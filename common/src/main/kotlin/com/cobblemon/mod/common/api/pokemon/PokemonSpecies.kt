@@ -23,14 +23,15 @@ import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -39,12 +40,12 @@ import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPack
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonRequirementAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.NbtItemPredicateAdapter
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
+import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonPreEvolutionAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonTriggerAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.NbtItemPredicateAdapter
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable
@@ -78,10 +79,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(ExperienceGroup::class.java, ExperienceGroupAdapter)
         .registerTypeAdapter(EntityDimensions::class.java, EntityDimensionsAdapter)
         .registerTypeAdapter(Learnset::class.java, LearnsetAdapter)
-        .registerTypeAdapter(Evolution::class.java, CobblemonEvolutionAdapter)
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(AbilityPool::class.java, AbilityPoolAdapter)
-        .registerTypeAdapter(EvolutionRequirement::class.java, CobblemonRequirementAdapter)
         .registerTypeAdapter(PreEvolution::class.java, CobblemonPreEvolutionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
@@ -100,6 +99,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(EggGroup::class.java, EggGroupAdapter)
         .registerTypeAdapter(MobEffect::class.java, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
         .registerTypeAdapter(NbtItemPredicate::class.java, NbtItemPredicateAdapter)
+        .registerTypeAdapter(TransformationTrigger::class.java, CobblemonTriggerAdapter)
+        .registerTypeAdapter(TransformationRequirement::class.java, CobblemonRequirementAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()

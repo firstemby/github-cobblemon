@@ -89,7 +89,7 @@ import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
-import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
+import com.cobblemon.mod.common.pokemon.transformation.triggers.BlockClickTrigger
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
@@ -102,7 +102,6 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.trade.TradeManager
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
@@ -229,12 +228,9 @@ object Cobblemon {
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe { event ->
             val player = event.player
             val block = player.level().getBlockState(event.pos).block
-            player.party().forEach { pokemon ->
-                pokemon.lockedEvolutions
-                    .filterIsInstance<BlockClickEvolution>()
-                    .forEach { evolution ->
-                        evolution.attemptEvolution(pokemon, BlockClickEvolution.BlockInteractionContext(block, player.level()))
-                    }
+            val context = BlockClickTrigger.BlockInteractionContext(block, player.level())
+            player.party().forEach { pokemon -> pokemon.transformationTriggers<BlockClickTrigger>().forEach {
+                (trigger, transformation) -> trigger.testContext(pokemon, context) && transformation.start(pokemon) }
             }
         }
 

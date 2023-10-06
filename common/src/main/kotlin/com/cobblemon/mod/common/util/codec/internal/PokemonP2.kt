@@ -15,9 +15,9 @@ import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.evolution.CobblemonEvolutionProxy
-import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionController
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec

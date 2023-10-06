@@ -172,8 +172,8 @@
         },
         {
           "variant": "stat_compare",
-          "highStat": "atk",
-          "lowStat": "def"
+          "highStat": "cobblemon:attack",
+          "lowStat": "cobblemon:defence"
         }
       ]
     },
@@ -190,8 +190,8 @@
         },
         {
           "variant": "stat_compare",
-          "highStat": "def",
-          "lowStat": "atk"
+          "highStat": "cobblemon:defence",
+          "lowStat": "cobblemon:attack"
         }
       ]
     },
@@ -210,8 +210,8 @@
         },
         {
           "variant": "stat_equal",
-          "statOne": "atk",
-          "statTwo": "def"
+          "statOne": "cobblemon:attack",
+          "statTwo": "cobblemon:defence"
         }
       ]
     }

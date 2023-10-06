@@ -37,11 +37,11 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionController
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionProxy
-import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionController
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionProxy
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
@@ -53,6 +53,8 @@ import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
@@ -86,11 +88,11 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.PokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.evolution.CobblemonEvolutionProxy
-import com.cobblemon.mod.common.pokemon.evolution.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionController
-import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
-import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionProxy
+import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
@@ -275,7 +277,7 @@ open class Pokemon : ShowdownIdentifiable {
                 }
                 // These are meant to reset on faint
                 this.evolutionProxy.current().progress()
-                    .filter { it is RecoilEvolutionProgress || it is DamageTakenEvolutionProgress }
+                    .filter { it is RecoilTransformationProgress || it is DamageTakenTransformationProgress }
                     .forEach { it.reset() }
             }
             this.healTimer = Cobblemon.config.healTimer
@@ -533,6 +535,8 @@ open class Pokemon : ShowdownIdentifiable {
     var persistentData: CompoundTag =
         CompoundTag()
         internal set
+
+    val transformations: Iterable<Transformation> get() = lockedEvolutions
 
     /**
      * The [ItemStack] this Pokémon is holding.
@@ -1568,6 +1572,13 @@ open class Pokemon : ShowdownIdentifiable {
      * @return The current [Pokemon] instance.
      */
     open fun self(): Pokemon = this
+
+    /**
+     * @param T The type of [TransformationTrigger] to query.
+     * @return The [Transformation]s of this [Pokemon] with triggers of type [T].
+     */
+    // TODO this can be improved. having to test triggers and transformations on your own is a hassle. but triggers need contextual args. pass a TriggerContext data class that's forwarded to trigger instead?
+    inline fun <reified T : TransformationTrigger> transformationTriggers() = this.transformations.filter { it.trigger is T }.map { it.trigger as T to it }
 
     private fun findAndLearnFormChangeMoves() {
         this.form.moves.formChangeMoves.forEach { move ->

@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.fossil.FossilRegistrySyncPacket
-import com.cobblemon.mod.common.pokemon.evolution.adapters.NbtItemPredicateAdapter
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
+import com.cobblemon.mod.common.pokemon.transformation.adapters.NbtItemPredicateAdapter
+import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.ItemLikeConditionAdapter
 import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter

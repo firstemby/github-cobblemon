@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.pokemon.evolution
 
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**

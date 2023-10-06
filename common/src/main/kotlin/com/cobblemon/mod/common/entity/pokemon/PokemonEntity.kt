@@ -72,9 +72,9 @@ import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
-import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
+import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.core.BlockPos
@@ -96,7 +96,6 @@ import com.mojang.serialization.Codec
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.protocol.game.DebugPackets
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerEntity
 import net.minecraft.server.level.ServerLevel
@@ -128,6 +127,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.concurrent.CompletableFuture
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -1001,23 +1001,15 @@ open class PokemonEntity(
 
         // Check evolution item interaction
         if (pokemon.getOwnerPlayer() == player) {
-            val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
-            pokemon.lockedEvolutions
-                .filterIsInstance<ItemInteractionEvolution>()
-                .forEach { evolution ->
-                    if (evolution.attemptEvolution(pokemon, context)) {
-                        if (!player.isCreative) {
-                            stack.shrink(1)
-                        }
-                        this.level().playSoundServer(
-                            position = this.position(),
-                            sound = CobblemonSounds.ITEM_USE,
-                            volume = 1F,
-                            pitch = 1F
-                        )
-                        return true
-                    }
-                }
+            val context = ItemInteractionTrigger.ItemInteractionContext(stack, player.level())
+            val transformed = pokemon.transformationTriggers<ItemInteractionTrigger>().map {
+                (trigger, transformation) -> trigger.testContext(pokemon, context) && transformation.start(pokemon)
+            }
+            if (transformed.any()) {
+                if (!player.isCreative) stack.shrink(1)
+                this.level().playSoundServer(position = this.position(), sound = CobblemonSounds.ITEM_USE, volume = 1F, pitch = 1F)
+                return true
+            }
         }
 
         (stack.item as? PokemonEntityInteraction)?.let {

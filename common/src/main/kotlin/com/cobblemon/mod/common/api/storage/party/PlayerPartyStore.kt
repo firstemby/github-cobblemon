@@ -12,14 +12,12 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.PassiveEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.util.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
@@ -131,14 +129,8 @@ open class PlayerPartyStore(
                     }
                 }
 
-                // Passive evolutions
-                pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { it.attemptEvolution(pokemon) }
-                val removeList = mutableListOf<Evolution>()
-                pokemon.evolutionProxy.server().forEach {
-                    if (!it.test(pokemon) && it is LevelUpEvolution && !it.permanent)
-                        removeList.add(it)
-                }
-                removeList.forEach { pokemon.evolutionProxy.server().remove(it) }
+                // Passive evolutions and form changes
+                pokemon.transformationTriggers<PassiveTrigger>().forEach { (_, transformation) -> transformation.start(pokemon) }
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

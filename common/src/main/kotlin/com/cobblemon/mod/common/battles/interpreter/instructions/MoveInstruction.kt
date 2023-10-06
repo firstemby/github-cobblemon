@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.UseMoveTransformationProgress
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
@@ -70,9 +70,9 @@ class MoveInstruction(
             val spreadTargetPokemon = spreadTargets.map { battle.activePokemon.firstOrNull() { poke -> poke.getPNX() == it }?.battlePokemon }
 
             userPokemon.effectedPokemon.let { pokemon ->
-                if (UseMoveEvolutionProgress.supports(pokemon, move)) {
-                    val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is UseMoveEvolutionProgress && it.currentProgress().move == move }) { UseMoveEvolutionProgress() }
-                    progress.updateProgress(UseMoveEvolutionProgress.Progress(move, progress.currentProgress().amount + 1))
+                if (UseMoveTransformationProgress.supports(pokemon, move)) {
+                    val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is UseMoveTransformationProgress && it.currentProgress().move == move }) { UseMoveTransformationProgress() }
+                    progress.updateProgress(UseMoveTransformationProgress.Progress(move, progress.currentProgress().amount + 1))
                 }
             }
 
