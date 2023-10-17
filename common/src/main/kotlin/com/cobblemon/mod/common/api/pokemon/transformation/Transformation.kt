@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.pokemon.transformation
 
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -26,21 +27,27 @@ interface Transformation {
     /** The [TransformationRequirement]s that need to be satisfied for this transformation. */
     val requirements: Set<TransformationRequirement>
 
-    /**
-     * Checks if the given [Pokemon] passes all the conditions and is ready to transform.
-     *
-     * @param pokemon The [Pokemon] being queried.
-     * @return If the [Transformation] can start.
-     */
-    fun test(pokemon: Pokemon) = this.requirements.all { requirement -> requirement.check(pokemon) }
+    /** Checks if all [TransformationRequirement]s are met. */
+    fun checkRequirements(pokemon: Pokemon) = this.requirements.all { requirement -> requirement.check(pokemon) }
 
     /**
-     * Starts this transformation if requirements are met.
+     * Tests if the given [Pokemon] passes all the conditions and is ready to transform.
      *
-     * @param pokemon The [Pokemon] being evolved.
+     * @param pokemon The [Pokemon] being queried.
+     * @param context The optional [TriggerContext] needed to transform.
+     * @return Whether the [Transformation] can start.
      */
-    fun start(pokemon: Pokemon): Boolean {
-        if (this.test(pokemon)) {
+    fun test(pokemon: Pokemon, context: TriggerContext?) = this.trigger.testTrigger(context) && this.checkRequirements(pokemon)
+
+    /**
+     * Starts this transformation if conditions are met.
+     *
+     * @param pokemon The [Pokemon] being transformed.
+     * @param context The optional [TriggerContext] needed to transform.
+     * @return Whether the [Transformation] was successful.
+     */
+    fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
+        if (test(pokemon, context)) {
             forceStart(pokemon)
             return true
         }
@@ -50,7 +57,7 @@ interface Transformation {
     /**
      * Starts this transformation without evaluating the requirements.
      *
-     * @param pokemon The [Pokemon] being evolved.
+     * @param pokemon The [Pokemon] being transformed.
      */
     fun forceStart(pokemon: Pokemon) { this.requirements.forEach { it.fulfill(pokemon) } }
 }

@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.transformation.triggers
 
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
-import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
 import com.cobblemon.mod.common.registry.ItemIdentifierCondition
 import net.minecraft.core.registries.Registries
@@ -28,16 +28,15 @@ import net.minecraft.world.level.Level
 open class ItemInteractionTrigger(
     override val requiredContext: NbtItemPredicate =
         NbtItemPredicate(ItemIdentifierCondition(ResourceLocation.fromNamespaceAndPath("minecraft", "fish")), null),
-) : ContextTrigger<ItemInteractionTrigger.ItemInteractionContext, NbtItemPredicate> {
+) : ContextTrigger<NbtItemPredicate> {
 
-    override fun testContext(pokemon: Pokemon, context: ItemInteractionContext): Boolean =
-        this.requiredContext.item.fits(context.stack.item, context.world.registryAccess().registryOrThrow(Registries.ITEM)) &&
-        this.requiredContext.nbt?.matches(context.stack) ?: true
+    override fun testContext(context: TriggerContext) = context is Context &&
+        this.requiredContext.test(context.stack)
 
-    data class ItemInteractionContext(
+    data class Context(
         val stack: ItemStack,
         val world: Level
-    )
+    ): TriggerContext
 
     companion object {
         const val ADAPTER_VARIANT = "item_interact"

@@ -41,11 +41,8 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
-import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonTriggerAdapter
-import com.cobblemon.mod.common.pokemon.transformation.adapters.NbtItemPredicateAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.*
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable

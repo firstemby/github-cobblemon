@@ -130,7 +130,7 @@ open class PlayerPartyStore(
                 }
 
                 // Passive evolutions and form changes
-                pokemon.transformationTriggers<PassiveTrigger>().forEach { (_, transformation) -> transformation.start(pokemon) }
+                pokemon.triggerTransformations(PassiveTrigger::class.java)
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

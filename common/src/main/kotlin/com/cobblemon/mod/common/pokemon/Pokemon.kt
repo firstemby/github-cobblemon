@@ -54,7 +54,9 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
@@ -1574,11 +1576,14 @@ open class Pokemon : ShowdownIdentifiable {
     open fun self(): Pokemon = this
 
     /**
-     * @param T The type of [TransformationTrigger] to query.
-     * @return The [Transformation]s of this [Pokemon] with triggers of type [T].
+     * Transforms the pokemon if requirements are met.
+     *
+     * @param type The type of [TransformationTrigger] to trigger.
+     * @param context The [TriggerContext] required for [ContextTrigger]s.
+     * @return The [Transformation]s of this [Pokemon] that were triggered.
      */
-    // TODO this can be improved. having to test triggers and transformations on your own is a hassle. but triggers need contextual args. pass a TriggerContext data class that's forwarded to trigger instead?
-    inline fun <reified T : TransformationTrigger> transformationTriggers() = this.transformations.filter { it.trigger is T }.map { it.trigger as T to it }
+    fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: TriggerContext? = null) =
+        transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
 
     private fun findAndLearnFormChangeMoves() {
         this.form.moves.formChangeMoves.forEach { move ->

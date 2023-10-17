@@ -19,7 +19,9 @@ class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
     override val accepted = setOf(PokemonEntityInteraction.Ownership.OWNER)
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         val pokemon = entity.pokemon
-        val transformed = pokemon.transformationTriggers<TradeTrigger>().map { (_, transformation) -> transformation.start(pokemon) }
+
+        // Skip trigger evaluation and force the transformation
+        val transformed = pokemon.triggerTransformations(TradeTrigger::class.java)
         if (transformed.any()) {
             this.consumeItem(player, stack)
             return true

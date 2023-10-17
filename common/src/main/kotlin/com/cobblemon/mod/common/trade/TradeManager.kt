@@ -111,8 +111,9 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         party2.add(pokemon1)
         party1.add(pokemon2)
 
-        pokemon1.transformationTriggers<TradeTrigger>().forEach { (trigger, transformation) -> trigger.testContext(pokemon1, pokemon2) && transformation.start(pokemon1) }
-        pokemon2.transformationTriggers<TradeTrigger>().forEach { (trigger, transformation) -> trigger.testContext(pokemon2, pokemon1) && transformation.start(pokemon2) }
+        pokemon1.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon2))
+        pokemon2.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon1))
+
         CobblemonEvents.TRADE_COMPLETED.post(TradeCompletedEvent(player1, pokemon2, player2, pokemon1))
     }
 }

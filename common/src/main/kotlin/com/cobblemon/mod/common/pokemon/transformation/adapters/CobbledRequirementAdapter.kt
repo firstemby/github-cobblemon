@@ -66,7 +66,6 @@ object CobblemonRequirementAdapter : RequirementAdapter {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TransformationRequirement {
         val variant = json.asJsonObject.get(VARIANT).asString.lowercase()
-        Cobblemon.LOGGER.error(variant)
         val type = this.types[variant] ?: throw IllegalArgumentException("Cannot resolve transformation requirement type for variant $variant")
         return context.deserialize(json, type.java)
     }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.pokemon.transformation.trigger
 
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.item.interactive.LinkCableItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
@@ -17,12 +18,11 @@ import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
  * Represents a [TransformationTrigger] of a [Pokemon] that can only occur during specific actions and with added context.
  * For the default implementations see [ItemInteractionTrigger] & [TradeTrigger].
  *
- * @param RC The context given at runtime when querying the [Transformation].
  * @param TC The context that is serialized from JSON during species loading, this is what the [RC] is expected to match against.
  * @author Licious
  * @since March 19th, 2022
  */
-interface ContextTrigger<RC, TC>: TransformationTrigger {
+interface ContextTrigger<TC>: TransformationTrigger {
 
     /**
      * The target context for this [Transformation] to even be tested.
@@ -33,9 +33,17 @@ interface ContextTrigger<RC, TC>: TransformationTrigger {
      * Checks if the given context is valid for the [requiredContext].
      *
      * @param pokemon The [Pokemon] attempting to transform.
-     * @param context The context of this query.
+     * @param context The [TriggerContext] given at runtime when querying the [Transformation].
      * @return If the context matched the [requiredContext].
      */
-    fun testContext(pokemon: Pokemon, context: RC): Boolean
+    fun testContext(context: TriggerContext): Boolean = false
+
+    /**
+     * Evaluates the triggering condition of a [Transformation].
+     *
+     * @param context The [TriggerContext] of the [Transformation]. If null, bypasses the condition check (see [LinkCableItem]).
+     * @return Whether the triggering condition is satisfied.
+     */
+    override fun testTrigger(context: TriggerContext?) = context?.let { testContext(it) } ?: true
 
 }
