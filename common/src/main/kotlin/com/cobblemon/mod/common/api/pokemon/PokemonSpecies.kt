@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolutio
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
+import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -43,6 +44,9 @@ import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.transformation.adapters.*
+import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable
@@ -206,34 +210,18 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     }
 
     /**
-     * The representation of a [Species] and/or [FormData] in the context of showdown.
+     * The representation of [FormData] in the context of Showdown.
      * This is intended as a sort of DTO that can be easily converted between JSON and Java/JS objects.
      *
-     * @param species The [Species] being converted or the base species if the form is not null.
-     * @param form The [FormData] being converted int o species (Showdown considers them species) will be null when dealing with the base form.
+     * @param form The [FormData] being converted into a species (Showdown considers them species).
      */
     @Suppress("unused")
-    internal class ShowdownSpecies(species: Species, form: FormData?) {
-        val num = species.nationalPokedexNumber
-        val name = if (form != null) "${createShowdownName(species)}-${form.name}" else createShowdownName(species)
-        val baseSpecies = if (form != null) createShowdownName(species) else this.name
-        val forme = form?.name
-        // ToDo baseForme
-        val otherFormes = if (form == null && species.forms.isNotEmpty()) species.forms.map { "${this.name}-${it.name}" } else emptyList()
-        val formeOrder = if (form == null && this.otherFormes.isNotEmpty()) arrayListOf(this.name, *this.otherFormes.toTypedArray()) else emptyList()
-        val abilities: Map<String, String> = mapOf(
-            "0" to "No Ability",
-            "1" to "No Ability",
-            "H" to "No Ability",
-            "S" to "No Ability"
-        )
-        val types = (form?.types ?: species.types).map { it.name.replaceFirstChar(Char::uppercase) }
-        val preevo: String? = (form?.preEvolution ?: species.preEvolution)?.let { if (it.form == it.species.standardForm) createShowdownName(it.species) else "${createShowdownName(it.species)}-${it.form.name}" }
-        // For the context of battles the content here doesn't matter whatsoever and due to how PokemonProperties work we can't guarantee an actual specific species is defined.
-        val evos = if ((form?.evolutions ?: species.evolutions).isEmpty()) emptyList() else arrayListOf("")
-        val nfe = this.evos.isNotEmpty()
-        val eggGroups = (form?.eggGroups ?: species.eggGroups).map { it.showdownID }
-        val gender: String? = when (form?.maleRatio ?: species.maleRatio) {
+    internal open class ShowdownSpecies(form: FormData) {
+        val num = form.species.nationalPokedexNumber
+        val name = form.showdownName()
+        val types = form.types.map { it.name.replaceFirstChar(Char::uppercase) }
+        val eggGroups = form.eggGroups.map { it.showdownID }
+        val gender: String? = when (form.maleRatio) {
             0F -> "F"
             1F -> "M"
             -1F, 1.125F -> "N"
@@ -241,35 +229,66 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         }
         val genderRatio = if (this.gender == null)
             mapOf(
-                "maleRatio" to (form?.maleRatio ?: species.maleRatio),
-                "femaleRation" to (1F - (form?.maleRatio ?: species.maleRatio))
+                "maleRatio" to (form.maleRatio),
+                "femaleRation" to (1F - (form.maleRatio))
             ) else null
-        val baseStats = mapOf(
-            "hp" to (form?.baseStats?.get(Stats.HP) ?: species.baseStats[Stats.HP] ?: 1),
-            "atk" to (form?.baseStats?.get(Stats.ATTACK) ?: species.baseStats[Stats.ATTACK] ?: 1),
-            "def" to (form?.baseStats?.get(Stats.DEFENCE) ?: species.baseStats[Stats.DEFENCE] ?: 1),
-            "spa" to (form?.baseStats?.get(Stats.SPECIAL_ATTACK) ?: species.baseStats[Stats.SPECIAL_ATTACK] ?: 1),
-            "spd" to (form?.baseStats?.get(Stats.SPECIAL_DEFENCE) ?: species.baseStats[Stats.SPECIAL_DEFENCE] ?: 1),
-            "spe" to (form?.baseStats?.get(Stats.SPEED) ?: species.baseStats[Stats.SPEED] ?: 1)
-        )
-        val heightm = (form?.height ?: species.height) / 10
-        val weightkg = (form?.weight ?: species.weight) / 10
+        val baseStats = Stats.PERMANENT.associateBy({ it.showdownId }, { form.baseStats[it] ?: 1 })
+        val heightm = form.height / 10
+        val weightkg = form.weight / 10
         // This is ugly, but we already have it hardcoded in the mod anyway
-        val maxHP = if (species.showdownId() == "shedinja") 1 else null
-        val canGigantamax: String? = if (form?.gigantamaxMove != null) form.gigantamaxMove.name else null
-        val cannotDynamax = form?.dynamaxBlocked ?: species.dynamaxBlocked
-        // ToDo battleOnly
-        // ToDo changesFrom
-        val requiredMove = form?.requiredMove
-        val requiredItem = form?.requiredItem
-        val requiredItems = form?.requiredItems
+        val maxHP = if (this.num == 292) 1 else null
+        val cannotDynamax = form.dynamaxBlocked
     }
 
-    private fun createShowdownName(species: Species): String {
-        if (species.resourceIdentifier.namespace == Cobblemon.MODID) {
-            return species.name
-        }
-        return "${species.resourceIdentifier.namespace}:${species.name}"
+    /**
+     * The representation of a [PermanentForm] in the context of Showdown.
+     *
+     * @param form The [PermanentForm] being converted into a species (Showdown considers them species).
+     */
+    internal open class ShowdownPermanentForm(form: PermanentForm) : ShowdownSpecies(form) {
+        val forme = if (form !is StandardForm) form.name else null
+        val baseSpecies = if (form !is StandardForm) form.species.standardForm.showdownName() else null
+        val preevo = form.preEvolution?.form?.showdownName()
+        // For the context of battles the content here doesn't matter whatsoever and due to how PokemonProperties work we can't guarantee an actual specific species is defined.
+        val evos = if (form.evolutions.isEmpty()) emptyList() else arrayListOf("")
+        val nfe = this.evos.isNotEmpty()
+        val canGigantamax = form.temporaryForms.firstOrNull { it.gigantamaxMove != null }?.gigantamaxMove
     }
 
+    /**
+     * The representation of a [StandardForm] in the context of Showdown.
+     *
+     * @param form The [StandardForm] being converted into a species.
+     */
+    internal class ShowdownStandardForm(form: StandardForm) : ShowdownPermanentForm(form) {
+        val otherFormes = form.flattenForms().map { it.showdownName() }
+        val formeOrder = if (this.otherFormes.isNotEmpty()) arrayListOf(this.name, *this.otherFormes.toTypedArray()) else null
+    }
+
+    /**
+     * The representation of a [TemporaryForm] in the context of Showdown.
+     *
+     * @param form The [TemporaryForm] being converted into a species (Showdown considers them species).
+     * @param baseForm The [PermanentForm] that transitions into this [TemporaryForm].
+     */
+    internal class ShowdownTemporaryForm(form: TemporaryForm) : ShowdownSpecies(form) {
+        val forme = form.name
+        val baseSpecies = form.species.standardForm.showdownName()
+        // forms this form can change from during a battle
+        val battleOnly = if (form.battleOnly) form.showdownParentForm() else null
+        // forms this form can change from outside of battle (mutually exclusive with above)
+        val changesFrom = if (!form.battleOnly) form.showdownParentForm() else null
+    }
+
+    /** Accommodate for Showdown bullshit. */
+    private fun TemporaryForm.showdownParentForm(): Any? {
+        // megas and primal don't use battleOnly because... fuck you?
+        if (this.battleOnly && this.labels.any { it == CobblemonPokemonLabels.MEGA || it == CobblemonPokemonLabels.PRIMAL })
+            return null
+        // Necrozma-Ultra and Zygarde-Complete are the only forms where parent form != the forms it can change from
+        else if (this.parentOverrides.isNotEmpty())
+            return this.species.standardForm.flattenForms().filter { parentOverrides.contains(it.showdownId()) }.map { it.showdownName() }
+        else
+            return parentForm?.showdownName()
+    }
 }

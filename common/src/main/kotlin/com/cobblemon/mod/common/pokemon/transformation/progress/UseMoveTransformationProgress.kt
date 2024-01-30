@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.UseMoveRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -66,8 +67,10 @@ class UseMoveTransformationProgress : TransformationProgress<UseMoveTransformati
         }
 
         fun supports(pokemon: Pokemon, move: MoveTemplate): Boolean {
-            return pokemon.form.evolutions.any { evolution ->
-                evolution.requirements.any { requirement ->
+            val form = pokemon.form
+            if (form !is PermanentForm) return false
+            return form.transformations.any { transformation ->
+                transformation.requirements.any { requirement ->
                     requirement is UseMoveRequirement && requirement.move == move
                 }
             }

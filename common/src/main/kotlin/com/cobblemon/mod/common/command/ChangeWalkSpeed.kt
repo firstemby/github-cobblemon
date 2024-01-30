@@ -41,8 +41,7 @@ object ChangeWalkSpeed {
         val walkSpeed = FloatArgumentType.getFloat(context, "walkSpeed")
 
         pkm.behaviour.moving.walk.walkSpeed = walkSpeed.toString().asExpressionLike()
-        pkm.forms.clear()
-        pkm.forms.add(FormData().also { it.initialize(pkm)})
+        // TODO refresh form
         return Command.SINGLE_SUCCESS
     }
 }

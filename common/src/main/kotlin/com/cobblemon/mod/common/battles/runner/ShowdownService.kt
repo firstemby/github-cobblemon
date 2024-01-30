@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.battles.runner
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.runner.graal.GraalShowdownService
+import com.cobblemon.mod.common.battles.runner.socket.SocketShowdownService
 import com.google.gson.JsonArray
 import java.util.UUID
 

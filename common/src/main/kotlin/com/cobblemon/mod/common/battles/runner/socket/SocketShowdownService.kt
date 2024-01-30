@@ -123,8 +123,8 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         return gson.fromJson(response, JsonArray::class.java)
     }
 
-    private fun sendSpeciesData(species: Species, form: FormData?) {
-        writer.write(">receiveSpeciesData ${gson.toJson(PokemonSpecies.ShowdownSpecies(species, form))}\n")
+    private fun sendSpeciesData(species: PokemonSpecies.ShowdownSpecies) {
+        writer.write(">receiveSpeciesData ${gson.toJson(species)}\n")
         acknowledge()
     }
 
@@ -137,11 +137,15 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         writer.write(">resetSpeciesData\n")
         acknowledge()
         PokemonSpecies.species.forEach { species ->
-            sendSpeciesData(species, null)
-            species.forms.forEach { form ->
-                if (form != species.standardForm) {
-                    sendSpeciesData(species, form)
+            sendSpeciesData(PokemonSpecies.ShowdownStandardForm(species.standardForm))
+            species.permanentForms.forEach { form ->
+                sendSpeciesData(PokemonSpecies.ShowdownPermanentForm(form))
+                form.temporaryForms.forEach { tempForm ->
+                    sendSpeciesData(PokemonSpecies.ShowdownTemporaryForm(tempForm))
                 }
+            }
+            species.temporaryForms.forEach { form ->
+                sendSpeciesData(PokemonSpecies.ShowdownTemporaryForm(form))
             }
         }
     }

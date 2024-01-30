@@ -22,12 +22,12 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
-import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType.Companion.FLYING_POSES
@@ -37,6 +37,9 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
@@ -109,10 +112,23 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var weight = 1F
         private set
 
-    var forms = mutableListOf<FormData>()
+    var permanentForms = mutableListOf<PermanentForm>()
         private set
 
-    val standardForm by lazy { FormData(_evolutions = this.evolutions).initialize(this) }
+    var temporaryForms = mutableListOf<TemporaryForm>()
+        private set
+
+    val standardForm by lazy {
+        StandardForm(
+            _evolutions = this.evolutions,
+            _permanentForms = this.permanentForms,
+            _temporaryForms = this.temporaryForms
+        ).initialize(this) as StandardForm
+    }
+
+    val forms: Collection<FormData> get() = permanentForms + temporaryForms
+
+    val transformations: Collection<Transformation> get() = evolutions + temporaryForms
 
     var labels = hashSetOf<String>()
         private set
@@ -164,15 +180,13 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     fun initialize() {
         Cobblemon.statProvider.provide(this)
-        this.forms.forEach { it.initialize(this) }
-        if (this.forms.isNotEmpty() && this.forms.none { it == this.standardForm }) {
-            this.forms.add(0, this.standardForm)
-        }
         this.lightingData?.let { this.lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species
         this.preEvolution?.form
         this.evolutions.size
+        // init all forms
+        this.standardForm
     }
 
     // Ran after initialize due to us creating a Pokémon here which requires all the properties in #initialize to be present for both this and the results, this is the easiest way to quickly resolve species + form
@@ -183,7 +197,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
                 pokemon.form.moves.evolutionMoves += evolution.learnableMoves
             }
         }
-        this.forms.forEach(FormData::resolveEvolutionMoves)
+        this.permanentForms.forEach(PermanentForm::resolveEvolutionMoves)
     }
 
     fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.name}\" level=${level}").create()
@@ -227,8 +241,9 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         // Hitbox end
         this.moves.encode(buffer)
         buffer.writeCollection(this.pokedex) { pb, line -> pb.writeString(line) }
-        buffer.writeCollection(this.forms) { _, form -> form.encode(buffer) }
         buffer.writeIdentifier(this.battleTheme)
+        buffer.writeCollection(this.permanentForms) { _, form -> form.encode(buffer) }
+        buffer.writeCollection(this.temporaryForms) { _, form -> form.encode(buffer) }
         buffer.writeCollection(this.features) { pb, feature -> pb.writeString(feature) }
         buffer.writeNullable(this.lightingData) { pb, data ->
             pb.writeInt(data.lightLevel)
@@ -261,9 +276,11 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.moves.decode(buffer)
         this.pokedex.clear()
         this.pokedex += buffer.readList { pb -> pb.readString() }
-        this.forms.clear()
-        this.forms += buffer.readList{ FormData().apply { decode(buffer) } }.filterNotNull()
         this.battleTheme = buffer.readIdentifier()
+        this.permanentForms.clear()
+        this.permanentForms += buffer.readList{ PermanentForm().apply { decode(buffer) } }.filterNotNull()
+        this.temporaryForms.clear()
+        this.temporaryForms += buffer.readList{ TemporaryForm().apply { decode(buffer) } }.filterNotNull()
         this.features.clear()
         this.features += buffer.readList { pb -> pb.readString() }
         this.lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }
@@ -308,7 +325,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     /**
      * The literal Showdown ID of this species.
      * This will be a lowercase version of the [name] with all the non-alphanumeric characters removed. For example, "Mr. Mime" becomes "mrmime".
-     * If a Species is not a part of the Cobblemon mon the [resourceIdentifier] will have the namespace appended at the start of the ID resulting in something such as 'somemodaspecies'
+     * If a Species is not a part of the Cobblemon mod, the [resourceIdentifier] will have the namespace appended at the start of the ID resulting in something such as 'somemodaspecies'
      *
      * @return The literal Showdown ID of this species.
      */
@@ -329,6 +346,19 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
      * @return The unformatted literal Showdown ID of this species.
      */
     private fun unformattedShowdownId(): String = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+
+    /**
+     * The Showdown name of this species.
+     * If a species is not a part of the Cobblemon mod, the [resourceIdentifier] will have the namespace appended at
+     * the start of the name. 'Namespace:Species'.
+     *
+     * @return The Showdown name of this species.
+     */
+    fun showdownName(): String {
+        val namespace = this.resourceIdentifier.namespace
+        val name = this.name
+        return if (namespace == Cobblemon.MODID) name else "$namespace:$name"
+    }
 
     override fun toString() = this.showdownId()
 

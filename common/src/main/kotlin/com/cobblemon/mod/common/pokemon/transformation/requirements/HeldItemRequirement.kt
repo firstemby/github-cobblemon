@@ -26,7 +26,8 @@ import net.minecraft.world.item.ItemStack
  * @since March 21st, 2022
  */
 class HeldItemRequirement(
-    val itemCondition: NbtItemPredicate = NbtItemPredicate(ItemIdentifierCondition(ResourceLocation.parse("air"))),
+    val itemCondition: NbtItemPredicate =
+        NbtItemPredicate(ItemIdentifierCondition(ResourceLocation.fromNamespaceAndPath("minecraft", "air"))),
     val consumeHeldItem: Boolean? = null
 ) : TransformationRequirement {
 

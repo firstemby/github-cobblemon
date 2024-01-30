@@ -5,6 +5,10 @@
     "description": "A Pokémon species",
     "type": "object",
     "properties": {
+        "implemented": {
+            "type": "boolean",
+            "default": false
+        },
         "name": {
             "description": "The Pokémon's name",
             "type": "string"
@@ -21,9 +25,12 @@
             "description": "The Pokémon secondary type",
             "type": "string"
         },
-        "maleRatio": {
-            "description": "The Pokémon's gender ratio",
-            "type": ["number", "null"]
+        "abilities": {
+            "description": "The Pokémon's possible abilities",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         },
         "baseStats": {
             "description": "The Pokémon's base stats",
@@ -57,6 +64,110 @@
             "description": "The Pokémon's catch rate",
             "type": "integer"
         },
+        "maleRatio": {
+            "description": "The Pokémon's gender ratio",
+            "type": "number"
+        },
+        "baseFriendship": {
+            "description": "The Pokémon's base friendship",
+            "type": "integer"
+        },
+        "experienceGroup": {
+            "description": "The Pokémon's experience group",
+            "type": "string"
+        },
+        "eggCycles": {
+            "description": "The Pokémon's egg cycles",
+            "type": "integer"
+        },
+        "eggGroups": {
+            "description": "The Pokémon's egg group",
+            "type": "string"
+        },
+        "height": {
+            "description": "The Pokémon's Pokédex height in decimeters",
+            "type": "number"
+        },
+        "weight": {
+            "description": "The Pokémon's Pokédex weight in hectograms",
+            "type": "number"
+        },
+        "labels": {
+            "description": "The Pokémon's descriptors",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "features": {
+            "description": "The Pokémon's features",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "aspects": {
+            "description": "The Pokémon's aspects",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "baseExperienceYield": {
+            "description": "The Pokémon's base stats",
+            "type": "object"
+        },
+        "evYield": {
+            "description": "The Pokémon's base stats",
+            "type": "object",
+            "hp": {
+                "description": "The Pokémon's base health stat",
+                "type": "integer"
+            },
+            "attack": {
+                "description": "The Pokémon's base attack stat",
+                "type": "integer"
+            },
+            "defence": {
+                "description": "The Pokémon's base defence stat",
+                "type": "integer"
+            },
+            "specialAttack": {
+                "description": "The Pokémon's base special attack stat",
+                "type": "integer"
+            },
+            "specialDefence": {
+                "description": "The Pokémon's base special defence stat",
+                "type": "integer"
+            },
+            "speed": {
+                "description": "The Pokémon's base speed stat",
+                "type": "integer"
+            }
+        },
+        "drops": {
+            "description": "The items this Pokémon drops on defeat",
+            "type": "object",
+            "amount": {
+                "description": "The maximum number of items this Pokémon may drop",
+                "type": "integer"
+            },
+            "entries": {
+                "description": "The different items that this Pokémon may drop",
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "item": {
+                        "description": "The ID of the item that is dropped",
+                        "type": "string"
+                    },
+                    "percentage": {
+                        "description": "The chance that this item is one of the items dropped",
+                        "type": "number"
+                    }
+                }
+            }
+        },
         "baseScale": {
             "description": "The Pokémon's base scale",
             "type": "number"
@@ -73,38 +184,233 @@
                 "type": "number"
             },
             "fixed": {
-                "description": "idk",
-                "type": "boolean"
+                "description": "Whether the hitbox is fixed",
+                "type": "boolean",
+                "default": false
             }
+        },
+        "battleTheme": {
+            "description": "The ID of the SoundEvent that's played as the Pokémon's encounter theme",
+            "type": "string",
+            "default": "cobblemon:battle.pvw.default"
+        },
+        "dynamaxBlocked": {
+            "description": "Whether the Pokémon is restricted from dynamaxing",
+            "type": "boolean",
+            "default": false
+        },
+        "shoulderMountable": {
+            "description": "The Pokémon's gender ratio",
+            "type": "boolean",
+            "default": false
+        },
+        "behaviour": {
+            "description": "The Pokémon's hitbox",
+            "type": "object",
+            "moving": {
+                "type": "object",
+                "walk": {
+                    "description": "The Pokémon's behaviour when on land",
+                    "type": "object",
+                    "canWalk": {
+                        "description": "Whether the Pokémon can move on land",
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "avoidsLand": {
+                        "description": "Whether the Pokémon seeks the nearest source of water",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "walkSpeed": {
+                        "description": "The Pokémon's speed while on land",
+                        "type": "number",
+                        "default": 0.35
+                    }
+                },
+                "swim": {
+                    "description": "The Pokémon's behaviour when in liquid",
+                    "type": "object",
+                    "avoidsWater": {
+                        "description": "Whether the Pokémon seeks the nearest source of land",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "hurtByLava": {
+                        "description": "Whether the Pokémon is damaged in lava",
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "canSwimInWater": {
+                        "description": "Whether the Pokémon can swim in water",
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "canSwimInLava": {
+                        "description": "Whether the Pokémon can swim in lava",
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "canBreatheUnderwater": {
+                        "description": "Whether the Pokémon can breathe in water",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "canBreatheUnderlava": {
+                        "description": "Whether the Pokémon can breathe in lava",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "canWalkOnWater": {
+                        "description": "Whether the Pokémon can walk on water",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "canWalkOnLava": {
+                        "description": "Whether the Pokémon can walk on lava",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "swimSpeed": {
+                        "description": "The Pokémon's speed while in liquid",
+                        "type": "number",
+                        "default": 0.3
+                    }
+                },
+                "fly": {
+                    "description": "The Pokémon's behaviour when in air",
+                    "type": "object",
+                    "canFly": {
+                        "description": "Whether the Pokémon can move in ar",
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "flySpeedHorizontal": {
+                        "description": "The Pokémon's speed while in air",
+                        "type": "number",
+                        "default": 0.3
+                    }
+                },
+                "canLook": {
+                    "description": "Whether the Pokémon can look at targets",
+                    "type": "boolean",
+                    "default": true
+                },
+                "looksAtEntities": {
+                    "description": "Whether the Pokémon can look at other entities",
+                    "type": "boolean",
+                    "default": true
+                },
+                "wanderChance": {
+                    "description": "The chance that the Pokémon breaks idle state and wanders",
+                    "type": "integer",
+                    "default": 120
+                },
+                "wanderSpeed": {
+                    "description": "The speed that the Pokémon wanders",
+                    "type": "number",
+                    "default": 1.0
+                }
+            },
+            "resting": {
+                "type": "object",
+                "canSleep": {
+                    "description": "Whether the Pokémon can enter a sleeping state",
+                    "type": "boolean",
+                    "default": false
+                },
+                "times": {
+                    "description": "The time of day that the Pokémon can sleep",
+                    "type": "string",
+                    "enum": ["any", "day", "night", "noon", "midnight", "dawn", "dusk", "twilight", "morning", "afternoon"],
+                    "default": "night"
+                },
+                "sleepChance": {
+                    "description": "The chance that the Pokémon enters a sleeping state",
+                    "type": "number",
+                    "default": 0.0016
+                },
+                "blocks": {
+                    "description": "The blocks that the Pokémon can sleep on",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "biomes": {
+                    "description": "The biome that the Pokémon can sleep in",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "light": {
+                    "description": "The light level that the Pokémon can sleep in",
+                    "type": "string",
+                    "default": "0-15"
+                },
+                "depth": {
+                    "description": "How deep the Pokémon sleeps",
+                    "type": "string",
+                    "enum": ["comatose", "normal"],
+                    "default": "normal"
+                },
+                "willSleepOnBed": {
+                    "description": "Whether the Pokémon can sleep on a bed",
+                    "type": "boolean"
+                }
+            },
+            "idle": {
+                "type": "object",
+                "pointsAtSpawn": {
+                    "description": "Whether the Pokémon looks towards world spawn",
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "moves": {
+            "description": "The Pokémon's learnset",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "preEvolution": {
+            "description": "The Pokémon's pre-evolved form",
+            "type": "string"
         },
         "evolutions": {
             "description": "The Pokémon's evolutions",
             "type": "array",
             "items": {
                 "type": "object",
-                "variant": {
-                    "description": "The ID of the event that attempts to start an evolution",
-                    "type": "string",
-                    "enum": ["level_up", "trade", "item_interact"]
-                },
                 "id": {
-                    "description": "An unique ID for this evolution, IE pikachu_level",
+                    "description": "A unique ID for this evolution (i.e. nosepass_probopass)",
                     "type": "string"
                 },
                 "result": {
                     "description": "The PokemonProperties that represents the result of this evolution",
                     "type": "string"
                 },
-                "optional": {
-                    "description": "If this evolution will allow the user to choose when to start it or not",
-                    "type": "boolean"
+                "learnableMoves": {
+                    "description": "The moves learnt after evolution",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "consumeHeldItem": {
-                    "description": "If this evolution will consume the held item",
-                    "type": "boolean"
-                },
-                "data": {
-                    "description": "The data that backs this event"
+                "trigger": {
+                    "type": ["object", "string"],
+                    "variant": {
+                        "description": "The ID of the event that attempts to start this evolution",
+                        "type": "string",
+                        "enum": ["level_up", "trade", "item_interact", "block_click"]
+                    },
+                    "requiredContext": {
+                        "description": "The context required to kick-start this evolution",
+                        "type": "string"
+                    }
                 },
                 "requirements": {
                     "description": "The requirements behind this evolution",
@@ -120,12 +426,27 @@
                             "description": "The data that backs this requirement"
                         }
                     }
+                },
+                "optional": {
+                    "description": "If this evolution will allow the user to choose when to start it or not",
+                    "type": "boolean",
+                    "default": true
                 }
             }
         },
-        "battleTheme": {
-            "description": "The SoundEvent ID for the theme to play when encountering a wild Pokémon of this species",
-            "type": "string"
+        "temporaryForms": {
+            "description": "The interchangeable forms of this Pokémon",
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
+        },
+        "permanentForms": {
+            "description": "The non-interchangeable forms of this Pokémon",
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
         }
     }
   }
