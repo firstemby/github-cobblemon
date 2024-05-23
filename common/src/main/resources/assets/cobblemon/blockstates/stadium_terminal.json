@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/stadium_terminal"
+    },
+    "facing=west": {
+      "model": "cobblemon:block/stadium_terminal",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/stadium_terminal",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "cobblemon:block/stadium_terminal",
+      "y": 270
+    }
+  }
+}
