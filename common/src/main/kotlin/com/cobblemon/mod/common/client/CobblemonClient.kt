@@ -260,7 +260,8 @@ object CobblemonClient {
             CobblemonBlocks.SKY_TUMBLESTONE_CLUSTER,
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
-            CobblemonBlocks.LECTERN
+            CobblemonBlocks.LECTERN,
+            CobblemonBlocks.STADIUM
         )
 
         this.createBoatModelLayers()

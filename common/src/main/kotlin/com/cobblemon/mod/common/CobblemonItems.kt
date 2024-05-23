@@ -272,6 +272,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val PC = blockItem("pc", CobblemonBlocks.PC)
     @JvmField
+    val STADIUM = blockItem("stadium_terminal", CobblemonBlocks.STADIUM)
+    @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)
     @JvmField
     val DISPLAY_CASE = blockItem("display_case", CobblemonBlocks.DISPLAY_CASE)
