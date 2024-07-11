@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
+import com.cobblemon.mod.common.api.pokemon.aspect.FeatureAspectProvider
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionController
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
@@ -198,6 +199,7 @@ open class Pokemon : ShowdownIdentifiable {
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            this.updateFeatures(value)
             field = value
             this.sanitizeFormChangeMoves(old)
             // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
@@ -475,7 +477,7 @@ open class Pokemon : ShowdownIdentifiable {
 
     var caughtBall: PokeBall = PokeBalls.POKE_BALL
         set(value) { field = value ; _caughtBall.emit(caughtBall) }
-    var features = mutableListOf<SpeciesFeature>()
+    var features = mutableListOf<SpeciesFeature<*>>()
 
     fun asRenderablePokemon() = RenderablePokemon(species, aspects)
 
@@ -1215,6 +1217,36 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
+    /** Configures [SpeciesFeature]s to provide the aspects needed for [newForm].  */
+    fun updateFeatures(newForm: FormData) {
+        if (!this.species.forms.contains(newForm) || this.form === newForm) return;
+
+        val presentForm = this.form
+        val formProviders = SpeciesFeatures.getFeaturesFor(this.species)
+            .filterIsInstance<FeatureAspectProvider>()
+            .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
+
+        // Features used for the present form
+        val presentProviders = presentForm.aspects.mapNotNull { aspect -> formProviders.find { provider -> (provider as FeatureAspectProvider).matches(aspect) } }
+        val presentFeatures = presentProviders.mapNotNull { provider -> provider.get(this) }
+
+        // Features needed for the new form
+        val newFeatures = newForm.aspects.map { aspect ->
+            val provider = formProviders.find { provider -> (provider as FeatureAspectProvider).matches(aspect) } ?: return
+            (provider as FeatureAspectProvider).from(aspect) ?: return
+        }
+
+        // Commit feature changes if no issue
+        presentFeatures.forEach { feature -> features.remove(feature) }
+        newFeatures.forEach { feature ->
+            features.removeIf { it.name == feature.name }   // just overwrite existing features
+            features.add(feature)
+        }
+
+        // a bit redundant since form (and thus updateFeatures) is updated on aspect update, but necessary for visual changes when setting form property
+        this.updateAspects()
+    }
+
     fun updateForm() {
         val newForm = species.getForm(aspects)
         if (form != newForm) {
@@ -1421,7 +1453,7 @@ open class Pokemon : ShowdownIdentifiable {
         return result
     }
 
-    fun <T : SpeciesFeature> getFeature(name: String) = features.find { it.name == name } as? T
+    fun <T : SpeciesFeature<*>> getFeature(name: String) = features.find { it.name == name } as? T
 
     /**
      * Copies the specified properties from this Pokémon into a new [PokemonProperties] instance.
@@ -1567,7 +1599,7 @@ open class Pokemon : ShowdownIdentifiable {
     val struct = ObjectValue<Pokemon>(this)
         .addPokemonFunctions(this)
 
-    fun markFeatureDirty(feature: SpeciesFeature) {
+    fun markFeatureDirty(feature: SpeciesFeature<*>) {
         _features.emit(feature)
     }
 
@@ -1650,7 +1682,7 @@ open class Pokemon : ShowdownIdentifiable {
     private val _gmaxFactor = registerObservable(SimpleObservable<Boolean>()) { GmaxFactorUpdatePacket({ this }, it) }
     private val _originalTrainerName = registerObservable(SimpleObservable<String?>()) { OriginalTrainerUpdatePacket({ this }, it) }
 
-    private val _features = registerObservable(SimpleObservable<SpeciesFeature>()) {
+    private val _features = registerObservable(SimpleObservable<SpeciesFeature<*>>()) {
         val featureProvider = SpeciesFeatures.getFeature(it.name)
         if (it is SynchronizedSpeciesFeature && featureProvider is SynchronizedSpeciesFeatureProvider && featureProvider.visible) {
             SpeciesFeatureUpdatePacket({ this }, species.resourceIdentifier, it)

@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 13th, 2023
  */
-interface SynchronizedSpeciesFeatureProvider<T : SynchronizedSpeciesFeature> : SpeciesFeatureProvider<T>, BufferSerializer {
+interface SynchronizedSpeciesFeatureProvider<T : SynchronizedSpeciesFeature<*>> : SpeciesFeatureProvider<T>, BufferSerializer {
     var visible: Boolean
     operator fun invoke(buffer: RegistryFriendlyByteBuf, name: String): T?
     /** Gets the feature from this Pokémon, if it has been created yet. */

@@ -1,6 +1,5 @@
 package com.cobblemon.mod.common.pokemon.transformation.form
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
@@ -49,7 +48,7 @@ open class PermanentForm (
 
     open val transformations: List<Transformation> get() = temporaryForms + evolutions
 
-    override fun initialize(species: Species, parent: FormData?): FormData {
+    override fun initialize(species: Species, parent: PermanentForm?): FormData {
         super.initialize(species, parent)
         // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species

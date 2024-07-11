@@ -84,7 +84,7 @@ object GlobalSpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
     }
 
     fun register(name: String, provider: SpeciesFeatureProvider<*>) = register(name, provider, isCoded = true)
-    fun <T : SpeciesFeature> register(name: String, providerLambda: () -> T) {
+    fun <T : SpeciesFeature<*>> register(name: String, providerLambda: () -> T) {
         register(name, object : SpeciesFeatureProvider<T> {
             override fun invoke(pokemon: Pokemon) = providerLambda()
             override fun invoke(nbt: CompoundTag) = providerLambda().apply { loadFromNBT(nbt) }

@@ -24,14 +24,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  */
 class StringSpeciesFeature(
     override val name: String,
-    var value: String
-) : SynchronizedSpeciesFeature, CustomPokemonProperty {
+    override var value: String
+) : SynchronizedSpeciesFeature<String>, CustomPokemonProperty {
     override fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag {
         pokemonNBT.putString(name, value)
         return pokemonNBT
     }
 
-    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
+    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature<String> {
         value = pokemonNBT.getString(name)?.takeIf { it.isNotBlank() }?.lowercase() ?: return this
         return this
     }
@@ -41,7 +41,7 @@ class StringSpeciesFeature(
         return pokemonJSON
     }
 
-    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
+    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature<String> {
         value = pokemonJSON.get(name)?.asString?.lowercase() ?: return this
         return this
     }

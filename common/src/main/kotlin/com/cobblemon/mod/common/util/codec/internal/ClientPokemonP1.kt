@@ -143,7 +143,7 @@ internal class ClientPokemonP1(
         )
 
         fun collectVisibleFeatures(pokemon: Pokemon) = pokemon.features
-            .filterIsInstance<SynchronizedSpeciesFeature>()
+            .filterIsInstance<SynchronizedSpeciesFeature<*>>()
             .filter { (SpeciesFeatures.getFeature(it.name) as? SynchronizedSpeciesFeatureProvider<*>)?.visible == true }
             .map { feature ->
                 val nbt = CompoundTag()

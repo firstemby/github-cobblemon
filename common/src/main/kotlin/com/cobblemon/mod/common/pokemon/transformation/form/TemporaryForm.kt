@@ -5,23 +5,24 @@ import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.pokemon.FormData
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 
 /**
- * A form of a [Species] that is interchangeable with a parent [PermanentForm]. These forms are temporary and may be toggled
- * OUTSIDE of battle by its [TransformationTrigger] when the [TransformationRequirement]s are satisfied.
+ * A form of a [Species] that is interchangeable with a parent [PermanentForm]. This type of form is temporary and may be toggled
+ * OUTSIDE of battle by a [TransformationTrigger] when the respective [TransformationRequirement]s are satisfied.
  *
- * For example:
+ * Sample forms:
  * https://bulbapedia.bulbagarden.net/wiki/Mega_Evolution
  * https://bulbapedia.bulbagarden.net/wiki/Rotom#Forms
  *
- * Note: triggering of forms INSIDE a battle is forced by Showdown.
+ * Note: triggering this type of form INSIDE a battle is instructed by Showdown.
  *
  * @author Segfault Guy
  * @since October 21st, 2023
  */
-class TemporaryForm (
+open class TemporaryForm (
     /** The [MoveTemplate] of the signature attack of the G-Max form. This is always null on any form aside G-Max. */
     val gigantamaxMove: MoveTemplate? = null,
     /** Whether this form is triggered during a battle. */
@@ -35,4 +36,16 @@ class TemporaryForm (
     override val trigger: TransformationTrigger = ItemInteractionTrigger(),
     /** The [TransformationRequirement]s that need to be satisfied for this transformation OUTSIDE of battle. */
     override val requirements: Set<TransformationRequirement> = mutableSetOf()
-) : FormData(), Transformation
+) : FormData(), Transformation {
+
+    @delegate:Transient
+    override val parentForm: PermanentForm by lazy { parentFormInitializer ?: throw IllegalStateException("Unable to find parent form of ${this.name}") }
+
+    override fun forceStart(pokemon: Pokemon) {
+
+        // TODO: execute this after form change effect
+        pokemon.form = this
+
+        super.forceStart(pokemon)
+    }
+}

@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -178,20 +179,27 @@ abstract class FormData(
         get() = _labels ?: species.labels
 
     /**
-     * The [FormData] that precedes this form. Null if a parent form does not exist.
+     * The [PermanentForm] that precedes this form. Null if a parent form does not exist.
      *
      * For example the parent of Toxtricity's 'Gmax' form can be either its  'Low-Key' or 'Standard' form.
      * The parent of Toxtricity's 'Low-Key' form is its 'Standard' form.
      * And the parent of Toxtricity's 'Standard' form is null (does not exist).
      */
     @delegate:Transient
-    val parentForm: FormData? by lazy { parentFormInitializer }
+    open val parentForm: PermanentForm? by lazy { parentFormInitializer }
 
     @delegate:Transient
     val species: Species by lazy { speciesInitializer }
 
+    /*
+    /** The [SpeciesFeatures] */
+    @delegate:Transient
+    val features: Collection<SpeciesFeature<*>> by lazy { featureInitializer }
+
+     */
+
     @Transient
-    private var parentFormInitializer: FormData? = null
+    protected open var parentFormInitializer: PermanentForm? = null
 
     @Transient
     private lateinit var speciesInitializer: Species
@@ -218,7 +226,7 @@ abstract class FormData(
         else -> this.standingEyeHeight
     }
 
-    open fun initialize(species: Species, parent: FormData? = null): FormData {
+    open fun initialize(species: Species, parent: PermanentForm? = null): FormData {
         this.speciesInitializer = species
         this.species
         this.parentFormInitializer = parent
