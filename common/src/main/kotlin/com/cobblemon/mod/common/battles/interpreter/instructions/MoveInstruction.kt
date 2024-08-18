@@ -111,6 +111,11 @@ class MoveInstruction(
                 }
             }
 
+            val moveEffectiveness = subsequentInstructions.filterIsInstance<EffectivenessInstruction>().mapNotNull { it.typeOfEffectiveness}
+            runtime.environment.getQueryStruct().addFunction("effectiveness") { params ->
+                return@addFunction StringValue(moveEffectiveness.firstOrNull() ?: "normal")
+            }
+
             val hurtTargets = subsequentInstructions.filterIsInstance<DamageInstruction>().mapNotNull { it.expectedTarget }
             runtime.environment.getQueryStruct().addFunction("hurt") { params ->
                 if (params.params.size == 0) {

@@ -21,6 +21,10 @@
       "delay": 0.1
     },
     {
+      "type": "run_action_effect",
+      "actionEffect": "cobblemon:generic_effectiveness"
+    },
+    {
       "type": "remove_holds",
       "holds": ["effects"]
     },

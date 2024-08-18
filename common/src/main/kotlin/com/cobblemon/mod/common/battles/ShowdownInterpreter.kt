@@ -92,7 +92,6 @@ object ShowdownInterpreter {
         updateInstructionParser["-mustrecharge"]         = { _, _, message, _ -> RechargeInstruction(message) }
         updateInstructionParser["replace"]               = { _, _, message, _ -> ReplaceInstruction(message) }
         updateInstructionParser["-resisted"]             = { _, _, message, _ -> ResistedInstruction(message) }
-        updateInstructionParser["-resisted"]             = { _, _, message, _ -> ResistedInstruction(message) }
         updateInstructionParser["-setboost"]             = { _, _, message, _ -> SetBoostInstruction(message) }
         updateInstructionParser["-sideend"]              = { _, _, message, _ -> SideEndInstruction(message) }
         updateInstructionParser["-sidestart"]            = { _, _, message, _ -> SideStartInstruction(message) }

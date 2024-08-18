@@ -21,13 +21,15 @@ import net.minecraft.registry.RegistryKeys
 /**
  * An action effect keyframe that plays a positioned sound for all matching entities.
  *
- * @author Hiroku
+ * @author Hiroku, Waldleufer
  * @since January 21st, 2024
  */
 class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
     override val entityCondition = "q.entity.is_user".asExpressionLike()
     var sound: String? = null
     val delay: ExpressionLike = "0".asExpressionLike()
+    val volume: ExpressionLike = "1".asExpressionLike()
+    val pitch: ExpressionLike = "1".asExpressionLike()
 
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
         val entities = context.providers
@@ -40,9 +42,13 @@ class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), Entit
             sound
         }?.asIdentifierDefaultingNamespace() ?: return skip()
 
+        val volumeValue = volume.resolveFloat(context.runtime)
+        val pitchValue = pitch.resolveFloat(context.runtime)
+
         entities.forEach { entity ->
-            val soundEvent = entity.world.registryManager.get(RegistryKeys.SOUND_EVENT).get(soundIdentifier) ?: return skip()
-            entity.playSound(soundEvent, 1f, 1f)
+            val soundEvent =
+                entity.world.registryManager.get(RegistryKeys.SOUND_EVENT).get(soundIdentifier) ?: return skip()
+            entity.playSound(soundEvent, volumeValue, pitchValue)
         }
 
         return delayedFuture(seconds = delay.resolveFloat(context.runtime), serverThread = true)

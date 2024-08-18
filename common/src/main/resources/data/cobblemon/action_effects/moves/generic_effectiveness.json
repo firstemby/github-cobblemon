@@ -1,0 +1,19 @@
+{
+  "condition": "q.move.damage_category != 'status' && q.effectiveness != 'immune'",
+  "timeline": [
+    {
+      "type": "entity_sound",
+      "entityCondition": "q.effectiveness == 'superEffective' && q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "sound": "cobblemon:supereffective",
+      "pitch": 1.0,
+      "volume": 1.6
+    },
+    {
+      "type": "entity_sound",
+      "entityCondition": "q.effectiveness == 'resisted' && q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "sound": "cobblemon:notveryeffective",
+      "pitch": 1.0,
+      "volume": 1.0
+    }
+  ]
+}

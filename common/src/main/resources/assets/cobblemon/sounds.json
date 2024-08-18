@@ -441,225 +441,225 @@
     "sounds": [ "cobblemon:effective" ]
   },
   "notveryeffective": {
-    "sounds": [ "cobblemon:notveryeffective" ]
+    "sounds": [ { "name": "cobblemon:attacks/effectiveness_layer/not_very_effective_layer", "volume": 0.8 } ]
   },
   "supereffective": {
-      "sounds": [ "cobblemon:supereffective" ]
+    "sounds": [ { "name": "cobblemon:attacks/effectiveness_layer/super_effective_layer", "volume": 0.6 } ]
   },
   "impact.normal": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_8", "volume": 1.0 }
     ]
   },
   "impact.ice": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ice_8", "volume": 1.0 }
     ]
   },
   "impact.water": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_water_8", "volume": 1.0 }
     ]
   },
   "impact.fire": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fire_8", "volume": 1.0 }
     ]
   },
   "impact.electric": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_electric_8", "volume": 1.0 }
     ]
   },
   "impact.grass": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_grass_8", "volume": 1.0 }
     ]
   },
   "impact.fighting": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fighting_8", "volume": 1.0 }
     ]
   },
   "impact.poison": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_poison_8", "volume": 1.0 }
     ]
   },
   "impact.ground": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ground_8", "volume": 1.0 }
     ]
   },
   "impact.flying": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_flying_8", "volume": 1.0 }
     ]
   },
   "impact.psychic": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_psychic_8", "volume": 1.0 }
     ]
   },
   "impact.bug": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_bug_8", "volume": 1.0 }
     ]
   },
   "impact.rock": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_rock_8", "volume": 1.0 }
     ]
   },
   "impact.ghost": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_ghost_8", "volume": 1.0 }
     ]
   },
   "impact.dragon": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dragon_8", "volume": 1.0 }
     ]
   },
   "impact.dark": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_dark_8", "volume": 1.0 }
     ]
   },
   "impact.steel": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_steel_8", "volume": 1.0 }
     ]
   },
   "impact.fairy": {
     "sounds": [
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_1", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_2", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_3", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_4", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_5", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_6", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_7", "volume": 0.8 },
-      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_8", "volume": 0.8 }
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_1", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_2", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_3", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_4", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_5", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_6", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_7", "volume": 1.0 },
+      { "name": "cobblemon:attacks/impact_generic/impact_generic_fairy_8", "volume": 1.0 }
     ]
   },
   "status.paralysis.actor": {

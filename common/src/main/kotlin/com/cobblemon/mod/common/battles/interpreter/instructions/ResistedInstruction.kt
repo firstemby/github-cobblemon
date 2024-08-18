@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -20,7 +19,8 @@ import com.cobblemon.mod.common.util.battleLang
  * @author Hunter
  * @since August 18th, 2022
  */
-class ResistedInstruction(val message: BattleMessage): InterpreterInstruction {
+class ResistedInstruction(override val message: BattleMessage): EffectivenessInstruction {
+    override val typeOfEffectiveness: String = "resisted"
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo {
