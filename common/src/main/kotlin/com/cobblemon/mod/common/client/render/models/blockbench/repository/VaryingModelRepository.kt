@@ -193,7 +193,7 @@ abstract class VaryingModelRepository<T : PosableModel> {
 
     fun getPoser(name: ResourceLocation, aspects: Set<String>): T {
         try {
-            val poser = this.variations[name]?.getPoser(aspects)
+            val poser = this.variations[cobblemonResource("gholdengo")]?.getPoser(aspects)
             if (poser != null) {
                 return poser
             }
