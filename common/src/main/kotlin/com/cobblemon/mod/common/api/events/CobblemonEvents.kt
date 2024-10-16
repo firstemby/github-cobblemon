@@ -77,6 +77,8 @@ object CobblemonEvents {
     val EVOLUTION_COMPLETE = EventObservable<EvolutionCompleteEvent>()
     @JvmField
     val POKEMON_NICKNAMED = CancelableObservable<PokemonNicknamedEvent>()
+    @JvmField
+    val POKEMON_HEADPAT = CancelableObservable<PokemonHeadpatEvent>()
 
     @JvmField
     val THROWN_POKEBALL_HIT = CancelableObservable<ThrownPokeballHitEvent>()
