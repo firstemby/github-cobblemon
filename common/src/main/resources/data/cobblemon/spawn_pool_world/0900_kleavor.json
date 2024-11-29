@@ -14,11 +14,13 @@
             "context": "grounded",
             "bucket": "rare",
             "level": "45-50",
-            "weight": 0.2,
+            "weight": 0.25,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_forest"
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_hills"
                 ],
                 "timeRange": "day"
             },

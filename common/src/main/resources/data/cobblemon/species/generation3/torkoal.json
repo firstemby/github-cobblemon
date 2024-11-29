@@ -25,8 +25,13 @@
   "eggGroups": [
     "field"
   ],
+  "behaviour": {
+    "resting": {
+      "canSleep": true
+    }
+  },
   "drops": {
-    "amount": 4,
+    "amount": 5,
     "entries": [
       {
         "item": "minecraft:coal",
@@ -34,6 +39,10 @@
       },
       {
         "item": "cobblemon:charcoal_stick",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:smoke_ball",
         "percentage": 5.0
       },
       {

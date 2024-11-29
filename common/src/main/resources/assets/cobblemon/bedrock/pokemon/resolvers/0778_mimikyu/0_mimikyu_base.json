@@ -5,14 +5,12 @@
     {
       "aspects": [],
       "poser": "cobblemon:mimikyu",
-      "model": "cobblemon:mimikyu_male.geo",
+      "model": "cobblemon:mimikyu.geo",
       "texture": "cobblemon:textures/pokemon/0778_mimikyu/mimikyu.png",
       "layers": []
     },
     {
-      "aspects": [
-        "shiny"
-      ],
+      "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0778_mimikyu/mimikyu_shiny.png"
     }
   ]

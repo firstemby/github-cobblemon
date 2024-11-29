@@ -208,7 +208,7 @@
         {
           "id": "vulpix_ninetales",
           "variant": "item_interact",
-          "result": "ninetales form=alola",
+          "result": "ninetales alolan",
           "consumeHeldItem": false,
           "learnableMoves": [
             "dazzlinggleam"
@@ -219,6 +219,9 @@
       ],
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.vulpix-alola.desc"
+      ],
       "drops": {
         "amount": 5,
         "entries": [

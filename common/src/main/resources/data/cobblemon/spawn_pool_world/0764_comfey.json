@@ -15,11 +15,13 @@
             "level": "24-49",
             "weight": 10.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_floral",
                     "#cobblemon:is_tropical_island"
-                ]
+                ],
+                "isRaining": false
             }
         },
         {
@@ -35,10 +37,12 @@
             "level": "24-49",
             "weight": 10.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isRaining": false
             }
         },
         {
@@ -52,7 +56,8 @@
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isRaining": false
             },
             "anticondition": {
                 "structures": [

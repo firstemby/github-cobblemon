@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "rare",
             "level": "6-31",
-            "weight": 9.0,
+            "weight": 7.5,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_hills",
                     "#cobblemon:is_temperate"
@@ -38,9 +39,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "6-31",
-            "weight": 9.0,
+            "weight": 8.4,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_magical"
                 ],

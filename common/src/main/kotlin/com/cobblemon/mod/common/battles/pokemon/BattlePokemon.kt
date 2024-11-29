@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles.pokemon
 
-import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
@@ -23,11 +22,13 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleUpdateTeamPokem
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
+import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import java.util.UUID
-import net.minecraft.text.MutableText
+import net.minecraft.network.chat.MutableComponent
 
 open class BattlePokemon(
     val originalPokemon: Pokemon,
@@ -36,10 +37,23 @@ open class BattlePokemon(
 ) {
     lateinit var actor: BattleActor
     companion object {
-        fun safeCopyOf(pokemon: Pokemon): BattlePokemon = BattlePokemon(
+        fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
+            val effectedPokemon = pokemon.clone()
+            BattleCloneProperty.isBattleClone().apply(effectedPokemon)
+            UncatchableProperty.uncatchable().apply(effectedPokemon)
+            return BattlePokemon(
+                originalPokemon = pokemon,
+                effectedPokemon = effectedPokemon,
+                postBattleEntityOperation = { it.recallWithAnimation() }
+            )
+        }
+
+        fun playerOwned(pokemon: Pokemon): BattlePokemon = BattlePokemon(
             originalPokemon = pokemon,
-            effectedPokemon = pokemon.clone(),
-            postBattleEntityOperation = { entity -> entity.discard() }
+            effectedPokemon = pokemon,
+            postBattleEntityOperation = { entity ->
+                entity.effects.wipe()
+            }
         )
     }
 
@@ -48,7 +62,7 @@ open class BattlePokemon(
     val health: Int
         get() = effectedPokemon.currentHealth
     val maxHealth: Int
-        get() = effectedPokemon.hp
+        get() = effectedPokemon.maxHealth
     val ivs: IVs
         get() = effectedPokemon.ivs
     val nature: Nature
@@ -74,10 +88,12 @@ open class BattlePokemon(
 
     val contextManager = ContextManager()
 
-    open fun getName(): MutableText {
+    open fun getName(): MutableComponent {
+        val displayPokemon = getIllusion()?.effectedPokemon ?: effectedPokemon
         return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
-            effectedPokemon.getDisplayName()
+            displayPokemon.getDisplayName()
         } else {
+            battleLang("owned_pokemon", actor.getName(), displayPokemon.getDisplayName())
 //            val mark = effectedPokemon.selectedMark
             val mark = PokemonMarks.marks[cobblemonResource("resurrected")]
             if (mark != null) {
@@ -95,13 +111,11 @@ open class BattlePokemon(
 
     fun isSentOut() = actor.battle.activePokemon.any { it.battlePokemon == this }
     fun canBeSentOut() =
-            if (actor.request?.side?.pokemon?.get(0)?.reviving == true) {
+            if (actor.request?.side?.pokemon?.any{ it.reviving } == true) {
                 !isSentOut() && !willBeSwitchedIn && health <= 0
             } else {
                 !isSentOut() && !willBeSwitchedIn && health > 0
             }
 
-    fun writeVariables(struct: VariableStruct) {
-        effectedPokemon.writeVariables(struct)
-    }
+    fun getIllusion(): BattlePokemon? = this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
 }

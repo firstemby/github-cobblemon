@@ -9,40 +9,63 @@
 package com.cobblemon.mod.common.client.net.effect
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.getQueryStruct
+import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
-import com.cobblemon.mod.common.client.particle.BedrockParticleEffectRepository
+import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm
-import com.cobblemon.mod.common.client.render.models.blockbench.PoseableEntityState
-import com.cobblemon.mod.common.entity.Poseable
+import com.cobblemon.mod.common.client.render.MatrixWrapper
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
-import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.Entity
+import net.minecraft.client.Minecraft
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 
 object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormEntityParticlePacket> {
-    override fun handle(packet: SpawnSnowstormEntityParticlePacket, client: MinecraftClient) {
-        val world = MinecraftClient.getInstance().world ?: return
-        val effect = BedrockParticleEffectRepository.getEffect(packet.effectId) ?: return
-        val entity = world.getEntityById(packet.entityId) as? Poseable ?: return
-        entity as Entity
-        val state = entity.delegate as PoseableEntityState<*>
-        val matrixWrapper = state.locatorStates[packet.locator] ?: state.locatorStates["root"]!!
+    override fun handle(packet: SpawnSnowstormEntityParticlePacket, client: Minecraft) {
+        val world = Minecraft.getInstance().level ?: return
+        val effect = BedrockParticleOptionsRepository.getEffect(packet.effectId) ?: return
+        val entity = world.getEntity(packet.entityId)
+        if (entity is PosableEntity) {
+            val state = entity.delegate as PosableState
+            val locators = packet.locator.firstNotNullOfOrNull { state.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return
 
-        val particleRuntime = MoLangRuntime().setup().setupClient()
-        particleRuntime.environment.getQueryStruct().addFunction("entity") { state.runtime.environment.getQueryStruct() }
+            val matrixWrappers = locators.mapNotNull { state.locatorStates[it] }
+            matrixWrappers.forEach { matrixWrapper ->
+                val particleRuntime = MoLangRuntime().setup().setupClient()
+                particleRuntime.environment.query.addFunction("entity") { state.runtime.environment.query }
+                val storm = ParticleStorm(
+                    effect = effect,
+                    matrixWrapper = matrixWrapper,
+                    world = world,
+                    runtime = particleRuntime,
+                    sourceVelocity = { entity.deltaMovement },
+                    sourceAlive = { !entity.isRemoved },
+                    sourceVisible = { !entity.isInvisible },
+                    entity = entity
+                )
 
-        val storm = ParticleStorm(
-            effect = effect,
-            matrixWrapper = matrixWrapper,
-            world = world,
-            runtime = particleRuntime,
-            sourceVelocity = { entity.velocity },
-            sourceAlive = { !entity.isRemoved },
-            sourceVisible = { !entity.isInvisible }
-        )
+                storm.spawn()
+            }
+        } else if (entity is LivingEntity) {
+            val matrixWrapper = MatrixWrapper()
+            matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
+            val particleRuntime = MoLangRuntime().setup().setupClient()
+            particleRuntime.environment.query.addFunction("entity") { params -> MoLangFunctions.entityFunctions.flatMap { it(entity).map { it.key to it.value } } }
+            val storm = ParticleStorm(
+                effect = effect,
+                matrixWrapper = matrixWrapper,
+                world = world,
+                runtime = particleRuntime,
+                sourceVelocity = { entity.deltaMovement },
+                sourceAlive = { !entity.isRemoved },
+                sourceVisible = { !entity.isInvisible },
+                entity = entity
+            )
+            storm.spawn()
+        }
 
-        storm.spawn()
     }
 }

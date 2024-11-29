@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "28-53",
-            "weight": 1.0,
+            "weight": 1.2,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_grassland"
                 ]
@@ -32,9 +33,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "28-53",
-            "weight": 0.025,
+            "weight": 0.02,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ]
@@ -51,9 +53,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "28-53",
-            "weight": 0.025,
+            "weight": 0.02,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ]
@@ -69,7 +72,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "28-53",
-            "weight": 0.125,
+            "weight": 0.1,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

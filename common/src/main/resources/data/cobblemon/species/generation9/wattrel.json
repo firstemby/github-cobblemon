@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Wattrel",
   "nationalPokedexNumber": 940,
   "primaryType": "electric",
@@ -34,6 +35,13 @@
     "water_1",
     "flying"
   ],
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "moves": [
     "1:growl",
     "1:peck",
@@ -59,12 +67,17 @@
     "tm:aircutter",
     "tm:airslash",
     "tm:bravebird",
+    "tm:charge",
     "tm:chargebeam",
+    "tm:dualwingbeat",
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
+    "tm:electroweb",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:featherdance",
     "tm:fly",
     "tm:hurricane",
     "tm:protect",
@@ -78,8 +91,10 @@
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
+    "tm:uproar",
     "tm:uturn",
     "tm:voltswitch",
+    "tm:weatherball",
     "tm:wildcharge"
   ],
   "labels": [
@@ -105,6 +120,12 @@
       ]
     }
   ],
+  "baseScale": 0.55,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.15,
+    "fixed": false
+  },
   "cannotDynamax": false,
   "pokedex": [
     "cobblemon.species.wattrel.desc"

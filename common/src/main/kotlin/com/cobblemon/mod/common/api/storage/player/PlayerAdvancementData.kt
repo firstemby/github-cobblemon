@@ -8,15 +8,16 @@
 
 package com.cobblemon.mod.common.api.storage.player
 
-import com.cobblemon.mod.common.advancement.criterion.AspectCriterionCondition
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
 
 class PlayerAdvancementData {
 
     var totalCaptureCount: Int = 0
+        private set
+    var totalEggsCollected: Int = 0
         private set
     var totalEggsHatched: Int = 0
         private set
@@ -36,12 +37,16 @@ class PlayerAdvancementData {
         private set
 
     private var totalTypeCaptureCounts = mutableMapOf<String, Int>()
-    private var totalDefeatedCounts = mutableMapOf<Identifier, Int>()
-    var aspectsCollected = mutableMapOf<Identifier, MutableSet<String>>()
+    private var totalDefeatedCounts = mutableMapOf<ResourceLocation, Int>()
+    var aspectsCollected = mutableMapOf<ResourceLocation, MutableSet<String>>()
         private set
 
     fun updateTotalCaptureCount() {
         totalCaptureCount++
+    }
+
+    fun updateTotalEggsCollected() {
+        totalEggsCollected++
     }
 
     fun updateTotalEggsHatched() {
@@ -101,11 +106,12 @@ class PlayerAdvancementData {
         }
     }
 
-    fun updateAspectsCollected(player: ServerPlayerEntity, pokemon: Pokemon) {
-        val aspectConditions = player.advancementTracker.progress.keys
-            .flatMap { it.criteria.values }
-            .mapNotNull { it.conditions }
-            .filterIsInstance<AspectCriterionCondition>()
+    fun updateAspectsCollected(player: ServerPlayer, pokemon: Pokemon) {
+        //TODO: take another look at using the Advancement progress
+        /*val aspectConditions = player.advancements.progress.keys
+            .flatMap { it.value.criteria.values }
+            .mapNotNull { it.trigger }
+            .filterIsInstance<AspectCriterion>()
 
         val trackedAspects = aspectConditions
             .filter { it.pokemon == pokemon.species.resourceIdentifier }
@@ -114,6 +120,9 @@ class PlayerAdvancementData {
         if (trackedAspects.isNotEmpty()) {
             val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
             pokemon.aspects.filter(trackedAspects::contains).forEach(collectedAspects::add)
-        }
+        }*/
+
+        val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
+        pokemon.aspects.forEach(collectedAspects::add)
     }
 }

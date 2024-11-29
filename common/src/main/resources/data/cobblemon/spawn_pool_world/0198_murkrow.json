@@ -14,7 +14,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "16-41",
-            "weight": 9.0,
+            "weight": 9.5,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -22,7 +22,8 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_spooky"
                 ]
@@ -39,9 +40,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "16-41",
-            "weight": 5.4,
+            "weight": 5.7,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_swamp"
                 ],
@@ -59,9 +61,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "16-41",
-            "weight": 5.4,
+            "weight": 5.7,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_taiga"
                 ],
@@ -79,9 +82,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "16-41",
-            "weight": 9.0,
+            "weight": 9.5,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_sky"
                 ],

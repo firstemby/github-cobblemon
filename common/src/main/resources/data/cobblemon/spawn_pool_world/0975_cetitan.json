@@ -14,9 +14,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "28-52",
-            "weight": 0.6,
+            "weight": 0.48,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
                 ]
@@ -33,9 +34,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "28-52",
-            "weight": 1.0,
+            "weight": 0.8,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"

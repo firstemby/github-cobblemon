@@ -13,7 +13,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.9,
+            "weight": 0.95,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -21,7 +21,8 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_jungle"
                 ]
@@ -37,7 +38,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.18,
+            "weight": 0.19,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -45,7 +46,8 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_temperate"
                 ]
@@ -61,7 +63,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.18,
+            "weight": 0.19,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -69,7 +71,8 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_savanna",
                     "#cobblemon:is_tropical_island"

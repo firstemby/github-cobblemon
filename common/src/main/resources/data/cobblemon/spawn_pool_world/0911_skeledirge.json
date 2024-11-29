@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 0.1,
+            "weight": 0.4,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_badlands"
                 ]
@@ -31,10 +32,10 @@
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 0.1,
+            "weight": 0.4,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_wasteland"
+                    "#cobblemon:nether/is_wasteland"
                 ]
             }
         }

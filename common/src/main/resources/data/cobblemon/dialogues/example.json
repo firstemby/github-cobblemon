@@ -2,18 +2,19 @@
   "escapeAction": "q.dialogue.set_page('quitter')",
   "speakers": {
     "pikachu": {
-      "name": "The Voice of Hiro",
+      "name": "Mouse Pokémon",
       "face": {
         "type": "artificial",
         "modelType": "pokemon",
         "identifier": "cobblemon:pikachu",
+        "isLeftSide": false,
         "aspects": [
           "shiny"
         ]
       }
     },
     "player": {
-      "face": "q.player.face();",
+      "face": "q.player.face(true);",
       "name": {
         "type": "expression",
         "expression": "q.player.username"
@@ -209,7 +210,7 @@
     {
       "id": "name-question",
       "speaker": "pikachu",
-      "lines": [ "Here's a puzzle though... What is my name? Lowercase only."],
+      "lines": [ "Here's a puzzle though... What Pokémon am I? Lowercase only."],
       "input": {
         "type": "text",
         "timeout": {
@@ -228,7 +229,7 @@
       "lines": [
         {
           "type": "expression",
-          "expression": "'Your name is ' + v.selected_option + ', right?'"
+          "expression": "'You are a ' + v.selected_option + ', right?'"
         }
       ],
       "input": "q.dialogue.set_page('name-guess');"
@@ -239,7 +240,7 @@
       "lines": [
         {
           "type": "expression",
-          "expression": "v.selected_option == 'hiroku' ? 'Correct! You know things that you shouldn\\'t...' : ('Wrong! I\\'m not \"' + v.selected_option + '\". Whoever that is.')"
+          "expression": "v.selected_option == 'pikachu' ? 'Correct! You know things that you shouldn\\'t...' : ('Wrong! I\\'m not a \"' + v.selected_option + '\". Whatever that is.')"
         }
       ],
       "input": {
@@ -258,7 +259,7 @@
     {
       "id": "too-slow",
       "speaker": "pikachu",
-      "lines": ["Don't know? Sad. Well I don't know your name either, so I guess we're even."],
+      "lines": ["Don't know? Sad. Well I don't know what you are either, so I guess we're even."],
       "input": "q.dialogue.close()"
     }
   ]

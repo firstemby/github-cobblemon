@@ -8,11 +8,13 @@
 
 package com.cobblemon.mod.common
 
-import net.minecraft.entity.ai.brain.Activity
+import net.minecraft.world.entity.schedule.Activity
 
 object CobblemonActivities {
     val activities = mutableListOf<Activity>()
-    val BATTLING_ACTIVITY = Activity("pokemon_battling")
+    val BATTLING = register(Activity("battling"))
+    val ACTION_EFFECT = register(Activity("action_effect"))
+    val NPC_CHATTING = register(Activity("npc_chatting"))
 
     fun register(activity: Activity): Activity {
         activities.add(activity)

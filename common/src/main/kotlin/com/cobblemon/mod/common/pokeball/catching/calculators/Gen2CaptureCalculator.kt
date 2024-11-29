@@ -12,16 +12,16 @@ import com.cobblemon.mod.common.api.pokeball.catching.CaptureContext
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.status.statuses.BurnStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.FrozenStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.ParalysisStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.PoisonBadlyStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.PoisonStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.SleepStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.BurnStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.FrozenStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.ParalysisStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.persistent.SleepStatus
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.random.Random
-import net.minecraft.entity.LivingEntity
+import net.minecraft.world.entity.LivingEntity
 
 /**
  * An implementation of the capture calculator used in the generation 1 games.
@@ -50,7 +50,7 @@ class Gen2CaptureCalculator(val bugsFixed: Boolean) : CaptureCalculator {
             this.bugsFixed && (status is ParalysisStatus || status is BurnStatus || status is PoisonStatus || status is PoisonBadlyStatus) -> 5
             else -> 1
         }
-        val modifiedCatchRate = max((((3F * pokemon.hp - 2F * pokemon.currentHealth) * modifiedRate) / (3F * pokemon.hp)) + bonusStatus, 1F).coerceAtMost(255F).roundToInt()
+        val modifiedCatchRate = max((((3F * pokemon.maxHealth - 2F * pokemon.currentHealth) * modifiedRate) / (3F * pokemon.maxHealth)) + bonusStatus, 1F).coerceAtMost(255F).roundToInt()
         if (Random.nextInt(256) <= modifiedCatchRate) {
             return CaptureContext.successful()
         }

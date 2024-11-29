@@ -1,4 +1,4 @@
-﻿{
+{
   "implemented": true,
   "name": "Charizard",
   "nationalPokedexNumber": 6,
@@ -187,6 +187,11 @@
       "fly": {
         "canFly": true,
         "flySpeedHorizontal": 0.6
+      },
+      "swim": {
+        "swimSpeed": 0.1,
+        "canSwimInWater": true,
+        "canWalkOnWater": true
       }
     }
   },
@@ -306,17 +311,14 @@
     "tm:weatherball",
     "tm:willowisp",
     "tm:workup",
-    "tutor:acrobatics",
     "tutor:aircutter",
     "tutor:airslash",
     "tutor:attract",
-    "tutor:bellydrum",
     "tutor:bide",
     "tutor:blastburn",
     "tutor:bodyslam",
     "tutor:brickbreak",
     "tutor:counter",
-    "tutor:crunch",
     "tutor:curse",
     "tutor:cut",
     "tutor:defensecurl",
@@ -344,7 +346,6 @@
     "tutor:fissure",
     "tutor:flameburst",
     "tutor:flamethrower",
-    "tutor:flareblitz",
     "tutor:fly",
     "tutor:focusblast",
     "tutor:focuspunch",
@@ -412,10 +413,10 @@
   ],
   "preEvolution": "charmeleon",
   "evolutions": [],
-  "baseScale": 1.35,
+  "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 2.1,
+    "width": 1.5,
+    "height": 2.65,
     "fixed": false
   },
   "baseFriendship": 50,

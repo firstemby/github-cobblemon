@@ -14,9 +14,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "45-50",
-            "weight": 0.2,
+            "weight": 0.16,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_jungle"
                 ],

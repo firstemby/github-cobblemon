@@ -49,6 +49,11 @@
       "willSleepOnBed": false,
       "depth": "normal",
       "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.18
+      }
     }
   },
   "moves": [
@@ -71,7 +76,9 @@
     "tm:acrobatics",
     "tm:batonpass",
     "tm:dig",
+    "tm:doubleedge",
     "tm:encore",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:fling",
@@ -79,6 +86,7 @@
     "tm:gigaimpact",
     "tm:gunkshot",
     "tm:helpinghand",
+    "tm:knockoff",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:metronome",
@@ -89,19 +97,25 @@
     "tm:poisontail",
     "tm:pounce",
     "tm:protect",
+    "tm:psychup",
     "tm:raindance",
     "tm:rest",
     "tm:scaryface",
     "tm:shadowclaw",
+    "tm:skittersmack",
     "tm:sleeptalk",
     "tm:sludgebomb",
+    "tm:sludgewave",
     "tm:substitute",
     "tm:sunnyday",
+    "tm:superfang",
     "tm:swordsdance",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
     "tm:thief",
+    "tm:throatchop",
+    "tm:toxic",
     "tm:trailblaze",
     "tm:uturn",
     "tm:venoshock",

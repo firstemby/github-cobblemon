@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
 import com.cobblemon.mod.common.CobblemonNetwork
-import com.cobblemon.mod.common.api.gui.ColourLibrary
-import com.cobblemon.mod.common.api.gui.MultiLineLabelK
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.text.text
@@ -21,16 +19,16 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.text.Text
 
 class MovesWidget(
     pX: Int, pY: Int,
     val summary: Summary
-): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Text.literal("MovesWidget")) {
+): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("MovesWidget")) {
     companion object {
         private const val WIDTH = 134
         private const val HEIGHT = 148
@@ -50,20 +48,33 @@ class MovesWidget(
     var selectedMove: Move? = null
 
     private var index = -1
-    private val moves = summary.selectedPokemon.moveSet.getMoves().map { move ->
+    private val moves = (
+            if (summary.selectedPokemon.relearnableMoves.count() > 0)
+                summary.selectedPokemon.moveSet.getMovesWithNulls()
+            else summary.selectedPokemon.moveSet
+        ).map { move ->
         index++
         MoveSlotWidget(
             x + 13,
             y + 6 + (MoveSlotWidget.MOVE_HEIGHT + 3) * index,
             move,
-            this
+            this,
+            summary.selectedPokemon
         )
     }.toMutableList().onEach {
         addWidget(it)
     }
 
-    override fun renderButton(context: DrawContext, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val matrices = context.matrices
+    private var descriptionScrollList = MoveDescriptionScrollList(
+        x + 69,
+        y + 113,
+        5
+    )
+
+
+    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        val matrices = context.pose()
+
         blitk(
             matrixStack = matrices,
             texture = movesBaseResource,
@@ -135,12 +146,12 @@ class MovesWidget(
             shadow = true
         )
 
-        val mcFont = MinecraftClient.getInstance().textRenderer
+        val mcFont = Minecraft.getInstance().font
         val movePower = if (selectedMove != null && selectedMove!!.power.toInt() > 0) selectedMove!!.power.toInt().toString().text() else "—".text()
         drawScaledText(
             context = context,
             text = movePower,
-            x = (x + 62.5) - (mcFont.getWidth(movePower) * SCALE),
+            x = (x + 62.5) - (mcFont.width(movePower) * SCALE),
             y = y + 115,
             scale = SCALE,
             shadow = true
@@ -150,7 +161,7 @@ class MovesWidget(
         drawScaledText(
             context = context,
             text = moveAccuracy,
-            x = (x + 62.5) - (mcFont.getWidth(moveAccuracy) * SCALE),
+            x = (x + 62.5) - (mcFont.width(moveAccuracy) * SCALE),
             y = y + 126,
             scale = SCALE,
             shadow = true
@@ -160,28 +171,15 @@ class MovesWidget(
         drawScaledText(
             context = context,
             text = moveEffect,
-            x = (x + 62.5) - (mcFont.getWidth(moveEffect) * SCALE),
+            x = (x + 62.5) - (mcFont.width(moveEffect) * SCALE),
             y = y + 137,
             scale = SCALE,
             shadow = true
         )
 
+         // Render move description
         if (selectedMove != null) {
-            matrices.push()
-            matrices.scale(SCALE, SCALE, 1F)
-            MultiLineLabelK.create(
-                component = selectedMove!!.description,
-                width = 57 / SCALE,
-                maxLines = 5
-            ).renderLeftAligned(
-                context = context,
-                x = (x + 70) / SCALE,
-                y = (y + 115) / SCALE,
-                ySpacing = 5.5 / SCALE,
-                colour = ColourLibrary.WHITE,
-                shadow = true
-            )
-            matrices.pop()
+            descriptionScrollList.renderWidget(context, pMouseX, pMouseY, pPartialTicks)
         }
     }
 
@@ -201,7 +199,7 @@ class MovesWidget(
                 targetSlot = 0
         }
 
-        CobblemonNetwork.sendPacketToServer(
+        CobblemonNetwork.sendToServer(
             RequestMoveSwapPacket(
                 move1 = movePos,
                 move2 = targetSlot,
@@ -210,12 +208,28 @@ class MovesWidget(
         )
     }
 
-    public fun format(input: Double): String {
+    fun format(input: Double): String {
         if (input <= 0) return "—"
         return "${decimalFormat.format(input)}%"
     }
 
-    public fun selectMove(move: Move?) {
+    fun selectMove(move: Move?) {
         selectedMove = if (selectedMove == move || move == null) null else move
+        descriptionScrollList.setMoveDescription(selectedMove?.description ?: "".text())
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+    }
+
+    override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (descriptionScrollList.isHovered) descriptionScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 }

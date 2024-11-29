@@ -10,10 +10,14 @@
     "h:frisk"
   ],
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:moon_stone",
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:air_balloon",
         "percentage": 10.0
       },
       {
@@ -292,10 +296,10 @@
   ],
   "preEvolution": "jigglypuff",
   "evolutions": [],
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 0.7,
-    "height": 1.2,
+    "width": 1,
+    "height": 1.4,
     "fixed": false
   },
   "baseFriendship": 50,

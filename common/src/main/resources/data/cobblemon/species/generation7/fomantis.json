@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Fomantis",
   "nationalPokedexNumber": 753,
   "primaryType": "grass",
@@ -14,9 +15,17 @@
     "special_defence": 35,
     "speed": 35
   },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "depth": "normal",
+      "light": "0-4"
+    }
+  },
   "catchRate": 190,
   "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "shoulderMountable": true,
   "baseExperienceYield": 50,
   "experienceGroup": "medium_fast",
   "eggCycles": 20,
@@ -125,9 +134,9 @@
       ]
     }
   ],
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
+    "width": 0.55,
     "height": 1,
     "fixed": false
   },

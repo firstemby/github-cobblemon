@@ -1,0 +1,20 @@
+{
+  "type": "choice",
+  "keys": ["region_bias"],
+  "default": "none",
+  "choices": [
+    "none",
+    "kanto",
+    "johto",
+    "hoenn",
+    "sinnoh",
+    "unova",
+    "kalos",
+    "alola",
+    "galar",
+    "hisui",
+    "paldea"
+  ],
+  "isAspect": true,
+  "aspectFormat": "region-bias-{{choice}}"
+}

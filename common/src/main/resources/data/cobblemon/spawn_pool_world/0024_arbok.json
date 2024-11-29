@@ -15,14 +15,15 @@
             "level": "22-45",
             "weight": 0.45,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-legacy-1",
+            "id": "arbok-legacy-2",
             "pokemon": "arbok snake_pattern=legacy",
             "presets": [
                 "natural"
@@ -33,14 +34,15 @@
             "level": "22-45",
             "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-attack-1",
+            "id": "arbok-attack-2",
             "pokemon": "arbok snake_pattern=attack",
             "presets": [
                 "natural"
@@ -51,14 +53,15 @@
             "level": "22-45",
             "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-speed-1",
+            "id": "arbok-speed-2",
             "pokemon": "arbok snake_pattern=speed",
             "presets": [
                 "natural"
@@ -69,14 +72,15 @@
             "level": "22-45",
             "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-elusive-1",
+            "id": "arbok-elusive-2",
             "pokemon": "arbok snake_pattern=elusive",
             "presets": [
                 "natural"
@@ -87,14 +91,15 @@
             "level": "22-45",
             "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-sound-1",
+            "id": "arbok-sound-2",
             "pokemon": "arbok snake_pattern=sound",
             "presets": [
                 "natural"
@@ -105,14 +110,15 @@
             "level": "22-45",
             "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
                 ]
             }
         },
         {
-            "id": "arbok-dark-2",
+            "id": "arbok-dark-3",
             "pokemon": "arbok snake_pattern=dark",
             "presets": [
                 "natural"
@@ -124,7 +130,7 @@
             "weight": 0.6,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_desert"
+                    "#cobblemon:nether/is_desert"
                 ]
             }
         }

@@ -1,4 +1,4 @@
-﻿{
+{
   "implemented": true,
   "name": "Basculin",
   "nationalPokedexNumber": 550,
@@ -32,7 +32,7 @@
     "special_defence": 55,
     "speed": 98
   },
-  "catchRate": 25,
+  "catchRate": 190,
   "maleRatio": 0.5,
   "shoulderMountable": false,
   "baseExperienceYield": 161,
@@ -167,8 +167,8 @@
   "evolutions": [],
   "baseScale": 1,
   "hitbox": {
-    "width": 1.1,
-    "height": 0.8,
+    "width": 1.18,
+    "height": 0.95,
     "fixed": false
   },
   "baseFriendship": 50,
@@ -199,7 +199,7 @@
         "special_defence": 55,
         "speed": 98
       },
-      "catchRate": 25,
+      "catchRate": 190,
       "maleRatio": 0.5,
       "baseExperienceYield": 161,
       "baseFriendship": 50,
@@ -243,7 +243,7 @@
         "special_defence": 55,
         "speed": 98
       },
-      "catchRate": 25,
+      "catchRate": 190,
       "maleRatio": 0.5,
       "baseExperienceYield": 161,
       "baseFriendship": 50,
@@ -327,19 +327,6 @@
           "id": "basculin_basculegion",
           "variant": "level_up",
           "result": "basculegion",
-          "consumeHeldItem": false,
-          "learnableMoves": [],
-          "requirements": [
-            {
-              "variant": "recoil",
-              "amount": 294
-            }
-          ]
-        },
-        {
-          "id": "basculin_basculegion",
-          "variant": "level_up",
-          "result": "basculegion form=f",
           "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [

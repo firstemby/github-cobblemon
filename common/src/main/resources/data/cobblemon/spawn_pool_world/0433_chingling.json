@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 1.8,
+            "weight": 1.68,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_forest",
                     "#cobblemon:is_mountain",
@@ -35,13 +36,32 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 5.4,
+            "weight": 5.04,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_magical"
                 ],
                 "timeRange": "night"
+            }
+        },
+        {
+            "id": "chingling-3",
+            "pokemon": "chingling",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 84.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "timeRange": "night",
+                "neededNearbyBlocks": [
+                    "minecraft:bell"
+                ]
             }
         }
     ]

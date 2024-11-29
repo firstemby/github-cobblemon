@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.storage.party
 
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -25,9 +26,11 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.server
 import com.google.gson.JsonObject
+import java.util.Collections
 import java.util.UUID
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.core.RegistryAccess
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.level.ServerPlayer
 
 /**
  * A [PokemonStore] for a party of Pokémon. This is a simple structure that by default will hold 6 nullable slots of Pokémon.
@@ -44,6 +47,8 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
 
     /** A list of player UUIDs representing players that are observing this store. This is NOT serialized/deserialized. */
     var observerUUIDs = mutableListOf<UUID>()
+
+    val struct = asMoLangValue()
 
     override fun iterator() = slots.filterNotNull().iterator()
     /** Gets the Pokémon at the specified slot. It will return null if the slot is empty or the given slot is out of bounds. */
@@ -87,7 +92,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         return position.slot in (0 until slots.size)
     }
 
-    override fun getObservingPlayers() = server()?.playerManager?.playerList?.filter { it.uuid in observerUUIDs } ?: emptyList()
+    override fun getObservingPlayers() = server()?.playerList?.players?.filter { it.uuid in observerUUIDs } ?: emptyList()
 
     /** The total amount of slots in the party. */
     fun size() = slots.size
@@ -95,18 +100,18 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     /** The amount of party slots that are occupied by a [Pokemon]. */
     fun occupied() = slots.filterNotNull().count()
 
-    override fun sendTo(player: ServerPlayerEntity) {
+    override fun sendTo(player: ServerPlayer) {
         player.sendPacket(InitializePartyPacket(false, uuid, slots.size))
         slots.forEachIndexed { index, pokemon ->
             if (pokemon != null) {
-                player.sendPacket(SetPartyPokemonPacket(uuid, PartyPosition(index), pokemon))
+                player.sendPacket(SetPartyPokemonPacket(uuid, PartyPosition(index)) { pokemon })
             }
         }
     }
 
     override operator fun set(position: PartyPosition, pokemon: Pokemon) {
         super.set(position, pokemon)
-        sendPacketToObservers(SetPartyPokemonPacket(uuid, position, pokemon))
+        sendPacketToObservers(SetPartyPokemonPacket(uuid, position) { pokemon })
     }
 
     override fun remove(pokemon: Pokemon): Boolean {
@@ -152,26 +157,26 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     /** Maps the slots of the party using the giving mapper function, but preserving the nulls in the party at the right spots. */
     fun <T : Any> mapNullPreserving(mapper: (Pokemon) -> T): List<T?> = toGappyList().map { it?.let(mapper) }
 
-    override fun saveToNBT(nbt: NbtCompound): NbtCompound {
+    override fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
         nbt.putInt(DataKeys.STORE_SLOT_COUNT, slots.size)
         for (slot in slots.indices) {
             val pokemon = get(slot)
             if (pokemon != null) {
-                nbt.put(DataKeys.STORE_SLOT + slot, pokemon.saveToNBT(NbtCompound()))
+                nbt.put(DataKeys.STORE_SLOT + slot, pokemon.saveToNBT(registryAccess))
             }
         }
         return nbt
     }
 
-    override fun loadFromNBT(nbt: NbtCompound): PartyStore {
-        val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT)
-        while (slotCount > slots.size) { slots.removeLast() }
-        while (slotCount < slots.size) { slots.add(null) }
+    override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PartyStore {
+        val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).takeIf { it in 1..6 } ?: 6
+        while (slotCount < slots.size) { slots.removeLast() }
+        while (slotCount > slots.size) { slots.add(null) }
         for (slot in slots.indices) {
             val pokemonNBT = nbt.getCompound(DataKeys.STORE_SLOT + slot)
             try {
                 if (!pokemonNBT.isEmpty) {
-                    slots[slot] = Pokemon().loadFromNBT(pokemonNBT)
+                    slots[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
                 }
             } catch (_: InvalidSpeciesException) {
                 handleInvalidSpeciesNBT(pokemonNBT)
@@ -183,18 +188,18 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         return this
     }
 
-    override fun saveToJSON(json: JsonObject): JsonObject {
+    override fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
         json.addProperty(DataKeys.STORE_SLOT_COUNT, slots.size)
         for (slot in slots.indices) {
             val pokemon = get(slot)
             if (pokemon != null) {
-                json.add(DataKeys.STORE_SLOT + slot, pokemon.saveToJSON(JsonObject()))
+                json.add(DataKeys.STORE_SLOT + slot, pokemon.saveToJSON(registryAccess))
             }
         }
         return json
     }
 
-    override fun loadFromJSON(json: JsonObject): PartyStore {
+    override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PartyStore {
         val slotCount = json.get(DataKeys.STORE_SLOT_COUNT).asInt
         while (slotCount > slots.size) { slots.removeLast() }
         while (slotCount < slots.size) { slots.add(null) }
@@ -203,7 +208,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
             if (json.has(key)) {
                 val pokemonJSON = json.get(key).asJsonObject
                 try {
-                    slots[slot] = Pokemon().loadFromJSON(pokemonJSON)
+                    slots[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJSON)
                 } catch (_: InvalidSpeciesException) {
                     handleInvalidSpeciesJSON(pokemonJSON)
                 }
@@ -228,12 +233,12 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         }
     }
 
-    override fun loadPositionFromNBT(nbt: NbtCompound): StoreCoordinates<PartyPosition> {
+    override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PartyPosition> {
         val slot = nbt.getByte(DataKeys.STORE_SLOT).toInt()
         return StoreCoordinates(this, PartyPosition(slot))
     }
 
-    override fun savePositionToNBT(position: PartyPosition, nbt: NbtCompound) {
+    override fun savePositionToNBT(position: PartyPosition, nbt: CompoundTag) {
         nbt.putByte(DataKeys.STORE_SLOT, position.slot.toByte())
     }
 
@@ -250,20 +255,25 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     fun getHealingRemainderPercent(): Float {
         var totalPercent = 0.0f
         for (pokemon in this) {
-            totalPercent += (1.0f - (pokemon.currentHealth.toFloat() / pokemon.hp))
+            totalPercent += (1.0f - (pokemon.currentHealth.toFloat() / pokemon.maxHealth))
         }
         return totalPercent
     }
 
-    fun toBattleTeam(clone: Boolean = false, checkHealth: Boolean = true, leadingPokemon: UUID? = null) = mapNotNull {
-        // TODO Other 'able to battle' checks
-        return@mapNotNull if (clone) {
-            BattlePokemon.safeCopyOf(it)
-        } else {
-            BattlePokemon(it)
+    @JvmOverloads
+    fun toBattleTeam(clone: Boolean = false, healPokemon: Boolean = false, leadingPokemon: UUID? = null) : List<BattlePokemon> {
+        val result = this.mapNotNull {
+            return@mapNotNull if (clone) {
+                BattlePokemon.safeCopyOf(it)
+            } else {
+                BattlePokemon.playerOwned(it)
+            }.also { if (healPokemon) it.effectedPokemon.heal() }
+        }.toMutableList()
+        if(leadingPokemon != null) {
+            Collections.rotate(result, result.size - this.indexOfFirst { it.uuid == leadingPokemon })
         }
-    }.sortedBy { if (it.uuid == leadingPokemon) 0 else (indexOf(it.originalPokemon) + 1) }
-
+        return result
+    }
     fun clearParty() {
         forEach {
             it.tryRecallWithAnimation()

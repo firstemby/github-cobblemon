@@ -7,18 +7,26 @@
             "id": "yanmega-1",
             "pokemon": "yanmega",
             "presets": [
-                "freshwater",
                 "water_surface"
             ],
             "type": "pokemon",
             "context": "surface",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "33-52",
-            "weight": 0.6,
+            "weight": 0.96,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_freshwater"
+                ],
                 "timeRange": "day",
                 "isRaining": false
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -29,11 +37,12 @@
             ],
             "type": "pokemon",
             "context": "surface",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "33-52",
-            "weight": 0.2,
+            "weight": 0.32,
             "condition": {
-                "canSeeSky": false,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_lush"
                 ]
@@ -47,9 +56,9 @@
             ],
             "type": "pokemon",
             "context": "surface",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "33-52",
-            "weight": 0.2,
+            "weight": 0.32,
             "condition": {
                 "biomes": [
                     "#the_bumblezone:the_bumblezone"

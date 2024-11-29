@@ -1,4 +1,5 @@
-﻿{
+{
+  "implemented": true,
   "name": "Lurantis",
   "nationalPokedexNumber": 754,
   "primaryType": "grass",
@@ -13,6 +14,14 @@
     "special_attack": 80,
     "special_defence": 90,
     "speed": 45
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "depth": "normal",
+      "light": "0-4"
+    }
   },
   "catchRate": 75,
   "maleRatio": 0.5,
@@ -229,8 +238,8 @@
   "evolutions": [],
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 1.5,
     "fixed": false
   },
   "baseFriendship": 50,

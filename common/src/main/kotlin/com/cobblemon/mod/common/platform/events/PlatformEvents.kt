@@ -59,4 +59,11 @@ object PlatformEvents {
     @JvmField
     val CLIENT_ITEM_TOOLTIP = EventObservable<ItemTooltipEvent>()
 
+    @JvmField
+    val CLIENT_ENTITY_LOAD = EventObservable<ClientEntityEvent.Load>()
+    @JvmField
+    val CLIENT_ENTITY_UNLOAD = EventObservable<ClientEntityEvent.Unload>()
+
+    @JvmField
+    val RENDER = EventObservable<RenderEvent>()
 }

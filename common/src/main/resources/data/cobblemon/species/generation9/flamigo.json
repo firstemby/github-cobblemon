@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Flamigo",
   "nationalPokedexNumber": 973,
   "primaryType": "flying",
@@ -48,6 +49,26 @@
     "special_defence": 0,
     "speed": 0
   },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.16
+      },
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "swimSpeed": 0.16,
+        "canSwimInWater": true,
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "times": "night"
+    }
+  },
   "experienceGroup": "medium_slow",
   "eggCycles": 20,
   "eggGroups": [
@@ -81,8 +102,11 @@
     "tm:bulkup",
     "tm:chillingwater",
     "tm:closecombat",
+    "tm:dualwingbeat",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:featherdance",
     "tm:fling",
     "tm:fly",
     "tm:gigaimpact",
@@ -91,8 +115,10 @@
     "tm:liquidation",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:lunge",
     "tm:pounce",
     "tm:protect",
+    "tm:psychup",
     "tm:rest",
     "tm:reversal",
     "tm:sleeptalk",
@@ -103,9 +129,17 @@
     "tm:taunt",
     "tm:terablast",
     "tm:thief",
+    "tm:throatchop",
+    "tm:upperhand",
     "tm:uturn",
     "tm:waterpulse"
   ],
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 1,
+    "height": 2,
+    "fixed": false
+  },
   "labels": [
     "gen9"
   ],

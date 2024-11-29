@@ -13,7 +13,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
-            "weight": 5.4,
+            "weight": 5.52,
             "weightMultiplier": {
                 "multiplier": 2.5,
                 "condition": {
@@ -21,7 +21,8 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_forest",
                     "#cobblemon:is_taiga"
@@ -43,15 +44,15 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.8,
+            "weight": 1.9,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_forest"
+                    "#cobblemon:nether/is_forest"
                 ]
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_nether_frozen"
+                    "#cobblemon:nether/is_frozen"
                 ]
             }
         },
@@ -65,7 +66,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
-            "weight": 5.4,
+            "weight": 5.52,
             "weightMultiplier": {
                 "multiplier": 2.5,
                 "condition": {
@@ -73,9 +74,11 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_snowy_forest"
+                    "#cobblemon:is_snowy_forest",
+                    "#cobblemon:is_snowy_taiga"
                 ]
             }
         },
@@ -89,10 +92,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.8,
+            "weight": 1.9,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_frozen"
+                    "#cobblemon:nether/is_frozen"
                 ]
             }
         }

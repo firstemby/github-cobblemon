@@ -8,80 +8,93 @@
 
 package com.cobblemon.mod.common.trade
 
-import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent
-import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
+import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.text.aqua
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferExpiredPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferNotificationPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
-import com.cobblemon.mod.common.util.getPlayer
-import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.canInteractWith
+import com.cobblemon.mod.common.util.party
 import java.util.UUID
-import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.server.level.ServerPlayer
 
-object TradeManager {
-    class TradeRequest(val tradeOfferId: UUID, val senderId: UUID, val receiverId: UUID)
+/**
+ * Responsible for managing [ActiveTrade]s and the respective [TradeRequest]s that create them.
+ *
+ * @author Hiroku
+ * @since March 4th, 2023
+ */
+object TradeManager : RequestManager<TradeManager.TradeRequest>() {
 
-    val requests = mutableListOf<TradeRequest>()
-    val activeTrades = mutableListOf<ActiveTrade>()
-
-    fun getExistingRequest(playerId: UUID) = requests.find { it.senderId == playerId || it.receiverId == playerId }
-    fun getActiveTrade(playerId: UUID) =
-        activeTrades.find { it.player1.uuid == playerId || it.player2.uuid == playerId }
-
-    fun offerTrade(player: ServerPlayerEntity, otherPlayerEntity: ServerPlayerEntity) {
-        val existingFromPlayer = requests.find { it.senderId == player.uuid }
-        if (existingFromPlayer != null) {
-            existingFromPlayer.receiverId.getPlayer()?.sendPacket(TradeOfferExpiredPacket(existingFromPlayer.tradeOfferId))
-        }
-        if (getActiveTrade(otherPlayerEntity.uuid) != null) {
-            player.sendMessage(lang("trade.occupied", otherPlayerEntity.name), true)
-        } else {
-            val request = TradeRequest(UUID.randomUUID(), player.uuid, otherPlayerEntity.uuid)
-            requests.add(request)
-            afterOnServer(seconds = 60F) {
-                if (requests.remove(request)) {
-                    player.sendMessage(lang("trade.request_expired", otherPlayerEntity.name), true)
-                }
-            }
-
-            otherPlayerEntity.sendPacket(TradeOfferNotificationPacket(request.tradeOfferId, player.uuid, player.name.copy()))
-            player.sendMessage(lang("trade.request_sent", otherPlayerEntity.name), true)
-        }
+    init {
+        register(this)
     }
 
-    fun acceptTradeRequest(player: ServerPlayerEntity, tradeOfferId: UUID) {
-        val request = requests.find { it.tradeOfferId == tradeOfferId }
-        if (request == null) {
-            player.sendMessage(lang("trade.request_already_expired"), true)
-        } else {
-            requests.remove(request)
-            val otherPlayer = request.senderId.getPlayer() ?: return
-            val trade = ActiveTrade(PlayerTradeParticipant(player), PlayerTradeParticipant(otherPlayer))
-            activeTrades.add(trade)
-            player.sendPacket(TradeStartedPacket(otherPlayer.uuid, otherPlayer.name.copy(), trade.player2.party.mapNullPreserving(::TradeablePokemon)))
-            otherPlayer.sendPacket(TradeStartedPacket(player.uuid, player.name.copy(), trade.player1.party.mapNullPreserving(::TradeablePokemon)))
-        }
+    /**
+     * Represents an interaction request between players to trade.
+     *
+     * @param sender The player sending this request.
+     * @param receiver The player receiving this request.
+     * @param expiryTime How long (in seconds) this request is active.
+     */
+    data class TradeRequest(
+        override val sender: ServerPlayer,
+        override val receiver: ServerPlayer,
+        override val expiryTime: Int = 20
+    ) : ServerPlayerActionRequest {
+        override val key: String = "trade"
+        override val requestID: UUID = UUID.randomUUID()
     }
 
-    fun onLogoff(player: ServerPlayerEntity) {
-        val request = requests.find { it.senderId == player.uuid || it.receiverId == player.uuid }
-        if (request != null) {
-            val otherPlayer = if (request.receiverId == player.uuid) request.senderId.getPlayer() else request.receiverId.getPlayer()
-            otherPlayer?.sendPacket(TradeOfferExpiredPacket(request.tradeOfferId))
-            requests.remove(request)
-        }
+    private val activeTrades = mutableListOf<ActiveTrade>()
 
-        val trade = getActiveTrade(player.uuid)
+    fun removeActiveTrade(trade: ActiveTrade) = activeTrades.remove(trade)
+
+    fun getActiveTrade(playerId: UUID) = activeTrades.find { it.player1.uuid == playerId || it.player2.uuid == playerId }
+
+    override fun expirationPacket(request: TradeRequest): NetworkPacket<*> = TradeOfferExpiredPacket(request)
+
+    override fun notificationPacket(request: TradeRequest): NetworkPacket<*> = TradeOfferNotificationPacket(request)
+
+    override fun onAccept(request: TradeRequest) {
+        val trade = ActiveTrade(PlayerTradeParticipant(request.receiver), PlayerTradeParticipant(request.sender))
+        activeTrades.add(trade)
+        request.sendToSender(TradeStartedPacket(request.sender.uuid, request.receiver.name.plainCopy(), trade.player1.party.mapNullPreserving(::TradeablePokemon)))
+        request.sendToReceiver(TradeStartedPacket(request.receiver.uuid, request.sender.name.plainCopy(), trade.player2.party.mapNullPreserving(::TradeablePokemon)))
+    }
+
+    override fun canAccept(request: TradeRequest): Boolean {
+        if (request.sender.party().none()) {
+            request.notifySender(true, "error.insufficient_pokemon.self")
+            request.notifyReceiver(true, "error.insufficient_pokemon.other", request.sender.name.copy().aqua())
+        }
+        else if (request.receiver.party().none()) {
+            request.notifySender(true, "error.insufficient_pokemon.other", request.sender.name.copy().aqua())
+            request.notifyReceiver(true, "error.insufficient_pokemon.self")
+        }
+        // isBusy already checks if sender is in an active trade
+        else return true
+        return false
+    }
+
+    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean = player.canInteractWith(target, Cobblemon.config.tradeMaxDistance)
+
+    override fun onLogoff(player: ServerPlayer) {
+        super.onLogoff(player)
+        val trade = this.getActiveTrade(player.uuid)
         if (trade != null) {
             val tradeParticipant = trade.getTradeParticipant(player.uuid)
             val oppositeParticipant = trade.getOppositePlayer(tradeParticipant)
             oppositeParticipant.cancelTrade(trade)
-            activeTrades.remove(trade)
+            this.removeActiveTrade(trade)
         }
     }
 
@@ -92,17 +105,17 @@ object TradeManager {
         party1.remove(pokemon1)
         party2.remove(pokemon2)
 
-        pokemon1.setFriendship(0)
-        pokemon2.setFriendship(0)
+        pokemon1.setFriendship(pokemon1.form.baseFriendship)
+        pokemon2.setFriendship(pokemon2.form.baseFriendship)
 
         party2.add(pokemon1)
         party1.add(pokemon2)
 
-        pokemon1.evolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+        pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
             it.attemptEvolution(pokemon1, pokemon2)
         }
 
-        pokemon2.evolutions.filterIsInstance<TradeEvolution>().firstOrNull {
+        pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
             it.attemptEvolution(pokemon2, pokemon1)
         }
         CobblemonEvents.TRADE_COMPLETED.post(TradeCompletedEvent(player1, pokemon2, player2, pokemon1))

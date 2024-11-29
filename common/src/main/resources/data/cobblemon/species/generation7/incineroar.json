@@ -25,11 +25,27 @@
   "eggGroups": [
     "field"
   ],
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.28
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "times": "night",
+      "willSleepOnBed": true
+    }
+  },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:charcoal_stick",
+        "percentage": 25.0
+      },
+      {
+        "item": "cobblemon:expert_belt",
         "percentage": 25.0
       }
     ]
@@ -181,10 +197,10 @@
   ],
   "preEvolution": "torracat",
   "evolutions": [],
-  "baseScale": 1.2,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 1,
-    "height": 2.1,
+    "height": 2.9,
     "fixed": false
   },
   "baseFriendship": 50,

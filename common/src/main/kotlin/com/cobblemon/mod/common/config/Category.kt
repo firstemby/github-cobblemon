@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.config
 
 enum class Category {
     Starter,
+    Pokedex,
     Pokemon,
     Spawning,
     Battles,
     PassiveStatus,
     Healing,
     Storage,
-    World
+    World,
+    Debug
 }

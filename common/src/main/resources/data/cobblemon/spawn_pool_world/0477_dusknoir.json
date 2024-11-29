@@ -13,31 +13,14 @@
             "context": "grounded",
             "bucket": "common",
             "level": "41-53",
-            "weight": 0.06,
+            "weight": 0.03,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_spooky"
                 ],
                 "timeRange": "night"
-            }
-        },
-        {
-            "id": "dusknoir-2",
-            "pokemon": "dusknoir",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "context": "grounded",
-            "bucket": "uncommon",
-            "level": "41-53",
-            "weight": 0.06,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_deep_dark"
-                ]
             }
         },
         {
@@ -50,10 +33,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "41-53",
-            "weight": 0.1,
+            "weight": 0.05,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_soul_sand"
+                    "#cobblemon:nether/is_soul_sand"
                 ]
             }
         }

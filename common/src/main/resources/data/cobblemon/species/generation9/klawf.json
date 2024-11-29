@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Klawf",
   "nationalPokedexNumber": 950,
   "primaryType": "rock",
@@ -57,14 +58,18 @@
     "tm:bulldoze",
     "tm:dig",
     "tm:earthpower",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:fling",
     "tm:gigaimpact",
     "tm:helpinghand",
+    "tm:highhorsepower",
     "tm:hyperbeam",
     "tm:irondefense",
+    "tm:knockoff",
     "tm:metalclaw",
+    "tm:meteorbeam",
     "tm:mudshot",
     "tm:mudslap",
     "tm:powergem",
@@ -78,7 +83,9 @@
     "tm:sandstorm",
     "tm:scaryface",
     "tm:shadowclaw",
+    "tm:skittersmack",
     "tm:sleeptalk",
+    "tm:smackdown",
     "tm:stealthrock",
     "tm:stompingtantrum",
     "tm:stoneedge",
@@ -86,14 +93,12 @@
     "tm:sunnyday",
     "tm:swordsdance",
     "tm:takedown",
+    "tm:temperflare",
     "tm:terablast",
     "tm:thief",
+    "tm:throatchop",
     "tm:trailblaze",
-    "tm:xscissor",
-    "tutor:block",
-    "tutor:rocksmash",
-    "tutor:rocktomb",
-    "tutor:visegrip"
+    "tm:xscissor"
   ],
   "labels": [
     "gen9"
@@ -101,6 +106,12 @@
   "aspects": [],
   "height": 13,
   "weight": 790,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 2.65,
+    "height": 1.25,
+    "fixed": false
+  },
   "evolutions": [],
   "cannotDynamax": false,
   "pokedex": [

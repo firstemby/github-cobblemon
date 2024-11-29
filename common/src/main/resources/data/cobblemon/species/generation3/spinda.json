@@ -26,6 +26,12 @@
     "field",
     "human_like"
   ],
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "times": "night"
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

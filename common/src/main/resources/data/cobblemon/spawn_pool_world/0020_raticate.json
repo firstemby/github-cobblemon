@@ -15,7 +15,8 @@
             "level": "20-41",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_grassland"
                 ],
@@ -39,7 +40,8 @@
             "level": "20-41",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": false,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
@@ -61,7 +63,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "20-41",
-            "weight": 1.0,
+            "weight": 1.6,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -87,7 +89,8 @@
             "level": "20-41",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": false,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
@@ -109,7 +112,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "20-41",
-            "weight": 1.0,
+            "weight": 1.6,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -135,7 +138,8 @@
             "level": "20-41",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_spooky"
                 ],
@@ -152,7 +156,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "20-41",
-            "weight": 1.0,
+            "weight": 1.6,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

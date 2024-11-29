@@ -8,8 +8,11 @@
 
 package com.cobblemon.mod.common.api.abilities
 
+import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.google.gson.JsonObject
-import net.minecraft.nbt.NbtCompound
+import com.mojang.serialization.Codec
+import net.minecraft.nbt.CompoundTag
 
 /**
  * This represents the base of an Ability.
@@ -19,22 +22,21 @@ import net.minecraft.nbt.NbtCompound
  */
 class AbilityTemplate(
     val name: String = "",
-    var builder: (AbilityTemplate, forced: Boolean) -> Ability = { template, forced -> Ability(template, forced) },
+    var builder: (AbilityTemplate, forced: Boolean, priority: Priority) -> Ability = { template, forced, priority -> Ability(template, forced, priority) },
     val displayName: String = "cobblemon.ability.$name",
     val description: String = "cobblemon.ability.$name.desc"
 ) {
     /**
      * Returns the Ability or if applicable the extension connected to this template
      */
-    fun create(forced: Boolean = false) = builder(this, forced)
-
+    fun create(forced: Boolean = false, priority: Priority = Priority.LOWEST) = builder(this, forced, priority)
 
     /**
      * Returns the Ability and loads the given NBT Tag into it.
      *
      * Ability extensions need to write and read their needed data from here.
      */
-    fun create(nbt: NbtCompound) = create().loadFromNBT(nbt)
+    fun create(nbt: CompoundTag) = create().loadFromNBT(nbt)
 
     /**
      * Returns the Ability and loads the given JSON object into it.
@@ -42,4 +44,15 @@ class AbilityTemplate(
      * Ability extensions need to write and read their needed data from here.
      */
     fun create(json: JsonObject) = create().loadFromJSON(json)
+
+    companion object {
+
+        @JvmStatic
+        val CODEC: Codec<AbilityTemplate> = CodecUtils.createByStringCodec(
+            Abilities::get,
+            AbilityTemplate::name
+        ) { id -> "No ability for ID $id" }
+
+    }
+
 }

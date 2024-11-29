@@ -144,14 +144,16 @@
       ],
       "height": 5,
       "weight": 325,
-      "preEvolution": "zigzagoon form=galar",
+      "preEvolution": "zigzagoon galarian",
       "evolutions": [
         {
           "id": "linoone_obstagoon",
           "variant": "level_up",
           "result": "obstagoon",
           "consumeHeldItem": false,
-          "learnableMoves": [],
+          "learnableMoves": [
+            "obstruct"
+          ],
           "requirements": [
             {
               "variant": "level",

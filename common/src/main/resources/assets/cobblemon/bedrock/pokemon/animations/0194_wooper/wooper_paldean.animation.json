@@ -602,7 +602,7 @@
 			},
 			"sound_effects": {
 				"0.25": {
-					"effect": "pokemon.wooper_paldean.cry"
+					"effect": "pokemon.wooper.cry"
 				}
 			}
 		},

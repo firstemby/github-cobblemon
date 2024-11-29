@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "34-51",
-            "weight": 0.6,
+            "weight": 0.48,
             "condition": {
-                "canSeeSky": false,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ]
@@ -36,10 +37,10 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "34-51",
-            "weight": 0.2,
+            "weight": 0.16,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_basalt"
+                    "#cobblemon:nether/is_basalt"
                 ]
             }
         }

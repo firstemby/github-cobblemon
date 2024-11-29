@@ -135,6 +135,9 @@
       "aspects": [
         "paldean"
       ],
+      "pokedex": [
+        "cobblemon.species.wooper-paldea.desc"
+      ],
       "height": 4,
       "weight": 85,
       "evolutions": [
@@ -143,7 +146,9 @@
           "variant": "level_up",
           "result": "clodsire",
           "consumeHeldItem": false,
-          "learnableMoves": [],
+          "learnableMoves": [
+            "amnesia"
+          ],
           "requirements": [
             {
               "variant": "level",
@@ -153,7 +158,20 @@
         }
       ],
       "cannotDynamax": false,
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 2,
+        "entries": [
+          {
+            "item": "minecraft:clay_ball",
+            "quantityRange": "0-1"
+          },
+          {
+            "item": "cobblemon:pecha_berry",
+            "percentage": 2.5
+          }
+        ]
+      }
     }
   ],
   "baseExperienceYield": 42,

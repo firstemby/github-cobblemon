@@ -12,6 +12,8 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
+import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules.DO_POKEMON_SPAWNING
 
 /**
  * A manager of various spawners. This is a class in which you should register
@@ -24,8 +26,21 @@ import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
  */
 open class SpawnerManager {
     val spawners = mutableListOf<Spawner>()
+        get() {
+            if (server()?.isSameThread == false) {
+                Cobblemon.LOGGER.error("Illegal access to spawners list from non-server thread!")
+                Exception().printStackTrace()
+            }
+            return field
+        }
     val influences = mutableListOf<SpawningInfluence>()
-
+        get() {
+            if (server()?.isSameThread == false) {
+                Cobblemon.LOGGER.error("Illegal access to influences from non-server thread!")
+                Exception().printStackTrace()
+            }
+            return field
+        }
     inline fun <reified T : Spawner> getSpawnersOfType() = spawners.filterIsInstance<T>()
     open fun getSpawnerByName(name: String) = spawners.find { it.name == name }
 
@@ -49,7 +64,7 @@ open class SpawnerManager {
 
     open fun onServerTick() {
         // Disables spawning
-        if (!Cobblemon.config.enableSpawning) {
+        if (!Cobblemon.config.enableSpawning || server()?.gameRules?.getBoolean(DO_POKEMON_SPAWNING) == false) {
             return
         }
         influences.removeIf { it.isExpired() }

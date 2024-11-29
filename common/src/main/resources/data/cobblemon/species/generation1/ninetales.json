@@ -1,4 +1,4 @@
-﻿{
+{
   "implemented": true,
   "name": "Ninetales",
   "nationalPokedexNumber": 38,
@@ -196,9 +196,12 @@
       ],
       "height": 11,
       "weight": 199,
-      "preEvolution": "vulpix form=alola",
+      "preEvolution": "vulpix alolan",
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.ninetales-alola.desc"
+      ],
       "drops": {
         "amount": 7,
         "entries": [

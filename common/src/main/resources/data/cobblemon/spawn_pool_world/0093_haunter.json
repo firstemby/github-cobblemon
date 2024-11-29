@@ -11,29 +11,12 @@
             ],
             "type": "pokemon",
             "context": "grounded",
-            "bucket": "uncommon",
-            "level": "25-41",
-            "weight": 0.54,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_deep_dark"
-                ]
-            }
-        },
-        {
-            "id": "haunter-2",
-            "pokemon": "haunter",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "context": "grounded",
             "bucket": "common",
             "level": "25-41",
-            "weight": 0.9,
+            "weight": 0.95,
             "condition": {
-                "canSeeSky": false,
+                "minSkyLight": 0,
+                "maxSkyLight": 0,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
@@ -46,7 +29,7 @@
             }
         },
         {
-            "id": "haunter-3",
+            "id": "haunter-2",
             "pokemon": "haunter",
             "presets": [
                 "derelict"
@@ -55,7 +38,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "25-41",
-            "weight": 0.54,
+            "weight": 0.712,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -66,6 +49,26 @@
                 "biomes": [
                     "#cobblemon:is_deep_dark"
                 ]
+            }
+        },
+        {
+            "id": "haunter-3",
+            "pokemon": "haunter",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "25-41",
+            "weight": 0.95,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_spooky"
+                ],
+                "maxLight": 0
             }
         },
         {
@@ -78,26 +81,7 @@
             "context": "grounded",
             "bucket": "common",
             "level": "25-41",
-            "weight": 0.9,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_spooky"
-                ],
-                "maxLight": 0
-            }
-        },
-        {
-            "id": "haunter-5",
-            "pokemon": "haunter",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "context": "grounded",
-            "bucket": "common",
-            "level": "25-41",
-            "weight": 0.9,
+            "weight": 0.95,
             "condition": {
                 "biomes": [
                     "#minecraft:is_nether"
@@ -116,7 +100,7 @@
                     },
                     {
                         "item": "minecraft:ghast_tear",
-                        "percentage": 5.0
+                        "percentage": 10.0
                     }
                 ]
             }

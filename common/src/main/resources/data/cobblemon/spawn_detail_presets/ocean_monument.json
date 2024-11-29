@@ -1,13 +1,8 @@
 {
   "condition": {
 	"structures": [
-	  "minecraft:ocean_monument"
+	  "minecraft:monument"
     ],
-	"maxY": 62,
-	"neededNearbyBlocks": [
-      "minecraft:dark_prismarine",
-	  "minecraft:prismarine",
-	  "minecraft:prismarine_bricks"
-	]
+	"maxY": 62
   }
 }

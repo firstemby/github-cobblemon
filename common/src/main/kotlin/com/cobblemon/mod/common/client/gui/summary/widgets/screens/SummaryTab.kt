@@ -13,20 +13,22 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.widget.ButtonWidget
-import net.minecraft.client.sound.SoundManager
-import net.minecraft.text.MutableText
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.sounds.SoundManager
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 
 class SummaryTab(
     pX: Int, pY: Int,
-    val label: MutableText,
-    onPress: PressAction
-): ButtonWidget(pX, pY, 50, 13, label, onPress, DEFAULT_NARRATION_SUPPLIER) {
+    val label: MutableComponent? = null,
+    val icon: ResourceLocation? = null,
+    onPress: OnPress
+): Button(pX, pY, 50, 13, label, onPress, DEFAULT_NARRATION) {
     private var isActive = false
 
-    override fun renderButton(context: DrawContext, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val matrices = context.matrices
+    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        val matrices = context.pose()
         if (isActive) {
             blitk(
                 matrixStack = matrices,
@@ -38,15 +40,29 @@ class SummaryTab(
             )
         }
 
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = label.bold(),
-            x = x + 25,
-            y = y + 3,
-            centered = true,
-            shadow = true
-        )
+        if (icon !== null) {
+            blitk(
+                matrixStack = matrices,
+                texture = icon,
+                x = (x + 21) / 0.5F,
+                y = (y + 3.5) / 0.5F,
+                width = 17,
+                height = 17,
+                scale = 0.5F
+            )
+        }
+
+        if (label !== null) {
+            drawScaledText(
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = label.bold(),
+                x = x + 25,
+                y = y + 3,
+                centered = true,
+                shadow = true
+            )
+        }
     }
 
     override fun playDownSound(soundManager: SoundManager) {

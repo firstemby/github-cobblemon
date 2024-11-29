@@ -13,9 +13,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "30-50",
-            "weight": 0.9,
+            "weight": 0.95,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_hills"
                 ],
@@ -41,9 +42,10 @@
             "context": "grounded",
             "bucket": "common",
             "level": "30-50",
-            "weight": 0.9,
+            "weight": 0.95,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_volcanic"
                 ],
@@ -60,11 +62,28 @@
             "context": "grounded",
             "bucket": "common",
             "level": "30-50",
-            "weight": 0.9,
+            "weight": 0.95,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_basalt",
-                    "#cobblemon:is_nether_wasteland"
+                    "#cobblemon:nether/is_basalt",
+                    "#cobblemon:nether/is_wasteland"
+                ]
+            },
+            "drops": {
+                "amount": 3,
+                "entries": [
+                    {
+                        "item": "minecraft:blaze_powder",
+                        "percentage": 10.0
+                    },
+                    {
+                        "item": "cobblemon:magmarizer",
+                        "percentage": 5.0
+                    },
+                    {
+                        "item": "cobblemon:rawst_berry",
+                        "percentage": 5.0
+                    }
                 ]
             }
         }

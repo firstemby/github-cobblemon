@@ -15,7 +15,8 @@
             "level": "37-51",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
                 ]
@@ -33,7 +34,8 @@
             "level": "37-51",
             "weight": 1.0,
             "condition": {
-                "canSeeSky": true,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
                 ]
@@ -41,6 +43,28 @@
         },
         {
             "id": "avalugg-3",
+            "pokemon": "avalugg",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "37-51",
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 0.6,
+                "condition": {
+                    "minLureLevel": "0",
+                    "maxLureLevel": "0"
+                }
+            },
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "avalugg-4",
             "pokemon": "avalugg",
             "presets": [
                 "natural"
@@ -52,7 +76,31 @@
             "weight": 1.0,
             "condition": {
                 "biomes": [
-                    "#cobblemon:is_nether_frozen"
+                    "#cobblemon:nether/is_frozen"
+                ]
+            }
+        },
+        {
+            "id": "avalugg-5",
+            "pokemon": "avalugg",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "37-51",
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 0.6,
+                "condition": {
+                    "minLureLevel": "0",
+                    "maxLureLevel": "0"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
                 ]
             }
         }

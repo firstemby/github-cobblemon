@@ -10,10 +10,14 @@
     "h:friendguard"
   ],
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:moon_stone",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:air_balloon",
         "percentage": 5.0
       },
       {
@@ -295,10 +299,10 @@
       "requiredContext": "cobblemon:moon_stone"
     }
   ],
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.7,
+    "width": 0.9,
+    "height": 0.9,
     "fixed": false
   },
   "baseFriendship": 50,

@@ -10,7 +10,7 @@
 
 configurations.all {
     resolutionStrategy {
-        force(libs.fabricLoader)
+        force(libs.fabric.loader)
     }
 }
 
@@ -51,29 +51,29 @@ dependencies {
     bundle(project(path = ":common", configuration = "transformProductionFabric")) {
         isTransitive = false
     }
+    modLocalRuntime(libs.fabric.debugutils)
+    modImplementation(libs.fabric.loader)
+    modApi(libs.fabric.api)
+    modApi(libs.bundles.fabric)
 
-    modImplementation(libs.fabricLoader)
-    modApi(libs.fabricApi)
-    modApi(libs.fabricKotlin)
-    modApi(libs.fabricPermissionsApi)
-    modCompileOnly(libs.lambDynamicLights) { isTransitive = false }
-    modRuntimeOnly(libs.jeiFabric)
-    modCompileOnly(libs.adornFabric)
+    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+        isTransitive = false
+    }
+    modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
 
+    include(libs.fabric.kotlin)
+
     listOf(
-        libs.stdlib,
-        libs.reflect,
-        libs.jetbrainsAnnotations,
-        libs.serializationCore,
-        libs.serializationJson,
         libs.graal,
         libs.molang
     ).forEach {
         bundle(it)
         runtimeOnly(it)
     }
+
+    minecraftServerLibraries(libs.icu4j)
 
 }
 
@@ -88,13 +88,13 @@ tasks {
     processResources {
         dependsOn(copyAccessWidener)
         inputs.property("version", rootProject.version)
-        inputs.property("fabric_loader_version", libs.fabricLoader.get().version)
+        inputs.property("fabric_loader_version", libs.fabric.loader.get().version)
         inputs.property("minecraft_version", rootProject.property("mc_version").toString())
 
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to rootProject.version,
-                "fabric_loader_version" to libs.fabricLoader.get().version,
+                "fabric_loader_version" to libs.fabric.loader.get().version,
                 "minecraft_version" to rootProject.property("mc_version").toString()
             )
         }

@@ -9,25 +9,18 @@
 package com.cobblemon.mod.common.client.net.battle
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
-import com.cobblemon.mod.common.api.text.lightPurple
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBattleChallenge
-import com.cobblemon.mod.common.client.keybind.boundKey
-import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
+import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleChallengeNotificationPacket
-import com.cobblemon.mod.common.util.lang
-import net.minecraft.client.MinecraftClient
+import net.minecraft.client.Minecraft
 
 object BattleChallengeNotificationHandler : ClientNetworkPacketHandler<BattleChallengeNotificationPacket> {
-    override fun handle(packet: BattleChallengeNotificationPacket, client: MinecraftClient) {
-        CobblemonClient.requests.battleChallenges.add(ClientBattleChallenge(packet.battleChallengeId, packet.challengerId))
-        client.player?.sendMessage(
-            lang(
-                "challenge.receiver",
-                packet.challengerName,
-                PartySendBinding.boundKey().localizedText
-            ),
-            true
-        )
+    override fun handle(packet: BattleChallengeNotificationPacket, client: Minecraft) {
+        val clientBattleChallenge = ClientBattleChallenge(packet.challengeID, packet.senderID, packet.expiryTime, packet.battleFormat)
+        packet.challengerIDs.forEach {
+            CobblemonClient.requests.battleChallenges[it] = clientBattleChallenge
+            ClientPlayerIcon.update(it)
+        }
     }
 }
