@@ -48,6 +48,8 @@ import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.friendship.FriendshipMutationCalculator
 import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
+import com.cobblemon.mod.common.api.pokemon.marks.PokemonMark
+import com.cobblemon.mod.common.api.pokemon.marks.PokemonMarks
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -64,6 +66,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.api.types.tera.TeraTypes
+import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.datafixer.CobblemonSchemas
 import com.cobblemon.mod.common.datafixer.CobblemonTypeReferences
@@ -105,6 +108,7 @@ import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
 import com.cobblemon.mod.common.util.toBlockPos
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
@@ -122,6 +126,7 @@ import kotlin.random.Random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -129,6 +134,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.FluidTags
@@ -147,6 +153,8 @@ import net.minecraft.world.level.block.MagmaBlock
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
+import kotlin.collections.get
+import kotlin.toString
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -228,7 +236,14 @@ open class Pokemon : ShowdownIdentifiable {
             _nickname.emit(value)
         }
 
-    fun getDisplayName(): MutableComponent = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+    fun getDisplayName(mark: PokemonMark? = selectedMark): MutableComponent =
+        if (mark != null) {
+            nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY }?.append(" ")?.append(lang(mark.title)) ?: species.translatedName.copy().append(" ").append(lang(mark.title))
+        } else {
+            nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+        }
+
+    fun getDisplayNameNoTitle() = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
 
     var level = 1
         set(value) {
@@ -426,6 +441,8 @@ open class Pokemon : ShowdownIdentifiable {
             _originalTrainerName.emit(value)
         }
 
+    val marks = mutableListOf<PokemonMark>()
+    var selectedMark: PokemonMark? = PokemonMarks.marks[cobblemonResource("resurrected")]
 
     /**
      * All moves that the Pokémon has, at some point, known. This is to allow players to
@@ -916,22 +933,45 @@ open class Pokemon : ShowdownIdentifiable {
     fun removeHeldItem(): ItemStack = this.swapHeldItem(ItemStack.EMPTY)
 
     fun saveToNBT(registryAccess: RegistryAccess, nbt: CompoundTag = CompoundTag()): CompoundTag {
+        val markList = marks.map { it.identifier.toString() }.map { StringTag.valueOf(it) }
+        nbt.put(DataKeys.POKEMON_MARKS, ListTag().also { it.addAll(markList) })
+        if (selectedMark != null) {
+            nbt.put(DataKeys.SELECTED_MARK, StringTag.valueOf(selectedMark!!.identifier.toString()))
+        }
         return this.saveTo(registryAccess.createSerializationContext(NbtOps.INSTANCE), nbt).orThrow as CompoundTag
     }
 
     fun loadFromNBT(registryAccess: RegistryAccess, nbt: CompoundTag): Pokemon {
         this.loadFrom(registryAccess.createSerializationContext(NbtOps.INSTANCE), nbt)
+        val markList = nbt.get(DataKeys.POKEMON_MARKS) as ListTag
+        markList.forEach { PokemonMarks.marks[ResourceLocation.tryParse(it.asString)]?.let { it1 -> this.marks.add(it1) } }
+        if (nbt.contains(DataKeys.SELECTED_MARK)) {
+            val markOrNull = PokemonMarks.marks[ResourceLocation.tryParse(nbt.getString(DataKeys.SELECTED_MARK))]
+            if (markOrNull != null) selectedMark = markOrNull
+        }
         return this
     }
 
     fun saveToJSON(registryAccess: RegistryAccess, json: JsonObject = JsonObject()): JsonObject {
         val ops = registryAccess.createSerializationContext(JsonOps.INSTANCE)
+        val marksList = JsonArray()
+        marks.forEach { marksList.add(it.identifier.toString()) }
+        json.add(DataKeys.POKEMON_MARKS, marksList)
+        if (selectedMark != null) json.addProperty(DataKeys.SELECTED_MARK, selectedMark!!.identifier.toString())
         return this.saveTo(ops, json).orThrow as JsonObject
     }
 
     fun loadFromJSON(registryAccess: RegistryAccess, json: JsonObject): Pokemon {
         val ops = registryAccess.createSerializationContext(JsonOps.INSTANCE)
         this.loadFrom(ops, json)
+        json.getAsJsonArray(DataKeys.POKEMON_MARKS).forEach {
+            val markId = ResourceLocation.tryParse(it.asString)
+            if (markId != null && PokemonMarks.marks[markId] != null) this.marks.add(PokemonMarks.marks[markId]!!)
+        }
+        if (json.has(DataKeys.SELECTED_MARK)) {
+            val markOrNull = PokemonMarks.marks[ResourceLocation.tryParse(json.get(DataKeys.SELECTED_MARK).toString())]
+            if (markOrNull != null) selectedMark = markOrNull
+        }
         return this
     }
 

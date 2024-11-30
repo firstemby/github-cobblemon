@@ -1,5 +1,7 @@
 {
   "id": "cobblemon:resurrected",
   "title": "marks.resurrected.title",
-  "icon": "cobblemon:textures/gui/icons/marks/resurrected"
+  "description": "cobblemon:marks.resurrected.description",
+  "icon": "cobblemon:textures/gui/icons/marks/resurrected",
+  "chance": 1.0
 }

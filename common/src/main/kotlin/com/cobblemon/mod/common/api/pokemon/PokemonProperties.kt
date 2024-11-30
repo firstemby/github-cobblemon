@@ -19,6 +19,8 @@ import com.cobblemon.mod.common.api.events.pokemon.ShinyChanceCalculationEvent
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
+import com.cobblemon.mod.common.api.pokemon.marks.PokemonMark
+import com.cobblemon.mod.common.api.pokemon.marks.PokemonMarks
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
@@ -640,6 +642,7 @@ open class PokemonProperties {
         val custom = ListTag()
         customProperties.map { StringTag.valueOf(it.asString()) }.forEach { custom.add(it) }
         nbt.put(DataKeys.POKEMON_PROPERTIES_CUSTOM, custom)
+
         return nbt
     }
 
@@ -672,6 +675,7 @@ open class PokemonProperties {
         // This is kinda gross
         custom.forEach { customProperties.addAll(parse(it.asString).customProperties) }
         updateAspects()
+
         return this
     }
 
@@ -737,6 +741,7 @@ open class PokemonProperties {
         // This is still kinda gross
         custom?.forEach { customProperties.addAll(parse(it.asString).customProperties) }
         updateAspects()
+
         return this
     }
 

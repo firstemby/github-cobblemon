@@ -52,7 +52,7 @@ class NicknameEntryWidget(
                 this.updateNickname(pokemonName)
             }
         }
-        value = pokemon.getDisplayName().string
+        value = pokemon.getDisplayNameNoTitle().string
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {

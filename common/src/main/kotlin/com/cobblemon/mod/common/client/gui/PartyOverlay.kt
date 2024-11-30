@@ -224,7 +224,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
                 drawScaledText(
                     context = context,
-                    text = pokemon.getDisplayName(),
+                    text = pokemon.getDisplayNameNoTitle(),
                     x = panelX + selectedOffsetX + 2.5F,
                     y = indexY + 25,
                     scale = SCALE

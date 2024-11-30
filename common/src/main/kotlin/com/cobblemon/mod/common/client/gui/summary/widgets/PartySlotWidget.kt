@@ -166,7 +166,7 @@ class PartySlotWidget(
 
             drawScaledText(
                 context = context,
-                text = slotPokemon.getDisplayName(),
+                text = slotPokemon.getDisplayNameNoTitle(),
                 x = x + 4,
                 y = y + 20,
                 scale = halfScale

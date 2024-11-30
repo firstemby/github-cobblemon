@@ -1,11 +1,15 @@
 package com.cobblemon.mod.common.api.pokemon.marks
 
-import net.minecraft.util.Identifier
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.api.multiblock.condition.OrCondition
+import net.minecraft.resources.ResourceLocation
 
 class PokemonMark(
-    id: Identifier,
+    id: ResourceLocation,
     val title: String,
-    val icon: Identifier
+    val description: String,
+    val icon: ResourceLocation,
+    val chance: Float = 1.0f
 ) {
     @Transient
     var identifier = id

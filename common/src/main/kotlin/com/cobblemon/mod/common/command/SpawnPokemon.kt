@@ -9,10 +9,15 @@
 package com.cobblemon.mod.common.command
 
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.marks.PokemonMarks
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.alias
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.toBlockPos
@@ -25,6 +30,7 @@ import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.coordinates.Vec3Argument
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.level.Level
 
@@ -71,6 +77,8 @@ object SpawnPokemon {
             throw NO_SPECIES_EXCEPTION.create()
         }
         val pokemonEntity = properties.createEntity(world)
+
+        println("${pokemonEntity.pokemon.marks}")
         pokemonEntity.moveTo(pos.x, pos.y, pos.z, pokemonEntity.yRot, pokemonEntity.xRot)
         pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
         if (world.addFreshEntity(pokemonEntity)) {

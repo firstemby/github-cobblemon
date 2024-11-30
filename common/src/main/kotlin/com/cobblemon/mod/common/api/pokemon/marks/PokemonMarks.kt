@@ -8,26 +8,26 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.resource.ResourceType
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
 
 object PokemonMarks: JsonDataRegistry<PokemonMark> {
 
     override val id = cobblemonResource("marks")
-    override val type = ResourceType.SERVER_DATA
+    override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<PokemonMarks>()
 
     override val gson = GsonBuilder()
-        .registerTypeAdapter(Identifier::class.java, IdentifierAdapter)
+        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .create()
 
     override val typeToken = TypeToken.get(PokemonMark::class.java)
     override val resourcePath = "marks"
 
-    val marks = hashMapOf<Identifier, PokemonMark>()
+    val marks = hashMapOf<ResourceLocation, PokemonMark>()
 
-    override fun reload(data: Map<Identifier, PokemonMark>) {
+    override fun reload(data: Map<ResourceLocation, PokemonMark>) {
         this.marks.clear()
         data.forEach { id, mark ->
             try {
@@ -41,10 +41,9 @@ object PokemonMarks: JsonDataRegistry<PokemonMark> {
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayerEntity) {
+    override fun sync(player: ServerPlayer) {
         MarksRegistrySyncPacket(all()).sendToPlayer(player)
     }
 
     fun all() = this.marks.values.toList()
-
 }

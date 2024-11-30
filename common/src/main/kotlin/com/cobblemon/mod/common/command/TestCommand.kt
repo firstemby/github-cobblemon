@@ -34,8 +34,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.ActiveTrade
 import com.cobblemon.mod.common.trade.DummyTradeParticipant
 import com.cobblemon.mod.common.trade.PlayerTradeParticipant
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.fromJson
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.toPokemon
 import com.google.gson.GsonBuilder
@@ -44,28 +42,44 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
+import com.mojang.brigadier.suggestion.SuggestionProvider
+import com.mojang.brigadier.suggestion.Suggestions
+import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
 import com.mojang.serialization.JsonOps
+import com.sun.jdi.connect.Connector
+import net.minecraft.commands.SharedSuggestionProvider
+import net.minecraft.commands.arguments.ResourceLocationArgument
+import net.minecraft.resources.ResourceLocation
 import java.io.File
 import java.io.PrintWriter
-import net.minecraft.server.command.CommandManager
-import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.Box
+import java.util.concurrent.CompletableFuture
+import kotlin.collections.get
+import kotlin.comparisons.then
+import kotlin.text.get
 
 @Suppress("unused")
 object TestCommand {
 
+    private val MARK_SUGGESTIONS: SuggestionProvider<CommandSourceStack> = SuggestionProvider { context, builder ->
+        suggestMarks(builder)
+    }
+
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("testcommand")
-            .requires { it.hasPermission(4) }.then(CommandManager.argument("mark", StringArgumentType.string())).executes(::execute)
+            .requires { it.hasPermission(4) }
+            .then(Commands.argument("mark", ResourceLocationArgument.id())
+                .suggests(MARK_SUGGESTIONS)
+                .executes(::execute))
         dispatcher.register(command)
+    }
+
+    private fun suggestMarks(builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
+        return SharedSuggestionProvider.suggest(PokemonMarks.marks.keys.map { it.toString() }, builder)
     }
 
     @Suppress("SameReturnValue")
@@ -74,20 +88,20 @@ object TestCommand {
             return Command.SINGLE_SUCCESS
         }
 
-        val player = context.source.playerOrThrow
-        val mark: PokemonMark = PokemonMarks.marks[Identifier.tryParse(context.getArgument("mark", String::class.java))!!]!!
+        val player = context.source.playerOrException
+        val mark: PokemonMark = PokemonMarks.marks[ResourceLocationArgument.getId(context, "mark")]!!
 
-        player.party()[0]!!.selectedMark = mark
+        player.party()[0]!!.marks.add(mark)
 
         try {
             //this.testCodecOutput(context)
-            val player = context.source.entity as ServerPlayer
-            player.party().forEach { it.currentHealth = it.hp / 2 }
-            val npc = NPCEntity(player.level())
-            npc.setPos(player.x, player.y, player.z)
-            npc.npc = NPCClasses.getByName("standard")!!
-            npc.initialize(50)
-            player.level().addFreshEntity(npc)
+//            val player = context.source.entity as ServerPlayer
+//            player.party().forEach { it.currentHealth = it.hp / 2 }
+//            val npc = NPCEntity(player.level())
+//            npc.setPos(player.x, player.y, player.z)
+//            npc.npc = NPCClasses.getByName("standard")!!
+//            npc.initialize(50)
+//            player.level().addFreshEntity(npc)
 //            val evolutionEntity = GenericBedrockEntity(world = player.level())
 //            evolutionEntity.apply {
 //                category = cobblemonResource("evolution")

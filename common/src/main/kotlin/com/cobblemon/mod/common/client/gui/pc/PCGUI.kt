@@ -242,7 +242,7 @@ class PCGUI(
             drawScaledText(
                 context = context,
                 font = CobblemonResources.DEFAULT_LARGE,
-                text = pokemon.getDisplayName().bold(),
+                text = pokemon.getDisplayNameNoTitle().bold(),
                 x = x + 12,
                 y = y + 11.5,
                 shadow = true
