@@ -1224,6 +1224,80 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
 
+    @JvmField
+    val GEM_BUG_BLOCK = blockItem("gem_bug_block", CobblemonBlocks.GEM_BUG_BLOCK)
+    @JvmField
+    val GEM_DARK_BLOCK = blockItem("gem_dark_block", CobblemonBlocks.GEM_DARK_BLOCK)
+    @JvmField
+    val GEM_DRAGON_BLOCK = blockItem("gem_dragon_block", CobblemonBlocks.GEM_DRAGON_BLOCK)
+    @JvmField
+    val GEM_ELECTRIC_BLOCK = blockItem("gem_electric_block", CobblemonBlocks.GEM_ELECTRIC_BLOCK)
+    @JvmField
+    val GEM_FAIRY_BLOCK = blockItem("gem_fairy_block", CobblemonBlocks.GEM_FAIRY_BLOCK)
+    @JvmField
+    val GEM_FIGHTING_BLOCK = blockItem("gem_fighting_block", CobblemonBlocks.GEM_FIGHTING_BLOCK)
+    @JvmField
+    val GEM_FIRE_BLOCK = blockItem("gem_fire_block", CobblemonBlocks.GEM_FIRE_BLOCK)
+    @JvmField
+    val GEM_FLYING_BLOCK = blockItem("gem_flying_block", CobblemonBlocks.GEM_FLYING_BLOCK)
+    @JvmField
+    val GEM_GHOST_BLOCK = blockItem("gem_ghost_block", CobblemonBlocks.GEM_GHOST_BLOCK)
+    @JvmField
+    val GEM_GRASS_BLOCK = blockItem("gem_grass_block", CobblemonBlocks.GEM_GRASS_BLOCK)
+    @JvmField
+    val GEM_GROUND_BLOCK = blockItem("gem_ground_block", CobblemonBlocks.GEM_GROUND_BLOCK)
+    @JvmField
+    val GEM_ICE_BLOCK = blockItem("gem_ice_block", CobblemonBlocks.GEM_ICE_BLOCK)
+    @JvmField
+    val GEM_NORMAL_BLOCK = blockItem("gem_normal_block", CobblemonBlocks.GEM_NORMAL_BLOCK)
+    @JvmField
+    val GEM_POISON_BLOCK = blockItem("gem_poison_block", CobblemonBlocks.GEM_POISON_BLOCK)
+    @JvmField
+    val GEM_PSYCHIC_BLOCK = blockItem("gem_psychic_block", CobblemonBlocks.GEM_PSYCHIC_BLOCK)
+    @JvmField
+    val GEM_ROCK_BLOCK = blockItem("gem_rock_block", CobblemonBlocks.GEM_ROCK_BLOCK)
+    @JvmField
+    val GEM_STEEL_BLOCK = blockItem("gem_steel_block", CobblemonBlocks.GEM_STEEL_BLOCK)
+    @JvmField
+    val GEM_WATER_BLOCK = blockItem("gem_water_block", CobblemonBlocks.GEM_WATER_BLOCK)
+
+    @JvmField
+    val GEM_BUG_BUDDING = blockItem("gem_bug_budding", CobblemonBlocks.GEM_BUG_BUDDING)
+    @JvmField
+    val GEM_DARK_BUDDING = blockItem("gem_dark_budding", CobblemonBlocks.GEM_DARK_BUDDING)
+    @JvmField
+    val GEM_DRAGON_BUDDING = blockItem("gem_dragon_budding", CobblemonBlocks.GEM_DRAGON_BUDDING)
+    @JvmField
+    val GEM_ELECTRIC_BUDDING = blockItem("gem_electric_budding", CobblemonBlocks.GEM_ELECTRIC_BUDDING)
+    @JvmField
+    val GEM_FAIRY_BUDDING = blockItem("gem_fairy_budding", CobblemonBlocks.GEM_FAIRY_BUDDING)
+    @JvmField
+    val GEM_FIGHTING_BUDDING = blockItem("gem_fighting_budding", CobblemonBlocks.GEM_FIGHTING_BUDDING)
+    @JvmField
+    val GEM_FIRE_BUDDING = blockItem("gem_fire_budding", CobblemonBlocks.GEM_FIRE_BUDDING)
+    @JvmField
+    val GEM_FLYING_BUDDING = blockItem("gem_flying_budding", CobblemonBlocks.GEM_FLYING_BUDDING)
+    @JvmField
+    val GEM_GHOST_BUDDING = blockItem("gem_ghost_budding", CobblemonBlocks.GEM_GHOST_BUDDING)
+    @JvmField
+    val GEM_GRASS_BUDDING = blockItem("gem_grass_budding", CobblemonBlocks.GEM_GRASS_BUDDING)
+    @JvmField
+    val GEM_GROUND_BUDDING = blockItem("gem_ground_budding", CobblemonBlocks.GEM_GROUND_BUDDING)
+    @JvmField
+    val GEM_ICE_BUDDING = blockItem("gem_ice_budding", CobblemonBlocks.GEM_ICE_BUDDING)
+    @JvmField
+    val GEM_NORMAL_BUDDING = blockItem("gem_normal_budding", CobblemonBlocks.GEM_NORMAL_BUDDING)
+    @JvmField
+    val GEM_POISON_BUDDING = blockItem("gem_poison_budding", CobblemonBlocks.GEM_POISON_BUDDING)
+    @JvmField
+    val GEM_PSYCHIC_BUDDING = blockItem("gem_psychic_budding", CobblemonBlocks.GEM_PSYCHIC_BUDDING)
+    @JvmField
+    val GEM_ROCK_BUDDING = blockItem("gem_rock_budding", CobblemonBlocks.GEM_ROCK_BUDDING)
+    @JvmField
+    val GEM_STEEL_BUDDING = blockItem("gem_steel_budding", CobblemonBlocks.GEM_STEEL_BUDDING)
+    @JvmField
+    val GEM_WATER_BUDDING = blockItem("gem_water_budding", CobblemonBlocks.GEM_WATER_BUDDING)
+
     private fun blockItem(name: String, block: Block): BlockItem = this.create(name, BlockItem(block, Item.Properties()))
 
     private fun noSettingsItem(name: String): CobblemonItem = this.create(name, CobblemonItem(Item.Properties()))
