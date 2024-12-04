@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.entity.pokemon.*
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -45,6 +46,12 @@ class IllusionEffect(
 
     override fun revert(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
         entity.effects.mockEffect = null
+
+        if (!entity.exposedSpecies.behaviour.moving.fly.canFly && entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
+            // Transitioning from a flying form to a non-flying form.
+            // If we were flying, need to turn the behavior flag off or the pokemon will continue to float in the air.
+            entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
+        }
         afterOnServer(seconds = 1.0F) {
             entity.cry()
             if (entity.pokemon.shiny) SpawnSnowstormEntityParticlePacket(cobblemonResource("shiny_ring"), entity.id, listOf("shiny_particles", "middle")).sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())

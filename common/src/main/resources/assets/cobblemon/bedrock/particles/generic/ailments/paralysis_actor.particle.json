@@ -11,7 +11,7 @@
 		"events": {
 			"paraSparks": {
 				"sound_effect": {
-					"event_name": "cobblemon:status.paralysis.actor"
+					"event_name": "cobblemon:status.nonvolatile.paralysis.actor"
 				}
 			}
 		},

@@ -13,17 +13,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.protocol.Packet
-import net.minecraft.network.protocol.game.ClientGamePacketListener
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
 
-class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : BlockEntity(CobblemonBlockEntities.LECTERN, blockPos, blockState) {
+class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : ViewerCountBlockEntity(CobblemonBlockEntities.LECTERN, blockPos, blockState) {
     val inventory: NonNullList<ItemStack> = NonNullList.withSize(1, ItemStack.EMPTY)
 
     override fun saveAdditional(compoundTag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -34,10 +29,6 @@ class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : BlockEnti
     override fun loadAdditional(compoundTag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(compoundTag, registryLookup)
         ContainerHelper.loadAllItems(compoundTag, inventory, registryLookup)
-    }
-
-    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
-        return ClientboundBlockEntityDataPacket.create(this)
     }
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
@@ -51,23 +42,16 @@ class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : BlockEnti
     fun setItemStack(itemStack: ItemStack) {
         if (level != null) {
             inventory[0] = itemStack
-            onItemUpdate(level!!)
+            updateBlock(level!!)
         }
     }
 
     fun removeItemStack(): ItemStack {
         if (level != null) {
             val itemStack = ContainerHelper.removeItem(inventory, 0, 1)
-            onItemUpdate(level!!)
+            updateBlock(level!!)
             return itemStack
         }
         return ItemStack.EMPTY
-    }
-
-    private fun onItemUpdate(level: Level) {
-        val oldState = level.getBlockState(blockPos)
-        level.sendBlockUpdated(blockPos, oldState, level.getBlockState(blockPos), Block.UPDATE_ALL)
-        level.updateNeighbourForOutputSignal(blockPos, level.getBlockState(blockPos).block)
-        setChanged()
     }
 }

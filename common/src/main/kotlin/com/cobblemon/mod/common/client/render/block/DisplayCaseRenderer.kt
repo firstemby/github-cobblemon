@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.DisplayCaseBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.item.PokedexItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
@@ -159,6 +160,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             stack.item is BedItem -> PositioningType.BED
             stack.item is BannerItem -> PositioningType.BANNER
             stack.`is`(CobblemonItemTags.POKE_BALLS) -> PositioningType.POKE_BALL
+            stack.item is PokedexItem -> PositioningType.POKEDEX
             stack.item == CobblemonItems.RELIC_COIN_POUCH -> PositioningType.COIN_POUCH
             stack.item == CobblemonItems.PASTURE -> PositioningType.PASTURE
             //stack.item == CobblemonItems.POKEMON_MODEL -> PositioningType.ITEM_MODEL
@@ -175,6 +177,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         val rotY: Float = 0f
     ) {
         POKE_BALL(1f, 1f, 1f, 0f, 0.04f, 0f),
+        POKEDEX(1f, 1f, 1f, 0f, 0.04f, 0f, 180f),
         BLOCK_MODEL(1f, 1f, 1f, 0f, -0.15f, 0f),
         ITEM_MODEL(1f, 1f, 1f, 0f, 0.04f, 0f),
         BED(1f, 1f, 1f, 0f, -0.02f, 0f),

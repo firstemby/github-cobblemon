@@ -21,21 +21,21 @@ import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PosablePokemonEntityModel
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokeBallModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallPosableState
 import com.cobblemon.mod.common.client.render.renderBeaconBeam
 import com.cobblemon.mod.common.client.settings.ServerSettings
+import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.SPAWN_DIRECTION
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.util.effectiveName
-import com.cobblemon.mod.common.util.isLookingAt
-import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
@@ -119,6 +119,18 @@ class PokemonRenderer(
                 packedLight,
                 clientDelegate
             )
+        }
+        if(entity.platform != PlatformType.NONE) {
+            drawPlatform(
+                    poseMatrix,
+                    entity,
+                    (entity.delegate as PokemonClientDelegate).entityScaleModifier,
+                    partialTicks,
+                    buffer,
+                    packedLight,
+            )
+            // keeps the pokemon's root on the raft
+            poseMatrix.translate(0.0, 0.25 * (entity.delegate as PokemonClientDelegate).entityScaleModifier, 0.0)
         }
 
         modelNow.setLayerContext(buffer, clientDelegate, PokemonModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
@@ -349,7 +361,7 @@ class PokemonRenderer(
             val matrix4f = matrices.last().pose()
             val opacity = (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F).toInt() shl 24
             var label = if (ServerSettings.displayEntityNameLabel &&
-                !Cobblemon.config.diplayNameForUnknownPokemon &&
+                !Cobblemon.config.displayNameForUnknownPokemon &&
                 CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) == PokedexEntryProgress.NONE) {
                 Component.literal("???")
             } else if (ServerSettings.displayEntityNameLabel) {
@@ -423,6 +435,26 @@ class PokemonRenderer(
         model.blue = 1f
         model.red = 1f
         model.resetLayerContext()
+        matrixStack.popPose()
+    }
+
+    private fun drawPlatform(
+            matrixStack: PoseStack,
+            entity: PokemonEntity,
+            scale: Float = 1F,
+            partialTicks: Float,
+            buff: MultiBufferSource,
+            packedLight: Int,
+            ) {
+        val (modelResource, textureResource) = PlatformType.GetModelWithTexture(entity.platform)
+        val model = MiscModelRepository.modelOf(modelResource) ?: return
+        matrixStack.pushPose()
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
+        matrixStack.rotateAround(Axis.YP.rotationDegrees(entity.entityData.get(SPAWN_DIRECTION)), 0.0f, 0f, 0.0f)
+        matrixStack.scale(scale, scale, scale)
+        val buffer = ItemRenderer.getFoilBufferDirect(buff, RenderType.entityCutout(textureResource), false, false)
+        model.render(matrixStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
+
         matrixStack.popPose()
     }
 }

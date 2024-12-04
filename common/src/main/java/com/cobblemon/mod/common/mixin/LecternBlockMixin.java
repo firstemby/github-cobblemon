@@ -52,10 +52,11 @@ public abstract class LecternBlockMixin {
 
                 if (lecternEntity instanceof LecternBlockEntity) {
                     ((LecternBlockEntity) lecternEntity).setItemStack((pokedexItemStack));
+                    world.playSound(null, blockPos, CobblemonSounds.POKEDEX_CLOSE, SoundSource.BLOCKS, 0.5F, 1.25F);
+                    cir.setReturnValue(ItemInteractionResult.SUCCESS);
+                } else {
+                    cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
                 }
-
-                world.playSound(null, blockPos, CobblemonSounds.POKEDEX_CLOSE, SoundSource.BLOCKS, 0.5F, 1.25F);
-                cir.setReturnValue(itemStack.isEmpty() && interactionHand == InteractionHand.MAIN_HAND ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION);
             }
         }
     }

@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft
 object PokedexUIPacketHandler: ClientNetworkPacketHandler<PokedexUIPacket> {
     override fun handle(packet: PokedexUIPacket, client: Minecraft) {
         try {
-            PokedexGUI.open(CobblemonClient.clientPokedexData, packet.type, packet.initSpecies)
+            PokedexGUI.open(CobblemonClient.clientPokedexData, packet.type, packet.initSpecies, packet.blockPos)
         } catch (e: Exception) {
             Cobblemon.LOGGER.debug("Failed to open the Pokedex from the Pokedex UI packet", e)
         }

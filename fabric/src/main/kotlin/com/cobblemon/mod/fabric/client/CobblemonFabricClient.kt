@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.item.PokedexItem
@@ -68,8 +69,15 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         registerParticleFactory(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
         CobblemonClient.initialize(this)
         ModelLoadingPlugin.register {
-            PokeBalls.all().forEach { ball ->
-                it.addModels(ball.model3d)
+            PokeBalls.all().forEach { pokeBall -> it.addModels(pokeBall.model3d) }
+            PokedexType.entries.toList().forEach { pokedex ->
+                it.addModels(
+                    pokedex.getItemModelPath(),
+                    pokedex.getItemModelPath("scanning"),
+                    pokedex.getItemModelPath("flat"),
+                    pokedex.getItemModelPath("flat_off"),
+                    pokedex.getItemModelPath("off")
+                )
             }
         }
 

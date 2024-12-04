@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.compat.LambDynamicLightsCompat
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
@@ -73,7 +74,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             addListener(::onClientSetup)
             addListener(::onKeyMappingRegister)
             addListener(::onRegisterParticleProviders)
-            addListener(::register3dPokeballModels)
+            addListener(::register3dModels)
             addListener(::onRegisterReloadListener)
             addListener(::onShaderRegistration)
         }
@@ -158,14 +159,16 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
         EntityRenderers.register(type, factory)
     }
 
-    private fun register3dPokeballModels(event: ModelEvent.RegisterAdditional) {
-        PokeBalls.all().forEach { pokeball ->
-            event.register(
-                ModelResourceLocation(
-                    pokeball.model3d,
-                    "standalone"
-                )
-            )
+    private fun register3dModels(event: ModelEvent.RegisterAdditional) {
+        PokeBalls.all().forEach { pokeBall ->
+            event.register(ModelResourceLocation(pokeBall.model3d, "standalone"))
+        }
+        PokedexType.entries.toList().forEach { pokedex ->
+            event.register(ModelResourceLocation(pokedex.getItemModelPath(), "standalone"))
+            event.register(ModelResourceLocation(pokedex.getItemModelPath("scanning"), "standalone"))
+            event.register(ModelResourceLocation(pokedex.getItemModelPath("flat"), "standalone"))
+            event.register(ModelResourceLocation(pokedex.getItemModelPath("flat_off"), "standalone"))
+            event.register(ModelResourceLocation(pokedex.getItemModelPath("off"), "standalone"))
         }
     }
 

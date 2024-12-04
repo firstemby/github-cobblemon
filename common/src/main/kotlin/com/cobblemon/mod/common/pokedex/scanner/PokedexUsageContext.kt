@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
-import com.cobblemon.mod.common.client.pokedex.PokedexTypes
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
@@ -60,7 +60,7 @@ class PokedexUsageContext {
     var innerRingRotation: Float = 0F
     var zoomLevel: Float = 0F
     var newPokemonInfo: PokedexLearnedInformation = PokedexLearnedInformation.NONE
-    var type: PokedexTypes = PokedexTypes.RED
+    var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
 
@@ -128,7 +128,7 @@ class PokedexUsageContext {
         }
     }
 
-    fun openPokedexGUI(types: PokedexTypes = PokedexTypes.RED, speciesId: ResourceLocation? = null) {
+    fun openPokedexGUI(types: PokedexType = PokedexType.RED, speciesId: ResourceLocation? = null) {
         PokedexGUI.open(CobblemonClient.clientPokedexData, types, speciesId)
         playSound(CobblemonSounds.POKEDEX_OPEN)
     }

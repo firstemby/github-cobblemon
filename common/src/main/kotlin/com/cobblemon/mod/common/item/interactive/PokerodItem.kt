@@ -172,19 +172,20 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
                 playAttachSound(user)
 
                 // if there is bait on the rod already then drop it on the ground before applying offhand bait
-                if (baitOnRod != null) {
-                    val baitStack = baitOnRod.toItemStack(world.itemRegistry) // Convert the bait to an ItemStack
+                val baitStack = baitOnRod?.toItemStack(world.itemRegistry)
+
+                if (baitStack != null && offHandItem.item != baitStack.item) {
                     if (!baitStack.isEmpty) {
                         baitStack.count = getBaitStackOnRod(itemStack).count
                         user.drop(baitStack, true) // Drop the full stack
                     }
-                }
 
-                // apply single bait item from offhand
-                val singleBait = offHandItem.copy()
-                singleBait.count = 1
-                setBait(itemStack, singleBait)
-                offHandItem.shrink(1)
+                    // apply single bait item from offhand
+                    val singleBait = offHandItem.copy()
+                    singleBait.count = 1
+                    setBait(itemStack, singleBait)
+                    offHandItem.shrink(1)
+                }
             })
         }
 

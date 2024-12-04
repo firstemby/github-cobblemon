@@ -631,6 +631,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
 
                             playerEntity.level().addFreshEntity(ExperienceOrb(playerEntity.level(), playerEntity.getX(), playerEntity.getY() + 0.5, playerEntity.getZ() + 0.5, random.nextInt(6) + 1))
 
+                            i = 1
                         })
                     }
             }
@@ -732,7 +733,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             hookedEntity = level().getEntity(hookedEntityID)
         }
 
-        afterOnServer(seconds = 0.1F) {
+        afterOnServer(seconds = 1.0F) {
             if (player !in player.level().players()) {
                 return@afterOnServer
             }

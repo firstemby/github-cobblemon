@@ -77,7 +77,7 @@ object CobblemonTradeOffers {
         )
         VillagerProfession.FISHERMAN -> listOf(
             VillagerTradeOffer(VillagerProfession.FISHERMAN, 5, listOf(
-                VillagerTrades.ItemsForEmeralds(CobblemonItems.POKEROD_SMITHING_TEMPLATE, 12, 3, 30)
+                VillagerTrades.ItemsForEmeralds(CobblemonItems.POKEROD_SMITHING_TEMPLATE, 12, 1, 3, 30)
             ))
         )
         else -> emptyList()

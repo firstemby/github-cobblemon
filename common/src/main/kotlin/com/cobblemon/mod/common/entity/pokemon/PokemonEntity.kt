@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
+import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -45,6 +46,7 @@ import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -141,6 +143,7 @@ open class PokemonEntity(
         @JvmStatic val MOVING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val BEHAVIOUR_FLAGS = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BYTE)
         @JvmStatic val PHASING_TARGET_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
+        @JvmStatic val PLATFORM_TYPE = SynchedEntityData.defineId(PokemonEntity::class.java, PlatformTypeDataSerializer)
         @JvmStatic val BEAM_MODE = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BYTE)
         @JvmStatic val BATTLE_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.OPTIONAL_UUID)
         @JvmStatic val ASPECTS = SynchedEntityData.defineId(PokemonEntity::class.java, StringSetDataSerializer)
@@ -260,6 +263,10 @@ open class PokemonEntity(
     /** The pokeball exposed to the client. Used for sendout animation. */
     val exposedBall: PokeBall get() = this.effects.mockEffect?.exposedBall ?: this.pokemon.caughtBall
 
+    var platform : PlatformType
+        get() = entityData.get(PLATFORM_TYPE)
+        set(value) { entityData.set(PLATFORM_TYPE, value) }
+
     override val struct: QueryStruct = QueryStruct(hashMapOf())
         .addStandardFunctions()
         .addEntityFunctions(this)
@@ -283,6 +290,7 @@ open class PokemonEntity(
         builder.define(MOVING, false)
         builder.define(BEHAVIOUR_FLAGS, 0)
         builder.define(BEAM_MODE, 0)
+        builder.define(PLATFORM_TYPE, PlatformType.NONE)
         builder.define(PHASING_TARGET_ID, -1)
         builder.define(BATTLE_ID, Optional.empty())
         builder.define(ASPECTS, emptySet())
@@ -333,7 +341,7 @@ open class PokemonEntity(
 //        val targetPos = node?.blockPos
 //        if (targetPos == null || world.getBlockState(targetPos.up()).isAir) {
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
-            behaviour.moving.swim.canWalkOnWater
+            behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
         } else if (state.`is`(FluidTags.LAVA) && !isEyeInFluid(FluidTags.LAVA)) {
             behaviour.moving.swim.canWalkOnLava
         } else {
@@ -638,6 +646,10 @@ open class PokemonEntity(
         }
         if (nbt.contains(DataKeys.POKEMON_RECALCULATE_POSE)) {
             enablePoseTypeRecalculation = nbt.getBoolean(DataKeys.POKEMON_RECALCULATE_POSE)
+        }
+
+        if (nbt.contains(DataKeys.POKEMON_PLATFORM_TYPE)) {
+            entityData.set(PLATFORM_TYPE, PlatformType.valueOf(nbt.getString(DataKeys.POKEMON_PLATFORM_TYPE)))
         }
 
         CobblemonEvents.POKEMON_ENTITY_LOAD.postThen(
@@ -1117,6 +1129,91 @@ open class PokemonEntity(
         return true
     }
 
+    /**
+     * Adjusts a given sent out position based on the local environment.
+     * Returns the new position and a PlatformType if the pokemon should be placed on one.
+     */
+    fun getAjustedSendoutPosition(pos: Vec3) : Vec3 {
+        var platform = PlatformType.NONE
+        var blockPos = BlockPos(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
+        var blockLookCount = 5
+        var foundSurface = false
+        val species = this.exposedSpecies
+        val form = this.exposedForm
+        var result = pos
+        if (this.level().isWaterAt(blockPos)) {
+            // look upward for a water surface
+            var testPos = blockPos
+            if (!species.behaviour.moving.swim.canBreatheUnderwater) {
+                // move sendout pos to surface if it's near
+                for (i in 0..blockLookCount) {
+                    // Try to find a surface...
+                    val blockState = this.level().getBlockState(testPos)
+                    if (blockState.fluidState.isEmpty) {
+                        if(blockState.getCollisionShape(this.level(), testPos).isEmpty) {
+                            foundSurface = true
+                        }
+                        // No space above the water surface
+                        break
+                    }
+                    testPos = testPos.above()
+                }
+                if (foundSurface) {
+                    val hasHeadRoom = !collidesWithBlock(Vec3(blockPos.x.toDouble(), (blockPos.y).toDouble(), (blockPos.z).toDouble()))
+                    if (hasHeadRoom) {
+                        result = Vec3(result.x, testPos.y.toDouble(), result.z)
+                    }
+                } else {
+                    foundSurface = false
+                }
+            }
+        } else if (this.level().isEmptyBlock(blockPos)) {
+            // look downward for a water surface
+            blockLookCount = 64 // Higher because the pokemon can fall down to water below
+            var testPos =  BlockPos(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
+            for (i in 0..blockLookCount) {
+                // Try to find a surface...
+                val blockState = this.level().getBlockState(testPos)
+                if (!blockState.fluidState.isEmpty) {
+                    foundSurface = true
+                    break
+                }
+                if (!blockState.getCollisionShape(this.level(), testPos).isEmpty) {
+                    break
+                }
+                testPos = testPos.below()
+            }
+        }
+        if (foundSurface) {
+            val canFly = species.behaviour.moving.fly.canFly
+            if (canFly) {
+                val hasHeadRoom = !collidesWithBlock(Vec3(blockPos.x.toDouble(), (result.y + 1), (blockPos.z).toDouble()))
+                if (hasHeadRoom) {
+                    result = Vec3(result.x, result.y + 1.0, result.z)
+                }
+            } else if (species.behaviour.moving.swim.canBreatheUnderwater && !species.behaviour.moving.swim.canWalkOnWater) {
+                // Use half hitbox height for swimmers
+                val halfHeight = species.hitbox.height * species.baseScale / 2.0
+                for (i in 1..halfHeight.toInt()) {
+                    blockPos = blockPos.below()
+                    if (!this.level().isWaterAt(blockPos) || !this.level().getBlockState(blockPos).getCollisionShape(this.level(), blockPos).isEmpty) {
+                        break
+                    }
+                }
+                result = Vec3(result.x, result.y + halfHeight - halfHeight.toInt(), result.z)
+            } else {
+                platform = if (species.behaviour.moving.swim.canWalkOnWater || collidesWithBlock(Vec3(result.x, result.y, result.z))) PlatformType.NONE else PlatformType.GetPlatformTypeForPokemon(form)
+            }
+        }
+        this.platform = platform
+
+        return result
+    }
+
+    private fun Entity.collidesWithBlock(pos: Vec3) : Boolean {
+        return level().getBlockCollisions(this, boundingBox.move(pos)).iterator().hasNext()
+    }
+
     override fun remove(reason: RemovalReason) {
         val stateEntity = (pokemon.state as? ActivePokemonState)?.entity
         super.remove(reason)
@@ -1195,6 +1292,10 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
             super.travel(movementInput)
             this.updateBlocksTraveled(prevBlockPos)
+        }
+        if (isBattling && this.isInWater) {
+            // Prevent swimmers from sinking in battle
+            this.deltaMovement = Vec3(deltaMovement.x, 0.0, deltaMovement.z)
         }
     }
 

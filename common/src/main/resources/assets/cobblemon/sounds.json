@@ -180,6 +180,9 @@
   "gui.trade": {
     "sounds": [ { "name": "cobblemon:gui/trade", "volume": 0.6 } ]
   },
+  "item.medicine.candy.use": {
+    "sounds": [ "cobblemon:item/medicine/medicine_candy_use" ]
+  },
   "item.medicine.herb.use": {
     "subtitle": "cobblemon:subtitle.item.medicine.herb.use",
     "sounds": [ "cobblemon:item/medicine/medicine_herb_use" ]
@@ -638,10 +641,10 @@
     ]
   },
   "move.watersport.actor": {
-    "sounds": [ { "name": "cobblemon:move/watersport/water_sport_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/water_sport/water_sport_actor", "volume": 0.8 } ]
   },
   "move.mudsport.actor": {
-    "sounds": [ { "name": "cobblemon:move/watersport/mud_sport_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/mud_sport/mud_sport_actor", "volume": 0.8 } ]
   },
   "move.flamethrower.actor": {
     "sounds": [ { "name": "cobblemon:move/flamethrower/flamethrower_actor", "volume": 0.8 } ]
@@ -662,13 +665,13 @@
       "sounds": [ { "name": "cobblemon:move/confusion/confusion_target", "volume": 0.8 } ]
   },
   "move.swordsdance.actor": {
-    "sounds": [ { "name": "cobblemon:move/swordsdance/swords_dance_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/swords_dance/swords_dance_actor", "volume": 0.8 } ]
   },
   "move.thunderwave.actor": {
-    "sounds": [ { "name": "cobblemon:move/thunderwave/thunder_wave_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/thunder_wave/thunder_wave_actor", "volume": 0.8 } ]
   },
   "move.thunderwave.target": {
-      "sounds": [ { "name": "cobblemon:move/thunderwave/thunder_wave_target", "volume": 0.8 } ]
+      "sounds": [ { "name": "cobblemon:move/thunder_wave/thunder_wave_target", "volume": 0.8 } ]
   },
   "move.protect.actor": {
     "sounds": [ { "name": "cobblemon:move/protect/protect_actor", "volume": 0.8 } ]
@@ -760,9 +763,9 @@
     "sounds": [ { "name": "cobblemon:move/seismic_toss/seismic_toss_target_1", "volume": 0.8 } ]
   },
   "move.seismictoss.target2": {
-    "sounds": [ { "name": "cobblemon:move/seismic_toss/seismic_toss_target_2", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/seismic_toss/seismic_toss_target_2", "volume": 1.0 } ]
   },
-  "move.sing_actor": {
+  "move.sing.actor": {
     "sounds": [ { "name": "cobblemon:move/sing/sing_actor", "volume": 0.8 } ]
   },
   "move.withdraw.actor": {

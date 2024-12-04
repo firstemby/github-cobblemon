@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.ModAPI;
-import com.cobblemon.mod.common.client.CobblemonBakingOverrides;
 import com.cobblemon.mod.common.item.PokeBallItem;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,7 +19,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -52,25 +53,33 @@ public abstract class ItemRendererMixin {
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
         boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED;
-        if (!shouldBe2d && stack.getItem() instanceof PokedexItem) {
-            BakedModel replacementModel = CobblemonBakingOverrides.INSTANCE.getPokedexOverride(((PokedexItem) stack.getItem()).getType()).getModel();
-            if (!cobblemon$isSameModel(model, replacementModel)) {
-                ci.cancel();
-                render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
-            }
-        } else if (shouldBe2d && stack.getItem() instanceof PokeBallItem pokeBallItem) {
-            BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(pokeBallItem.getPokeBall().getModel2d(), "inventory"));
-            if (!cobblemon$isSameModel(model, replacementModel)) {
-                ci.cancel();
-                render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
+        if (shouldBe2d) {
+            ResourceLocation resourceLocation = null;
+            if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel2d();
+            else if (stack.getItem() instanceof PokedexItem pokedexItem) resourceLocation = pokedexItem.getType().getItemSpritePath();
+
+            if (resourceLocation != null) {
+                BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, "inventory"));
+                if (!cobblemon$isSameModel(model, replacementModel)) {
+                    ci.cancel();
+                    render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
+                }
             }
         }
     }
 
     @Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
-    private void cobblemon$bakePokeballModel(ItemStack stack, Level world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-        if (stack.getItem() instanceof PokeBallItem pokeBallItem) {
-            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(pokeBallItem.getPokeBall().getModel3d(), MODEL_PATH));
+    private void cobblemon$getItemModel(ItemStack stack, Level world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
+        ResourceLocation resourceLocation = null;
+        if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel3d();
+        else if (stack.getItem() instanceof PokedexItem pokedexItem) {
+            boolean isScanModel = entity instanceof Player && entity.getUseItem() == stack && entity.isUsingItem();
+            boolean canOpenScreen = entity != null && ((entity.getOffhandItem() == stack && !(entity.getMainHandItem().getItem() instanceof PokedexItem)) || entity.getMainHandItem() == stack);
+            resourceLocation = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
+        }
+
+        if (resourceLocation != null) {
+            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, MODEL_PATH));
             ClientLevel clientWorld = world instanceof ClientLevel ? (ClientLevel) world : null;
             BakedModel overriddenModel = model.getOverrides().resolve(model, stack, clientWorld, entity, seed);
             cir.setReturnValue(overriddenModel == null ? this.itemModelShaper.getModelManager().getMissingModel() : overriddenModel);

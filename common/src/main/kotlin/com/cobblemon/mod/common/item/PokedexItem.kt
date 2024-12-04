@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.client.pokedex.PokedexTypes
+import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.player.LocalPlayer
@@ -24,7 +24,7 @@ import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 
-class PokedexItem(val type: PokedexTypes): CobblemonItem(Item.Properties().stacksTo(1)) {
+class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacksTo(1)) {
 
     override fun getUseAnimation(itemStack: ItemStack): UseAnim? = UseAnim.TOOT_HORN
 
