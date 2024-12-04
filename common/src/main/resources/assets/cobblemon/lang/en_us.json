@@ -6831,17 +6831,6 @@
   "cobblemon.subtitle.pokemon.wild_shiny_shine": "Wild shiny Pokémon shines!",
   "cobblemon.subtitle.pokemon.owned_shiny_ambient": "Ambient shiny Pokémon sparkles",
   "cobblemon.subtitle.pokemon.shiny_ambient": "Wild shiny Pokémon sparkles!",
-  "cobblemon.subtitle.fossilmachine.activate": "Restoration Machine activates",
-  "cobblemon.subtitle.fossilmachine.active_loop": "Restoration Machine hums",
-  "cobblemon.subtitle.fossilmachine.dna_full": "Restoration Tank reaches capacity",
-  "cobblemon.subtitle.fossilmachine.finished": "Restoration Machine finishes",
-  "cobblemon.subtitle.fossilmachine.insert_dna": "Restoration Tank splashes",
-  "cobblemon.subtitle.fossilmachine.insert_dna_small": "Restoration Tank splashes lightly",
-  "cobblemon.subtitle.fossilmachine.insert_fossil": "Fossil inserted",
-  "cobblemon.subtitle.fossilmachine.retrieve_fossil": "Fossil retrieved",
-  "cobblemon.subtitle.fossilmachine.retrieve_pokemon": "Fossil Pokémon retrieved",
-  "cobblemon.subtitle.fossilmachine.unprotected": "Restoration Machine protection ends",
-  "cobblemon.subtitle.fossilmachine.assemble": "Restoration Machine assembles",
 
   "cobblemon:subtitle.entity.villager.work_nurse": "Nurse works",
 
@@ -6852,6 +6841,7 @@
   "cobblemon.subtitle.poke_ball.capture_succeeded.ancient": "Pokémon capture succeeds",
   "cobblemon:subtitle.poke_ball.shake": "Poké Ball shakes",
   "cobblemon:subtitle.poke_ball.shake.ancient": "Ancient Poké Ball shakes",
+  "cobblemon:subtitle.poke_ball.shake.critical": "(placeholder subtitle for critical shake)",
   "cobblemon:subtitle.poke_ball.bounce": "Poké Ball bounces",
   "cobblemon:subtitle.poke_ball.bounce.ancient": "Ancient Poké Ball bounces",
   "cobblemon:subtitle.poke_ball.open": "Poké Ball opens",
@@ -6868,14 +6858,41 @@
 
   "cobblemon:subtitle.item.use": "Item used",
 
-  "cobblemon:subtitle.item.medicine.herb.use": "Herb medicine used",
+  "cobblemon:subtitle.item.pokedex.open": "Pokédex opens",
+  "cobblemon:subtitle.item.pokedex.close": "Pokédex closes",
+  "cobblemon:subtitle.item.pokedex.scan_open": "Pokédex scans",
+  "cobblemon:subtitle.item.pokedex.scan_close": "Pokédex stops scanning",
+  "cobblemon:subtitle.item.pokedex.scan_register_pokemon": "Pokédex registers Pokémon",
+  "cobblemon:subtitle.item.pokedex.scan_register_aspect": "Pokédex registers an aspect",
+
+  "cobblemon:subtitle.item.medicine.candy.use": "Candy used",
+  "cobblemon:subtitle.item.medicine.herb.use": "Herb used",
   "cobblemon:subtitle.item.medicine.liquid.use": "Liquid medicine used",
-  "cobblemon:subtitle.item.medicine.pills.use": "Pills medicine used",
-  "cobblemon:subtitle.item.medicine.feather.use": "Feather medicine used",
+  "cobblemon:subtitle.item.medicine.pills.use": "Pills used",
+  "cobblemon:subtitle.item.medicine.feather.use": "Feather used",
 
   "cobblemon:subtitle.item.berry.eat": "Berry eaten",
 
   "cobblemon:subtitle.evolution.full": "Pokémon evolves",
+
+  "cobblemon:subtitle.fishing.notification": "Poké Rod Bobber splashes",
+  "cobblemon:subtitle.fishing.rod_cast": "Poké Rod Bobber thrown",
+  "cobblemon:subtitle.fishing.rod_reel_in": "Poké Rod Bobber retrieved",
+  "cobblemon:subtitle.fishing.bobber_land": "Poké Rod Bobber lands",
+
+  "cobblemon.subtitle.block.healing_machine.active": "Healing Machine activates",
+
+  "cobblemon.subtitle.block.fossil_machine.activate": "Restoration Machine activates",
+  "cobblemon.subtitle.block.fossil_machine.active_loop": "Restoration Machine hums",
+  "cobblemon.subtitle.block.fossil_machine.dna_full": "Restoration Tank reaches capacity",
+  "cobblemon.subtitle.block.fossil_machine.finished": "Restoration Machine finishes",
+  "cobblemon.subtitle.block.fossil_machine.insert_dna": "Restoration Tank splashes",
+  "cobblemon.subtitle.block.fossil_machine.insert_dna_small": "Restoration Tank splashes lightly",
+  "cobblemon.subtitle.block.fossil_machine.insert_fossil": "Fossil inserted",
+  "cobblemon.subtitle.block.fossil_machine.retrieve_fossil": "Fossil retrieved",
+  "cobblemon.subtitle.block.fossil_machine.retrieve_pokemon": "Fossil Pokémon retrieved",
+  "cobblemon.subtitle.block.fossil_machine.unprotected": "Restoration Machine protection ends",
+  "cobblemon.subtitle.block.fossil_machine.assemble": "Restoration Machine assembles",
 
   "cobblemon:subtitle.pokemon.bulbasaur.cry": "Bulbasaur cries",
   "cobblemon:subtitle.pokemon.ivysaur.cry": "Ivysaur cries",
