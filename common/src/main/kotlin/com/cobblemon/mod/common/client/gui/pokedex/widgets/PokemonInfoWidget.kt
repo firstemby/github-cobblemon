@@ -689,7 +689,6 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     fun isWithinPortraitSpace(mouseX: Double, mouseY: Double): Boolean =
         mouseX.toInt() in pX + 15..(pX + 15 + PORTRAIT_POKE_BALL_WIDTH)
         && mouseY.toInt() in pY + 25..(pY + 25 + PORTRAIT_POKE_BALL_HEIGHT)
-        && !variationButtons.any { it.getWidget().isButtonHovered(mouseX.toInt(), mouseY.toInt()) }
         && !children.any { it.isMouseOver(mouseX.toDouble(), mouseY.toDouble()) && it is ScaledButton}
 
     private fun isSelectedPokemonOwned(): Boolean {
