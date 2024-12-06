@@ -24,7 +24,7 @@ abstract class ParentWidget(
     component: Component
 ): Renderable, AbstractWidget(pX, pY, pWidth, pHeight, component) {
 
-    private val children: MutableList<GuiEventListener> = mutableListOf()
+    val children: MutableList<GuiEventListener> = mutableListOf()
 
     /**
      * Adds Widget to the children list

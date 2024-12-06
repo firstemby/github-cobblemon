@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.api.gui.ParentWidget
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -48,6 +49,7 @@ import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import com.ibm.icu.number.Scale
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -689,13 +691,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         mouseX.toInt() in pX + 15..(pX + 15 + PORTRAIT_POKE_BALL_WIDTH)
         && mouseY.toInt() in pY + 25..(pY + 25 + PORTRAIT_POKE_BALL_HEIGHT)
         && !variationButtons.any { it.getWidget().isButtonHovered(mouseX.toInt(), mouseY.toInt()) }
-        && !genderButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !shinyButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !cryButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !formLeftButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !formRightButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !animationLeftButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
-        && !animationRightButton.isButtonHovered(mouseX.toInt(), mouseY.toInt())
+        && !children.any { it.isMouseOver(mouseX.toDouble(), mouseY.toDouble()) && it is ScaledButton}
 
     private fun isSelectedPokemonOwned(): Boolean {
         return currentEntry?.let { CobblemonClient.clientPokedexData.getKnowledgeForSpecies(it.speciesId) } == PokedexEntryProgress.CAUGHT
