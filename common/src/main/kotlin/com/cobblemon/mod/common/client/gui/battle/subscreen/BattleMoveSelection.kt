@@ -11,12 +11,11 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Moves
-import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.gold
-import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.api.moves.TypeChart
+import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.TypeIcon
@@ -24,12 +23,16 @@ import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.toRGB
+import com.google.common.collect.Lists
+import net.fabricmc.loader.impl.util.StringUtil
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth.floor
 
 class BattleMoveSelection(
@@ -91,16 +94,16 @@ class BattleMoveSelection(
         open val response: MoveActionResponse get() = MoveActionResponse(move.id, targetPnx)
         open val selectable: Boolean get() = !move.disabled
 
-        val targetPnx: String? get() = targetList?.let { targets ->
+        val target: Targetable? get() = targetList?.let { targets ->
             return@let when {
                 targets.isEmpty() -> null
-                targets.size == 1 -> targets[0].getPNX()
+                targets.size == 1 -> targets[0]
                 else -> null    // TODO: multi-battles
             }
         }
+        val targetPnx: String? get() = target?.getPNX()
 
         fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-
             val selectConditionOpacity = moveSelection.opacity * if (!selectable) 0.5F else 1F
 
             blitk(
@@ -173,6 +176,8 @@ class BattleMoveSelection(
                 opacity = moveSelection.opacity,
                 centered = true
             )
+
+            drawTooltip(context, mouseX, mouseY)
         }
 
         fun isHovered(mouseX: Double, mouseY: Double) = mouseX >= x && mouseX <= x + MOVE_WIDTH && mouseY >= y && mouseY <= y + MOVE_HEIGHT
@@ -181,6 +186,41 @@ class BattleMoveSelection(
             if (!selectable) return
             moveSelection.playDownSound(Minecraft.getInstance().soundManager)
             moveSelection.battleGUI.selectAction(moveSelection.request, response)
+        }
+
+        private fun drawTooltip(context: GuiGraphics, mouseX: Int, mouseY: Int) {
+            if (!isHovered(mouseX.toDouble(), mouseY.toDouble())) return
+
+            val textTooltip: MutableList<MutableComponent> = mutableListOf()
+            for (descriptionLine in StringUtil.wrapLines(moveTemplate.description.string, 80).split("\n")) {
+                textTooltip.add(Component.literal(descriptionLine).gray())
+            }
+
+            textTooltip.add(Component.literal(""))
+
+            if (moveTemplate.power > 0) textTooltip.add(lang("ui.power").append(String.format(": %d", moveTemplate.power.toInt())))
+            if (moveTemplate.accuracy > 0) textTooltip.add(lang("ui.accuracy").append(String.format(": %d%%", moveTemplate.accuracy.toInt())))
+
+            if (moveTemplate.power > 0 && moveTemplate.target != MoveTarget.self && target is ActiveClientBattlePokemon) {
+                val species = (target as ActiveClientBattlePokemon).battlePokemon?.species
+                if (species != null) {
+                    val moveEffectiveness: Double = TypeChart.getMoveEffectiveness(elementalType, listOf(species.primaryType, species.secondaryType))
+
+                    textTooltip.add(when {
+                        moveEffectiveness == 0.0 -> lang("battle.ui.effectiveness.immunity", moveEffectiveness).gray()
+                        moveEffectiveness < 1.0 -> lang("battle.ui.effectiveness.resistance", moveEffectiveness).gray()
+                        moveEffectiveness > 1.0 -> lang("battle.ui.effectiveness.super_effective", moveEffectiveness).yellow()
+                        else -> lang("battle.ui.effectiveness.normal", moveEffectiveness).white()
+                    })
+                }
+            }
+
+            context.renderTooltip(
+                Minecraft.getInstance().font,
+                Lists.transform(textTooltip, Component::getVisualOrderText),
+                mouseX,
+                mouseY
+            )
         }
     }
 

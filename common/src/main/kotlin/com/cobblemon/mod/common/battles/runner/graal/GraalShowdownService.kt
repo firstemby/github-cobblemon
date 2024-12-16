@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -150,6 +151,12 @@ class GraalShowdownService : ShowdownService {
         val getCobbledItemIdsFn = context.getBindings("js").getMember("getCobbledItemIds")
         val arrayResult = getCobbledItemIdsFn.execute().asString()
         return gson.fromJson(arrayResult, JsonArray::class.java)
+    }
+
+    override fun getTypeChart(): JsonObject {
+        val getCobbledItemIdsFn = context.getBindings("js").getMember("getTypeChart")
+        val arrayResult = getCobbledItemIdsFn.execute().asString()
+        return gson.fromJson(arrayResult, JsonObject::class.java)
     }
 
     override fun registerSpecies() {

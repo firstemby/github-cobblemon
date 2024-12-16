@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.runner
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.runner.graal.GraalShowdownService
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import java.util.UUID
 
 /**
@@ -30,6 +31,7 @@ interface ShowdownService {
     fun getAbilityIds(): JsonArray
     fun getMoves(): JsonArray
     fun getItemIds(): JsonArray
+    fun getTypeChart(): JsonObject
     fun registerSpecies()
     fun registerBagItems()
     fun indicateSpeciesInitialized() {}

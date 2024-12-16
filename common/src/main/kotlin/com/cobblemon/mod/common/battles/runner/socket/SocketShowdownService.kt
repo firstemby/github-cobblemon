@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -121,6 +122,13 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         writer.flush()
         val response = readMessage()
         return gson.fromJson(response, JsonArray::class.java)
+    }
+
+    override fun getTypeChart(): JsonObject {
+        writer.write(">getTypeChart")
+        writer.flush()
+        val response = readMessage()
+        return gson.fromJson(response, JsonObject::class.java)
     }
 
     private fun sendSpeciesData(species: Species, form: FormData?) {

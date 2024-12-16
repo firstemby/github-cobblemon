@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.TypeChart
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
@@ -125,6 +126,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
                 it.indicateSpeciesInitialized()
                 // Reload this with the mod
                 CobblemonHeldItemManager.load()
+                TypeChart.load()
                 Cobblemon.LOGGER.info("Loaded {} Pokémon species", this.speciesByIdentifier.size)
                 this.observable.emit(this)
             }

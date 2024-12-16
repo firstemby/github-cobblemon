@@ -1268,6 +1268,7 @@
   "cobblemon.ui.status.psn": "PSN",
   "cobblemon.ui.status.slp": "SLP",
   "cobblemon.ui.status.tox": "PSN",
+
   "cobblemon.battle.ui.fight": "Fight",
   "cobblemon.battle.ui.switch": "Switch",
   "cobblemon.battle.ui.capture": "Catch",
@@ -1276,6 +1277,11 @@
   "cobblemon.battle.ui.forfeit_confirmation": "Forfeiting makes you lose the battle. Are you sure?",
   "cobblemon.battle.ui.hide_label": "Press %1$s to move around.",
   "cobblemon.battle.ui.actions_label": "You need to choose an action. Press %1$s.",
+
+  "cobblemon.battle.ui.effectiveness.normal": "%1$sx Normal",
+  "cobblemon.battle.ui.effectiveness.super_effective": "%1$sx Super Effective",
+  "cobblemon.battle.ui.effectiveness.resistance": "%1$sx Resistance",
+  "cobblemon.battle.ui.effectiveness.immunity": "%1$sx Immunity",
 
   "cobblemon.ui.evolve": "Evolve",
   "cobblemon.ui.evolution": "Evolution",
