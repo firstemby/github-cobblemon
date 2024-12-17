@@ -12,19 +12,53 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.codec.CodecUtils
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
+import java.util.*
 
 data class Egg(
-    val hatchedPokemon: EggPokemon,
-    val patternId: ResourceLocation,
-    val baseColor: String,
-    val overlayColor: String?,
-    //Time in ticks to hatch
-    var timeToHatch: Int
+        val species: ResourceLocation, // Species of the Pokémon
+        val parentOneUUID: UUID,       // First parent's UUID
+        val parentTwoUUID: UUID,       // Second parent's UUID
+        var timeToHatch: Int           // Time in ticks to hatch
 ) {
+
+    companion object {
+        val CODEC: Codec<Egg> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                    ResourceLocation.CODEC.fieldOf("species").forGetter { it.species },
+                    CodecUtils.UUID_CODEC.fieldOf("parentOneUUID").forGetter { it.parentOneUUID },
+                    CodecUtils.UUID_CODEC.fieldOf("parentTwoUUID").forGetter { it.parentTwoUUID },
+                    Codec.INT.fieldOf("timeToHatch").forGetter { it.timeToHatch }
+            ).apply(instance, ::Egg)
+        }
+
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Egg> = StreamCodec.of(
+                { buf, egg -> // Write Egg to buffer
+                    buf.writeResourceLocation(egg.species)
+                    buf.writeUUID(egg.parentOneUUID)
+                    buf.writeUUID(egg.parentTwoUUID)
+                    buf.writeInt(egg.timeToHatch)
+                },
+                { buf -> // Read Egg from buffer
+                    Egg(
+                            species = buf.readResourceLocation(),
+                            parentOneUUID = buf.readUUID(),
+                            parentTwoUUID = buf.readUUID(),
+                            timeToHatch = buf.readInt()
+                    )
+                }
+        )
+    }
+
+
 
     fun asItemStack(blockEntityNbt: CompoundTag): ItemStack {
         val stack = CobblemonBlocks.EGG.asItem().defaultInstance
@@ -32,8 +66,9 @@ data class Egg(
         //BlockItem.setBlockEntityNbt(stack, CobblemonBlockEntities.EGG, blockEntityNbt)
         return stack
     }
+}
 
-    fun getPattern(): EggPattern? {
+    /*fun getPattern(): EggPattern? {
         return EggPatterns.patternMap[patternId]
     }
 
@@ -61,4 +96,4 @@ data class Egg(
             )
         }
     }
-}
+}*/

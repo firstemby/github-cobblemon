@@ -8,34 +8,42 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
+import com.mojang.serialization.Dynamic
 import com.mojang.serialization.MapCodec
-import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.RenderShape
 
 class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun setPlacedBy(
-        level: Level,
-        blockPos: BlockPos,
-        blockState: BlockState,
-        placer: LivingEntity?,
-        itemStack: ItemStack
+            level: Level,
+            blockPos: BlockPos,
+            blockState: BlockState,
+            placer: LivingEntity?,
+            itemStack: ItemStack
     ) {
         val entity = level.getBlockEntity(blockPos) as? EggBlockEntity
-        //FIXME: Component
-        val itemBlockEntityNbt = null /*BlockItem.getBlockEntityNbt(itemStack)*/ ?: return
-        //entity?.let { entity.readNbt(itemBlockEntityNbt) }
+
+        // Retrieve the EGG_DATA component directly
+        itemStack.get(CobblemonItemComponents.EGG_DATA)?.let { eggData ->
+            entity?.setEggData(eggData) // Pass the Egg directly to the block entity
+        }
+
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)
     }
+
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
         TODO("Not yet implemented")

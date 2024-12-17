@@ -378,14 +378,13 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                     if (blockEntity != null && breedResult.pokemon != null) {
                                         //Most params here need to be gotten from the form when implemented properly
                                         blockEntity.egg = Egg(
-                                                breedResult.pokemon,
-                                                EggPatterns.patternMap.keys.random(),
-                                                Integer.toHexString(breedResult.pokemon.species.primaryType.hue),
-                                                breedResult.pokemon.species.secondaryType?.let {Integer.toHexString(it.hue)} ?: "FFFFFF",
-                                                20*10
+                                                species = breedResult.pokemon!!.species.resourceIdentifier, // Species
+                                                parentOneUUID = motherPoke.uuid, // Mother UUID
+                                                parentTwoUUID = fatherPoke.uuid, // Father UUID
+                                                timeToHatch = 20 * 10 // 10 seconds hatch time
                                         )
                                         blockEntity.setChanged()
-                                        level?.sendBlockUpdated(nestTaken, level?.getBlockState(nestTaken), level?.getBlockState(nestTaken), Block.UPDATE_CLIENTS)
+                                        level?.getBlockState(nestTaken)?.let { level?.sendBlockUpdated(nestTaken, it, level?.getBlockState(nestTaken)!!, Block.UPDATE_CLIENTS) }
 
                                         // remove the nest used from the nest consideration pool
                                         nests.remove(nestTaken)
@@ -459,6 +458,10 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 //Cobblemon.LOGGER.warn("Nest at ${it.toString()}")
                 if (entity.egg == null) {
                     res.add(it)
+                }
+                else
+                {
+                    Cobblemon.LOGGER.warn("Nest with egg at ${it.toString()}")
                 }
 
             }

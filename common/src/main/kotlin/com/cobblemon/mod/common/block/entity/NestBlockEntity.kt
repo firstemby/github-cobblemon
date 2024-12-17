@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -22,6 +23,8 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.level.Level
 import net.minecraft.world.entity.item.ItemEntity
 
@@ -54,7 +57,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         state: BlockState,
         world: Level,
         pos: BlockPos,
-        player: Player,
+        player: ServerPlayer,
         hand: InteractionHand,
         hit: BlockHitResult
     ): InteractionResult {
@@ -90,16 +93,35 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         state: BlockState,
         world: Level,
         pos: BlockPos,
-        player: Player
+        player: ServerPlayer
     ) {
-        if (!world.isClientSide) {
-            val party = Cobblemon.storage.getParty(player.uuid)
-            val newPoke = egg!!.hatchedPokemon.generatePokemon()
-            party.add(newPoke)
-            this.egg = null
-            this.setChanged()
-            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
-        }
+        /*egg?.let { eggData ->
+            if (!world.isClientSide) {
+                // Retrieve the two parent Pokémon using their UUIDs
+                val parentOne = Cobblemon.storage.getPokemon(eggData.parentOneUUID)
+                val parentTwo = Cobblemon.storage.getPokemon(eggData.parentTwoUUID)
+
+                if (parentOne != null && parentTwo != null) {
+                    // Generate the hatched Pokémon using BreedingLogicManager
+                    val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
+                    val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
+
+                    hatchedPokemon?.let { newPokemon ->
+                        val player = Cobblemon.storage.getPartyOwner(this)?.let { world.getPlayerByUUID(it) }
+                        player?.let {
+                            val party = Cobblemon.storage.getParty(it.uuid)
+                            party.add(newPokemon)
+                        }
+
+                        world.playSound(null, pos, SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+                    }
+                }
+
+                egg = null
+                setChanged()
+                world.sendBlockUpdated(pos, blockState, blockState, Block.UPDATE_CLIENTS)
+            }
+        }*/
 
 
     }

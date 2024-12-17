@@ -1,143 +1,58 @@
-/*
- * Copyright (C) 2023 Cobblemon Contributors
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
-import com.cobblemon.mod.common.api.pokemon.breeding.EggPatterns
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
-import com.cobblemon.mod.common.block.entity.NestBlockEntity
-import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
+import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
-import com.cobblemon.mod.common.client.render.models.blockbench.setRotation
-import com.cobblemon.mod.common.util.math.geometry.Axis
-import com.mojang.authlib.minecraft.client.MinecraftClient
-import com.mojang.blaze3d.systems.RenderSystem
-import com.mojang.blaze3d.vertex.VertexBuffer
-import net.minecraft.client.renderer.GameRenderer
-import com.mojang.blaze3d.vertex.Tesselator
+import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import com.mojang.blaze3d.vertex.PoseStack
-import java.awt.Color
+import net.minecraft.resources.ResourceLocation
 
-class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<EggBlockEntity>{
-    // will need to be changed
+class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<EggBlockEntity> {
     override fun render(
-        entity: EggBlockEntity,
-        tickDelta: Float,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+            entity: EggBlockEntity,
+            tickDelta: Float,
+            matrices: PoseStack,
+            vertexConsumers: MultiBufferSource,
+            light: Int,
+            overlay: Int
     ) {
-        if (entity.renderState == null) {
-            entity.renderState = BasicBlockEntityRenderState()
-        }
-        val renderState = entity.renderState as BasicBlockEntityRenderState
-        if (renderState.needsRebuild || renderState.vboLightLevel != light) {
-            renderToBuffer(entity, light, overlay, renderState.vbo, entity.egg)
-            renderState.vboLightLevel = light
-            renderState.needsRebuild = false
-        }
-        if (entity.egg != null) {
+        entity.egg?.let { egg ->
             matrices.pushPose()
-            CobblemonRenderLayers.EGG_LAYER.setupRenderState()
-            renderState.vbo.bind()
-            renderState.vbo.drawWithShader(
-                matrices.last().pose().mul(RenderSystem.getModelViewMatrix()),
-                RenderSystem.getProjectionMatrix(),
-                GameRenderer.getRendertypeCutoutShader()
-            )
-            VertexBuffer.unbind()
-            CobblemonRenderLayers.EGG_LAYER.clearRenderState()
+
+            // Get the texture based on species
+            val texture = getTextureForSpecies(egg)
+            val model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")] ?: return
+
+            // Render the egg model with the specified texture
+            renderEggModel(model, texture, matrices, vertexConsumers, light, overlay)
+
             matrices.popPose()
         }
-
     }
 
-    fun renderToBuffer(entity: EggBlockEntity, light: Int, overlay: Int, buffer: VertexBuffer, egg: Egg?) {
-        if (egg != null) {
-            val bufferBuilder = Tesselator.getInstance().begin(
-                CobblemonRenderLayers.EGG_LAYER.mode(),
-                CobblemonRenderLayers.EGG_LAYER.format()
-            )
-            val pattern = EggPatterns.patternMap[egg.patternId]!!
-            val model = EggModelRepo.eggModels[pattern.model]
-            val baseTexture = pattern.baseTexturePath
-            val baseAtlasedTexture = CobblemonAtlases.EGG_PATTERN_ATLAS.getSprite(baseTexture)
+    private fun renderEggModel(
+            model: TexturedModel,
+            texture: ResourceLocation,
+            matrices: PoseStack,
+            vertexConsumers: MultiBufferSource,
+            light: Int,
+            overlay: Int
+    ) {
+        // Retrieve the buffer for the texture
+        val buffer = vertexConsumers.getBuffer(CobblemonRenderLayers.ENTITY_CUTOUT.apply(texture))
 
-            val primaryColor = Color.decode("#${egg.baseColor}")
-
-            //Patching uvs so we can use atlases
-            val baseModel = model?.createWithUvOverride(
-                false,
-                baseAtlasedTexture.x,
-                baseAtlasedTexture.y,
-                CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.width,
-                CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.height
-            )?.bakeRoot()
-            baseModel?.setRotation(Axis.Z_AXIS.ordinal, Math.toRadians(180.0).toFloat())
-            val baseTextureModel = model?.createWithUvOverride(
-                false,
-                baseAtlasedTexture.x,
-                baseAtlasedTexture.y,
-                CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.width,
-                CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.height
-            )?.bakeRoot()
-            baseTextureModel?.setRotation(Axis.Z_AXIS.ordinal, Math.toRadians(180.0).toFloat())
-            val matrixStack = PoseStack()
-            matrixStack.setIdentity()
-            //matrixStack.translate(0F, 1F, 0F)
-            baseModel?.render(matrixStack, bufferBuilder, light, overlay)
-            baseTextureModel?.render(
-                matrixStack,
-                bufferBuilder,
-                light,
-                overlay,
-                //FIXME: This is prob either RGBA or ARGB,not just rgb
-                primaryColor.rgb
-            )
-
-
-            pattern.overlayTexturePath?.let {
-                val overlayAtlasedTexture = CobblemonAtlases.EGG_PATTERN_ATLAS.getSprite(it)
-                val overlayColor = Color.decode("#${egg.overlayColor}")
-                if (overlayColor != null) {
-                    val overlayTextureModel = model?.createWithUvOverride(
-                        false,
-                        overlayAtlasedTexture.x,
-                        overlayAtlasedTexture.y,
-                        CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.width,
-                        CobblemonAtlases.EGG_PATTERN_ATLAS.textureAtlas.height
-                    )?.bakeRoot()
-                    overlayTextureModel?.setRotation(Axis.Z_AXIS.ordinal, Math.toRadians(180.0).toFloat())
-                    overlayTextureModel?.render(
-                        matrixStack,
-                        bufferBuilder,
-                        light,
-                        overlay,
-                        //FIXME: RGBA or ARGB
-                        overlayColor.rgb
-                    )
-                }
-
-            }
-
-
-
-            val bufferBuilderFinal = bufferBuilder.buildOrThrow()
-            buffer.bind()
-            buffer.upload(bufferBuilderFinal)
-            VertexBuffer.unbind()
-        }
+        // Bake and render the model
+        val bakedModel = model.createWithUvOverride(false, 0, 0, 64, 64).bakeRoot()
+        bakedModel.render(matrices, buffer, light, overlay)
     }
 
+    private fun getTextureForSpecies(egg: Egg): ResourceLocation {
+        // Generate texture path dynamically based on species
+        return cobblemonResource("textures/egg/${egg.species.path}_egg.png")
+    }
 }

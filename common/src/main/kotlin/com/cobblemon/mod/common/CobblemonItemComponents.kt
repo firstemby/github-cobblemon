@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.item.components.HeldItemCapableComponent
 import com.cobblemon.mod.common.item.components.PokemonItemComponent
 import com.cobblemon.mod.common.item.RodBaitComponent
@@ -36,11 +38,17 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .networkSynchronized(RodBaitComponent.PACKET_CODEC)
         .build())
 
+    val EGG_DATA: DataComponentType<Egg> = DataComponentType.builder<Egg>()
+            .persistent(Egg.CODEC) // For saving/loading
+            .networkSynchronized(Egg.STREAM_CODEC) // For network serialization
+            .build()
+
 
 
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait"), BAIT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:egg_data"), EGG_DATA)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

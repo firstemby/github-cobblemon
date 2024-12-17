@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.util.codec
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
-import java.util.Optional
 import net.minecraft.resources.ResourceLocation
+import java.util.*
 
 //Codec.optionalFieldOf uses Java Optionals, which cant be passed into constructors using Kotlin optionals.
 fun <T> Codec<T>.kotlinOptionalFieldOf(name: String): MapCodec<T?> {
@@ -56,6 +56,18 @@ object CodecUtils {
             { checker(it) }
         )
     }
+
+    @JvmStatic
+    val UUID_CODEC: Codec<UUID> = Codec.STRING.comapFlatMap(
+            { string ->
+                try {
+                    DataResult.success(UUID.fromString(string))
+                } catch (e: IllegalArgumentException) {
+                    DataResult.error { "Invalid UUID: $string" }
+                }
+            },
+            { uuid -> uuid.toString() }
+    )
 
     /**
      * @see [CodecUtils.dynamicIntRange]

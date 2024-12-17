@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
 import com.mojang.serialization.MapCodec
-import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -59,16 +59,16 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     }
 
     override fun useWithoutItem(
-        blockState: BlockState,
-        level: Level,
-        blockPos: BlockPos,
-        player: Player,
-        blockHitResult: BlockHitResult
+            blockState: BlockState,
+            level: Level,
+            blockPos: BlockPos,
+            player: Player,
+            blockHitResult: BlockHitResult
     ): InteractionResult {
         super.useWithoutItem(blockState, level, blockPos, player, blockHitResult)
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity
-        return entity?.onUse(blockState, level, blockPos, player, InteractionHand.MAIN_HAND, blockHitResult) ?: InteractionResult.FAIL
+        return entity?.onUse(blockState, level, blockPos, (player as ServerPlayer), InteractionHand.MAIN_HAND, blockHitResult) ?: InteractionResult.FAIL
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = NestBlockEntity(pos, state)
