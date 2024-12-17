@@ -18,8 +18,6 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
  * @since March 25th 2023
  */
 data class BattleFledEvent (
-
     override val battle: PokemonBattle,
     val player: PlayerBattleActor
-
 ) : BattleEvent

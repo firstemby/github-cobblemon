@@ -43,11 +43,11 @@ internal object CobblemonNeoForgeBrewingRegistry {
                     }
 
                     override fun isIngredient(arg: ItemStack): Boolean {
-                        if (input is CobblemonItemIngredient) {
-                            return input.item == arg.item
+                        if (ingredient is CobblemonItemIngredient) {
+                            return ingredient.item == arg.item
                         }
-                        else if (input is CobblemonPotionIngredient) {
-                            return input.matches(arg)
+                        else if (ingredient is CobblemonPotionIngredient) {
+                            return ingredient.matches(arg)
                         }
                         else {
                             return false

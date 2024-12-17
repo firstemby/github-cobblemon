@@ -63,11 +63,17 @@ object DataKeys {
     const val POKEMON_HIDE_LABEL = "HideLabel"
     const val POKEMON_UNBATTLEABLE = "Unbattleable"
     const val POKEMON_COUNTS_TOWARDS_SPAWN_CAP = "CountsTowardsSpawnCap"
+    const val POKEMON_FREEZE_FRAME = "FreezeFrame"
+    const val POKEMON_RECALCULATE_POSE = "RecalculatePose"
+    const val POKEMON_PLATFORM_TYPE = "PlatformType"
 
     const val POKEMON_BREEDING_COOLDOWN = "BreedingCooldown"
 
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
+
+    const val POKEMON_PROPERTIES_MOVES = "Moves"
+    const val POKEMON_PROPERTIES_HELDITEM = "HeldItem"
 
     // Entity effects
     const val ENTITY_EFFECTS = "EntityEffects"
@@ -90,6 +96,12 @@ object DataKeys {
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
 
+    // Pokédex Keys
+    const val POKEDEX_TYPE = "PokedexType"
+    const val NUM_ENCOUNTED_WILD = "NumberEncounteredWild"
+    const val NUM_ENCOUNTED_BATTLE = "NumberEncounteredBattle"
+    const val NUM_CAUGHT = "NumberCaught"
+
     const val TETHER_OWNER_ID = "TetherOwnerId"
     const val TETHER_OWNER_NAME = "TetherOwnerName"
     const val TETHERING_ID = "TetheringId"
@@ -102,28 +114,26 @@ object DataKeys {
     const val TETHERING_PLAYER_ID = "PlayerId"
     const val TETHERING_ENTITY_ID = "EntityId"
 
-    /* Form stuff */
+    // Form stuff
     const val ALOLAN = "alolan"
     const val GALARIAN = "galarian"
     const val HISUIAN = "hisuian"
     const val VALENCIAN = "valencian"
     const val CRYSTAL = "crystal"
-    /* ---------- */
 
     const val POKEMON_PROPERTIES = "Properties"
     const val POKEMON_PROPERTIES_CUSTOM = "CustomProperties"
     const val POKEMON_PROPERTIES_ORIGINAL_TEXT = "OriginalText"
     const val POKEMON_SPECIES_TEXT = "SpeciesText"
 
-    /* Healer  Block */
+    // Healer  Block
     const val HEALER_MACHINE_USER = "MachineUser"
     const val HEALER_MACHINE_POKEBALLS = "MachinePokeBalls"
     const val HEALER_MACHINE_TIME_LEFT = "MachineTimeLeft"
     const val HEALER_MACHINE_CHARGE = "MachineCharge"
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
-    /* ----------- */
 
-    // Pokemon Item
+    // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"
     const val POKEMON_ITEM_ASPECTS = "aspects"
     const val POKEMON_ITEM_TINT_RED = "TintRed"
@@ -152,11 +162,11 @@ object DataKeys {
     const val SHOULDER_ASPECTS = "shoulder_aspects"
     const val SHOULDER_SCALE_MODIFIER = "shoulder_scale"
 
-    //Multiblock Stuff
+    // Multi-Block
     const val MULTIBLOCK_STORAGE = "MultiblockStore"
     const val CONTROLLER_BLOCK = "ControllerBlock"
 
-    //FossilMultiblockStructure Serialization
+    // FossilMultiblockStructure Serialization
     const val MONITOR_POS = "MonitorPos"
     const val TANK_BASE_POS = "TankBasePos"
     const val ANALYZER_POS = "AnalyzerPos"
@@ -173,7 +183,10 @@ object DataKeys {
     const val FOSSIL_OWNER = "FossilOwner"
     const val FOSSIL_STATE = "FossilState"
 
-    /* Generic Bedrock Entity */
+    // Generic Block Entity
+    const val BLOCK_ENTITY_USER_AMOUNT = "userAmount"
+
+    // Generic Bedrock Entity
     const val GENERIC_BEDROCK_CATEGORY = "Category"
     const val GENERIC_BEDROCK_ASPECTS = "Aspects"
     const val GENERIC_BEDROCK_POSE_TYPE = "PoseType"
@@ -198,14 +211,24 @@ object DataKeys {
     const val NPC_HEAL_AFTERWARDS = "HealAfterwards"
     const val NPC_PARTY = "Party"
     const val NPC_PARTY_TYPE = "PartyType"
-    const val NPC_PARTY_POKEMON = "Pokemon"
     const val NPC_ASPECTS = "AppliedAspects"
+    const val NPC_VARIATION_ASPECTS = "VariationAspects"
     const val NPC_DATA = "Data"
+    const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
     const val NPC_INTERACT_CUSTOM_SCRIPT = "CustomScript"
     const val NPC_INTERACT_DIALOGUE = "Dialogue"
+    const val NPC_PLAYER_TEXTURE = "NPCPlayerTexture"
+    const val NPC_PLAYER_TEXTURE_MODEL = "Model"
+    const val NPC_PLAYER_TEXTURE_TEXTURE = "Texture"
+    const val NPC_LEVEL = "Level"
+    const val NPC_IS_MOVABLE = "IsMovable"
+    const val NPC_SKILL = "Skill"
+    const val NPC_IS_INVULNERABLE = "IsInvulnerable"
+    const val NPC_IS_LEASHABLE = "IsLeashable"
+    const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

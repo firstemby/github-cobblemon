@@ -201,7 +201,7 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 54.0,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

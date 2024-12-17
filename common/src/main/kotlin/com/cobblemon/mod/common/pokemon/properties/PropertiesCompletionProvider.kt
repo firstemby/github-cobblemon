@@ -146,6 +146,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
         this.inject(setOf("tradeable"), setOf("yes", "no"))
         this.inject(setOf("originaltrainer", "ot"), setOf(""))
         this.inject(setOf("originaltrainertype", "ottype"), setOf("None", "Player", "NPC"))
+        this.inject(setOf("nickname", "nick"), setOf(""))
 
         Stats.PERMANENT.forEach{ stat ->
             val statName = stat.toString().lowercase()

@@ -13,7 +13,7 @@
             "context": "grounded",
             "bucket": "rare",
             "level": "55-60",
-            "weight": 0.1,
+            "weight": 0.25,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -37,7 +37,7 @@
             "context": "submerged",
             "bucket": "uncommon",
             "level": "55-60",
-            "weight": 1.0,
+            "weight": 1.6,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -53,9 +53,9 @@
             ],
             "type": "pokemon",
             "context": "grounded",
-            "bucket": "rare",
+            "bucket": "ultra-rare",
             "level": "55-60",
-            "weight": 2.0,
+            "weight": 0.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -63,6 +63,211 @@
                     "#cobblemon:is_sky"
                 ],
                 "isRaining": true
+            }
+        },
+        {
+            "id": "dragonite-5",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "55-60",
+            "weight": 0.05,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "maxY": 32
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "dragonite-6",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "55-60",
+            "weight": 0.02,
+            "weightMultiplier": {
+                "multiplier": 3.0,
+                "condition": {
+                    "minLureLevel": "3"
+                }
+            },
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "maxY": 32,
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "dragonite-7",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "55-60",
+            "weight": 0.4,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-8",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "55-60",
+            "weight": 0.25,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-9",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "55-60",
+            "weight": 0.02,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 3
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-10",
+            "pokemon": "dragonite",
+            "presets": [
+                "underwater",
+                "ocean_ruins"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "uncommon",
+            "level": "55-60",
+            "weight": 1.6,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-11",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "55-60",
+            "weight": 0.4,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-12",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "55-60",
+            "weight": 0.25,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "dragonite-13",
+            "pokemon": "dragonite",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "55-60",
+            "weight": 0.02,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_magical",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 3
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
             }
         }
     ]

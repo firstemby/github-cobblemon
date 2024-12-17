@@ -62,7 +62,7 @@ class UseMoveEvolutionProgress : EvolutionProgress<UseMoveEvolutionProgress.Prog
         val CODEC: MapCodec<UseMoveEvolutionProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 MoveTemplate.BY_STRING_CODEC.fieldOf(MOVE).forGetter { it.progress.move },
-                Codec.intRange(1, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { move, amount -> UseMoveEvolutionProgress().apply { updateProgress(Progress(move, amount)) } }
         }
 

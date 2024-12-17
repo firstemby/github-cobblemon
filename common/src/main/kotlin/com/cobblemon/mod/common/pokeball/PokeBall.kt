@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.pokeball
 
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
@@ -39,6 +42,12 @@ open class PokeBall(
     val throwPower: Float,
     val ancient: Boolean
 ) {
+    val struct = QueryStruct(hashMapOf())
+        .addFunction("name") { StringValue(name.toString()) }
+        .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
+        .addFunction("throw_power") { DoubleValue(throwPower) }
+        .addFunction("is_ancient") { DoubleValue(ancient) }
+//        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry
     internal lateinit var item: PokeBallItem
@@ -49,7 +58,7 @@ open class PokeBall(
         ItemStack(this.item(), count)
 
     @Deprecated("This is a temporary solution for the safari ball dilemma", ReplaceWith("target.currentHealth"))
-    internal fun hpForCalculation(target: Pokemon): Int = if (this.name == PokeBalls.SAFARI_BALL.name) target.hp else target.currentHealth
+    internal fun hpForCalculation(target: Pokemon): Int = if (this.name == PokeBalls.SAFARI_BALL.name) target.maxHealth else target.currentHealth
 
     companion object {
 

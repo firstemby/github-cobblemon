@@ -21,13 +21,13 @@ import com.cobblemon.mod.common.util.adapters.DialogueTextAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
-import com.cobblemon.mod.common.util.adapters.TextAdapter
+import com.cobblemon.mod.common.util.adapters.TranslatedTextAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
 /**
@@ -56,7 +56,7 @@ object Dialogues : JsonDataRegistry<Dialogue> {
         .registerTypeAdapter(DialogueText::class.java, DialogueTextAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(MutableComponent::class.java, TextAdapter)
+        .registerTypeAdapter(MutableComponent::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .also { gsonObservable.emit(it) }
         .create()

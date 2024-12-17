@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.data
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 
+// TODO this is implemented in multiple places but unused. Can we scratch this?
 /**
  * Represents an object that will possibly be synchronized to the client during datapack synchronization.
  *

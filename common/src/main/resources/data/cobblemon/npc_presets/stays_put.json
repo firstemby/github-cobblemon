@@ -1,0 +1,46 @@
+{
+  "ai": [
+    {
+      "type": "add_tasks_to_activity",
+        "activity": "minecraft:idle",
+        "tasksByPriority": {
+          "1": [
+            {
+              "type": "run_script",
+              "script": "cobblemon:home_walk_task"
+            }
+          ]
+        }
+    }
+  ],
+  "config": [
+    {
+      "variableName": "home_x",
+      "displayName": "npc.variable.home_x.name",
+      "description": "npc.variable.home_x.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    },
+    {
+      "variableName": "home_y",
+      "displayName": "npc.variable.home_y.name",
+      "description": "npc.variable.home_y.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    },
+    {
+      "variableName": "home_z",
+      "displayName": "npc.variable.home_z.name",
+      "description": "npc.variable.home_z.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    },
+    {
+      "variableName": "home_radius",
+      "displayName": "npc.variable.home_radius.name",
+      "description": "npc.variable.home_radius.desc",
+      "type": "NUMBER",
+      "defaultValue": "2"
+    }
+  ]
+}

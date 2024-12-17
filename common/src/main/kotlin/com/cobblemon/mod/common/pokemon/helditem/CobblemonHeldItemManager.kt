@@ -75,6 +75,21 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         return original
     }
 
+    fun showdownId(itemStack: ItemStack): String? {
+        if (remaps.containsKey(itemStack.item)) {
+            return remaps[itemStack.item]
+        }
+
+        for (remap in stackRemaps) {
+            val id = remap.apply(itemStack)
+            if (id != null) {
+                return id
+            }
+        }
+
+        return this.showdownIdOf(itemStack.item)
+    }
+
     override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
         val itemID = battleMessage.effectAt(1)?.id ?: return
         val consumeHeldItems = this.shouldConsumeItem(pokemon, battle, itemID)
@@ -139,8 +154,10 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         val text = when {
             effect?.id != null -> battleLang("enditem.${effect.id}", battlerName, itemName, sourceName)
             else -> when (itemID) {
-                "boosterenergy", "electricseed", "grassyseed", "mistyseed", "psychicseed", "roomservice" -> battleLang("enditem.generic", battlerName, itemName)
-                else -> battleLang("enditem.$itemID", battlerName)
+                "boosterenergy", "electricseed", "grassyseed", "mistyseed", "psychicseed", "roomservice", "blunderpolicy", "weaknesspolicy", "absorbbulb",
+                    -> battleLang("enditem.generic", battlerName, itemName)   // TODO this cannot scale like this
+                else
+                    -> battleLang("enditem.$itemID", battlerName)
             }
         }
         if (consumeHeldItems) this.take(pokemon, itemID)

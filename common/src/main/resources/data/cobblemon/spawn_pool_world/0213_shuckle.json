@@ -13,6 +13,22 @@
             "context": "grounded",
             "bucket": "uncommon",
             "level": "16-51",
+            "weight": 10.0,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ]
+            }
+        },
+        {
+            "id": "shuckle-2",
+            "pokemon": "shuckle",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "16-51",
             "weight": 6.0,
             "condition": {
                 "minSkyLight": 0,
@@ -20,6 +36,32 @@
                 "biomes": [
                     "#cobblemon:is_lush"
                 ]
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "shuckle-3",
+            "pokemon": "shuckle",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "16-51",
+            "weight": 2.0,
+            "weightMultiplier": {
+                "multiplier": 3.0,
+                "condition": {
+                    "minLureLevel": "3"
+                }
+            },
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ],
+                "minLureLevel": 1
             }
         }
     ]

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Feebas",
   "nationalPokedexNumber": 349,
   "primaryType": "water",
@@ -25,6 +26,26 @@
     "water_1",
     "dragon"
   ],
+  "behaviour": {
+    "moving": {
+      "canLook": false,
+      "walk": {
+        "avoidsLand": true
+      },
+      "swim": {
+        "swimSpeed": 0.1,
+        "canSwimInWater": true,
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": false
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "depth": "normal",
+      "times": "night"
+    }
+  },
   "moves": [
     "1:splash",
     "15:tackle",
@@ -128,8 +149,8 @@
   ],
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 0.8,
     "fixed": false
   },
   "baseFriendship": 50,

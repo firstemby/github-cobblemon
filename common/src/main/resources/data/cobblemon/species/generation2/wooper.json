@@ -135,6 +135,9 @@
       "aspects": [
         "paldean"
       ],
+      "pokedex": [
+        "cobblemon.species.wooper-paldea.desc"
+      ],
       "height": 4,
       "weight": 85,
       "evolutions": [

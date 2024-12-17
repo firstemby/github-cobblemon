@@ -18,7 +18,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.3
+        "walkSpeed": 0.175
       }
     },
     "resting": {
@@ -230,8 +230,8 @@
   ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.7,
-    "height": 1.5,
+    "width": 0.9,
+    "height": 1.6,
     "fixed": false
   },
   "baseFriendship": 50,

@@ -1,0 +1,39 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["mist", "ice", "status"],
+      "delay": 0.5
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:mist_actor",
+      "locator": "middle"
+    },
+    {
+      "type": "pause",
+      "pause": 0.9
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:mist_actorshroud",
+      "locator": "middle"
+    },
+    {
+      "type": "pause",
+      "pause": 1.2
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.9
+    }
+  ]
+}

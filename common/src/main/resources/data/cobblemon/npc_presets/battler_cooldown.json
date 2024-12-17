@@ -1,0 +1,11 @@
+{
+  "config": [
+    {
+      "variableName": "challenge_cooldown",
+      "displayName": "npc.variable.challenge_cooldown.name",
+      "description": "npc.variable.challenge_cooldown.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    }
+  ]
+}

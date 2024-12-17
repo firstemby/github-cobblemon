@@ -8,10 +8,11 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.npc.NPCClass
-import com.cobblemon.mod.common.api.npc.NPCConfiguration
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.util.asExpression
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -30,8 +31,9 @@ class NPCSpawnDetail : SpawnDetail() {
 
     @SerializedName(value = "npcClass", alternate = ["class", "npc"])
     val npcClass: NPCClass = blankClass
-    val configuration: NPCConfiguration? = null
     val aspects: Set<String> = emptySet()
+    val minLevel: Expression = "1".asExpression()
+    val maxLevel: Expression = "100".asExpression()
 
     override fun doSpawn(ctx: SpawningContext) = NPCSpawnAction(ctx, this)
 }

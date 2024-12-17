@@ -23,7 +23,7 @@ object CobblemonTooltipGenerator : TooltipGenerator() {
         val resultLines = mutableListOf<Component>()
 
         if (stack.item.builtInRegistryHolder().unwrapKey().isPresent && stack.item.builtInRegistryHolder().unwrapKey().get().location().namespace == Cobblemon.MODID) {
-            if (stack.get(DataComponents.HIDE_TOOLTIP) != null) {
+            if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
                 return null
             }
             val language = Language.getInstance()

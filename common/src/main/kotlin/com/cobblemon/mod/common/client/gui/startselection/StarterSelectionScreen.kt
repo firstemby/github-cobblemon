@@ -132,7 +132,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
                 pX = x + 85, pY = y + 50,
                 pWidth = 102, pHeight = 100,
                 pokemon = this,
-                baseScale = 2.0f
+                baseScale = 2.0f,
+                playCryOnClick = true,
             )
 
             typeWidget = typeWidget(this, x, y)
@@ -326,6 +327,15 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             type = pokemon.form.primaryType,
             renderText = false
         )
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
+            Minecraft.getInstance().setScreen(null)
+            return true
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
     override fun isPauseScreen() = true

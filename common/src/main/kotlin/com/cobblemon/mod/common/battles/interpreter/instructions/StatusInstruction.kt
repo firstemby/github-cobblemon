@@ -41,6 +41,7 @@ class StatusInstruction( val message: BattleMessage): InterpreterInstruction {
             if (status is PersistentStatus) {
                 pokemon.effectedPokemon.applyStatus(status)
                 battle.sendUpdate(BattlePersistentStatusPacket(pnx, status))
+                pokemon.sendUpdate()
             }
 
             battle.broadcastChatMessage(status.applyMessage.asTranslated(pokemon.getName()))

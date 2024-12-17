@@ -11,11 +11,12 @@ package com.cobblemon.mod.common.api.drop
 import com.cobblemon.mod.common.api.events.CobblemonEvents.LOOT_DROPPED
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import kotlin.random.Random
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
-import kotlin.random.Random
 
 /**
  * A table of drops that can produce a list of [DropEntry]. You can produce a drop list from [getDrops] to
@@ -95,5 +96,15 @@ class DropTable {
             event = LootDroppedEvent(this, player, entity, drops),
             ifSucceeded = { it.drops.forEach { it.drop(entity, world, pos, player) } }
         )
+    }
+
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeInt(this.entries.size)
+        this.entries.filterIsInstance<ItemDropEntry>().forEach { it.encode(buffer) }
+    }
+
+    fun decode(buffer: RegistryFriendlyByteBuf) {
+        val entries = buffer.readInt()
+        repeat(entries) { this.entries.add(ItemDropEntry().decode(buffer)) }
     }
 }

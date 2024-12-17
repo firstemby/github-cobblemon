@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.item
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.resources.ResourceLocation
@@ -71,17 +72,21 @@ object CobblemonModelPredicateRegistry {
 
         rods.forEach { rod ->
             ItemProperties.register(rod, ResourceLocation.parse("cast")) { stack, world, entity, seed ->
-                if (entity == null) {
-                    0.0f
-                } else {
-                    val isMainHand = entity.mainHandItem == stack
-                    var isOffHand = entity.offhandItem == stack
-                    if (entity.mainHandItem.item is PokerodItem) {
-                        isOffHand = false
-                    }
+                if (entity !is Player || entity.fishing !is PokeRodFishingBobberEntity) return@register 0.0f
 
-                    if ((isMainHand || isOffHand) && entity is Player && entity.fishing != null) 1.0f else 0.0f
+                val rodId = entity.fishing!!.entityData.get(PokeRodFishingBobberEntity.POKEROD_ID)
+
+                val isMainHand = stack == entity.mainHandItem
+                var isOffHand = stack == entity.offhandItem
+
+                var mainHandItem = entity.mainHandItem.item
+                val isFishingWithMainHand = mainHandItem is PokerodItem && rodId == mainHandItem.pokeRodId.toString()
+
+                if (isFishingWithMainHand) {
+                    isOffHand = false
                 }
+
+                if (isMainHand && isFishingWithMainHand || isOffHand) 1.0f else 0.0f
             }
         }
 

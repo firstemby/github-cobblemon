@@ -212,6 +212,9 @@
       ],
       "height": 2,
       "weight": 7,
+      "pokedex": [
+        "cobblemon.species.mimikyu-busted.desc"
+      ],
       "cannotDynamax": false,
       "battleOnly": true
     },

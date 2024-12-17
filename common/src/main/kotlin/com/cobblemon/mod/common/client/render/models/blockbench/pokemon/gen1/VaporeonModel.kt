@@ -38,7 +38,7 @@ class VaporeonModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override fun registerPoses() {
         standing = registerPose(
             poseName = "standing",
-            poseTypes = STATIONARY_POSES + UI_POSES,
+            poseTypes = STATIONARY_POSES + UI_POSES - PoseType.FLOAT,
             transformTicks = 10,
             animations = arrayOf(
                 singleBoneLook(),

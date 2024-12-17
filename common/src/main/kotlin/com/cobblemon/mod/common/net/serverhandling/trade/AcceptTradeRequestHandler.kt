@@ -9,14 +9,20 @@
 package com.cobblemon.mod.common.net.serverhandling.trade
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import com.cobblemon.mod.common.trade.TradeManager.TradeRequest
 import com.cobblemon.mod.common.net.messages.server.trade.AcceptTradeRequestPacket
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
+/**
+ * Processes a player's acceptance of a [TradeRequest].
+ *
+ * @author Hiroku
+ * @since March 12th, 2023
+ */
 object AcceptTradeRequestHandler : ServerNetworkPacketHandler<AcceptTradeRequestPacket> {
     override fun handle(packet: AcceptTradeRequestPacket, server: MinecraftServer, player: ServerPlayer) {
-        if(player.isSpectator) return
-        TradeManager.acceptTradeRequest(player, packet.tradeOfferId)
+        TradeManager.acceptRequest(player, packet.tradeOfferId)
     }
 }

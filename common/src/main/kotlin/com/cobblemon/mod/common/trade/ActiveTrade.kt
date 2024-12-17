@@ -35,26 +35,31 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
         }
 
         if (offer.accepted && getOffer(tradeParticipant).accepted) {
-            performTrade()
+            //performTrade
+            player1.startTradeProcess(this, tradeParticipant == player1)
+            player2.startTradeProcess(this, tradeParticipant == player2)
         }
     }
 
     fun getOppositePlayer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player2 else player1
 
-    fun performTrade() {
-        TradeManager.performTrade(
-            player1 = player1,
-            player2 = player2,
-            pokemon1 = player1Offer.pokemon!!,
-            pokemon2 = player2Offer.pokemon!!
-        )
-        completeTrade()
+    fun performTrade(tradeParticipant: TradeParticipant) {
+        val offer = getOpposingOffer(tradeParticipant)
+        if (offer.accepted && getOffer(tradeParticipant).accepted) {
+            TradeManager.performTrade(
+                player1 = player1,
+                player2 = player2,
+                pokemon1 = player1Offer.pokemon!!,
+                pokemon2 = player2Offer.pokemon!!
+            )
+            completeTrade()
+        }
     }
 
     fun cancelTrade() {
         player1.cancelTrade(this)
         player2.cancelTrade(this)
-        TradeManager.activeTrades -= this
+        TradeManager.removeActiveTrade(this)
     }
 
     fun completeTrade() {

@@ -199,6 +199,9 @@
       "preEvolution": "vulpix alolan",
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.ninetales-alola.desc"
+      ],
       "drops": {
         "amount": 7,
         "entries": [

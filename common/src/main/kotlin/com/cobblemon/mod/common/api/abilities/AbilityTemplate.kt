@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.abilities
 
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
@@ -21,14 +22,14 @@ import net.minecraft.nbt.CompoundTag
  */
 class AbilityTemplate(
     val name: String = "",
-    var builder: (AbilityTemplate, forced: Boolean) -> Ability = { template, forced -> Ability(template, forced) },
+    var builder: (AbilityTemplate, forced: Boolean, priority: Priority) -> Ability = { template, forced, priority -> Ability(template, forced, priority) },
     val displayName: String = "cobblemon.ability.$name",
     val description: String = "cobblemon.ability.$name.desc"
 ) {
     /**
      * Returns the Ability or if applicable the extension connected to this template
      */
-    fun create(forced: Boolean = false) = builder(this, forced)
+    fun create(forced: Boolean = false, priority: Priority = Priority.LOWEST) = builder(this, forced, priority)
 
     /**
      * Returns the Ability and loads the given NBT Tag into it.

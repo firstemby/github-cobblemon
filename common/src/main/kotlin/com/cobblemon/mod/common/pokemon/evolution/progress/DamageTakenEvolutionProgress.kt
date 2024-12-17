@@ -56,7 +56,7 @@ class DamageTakenEvolutionProgress : EvolutionProgress<DamageTakenEvolutionProgr
         @JvmStatic
         val CODEC: MapCodec<DamageTakenEvolutionProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                Codec.intRange(1, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { amount -> DamageTakenEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 

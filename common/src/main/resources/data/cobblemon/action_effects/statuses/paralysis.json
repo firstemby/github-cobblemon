@@ -7,12 +7,21 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:paralysis_actor",
-      "locator": "middle",
-      "delay": 1.5
+      "locators": ["middle"],
+      "delay": 0.1
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:paralysis_actorresidual",
+      "locators": ["middle"]
     },
     {
       "type": "remove_holds",
       "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1
     }
   ]
 }

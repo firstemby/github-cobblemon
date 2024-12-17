@@ -74,14 +74,15 @@ transitive-accessible field net/minecraft/client/render/RenderPhase ENABLE_OVERL
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry POTION_TYPES Ljava/util/List;
 transitive-accessible class net/minecraft/world/item/alchemy/PotionBrewing$Mix
 
+transitive-accessible class net/minecraft/util/datafix/fixes/ItemStackComponentizationFix$ItemStackData
+
 accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl connection Lnet/minecraft/network/Connection;
 transitive-accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
 transitive-accessible field com/mojang/blaze3d/systems/RenderSystem shaderLightDirections [Lorg/joml/Vector3f;
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$PotionSlot
 transitive-accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
-transitive-accessible field net/minecraft/world/level/biome/Biome climateSettings Lnet/minecraft/world/level/biome/Biome$ClimateSettings;
 accessible field net/minecraft/client/gui/components/toasts/AdvancementToast BACKGROUND_SPRITE Lnet/minecraft/resources/ResourceLocation;
-#accessible method net/minecraft/text/Text$Serialization fromJson (Lcom/google/gson/JsonElement;)Lnet/minecraft/text/MutableText;
+#accessible method net/minecraft/text/Text$Serialization fromJson (Lcom/google/gson/JsonElement;)Lnet/minecraft/text/MutableComponent;
 
 
 transitive-accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds
@@ -114,3 +115,6 @@ transitive-extendable method net/minecraft/world/entity/LivingEntity getDimensio
 #String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, MultiPhaseParameters phases
 transitive-accessible method net/minecraft/client/renderer/block/model/ItemModelGenerator createSideElements (Lnet/minecraft/client/renderer/texture/SpriteContents;Ljava/lang/String;I)Ljava/util/List;
 transitive-accessible method net/minecraft/client/renderer/block/model/ItemOverrides <init> ()V
+transitive-accessible field net/minecraft/world/level/material/MapColor MATERIAL_COLORS [Lnet/minecraft/world/level/material/MapColor;
+
+transitive-accessible field net/minecraft/client/Minecraft textureManager Lnet/minecraft/client/renderer/texture/TextureManager;

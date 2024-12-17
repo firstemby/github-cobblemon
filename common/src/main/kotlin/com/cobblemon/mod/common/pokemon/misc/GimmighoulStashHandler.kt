@@ -33,8 +33,7 @@ object GimmighoulStashHandler {
     val SCRAP_VALUE = 1
     val INGOT_VALUE = SCRAP_VALUE * 4
     val BLOCK_VALUE = INGOT_VALUE * 9
-
-    fun mobInteract(player: Player, hand: InteractionHand, pokemon:Pokemon) : Boolean {
+    fun interactMob(player: Player, hand: InteractionHand, pokemon:Pokemon) : Boolean {
         val itemStack = player.getItemInHand(hand)
         var success = false
         if(player is ServerPlayer && pokemon.getOwnerPlayer() == player) {
@@ -53,7 +52,6 @@ object GimmighoulStashHandler {
             pokemon.removeHeldItem()
         }
     }
-
     fun handleItem(pokemon: Pokemon, item: Item) : Boolean {
         val goldHoard = pokemon.getFeature<IntSpeciesFeature>("gimmighoul_coins")
         val netheriteHoard = pokemon.getFeature<IntSpeciesFeature>("gimmighoul_netherite")
@@ -68,7 +66,7 @@ object GimmighoulStashHandler {
             if (increase != 0) {
                 goldHoard.value += increase
                 if (goldHoard.value > 999) goldHoard.value = 999
-                if (pokemon.entity != null) pokemon.entity!!.playSound(CobblemonSounds.GIMMIGHOUL_GIVE_ITEM_SMALL, 1f, 1f)
+                if (pokemon.entity != null) pokemon.entity!!.playSound(CobblemonSounds.GIMMIGHOUL_GIVE_ITEM, 1f, 1f)
                 pokemon.markFeatureDirty(goldHoard)
                 return true
             }
@@ -85,7 +83,7 @@ object GimmighoulStashHandler {
             if (increase != 0) {
                 netheriteHoard.value += increase
                 if (netheriteHoard.value > 256) netheriteHoard.value = 256
-                if (pokemon.entity != null) pokemon.entity!!.playSound(CobblemonSounds.GIMMIGHOUL_GIVE_ITEM_SMALL, 1f, 1f)
+                if (pokemon.entity != null) pokemon.entity!!.playSound(CobblemonSounds.GIMMIGHOUL_GIVE_ITEM, 1f, 1f)
                 pokemon.markFeatureDirty(netheriteHoard)
                 return true
             }

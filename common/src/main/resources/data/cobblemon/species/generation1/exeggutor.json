@@ -235,6 +235,9 @@
       "height": 109,
       "weight": 4156,
       "preEvolution": "exeggcute region_bias=alola",
+      "pokedex": [
+        "cobblemon.species.exeggutor-alola.desc"
+      ],
       "cannotDynamax": false,
       "battleOnly": false
     }

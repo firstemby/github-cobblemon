@@ -1,0 +1,24 @@
+{
+  "id": "cobblemon:cubone",
+  "speciesId": "cobblemon:cubone",
+  "displayAspects": [],
+  "conditionAspects": [],
+  "forms": [
+    {
+      "displayForm": "Normal",
+      "unlockForms": [
+        "Normal"
+      ]
+    }
+  ],
+  "variations": [
+    {
+      "displayName": "cobblemon.pokedex.variation.region_bias",
+      "icon": "cobblemon:textures/gui/pokedex/variation/globe.png",
+      "aspects": [
+        "region-bias-none",
+        "region-bias-alola"
+      ]
+    }
+  ]
+}

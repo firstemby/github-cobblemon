@@ -134,12 +134,12 @@ class Toast(
     }
 
     /**
-     * Invokes [expire] after the specified [ticks].
+     * Invokes [expire] after the specified [seconds].
      *
-     * @param ticks The number of ticks before the lifecycle of this toast ends.
+     * @param seconds The number of seconds before the lifecycle of this toast ends.
      */
-    fun expireAfter(ticks: Int) {
-        afterOnServer(ticks = ticks) {
+    fun expireAfter(seconds: Float) {
+        afterOnServer(seconds = seconds) {
             this.expire()
         }
     }

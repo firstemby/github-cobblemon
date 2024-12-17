@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
+import com.cobblemon.mod.common.api.battles.interpreter.InvalidInstructionException
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
@@ -19,7 +20,6 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
-import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -33,19 +33,25 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since August 20th, 2022
  */
-class BoostInstruction(val instructionSet: InstructionSet, val message: BattleMessage, val remainingLines: Iterator<BattleMessage>, val isBoost: Boolean = true): ActionEffectInstruction {
+class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val isBoost: Boolean = true): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("boost")
+
+    val pokemon = message.battlePokemon(0, battle) ?: throw InvalidInstructionException(message)
+    val statKey = message.argumentAt(1) ?: throw InvalidInstructionException(message)
+    val stages = message.argumentAt(2)?.toInt() ?: throw InvalidInstructionException(message)
+    val stat = Stats.getStat(statKey).displayName
+
     override fun preActionEffect(battle: PokemonBattle) {
 
     }
 
     override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+        if (stages == 0) return // only play effect if there was a stat change
         battle.dispatch {
             val actionEffect = if (isBoost) BOOST_EFFECT else UNBOOST_EFFECT
             val providers = mutableListOf<Any>(battle)
-            val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
             pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
@@ -60,10 +66,6 @@ class BoostInstruction(val instructionSet: InstructionSet, val message: BattleMe
     }
 
     override fun postActionEffect(battle: PokemonBattle) {
-        val pokemon = message.battlePokemon(0, battle) ?: return
-        val statKey = message.argumentAt(1) ?: return
-        val stages = message.argumentAt(2)?.toInt() ?: return
-        val stat = Stats.getStat(statKey).displayName
         val severity = Stats.getSeverity(stages)
         val rootKey = if (isBoost) "boost" else "unboost"
 

@@ -13,7 +13,7 @@
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 9.0,
+            "weight": 6.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,12 +32,164 @@
             "context": "submerged",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 9.0,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
                 ]
+            }
+        },
+        {
+            "id": "piplup-3",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "5-31",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "piplup-4",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "5-31",
+            "weight": 7.5,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "piplup-5",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "5-31",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ],
+                "minLureLevel": 3
+            }
+        },
+        {
+            "id": "piplup-6",
+            "pokemon": "piplup",
+            "presets": [
+                "underwater"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "ultra-rare",
+            "level": "5-31",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "piplup-7",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "5-31",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "piplup-8",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "5-31",
+            "weight": 7.5,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "piplup-9",
+            "pokemon": "piplup",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "5-31",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean",
+                    "#minecraft:frozen_river",
+                    "#cobblemon:is_glacial",
+                    "#cobblemon:is_tundra"
+                ],
+                "minLureLevel": 3
             }
         }
     ]

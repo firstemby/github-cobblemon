@@ -29,6 +29,9 @@
       "aspects": [
         "region-bias-alola"
       ],
+      "pokedex": [
+        "cobblemon.species.exeggcute-alola.desc"
+      ],
       "evolutions": [
         {
           "id": "alola_exeggcute_exeggutor",

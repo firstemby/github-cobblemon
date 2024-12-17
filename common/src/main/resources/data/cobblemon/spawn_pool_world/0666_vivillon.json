@@ -355,8 +355,8 @@
                 ],
                 "biomes": [
                     "#cobblemon:is_badlands",
-                    "#cobblemon:is_floral",
                     "#cobblemon:is_desert",
+                    "#cobblemon:is_floral",
                     "#cobblemon:is_mushroom",
                     "#cobblemon:is_tropical_island"
                 ]

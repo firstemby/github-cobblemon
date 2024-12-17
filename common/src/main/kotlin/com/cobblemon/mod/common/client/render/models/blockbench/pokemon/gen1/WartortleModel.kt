@@ -67,9 +67,9 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
         standing = registerPose(
             poseName = "standing",
-            poseTypes = PoseType.STATIONARY_POSES - PoseType.HOVER + UI_POSES,
+            poseTypes = setOf(PoseType.STAND) + UI_POSES,
             quirks = arrayOf(blink, quirkidle),
-            condition = { !it.isBattling && !it.isInWater && !it.isUnderWater},
+            condition = { !it.isBattling && !it.isUnderWater},
             namedAnimations = mutableMapOf("faint" to faint),
             animations = arrayOf(
                 singleBoneLook(),
@@ -91,9 +91,8 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
         walk = registerPose(
             poseName = "walk",
-            poseTypes = PoseType.MOVING_POSES - PoseType.FLY,
+            poseTypes = setOf(PoseType.WALK),
             quirks = arrayOf(blink),
-            condition = { !it.isInWater && !it.isUnderWater},
             namedAnimations = mutableMapOf("faint" to faint),
             animations = arrayOf(
                 singleBoneLook(),
@@ -105,7 +104,6 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
             poseName = "floating",
             transformTicks = 10,
             poseType = PoseType.FLOAT,
-            condition = { it.isUnderWater },
             namedAnimations = mutableMapOf("faint" to faint),
             quirks = arrayOf(blink),
             animations = arrayOf(
@@ -117,7 +115,6 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
         swimming = registerPose(
             poseName = "swimming",
             transformTicks = 10,
-            condition = { it.isUnderWater },
             namedAnimations = mutableMapOf("faint" to faint),
             poseType = PoseType.SWIM,
             quirks = arrayOf(blink),
@@ -129,10 +126,10 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
         water_surface_idle = registerPose(
             poseName = "surface_idle",
-            poseTypes = PoseType.STATIONARY_POSES,
+            poseType = PoseType.STAND,
             namedAnimations = mutableMapOf("faint" to faint),
             quirks = arrayOf(blink),
-            condition = { !it.isUnderWater && it.isInWater },
+            condition = { it.isInWater },
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("wartortle", "surfacewater_idle"),
@@ -144,9 +141,9 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
         water_surface_swim = registerPose(
             poseName = "surface_swim",
-            poseTypes = PoseType.MOVING_POSES,
+            poseType = PoseType.WALK,
             quirks = arrayOf(blink),
-            condition = { !it.isUnderWater && it.isInWater },
+            condition = { it.isInWater },
             namedAnimations = mutableMapOf("faint" to faint),
             animations = arrayOf(
                 singleBoneLook(),

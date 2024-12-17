@@ -15,7 +15,7 @@ package com.cobblemon.mod.common.api.pokemon.egg
  *
  * @property showdownID used for data synchronization with Showdown data format.
  */
-enum class EggGroup(internal val showdownID: String) {
+enum class EggGroup(val showdownID: String) {
 
     MONSTER("Monster"),
     WATER_1("Water 1"),
@@ -31,6 +31,16 @@ enum class EggGroup(internal val showdownID: String) {
     WATER_2("Water 2"),
     DITTO("Ditto"),
     DRAGON("Dragon"),
-    UNDISCOVERED("Undiscovered")
+    UNDISCOVERED("Undiscovered");
 
+    companion object {
+        private val identifierMap: Map<String, EggGroup> = entries.associateBy {
+            it.showdownID.lowercase().replace(" ", "_").replace("-", "_")
+        }
+
+        fun fromIdentifier(identifier: String): EggGroup? {
+            val key = identifier.lowercase().replace(" ", "_").replace("-", "_")
+            return identifierMap[key]
+        }
+    }
 }

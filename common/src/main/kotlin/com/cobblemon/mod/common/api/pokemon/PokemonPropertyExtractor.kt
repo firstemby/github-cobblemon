@@ -53,7 +53,7 @@ fun interface PokemonPropertyExtractor {
         val EVS = add { pokemon, properties -> properties.evs = pokemon.evs }
 
         @JvmField
-        val ILLUSION = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, NICKNAME, SHINY)
+        val ILLUSION = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, NICKNAME, SHINY, POKEBALL)
         @JvmField
         val TRANSFORM = mutableListOf(SPECIES, FORM, ASPECTS, GENDER)
 

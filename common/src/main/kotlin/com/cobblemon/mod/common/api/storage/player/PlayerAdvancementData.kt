@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.storage.player
 
-import com.cobblemon.mod.common.advancement.criterion.AspectCriterion
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
@@ -17,6 +16,8 @@ import net.minecraft.resources.ResourceLocation
 class PlayerAdvancementData {
 
     var totalCaptureCount: Int = 0
+        private set
+    var totalEggsCollected: Int = 0
         private set
     var totalEggsHatched: Int = 0
         private set
@@ -42,6 +43,10 @@ class PlayerAdvancementData {
 
     fun updateTotalCaptureCount() {
         totalCaptureCount++
+    }
+
+    fun updateTotalEggsCollected() {
+        totalEggsCollected++
     }
 
     fun updateTotalEggsHatched() {
@@ -102,7 +107,8 @@ class PlayerAdvancementData {
     }
 
     fun updateAspectsCollected(player: ServerPlayer, pokemon: Pokemon) {
-        val aspectConditions = player.advancements.progress.keys
+        //TODO: take another look at using the Advancement progress
+        /*val aspectConditions = player.advancements.progress.keys
             .flatMap { it.value.criteria.values }
             .mapNotNull { it.trigger }
             .filterIsInstance<AspectCriterion>()
@@ -114,6 +120,9 @@ class PlayerAdvancementData {
         if (trackedAspects.isNotEmpty()) {
             val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
             pokemon.aspects.filter(trackedAspects::contains).forEach(collectedAspects::add)
-        }
+        }*/
+
+        val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
+        pokemon.aspects.forEach(collectedAspects::add)
     }
 }

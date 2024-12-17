@@ -47,6 +47,7 @@ class AbilityInstruction(val instructionSet: InstructionSet, val message: Battle
             val lang = when (optionalEffect?.id) {
                 "trace" -> optionalPokemonName?.let { battleLang("ability.trace", pokemonName, it, effect.typelessData) }
                 "receiver", "powerofalchemy" -> optionalPokemonName?.let { battleLang("ability.receiver", it, effect.typelessData) } // Receiver and Power of Alchemy share the same text
+                "worryseed", "entrainment", "simplebeam", "roleplay", "doodle" -> battleLang("ability.replace", pokemonName, effect.typelessData)
                 else -> when (effect.id) {
                     "sturdy", "unnerve", "anticipation" -> battleLang("ability.${effect.id}", pokemonName) // Unique message
                     "airlock", "cloudnine" -> battleLang("ability.airlock") // Cloud Nine shares the same text as Air Lock

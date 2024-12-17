@@ -6,23 +6,23 @@
     },
     {
       "type": "entity_particles",
-      "effect": "cobblemon:sleep_bubbles",
-      "locator": "middle",
+      "effect": "cobblemon:sleep_actor",
+      "locators": ["middle"],
       "delay": 0.05
     },
     {
       "type": "entity_particles",
-      "effect": "cobblemon:sleep_zzz",
-      "locator": "middle",
+      "effect": "cobblemon:sleep_actorresidual",
+      "locators": ["middle"],
       "delay": 0.05
-    },
-    {
-      "type": "pause",
-      "pause": 1.0
     },
     {
       "type": "remove_holds",
       "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1
     }
   ]
 }

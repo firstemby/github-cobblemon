@@ -32,7 +32,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
 ) {
     companion object {
         const val WIDTH = 108
-        const val HEIGHT = 111
+        const val HEIGHT = 112
         const val SLOT_WIDTH = 91
 
         private val backgroundResource = cobblemonResource("textures/gui/summary/summary_scroll_background.png")
@@ -71,7 +71,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
         )
         context.enableScissor(
             x,
-            y - 1,
+            y,
             x + width,
             y + height
         )

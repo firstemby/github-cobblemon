@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import java.util.UUID
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.PlayerModel
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
@@ -58,14 +59,15 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         netHeadYaw: Float,
         headPitch: Float
     ) {
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, true)
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, false)
+        // It's unclear why Minecraft's providing a partial ticks based on 60FPS regardless of the real FPS.
+        // Whatever - the delta manager works correctly.
+        val realPartialTicks = Minecraft.getInstance().timer.realtimeDeltaTicks
+        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, true)
+        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, false)
     }
 
-    fun makeState(model: PosableModel, aspects: Set<String>, leftShoulder: Boolean): FloatingState {
-        val state = FloatingState()
+    fun configureState(state: FloatingState, model: PosableModel, leftShoulder: Boolean): FloatingState {
         state.currentModel = model
-        state.currentAspects = aspects
         state.setPoseToFirstSuitable(if (leftShoulder) PoseType.SHOULDER_LEFT else PoseType.SHOULDER_RIGHT)
         return state
     }
@@ -103,7 +105,10 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                 shoulderData = (if (pLeftShoulder) cache.lastKnownLeft else cache.lastKnownRight) ?: return
             }
 
-            val model = PokemonModelRepository.getPoser(shoulderData.species.resourceIdentifier, shoulderData.aspects)
+            var state = FloatingState()
+            state.currentAspects = shoulderData.aspects
+            val model = PokemonModelRepository.getPoser(shoulderData.species.resourceIdentifier, state)
+            model.context = context
             context.put(RenderContext.SPECIES, shoulderData.species.resourceIdentifier)
             context.put(RenderContext.ASPECTS, shoulderData.aspects)
             val scale = shoulderData.form.baseScale * shoulderData.scaleModifier
@@ -125,12 +130,12 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
             matrixStack.scale(scale, scale, scale)
 
-            val state = if (pLeftShoulder && shoulderData != lastRenderedLeft) {
-                leftState = makeState(model, shoulderData.aspects, true)
+            state = if (pLeftShoulder && shoulderData != lastRenderedLeft) {
+                leftState = configureState(state, model, true)
                 lastRenderedLeft = shoulderData
                 leftState
             } else if (!pLeftShoulder && shoulderData != lastRenderedRight) {
-                rightState = makeState(model, shoulderData.aspects, false)
+                rightState = configureState(state, model, false)
                 lastRenderedRight = shoulderData
                 rightState
             } else {
@@ -139,7 +144,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             state.updatePartialTicks(partialTicks)
             context.put(RenderContext.POSABLE_STATE, state)
             state.currentModel = model
-            val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(PokemonModelRepository.getTexture(shoulderData.species.resourceIdentifier, shoulderData.aspects, state.animationSeconds)))
+            val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(PokemonModelRepository.getTexture(shoulderData.species.resourceIdentifier, state)))
             val i = LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0f)
 
             model.applyAnimations(
@@ -152,7 +157,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                 ageInTicks = livingEntity.tickCount.toFloat()
             )
             model.render(context, matrixStack, vertexConsumer, packedLight, i, -0x1)
-            model.withLayerContext(buffer, state, PokemonModelRepository.getLayers(shoulderData.species.resourceIdentifier, shoulderData.aspects)) {
+            model.withLayerContext(buffer, state, PokemonModelRepository.getLayers(shoulderData.species.resourceIdentifier, state)) {
                 model.render(context, matrixStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
             }
             model.setDefault()
@@ -204,7 +209,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
          * Checks if a player has shoulder data cached.
          *
          * @param player The player being checked.
-         * @return A [Pair] with [Pair.left] and [Pair.right] being the respective shoulder.
+         * @return A [Pair] with [Pair.first] and [Pair.second] being the respective shoulder.
          */
         @JvmStatic
         fun shoulderDataOf(player: Player): Pair<ShoulderData?, ShoulderData?> {
@@ -212,6 +217,16 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             return Pair(cache.lastKnownLeft, cache.lastKnownRight)
         }
 
-    }
+        /**
+         * Clears the cache for the respective player.
+         * This is required to be done whenever a Pokémon changes in any way (form, evolution, etc.)
+         *
+         * @param player The player whose cache to clear
+         */
+        @JvmStatic
+        fun clearCache(player: Player) {
+            playerCache.remove(player.uuid)
+        }
 
+    }
 }

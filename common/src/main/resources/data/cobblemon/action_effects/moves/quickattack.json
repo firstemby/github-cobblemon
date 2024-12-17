@@ -27,13 +27,13 @@
                 {
                     "type": "entity_sound",
                     "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-                    "sound": "cobblemon:impact.normal"
+                    "sound": "cobblemon:move.quickattack.target"
                 },
                 {
                     "type": "entity_particles",
                     "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
                     "effect": "cobblemon:impact_normal",
-                    "locator": "target"
+                    "locators": ["target"]
                 }
             ]
         },

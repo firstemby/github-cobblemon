@@ -25,7 +25,6 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-
 class InfoWidget(
     pX: Int,
     pY: Int,
@@ -52,9 +51,9 @@ class InfoWidget(
 
 
         // Pokédex Number
-        // Add preceding zeroes if Pokédex number is less than 3 digits
+        // Add preceding zeroes if Pokédex number is less than 4 digits
         var dexNo = pokemon.species.nationalPokedexNumber.toString()
-        while (dexNo.length < 3) {
+        while (dexNo.length < 4) {
             dexNo = "0$dexNo"
         }
 

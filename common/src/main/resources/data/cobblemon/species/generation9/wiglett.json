@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "name": "Wiglett",
   "nationalPokedexNumber": 960,
   "primaryType": "water",
@@ -81,7 +82,21 @@
   "labels": [
     "gen9"
   ],
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.7,
+    "fixed": false
+  },
   "aspects": [],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInWater": false,
+        "canBreatheUnderwater": true
+      }
+    }
+  },
   "height": 12,
   "weight": 18,
   "evolutions": [

@@ -7,7 +7,7 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:infatuate_actor",
-      "locator": "middle",
+      "locators": ["middle"],
       "delay": 1.5
     },
     {

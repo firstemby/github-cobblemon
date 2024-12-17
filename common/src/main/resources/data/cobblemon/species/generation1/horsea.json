@@ -28,6 +28,9 @@
   ],
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "canSwimInWater": true,
         "canBreatheUnderwater": true
@@ -203,7 +206,7 @@
       ]
     }
   ],
-  "baseScale": 0.7,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 0.5,
     "height": 1.1,

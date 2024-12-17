@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.render
 
 import com.cobblemon.mod.common.util.math.geometry.getOrigin
 import com.cobblemon.mod.common.util.math.geometry.transformPosition
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import org.joml.Matrix4f
 import net.minecraft.world.phys.Vec3
 
@@ -22,6 +23,7 @@ import net.minecraft.world.phys.Vec3
 class MatrixWrapper {
     var position: Vec3 = Vec3.ZERO
     var matrix: Matrix4f = Matrix4f()
+    var updateFunction: ((MatrixWrapper) -> Unit)? = null
 
     fun updateMatrix(rotationMatrix: Matrix4f) = apply {
         this.matrix = Matrix4f(rotationMatrix)
@@ -31,6 +33,9 @@ class MatrixWrapper {
         this.position = position
     }
 
-    fun getOrigin() = position.add(matrix.getOrigin())
+    fun getOrigin(): Vec3 {
+        updateFunction?.invoke(this)
+        return position.add(matrix.getOrigin())
+    }
     fun transformPosition(position: Vec3) = this.position.add(matrix.transformPosition(position))
 }

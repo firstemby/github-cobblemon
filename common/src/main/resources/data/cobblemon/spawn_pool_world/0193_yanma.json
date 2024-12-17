@@ -7,14 +7,13 @@
             "id": "yanma-1",
             "pokemon": "yanma",
             "presets": [
-                "freshwater",
                 "water_surface"
             ],
             "type": "pokemon",
             "context": "surface",
             "bucket": "uncommon",
             "level": "14-39",
-            "weight": 5.4,
+            "weight": 5.04,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -23,6 +22,11 @@
                 ],
                 "timeRange": "day",
                 "isRaining": false
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
             }
         },
         {
@@ -35,7 +39,7 @@
             "context": "surface",
             "bucket": "uncommon",
             "level": "14-39",
-            "weight": 1.8,
+            "weight": 1.68,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -54,7 +58,7 @@
             "context": "surface",
             "bucket": "uncommon",
             "level": "14-39",
-            "weight": 1.8,
+            "weight": 1.68,
             "condition": {
                 "biomes": [
                     "#the_bumblezone:the_bumblezone"

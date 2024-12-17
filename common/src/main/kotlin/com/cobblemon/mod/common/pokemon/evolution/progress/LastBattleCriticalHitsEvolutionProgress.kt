@@ -51,7 +51,7 @@ class LastBattleCriticalHitsEvolutionProgress : EvolutionProgress<LastBattleCrit
         @JvmStatic
         val CODEC: MapCodec<LastBattleCriticalHitsEvolutionProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                Codec.intRange(1, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { amount -> LastBattleCriticalHitsEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 

@@ -9,6 +9,19 @@
     "sheerforce",
     "h:sharpness"
   ],
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:stone_axe",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:wepear_berry",
+        "percentage": 5.0
+      }
+    ]
+  },
   "baseStats": {
     "hp": 70,
     "attack": 130,
@@ -26,18 +39,13 @@
   "eggGroups": [
     "bug"
   ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:stone_axe",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "cobblemon:wepear_berry",
-        "percentage": 5.0
-      }
-    ]
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "depth": "normal",
+      "light": "0-4"
+    }
   },
   "moves": [
     "1:leer",

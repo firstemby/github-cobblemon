@@ -1,0 +1,33 @@
+{
+  "ai": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "tasksByPriority": {
+        "1": [
+          {
+            "type": "look_in_direction",
+            "yaw": "q.entity.config.yaw",
+            "pitch": "q.entity.config.pitch"
+          }
+        ]
+      }
+    }
+  ],
+  "config": [
+    {
+      "variableName": "yaw",
+      "displayName": "npc.variable.yaw.name",
+      "description": "npc.variable.yaw.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    },
+    {
+      "variableName": "pitch",
+      "displayName": "npc.variable.pitch.name",
+      "description": "npc.variable.pitch.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    }
+  ]
+}

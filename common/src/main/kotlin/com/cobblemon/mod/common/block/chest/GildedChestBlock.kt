@@ -145,14 +145,8 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
             if (isFake() && (player is ServerPlayer)) {
                 spawnPokemon(world, pos, state, player)
             }
-            val bEntity = world.getBlockEntity(pos) as? GildedChestBlockEntity
-            bEntity?.setRemoved()
-            val resultState =
-                if (state.fluidState.`is`(Fluids.WATER)) Blocks.WATER.defaultBlockState() else Blocks.AIR.defaultBlockState()
-            world.setBlockAndUpdate(pos, resultState)
-            return resultState
         }
-        return Blocks.AIR.defaultBlockState()
+        return super.playerWillDestroy(world, pos, state, player)
     }
 
     private fun spawnPokemon(world: Level, pos: BlockPos, state: BlockState, player: ServerPlayer): InteractionResult {
@@ -163,14 +157,14 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
         // The yaw based on the block's facing direction
         val yaw = facingToYaw[state.getValue(HorizontalDirectionalBlock.FACING)] ?: 0.0F
 
-        entity.entityData.set(PokemonEntity.SPAWN_DIRECTION, facingToYaw[state.getValue(HorizontalDirectionalBlock.FACING)])
+        entity.entityData.set(PokemonEntity.SPAWN_DIRECTION, yaw)
         val offsetDir = state.getValue(HorizontalDirectionalBlock.FACING)
         val vec = pos.toVec3d().add(offsetDir.stepX * 0.1 + 0.5, 0.0, offsetDir.stepZ * 0.1 + 0.5)
         entity.moveTo(vec.x, vec.y, vec.z, yaw, entity.xRot)
         world.addFreshEntity(entity)
 
         world.removeBlock(pos, false)
-        afterOnServer(ticks = 2) {
+        afterOnServer(seconds = 0.1F) {
             if (player !in player.level().players()) {
                 return@afterOnServer
             }
@@ -214,12 +208,10 @@ class GildedChestBlock(settings: Properties, val type: Type = Type.RED) : BaseEn
         newState: BlockState,
         moved: Boolean
     ) {
-        if (!state.`is`(newState.block) && !world.isClientSide) {
-            val chest = world.getBlockEntity(pos) as? GildedChestBlockEntity
-            chest?.let {
-                Containers.dropContents(world, pos, chest.inventoryContents)
-            }
+        if (!isFake()) {
+            Containers.dropContentsOnDestroy(state, newState, world, pos)
         }
+        super.onRemove(state, world, pos, newState, moved)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.ENTITYBLOCK_ANIMATED

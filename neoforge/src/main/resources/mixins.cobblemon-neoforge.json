@@ -1,11 +1,12 @@
 {
-    "required": true,
-    "package": "com.cobblemon.mod.neoforge.mixin",
-    "compatibilityLevel": "JAVA_21",
-    "minVersion": "0.8",
-    "client": [
-    ],
-    "mixins": [
-        "GenericPacketSplitterMixin"
-    ]
+  "required": true,
+  "package": "com.cobblemon.mod.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "client.GuiMixin"
+  ],
+  "mixins": [
+    "GenericPacketSplitterMixin"
+  ]
 }

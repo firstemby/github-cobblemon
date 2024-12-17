@@ -14,7 +14,7 @@
             "context": "grounded",
             "bucket": "rare",
             "level": "40-54",
-            "weight": 0.1,
+            "weight": 0.125,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -40,7 +40,7 @@
             "context": "grounded",
             "bucket": "rare",
             "level": "40-54",
-            "weight": 0.1,
+            "weight": 0.125,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {

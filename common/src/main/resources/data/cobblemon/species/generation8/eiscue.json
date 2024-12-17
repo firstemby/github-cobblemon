@@ -199,7 +199,10 @@
       "height": 14,
       "weight": 890,
       "cannotDynamax": false,
-      "battleOnly": true
+      "battleOnly": true,
+      "pokedex": [
+        "cobblemon.species.eiscue-noice.desc"
+      ]
     }
   ],
   "pokedex": [

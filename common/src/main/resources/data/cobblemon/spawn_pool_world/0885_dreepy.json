@@ -7,25 +7,25 @@
             "id": "dreepy-1",
             "pokemon": "dreepy",
             "presets": [
-                "natural",
-                "freshwater"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
-            "bucket": "rare",
+            "bucket": "ultra-rare",
             "level": "2-27",
-            "weight": 9.0,
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "timeRange": "twilight"
+                    "timeRange": "dusk"
                 }
             },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_coast"
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
                 ]
             }
         },
@@ -37,24 +37,167 @@
             ],
             "type": "pokemon",
             "context": "surface",
-            "bucket": "rare",
+            "bucket": "ultra-rare",
             "level": "2-27",
-            "weight": 9.0,
+            "weight": 6.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "timeRange": "dusk"
+            }
+        },
+        {
+            "id": "dreepy-3",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "2-27",
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "timeRange": "twilight"
+                    "timeRange": "dusk"
                 }
             },
             "condition": {
+                "canSeeSky": true,
                 "biomes": [
-                    "#cobblemon:is_overworld"
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
                 ]
             },
             "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "dreepy-4",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "2-27",
+            "weight": 7.5,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "timeRange": "dusk"
+                }
+            },
+            "condition": {
+                "canSeeSky": true,
                 "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "dreepy-5",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "2-27",
+            "weight": 1.8,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "timeRange": "dusk"
+                }
+            },
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 3
+            }
+        },
+        {
+            "id": "dreepy-6",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "2-27",
+            "weight": 6.0,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "timeRange": "dusk"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
                     "#cobblemon:is_ocean"
                 ]
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "dreepy-7",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "2-27",
+            "weight": 7.5,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "timeRange": "dusk"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "dreepy-8",
+            "pokemon": "dreepy",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "2-27",
+            "weight": 1.8,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "timeRange": "dusk"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "minLureLevel": 3
             }
         }
     ]

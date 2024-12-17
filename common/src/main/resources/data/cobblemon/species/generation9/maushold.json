@@ -231,7 +231,10 @@
       "weight": 28,
       "preEvolution": "tandemaus",
       "cannotDynamax": false,
-      "battleOnly": false
+      "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.maushold-four.desc"
+      ]
     }
   ],
   "pokedex": [

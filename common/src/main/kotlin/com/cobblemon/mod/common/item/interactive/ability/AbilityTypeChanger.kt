@@ -8,9 +8,11 @@
 
 package com.cobblemon.mod.common.item.interactive.ability
 
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.*
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 
 
 // TODO Polish me down the line when we actually release the item in the mod, we need a way to select the ability
@@ -20,8 +22,11 @@ open class AbilityTypeChanger<T : PotentialAbility>(
 ) : AbilityChanger<T> {
 
     override fun queryPossible(pokemon: Pokemon): Set<AbilityTemplate> {
-        val ofType = pokemon.form.abilities.filter { it.type == this.type }
-        return ofType.filter { it.template != pokemon.ability.template }
+        val currentType = this.findCurrent(pokemon)
+        val targetType = if (currentType == HiddenAbilityType) CommonAbilityType else this.type
+
+        return pokemon.form.abilities
+            .filter { it.type == targetType && it.template != pokemon.ability.template }
             .map { it.template }
             .toSet()
     }
@@ -34,7 +39,12 @@ open class AbilityTypeChanger<T : PotentialAbility>(
         val possible = this.queryPossible(pokemon)
         val picked = possible.randomOrNull() ?: return false
         val old = pokemon.ability.template
-        pokemon.updateAbility(picked.create(forced = false))
+        val priority = when (type) {
+            HiddenAbilityType -> if (currentType == HiddenAbilityType) Priority.LOWEST else Priority.LOW
+            CommonAbilityType -> Priority.LOWEST
+            else -> Priority.LOWEST
+        }
+        pokemon.updateAbility(picked.create(forced = false, priority = priority))
         return pokemon.ability.template != old
     }
 

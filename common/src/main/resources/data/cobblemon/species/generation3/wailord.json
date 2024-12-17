@@ -167,7 +167,7 @@
   ],
   "preEvolution": "wailmer",
   "evolutions": [],
-  "baseScale": 2,
+  "baseScale": 2.5,
   "hitbox": {
     "width": 3.2,
     "height": 2.1,

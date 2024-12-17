@@ -9,9 +9,13 @@
 package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.math.min
@@ -23,6 +27,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.phys.shapes.VoxelShape
+import org.joml.Vector4f
 
 fun cobblemonResource(path: String) = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, path)
 fun cobblemonModel(path: String, variant: String) =
@@ -32,6 +37,7 @@ fun String.asTranslated() = Component.translatable(this)
 fun String.asResource() = ResourceLocation.parse(this)
 fun String.asTranslated(vararg data: Any) = Component.translatable(this, *data)
 fun String.isInt() = this.toIntOrNull() != null
+fun String.isDouble() = this.toDoubleOrNull() != null
 fun String.isHigherVersion(other: String): Boolean {
     val thisSplits = split(".")
     val thatSplits = other.split(".")
@@ -118,6 +124,10 @@ val PosableState.isInWater: Boolean
 val PosableState.isInWaterOrRain: Boolean
     get() = getEntity()?.isInWaterOrRain == true
 
+fun Screen.isInventoryKeyPressed(client: Minecraft?, keyCode: Int, scanCode: Int): Boolean {
+    return client?.options?.keyInventory?.matches(keyCode, scanCode) == true
+}
+
 fun InteractionHand.toEquipmentSlot(): EquipmentSlot {
     return when (this) {
         InteractionHand.MAIN_HAND -> EquipmentSlot.MAINHAND
@@ -130,5 +140,30 @@ fun EquipmentSlot.toHand(): InteractionHand {
         EquipmentSlot.MAINHAND -> InteractionHand.MAIN_HAND
         EquipmentSlot.OFFHAND -> InteractionHand.OFF_HAND
         else -> throw IllegalArgumentException("Invalid equipment slot: $this")
+    }
+}
+
+val String.asUUID: UUID?
+    get() = try {
+        UUID.fromString(this)
+    } catch (e: Exception) {
+        null
+    }
+
+fun toHex(red: Float, green: Float, blue: Float, alpha: Float): Int {
+    return ((alpha * 255).toInt() shl 24) or ((red * 255).toInt() shl 16) or ((green * 255).toInt() shl 8) or (blue * 255).toInt()
+}
+
+fun Int.toRGBA(): Vector4f {
+    val red = (this shr 16 and 255) / 255.0f
+    val green = (this shr 8 and 255) / 255.0f
+    val blue = (this and 255) / 255.0f
+    val alpha = (this shr 24 and 255) / 255.0f
+    return Vector4f(red, green, blue, alpha)
+}
+
+inline fun <reified T> Any.ifIsType(block: T.() -> Unit) {
+    if (this is T) {
+        block(this)
     }
 }

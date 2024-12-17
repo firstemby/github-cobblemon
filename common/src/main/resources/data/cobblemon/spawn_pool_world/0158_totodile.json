@@ -13,7 +13,7 @@
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 9.0,
+            "weight": 6.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,7 +32,7 @@
             "context": "submerged",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 9.0,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -41,13 +41,144 @@
             }
         },
         {
-            "id": "totodile-fishing-EV-2",
+            "id": "totodile-3",
             "pokemon": "totodile",
             "type": "pokemon",
             "context": "fishing",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 9.0
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "totodile-4",
+            "pokemon": "totodile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "5-31",
+            "weight": 7.5,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "totodile-5",
+            "pokemon": "totodile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "5-31",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 3
+            }
+        },
+        {
+            "id": "totodile-6",
+            "pokemon": "totodile",
+            "presets": [
+                "underwater"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "ultra-rare",
+            "level": "5-31",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "totodile-7",
+            "pokemon": "totodile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "5-31",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "totodile-8",
+            "pokemon": "totodile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "5-31",
+            "weight": 7.5,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "totodile-9",
+            "pokemon": "totodile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "5-31",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 3
+            }
         }
     ]
 }

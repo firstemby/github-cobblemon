@@ -7,17 +7,41 @@
             "id": "drizzile-1",
             "pokemon": "drizzile",
             "presets": [
-                "natural",
-                "freshwater"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "ultra-rare",
             "level": "16-42",
-            "weight": 0.9,
+            "weight": 3.6,
             "condition": {
                 "minSkyLight": 8,
-                "maxSkyLight": 15
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "drizzile-1",
+            "pokemon": "drizzile",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "ultra-rare",
+            "level": "16-42",
+            "weight": 3.6,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_jungle"
+                ],
+                "neededNearbyBlocks": [
+                    "#minecraft:water"
+                ]
             }
         },
         {
@@ -31,9 +55,70 @@
             "context": "submerged",
             "bucket": "ultra-rare",
             "level": "16-42",
-            "weight": 0.9,
+            "weight": 3.6,
             "condition": {
-                "canSeeSky": true
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "drizzile-3",
+            "pokemon": "drizzile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "ultra-rare",
+            "level": "16-42",
+            "weight": 3.6,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ]
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "drizzile-4",
+            "pokemon": "drizzile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "rare",
+            "level": "16-42",
+            "weight": 2.25,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 2,
+                "maxLureLevel": 2
+            }
+        },
+        {
+            "id": "drizzile-5",
+            "pokemon": "drizzile",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "16-42",
+            "weight": 0.18,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_swamp"
+                ],
+                "minLureLevel": 3
             }
         }
     ]

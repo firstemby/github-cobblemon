@@ -22,6 +22,11 @@ enum class PermissionLevel(val numericalValue: Int) {
     SPAWN_PROTECTION_BYPASS(1),
     CHEAT_COMMANDS_AND_COMMAND_BLOCKS(2),
     MULTIPLAYER_MANAGEMENT(3),
-    ALL_COMMANDS(4)
+    ALL_COMMANDS(4);
 
+    companion object {
+        fun byNumericValue(value: Int): PermissionLevel {
+            return entries.first { it.numericalValue == value }
+        }
+    }
 }

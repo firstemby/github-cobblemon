@@ -57,7 +57,7 @@ class RecoilEvolutionProgress : EvolutionProgress<RecoilEvolutionProgress.Progre
         @JvmStatic
         val CODEC: MapCodec<RecoilEvolutionProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                Codec.intRange(1, Int.MAX_VALUE).fieldOf(RECOIL).forGetter { it.progress.recoil }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(RECOIL).forGetter { it.progress.recoil }
             ).apply(instance) { amount -> RecoilEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 

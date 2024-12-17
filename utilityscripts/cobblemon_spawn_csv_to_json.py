@@ -19,11 +19,11 @@ def init_filters():
     global pokemon_numbers, included_groups, known_contexts, bucket_mapping, included_generations
     # Define what kind of pokémon should be included, if nothing is specified (empty array), all will be included.
     # filter by number ranges (dex range)
-    pokemon_numbers = range(875, 876)
+    pokemon_numbers = range(1, 1100)
     # filter by group
     included_groups = ['basic', 'boss', 'fossil']
     # filter by context
-    known_contexts = ['grounded', 'submerged', 'seafloor', 'surface']
+    known_contexts = ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']
     # filter by bucket ['common', 'uncommon', 'rare', 'ultra-rare']
     bucket_mapping = ['common', 'uncommon', 'rare', 'ultra-rare']
     # filter by generation
@@ -69,6 +69,7 @@ biome_mapping = {
     'freezing': '#cobblemon:is_freezing',
     'freshwater':'#cobblemon:is_freshwater',
     'frozen ocean': '#cobblemon:is_frozen_ocean',
+    'frozen river': '#minecraft:frozen_river',
     'glacial': '#cobblemon:is_glacial',
     'grassland': '#cobblemon:is_grassland',
     'highlands': '#cobblemon:is_highlands',
@@ -403,20 +404,83 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             multiplier_condition["isRaining"] = True
                         case "Storm":
                             multiplier_condition["isThundering"] = True
+                        case "Clear":
+                            multiplier_condition["isRaining"] = False
                         case "Night":
                             multiplier_condition["timeRange"] = "night"
                         case "Day":
                             multiplier_condition["timeRange"] = "day"
                         case "Twilight":
                             multiplier_condition["timeRange"] = "twilight"
+                        case "Dusk":
+                            multiplier_condition["timeRange"] = "dusk"
                         case "Beehive":
                             multiplier_condition["neededNearbyBlocks"] = ["#minecraft:beehives"]
                         case "Full Moon":
-                            multiplier_condition["moonPhase"] = "1"
+                            multiplier_condition["moonPhase"] = "0"
                         case "New Moon":
-                            multiplier_condition["moonPhase"] = "5"
+                            multiplier_condition["moonPhase"] = "4"
                         case "Shipwreck":
                             multiplier_condition["structures"] = ["#minecraft:shipwreck"]
+                        case "Lure0":
+                            multiplier_condition["minLureLevel"] = "0"
+                            multiplier_condition["maxLureLevel"] = "0"
+                        case "Lure1/2":
+                            multiplier_condition["minLureLevel"] = "1"
+                            multiplier_condition["maxLureLevel"] = "2"
+                        case "Lure2":
+                            multiplier_condition["minLureLevel"] = "2"
+                            multiplier_condition["maxLureLevel"] = "2"
+                        case "Lure3":
+                            multiplier_condition["minLureLevel"] = "3"
+                        case "MJ-Skel":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_spooky"]
+                        case "MJ-Cal1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_mountain, #cobblemon:is_freshwater"]
+                        case "MJ-Cal2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_temperate"]
+                        case "MJ-Gld1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands"]
+                        case "MJ-Gld2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_island"]
+                        case "MJ-Orn1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_forest, #cobblemon:is_island, #cobblemon:is_savanna"]
+                        case "MJ-Orn2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_ocean, #cobblemon:is_river"]
+                        case "MJ-Pnk1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_magical, #cobblemon:is_plains"]
+                        case "MJ-Pnk2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_island"]
+                        case "MJ-Gry1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_river, #cobblemon:is_snowy, #cobblemon:is_tundra"]
+                        case "MJ-Gry2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain, #cobblemon:is_spooky"]
+                        case "MJ-Pur1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_forest, #cobblemon:is_magical, #cobblemon:is_taiga"]
+                        case "MJ-Pur2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_swamp"]
+                        case "MJ-Apc1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle, #cobblemon:is_ocean, #cobblemon:is_plains"]
+                        case "MJ-Apc2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_savanna"]
+                        case "MJ-Brw1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain, #cobblemon:is_swamp, #cobblemon:is_taiga"]
+                        case "MJ-Brw2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_jungle"]
+                        case "MJ-White":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_savanna, #cobblemon:is_snowy, #cobblemon:is_tundra"]
+                        case "MJ-Bla1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_spooky"]
+                        case "MJ-Bla2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_taiga"]
+                        case "MJ-Blu1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_island, #cobblemon:is_ocean"]
+                        case "MJ-Blu2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_snowy, #cobblemon:is_tundra"]
+                        case "MJ-Vio1":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle, #cobblemon:is_spooky"]
+                        case "MJ-Vio2":
+                            multiplier_condition["biomes"] = ["#cobblemon:is_magical"]
                         case _:
                             unknown_weight_multiplier_identifiers.append(f"'{identifier}' ({currentID})")
                     weight_multipliers.append({"multiplier": multiplier, "condition": multiplier_condition})
@@ -543,11 +607,13 @@ def handle_common_conditions(column_name, currentID, invalid_biome_tags, row, sp
         if parsed_biomes:
             condition['biomes'] = parsed_biomes
 
-    # check if Time column is day or night or any
+    # check if Time column is day, night, dusk, or any
     if pd.notna(row['Time']):
         if row['Time'].lower() == 'day':
             condition['timeRange'] = row['Time'].lower()
         elif row['Time'].lower() == 'night':
+            condition['timeRange'] = row['Time'].lower()
+        elif row['Time'].lower() == 'dusk':
             condition['timeRange'] = row['Time'].lower()
 
     # check if Weather column is clear or rain or any
@@ -593,6 +659,12 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
             # if the string contains "maxY = " then split it and add it to the condition dictionary
             elif "maxY" in string:
                 condition['maxY'] = int(string.split('=')[1].strip())
+            # if the string contains "minX = " then split it and add it to the condition dictionary
+            elif "minX" in string:
+                condition['minX'] = int(string.split('=')[1].strip())
+            # if the string contains "maxX = " then split it and add it to the condition dictionary
+            elif "maxX" in string:
+                condition['maxX'] = int(string.split('=')[1].strip())
             # if the string is "Full Moon" then add moonPhase = 0 to the condition dictionary
             elif string == "Full Moon":
                 condition['moonPhase'] = "0"
@@ -621,6 +693,24 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
                 condition['maxSkyLight'] = int(string.split('=')[1].strip())
             elif "minSkyLight" in string:
                 condition['minSkyLight'] = int(string.split('=')[1].strip())
+            # if the string is "Slime Chunk" then add isSlimeChunk = true to the condition dictionary
+            elif "Slime Chunk" in string:
+                condition['isSlimeChunk'] = True
+            # if the string contains "minLureLevel = " then split it and add it to the condition dictionary
+            elif "minLureLevel" in string:
+                condition['minLureLevel'] = int(string.split('=')[1].strip())
+            # if the string contains "maxLureLevel = " then split it and add it to the condition dictionary
+            elif "maxLureLevel" in string:
+                condition['maxLureLevel'] = int(string.split('=')[1].strip())
+            # if the string contains "bobber = master ball" then add it to the condition dictionary
+            elif "bobber = master ball" in string:
+                condition['bobber'] = "cobblemon:master_ball"
+            # if the string contains "bobber = love ball" then add it to the condition dictionary
+            elif "bobber = love ball" in string:
+                condition['bobber'] = "cobblemon:love_ball"
+            # if the string contains "bait = love sweet" then add it to the condition dictionary
+            elif "bait = love sweet" in string:
+                condition['bait'] = "cobblemon:love_sweet"
             # if the string is a digit, pass (was already hanlded by other conditions)
             elif string.strip().isdigit():
                 pass

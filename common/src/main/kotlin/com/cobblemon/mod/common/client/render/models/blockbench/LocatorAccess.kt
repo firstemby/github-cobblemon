@@ -27,7 +27,7 @@ class LocatorAccess(
     val children: List<LocatorAccess> = listOf()
 ) {
     companion object {
-        const val PREFIX = "locator_"
+        const val PREFIX = "internal_locator__"
 
         fun resolve(part: Bone): LocatorAccess? {
             val (
@@ -96,6 +96,12 @@ class LocatorAccess(
             state.getOrPut("middle") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
             matrixStack.popPose()
 
+            // If we have the entity, put in a "top" locator for top center of hitbox.
+            matrixStack.pushPose()
+            matrixStack.translate(0.0, -entity.boundingBox.ysize, 0.0)
+            matrixStack.scale(-1F, -1F, 1F)
+            state.getOrPut("top") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
+            matrixStack.popPose()
         }
 
         for ((name, locator) in locators) {

@@ -29,6 +29,8 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
 
     val CATCH_SHINY_POKEMON = this.create("catch_shiny_pokemon", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
+    val EGG_COLLECT = this.create("eggs_collected", SimpleCriterionTrigger(CountableCriterion.CODEC))
+
     val EGG_HATCH = this.create("eggs_hatched", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
     val EVOLVE_POKEMON = this.create("pokemon_evolved", SimpleCriterionTrigger(EvolvePokemonCriterion.CODEC))

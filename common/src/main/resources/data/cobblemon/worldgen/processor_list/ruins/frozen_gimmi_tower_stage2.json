@@ -35,15 +35,15 @@
                 },
                 {
                     "input_predicate": {
-                        "block": "minecraft:deepslate_bricks",
+                        "block": "minecraft:tuff_bricks",
                         "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.6
+                        "probability": 0.4
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
                     },
                     "output_state": {
-                        "Name": "minecraft:cracked_deepslate_bricks"
+                        "Name": "minecraft:tuff"
                     }
                 },
                 {
@@ -87,20 +87,7 @@
                 },
                 {
                     "input_predicate": {
-                        "block": "minecraft:deepslate_bricks",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.3
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "minecraft:cobbled_deepslate"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:deepslate_bricks",
+                        "block": "minecraft:tuff_bricks",
                         "predicate_type": "minecraft:random_block_match",
                         "probability": 0.1
                     },
@@ -127,7 +114,7 @@
                 {
                     "input_predicate": {
                         "block_state": {
-                            "Name": "minecraft:deepslate_brick_wall",
+                            "Name": "minecraft:tuff_wall",
                             "Properties": {
                                 "east": "tall",
                                 "north": "tall",
@@ -157,10 +144,10 @@
                 {
                     "input_predicate": {
                         "block_state": {
-                            "Name": "minecraft:deepslate_brick_wall",
+                            "Name": "minecraft:tuff_wall",
                             "Properties": {
                                 "east": "tall",
-                                "north": "false",
+                                "north": "none",
                                 "south": "tall",
                                 "west": "none",
                                 "up": "true",
@@ -187,7 +174,7 @@
                 {
                     "input_predicate": {
                         "block_state": {
-                            "Name": "minecraft:deepslate_brick_wall",
+                            "Name": "minecraft:tuff_wall",
                             "Properties": {
                                 "east": "none",
                                 "north": "tall",
@@ -217,7 +204,7 @@
                 {
                     "input_predicate": {
                         "block_state": {
-                            "Name": "minecraft:deepslate_brick_wall",
+                            "Name": "minecraft:tuff_wall",
                             "Properties": {
                                 "east": "none",
                                 "north": "none",
@@ -452,7 +439,7 @@
                         "predicate_type": "minecraft:always_true"
                     },
                     "output_state": {
-                        "Name": "minecraft:cracked_deepslate_bricks"
+                        "Name": "minecraft:tuff"
                     }
                 },
                 {
@@ -465,7 +452,7 @@
                         "predicate_type": "minecraft:always_true"
                     },
                     "output_state": {
-                        "Name": "minecraft:deepslate_bricks"
+                        "Name": "minecraft:tuff_bricks"
                     }
                 },
                 {

@@ -219,6 +219,9 @@
       ],
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.vulpix-alola.desc"
+      ],
       "drops": {
         "amount": 5,
         "entries": [

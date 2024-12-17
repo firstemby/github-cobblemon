@@ -15,7 +15,7 @@
         {
             "type": "entity_particles",
             "effect": "cobblemon:cottonguard",
-            "locator": "middle"
+            "locators": ["middle"]
         },
         {
             "type": "pause",

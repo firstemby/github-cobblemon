@@ -24,7 +24,6 @@ interface PermissionValidator {
 
     /**
      * Invoked when the validator replaces the existing one in [Cobblemon.permissionValidator].
-     *
      */
     fun initialize()
 
@@ -36,6 +35,14 @@ interface PermissionValidator {
      * @return If the [player] has the [permission].
      */
     fun hasPermission(player: ServerPlayer, permission: Permission): Boolean
+    /**
+     * Validates a permission for [ServerPlayer] based only on a permission string and a permission level.
+     *
+     * @param player The target [ServerPlayer].
+     * @param permission The permission string being queried such as cobblemon.command.giveallpokemon.
+     * @param level The permission level being queried. 4 is generally used for cheats.
+     */
+    fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean = hasPermission(player, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
 
     /**
      * Validates a permission for [CommandSource].
@@ -45,5 +52,12 @@ interface PermissionValidator {
      * @return If the [source] has the [permission].
      */
     fun hasPermission(source: CommandSourceStack, permission: Permission): Boolean
-
+    /**
+     * Validates a permission for [CommandSourceStack] based only on a permission string and a permission level.
+     *
+     * @param source The target [CommandSourceStack].
+     * @param permission The permission string being queried such as cobblemon.command.giveallpokemon.
+     * @param level The permission level being queried. 4 is generally used for cheats.
+     */
+    fun hasPermission(source: CommandSourceStack, permission: String, level: Int): Boolean = hasPermission(source, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
 }

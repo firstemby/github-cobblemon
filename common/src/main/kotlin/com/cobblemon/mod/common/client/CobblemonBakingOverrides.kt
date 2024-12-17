@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation
 object CobblemonBakingOverrides {
     val models = mutableListOf<BakingOverride>()
 
+    // Blocks
     val RESTORATION_TANK_FLUID_BUBBLING = registerOverride(
         cobblemonResource("block/restoration_tank_fluid_bubbling"),
         cobblemonModel("restoration_tank_fluid_bubbling", "none")

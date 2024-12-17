@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles
 
-import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
@@ -18,46 +17,26 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
-import com.cobblemon.mod.common.net.messages.client.battle.BattleChallengeExpiredPacket
-import com.cobblemon.mod.common.util.getPlayer
 import com.google.gson.GsonBuilder
-import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.minecraft.server.level.ServerPlayer
 
 object BattleRegistry {
 
-    class BattleChallenge(
-        val challengeId: UUID,
-        val challengedPlayerUUID: UUID,
-        val selectedPokemonId: UUID,
-        var expiryTimeSeconds: Int = 60
-    ) {
-        val challengedTime = Instant.now()
-        fun isExpired() = Instant.now().isAfter(challengedTime.plusSeconds(expiryTimeSeconds.toLong()))
-    }
-
     val gson = GsonBuilder()
         .disableHtmlEscaping()
         .registerTypeAdapter(ShowdownMoveset::class.java, ShowdownMovesetAdapter)
         .create()
     private val battleMap = ConcurrentHashMap<UUID, PokemonBattle>()
-    // Challenger to challenge
-    val pvpChallenges = mutableMapOf<UUID, BattleChallenge>()
 
     fun onServerStarted() {
         battleMap.clear()
-        pvpChallenges.clear()
     }
 
-    fun removeChallenge(challengerId: UUID, challengeId: UUID? = null) {
-        val existing = pvpChallenges[challengerId] ?: return
-        if (existing.challengeId != challengeId) {
-            return
-        }
-        pvpChallenges.remove(challengerId)
-        existing.challengedPlayerUUID.getPlayer()?.sendPacket(BattleChallengeExpiredPacket(existing.challengeId))
+    fun onPlayerDisconnect(player: ServerPlayer) {
+        // Stop battles
+        getBattleByParticipatingPlayer(player)?.stop()
     }
 
     /**
@@ -162,7 +141,7 @@ object BattleRegistry {
          * See the lines about multi battles and free for alls. The same side of the battle will share 'parity' (even or odd) across
          * all participants. So side 1 will be 1, 3, 5, ... while side 2 will be 2, 4, 6, ...
          *
-         * That isn't how our code works, as we have the BattleSide thing, but it's how Showdown works so we need to play along a bit.
+         * That isn't how our code works, as we have the BattleSide thing, but it's how Showdown works, so we need to play along a bit.
          */
 
         var actorIndex = 1
@@ -227,8 +206,8 @@ object BattleRegistry {
         return battleMap[id]
     }
 
-    fun getBattleByParticipatingPlayer(serverPlayerEntity: ServerPlayer) : PokemonBattle? {
-        return battleMap.values.find { it.getActor(serverPlayerEntity) != null }
+    fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer) : PokemonBattle? {
+        return battleMap.values.find { it.getActor(serverPlayer) != null }
     }
 
     fun getBattleByParticipatingPlayerId(playerId: UUID): PokemonBattle? {

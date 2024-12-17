@@ -94,8 +94,7 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
 
         Stats.PERMANENT.forEach { stat ->
             val identifier = this.cleanStatIdentifier(stat.identifier)
-            this[stat] = json.get(identifier)?.asInt?.coerceIn(this.acceptableRange)
-                ?: this.defaultValue
+            json.get(identifier)?.asInt?.coerceIn(this.acceptableRange)?.let { this.stats[stat] = it }
         }
         return this
     }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.tooltips
 
 import com.cobblemon.mod.common.api.fishing.FishingBaits
+import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.interactive.PokerodItem
@@ -58,7 +59,16 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
 
                     "gender_chance" -> Genders[Gender.valueOf(effectSubcategory.toUpperCase())]
 
-                    "tera" -> ElementalTypes.get(effectSubcategory)?.displayName
+                    "typing" -> ElementalTypes.get(effectSubcategory)?.displayName
+
+                    "egg_group" -> {
+                        val effectSubcategory = effect.subcategory?.path
+                        val eggGroup = effectSubcategory?.let { EggGroup.fromIdentifier(it) }
+                        eggGroup?.let {
+                            val langKey = "egg_group.${it.name.lowercase()}"
+                            lang(langKey)
+                        } ?: Component.literal(effectSubcategory ?: "Unknown").gold()
+                    }
 
                     else -> Component.empty()
                 } ?: Component.literal("cursed").obfuscate()

@@ -40,12 +40,14 @@ object GiveAllPokemon {
 
     private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange) : Int {
         val player = context.source.playerOrException
-        val pc = player.party().getOverflowPC() ?: return 0
+        val pc = player.party().getOverflowPC(player.registryAccess()) ?: return 0
 
         val orderedSpeces = PokemonSpecies.implemented.sortedBy { it.nationalPokedexNumber }
 
         for (species in orderedSpeces) {
-            pc.add(species.create())//.sendOut(player.level() as ServerWorld, player.pos)
+            val pokemon = species.create()
+            pokemon.setOriginalTrainer(player.uuid)
+            pc.add(pokemon)//.sendOut(player.level() as ServerWorld, player.pos)
         }
 
         return Command.SINGLE_SUCCESS

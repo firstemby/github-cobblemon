@@ -173,10 +173,6 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
 
     override fun getMaxStackSize() = 1
 
-    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, dir: Direction?): Boolean {
-        if(dir == Direction.DOWN) return false
-        return getStack().isEmpty
-    }
-
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, dir: Direction?): Boolean = (getStack().isEmpty)
     override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, direction: Direction): Boolean = (direction == Direction.DOWN)
 }

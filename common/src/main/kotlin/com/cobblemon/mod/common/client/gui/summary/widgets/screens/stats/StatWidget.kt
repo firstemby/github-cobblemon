@@ -43,17 +43,19 @@ import kotlin.math.sin
 class StatWidget(
     pX: Int, pY: Int,
     val pokemon: Pokemon,
-    val tabIndex: Int = STATS
+    val tabIndex: Int = 0
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("StatWidget")) {
 
     companion object {
-        // Stat Index
-        private const val STATS = 0
-        private const val IV = 1
-        private const val EV = 2
-        private const val BASE = 3
-        private const val OTHER = 4
+        // Stat tab options
+        private const val STATS = "stats"
+        private const val IV = "iv"
+        private const val EV = "ev"
+        private const val OTHER = "other"
 
+        private val statOptions = listOf(STATS, IV, EV, OTHER)
+
+        private const val statTabWidth = 24
         private const val WIDTH = 134
         private const val HEIGHT = 148
         const val SCALE = 0.5F
@@ -73,7 +75,6 @@ class StatWidget(
         private val statDecreaseResource = cobblemonResource("textures/gui/summary/summary_stats_icon_decrease.png")
 
         private val statsLabel = lang("ui.stats")
-        private val baseLabel = lang("ui.stats.base")
         private val ivLabel = lang("ui.stats.ivs")
         private val evLabel = lang("ui.stats.evs")
         private val otherLabel = lang("ui.stats.other")
@@ -179,9 +180,6 @@ class StatWidget(
         drawTriangle(colour, specialDefencePoint, centerPoint, specialAttackPoint)
         // 11-o'clock
         drawTriangle(colour, specialAttackPoint, centerPoint, hpPoint)
-
-
-//        drawTriangle(colour, specialAttackPoint, centerPoint, hpPoint)
     }
 
     private fun drawFriendship(moduleX: Int, moduleY: Int, matrices: PoseStack, context: GuiGraphics, friendship: Int) {
@@ -254,7 +252,7 @@ class StatWidget(
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
-        val renderChart = statTabIndex != OTHER
+        val renderChart = statOptions.get(statTabIndex) != OTHER
         val matrices = context.pose()
 
         // Background
@@ -280,10 +278,10 @@ class StatWidget(
             )
         }
 
-        when (statTabIndex) {
+        when (statOptions.get(statTabIndex)) {
             STATS -> drawStatHexagon(
                 mapOf(
-                    Stats.HP to pokemon.hp,
+                    Stats.HP to pokemon.maxHealth,
                     Stats.ATTACK to pokemon.attack,
                     Stats.DEFENCE to pokemon.defence,
                     Stats.SPECIAL_ATTACK to pokemon.specialAttack,
@@ -292,11 +290,6 @@ class StatWidget(
                 ),
                 colour = Vector3f(50F/255, 215F/255F, 1F),
                 maximum = 400
-            )
-            BASE -> drawStatHexagon(
-                pokemon.form.baseStats,
-                colour = Vector3f(1F, 107F/255, 50F/255),
-                maximum = 200
             )
             IV -> drawStatHexagon(
                 pokemon.ivs.associate { it.key to it.value },
@@ -313,57 +306,48 @@ class StatWidget(
         drawScaledText(
             context = context,
             text = statsLabel.bold(),
-            x = x + 29,
+            x = x + 31,
             y = y + 143,
             scale = SCALE,
-            colour = if (statTabIndex == STATS) WHITE else GREY,
+            colour = if (statOptions.get(statTabIndex) == STATS) WHITE else GREY,
             centered = true
         )
 
         drawScaledText(
             context = context,
             text = ivLabel.bold(),
-            x = x + 48,
+            x = x + 55,
             y = y + 143,
             scale = SCALE,
-            colour = if (statTabIndex == IV) WHITE else GREY,
+            colour = if (statOptions.get(statTabIndex) == IV) WHITE else GREY,
             centered = true
         )
 
         drawScaledText(
             context = context,
             text = evLabel.bold(),
-            x = x + 67,
+            x = x + 79,
             y = y + 143,
             scale = SCALE,
-            colour = if (statTabIndex == EV) WHITE else GREY,
-            centered = true
-        )
-
-        drawScaledText(
-            context = context,
-            text = baseLabel.bold(),
-            x = x + 86,
-            y = y + 143,
-            scale = SCALE,
-            colour = if (statTabIndex == BASE) WHITE else GREY,
+            colour = if (statOptions.get(statTabIndex) == EV) WHITE else GREY,
             centered = true
         )
 
         drawScaledText(
             context = context,
             text = otherLabel.bold(),
-            x = x + 105,
+            x = x + 103,
             y = y + 143,
             scale = SCALE,
-            colour = if (statTabIndex == OTHER) WHITE else GREY,
+            colour = if (statOptions.get(statTabIndex) == OTHER) WHITE else GREY,
             centered = true
         )
 
+        val paddingLeft = (WIDTH - ((statOptions.size + 1) * statTabWidth)) / 2
         blitk(
             matrixStack = context.pose(),
             texture = tabMarkerResource,
-            x= (x + 27 + (statTabIndex * 19)) / SCALE,
+            x= ((x + paddingLeft + ((statTabIndex + 1) * statTabWidth)) / SCALE) - 2,
             y = (y + 140) / SCALE,
             width = 8,
             height = 4,
@@ -396,7 +380,7 @@ class StatWidget(
             )
 
             // Nature-modified Stat Icons
-            if (statTabIndex == STATS) {
+            if (statOptions.get(statTabIndex) == STATS) {
                 val nature = pokemon.effectiveNature
                 renderModifiedStatIcon(matrices, nature.increasedStat, true)
                 renderModifiedStatIcon(matrices, nature.decreasedStat, false)
@@ -409,7 +393,7 @@ class StatWidget(
 
             for (renderableFeature in renderableFeatures) {
                 val rendered = renderableFeature.render(
-                    drawContext = context,
+                    GuiGraphics = context,
                     x = x + 5F,
                     y = drawY.toFloat(),
                     pokemon = pokemon
@@ -419,18 +403,13 @@ class StatWidget(
                     drawY += 30
                 }
             }
-
-//            for (value in summaries) {
-//                drawBarModule(x + 5, drawY, matrices, context, value)
-//            }
-
         }
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
         val index = getTabIndexFromPos(pMouseX, pMouseY)
         // Only play sound here as the rest of the widget is meant to be silent
-        if (index in 0..4) {
+        if (index in 0..4 && statTabIndex != index) {
             statTabIndex = index
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
         }
@@ -438,9 +417,8 @@ class StatWidget(
     }
 
     private fun getStatValueAsText(stat: Stat): MutableComponent {
-        val value = when(statTabIndex) {
-            STATS -> if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.hp}" else pokemon.getStat(stat).toString()
-            BASE -> pokemon.form.baseStats[stat].toString()
+        val value = when(statOptions.get(statTabIndex)) {
+            STATS -> if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.maxHealth}" else pokemon.getStat(stat).toString()
             IV -> pokemon.ivs.getOrDefault(stat).toString()
             EV -> pokemon.evs.getOrDefault(stat).toString()
             else -> "0"
@@ -475,7 +453,7 @@ class StatWidget(
     }
 
     private fun getModifiedStatColour(stat: Stat, enableColour: Boolean): Int {
-        if (statTabIndex == STATS && enableColour) {
+        if (statOptions.get(statTabIndex) == STATS && enableColour) {
             val nature = pokemon.effectiveNature
 
             if (nature.increasedStat == stat) return RED
@@ -557,15 +535,16 @@ class StatWidget(
     }
 
     private fun getTabIndexFromPos(mouseX: Double, mouseY: Double): Int {
-        val left = x + 19.5
+        val paddingLeft = ((WIDTH - ((statOptions.size + 1) * statTabWidth)) / 2.0) + (statTabWidth / 2)
+        val left = x + paddingLeft
         val top = y + 140.0
-        if (mouseX in left..(left + 95.0) && mouseY in top..(top + 9.0)) {
+        if (mouseX in left..(left + (statTabWidth * (statOptions.size + 1))) && mouseY in top..(top + 9.0)) {
             var startX = left
-            var endX = left + 19
-            for (index in 0..4) {
+            var endX = left + statTabWidth
+            for (index in 0 until statOptions.size) {
                 if (mouseX in startX..endX) return index
-                startX += 19
-                endX += 19
+                startX += statTabWidth
+                endX += statTabWidth
             }
         }
         return -1

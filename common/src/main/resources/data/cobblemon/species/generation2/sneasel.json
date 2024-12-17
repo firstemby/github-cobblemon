@@ -156,6 +156,9 @@
       ],
       "height": 9,
       "weight": 270,
+      "pokedex": [
+        "cobblemon.species.sneasel-hisui.desc"
+      ],
       "evolutions": [
         {
           "id": "sneasel_sneasler",

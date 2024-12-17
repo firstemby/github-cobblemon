@@ -24,8 +24,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 data class BattleFormat(
     val mod: String = "cobblemon",
     val battleType: BattleType = BattleTypes.SINGLES,
-    val ruleSet: Set<String> = setOf(),
-    val gen: Int = 9
+    var ruleSet: Set<String> = setOf(),
+    val gen: Int = 9,
+    var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
 ) {
     companion object {
         val GEN_9_SINGLES = BattleFormat(
@@ -35,12 +36,22 @@ data class BattleFormat(
 
         val GEN_9_DOUBLES = BattleFormat(
             battleType = BattleTypes.DOUBLES,
-            ruleSet = setOf(BattleRules.OBTAINABLE)
+            ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
+
+        val GEN_9_TRIPLES = BattleFormat(
+                battleType = BattleTypes.TRIPLES,
+                ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_MULTI = BattleFormat(
             battleType = BattleTypes.MULTI,
-            ruleSet = setOf(BattleRules.OBTAINABLE)
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
+
+        val GEN_9_ROYAL = BattleFormat(
+            battleType = BattleTypes.ROYAL,
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BattleFormat {
@@ -48,10 +59,12 @@ data class BattleFormat(
             val battleType = BattleType.loadFromBuffer(buffer)
             val ruleSet = mutableSetOf<String>()
             repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) { ruleSet.add(buffer.readString()) }
+            val adjustLevel = buffer.readSizedInt(IntSize.INT)
             return BattleFormat(
                 mod = mod,
                 battleType = battleType,
-                ruleSet = ruleSet
+                ruleSet = ruleSet,
+                adjustLevel = adjustLevel
             )
         }
     }
@@ -61,6 +74,7 @@ data class BattleFormat(
         battleType.saveToBuffer(buffer)
         buffer.writeSizedInt(IntSize.U_BYTE, ruleSet.size)
         ruleSet.forEach(buffer::writeString)
+        buffer.writeSizedInt(IntSize.INT, adjustLevel)
         return buffer
     }
 

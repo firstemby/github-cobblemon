@@ -8,11 +8,13 @@
 
 package com.cobblemon.mod.common.api.entity.pokemon
 
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.entity.pokemon.effects.TransformEffect
+import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
@@ -95,4 +97,7 @@ interface MocKEffect : PhysicalEffect {
         get() = this.mock.form?.let {
             formID -> this.exposedSpecies?.forms?.firstOrNull { it.formOnlyShowdownId().equals(formID, true) } }
                 ?: this.exposedSpecies?.standardForm
+
+    val exposedBall: PokeBall?
+        get() = this.mock.pokeball?.let { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace()) }
 }

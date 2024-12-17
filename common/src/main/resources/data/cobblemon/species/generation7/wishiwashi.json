@@ -81,6 +81,9 @@
       "aspects": [
         "schooling"
       ],
+      "pokedex": [
+        "cobblemon.species.wishiwashi-school.desc"
+      ],
       "height": 82,
       "weight": 786,
       "baseScale": 2,

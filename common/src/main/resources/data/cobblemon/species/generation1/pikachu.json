@@ -1769,6 +1769,9 @@
       "aspects": [
         "region-bias-alola"
       ],
+      "pokedex": [
+        "cobblemon.species.pikachu-alola.desc"
+      ],
       "evolutions": [
         {
           "id": "alola_pikachu_raichu",

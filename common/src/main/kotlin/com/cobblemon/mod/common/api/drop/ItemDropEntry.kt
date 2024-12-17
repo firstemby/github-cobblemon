@@ -17,9 +17,10 @@ import com.cobblemon.mod.common.util.toBlockPos
 import net.minecraft.core.component.DataComponentMap
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.registries.Registries
-import net.minecraft.server.level.ServerPlayer
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
@@ -33,12 +34,12 @@ import net.minecraft.world.phys.Vec3
  * @since July 24th, 2022
  */
 open class ItemDropEntry : DropEntry {
-    override val percentage = 100F
-    override val quantity = 1
-    open val quantityRange: IntRange? = null
-    override val maxSelectableTimes = 1
+    override var percentage = 100F
+    override var quantity = 1
+    open var quantityRange: IntRange? = null
+    override var maxSelectableTimes = 1
     open val dropMethod: ItemDropMethod? = null
-    open val item = ResourceLocation.parse("minecraft:fish")
+    open var item = ResourceLocation.parse("minecraft:fish")
     open val components: DataComponentMap? = null
 
     override fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?) {
@@ -75,5 +76,20 @@ open class ItemDropEntry : DropEntry {
         } else {
             world.addFreshEntity(ItemEntity(world, pos.x, pos.y, pos.z, stack))
         }
+    }
+
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeFloat(this.percentage)
+        buffer.writeVarInt(this.quantity)
+        buffer.writeResourceLocation(this.item)
+        buffer.writeNullable(this.quantityRange) { _, it -> buffer.writeVarInt(it.first); buffer.writeVarInt(it.last) }
+    }
+
+    fun decode(buffer: RegistryFriendlyByteBuf): ItemDropEntry {
+        this.percentage = buffer.readFloat()
+        this.quantity = buffer.readVarInt()
+        this.item = buffer.readResourceLocation()
+        this.quantityRange = buffer.readNullable { buffer.readVarInt()..buffer.readVarInt() }
+        return this
     }
 }

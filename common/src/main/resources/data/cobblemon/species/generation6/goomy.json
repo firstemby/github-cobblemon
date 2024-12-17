@@ -121,6 +121,9 @@
         "gen6",
         "hisui_regional"
       ],
+      "pokedex": [
+        "cobblemon.species.goomy-hisui.desc"
+      ],
       "evolutions": [
         {
           "id": "hisui_goomy_hisui_sliggoo",

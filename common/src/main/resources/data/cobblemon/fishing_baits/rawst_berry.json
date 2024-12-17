@@ -2,10 +2,10 @@
     "item": "cobblemon:rawst_berry",
     "effects": [
       {
-        "type": "cobblemon:nature",
-        "chance": 0.25,
-        "value": 0.0,
-        "subcategory": "cobblemon:spd"
+        "type": "cobblemon:egg_group",
+        "chance": 1.00,
+        "value": 10.0,
+        "subcategory": "field"
       }
     ]
   }

@@ -24,13 +24,13 @@
             "type": "entity_particles",
             "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
             "effect": "cobblemon:firepunch",
-            "locator": "target"
+            "locators": ["target"]
           },
           {
             "type": "entity_particles",
             "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
             "effect": "cobblemon:impact_fire",
-            "locator": "target"
+            "locators": ["target"]
           }
         ]
       },

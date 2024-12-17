@@ -37,6 +37,7 @@ import net.minecraft.world.level.Level
 class EtherItem(val max: Boolean): CobblemonItem(Properties()), PokemonAndMoveSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_ether" else "ether" }"
+        override val returnItem = Items.GLASS_BOTTLE
         override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "ether $data${ if (max) "" else " 10" }"
     }
@@ -47,7 +48,7 @@ class EtherItem(val max: Boolean): CobblemonItem(Properties()), PokemonAndMoveSe
         val moveToRecover = pokemon.moveSet.find { it.template == move.template }
         if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
             moveToRecover.currentPp = if (max) moveToRecover.maxPp else min(moveToRecover.maxPp, moveToRecover.currentPp + 10)
-            player.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+            pokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
             if (!player.isCreative) {
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
@@ -57,7 +58,7 @@ class EtherItem(val max: Boolean): CobblemonItem(Properties()), PokemonAndMoveSe
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
         super.applyToBattlePokemon(player, stack, battlePokemon, move)
-        player.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+        battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

@@ -26,7 +26,7 @@ import net.minecraft.nbt.NbtOps
  * @author Qu
  * @since January 9th, 2022
  */
-open class Ability internal constructor(var template: AbilityTemplate, forced: Boolean) {
+open class Ability internal constructor(var template: AbilityTemplate, forced: Boolean, priority: Priority) {
 
     val name: String
         get() = template.name
@@ -57,7 +57,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
      *
      * @see [Pokemon.updateAbility].
      */
-    var priority = Priority.LOWEST
+    var priority = priority
         internal set
 
     @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
@@ -111,7 +111,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
                 Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ABILITY_FORCED, false).forGetter(Ability::forced),
                 Codec.INT.optionalFieldOf(DataKeys.POKEMON_ABILITY_INDEX, -1).forGetter(Ability::index),
                 Priority.CODEC.optionalFieldOf(DataKeys.POKEMON_ABILITY_PRIORITY, Priority.LOWEST).forGetter(Ability::priority)
-            ).apply(it) { template, forced, index, priority -> Ability(template, forced).apply {
+            ).apply(it) { template, forced, index, priority -> Ability(template, forced, priority).apply {
                 this.index = index
                 this.priority = priority
             } }

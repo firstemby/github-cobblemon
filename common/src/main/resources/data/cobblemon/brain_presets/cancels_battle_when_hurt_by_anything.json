@@ -1,0 +1,14 @@
+[
+  {
+    "type": "add_tasks_to_activity",
+    "activity": "cobblemon:battling",
+    "tasksByPriority": {
+      "0": [
+        {
+          "type": "exit_battle_when_hurt",
+          "includePassiveDamage": true
+        }
+      ]
+    }
+  }
+]

@@ -26,4 +26,6 @@ class LaxPermissionValidator : PermissionValidator {
 
     override fun hasPermission(player: ServerPlayer, permission: Permission) = player.hasPermissions(permission.level.numericalValue)
     override fun hasPermission(source: CommandSourceStack, permission: Permission) = source.hasPermission(permission.level.numericalValue)
+    override fun hasPermission(player: ServerPlayer, permission: String, level: Int) = player.hasPermissions(level)
+    override fun hasPermission(source: CommandSourceStack, permission: String, level: Int) = source.hasPermission(level)
 }

@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.util.weightedSelection
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
 
 /**
  * A [SpawnAction] that will spawn a single [PokemonEntity].
@@ -44,7 +46,8 @@ class PokemonSpawnAction(
         } else {
             null
         }?.createStack(ctx)
-        val entity = props.createEntity(ctx.world)
+        val sourcePlayer = ctx.cause.entity as? ServerPlayer
+        val entity = props.createEntity(ctx.world, sourcePlayer)
         entity.spawnCause = ctx.cause
         SeasonFeatureHandler.updateSeason(entity.pokemon, Cobblemon.seasonResolver(ctx.world, ctx.position))
         if (heldItem != null) {

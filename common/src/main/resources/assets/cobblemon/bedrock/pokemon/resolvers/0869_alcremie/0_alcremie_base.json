@@ -100,10 +100,6 @@
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_mint.png"
     },
     {
-      "aspects": ["cream-ruby"],
-      "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_ruby.png"
-    },
-    {
       "aspects": ["cream-lemon"],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_lemon.png"
     },
@@ -120,8 +116,7 @@
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_rainbowswirl.png"
     },
     {
-      "aspects": [
-        "shiny"],
+      "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_shiny.png"
     }
   ]

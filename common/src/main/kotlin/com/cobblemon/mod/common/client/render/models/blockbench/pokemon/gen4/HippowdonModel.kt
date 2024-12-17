@@ -179,7 +179,7 @@ class HippowdonModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame 
         battleidle = registerPose(
             poseName = "battleidle",
             poseTypes = PoseType.STATIONARY_POSES,
-            condition = { it.isBattling && it.getEntity()?.isStandingOnSandOrRedSand() == true },
+            condition = { it.isBattling && it.getEntity()?.isStandingOnSandOrRedSand() != true },
             quirks = arrayOf(blink),
             transformedParts = arrayOf(
                 sand.createTransformation().withVisibility(visibility = false),

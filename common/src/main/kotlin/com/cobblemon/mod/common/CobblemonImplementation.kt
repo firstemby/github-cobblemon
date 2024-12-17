@@ -101,6 +101,12 @@ interface CobblemonImplementation {
      * TODO
      *
      */
+    fun registerVillagers()
+
+    /**
+     * TODO
+     *
+     */
     fun registerWorldGenFeatures()
 
     fun registerParticles()
@@ -164,14 +170,6 @@ interface CobblemonImplementation {
      * @return
      */
     fun server(): MinecraftServer?
-
-    /**
-     * Handles platform independent reloading of a [JsonDataRegistry].
-     *
-     * @param registry The [JsonDataRegistry] to reload.
-     * @param manager The [ResourceManager] to reload from.
-     */
-    fun <T> reloadJsonRegistry(registry: JsonDataRegistry<T>, manager: ResourceManager): HashMap<ResourceLocation, T>
 
     /**
      * Registers an item to the [ComposterBlock].

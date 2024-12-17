@@ -28,8 +28,8 @@ class BattleMessagePane(
     messageQueue: ClientBattleMessageQueue
 ): ObjectSelectionList<BattleMessagePane.BattleMessageLine>(
     Minecraft.getInstance(),
-    TEXT_BOX_WIDTH, // width
-    TEXT_BOX_HEIGHT, // height
+    FRAME_WIDTH, // width
+    FRAME_HEIGHT, // height
     1, // top
     LINE_HEIGHT
 ) {
@@ -62,7 +62,7 @@ class BattleMessagePane(
 
     companion object {
         const val LINE_HEIGHT = 10
-        const val LINE_WIDTH = 142
+        const val LINE_WIDTH = 146
         const val FRAME_WIDTH = 169
         const val FRAME_HEIGHT = 55
         const val FRAME_EXPANDED_HEIGHT = 101
@@ -72,6 +72,7 @@ class BattleMessagePane(
 
         private val battleMessagePaneFrameResource = cobblemonResource("textures/gui/battle/battle_log.png")
         private val battleMessagePaneFrameExpandedResource = cobblemonResource("textures/gui/battle/battle_log_expanded.png")
+        private val battleMessageHighlight = cobblemonResource("textures/gui/battle/battle_log_row_selected_color.png")
         private var expanded = false
     }
 
@@ -79,8 +80,54 @@ class BattleMessagePane(
         return super.addEntry(entry)
     }
 
+    override fun getRowLeft(): Int {
+        return super.getRowLeft() + 4
+    }
+
+    override fun renderSelection(guiGraphics: GuiGraphics, top: Int, width: Int, height: Int, outerColor: Int, innerColor: Int) {
+        blitk(
+            matrixStack = guiGraphics.pose(),
+            texture = battleMessageHighlight,
+            x = x + 6,
+            y = top - 2,
+            height = 10,
+            width = 1,
+            alpha = opacity
+        )
+
+        blitk(
+            matrixStack = guiGraphics.pose(),
+            texture = battleMessageHighlight,
+            x = x + 6,
+            y = top - 2,
+            height = 1,
+            width = LINE_WIDTH,
+            alpha = opacity
+        )
+
+        blitk(
+            matrixStack = guiGraphics.pose(),
+            texture = battleMessageHighlight,
+            x = x + 6,
+            y = top + 7,
+            height = 1,
+            width = LINE_WIDTH,
+            alpha = opacity
+        )
+
+        blitk(
+            matrixStack = guiGraphics.pose(),
+            texture = battleMessageHighlight,
+            x = x + 6 + LINE_WIDTH - 1,
+            y = top - 2,
+            height = 10,
+            width = 1,
+            alpha = opacity
+        )
+    }
+
     override fun getRowWidth(): Int {
-        return 80
+        return LINE_WIDTH
     }
 
     override fun getScrollbarPosition(): Int {
@@ -162,7 +209,7 @@ class BattleMessagePane(
             drawScaledText(
                 context,
                 line,
-                rowLeft - 29,
+                rowLeft,
                 rowTop - 2,
                 opacity = pane.opacity
             )

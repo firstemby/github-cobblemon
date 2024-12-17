@@ -178,6 +178,9 @@
       "aspects": [
         "hisuian"
       ],
+      "pokedex": [
+        "cobblemon.species.qwilfish-hisui.desc"
+      ],
       "height": 5,
       "weight": 39,
       "evolutions": [

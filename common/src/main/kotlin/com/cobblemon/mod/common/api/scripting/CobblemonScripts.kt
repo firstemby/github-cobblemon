@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.ScriptRegistrySyncPacket
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.contextOrEmpty
 import com.cobblemon.mod.common.util.endsWith
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -64,6 +65,6 @@ object CobblemonScripts : DataRegistry {
     }
 
     fun run(identifier: ResourceLocation, runtime: MoLangRuntime): MoValue? {
-        return scripts[identifier]?.resolve(runtime)
+        return scripts[identifier]?.resolve(runtime, runtime.contextOrEmpty)
     }
 }

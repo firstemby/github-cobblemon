@@ -92,6 +92,7 @@ enum class ShowdownActionResponseType(val loader: (RegistryFriendlyByteBuf) -> S
     DEFAULT({ DefaultActionResponse() }),
     FORCE_PASS({ ForcePassActionResponse() }),
     PASS({ PassActionResponse }),
+    SHIFT({ ShiftActionResponse()}),
     HEAL_ITEM({ HealItemActionResponse("potion") }),
     FORFEIT({ ForfeitActionResponse() });
 }
@@ -130,7 +131,7 @@ data class MoveActionResponse(var moveName: String, var targetPnx: String? = nul
 
         val pnx = targetPnx ?: return false // If the targets list is non-null then they need to have specified a target
         val (_, targetPokemon) = activeBattlePokemon.actor.battle.getActorAndActiveSlotFromPNX(pnx)
-        if (targetPokemon !in availableTargets || targetPokemon.battlePokemon == null || targetPokemon.battlePokemon!!.health <= 0) {
+        if (targetPokemon !in availableTargets) {
             return false // It's not a possible target.
         }
 
@@ -188,6 +189,16 @@ data class HealItemActionResponse(var item: String) : ShowdownActionResponse(Sho
     }
 }
 
+class ShiftActionResponse() : ShowdownActionResponse(ShowdownActionResponseType.SHIFT) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        return !forceSwitch && activeBattlePokemon.getPNX()[1] != 'b' && activeBattlePokemon.battle.format.battleType.pokemonPerSide == 3
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        return "shift"
+    }
+
+}
 data class SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse(ShowdownActionResponseType.SWITCH) {
     override fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
         super.saveToBuffer(buffer)
@@ -204,7 +215,7 @@ data class SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse
         val pokemon = activeBattlePokemon.actor.pokemonList.find { it.uuid == newPokemonId }
         return when {
             pokemon == null -> false // No such Pokémon
-            (!activeBattlePokemon.actor.request?.side?.pokemon?.get(0)?.reviving!! && pokemon.health <= 0) -> false // Checks if the active Pokémon is reviving, if so ignore this check. If not, return false if dead
+            (!activeBattlePokemon.actor.request?.side?.pokemon?.any{ it.uuid == activeBattlePokemon.battlePokemon?.uuid && it.reviving }!! && pokemon.health <= 0) -> false // Checks if the active Pokémon is reviving, if so ignore this check. If not, return false if dead
             showdownMoveSet != null && showdownMoveSet.trapped -> false // You're not allowed to switch
             activeBattlePokemon.actor.getSide().activePokemon.any { it.battlePokemon?.uuid == newPokemonId } -> false // Pokémon is already sent out
             else -> true
@@ -390,6 +401,9 @@ class ShowdownPokemon {
     lateinit var baseAbility: String
     lateinit var pokeball: String
     lateinit var ability: String
+    var baseTypes = mutableListOf<String>()
+    var types = mutableListOf<String>()
+    var commanding: Boolean = false
     var reviving: Boolean = false
 
     val uuid: UUID by lazy { UUID.fromString(details.split(",")[1].trim()) }
@@ -399,11 +413,16 @@ class ShowdownPokemon {
         buffer.writeString(condition)
         buffer.writeBoolean(active)
         buffer.writeBoolean(reviving)
+        buffer.writeBoolean(commanding)
         buffer.writeSizedInt(IntSize.U_BYTE, moves.size)
         moves.forEach(buffer::writeString)
         buffer.writeString(baseAbility)
         buffer.writeString(pokeball)
         buffer.writeString(ability)
+        buffer.writeSizedInt(IntSize.U_BYTE, baseTypes.size)
+        baseTypes.forEach(buffer::writeString)
+        buffer.writeSizedInt(IntSize.U_BYTE, types.size)
+        types.forEach(buffer::writeString)
 
     }
     fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownPokemon {
@@ -412,12 +431,20 @@ class ShowdownPokemon {
         condition = buffer.readString()
         active = buffer.readBoolean()
         reviving = buffer.readBoolean()
+        commanding = buffer.readBoolean()
         repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
             moves.add(buffer.readString())
         }
         baseAbility = buffer.readString()
         pokeball = buffer.readString()
         ability = buffer.readString()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            baseTypes.add(buffer.readString())
+        }
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            types.add(buffer.readString())
+        }
+
         return this
     }
 }

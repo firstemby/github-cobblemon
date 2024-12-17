@@ -142,6 +142,9 @@
       "aspects": [
         "hisuian"
       ],
+      "pokedex": [
+        "cobblemon.species.goodra-hisui.desc"
+      ],
       "height": 17,
       "weight": 3341,
       "preEvolution": "sliggoo hisuian",

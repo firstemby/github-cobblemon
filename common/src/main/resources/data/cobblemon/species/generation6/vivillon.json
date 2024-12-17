@@ -124,6 +124,9 @@
       "weight": 170,
       "preEvolution": "spewpa",
       "evolutions": [],
+      "pokedex": [
+        "cobblemon.species.vivillon-fancy.desc"
+      ],
       "cannotDynamax": false,
       "battleOnly": false
     },
@@ -216,6 +219,9 @@
       "height": 12,
       "weight": 170,
       "evolutions": [],
+      "pokedex": [
+        "cobblemon.species.vivillon-pokeball.desc"
+      ],
       "cannotDynamax": false,
       "battleOnly": false
     }

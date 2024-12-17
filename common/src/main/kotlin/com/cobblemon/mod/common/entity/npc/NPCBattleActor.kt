@@ -14,7 +14,8 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PartyStore
-import com.cobblemon.mod.common.battles.ai.RandomBattleAI
+import com.cobblemon.mod.common.battles.ai.StrongBattleAI
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.chainFutures
@@ -24,22 +25,34 @@ import java.util.concurrent.CompletableFuture
 
 class NPCBattleActor(
     val npc: NPCEntity,
-    val party: PartyStore
+    pokemonList: List<BattlePokemon>,
+    val skill: Int
 ) : AIBattleActor(
     gameId = npc.uuid,
-    pokemonList = party.toBattleTeam(),
-    battleAI = RandomBattleAI()
+    pokemonList = pokemonList,
+    battleAI = StrongBattleAI(skill)
 ), EntityBackedBattleActor<NPCEntity> {
     override val entity = npc
     override val type = ActorType.NPC
     override fun getName() = npc.effectiveName().copy()
     override fun nameOwned(name: String) = battleLang("owned_pokemon", this.getName(), name)
+    override val initialPos = entity.position()
+
+    constructor(
+        npc: NPCEntity,
+        party: PartyStore,
+        skill: Int
+    ): this(
+        npc,
+        party.toBattleTeam(healPokemon = npc.npc.autoHealParty),
+        skill
+    )
 
     override fun sendUpdate(packet: NetworkPacket<*>) {
         super.sendUpdate(packet)
         if (packet is BattleEndPacket) {
             if (npc.isAlive) {
-                val allEntities = party.mapNotNull { it.entity }.toMutableList()
+                val allEntities = pokemonList.mapNotNull { it.entity }.toMutableList()
                 val finalFuture = CompletableFuture<Unit>()
                 chainFutures(allEntities.map { pokemonEntity -> { pokemonEntity.recallWithAnimation() } }.iterator(), finalFuture)
                 if (allEntities.isEmpty()) {
@@ -65,5 +78,10 @@ class NPCBattleActor(
     override fun lose(winners: List<BattleActor>, otherLosers: List<BattleActor>) {
         super.lose(winners, otherLosers)
         npc.playAnimation(NPCEntity.LOSE_ANIMATION)
+//        winners.forEach {
+//            rewards.forEach {
+//                winner give reward :))
+//            }
+//        }
     }
 }

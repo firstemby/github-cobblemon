@@ -19,8 +19,8 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
  * @author Segfault Guy
  * @since April 6th, 2023
  */
-data class BattleFaintedEvent (
-        override val battle: PokemonBattle,
-        val killed: BattlePokemon,
-        val context: BattleContext
+data class BattleFaintedEvent(
+    override val battle: PokemonBattle,
+    val killed: BattlePokemon,
+    val context: BattleContext
 ) : BattleEvent

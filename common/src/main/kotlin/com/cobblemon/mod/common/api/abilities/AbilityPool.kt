@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.Species
  */
 open class AbilityPool : PrioritizedList<PotentialAbility>() {
     fun select(species: Species, aspects: Set<String>): Pair<Ability, Priority> {
-        for (priority in Priority.values()) {
+        for (priority in Priority.entries) {
             val potentialAbilities = priorityMap[priority]?.filter { it.isSatisfiedBy(aspects) } ?: continue
             if (potentialAbilities.isNotEmpty()) {
                 return potentialAbilities.random().template.create() to priority
@@ -31,7 +31,7 @@ open class AbilityPool : PrioritizedList<PotentialAbility>() {
         }
 
         LOGGER.error("Unable to select an ability from the pool for $species and aspects: ${aspects.joinToString()}")
-        LOGGER.error("Usually this happens when a client is doing logic it shouldn't. Please show this to the Cobblemon developers!")
+        LOGGER.error("Please show this to the Cobblemon developers!")
         Exception().printStackTrace()
         return Abilities.first().create() to Priority.LOWEST
     }

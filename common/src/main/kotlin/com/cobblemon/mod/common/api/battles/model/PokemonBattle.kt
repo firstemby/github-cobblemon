@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.yellow
@@ -40,6 +41,9 @@ import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.entity.PlatformType
+import com.cobblemon.mod.common.entity.npc.NPCBattleActor
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
@@ -48,12 +52,16 @@ import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHit
 import com.cobblemon.mod.common.pokemon.evolution.requirements.DefeatRequirement
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
-import net.minecraft.network.chat.Component
+import com.cobblemon.mod.common.util.giveOrDropItemStack
+import com.cobblemon.mod.common.util.itemRegistry
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedDeque
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 
 /**
  * Individual battle instance
@@ -73,6 +81,8 @@ open class PokemonBattle(
     val runtime = MoLangRuntime().also { it.environment.query = struct }
 
     val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf()
+
+    val battlePartyStores = mutableListOf<PlayerPartyStore>()
 
     init {
         side1.battle = this
@@ -109,7 +119,7 @@ open class PokemonBattle(
     var ended = false
     // TEMP battle showcase stuff
     var announcingRules = false
-    var turn: Int = 1
+    var turn: Int = 0
         private set
 
     private var ticks: Int = 0
@@ -176,6 +186,11 @@ open class PokemonBattle(
     fun getActor(player: ServerPlayer) = actors.firstOrNull { it.isForPlayer(player) }
 
     /**
+     * Gets the first battle actor whom the given NPC controls, or null if there is no such actor.
+     */
+    fun getActor(npc: NPCEntity) = actors.firstOrNull { it is NPCBattleActor && it.npc == npc }
+
+    /**
      * Gets a [BattleActor] and an [ActiveBattlePokemon] from a pnx key, e.g. p2a
      *
      * Returns null if either the pn or x is invalid.
@@ -214,11 +229,12 @@ open class PokemonBattle(
 
     fun turn(newTurnNumber: Int) {
         actors.forEach { it.turn() }
+        // TODO: If a pokemon switches in the same turn another pokemon is KO'd it will not receive exp for the KO
         for (side in sides) {
             val opposite = side.getOppositeSide()
-            side.activePokemon.forEach {
-                val battlePokemon = it.battlePokemon ?: return@forEach
-                battlePokemon.facedOpponents.addAll(opposite.activePokemon.mapNotNull { it.battlePokemon })
+            side.activePokemon.filter { it.isAlive() }.forEach { activePokemon ->
+                val battlePokemon = activePokemon.battlePokemon ?: return@forEach
+                battlePokemon.facedOpponents.addAll(opposite.activePokemon.filter { opposingActivePokemon -> opposingActivePokemon.isAlive() }.mapNotNull { it.battlePokemon })
             }
         }
         this.turn = newTurnNumber
@@ -252,15 +268,31 @@ open class PokemonBattle(
                             else -> continue
                         }
                         val experience = Cobblemon.experienceCalculator.calculate(opponentPokemon, faintedPokemon, multiplier)
-                        if (experience > 0) {
+                        if (experience > 0 && actor.pokemonList.all { it.health <= 0 }) {
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
                             pokemon.evs.add(stat, amount)
                         }
+
                     }
                 }
             }
+            if (actor.itemsUsed.isNotEmpty() && actor.getPlayerUUIDs().count() > 0) {
+                val player = actor.getPlayerUUIDs().first().getPlayer()
+                player?.level()?.itemRegistry.let { registry ->
+                    actor.itemsUsed.mapNotNull { registry?.get(ResourceLocation.tryBySeparator(it.itemName.substringAfter('.'), '.')) }
+                            .forEach { player?.giveOrDropItemStack(ItemStack(it))}
+                }
+            }
+
+            // Heal NPC's team if enabled
+            if (actor is NPCBattleActor) {
+                if (actor.npc.npc.autoHealParty) {
+                    actor.npc.party?.heal()
+                }
+            }
+
         }
         // Heal Mon if wild
         actors.filter { it.type == ActorType.WILD }
@@ -271,6 +303,11 @@ open class PokemonBattle(
         actors.forEach { actor ->
             actor.pokemonList.forEach { battlePokemon ->
                 battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
+                if (battlePokemon.effectedPokemon.entity != null
+                        && battlePokemon.effectedPokemon.entity?.beamMode == 0
+                        && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
+                    battlePokemon.effectedPokemon.tryRecallWithAnimation()
+                }
             }
         }
         sendUpdate(BattleEndPacket())
@@ -346,6 +383,13 @@ open class PokemonBattle(
     fun dispatchToFront(dispatcher: () -> DispatchResult) {
         dispatches.addFirst(BattleDispatch { dispatcher() })
 
+    }
+
+    fun dispatchWaitingToFront(delaySeconds: Float = 1F, dispatcher: () -> Unit) {
+        dispatches.addFirst(BattleDispatch {
+            dispatcher()
+            WaitDispatch(delaySeconds)
+        })
     }
 
     fun dispatchGo(dispatcher: () -> Unit) {

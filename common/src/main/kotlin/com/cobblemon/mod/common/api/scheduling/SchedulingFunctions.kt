@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.api.scheduling
 
 import java.util.concurrent.CompletableFuture
 import com.cobblemon.mod.common.util.runOnServer
+import net.minecraft.world.TickRateManager
+import net.minecraft.world.level.Level
 
 @Deprecated("Use afterOnServer or afterOnClient; ambiguous side is not good for your health")
 @JvmOverloads
@@ -33,9 +35,13 @@ fun delayedFuture(ticks: Int = 0, seconds: Float = 0F, serverThread: Boolean = f
  * being completed after the delay does things like entity removal or other thread-unsafe actions.
  */
 @JvmOverloads
-fun afterOnServer(ticks: Int = 0, seconds: Float = 0F, action: () -> Unit) = ServerTaskTracker.after(seconds + ticks / 20F, action)
+fun afterOnServer(seconds: Float, action: () -> Unit) = ServerTaskTracker.after(seconds, action)
 @JvmOverloads
-fun afterOnClient(ticks: Int = 0, seconds: Float, action: () -> Unit) = ClientTaskTracker.after(seconds + ticks / 20F, action)
+fun afterOnServer(ticks: Int, level: Level, action: () -> Unit) = ServerTaskTracker.after(ticks / level.tickRateManager().tickrate(), action)
+@JvmOverloads
+fun afterOnClient(seconds: Float, action: () -> Unit) = ClientTaskTracker.after(seconds, action)
+@JvmOverloads
+fun afterOnClient(ticks: Int, level: Level, action: () -> Unit) = ClientTaskTracker.after(ticks / level.tickRateManager().tickrate(), action)
 
 @Deprecated("Use lerpOnServer or lerpOnClient, side-ambiguity causes problems now")
 fun lerp(seconds: Float = 0F, serverThread: Boolean = false, action: (Float) -> Unit) = (if (serverThread) ServerTaskTracker else ClientTaskTracker).lerp(seconds, action = action)

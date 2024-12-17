@@ -17,6 +17,11 @@
     "speed": 60
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      }
+    },
     "resting": {
       "canSleep": true,
       "depth": "normal",
@@ -199,7 +204,7 @@
       ]
     }
   ],
-  "baseScale": 1,
+  "baseScale": 0.95,
   "hitbox": {
     "width": 0.7,
     "height": 1,

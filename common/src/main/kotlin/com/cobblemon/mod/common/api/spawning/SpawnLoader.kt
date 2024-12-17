@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.spawning
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
+import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
@@ -68,6 +71,9 @@ object SpawnLoader {
         .registerTypeAdapter(CompoundTag::class.java, CompoundTagAdapter)
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
+        .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .create()
 
     var deserializingConditionClass: Class<out SpawningCondition<*>>? = null

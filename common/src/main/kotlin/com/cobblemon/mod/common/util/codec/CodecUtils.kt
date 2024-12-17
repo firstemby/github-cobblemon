@@ -10,8 +10,17 @@ package com.cobblemon.mod.common.util.codec
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import com.mojang.serialization.MapCodec
+import java.util.Optional
 import net.minecraft.resources.ResourceLocation
 
+//Codec.optionalFieldOf uses Java Optionals, which cant be passed into constructors using Kotlin optionals.
+fun <T> Codec<T>.kotlinOptionalFieldOf(name: String): MapCodec<T?> {
+    return Codec.optionalField<T>(name, this, false).xmap<T?>(
+        { it.orElse(null) },
+        { Optional.ofNullable(it) as Optional<T> }
+    )
+}
 object CodecUtils {
 
     @JvmStatic

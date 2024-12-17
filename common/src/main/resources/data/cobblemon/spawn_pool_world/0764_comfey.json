@@ -20,7 +20,8 @@
                 "biomes": [
                     "#cobblemon:is_floral",
                     "#cobblemon:is_tropical_island"
-                ]
+                ],
+                "isRaining": false
             }
         },
         {
@@ -40,7 +41,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isRaining": false
             }
         },
         {
@@ -54,7 +56,8 @@
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isRaining": false
             },
             "anticondition": {
                 "structures": [

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.item.interactive
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -36,6 +37,7 @@ import net.minecraft.world.level.Level
 class ElixirItem(val max: Boolean) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_elixir" else "elixir" }"
+        override val returnItem = Items.GLASS_BOTTLE
         override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "elixir".let { if (!max) "$it 10" else it }
     }
@@ -60,9 +62,9 @@ class ElixirItem(val max: Boolean) : CobblemonItem(Properties()), PokemonSelecti
             pokemon.moveSet.update()
             if (!player.isCreative) {
                 stack.shrink(1)
-                player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
+                player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }
-            player.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+            pokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)
@@ -71,7 +73,7 @@ class ElixirItem(val max: Boolean) : CobblemonItem(Properties()), PokemonSelecti
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+        battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

@@ -1,12 +1,12 @@
 {
-  "escapeAction": "q.dialogue.set_page('quitter')",
+  "initializationAction": "(q.npc.is_in_battle_with(q.player) || !q.npc.is_doing_activity('minecraft:idle', 'cobblemon:battling')) ? q.dialogue.close()",
   "speakers": {
     "npc": {
       "name": {
         "type": "expression",
         "expression": "q.npc.name"
       },
-      "face": "q.npc.face();"
+      "face": "q.npc.face(false);"
     },
     "player": {
       "face": "q.player.face();",
@@ -48,12 +48,16 @@
         "vertical": false,
         "options": [
           {
-            "text": "Battle",
+            "text": {
+              "type": "expression",
+              "expression": "q.run_script('cobblemon:npc_battle_cooling_down') ? 'Battle (cooldown)' : 'Battle';"
+            },
             "value": "battle",
             "action": [
               "q.dialogue.close();",
-              "q.npc.battle(q.player);"
-            ]
+              "q.npc.start_battle(q.player);"
+            ],
+            "isSelectable": "!q.run_script('cobblemon:npc_battle_cooling_down') && c.npc.can_battle;"
           },
           {
             "text": "Trade",

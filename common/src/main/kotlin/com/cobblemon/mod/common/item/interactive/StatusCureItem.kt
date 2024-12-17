@@ -35,6 +35,7 @@ import net.minecraft.world.level.Level
 class StatusCureItem(val itemName: String, vararg val status: Status) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = this@StatusCureItem.itemName
+        override val returnItem = Items.AIR
         override fun canUse(battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(target.effectedPokemon)
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
@@ -48,10 +49,10 @@ class StatusCureItem(val itemName: String, vararg val status: Status) : Cobblemo
         val currentStatus = pokemon.status?.status
         return if (currentStatus != null && (status.isEmpty() || currentStatus in status)) {
             pokemon.status = null
-            player.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
+            pokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
             if (!player.isCreative)  {
                 stack.shrink(1)
-                player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
+                player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }
             InteractionResultHolder.success(stack)
         } else {
@@ -61,7 +62,7 @@ class StatusCureItem(val itemName: String, vararg val status: Status) : Cobblemo
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
+        battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

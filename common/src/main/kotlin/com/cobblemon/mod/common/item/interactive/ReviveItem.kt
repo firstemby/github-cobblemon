@@ -14,6 +14,9 @@ import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
+import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BagItemActionResponse
 import com.cobblemon.mod.common.battles.BattleRegistry
@@ -21,10 +24,7 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.battleLang
-import com.cobblemon.mod.common.util.isHeld
-import com.cobblemon.mod.common.util.isInBattle
-import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.*
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -32,6 +32,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import kotlin.math.ceil
 
@@ -41,9 +42,10 @@ import kotlin.math.ceil
  * @author Hiroku
  * @since July 7th, 2023
  */
-class ReviveItem(val max: Boolean): CobblemonItem(Properties()) {
+class ReviveItem(val max: Boolean): CobblemonItem(Properties()), HealingSource {
     val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_revive" else "revive" }"
+        override val returnItem = Items.AIR
         override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "revive ${ if (max) "1" else "0.5" }"
     }
@@ -74,7 +76,7 @@ class ReviveItem(val max: Boolean): CobblemonItem(Properties()) {
                             if (!player.isCreative) {
                                 stack.shrink(1)
                             }
-                            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.entity?.pokemon?.species!!.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
+                            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.effectedPokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
                         }
                     }
                 }
@@ -86,7 +88,11 @@ class ReviveItem(val max: Boolean): CobblemonItem(Properties()) {
                     canSelect = Pokemon::isFainted
                 ) { pk ->
                     if (pk.isFainted() && !player.isInBattle() && stack.isHeld(player)) {
-                        pk.currentHealth = if (max) pk.hp else ceil(pk.hp / 2F).toInt()
+                        var amount = if (max) pk.maxHealth else ceil(pk.maxHealth / 2F).toInt()
+                        CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pk, amount, this), { cancelledEvent -> return@createFromPokemon }) { event ->
+                            amount = event.amount
+                        }
+                        pk.currentHealth = amount
                         if (!player.isCreative) {
                             stack.shrink(1)
                         }

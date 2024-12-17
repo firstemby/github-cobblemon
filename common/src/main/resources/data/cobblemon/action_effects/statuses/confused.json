@@ -8,7 +8,7 @@
       "type": "entity_particles",
       "effect": "cobblemon:confused_actor",
       "delay": 1.0,
-      "locator": "root"
+      "locators": ["root"]
     },
     {
       "type": "remove_holds",

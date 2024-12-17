@@ -148,6 +148,9 @@
       ],
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.sliggoo-hisui.desc"
+      ],
       "drops": {
         "amount": 5,
         "entries": [

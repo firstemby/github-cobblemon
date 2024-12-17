@@ -1,0 +1,32 @@
+{
+  "config": [
+    {
+      "variableName": "on_defeat",
+      "displayName": "npc.variable.on_defeat.name",
+      "description": "npc.variable.on_defeat.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "variableName": "on_victory",
+      "displayName": "npc.variable.on_victory.name",
+      "description": "npc.variable.on_victory.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "variableName": "on_player_wins",
+      "displayName": "npc.variable.on_player_wins.name",
+      "description": "npc.variable.on_player_wins.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "variableName": "on_player_loses",
+      "displayName": "npc.variable.on_player_loses.name",
+      "description": "npc.variable.on_player_loses.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    }
+  ]
+}

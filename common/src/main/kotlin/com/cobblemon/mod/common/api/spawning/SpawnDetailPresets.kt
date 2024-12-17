@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.spawning
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
+import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
@@ -69,6 +72,9 @@ object SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
         .registerTypeAdapter(MoonPhaseRange::class.java, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
+        .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .create()
 
     val presetTypes = mutableMapOf<String, Class<out SpawnDetailPreset>>()

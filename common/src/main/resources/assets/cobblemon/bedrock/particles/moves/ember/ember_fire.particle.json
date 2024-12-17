@@ -8,6 +8,13 @@
 				"texture": "textures/particles/ember"
 			}
 		},
+		"events": {
+			"event_sound": {
+				"sound_effect": {
+					"event_name": "cobblemon:move.ember.actor"
+				}
+			}
+		},
 		"components": {
 			"minecraft:emitter_rate_steady": {
 				"spawn_rate": 50,
@@ -15,6 +22,9 @@
 			},
 			"minecraft:emitter_lifetime_once": {
 				"active_time": 0.45
+			},
+			"minecraft:emitter_lifetime_events": {
+				"creation_event": "event_sound"
 			},
 			"minecraft:emitter_shape_point": {
 				"offset": ["math.random(-0.41,0.41)*(v.emitter_age*3.5)", "math.random(-0.41,0.41)*(v.emitter_age*3.5)", "math.random(-0.35,0.35)-v.emitter_age*7"],

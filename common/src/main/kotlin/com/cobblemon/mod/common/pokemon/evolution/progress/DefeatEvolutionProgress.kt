@@ -66,7 +66,7 @@ class DefeatEvolutionProgress : EvolutionProgress<DefeatEvolutionProgress.Progre
         val CODEC: MapCodec<DefeatEvolutionProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 PokemonProperties.CODEC.fieldOf(TARGET).forGetter { it.progress.target },
-                Codec.intRange(1, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { target, amount -> DefeatEvolutionProgress().apply { updateProgress(Progress(target, amount)) } }
         }
     }

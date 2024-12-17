@@ -11,8 +11,9 @@ package com.cobblemon.mod.fabric
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
-import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
+import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
@@ -28,7 +29,6 @@ import com.cobblemon.mod.common.platform.events.ServerTickEvent
 import com.cobblemon.mod.common.sherds.CobblemonSherds
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.didSleep
-import com.cobblemon.mod.common.util.endsWith
 import com.cobblemon.mod.common.world.CobblemonStructures
 import com.cobblemon.mod.common.world.feature.CobblemonFeatures
 import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifierTypes
@@ -38,9 +38,7 @@ import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProc
 import com.cobblemon.mod.fabric.net.CobblemonFabricNetworkManager
 import com.cobblemon.mod.fabric.permission.FabricPermissionValidator
 import com.mojang.brigadier.arguments.ArgumentType
-import java.io.File
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor
 import kotlin.reflect.KClass
 import net.fabricmc.api.EnvType
@@ -63,6 +61,7 @@ import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
+import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PointOfInterestHelper
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
@@ -140,8 +139,8 @@ object CobblemonFabric : CobblemonImplementation {
         ServerLifecycleEvents.SERVER_STOPPED.register { server -> PlatformEvents.SERVER_STOPPED.post(ServerEvent.Stopped(server)) }
         ServerTickEvents.START_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_PRE.post(ServerTickEvent.Pre(server)) }
         ServerTickEvents.END_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_POST.post(ServerTickEvent.Post(server)) }
-        ServerPlayConnectionEvents.JOIN.register { handler, _, _ -> PlatformEvents.SERVER_PLAYER_LOGIN.post(ServerPlayerEvent.Login(handler.player)) }
-        ServerPlayConnectionEvents.DISCONNECT.register { handler, _ -> PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) }
+        ServerPlayConnectionEvents.JOIN.register { handler, _, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGIN.post(ServerPlayerEvent.Login(handler.player)) } }
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) } }
         ServerLivingEntityEvents.ALLOW_DEATH.register { entity, _, _ ->
             if (entity is ServerPlayer) {
                 PlatformEvents.PLAYER_DEATH.postThen(
@@ -218,8 +217,10 @@ object CobblemonFabric : CobblemonImplementation {
         EntityDataSerializers.registerSerializer(Vec3DataSerializer)
         EntityDataSerializers.registerSerializer(StringSetDataSerializer)
         EntityDataSerializers.registerSerializer(PoseTypeDataSerializer)
+        EntityDataSerializers.registerSerializer(PlatformTypeDataSerializer)
         EntityDataSerializers.registerSerializer(IdentifierDataSerializer)
         EntityDataSerializers.registerSerializer(UUIDSetDataSerializer)
+        EntityDataSerializers.registerSerializer(NPCPlayerTextureSerializer)
     }
 
     override fun registerItems() {
@@ -238,9 +239,6 @@ object CobblemonFabric : CobblemonImplementation {
                 CobblemonItemGroups.inject(key, fabricInjector)
             }
         }
-        CobblemonTradeOffers.tradeOffersForAll().forEach { tradeOffer -> TradeOfferHelper.registerVillagerOffers(tradeOffer.profession, tradeOffer.requiredLevel) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
-        // 1 = common trades, 2 = rare, it has no concept of levels
-        CobblemonTradeOffers.resolveWanderingTradeOffers().forEach { tradeOffer -> TradeOfferHelper.registerWanderingTraderOffers(if (tradeOffer.isRareTrade) 2 else 1) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
     }
 
     override fun registerBlocks() {
@@ -258,6 +256,15 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerBlockEntityTypes() {
         CobblemonBlockEntities.register { identifier, type -> Registry.register(CobblemonBlockEntities.registry, identifier, type) }
+    }
+
+    override fun registerVillagers() {
+        CobblemonVillagerPoiTypes.register { identifier, type -> PointOfInterestHelper.register(identifier, type.maxTickets, type.validRange, type.matchingStates) }
+        CobblemonVillagerProfessions.register { identifier, profession -> Registry.register(CobblemonVillagerProfessions.registry, identifier, profession) }
+
+        CobblemonTradeOffers.tradeOffersForAll().forEach { tradeOffer -> TradeOfferHelper.registerVillagerOffers(tradeOffer.profession, tradeOffer.requiredLevel) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
+        // 1 = common trades, 2 = rare, it has no concept of levels
+        CobblemonTradeOffers.resolveWanderingTradeOffers().forEach { tradeOffer -> TradeOfferHelper.registerWanderingTraderOffers(if (tradeOffer.isRareTrade) 2 else 1) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
     }
 
     override fun registerWorldGenFeatures() {
@@ -281,7 +288,7 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerCriteria() {
         CobblemonCriteria.register { id, obj ->
-            Registry.register(BuiltInRegistries.TRIGGER_TYPES, id, obj)
+            Registry.register(CobblemonCriteria.registry, id, obj)
         }
     }
 
@@ -296,66 +303,6 @@ object CobblemonFabric : CobblemonImplementation {
     }
 
     override fun server(): MinecraftServer? = if (this.environment() == Environment.CLIENT) Minecraft.getInstance().singleplayerServer else this.server
-
-    override fun <T> reloadJsonRegistry(registry: JsonDataRegistry<T>, manager: ResourceManager): HashMap<ResourceLocation, T> {
-        val data = hashMapOf<ResourceLocation, T>()
-
-        if (!Cobblemon.isDedicatedServer) {
-            manager.listResources(registry.resourcePath) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }.forEach { (identifier, resource) ->
-                if (identifier.namespace == "pixelmon") {
-                    return@forEach
-                }
-
-                resource.open().use { stream ->
-                    stream.bufferedReader().use { reader ->
-                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                        try {
-                            data[resolvedIdentifier] = registry.gson.fromJson(reader, registry.typeToken.type)
-                        } catch (exception: Exception) {
-                            throw ExecutionException("Error loading JSON for data: $identifier", exception)
-                        }
-                    }
-                }
-            }
-        } else {
-            // Currently in Fabric API, the ResourceManager does not work as expected when using findResources.
-            // It will treat built-in resources as priority over datapack resources.
-            manager.listResourceStacks(registry.resourcePath) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }.forEach { (identifier, resources) ->
-                if (identifier.namespace == "pixelmon") {
-                    return@forEach
-                }
-
-                if (resources.isEmpty()) {
-                    return@forEach
-                }
-
-                val orderedResources = if (resources.size > 1) {
-                    val sorted = resources.sortedBy { it.sourcePackId().replace("file/", "") }.toMutableList()
-                    val fabric = sorted.find { it.sourcePackId() == "fabric" }
-
-                    if (fabric != null) {
-                        sorted.remove(fabric)
-                        sorted.add(fabric)
-                    }
-                    sorted
-                } else {
-                    resources
-                }
-
-                orderedResources[0].open().use { stream ->
-                    stream.bufferedReader().use { reader ->
-                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                        try {
-                            data[resolvedIdentifier] = registry.gson.fromJson(reader, registry.typeToken.type)
-                        } catch (exception: Exception) {
-                            throw ExecutionException("Error loading JSON for data: $identifier", exception)
-                        }
-                    }
-                }
-            }
-        }
-        return data
-    }
 
     override fun registerCompostable(item: ItemLike, chance: Float) {
         CompostingChanceRegistry.INSTANCE.add(item, chance)
@@ -372,7 +319,9 @@ object CobblemonFabric : CobblemonImplementation {
     }
 
     private fun attemptModCompat() {
-
+        if(isModInstalled("adorn")) {
+            registerBuiltinResourcePack(cobblemonResource("adorncompatibility"), Component.literal("Adorn Compatibility"), ResourcePackActivationBehaviour.ALWAYS_ENABLED)
+        }
     }
 
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {
@@ -386,7 +335,6 @@ object CobblemonFabric : CobblemonImplementation {
         override fun getFabricDependencies(): MutableCollection<ResourceLocation> = this.dependencies.toMutableList()
     }
 
-    @Suppress("UnstableApiUsage")
     private class FabricItemGroupInjector(private val fabricItemGroupEntries: FabricItemGroupEntries) : CobblemonItemGroups.Injector {
         override fun putFirst(item: ItemLike) {
             this.fabricItemGroupEntries.prepend(item)

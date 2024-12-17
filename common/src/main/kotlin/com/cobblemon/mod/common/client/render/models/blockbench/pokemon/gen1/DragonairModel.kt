@@ -70,7 +70,7 @@ class DragonairModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
         standing = registerPose(
             poseName = "standing",
-            poseTypes = STATIONARY_POSES + UI_POSES - PoseType.FLOAT - PoseType.HOVER,
+            poseTypes = setOf(PoseType.STAND) + UI_POSES,
             quirks = arrayOf(blink),
             condition = { !it.isBattling && !it.isInWater},
             transformTicks = 10,

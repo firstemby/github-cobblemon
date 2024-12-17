@@ -234,6 +234,20 @@
       "aspects": [
         "alolan"
       ],
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "canWalkOnWater": true,
+            "canSwimInWater": true
+          }
+        },
+        "resting": {
+          "canSleep": true,
+          "willSleepOnBed": false,
+          "depth": "normal",
+          "light": "0-4"
+        }
+      },
       "height": 7,
       "weight": 210,
       "preEvolution": "pikachu region_bias=alola",
@@ -245,6 +259,9 @@
       },
       "cannotDynamax": false,
       "battleOnly": false,
+      "pokedex": [
+        "cobblemon.species.raichu-alola.desc"
+      ],
       "drops": {
         "amount": 3,
         "entries": [

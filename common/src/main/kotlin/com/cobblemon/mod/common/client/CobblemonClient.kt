@@ -12,10 +12,15 @@ import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
+import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
+import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
+import com.cobblemon.mod.common.client.render.ClientPlayerIcon
+import com.cobblemon.mod.common.client.render.DeferredRenderer
 import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
@@ -29,8 +34,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.*
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
-import com.cobblemon.mod.common.client.sound.battle.BattleMusicController
-import com.cobblemon.mod.common.client.starter.ClientPlayerData
+import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequests
+import com.cobblemon.mod.common.client.sound.BattleMusicController
+import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.client.storage.ClientStorageManager
 import com.cobblemon.mod.common.client.tooltips.CobblemonTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.FishingBaitTooltipGenerator
@@ -41,7 +47,10 @@ import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.item.PokemonEggItem
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.gui.GuiGraphics
@@ -57,7 +66,9 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.resources.PlayerSkin
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.AABB
 
 object CobblemonClient {
 
@@ -65,10 +76,12 @@ object CobblemonClient {
     val storage = ClientStorageManager()
     var trade: ClientTrade? = null
     var battle: ClientBattle? = null
-    var clientPlayerData = ClientPlayerData()
+    var clientPlayerData = ClientGeneralPlayerData()
+    var clientPokedexData = ClientPokedexManager(mutableMapOf())
     /** If true then we won't bother them anymore about choosing a starter even if it's a thing they can do. */
     var checkedStarterScreen = false
     var requests = ClientPlayerActionRequests()
+    var teamData = ClientPlayerTeamData()
     var posableModelRepositories = listOf(
         PokemonModelRepository,
         PokeBallModelRepository,
@@ -81,10 +94,13 @@ object CobblemonClient {
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
+    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
 
     fun onLogin() {
-        clientPlayerData = ClientPlayerData()
+        clientPlayerData = ClientGeneralPlayerData()
         requests = ClientPlayerActionRequests()
+        teamData = ClientPlayerTeamData()
+        clientPokedexData = ClientPokedexManager(mutableMapOf())
         storage.onLogin()
         CobblemonDataProvider.canReload = false
     }
@@ -96,6 +112,8 @@ object CobblemonClient {
         ClientTaskTracker.clear()
         checkedStarterScreen = false
         CobblemonDataProvider.canReload = true
+        DeferredRenderer.clearAll()
+        ClientPlayerIcon.clear()
     }
 
     fun initialize(implementation: CobblemonClientImplementation) {
@@ -123,6 +141,33 @@ object CobblemonClient {
             val stack = event.stack
             val lines = event.lines
             TooltipManager.generateTooltips(stack, lines, Screen.hasShiftDown())
+        }
+
+        PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
+        PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
+            val player = event.client.player
+            if (player !== null) {
+                var selectedItem = player.inventory.getItem(player.inventory.selected)
+                if (pokedexUsageContext.scanningGuiOpen &&
+                    !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
+                    !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
+                        player.isUsingItem == true &&
+                        player.usedItemHand == InteractionHand.OFF_HAND
+                    )
+                ) {
+                    // Stop using Pokédex in main hand if player switches to a different slot in hotbar
+                    pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
+                }
+                if(event.client.isPaused) {
+                    return@subscribe
+                }
+                val nearbyShinies = player?.level()?.getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0)) { (it is PokemonEntity) && it.pokemon.shiny }
+                nearbyShinies?.firstOrNull { player.isLookingAt(it) && !player.isSpectator }.let {
+                    if(it is PokemonEntity)
+                        it.delegate.spawnShinyParticle(player!!)
+                }
+            }
+            ClientPlayerIcon.onTick()
         }
     }
 
@@ -206,7 +251,8 @@ object CobblemonClient {
             CobblemonBlocks.LARGE_BUDDING_SKY_TUMBLESTONE,
             CobblemonBlocks.SKY_TUMBLESTONE_CLUSTER,
             CobblemonBlocks.GIMMIGHOUL_CHEST,
-            CobblemonBlocks.DISPLAY_CASE
+            CobblemonBlocks.DISPLAY_CASE,
+            CobblemonBlocks.LECTERN
         )
 
         this.implementation.registerBlockRenderType(
@@ -247,6 +293,7 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.EGG, ::EggBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
     }
 
     private fun registerEntityRenderers() {

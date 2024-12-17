@@ -6,18 +6,18 @@
     },
     {
       "type": "animation",
-      "animation": ["stunspore", "status"],
+      "animation": ["stunspore", "status", "cry"],
       "delay": 1.15
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:stunspore",
-      "locator": "target"
+      "locators": ["target"]
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:stunspore_cloud",
-      "locator": "target",
+      "locators": ["target"],
       "delay": 0.1
     },
     {
@@ -28,14 +28,7 @@
       "type": "entity_particles",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:stunspore_land",
-      "locator": "target",
-      "delay": 0.1
-    },
-    {
-      "type": "entity_particles",
-      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-      "effect": "cobblemon:paralysis_actor",
-      "locator": "middle",
+      "locators": ["root"],
       "delay": 1
     },
     {

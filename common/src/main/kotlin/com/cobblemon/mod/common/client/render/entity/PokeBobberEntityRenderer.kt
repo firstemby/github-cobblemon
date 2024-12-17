@@ -179,8 +179,8 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         matrixStack.popPose() // close bobber rendering transforms
 
         var armOffset = if (playerEntity.mainArm == HumanoidArm.RIGHT) 1 else -1
-        val itemStack = playerEntity.mainHandItem
-        if (itemStack.item !is PokerodItem) {
+        val item = playerEntity.mainHandItem.item
+        if ((item !is PokerodItem) || item.pokeRodId != pokeRodId) {
             armOffset = -armOffset
         }
         val handSwingProgress = playerEntity.getAttackAnim(tickDelta)
@@ -189,7 +189,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         val sinBodyYaw = Mth.sin(bodyYawRadians).toDouble()
         val cosBodyYaw = Mth.cos(bodyYawRadians).toDouble()
         val horizontalOffset = armOffset.toDouble() * 0.35
-        if (!entityRenderDispatcher.options.cameraType.isFirstPerson || playerEntity !== Minecraft.getInstance().player) {
+        if (!entityRenderDispatcher.options.cameraType.isFirstPerson || playerEntity != Minecraft.getInstance().player) {
             playerEyeYWorld = Mth.lerp(tickDelta.toDouble(), playerEntity.xo, playerEntity.x) - cosBodyYaw * horizontalOffset - sinBodyYaw * 0.8
             playerPosYWorld = playerEntity.yo + playerEntity.eyeHeight.toDouble() + (playerEntity.y - playerEntity.yo) * tickDelta.toDouble() - 0.45
             playerPosZWorld = Mth.lerp(tickDelta.toDouble(), playerEntity.zo, playerEntity.z) - sinBodyYaw * horizontalOffset + cosBodyYaw * 0.8
@@ -220,6 +220,11 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         }
 
         matrixStack.popPose() // close main rendering transforms
+
+        // Iris Shader Compatibility: Keeps Iris from connecting the fishing lines of multiple players' Pokerods.
+        // Iris performs a mixin into FishingHookRenderer to achieve the same result.
+        // So we mimic their fix here.
+        vertexConsumer2.addVertex( 0f, 0f, 0f).setColor(0, 0, 0, 255).setNormal( 0f, 0f, 0f);
 
         super.render(fishingBobberEntity, elapsedPartialTicks, tickDelta, matrixStack, vertexConsumerProvider, light)
     }

@@ -59,12 +59,20 @@ internal class ClientPokemonP1(
         other.experience = this.experience
         other.setFriendship(this.friendship)
         // Applied before current health for calcs to take place
-        other.ivs = this.ivs
-        other.evs = this.evs
+        other.ivs.doWithoutEmitting {
+            this.ivs.forEach {
+                other.ivs[it.key] = it.value
+            }
+        }
+        other.evs.doWithoutEmitting {
+            this.evs.forEach {
+                other.evs[it.key] = it.value
+            }
+        }
         other.currentHealth = this.currentHealth
         other.gender = this.gender
-        other.moveSet = this.moveSet
-        other.benchedMoves = this.benchedMoves
+        other.moveSet.copyFrom(this.moveSet)
+        other.benchedMoves.copyFrom(this.benchedMoves)
         other.scaleModifier = this.scaleModifier
         this.features.forEach { featureNbt ->
             val featureId = featureNbt.getString(FEATURE_ID)
@@ -88,8 +96,8 @@ internal class ClientPokemonP1(
 
     companion object {
 
-        private const val FEATURES = "Features"
-        private const val FEATURE_ID = "${Cobblemon.MODID}:feature_id"
+        const val FEATURES = "Features"
+        const val FEATURE_ID = "${Cobblemon.MODID}:feature_id"
 
         internal val CODEC: MapCodec<ClientPokemonP1> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
@@ -134,7 +142,7 @@ internal class ClientPokemonP1(
             pokemon.ability,
         )
 
-        private fun collectVisibleFeatures(pokemon: Pokemon) = pokemon.features
+        fun collectVisibleFeatures(pokemon: Pokemon) = pokemon.features
             .filterIsInstance<SynchronizedSpeciesFeature>()
             .filter { (SpeciesFeatures.getFeature(it.name) as? SynchronizedSpeciesFeatureProvider<*>)?.visible == true }
             .map { feature ->

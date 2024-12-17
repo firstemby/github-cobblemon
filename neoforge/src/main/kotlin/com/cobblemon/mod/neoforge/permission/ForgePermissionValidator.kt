@@ -42,9 +42,20 @@ object ForgePermissionValidator : PermissionValidator {
         return PermissionAPI.getPermission(player, node)
     }
 
+    override fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean {
+        val node = PermissionNode(permission.split(".").first(), permission.substringAfter("."), PermissionTypes.BOOLEAN, { player, _, _ -> player?.hasPermissions(level) == true })
+        return PermissionAPI.getPermission(player, node)
+    }
+
     override fun hasPermission(source: CommandSourceStack, permission: Permission): Boolean {
         val player = this.extractPlayerFromSource(source) ?: return source.hasPermission(permission.level.numericalValue)
         val node = this.findNode(permission) ?: return source.hasPermission(permission.level.numericalValue)
+        return PermissionAPI.getPermission(player, node)
+    }
+
+    override fun hasPermission(source: CommandSourceStack, permission: String, level: Int): Boolean {
+        val player = this.extractPlayerFromSource(source) ?: return source.hasPermission(4)
+        val node = PermissionNode(permission.split(".").first(), permission.substringAfter("."), PermissionTypes.BOOLEAN, { player, _, _ -> player?.hasPermissions(level) == true })
         return PermissionAPI.getPermission(player, node)
     }
 

@@ -36,6 +36,11 @@
 						"0.2083": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.open"
+				}
 			}
 		},
 		"animation.poke_ball.open_idle": {
@@ -50,6 +55,11 @@
 				"ball": {
 					"rotation": ["22.5-math.sin(q.anim_time*90*10)*0.4-math.sin(q.anim_time*90*1)*2", 0, "0-math.sin(q.anim_time*90*2)*0.5"],
 					"position": [0, "math.sin(q.anim_time*90*2-60)*0.1", 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.open"
 				}
 			}
 		},
@@ -127,6 +137,11 @@
 						"0.375": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shut"
+				}
 			}
 		},
 		"animation.poke_ball.shut_idle": {
@@ -137,6 +152,11 @@
 				},
 				"lid": {
 					"rotation": [0, 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shut"
 				}
 			}
 		},
@@ -247,6 +267,11 @@
 						"0.2083": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.bounce"
+				}
 			}
 		},
 		"animation.poke_ball.bob1": {
@@ -259,6 +284,11 @@
 						"0.875": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
+				}
 			}
 		},
 		"animation.poke_ball.bob2": {
@@ -270,6 +300,11 @@
 						"0.6667": ["math.sin(q.anim_time*90*15)*2", 0, "math.sin(q.anim_time*90*8)*2"],
 						"0.875": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
 				}
 			}
 		},
@@ -289,6 +324,11 @@
 						"0.6667": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
+				}
 			}
 		},
 		"animation.poke_ball.bob4": {
@@ -306,6 +346,11 @@
 						"0.0": ["math.sin(q.anim_time*90*10)*0.5", 0, 0],
 						"0.6667": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
 				}
 			}
 		},
@@ -383,6 +428,11 @@
 						"0.6667": [0, -0.1, 0],
 						"0.75": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
 				}
 			}
 		},
@@ -471,6 +521,11 @@
 						"0.5833": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake"
+				}
 			}
 		},
 		"animation.poke_ball.critical": {
@@ -488,6 +543,11 @@
 						"0.4167": ["math.sin(q.anim_time*90*20)*0.3", "math.sin(q.anim_time*90*40)*0.1", 0],
 						"0.75": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.shake.critical"
 				}
 			}
 		},
@@ -546,13 +606,31 @@
 			}
 		},
 		"animation.poke_ball.break": {
-			"animation_length": 1,
+			"animation_length": 1.2,
 			"bones": {
 				"ball": {
 					"rotation": {
 						"0.0": [0, 0, 0],
 						"0.3333": [0, -15, 0],
 						"0.4583": [0, -15, 0]
+					},
+					"position": {
+						"0.75": [0, 0, 0],
+						"1.0": {
+							"pre": [0, -0.6, 0],
+							"post": [0, -0.6, 0],
+							"lerp_mode": "catmullrom"
+						},
+						"1.125": [0, -4, 0]
+					},
+					"scale": {
+						"0.75": [1, 1, 1],
+						"1.0": {
+							"pre": [0.82, 0.82, 0.82],
+							"post": [0.82, 0.82, 0.82],
+							"lerp_mode": "catmullrom"
+						},
+						"1.125": [0, 0, 0]
 					}
 				},
 				"bottom": {
@@ -653,6 +731,11 @@
 						"0.2917": [0, -0.3, 0.2]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "poke_ball.break"
+				}
 			}
 		},
 		"animation.poke_ball.capture": {
@@ -691,6 +774,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.034": {
+					"effect": "poke_ball.capture_succeeded"
 				}
 			},
 			"particle_effects": {
