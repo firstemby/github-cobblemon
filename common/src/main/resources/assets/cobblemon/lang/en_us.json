@@ -1041,6 +1041,7 @@
   "cobblemon.ui.pokedex.region.unknown": "Unknown",
   "cobblemon.ui.pokedex.region.unova": "Unova",
 
+  "cobblemon.ui.pokedex.search.show_only_discovered": "Show Only Discovered Species",
   "cobblemon.ui.pokedex.search.search_by": "Search by %1$s",
   "cobblemon.ui.pokedex.search.type.species": "Species Name",
   "cobblemon.ui.pokedex.search.type.abilities": "Ability",

@@ -54,6 +54,7 @@ import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewe
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Renderable
@@ -63,6 +64,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 
@@ -127,11 +129,13 @@ class PokedexGUI private constructor(
 
     private lateinit var regionSelectWidgetUp: ScaledButton
     private lateinit var regionSelectWidgetDown: ScaledButton
+    private lateinit var onlyDiscoveredSpeciesButton: ScaledButton
     private lateinit var searchByTypeButton: ScaledButton
     private lateinit var scrollScreen: EntriesScrollingWidget
     private lateinit var pokemonInfoWidget: PokemonInfoWidget
     private lateinit var searchWidget: SearchWidget
 
+    private var showOnlyDiscoveredSpecies: Boolean = false
     private var selectedSearchByType: SearchByType = SearchByType.SPECIES
     private val tabButtons: MutableList<ScaledButton> = mutableListOf()
 
@@ -171,7 +175,7 @@ class PokedexGUI private constructor(
         displaytabInfoElement(tabInfoIndex, false)
 
         if (::searchWidget.isInitialized) removeWidget(searchWidget)
-        searchWidget = SearchWidget(x + 26, y + 28, 128, HEADER_BAR_HEIGHT, update = ::updateFilters)
+        searchWidget = SearchWidget(x + 26, y + 28, 120, HEADER_BAR_HEIGHT, update = ::updateFilters)
         addRenderableWidget(searchWidget)
 
         if (::regionSelectWidgetUp.isInitialized) removeWidget(regionSelectWidgetUp)
@@ -197,6 +201,21 @@ class PokedexGUI private constructor(
             clickAction = { updatePokedexRegion(true) }
         )
         addRenderableWidget(regionSelectWidgetDown)
+
+        if (::onlyDiscoveredSpeciesButton.isInitialized) removeWidget(onlyDiscoveredSpeciesButton)
+        onlyDiscoveredSpeciesButton = ScaledButton(
+            buttonX = (x + 145.5).toFloat(),
+            buttonY = (y + 29.5).toFloat(),
+            buttonWidth = 16,
+            buttonHeight = 16,
+            scale = SCALE,
+            resource = cobblemonResource("textures/gui/pokedex/tab_species.png"),
+            clickAction = {
+                showOnlyDiscoveredSpecies = !showOnlyDiscoveredSpecies
+                updateFilters()
+            }
+        )
+        addRenderableWidget(onlyDiscoveredSpeciesButton)
 
         if (::searchByTypeButton.isInitialized) removeWidget(searchByTypeButton)
         searchByTypeButton = ScaledButton(
@@ -328,20 +347,28 @@ class PokedexGUI private constructor(
 
         super.render(context, mouseX, mouseY, delta)
 
-        // Search type tooltip
-        if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
-            matrices.pushPose()
-            matrices.translate(0.0, 0.0, 1000.0)
-            val searchTypeText = lang("ui.pokedex.search.search_by", lang("ui.pokedex.search.type.${selectedSearchByType.name.lowercase()}")).bold()
-            val searchTypeTextWidth = Minecraft.getInstance().font.width(searchTypeText.font(CobblemonResources.DEFAULT_LARGE))
-            val tooltipWidth = searchTypeTextWidth + 6
-
-            blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX - (tooltipWidth / 2) - 1, y = mouseY - 16, width = 1, height = 11)
-            blitk(matrixStack = matrices, texture = tooltipBackground, x = mouseX - (tooltipWidth / 2), y = mouseY - 16, width = tooltipWidth, height = 11)
-            blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX + (tooltipWidth / 2), y = mouseY - 16, width = 1, height = 11)
-            drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = searchTypeText, x = mouseX, y = mouseY - 15, shadow = true, centered = true)
-            matrices.popPose()
+        if (onlyDiscoveredSpeciesButton.isButtonHovered(mouseX, mouseY)) {
+            val text = lang("ui.pokedex.search.show_only_discovered").bold()
+            renderPokedexStyledTooltip(context, matrices, mouseX, mouseY, text)
         }
+
+        if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
+            val searchTypeText = lang("ui.pokedex.search.search_by", lang("ui.pokedex.search.type.${selectedSearchByType.name.lowercase()}")).bold()
+            renderPokedexStyledTooltip(context, matrices, mouseX, mouseY, searchTypeText)
+        }
+    }
+
+    private fun renderPokedexStyledTooltip(context: GuiGraphics, matrices: PoseStack, mouseX: Int, mouseY: Int, text: MutableComponent) {
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, 1000.0)
+        val searchTypeTextWidth = Minecraft.getInstance().font.width(text.font(CobblemonResources.DEFAULT_LARGE))
+        val tooltipWidth = searchTypeTextWidth + 6
+
+        blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX - (tooltipWidth / 2) - 1, y = mouseY - 16, width = 1, height = 11)
+        blitk(matrixStack = matrices, texture = tooltipBackground, x = mouseX - (tooltipWidth / 2), y = mouseY - 16, width = tooltipWidth, height = 11)
+        blitk(matrixStack = matrices, texture = tooltipEdge, x = mouseX + (tooltipWidth / 2), y = mouseY - 16, width = 1, height = 11)
+        drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = mouseX, y = mouseY - 15, shadow = true, centered = true)
+        matrices.popPose()
     }
 
     override fun onClose() {
@@ -435,7 +462,12 @@ class PokedexGUI private constructor(
     fun getFilters(): Collection<EntryFilter> {
         val filters: MutableList<EntryFilter> = mutableListOf()
 
-        filters.add(SearchFilter(CobblemonClient.clientPokedexData, searchWidget.value, selectedSearchByType))
+        filters.add(SearchFilter(
+            CobblemonClient.clientPokedexData,
+            searchWidget.value,
+            selectedSearchByType,
+            showOnlyDiscoveredSpecies
+        ))
 
         return filters
     }

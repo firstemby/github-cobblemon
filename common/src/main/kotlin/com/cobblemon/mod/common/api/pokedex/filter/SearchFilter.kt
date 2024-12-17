@@ -25,14 +25,24 @@ import net.minecraft.world.item.ItemStack
  * @author whatsy
  * @since September 4th, 2024
  * @param searchString The string to use when checking.
+ * @param searchByType The type of search to perform
+ * @param showOnlyDiscoveredSpecies Whether to include only species that have been discovered or all species
  */
-class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString: String, val searchByType: SearchByType = SearchByType.SPECIES) : EntryFilter() {
+class SearchFilter(
+    val pokedexManager: AbstractPokedexManager,
+    val searchString: String,
+    val searchByType: SearchByType = SearchByType.SPECIES,
+    val showOnlyDiscoveredSpecies: Boolean,
+) : EntryFilter() {
 
     override fun test(entry: PokedexEntry): Boolean {
+        val pokedexEntryProgress = pokedexManager.getHighestKnowledgeFor(entry)
+
+        if (showOnlyDiscoveredSpecies && pokedexEntryProgress == PokedexEntryProgress.NONE) return false
         if (searchString == "") return true
 
         val species = PokemonSpecies.getByIdentifier(entry.speciesId) ?: return false
-        if (pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.NONE) return false
+        if (pokedexEntryProgress == PokedexEntryProgress.NONE) return false
 
         when(searchByType) {
             SearchByType.ABILITIES -> {
