@@ -29,6 +29,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import java.awt.Color
 
 class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<EggBlockEntity>{
+    // will need to be changed
     override fun render(
         entity: EggBlockEntity,
         tickDelta: Float,
