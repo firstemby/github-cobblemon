@@ -90,6 +90,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
             eggComponent = EggComponent.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
                     .result()
                     ?.orElse(null)
+            println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
         }
     }
 }

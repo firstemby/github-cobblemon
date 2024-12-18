@@ -77,6 +77,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     ?.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
                     ?.result()
                     ?.orElse(null)
+            println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
         }
     }
 

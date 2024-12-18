@@ -41,14 +41,24 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         }
 
         // Load the egg model
-        val model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]
+        var model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]
+        if (model == null) {
+            println("Egg model not found in EggModelRepo!")
+            return
+        }
+        // Load the species-specific texture dynamically
+        var texture = getTextureForSpecies(egg)
+
+        // Force-rendering a Charmander egg for debugging
+        println("DEBUG: Forcing Charmander egg render.")
+        texture = cobblemonResource("textures/egg/charmander_egg.png")
+        model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]
         if (model == null) {
             println("Egg model not found in EggModelRepo!")
             return
         }
 
-        // Load the species-specific texture dynamically
-        val texture = getTextureForSpecies(egg)
+
 
         // Push pose stack for proper positioning
         matrices.pushPose()

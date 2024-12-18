@@ -51,6 +51,9 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
         TODO("Not yet implemented")
     }
 
-    override fun getRenderShape(state: BlockState) = RenderShape.ENTITYBLOCK_ANIMATED
+    override fun getRenderShape(blockState: BlockState): RenderShape {
+        return RenderShape.ENTITYBLOCK_ANIMATED
+    }
+
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = EggBlockEntity(pos, state)
 }

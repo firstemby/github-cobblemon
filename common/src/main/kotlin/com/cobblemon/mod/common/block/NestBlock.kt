@@ -65,11 +65,18 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
             player: Player,
             blockHitResult: BlockHitResult
     ): InteractionResult {
-        super.useWithoutItem(blockState, level, blockPos, player, blockHitResult)
+        // Ensure this logic only runs on the server
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS // Client-side only needs to show the hand animation
+        }
+
+        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity
-        return entity?.onUse(blockState, level, blockPos, (player as ServerPlayer), InteractionHand.MAIN_HAND, blockHitResult) ?: InteractionResult.FAIL
+        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
+                ?: InteractionResult.FAIL
     }
+
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = NestBlockEntity(pos, state)
 
@@ -98,11 +105,10 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         return defaultBlockState()
     }
 
-    override fun <T : BlockEntity?> getTicker(
-        level: Level,
-        blockState: BlockState,
-        blockEntityType: BlockEntityType<T>
-    ): BlockEntityTicker<T>? = createTickerHelper(blockEntityType, CobblemonBlockEntities.NEST, NestBlockEntity.TICKER::tick)
+    override fun <T : BlockEntity?> getTicker(level: Level, blockState: BlockState, blockEntityType: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return createTickerHelper(blockEntityType, CobblemonBlockEntities.NEST, NestBlockEntity.TICKER)
+    }
+
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
         TODO("Not yet implemented")

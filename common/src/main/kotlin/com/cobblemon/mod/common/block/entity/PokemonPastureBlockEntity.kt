@@ -386,9 +386,9 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
 
                                         val isClientSide = this.level?.isClientSide ?: false
                                         if (isClientSide) {
-                                            println("NestBlockRenderer: Running on the CLIENT side.")
+                                            println("PokemonPastureBlockEntity: Running on the CLIENT side.")
                                         } else {
-                                            println("NestBlockRenderer: Running on the SERVER side.")
+                                            println("PokemonPastureBlockEntity: Running on the SERVER side.")
                                         }
 
                                         println("Egg set in NestBlockEntity at ${nestTaken}: ${blockEntity.getEgg()!!.species}")

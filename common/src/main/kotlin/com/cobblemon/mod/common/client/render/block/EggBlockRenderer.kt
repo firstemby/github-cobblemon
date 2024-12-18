@@ -25,8 +25,17 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
             matrices.pushPose()
 
             // Get the texture based on species
-            val texture = getTextureForSpecies(egg)
-            val model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")] ?: return
+            var texture = getTextureForSpecies(egg)
+            var model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")] ?: return
+
+            // Force-rendering a Charmander egg for debugging
+            println("DEBUG: Forcing Charmander egg render.")
+            texture = cobblemonResource("textures/egg/charmander_egg.png")
+            model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]!!
+            if (model == null) {
+                println("Egg model not found in EggModelRepo!")
+                return
+            }
 
             // Render the egg model with the specified texture
             renderEggModel(model, texture, matrices, vertexConsumers, light, overlay)
