@@ -4,10 +4,10 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.resources.ResourceLocation
@@ -24,20 +24,11 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
         entity.getEgg()?.let { egg ->
             matrices.pushPose()
 
-            // Get the texture based on species
-            var texture = getTextureForSpecies(egg)
-            var model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")] ?: return
+            // Dynamically determine the texture and model
+            val texture = getTextureForSpecies(egg)
+            val model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")] ?: return
 
-            // Force-rendering a Charmander egg for debugging
-            println("DEBUG: Forcing Charmander egg render.")
-            texture = cobblemonResource("textures/egg/charmander_egg.png")
-            model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]!!
-            if (model == null) {
-                println("Egg model not found in EggModelRepo!")
-                return
-            }
-
-            // Render the egg model with the specified texture
+            // Render the egg model with the dynamically determined texture
             renderEggModel(model, texture, matrices, vertexConsumers, light, overlay)
 
             matrices.popPose()
@@ -53,7 +44,7 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
             overlay: Int
     ) {
         // Retrieve the buffer for the texture
-        val buffer = vertexConsumers.getBuffer(CobblemonRenderLayers.ENTITY_CUTOUT.apply(texture))
+        val buffer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
 
         // Bake and render the model
         val bakedModel = model.createWithUvOverride(false, 0, 0, 64, 64).bakeRoot()
