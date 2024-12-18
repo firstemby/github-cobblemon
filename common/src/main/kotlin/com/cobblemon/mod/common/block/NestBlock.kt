@@ -11,7 +11,9 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
+import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
@@ -110,7 +112,21 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     }
 
 
-    override fun codec(): MapCodec<out BaseEntityBlock> {
-        TODO("Not yet implemented")
+    override fun codec(): MapCodec<NestBlock> {
+        return RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                    Codec.STRING.fieldOf("variant").forGetter { block -> block.variant.id }, // Serializes the variant
+                    Codec.BOOL.optionalFieldOf("waterlogged", false).forGetter { block ->
+                        block.defaultBlockState().getValue(BlockStateProperties.WATERLOGGED)
+                    }
+            ).apply(instance) { variant, waterlogged ->
+                val block = NestBlock(NestVariant.valueOf(variant.uppercase()), Properties.of().noOcclusion())
+                block.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, waterlogged)
+                block
+            }
+        }
     }
+
+
+
 }

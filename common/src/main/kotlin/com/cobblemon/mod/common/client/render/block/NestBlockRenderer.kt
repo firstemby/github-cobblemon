@@ -4,10 +4,8 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
-import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
@@ -24,53 +22,36 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
             light: Int,
             overlay: Int
     ) {
-        // Log whether this is running on the client or server
+        // Ensure the renderer runs only on the client
         val isClientSide = entity.level?.isClientSide ?: false
-        if (isClientSide) {
-            println("NestBlockRenderer: Running on the CLIENT side.")
-        } else {
-            println("NestBlockRenderer: Running on the SERVER side.")
-        }
+        if (!isClientSide) return
 
-        val egg = entity.getEgg()
-        if (egg == null) {
-            println("No egg found in NestBlockEntity at ${entity.blockPos}")
-            return
-        } else {
-            println("Rendering egg with species: ${egg.species}")
-        }
+        // Retrieve the egg data
+        val egg = entity.getEgg() ?: return
 
         // Load the egg model
-        var model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]
-        if (model == null) {
-            println("Egg model not found in EggModelRepo!")
-            return
-        }
-        // Load the species-specific texture dynamically
-        var texture = getTextureForSpecies(egg)
-
-        // Force-rendering a Charmander egg for debugging
-        println("DEBUG: Forcing Charmander egg render.")
-        texture = cobblemonResource("textures/egg/charmander_egg.png")
-        model = EggModelRepo.eggModels[cobblemonResource("egg_models/egg")]
+        val model = EggModelRepo.eggModels[cobblemonResource("egg")]
         if (model == null) {
             println("Egg model not found in EggModelRepo!")
             return
         }
 
+        // Dynamically determine the texture for the egg
+        val texture = getTextureForSpecies(egg)
 
-
-        // Push pose stack for proper positioning
+        // Push pose stack for transformations
         matrices.pushPose()
-        matrices.translate(0.5, 0.0, 0.5) // Center the egg in the block space
-        matrices.scale(0.75f, 0.75f, 0.75f) // Scale down the egg slightly for better appearance
 
-        // Render the model with the correct texture
+        // Center, raise, and flip the egg
+        matrices.translate(0.5, 0.4, 0.5) // Move to block center and raise
+        matrices.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180f)) // Flip upside down
+        matrices.scale(1.0f, 1.0f, 1.0f) // Scale down for better appearance
+
+        // Render the egg model with the specified texture
         renderEggModel(model, texture, matrices, vertexConsumers, light, overlay)
 
-        matrices.popPose()
+        matrices.popPose() // Restore the matrix stack
     }
-
 
     private fun renderEggModel(
             model: TexturedModel,
@@ -80,16 +61,16 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
             light: Int,
             overlay: Int
     ) {
-        // Use RenderType to render the model with the correct texture
+        // Use the RenderType to render with the correct texture
         val buffer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
 
         // Bake and render the model
-        val bakedModel = model.createWithUvOverride(false, 0, 0, 64, 64).bakeRoot()
+        val bakedModel = model.createWithUvOverride(false, 0, 0, 64, 16).bakeRoot()
         bakedModel.render(matrices, buffer, light, overlay)
     }
 
     private fun getTextureForSpecies(egg: Egg): ResourceLocation {
-        // Construct the texture path dynamically based on the species
+        // Dynamically construct the texture path based on the species
         return cobblemonResource("textures/egg/${egg.species.path}_egg.png")
     }
 }

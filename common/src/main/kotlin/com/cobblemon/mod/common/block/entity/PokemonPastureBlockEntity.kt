@@ -386,12 +386,12 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
 
                                         val isClientSide = this.level?.isClientSide ?: false
                                         if (isClientSide) {
-                                            println("PokemonPastureBlockEntity: Running on the CLIENT side.")
+                                            //println("PokemonPastureBlockEntity: Running on the CLIENT side.")
                                         } else {
-                                            println("PokemonPastureBlockEntity: Running on the SERVER side.")
+                                            //println("PokemonPastureBlockEntity: Running on the SERVER side.")
                                         }
 
-                                        println("Egg set in NestBlockEntity at ${nestTaken}: ${blockEntity.getEgg()!!.species}")
+                                        //println("Egg set in NestBlockEntity at ${nestTaken}: ${blockEntity.getEgg()!!.species}")
 
                                         level?.getBlockState(nestTaken)?.let { level?.sendBlockUpdated(nestTaken, it, level?.getBlockState(nestTaken)!!, Block.UPDATE_CLIENTS) }
 
@@ -470,7 +470,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 }
                 else
                 {
-                    Cobblemon.LOGGER.warn("Nest with egg at ${it.toString()}")
+                    //Cobblemon.LOGGER.warn("Nest with egg at ${it.toString()}")
                 }
 
             }

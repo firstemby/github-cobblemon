@@ -28,6 +28,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.NbtOps
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.level.Level
@@ -43,9 +46,11 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
      */
     fun setEgg(egg: Egg) {
         this.eggComponent = EggComponent(egg)
-        setChanged()
-        level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
+        setChanged() // Mark the block entity as changed.
+        level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
+        //println("Egg data synchronized to client for NestBlockEntity at $blockPos: $egg")
     }
+
 
     /**
      * Retrieves the EggComponent's Egg data.
@@ -59,6 +64,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
      */
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
+        //println("Saving NestBlockEntity at $blockPos with eggComponent: $eggComponent")
         eggComponent?.let {
             CobblemonItemComponents.EGG_DATA.codec()
                     ?.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, it)
@@ -72,14 +78,28 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
      */
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(tag, registryLookup)
+        //println("Loading NestBlockEntity at $blockPos. EggComponent loaded: $eggComponent")
         if (tag.contains("EggComponent")) {
             eggComponent = CobblemonItemComponents.EGG_DATA.codec()
                     ?.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
                     ?.result()
                     ?.orElse(null)
-            println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
+            //println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
         }
     }
+
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
+        //println("getUpdatePacket called for NestBlockEntity at $blockPos with egg: $eggComponent")
+        return ClientboundBlockEntityDataPacket.create(this)
+    }
+
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
+        val tag = saveWithoutMetadata(registryLookup)
+        //println("getUpdateTag called for NestBlockEntity at $blockPos with tag: $tag")
+        return tag
+    }
+
+
 
     fun dropEgg(
             state: BlockState,
@@ -181,6 +201,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
     companion object {
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
+            //println("Ticking NestBlockEntity at $pos. Egg state: ${blockEntity.getEgg()}")
+
             // Retrieve the Egg from the EggComponent
             val egg = blockEntity.getEgg() ?: return@BlockEntityTicker
 
@@ -192,7 +214,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     blockEntity.hatchPokemon(state, world, pos, nearestPlayer)
                 } else {
                     // Handle edge case if no ServerPlayer is nearby
-                    println("No ServerPlayer found near NestBlockEntity at $pos to hatch the egg.")
+                    //println("No ServerPlayer found near NestBlockEntity at $pos to hatch the egg.")
                 }
 
                 blockEntity.setChanged()
