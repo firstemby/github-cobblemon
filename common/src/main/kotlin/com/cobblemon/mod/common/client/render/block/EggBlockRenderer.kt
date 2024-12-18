@@ -21,7 +21,7 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
             light: Int,
             overlay: Int
     ) {
-        entity.egg?.let { egg ->
+        entity.getEgg()?.let { egg ->
             matrices.pushPose()
 
             // Get the texture based on species

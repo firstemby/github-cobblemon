@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.item.components.HeldItemCapableComponent
 import com.cobblemon.mod.common.item.components.PokemonItemComponent
 import com.cobblemon.mod.common.item.RodBaitComponent
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
@@ -38,10 +39,11 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .networkSynchronized(RodBaitComponent.PACKET_CODEC)
         .build())
 
-    val EGG_DATA: DataComponentType<Egg> = DataComponentType.builder<Egg>()
-            .persistent(Egg.CODEC) // For saving/loading
-            .networkSynchronized(Egg.STREAM_CODEC) // For network serialization
-            .build()
+    val EGG_DATA: DataComponentType<EggComponent> = create("egg", DataComponentType.builder<EggComponent>()
+            .persistent(EggComponent.CODEC) // For saving/loading
+            .networkSynchronized(EggComponent.PACKET_CODEC) // For network synchronization
+            .build())
+
 
 
 

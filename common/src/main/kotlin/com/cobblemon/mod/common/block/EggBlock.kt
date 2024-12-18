@@ -36,9 +36,11 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
     ) {
         val entity = level.getBlockEntity(blockPos) as? EggBlockEntity
 
-        // Retrieve the EGG_DATA component directly
-        itemStack.get(CobblemonItemComponents.EGG_DATA)?.let { eggData ->
-            entity?.setEggData(eggData) // Pass the Egg directly to the block entity
+        // Retrieve the EGG_COMPONENT from the item stack and set it in the block entity
+        val eggComponent = itemStack.get(CobblemonItemComponents.EGG_DATA)
+        eggComponent?.let { component ->
+            entity?.setEggData(component.egg) // Pass the Egg data to the block entity
+            println("Set egg in EggBlockEntity: ${component.egg.species}")
         }
 
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)

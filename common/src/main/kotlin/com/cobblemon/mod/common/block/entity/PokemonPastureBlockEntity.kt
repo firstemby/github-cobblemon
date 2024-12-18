@@ -377,13 +377,22 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                     val blockEntity = level?.getBlockEntity(nestTaken) as? NestBlockEntity
                                     if (blockEntity != null && breedResult.pokemon != null) {
                                         //Most params here need to be gotten from the form when implemented properly
-                                        blockEntity.egg = Egg(
+                                        blockEntity.setEgg( Egg(
                                                 species = breedResult.pokemon!!.species.resourceIdentifier, // Species
                                                 parentOneUUID = motherPoke.uuid, // Mother UUID
                                                 parentTwoUUID = fatherPoke.uuid, // Father UUID
                                                 timeToHatch = 20 * 10 // 10 seconds hatch time
-                                        )
-                                        blockEntity.setChanged()
+                                        ))
+
+                                        val isClientSide = this.level?.isClientSide ?: false
+                                        if (isClientSide) {
+                                            println("NestBlockRenderer: Running on the CLIENT side.")
+                                        } else {
+                                            println("NestBlockRenderer: Running on the SERVER side.")
+                                        }
+
+                                        println("Egg set in NestBlockEntity at ${nestTaken}: ${blockEntity.getEgg()!!.species}")
+
                                         level?.getBlockState(nestTaken)?.let { level?.sendBlockUpdated(nestTaken, it, level?.getBlockState(nestTaken)!!, Block.UPDATE_CLIENTS) }
 
                                         // remove the nest used from the nest consideration pool
@@ -456,7 +465,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             if (state?.block is NestBlock) {
                 val entity = level?.getBlockEntity(it) as NestBlockEntity
                 //Cobblemon.LOGGER.warn("Nest at ${it.toString()}")
-                if (entity.egg == null) {
+                if (entity.getEgg() == null) {
                     res.add(it)
                 }
                 else
