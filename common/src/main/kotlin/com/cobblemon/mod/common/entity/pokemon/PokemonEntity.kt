@@ -745,6 +745,7 @@ open class PokemonEntity(
         goalSelector.addGoal(4, PokemonMoveIntoFluidGoal(this))
         goalSelector.addGoal(5, SleepOnTrainerGoal(this))
         goalSelector.addGoal(5, WildRestGoal(this))
+        goalSelector.addGoal(5, PokemonHideInGrassGoal(this))
 
         if (pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED) != null) {
             goalSelector.addGoal(5, EatBlockGoal(this))
