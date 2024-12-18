@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
+import com.cobblemon.mod.common.api.events.pokemon.EVsGainedEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
@@ -272,7 +273,9 @@ open class PokemonBattle(
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
-                            pokemon.evs.add(stat, amount)
+                            CobblemonEvents.EVS_GAINED.post(EVsGainedEvent(pokemon, stat, amount)) {
+                                pokemon.evs.add(stat, it.value)
+                            }
                         }
 
                     }

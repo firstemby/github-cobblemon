@@ -19,8 +19,10 @@ import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.CobblemonEvents.ABILITY_UPDATED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.FRIENDSHIP_UPDATED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
+import com.cobblemon.mod.common.api.events.CobblemonEvents.TERATYPE_UPDATED
 import com.cobblemon.mod.common.api.events.pokemon.*
 import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
@@ -343,10 +345,15 @@ open class Pokemon : ShowdownIdentifiable {
     val types: Iterable<ElementalType>
         get() = form.types
 
+    /**
+     * The teratype of this Pokémon.
+     */
     var teraType: TeraType = TeraTypes.forElementalType(this.primaryType)
         set(value) {
-            field = value
-            _teraType.emit(value)
+            TERATYPE_UPDATED.post(TeraTypeUpdatedEvent(this, value)) {
+                field = value
+                _teraType.emit(value)
+            }
         }
 
     var dmaxLevel = 0
@@ -444,10 +451,12 @@ open class Pokemon : ShowdownIdentifiable {
     var ability: Ability = Abilities.DUMMY.create(false)
         // Keep internal for DTO & sync packet
         internal set(value) {
-            if (field != value) {
-                _ability.emit(value)
+            ABILITY_UPDATED.post(PokemonAbilityUpdatedEvent(this, value)) {
+                if (field != value) {
+                    _ability.emit(value)
+                }
+                field = value
             }
-            field = value
         }
 
     val maxHealth: Int
