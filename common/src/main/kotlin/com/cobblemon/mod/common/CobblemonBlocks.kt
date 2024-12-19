@@ -478,6 +478,14 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DRAGON_EGG)))
 
+    @JvmField
+    val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
+        .mapColor(MapColor.COLOR_LIGHT_GRAY)
+        .sound(SoundType.METAL)
+        .strength(2.0F)
+        .noOcclusion()
+    ))
+
     init {
         /**
          * Makes all blocks in array flammable by adding them to FireBlock's flammableRegistry.

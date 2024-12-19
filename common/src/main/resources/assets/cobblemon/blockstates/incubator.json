@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "cobblemon:block/incubator" },
+    "facing=east": { "model": "cobblemon:block/incubator", "y": 90 },
+    "facing=south": { "model": "cobblemon:block/incubator", "y": 180 },
+    "facing=west": { "model": "cobblemon:block/incubator", "y": 270 }
+  }
+}

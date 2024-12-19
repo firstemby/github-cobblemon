@@ -99,6 +99,15 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
         )
 
     @JvmField
+    val INCUBATOR: BlockEntityType<IncubatorBlockEntity> = this.create("incubator",
+        BlockEntityType.Builder.of(
+            ::IncubatorBlockEntity,
+            CobblemonBlocks.INCUBATOR
+        ).build(null)
+    )
+
+
+    @JvmField
     val DISPLAY_CASE: BlockEntityType<DisplayCaseBlockEntity> = this.create("display_case",
         BlockEntityType.Builder.of(::DisplayCaseBlockEntity, CobblemonBlocks.DISPLAY_CASE).build(null)
     )
