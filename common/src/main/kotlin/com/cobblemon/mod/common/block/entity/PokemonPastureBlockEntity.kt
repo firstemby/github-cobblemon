@@ -488,6 +488,11 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         val tethering = tetheredPokemon.find { it.pokemonId == pokemonId } ?: return
         tethering.getPokemon()?.tetheringId = null
         tetheredPokemon.remove(tethering)
+
+        // Recalculate breeding sets after removal
+        breedingSets.clear()
+        tetheredPokemon.forEach { calcBreedingSets(it) }
+
         setChanged()
     }
 
@@ -498,9 +503,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             tetheredPokemon.remove(it)
             unpastured.add(it.pokemonId)
         }
+
+        // Recalculate breeding sets after all removals
+        breedingSets.clear()
+        tetheredPokemon.forEach { calcBreedingSets(it) }
+
         setChanged()
         return unpastured
     }
+
 
     private fun getInRangeViewerCount(world: Level, pos: BlockPos, range: Double = 5.0): Int {
         val box = AABB(
