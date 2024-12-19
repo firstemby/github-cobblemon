@@ -428,18 +428,30 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     fun addIfBreedingPair(monOne: Tethering, monTwo: Tethering) {
-        val tetheredMon = monOne.getPokemon()
-        val mother =  if (tetheredMon?.gender == Gender.FEMALE ||
-            tetheredMon?.species?.nationalPokedexNumber == DITTO_DEX_NUM)
-            monOne
-        else monTwo
-        val father = (if (tetheredMon == mother) monTwo else monOne)
+        val pokemonOne = monOne.getPokemon()
+        val pokemonTwo = monTwo.getPokemon()
+
+        if (pokemonOne == null || pokemonTwo == null) {
+            return // Skip if either Pokémon is null
+        }
+
+        // Ensure distinct Pokémon
+        if (pokemonOne.uuid == pokemonTwo.uuid) {
+            return // Skip if the Pokémon have the same UUID
+        }
+
+        // Determine mother and father based on gender or if Ditto is involved
+        val mother = if (pokemonOne.gender == Gender.FEMALE || pokemonOne.species.nationalPokedexNumber == DITTO_DEX_NUM) monOne else monTwo
+        val father = if (mother == monOne) monTwo else monOne
+
+        // Ensure they can breed
         if (SimpleBreedingLogic.canBreed(mother.getPokemon()!!, father.getPokemon()!!)) {
             val fatherSet: MutableSet<Tethering> = breedingSets.getOrDefault(father, mutableSetOf())
             fatherSet.add(mother)
             breedingSets[father] = fatherSet
         }
     }
+
 
     fun findUnusedNests(): MutableSet<BlockPos> {
         val res = mutableSetOf<BlockPos>()
