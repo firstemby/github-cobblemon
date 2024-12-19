@@ -9,11 +9,17 @@
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.DisplayCaseBlock
+import com.cobblemon.mod.common.block.EggBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
+import com.cobblemon.mod.common.block.entity.EggBlockEntity
+import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.PokedexItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
@@ -22,6 +28,7 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.core.Direction
+import net.minecraft.core.Position
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.*
 import net.minecraft.world.item.component.CustomModelData
@@ -69,27 +76,48 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
          */
 
         matrices.pushPose()
-        matrices.translate(0.5f, 0.4f, 0.5f)
 
-        matrices.scale(posType.scaleX, posType.scaleY, posType.scaleZ)
-        matrices.translate(posType.transX, posType.transY, posType.transZ)
+        try {
+            if (stack.`is`(CobblemonItems.POKEMON_EGG)) {
+                val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA)
+                eggComponent?.egg?.let { egg ->
+                    // Render the egg using the EggRenderHelper
+                    EggRenderHelper.renderEgg(
+                        egg = egg,
+                        matrices = matrices,
+                        vertexConsumers = vertexConsumers,
+                        light = light,
+                        overlay = overlay,
+                        yRot = 0f,
+                        scale = 1f,
+                        translation = Triple(0.5f, 0.6f, 0.5f), // Adjust translation
+                        rotation = Triple(180f, 0f, 0f)           // Adjust rotation
+                    )
+                }
+                return // Exit early after rendering the egg
+            }
 
-        matrices.mulPose(Axis.YP.rotationDegrees(-yRot))
-        matrices.mulPose(Axis.YP.rotationDegrees(posType.rotY))
+            matrices.translate(0.5f, 0.4f, 0.5f)
 
-        Minecraft.getInstance().itemRenderer.renderStatic(
-            stack,
-            ItemDisplayContext.GROUND,
-            light,
-            overlay,
-            matrices,
-            vertexConsumers,
-            entity.level,
-            0
-        )
+            matrices.scale(posType.scaleX, posType.scaleY, posType.scaleZ)
+            matrices.translate(posType.transX, posType.transY, posType.transZ)
 
-        matrices.popPose()
+            matrices.mulPose(Axis.YP.rotationDegrees(-yRot))
+            matrices.mulPose(Axis.YP.rotationDegrees(posType.rotY))
 
+            Minecraft.getInstance().itemRenderer.renderStatic(
+                stack,
+                ItemDisplayContext.GROUND,
+                light,
+                overlay,
+                matrices,
+                vertexConsumers,
+                entity.level,
+                0
+            )
+        } finally {
+            matrices.popPose() // Ensure pose stack is balanced
+        }
     }
     /*
     private fun renderPokemon(
@@ -160,6 +188,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             stack.item is BedItem -> PositioningType.BED
             stack.item is BannerItem -> PositioningType.BANNER
             stack.`is`(CobblemonItemTags.POKE_BALLS) -> PositioningType.POKE_BALL
+            stack.`is`(CobblemonItems.POKEMON_EGG) -> PositioningType.EGG
             stack.item is PokedexItem -> PositioningType.POKEDEX
             stack.item == CobblemonItems.RELIC_COIN_POUCH -> PositioningType.COIN_POUCH
             stack.item == CobblemonItems.PASTURE -> PositioningType.PASTURE
@@ -185,6 +214,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         MOB_HEAD(1f, 1f, 1f, 0f, -0.025f, 0f, 180f),
         SHIELD(1f, 1f, 1f, 0f, -0.045f, 0f, 180f),
         PASTURE(1f, 1f, 1f, 0f, 0.0375f, 0f),
-        COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f)
+        COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f),
+        EGG(1f, 1f, 1f, 0f, 0.285f, 0f)
     }
 }

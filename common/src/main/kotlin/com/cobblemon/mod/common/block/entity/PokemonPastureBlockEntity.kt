@@ -325,52 +325,39 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                     // add cooldown to the parents
                                     motherPoke.breedingCooldown = 240
 
-                                    //FIXME: Reimplement or scrap
-                                    /*
-                                    // add heart particles <3 <3 <3
+                                    // Add heart particles <3 <3 <3
                                     val fatherPokemon = father.getPokemon()?.entity
                                     val motherPokemon = mother.getPokemon()?.entity
-                                    // Spawn heart particles for father
+
                                     if (fatherPokemon != null && motherPokemon != null) {
-                                        /*//this.getWorld().addParticle(ParticleTypes.HEART, this.getParticleX(1.0), this.getRandomBodyY() + 0.5, this.getParticleZ(1.0), d, e, f);
-                                        fatherPokemon.getWorld()?.addParticle(ParticleTypes.HEART,
-                                                            fatherPokemon.getParticleX(1.0),
-                                                            fatherPokemon.getRandomBodyY() + 0.5,
-                                                            fatherPokemon.getParticleZ(1.0),
-                                                            0.02 * fatherPokemon.random.nextGaussian(), // X velocity (slight variance)
-                                                            0.02 * fatherPokemon.random.nextGaussian(), // Y velocity (upwards with variance)
-                                                            0.02 * fatherPokemon.random.nextGaussian()) // Z velocity (slight variance))
-
-                                        motherPokemon.getWorld()?.addParticle(ParticleTypes.HEART,
-                                                motherPokemon.getParticleX(1.0),
-                                                motherPokemon.getRandomBodyY() + 0.5,
-                                                motherPokemon.getParticleZ(1.0),
-                                                0.02 * motherPokemon.random.nextGaussian(), // X velocity (slight variance)
-                                                0.02 * motherPokemon.random.nextGaussian(), // Y velocity (upwards with variance)
-                                                0.02 * motherPokemon.random.nextGaussian()) // Z velocity (slight variance))*/
-                                        (level as ServerLevel).addParticle(
-                                                ParticleTypes.HEART,
-                                                fatherPokemon.getParticleX(1.0), fatherPokemon.getRandomBodyY() + 0.5, fatherPokemon.getParticleZ(1.0), // Slightly raise the Y position for upward effect
-                                                4 + kotlin.random.Random.nextInt(2),
-                                                0.2 * fatherPokemon.random.nextGaussian(), // X velocity (slight variance)
-                                                0.1 * fatherPokemon.random.nextGaussian(), // Y velocity (upwards with variance)
-                                                0.2 * fatherPokemon.random.nextGaussian(), // Z velocity (slight variance)
-                                                0.02 // Speed of particles
+                                        // Spawn heart particles for father
+                                        (level as net.minecraft.server.level.ServerLevel).sendParticles(
+                                            net.minecraft.core.particles.ParticleTypes.HEART,
+                                            fatherPokemon.getRandomX(1.0), // Particle X position with slight randomness
+                                            fatherPokemon.getRandomY() + 0.5, // Slightly raised Y position
+                                            fatherPokemon.getRandomZ(1.0), // Particle Z position with slight randomness
+                                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                                            0.2 * fatherPokemon.random.nextGaussian(), // X velocity with slight variance
+                                            0.1 * fatherPokemon.random.nextGaussian(), // Y velocity with upwards variance
+                                            0.2 * fatherPokemon.random.nextGaussian(), // Z velocity with slight variance
+                                            0.02 // Particle speed
                                         )
-
 
                                         // Spawn heart particles for mother
-                                        (world as ServerWorld).spawnParticles(
-                                                ParticleTypes.HEART,
-                                                motherPokemon.getParticleX(1.0), motherPokemon.getRandomBodyY() + 0.5, motherPokemon.getParticleZ(1.0), // Slightly raise the Y position for upward effect
-                                                4 + kotlin.random.Random.nextInt(2),
-                                                0.2 * motherPokemon.random.nextGaussian(), // X velocity (slight variance)
-                                                0.1 * motherPokemon.random.nextGaussian(), // Y velocity (upwards with variance)
-                                                0.2 * motherPokemon.random.nextGaussian(), // Z velocity (slight variance)
-                                                0.02 // Speed of particles
+                                        (level as net.minecraft.server.level.ServerLevel).sendParticles(
+                                            net.minecraft.core.particles.ParticleTypes.HEART,
+                                            motherPokemon.getRandomX(1.0), // Particle X position with slight randomness
+                                            motherPokemon.getRandomY() + 0.5, // Slightly raised Y position
+                                            motherPokemon.getRandomZ(1.0), // Particle Z position with slight randomness
+                                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                                            0.2 * motherPokemon.random.nextGaussian(), // X velocity with slight variance
+                                            0.1 * motherPokemon.random.nextGaussian(), // Y velocity with upwards variance
+                                            0.2 * motherPokemon.random.nextGaussian(), // Z velocity with slight variance
+                                            0.02 // Particle speed
                                         )
                                     }
-                                    */
+
+
                                     println(breedResult.pokemon)
                                     val nestTaken = nests.random()
                                     val nestStal = level?.getBlockState(nestTaken)

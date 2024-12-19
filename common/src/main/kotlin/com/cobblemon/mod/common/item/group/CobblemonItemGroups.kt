@@ -338,6 +338,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.CAVE_NEST)
         entries.accept(CobblemonItems.NETHER_NEST)
         entries.accept(CobblemonItems.WATER_NEST)
+        entries.accept(CobblemonItems.INCUBATOR)
 
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)

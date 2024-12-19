@@ -399,6 +399,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val NETHER_NEST = blockItem(NestBlock.NestVariant.NETHER.serializedName, CobblemonBlocks.NETHER_NEST)
     val WATER_NEST = blockItem(NestBlock.NestVariant.WATER.serializedName, CobblemonBlocks.WATER_NEST)
 
+    @JvmField
+    val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)
+
     // Medicine
     @JvmField
     val RARE_CANDY = candyItem("rare_candy") { _, pokemon -> pokemon.getExperienceToNextLevel() }
