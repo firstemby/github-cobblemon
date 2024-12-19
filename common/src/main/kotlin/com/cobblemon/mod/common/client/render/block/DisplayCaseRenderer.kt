@@ -215,6 +215,6 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         SHIELD(1f, 1f, 1f, 0f, -0.045f, 0f, 180f),
         PASTURE(1f, 1f, 1f, 0f, 0.0375f, 0f),
         COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f),
-        EGG(1f, 1f, 1f, 0f, 0.285f, 0f)
+        EGG(1f, 1f, 1f, 0f, 1f, 0f)
     }
 }
