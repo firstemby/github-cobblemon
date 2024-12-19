@@ -1,4 +1,3 @@
-// IncubatorRenderer.kt
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
@@ -27,9 +26,8 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         val isClientSide = entity.level?.isClientSide ?: false
         if (!isClientSide) return
 
-        // Retrieve the egg data
-        val eggTag = entity.getEgg() ?: return
-        val species = eggTag.getString("species")
+        // Retrieve the egg data from the entity
+        val egg = entity.getEgg() ?: return
 
         // Load the egg model
         val model = EggModelRepo.eggModels[cobblemonResource("egg")]
@@ -39,7 +37,7 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         }
 
         // Dynamically determine the texture for the egg
-        val texture = getTextureForSpecies(species)
+        val texture = getTextureForSpecies(egg)
 
         // Push pose stack for transformations
         matrices.pushPose()
@@ -71,8 +69,8 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         bakedModel.render(matrices, buffer, light, overlay)
     }
 
-    private fun getTextureForSpecies(species: String): ResourceLocation {
+    private fun getTextureForSpecies(egg: Egg): ResourceLocation {
         // Dynamically construct the texture path based on the species
-        return cobblemonResource("textures/egg/${species}_egg.png")
+        return cobblemonResource("textures/egg/${egg.species.path}_egg.png")
     }
 }

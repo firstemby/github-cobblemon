@@ -24,6 +24,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     companion object {
         val FACING: DirectionProperty = DirectionProperty.create("facing", { dir -> dir.axis.isHorizontal })
+        val CODEC: MapCodec<IncubatorBlock> = simpleCodec(::IncubatorBlock) as MapCodec<IncubatorBlock>
     }
 
     init {
@@ -61,7 +62,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         hand: InteractionHand,
         hit: BlockHitResult
     ): ItemInteractionResult {
-        val entity = world.getBlockEntity(pos) as? IncubatorBlockEntity ?: return InteractionResult.FAIL
+        val entity = world.getBlockEntity(pos) as? IncubatorBlockEntity ?: return ItemInteractionResult.FAIL
         return entity.updateEgg(player, hand)
     }
 
@@ -75,14 +76,9 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         return super.playerWillDestroy(level, pos, state, player)
     }
 
-
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
         return CODEC
-    }
-
-    companion object {
-        val CODEC = simpleCodec(::IncubatorBlock)
     }
 }
