@@ -17,11 +17,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.pokemon.IVs
-import com.cobblemon.mod.common.pokemon.Nature
-import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries
@@ -54,7 +50,7 @@ interface BreedingLogic {
         val newPoke = EggPokemon(
             ivs,
             nature,
-            form.species,
+            getPreEvoSpecies(form.species),
             form,
             ability,
             moveset,
@@ -76,6 +72,21 @@ interface BreedingLogic {
      */
     fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
         return true
+    }
+
+    /**
+     * Determines the base pre-evolution of a [Pokemon] species.
+     *
+     * @param species The Species of [Pokemon]
+     * @return The base pre-evolution Species of [Pokemon]
+     * @author Plastered_Crab
+     */
+    private fun getPreEvoSpecies(species: Species): Species {
+        var currentSpecies = species
+        while (currentSpecies.preEvolution != null) {
+            currentSpecies = currentSpecies.preEvolution!!.species
+        }
+        return currentSpecies
     }
 
     /**

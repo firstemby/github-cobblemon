@@ -386,15 +386,22 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) != 0) {
 
                     val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+
                     if (parent1 != null && parent2 != null) {
+                        val childResult = BreedingLogicManager.breed(parent1.pokemon,parent2.pokemon)
+
                         // Create an egg with the parents
-                        val randomEgg = Egg(
-                            species = parent1.pokemon.species.resourceIdentifier,
-                            parentOneUUID = parent1.uuid, // Parent one UUID
-                            parentTwoUUID = parent2.uuid, // Parent two UUID
-                            timeToHatch = 2000 * 10 // 10 seconds hatch time
-                        )
-                        blockEntity.setEgg(randomEgg)
+                        val egg = childResult.pokemon?.species?.let {
+                            Egg(
+                                    species = it.resourceIdentifier,
+                                    parentOneUUID = parent1.uuid, // Parent one UUID
+                                    parentTwoUUID = parent2.uuid, // Parent two UUID
+                                    timeToHatch = 2000 * 10 // 10 seconds hatch time
+                            )
+                        }
+                        if (egg != null) {
+                            blockEntity.setEgg(egg)
+                        }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                     }
 
