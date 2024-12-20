@@ -231,7 +231,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         pos: BlockPos//,
         //species: PokemonSpecies
     ): Pair<PokemonEntity?,PokemonEntity?> {
-        if (world !is ServerLevel) return null
+        if (world !is ServerLevel) return null to null
 
         // Generate a random offset within the radius
         val randomOffset = {
@@ -384,21 +384,20 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             } else {
                 // Attempt to spawn a random egg in the nest with a small chance
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0) {
-                    val randomSpecies = PokemonSpecies.random()
-                    if (randomSpecies != null) {
-                        val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
-                        if (parent1 != null && parent2 != null) {
-                            // Create an egg with the parents
-                            val randomEgg = Egg(
-                                species = randomSpecies.resourceIdentifier,
-                                parentOneUUID = parent1.uuid, // Parent one UUID
-                                parentTwoUUID = parent2.uuid, // Parent two UUID
-                                timeToHatch = 20 * 10 // 10 seconds hatch time
-                            )
-                            blockEntity.setEgg(randomEgg)
-                            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
-                        }
+
+                    val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+                    if (parent1 != null && parent2 != null) {
+                        // Create an egg with the parents
+                        val randomEgg = Egg(
+                            species = parent1.pokemon.species.resourceIdentifier,
+                            parentOneUUID = parent1.uuid, // Parent one UUID
+                            parentTwoUUID = parent2.uuid, // Parent two UUID
+                            timeToHatch = 2000 * 10 // 10 seconds hatch time
+                        )
+                        blockEntity.setEgg(randomEgg)
+                        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                     }
+
                 }
             }
         }

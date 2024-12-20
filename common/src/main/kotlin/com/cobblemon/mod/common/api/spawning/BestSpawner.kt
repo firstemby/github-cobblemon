@@ -11,14 +11,7 @@ package com.cobblemon.mod.common.api.spawning
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.spawning.condition.*
-import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.GroundedSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.LavafloorSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SeafloorSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SubmergedSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SurfaceSpawningContext
+import com.cobblemon.mod.common.api.spawning.context.*
 import com.cobblemon.mod.common.api.spawning.context.calculators.GroundedSpawningContextCalculator
 import com.cobblemon.mod.common.api.spawning.context.calculators.LavafloorSpawningContextCalculator
 import com.cobblemon.mod.common.api.spawning.context.calculators.SeafloorSpawningContextCalculator
@@ -94,6 +87,7 @@ object BestSpawner {
         SpawningCondition.register(SurfaceSpawningCondition.NAME, SurfaceSpawningCondition::class.java)
         SpawningCondition.register(SeafloorSpawningCondition.NAME, SeafloorSpawningCondition::class.java)
         SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition::class.java)
+        SpawningCondition.register(NestSpawningCondition.NAME, NestSpawningCondition::class.java)
 
         LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
         SpawningContextCalculator.register(GroundedSpawningContextCalculator)
@@ -108,6 +102,7 @@ object BestSpawner {
         SpawningContext.register(name = "submerged", clazz = SubmergedSpawningContext::class.java, defaultCondition = SubmergedSpawningCondition.NAME)
         SpawningContext.register(name = "surface", clazz = SurfaceSpawningContext::class.java, defaultCondition = SurfaceSpawningCondition.NAME)
         SpawningContext.register(name = "fishing", clazz = FishingSpawningContext::class.java, defaultCondition = FishingSpawningCondition.NAME)
+        SpawningContext.register(name = "nest", clazz = NestSpawningContext::class.java, defaultCondition = NestSpawningCondition.NAME)
 
         LOGGER.info("Loaded ${SpawningContext.contexts.size} spawning context types.")
 

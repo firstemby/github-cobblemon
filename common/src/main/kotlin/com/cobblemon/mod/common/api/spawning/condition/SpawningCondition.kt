@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.condition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.spawning.MoonPhaseRange
 import com.cobblemon.mod.common.api.spawning.TimeRange
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.util.Merger
 import com.cobblemon.mod.common.util.math.orMax
