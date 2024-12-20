@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
@@ -28,6 +29,7 @@ import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
@@ -228,10 +230,13 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         // todo WHY WON'T THEY CRY :(
         // Trigger cry animation
-        spawnedEntity.cry()
+        afterOnServer(seconds = 1.0f) {
+            spawnedEntity.cry()
+        }
 
         // If party has space, add Pokémon to the party
         if (playerParty.getFirstAvailablePosition() != null){
+            playerParty.add(hatchedPokemon)
             player.displayClientMessage("The Pokémon was added to your party!".green(), true)
         }
 
