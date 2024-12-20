@@ -59,9 +59,6 @@
         {
             "id": "charizard-4",
             "pokemon": "charizard",
-            "presets": [
-                "natural"
-            ],
             "biomes": [
                 "minecraft:plains",
                 "minecraft:forest",
@@ -120,7 +117,10 @@
             "context": "nest",
             "bucket": "common",
             "level": "36-53",
-            "weight": 0.4
+            "weight": 0.4,
+            "condition": {
+                "canSeeSky": true
+            }
         }
     ]
 }

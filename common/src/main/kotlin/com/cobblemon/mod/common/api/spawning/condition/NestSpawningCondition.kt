@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.spawning.condition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
 import com.cobblemon.mod.common.api.spawning.context.NestSpawningContext
+import com.cobblemon.mod.common.util.Merger
 import com.cobblemon.mod.common.util.itemRegistry
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.EnchantmentHelper
@@ -35,6 +36,18 @@ class NestSpawningCondition: SpawningCondition<NestSpawningContext>() {
             return false
         }
         return true
+    }
+
+    override fun copyFrom(other: SpawningCondition<*>, merger: Merger) {
+        super.copyFrom(other, merger)
+        if (other is NestSpawningCondition) {
+            neededNearbyBlocks = merger.merge(neededNearbyBlocks, other.neededNearbyBlocks)?.toMutableList()
+        }
+    }
+
+    override fun isValid(): Boolean {
+        val containsNullValues = neededNearbyBlocks != null && neededNearbyBlocks!!.any {it == null}
+        return super.isValid() && !containsNullValues
     }
 
     companion object {

@@ -75,6 +75,7 @@ object SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
         SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(ctxType.defaultCondition)
             ?: throw IllegalStateException("There is no spawning condition registered with the name '${ctxType.defaultCondition}'")
         val detail = registeredSpawnDetail.deserializeDetail(element, ctx)
+        // TODO figure out why are presets not being applied properly to [NestSpawningConditions]
         presets.forEach { it.apply(detail) }
         if (detail.bucket.name.isBlank()) {
             throw IllegalStateException("No bucket was specified for spawn: ${detail.id}")
