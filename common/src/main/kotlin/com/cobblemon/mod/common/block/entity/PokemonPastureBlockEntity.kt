@@ -366,8 +366,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                         //Most params here need to be gotten from the form when implemented properly
                                         blockEntity.setEgg( Egg(
                                                 species = breedResult.pokemon!!.species.resourceIdentifier, // Species
-                                                parentOneUUID = motherPoke.uuid, // Mother UUID
-                                                parentTwoUUID = fatherPoke.uuid, // Father UUID
+                                                parentOne = motherPoke, // Mother UUID
+                                                parentTwo = fatherPoke, // Father UUID
                                                 timeToHatch = 20 * 10 // 10 seconds hatch time
                                         ))
 

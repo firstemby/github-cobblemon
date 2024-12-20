@@ -3,6 +3,7 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
-import java.util.UUID
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -19,6 +19,7 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.level.block.Blocks
+import java.util.*
 
 class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.EGG, pos, state) {
     private var eggComponent: EggComponent? = null
@@ -29,16 +30,16 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         val CODEC: Codec<EggBlockEntity> = RecordCodecBuilder.create { instance ->
             instance.group(
                     ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it.getEgg()?.species ?: cobblemonResource("unknown") },
-                    CodecUtils.UUID_CODEC.optionalFieldOf("parentOneUUID", UUID.randomUUID()).forGetter { it.getEgg()?.parentOneUUID ?: UUID.randomUUID() },
-                    CodecUtils.UUID_CODEC.optionalFieldOf("parentTwoUUID", UUID.randomUUID()).forGetter { it.getEgg()?.parentTwoUUID ?: UUID.randomUUID() },
+                    Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { Optional.ofNullable(it.getEgg()?.parentOne) },
+                    Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { Optional.ofNullable(it.getEgg()?.parentTwo) },
                     Codec.INT.optionalFieldOf("timeToHatch", 0).forGetter { it.getEgg()?.timeToHatch ?: 0 }
-            ).apply(instance) { species, parentOneUUID, parentTwoUUID, timeToHatch ->
+            ).apply(instance) { species, parentOneOpt, parentTwoOpt, timeToHatch ->
                 EggBlockEntity(BlockPos(0, 0, 0), Blocks.AIR.defaultBlockState()).apply {
                     setEgg(
                             Egg(
                                     species = species,
-                                    parentOneUUID = parentOneUUID,
-                                    parentTwoUUID = parentTwoUUID,
+                                    parentOne = parentOneOpt.orElse(null),
+                                    parentTwo = parentTwoOpt.orElse(null),
                                     timeToHatch = timeToHatch
                             )
                     )
@@ -59,6 +60,14 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     /**
      * Retrieves the Egg data from the EggComponent.
      */
+    /*fun getEgg(): Egg? {
+        return eggComponent?.egg ?: Egg(
+                species = cobblemonResource("unknown"),
+                parentOne = null,
+                parentTwo = null,
+                timeToHatch = 0
+        )
+    }*/
     fun getEgg(): Egg? {
         return eggComponent?.egg
     }
@@ -77,12 +86,14 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
      */
     override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(tag, registries)
-        eggComponent?.let { component ->
-            EggComponent.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, component)
+        eggComponent?.egg?.let { egg ->
+            Egg.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, egg)
                     .result()
                     ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
         }
     }
+
+
 
     /**
      * Load the EggComponent data manually from NBT.
@@ -90,12 +101,13 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
         if (tag.contains("EggComponent")) {
-            eggComponent = EggComponent.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
+            val egg = Egg.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
                     .result()
                     ?.orElse(null)
-            println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
+            eggComponent = if (egg != null) EggComponent(egg) else null
         }
     }
+
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
         return ClientboundBlockEntityDataPacket.create(this)

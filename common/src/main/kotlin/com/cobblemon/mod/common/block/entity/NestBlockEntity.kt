@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.fishing.NestSpawner
 import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
+import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -52,8 +53,10 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.ticks.TickPriority
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state) {
     var eggComponent: EggComponent? = null
@@ -63,7 +66,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     /**
      * Sets the EggComponent and synchronizes it.
      */
-    fun setEgg(egg: Egg) {
+    fun setEgg(egg: Egg?) {
         this.eggComponent = EggComponent(egg)
         setChanged() // Mark the block entity as changed.
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
@@ -137,10 +140,11 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         world.addFreshEntity(itemEntity)
 
         // Clear the egg from the nest
-        eggComponent = null
+        setEgg(null)
         setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS) // Notify client
     }
+
 
 
     fun onUse(
@@ -182,41 +186,78 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
 
     fun hatchPokemon(
-        state: BlockState,
-        world: Level,
-        pos: BlockPos,
-        player: ServerPlayer
+            state: BlockState,
+            world: Level,
+            pos: BlockPos,
+            player: ServerPlayer
     ) {
-        /*egg?.let { eggData ->
-            if (!world.isClientSide) {
-                // Retrieve the two parent Pokémon using their UUIDs
-                val parentOne = Cobblemon.storage.getPokemon(eggData.parentOneUUID)
-                val parentTwo = Cobblemon.storage.getPokemon(eggData.parentTwoUUID)
+        val egg = getEgg() ?: return
+        if (world !is ServerLevel) return
 
-                if (parentOne != null && parentTwo != null) {
-                    // Generate the hatched Pokémon using BreedingLogicManager
-                    val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
-                    val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
+        val parentOne = egg.parentOne
+        val parentTwo = egg.parentTwo
 
-                    hatchedPokemon?.let { newPokemon ->
-                        val player = Cobblemon.storage.getPartyOwner(this)?.let { world.getPlayerByUUID(it) }
-                        player?.let {
-                            val party = Cobblemon.storage.getParty(it.uuid)
-                            party.add(newPokemon)
-                        }
+        if (parentOne == null || parentTwo == null) {
+            player.displayClientMessage("Hatching failed: Parent Pokémon not found.".red(), true)
+            return
+        }
 
-                        world.playSound(null, pos, SoundEvents.CHICKEN_EGG, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
-                    }
-                }
+        val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
+        val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
 
-                egg = null
-                setChanged()
-                world.sendBlockUpdated(pos, blockState, blockState, Block.UPDATE_CLIENTS)
+        if (hatchedPokemon == null) {
+            player.displayClientMessage("Hatching failed: Unable to generate Pokémon.".red(), true)
+            return
+        }
+
+        val playerParty = Cobblemon.storage.getParty(player)
+        val playerPC = Cobblemon.storage.getPC(player)
+
+        // If PC is full, prevent hatching
+        // todo find maybe a better way to check if PC is full
+        if (playerPC.getFirstAvailablePosition() == null) {
+            player.displayClientMessage("Hatching failed: Your PC is full.".red(), true)
+            return
+        }
+
+        // Spawn the Pokémon entity at the egg's position
+        val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
+            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+            world.addFreshEntity(this)
+        }
+
+        // todo WHY WON'T THEY CRY :(
+        // Trigger cry animation
+        spawnedEntity.cry()
+
+        // If party has space, add Pokémon to the party
+        if (playerParty.getFirstAvailablePosition() != null){
+            player.displayClientMessage("The Pokémon was added to your party!".green(), true)
+        }
+
+        // If party is full but PC has space, add to PC and recall Pokémon
+        else if (playerPC.add(hatchedPokemon)) {
+            player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
+
+            // Schedule recall animation
+            spawnedEntity.after(seconds = 3.0f) {
+                spawnedEntity.recallWithAnimation()
             }
-        }*/
 
+            /*// Remove the Pokémon entity after recall
+            spawnedEntity.after(seconds = 4.0f) {
+                spawnedEntity.remove(Entity.RemovalReason.DISCARDED)
+            }*/
+        }
 
+        // Clear the egg from the nest and update the block entity
+        setEgg(null)
+        setChanged()
+        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }
+
+
+
 
     /**
      * Spawns a Pokémon of the given species around the specified position.
@@ -366,7 +407,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     val nearestPlayer = world.getNearestPlayer(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 10.0, false)
 
                     if (nearestPlayer is ServerPlayer) {
-                        blockEntity.hatchPokemon(state, world, pos, nearestPlayer)
+                        // todo Crab Note: I removed this as it was auto-hatching eggs as soon as you got near them
+                        //blockEntity.hatchPokemon(state, world, pos, nearestPlayer)
                     }
 
                     blockEntity.setChanged()
@@ -394,9 +436,9 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                         val egg = childResult.pokemon?.species?.let {
                             Egg(
                                     species = it.resourceIdentifier,
-                                    parentOneUUID = parent1.uuid, // Parent one UUID
-                                    parentTwoUUID = parent2.uuid, // Parent two UUID
-                                    timeToHatch = 2000 * 10 // 10 seconds hatch time
+                                    parentOne = parent1.pokemon, // Parent one UUID
+                                    parentTwo = parent2.pokemon, // Parent two UUID
+                                    timeToHatch = 20 * 10 // 10 seconds hatch time
                             )
                         }
                         if (egg != null) {

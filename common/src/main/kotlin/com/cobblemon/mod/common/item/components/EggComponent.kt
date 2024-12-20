@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation
 /**
  * A component that stores the [Egg] data.
  */
-class EggComponent(val egg: Egg) {
+class EggComponent(val egg: Egg?) {
 
     companion object {
         // Codec for saving/loading the component (serialization)

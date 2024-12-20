@@ -11,7 +11,9 @@ package com.cobblemon.mod.common.api.pokemon.breeding
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -25,22 +27,33 @@ import java.util.*
 
 data class Egg(
         val species: ResourceLocation, // Species of the Pokémon
-        val parentOneUUID: UUID,       // First parent's UUID
-        val parentTwoUUID: UUID,       // Second parent's UUID
+        val parentOne: Pokemon?,       // First parent's UUID
+        val parentTwo: Pokemon?,       // Second parent's UUID
         var timeToHatch: Int           // Time in ticks to hatch
 ) {
 
     companion object {
-        val CODEC: Codec<Egg> = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<Egg?> = RecordCodecBuilder.create { instance ->
             instance.group(
-                    ResourceLocation.CODEC.fieldOf("species").forGetter { it.species },
-                    CodecUtils.UUID_CODEC.fieldOf("parentOneUUID").forGetter { it.parentOneUUID },
-                    CodecUtils.UUID_CODEC.fieldOf("parentTwoUUID").forGetter { it.parentTwoUUID },
-                    Codec.INT.fieldOf("timeToHatch").forGetter { it.timeToHatch }
-            ).apply(instance, ::Egg)
+                    ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it?.species ?: cobblemonResource("unknown") },
+                    Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { it?.parentOne?.let { Optional.of(it) } ?: Optional.empty() },
+                    Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { it?.parentTwo?.let { Optional.of(it) } ?: Optional.empty() },
+                    Codec.INT.optionalFieldOf("timeToHatch", 0).forGetter { it?.timeToHatch ?: 0 }
+            ).apply(instance) { species, parentOneOpt, parentTwoOpt, timeToHatch ->
+                if (species != cobblemonResource("unknown") || timeToHatch != 0 || parentOneOpt.isPresent || parentTwoOpt.isPresent) {
+                    Egg(
+                            species = species,
+                            parentOne = parentOneOpt.orElse(null),
+                            parentTwo = parentTwoOpt.orElse(null),
+                            timeToHatch = timeToHatch
+                    )
+                } else {
+                    null // Represents no egg.
+                }
+            }
         }
 
-        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Egg> = StreamCodec.of(
+        /*val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Egg> = StreamCodec.of(
                 { buf, egg -> // Write Egg to buffer
                     buf.writeResourceLocation(egg.species)
                     buf.writeUUID(egg.parentOneUUID)
@@ -55,15 +68,15 @@ data class Egg(
                             timeToHatch = buf.readInt()
                     )
                 }
-        )
+        )*/
     }
 
 
 
     fun asItemStack(blockEntityNbt: CompoundTag): ItemStack {
         val stack = CobblemonBlocks.EGG.asItem().defaultInstance
-        //FIXME: Use properties
-        //BlockItem.setBlockEntityNbt(stack, CobblemonBlockEntities.EGG, blockEntityNbt)
+        // FIXME: Use properties
+        // BlockItem.setBlockEntityNbt(stack, CobblemonBlockEntities.EGG, blockEntityNbt)
         return stack
     }
 }
