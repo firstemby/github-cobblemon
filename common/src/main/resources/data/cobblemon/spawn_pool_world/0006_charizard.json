@@ -40,6 +40,21 @@
                     "#cobblemon:nether/is_basalt"
                 ]
             }
+        },
+        {
+            "id": "charizard-3",
+            "pokemon": "charizard",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "nest",
+            "bucket": "common",
+            "level": "36-53",
+            "weight": 0.4,
+            "condition": {
+                "canSeeSky": true
+            }
         }
     ]
 }

@@ -220,6 +220,4 @@ class FishingSpawnCause(
         }
         return super.affectWeight(detail, ctx, weight)
     }
-
-
 }

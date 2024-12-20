@@ -19,7 +19,10 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
+import com.cobblemon.mod.common.api.spawning.fishing.NestSpawner
+import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -227,7 +230,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         world: Level,
         pos: BlockPos//,
         //species: PokemonSpecies
-    ): PokemonEntity? {
+    ): Pair<PokemonEntity?,PokemonEntity?> {
         if (world !is ServerLevel) return null
 
         // Generate a random offset within the radius
@@ -238,38 +241,40 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         // todo Use Spawn files
         // todo CHANGE THIS! We probably want a brand new spawner similar to the fishing spawner
-        /*val spawner = BestSpawner.spawnerManagers[0].spawners[0]
+        val spawner = BestSpawner.nestSpawner
 
         val buckets = Cobblemon.bestSpawner.config.buckets
 
         val chosenBucket = chooseSpawnBucket(buckets)
 
-        val spawnCause = SpawnCause(
+        val spawnCause = NestSpawnCause(
             spawner = spawner,
             bucket = chosenBucket,
             entity = null
         )
 
-        val result = spawner.run(spawnCause, level() as ServerLevel, position().toBlockPos())
-
-        //val result = spawner.run(spawnCause, level, blockPos)
+        //
+        val result = spawner.run(spawnCause, level as ServerLevel, spawnPos)
 
         var spawnedPokemon: PokemonEntity? = null
-        val resultingSpawn = result?.get()*/
+        var partnerPokemon: PokemonEntity? = null
+        val resultingSpawn = result?.get()
 
-        // Create the entity and set its position
+        if (resultingSpawn is EntitySpawnResult) {
+            for (entity in resultingSpawn.entities) {
+                // we can query the spawned pokemon here
+                spawnedPokemon = (entity as PokemonEntity)
 
-        // Ensure level is a ServerLevel
-        if (level !is ServerLevel) {
-            println("Error: Level is not a ServerLevel.")
-            return null
+                // spawn a partner pokemon also in a random position
+                partnerPokemon = this.spawnPartnerPokemon(world, pos, spawnedPokemon)
+
+                // CRAB IDEA: todo maybe some grass particles? as if they appeared from the grass or forest?
+
+
+            }
         }
 
-        val pokemonEntity = PokemonEntity(world, Pokemon())
-        pokemonEntity.setPos(spawnPos.x + 0.5, spawnPos.y.toDouble() + 0.5, spawnPos.z + 0.5)
-
-        // Add the entity to the world
-        return if (world.addFreshEntity(pokemonEntity)) pokemonEntity else null
+        return spawnedPokemon to partnerPokemon
     }
 
     fun spawnPartnerPokemon(
@@ -316,10 +321,6 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         // Add the partner to the world
         return if (world.addFreshEntity(partnerPokemonEntity)) partnerPokemonEntity else null
     }
-
-
-
-
 
     fun chooseSpawnBucket(buckets: List<SpawnBucket>): SpawnBucket {
         val baseIncreases = listOf(2.5F, 1.0F, 0.6F)  // Base increases for the first three buckets beyond the first
@@ -385,23 +386,17 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0) {
                     val randomSpecies = PokemonSpecies.random()
                     if (randomSpecies != null) {
-                        // Spawn two Pokémon of the same species
-                        val parentOne = blockEntity.spawnPokemon(world, pos)//, randomSpecies, true)
-                        if (parentOne != null) {
-                            // Spawn the partner Pokémon
-                            val parentTwo = blockEntity.spawnPartnerPokemon(world as ServerLevel, pos, parentOne)
-
-                            if (parentTwo != null) {
-                                // Create an egg with the parents
-                                val randomEgg = Egg(
-                                    species = randomSpecies.resourceIdentifier,
-                                    parentOneUUID = parentOne.uuid, // Parent one UUID
-                                    parentTwoUUID = parentTwo.uuid, // Parent two UUID
-                                    timeToHatch = 20 * 10 // 10 seconds hatch time
-                                )
-                                blockEntity.setEgg(randomEgg)
-                                world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
-                            }
+                        val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+                        if (parent1 != null && parent2 != null) {
+                            // Create an egg with the parents
+                            val randomEgg = Egg(
+                                species = randomSpecies.resourceIdentifier,
+                                parentOneUUID = parent1.uuid, // Parent one UUID
+                                parentTwoUUID = parent2.uuid, // Parent two UUID
+                                timeToHatch = 20 * 10 // 10 seconds hatch time
+                            )
+                            blockEntity.setEgg(randomEgg)
+                            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                         }
                     }
                 }

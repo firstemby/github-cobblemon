@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
+import com.cobblemon.mod.common.api.spawning.fishing.NestSpawner
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
@@ -82,6 +83,7 @@ object BestSpawner {
     val spawnerManagers = mutableListOf<SpawnerManager>(CobblemonWorldSpawnerManager)
     var defaultPokemonDespawner: Despawner<PokemonEntity> = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
     lateinit var fishingSpawner: FishingSpawner
+    lateinit var nestSpawner: NestSpawner
 
     fun loadConfig() {
         LOGGER.info("Starting the Best Spawner...")
@@ -122,5 +124,6 @@ object BestSpawner {
     fun onServerStarted() {
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
+        nestSpawner = NestSpawner()
     }
 }
