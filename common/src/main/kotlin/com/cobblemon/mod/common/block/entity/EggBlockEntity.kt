@@ -15,6 +15,9 @@ import java.util.UUID
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.level.block.Blocks
 
 class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.EGG, pos, state) {
@@ -47,7 +50,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     /**
      * Sets the egg data and notifies the client.
      */
-    fun setEggData(egg: Egg) {
+    fun setEggData(egg: Egg?) {
         this.eggComponent = EggComponent(egg)
         setChanged()
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
@@ -63,7 +66,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     /**
      * Sets the EggComponent and synchronizes with the client.
      */
-    fun setEgg(egg: Egg) {
+    fun setEgg(egg: Egg?) {
         this.eggComponent = EggComponent(egg)
         setChanged()
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
@@ -93,4 +96,14 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
             println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
         }
     }
+
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
+        return ClientboundBlockEntityDataPacket.create(this)
+    }
+
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
+        val tag = saveWithoutMetadata(registryLookup)
+        return tag
+    }
+
 }
