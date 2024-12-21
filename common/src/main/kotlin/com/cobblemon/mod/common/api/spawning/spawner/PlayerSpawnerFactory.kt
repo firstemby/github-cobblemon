@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.RestrictedSpawnBlocksInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.rules.SpawnRule
+import com.cobblemon.mod.common.influences.RepelInfluence
 import com.cobblemon.mod.common.util.mutableLazy
 import net.minecraft.server.level.ServerPlayer
 
@@ -44,6 +45,7 @@ object PlayerSpawnerFactory {
             it,
             variation = 5
         )
+        RepelInfluence(it)
     }, { RestrictedSpawnBlocksInfluence() })
 
     fun create(spawnerManager: SpawnerManager, player: ServerPlayer): PlayerSpawner {

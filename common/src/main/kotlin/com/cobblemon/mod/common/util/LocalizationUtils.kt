@@ -16,5 +16,7 @@ fun lang(
 ) = "cobblemon.$subKey".asTranslated(*objects)
 
 fun commandLang(subKey: String, vararg objects: Any ) = lang("command.$subKey", *objects)
+
+fun effectLang(subKey: String, vararg objects: Any) = lang("effects.$subKey", *objects)
 fun battleLang(key: String, vararg objects: Any) = lang("battle.$key", *objects)
 fun tooltipLang(modId: String = Cobblemon.MODID, key: String, vararg objects: Any) = "item.$modId.$key.tooltip".asTranslated(*objects)

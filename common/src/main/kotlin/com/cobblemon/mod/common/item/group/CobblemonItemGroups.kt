@@ -365,6 +365,10 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MAX_POTION)
         entries.accept(CobblemonItems.FULL_RESTORE)
 
+        entries.accept(CobblemonItems.REPEL)
+        entries.accept(CobblemonItems.SUPER_REPEL)
+        entries.accept(CobblemonItems.MAX_REPEL)
+
         entries.accept(CobblemonItems.ANTIDOTE)
         entries.accept(CobblemonItems.AWAKENING)
         entries.accept(CobblemonItems.BURN_HEAL)

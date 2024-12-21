@@ -475,6 +475,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val FULL_RESTORE = create("full_restore", PotionItem(PotionType.FULL_RESTORE))
 
     @JvmField
+    val REPEL = create("repel", RepelItem(RepelType.REPEL))
+    @JvmField
+    val SUPER_REPEL = create("super_repel", RepelItem(RepelType.SUPER_REPEL))
+    @JvmField
+    val MAX_REPEL = create("max_repel", RepelItem(RepelType.MAX_REPEL))
+
+    @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
     @JvmField
     val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", Item(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).build()).stacksTo(1)))

@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
+import com.cobblemon.mod.common.effects.CobblemonMobEffects
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
 import com.cobblemon.mod.common.particle.CobblemonParticles
@@ -111,6 +112,7 @@ object CobblemonFabric : CobblemonImplementation {
         CobblemonBlockPredicates.touch()
         CobblemonPlacementModifierTypes.touch()
         CobblemonProcessorTypes.touch()
+
         CobblemonActivities.activities.forEach { Registry.register(BuiltInRegistries.ACTIVITY, cobblemonResource(it.name), it) }
         CobblemonSensors.sensors.forEach { (key, sensorType) -> Registry.register(BuiltInRegistries.SENSOR_TYPE, cobblemonResource(key), sensorType) }
         CobblemonMemories.memories.forEach { (key, memoryModuleType) -> Registry.register(BuiltInRegistries.MEMORY_MODULE_TYPE, cobblemonResource(key), memoryModuleType) }
@@ -211,6 +213,10 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerDataComponents() {
         CobblemonItemComponents.register { identifier, component -> Registry.register(CobblemonItemComponents.registry, identifier, component) }
+    }
+
+    override fun registerEffects() {
+        CobblemonMobEffects.register { identifier, effect -> Registry.register(CobblemonMobEffects.registry, identifier, effect) }
     }
 
     override fun registerEntityDataSerializers() {

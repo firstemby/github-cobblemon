@@ -218,6 +218,15 @@
   "item.cobblemon.full_restore": "Full Restore",
   "item.cobblemon.full_restore.tooltip": "Fully restores the HP and heals any status problems of a Pokémon",
 
+  "item.cobblemon.repel": "Repel",
+  "item.cobblemon.repel.tooltip": "Prevents certain Wild Pokémon from appearing for 100 seconds.",
+  "item.cobblemon.super_repel": "Super Repel",
+  "item.cobblemon.super_repel.tooltip": "Prevents certain Wild Pokémon from appearing for 200 seconds.",
+  "item.cobblemon.max_repel": "Max Repel",
+  "item.cobblemon.max_repel.tooltip": "Prevents certain Wild Pokémon from appearing for 250 seconds.",
+
+  "effect.cobblemon.repel": "Repel",
+
   "item.cobblemon.health_feather": "Health Feather",
   "item.cobblemon.health_feather.tooltip": "Raises the Pokémon's HP EVs by 1",
   "item.cobblemon.muscle_feather": "Muscle Feather",
@@ -1518,6 +1527,9 @@
   "cobblemon.command.pokebox.last_pokemon": "Did not send that Player's last Pokémon to the PC.",
   "cobblemon.command.pokemonrestart": "Cleared %1$s's party and PC.",
   "cobblemon.command.freezepokemon.non_pokemon": "You are not looking at a Pokémon.",
+
+  "cobblemon.effects.errors.has_effect": "You already have this effect applied.",
+  "cobblemon.effects.errors.no_party": "You do not have any Pokémon in your party.",
 
   "advancements.cobblemon.root": "The World of Cobblemon!",
   "advancements.cobblemon.root.description": "Choose a starter Pokémon and set out on a new adventure",

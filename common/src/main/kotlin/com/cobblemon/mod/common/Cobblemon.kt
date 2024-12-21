@@ -176,6 +176,7 @@ object Cobblemon {
         implementation.registerPermissionValidator()
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
+        implementation.registerEffects()
         implementation.registerBlocks()
         implementation.registerItems()
         implementation.registerEntityTypes()
