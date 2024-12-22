@@ -9,36 +9,31 @@
 package com.cobblemon.mod.common.influences
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.effects.CobblemonMobEffects
+import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnAction
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.effects.CobblemonMobEffects
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.Entity
-import kotlin.random.Random
 
 class RepelInfluence(
     val player: ServerPlayer
 ) : SpawningInfluence {
 
-    override fun affectSpawn(entity: Entity) {
-        super.affectSpawn(entity)
+    override fun affectAction(action: SpawnAction<*>) {
+        super.affectAction(action)
 
-        if (entity !is PokemonEntity || !player.hasEffect(CobblemonMobEffects.REPEL)) return
+        if (action !is PokemonSpawnAction || !player.hasEffect(CobblemonMobEffects.REPEL)) return
 
-        val wildLevel = entity.pokemon.level
         val firstNonFaintedPokemon = Cobblemon.storage.getParty(player)
             .firstOrNull { !it.isFainted() } ?: return
 
-        val ownedLevel = firstNonFaintedPokemon.level
+        if (action.props.level == null) {
+            val level = action.detail.getDerivedLevelRange()
+                .filter { it >= firstNonFaintedPokemon.level }
+                .randomOrNull()?.coerceAtLeast(firstNonFaintedPokemon.level)
+                ?: firstNonFaintedPokemon.level
 
-        if (wildLevel < ownedLevel) {
-            entity.pokemon.level = calculateLevel(wildLevel, ownedLevel)
+            action.props.level = level
         }
-    }
-
-    private fun calculateLevel(wildLevel: Int, ownedLevel: Int): Int {
-        var maxLevel = (wildLevel * 0.2).toInt() + wildLevel
-        if (maxLevel <= ownedLevel) maxLevel += 1
-        return Random.nextInt(ownedLevel, maxLevel)
     }
 }
