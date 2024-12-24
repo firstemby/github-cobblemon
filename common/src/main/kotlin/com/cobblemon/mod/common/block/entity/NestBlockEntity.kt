@@ -132,10 +132,17 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     ) {
         val currentEgg = getEgg() ?: return
 
+        // Log before clearing
+        println("Dropping egg: ${currentEgg.species} at $pos")
+
         // Create an ItemStack with the EggComponent
         val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {
             set(CobblemonItemComponents.EGG_DATA, EggComponent(currentEgg))
         }
+
+        // Debug log to verify component data
+        val component = eggItemStack.get(CobblemonItemComponents.EGG_DATA)
+        println("EggComponent on dropped ItemStack: $component")
 
         // Spawn the egg as an entity
         val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItemStack)

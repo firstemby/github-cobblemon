@@ -1,12 +1,16 @@
 package com.cobblemon.mod.common.item.components
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
+import net.minecraft.core.component.DataComponentType
 
 /**
  * A component that stores the [Egg] data.
@@ -17,8 +21,14 @@ class EggComponent(val egg: Egg?) {
         // Codec for saving/loading the component (serialization)
         val CODEC: Codec<EggComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
-                    Egg.CODEC.fieldOf("egg").forGetter { it.egg }
+                Egg.CODEC.fieldOf("egg").forGetter { it.egg }
             ).apply(builder, ::EggComponent)
+        }
+
+        // Utility for interacting with components
+        fun getFrom(stack: ItemStack): EggComponent? {
+            // Use the registered type to fetch the component
+            return stack.components.get(CobblemonItemComponents.EGG_DATA)
         }
 
         // StreamCodec for network synchronization
