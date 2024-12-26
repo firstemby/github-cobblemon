@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -162,7 +163,7 @@ interface Evolution : EvolutionLike {
             evolutionMethod(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.busyLocks.add("evolving")
+            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
             pokemonEntity.navigation.stop()
             pokemonEntity.after(1F) {
                 evolutionAnimation(pokemonEntity)
@@ -172,7 +173,7 @@ interface Evolution : EvolutionLike {
             }
             pokemonEntity.after( seconds = 12F ) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.busyLocks.remove("evolving")
+                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
         }

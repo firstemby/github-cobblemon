@@ -153,6 +153,7 @@ import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
 import kotlin.math.*
+import net.minecraft.util.Mth
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -650,7 +651,7 @@ open class Pokemon : ShowdownIdentifiable {
                     if (!spawnYaw.isFinite()) {
                         spawnYaw = 0.0
                     }
-                    it.entityData.set(PokemonEntity.SPAWN_DIRECTION, spawnYaw.toFloat())
+                    it.entityData.set(PokemonEntity.SPAWN_DIRECTION, Mth.wrapDegrees(spawnYaw.toFloat()))
                 }
                 if (owner != null) {
                     level.playSoundServer(owner.position(), CobblemonSounds.POKE_BALL_THROW, volume = 0.6F)
@@ -993,12 +994,12 @@ open class Pokemon : ShowdownIdentifiable {
     fun clone(newUUID: Boolean = true): Pokemon {
         // NBT is faster, ops type doesn't really matter
         val encoded = CODEC.encodeStart(NbtOps.INSTANCE, this).orThrow
-        if (newUUID) {
-            NbtOps.INSTANCE.set(encoded, DataKeys.POKEMON_UUID, StringTag.valueOf(UUID.randomUUID().toString()))
-            NbtOps.INSTANCE.remove(encoded, DataKeys.TETHERING_ID)
-        }
         val result = CODEC.decode(NbtOps.INSTANCE, encoded).orThrow.first
         result.isClient = this.isClient
+        if (newUUID) {
+            result.uuid = UUID.randomUUID()
+            result.tetheringId = null
+        }
         return result
     }
 

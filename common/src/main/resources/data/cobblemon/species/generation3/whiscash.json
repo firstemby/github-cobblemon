@@ -30,6 +30,20 @@
     "special_defence": 71,
     "speed": 60
   },
+  "forms": [
+    {
+      "name": "Nero",
+      "baseScale": 1.2,
+      "hitbox": {
+        "width": 2.3,
+        "height": 1,
+        "fixed": false
+      },
+      "aspects": [
+        "whiscash_nero"
+      ]
+    }
+  ],
   "catchRate": 75,
   "maleRatio": 0.5,
   "shoulderMountable": false,

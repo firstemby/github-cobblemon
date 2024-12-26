@@ -86,7 +86,8 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
         remainingUseTicks: Int
     ) {
         // Check if the player is interacting with a Pokémon
-        val entity = world.getEntities(user, AABB.ofSize(user.position(), 11.0, 11.0, 11.0))
+        val range = if (user is Player) user.entityInteractionRange() else 5.0
+        val entity = world.getEntities(user, AABB.ofSize(user.position(), range, range, range))
             .filter { user.isLookingAt(it, stepDistance = 0.1F) }
             .minByOrNull { it.distanceTo(user) } as? PokemonEntity?
 

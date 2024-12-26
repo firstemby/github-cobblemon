@@ -35,7 +35,7 @@ class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), Entit
             .flatMap { prov -> prov.entities.filter { test(context, it, isUser = prov is UsersProvider) } }
 
         val soundIdentifier = try {
-            sound?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0.0" } ?: sound
+            sound?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0" } ?: sound
         } catch (e: Exception) {
             sound
         }?.asIdentifierDefaultingNamespace() ?: return skip()

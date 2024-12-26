@@ -10,15 +10,20 @@ package com.cobblemon.mod.common.client.particle
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.api.snowstorm.ParticleEmitterAction
+import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.SnowstormParticle
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.particle.SnowstormParticleOptions
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
+import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.NoRenderParticle
@@ -26,6 +31,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import kotlin.random.Random
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.Level
 
 /**
  * An instance of a bedrock particle effect.
@@ -95,6 +102,56 @@ class ParticleStorm(
 
     companion object {
         var contextStorm: ParticleStorm? = null
+
+        fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, position: Vec3): ParticleStorm {
+            val wrapper = MatrixWrapper()
+            val matrix = PoseStack()
+            matrix.translate(position.x, position.y, position.z)
+            wrapper.updateMatrix(matrix.last().pose())
+            return ParticleStorm(effect, wrapper, world)
+        }
+
+        /**
+         * Creates multiple potentially, because in the case of posable entities if multiple locators match, it repeats the effect.
+         */
+        fun createAtEntity(world: ClientLevel, effect: BedrockParticleOptions, entity: LivingEntity, locator: Collection<String> = emptySet()): List<ParticleStorm> {
+            if (entity is PosableEntity) {
+                val state = entity.delegate as PosableState
+                val locators = locator.firstNotNullOfOrNull { state.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return emptyList()
+                val matrixWrappers = locators.mapNotNull { state.locatorStates[it] }
+                return matrixWrappers.map { matrixWrapper ->
+                    val particleRuntime = MoLangRuntime().setup().setupClient()
+                    particleRuntime.environment.query.addFunction("entity") { state.runtime.environment.query }
+                    ParticleStorm(
+                        effect = effect,
+                        matrixWrapper = matrixWrapper,
+                        world = world,
+                        runtime = particleRuntime,
+                        sourceVelocity = { entity.deltaMovement },
+                        sourceAlive = { !entity.isRemoved },
+                        sourceVisible = { !entity.isInvisible },
+                        entity = entity
+                    )
+                }
+            } else {
+                val matrixWrapper = MatrixWrapper()
+                matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
+                val particleRuntime = MoLangRuntime().setup().setupClient()
+                particleRuntime.environment.query.addFunction("entity") { params -> MoLangFunctions.entityFunctions.flatMap { it(entity).map { it.key to it.value } } }
+                return listOf(
+                    ParticleStorm(
+                        effect = effect,
+                        matrixWrapper = matrixWrapper,
+                        world = world,
+                        runtime = particleRuntime,
+                        sourceVelocity = { entity.deltaMovement },
+                        sourceAlive = { !entity.isRemoved },
+                        sourceVisible = { !entity.isInvisible },
+                        entity = entity
+                    )
+                )
+            }
+        }
     }
 
     val particleEffect = SnowstormParticleOptions(effect)

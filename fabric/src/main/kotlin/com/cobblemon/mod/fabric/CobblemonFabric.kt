@@ -66,13 +66,11 @@ import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -122,6 +120,21 @@ object CobblemonFabric : CobblemonImplementation {
 
             playerEntity.didSleep()
         }
+
+        // This doesn't work (yet) because Fabric does not let us make non-potion ingredients/inputs/outputs.
+        // Throws an exception about the ingredient not being a potion. Maybe one day?
+//        FabricBrewingRecipeRegistryBuilder.BUILD.register { builder ->
+//            BrewingRecipes.recipes.forEach { (input, ingredient, output) ->
+//                if (input is CobblemonPotionIngredient) {
+//                    // This doesn't respect the specific potion types that are considered inputs. This is less than perfect
+//                    // but will at least let JEI/EMI etc fill in the ingredients.
+//                    builder.addContainerRecipe(Items.POTION, ingredient, output)
+//                } else {
+//                    input as CobblemonItemIngredient
+//                    builder.addContainerRecipe(input.item, ingredient, output)
+//                }
+//            }
+//        }
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) {
@@ -185,8 +198,6 @@ object CobblemonFabric : CobblemonImplementation {
         }
 
         CommandRegistrationCallback.EVENT.register(CobblemonCommands::register)
-
-        this.attemptModCompat()
     }
 
     override fun isModInstalled(id: String) = FabricLoader.getInstance().isModLoaded(id)
@@ -306,22 +317,6 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerCompostable(item: ItemLike, chance: Float) {
         CompostingChanceRegistry.INSTANCE.add(item, chance)
-    }
-
-    override fun registerBuiltinResourcePack(id: ResourceLocation, title: Component, activationBehaviour: ResourcePackActivationBehaviour) {
-        val mod = FabricLoader.getInstance().getModContainer(Cobblemon.MODID).get()
-        val resourcePackActivationType = when (activationBehaviour) {
-            ResourcePackActivationBehaviour.NORMAL -> ResourcePackActivationType.NORMAL
-            ResourcePackActivationBehaviour.DEFAULT_ENABLED -> ResourcePackActivationType.DEFAULT_ENABLED
-            ResourcePackActivationBehaviour.ALWAYS_ENABLED -> ResourcePackActivationType.ALWAYS_ENABLED
-        }
-        ResourceManagerHelper.registerBuiltinResourcePack(id, mod, title, resourcePackActivationType)
-    }
-
-    private fun attemptModCompat() {
-        if(isModInstalled("adorn")) {
-            registerBuiltinResourcePack(cobblemonResource("adorncompatibility"), Component.literal("Adorn Compatibility"), ResourcePackActivationBehaviour.ALWAYS_ENABLED)
-        }
     }
 
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {

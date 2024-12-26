@@ -201,7 +201,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         addRenderableOnly(dialoguePortraitWidget)
 
         if (dialogueDTO.dialogueInput.inputType == DialogueInputDTO.InputType.TEXT) {
-            //focusOn(dialogueTextInputWidget)
+            setInitialFocus(dialogueTextInputWidget)
         }
 
         dialogueDTO.currentPageDTO.clientActions.flatMap(String::asExpressions).resolve(runtime)

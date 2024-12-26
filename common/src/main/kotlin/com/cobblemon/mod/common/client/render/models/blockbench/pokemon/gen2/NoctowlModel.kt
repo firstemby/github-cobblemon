@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen2
 
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.WingFlapIdleAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BiWingedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
@@ -61,7 +62,11 @@ class NoctowlModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("noctowl", "ground_idle")
+                WingFlapIdleAnimation(this,
+                    flapFunction = sineFunction(verticalShift = -10F.toRadians(), period = 0.9F, amplitude = 0.8F),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Y_AXIS
+                )
             )
         )
         fly = registerPose(
@@ -70,7 +75,11 @@ class NoctowlModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("noctowl", "ground_idle")
+                WingFlapIdleAnimation(this,
+                    flapFunction = sineFunction(verticalShift = -10F.toRadians(), period = 0.9F, amplitude = 0.8F),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Y_AXIS
+                )
             )
         )
         walk = registerPose(

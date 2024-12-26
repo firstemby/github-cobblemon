@@ -27,7 +27,7 @@
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
-        "q.bedrock('delphox', 'ground_walk_old')"
+        "q.bedrock('delphox', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('delphox', 'blink')"],
       "transformedParts": [

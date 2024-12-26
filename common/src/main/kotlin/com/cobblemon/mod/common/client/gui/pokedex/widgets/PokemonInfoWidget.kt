@@ -595,6 +595,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     }
 
     private fun switchForm(nextIndex: Boolean) {
+        selectedPoseIndex = 0
+
         if (nextIndex) {
             if (selectedFormIndex < visibleForms.lastIndex) selectedFormIndex++
             else selectedFormIndex = 0

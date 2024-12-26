@@ -24,6 +24,8 @@ import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
+import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
+import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -180,7 +182,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     fun chooseAdjustedSpawnBucket(buckets: List<SpawnBucket>, luckOfTheSeaLevel: Int): SpawnBucket {
-        val baseIncreases = listOf(2.5F, 1.0F, 0.6F)  // Base increases for the first three buckets beyond the first
+        val baseIncreases = listOf(2.5F, 0.5F, 0.2F)  // Base increases for the first three buckets beyond the first
         val adjustedWeights = buckets.mapIndexed { index, bucket ->
             if (index == 0) {
                 // Placeholder, will be recalculated
@@ -687,7 +689,12 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         )
 
 
-        val result = spawner.run(spawnCause, level() as ServerLevel, position().toBlockPos())
+        val result = spawner.run(
+            cause = spawnCause,
+            world = level() as ServerLevel,
+            pos = position().toBlockPos(),
+            influences = listOf(PlayerLevelRangeInfluence(player as ServerPlayer, TYPICAL_VARIATION))
+        )
 
         if (result == null) {
         // This has a chance to fail, if the position has no suitability for a fishing context

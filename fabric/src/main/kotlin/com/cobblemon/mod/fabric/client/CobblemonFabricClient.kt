@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.fabric.client
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
+import com.cobblemon.mod.common.ResourcePackActivationBehaviour
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
@@ -20,11 +22,19 @@ import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegist
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
-import com.cobblemon.mod.common.platform.events.*
+import com.cobblemon.mod.common.platform.events.ClientEntityEvent
+import com.cobblemon.mod.common.platform.events.ClientPlayerEvent
+import com.cobblemon.mod.common.platform.events.ClientTickEvent
+import com.cobblemon.mod.common.platform.events.ItemTooltipEvent
+import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.fabric.CobblemonFabric
 import com.mojang.blaze3d.vertex.PoseStack
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
+import java.util.function.Supplier
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
@@ -34,9 +44,15 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.*
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.color.item.ItemColor
@@ -61,9 +77,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executor
-import java.util.function.Supplier
 
 class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation {
     override fun onInitializeClient() {
@@ -83,6 +96,18 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         }
 
         CobblemonFabric.networkManager.registerClientHandlers()
+
+        CobblemonClient.builtinResourcePacks
+            .filter { it.neededMods.all(Cobblemon.implementation::isModInstalled) }
+            .forEach {
+                val mod = FabricLoader.getInstance().getModContainer(Cobblemon.MODID).get()
+                val resourcePackActivationType = when (it.activationBehaviour) {
+                    ResourcePackActivationBehaviour.NORMAL -> ResourcePackActivationType.NORMAL
+                    ResourcePackActivationBehaviour.DEFAULT_ENABLED -> ResourcePackActivationType.DEFAULT_ENABLED
+                    ResourcePackActivationBehaviour.ALWAYS_ENABLED -> ResourcePackActivationType.ALWAYS_ENABLED
+                }
+                ResourceManagerHelper.registerBuiltinResourcePack(cobblemonResource(it.id), mod, it.displayName, resourcePackActivationType)
+            }
 
         ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(object : IdentifiableResourceReloadListener {
             override fun reload(

@@ -40,8 +40,6 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
         this.zo = z
     }
 
-    private var itemStacks: NonNullList<ItemStack>? = null
-    private var lootTable: ResourceKey<LootTable>? = null
     private var inventory = this.emptyInventory()
     private var lootTableId: ResourceKey<LootTable>? = null
     private var lootTableSeed = 0L
@@ -54,9 +52,9 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
         }
     }
 
-    override fun interact(player: Player, hand: InteractionHand?): InteractionResult {
+    override fun interact(player: Player, hand: InteractionHand): InteractionResult {
         if (!player.isSecondaryUseActive) {
-            val interactionResult = super.interact(player, hand!!)
+            val interactionResult = super.interact(player, hand)
             if (interactionResult != InteractionResult.PASS) {
                 return interactionResult
             }

@@ -2005,6 +2005,7 @@
   "cobblemon.battle.end.illusion": "%1$s's illusion wore off!",
   "cobblemon.battle.end.neutralizinggas": "The effects of the neutralizing gas wore off!",
   "cobblemon.battle.end.stockpile": "%1$s's stockpiled effect wore off!",
+  "cobblemon.battle.end.infestation": "%1$s was freed from Infestation!",
 
   "cobblemon.battle.block.sweetveil": "%1$s can't fall asleep due to a veil of sweetness!",
   "cobblemon.battle.block.uproar": "But the uproar kept %1$s awake!",
@@ -2141,9 +2142,15 @@
 
   "cobblemon.battle.terastallize": "%1$s has Terastallized into the %2$s-type!",
 
-  "cobblemon.battle.detailschange.mega": "%1$s is reacting to the Key Stone!",
-  "cobblemon.battle.detailschange.noice": "%1$s transformed!",
-  "cobblemon.battle.detailschange.eiscue": "%1$s transformed!",
+  "cobblemon.battle.formechange.default.permanent": "%1$s transformed into its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary": "%1$s changed to its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary.ended": "%1$s changed to its base form.",
+  "cobblemon.battle.formechange.mega": "%1$s is reacting to the Key Stone!",
+  "cobblemon.battle.formechange.ash": "%1$s became Ash-Greninja!",
+  "cobblemon.battle.formechange.school": "%1$s formed a school!",
+  "cobblemon.battle.formechange.wishiwashi": "%1$s stopped schooling!",
+  "cobblemon.battle.formechange.meteor": "%1$s shielded itself.",
+  "cobblemon.battle.formechange.minior": "%1$s stopped shielding itself.",
 
   "cobblemon.battle.mega": "%1$s has Mega Evolved!",
 
@@ -6774,7 +6781,7 @@
   "cobblemon.ability.schooling": "Schooling",
   "cobblemon.ability.schooling.desc": "When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.",
   "cobblemon.ability.scrappy": "Scrappy",
-  "cobblemon.ability.scrappy.desc": "The Pokémon can hit Ghost-type Pokémon with Normal- and Fighting-type moves.",
+  "cobblemon.ability.scrappy.desc": "The Pokémon can hit Ghost-type Pokémon with Normal- and Fighting-type moves. It also grants immunity to Intimidate.",
   "cobblemon.ability.screencleaner": "Screen Cleaner",
   "cobblemon.ability.screencleaner.desc": "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
   "cobblemon.ability.seedsower": "Seed Sower",

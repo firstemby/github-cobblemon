@@ -69,7 +69,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-copyboost"]            = { _, _, message, _ -> CopyBoostInstruction(message) }
         updateInstructionParser["-crit"]                 = { _, instructionSet, message, _ -> CritInstruction(message, instructionSet) }
         updateInstructionParser["-curestatus"]           = { _, _, message, _ -> CureStatusInstruction(message) }
-        updateInstructionParser["detailschange"]         = { _, _, message, _ -> DetailsChangeInstruction(message) }
+        updateInstructionParser["detailschange"]         = { _, _, message, _ -> FormeChangeInstruction(message) }
         updateInstructionParser["-endability"]           = { _, _, message, _ -> EndAbilityInstruction(message) }
         updateInstructionParser["-end"]                  = { _, _, message, _ -> EndInstruction(message) }
         updateInstructionParser["-enditem"]              = { _, _, message, _ -> EndItemInstruction(message) }
@@ -78,6 +78,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-fieldactivate"]        = { _, _, message, _ -> FieldActivateInstruction(message) }
         updateInstructionParser["-fieldend"]             = { _, _, message, _ -> FieldEndInstruction(message) }
         updateInstructionParser["-fieldstart"]           = { _, _, message, _ -> FieldStartInstruction(message) }
+        updateInstructionParser["-formechange"]          = { _, _, message, _ -> FormeChangeInstruction(message) }
         updateInstructionParser["-hitcount"]             = { _, _, message, _ -> HitCountInstruction(message) }
         updateInstructionParser["-immune"]               = { _, _, message, _ -> ImmuneInstruction(message) }
         updateInstructionParser["-invertboost"]          = { _, _, message, _ -> InvertBoostInstruction(message) }

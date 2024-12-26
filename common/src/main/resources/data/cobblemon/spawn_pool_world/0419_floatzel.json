@@ -78,9 +78,6 @@
         {
             "id": "floatzel-4",
             "pokemon": "floatzel",
-            "presets": [
-                "freshwater"
-            ],
             "type": "pokemon",
             "context": "fishing",
             "bucket": "common",

@@ -450,8 +450,9 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     override fun isCustomNameVisible() = true
 
-    override fun isPersistenceRequired() = !npc.canDespawn
-
+    override fun isPersistenceRequired(): Boolean {
+        return super.isPersistenceRequired() || !npc.canDespawn
+    }
     override fun getDimensions(pose: Pose): EntityDimensions = hitbox ?: npc.hitbox
 
     override fun isPushable(): Boolean {

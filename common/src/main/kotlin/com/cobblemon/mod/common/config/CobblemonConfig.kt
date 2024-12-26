@@ -181,7 +181,7 @@ class CobblemonConfig {
     var displayNameForUnknownPokemon = false
 
     @NodeCategory(Category.Pokemon)
-    var displayEntityLabelsWhenCrouchingOnly  = true
+    var displayEntityLabelsWhenCrouchingOnly = false
 
     @NodeCategory(Category.Spawning)
     var shinyRate = 8192F

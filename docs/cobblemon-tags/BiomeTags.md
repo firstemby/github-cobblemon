@@ -15,7 +15,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_badlands</summary>
 
-- #c:mesa
+- #c:is_badlands
+- #clifftree:dry_badlands
 - #minecraft:is_badlands
 - terralith:ashen_savanna
 - terralith:red_oasis
@@ -57,9 +58,9 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_cave</summary>
 
-- #c:caves
-- #c:underground
-- #forge:is_underground
+- #c:is_cave
+- #c:is_underground
+- #clifftree:all_caves
 - biomesoplenty:glowing_grotto
 - biomesoplenty:spider_nest
 - minecraft:dripstone_caves
@@ -105,7 +106,9 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_coast</summary>
 
-- #c:stony_shores
+- #c:is_beach
+- #c:is_stony_shores
+- #clifftree:is_cliff
 - #cobblemon:is_beach
 - minecraft:stony_shore
 - terralith:basalt_cliffs
@@ -131,13 +134,13 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_cold</summary>
 
 - #byg:is_cold
-- #c:climate_cold
+- #c:is_cold
+- #c:is_cold/overworld
 - #cobblemon:is_cold_ocean
 - #cobblemon:is_freezing
 - #cobblemon:is_peak
 - #cobblemon:is_taiga
 - #cobblemon:is_tundra
-- #forge:is_cold/overworld
 - biomesoplenty:aspen_forest
 - biomesoplenty:bog
 - biomesoplenty:cold_desert
@@ -148,6 +151,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - biomesoplenty:pumpkin_patch
 - biomesoplenty:seasonal_forest
 - biomesoplenty:seasonal_orchard
+- clifftree:cold_caves
+- clifftree:cold_river
 - wythers:berry_bog
 
 </details>
@@ -177,7 +182,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_deep_ocean</summary>
 
-- #c:deep_ocean
+- #c:is_deep_ocean
 - #minecraft:is_deep_ocean
 - wythers:deep_icy_ocean
 
@@ -187,9 +192,11 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_desert</summary>
 
 - #byg:is_desert
-- #c:desert
+- #c:is_desert
+- #clifftree:is_desert
 - #wythers:is_desert
 - biomesoplenty:lush_desert
+- clifftree:desert_cliff
 - darkerdepths:sandy_catacombs
 - minecraft:desert
 - terralith:ancient_sands
@@ -226,11 +233,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
+<summary><b>Tag:</b> #biome:is_end</summary>
+
+- #c:is_end
+- #minecraft:is_end
+- endercon:end_border
+- endercon:end_hallows
+
+</details>
+
+<details>
 <summary><b>Tag:</b> #biome:is_floral</summary>
 
 - #byg:is_floral
-- #c:floral
-- #c:flower_forests
+- #c:flower_forest
+- #c:is_floral
 - biomesoplenty:bamboo_grove
 - biomesoplenty:cherry_blossom_grove
 - biomesoplenty:field
@@ -270,8 +287,9 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_forest</summary>
 
-- #c:flower_forests
-- #c:tree_deciduous
+- #c:is_flower_forest
+- #c:is_forest
+- #c:tree/deciduous
 - #minecraft:is_forest
 - biomesoplenty:bamboo_grove
 - biomesoplenty:cherry_blossom_grove
@@ -315,8 +333,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - #cobblemon:is_frozen_ocean
 - #cobblemon:is_glacial
 - #cobblemon:is_snowy
-- #forge:is_snowy
 - byg:cardinal_tundra
+- clifftree:frozen_caves
 - minecraft:frozen_river
 - minecraft:jagged_peaks
 - minecraft:snowy_beach
@@ -361,7 +379,9 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_glacial</summary>
 
 - #byg:is_icy
-- #c:icy
+- #c:is_icy
+- clifftree:glacier_cliff
+- clifftree:glacier_valley
 - minecraft:frozen_peaks
 - minecraft:ice_spikes
 - terralith:cave/frostfire_caves
@@ -406,9 +426,10 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_hills</summary>
 
-- #c:mountain_slope
+- #c:is_hill
+- #c:is_mountain/slope
+- #c:is_windswept
 - #cobblemon:is_highlands
-- #forge:is_slope
 - #minecraft:is_hill
 - biomesoplenty:jade_cliffs
 - biomesoplenty:mediterranean_forest
@@ -458,9 +479,11 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_jungle</summary>
 
+- #c:is_jungle
 - #minecraft:is_jungle
 - biomesoplenty:floodplain
 - biomesoplenty:rainforest
+- clifftree:tropical_river
 - terralith:cave/underground_jungle
 - wythers:dripleaf_swamp
 - wythers:eucalyptus_deanei_forest
@@ -492,9 +515,10 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_lush</summary>
 
-- #forge:is_lush
+- #c:is_lush
 - byg:lush_stacks
 - minecraft:lush_caves
+- terralith:cave/fungal_caves
 - terralith:cave/underground_jungle
 - wythers:dripleaf_swamp
 - wythers:lichenous_caves
@@ -509,6 +533,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_magical</summary>
 
 - #byg:is_magical
+- #c:is_magical
 - #wythers:is_dark_forest
 - biomesoplenty:aspen_forest
 - biomesoplenty:mystic_grove
@@ -528,8 +553,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_mountain</summary>
 
+- #c:is_mountain
 - #cobblemon:is_hills
-- #forge:is_mountain
 - #minecraft:is_mountain
 - biomesoplenty:crag
 - terralith:stony_spires
@@ -546,8 +571,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_mushroom</summary>
 
-- #c:mushroom
-- #forge:is_mushroom
+- #c:is_mushroom
+- #c:is_mushroom_island
 - biomesoplenty:fungal_jungle
 - biomesoplenty:glowing_grotto
 - biomesoplenty:mystic_grove
@@ -571,7 +596,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_ocean</summary>
 
-- #cobblemon:is_coast
+- #c:is_ocean
 - #cobblemon:is_cold_ocean
 - #cobblemon:is_deep_ocean
 - #cobblemon:is_frozen_ocean
@@ -579,12 +604,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - #cobblemon:is_temperate_ocean
 - #cobblemon:is_warm_ocean
 - #minecraft:is_ocean
+- clifftree:stone_ocean
 
 </details>
 
 <details>
 <summary><b>Tag:</b> #biome:is_overworld</summary>
 
+- #c:is_overworld
 - #cobblemon:is_arid
 - #cobblemon:is_cave
 - #cobblemon:is_coast
@@ -613,8 +640,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_peak</summary>
 
-- #c:mountain_peak
-- #forge:is_peak
+- #c:is_mountain/peak
 - minecraft:frozen_peaks
 - minecraft:jagged_peaks
 - minecraft:snowy_slopes
@@ -632,9 +658,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_plains</summary>
 
 - #byg:is_plains
-- #c:plains
+- #c:is_plains
 - #cobblemon:is_highlands
-- #forge:is_plains
 - biomesoplenty:clover_patch
 - biomesoplenty:field
 - biomesoplenty:fir_clearing
@@ -645,6 +670,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - biomesoplenty:pasture
 - biomesoplenty:prairie
 - biomesoplenty:seasonal_orchard
+- clifftree:sparse_forest
 - minecraft:plains
 - minecraft:sunflower_plains
 - terralith:brushland
@@ -665,7 +691,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_plateau</summary>
 
 - #byg:is_plateau
-- #forge:is_plateau
+- #c:is_plateau
 - minecraft:savanna_plateau
 - wythers:ayers_rock
 
@@ -674,6 +700,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_river</summary>
 
+- #c:is_river
 - #minecraft:is_river
 - terralith:warm_river
 - wythers:guelta
@@ -685,17 +712,22 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_sandy</summary>
 
 - #byg:is_sandy
+- #c:is_sandy
 - #cobblemon:is_badlands
 - #cobblemon:is_desert
+- clifftree:warm_river
 
 </details>
 
 <details>
 <summary><b>Tag:</b> #biome:is_savanna</summary>
 
+- #c:is_savanna
 - #minecraft:is_savanna
 - biomesoplenty:lush_desert
 - biomesoplenty:lush_savanna
+- clifftree:oasis
+- clifftree:shrubland
 - terralith:arid_highlands
 - terralith:ashen_savanna
 - terralith:brushland
@@ -715,8 +747,6 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_shrubland</summary>
 
-- #cobblemon:is_plains
-- #cobblemon:is_savanna
 - biomesoplenty:bog
 - biomesoplenty:dryland
 - biomesoplenty:field
@@ -727,6 +757,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - biomesoplenty:rocky_shrubland
 - biomesoplenty:scrubland
 - biomesoplenty:shrubland
+- clifftree:shrubland
 - terralith:alpine_highlands
 - terralith:arid_highlands
 - terralith:brushland
@@ -764,11 +795,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_snowy</summary>
 
 - #byg:is_snowy
-- #c:snowy
+- #c:is_snowy
 - #cobblemon:is_glacial
 - #cobblemon:is_snowy_forest
 - #cobblemon:is_snowy_taiga
 - byg:cardinal_tundra
+- clifftree:bog
+- clifftree:snowy_diorite_shore
+- clifftree:tundra
 - minecraft:jagged_peaks
 - minecraft:snowy_beach
 - minecraft:snowy_plains
@@ -809,6 +843,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - biomesoplenty:snowy_coniferous_forest
 - biomesoplenty:snowy_fir_clearing
 - biomesoplenty:snowy_maple_woods
+- clifftree:snowy_old_growth_taiga
 - minecraft:grove
 - minecraft:snowy_taiga
 - terralith:alpine_grove
@@ -828,7 +863,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_spooky</summary>
 
 - #byg:is_spooky
-- #forge:is_spooky
+- #c:is_spooky
 - #wythers:is_dark_forest
 - biomesoplenty:ominous_woods
 - byg:ebony_woods
@@ -843,8 +878,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_swamp</summary>
 
 - #byg:is_swamp
-- #c:swamp
-- #forge:is_swamp
+- #c:is_swamp
+- #clifftree:is_swamp
 - #wythers:is_swamp
 - biomesoplenty:bayou
 - biomesoplenty:bog
@@ -862,9 +897,9 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_taiga</summary>
 
-- #c:tree_coniferous
+- #c:is_taiga
+- #c:tree/coniferous
 - #cobblemon:is_snowy_taiga
-- #forge:is_coniferous
 - #minecraft:is_taiga
 - biomesoplenty:coniferous_forest
 - biomesoplenty:dead_forest
@@ -874,6 +909,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 - biomesoplenty:mediterranean_forest
 - biomesoplenty:redwood_forest
 - biomesoplenty:wetland
+- clifftree:cold_river
 - terralith:bryce_canyon
 - terralith:cloud_forest
 - terralith:haze_mountain
@@ -916,6 +952,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_temperate_ocean</summary>
 
+- clifftree:stone_ocean
 - minecraft:deep_ocean
 - minecraft:ocean
 
@@ -925,6 +962,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <summary><b>Tag:</b> #biome:is_thermal</summary>
 
 - biomesoplenty:hot_springs
+- clifftree:inferno
 - terralith:caldera
 - terralith:cave/thermal_caves
 - terralith:yellowstone
@@ -951,12 +989,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_tundra</summary>
 
-- #c:snowy_plains
+- #c:is_snowy_plains
 - biomesoplenty:cold_desert
 - biomesoplenty:muskeg
 - biomesoplenty:snowy_fir_clearing
 - biomesoplenty:tundra
 - byg:cardinal_tundra
+- clifftree:bog
+- clifftree:tundra
 - minecraft:ice_spikes
 - minecraft:snowy_plains
 - terralith:cold_shrubland
@@ -1120,548 +1160,10 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_block:acacia_log</summary>
-
-- biomesoplenty:amethyst_canyon
-- biomesoplenty:amethyst_rainforest
-- biomesoplenty:lush_desert
-- byg:araucaria_savanna
-- byg:baobab_savanna
-- byg:black_forest
-- minecraft:savanna
-- minecraft:savanna_plateau
-- minecraft:windswept_savanna
-- terralith:arid_highlands
-- terralith:ashen_savanna
-- terralith:fractured_savanna
-- terralith:hot_shrubland
-- terralith:moonlight_grove
-- terralith:moonlight_valley
-- terralith:savanna_badlands
-- terralith:savanna_slopes
-- wythers:bamboo_jungle_canyon
-- wythers:bamboo_jungle_highlands
-- wythers:bamboo_jungle_swamp
-- wythers:bayou
-- wythers:dry_savanna
-- wythers:dry_tropical_forest
-- wythers:eucalyptus_danei_forest
-- wythers:eucalyptus_jungle
-- wythers:eucalyptus_jungle_canyon
-- wythers:eucalyptus_salubris_woodland
-- wythers:flooded_jungle
-- wythers:flooded_rainforest
-- wythers:flooded_savanna
-- wythers:flowering_platanal
-- wythers:huangshan_highlands
-- wythers:humid_tropical_grassland
-- wythers:jacaranda_savanna
-- wythers:jungle_canyon
-- wythers:jungle_island
-- wythers:lapacho_plains
-- wythers:mediterranean_island
-- wythers:mediterranean_island_thermal_spring
-- wythers:mushroom_island
-- wythers:pantanal
-- wythers:sakura_forest
-- wythers:savanna_badlands
-- wythers:scrub_forest
-- wythers:tropical_forest
-- wythers:tropical_forest_canyon
-- wythers:tropical_grassland
-- wythers:tropical_rainforest
-- wythers:tsingy_forest
-- wythers:wooded_desert
-- wythers:wooded_savanna
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:apricorn_log</summary>
-
-- #cobblemon:is_badlands
-- #cobblemon:is_desert
-- #cobblemon:is_forest
-- #cobblemon:is_grassland
-- #cobblemon:is_hills
-- #cobblemon:is_jungle
-- #cobblemon:is_snowy_forest
-- #cobblemon:is_swamp
-- #cobblemon:is_taiga
-- #cobblemon:is_tundra
-- minecraft:sparse_jungle
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:birch_log</summary>
-
-- #c:birch_forest
-- biomesoplenty:aspen_glade
-- biomesoplenty:auroral_garden
-- biomesoplenty:seasonal_forest
-- biomesoplenty:seasonal_orchard
-- byg:aspen_forest
-- byg:autumnal_forest
-- byg:borealis_grove
-- byg:howling_peaks
-- byg:temperate_grove
-- minecraft:birch_forest
-- minecraft:flower_forest
-- minecraft:forest
-- minecraft:old_growth_birch_forest
-- terralith:alpine_highlands
-- terralith:arid_highlands
-- terralith:birch_taiga
-- terralith:blooming_valley
-- terralith:cloud_forest
-- terralith:haze_mountain
-- terralith:lavender_forest
-- terralith:lavender_valley
-- terralith:lush_valley
-- terralith:orchid_swamp
-- terralith:sakura_grove
-- terralith:sakura_valley
-- terralith:shield
-- terralith:temperate_highlands
-- terralith:white_cliffs
-- terralith:yosemite_lowlands
-- wythers:aspen_crags
-- wythers:autumnal_birch_forest
-- wythers:autumnal_flower_forest
-- wythers:autumnal_forest
-- wythers:autumnal_forest_edge
-- wythers:birch_swamp
-- wythers:birch_taiga
-- wythers:boreal_forest_red
-- wythers:boreal_forest_yellow
-- wythers:cool_forest
-- wythers:cool_forest_edge
-- wythers:eucalyptus_danei_forest
-- wythers:eucalyptus_jungle
-- wythers:eucalyptus_jungle_canyon
-- wythers:eucalyptus_woodland
-- wythers:sparse_eucalyptus_jungle
-- wythers:sparse_eucalyptus_woodland
-- wythers:temperate_island
-- wythers:thermal_taiga
-- wythers:thermal_taiga_crags
-- wythers:warm_birch_forest
-- wythers:waterlily_swamp
-- wythers:windswept_forest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:cherry_log</summary>
-
-- minecraft:cherry_grove
-- terralith:sakura_grove
-- terralith:sakura_valley
-- terralith:snowy_cherry_grove
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:crimson_log</summary>
-
-- betternether:crimson_glowing_woods
-- betternether:crimson_pinewood
-- byg:crimson_gardens
-- gardens_of_the_dead:whistling_woods
-- minecraft:crimson_forest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:dark_oak_log</summary>
-
-- biomesoplenty:mystic_grove
-- biomesoplenty:pumpkin_patch
-- biomesoplenty:seasonal_forest
-- byg:coconino_meadow
-- byg:temperate_rainforest
-- minecraft:dark_forest
-- terralith:lavender_forest
-- terralith:lavender_valley
-- terralith:mirage_isles
-- terralith:temperate_highlands
-- wythers:ancient_moss_forest
-- wythers:ancient_mossy_swamp
-- wythers:dry_tropical_forest
-- wythers:flooded_savanna
-- wythers:highland_tropical_rainforest
-- wythers:humid_tropical_grassland
-- wythers:jungle_canyon
-- wythers:pantanal
-- wythers:phantasmal_forest
-- wythers:phantasmal_swamp
-- wythers:sparse_bamboo_jungle
-- wythers:tropical_forest
-- wythers:tropical_forest_canyon
-- wythers:tropical_grassland
-- wythers:tsingy_forest
-- wythers:waterlily_swamp
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:flowering_azalea_leaves</summary>
-
-- minecraft:lush_caves
-- terralith:amethyst_canyon
-- terralith:amethyst_rainforest
-- terralith:blooming_valley
-- terralith:desert_oasis
-- terralith:desert_spires
-- terralith:red_oasis
-- terralith:sandstone_valley
-- wythers:ancient_mossy_swamp
-- wythers:flooded_jungle
-- wythers:flooded_rainforest
-- wythers:flowering_platanal
-- wythers:jacaranda_savanna
-- wythers:lush_shroom_cave
-- wythers:mossy_cave
-- wythers:pantanal
-- wythers:sandy_jungle
-- wythers:sparse_bamboo_jungle
-- wythers:tropical_grassland
-- wythers:tropical_island
-- wythers:tropical_rainforest
-- wythers:tsingy_forest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:gravel</summary>
-
-- biomesoplenty:cold_desert
-- minecraft:windswept_gravelly_hills
-- terralith:gravel_beach
-- terralith:gravel_desert
-- wythers:gravelly_beach
-- wythers:gravelly_river
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:jungle_log</summary>
-
-- #minecraft:is_jungle
-- biomesoplenty:fungal_jungle
-- biomesoplenty:rainforest
-- byg:crag_gardens
-- terralith:jungle_mountains
-- terralith:rocky_jungle
-- terralith:tropical_jungle
-- wythers:bamboo_jungle_swamp
-- wythers:desert_island
-- wythers:desert_lake
-- wythers:desert_river
-- wythers:eucalyptus_danei_forest
-- wythers:eucalyptus_jungle
-- wythers:eucalyptus_jungle_canyon
-- wythers:flooded_jungle
-- wythers:flooded_rainforest
-- wythers:flowering_platanal
-- wythers:humid_tropical_grassland
-- wythers:jacaranda_savanna
-- wythers:jungle_island
-- wythers:lapacho_plains
-- wythers:mushroom_island
-- wythers:pantanal
-- wythers:sandy_jungle
-- wythers:sparse_bamboo_jungle
-- wythers:sparse_eucalyptus_jungle
-- wythers:tropical_grassland
-- wythers:tropical_island
-- wythers:tropical_rainforest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:mangrove_log</summary>
-
-- minecraft:mangrove_swamp
-- terralith:cave/underground_jungle
-- wythers:coastal_mangrove
-- wythers:dry_tropical_forest
-- wythers:eucalyptus_danei_forest
-- wythers:eucalyptus_jungle
-- wythers:eucalyptus_jungle_canyon
-- wythers:flooded_savanna
-- wythers:forbidden_forest
-- wythers:highland_tropical_rainforest
-- wythers:jungle_canyon
-- wythers:jungle_island
-- wythers:mushroom_island
-- wythers:sparse_eucalyptus_jungle
-- wythers:tangled_forest
-- wythers:tropical_forest
-- wythers:tropical_forest_canyon
-- wythers:tropical_grassland
-- wythers:tropical_island
-- wythers:tropical_rainforest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:mud</summary>
-
-- minecraft:mangrove_swamp
-- terralith:cave/underground_jungle
-- wythers:coastal_mangrove
-- wythers:dripleaf_swamp
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:oak_log</summary>
-
-- biomesoplenty:bamboo_grove
-- biomesoplenty:cherry_blossom_grove
-- biomesoplenty:dead_forest
-- biomesoplenty:dryland
-- biomesoplenty:floodplain
-- biomesoplenty:lavender_forest
-- biomesoplenty:maple_woods
-- biomesoplenty:muskeg
-- biomesoplenty:mystic_grove
-- biomesoplenty:old_growth_woodland
-- biomesoplenty:orchard
-- biomesoplenty:origin_valley
-- biomesoplenty:prairie
-- biomesoplenty:seasonal_forest
-- biomesoplenty:snowy_maple_woods
-- biomesoplenty:woodland
-- byg:autumnal_forest
-- byg:coconino_meadow
-- byg:mojave_desert
-- byg:orchard
-- byg:prairie
-- byg:red_oak_forest
-- byg:temperate_rainforest
-- byg:white_mangrove_marshes
-- minecraft:flower_forest
-- minecraft:forest
-- minecraft:swamp
-- minecraft:windswept_forest
-- minecraft:wooded_badlands
-- terralith:alpha_islands
-- terralith:alpha_islands_winter
-- terralith:birch_taiga
-- terralith:blooming_valley
-- terralith:desert_oasis
-- terralith:desert_spires
-- terralith:forested_highlands
-- terralith:fractured_savanna
-- terralith:haze_mountain
-- terralith:ice_marsh
-- terralith:lavender_forest
-- terralith:lavender_valley
-- terralith:lush_valley
-- terralith:mirage_isles
-- terralith:red_oasis
-- terralith:sakura_grove
-- terralith:sakura_valley
-- terralith:sandstone_valley
-- terralith:shrubland
-- terralith:temperate_highlands
-- wythers:ancient_emerald_beech_forest
-- wythers:ancient_golden_beech_forest
-- wythers:ancient_oak_swamp
-- wythers:ancient_tropical_beech_forest
-- wythers:autumnal_flower_forest
-- wythers:autumnal_forest
-- wythers:autumnal_forest_edge
-- wythers:autumnal_swamp
-- wythers:birch_taiga
-- wythers:boreal_forest_red
-- wythers:boreal_forest_yellow
-- wythers:boreal_forest_yellow
-- wythers:cool_forest
-- wythers:cool_forest_edge
-- wythers:dry_tropical_forest
-- wythers:flooded_temperate_rainforest
-- wythers:flowering_platanal
-- wythers:forbidden_forest
-- wythers:forest_edge
-- wythers:highland_tropical_rainforest
-- wythers:humid_tropical_grassland
-- wythers:jacaranda_savanna
-- wythers:jungle_canyon
-- wythers:jungle_island
-- wythers:lapacho_plains
-- wythers:larch_taiga
-- wythers:maple_mountains
-- wythers:mushroom_island
-- wythers:sandy_jungle
-- wythers:savanna_badlands
-- wythers:sparse_bamboo_jungle
-- wythers:spring_flower_forest
-- wythers:subtropical_forest
-- wythers:subtropical_forest_edge
-- wythers:tangled_forest
-- wythers:temperate_island
-- wythers:temperate_rainforest
-- wythers:temperate_rainforest_crags
-- wythers:tropical_forest
-- wythers:tropical_forest
-- wythers:tropical_forest_canyon
-- wythers:tropical_grassland
-- wythers:tropical_rainforest
-- wythers:tsingy_forest
-- wythers:windswept_forest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:red_sand</summary>
-
-- #minecraft:is_badlands
-- byg:atacama_desert
-- byg:red_rock_valley
-- terralith:ancient_sands
-- terralith:arid_highlands
-- terralith:bryce_canyon
-- terralith:painted_mountains
-- terralith:red_oasis
-- wythers:ayers_rock
-- wythers:badlands_desert
-- wythers:badlands_jungle_canyon
-- wythers:billabong
-- wythers:kwongan_heath
-- wythers:outback
-- wythers:outback_desert
-- wythers:red_desert
-- wythers:red_rock_canyon
-- wythers:wooded_badlands
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:sand</summary>
-
-- byg:mojave_desert
-- minecraft:desert
-- terralith:ancient_sands
-- terralith:cave/desert_caves
-- terralith:desert_canyon
-- terralith:desert_oasis
-- terralith:desert_spires
-- terralith:lush_desert
-- terralith:sandstone_valley
-- terralith:white_mesa
-- wythers:cactus_desert
-- wythers:deep_desert
-- wythers:desert_island
-- wythers:desert_pinnacles
-- wythers:guelta
-- wythers:sand_dunes
-- wythers:sandy_jungle
-- wythers:wooded_desert
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:spruce_log</summary>
-
-- biomesoplenty:dead_forest
-- biomesoplenty:field
-- biomesoplenty:forested_field
-- biomesoplenty:hot_springs
-- biomesoplenty:jade_cliffs
-- biomesoplenty:maple_woods
-- biomesoplenty:mediterranean_forest
-- biomesoplenty:snowy_maple_woods
-- biomesoplenty:wetland
-- byg:autumnal_taiga
-- byg:autumnal_valley
-- byg:borealis_grove
-- byg:canadian_shield
-- byg:coniferous_forest
-- byg:frosted_coniferous_forest
-- byg:frosted_taiga
-- byg:howling_peaks
-- byg:rose_fields
-- byg:weeping_witch_forest
-- minecraft:grove
-- minecraft:old_growth_pine_taiga
-- minecraft:old_growth_spruce_taiga
-- minecraft:snowy_taiga
-- minecraft:taiga
-- minecraft:windswept_forest
-- terralith:alpine_grove
-- terralith:alpine_highlands
-- terralith:bryce_canyon
-- terralith:cloud_forest
-- terralith:cold_shrubland
-- terralith:forested_highlands
-- terralith:haze_mountain
-- terralith:ice_marsh
-- terralith:lush_valley
-- terralith:rocky_shrubland
-- terralith:sakura_grove
-- terralith:sakura_valley
-- terralith:shield
-- terralith:siberian_grove
-- terralith:siberian_taiga
-- terralith:snowy_maple_forest
-- terralith:snowy_shield
-- terralith:wintry_forest
-- terralith:wintry_lowlands
-- terralith:yellowstone
-- terralith:yosemite_lowlands
-- wythers:ancient_taiga
-- wythers:bamboo_jungle_canyon
-- wythers:birch_taiga
-- wythers:boreal_forest_red
-- wythers:boreal_forest_yellow
-- wythers:cold_island
-- wythers:cool_forest
-- wythers:cool_forest_edge
-- wythers:deep_snowy_taiga
-- wythers:fen
-- wythers:flooded_temperate_rainforest
-- wythers:forested_highlands
-- wythers:giant_sequoia_forest
-- wythers:huangshan_highlands
-- wythers:jade_highlands
-- wythers:larch_taiga
-- wythers:maple_mountains
-- wythers:old_growth_taiga_crags
-- wythers:old_growth_taiga_swamp
-- wythers:pine_barrens
-- wythers:snowy_fen
-- wythers:snowy_peaks
-- wythers:snowy_thermal_taiga
-- wythers:taiga_crags
-- wythers:temperate_island
-- wythers:temperate_rainforest
-- wythers:temperate_rainforest_crags
-- wythers:thermal_taiga
-- wythers:thermal_taiga_crags
-- wythers:windswept_forest
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #has_block:warped_log</summary>
-
-- betternether:old_warped_woods
-- byg:crimson_gardens
-- byg:wailing_garth
-- byg:warped_desert
-- minecraft:warped_forest
-- wythers:deep_dark_forest
-
-</details>
-
-<details>
 <summary><b>Tag:</b> #has_density:dense</summary>
 
-- #c:vegetation_dense
+- #c:is_dense_vegetation
+- #c:is_dense_vegetation/overworld
 - #cobblemon:is_jungle
 - #forge:is_dense
 - #forge:is_dense/overworld
@@ -1673,7 +1175,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #has_density:sparse</summary>
 
-- #c:vegetation_sparse
+- #c:is_sparse_vegetation
+- #c:is_sparse_vegetation/overworld
 - #cobblemon:is_arid
 - #cobblemon:is_grassland
 - #cobblemon:is_tundra
@@ -1715,7 +1218,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #has_feature:revival_herbs</summary>
 
-- minecraft:lush_caves
+- #cobblemon:is_lush
 
 </details>
 
