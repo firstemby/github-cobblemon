@@ -7,7 +7,7 @@
             "id": "barboach-1",
             "pokemon": "barboach",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -25,7 +25,7 @@
             "id": "barboach-2",
             "pokemon": "barboach",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -85,7 +85,7 @@
             "id": "barboach-5",
             "pokemon": "barboach",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

@@ -18,12 +18,12 @@
       "required": false
     },
 	{
-      "id": "#forge:is_snowy",
+      "id": "byg:cardinal_tundra",
       "required": false
     },
 	{
-      "id": "byg:cardinal_tundra",
-      "required": false
+      "id": "clifftree:frozen_caves",
+      "required": false 
     },
 	{
       "id": "terralith:emerald_peaks",

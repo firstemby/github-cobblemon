@@ -229,6 +229,10 @@ object DataKeys {
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    const val NPC_HITBOX = "Hitbox"
+    const val NPC_HITBOX_WIDTH = "Width"
+    const val NPC_HITBOX_HEIGHT = "Height"
+    const val NPC_HITBOX_FIXED = "Fixed"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

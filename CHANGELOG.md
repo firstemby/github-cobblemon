@@ -431,6 +431,7 @@
 - Fixed display case not being able to be fed items from underneath.
 - Fixed Pokémon battling in water continuously sinking to the bottom.
 - Fixed passive healing and wake from faint not disabling when their config values are set to 0.
+- Fixed an issue where rebinding the R key to a mouse button prevented players from closing the battle interface using that button.
 
 ### Developer
 - `SpawnCause` is now an implementation of `SpawningInfluence`.

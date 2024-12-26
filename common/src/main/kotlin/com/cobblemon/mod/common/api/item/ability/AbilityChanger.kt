@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.item.ability
 
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityTypeChanger
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -33,7 +34,7 @@ interface AbilityChanger<T : PotentialAbility> {
      * @param pokemon The [Pokemon] being queried.
      * @return A set containing all their legal abilities associated with [type], can be empty.
      */
-    fun queryPossible(pokemon: Pokemon): Set<AbilityTemplate>
+    fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>>
 
     /**
      * Attempts to update the ability of the given [pokemon].

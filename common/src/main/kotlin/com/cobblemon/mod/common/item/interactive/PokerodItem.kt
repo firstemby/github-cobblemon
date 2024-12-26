@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.item.interactive
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
+import com.cobblemon.mod.common.advancement.criterion.CastPokeRodContext
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.fishing.BaitConsumedEvent
 import com.cobblemon.mod.common.api.events.fishing.BaitSetEvent
@@ -20,6 +21,7 @@ import com.cobblemon.mod.common.api.fishing.FishingBait
 import com.cobblemon.mod.common.api.fishing.FishingBaits
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.RodBaitComponent
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.enchantmentRegistry
 import com.cobblemon.mod.common.util.itemRegistry
 import com.cobblemon.mod.common.util.playSoundServer
@@ -238,7 +240,8 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
                     { event -> return InteractionResultHolder.fail(itemStack) },
                     { event ->
                         world.addFreshEntity(bobberEntity)
-                        CobblemonCriteria.CAST_POKE_ROD.trigger(user as ServerPlayer, baitOnRod != null)
+                        var baitId = getBaitOnRod(itemStack)?.item ?: cobblemonResource("empty_bait")
+                        CobblemonCriteria.CAST_POKE_ROD.trigger(user as ServerPlayer, CastPokeRodContext(baitId))
 
                         CobblemonEvents.POKEROD_CAST_POST.post(
                             PokerodCastEvent.Post(itemStack, bobberEntity, getBaitStackOnRod(itemStack))

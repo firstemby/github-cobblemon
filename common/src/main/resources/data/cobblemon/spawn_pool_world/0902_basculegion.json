@@ -7,7 +7,7 @@
             "id": "basculegion-1",
             "pokemon": "basculegion",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -50,7 +50,7 @@
             "id": "basculegion-3",
             "pokemon": "basculegion",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

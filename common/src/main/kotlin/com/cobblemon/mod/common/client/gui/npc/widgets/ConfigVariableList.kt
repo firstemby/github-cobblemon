@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable.NPCVariableType
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorButton
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorScreen
 import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList.ConfigVariable
@@ -35,7 +36,7 @@ class ConfigVariableList(
     HEIGHT, // height
     0, // top
     SLOT_HEIGHT + SLOT_SPACING
-) {
+), CobblemonRenderable {
     companion object {
         const val WIDTH = 211
         const val HEIGHT = 160

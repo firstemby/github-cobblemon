@@ -34,7 +34,7 @@
             "id": "illumise-2",
             "pokemon": "illumise",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -79,7 +79,7 @@
             "id": "illumise-4",
             "pokemon": "illumise",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",

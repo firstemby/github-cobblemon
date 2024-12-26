@@ -55,6 +55,8 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
 
     val CAST_POKE_ROD = this.create("cast_poke_rod", SimpleCriterionTrigger(CastPokeRodCriterionCondition.CODEC))
 
+    val REEL_IN_POKEMON = this.create("reel_in_pokemon", SimpleCriterionTrigger(ReelInPokemonCriterionCondition.CODEC))
+
     // Advancement criteria for [grow_tumblestone.json]
     val PLANT_TUMBLESTONE = this.create("plant_tumblestone", SimpleCriterionTrigger(PlantTumblestoneCriterion.CODEC))
 

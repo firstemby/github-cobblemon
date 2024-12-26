@@ -16,21 +16,9 @@
     "#minecraft:coral_blocks",
     "#minecraft:diamond_ores",
     "#minecraft:dirt",
-    {
-      "id": "#minecraft:dirt_like",
-      "required": false
-    },
     "#minecraft:emerald_ores",
     "#minecraft:sculk_replaceable",
     "#minecraft:gold_ores",
-    {
-      "id": "#minecraft:grass",
-      "required": false
-    },
-    {
-      "id": "#minecraft:gravel",
-      "required": false
-    },
     "#minecraft:ice",
     "#minecraft:iron_ores",
     "#minecraft:lapis_ores",

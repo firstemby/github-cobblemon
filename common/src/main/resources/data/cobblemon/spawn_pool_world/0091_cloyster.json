@@ -7,7 +7,7 @@
             "id": "cloyster-1",
             "pokemon": "cloyster",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -26,7 +26,7 @@
             "id": "cloyster-2",
             "pokemon": "cloyster",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -58,7 +58,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -81,7 +81,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },
@@ -118,7 +118,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -143,7 +143,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },
@@ -168,6 +168,56 @@
                     "#cobblemon:is_cold_ocean",
                     "#cobblemon:is_frozen_ocean"
                 ]
+            }
+        },
+        {
+            "id": "cloyster-7",
+            "pokemon": "cloyster",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "seafloor",
+            "bucket": "common",
+            "level": "26-53",
+            "weight": 0.3,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            }
+        },
+        {
+            "id": "cloyster-8",
+            "pokemon": "cloyster",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "26-53",
+            "weight": 0.5,
+            "weightMultiplier": {
+                "multiplier": 0.6,
+                "condition": {
+                    "minLureLevel": "0",
+                    "maxLureLevel": "1"
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

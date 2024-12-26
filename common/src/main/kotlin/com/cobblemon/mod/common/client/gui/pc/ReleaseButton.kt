@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -23,7 +24,7 @@ class ReleaseButton(
     x: Int, y: Int,
     private val parent: StorageWidget,
     onPress: OnPress
-) : Button(x, y, WIDTH, HEIGHT, Component.literal("Release"), onPress, DEFAULT_NARRATION) {
+) : Button(x, y, WIDTH, HEIGHT, Component.literal("Release"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val WIDTH = 58

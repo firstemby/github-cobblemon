@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
 import com.cobblemon.mod.common.api.gui.drawProfile
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
 import net.minecraft.client.gui.GuiGraphics
@@ -21,7 +22,7 @@ class NPCRenderWidget(
     val y: Int,
     var identifier: ResourceLocation,
     val aspects: MutableSet<String>
-) : Renderable, GuiEventListener {
+) : CobblemonRenderable, GuiEventListener {
     val state = FloatingState().also {
         it.currentAspects = aspects
     }

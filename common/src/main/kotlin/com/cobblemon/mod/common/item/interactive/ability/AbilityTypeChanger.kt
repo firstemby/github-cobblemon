@@ -21,13 +21,13 @@ open class AbilityTypeChanger<T : PotentialAbility>(
     private val supportsChangingFrom: (other: PotentialAbilityType<*>?) -> Boolean
 ) : AbilityChanger<T> {
 
-    override fun queryPossible(pokemon: Pokemon): Set<AbilityTemplate> {
+    override fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>> {
         val currentType = this.findCurrent(pokemon)
         val targetType = if (currentType == HiddenAbilityType) CommonAbilityType else this.type
 
         return pokemon.form.abilities
             .filter { it.type == targetType && it.template != pokemon.ability.template }
-            .map { it.template }
+            .map { it.template to it.priority }
             .toSet()
     }
 
@@ -39,12 +39,7 @@ open class AbilityTypeChanger<T : PotentialAbility>(
         val possible = this.queryPossible(pokemon)
         val picked = possible.randomOrNull() ?: return false
         val old = pokemon.ability.template
-        val priority = when (type) {
-            HiddenAbilityType -> if (currentType == HiddenAbilityType) Priority.LOWEST else Priority.LOW
-            CommonAbilityType -> Priority.LOWEST
-            else -> Priority.LOWEST
-        }
-        pokemon.updateAbility(picked.create(forced = false, priority = priority))
+        pokemon.updateAbility(picked.first.create(forced = false, priority = picked.second))
         return pokemon.ability.template != old
     }
 

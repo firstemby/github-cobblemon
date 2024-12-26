@@ -94,8 +94,7 @@
             "id": "purrloin-4",
             "pokemon": "purrloin",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -114,7 +113,10 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "isRaining": false
+                "isRaining": false,
+                "structures": [
+                    "#minecraft:village"
+                ]
             },
             "anticondition": {
                 "biomes": [
@@ -154,8 +156,7 @@
             "id": "purrloin-6",
             "pokemon": "purrloin",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -173,6 +174,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_savanna"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         },

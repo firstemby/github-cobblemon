@@ -1,20 +1,20 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "  Q",
-      "CPC",
-      "Q  "
+      "IA",
+      "CI",
+      "C "
     ],
     "key": {
-      "Q": {
-        "item": "minecraft:quartz"
-      },
-      "C": {
-        "item": "minecraft:copper_ingot"
-      },
-      "P": {
-        "item": "minecraft:ender_pearl"
-      }
+        "I": {
+            "item": "minecraft:iron_ingot"
+        },
+        "C": {
+            "item": "minecraft:copper_ingot"
+        },
+        "A": {
+            "item": "minecraft:amethyst_shard"
+        }
     },
     "result": {
         "id": "cobblemon:wide_lens"

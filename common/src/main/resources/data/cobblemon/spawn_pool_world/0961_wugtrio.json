@@ -31,7 +31,7 @@
             "id": "wugtrio-2",
             "pokemon": "wugtrio",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

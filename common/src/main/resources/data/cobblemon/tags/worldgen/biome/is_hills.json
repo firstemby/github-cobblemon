@@ -3,12 +3,16 @@
   "values": [
     "#minecraft:is_hill",
 	"#cobblemon:is_highlands",
-    {
-      "id": "#c:mountain_slope",
+	{
+      "id": "#c:is_hill",
       "required": false
     },
 	{
-      "id": "#forge:is_slope",
+      "id": "#c:is_mountain/slope",
+      "required": false
+    },
+	{
+      "id": "#c:is_windswept",
       "required": false
     },
 	{

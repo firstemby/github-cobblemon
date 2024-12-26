@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.npc.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import net.minecraft.Util
 import net.minecraft.client.Minecraft
@@ -39,7 +40,7 @@ class SimpleNPCTextInputWidget(
     width,
     height,
     "input".text()
-) {
+), CobblemonRenderable {
     companion object {
         const val TEXT_PADDING = 4
     }

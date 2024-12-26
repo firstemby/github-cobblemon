@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
@@ -52,7 +53,7 @@ class TradeGUI(
     val traderName: MutableComponent,
     val traderParty: MutableList<TradeablePokemon?>,
     val party: MutableList<TradeablePokemon?>
-): Screen(lang("trade.gui.title")) {
+): Screen(lang("trade.gui.title")), CobblemonRenderable {
 
     companion object {
         const val BASE_WIDTH = 293

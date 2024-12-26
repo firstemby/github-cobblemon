@@ -32,7 +32,7 @@
             "id": "swampert-2",
             "pokemon": "swampert",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -63,13 +63,20 @@
                 "biomes": [
                     "#cobblemon:is_lush"
                 ]
+            },
+            "anticondition": {
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
             }
         },
         {
             "id": "swampert-4",
             "pokemon": "swampert",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -82,6 +89,13 @@
                 "biomes": [
                     "#cobblemon:is_lush"
                 ]
+            },
+            "anticondition": {
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
             }
         },
         {
@@ -102,56 +116,10 @@
                     "#cobblemon:is_savanna",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
             }
         },
         {
             "id": "swampert-6",
-            "pokemon": "swampert",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "36-53",
-            "weight": 7.5,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_badlands",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_mushroom",
-                    "#cobblemon:is_savanna",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "swampert-7",
-            "pokemon": "swampert",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "36-53",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_badlands",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_mushroom",
-                    "#cobblemon:is_savanna",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 3
-            }
-        },
-        {
-            "id": "swampert-8",
             "pokemon": "swampert",
             "type": "pokemon",
             "context": "fishing",
@@ -166,49 +134,18 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "swampert-9",
-            "pokemon": "swampert",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "36-53",
-            "weight": 0.25,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_lush"
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
                 ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
+                "minY": -41,
+                "maxY": 9
             }
         },
         {
-            "id": "swampert-10",
-            "pokemon": "swampert",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "36-53",
-            "weight": 0.02,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_lush"
-                ],
-                "minLureLevel": 3
-            }
-        },
-        {
-            "id": "swampert-11",
+            "id": "swampert-7",
             "pokemon": "swampert",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -225,7 +162,7 @@
             }
         },
         {
-            "id": "swampert-12",
+            "id": "swampert-8",
             "pokemon": "swampert",
             "type": "pokemon",
             "context": "fishing",
@@ -244,56 +181,90 @@
                     "#cobblemon:is_savanna",
                     "#cobblemon:is_swamp"
                 ]
+            }
+        },
+        {
+            "id": "swampert-9",
+            "pokemon": "swampert",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "ultra-rare",
+            "level": "36-53",
+            "weight": 0.4,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
             },
             "anticondition": {
-                "minLureLevel": 2
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ]
             }
         },
         {
-            "id": "swampert-13",
+            "id": "swampert-10",
             "pokemon": "swampert",
+            "presets": [
+                "water"
+            ],
             "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
+            "context": "submerged",
+            "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 7.5,
+            "weight": 0.4,
             "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
-                    "#cobblemon:is_badlands",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_mushroom",
-                    "#cobblemon:is_savanna",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ]
             }
         },
         {
-            "id": "swampert-14",
+            "id": "swampert-11",
             "pokemon": "swampert",
             "type": "pokemon",
             "context": "fishing",
-            "bucket": "common",
+            "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 1.8,
+            "weight": 0.4,
             "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
                 "biomes": [
-                    "#cobblemon:is_badlands",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_mushroom",
-                    "#cobblemon:is_savanna",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 3
+                "structures": [
+                    "cobblemon:shipwreck_coves/lush_shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ]
             }
         }
     ]

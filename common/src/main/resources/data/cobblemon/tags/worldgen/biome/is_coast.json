@@ -4,7 +4,15 @@
     "minecraft:stony_shore",
 	"#cobblemon:is_beach",
 	{
-      "id": "#c:stony_shores",
+      "id": "#c:is_beach",
+      "required": false
+    },
+	{
+      "id": "#c:is_stony_shores",
+      "required": false
+    },
+	{
+      "id": "#clifftree:is_cliff",
       "required": false
     },
 	{

@@ -26,7 +26,7 @@
             "id": "tirtouga-2",
             "pokemon": "tirtouga",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

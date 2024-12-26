@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pc
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -31,7 +32,7 @@ open class StorageSlot(
     x: Int, y: Int,
     private val parent: StorageWidget,
     onPress: OnPress
-) : Button(x, y, SIZE, SIZE, Component.literal("StorageSlot"), onPress, DEFAULT_NARRATION) {
+) : Button(x, y, SIZE, SIZE, Component.literal("StorageSlot"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     val state = FloatingState()
 
     companion object {

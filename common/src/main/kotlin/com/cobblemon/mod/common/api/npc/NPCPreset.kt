@@ -30,6 +30,7 @@ class NPCPreset {
     var ai: List<BrainConfig>? = null
     var skill: Int? = null
     var autoHealParty: Boolean? = null
+    var randomizePartyOrder: Boolean? = null
     var battleTheme: ResourceLocation? = null
     var isMovable: Boolean? = null
     var isInvulnerable: Boolean? = null
@@ -53,6 +54,7 @@ class NPCPreset {
         hitbox?.let { npcClass.hitbox = it }
         skill?.let { npcClass.skill = it }
         autoHealParty?.let { npcClass.autoHealParty = it }
+        randomizePartyOrder?.let { npcClass.randomizePartyOrder = it }
         battleTheme?.let { npcClass.battleTheme = it }
         ai?.let { npcClass.ai.addAll(it) }
         isMovable?.let { npcClass.isMovable = it }

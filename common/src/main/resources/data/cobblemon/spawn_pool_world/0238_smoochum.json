@@ -33,8 +33,7 @@
             "id": "smoochum-2",
             "pokemon": "smoochum",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -52,6 +51,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_freezing"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         }

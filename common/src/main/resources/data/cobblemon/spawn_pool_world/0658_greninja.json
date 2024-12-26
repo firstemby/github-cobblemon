@@ -31,7 +31,7 @@
             "id": "greninja-2",
             "pokemon": "greninja",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -78,7 +78,7 @@
             "id": "greninja-4",
             "pokemon": "greninja",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -110,56 +110,6 @@
                     "#cobblemon:is_freshwater",
                     "#cobblemon:is_jungle"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "greninja-6",
-            "pokemon": "greninja",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "36-53",
-            "weight": 0.25,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "greninja-7",
-            "pokemon": "greninja",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "36-53",
-            "weight": 0.02,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

@@ -4,15 +4,15 @@
     "minecraft:dripstone_caves",
     "minecraft:lush_caves",
     {
-      "id": "#c:caves",
+      "id": "#c:is_cave",
       "required": false 
     },
 	{
-      "id": "#c:underground",
+      "id": "#c:is_underground",
       "required": false 
     },
 	{
-      "id": "#forge:is_underground",
+      "id": "#clifftree:all_caves",
       "required": false 
     },
 	{

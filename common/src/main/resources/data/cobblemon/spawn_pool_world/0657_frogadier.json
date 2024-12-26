@@ -31,7 +31,7 @@
             "id": "frogadier-2",
             "pokemon": "frogadier",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -78,7 +78,7 @@
             "id": "frogadier-4",
             "pokemon": "frogadier",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -110,56 +110,6 @@
                     "#cobblemon:is_freshwater",
                     "#cobblemon:is_jungle"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "frogadier-6",
-            "pokemon": "frogadier",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "16-41",
-            "weight": 2.25,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "frogadier-7",
-            "pokemon": "frogadier",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "16-41",
-            "weight": 0.18,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

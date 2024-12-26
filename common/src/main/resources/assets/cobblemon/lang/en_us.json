@@ -1615,12 +1615,14 @@
   "advancements.cobblemon.grow_tumblestone.description": "Place a Tumblestone near Lava or Magma to grow it over time",
   "advancements.cobblemon.craft_ancient_balls": "A True Antiquarian",
   "advancements.cobblemon.craft_ancient_balls.description": "Utilize Tumblestones to craft all fifteen Ancient Balls",
-  "advancements.cobblemon.craft_rod": "Gone Fishin'",
-  "advancements.cobblemon.craft_rod.description": "Craft a Poké Rod using a Poké Rod Smithing Template",
-  "advancements.cobblemon.use_bait": "A Berry Good Lure",
-  "advancements.cobblemon.use_bait.description": "Use a berry as bait for your Poké Rod",
+  "advancements.cobblemon.craft_rod": "New Angles for Angling",
+  "advancements.cobblemon.craft_rod.description": "Unlock new ways to fish by creating a Poké Rod at a Smithing Table",
+  "advancements.cobblemon.use_all_berry_bait": "Some Berry Good Lures",
+  "advancements.cobblemon.use_all_berry_bait.description": "Reel in a Pokémon with one of each of the different berries attached to your Poké Rod",
   "advancements.cobblemon.craft_master_rod": "Masterful Dedication",
   "advancements.cobblemon.craft_master_rod.description": "Craft a Poké Rod using a Master Ball",
+  "advancements.cobblemon.craft_pokedex": "Researcher Recruit",
+  "advancements.cobblemon.craft_pokedex.description": "Craft a Pokédex out of Apricorns, Iron, Copper, and any glowing powder",
 
   "cobblemon.battle.crash": "A battle error has occurred. If playing single-player, report this to the mod team. Otherwise, report this to the servers administrator.",
   "cobblemon.battle.damage_dealt": "%1$s took %2$s damage!",
@@ -4260,6 +4262,9 @@
 
   "cobblemon.entity.pokemon": "Pokémon",
   "entity.cobblemon.empty_pokeball": "Empty Poké Ball",
+  "entity.cobblemon.poke_bobber": "Poké Bobber",
+  "entity.cobblemon.boat": "Boat",
+  "entity.cobblemon.chest_boat": "Boat with Chest",
 
   "cobblemon.species.bulbasaur.name": "Bulbasaur",
   "cobblemon.species.bulbasaur.desc": "While rare and elusive in the wild, Bulbasaur’s calm and easygoing nature makes it a popular choice for beginning trainers. The bud on its back is still developing, so this Pokémon must expend large amounts of energy to fuel its growth. As a result, it is often seen rummaging through composters in search of precious fertilizer.",

@@ -7,7 +7,7 @@
             "id": "lileep-1",
             "pokemon": "lileep",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

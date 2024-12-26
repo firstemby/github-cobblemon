@@ -7,7 +7,7 @@
             "id": "goldeen-1",
             "pokemon": "goldeen",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -48,7 +48,7 @@
             "id": "goldeen-3",
             "pokemon": "goldeen",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

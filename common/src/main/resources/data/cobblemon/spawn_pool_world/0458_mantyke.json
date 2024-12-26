@@ -7,7 +7,7 @@
             "id": "mantyke-1",
             "pokemon": "mantyke",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -78,7 +78,7 @@
             "id": "mantyke-4",
             "pokemon": "mantyke",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

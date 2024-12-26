@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "GCA",
-        "ICA",
-        "I  "
+        " GA",
+        "GGA",
+        "II "
     ],
     "key": {
         "I": {
@@ -11,9 +11,6 @@
         },
         "G": {
             "item": "minecraft:gold_ingot"
-        },
-        "C": {
-            "item": "minecraft:copper_ingot"
         },
         "A": {
             "item": "minecraft:amethyst_shard"

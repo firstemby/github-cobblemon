@@ -26,7 +26,7 @@
             "id": "empoleon-2",
             "pokemon": "empoleon",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -57,57 +57,13 @@
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
             }
         },
         {
             "id": "empoleon-4",
             "pokemon": "empoleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "36-53",
-            "weight": 0.25,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_cold_ocean",
-                    "#cobblemon:is_frozen_ocean",
-                    "#minecraft:frozen_river",
-                    "#cobblemon:is_glacial",
-                    "#cobblemon:is_tundra"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "empoleon-5",
-            "pokemon": "empoleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "36-53",
-            "weight": 0.02,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_cold_ocean",
-                    "#cobblemon:is_frozen_ocean",
-                    "#minecraft:frozen_river",
-                    "#cobblemon:is_glacial",
-                    "#cobblemon:is_tundra"
-                ],
-                "minLureLevel": 3
-            }
-        },
-        {
-            "id": "empoleon-6",
-            "pokemon": "empoleon",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -124,7 +80,7 @@
             }
         },
         {
-            "id": "empoleon-7",
+            "id": "empoleon-5",
             "pokemon": "empoleon",
             "type": "pokemon",
             "context": "fishing",
@@ -142,54 +98,6 @@
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "empoleon-8",
-            "pokemon": "empoleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "36-53",
-            "weight": 0.25,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_cold_ocean",
-                    "#cobblemon:is_frozen_ocean",
-                    "#minecraft:frozen_river",
-                    "#cobblemon:is_glacial",
-                    "#cobblemon:is_tundra"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "empoleon-9",
-            "pokemon": "empoleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "36-53",
-            "weight": 0.02,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_cold_ocean",
-                    "#cobblemon:is_frozen_ocean",
-                    "#minecraft:frozen_river",
-                    "#cobblemon:is_glacial",
-                    "#cobblemon:is_tundra"
-                ],
-                "minLureLevel": 3
             }
         }
     ]

@@ -7,7 +7,7 @@
             "id": "basculin-blue-1",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -26,7 +26,7 @@
             "id": "basculin-blue-2",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -45,7 +45,7 @@
             "id": "basculin-blue-3",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -136,7 +136,7 @@
             "id": "basculin-red-7",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -155,7 +155,7 @@
             "id": "basculin-red-8",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -174,7 +174,7 @@
             "id": "basculin-red-9",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -262,53 +262,10 @@
             }
         },
         {
-            "id": "basculin-white-13",
-            "pokemon": "basculin striped=white",
-            "presets": [
-                "underwater"
-            ],
-            "type": "pokemon",
-            "context": "submerged",
-            "bucket": "common",
-            "level": "21-46",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_freshwater"
-                ],
-                "moonPhase": "0,4"
-            }
-        },
-        {
-            "id": "basculin-white-14",
-            "pokemon": "basculin striped=white",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "21-46",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_arid",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_grassland",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_mountain",
-                    "#cobblemon:is_snowy_forest",
-                    "#cobblemon:is_taiga",
-                    "#cobblemon:is_tundra"
-                ],
-                "moonPhase": "0,4"
-            }
-        },
-        {
             "id": "basculin-blue-15",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -329,7 +286,7 @@
             "id": "basculin-blue-16",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -350,7 +307,7 @@
             "id": "basculin-blue-17",
             "pokemon": "basculin striped=blue",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -449,7 +406,7 @@
             "id": "basculin-red-21",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -470,7 +427,7 @@
             "id": "basculin-red-22",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -491,7 +448,7 @@
             "id": "basculin-red-23",
             "pokemon": "basculin striped=red",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -587,10 +544,53 @@
             }
         },
         {
+            "id": "basculin-white-13",
+            "pokemon": "basculin striped=white",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "common",
+            "level": "21-46",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_freshwater"
+                ],
+                "moonPhase": "0,4"
+            }
+        },
+        {
+            "id": "basculin-white-14",
+            "pokemon": "basculin striped=white",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "21-46",
+            "weight": 1.8,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_grassland",
+                    "#cobblemon:is_jungle",
+                    "#cobblemon:is_mountain",
+                    "#cobblemon:is_snowy_forest",
+                    "#cobblemon:is_taiga",
+                    "#cobblemon:is_tundra"
+                ],
+                "moonPhase": "0,4"
+            }
+        },
+        {
             "id": "basculin-white-27",
             "pokemon": "basculin striped=white",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

@@ -24,9 +24,6 @@
         {
             "id": "doublade-2",
             "pokemon": "doublade",
-            "presets": [
-                "ruins"
-            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "uncommon",
@@ -37,6 +34,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         },
