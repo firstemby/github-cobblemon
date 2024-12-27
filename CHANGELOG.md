@@ -14,6 +14,7 @@
 - Added debug renderer for poseable entity locators
 - Added time zone as a config option
 - Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
+- Added "irlDateRange" and "irlTimeRange" as a condition for spawning
 
 ### Additions
 - Added time zone as a config option
