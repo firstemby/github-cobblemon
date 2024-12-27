@@ -7,6 +7,8 @@
 - Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
 - Added molang particle queries for getting distance to targeted entities
 - Added debug renderer for poseable entity locators
+- Added time zone as a config option
+- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
 
 ### Fixes
 - Fix Pokédex sometimes crashing when switching forms

@@ -18,5 +18,6 @@ enum class Category {
     Healing,
     Storage,
     World,
-    Debug
+    Debug,
+    System
 }
