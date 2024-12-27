@@ -74,8 +74,6 @@ object SpawnLoader {
         .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(IrlTimeRange::class.java, IrlTimeRangeAdapter)
-        .registerTypeAdapter(IrlDateRange::class.java, IrlDateRangeAdapter)
         .create()
 
     var deserializingConditionClass: Class<out SpawningCondition<*>>? = null

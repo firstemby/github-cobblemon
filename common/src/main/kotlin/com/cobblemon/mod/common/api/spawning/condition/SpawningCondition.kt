@@ -8,10 +8,7 @@
 
 package com.cobblemon.mod.common.api.spawning.condition
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.IrlDateRange
-import com.cobblemon.mod.common.api.spawning.IrlTimeRange
 import com.cobblemon.mod.common.api.spawning.MoonPhaseRange
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
@@ -27,8 +24,6 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.WorldgenRandom
 import net.minecraft.world.level.levelgen.structure.Structure
-import java.time.LocalDate
-import java.time.LocalTime
 
 /**
  * The root of spawning conditions that can be applied to a spawning context. What type
@@ -65,8 +60,6 @@ abstract class SpawningCondition<T : SpawningContext> {
     var timeRange: TimeRange? = null
     var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
     var isSlimeChunk: Boolean? = null
-    var irlTimeRange: IrlTimeRange? = null
-    var irlDateRange: IrlDateRange? = null
 
     @Transient
     var appendages = mutableListOf<AppendageCondition>()
@@ -135,10 +128,6 @@ abstract class SpawningCondition<T : SpawningContext> {
 
             val random = Random(seed)
             return random.nextInt(10) == 0*/
-        } else if (irlTimeRange != null && !irlTimeRange!!.contains(LocalTime.now(Cobblemon.config.timeZoneId))){
-            return false
-        } else if (irlDateRange != null && !irlDateRange!!.contains(LocalDate.now(Cobblemon.config.timeZoneId))){
-            return false
         }
 
         return true
@@ -169,10 +158,6 @@ abstract class SpawningCondition<T : SpawningContext> {
         if(dimensions != null && dimensions!!.any {it == null})
             return false
         if(structures != null && structures!!.any {it == null})
-            return false
-        if(irlTimeRange != null && irlTimeRange!!.stopTime.isBefore(irlTimeRange!!.startTime))
-            return false
-        if(irlDateRange != null && irlDateRange!!.stopDate != null && irlDateRange!!.stopDate!!.isBefore(irlDateRange!!.startDate))
             return false
         return true
     }
