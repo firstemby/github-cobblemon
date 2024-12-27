@@ -15,6 +15,10 @@
 - Added time zone as a config option
 - Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
 
+### Additions
+- Added time zone as a config option
+- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
+
 ### Fixes
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
 - Fixed PCs always opening at box 2 instead of box 1.
