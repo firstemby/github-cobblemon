@@ -7,6 +7,13 @@
 
 ### Changes
 - Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
+- Added config setting `maxPokedexScanningDetectionRange` to control from what distance the player can scan Pokémon using the Pokédex.
+- Added the `is_standing_on_blocks(depth, blocks...)` MoLang function, which returns whether the specified entity is standing on a specific block or set of blocks. Example usage: `q.is_standing_on_blocks(2, minecraft:sand)` 
+- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
+- Added molang particle queries for getting distance to targeted entities
+- Added debug renderer for poseable entity locators
+- Added time zone as a config option
+- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
 
 ### Fixes
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
