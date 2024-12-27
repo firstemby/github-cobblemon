@@ -1,6 +1,10 @@
 # Changelog
 ## [1.6.1 (Release TBD)](#1-6-1)
 
+### Additions
+- Added time zone as a config option
+- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
+
 ### Fixes
 - Fix Pokédex sometimes crashing when switching forms
 - Fix crash related to Tom's Simple Storage and Fossil Machine

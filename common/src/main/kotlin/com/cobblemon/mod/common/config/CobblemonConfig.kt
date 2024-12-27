@@ -15,7 +15,10 @@ import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCalculator
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.adapters.ZoneIdAdapter
 import com.google.gson.GsonBuilder
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 class CobblemonConfig {
     companion object {
@@ -25,6 +28,7 @@ class CobblemonConfig {
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
             .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
             .registerTypeAdapter(CaptureCalculator::class.java, CaptureCalculatorAdapter)
+            .registerTypeHierarchyAdapter(ZoneId::class.java, ZoneIdAdapter)
             .create()
     }
 
@@ -249,4 +253,7 @@ class CobblemonConfig {
 
     @NodeCategory(Category.Debug)
     var enableDebugKeys = false
+
+    @NodeCategory(Category.System)
+    var timeZoneId: ZoneId = ZoneOffset.systemDefault()
 }
