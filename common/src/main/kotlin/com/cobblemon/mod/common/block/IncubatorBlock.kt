@@ -12,6 +12,8 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+Fiimport net.minecraft.world.item.AirItem
+import net.minecraft.world.item.EggItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -66,28 +68,14 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
 
-        val entity = level.getBlockEntity(blockPos) as? IncubatorBlockEntity
+        val entity = level.getBlockEntity(blockPos) as? IncubatorBlockEntity ?: return InteractionResult.FAIL
 
-        val egg = entity?.getEgg()
-        if (player.uuid != egg?.parentOne?.getOwnerUUID() && player.uuid != egg?.parentTwo?.getOwnerUUID()) {
+        val egg = entity.getEgg()
+        if (egg != null && player.uuid != egg?.parentOne?.getOwnerUUID() && player.uuid != egg?.parentTwo?.getOwnerUUID()) {
             return InteractionResult.FAIL
         }
 
-        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
-            ?: InteractionResult.FAIL
-    }
-
-    override fun useItemOn(
-        stack: ItemStack,
-        state: BlockState,
-        world: Level,
-        pos: BlockPos,
-        player: Player,
-        hand: InteractionHand,
-        hit: BlockHitResult
-    ): ItemInteractionResult {
-        val entity = world.getBlockEntity(pos) as? IncubatorBlockEntity ?: return ItemInteractionResult.FAIL
-        return entity.updateEgg(player, hand)
+        return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
     }
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {

@@ -29,6 +29,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -78,29 +79,24 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
 
         val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
 
-        val entity = level.getBlockEntity(blockPos) as? NestBlockEntity
-        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
-                ?: InteractionResult.FAIL
+        val entity = level.getBlockEntity(blockPos) as? NestBlockEntity ?: return InteractionResult.FAIL
+        return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
     }
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? NestBlockEntity
-        val itemStack = player.mainHandItem
 
         entity?.let {
             if (!player.isCreative) {
-                it.dropEgg(state, level, pos)
-                if (itemStack.item is PickaxeItem) {
-
-                    val itemEntity = when (this.variant) {
-                        NestVariant.BASIC -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.BASE_NEST.defaultInstance)
-                        NestVariant.WATER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.WATER_NEST.defaultInstance)
-                        NestVariant.CAVE -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.CAVE_NEST.defaultInstance)
-                        NestVariant.NETHER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.NETHER_NEST.defaultInstance)
-                    }
-                    level.addFreshEntity(itemEntity)
+                val itemEntity = when (this.variant) {
+                    NestVariant.BASIC -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.BASE_NEST.defaultInstance)
+                    NestVariant.WATER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.WATER_NEST.defaultInstance)
+                    NestVariant.CAVE -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.CAVE_NEST.defaultInstance)
+                    NestVariant.NETHER -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.NETHER_NEST.defaultInstance)
                 }
+                level.addFreshEntity(itemEntity)
             }
+            it.dropEgg(state, level, pos)
         }
         return super.playerWillDestroy(level, pos, state, player)
     }

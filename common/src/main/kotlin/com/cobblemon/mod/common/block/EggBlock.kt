@@ -34,6 +34,7 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
@@ -80,9 +81,8 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
 
         val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
 
-        val entity = level.getBlockEntity(blockPos) as? EggBlockEntity
-        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
-            ?: InteractionResult.FAIL
+        val entity = level.getBlockEntity(blockPos) as? EggBlockEntity ?: return InteractionResult.FAIL
+        return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
     }
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {

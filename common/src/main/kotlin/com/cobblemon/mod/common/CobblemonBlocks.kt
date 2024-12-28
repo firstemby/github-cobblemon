@@ -489,10 +489,9 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
         .mapColor(MapColor.COLOR_LIGHT_GRAY)
         .sound(SoundType.METAL)
-        .strength(2.0F)
+        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.BEDROCK.explosionResistance)
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK)
-        .explosionResistance(Blocks.BEDROCK.explosionResistance)
     ))
 
     init {
