@@ -491,6 +491,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .sound(SoundType.METAL)
         .strength(2.0F)
         .noOcclusion()
+        .pushReaction(PushReaction.BLOCK)
+        .explosionResistance(Blocks.BEDROCK.explosionResistance)
     ))
 
     init {
@@ -523,7 +525,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     private fun nestBlock(variant: NestBlock.NestVariant): NestBlock {
         val identifier = cobblemonResource(variant.serializedName)
-        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion())
+        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
         return this.create(identifier.path, block)
     }
 

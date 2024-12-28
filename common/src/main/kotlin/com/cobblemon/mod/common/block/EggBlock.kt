@@ -9,9 +9,16 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.block.HealingMachineBlock.Companion
+import com.cobblemon.mod.common.block.HealingMachineBlock.Companion.CHARGE_LEVEL
+import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
+import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
+import com.cobblemon.mod.common.item.PokemonEggItem
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.mojang.serialization.Dynamic
 import com.mojang.serialization.MapCodec
 import net.minecraft.world.level.block.state.BlockState
@@ -20,11 +27,24 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.phys.BlockHitResult
 
 class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun setPlacedBy(
@@ -46,6 +66,34 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)
     }
 
+    override fun useWithoutItem(
+        blockState: BlockState,
+        level: Level,
+        blockPos: BlockPos,
+        player: Player,
+        blockHitResult: BlockHitResult
+    ): InteractionResult {
+        // Ensure this logic only runs on the server
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS // Client-side only needs to show the hand animation
+        }
+
+        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
+
+        val entity = level.getBlockEntity(blockPos) as? EggBlockEntity
+        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
+            ?: InteractionResult.FAIL
+    }
+
+    override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
+        val entity = level.getBlockEntity(pos) as? EggBlockEntity
+
+        if (entity != null && !player.isCreative) {
+            entity.dropEgg(state, level, pos)
+        }
+
+        return super.playerWillDestroy(level, pos, state, player)
+    }
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
         TODO("Not yet implemented")

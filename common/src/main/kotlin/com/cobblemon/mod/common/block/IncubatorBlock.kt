@@ -1,13 +1,19 @@
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
+import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
@@ -17,6 +23,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.phys.BlockHitResult
 
@@ -28,7 +35,9 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
     }
 
     init {
-        registerDefaultState(stateDefinition.any().setValue(FACING, net.minecraft.core.Direction.NORTH))
+        registerDefaultState(stateDefinition.any()
+            .setValue(FACING, net.minecraft.core.Direction.NORTH)
+        )
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
@@ -44,13 +53,28 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
     }
 
     override fun useWithoutItem(
-        state: BlockState,
+        blockState: BlockState,
         level: Level,
-        pos: BlockPos,
+        blockPos: BlockPos,
         player: Player,
-        hitResult: BlockHitResult
+        blockHitResult: BlockHitResult
     ): InteractionResult {
-        return super.useWithoutItem(state, level, pos, player, hitResult)
+        // Ensure this logic only runs on the server
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS // Client-side only needs to show the hand animation
+        }
+
+        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
+
+        val entity = level.getBlockEntity(blockPos) as? IncubatorBlockEntity
+
+        val egg = entity?.getEgg()
+        if (player.uuid != egg?.parentOne?.getOwnerUUID() && player.uuid != egg?.parentTwo?.getOwnerUUID()) {
+            return InteractionResult.FAIL
+        }
+
+        return entity?.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
+            ?: InteractionResult.FAIL
     }
 
     override fun useItemOn(
@@ -68,9 +92,15 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? IncubatorBlockEntity
+        val itemStack = player.mainHandItem
+
         entity?.let {
             if (!player.isCreative) {
-                it.clearContent()
+                it.dropEgg(state, level, pos)
+                if (itemStack.item is PickaxeItem) {
+                    val itemEntity = ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.INCUBATOR.defaultInstance)
+                    level.addFreshEntity(itemEntity)
+                }
             }
         }
         return super.playerWillDestroy(level, pos, state, player)

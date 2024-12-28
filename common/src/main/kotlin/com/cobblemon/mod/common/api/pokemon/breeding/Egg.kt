@@ -29,7 +29,7 @@ data class Egg(
         val species: ResourceLocation, // Species of the Pokémon
         val parentOne: Pokemon?,       // First parent's UUID
         val parentTwo: Pokemon?,       // Second parent's UUID
-        var timeToHatch: Int           // Time in ticks to hatch
+        var timeToHatch: Float           // Time in ticks to hatch
 ) {
 
     companion object {
@@ -38,9 +38,9 @@ data class Egg(
                     ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it?.species ?: cobblemonResource("unknown") },
                     Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { it?.parentOne?.let { Optional.of(it) } ?: Optional.empty() },
                     Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { it?.parentTwo?.let { Optional.of(it) } ?: Optional.empty() },
-                    Codec.INT.optionalFieldOf("timeToHatch", 0).forGetter { it?.timeToHatch ?: 0 }
+                    Codec.FLOAT.optionalFieldOf("timeToHatch", 0F).forGetter { it?.timeToHatch ?: 0F }
             ).apply(instance) { species, parentOneOpt, parentTwoOpt, timeToHatch ->
-                if (species != cobblemonResource("unknown") || timeToHatch != 0 || parentOneOpt.isPresent || parentTwoOpt.isPresent) {
+                if (species != cobblemonResource("unknown") || timeToHatch != 0F || parentOneOpt.isPresent || parentTwoOpt.isPresent) {
                     Egg(
                             species = species,
                             parentOne = parentOneOpt.orElse(null),

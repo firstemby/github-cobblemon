@@ -168,7 +168,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         // If the nest has an egg
         if (currentEgg != null) {
-            return if (currentEgg.timeToHatch == 0) {
+            return if (currentEgg.timeToHatch <= 0F) {
                 hatchPokemon(state, world, pos, player) // Hatch if ready
                 InteractionResult.SUCCESS
             } else {
@@ -428,10 +428,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 }
 
                 // Decrease hatch time if the egg still has time left
-                egg.timeToHatch--
+                if (egg.timeToHatch > 0F) { egg.timeToHatch -- }
 
                 // Sync to client every 10 seconds (200 ticks)
-                if (egg.timeToHatch % 200 == 0) {
+                if (egg.timeToHatch % 200F == 0F) {
                     blockEntity.setEgg(egg) // Update component and synchronize
                     blockEntity.setChanged()
                 }
@@ -450,7 +450,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                                     species = it.resourceIdentifier,
                                     parentOne = parent1.pokemon, // Parent one UUID
                                     parentTwo = parent2.pokemon, // Parent two UUID
-                                    timeToHatch = 20 * 10 // 10 seconds hatch time
+                                    timeToHatch = 200F // 10 seconds hatch time
                             )
                         }
                         if (egg != null) {
