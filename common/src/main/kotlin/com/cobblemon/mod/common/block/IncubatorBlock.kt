@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
@@ -12,7 +13,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-Fiimport net.minecraft.world.item.AirItem
+import net.minecraft.world.item.AirItem
 import net.minecraft.world.item.EggItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
@@ -23,6 +24,9 @@ import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -98,5 +102,9 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun codec(): MapCodec<out BaseEntityBlock> {
         return CODEC
+    }
+
+    override fun <T : BlockEntity?> getTicker(level: Level, blockState: BlockState, blockEntityType: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return createTickerHelper(blockEntityType, CobblemonBlockEntities.INCUBATOR, IncubatorBlockEntity.TICKER)
     }
 }

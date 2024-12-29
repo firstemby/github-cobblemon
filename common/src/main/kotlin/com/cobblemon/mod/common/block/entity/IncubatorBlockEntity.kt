@@ -27,9 +27,11 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
@@ -251,18 +253,6 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             return
         }
 
-        // Spawn the Pokémon entity at the egg's position
-        val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
-            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
-            world.addFreshEntity(this)
-        }
-
-        // todo WHY WON'T THEY CRY :(
-        // Trigger cry animation
-        afterOnServer(seconds = 1.0f) {
-            spawnedEntity.cry()
-        }
-
         // If party has space, add Pokémon to the party
         if (playerParty.getFirstAvailablePosition() != null) {
             playerParty.add(hatchedPokemon)
@@ -272,16 +262,6 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         // If party is full but PC has space, add to PC and recall Pokémon
         else if (playerPC.add(hatchedPokemon)) {
             player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
-
-            // Schedule recall animation
-            spawnedEntity.after(seconds = 3.0f) {
-                spawnedEntity.recallWithAnimation()
-            }
-
-            /*// Remove the Pokémon entity after recall
-            spawnedEntity.after(seconds = 4.0f) {
-                spawnedEntity.remove(Entity.RemovalReason.DISCARDED)
-            }*/
         }
 
         // Clear the egg from the nest and update the block entity
@@ -289,5 +269,4 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         setChanged()
         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }
-
 }
