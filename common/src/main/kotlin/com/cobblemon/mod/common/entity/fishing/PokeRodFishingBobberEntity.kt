@@ -183,7 +183,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     fun chooseAdjustedSpawnBucket(buckets: List<SpawnBucket>, luckOfTheSeaLevel: Int): SpawnBucket {
-        val baseIncreases = listOf(2.5F, 0.5F, 0.2F)  // Base increases for the first three buckets beyond the first
+        val baseIncreases = listOf(2.5F, 0.9F, 0.35F)  // Base increases for the first three buckets beyond the first
         val adjustedWeights = buckets.mapIndexed { index, bucket ->
             if (index == 0) {
                 // Placeholder, will be recalculated

@@ -40,7 +40,7 @@ class BestSpawnerConfig {
     val buckets = mutableListOf(
         SpawnBucket("common", 93.8F),
         SpawnBucket("uncommon", 5F),
-        SpawnBucket("rare", 1.0F),
+        SpawnBucket("rare", 0.5F),
         SpawnBucket("ultra-rare", 0.2F)
     )
 
