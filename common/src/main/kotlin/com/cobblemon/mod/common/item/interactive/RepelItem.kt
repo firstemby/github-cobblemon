@@ -12,6 +12,9 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.effects.CobblemonMobEffects
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.item.interactive.RepelItem.Companion.MAX_REPEL_DURATION
+import com.cobblemon.mod.common.item.interactive.RepelItem.Companion.REPEL_DURATION
+import com.cobblemon.mod.common.item.interactive.RepelItem.Companion.SUPER_REPEL_DURATION
 import com.cobblemon.mod.common.util.effectLang
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -22,6 +25,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 class RepelItem(val type: RepelType) : CobblemonItem(Properties()) {
+
+    companion object {
+        const val REPEL_DURATION = 2000
+        const val SUPER_REPEL_DURATION = 4000
+        const val MAX_REPEL_DURATION = 5000
+    }
 
     override fun use(level: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) {
@@ -56,9 +65,9 @@ enum class RepelType {
 
     fun returnDuration(type: RepelType) : Int {
         val duration = when (type) {
-            REPEL -> 2000
-            SUPER_REPEL -> 4000
-            MAX_REPEL -> 5000
+            REPEL -> REPEL_DURATION
+            SUPER_REPEL -> SUPER_REPEL_DURATION
+            MAX_REPEL -> MAX_REPEL_DURATION
         }
 
         return duration
