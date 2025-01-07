@@ -261,7 +261,16 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 capturingPokemon = pokemonEntity
                 entityData.set(HIT_VELOCITY, deltaMovement.normalize())
                 entityData.set(HIT_TARGET_POSITION, hitResult.location)
-                attemptCatch(pokemonEntity)
+                CobblemonEvents.THROWN_POKEBALL_HIT.postThen(
+                    event = ThrownPokeballHitEvent(this, pokemonEntity),
+                    ifSucceeded = {
+                        attemptCatch(pokemonEntity)
+                    },
+                    ifCanceled = {
+                        drop()
+                        return
+                    }
+                )
                 return
             }
         }
@@ -284,19 +293,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         delegate.tick(this)
 
         if (level().isServerSide()) {
-            capturingPokemon?.let {
-                if (!it.isInvisible) {
-                    entityData.set(HIT_TARGET_POSITION, it.position())
-                }
-                CobblemonEvents.THROWN_POKEBALL_HIT.postThen(
-                    event = ThrownPokeballHitEvent(this, it),
-                    ifSucceeded = {},
-                    ifCanceled = {
-                        drop()
-                        return
-                    }
-                )
-            }
+        
 
             if (this.tickCount > 600 && this.capturingPokemon == null) {
                 this.remove(RemovalReason.DISCARDED)
@@ -419,7 +416,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 matrix.translate(x, y, z)
                 wrapper.updateMatrix(matrix.last().pose())
                 val world = Minecraft.getInstance().level ?: return@let
-                ParticleStorm(effect, wrapper, world).spawn()
+                ParticleStorm(effect, wrapper, wrapper, world).spawn()
             }
         }
     }
@@ -459,7 +456,6 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         after(seconds = 2.2F) {
             // Time to begin falling
             pokemonEntity.phasingTargetId = -1
-            pokemonEntity.beamMode = 0
             pokemonEntity.isInvisible = true
             captureState = CaptureState.FALL
             after(seconds = 1.5F) {

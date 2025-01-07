@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable.NPCVariableType
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorButton
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorScreen
 import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList.ConfigVariable
@@ -22,6 +23,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ContainerObjectSelectionList
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.components.Tooltip
+import net.minecraft.client.gui.components.WidgetTooltipHolder
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
 
@@ -35,7 +37,7 @@ class ConfigVariableList(
     HEIGHT, // height
     0, // top
     SLOT_HEIGHT + SLOT_SPACING
-) {
+), CobblemonRenderable {
     companion object {
         const val WIDTH = 211
         const val HEIGHT = 160
@@ -123,6 +125,9 @@ class ConfigVariableList(
         var textValue = value
         var booleanValue = value.let { it.toDoubleOrNull() == 1.0 || it.toBooleanStrictOrNull() == true }
 
+        val tooltip = Tooltip.create(variable.description)
+        val tooltipHolder = WidgetTooltipHolder().also { it.set(tooltip) }
+
         val editBox = EditBox(
             client.font,
             parent.listX,
@@ -132,7 +137,6 @@ class ConfigVariableList(
             variable.displayName,
         ).also {
             it.isBordered = false
-            it.tooltip = Tooltip.create(variable.description)
             it.height = SLOT_HEIGHT - 16
             it.setMaxLength(250)
             it.value = value
@@ -144,6 +148,7 @@ class ConfigVariableList(
                 it.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() || value == "." || value == "-" }
             }
         }
+
         val toggleButton = NPCEditorButton(
             parent.listX.toFloat(),
             parent.listY + 6F,
@@ -155,7 +160,7 @@ class ConfigVariableList(
             parent.parent.dto.variables[variable.variableName] = if (booleanValue) "1" else "0"
             (it as NPCEditorButton).cycleButtonState = booleanValue
         }.also {
-            it.tooltip = Tooltip.create(variable.description)
+            it.tooltip = tooltip
         }
 
         init {
@@ -210,6 +215,10 @@ class ConfigVariableList(
                 editBox.x = x + 4
                 editBox.y = y + 18
                 editBox.render(context, mouseX, mouseY, partialTicks)
+
+                // Manually renders the tooltip for the edit box because disabling its border messes everything up
+                val isEditBoxHovered = mouseX >= x && mouseX <= x + SLOT_WIDTH - 1 && mouseY >= y + 15 && mouseY <= y + 15 + 14
+                tooltipHolder.refreshTooltipForNextRenderPass(isEditBoxHovered, editBox.isFocused, editBox.rectangle)
             }
         }
     }

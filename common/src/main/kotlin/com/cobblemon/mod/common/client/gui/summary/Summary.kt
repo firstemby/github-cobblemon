@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.widgets.EvolutionSelectScreen
@@ -63,7 +64,7 @@ import net.minecraft.sounds.SoundEvent
  * @param selection The index the [party] will have as the base [selectedPokemon].
  */
 class Summary private constructor(party: Collection<Pokemon?>, private val editable: Boolean, private val selection: Int): Screen(
-    Component.translatable("cobblemon.ui.summary.title")), Schedulable {
+    Component.translatable("cobblemon.ui.summary.title")), Schedulable, CobblemonRenderable {
 
     companion object {
         const val BASE_WIDTH = 331

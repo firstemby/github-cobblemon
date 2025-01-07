@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.ArrowButton
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.Multimap
@@ -20,7 +21,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
-class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title) {
+class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title), CobblemonRenderable {
     companion object {
         const val SIZE = 140
         const val OPTION_SIZE = 71

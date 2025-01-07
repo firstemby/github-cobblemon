@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.Add
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.server
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
@@ -73,7 +74,7 @@ class ServerEvolutionController(
 
     override fun add(element: Evolution): Boolean {
         if (this.evolutions.add(element)) {
-            this.pokemon.notify(AddEvolutionPacket(this.pokemon, element))
+            this.pokemon.notify(AddEvolutionPacket(this.pokemon, element, this.pokemon.getOwnerEntity()?.registryAccess() ?: server()?.registryAccess() ?: throw IllegalStateException("No registry access available")))
             return true
         }
         return false
@@ -109,7 +110,7 @@ class ServerEvolutionController(
 
     override fun remove(element: Evolution): Boolean {
         if (this.evolutions.remove(element)) {
-            this.pokemon.notify(RemoveEvolutionPacket(this.pokemon, element))
+            this.pokemon.notify(RemoveEvolutionPacket(this.pokemon, element, this.pokemon.getOwnerEntity()?.registryAccess() ?: server()?.registryAccess() ?: throw IllegalStateException("No registry access available")))
             return true
         }
         return false

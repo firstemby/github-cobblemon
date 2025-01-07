@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.npc
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawText
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList
 import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget
 import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget.Companion.HEIGHT
@@ -31,7 +32,7 @@ import java.util.UUID
 class NPCEditorScreen(
     val npcId: Int,
     val dto: NPCConfigurationDTO
-) : Screen("gui.npc_editor.title".asTranslated()) {
+) : Screen("gui.npc_editor.title".asTranslated()), CobblemonRenderable {
     companion object {
         const val BASE_WIDTH = 360
         const val BASE_HEIGHT = 220

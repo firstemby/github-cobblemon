@@ -1912,7 +1912,7 @@
     "cobblemon.move.wildcharge": "Carga Salvaje",
     "cobblemon.ability.blaze": "Llamarada",
     "cobblemon.ability.overgrow": "Espesura",
-    "cobblemon.ability.pressure.desc": "La presión que ejerce el pokémon obliga a los opoentes a usar el doble de PP.",
+    "cobblemon.ability.pressure.desc": "La presión que ejerce el pokémon obliga a los oponentes a usar el doble de PP.",
     "cobblemon.ability.pressure": "Presión",
     "cobblemon.ability.superluck": "Super Suerte",
     "cobblemon.ability.superluck.desc": "El pokémon tiene tanta suerte que da golpes críticos mucho mas seguido.",
@@ -1967,5 +1967,11 @@
     "cobblemon.move.bravebird.desc": "El pokémon dobla sus alas y se lanza desde baja altura, dañando muchísimo al oponente y a si mismo.",
     "cobblemon.move.astonish": "Impresión",
     "cobblemon.move.astonish.desc": "El pokémon ataca al oponente mientras grita sorpresivamente. Puede hacer retroceder al oponente.",
-    "cobblemon.move.aquatail.desc": "El pokémon ataca agitando su cola como si fuera una ola en una fuerte tormenta."
+    "cobblemon.move.aquatail.desc": "El pokémon ataca agitando su cola como si fuera una ola en una fuerte tormenta.",
+    "cobblemon.species.oinkologne.desc": "-",
+    "cobblemon.species.maushold.desc": "-",
+    "cobblemon.species.squawkabilly.desc": "-",
+    "cobblemon.species.palafin.desc": "-",
+    "cobblemon.species.dudunsparce.desc": "-",
+    "cobblemon.species.tatsugiri.desc": "-"
 }

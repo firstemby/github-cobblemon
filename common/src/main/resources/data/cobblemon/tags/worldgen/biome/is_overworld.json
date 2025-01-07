@@ -22,6 +22,10 @@
 	"#cobblemon:is_spooky",
 	"#cobblemon:is_temperate",
 	"#cobblemon:is_thermal",
-	"#cobblemon:is_volcanic"
+	"#cobblemon:is_volcanic",
+	{
+      "id": "#c:is_overworld",
+      "required": false
+    }
   ]
 }

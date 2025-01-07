@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "#minecraft:is_jungle",
+	{
+      "id": "#c:is_jungle",
+      "required": false
+    },
     {
       "id": "terralith:cave/underground_jungle",
       "required": false
@@ -13,6 +17,10 @@
 	{
       "id": "biomesoplenty:rainforest",
       "required": false
+    },
+	{
+      "id": "clifftree:tropical_river",
+      "required": false 
     },
     {
       "id": "wythers:dripleaf_swamp",

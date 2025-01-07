@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -129,7 +130,7 @@ interface Evolution : EvolutionLike {
         owner.party().getFirstAvailablePosition() ?: return false
 
         // Add shed Pokemon to player's party
-        val shedPokemon = pokemon.clone()
+        val shedPokemon = pokemon.clone(registryAccess = owner.registryAccess())
         shedPokemon.removeHeldItem()
         innerShedder.apply(shedPokemon)
         shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
@@ -162,7 +163,7 @@ interface Evolution : EvolutionLike {
             evolutionMethod(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.busyLocks.add("evolving")
+            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
             pokemonEntity.navigation.stop()
             pokemonEntity.after(1F) {
                 evolutionAnimation(pokemonEntity)
@@ -172,7 +173,7 @@ interface Evolution : EvolutionLike {
             }
             pokemonEntity.after( seconds = 12F ) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.busyLocks.remove("evolving")
+                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
         }
@@ -189,15 +190,23 @@ interface Evolution : EvolutionLike {
     }
 
     fun evolutionMethod(pokemon: Pokemon) {
+        // This ensures the Pokémon doesn't lose moves during evolution
+        // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
+        val previousSpeciesLearnableMoves = pokemon.relearnableMoves
+
         this.result.apply(pokemon)
-        this.learnableMoves.forEach { move ->
+
+        val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
+        movesToLearn.forEach { move ->
             if (pokemon.moveSet.hasSpace()) {
                 pokemon.moveSet.add(move.create())
             } else {
                 pokemon.benchedMoves.add(BenchedMove(move, 0))
             }
+
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
         }
+
         // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available
         pokemon.evolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }
         pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }

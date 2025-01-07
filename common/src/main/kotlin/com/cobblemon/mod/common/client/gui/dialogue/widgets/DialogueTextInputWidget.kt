@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.dialogue.widgets
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawCenteredText
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
@@ -36,7 +37,7 @@ class DialogueTextInputWidget(
     width,
     height,
     "gui_dialogue_text_input".text()
-) {
+), CobblemonRenderable {
     init {
         setMaxLength(maxLength)
         isFocused = true

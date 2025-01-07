@@ -50,7 +50,7 @@ class PokemonInBattleMovementGoal(val entity: PokemonEntity, val range: Int) : G
                 entity.navigation.moveTo(battlePos!!.x, battlePos!!.y, battlePos!!.z, 1.0)
                 hasMovedToPos = true
             }
-            if (entity.ticksLived > 1 && !entity.onGround() && !entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
+            if (entity.ticksLived > 1 && !entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) && entity.navigation.isAirborne(entity.level(), entity.blockPosition())) {
                 // Let flyers fly in battle if they're in the air
                 entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
             }

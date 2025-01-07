@@ -59,6 +59,10 @@ class SimpleQuirk(
     private fun applyAnimations(state: PosableState, data: SimpleQuirkData) {
         val (primary, stateful) = animations(state).partition { it is PrimaryAnimation }
         data.animations.addAll(stateful)
+        // We hit these to 'start' them (mainly to set the startedSeconds) but we don't need to do that for the primaryAnimation
+        // because state.addPrimaryAnimation does that for us. We don't technically add these stateful animations to the state
+        // so if not for this line, nothing would set the start time.
+        stateful.forEach { it.start(state) }
         if (primary.isNotEmpty()) {
             val primaryAnimation = primary.first() as PrimaryAnimation
             data.primaryAnimation = primaryAnimation

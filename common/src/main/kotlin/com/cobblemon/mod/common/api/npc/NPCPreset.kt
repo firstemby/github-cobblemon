@@ -26,10 +26,12 @@ class NPCPreset {
     var canDespawn: Boolean? = null
     var interaction: NPCInteractConfiguration? = null
     var names: MutableSet<Component>? = null
+    var baseScale: Float? = null
     var hitbox: EntityDimensions? = null
     var ai: List<BrainConfig>? = null
     var skill: Int? = null
     var autoHealParty: Boolean? = null
+    var randomizePartyOrder: Boolean? = null
     var battleTheme: ResourceLocation? = null
     var isMovable: Boolean? = null
     var isInvulnerable: Boolean? = null
@@ -50,9 +52,11 @@ class NPCPreset {
 //        aiScripts?.let { npcClass.aiScripts.addAll(it) }
         interaction?.let { npcClass.interaction = it }
         names?.let { npcClass.names.addAll(it) }
+        baseScale?.let { npcClass.baseScale = it }
         hitbox?.let { npcClass.hitbox = it }
         skill?.let { npcClass.skill = it }
         autoHealParty?.let { npcClass.autoHealParty = it }
+        randomizePartyOrder?.let { npcClass.randomizePartyOrder = it }
         battleTheme?.let { npcClass.battleTheme = it }
         ai?.let { npcClass.ai.addAll(it) }
         isMovable?.let { npcClass.isMovable = it }

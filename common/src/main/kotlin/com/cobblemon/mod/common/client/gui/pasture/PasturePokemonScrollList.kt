@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pc.StorageSlot
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget
@@ -40,7 +41,7 @@ class PasturePokemonScrollList(
     HEIGHT, // height
     0, // top
     SLOT_HEIGHT + SLOT_SPACING
-) {
+), CobblemonRenderable {
     companion object {
         const val WIDTH = 70
         const val HEIGHT = 120
@@ -191,7 +192,8 @@ class PasturePokemonScrollList(
             partialTicks: Float
         ) {
             val x = rowLeft - 4
-            val y = rowTop
+            val y = rowTop + 2
+
             val matrixStack = context.pose()
             blitk(
                 matrixStack = matrixStack,

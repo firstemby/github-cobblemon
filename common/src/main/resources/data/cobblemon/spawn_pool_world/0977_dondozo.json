@@ -7,7 +7,7 @@
             "id": "dondozo-1",
             "pokemon": "dondozo",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -37,41 +37,13 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
             }
         },
         {
             "id": "dondozo-3",
             "pokemon": "dondozo",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "28-53",
-            "weight": 2.0,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "dondozo-4",
-            "pokemon": "dondozo",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -88,7 +60,7 @@
             }
         },
         {
-            "id": "dondozo-5",
+            "id": "dondozo-4",
             "pokemon": "dondozo",
             "type": "pokemon",
             "context": "fishing",
@@ -105,36 +77,6 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "dondozo-6",
-            "pokemon": "dondozo",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "28-53",
-            "weight": 2.0,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_bamboo",
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2
             }
         }
     ]

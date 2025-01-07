@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionCont
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
+import com.cobblemon.mod.common.util.server
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -98,7 +99,8 @@ internal data class ClientPokemonP2(
             pokemon.faintedTimer,
             pokemon.healTimer,
             Optional.ofNullable((pokemon.evolutionProxy.current() as? ServerEvolutionController)?.let {
-                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon) }.toSet())
+                //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
+                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon, registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available")) }.toSet())
             }),
             pokemon.shiny,
             pokemon.nature,

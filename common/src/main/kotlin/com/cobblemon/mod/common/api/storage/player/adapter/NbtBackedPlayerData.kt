@@ -37,11 +37,11 @@ abstract class NbtBackedPlayerData<T : InstancedPlayerData>(
     override fun load(uuid: UUID): T {
         val playerFile = filePath(uuid)
         playerFile.parentFile.mkdirs()
-        return if (playerFile.exists()) {
+        return if (playerFile.exists() && playerFile.length() > 0L) {
             val input = NbtIo.read(playerFile.toPath())
             val decodeResult = NbtOps.INSTANCE.withDecoder(codec).apply(input)
             decodeResult.getPartialOrThrow {
-                Cobblemon.LOGGER.error("Error decoding pokedex for player uuid ${uuid}")
+                Cobblemon.LOGGER.error("Error decoding $subfolder for player uuid $uuid")
                 Cobblemon.LOGGER.error(it)
                 throw UnsupportedOperationException()
             }.first

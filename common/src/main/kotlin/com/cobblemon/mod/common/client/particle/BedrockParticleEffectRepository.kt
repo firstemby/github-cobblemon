@@ -31,12 +31,16 @@ object BedrockParticleOptionsRepository {
     fun loadEffects(resourceManager: ResourceManager) {
         LOGGER.info("Loading particle effects...")
         effects.clear()
-
         resourceManager.listResources("bedrock/particles") { path -> path.endsWith(".particle.json") }.forEach { identifier, resource ->
-            resource.open().use { stream ->
-                val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
-                val effect = SnowstormParticleReader.loadEffect(GSON.fromJson(json, JsonObject::class.java))
-                effects[effect.id] = effect
+            try {
+                resource.open().use { stream ->
+                    val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
+                    val effect = SnowstormParticleReader.loadEffect(GSON.fromJson(json, JsonObject::class.java))
+                    effects[effect.id] = effect
+                }
+            }
+            catch (e: Exception) {
+                LOGGER.error(e)
             }
         }
 

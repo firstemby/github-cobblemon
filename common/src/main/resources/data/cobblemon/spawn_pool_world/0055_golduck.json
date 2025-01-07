@@ -58,7 +58,7 @@
             "id": "golduck-3",
             "pokemon": "golduck",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -95,7 +95,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },

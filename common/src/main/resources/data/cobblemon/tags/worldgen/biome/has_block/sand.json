@@ -6,6 +6,14 @@
       "id": "byg:mojave_desert",
       "required": false
     },
+	{
+      "id": "clifftree:oasis",
+      "required": false 
+    },
+	{
+      "id": "clifftree:shrubland",
+      "required": false 
+    },
     {
       "id": "terralith:ancient_sands",
       "required": false

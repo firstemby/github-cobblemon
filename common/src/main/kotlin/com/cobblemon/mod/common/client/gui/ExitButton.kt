@@ -18,7 +18,7 @@ import net.minecraft.network.chat.Component
 class ExitButton(
     pX: Int, pY: Int,
     onPress: OnPress
-): Button(pX, pY, WIDTH.toInt(), HEIGHT.toInt(), Component.literal("Exit"), onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, WIDTH.toInt(), HEIGHT.toInt(), Component.literal("Exit"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val WIDTH = 26F

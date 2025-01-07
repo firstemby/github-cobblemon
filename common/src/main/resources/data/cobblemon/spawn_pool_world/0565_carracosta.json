@@ -26,7 +26,7 @@
             "id": "carracosta-2",
             "pokemon": "carracosta",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

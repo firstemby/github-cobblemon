@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -164,8 +165,9 @@ class InfoWidget(
         val experience = pokemon.experience.toString().text()
         val experienceForThisLevel =
             pokemon.experience - if (pokemon.level == 1) 0 else pokemon.experienceGroup.getExperience(pokemon.level)
+        val nextLevel = (pokemon.level + 1).coerceAtMost(ServerSettings.maxPokemonLevel)
         val experienceToNext =
-            pokemon.experienceGroup.getExperience(pokemon.level + 1) - pokemon.experienceGroup.getExperience(pokemon.level)
+            pokemon.experienceGroup.getExperience(nextLevel) - pokemon.experienceGroup.getExperience(pokemon.level)
 
         drawScaledText(
             context = context,
@@ -176,10 +178,11 @@ class InfoWidget(
             shadow = true
         )
 
+        val experienceToNextText = Component.literal(experienceToNext.toString())
         drawScaledText(
             context = context,
-            text = experienceToNext.toString().text(),
-            x = (x + 127) - (mcFont.width(experienceToNext.toString().text()) * smallTextScale),
+            text = experienceToNextText,
+            x = (x + 127) - (mcFont.width(experienceToNextText) * smallTextScale),
             y = y + 137,
             scale = smallTextScale,
             shadow = true

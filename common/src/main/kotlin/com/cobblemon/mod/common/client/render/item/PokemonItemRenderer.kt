@@ -56,7 +56,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
 
-        matrices.translate(model.profileTranslation.x, model.profileTranslation.y,  model.profileTranslation.z - 4.0)
+        matrices.translate(model.profileTranslation.x, model.profileTranslation.y, -4.0)
         matrices.scale(model.profileScale, model.profileScale, 0.15F)
 
         val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(transformations.rotation.x, transformations.rotation.y, transformations.rotation.z))

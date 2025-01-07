@@ -31,6 +31,7 @@ class BedrockParticleEmitter(
     var rate: ParticleEmitterRate = InstantParticleEmitterRate(),
     var shape: ParticleEmitterShape = SphereParticleEmitterShape(),
     var lifetime: ParticleEmitterLifetime = OnceEmitterLifetime(NumberExpression(1.0)),
+    var space: EmitterSpace = EmitterSpace(),
     var eventTimeline: EventTriggerTimeline = EventTriggerTimeline(mutableMapOf()),
     var creationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var expirationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
@@ -45,18 +46,20 @@ class BedrockParticleEmitter(
                 ParticleEmitterRate.codec.fieldOf("rate").forGetter { it.rate },
                 ParticleEmitterShape.codec.fieldOf("shape").forGetter { it.shape },
                 ParticleEmitterLifetime.codec.fieldOf("lifetime").forGetter { it.lifetime },
+                EmitterSpace.CODEC.fieldOf("space").forGetter { it.space },
                 EventTriggerTimeline.CODEC.fieldOf("eventTimeline").forGetter { it.eventTimeline },
                 SimpleEventTrigger.CODEC.listOf().fieldOf("creationEvents").forGetter { it.creationEvents },
                 SimpleEventTrigger.CODEC.listOf().fieldOf("expirationEvents").forGetter { it.expirationEvents },
                 EventTriggerTimeline.CODEC.fieldOf("travelDistanceEvents").forGetter { it.travelDistanceEvents },
                 LoopingTravelDistanceEventTrigger.CODEC.listOf().fieldOf("loopingTravelDistanceEvents").forGetter { it.loopingTravelDistanceEvents }
-            ).apply(instance) { startExpressions, updateExpressions, rate, shape, lifetime, eventTimeline, creationEvents, expirationEvents, travelDistanceEvents, loopingTravelDistanceEvents ->
+            ).apply(instance) { startExpressions, updateExpressions, rate, shape, lifetime, space, eventTimeline, creationEvents, expirationEvents, travelDistanceEvents, loopingTravelDistanceEvents ->
                 BedrockParticleEmitter(
                     startExpressions = startExpressions,
                     updateExpressions = updateExpressions,
                     shape = shape,
                     rate = rate,
                     lifetime = lifetime,
+                    space = space,
                     eventTimeline = eventTimeline,
                     creationEvents = creationEvents,
                     expirationEvents = expirationEvents,

@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
-import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
@@ -72,8 +71,6 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
         super.defineSynchedData(builder)
         builder.define(TYPE_TRACKED_DATA, CobblemonBoatType.APRICORN.ordinal)
     }
-
-    override fun getTypeName(): Component = EntityType.BOAT.description
 
     override fun readAdditionalSaveData(nbt: CompoundTag) {
         if (nbt.contains(TYPE_KEY, Tag.TAG_STRING.toInt())) {

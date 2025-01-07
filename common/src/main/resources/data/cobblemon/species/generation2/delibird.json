@@ -182,10 +182,17 @@
     "cobblemon.species.delibird.desc"
   ],
   "evolutions": [],
-  "baseScale": 1,
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
+  "baseScale": 0.63,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.15,
+    "height": 1.65,
     "fixed": false
   },
   "baseFriendship": 50,

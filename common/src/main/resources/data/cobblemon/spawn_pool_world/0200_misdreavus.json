@@ -98,6 +98,26 @@
                     "#cobblemon:nether/is_warped"
                 ]
             }
+        },
+        {
+            "id": "misdreavus-6",
+            "pokemon": "misdreavus",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "19-44",
+            "weight": 5.7,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
+            }
         }
     ]
 }

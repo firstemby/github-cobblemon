@@ -134,10 +134,6 @@ class PokemonRenderer(
 
         modelNow.setLayerContext(buffer, clientDelegate, PokemonModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
 
-        if (entity.ticksLived < 10) {
-            entity.yBodyRot = entity.entityData.get(SPAWN_DIRECTION)
-            entity.yBodyRotO = entity.yBodyRot
-        }
 
         super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
 

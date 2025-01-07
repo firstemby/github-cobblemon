@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -22,7 +23,7 @@ class DialogueNameWidget(
     val width: Int,
     val height: Int,
     val text: MutableComponent?
-) : Renderable, GuiEventListener {
+) : CobblemonRenderable, GuiEventListener {
     companion object {
         val nameResource = cobblemonResource("textures/gui/dialogue/dialogue_name.png")
     }

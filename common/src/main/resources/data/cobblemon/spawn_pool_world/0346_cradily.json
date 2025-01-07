@@ -7,7 +7,7 @@
             "id": "cradily-1",
             "pokemon": "cradily",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

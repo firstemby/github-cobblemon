@@ -4,11 +4,11 @@
     "minecraft:dark_forest",
     "minecraft:mushroom_fields",
     {
-      "id": "#c:mushroom",
+      "id": "#c:is_mushroom",
       "required": false
     },
-	{
-      "id": "#forge:is_mushroom",
+    {
+      "id": "#c:is_mushroom_island",
       "required": false
     },
 	{

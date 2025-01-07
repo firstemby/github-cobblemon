@@ -56,7 +56,8 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
                 runtime = runtime,
-                providers = providers
+                providers = providers,
+                level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds

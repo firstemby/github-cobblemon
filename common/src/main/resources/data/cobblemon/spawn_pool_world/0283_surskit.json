@@ -7,7 +7,7 @@
             "id": "surskit-1",
             "pokemon": "surskit",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -32,7 +32,7 @@
             "id": "surskit-2",
             "pokemon": "surskit",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",

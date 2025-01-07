@@ -3,12 +3,24 @@
   "values": [
     "#minecraft:is_savanna",
 	{
+      "id": "#c:is_savanna",
+      "required": false
+    },
+	{
       "id": "biomesoplenty:lush_desert",
       "required": false
     },
 	{
       "id": "biomesoplenty:lush_savanna",
       "required": false
+    },
+	{
+      "id": "clifftree:oasis",
+      "required": false 
+    },
+	{
+      "id": "clifftree:shrubland",
+      "required": false 
     },
     {
       "id": "terralith:arid_highlands",

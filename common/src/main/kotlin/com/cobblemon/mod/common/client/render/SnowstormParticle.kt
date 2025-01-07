@@ -8,12 +8,16 @@
 
 package com.cobblemon.mod.common.client.render
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
 import com.cobblemon.mod.common.client.particle.ParticleStorm
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.math.geometry.transformDirection
+import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
 import com.mojang.blaze3d.platform.GlStateManager
@@ -37,6 +41,7 @@ import org.joml.AxisAngle4d
 import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3f
+import kotlin.random.Random
 
 class SnowstormParticle(
     val storm: ParticleStorm,
@@ -45,7 +50,10 @@ class SnowstormParticle(
     y: Double,
     z: Double,
     initialVelocity: Vec3,
-    var invisible: Boolean = false
+    //Usually, this will be the storms runtime. But sometimes particles need to have variables different from their emitter, so the VariableStruct will differ
+    val runtime: MoLangRuntime,
+    val matrixWrapper: MatrixWrapper,
+    var invisible: Boolean = false,
 ) : Particle(world, x, y, z) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
@@ -58,11 +66,6 @@ class SnowstormParticle(
     var colliding = false
 
     var texture = storm.effect.particle.texture
-
-    val random1 = storm.runtime.environment.variable.map["particle_random_1"]
-    val random2 = storm.runtime.environment.variable.map["particle_random_2"]
-    val random3 = storm.runtime.environment.variable.map["particle_random_3"]
-    val random4 = storm.runtime.environment.variable.map["particle_random_4"]
 
     var localX = x - storm.getX()
     var localY = y - storm.getY()
@@ -95,30 +98,25 @@ class SnowstormParticle(
 
     fun getSpriteFromAtlas(): TextureAtlasSprite {
         val atlas = Minecraft.getInstance().particleEngine.textureAtlas
-
-//        val field = atlas::class.java.getDeclaredField("sprites")
-//        field.isAccessible = true
-//        val map = field.get(atlas) as Map<Identifier, Sprite>
-//        println(map.keys.joinToString { it.toString() })
         val sprite = atlas.getSprite(storm.effect.particle.texture)
-//        println(storm.effect.particle.texture)
         return sprite
     }
 
     private fun applyRandoms() {
-        storm.runtime.environment.variable.setDirectly("particle_random_1", random1)
-        storm.runtime.environment.variable.setDirectly("particle_random_2", random2)
-        storm.runtime.environment.variable.setDirectly("particle_random_3", random3)
-        storm.runtime.environment.variable.setDirectly("particle_random_4", random4)
+        //Will having these emitter randoms not equal the real emitter randoms be a problem?
+        runtime.environment.setSimpleVariable("emitter_random_1", DoubleValue(Random.Default.nextDouble()))
+        runtime.environment.setSimpleVariable("emitter_random_2", DoubleValue(Random.Default.nextDouble()))
+        runtime.environment.setSimpleVariable("emitter_random_3", DoubleValue(Random.Default.nextDouble()))
+        runtime.environment.setSimpleVariable("emitter_random_4", DoubleValue(Random.Default.nextDouble()))
     }
 
     init {
         setParticleSpeed(initialVelocity.x, initialVelocity.y, initialVelocity.z)
-        roll = -storm.effect.particle.rotation.getInitialRotation(storm.runtime).toFloat()
+        roll = -storm.effect.particle.rotation.getInitialRotation(runtime).toFloat()
         oRoll = roll
-        angularVelocity = storm.effect.particle.rotation.getInitialAngularVelocity(storm.runtime)
+        angularVelocity = storm.effect.particle.rotation.getInitialAngularVelocity(runtime)
         friction = 1F
-        lifetime = (storm.runtime.resolveDouble(storm.effect.particle.maxAge) * 20).toInt()
+        lifetime = (runtime.resolveDouble(storm.effect.particle.maxAge) * 20).toInt()
         storm.particles.add(this)
         gravity = 0F
         particleTextureSheet = if (invisible) NO_RENDER else PARTICLE_SHEET_TRANSLUCENT
@@ -140,8 +138,8 @@ class SnowstormParticle(
 
         applyRandoms()
         setParticleAgeInRuntime()
-        storm.effect.curves.forEach { it.apply(storm.runtime) }
-        storm.runtime.execute(storm.effect.particle.renderExpressions)
+        storm.effect.curves.forEach { it.apply(runtime) }
+        runtime.execute(storm.effect.particle.renderExpressions)
 
 //        // TODO need to implement the other materials but not sure exactly what they are GL wise
         when (storm.effect.particle.material) {
@@ -173,7 +171,7 @@ class SnowstormParticle(
         val g = (pos.y + originPos.y - vec3d.y()).toFloat()
         val h = (pos.z + originPos.z - vec3d.z()).toFloat()
         val quaternion = storm.effect.particle.cameraMode.getRotation(
-            matrixWrapper = storm.matrixWrapper,
+            matrixWrapper = matrixWrapper,
             prevAngle = oRoll,
             angle = roll,
             deltaTicks = tickDelta,
@@ -184,8 +182,8 @@ class SnowstormParticle(
             cameraPitch = camera.xRot,
             viewDirection = viewDirection
         )
-        val xSize = storm.runtime.resolveDouble(storm.effect.particle.sizeX).toFloat() / 1.5.toFloat()
-        val ySize = storm.runtime.resolveDouble(storm.effect.particle.sizeY).toFloat() / 1.5.toFloat()
+        val xSize = runtime.resolveDouble(storm.effect.particle.sizeX).toFloat() / 1.5.toFloat()
+        val ySize = runtime.resolveDouble(storm.effect.particle.sizeY).toFloat() / 1.5.toFloat()
 
         val particleVertices = arrayOf(
             Vector3f(xSize, -ySize, 0.0f),
@@ -200,8 +198,8 @@ class SnowstormParticle(
             vertex.add(f, g, h)
         }
 
-        val uvs = storm.effect.particle.uvMode.get(storm.runtime, age / 20.0, lifetime / 20.0, uvDetails)
-        val colour = storm.effect.particle.tinting.getTint(storm.runtime)
+        val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
+        val colour = storm.effect.particle.tinting.getTint(runtime)
 
         val spriteURange = sprite.u1 - sprite.u0
         val spriteVRange = sprite.v1 - sprite.v0
@@ -240,21 +238,21 @@ class SnowstormParticle(
 
     override fun tick() {
         if (storm.effect.space.localPosition) {
-            originPos = storm.matrixWrapper.getOrigin()
+            originPos = matrixWrapper.getOrigin()
         }
 
         applyRandoms()
         setParticleAgeInRuntime()
-        storm.effect.curves.forEach { it.apply(storm.runtime) }
-        storm.runtime.execute(storm.effect.particle.updateExpressions)
-        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(storm.runtime, -roll.toDouble(), angularVelocity) / 20
+        storm.effect.curves.forEach { it.apply(runtime) }
+        runtime.execute(storm.effect.particle.updateExpressions)
+        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
-        if (age >= lifetime || storm.runtime.resolveBoolean(storm.effect.particle.killExpression)) {
+        if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
             runExpirationEvents()
             remove()
             return
         } else {
-            val velocity = storm.effect.particle.motion.getVelocity(storm.runtime, this,
+            val velocity = storm.effect.particle.motion.getVelocity(runtime, this,
                 Vec3(xd, yd, zd)
             )
             xd = velocity.x
@@ -266,7 +264,7 @@ class SnowstormParticle(
         }
 
         viewDirection = storm.effect.particle.viewDirection.getDirection(
-            runtime = storm.runtime,
+            runtime = runtime,
             lastDirection = viewDirection,
             currentVelocity = Vec3(xd, yd, zd)
         ).normalize()
@@ -282,7 +280,17 @@ class SnowstormParticle(
         oldAxisRotation = axisRotation
         prevRotatedLocal = oldAxisRotation.transform(Vector3d(prevLocalX, prevLocalY, prevLocalZ))
 
-        storm.matrixWrapper.matrix.getRotation(axisRotation)
+        //This is a bit of a hack. Technically local rotation is supposed to make it so the particle uses
+        //the emitter's rotation - but we've made it so the emitter doesn't actually follow the locators rotation, only position.
+        //So instead of being bound to the emitter, the particle is actually bound to the locator for local rotation.
+        //If you're messing with this - make sure evo particles still rotate with the pokemon
+        if (storm.effect.space.localRotation) {
+            storm.locatorSpaceMatrix.matrix.getRotation(axisRotation)
+        }
+        else {
+            matrixWrapper.matrix.getRotation(axisRotation)
+        }
+
         rotatedLocal = axisRotation.transform(Vector3d(prevLocalX, prevLocalY, prevLocalZ))
         Quaterniond().rotateTo(prevRotatedLocal, rotatedLocal).get(currentRotation)
 
@@ -295,7 +303,7 @@ class SnowstormParticle(
 
     override fun move(dx: Double, dy: Double, dz: Double) {
         val collision = storm.effect.particle.collision
-        val radius = storm.runtime.resolveDouble(collision.radius)
+        val radius = runtime.resolveDouble(collision.radius)
         boundingBox = AABB.ofSize(Vec3(x, y, z), radius, radius, radius)
         if (dx == 0.0 && dy == 0.0 && dz == 0.0) {
             updatePosition()
@@ -306,7 +314,7 @@ class SnowstormParticle(
         var dy = dy
         var dz = dz
 
-        if (storm.runtime.resolveBoolean(collision.enabled) && radius > 0.0 && !storm.effect.space.isLocalSpace) {
+        if (runtime.resolveBoolean(collision.enabled) && radius > 0.0 && !storm.effect.space.isLocalSpace) {
             hasPhysics = true
 
             val newMovement = checkCollision(Vec3(dx, dy, dz))
@@ -359,7 +367,7 @@ class SnowstormParticle(
     }
 
     fun updatePosition() {
-        val localVector = if (storm.effect.space.localRotation) storm.transformDirection(
+        val localVector = if (storm.effect.space.localRotation) storm.locatorSpaceMatrix.matrix.transformDirection(
             Vec3(
                 localX,
                 localY,
@@ -374,8 +382,8 @@ class SnowstormParticle(
     private fun checkCollision(movement: Vec3): Vec3 {
         val collision = storm.effect.particle.collision
         var box = boundingBox
-        val bounciness = storm.runtime.resolveDouble(collision.bounciness)
-        val friction = storm.runtime.resolveDouble(collision.friction)
+        val bounciness = runtime.resolveDouble(collision.bounciness)
+        val friction = runtime.resolveDouble(collision.friction)
         val expiresOnContact = collision.expiresOnContact
 
         val collisions = level.getBlockCollisions(null, box.expandTowards(movement))
@@ -513,8 +521,8 @@ class SnowstormParticle(
 
 
     private fun setParticleAgeInRuntime() {
-        storm.runtime.environment.variable.setDirectly("particle_age", DoubleValue(age / 20.0))
-        storm.runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
+        runtime.environment.variable.setDirectly("particle_age", DoubleValue(age / 20.0))
+        runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
     }
 
     override fun getRenderType() = particleTextureSheet

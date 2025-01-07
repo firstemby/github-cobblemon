@@ -50,6 +50,8 @@ class SpeciesDexRecord {
     lateinit var id: ResourceLocation
     private val aspects: MutableSet<String> = mutableSetOf()
     private val formRecords: MutableMap<String, FormDexRecord> = mutableMapOf()
+    val isFormRecordsEmpty: Boolean
+        get() = formRecords.isEmpty()
 
     fun describe(): String {
         return "SpeciesDexRecord(aspects=$aspects, formRecords=$formRecords)"

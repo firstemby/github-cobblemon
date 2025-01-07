@@ -26,7 +26,7 @@
             "id": "popplio-2",
             "pokemon": "popplio",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -44,7 +44,7 @@
             "id": "popplio-3",
             "pokemon": "popplio",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -76,7 +76,6 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 1,
                 "biomes": [
                     "#cobblemon:is_freezing"
                 ]
@@ -85,55 +84,8 @@
         {
             "id": "popplio-5",
             "pokemon": "popplio",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "5-32",
-            "weight": 7.5,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "popplio-6",
-            "pokemon": "popplio",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "5-32",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "popplio-7",
-            "pokemon": "popplio",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -150,7 +102,7 @@
             }
         },
         {
-            "id": "popplio-8",
+            "id": "popplio-6",
             "pokemon": "popplio",
             "type": "pokemon",
             "context": "fishing",
@@ -166,58 +118,6 @@
                     "#cobblemon:is_ocean",
                     "#cobblemon:is_tropical_island"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "popplio-9",
-            "pokemon": "popplio",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "5-32",
-            "weight": 7.5,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "popplio-10",
-            "pokemon": "popplio",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "5-32",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

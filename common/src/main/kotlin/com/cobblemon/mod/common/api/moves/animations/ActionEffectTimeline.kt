@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.Level
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -69,7 +70,8 @@ class ActionEffectContext(
     val runtime: MoLangRuntime,
     var canBeInterrupted: Boolean = false,
     var interrupted: Boolean = false,
-    var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf()
+    var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf(),
+    var level: Level? = null
 ) {
     inline fun <reified T> findOneProvider() = providers.filterIsInstance<T>().firstOrNull()
 }

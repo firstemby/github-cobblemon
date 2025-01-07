@@ -6,11 +6,7 @@
 	"minecraft:snowy_slopes",
     "minecraft:stony_peaks",
     {
-      "id": "#c:mountain_peak",
-      "required": false
-    },
-	{
-      "id": "#forge:is_peak",
+      "id": "#c:is_mountain/peak",
       "required": false
     },
 	{

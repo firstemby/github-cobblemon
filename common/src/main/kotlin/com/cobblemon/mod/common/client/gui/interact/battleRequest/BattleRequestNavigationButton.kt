@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.interact.battleRequest
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -25,7 +26,7 @@ class BattleRequestNavigationButton(
     private val forwardIcon: ResourceLocation = forwardButtonResource,
     private val backwardIcon: ResourceLocation = backwardsButtonResource,
     onPress: OnPress
-): Button(pX.toInt(), pY.toInt(), (WIDTH * SCALE).toInt(), (clickHeight * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION) {
+): Button(pX.toInt(), pY.toInt(), (WIDTH * SCALE).toInt(), (clickHeight * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         const val HEIGHT = 16

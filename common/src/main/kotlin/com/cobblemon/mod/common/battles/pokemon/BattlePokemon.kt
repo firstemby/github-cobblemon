@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.server
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
 
@@ -35,7 +36,8 @@ open class BattlePokemon(
     lateinit var actor: BattleActor
     companion object {
         fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
-            val effectedPokemon = pokemon.clone()
+            //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
+            val effectedPokemon = pokemon.clone(registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available"))
             BattleCloneProperty.isBattleClone().apply(effectedPokemon)
             UncatchableProperty.uncatchable().apply(effectedPokemon)
             return BattlePokemon(

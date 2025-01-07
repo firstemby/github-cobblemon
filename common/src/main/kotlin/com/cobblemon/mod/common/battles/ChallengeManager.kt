@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.*
 
 /**
- * Responsible for managing [BattleChallenge]s and initiating PVP [PokemonBattle]s.
+ * Responsible for managing [BattleChallenge]s and initiating PVP [com.cobblemon.mod.common.api.battles.model.PokemonBattle]s.
  *
  * @author Segfault Guy, JazzMcNade
  * @since October 28th, 2024
@@ -122,7 +122,7 @@ object ChallengeManager : RequestManager<ChallengeManager.BattleChallenge>() {
         }
     }
 
-    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer) = player.canInteractWith(target, Cobblemon.config.BattlePvPMaxDistance)
+    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer) = player.canInteractWith(target, Cobblemon.config.battlePvPMaxDistance)
 
     override fun canAccept(request: BattleChallenge): Boolean {
         if (request is MultiBattleChallenge) {
@@ -132,7 +132,7 @@ object ChallengeManager : RequestManager<ChallengeManager.BattleChallenge>() {
             if (existingReceiverTeam == null || existingSenderTeam == null) {
                 request.notifySender(true, "error.missing_team")
                 request.notifyReceiver(true, "error.missing_team")
-                return false;
+                return false
             }
 
             val players = existingReceiverTeam.teamPlayers + existingSenderTeam.teamPlayers

@@ -14,6 +14,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -43,8 +44,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     companion object {
@@ -193,15 +192,18 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                         val ballType =
                                             currentEntity.pokemon.caughtBall.name.path.toLowerCase().replace("_", "")
                                         val mode = if (currentEntity.isBattling) "battle" else "casual"
+                                        //TODO: A lot of this is probably able to be simplified by just using a single particle with events
+                                        //Do it in the particle file, not code.
                                         val sendflash =
                                             BedrockParticleOptionsRepository.getEffect(cobblemonResource("${ballType}/${mode}/sendflash"))
                                         sendflash?.let { effect ->
                                             val wrapper = MatrixWrapper()
                                             val matrix = PoseStack()
-                                            matrix.translate(newPos.x, newPos.y, newPos.z)
+                                            //This could potentially cause strange issues if the matrix has a translation component here.
                                             wrapper.updateMatrix(matrix.last().pose())
+                                            wrapper.updatePosition(Vec3(newPos.x, newPos.y, newPos.z))
                                             val world = Minecraft.getInstance().level ?: return@let
-                                            ParticleStorm(effect, wrapper, world).spawn()
+                                            ParticleStorm(effect, wrapper, wrapper, world).spawn()
                                             val ballsparks =
                                                 BedrockParticleOptionsRepository.getEffect(cobblemonResource("${ballType}/${mode}/ballsparks"))
                                             val ballsendsparkle =
@@ -212,12 +214,14 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                                     ParticleStorm(
                                                         effect,
                                                         wrapper,
+                                                        wrapper,
                                                         world
                                                     ).spawn()
                                                 }
                                                 ballsendsparkle?.let { effect ->
                                                     ParticleStorm(
                                                         effect,
+                                                        wrapper,
                                                         wrapper,
                                                         world
                                                     ).spawn()
@@ -228,6 +232,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                                     ballsparkle?.let { effect ->
                                                         ParticleStorm(
                                                             effect,
+                                                            wrapper,
                                                             wrapper,
                                                             world
                                                         ).spawn()

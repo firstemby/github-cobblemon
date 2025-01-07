@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pokedex
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -29,6 +30,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
@@ -75,7 +77,7 @@ class PokedexGUI private constructor(
     val type: PokedexType,
     val initSpecies: ResourceLocation?,
     val blockPos: BlockPos?
-): Screen(Component.translatable("cobblemon.ui.pokedex.title")) {
+): Screen(Component.translatable("cobblemon.ui.pokedex.title")), CobblemonRenderable {
     companion object {
         private val screenBackground = cobblemonResource("textures/gui/pokedex/pokedex_screen.png")
 
@@ -409,6 +411,13 @@ class PokedexGUI private constructor(
         scrollScreen = EntriesScrollingWidget(x + 26, y + 39) { setSelectedEntry(it) }
         var entries = filteredPokedex
             .flatMap { it.getEntries() }
+
+        if (Cobblemon.config.hideUnimplementedPokemonInThePokedex) {
+            entries = entries.filter {
+                val species = PokemonSpecies.getByIdentifier(it.speciesId) ?: return@filter false
+                return@filter species.implemented
+            }
+        }
 
         for (filter in getFilters()) {
             entries = entries.filter { filter.test(it) }

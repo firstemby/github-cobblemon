@@ -54,9 +54,12 @@ class PoseAdapter(
         addCondition("isTouchingWater") { entity, expectedValue -> entity.isInWater == expectedValue }
         addCondition("isInWaterOrRain") { entity, expectedValue -> entity.isInWaterOrRain == expectedValue }
         addCondition("isUnderWater") { entity, expectedValue -> entity.isUnderWater == expectedValue }
+
+        // Kept for compatibility
         addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOnRedSand() == expectedValue }
         addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOnSand() == expectedValue }
         addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOnSandOrRedSand() == expectedValue }
+
         addCondition("isDusk") { entity, expectedValue -> entity.isDusk() == expectedValue }
 
         conditionsList.addAll(poseConditionReader(json))

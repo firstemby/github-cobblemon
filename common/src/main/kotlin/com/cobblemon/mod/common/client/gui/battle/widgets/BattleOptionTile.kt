@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.battle.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.render.drawScaledText
 import net.minecraft.client.gui.GuiGraphics
@@ -28,7 +29,7 @@ class BattleOptionTile(
     val resource: ResourceLocation,
     val text: MutableComponent,
     val onClick: () -> Unit
-) : Renderable, GuiEventListener, NarratableEntry {
+) : CobblemonRenderable, GuiEventListener, NarratableEntry {
     companion object {
         const val  OPTION_WIDTH = 90
         const val OPTION_HEIGHT = 26

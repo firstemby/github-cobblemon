@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.startselection.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -20,7 +21,7 @@ class ExitButton(
     pWidth: Int, pHeight: Int,
     pXTexStart: Int, pYTexStart: Int, pYDiffText: Int,
     onPress: OnPress
-): Button(pX, pY, EXIT_BUTTON_WIDTH.toInt(), EXIT_BUTTON_HEIGHT.toInt(), "cobblemon.ui.starter.narrator.backbutton".asTranslated(), onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, EXIT_BUTTON_WIDTH.toInt(), EXIT_BUTTON_HEIGHT.toInt(), "cobblemon.ui.starter.narrator.backbutton".asTranslated(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val EXIT_BUTTON_WIDTH = 15.95F

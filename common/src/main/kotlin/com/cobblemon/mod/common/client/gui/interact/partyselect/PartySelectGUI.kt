@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.callback.PartySelectPokemonDTO
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
@@ -37,7 +38,7 @@ class PartySelectConfiguration(
 )
 class PartySelectGUI(
     val config: PartySelectConfiguration
-) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")) {
+) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
     companion object {
         const val WIDTH = 163
         const val HEIGHT = 132

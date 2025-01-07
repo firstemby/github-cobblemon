@@ -13,10 +13,7 @@
 	  "#minecraft:wool_carpets"
 	],
 	"neededNearbyBlocks": [
-	  "minecraft:birch_planks",
-	  "minecraft:cobblestone_stairs",
-	  "minecraft:cobblestone_wall",
-	  "minecraft:dark_oak_planks"
+	  "#cobblemon:mansion_blocks"
 	]
   }
 }

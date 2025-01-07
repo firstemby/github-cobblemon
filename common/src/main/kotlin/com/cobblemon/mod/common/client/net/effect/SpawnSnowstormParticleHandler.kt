@@ -20,12 +20,10 @@ object SpawnSnowstormParticleHandler : ClientNetworkPacketHandler<SpawnSnowstorm
     override fun handle(packet: SpawnSnowstormParticlePacket, client: Minecraft) {
         val wrapper = MatrixWrapper()
         val matrix = PoseStack()
-        matrix.translate(packet.position.x, packet.position.y, packet.position.z)
-//        matrix.multiply(YP.rotationDegrees(packet.yawDegrees))
-//        matrix.multiply(NEGATIVE_X.rotationDegrees(packet.pitchDegrees))
         wrapper.updateMatrix(matrix.last().pose())
+        wrapper.updatePosition(packet.position)
         val world = Minecraft.getInstance().level ?: return
         val effect = BedrockParticleOptionsRepository.getEffect(packet.effectId) ?: return
-        ParticleStorm(effect, wrapper, world).spawn()
+        ParticleStorm(effect, wrapper, wrapper, world).spawn()
     }
 }

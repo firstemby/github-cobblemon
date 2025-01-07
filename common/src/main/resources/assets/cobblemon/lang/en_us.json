@@ -305,7 +305,7 @@
   "item.cobblemon.auspicious_armor": "Auspicious Armor",
   "item.cobblemon.auspicious_armor.tooltip": "Evolves Charcadet into Armarouge",
   "item.cobblemon.malicious_armor": "Malicious Armor",
-  "item.cobblemon.malicious_armor.tooltip": "Evolves Charcadet into Armarouge",
+  "item.cobblemon.malicious_armor.tooltip": "Evolves Charcadet into Ceruledge",
   "item.cobblemon.binding_band": "Binding Band",
   "item.cobblemon.binding_band.tooltip": "Increases damage dealt by the binding status",
   "item.cobblemon.black_belt": "Black Belt",
@@ -346,7 +346,7 @@
   "item.cobblemon.everstone": "Everstone",
   "item.cobblemon.everstone.tooltip": "Prevents the holder from evolving",
   "item.cobblemon.eviolite": "Eviolite",
-  "item.cobblemon.eviolite.tooltip": "Boosts the holder's Defense and Sp. Atk if it is not fully evolved",
+  "item.cobblemon.eviolite.tooltip": "Boosts the holder's Defense and Sp. Defense if it is not fully evolved",
   "item.cobblemon.exp_share": "Exp. Share",
   "item.cobblemon.exp_share.tooltip": "Allows the holder to receive a share of experience from battles without participating",
   "item.cobblemon.expert_belt": "Expert Belt",
@@ -888,6 +888,8 @@
   "block.cobblemon.dawn_stone_block": "Dawn Stone Block",
   "block.cobblemon.dusk_stone_block": "Dusk Stone Block",
 
+  "cobblemon.fishing.no_bite": "Not even a nibble.",
+
   "cobblemon.fishing_bait_effect_header": "Fishing Bait Effects:",
   "cobblemon.fishing_bait_effects.nature.tooltip": "%1$s%% - Attract %2$s Nature",
   "cobblemon.fishing_bait_effects.iv.tooltip": "%1$s%% - %2$s IV +%3$s",
@@ -897,11 +899,12 @@
   "cobblemon.fishing_bait_effects.level_raise.tooltip": "%1$s%% - Boost Level +%3$s",
   "cobblemon.fishing_bait_effects.typing.tooltip": "%1$s%% - %3$s× Chance for %2$s Types",
   "cobblemon.fishing_bait_effects.egg_group.tooltip": "%1$s%% - %3$s× Chance for %2$s Egg Group",
-  "cobblemon.fishing_bait_effects.shiny_reroll.tooltip": "%1$s× - %3$s× Shiny Chance",
+  "cobblemon.fishing_bait_effects.shiny_reroll.tooltip": "%1$s%% - %3$s× Shiny Chance",
   "cobblemon.fishing_bait_effects.ha_chance.tooltip": "%1$s%% - Attract Hidden Ability",
   "cobblemon.fishing_bait_effects.pokemon_chance.tooltip": "%1$s%% - Reel in a Pokémon",
   "cobblemon.fishing_bait_effects.friendship.tooltip": "%1$s%% - Boost Friendship +%3$s",
   "cobblemon.fishing_bait_effects.inert.tooltip": "No known effect",
+
   "cobblemon.egg_group.monster": "Monster",
   "cobblemon.egg_group.water_1": "Water 1",
   "cobblemon.egg_group.bug": "Bug",
@@ -1300,6 +1303,8 @@
   "cobblemon.challenge.canceled.receiver": "%1$s canceled their challenge...",
   "cobblemon.challenge.error.insufficient_pokemon.other": "%1$s doesn't have any Pokémon to battle with!",
   "cobblemon.challenge.error.insufficient_pokemon.self": "You don't have any Pokémon to battle with!",
+  "cobblemon.challenge.error.duplicate": "You already have a pending battle request sent to %1$s.",
+  "cobblemon.challenge.error.pending": "%1$s already has a pending battle request for you.",
   "cobblemon.challenge.rule.level": "Level %1$s All",
   "cobblemon.challenge.rule.anything_goes": "Anything Goes",
 
@@ -1518,6 +1523,7 @@
   "cobblemon.command.pokebox.last_pokemon": "Did not send that Player's last Pokémon to the PC.",
   "cobblemon.command.pokemonrestart": "Cleared %1$s's party and PC.",
   "cobblemon.command.freezepokemon.non_pokemon": "You are not looking at a Pokémon.",
+  "cobblemon.command.npcedit.non_npc": "You are not looking at a NPC.",
 
   "advancements.cobblemon.root": "The World of Cobblemon!",
   "advancements.cobblemon.root.description": "Choose a starter Pokémon and set out on a new adventure",
@@ -1615,12 +1621,14 @@
   "advancements.cobblemon.grow_tumblestone.description": "Place a Tumblestone near Lava or Magma to grow it over time",
   "advancements.cobblemon.craft_ancient_balls": "A True Antiquarian",
   "advancements.cobblemon.craft_ancient_balls.description": "Utilize Tumblestones to craft all fifteen Ancient Balls",
-  "advancements.cobblemon.craft_rod": "Gone Fishin'",
-  "advancements.cobblemon.craft_rod.description": "Craft a Poké Rod using a Poké Rod Smithing Template",
-  "advancements.cobblemon.use_bait": "A Berry Good Lure",
-  "advancements.cobblemon.use_bait.description": "Use a berry as bait for your Poké Rod",
+  "advancements.cobblemon.craft_rod": "New Angles for Angling",
+  "advancements.cobblemon.craft_rod.description": "Unlock new ways to fish by creating a Poké Rod at a Smithing Table",
+  "advancements.cobblemon.use_all_berry_bait": "Some Berry Good Lures",
+  "advancements.cobblemon.use_all_berry_bait.description": "Reel in a Pokémon with one of each of the different berries attached to your Poké Rod",
   "advancements.cobblemon.craft_master_rod": "Masterful Dedication",
   "advancements.cobblemon.craft_master_rod.description": "Craft a Poké Rod using a Master Ball",
+  "advancements.cobblemon.craft_pokedex": "Researcher Recruit",
+  "advancements.cobblemon.craft_pokedex.description": "Craft a Pokédex out of Apricorns, Iron, Copper, and any glowing powder",
 
   "cobblemon.battle.crash": "A battle error has occurred. If playing single-player, report this to the mod team. Otherwise, report this to the servers administrator.",
   "cobblemon.battle.damage_dealt": "%1$s took %2$s damage!",
@@ -2003,6 +2011,7 @@
   "cobblemon.battle.end.illusion": "%1$s's illusion wore off!",
   "cobblemon.battle.end.neutralizinggas": "The effects of the neutralizing gas wore off!",
   "cobblemon.battle.end.stockpile": "%1$s's stockpiled effect wore off!",
+  "cobblemon.battle.end.infestation": "%1$s was freed from Infestation!",
 
   "cobblemon.battle.block.sweetveil": "%1$s can't fall asleep due to a veil of sweetness!",
   "cobblemon.battle.block.uproar": "But the uproar kept %1$s awake!",
@@ -2139,9 +2148,15 @@
 
   "cobblemon.battle.terastallize": "%1$s has Terastallized into the %2$s-type!",
 
-  "cobblemon.battle.detailschange.mega": "%1$s is reacting to the Key Stone!",
-  "cobblemon.battle.detailschange.noice": "%1$s transformed!",
-  "cobblemon.battle.detailschange.eiscue": "%1$s transformed!",
+  "cobblemon.battle.formechange.default.permanent": "%1$s transformed into its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary": "%1$s changed to its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary.ended": "%1$s changed to its base form.",
+  "cobblemon.battle.formechange.mega": "%1$s is reacting to the Key Stone!",
+  "cobblemon.battle.formechange.ash": "%1$s became Ash-Greninja!",
+  "cobblemon.battle.formechange.school": "%1$s formed a school!",
+  "cobblemon.battle.formechange.wishiwashi": "%1$s stopped schooling!",
+  "cobblemon.battle.formechange.meteor": "%1$s shielded itself.",
+  "cobblemon.battle.formechange.minior": "%1$s stopped shielding itself.",
 
   "cobblemon.battle.mega": "%1$s has Mega Evolved!",
 
@@ -4260,6 +4275,9 @@
 
   "cobblemon.entity.pokemon": "Pokémon",
   "entity.cobblemon.empty_pokeball": "Empty Poké Ball",
+  "entity.cobblemon.poke_bobber": "Poké Bobber",
+  "entity.cobblemon.boat": "Boat",
+  "entity.cobblemon.chest_boat": "Boat with Chest",
 
   "cobblemon.species.bulbasaur.name": "Bulbasaur",
   "cobblemon.species.bulbasaur.desc": "While rare and elusive in the wild, Bulbasaur’s calm and easygoing nature makes it a popular choice for beginning trainers. The bud on its back is still developing, so this Pokémon must expend large amounts of energy to fuel its growth. As a result, it is often seen rummaging through composters in search of precious fertilizer.",
@@ -6769,7 +6787,7 @@
   "cobblemon.ability.schooling": "Schooling",
   "cobblemon.ability.schooling.desc": "When it has a lot of HP, the Pokémon forms a powerful school. It stops schooling when its HP is low.",
   "cobblemon.ability.scrappy": "Scrappy",
-  "cobblemon.ability.scrappy.desc": "The Pokémon can hit Ghost-type Pokémon with Normal- and Fighting-type moves.",
+  "cobblemon.ability.scrappy.desc": "The Pokémon can hit Ghost-type Pokémon with Normal- and Fighting-type moves. It also grants immunity to Intimidate.",
   "cobblemon.ability.screencleaner": "Screen Cleaner",
   "cobblemon.ability.screencleaner.desc": "When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.",
   "cobblemon.ability.seedsower": "Seed Sower",

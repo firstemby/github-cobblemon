@@ -225,7 +225,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
      * @param player The [Player] harvesting the tree.
      * @return The resulting [ItemStack]s to be dropped.
      */
-    fun harvest(world: Level, state: BlockState, pos: BlockPos, player: Player): Collection<ItemStack> {
+    fun harvest(world: Level, state: BlockState, pos: BlockPos, player: Player?): Collection<ItemStack> {
         val drops = arrayListOf<ItemStack>()
         val unique = this.growthPoints.groupingBy { it }.eachCount()
         unique.forEach { (identifier, amount) ->
@@ -246,6 +246,10 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         }
         refresh(world, pos, state, player)
         return drops
+    }
+
+    fun harvest(world: Level, state: BlockState, pos: BlockPos): Collection<ItemStack>{
+        return harvest(world, state, pos, null);
     }
 
     override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -330,7 +334,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         this.setChanged()
     }
 
-    private fun refresh(world: Level, pos: BlockPos, state: BlockState, player: Player) {
+    private fun refresh(world: Level, pos: BlockPos, state: BlockState, player: Player?) {
         val newState = state.setValue(BerryBlock.AGE, 3)
         world.setBlock(pos, newState, UPDATE_CLIENTS)
         world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)

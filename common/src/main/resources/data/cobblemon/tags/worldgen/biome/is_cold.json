@@ -11,11 +11,11 @@
       "required": false
     },
 	{
-      "id": "#c:climate_cold",
+      "id": "#c:is_cold",
       "required": false
     },
 	{
-      "id": "#forge:is_cold/overworld",
+      "id": "#c:is_cold/overworld",
       "required": false
     },
 	{
@@ -57,6 +57,14 @@
 	{
       "id": "biomesoplenty:seasonal_orchard",
       "required": false
+    },
+	{
+      "id": "clifftree:cold_caves",
+      "required": false 
+    },
+	{
+      "id": "clifftree:cold_river",
+      "required": false 
     },
     {
       "id": "wythers:berry_bog",

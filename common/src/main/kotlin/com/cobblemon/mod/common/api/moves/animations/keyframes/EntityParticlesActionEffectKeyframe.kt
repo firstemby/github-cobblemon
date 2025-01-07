@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerLevel
 
 /**
  * Spawns particles on the entity based on the given particle effect and locator.
+ * Optionally, you can specify target that ends up setting the destination pos on the spawned ParticleStorm
  *
  * @author Hiroku
  * @since January 21st, 2024
@@ -32,25 +33,50 @@ class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), E
     override val entityCondition = "q.entity.is_user".asExpressionLike()
     var effect: String? = null
     var locators: List<String> = listOf("target")
+    var targetLocators: Set<String>? = null
 
     val delay: ExpressionLike = "0".asExpressionLike()
     val visibilityRange = 200
 
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
-        val entities = context.providers
+        val allEntities = context.providers
             .filterIsInstance<EntityProvider>()
-            .flatMap { prov -> prov.entities.filter { test(context, it, isUser = prov is UsersProvider) } }
+            .flatMap { prov -> prov.entities }
+
+        val userEntities = context.providers
+            .filterIsInstance<UsersProvider>()
+            .flatMap { prov -> prov.entities }
+
+        val targetEntities = context.providers
+            .filterIsInstance<TargetsProvider>()
+            .flatMap { prov -> prov.entities}
+
+        val sourceEntities = allEntities.filter { test(context, it, it in userEntities) }
 
         val effectIdentifier = try {
-            effect?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0.0" } ?: effect
+            effect?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0" } ?: effect
         } catch (e: Exception) {
             effect
         }?.asIdentifierDefaultingNamespace() ?: return skip()
 
-        entities.filter { it is PosableEntity }.forEach { entity ->
-            val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, (locators).toList())
-            val players = (entity.level() as ServerLevel).getPlayers { it.distanceTo(entity) <= visibilityRange }
-            packet.sendToPlayers(players)
+        //Things could be a little weird here since TECHNICALLY it might be possible for a battle to be happening across dimensions
+        val calcedLevel = (context.level as? ServerLevel) ?: allEntities.first().level() as ServerLevel
+        val players = calcedLevel.getPlayers { player ->
+            allEntities.any { player.distanceTo(it) <= visibilityRange }
+        }
+
+
+        sourceEntities.filter { it is PosableEntity }.forEach { entity ->
+            if (targetLocators == null) {
+                val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators)
+                packet.sendToPlayers(players)
+            }
+            else {
+                targetEntities.forEach { targetEntity ->
+                    val packet = SpawnSnowstormEntityParticlePacket(effectIdentifier, entity.id, locators, targetEntity.id, targetLocators!!.toList())
+                    packet.sendToPlayers(players)
+                }
+            }
         }
 
         return delayedFuture(seconds = delay.resolveFloat(context.runtime))

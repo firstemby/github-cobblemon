@@ -129,15 +129,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     val possibleGenders: Set<Gender>
         get() = forms.flatMap {
-            if (it.maleRatio == -1F) {
-                setOf(Gender.GENDERLESS)
-            } else if (it.maleRatio == 0F) {
-                setOf(Gender.FEMALE)
-            } else if (it.maleRatio == 1F) {
-                setOf(Gender.MALE)
-            } else {
-                setOf(Gender.FEMALE, Gender.MALE)
-            }
+            it.possibleGenders
         }.toSet() + (if (maleRatio == -1F) {
             setOf(Gender.GENDERLESS)
         } else if (maleRatio == 0F) {

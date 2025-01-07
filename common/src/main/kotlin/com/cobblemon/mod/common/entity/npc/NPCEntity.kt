@@ -70,6 +70,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.AgeableMob
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -101,12 +102,18 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
                     brain = makeBrain(brainDynamic ?: makeEmptyBrainDynamic())
                 }
             }
+
+            this.refreshDimensions()
         }
 
     val level: Int
         get() = entityData.get(LEVEL)
 
     var skill: Int? = null // range from 0 - 5
+
+    var baseScale: Float? = null
+
+    var hitbox: EntityDimensions? = null
 
     var party: NPCPartyStore? = null
 
@@ -342,6 +349,18 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
                 it.putByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE, playerTexture.texture)
             })
         }
+        val baseScale = baseScale
+        if (baseScale != null) {
+            nbt.putFloat(DataKeys.NPC_BASE_SCALE, baseScale)
+        }
+        val hitbox = hitbox
+        if (hitbox != null) {
+            nbt.put(DataKeys.NPC_HITBOX, CompoundTag().also {
+                it.putFloat(DataKeys.NPC_HITBOX_WIDTH, hitbox.width)
+                it.putFloat(DataKeys.NPC_HITBOX_HEIGHT, hitbox.height)
+                it.putBoolean(DataKeys.NPC_HITBOX_FIXED, hitbox.fixed)
+            })
+        }
         val isMovable = isMovable
         if (isMovable != null) {
             nbt.putBoolean(DataKeys.NPC_IS_MOVABLE, isMovable)
@@ -360,9 +379,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         }
         return nbt
     }
-
-    override fun hasCustomName() = true
-    override fun isCustomNameVisible() = true
 
     override fun load(nbt: CompoundTag) {
         npc = NPCClasses.getByIdentifier(ResourceLocation.parse(nbt.getString(DataKeys.NPC_CLASS))) ?: NPCClasses.classes.first()
@@ -396,7 +412,18 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE) else null
         this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE) else null
         this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS) else null
+        this.baseScale = if (nbt.contains(DataKeys.NPC_BASE_SCALE)) nbt.getFloat(DataKeys.NPC_BASE_SCALE) else null
+        this.hitbox = if (nbt.contains(DataKeys.NPC_HITBOX)) {
+            val hitboxNBT = nbt.getCompound(DataKeys.NPC_HITBOX)
 
+            val width = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_WIDTH)
+            val height = hitboxNBT.getFloat(DataKeys.NPC_HITBOX_HEIGHT)
+            val fixed = hitboxNBT.getBoolean(DataKeys.NPC_HITBOX_FIXED)
+
+            if (fixed) EntityDimensions.fixed(width, height) else EntityDimensions.scalable(width, height)
+        } else {
+            null
+        }
         updateAspects()
     }
 
@@ -426,9 +453,24 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         updateAspects()
     }
 
-    override fun isPersistenceRequired() = !npc.canDespawn
+    override fun hasCustomName() = true
 
-    override fun getDefaultDimensions(pose: Pose) = npc.hitbox
+    override fun isCustomNameVisible() = true
+
+    override fun isPersistenceRequired(): Boolean {
+        return super.isPersistenceRequired() || !npc.canDespawn
+    }
+
+    override fun getScale(): Float {
+        return baseScale ?: npc.baseScale
+    }
+
+    override fun getDimensions(pose: Pose): EntityDimensions {
+        val hitbox = hitbox ?: npc.hitbox
+        val scaledHitbox = hitbox.scale(baseScale ?: npc.baseScale)
+
+        return scaledHitbox
+    }
 
     override fun isPushable(): Boolean {
         return isMovable ?: npc.isMovable

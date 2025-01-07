@@ -7,7 +7,7 @@
             "id": "alomomola-1",
             "pokemon": "alomomola",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -70,7 +70,7 @@
             "id": "alomomola-4",
             "pokemon": "alomomola",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

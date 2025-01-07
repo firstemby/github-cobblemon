@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
@@ -33,7 +34,7 @@ class SearchWidget(
     height: Int,
     text: Component = "Search".text(),
     val update: () -> (Unit)
-): EditBox(Minecraft.getInstance().font, posX.toInt(), posY.toInt(), width, height, text) {
+): EditBox(Minecraft.getInstance().font, posX.toInt(), posY.toInt(), width, height, text), CobblemonRenderable {
 
     companion object {
         private val backgroundOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_search_overlay.png")

@@ -26,7 +26,7 @@
             "id": "anorith-2",
             "pokemon": "anorith",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

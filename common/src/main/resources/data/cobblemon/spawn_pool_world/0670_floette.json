@@ -7,8 +7,7 @@
             "id": "floette-red-1",
             "pokemon": "floette flower=red",
             "presets": [
-                "natural",
-                "red_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -26,18 +25,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:poppy"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:red_flowers"
                 ]
             }
         },
@@ -45,8 +35,7 @@
             "id": "floette-yellow-2",
             "pokemon": "floette flower=yellow",
             "presets": [
-                "natural",
-                "yellow_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -64,18 +53,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:dandelion"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:yellow_flowers"
                 ]
             }
         },
@@ -83,8 +63,7 @@
             "id": "floette-orange-3",
             "pokemon": "floette flower=orange",
             "presets": [
-                "natural",
-                "orange_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -102,18 +81,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:orange_tulip"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:orange_flowers"
                 ]
             }
         },
@@ -121,8 +91,7 @@
             "id": "floette-blue-4",
             "pokemon": "floette flower=blue",
             "presets": [
-                "natural",
-                "blue_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -140,18 +109,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:cornflower"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:blue_flowers"
                 ]
             }
         },
@@ -159,8 +119,7 @@
             "id": "floette-white-5",
             "pokemon": "floette flower=white",
             "presets": [
-                "natural",
-                "white_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -178,18 +137,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:oxeye_daisy"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
                 ]
             }
         },
@@ -197,8 +147,7 @@
             "id": "floette-pink-6",
             "pokemon": "floette flower=pink",
             "presets": [
-                "natural",
-                "pink_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -216,18 +165,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:allium"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 5.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:pink_flowers"
                 ]
             }
         },

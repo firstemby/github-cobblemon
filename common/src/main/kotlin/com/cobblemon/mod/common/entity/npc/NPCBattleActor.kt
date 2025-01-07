@@ -29,7 +29,7 @@ class NPCBattleActor(
     val skill: Int
 ) : AIBattleActor(
     gameId = npc.uuid,
-    pokemonList = pokemonList,
+    pokemonList = pokemonList.let { if (npc.npc.randomizePartyOrder) it.shuffled() else it },
     battleAI = StrongBattleAI(skill)
 ), EntityBackedBattleActor<NPCEntity> {
     override val entity = npc

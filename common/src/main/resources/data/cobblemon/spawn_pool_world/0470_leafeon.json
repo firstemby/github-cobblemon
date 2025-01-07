@@ -53,8 +53,7 @@
             "id": "leafeon-3",
             "pokemon": "leafeon",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -66,6 +65,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         },

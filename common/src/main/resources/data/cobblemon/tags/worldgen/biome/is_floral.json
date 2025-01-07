@@ -10,11 +10,11 @@
       "required": false
     },
 	{
-      "id": "#c:floral",
+      "id": "#c:is_floral",
       "required": false
     },
 	{
-      "id": "#c:flower_forests",
+      "id": "#c:flower_forest",
       "required": false
     },
 	{
