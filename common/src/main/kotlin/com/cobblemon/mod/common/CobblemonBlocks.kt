@@ -489,8 +489,9 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
         .mapColor(MapColor.COLOR_LIGHT_GRAY)
         .sound(SoundType.METAL)
-        .strength(2.0F)
+        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.BEDROCK.explosionResistance)
         .noOcclusion()
+        .pushReaction(PushReaction.BLOCK)
     ))
 
     init {
@@ -523,7 +524,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     private fun nestBlock(variant: NestBlock.NestVariant): NestBlock {
         val identifier = cobblemonResource(variant.serializedName)
-        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion())
+        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
         return this.create(identifier.path, block)
     }
 

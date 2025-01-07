@@ -368,7 +368,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                                 species = breedResult.pokemon!!.species.resourceIdentifier, // Species
                                                 parentOne = motherPoke, // Mother UUID
                                                 parentTwo = fatherPoke, // Father UUID
-                                                timeToHatch = 20 * 10 // 10 seconds hatch time
+                                                timeToHatch = 200F // 10 seconds hatch time
                                         ))
 
                                         val isClientSide = this.level?.isClientSide ?: false
