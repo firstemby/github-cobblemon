@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonBrainConfigs
 import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.breeding.EggMoves
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokedex.Dexes
@@ -99,6 +100,7 @@ object CobblemonDataProvider : DataProvider {
         CobblemonSpawnPools.load()
         this.register(PokeRods)
         this.register(Berries)
+        this.register(EggMoves)
         this.register(FishingBaits)
         FishingBait.Effects.setupEffects()
 

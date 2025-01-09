@@ -1,0 +1,16 @@
+{
+  "baby": "cobblemon:pichu",
+  "parent1rules": {
+    "species": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": "cobblemon:light_ball"
+  },
+  "parent2rules": {
+    "species": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": null
+  },
+  "eggMove": "cobblemon:volttackle"
+}

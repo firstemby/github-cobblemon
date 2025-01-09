@@ -9,7 +9,11 @@
 package com.cobblemon.mod.common.api.pokemon.breeding
 
 import com.cobblemon.mod.common.api.abilities.Ability
+import com.cobblemon.mod.common.api.breeding.EggMove
+import com.cobblemon.mod.common.api.breeding.EggMoves
 import com.cobblemon.mod.common.api.moves.MoveSet
+import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
@@ -23,6 +27,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
 import kotlin.random.Random
 
 interface BreedingLogic {
@@ -35,6 +40,7 @@ interface BreedingLogic {
      * @return The [BreedingResult] of the two [Pokemon]
      * @author Apion, Nick, whatsy
      */
+    // TODO we may want to call this method "hatch" now since we store parents on the egg itself now
     fun breed(mother: Pokemon, father: Pokemon) : BreedingResult {
         if(!this.canBreed(mother, father)) {
             return BreedingResult()
@@ -42,7 +48,7 @@ interface BreedingLogic {
         val form: FormData = this.calculateForm(mother, father)
         val nature: Nature = this.calculateNature(mother, father)
         val ability: Ability = this.calculateAbility(mother, father, form)
-        val moveset: MoveSet = this.calculateMoveset(mother, father)
+        val moveset: MoveSet = this.calculateMoveset(mother, father, form)
         val ivs: IVs = this.calculateIVs(mother, father)
         val gender = calculateGender(mother, father, form)
         val pokeball: PokeBall = this.calculatePokeball(mother, father)
@@ -161,22 +167,14 @@ interface BreedingLogic {
      * @author Nick, whatsy
      */
     fun calculateNature(mother: Pokemon, father: Pokemon): Nature {
-        //FIXME: Use registry lookup
-        val dad = father.heldItemNoCopy().item.let { BuiltInRegistries.ITEM.wrapAsHolder(it) }.`is`(CobblemonItemTags.EVERSTONE) ?: false
-        val mom = mother.heldItemNoCopy().item.let { BuiltInRegistries.ITEM.wrapAsHolder(it) }.`is`(CobblemonItemTags.EVERSTONE) ?: false
+        val motherHasEverstone = mother.heldItemNoCopy().item.let { BuiltInRegistries.ITEM.wrapAsHolder(it) }.`is`(CobblemonItemTags.EVERSTONE)
+        val fatherHasEverstone = father.heldItemNoCopy().item.let { BuiltInRegistries.ITEM.wrapAsHolder(it) }.`is`(CobblemonItemTags.EVERSTONE)
 
-        return if(mom && dad) {
-            if(Random.nextInt(100) < 50) {
-                mother.nature
-            } else {
-                father.nature
-            }
-        } else if(mom) {
-            mother.nature
-        } else if(dad) {
-            father.nature
-        } else {
-            Natures.getRandomNature()
+        return when {
+            motherHasEverstone && fatherHasEverstone -> if (Random.nextInt(100) < 50) mother.nature else father.nature
+            motherHasEverstone -> mother.nature
+            fatherHasEverstone -> father.nature
+            else -> Natures.getRandomNature()
         }
     }
 
@@ -218,15 +216,54 @@ interface BreedingLogic {
      *
      * @param mother The mother [Pokemon]
      * @param father The father [Pokemon]
+     * @form the form of the [Pokemon]
      * @return The [MoveSet] of the child
      * @author Nick, Apion, whatsy
      */
     // TODO: This, based off of https://pokemondb.net/mechanics/breeding
-    fun calculateMoveset(mother: Pokemon, father: Pokemon): MoveSet {
-        val momMoveSet = mother.moveSet
-        val dadMoveSet = father.moveSet
-        return mother.moveSet
+    fun calculateMoveset(mother: Pokemon, father: Pokemon, form: FormData): MoveSet {
+        val babySpecies = getPreEvoSpecies(form.species)
+        val babyLearnset = form.moves.levelUpMoves[1] ?: emptySet()
+        val inheritedMoves = mutableListOf<MoveTemplate>()
+
+        // Add Egg Moves using the JSON registry based on parents
+        val eggMoves = EggMoves.getEggMoveList(mother, father, babySpecies.resourceIdentifier)
+        inheritedMoves.addAll(eggMoves)
+
+        // Add TM/HM Moves from both mother and father
+        val tmHmMoves = (mother.moveSet.getMoves() + father.moveSet.getMoves())
+                .map { it.template }
+                .filter { form.species.moves.tmMoves.contains(it) }
+        inheritedMoves.addAll(tmHmMoves)
+
+        // Add Inherited Level-Up Moves
+        inheritedMoves.addAll(mother.moveSet.getMoves()
+                .map { it.template }
+                .filter { it in babyLearnset })
+        inheritedMoves.addAll(father.moveSet.getMoves()
+                .map { it.template }
+                .filter { it in babyLearnset })
+
+        // Add Baby's Default Moves
+        inheritedMoves.addAll(babyLearnset)
+
+        // Limit to 4 moves, prioritizing certain moves first based off rules set by the games
+        val val finalMoves = inheritedMoves.distinct().sortedWith(compareBy(
+                { it.name == "volt_tackle" }, // Volt Tackle first
+                { eggMoves.contains(it) },    // Egg moves next
+                { tmHmMoves.contains(it) },   // TM/HM moves after
+                { babyLearnset.contains(it) } // Default moves last
+        )).take(4)
+
+        val moveSet = MoveSet()
+        finalMoves.forEach { moveTemplate ->
+            moveSet.add(moveTemplate.create())
+        }
+
+        return moveSet
     }
+
+
 
     /**
      * Determines the [IVs] of a child
