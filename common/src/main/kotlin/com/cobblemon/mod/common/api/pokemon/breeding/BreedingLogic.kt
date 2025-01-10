@@ -248,7 +248,7 @@ interface BreedingLogic {
         inheritedMoves.addAll(babyLearnset)
 
         // Limit to 4 moves, prioritizing certain moves first based off rules set by the games
-        val val finalMoves = inheritedMoves.distinct().sortedWith(compareBy(
+        val finalMoves = inheritedMoves.distinct().sortedWith(compareBy(
                 { it.name == "volt_tackle" }, // Volt Tackle first
                 { eggMoves.contains(it) },    // Egg moves next
                 { tmHmMoves.contains(it) },   // TM/HM moves after

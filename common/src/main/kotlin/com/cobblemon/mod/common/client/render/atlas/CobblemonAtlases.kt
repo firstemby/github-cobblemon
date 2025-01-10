@@ -17,6 +17,8 @@ object CobblemonAtlases {
 
     val BERRY_SPRITE_ATLAS = register("textures/atlas/berries.png", "berries")
     val EGG_PATTERN_ATLAS = register("textures/atlas/egg_patterns.png", "egg_patterns")
+    //val EGG_PATTERN_SPRITE_ATLAS = register("textures/atlas/egg_pattern_sprites.png", "egg_pattern_sprites")
+    //val EGG_SPRITE_ATLAS = register("textures/atlas/eggs.png", "eggs")
     val EGG_PATTERN_SPRITE_ATLAS = register("textures/atlas/egg_pattern_sprites.png", "egg_pattern_sprites")
 
     fun register(atlasId: String, sourcePath: String): TextureAtlasHolder {
