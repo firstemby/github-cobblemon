@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.api.events.fishing
 
 import com.cobblemon.mod.common.api.events.Cancelable
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 
 /**
  * Event that is fired when a fishing rod is reeled.
  * @param rod The ItemStack of the rod that is being reeled.
  */
-class PokerodReelEvent(val rod: ItemStack) : Cancelable()
+class PokerodReelEvent(val player: Player, val rod: ItemStack) : Cancelable()

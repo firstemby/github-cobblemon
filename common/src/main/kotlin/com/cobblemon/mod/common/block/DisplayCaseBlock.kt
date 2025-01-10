@@ -94,12 +94,18 @@ class DisplayCaseBlock(settings: Properties) : BaseEntityBlock(settings) {
         return result
     }
 
-    override fun playerWillDestroy(world: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
+    override fun onRemove(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        newState: BlockState,
+        moved: Boolean
+    ) {
         val entity = world.getBlockEntity(pos) as DisplayCaseBlockEntity
-        if (!entity.getStack().isEmpty && !player.isCreative) {
-            Containers.dropContents(world, pos, entity.inv)
+        if (!entity.getStack().isEmpty) {
+            Containers.dropContentsOnDestroy(state, newState, world, pos)
         }
-        return super.playerWillDestroy(world, pos, state, player)
+        super.onRemove(state, world, pos, newState, moved)
     }
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL

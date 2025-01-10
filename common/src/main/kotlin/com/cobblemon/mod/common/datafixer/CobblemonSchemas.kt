@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.datafixer.fix.FeatureFix
 import com.cobblemon.mod.common.datafixer.fix.IvEvToIdentifierFix
 import com.cobblemon.mod.common.datafixer.fix.MovesetJsonFix
 import com.cobblemon.mod.common.datafixer.fix.NicknameFix
+import com.cobblemon.mod.common.datafixer.fix.RaisedPPStagesFix
 import com.cobblemon.mod.common.datafixer.fix.ShoulderStateJsonFix
 import com.cobblemon.mod.common.datafixer.fix.TeraTypeFix
 import com.cobblemon.mod.common.datafixer.fix.TradeableMissingFix
@@ -89,6 +90,7 @@ object CobblemonSchemas {
         builder.addFixer(MovesetJsonFix(schema1))
         builder.addFixer(ShoulderStateJsonFix(schema1))
         builder.addFixer(NicknameFix(schema1))
+        builder.addFixer(RaisedPPStagesFix(schema1))
     }
 
     private class CobblemonDataFixerCodec<R>(private val baseCodec: Codec<R>, private val typeReference: TypeReference) : Codec<R> {

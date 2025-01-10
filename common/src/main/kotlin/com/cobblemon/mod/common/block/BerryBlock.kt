@@ -334,6 +334,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
             }
         }
     }
+
     override fun attemptShear(world: Level, state: BlockState, pos: BlockPos, successCallback: () -> Unit): Boolean {
         return if (this.isMaxAge(state)) {
             harvestBerry(world, state, pos)
@@ -341,12 +342,16 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
             false
         }
     }
+
     private fun harvestBerry(world: Level, state: BlockState, pos: BlockPos, player: Player? = null): Boolean {
         val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return false
         blockEntity.harvest(world, state, pos, player).forEach { drop ->
             Block.popResource(world, pos, drop)
         }
-        world.playSound(null, pos, SoundEvents.SHEEP_SHEAR, SoundSource.BLOCKS, 1F, 1F)
+
+        val sound = if (player != null) CobblemonSounds.BERRY_HARVEST else SoundEvents.SHEEP_SHEAR
+        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1F, 1F)
+
         return true
     }
 }

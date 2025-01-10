@@ -351,15 +351,15 @@
         },
         {
           "variant": "biome",
-          "biomeAnitcondition": "#cobblemon:is_arid"
+          "biomeAnticondition": "#cobblemon:is_arid"
         },
         {
           "variant": "biome",
-          "biomeAnitcondition": "#cobblemon:is_freezing"
+          "biomeAnticondition": "#cobblemon:is_freezing"
         },
         {
           "variant": "biome",
-          "biomeAnitcondition": "#cobblemon:is_spooky"
+          "biomeAnticondition": "#cobblemon:is_spooky"
         }
       ],
       "requiredContext": "cobblemon:sun_stone"
