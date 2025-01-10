@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.data.DataRegistry
+import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -50,19 +51,21 @@ object CobblemonFlows : DataRegistry {
     override fun reload(manager: ResourceManager) {
         clientFlows.clear()
         flows.clear()
+
+        val unsortedFlows = mutableMapOf<ResourceLocation, MutableList<Pair<String, ExpressionLike>>>()
         val folderBeforeNameRegex = ".*\\/([^\\/]+)\\/[^\\/]+\$".toRegex()
         manager.listResources("flows") { path -> path.endsWith(CobblemonScripts.MOLANG_EXTENSION) }.forEach { (identifier, resource) ->
             resource.openAsReader().use { stream ->
                 stream.buffered().use { reader ->
                     try {
                         val expression = reader.readText().asExpressionLike()
+
                         val event = folderBeforeNameRegex.find(identifier.path)?.groupValues?.get(1)
                             ?: throw IllegalArgumentException("Invalid flow path: $identifier. Should have a folder structure that includes the name of the event being flowed.")
-                        if (identifier.path.startsWith("flows/client/")) {
-                            clientFlows.getOrPut(ResourceLocation.fromNamespaceAndPath(identifier.namespace, event)) { mutableListOf() }.add(expression)
-                        } else {
-                            flows.getOrPut(ResourceLocation.fromNamespaceAndPath(identifier.namespace, event)) { mutableListOf() }.add(expression)
-                        }
+
+                        val flowKey = ResourceLocation.fromNamespaceAndPath(identifier.namespace, event)
+                        unsortedFlows.putIfAbsent(flowKey, mutableListOf())
+                        unsortedFlows[flowKey]!!.add(identifier.path to expression)
                     } catch (exception: Exception) {
                         throw ExecutionException("Error loading MoLang script for flow: $identifier", exception)
                     }
@@ -70,11 +73,31 @@ object CobblemonFlows : DataRegistry {
             }
         }
 
-        Cobblemon.LOGGER.info("Loaded ${CobblemonScripts.scripts.size} flows and ${CobblemonScripts.clientScripts.size} client flows")
+        unsortedFlows.forEach { (key, value) ->
+            value.sortBy { it.first }
+            if (key.path.startsWith("flows/client/")) {
+                clientFlows.getOrPut(key) { mutableListOf() }.addAll(value.map { it.second })
+            } else {
+                flows.getOrPut(key) { mutableListOf() }.addAll(value.map { it.second })
+            }
+        }
+
+        Cobblemon.LOGGER.info("Loaded ${flows.size} flows and ${clientFlows.size} client flows")
         observable.emit(this)
     }
 
-    fun run(eventResourceLocation: ResourceLocation, context: Map<String, MoValue>) {
-        flows[eventResourceLocation]?.forEach { it.resolve(runtime, context) }
+    fun run(eventResourceLocation: ResourceLocation, context: Map<String, MoValue>, cancelable: Cancelable? = null) {
+        if (cancelable == null) {
+            runtime.environment.query.functions.remove("cancel")
+        } else {
+            runtime.environment.query.addFunction("cancel") { cancelable }
+        }
+
+        flows[eventResourceLocation]?.forEach {
+            if (cancelable != null && cancelable.isCanceled) {
+                return
+            }
+            it.resolve(runtime, context)
+        }
     }
 }

@@ -87,15 +87,18 @@ object PokedexCommand {
         val form = context.getArgument("form", FormData::class.java)
         players.forEach {
             val dex = Cobblemon.playerDataManager.getPokedexData(it)
-            var completeEntry = Dexes.dexEntryMap[cobblemonResource("national")]!!.getEntries().first { it.speciesId == species.resourceIdentifier }
+            val completeEntry = Dexes.dexEntryMap[cobblemonResource("national")]!!.getEntries().first { it.speciesId == species.resourceIdentifier }
             val entry = dex.getOrCreateSpeciesRecord(species.resourceIdentifier)
-            completeEntry.forms.forEach { form ->
-                form.unlockForms.forEach {unlockForm ->
-                    val formRecord = entry.getOrCreateFormRecord(unlockForm)
-                    formRecord.setKnowledgeProgress(PokedexEntryProgress.CAUGHT)
-                    formRecord.addAllShinyStatesAndGenders()
+
+            completeEntry.forms
+                .filter { it.displayForm == form.name }
+                .forEach { form ->
+                    form.unlockForms.forEach { unlockForm ->
+                        val formRecord = entry.getOrCreateFormRecord(unlockForm)
+                        formRecord.setKnowledgeProgress(PokedexEntryProgress.CAUGHT)
+                        formRecord.addAllShinyStatesAndGenders()
+                    }
                 }
-            }
             entry.addAspects(completeEntry.variations.flatMap { it.aspects }.toSet())
         }
         val selectorStr = if (players.size == 1) players.first().name.string else "${players.size} players"
@@ -111,7 +114,7 @@ object PokedexCommand {
         val form = context.getArgument("form", FormData::class.java)
         players.forEach {
             val dex = Cobblemon.playerDataManager.getPokedexData(it)
-            dex.deleteSpeciesRecord(species.resourceIdentifier)
+            dex.deleteFormRecord(species.resourceIdentifier, form.name.lowercase())
             dex.clearCalculatedValues()
             it.sendPacket(SetClientPlayerDataPacket(PlayerInstancedDataStoreTypes.POKEDEX, dex.toClientData()))
         }

@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.QuirkData
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
@@ -44,8 +43,8 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
+import org.joml.Matrix4f
 import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.text.get
 
 /**
  * Represents some kind of animation state for an entity or GUI element or other renderable component in the game.
@@ -185,15 +184,17 @@ abstract class PosableState : Schedulable {
                 val entity = getEntity() ?: return@addFunction Unit
                 val world = entity.level() as ClientLevel
 
-                val matrixWrapper = locatorStates[locator] ?: locatorStates["root"]!!
-
+                val rootMatrix = locatorStates["root"]!!
+                val locatorMatrix = locatorStates[locator] ?: locatorStates["root"]!!
+                val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
                 val particleRuntime = MoLangRuntime().setup().setupClient()
                 particleRuntime.environment.query.addFunction("entity") { runtime.environment.query }
 
                     val storm = ParticleStorm(
                         effect = effect,
                         entity = entity,
-                        matrixWrapper = matrixWrapper,
+                        emitterSpaceMatrix = particleMatrix,
+                        locatorSpaceMatrix = locatorMatrix,
                         world = world,
                         runtime = particleRuntime,
                         sourceVelocity = { entity.deltaMovement },

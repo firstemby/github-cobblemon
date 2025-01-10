@@ -192,7 +192,8 @@ class PasturePokemonScrollList(
             partialTicks: Float
         ) {
             val x = rowLeft - 4
-            val y = rowTop
+            val y = rowTop + 2
+
             val matrixStack = context.pose()
             blitk(
                 matrixStack = matrixStack,

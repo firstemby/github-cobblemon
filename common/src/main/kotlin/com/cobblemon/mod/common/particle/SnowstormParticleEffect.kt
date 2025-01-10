@@ -13,7 +13,4 @@ import net.minecraft.core.particles.ParticleOptions
 
 class SnowstormParticleOptions(val effect: BedrockParticleOptions) : ParticleOptions {
     override fun getType() = CobblemonParticles.SNOWSTORM_PARTICLE_TYPE
-    companion object {
-
-    }
 }

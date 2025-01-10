@@ -74,7 +74,7 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
         ?: this.getInboundRequest(receiver.uuid, requestID)
 
     /** Determines whether [player] can receive a [T]. */
-    open fun isBusy(player: ServerPlayer): Boolean = player.isInBattle() || player.isTrading()
+    open fun isBusy(player: ServerPlayer): Boolean = player.isInBattle() || player.isTrading() || player.party().find { it.entity?.isBusy == true } != null
 
     /** Determines if the [target] is a valid interaction request target. */
     abstract fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean
@@ -176,7 +176,7 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
         else if (!this.isValidInteraction(player, target ?: request.sender))    // with teams anyone can accept
             request.notify(player, true, "ui.interact.failed")
         // if sending player is occupied, can't accept response
-        else if (this.isBusy(request.sender))                                   // TODO enhancement: allow retries - modify client so we don't remove request when sending acceptance
+        else if (this.isBusy(request.sender) || this.isBusy(request.receiver))  // TODO enhancement: allow retries - modify client so we don't remove request when sending acceptance
             request.notify(player, true, "ui.interact.unavailable")
         // if no condition is blocking acceptance, accept
         else if (this.canAccept(request))

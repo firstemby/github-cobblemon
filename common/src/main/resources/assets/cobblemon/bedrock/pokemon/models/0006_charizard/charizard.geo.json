@@ -152,7 +152,15 @@
 					"pivot": [0, 48.75, -3],
 					"rotation": [-90, 0, 0],
 					"locators": {
-						"mouth": [0, 48.75, -3],
+						"mouth": [0, 48.75, -3]
+					}
+				},
+				{
+					"name": "locator_special_attack",
+					"parent": "head_angle",
+					"pivot": [0, 48.75, -3],
+					"rotation": [-90, 0, 0],
+					"locators": {
 						"special_attack": [0, 48.75, -3]
 					}
 				},

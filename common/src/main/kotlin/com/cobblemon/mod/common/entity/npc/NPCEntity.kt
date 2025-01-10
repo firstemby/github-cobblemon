@@ -111,6 +111,8 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     var skill: Int? = null // range from 0 - 5
 
+    var baseScale: Float? = null
+
     var hitbox: EntityDimensions? = null
 
     var party: NPCPartyStore? = null
@@ -347,6 +349,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
                 it.putByteArray(DataKeys.NPC_PLAYER_TEXTURE_TEXTURE, playerTexture.texture)
             })
         }
+        val baseScale = baseScale
+        if (baseScale != null) {
+            nbt.putFloat(DataKeys.NPC_BASE_SCALE, baseScale)
+        }
         val hitbox = hitbox
         if (hitbox != null) {
             nbt.put(DataKeys.NPC_HITBOX, CompoundTag().also {
@@ -406,6 +412,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         this.isInvulnerable = if (nbt.contains(DataKeys.NPC_IS_INVULNERABLE)) nbt.getBoolean(DataKeys.NPC_IS_INVULNERABLE) else null
         this.isLeashable = if (nbt.contains(DataKeys.NPC_IS_LEASHABLE)) nbt.getBoolean(DataKeys.NPC_IS_LEASHABLE) else null
         this.allowProjectileHits = if (nbt.contains(DataKeys.NPC_ALLOW_PROJECTILE_HITS)) nbt.getBoolean(DataKeys.NPC_ALLOW_PROJECTILE_HITS) else null
+        this.baseScale = if (nbt.contains(DataKeys.NPC_BASE_SCALE)) nbt.getFloat(DataKeys.NPC_BASE_SCALE) else null
         this.hitbox = if (nbt.contains(DataKeys.NPC_HITBOX)) {
             val hitboxNBT = nbt.getCompound(DataKeys.NPC_HITBOX)
 
@@ -450,9 +457,20 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     override fun isCustomNameVisible() = true
 
-    override fun isPersistenceRequired() = !npc.canDespawn
+    override fun isPersistenceRequired(): Boolean {
+        return super.isPersistenceRequired() || !npc.canDespawn
+    }
 
-    override fun getDimensions(pose: Pose): EntityDimensions = hitbox ?: npc.hitbox
+    override fun getScale(): Float {
+        return baseScale ?: npc.baseScale
+    }
+
+    override fun getDimensions(pose: Pose): EntityDimensions {
+        val hitbox = hitbox ?: npc.hitbox
+        val scaledHitbox = hitbox.scale(baseScale ?: npc.baseScale)
+
+        return scaledHitbox
+    }
 
     override fun isPushable(): Boolean {
         return isMovable ?: npc.isMovable

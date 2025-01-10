@@ -8,12 +8,17 @@
 
 package com.cobblemon.mod.common.client
 
-import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonClientImplementation
+import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.ResourcePackActivationBehaviour
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
-import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
+import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
@@ -21,7 +26,13 @@ import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.*
+import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
+import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
+import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
+import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
+import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
+import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
+import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
@@ -29,7 +40,14 @@ import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererR
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.*
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.BlockEntityModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.FossilModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.GenericBedrockEntityModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokeBallModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
@@ -86,6 +104,13 @@ object CobblemonClient {
         GenericBedrockEntityModelRepository
     )
 
+    @JvmStatic
+    val builtinResourcePacks = listOf<CobblemonResourcePack>(
+        CobblemonResourcePack(id = "adorncompatibility", name = "Adorn Compatibility", activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
+        CobblemonResourcePack(id = "gyaradosjump", name = "Gyarados Jump Patterns", activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonResourcePack(id = "regionbiasforms", name = "Region Bias Forms", activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonResourcePack(id = "uniqueshinyforms", name = "Shinies for Magikarp Jump", activationBehaviour = ResourcePackActivationBehaviour.NORMAL),
+    )
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }

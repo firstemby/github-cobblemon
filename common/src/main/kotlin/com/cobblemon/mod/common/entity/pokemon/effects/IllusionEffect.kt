@@ -9,9 +9,12 @@
 package com.cobblemon.mod.common.entity.pokemon.effects
 
 import com.cobblemon.mod.common.api.entity.pokemon.*
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
@@ -55,6 +58,7 @@ class IllusionEffect(
         afterOnServer(seconds = 1.0F) {
             entity.cry()
             if (entity.pokemon.shiny) SpawnSnowstormEntityParticlePacket(cobblemonResource("shiny_ring"), entity.id, listOf("shiny_particles", "middle")).sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
+            this.revealToDex(entity)
             future.complete(entity)
         }
     }
@@ -70,6 +74,23 @@ class IllusionEffect(
     override fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         if (nbt.contains(DataKeys.POKEMON_ENTITY_MOCK)) this.mock = PokemonProperties().loadFromNBT(nbt.getCompound(DataKeys.POKEMON_ENTITY_MOCK), registryLookup)
         if (nbt.contains(DataKeys.POKEMON_ENTITY_SCALE)) this.scale = nbt.getFloat(DataKeys.POKEMON_ENTITY_SCALE)
+    }
+
+    /**
+     * Reveals the "base" Pokemon to everyone in the battle for dex purposes.
+     *
+     * @param entity The [PokemonEntity] being revealed.
+     */
+    private fun revealToDex(entity: PokemonEntity) {
+        // Step 1 resolve source battle and presence in actor.
+        val battleId = entity.battleId ?: return
+        val battle = BattleRegistry.getBattle(battleId) ?: return
+        val wildActor = battle.getActor(entity.pokemon.uuid) ?: return
+        val battlePokemon = wildActor.pokemonList.firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
+        // Step 2 flag all players as seeing the Pokemon
+        battle.playerUUIDs.forEach { uuid ->
+            CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
+        }
     }
 
     companion object {

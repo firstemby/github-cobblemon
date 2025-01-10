@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
+import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
 import com.cobblemon.mod.common.api.spawning.influence.RestrictedSpawnBlocksInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.rules.SpawnRule
@@ -42,7 +43,7 @@ object PlayerSpawnerFactory {
     var influenceBuilders = mutableListOf<(player: ServerPlayer) -> SpawningInfluence?>({
         PlayerLevelRangeInfluence(
             it,
-            variation = 5
+            variation = TYPICAL_VARIATION
         )
     }, { RestrictedSpawnBlocksInfluence() })
 

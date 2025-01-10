@@ -219,12 +219,8 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         } else { // if the bobber is not out yet
 
             if (!world.isClientSide) {
-                val lureLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                    world.enchantmentRegistry.getHolder(Enchantments.LURE).get(), itemStack
-                )
-                val luckLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                    world.enchantmentRegistry.getHolder(Enchantments.LUCK_OF_THE_SEA).get(), itemStack
-                )
+                val lureLevel = world.enchantmentRegistry.getHolder(Enchantments.LURE).map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }.orElse(0)
+                val luckLevel = world.enchantmentRegistry.getHolder(Enchantments.LUCK_OF_THE_SEA).map { EnchantmentHelper.getItemEnchantmentLevel(it, itemStack) }.orElse(0)
 
                 val bobberEntity = PokeRodFishingBobberEntity(
                     user,

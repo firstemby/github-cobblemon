@@ -113,11 +113,15 @@ class InteractWheelButton(
     override fun playDownSound(soundManager: SoundManager) {}
 
     private fun isHovered(mouseX: Float, mouseY: Float): Boolean {
-        val xMin = x.toFloat()
-        val xMax = xMin + BUTTON_SIZE
-        val yMin = y.toFloat()
-        val yMax = yMin + BUTTON_SIZE
+        val xMin = x.toFloat() + 1
+        val xMax = xMin + BUTTON_SIZE - 2
+        val yMin = y.toFloat() + 1
+        val yMax = yMin + BUTTON_SIZE - 2
         return canHover(mouseX.toDouble(), mouseY.toDouble()) && mouseX in xMin..xMax && mouseY in yMin..yMax
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        return if (isHovered(mouseX.toFloat(), mouseY.toFloat())) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     override fun getTooltip(): Tooltip? {

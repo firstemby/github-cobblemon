@@ -46,7 +46,7 @@ for_each(t.winner, c.npc_winners, {
       t.cmd = q.replace(t.winner.npc.config.player_lose_command, '{{player}}', t.player_loser.player.username);
       t.cmd = q.replace(t.cmd, '{{player_id}}', t.player_loser.player.uuid);
       t.cmd = q.replace(t.cmd, '{{npc}}', t.winner.npc.name);
-      t.cmd = q.replace(t.cmd, '{{npc_id}}', t.winner.npc.id);
+      t.cmd = q.replace(t.cmd, '{{npc_id}}', t.winner.npc.uuid);
       q.run_command(t.cmd);
     });
   };

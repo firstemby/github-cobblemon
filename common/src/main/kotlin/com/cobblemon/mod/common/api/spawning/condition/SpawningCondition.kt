@@ -59,10 +59,6 @@ abstract class SpawningCondition<T : SpawningContext> {
     var isThundering: Boolean? = null
     var timeRange: TimeRange? = null
     var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
-    var minLureLevel: Int? = null
-    var maxLureLevel: Int? = null
-    var bait: ResourceLocation? = null
-    var rodType: ResourceLocation? = null
     var isSlimeChunk: Boolean? = null
 
     @Transient

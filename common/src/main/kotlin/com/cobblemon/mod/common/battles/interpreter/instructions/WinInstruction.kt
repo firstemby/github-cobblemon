@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
-import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.text.gold
 import com.cobblemon.mod.common.api.text.plus
 import com.cobblemon.mod.common.api.text.red
@@ -70,11 +69,6 @@ class WinInstruction(val message: BattleMessage): InterpreterInstruction {
         }
         battle.dispatchGo {
             battle.end()
-            battle.actors.flatMap { it.pokemonList }.map { it.originalPokemon }.forEach { pokemon ->
-                battle.playerUUIDs.forEach { playerUuid ->
-                    CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(playerUuid, pokemon))
-                }
-            }
             CobblemonEvents.BATTLE_VICTORY.post(BattleVictoryEvent(battle, winners, losers, wasCaught))
             ShowdownInterpreter.lastCauser.remove(battle.battleId)
         }

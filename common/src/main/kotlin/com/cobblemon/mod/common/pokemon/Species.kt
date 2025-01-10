@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType.Companion.FLYING_POSES
@@ -39,7 +40,6 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
-import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.readEntityDimensions
 import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.readIdentifier
@@ -50,6 +50,7 @@ import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.cobblemon.mod.common.util.writeString
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -129,15 +130,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     val possibleGenders: Set<Gender>
         get() = forms.flatMap {
-            if (it.maleRatio == -1F) {
-                setOf(Gender.GENDERLESS)
-            } else if (it.maleRatio == 0F) {
-                setOf(Gender.FEMALE)
-            } else if (it.maleRatio == 1F) {
-                setOf(Gender.MALE)
-            } else {
-                setOf(Gender.FEMALE, Gender.MALE)
-            }
+            it.possibleGenders
         }.toSet() + (if (maleRatio == -1F) {
             setOf(Gender.GENDERLESS)
         } else if (maleRatio == 0F) {
@@ -353,13 +346,13 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
         // TODO: Registries have dedicated Codecs, migrate to that once this is a proper registry impl
         /**
-         * A [Codec] that maps to/from an [Identifier] associated as [Species.resourceIdentifier].
+         * A [Codec] that maps to/from an [ResourceLocation] associated as [Species.resourceIdentifier].
          * Uses [PokemonSpecies.getByIdentifier] to query.
          */
         @JvmStatic
-        val BY_IDENTIFIER_CODEC: Codec<Species> = CodecUtils.createByIdentifierCodec(
-            PokemonSpecies::getByIdentifier,
+        val BY_IDENTIFIER_CODEC: Codec<Species> = ResourceLocation.CODEC.comapFlatMap(
+            { identifier -> DataResult.success(PokemonSpecies.getByIdentifier(identifier) ?: throw InvalidSpeciesException(identifier))  },
             Species::resourceIdentifier
-        ) { identifier -> "No species for ID $identifier" }
+        )
     }
 }

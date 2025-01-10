@@ -30,8 +30,9 @@ abstract class TriggerSpawner<T : SpawnCause>(override val name: String, var spa
     private var selector: SpawningSelector = FlatContextWeightedSelector()
     override val influences = mutableListOf<SpawningInfluence>()
 
-    open fun run(cause: T, world: ServerLevel, pos: BlockPos): CompletableFuture<*>? {
+    open fun run(cause: T, world: ServerLevel, pos: BlockPos, influences: List<SpawningInfluence> = emptyList()): CompletableFuture<*>? {
         val context = parseContext(cause, world, pos) ?: return null
+        context.influences.addAll(influences)
         selector.select(this, listOf(context))?.let { (_, spawn) ->
             val action = spawn.doSpawn(context)
             action.complete()

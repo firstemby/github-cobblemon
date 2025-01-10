@@ -51,6 +51,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
@@ -75,6 +76,11 @@ class PokemonRenderer(
             .withUnderlined(false)
             .withStrikethrough(false)
             .withObfuscated(false)
+
+        private const val HIDDEN_NAME = "???"
+
+        private const val SPACE = " "
+
     }
 
     val ballContext = RenderContext().also {
@@ -355,23 +361,15 @@ class PokemonRenderer(
             matrices.scale((0.025 * sizeScale).toFloat(), (-0.025 * sizeScale).toFloat(), (1 * sizeScale).toFloat())
             val matrix4f = matrices.last().pose()
             val opacity = (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F).toInt() shl 24
-            var label = if (ServerSettings.displayEntityNameLabel &&
-                !Cobblemon.config.displayNameForUnknownPokemon &&
-                CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) == PokedexEntryProgress.NONE) {
-                Component.literal("???")
-            } else if (ServerSettings.displayEntityNameLabel) {
-                entity.name.copy()
-            } else {
-                Component.empty()
-            }
-            if(ServerSettings.displayEntityNameLabel && ServerSettings.displayEntityLevelLabel && entity.labelLevel() > 0) {
-                label.append(Component.literal(" "))
-            }
+            val label = this.resolveBaseLabel(entity)
             if (ServerSettings.displayEntityLevelLabel && entity.labelLevel() > 0) {
+                if (ServerSettings.displayEntityNameLabel) {
+                    label.append(SPACE)
+                }
                 // This a Style.EMPTY with a lot of effects set to false and color set to white, renderer inherits these from nick otherwise
                 val levelLabel = lang("label.lv", entity.labelLevel())
                     .setStyle(LEVEL_LABEL_STYLE)
-                label = label.append(levelLabel)
+                label.append(levelLabel)
             }
             var h = (-this.font.width(label) / 2).toFloat()
             val y = 0F
@@ -387,6 +385,14 @@ class PokemonRenderer(
                 this.font.drawInBatch(battlePrompt, h, y + 10, -1, false, matrix4f, vertexConsumers, DisplayMode.NORMAL, 0, packedLight)
             }
             matrices.popPose()
+        }
+    }
+
+    private fun resolveBaseLabel(entity: PokemonEntity): MutableComponent {
+        return when {
+            !ServerSettings.displayEntityNameLabel -> Component.empty()
+            Cobblemon.config.displayNameForUnknownPokemon || CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) != PokedexEntryProgress.NONE -> entity.name.copy()
+            else -> Component.literal(HIDDEN_NAME)
         }
     }
 

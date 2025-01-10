@@ -39,7 +39,7 @@ abstract class JsonBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     override fun load(uuid: UUID): T {
         val playerFile = filePath(uuid)
         playerFile.parentFile.mkdirs()
-        return if (playerFile.exists()) {
+        return if (playerFile.exists() && playerFile.length() > 0L) {
             gson.fromJson(BufferedReader(FileReader(playerFile)), classToken).also {
                 // Resolves old data that's missing new properties
                 val newProps = it::class.memberProperties.filterIsInstance<KMutableProperty<*>>().filter { member -> member.getter.call(it) == null }

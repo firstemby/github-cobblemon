@@ -305,7 +305,7 @@
   "item.cobblemon.auspicious_armor": "Auspicious Armor",
   "item.cobblemon.auspicious_armor.tooltip": "Evolves Charcadet into Armarouge",
   "item.cobblemon.malicious_armor": "Malicious Armor",
-  "item.cobblemon.malicious_armor.tooltip": "Evolves Charcadet into Armarouge",
+  "item.cobblemon.malicious_armor.tooltip": "Evolves Charcadet into Ceruledge",
   "item.cobblemon.binding_band": "Binding Band",
   "item.cobblemon.binding_band.tooltip": "Increases damage dealt by the binding status",
   "item.cobblemon.black_belt": "Black Belt",
@@ -346,7 +346,7 @@
   "item.cobblemon.everstone": "Everstone",
   "item.cobblemon.everstone.tooltip": "Prevents the holder from evolving",
   "item.cobblemon.eviolite": "Eviolite",
-  "item.cobblemon.eviolite.tooltip": "Boosts the holder's Defense and Sp. Atk if it is not fully evolved",
+  "item.cobblemon.eviolite.tooltip": "Boosts the holder's Defense and Sp. Defense if it is not fully evolved",
   "item.cobblemon.exp_share": "Exp. Share",
   "item.cobblemon.exp_share.tooltip": "Allows the holder to receive a share of experience from battles without participating",
   "item.cobblemon.expert_belt": "Expert Belt",
@@ -888,6 +888,8 @@
   "block.cobblemon.dawn_stone_block": "Dawn Stone Block",
   "block.cobblemon.dusk_stone_block": "Dusk Stone Block",
 
+  "cobblemon.fishing.no_bite": "Not even a nibble.",
+
   "cobblemon.fishing_bait_effect_header": "Fishing Bait Effects:",
   "cobblemon.fishing_bait_effects.nature.tooltip": "%1$s%% - Attract %2$s Nature",
   "cobblemon.fishing_bait_effects.iv.tooltip": "%1$s%% - %2$s IV +%3$s",
@@ -897,11 +899,12 @@
   "cobblemon.fishing_bait_effects.level_raise.tooltip": "%1$s%% - Boost Level +%3$s",
   "cobblemon.fishing_bait_effects.typing.tooltip": "%1$s%% - %3$s× Chance for %2$s Types",
   "cobblemon.fishing_bait_effects.egg_group.tooltip": "%1$s%% - %3$s× Chance for %2$s Egg Group",
-  "cobblemon.fishing_bait_effects.shiny_reroll.tooltip": "%1$s× - %3$s× Shiny Chance",
+  "cobblemon.fishing_bait_effects.shiny_reroll.tooltip": "%1$s%% - %3$s× Shiny Chance",
   "cobblemon.fishing_bait_effects.ha_chance.tooltip": "%1$s%% - Attract Hidden Ability",
   "cobblemon.fishing_bait_effects.pokemon_chance.tooltip": "%1$s%% - Reel in a Pokémon",
   "cobblemon.fishing_bait_effects.friendship.tooltip": "%1$s%% - Boost Friendship +%3$s",
   "cobblemon.fishing_bait_effects.inert.tooltip": "No known effect",
+
   "cobblemon.egg_group.monster": "Monster",
   "cobblemon.egg_group.water_1": "Water 1",
   "cobblemon.egg_group.bug": "Bug",
@@ -1300,6 +1303,8 @@
   "cobblemon.challenge.canceled.receiver": "%1$s canceled their challenge...",
   "cobblemon.challenge.error.insufficient_pokemon.other": "%1$s doesn't have any Pokémon to battle with!",
   "cobblemon.challenge.error.insufficient_pokemon.self": "You don't have any Pokémon to battle with!",
+  "cobblemon.challenge.error.duplicate": "You already have a pending battle request sent to %1$s.",
+  "cobblemon.challenge.error.pending": "%1$s already has a pending battle request for you.",
   "cobblemon.challenge.rule.level": "Level %1$s All",
   "cobblemon.challenge.rule.anything_goes": "Anything Goes",
 
@@ -1518,6 +1523,7 @@
   "cobblemon.command.pokebox.last_pokemon": "Did not send that Player's last Pokémon to the PC.",
   "cobblemon.command.pokemonrestart": "Cleared %1$s's party and PC.",
   "cobblemon.command.freezepokemon.non_pokemon": "You are not looking at a Pokémon.",
+  "cobblemon.command.npcedit.non_npc": "You are not looking at a NPC.",
 
   "advancements.cobblemon.root": "The World of Cobblemon!",
   "advancements.cobblemon.root.description": "Choose a starter Pokémon and set out on a new adventure",
@@ -2005,6 +2011,7 @@
   "cobblemon.battle.end.illusion": "%1$s's illusion wore off!",
   "cobblemon.battle.end.neutralizinggas": "The effects of the neutralizing gas wore off!",
   "cobblemon.battle.end.stockpile": "%1$s's stockpiled effect wore off!",
+  "cobblemon.battle.end.infestation": "%1$s was freed from Infestation!",
 
   "cobblemon.battle.block.sweetveil": "%1$s can't fall asleep due to a veil of sweetness!",
   "cobblemon.battle.block.uproar": "But the uproar kept %1$s awake!",
@@ -2141,9 +2148,15 @@
 
   "cobblemon.battle.terastallize": "%1$s has Terastallized into the %2$s-type!",
 
-  "cobblemon.battle.detailschange.mega": "%1$s is reacting to the Key Stone!",
-  "cobblemon.battle.detailschange.noice": "%1$s transformed!",
-  "cobblemon.battle.detailschange.eiscue": "%1$s transformed!",
+  "cobblemon.battle.formechange.default.permanent": "%1$s transformed into its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary": "%1$s changed to its %2$s form!",
+  "cobblemon.battle.formechange.default.temporary.ended": "%1$s changed to its base form.",
+  "cobblemon.battle.formechange.mega": "%1$s is reacting to the Key Stone!",
+  "cobblemon.battle.formechange.ash": "%1$s became Ash-Greninja!",
+  "cobblemon.battle.formechange.school": "%1$s formed a school!",
+  "cobblemon.battle.formechange.wishiwashi": "%1$s stopped schooling!",
+  "cobblemon.battle.formechange.meteor": "%1$s shielded itself.",
+  "cobblemon.battle.formechange.minior": "%1$s stopped shielding itself.",
 
   "cobblemon.battle.mega": "%1$s has Mega Evolved!",
 

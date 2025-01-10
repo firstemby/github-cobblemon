@@ -68,6 +68,7 @@ object DataKeys {
     const val POKEMON_PLATFORM_TYPE = "PlatformType"
 
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
+    const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
@@ -219,6 +220,7 @@ object DataKeys {
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    const val NPC_BASE_SCALE = "BaseScale"
     const val NPC_HITBOX = "Hitbox"
     const val NPC_HITBOX_WIDTH = "Width"
     const val NPC_HITBOX_HEIGHT = "Height"

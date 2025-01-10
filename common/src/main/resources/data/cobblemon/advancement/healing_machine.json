@@ -14,15 +14,8 @@
   "parent": "cobblemon:use_revive",
   "criteria": {
     "use_healing_machine": {
-      "trigger": "minecraft:item_used_on_block",
+      "trigger": "minecraft:any_block_use",
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {}
-          }
-        ],
         "location": [
           {
             "condition": "minecraft:location_check",

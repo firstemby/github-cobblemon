@@ -26,76 +26,25 @@ class PartyCheckCriterion(
     companion object {
         val CODEC: Codec<PartyCheckCriterion> = RecordCodecBuilder.create { it.group(
             EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(PartyCheckCriterion::playerCtx),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("id", listOf()).forGetter(PartyCheckCriterion::party)
+            ResourceLocation.CODEC.listOf().optionalFieldOf("party", listOf()).forGetter(PartyCheckCriterion::party)
         ).apply(it, ::PartyCheckCriterion) }
     }
 
     override fun matches(player: ServerPlayer, context: PlayerPartyStore): Boolean {
         val matches = mutableListOf<ResourceLocation>()
         party.forEach {
-            if (it == "any".asIdentifierDefaultingNamespace()) {
+            if (it == "any".asIdentifierDefaultingNamespace("minecraft") || it == "any".asIdentifierDefaultingNamespace()) {
                 matches.add(it)
             }
         }
         val partyCount = context.count()
         if (matches.containsAll(party) && party.size == partyCount && matches.size == partyCount) return true
+        matches.clear()
         context.iterator().forEach {
             if (party.contains(it.species.resourceIdentifier)) {
                 matches.add(it.species.resourceIdentifier)
             }
         }
-        return matches.containsAll(party) && matches.size == partyCount
+        return matches.containsAll(party) && matches.size == party.size
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*class PartyCheckCriterion(id: Identifier, entity: LootContextPredicate) : SimpleCriterionCondition<PartyCheckContext>(id, entity){
-    val party = mutableListOf<Identifier>()
-    override fun toJson(json: JsonObject) {
-        json.add("party", JsonArray(party.size).also {
-            party.forEach { pokemon -> it.add(pokemon.toString()) }
-        })
-    }
-
-    override fun fromJson(json: JsonObject) {
-        party.clear()
-        json.getAsJsonArray("party").forEach { element ->
-            party.add(element.asString.asIdentifierDefaultingNamespace())
-        }
-    }
-
-    override fun matches(player: ServerPlayer, context: PartyCheckContext): Boolean {
-        val playerParty = player.party()
-        val matches = mutableListOf<Identifier>()
-        party.forEach {
-            if (it == "any".asIdentifierDefaultingNamespace()) {
-                matches.add(it)
-            }
-        }
-        val partyCount = playerParty.count()
-        if (matches.containsAll(party) && party.size == partyCount && matches.size == partyCount) return true
-        playerParty.iterator().forEach {
-            if (party.contains(it.species.resourceIdentifier)) {
-                matches.add(it.species.resourceIdentifier)
-            }
-        }
-        return matches.containsAll(party) && matches.size == partyCount
-    }
-}
-
-open class PartyCheckContext(val party : PlayerPartyStore)*/

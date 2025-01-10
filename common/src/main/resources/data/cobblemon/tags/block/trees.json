@@ -4,7 +4,13 @@
     "#minecraft:leaves",
 	"#minecraft:logs",
 	"#minecraft:overworld_natural_logs",
-	"#c:leaves",
-	"#c:logs"
+	{
+      "id": "#c:leaves",
+      "required": false
+    },
+	{
+      "id": "#c:logs",
+      "required": false
+    }
   ]
 }

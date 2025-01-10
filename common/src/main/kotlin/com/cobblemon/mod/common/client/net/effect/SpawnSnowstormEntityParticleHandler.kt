@@ -9,63 +9,51 @@
 package com.cobblemon.mod.common.client.net.effect
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm
-import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.LivingEntity
 
 object SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormEntityParticlePacket> {
     override fun handle(packet: SpawnSnowstormEntityParticlePacket, client: Minecraft) {
         val world = Minecraft.getInstance().level ?: return
         val effect = BedrockParticleOptionsRepository.getEffect(packet.effectId) ?: return
-        val entity = world.getEntity(packet.entityId)
-        if (entity is PosableEntity) {
-            val state = entity.delegate as PosableState
-            val locators = packet.locator.firstNotNullOfOrNull { state.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return
+        val sourceEntity = world.getEntity(packet.sourceEntityId) as? PosableEntity ?: return
+        val targetedEntity = packet.targetedEntityId?.let { world.getEntity(it) }
+        sourceEntity as Entity
+        val sourceState = sourceEntity.delegate as PosableState
+        val targetState = (targetedEntity as? PosableEntity)?.delegate as? PosableState
+        val sourceLocators = packet.sourceLocators.firstNotNullOfOrNull { sourceState.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return
+        val targetedLocator = packet.targetLocators?.firstOrNull { targetState?.getMatchingLocators(it)?.isNotEmpty() == true }
+        val rootMatrix = sourceState.locatorStates["root"]!!
 
-            val matrixWrappers = locators.mapNotNull { state.locatorStates[it] }
-            matrixWrappers.forEach { matrixWrapper ->
-                val particleRuntime = MoLangRuntime().setup().setupClient()
-                particleRuntime.environment.query.addFunction("entity") { state.runtime.environment.query }
-                val storm = ParticleStorm(
-                    effect = effect,
-                    matrixWrapper = matrixWrapper,
-                    world = world,
-                    runtime = particleRuntime,
-                    sourceVelocity = { entity.deltaMovement },
-                    sourceAlive = { !entity.isRemoved },
-                    sourceVisible = { !entity.isInvisible },
-                    entity = entity
-                )
+        sourceLocators.forEach { locator ->
+            val locatorMatrix = sourceState.locatorStates[locator]!!
 
-                storm.spawn()
-            }
-        } else if (entity is LivingEntity) {
-            val matrixWrapper = MatrixWrapper()
-            matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
+            val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
             val particleRuntime = MoLangRuntime().setup().setupClient()
-            particleRuntime.environment.query.addFunction("entity") { params -> MoLangFunctions.entityFunctions.flatMap { it(entity).map { it.key to it.value } } }
+            particleRuntime.environment.query.addFunction("entity") { sourceState.runtime.environment.query }
+
             val storm = ParticleStorm(
                 effect = effect,
-                matrixWrapper = matrixWrapper,
+                emitterSpaceMatrix = particleMatrix,
+                locatorSpaceMatrix = locatorMatrix,
                 world = world,
                 runtime = particleRuntime,
-                sourceVelocity = { entity.deltaMovement },
-                sourceAlive = { !entity.isRemoved },
-                sourceVisible = { !entity.isInvisible },
-                entity = entity
+                sourceVelocity = { sourceEntity.deltaMovement },
+                sourceAlive = { !sourceEntity.isRemoved },
+                sourceVisible = { !sourceEntity.isInvisible },
+                targetPos =  if (targetedEntity != null) { { targetedLocator?.let { targetState?.locatorStates?.get(it) }?.getOrigin() ?: targetedEntity.position() } } else null,
+                entity = sourceEntity
             )
+
             storm.spawn()
         }
-
     }
 }

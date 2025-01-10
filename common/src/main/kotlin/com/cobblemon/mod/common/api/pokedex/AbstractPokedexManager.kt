@@ -32,6 +32,18 @@ abstract class AbstractPokedexManager {
         markDirty()
     }
 
+    fun deleteFormRecord(speciesId: ResourceLocation, formName: String) {
+        val speciesRecord = speciesRecords[speciesId] ?: return
+        speciesRecord.deleteFormRecord(formName)
+
+        if (speciesRecord.isFormRecordsEmpty) {
+            deleteSpeciesRecord(speciesId)
+            return
+        }
+
+        markDirty()
+    }
+
     fun getSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord? {
         return speciesRecords[speciesId]
     }
@@ -149,26 +161,5 @@ abstract class AbstractPokedexManager {
 
     open fun markDirty() {
         // Save stuff
-    }
-
-    companion object {
-        const val NUM_CAUGHT_KEY = "cobblemon.pokedex.entries.caught"
-        const val NUM_SEEN_KEY = "cobblemon.pokedex.entries.seen"
-
-        fun getKeyForSpeciesBase(speciesId: ResourceLocation): String {
-            return "cobblemon.pokedex.${speciesId.path}"
-        }
-
-        fun getKnowledgeKeyForSpecies(speciesId: ResourceLocation): String {
-            return "${getKeyForSpeciesBase(speciesId)}.knowledge"
-        }
-
-        fun getKnowledgeKeyForForm(speciesId: ResourceLocation, formName: String): String {
-            return "${getKnowledgeKeyForSpecies(speciesId)}.${formName.lowercase()}"
-        }
-
-        fun getCaptureMethodKeyForSpecies(speciesId: ResourceLocation): String {
-            return "${getKeyForSpeciesBase(speciesId)}.capturemethod"
-        }
     }
 }

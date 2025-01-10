@@ -197,28 +197,37 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 pokemonEntity.yya = 0.2F
             }
 
-            // In battle water antics
-            // Borrowing hard from Minecraft's Boat logic
-            if (this.pokemonEntity.isBattling && mob.isInWater) {
-                var e = 0.0F
-                val exposedForm = this.pokemonEntity.exposedForm
-                if (isUnderwater()) {
-                    if (this.pokemonEntity.platform != PlatformType.NONE) {
-                        // Float up if on a platform
-                        e = 0.3F
-                    }
-                } else if (checkInWater()) {
-                    if (this.pokemonEntity.platform != PlatformType.NONE ) {
-                        // Hold Steady
-                        e = ((this.waterLevel - this.pokemonEntity.y) / this.pokemonEntity.bbHeight).toFloat()
-                    } else if (exposedForm.behaviour.moving.swim.canBreatheUnderwater) {
-                        // allow swimmers to sink a bit into the water
-                        e = -1.5F
-                    }
+            if (this.pokemonEntity.isBattling) {
+                if (this.pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
+                    // Flying Pokemon have extremely low vertical deceleration and can fly into the stratosphere if their movement is not dampened
+                    // This can happen when:
+                    // A Pokemon was jumping when the battle begins
+                    // A Pokemon receives knockback from sweeping edge striking a nearby target, wind charges, etc.
+                    mob.deltaMovement = Vec3(mob.deltaMovement.x, min(0.01, mob.deltaMovement.y), mob.deltaMovement.z)
                 }
-                if (Mth.abs(e) > VERY_CLOSE) {
-                    val vec32: Vec3 = this.pokemonEntity.deltaMovement
-                    this.pokemonEntity.setDeltaMovement(vec32.x, (vec32.y + e * (this.pokemonEntity.gravity / 0.65)) * 0.75, vec32.z)
+                if (mob.isInWater) {
+                    // In battle water antics
+                    // Borrowing hard from Minecraft's Boat logic
+                    var e = 0.0F
+                    val exposedForm = this.pokemonEntity.exposedForm
+                    if (isUnderwater()) {
+                        if (this.pokemonEntity.platform != PlatformType.NONE) {
+                            // Float up if on a platform
+                            e = 0.3F
+                        }
+                    } else if (checkInWater()) {
+                        if (this.pokemonEntity.platform != PlatformType.NONE ) {
+                            // Hold Steady
+                            e = ((this.waterLevel - this.pokemonEntity.y) / this.pokemonEntity.bbHeight).toFloat()
+                        } else if (exposedForm.behaviour.moving.swim.canBreatheUnderwater) {
+                            // allow swimmers to sink a bit into the water
+                            e = -1.5F
+                        }
+                    }
+                    if (Mth.abs(e) > VERY_CLOSE) {
+                        val vec32: Vec3 = this.pokemonEntity.deltaMovement
+                        this.pokemonEntity.setDeltaMovement(vec32.x, (vec32.y + e * (this.pokemonEntity.gravity / 0.65)) * 0.75, vec32.z)
+                    }
                 }
             }
         }

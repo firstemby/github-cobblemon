@@ -32,16 +32,16 @@
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
-      "animations": ["q.bedrock('raichu_alolan', 'ground_sleep')"]
+      "isTouchingWater": false,
+      "animations": ["q.bedrock('raichu_alolan', 'sleep')"]
     },
     "surface_sleep": {
       "poseTypes": ["SLEEP"],
       "isTouchingWater": true,
       "animations": [
         "q.look('head')",
-        "q.bedrock('raichu_alolan', 'ground_sleep')"
+        "q.bedrock('raichu_alolan', 'sleep')"
       ],
-      "quirks": ["q.bedrock_quirk('raichu_alolan', 'blink')"],
       "transformedParts": [
         {
           "part": "body",

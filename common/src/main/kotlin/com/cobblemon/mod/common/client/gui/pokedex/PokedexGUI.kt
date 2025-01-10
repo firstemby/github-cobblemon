@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pokedex
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -410,6 +411,13 @@ class PokedexGUI private constructor(
         scrollScreen = EntriesScrollingWidget(x + 26, y + 39) { setSelectedEntry(it) }
         var entries = filteredPokedex
             .flatMap { it.getEntries() }
+
+        if (Cobblemon.config.hideUnimplementedPokemonInThePokedex) {
+            entries = entries.filter {
+                val species = PokemonSpecies.getByIdentifier(it.speciesId) ?: return@filter false
+                return@filter species.implemented
+            }
+        }
 
         for (filter in getFilters()) {
             entries = entries.filter { filter.test(it) }
