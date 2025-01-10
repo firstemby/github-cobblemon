@@ -23,6 +23,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.FaceInfo
 import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.model.*
 import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.texture.OverlayTexture
@@ -49,17 +50,21 @@ import java.nio.ByteBuffer
 class EggItemRenderer : CobblemonBuiltinItemRenderer {
 
     override fun render(
-        stack: ItemStack,
-        mode: ItemDisplayContext,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+            stack: ItemStack,
+            mode: ItemDisplayContext,
+            matrices: PoseStack,
+            vertexConsumers: MultiBufferSource,
+            light: Int,
+            overlay: Int
     ) {
+        val minecraft = Minecraft.getInstance()
+        val itemRenderer = minecraft.itemRenderer
+
         // Retrieve egg data
         val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return
         val egg = eggComponent.egg ?: return
 
+        // Fetch the sprite dynamically based on species
         val sprite = CobblemonAtlases.EGG_PATTERN_SPRITE_ATLAS.getSprite(
                 cobblemonResource("${egg.species.path}_egg")
         )
@@ -69,44 +74,38 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             return
         }
 
-        matrices.popPose() // Undo matrix transformations applied before
-        val model = getBakedModel(sprite, eggComponent) // Use custom model generation
+        // Retrieve the model
+        val model = itemRenderer.getModel(stack, minecraft.level, minecraft.player, 0)
+        if (model == null) {
+            println("Failed to retrieve model for stack: $stack")
+            return
+        }
+
+        // Push the transformation matrix
         matrices.pushPose()
 
-        logModelVertices(model)
-
-        val oldShaderLights = RenderSystem.shaderLightDirections
-        Lighting.setupForFlatItems()
-
-        val isLeftHanded = mode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || mode == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
-        Minecraft.getInstance().itemRenderer.render(
-                stack, mode, isLeftHanded, matrices, vertexConsumers, light, overlay, model
-        )
-
-        matrices.popPose() // Pop the matrix frame used for rendering
-        matrices.pushPose() // Reset matrix to avoid affecting subsequent renders
-        RenderSystem.setShaderLights(oldShaderLights[0], oldShaderLights[1])
-    }
-
-    private fun logModelVertices(model: BakedModel) {
-        println("Logging vertices for model: $model")
+        // Render the item directly using the default baked model renderer
+        val buffer = vertexConsumers.getBuffer(RenderType.entitySolid(sprite.atlasLocation()))
         val random = RandomSource.create()
-
-        model.getQuads(null, null, random).forEachIndexed { quadIndex, quad ->
-            println("Quad $quadIndex:")
-            val vertexData = quad.vertices
-            for (i in vertexData.indices step 8) {
-                val x = Float.fromBits(vertexData[i])
-                val y = Float.fromBits(vertexData[i + 1])
-                val z = Float.fromBits(vertexData[i + 2])
-                val u = Float.fromBits(vertexData[i + 4])
-                val v = Float.fromBits(vertexData[i + 5])
-                println("  Vertex ${i / 8}: Position=($x, $y, $z), UV=($u, $v)")
-            }
+        for (quad in model.getQuads(null, null, random)) {
+            buffer.putBulkData(
+                    matrices.last(), // Pass the PoseStack.Pose object directly
+                    quad,
+                    1.0f, 1.0f, 1.0f, 0.5F,// RGBA
+                    light,
+                    overlay
+            )
         }
-    }
 
-    fun getBakedModel(sprite: TextureAtlasSprite, eggComponent: EggComponent): BakedModel {
+
+        // Pop the transformation matrix
+        matrices.popPose()
+    }
+}
+
+
+// todo these were all test functions that didn't work T.T
+    /*fun getBakedModel(sprite: TextureAtlasSprite, eggComponent: EggComponent): BakedModel {
         val uvArrOne = floatArrayOf(0F, 0F, 16F, 16F)
         val uvArrTwo = floatArrayOf(16F, 0F, 0F, 16F)
 
@@ -244,10 +243,8 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
 
         // Padding or unused data
         buf.putInt(0) // Padding to align with the expected data structure
-    }
+    }*/
 
-
-}
 
     // TODO I AM SO SORRY APION MAY YOU REST IN PEACE. LET THIS CODE BE A REMINDER TO YOUR DEDICATION TO THIS ITEM RENDERER :(
     //FIXME: Componentify
