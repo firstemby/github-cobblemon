@@ -23,21 +23,18 @@ import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.FaceInfo
 import net.minecraft.client.renderer.ItemBlockRenderTypes
-import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.client.renderer.block.model.BlockElement
-import net.minecraft.client.renderer.block.model.BlockElementFace
-import net.minecraft.client.renderer.block.model.BlockFaceUV
-import net.minecraft.client.renderer.block.model.ItemOverrides
-import net.minecraft.client.renderer.block.model.ItemTransforms
+import net.minecraft.client.renderer.block.model.*
 import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.SimpleBakedModel
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector2f
 import org.joml.Vector3f
+import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
 // Abandon all hope, ye who enter here
@@ -63,100 +60,196 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
         val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return
         val egg = eggComponent.egg ?: return
 
-        // Fetch texture
-        val texture = cobblemonResource("textures/egg_patterns/inventory/${egg.species.path}_egg.png")
-        val model = getBakedModel(texture, eggComponent)
+        val sprite = CobblemonAtlases.EGG_PATTERN_SPRITE_ATLAS.getSprite(
+                cobblemonResource("${egg.species.path}_egg")
+        )
 
+        if (sprite.contents() == null) {
+            println("Sprite for ${egg.species.path}_egg not found!")
+            return
+        }
+
+        matrices.popPose() // Undo matrix transformations applied before
+        val model = getBakedModel(sprite, eggComponent) // Use custom model generation
         matrices.pushPose()
 
-        // Prepare buffer
-        val buffer = vertexConsumers.getBuffer(CobblemonRenderLayers.EGG_SPRITE_LAYER)
+        logModelVertices(model)
 
-        // Render quads
-        renderQuads(model, stack, light, overlay, matrices, buffer)
+        val oldShaderLights = RenderSystem.shaderLightDirections
+        Lighting.setupForFlatItems()
 
-        matrices.popPose()
+        val isLeftHanded = mode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || mode == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+        Minecraft.getInstance().itemRenderer.render(
+                stack, mode, isLeftHanded, matrices, vertexConsumers, light, overlay, model
+        )
+
+        matrices.popPose() // Pop the matrix frame used for rendering
+        matrices.pushPose() // Reset matrix to avoid affecting subsequent renders
+        RenderSystem.setShaderLights(oldShaderLights[0], oldShaderLights[1])
     }
 
-    private fun renderQuads(
-        model: BakedModel,
-        stack: ItemStack,
-        light: Int,
-        overlay: Int,
-        matrices: PoseStack,
-        buffer: VertexConsumer
-    ) {
-        val random = net.minecraft.util.RandomSource.create()
-        val pose = matrices.last()
+    private fun logModelVertices(model: BakedModel) {
+        println("Logging vertices for model: $model")
+        val random = RandomSource.create()
 
-        // Render each quad
-        model.getQuads(null, null, random).forEach { quad ->
-            buffer.putBulkData(pose, quad, 1f, 1f, 1f, 1f, light, overlay)
+        model.getQuads(null, null, random).forEachIndexed { quadIndex, quad ->
+            println("Quad $quadIndex:")
+            val vertexData = quad.vertices
+            for (i in vertexData.indices step 8) {
+                val x = Float.fromBits(vertexData[i])
+                val y = Float.fromBits(vertexData[i + 1])
+                val z = Float.fromBits(vertexData[i + 2])
+                val u = Float.fromBits(vertexData[i + 4])
+                val v = Float.fromBits(vertexData[i + 5])
+                println("  Vertex ${i / 8}: Position=($x, $y, $z), UV=($u, $v)")
+            }
         }
     }
 
-    private fun getBakedModel(texture: net.minecraft.resources.ResourceLocation, eggComponent: EggComponent): BakedModel {
-        //val sprite = CobblemonAtlases.EGG_SPRITE_ATLAS.getSprite(cobblemonResource("item/egg/${eggComponent.egg?.species?.path}_egg"))
-        val sprite = CobblemonAtlases.EGG_PATTERN_SPRITE_ATLAS.getSprite(cobblemonResource("${eggComponent.egg?.species?.path}_egg"))
+    fun getBakedModel(sprite: TextureAtlasSprite, eggComponent: EggComponent): BakedModel {
+        val uvArrOne = floatArrayOf(0F, 0F, 16F, 16F)
+        val uvArrTwo = floatArrayOf(16F, 0F, 0F, 16F)
 
-        val quads = mutableListOf<BakedQuad>()
+        // Define model elements
+        val baseElementList = mutableListOf(
+                BlockElement(
+                        Vector3f(0.0F, 0.0F, 7.5F),
+                        Vector3f(16.0F, 16.0F, 8.5F),
+                        buildMap {
+                            this[Direction.SOUTH] = BlockElementFace(null, 0, "${eggComponent.egg!!.species.path}_egg", BlockFaceUV(uvArrOne, 0))
+                            this[Direction.NORTH] = BlockElementFace(null, 0, "${eggComponent.egg.species.path}_egg", BlockFaceUV(uvArrTwo, 0))
+                        },
+                        null,
+                        false
+                )
+        )
+        // Generate quads from elements
+        baseElementList.addAll(ItemModelGenerator().createSideElements(sprite.contents(), "layer0", 0))
 
-        // Add simple quad for testing (can be extended to generate more complex models)
-        quads.add(createQuad(Vector3f(0f, 0f, 0f), Vector3f(1f, 1f, 0f), sprite))
+        val faceQuadMaps = Direction.values().associateWith { emptyList<BakedQuad>() }
+        val quads = generateQuads(baseElementList, 0, sprite)
 
         return SimpleBakedModel(
-            quads,
-            emptyMap(),
-            false, // hasAmbientOcclusion
-            false, // usesBlockLight
-            true,  // isGui3d
-            sprite, // particleIcon
-            ItemTransforms.NO_TRANSFORMS,
-            ItemOverrides.EMPTY
+                quads,
+                faceQuadMaps,
+                false,
+                false,
+                false,
+                sprite,
+                ItemTransforms.NO_TRANSFORMS,
+                ItemOverrides.EMPTY
         )
-
     }
 
-    fun createQuad(
-        from: Vector3f,
-        to: Vector3f,
-        sprite: TextureAtlasSprite
+    fun generateQuads(
+            modelElements: List<BlockElement>,
+            colorIndex: Int,
+            sprite: TextureAtlasSprite
+    ): MutableList<BakedQuad> {
+        val result = mutableListOf<BakedQuad>()
+        modelElements.forEach { element ->
+            element.faces.forEach { face ->
+                val cornerArray = getPositionMatrix(element.from, element.to)
+                val cornerOne = FaceInfo.fromFacing(face.key).getVertexInfo(0)
+                val cornerTwo = FaceInfo.fromFacing(face.key).getVertexInfo(1)
+                val cornerThree = FaceInfo.fromFacing(face.key).getVertexInfo(2)
+                val cornerFour = FaceInfo.fromFacing(face.key).getVertexInfo(3)
+                val uOne = sprite.getU(face.value.uv.getU(0))
+                val vOne = sprite.getV(face.value.uv.getV(0))
+                val uTwo = sprite.getU(face.value.uv.getU(1))
+                val vTwo = sprite.getV(face.value.uv.getV(1))
+                val uThree = sprite.getU(face.value.uv.getU(2))
+                val vThree = sprite.getV(face.value.uv.getV(2))
+                val uFour = sprite.getU(face.value.uv.getU(3))
+                val vFour = sprite.getV(face.value.uv.getV(3))
+                result.add(
+                        generateBakedQuad(
+                                Vector3f(cornerArray[cornerOne.xFace], cornerArray[cornerOne.yFace], cornerArray[cornerOne.zFace]),
+                                Vector2f(uOne, vOne),
+                                Vector3f(cornerArray[cornerTwo.xFace], cornerArray[cornerTwo.yFace], cornerArray[cornerTwo.zFace]),
+                                Vector2f(uTwo, vTwo),
+                                Vector3f(cornerArray[cornerThree.xFace], cornerArray[cornerThree.yFace], cornerArray[cornerThree.zFace]),
+                                Vector2f(uThree, vThree),
+                                Vector3f(cornerArray[cornerFour.xFace], cornerArray[cornerFour.yFace], cornerArray[cornerFour.zFace]),
+                                Vector2f(uFour, vFour),
+                                colorIndex,
+                                sprite,
+                                face.key
+                        )
+                )
+            }
+        }
+        return result
+    }
+
+    private fun getPositionMatrix(from: Vector3f, to: Vector3f): FloatArray {
+        val corners = FloatArray(Direction.values().size)
+        corners[FaceInfo.WEST.ordinal] = from.x() / 16.0f
+        corners[FaceInfo.DOWN.ordinal] = from.y() / 16.0f
+        corners[FaceInfo.NORTH.ordinal] = from.z() / 16.0f
+        corners[FaceInfo.EAST.ordinal] = to.x() / 16.0f
+        corners[FaceInfo.UP.ordinal] = to.y() / 16.0f
+        corners[FaceInfo.SOUTH.ordinal] = to.z() / 16.0f
+        return corners
+    }
+
+    private fun generateBakedQuad(
+            cornerOnePos: Vector3f,
+            cornerOneUv: Vector2f,
+            cornerTwoPos: Vector3f,
+            cornerTwoUv: Vector2f,
+            cornerThreePos: Vector3f,
+            cornerThreeUv: Vector2f,
+            cornerFourPos: Vector3f,
+            cornerFourUv: Vector2f,
+            colorIndex: Int,
+            sprite: TextureAtlasSprite,
+            face: Direction
     ): BakedQuad {
-        val vertices = IntArray(28) // 4 vertices * 7 data points (position, color, texture coords)
-        val uvs = floatArrayOf(sprite.u0, sprite.v0, sprite.u1, sprite.v1)
+        val vertBuf = MemoryStack.stackPush()
+        return vertBuf.use {
+            // Buffer for 4 vertices * 8 floats per vertex
+            val buf = it.malloc(4 * 4 * 8)
+            packVertexData(cornerOnePos, cornerOneUv, buf)
+            packVertexData(cornerTwoPos, cornerTwoUv, buf)
+            packVertexData(cornerThreePos, cornerThreeUv, buf)
+            packVertexData(cornerFourPos, cornerFourUv, buf)
 
-        // Vertex 1
-        packVertex(vertices, 0, from.x, from.y, from.z, uvs[0], uvs[1])
-        // Vertex 2
-        packVertex(vertices, 7, to.x, from.y, from.z, uvs[2], uvs[1])
-        // Vertex 3
-        packVertex(vertices, 14, to.x, to.y, from.z, uvs[2], uvs[3])
-        // Vertex 4
-        packVertex(vertices, 21, from.x, to.y, from.z, uvs[0], uvs[3])
+            val vertData = IntArray(32)
+            buf.rewind()
+            for (i in vertData.indices) {
+                vertData[i] = buf.getInt()
+            }
 
-        return BakedQuad(vertices, -1, Direction.SOUTH, sprite, true)
+            BakedQuad(vertData, colorIndex, face, sprite, true)
+        }
     }
 
-    private fun packVertex(
-        vertexData: IntArray,
-        index: Int,
-        x: Float,
-        y: Float,
-        z: Float,
-        u: Float,
-        v: Float
+    private fun packVertexData(
+            position: Vector3f,
+            uvs: Vector2f,
+            buf: ByteBuffer
     ) {
-        vertexData[index] = java.lang.Float.floatToRawIntBits(x)
-        vertexData[index + 1] = java.lang.Float.floatToRawIntBits(y)
-        vertexData[index + 2] = java.lang.Float.floatToRawIntBits(z)
-        vertexData[index + 3] = -1 // Default color (white)
-        vertexData[index + 4] = java.lang.Float.floatToRawIntBits(u)
-        vertexData[index + 5] = java.lang.Float.floatToRawIntBits(v)
-        vertexData[index + 6] = 0 // Padding for alignment
+        // Add position data (X, Y, Z)
+        buf.putFloat(position.x())
+        buf.putFloat(position.y())
+        buf.putFloat(position.z())
+
+        // Default color (white). You can change this to enable tinting if needed.
+        buf.putInt(-1)
+
+        // Add UV coordinates
+        buf.putFloat(uvs.x)
+        buf.putFloat(uvs.y)
+
+        // Padding or unused data
+        buf.putInt(0) // Padding to align with the expected data structure
     }
+
+
 }
 
-    // TODO I AM SO SORRY APION MAY YOU REST IN PEAVE. LET THIS CODE BE A REMINDER TO YOUR DEDICATION TO THIS ITEM RENDERER :(
+    // TODO I AM SO SORRY APION MAY YOU REST IN PEACE. LET THIS CODE BE A REMINDER TO YOUR DEDICATION TO THIS ITEM RENDERER :(
     //FIXME: Componentify
         /*
         val nbt = BlockItem.getBlockEntityNbt(stack) ?: return
@@ -285,7 +378,6 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             }
             return BakedQuad(vertData, colorIndex, face, sprite, true)
         }
-
     }
 
     //Mostly copied from BakedQuadFactory, with some consolidation
