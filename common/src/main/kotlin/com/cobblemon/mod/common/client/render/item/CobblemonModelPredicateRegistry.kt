@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common.client.render.item
 
-import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import net.minecraft.client.renderer.item.ItemProperties
@@ -21,6 +21,7 @@ object CobblemonModelPredicateRegistry {
     fun registerPredicates() {
 
         val rods = listOf(
+
                 CobblemonItems.AZURE_ROD,
                 CobblemonItems.BEAST_ROD,
                 CobblemonItems.CHERISH_ROD,
