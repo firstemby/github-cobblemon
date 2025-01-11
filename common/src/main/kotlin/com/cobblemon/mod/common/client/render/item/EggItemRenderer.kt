@@ -9,35 +9,33 @@
 package com.cobblemon.mod.common.client.render.item
 
 import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
-import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.platform.Lighting
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.resources.model.BakedModel
-import net.minecraft.world.item.ItemDisplayContext
-import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.FaceInfo
-import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.block.model.BakedQuad
+import net.minecraft.client.resources.model.SimpleBakedModel
+import net.minecraft.client.renderer.FaceInfo
+import net.minecraft.client.renderer.block.model.ItemModelGenerator
 import net.minecraft.client.renderer.block.model.BlockElement
 import net.minecraft.client.renderer.block.model.BlockElementFace
 import net.minecraft.client.renderer.block.model.BlockFaceUV
 import net.minecraft.client.renderer.block.model.ItemOverrides
 import net.minecraft.client.renderer.block.model.ItemTransforms
-import net.minecraft.client.renderer.entity.ItemRenderer
-import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.world.item.ItemDisplayContext
+import net.minecraft.client.renderer.block.model.ItemTransform
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.SimpleBakedModel
-import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Minecraft
 import net.minecraft.world.item.ItemStack
+import net.minecraft.core.Direction
+import net.minecraft.util.Mth
 import org.joml.Vector2f
 import org.joml.Vector3f
+import org.lwjgl.system.MemoryStack
 import java.nio.ByteBuffer
 
 // Abandon all hope, ye who enter here
@@ -50,146 +48,90 @@ import java.nio.ByteBuffer
  * @since February 12, 2024
  **/
 class EggItemRenderer : CobblemonBuiltinItemRenderer {
-
+    val generatedModels = hashMapOf<String, BakedModel>()
+    //DONT FORGET TO CACHE MODELS AFTER THEY ARE GENERATED AT SOME POINT
     override fun render(
-        stack: ItemStack,
-        mode: ItemDisplayContext,
-        matrices: PoseStack,
-        vertexConsumers: MultiBufferSource,
-        light: Int,
-        overlay: Int
+            stack: ItemStack,
+            mode: ItemDisplayContext,
+            matrices: PoseStack,
+            vertexConsumers: MultiBufferSource,
+            light: Int,
+            overlay: Int
     ) {
-        // Retrieve egg data
-        val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return
-        val egg = eggComponent.egg ?: return
+        val egg = stack.get(CobblemonItemComponents.EGG_DATA)?.egg
 
-        // Fetch texture
-        val texture = cobblemonResource("textures/egg_patterns/inventory/${egg.species.path}_egg.png")
-        val model = getBakedModel(texture, eggComponent)
-
-        matrices.pushPose()
-
-        // Prepare buffer
-        val buffer = vertexConsumers.getBuffer(CobblemonRenderLayers.EGG_SPRITE_LAYER)
-
-        // Render quads
-        renderQuads(model, stack, light, overlay, matrices, buffer)
-
-        matrices.popPose()
-    }
-
-    private fun renderQuads(
-        model: BakedModel,
-        stack: ItemStack,
-        light: Int,
-        overlay: Int,
-        matrices: PoseStack,
-        buffer: VertexConsumer
-    ) {
-        val random = net.minecraft.util.RandomSource.create()
-        val pose = matrices.last()
-
-        // Render each quad
-        model.getQuads(null, null, random).forEach { quad ->
-            buffer.putBulkData(pose, quad, 1f, 1f, 1f, 1f, light, overlay)
-        }
-    }
-
-    private fun getBakedModel(texture: net.minecraft.resources.ResourceLocation, eggComponent: EggComponent): BakedModel {
-        //val sprite = CobblemonAtlases.EGG_SPRITE_ATLAS.getSprite(cobblemonResource("item/egg/${eggComponent.egg?.species?.path}_egg"))
-        val sprite = CobblemonAtlases.EGG_PATTERN_SPRITE_ATLAS.getSprite(cobblemonResource("${eggComponent.egg?.species?.path}_egg"))
-
-        val quads = mutableListOf<BakedQuad>()
-
-        // Add simple quad for testing (can be extended to generate more complex models)
-        quads.add(createQuad(Vector3f(0f, 0f, 0f), Vector3f(1f, 1f, 0f), sprite))
-
-        return SimpleBakedModel(
-            quads,
-            emptyMap(),
-            false, // hasAmbientOcclusion
-            false, // usesBlockLight
-            true,  // isGui3d
-            sprite, // particleIcon
-            ItemTransforms.NO_TRANSFORMS,
-            ItemOverrides.EMPTY
-        )
-
-    }
-
-    fun createQuad(
-        from: Vector3f,
-        to: Vector3f,
-        sprite: TextureAtlasSprite
-    ): BakedQuad {
-        val vertices = IntArray(28) // 4 vertices * 7 data points (position, color, texture coords)
-        val uvs = floatArrayOf(sprite.u0, sprite.v0, sprite.u1, sprite.v1)
-
-        // Vertex 1
-        packVertex(vertices, 0, from.x, from.y, from.z, uvs[0], uvs[1])
-        // Vertex 2
-        packVertex(vertices, 7, to.x, from.y, from.z, uvs[2], uvs[1])
-        // Vertex 3
-        packVertex(vertices, 14, to.x, to.y, from.z, uvs[2], uvs[3])
-        // Vertex 4
-        packVertex(vertices, 21, from.x, to.y, from.z, uvs[0], uvs[3])
-
-        return BakedQuad(vertices, -1, Direction.SOUTH, sprite, true)
-    }
-
-    private fun packVertex(
-        vertexData: IntArray,
-        index: Int,
-        x: Float,
-        y: Float,
-        z: Float,
-        u: Float,
-        v: Float
-    ) {
-        vertexData[index] = java.lang.Float.floatToRawIntBits(x)
-        vertexData[index + 1] = java.lang.Float.floatToRawIntBits(y)
-        vertexData[index + 2] = java.lang.Float.floatToRawIntBits(z)
-        vertexData[index + 3] = -1 // Default color (white)
-        vertexData[index + 4] = java.lang.Float.floatToRawIntBits(u)
-        vertexData[index + 5] = java.lang.Float.floatToRawIntBits(v)
-        vertexData[index + 6] = 0 // Padding for alignment
-    }
-}
-
-    // TODO I AM SO SORRY APION MAY YOU REST IN PEAVE. LET THIS CODE BE A REMINDER TO YOUR DEDICATION TO THIS ITEM RENDERER :(
-    //FIXME: Componentify
-        /*
-        val nbt = BlockItem.getBlockEntityNbt(stack) ?: return
-        //I think it could be wise to change this so that the pokemon in the egg is not deserialized
-        //Basically only deserialize the minimum amount of info needed, textures
-        val egg = Egg.fromBlockNbt(nbt)
         //Since we are delegating back to the item renderer, we need the matrix frame from BEFORE the item renderer first ran
         matrices.popPose()
-        val pattern = egg.getPattern() ?: return
-        val model = getBakedModel(pattern)
+        //val pattern = egg.getPattern() ?: return
+        val model = getBakedModel(egg!!)
         matrices.pushPose()
         //GREMEDYStringMarker.glStringMarkerGREMEDY("Rendering egg item")
         val oldShaderLights = RenderSystem.shaderLightDirections
         //Might need to handle this differently depending on the mode
         Lighting.setupForFlatItems()
-        val isLeftHanded = mode == ModelTransformationMode.FIRST_PERSON_LEFT_HAND || mode == ModelTransformationMode.THIRD_PERSON_LEFT_HAND
-        MinecraftClient.getInstance().itemRenderer.renderItem(stack, mode, isLeftHanded, matrices, vertexConsumers, light, overlay, model)
+        val isLeftHanded = mode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || mode == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+        Minecraft.getInstance().itemRenderer.render(stack, mode, isLeftHanded, matrices, vertexConsumers, light, overlay, model)
         matrices.popPose()
         //Since the item renderer pops the frame off the we popped earlier, we need to put a frame back
         matrices.pushPose()
         RenderSystem.setShaderLights(oldShaderLights[0], oldShaderLights[1])
-
-
     }
 
-    fun getBakedModel(eggPattern: EggPattern): BakedModel {
-        if (generatedModels.containsKey(eggPattern)) {
-            return generatedModels[eggPattern]!!
+    fun getBakedModel(egg: Egg): BakedModel {
+        if (generatedModels.containsKey(egg.species.path)) {
+            return generatedModels[egg.species.path]!!
         }
-        val baseTexId = eggPattern.baseInvSpritePath
-        val overlayTexId = eggPattern.overlayInvSpritePath
-        val atlas = Minecraft.getInstance().getTextureAtlas(ResourceLocation.tryParse("minecraft:textures/atlas/blocks.png"))
-        val baseSprite = atlas.apply(ResourceLocation.tryBuild(baseTexId.namespace, "item/${baseTexId.path}"))
+
+        // Fetch the sprite from the Cobblemon atlas
+        val sprite = CobblemonAtlases.EGG_PATTERN_SPRITE_ATLAS.getSprite(
+                cobblemonResource("${egg.species.path}_egg")
+        )
+
+        if (sprite.contents() == null) {
+            println("Sprite for ${egg.species.path}_egg not found!")
+            return Minecraft.getInstance().modelManager.missingModel
+        }
+
+        // Generate model elements
+        val uvArrOne = floatArrayOf(0F, 0F, 16F, 16F)
+        val uvArrTwo = floatArrayOf(16F, 0F, 0F, 16F)
+
+        val baseElementList = mutableListOf(
+                BlockElement(
+                        Vector3f(0.0F, 0.0F, 7.5F),
+                        Vector3f(16.0F, 16.0F, 8.5F),
+                        buildMap {
+                            this[Direction.SOUTH] = BlockElementFace(null, 0, "${egg.species.path}_egg", BlockFaceUV(uvArrOne, 0))
+                            this[Direction.NORTH] = BlockElementFace(null, 0, "${egg.species.path}_egg", BlockFaceUV(uvArrTwo, 0))
+                        },
+                        null,
+                        false
+                )
+        )
+
+        // Add side elements
+        baseElementList.addAll(MODEL_GENERATOR.createSideElements(sprite.contents(), "layer0", 0))
+
+        // Generate quads
+        val faceQuadMaps = Direction.values().associateWith { emptyList<BakedQuad>() }
+        val quads = generateQuads(baseElementList, 0, sprite)
+
+        // Create and cache the model
+        val bakedModel = SimpleBakedModel(
+                quads,
+                faceQuadMaps,
+                false,
+                false,
+                false,
+                sprite,
+                DEFAULT_MODEL_TRANSFORMS,
+                ItemOverrides.EMPTY
+        )
+        generatedModels[egg.species.path] = bakedModel
+        return bakedModel
+
+        /*val atlas = ResourceLocation.tryParse("minecraft:textures/atlas/blocks.png")?.let { Minecraft.getInstance().getTextureAtlas(it) }
+        val baseSprite = atlas!!.apply(ResourceLocation.tryBuild(baseTexId.namespace, "item/${baseTexId.path}"))
         val uvArrOne = FloatArray(4)
         uvArrOne[0] = 0F
         uvArrOne[1] = 0F
@@ -202,16 +144,16 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
         uvArrTwo[3] = 16F
         //North and south faces are done separately for some reason
         val baseElementList = mutableListOf(
-            BlockElement(
-                Vector3f(0.0F, 0.0F, 7.5F),
-                Vector3f(16.0F, 16.0F, 8.5F),
-                buildMap {
-                    this[Direction.SOUTH] = BlockElementFace(null, 0, "item/${baseTexId.path}", BlockFaceUV(uvArrOne, 0))
-                    this[Direction.NORTH] = BlockElementFace(null, 0, "item/${baseTexId.path}", BlockFaceUV(uvArrTwo, 0))
-                },
-                null,
-                false
-            )
+                BlockElement(
+                        Vector3f(0.0F, 0.0F, 7.5F),
+                        Vector3f(16.0F, 16.0F, 8.5F),
+                        buildMap {
+                            this[Direction.SOUTH] = BlockElementFace(null, 0, "item/${baseTexId.path}", BlockFaceUV(uvArrOne, 0))
+                            this[Direction.NORTH] = BlockElementFace(null, 0, "item/${baseTexId.path}", BlockFaceUV(uvArrTwo, 0))
+                        },
+                        null,
+                        false
+                )
         )
         //This generates all of the other faces, but some more work is needed to bake them
         baseElementList.addAll(MODEL_GENERATOR.createSideElements(baseSprite.contents(), "layer0", 0))
@@ -221,16 +163,16 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             overlaySprite = atlas.apply(ResourceLocation.fromNamespaceAndPath(baseTexId.namespace, "item/${overlayTexId.path}"))
             if (overlaySprite == null) return@let
             overlayElementList = mutableListOf(
-                BlockElement(
-                    Vector3f(0.0F, 0.0F, 7.5F),
-                    Vector3f(16.0F, 16.0F, 8.5F),
-                    buildMap {
-                        this[Direction.SOUTH] = BlockElementFace(null, 1, "item/${overlayTexId.path}", BlockFaceUV(uvArrOne, 0))
-                        this[Direction.NORTH] = BlockElementFace(null, 1, "item/${overlayTexId.path}", BlockFaceUV(uvArrTwo, 0))
-                    },
-                    null,
-                    true
-                )
+                    BlockElement(
+                            Vector3f(0.0F, 0.0F, 7.5F),
+                            Vector3f(16.0F, 16.0F, 8.5F),
+                            buildMap {
+                                this[Direction.SOUTH] = BlockElementFace(null, 1, "item/${overlayTexId.path}", BlockFaceUV(uvArrOne, 0))
+                                this[Direction.NORTH] = BlockElementFace(null, 1, "item/${overlayTexId.path}", BlockFaceUV(uvArrTwo, 0))
+                            },
+                            null,
+                            true
+                    )
             )
             overlayElementList!!.addAll(MODEL_GENERATOR.createSideElements(overlaySprite!!.contents(), "layer1", 1))
         }
@@ -243,30 +185,30 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             quads.addAll(generateQuads(overlayElementList!!, 1, overlaySprite!!))
         }
         return SimpleBakedModel(
-            quads,
-            faceQuadMaps,
-            false,
-            false,
-            false,
-            //This is the particle sprite, so i assume unused in an item context
-            baseSprite,
-            DEFAULT_MODEL_TRANSFORMS,
-            ItemOverrides.EMPTY
-        )
+                quads,
+                faceQuadMaps,
+                false,
+                false,
+                false,
+                //This is the particle sprite, so i assume unused in an item context
+                baseSprite,
+                DEFAULT_MODEL_TRANSFORMS,
+                ItemOverrides.EMPTY
+        )*/
     }
 
     fun generateBakedQuad(
-        cornerOnePos: Vector3f,
-        cornerOneUv: Vector2f,
-        cornerTwoPos: Vector3f,
-        cornerTwoUv: Vector2f,
-        cornerThreePos: Vector3f,
-        cornerThreeUv: Vector2f,
-        cornerFourPos: Vector3f,
-        cornerFourUv: Vector2f,
-        colorIndex: Int,
-        sprite: TextureAtlasSprite,
-        face: Direction
+            cornerOnePos: Vector3f,
+            cornerOneUv: Vector2f,
+            cornerTwoPos: Vector3f,
+            cornerTwoUv: Vector2f,
+            cornerThreePos: Vector3f,
+            cornerThreeUv: Vector2f,
+            cornerFourPos: Vector3f,
+            cornerFourUv: Vector2f,
+            colorIndex: Int,
+            sprite: TextureAtlasSprite,
+            face: Direction
     ): BakedQuad {
         val vertBuf = MemoryStack.stackPush()
         vertBuf.use {
@@ -316,17 +258,17 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
                 val uFour = sprite.getU(face.value.uv.getU(3))
                 val vFour = sprite.getV(face.value.uv.getV(3))
                 result.add(generateBakedQuad(
-                    Vector3f(cornerArray[cornerOne.xFace], cornerArray[cornerOne.yFace], cornerArray[cornerOne.zFace]),
-                    Vector2f(uOne, vOne),
-                    Vector3f(cornerArray[cornerTwo.xFace], cornerArray[cornerTwo.yFace], cornerArray[cornerTwo.zFace]),
-                    Vector2f(uTwo, vTwo),
-                    Vector3f(cornerArray[cornerThree.xFace], cornerArray[cornerThree.yFace], cornerArray[cornerThree.zFace]),
-                    Vector2f(uThree, vThree),
-                    Vector3f(cornerArray[cornerFour.xFace], cornerArray[cornerFour.yFace], cornerArray[cornerFour.zFace]),
-                    Vector2f(uFour, vFour),
-                    colorIndex,
-                    sprite,
-                    face.key
+                        Vector3f(cornerArray[cornerOne.xFace], cornerArray[cornerOne.yFace], cornerArray[cornerOne.zFace]),
+                        Vector2f(uOne, vOne),
+                        Vector3f(cornerArray[cornerTwo.xFace], cornerArray[cornerTwo.yFace], cornerArray[cornerTwo.zFace]),
+                        Vector2f(uTwo, vTwo),
+                        Vector3f(cornerArray[cornerThree.xFace], cornerArray[cornerThree.yFace], cornerArray[cornerThree.zFace]),
+                        Vector2f(uThree, vThree),
+                        Vector3f(cornerArray[cornerFour.xFace], cornerArray[cornerFour.yFace], cornerArray[cornerFour.zFace]),
+                        Vector2f(uFour, vFour),
+                        colorIndex,
+                        sprite,
+                        face.key
                 ))
             }
         }
@@ -352,14 +294,14 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
         //Obtained from minecraft/assets/model/item/generated.json, the parent model for all generated item models
         //The modVector function does the same transformations done in [Transformation.Deserializer] <- >:( (So dumb)
         val DEFAULT_MODEL_TRANSFORMS = ItemTransforms(
-            ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 3F, 1F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
-            ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 3F, 1F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
-            ItemTransform(Vector3f(0F, -90F, 25F), modTranslationVector(Vector3f(1.13F, 3.2F, 1.13F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
-            ItemTransform(Vector3f(0F, -90F, 25F), modTranslationVector(Vector3f(1.13F, 3.2F, 1.13F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
-            ItemTransform(Vector3f(0F, 180F, 0F), modTranslationVector( Vector3f(0F, 13F, 7F)), modScaleVector(Vector3f(1F, 1F, 1F))),
-            ItemTransform.NO_TRANSFORM,
-            ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 2F, 0F)), modScaleVector(Vector3f(0.5F, 0.5F, 0.5F))),
-            ItemTransform(Vector3f(0F, 180F, 0F), modTranslationVector(Vector3f(0F, 0F, 0F)), modScaleVector(Vector3f(1F, 1F, 1F)))
+                ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 3F, 1F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
+                ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 3F, 1F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
+                ItemTransform(Vector3f(0F, -90F, 25F), modTranslationVector(Vector3f(1.13F, 3.2F, 1.13F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
+                ItemTransform(Vector3f(0F, -90F, 25F), modTranslationVector(Vector3f(1.13F, 3.2F, 1.13F)), modScaleVector(Vector3f(0.68F, 0.68F, 0.68F))),
+                ItemTransform(Vector3f(0F, 180F, 0F), modTranslationVector( Vector3f(0F, 13F, 7F)), modScaleVector(Vector3f(1F, 1F, 1F))),
+                ItemTransform.NO_TRANSFORM,
+                ItemTransform(Vector3f(0F, 0F, 0F), modTranslationVector(Vector3f(0F, 2F, 0F)), modScaleVector(Vector3f(0.5F, 0.5F, 0.5F))),
+                ItemTransform(Vector3f(0F, 180F, 0F), modTranslationVector(Vector3f(0F, 0F, 0F)), modScaleVector(Vector3f(1F, 1F, 1F)))
         )
 
         //TODO: Turn these into VectorUtil methods
@@ -368,18 +310,18 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
         fun modTranslationVector(translationVec: Vector3f): Vector3f {
             translationVec.mul(0.0625F)
             translationVec.set(
-                Mth.clamp(translationVec.x, -5.0f, 5.0f),
-                Mth.clamp(translationVec.y, -5.0f, 5.0f),
-                Mth.clamp(translationVec.z, -5.0f, 5.0f)
+                    Mth.clamp(translationVec.x, -5.0f, 5.0f),
+                    Mth.clamp(translationVec.y, -5.0f, 5.0f),
+                    Mth.clamp(translationVec.z, -5.0f, 5.0f)
             )
             return translationVec
         }
 
         fun modScaleVector(scaleVec: Vector3f): Vector3f {
             scaleVec.set(
-                Mth.clamp(scaleVec.x, -4.0f, 4.0f),
-                Mth.clamp(scaleVec.y, -4.0f, 4.0f),
-                Mth.clamp(scaleVec.z, -4.0f, 4.0f)
+                    Mth.clamp(scaleVec.x, -4.0f, 4.0f),
+                    Mth.clamp(scaleVec.y, -4.0f, 4.0f),
+                    Mth.clamp(scaleVec.z, -4.0f, 4.0f)
             )
             return scaleVec
         }
@@ -396,4 +338,5 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             fs[FaceInfo.SOUTH.ordinal] = to.z() / 16.0f
             return fs
         }
-         */
+    }
+}
