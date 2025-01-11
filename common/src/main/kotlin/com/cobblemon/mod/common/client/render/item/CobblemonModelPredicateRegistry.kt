@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.item
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
@@ -90,7 +91,19 @@ object CobblemonModelPredicateRegistry {
             }
         }
 
+        ItemProperties.register(CobblemonItems.POKEMON_EGG, ResourceLocation.parse("species")) { stack, world, entity, seed ->
+            // Retrieve egg data
+            val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return@register 0.0f
+            val egg = eggComponent.egg ?: return@register 0.0f
 
+            // Map Pokémon species to a custom model data value
+            when (egg.species.path) {
+                "charmander" -> 1.0f
+                "bulbasaur" -> 2.0f
+                "squirtle" -> 3.0f
+                else -> 0.0f // Default model for unknown species
+            }
+        }
 
     }
 }
