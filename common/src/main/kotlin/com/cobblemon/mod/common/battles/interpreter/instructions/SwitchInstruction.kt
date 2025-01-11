@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
@@ -213,7 +215,12 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                 battleLang("switch.other.nickname", actor.getName(), nickname, publicPokemon.species.translatedName)
             } ?: battleLang("switch.other", actor.getName(), publicPokemon.getDisplayName())
             actor.sendMessage(battleLang("switch.self", publicPokemon.getDisplayName()))
-            battle.actors.filter { it != actor }.forEach { it.sendMessage(publicLang) }
+            battle.actors.filter { it != actor }.forEach {
+                it.sendMessage(publicLang)
+            }
+            battle.playerUUIDs.forEach { uuid ->
+                CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, publicPokemon))
+            }
         }
     }
 

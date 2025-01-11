@@ -145,6 +145,9 @@
         "special_defence": 87,
         "speed": 100
       },
+      "features": [
+        "hero"
+      ],
       "catchRate": 45,
       "maleRatio": 0.5,
       "baseExperienceYield": 160,

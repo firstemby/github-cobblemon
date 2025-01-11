@@ -28,13 +28,10 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueDTO
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.asExpressions
-import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.resolve
+import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 
 class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
@@ -229,5 +226,14 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
     override fun onClose() {
         EscapeDialoguePacket().sendToServer()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+            onClose()
+            return true
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 }

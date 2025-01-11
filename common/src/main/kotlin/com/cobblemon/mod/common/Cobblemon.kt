@@ -68,6 +68,7 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.ShowdownThread
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
@@ -123,6 +124,7 @@ import kotlin.reflect.jvm.javaField
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceKey
+import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.NameTagItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.LevelResource
@@ -161,6 +163,16 @@ object Cobblemon {
     var permissionValidator: PermissionValidator by Delegates.observable(LaxPermissionValidator().also { it.initialize() }) { _, _, newValue -> newValue.initialize() }
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
+
+    @JvmStatic
+    val builtinPacks = listOf<CobblemonPack>(
+        CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
+        CobblemonPack(id = "gyaradosjump", name = "Gyarados Jump Patterns", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonPack(id = "regionbiasforms", name = "Region Bias Forms", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonPack(id = "uniqueshinyforms", name = "Shinies for Magikarp Jump", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.NORMAL),
+
+        CobblemonPack(id = "repurposedstructurescobblemon", name = "Repurposed Structures Cobblemon", packType = PackType.SERVER_DATA, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED, neededMods = setOf("repurposed_structures")),
+    )
 
     fun preInitialize(implementation: CobblemonImplementation) {
         this.implementation = implementation

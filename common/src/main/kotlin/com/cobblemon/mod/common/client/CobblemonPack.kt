@@ -10,10 +10,12 @@ package com.cobblemon.mod.common.client
 
 import com.cobblemon.mod.common.ResourcePackActivationBehaviour
 import net.minecraft.network.chat.Component
+import net.minecraft.server.packs.PackType
 
-class CobblemonResourcePack(
+class CobblemonPack(
     val id: String,
     val name: String,
+    val packType: PackType,
     val activationBehaviour: ResourcePackActivationBehaviour,
     val neededMods: Set<String> = setOf()
 ) {
