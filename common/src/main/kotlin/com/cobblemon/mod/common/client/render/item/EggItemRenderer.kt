@@ -16,23 +16,27 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.platform.Lighting
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.resources.model.BakedModel
-import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.client.resources.model.SimpleBakedModel
+import net.minecraft.world.item.ItemDisplayContext
+import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.FaceInfo
-import net.minecraft.client.renderer.block.model.ItemModelGenerator
+import net.minecraft.client.renderer.ItemBlockRenderTypes
+import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.block.model.BlockElement
 import net.minecraft.client.renderer.block.model.BlockElementFace
 import net.minecraft.client.renderer.block.model.BlockFaceUV
 import net.minecraft.client.renderer.block.model.ItemOverrides
 import net.minecraft.client.renderer.block.model.ItemTransforms
-import net.minecraft.world.item.ItemDisplayContext
-import net.minecraft.client.renderer.block.model.ItemTransform
+import net.minecraft.client.renderer.entity.ItemRenderer
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.world.item.ItemStack
 import net.minecraft.core.Direction
-import net.minecraft.util.Mth
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 import org.joml.Vector2f
 import org.joml.Vector3f
 import org.lwjgl.system.MemoryStack
@@ -227,7 +231,6 @@ class EggItemRenderer : CobblemonBuiltinItemRenderer {
             }
             return BakedQuad(vertData, colorIndex, face, sprite, true)
         }
-
     }
 
     //Mostly copied from BakedQuadFactory, with some consolidation
