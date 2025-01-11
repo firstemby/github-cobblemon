@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cobblemon:item/egg/flab\u00e9b\u00e9_egg"
+    }
+}

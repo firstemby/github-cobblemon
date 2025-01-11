@@ -1,3 +1,26 @@
 {
-    "parent": "minecraft:builtin/entity"
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cobblemon:item/egg/mystery_egg"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "species": 1
+            },
+            "model": "cobblemon:item/egg/charmander_egg"
+        },
+        {
+            "predicate": {
+                "species": 2
+            },
+            "model": "cobblemon:item/egg/bulbasaur_egg"
+        },
+        {
+            "predicate": {
+                "species": 3
+            },
+            "model": "cobblemon:item/egg/squirtle_egg"
+        }
+    ]
 }
