@@ -30,7 +30,6 @@ import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
-import com.cobblemon.mod.common.client.render.item.EggItemRenderer
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
@@ -322,7 +321,6 @@ object CobblemonClient {
 
     private fun registerBuiltinItemRenderers() {
         CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
-        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_EGG, EggItemRenderer())
     }
 
     fun reloadCodedAssets(resourceManager: ResourceManager) {
