@@ -8,11 +8,9 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.Difficulty
 import net.minecraft.world.entity.LivingEntity
@@ -22,8 +20,10 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToFightTaskConfig : SingleTaskConfig {
-    val condition = "true".asExpressionLike()
     val activity = Activity.FIGHT
+
+    override val variables: List<MoLangConfigVariable>
+        get() = emptyList()
 
     override fun createTask(
         entity: LivingEntity,
@@ -33,8 +33,7 @@ class SwitchToFightTaskConfig : SingleTaskConfig {
             it.present(MemoryModuleType.ATTACK_TARGET)
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-                if (!runtime.resolveBoolean(condition)) return@Trigger false
+                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 if (entity.commandSenderWorld.getCurrentDifficultyAt(entity.blockPosition()).difficulty == Difficulty.PEACEFUL) return@Trigger false
 
                 entity.brain.setActiveActivityIfPossible(activity)

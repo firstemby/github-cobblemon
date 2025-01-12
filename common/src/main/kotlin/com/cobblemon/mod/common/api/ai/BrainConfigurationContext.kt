@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai
 
 import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.entity.schedule.Schedule
@@ -26,6 +27,11 @@ class BrainConfigurationContext {
 
     fun apply(entity: LivingEntity, brainConfigs: List<BrainConfig>) {
         val brain = entity.brain
+
+        if (entity is MoLangScriptingEntity) {
+            entity.registerVariables(brainConfigs.flatMap { it.variables })
+            entity.initializeScripting()
+        }
 
         // Setup the brain config
         brainConfigs.forEach { it.configure(entity, this) }

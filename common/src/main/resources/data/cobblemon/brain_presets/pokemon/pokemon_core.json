@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.brain_preset.pokemon_core.name",
+  "description": "cobblemon.brain_preset.pokemon_core.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "apply_presets",
+      "presets": [
+        "cobblemon:core",
+        "cobblemon:looks_around",
+        "cobblemon:wanders"
+      ]
+    }
+  ]
+}

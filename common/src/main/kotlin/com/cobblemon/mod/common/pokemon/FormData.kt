@@ -96,6 +96,10 @@ class FormData(
     private var _height: Float? = null,
     @SerializedName("weight")
     private var _weight: Float? = null,
+    @SerializedName("baseAI")
+    private var _baseAI: MutableSet<ResourceLocation>? = null,
+    @SerializedName("ai")
+    private var _ai: MutableSet<ResourceLocation>? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
@@ -220,6 +224,11 @@ class FormData(
                 setOf(Gender.FEMALE, Gender.MALE)
             }
         }
+
+    val baseAI: Set<ResourceLocation>
+        get() = _baseAI ?: species.baseAI
+    val ai: Set<ResourceLocation>
+        get() = _ai ?: species.ai
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)

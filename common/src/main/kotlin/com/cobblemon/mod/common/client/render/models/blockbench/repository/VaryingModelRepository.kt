@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository.MixinCompatibilityExclusionStrategy
 import com.cobblemon.mod.common.client.util.exists
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
@@ -32,16 +31,16 @@ import com.google.gson.FieldAttributes
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.Resource
-import net.minecraft.server.packs.resources.ResourceManager
-import net.minecraft.world.phys.Vec3
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.Optional
 import java.util.function.BiFunction
 import java.util.function.Function
+import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.resources.Resource
+import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.world.phys.Vec3
 
 /**
  * A repository for [PosableModel]s. Can be parameterized with [PosableModel] itself or a subclass.

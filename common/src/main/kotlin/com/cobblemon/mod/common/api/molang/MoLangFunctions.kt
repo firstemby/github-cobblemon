@@ -992,7 +992,6 @@ object MoLangFunctions {
             map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
             map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
             map.put("catch_rate") { DoubleValue(species.catchRate) }
-
             map
         }
     )
@@ -1088,7 +1087,7 @@ object MoLangFunctions {
     }
 
     /**
-     * Different functions exist depending on
+     * Different functions exist depending on the entity type, this tries to make the struct that's most specific to the type.
      */
     fun LivingEntity.asMostSpecificMoLangValue(): ObjectValue<out LivingEntity> {
         return when (this) {
@@ -1157,6 +1156,7 @@ object MoLangFunctions {
             .flatMap { it.invoke(pokemonEntity).entries }
             .associate { it.key to it.value }
         functions.putAll(addedFunctions)
+        pokemonEntity.registerFunctionsForScripting(this)
         return this
     }
 

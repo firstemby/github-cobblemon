@@ -9,11 +9,13 @@
 package com.cobblemon.mod.common.api.ai.config
 
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
 class SetCoreActivities : BrainConfig {
     val activities = mutableListOf<Activity>()
+    override val variables = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         brainConfigurationContext.coreActivities = activities.toSet()
     }

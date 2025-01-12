@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.ai
 
 /**
- * Collection of all AI properties defineable at the species level of a Pokémon.
+ * Collection of all AI properties definable at the species level of a Pokémon.
  *
  * @author Hiroku
  * @since July 15th, 2022
@@ -18,4 +18,6 @@ open class PokemonBehaviour {
     val resting = RestBehaviour()
     var moving = MoveBehaviour()
     val idle = IdleBehaviour()
+    val entityInteract = EntityBehaviour()
+    val combat = CombatBehaviour()
 }

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawText
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.behaviour.BehaviourEditorScreen
 import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList
 import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget
 import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget.Companion.HEIGHT
@@ -28,6 +29,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import java.util.UUID
+import net.minecraft.world.entity.LivingEntity
 
 class NPCEditorScreen(
     val npcId: Int,
@@ -86,6 +88,18 @@ class NPCEditorScreen(
             ) {
                 SaveNPCPacket(npcId, dto).sendToServer()
                 this.minecraft!!.setScreen(null)
+            }
+        )
+
+        addRenderableWidget(
+            NPCEditorButton(
+                buttonX = leftX + 70F,
+                buttonY = topY + 201F,
+                label = lang("ui.entity.behaviour_editor"),
+                alignRight = true
+            ) {
+                val entity = this.minecraft!!.level!!.getEntity(npcId) as? LivingEntity ?: return@NPCEditorButton // Unlikely
+                minecraft!!.setScreen(BehaviourEditorScreen(entity = entity, appliedPresets = dto.brainPresets))
             }
         )
 

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config
 
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 
 /**
@@ -30,12 +31,15 @@ interface BrainConfig {
             "add_tasks_to_activity" to AddTasksToActivity::class.java,
             "apply_presets" to ApplyPresets::class.java,
             "set_default_activity" to SetDefaultActivity::class.java,
-            "set_core_activities" to SetCoreActivities::class.java
+            "set_core_activities" to SetCoreActivities::class.java,
+            "add_variables" to AddVariablesConfig::class.java,
+            "set_variables" to SetVariablesConfig::class.java,
         )
 
     }
 
 //    fun encode(buffer: RegistryFriendlyByteBuf)
 //    fun decode(buffer: RegistryFriendlyByteBuf)
+    val variables: List<MoLangConfigVariable>
     fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext)
 }

@@ -185,7 +185,8 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "depth": "normal",
-      "light": "0-4"
+      "light": "0-2",
+      "canSeeSky": false
     }
   },
   "moves": [

@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -34,14 +36,17 @@ import net.minecraft.world.entity.ai.behavior.RunOne
 class OneOfTaskConfig : SingleTaskConfig {
     class OneOfTaskOption {
         val weight: Int = 1
-        val task: TaskConfig = SingleTaskConfig { _, _ -> DoNothing(0, 1) }
+        val task: TaskConfig = SingleTaskConfig.nothing()
     }
 
     val condition: ExpressionLike = "true".asExpressionLike()
     val options = mutableListOf<OneOfTaskOption>()
 
+    override val variables: List<MoLangConfigVariable>
+        get() = options.flatMap { it.task.variables }
+
     override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!runtime.resolveBoolean(condition)) return null
         return RunOne(options.map { it.task.createTasks(entity, brainConfigurationContext).first() toDF it.weight })
     }

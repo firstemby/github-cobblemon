@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -68,6 +69,11 @@ class MoveInstruction(
             ShowdownInterpreter.lastCauser[battle.battleId] = message
             // For Spread targets the message data only gives the pnx strings. So we can't know what pokemon are actually targeted until the previous messages have been interpreted
             val spreadTargetPokemon = spreadTargets.map { battle.activePokemon.firstOrNull() { poke -> poke.getPNX() == it }?.battlePokemon }
+
+            val targetPokemonEntity = targetPokemon?.entity
+            if (targetPokemonEntity != null) {
+                userPokemon.entity?.brain?.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, targetPokemonEntity.uuid)
+            }
 
             userPokemon.effectedPokemon.let { pokemon ->
                 if (UseMoveEvolutionProgress.supports(pokemon, move)) {
@@ -134,7 +140,11 @@ class MoveInstruction(
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds
             future.thenApply { holds.clear() }
-            return@dispatch UntilDispatch { "effects" !in holds }
+            return@dispatch UntilDispatch { "effects" !in holds }.andThen {
+                val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
+                val targets = hurtTargets.mapNotNull { it.entity }
+                userPokemonId.let { id -> targets.forEach { it.brain.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, id) } }
+            }
         }
     }
 }

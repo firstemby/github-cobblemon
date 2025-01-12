@@ -40,6 +40,8 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.readEntityDimensions
 import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.readIdentifier
@@ -107,6 +109,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
     var dynamaxBlocked = false
     var implemented = false
+    var baseAI = mutableSetOf<ResourceLocation>(cobblemonResource("pokemon_core"))
+    var ai = mutableSetOf<ResourceLocation>()
 
     /**
      * The height in decimeters

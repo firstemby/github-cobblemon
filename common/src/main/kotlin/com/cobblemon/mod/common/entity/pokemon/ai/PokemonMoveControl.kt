@@ -20,6 +20,9 @@ import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveFloat
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
@@ -47,7 +50,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     private var waterLevel : Double = 0.0
 
     override fun tick() {
-        if (pokemonEntity.pokemon.status?.status == Statuses.SLEEP || pokemonEntity.isDeadOrDying) {
+        if (pokemonEntity.isDeadOrDying) {
             pokemonEntity.speed = 0F
             pokemonEntity.yya = 0F
             return
@@ -59,8 +62,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
             behaviour.moving.swim.swimSpeed
         } else {
-           behaviour.moving.walk.walkSpeed
-        })
+            behaviour.moving.walk.walkSpeed
+        }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
         val adjustedSpeed = baseSpeed * mediumSpeed
@@ -313,5 +316,11 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 Mth.floor(mob.z + zMovement.toDouble())
             )
         ) == PathType.WALKABLE
+    }
+
+    fun stop() {
+        this.operation = Operation.WAIT
+        strafeForwards = 0.0f
+        strafeRight = 0.0f
     }
 }

@@ -214,8 +214,6 @@ object DataKeys {
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
     const val NPC_VARIATION_ASPECTS = "VariationAspects"
-    const val NPC_DATA = "Data"
-    const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
@@ -235,6 +233,11 @@ object DataKeys {
     const val NPC_HITBOX_WIDTH = "Width"
     const val NPC_HITBOX_HEIGHT = "Height"
     const val NPC_HITBOX_FIXED = "Fixed"
+
+    const val SCRIPTED_BRAIN_IS_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BRAIN_PRESETS = "BrainPresets"
+    const val SCRIPTED_DATA = "Data"
+    const val SCRIPTED_CONFIG = "Config"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

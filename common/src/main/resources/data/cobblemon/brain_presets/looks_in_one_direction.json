@@ -1,0 +1,16 @@
+{
+  "name": "cobblemon.brain_preset.looks_in_one_direction.name",
+  "description": "cobblemon.brain_preset.looks_in_one_direction.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "core",
+      "tasksByPriority": {
+        "0": [
+          "look_in_direction",
+          "look_at_target"
+        ]
+      }
+    }
+  ]
+}

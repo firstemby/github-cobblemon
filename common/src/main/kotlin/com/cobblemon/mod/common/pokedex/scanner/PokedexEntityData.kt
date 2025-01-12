@@ -17,6 +17,10 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asArrayValue
 import java.util.UUID
 
+// Hiro note: I honestly want to move to not using this at all. There is always a Pokemon behind the data,
+// it's just that sometimes it's harder to reach or there's a Zoroark or Ditto throwing a curveball. It makes
+// in shittier in events to have to cater to two distinct classes of data that can be scanned.
+
 data class PokedexEntityData(
     val species: Species,
     val form: FormData,

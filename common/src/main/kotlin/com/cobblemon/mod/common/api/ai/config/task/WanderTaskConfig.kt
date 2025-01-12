@@ -8,18 +8,10 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveDouble
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -32,20 +24,32 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.LandRandomPos
 
 class WanderTaskConfig : SingleTaskConfig {
-    val condition: ExpressionLike = "true".asExpressionLike()
-    val shouldWander: ExpressionLike = "math.random(0, 20 * 8) <= 1".asExpressionLike()
-    val horizontalRange: Expression = "10".asExpression()
-    val verticalRange: Expression = "5".asExpression()
-    val speedMultiplier: Expression = "0.35".asExpression()
-    val completionRange: Expression = "1".asExpression()
-    val lookTargetYOffset: Expression = "1.5".asExpression()
+    companion object {
+        const val WANDER = "wander" // Category
+    }
+
+    val condition = booleanVariable(WANDER, "wanders", true).asExpressible()
+    val wanderChance = numberVariable(WANDER, "wander_chance", 1/(20 * 8F)).asExpressible()
+    val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 10).asExpressible()
+    val verticalRange = numberVariable(WANDER, "vertical_wander_range", 5).asExpressible()
+
+    val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
+
+    override val variables: List<MoLangConfigVariable>
+        get() = listOf(
+            condition,
+            wanderChance,
+            horizontalRange,
+            verticalRange,
+            speedMultiplier
+        ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
 
         return BehaviorBuilder.create {
             it.group(
@@ -57,12 +61,13 @@ class WanderTaskConfig : SingleTaskConfig {
                         return@Trigger false
                     }
 
-                    runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-                    if (!runtime.resolveBoolean(shouldWander)) return@Trigger false
+                    runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                    val wanderChance = wanderChance.resolveFloat()
+                    if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
-                    val targetVec = LandRandomPos.getPos(entity, runtime.resolveInt(horizontalRange), runtime.resolveInt(verticalRange)) ?: return@Trigger false
-                    walkTarget.set(WalkTarget(targetVec, runtime.resolveFloat(speedMultiplier), runtime.resolveInt(completionRange)))
-                    lookTarget.set(BlockPosTracker(targetVec.add(0.0, runtime.resolveDouble(lookTargetYOffset), 0.0)))
+                    val targetVec = LandRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt()) ?: return@Trigger false
+                    walkTarget.set(WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1))
+                    lookTarget.set(BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))
                     return@Trigger true
                 }
             }

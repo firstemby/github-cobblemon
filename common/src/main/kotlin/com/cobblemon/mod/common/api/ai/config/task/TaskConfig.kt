@@ -10,7 +10,17 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.resolve
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.resolveString
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
@@ -23,7 +33,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
  * @author Hiroku
  * @since October 14th, 2024
  */
-fun interface TaskConfig {
+interface TaskConfig {
     companion object {
         val types = mutableMapOf<String, Class<out TaskConfig>>(
             "one_of" to OneOfTaskConfig::class.java,
@@ -68,6 +78,33 @@ fun interface TaskConfig {
     val runtime: MoLangRuntime
         get() = Companion.runtime
 
+    fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })
+    fun ExpressionOrEntityVariable.resolveString() = runtime.resolveString(asExpression())
+    fun ExpressionOrEntityVariable.resolveBoolean() = runtime.resolveBoolean(asExpression())
+    fun ExpressionOrEntityVariable.resolveInt() = runtime.resolveInt(asExpression())
+    fun ExpressionOrEntityVariable.resolveDouble() = runtime.resolveDouble(asExpression())
+    fun ExpressionOrEntityVariable.resolveFloat() = runtime.resolveFloat(asExpression())
+
+    private fun variable(category: String, name: String, type: MoLangConfigVariable.MoLangVariableType, default: String) = MoLangConfigVariable(
+        variableName = name,
+        category = lang("entity.variable.category.$category"),
+        displayName = lang("entity.variable.$name.name"),
+        description = lang("entity.variable.$name.desc"),
+        type = type,
+        defaultValue = default
+    )
+
+    fun stringVariable(category: String, name: String, default: String) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.TEXT, default = default)
+    fun numberVariable(category: String, name: String, default: Number) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.NUMBER, default = default.toString())
+    fun booleanVariable(category: String, name: String, default: Boolean) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.BOOLEAN, default = default.toString())
+
+    fun getVariableExpression(name: String) = "q.entity.config.$name".asExpression()
+    fun resolveStringVariable(name: String) = runtime.resolveString(getVariableExpression(name))
+    fun resolveBooleanVariable(name: String) = runtime.resolveBoolean(getVariableExpression(name))
+    fun resolveNumberVariable(name: String) = runtime.resolveDouble(getVariableExpression(name))
+
+    /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
+    val variables: List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
     fun createTasks(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

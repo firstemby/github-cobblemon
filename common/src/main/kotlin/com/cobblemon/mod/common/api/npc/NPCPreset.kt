@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.npc
 
 import com.cobblemon.mod.common.api.ai.config.BrainConfig
-import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
 import net.minecraft.network.chat.Component
@@ -21,7 +21,7 @@ class NPCPreset {
     var resourceIdentifier: ResourceLocation? = null
     var aspects: Set<String>? = null
     var variations: Map<String, NPCVariationProvider>? = null
-    var config: List<NPCConfigVariable>? = null
+    var config: List<MoLangConfigVariable>? = null
     var party: NPCPartyProvider? = null
     var canDespawn: Boolean? = null
     var interaction: NPCInteractConfiguration? = null

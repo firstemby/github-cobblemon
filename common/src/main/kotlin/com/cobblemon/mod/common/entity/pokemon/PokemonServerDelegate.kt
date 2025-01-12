@@ -47,7 +47,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
     override fun changePokemon(pokemon: Pokemon) {
         updatePathfindingPenalties(pokemon)
-        entity.registerGoals()
+//        entity.registerGoals()
         updateMaxHealth()
     }
 
@@ -95,6 +95,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         with(entity) {
             speed = 0.1F
             entity.despawner.beginTracking(this)
+
+            initializeScripting()
         }
         updateTrackedValues()
     }

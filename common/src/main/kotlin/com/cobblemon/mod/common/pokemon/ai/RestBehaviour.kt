@@ -28,6 +28,8 @@ class RestBehaviour {
     val biomes = mutableListOf<RegistryLikeCondition<Biome>>()
     val light = IntRange(0, 15)
     val depth = SleepDepth.normal
+    val canSeeSky: Boolean? = null
+    val skyLight: IntRange? = null
 
     val willSleepOnBed = false
 }

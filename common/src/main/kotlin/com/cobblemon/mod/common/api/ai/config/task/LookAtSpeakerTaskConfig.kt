@@ -9,10 +9,12 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.ai.LookAtSpeakerTask
 import net.minecraft.world.entity.LivingEntity
 
 class LookAtSpeakerTaskConfig : SingleTaskConfig {
+    override val variables = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

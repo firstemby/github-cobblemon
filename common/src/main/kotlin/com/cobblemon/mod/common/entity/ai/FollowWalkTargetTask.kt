@@ -60,9 +60,9 @@ class FollowWalkTargetTask(
     override fun canStillUse(arg: ServerLevel, arg2: PathfinderMob, l: Long): Boolean {
         if (this.path != null && this.lookTargetPos != null) {
             val optional = arg2.brain.getMemory(MemoryModuleType.WALK_TARGET)
-            val bl = optional.map(::isTargetSpectator).orElse(false)
+            val isTargetSpectator = optional.map(::isTargetSpectator).orElse(false)
             val entityNavigation = arg2.navigation
-            return !entityNavigation.isDone && optional.isPresent && !this.hasReached(arg2, optional.get()) && !bl
+            return !entityNavigation.isDone && optional.isPresent && !this.hasReached(arg2, optional.get()) && !isTargetSpectator
         } else {
             return false
         }
@@ -80,9 +80,9 @@ class FollowWalkTargetTask(
         this.path = null
     }
 
-    override fun start(arg: ServerLevel, arg2: PathfinderMob, l: Long) {
-        arg2.brain.setMemory(MemoryModuleType.PATH, this.path)
-        arg2.navigation.moveTo(this.path, speed.toDouble())
+    override fun start(arg: ServerLevel, entity: PathfinderMob, time: Long) {
+        entity.brain.setMemory(MemoryModuleType.PATH, this.path)
+        entity.navigation.moveTo(this.path, speed.toDouble())
     }
 
     override fun tick(world: ServerLevel, entity: PathfinderMob, l: Long) {
@@ -95,7 +95,7 @@ class FollowWalkTargetTask(
 
         if (path != null && lookTargetPos != null) {
             val walkTarget = brain.getMemory(MemoryModuleType.WALK_TARGET).get()
-            if (walkTarget.target.currentBlockPosition().distSqr(lookTargetPos) > 4.0 && hasFinishedPath(entity, walkTarget, world.gameTime)) {
+            if (walkTarget.target.currentBlockPosition().distSqr(lookTargetPos!!) > 4.0 && hasFinishedPath(entity, walkTarget, world.gameTime)) {
                 lookTargetPos = walkTarget.target.currentBlockPosition()
                 start(world, entity, l)
             }
@@ -142,7 +142,6 @@ class FollowWalkTargetTask(
     }
 
     companion object {
-        private const val MAX_UPDATE_COUNTDOWN = 40
         private fun isTargetSpectator(target: WalkTarget): Boolean {
             val lookTarget = target.target
             return if (lookTarget is EntityTracker) {
@@ -153,3 +152,4 @@ class FollowWalkTargetTask(
         }
     }
 }
+

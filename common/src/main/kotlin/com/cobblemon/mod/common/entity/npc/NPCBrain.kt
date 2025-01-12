@@ -9,12 +9,23 @@
 package com.cobblemon.mod.common.entity.npc
 
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.config.ApplyPresets
+import com.cobblemon.mod.common.api.ai.config.BrainConfig
 import com.cobblemon.mod.common.api.npc.NPCClass
 import net.minecraft.world.entity.ai.Brain
 
 object NPCBrain {
     fun configure(npcEntity: NPCEntity, npcClass: NPCClass, brain: Brain<out NPCEntity>) {
-        BrainConfigurationContext().apply(npcEntity, npcClass.ai) // This redundancy will get cleaned up later when the rest of the framework is done
+        val brainConfigurations: List<BrainConfig>
+        if (npcEntity.behavioursAreCustom) {
+            brainConfigurations = listOf(ApplyPresets().apply { presets.addAll(npcEntity.behaviours) })
+        } else {
+            brainConfigurations = npcClass.ai
+            npcEntity.behaviours.clear()
+            npcEntity.behaviours.addAll(brainConfigurations.filterIsInstance<ApplyPresets>().flatMap { it.presets }.toMutableList())
+        }
+
+        BrainConfigurationContext().apply(npcEntity, brainConfigurations) // This redundancy will get cleaned up later when the rest of the framework is done
 
         // brain.addActivity(
         //     Activity.CORE, ImmutableList.of(

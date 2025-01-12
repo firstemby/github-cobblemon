@@ -31,6 +31,8 @@
     "DecoratedPotPatternsMixin",
     "EntityStorageMixin",
     "EntityVillagerMixin",
+    "EntityCreeperMixin",
+    "EntitySkeletonMixin",
     "ExplosionMixin",
     "ItemStackComponentizationFixMixin",
     "LecternBlockMixin",

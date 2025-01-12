@@ -13,6 +13,8 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.genericRuntime
+import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import com.google.common.collect.ImmutableMap
@@ -24,15 +26,17 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 
 class LookInDirectionTask(
+    val shouldLock: Expression = "true".asExpression(),
     val yaw: Expression = "0".asExpression(),
     val pitch: Expression = "0".asExpression()
 ) : Behavior<LivingEntity>(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT), 0, 0) {
+    val runtime = MoLangRuntime().setup()
     override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long): Boolean {
-        return !entity.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent
+        return !entity.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
     }
 
     override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity): Boolean {
-        return owner is PathfinderMob && !owner.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent
+        return owner is PathfinderMob && !owner.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && runtime.withQueryValue("entity", owner.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
     }
 
     override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
@@ -40,7 +44,6 @@ class LookInDirectionTask(
 
     override fun tick(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
         entity as PathfinderMob
-        val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         val yaw = (runtime.resolveFloat(this.yaw) + 90) * Math.PI / 180.0
         val pitch = runtime.resolveFloat(this.pitch) * Math.PI / 180.0 * -1

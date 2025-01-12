@@ -169,7 +169,7 @@ fun <T : Entity> Player.traceEntityCollision(
     val entities = level().getEntities(
         null,
         AABB(startPos.subtract(maxDistanceVector), startPos.add(maxDistanceVector)),
-        { entityClass.isInstance(it) }
+        { entityClass.isAssignableFrom(it::class.java) }
     )
 
     while (step <= maxDistance) {
@@ -177,11 +177,11 @@ fun <T : Entity> Player.traceEntityCollision(
         step += stepDistance
 
         val collided = entities.filter {
-            ignoreEntity != it && location in it.boundingBox && entityClass.isInstance(it) && !it.isSpectator
+            ignoreEntity != it && location in it.boundingBox && entityClass.isAssignableFrom(it::class.java) && !it.isSpectator
         }
 
         if (collided.isNotEmpty()) {
-            if(collideBlock != null && level().clip(ClipContext(startPos, location, ClipContext.Block.COLLIDER, collideBlock, this)).type == HitResult.Type.BLOCK) {
+            if (collideBlock != null && level().clip(ClipContext(startPos, location, ClipContext.Block.COLLIDER, collideBlock, this)).type == HitResult.Type.BLOCK) {
                 // Collided with block on the way to the entity
                 return null
             }
