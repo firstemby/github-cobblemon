@@ -96,10 +96,8 @@ object CobblemonModelPredicateRegistry {
             val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return@register 0.0f
             val egg = eggComponent.egg ?: return@register 0.0f
             val modelId = PokemonEggItemModelRegistry.getModelId(egg.species.path)
-            println("Evaluating species predicate for ${egg.species.path} -> $modelId")
+            //println("Evaluating species predicate for ${egg.species.path} -> $modelId")
             return@register modelId
         }
-
-
     }
 }
