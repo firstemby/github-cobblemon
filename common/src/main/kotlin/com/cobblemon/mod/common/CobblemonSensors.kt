@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.entity.sensor.BattlingPokemonSensor
+import com.cobblemon.mod.common.entity.sensor.MateSensor
 import com.cobblemon.mod.common.entity.sensor.NPCBattlingSensor
+import com.cobblemon.mod.common.entity.sensor.NestSensor
 import java.util.function.Supplier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor
@@ -20,6 +22,8 @@ object CobblemonSensors {
 
     val NPC_BATTLING = register("npc_battling", ::NPCBattlingSensor)
     val BATTLING_POKEMON = register("battling_pokemon", ::BattlingPokemonSensor)
+    val MATE_SENSOR = register("mate_sensor", ::MateSensor)
+    val NEST_SENSOR = register("nest_sensor", ::NestSensor)
 
     fun <E : Entity, U : Sensor<E>> register(id: String, supplier: Supplier<U>): SensorType<U> {
         val sensor = SensorType(supplier)

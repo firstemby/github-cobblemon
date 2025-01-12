@@ -1,0 +1,54 @@
+package com.cobblemon.mod.common.entity.sensor
+
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.Gender
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.Sensor
+import net.minecraft.world.phys.AABB
+
+/**
+ * Sensor used to detect nearby Pokémon that are potential mates.
+ *
+ * @since January 12th, 2025
+ */
+class MateSensor : Sensor<LivingEntity>() {
+    companion object {
+        val OUTPUT_MEMORY_MODULES = setOf(CobblemonMemories.POTENTIAL_MATE)
+        private const val DETECTION_RADIUS = 10.0 // Radius to search for potential mates
+    }
+
+    override fun requires(): Set<MemoryModuleType<*>> = OUTPUT_MEMORY_MODULES
+
+    override fun doTick(world: ServerLevel, entity: LivingEntity) {
+        // Ensure the entity is a PokemonEntity
+        if (entity !is PokemonEntity) return
+
+        val potentialMate = world.getEntitiesOfClass(
+            PokemonEntity::class.java,
+            AABB(entity.blockPosition()).inflate(DETECTION_RADIUS)
+        ) { nearbyEntity ->
+            nearbyEntity != entity && isValidMate(entity, nearbyEntity)
+        }.firstOrNull()
+
+        if (potentialMate != null) {
+            entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)
+        } else {
+            entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+        }
+    }
+
+    private fun isValidMate(entity: PokemonEntity, mate: PokemonEntity): Boolean {
+        val gender = entity.pokemon.gender
+        val mateGender = mate.pokemon.gender
+
+        return when {
+            entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto" -> true
+            gender == Gender.MALE && mateGender == Gender.FEMALE -> true
+            gender == Gender.FEMALE && mateGender == Gender.MALE -> true
+            else -> false
+        }
+    }
+}

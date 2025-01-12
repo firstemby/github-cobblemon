@@ -10,9 +10,11 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
+import net.minecraft.core.BlockPos
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
@@ -24,6 +26,8 @@ object CobblemonMemories {
     val NPC_BATTLING = register("npc_battling", PrimitiveCodec.BOOL)
     val DIALOGUES = register<List<ActiveDialogue>>("npc_dialogues")
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
+    val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
+    val NEST_LOCATION = register<BlockPos>("nest_location")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

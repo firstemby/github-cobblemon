@@ -775,6 +775,7 @@ open class PokemonEntity(
         }
 
         goalSelector.addGoal(6, PokemonWanderAroundGoal(this))
+        goalSelector.addGoal(7, PokemonBreedGoal(this))
         goalSelector.addGoal(7, PokemonLookAtEntityGoal(this, ServerPlayer::class.java, 5F))
         goalSelector.addGoal(8, PokemonPointAtSpawnGoal(this))
     }
