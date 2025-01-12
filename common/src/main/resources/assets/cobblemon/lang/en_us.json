@@ -1506,6 +1506,7 @@
 
   "cobblemon.command.general.invalid-party-slot": "There is no Pokémon in slot %1$s!",
   "cobblemon.command.givepokemon.give": "Gave %1$s to %2$s.",
+  "cobblemon.command.givepokemonegg.give": "Gave %1$s egg to %2$s.",
   "cobblemon.command.pokemonedit": "Edited %2$s's %1$s.",
   "cobblemon.command.teach": "%2$s's %1$s learnt %3$s.",
   "cobblemon.command.teach.already_knows": "%1$s already knows %2$s!",
@@ -1513,6 +1514,7 @@
   "cobblemon.command.friendship": "%1$s has %2$s friendship.",
   "cobblemon.command.givepokemon.nospecies": "Error: You need to include a Pokémon name or 'random'",
   "cobblemon.command.spawnpokemon.nospecies": "Error: You need to include a Pokémon name or 'random'",
+  "cobblemon.command.givepokemonegg.nospecies": "Error: You need to include a Pokémon name or 'random'",
   "cobblemon.command.error.nonpc": "Error: You need to include a valid NPC identifier.",
   "cobblemon.command.held_item": "%1$s's %2$s was given the %3$s to hold.",
   "cobblemon.command.pokeheal.in_battle": "You cannot heal your party while in a battle!",
