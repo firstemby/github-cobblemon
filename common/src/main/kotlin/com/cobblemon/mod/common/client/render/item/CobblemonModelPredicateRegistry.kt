@@ -93,18 +93,13 @@ object CobblemonModelPredicateRegistry {
         }
 
         ItemProperties.register(CobblemonItems.POKEMON_EGG, ResourceLocation.parse("species")) { stack, world, entity, seed ->
-            // Retrieve egg data
             val eggComponent = stack.get(CobblemonItemComponents.EGG_DATA) ?: return@register 0.0f
             val egg = eggComponent.egg ?: return@register 0.0f
-
-            // Map Pokémon species to a custom model data value
-            when (egg.species.path) {
-                "charmander" -> 1.0f
-                "bulbasaur" -> 2.0f
-                "squirtle" -> 3.0f
-                else -> 0.0f // Default model for unknown species
-            }
+            val modelId = PokemonEggItemModelRegistry.getModelId(egg.species.path)
+            println("Evaluating species predicate for ${egg.species.path} -> $modelId")
+            return@register modelId
         }
+
 
     }
 }

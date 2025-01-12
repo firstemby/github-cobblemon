@@ -1,0 +1,103 @@
+package com.cobblemon.mod.common.client.render.item
+
+object PokemonEggItemModelRegistry {
+    private val speciesModelMap = mapOf(
+        "bulbasaur" to 1.0f,
+        "charmander" to 2.0f,
+        "squirtle" to 3.0f,
+        "caterpie" to 4.0f,
+        "weedle" to 5.0f,
+        "pidgey" to 6.0f,
+        "rattata" to 7.0f,
+        "rattata_alola" to 8.0f,
+        "spearow" to 9.0f,
+        "ekans" to 10.0f,
+        "sandshrew" to 11.0f,
+        "sandshrew_alola" to 12.0f,
+        "nidoranm" to 13.0f,
+        "nidoranf" to 14.0f,
+        "vulpix" to 15.0f,
+        "vulpix_alola" to 16.0f,
+        "zubat" to 17.0f,
+        "oddish" to 18.0f,
+        "paras" to 19.0f,
+        "venonat" to 20.0f,
+        "diglett" to 21.0f,
+        "diglett_alola" to 22.0f,
+        "meowth" to 23.0f,
+        "meowth_alola" to 24.0f,
+        "meowth_galar" to 25.0f,
+        "psyduck" to 26.0f,
+        "mankey" to 27.0f,
+        "growlithe" to 28.0f,
+        "growlithe_hisui" to 29.0f,
+        "poliwag" to 30.0f,
+        "abra" to 31.0f,
+        "machop" to 32.0f,
+        "bellsprout" to 33.0f,
+        "tentacool" to 34.0f,
+        "geodude" to 35.0f,
+        "geodude_alola" to 36.0f,
+        "ponyta" to 37.0f,
+        "ponyta_galar" to 38.0f,
+        "slowpoke" to 39.0f,
+        "slowpoke_galar" to 40.0f,
+        "magnemite" to 41.0f,
+        "farfetchd" to 42.0f,
+        "farfetchd_galar" to 43.0f,
+        "doduo" to 44.0f,
+        "seel" to 45.0f,
+        "grimer" to 46.0f,
+        "grimer_alola" to 47.0f,
+        "shellder" to 48.0f,
+        "gastly" to 49.0f,
+        "onix" to 50.0f,
+        "drowzee" to 51.0f,
+        "krabby" to 52.0f,
+        "voltorb" to 53.0f,
+        "voltorb_hisui" to 54.0f,
+        "exeggcute" to 55.0f,
+        "cubone" to 56.0f,
+        "lickitung" to 57.0f,
+        "koffing" to 58.0f,
+        "rhyhorn" to 59.0f,
+        "tangela" to 60.0f,
+        "kangaskhan" to 61.0f,
+        "horsea" to 62.0f,
+        "goldeen" to 63.0f,
+        "staryu" to 64.0f,
+        "scyther" to 65.0f,
+        "pinsir" to 66.0f,
+        "tauros" to 67.0f,
+        "tauros_paldea" to 68.0f,
+        "magikarp" to 69.0f,
+        "lapras" to 70.0f,
+        "ditto" to 71.0f,
+        "eevee" to 72.0f,
+        "porygon" to 73.0f,
+        "omanyte" to 74.0f,
+        "kabuto" to 75.0f,
+        "aerodactyl" to 76.0f,
+        "articuno" to 77.0f,
+        "articuno_galar" to 78.0f,
+        "zapdos" to 79.0f,
+        "zapdos_galar" to 80.0f,
+        "moltres" to 81.0f,
+        "moltres_galar" to 82.0f,
+        "dratini" to 83.0f,
+        "mewtwo" to 84.0f,
+        "mew" to 85.0f
+    )
+
+    /**
+     * Gets the model ID for a Pokémon species.
+     *
+     * @param species The species path string.
+     * @return The model ID, or 0.0f if the species is not found.
+     */
+    fun getModelId(species: String): Float {
+        val modelId = speciesModelMap[species]?.toInt() ?: 0
+        println("Getting model ID for species: $species at ID: $modelId")
+        return modelId.toFloat()
+    }
+}
