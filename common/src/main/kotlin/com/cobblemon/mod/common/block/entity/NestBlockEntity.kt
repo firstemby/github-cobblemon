@@ -406,7 +406,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     companion object {
-        private const val RANDOM_SPAWN_CHANCE = 1000 // 1 in 100 chance per random tick
+        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->

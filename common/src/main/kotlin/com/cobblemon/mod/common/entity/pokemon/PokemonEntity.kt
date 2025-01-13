@@ -62,6 +62,10 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonLookAtEntityGoal
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonPointAtSpawnGoal
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonWanderAroundGoal
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
@@ -136,6 +140,7 @@ import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
+import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.ShoulderRidingEntity
 import net.minecraft.world.entity.player.Player
@@ -805,11 +810,14 @@ open class PokemonEntity(
         super.registerGoals()
     }
 
+    fun addGoal(priority: Int, goal: Goal) {
+        this.goalSelector.addGoal(priority, goal)
+    }
+
     override fun onPathfindingDone() {
         super.onPathfindingDone()
         (moveControl as PokemonMoveControl).stop()
         goalSelector.addGoal(6, PokemonWanderAroundGoal(this))
-        goalSelector.addGoal(7, PokemonBreedGoal(this))
         goalSelector.addGoal(7, PokemonLookAtEntityGoal(this, ServerPlayer::class.java, 5F))
         goalSelector.addGoal(8, PokemonPointAtSpawnGoal(this))
     }

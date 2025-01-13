@@ -19,7 +19,6 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
 import java.util.UUID
-import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
 
 object CobblemonMemories {

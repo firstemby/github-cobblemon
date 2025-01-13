@@ -1,4 +1,4 @@
-package com.cobblemon.mod.common.entity.sensor
+package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -8,6 +8,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.phys.AABB
+import kotlin.collections.firstOrNull
+import kotlin.jvm.java
 
 /**
  * Sensor used to detect nearby Pokémon that are potential mates.
@@ -34,7 +36,7 @@ class MateSensor : Sensor<LivingEntity>() {
         }.firstOrNull()
 
         if (potentialMate != null) {
-            entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)
+            entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)  // WORKS
         } else {
             entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
         }
@@ -43,6 +45,11 @@ class MateSensor : Sensor<LivingEntity>() {
     private fun isValidMate(entity: PokemonEntity, mate: PokemonEntity): Boolean {
         val gender = entity.pokemon.gender
         val mateGender = mate.pokemon.gender
+
+        //todo delete this later
+        if (entity.pokemon.species.name == mate.pokemon.species.name) {
+            val test = 1
+        }
 
         return when {
             entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto" -> true

@@ -1,4 +1,4 @@
-package com.cobblemon.mod.common.entity.sensor
+package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.block.NestBlock
@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import kotlin.collections.firstOrNull
 
 /**
  * Sensor used to detect nearby nests (NestBlocks or NestBlockEntities).
@@ -30,7 +31,7 @@ class NestSensor : Sensor<LivingEntity>() {
         if (entity !is PokemonEntity) return
 
         val nearbyNest = findNearbyNest(world, entity.blockPosition())
-        if (nearbyNest != null) {
+        if (nearbyNest != null) { // WORKS
             entity.brain.setMemory(CobblemonMemories.NEST_LOCATION, nearbyNest)
         } else {
             entity.brain.eraseMemory(CobblemonMemories.NEST_LOCATION)

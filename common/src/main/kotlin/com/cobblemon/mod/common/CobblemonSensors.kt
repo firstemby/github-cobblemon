@@ -14,9 +14,9 @@ import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonAdultSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonGrowableCropSensor
 import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
 import com.cobblemon.mod.common.entity.sensor.BattlingPokemonSensor
-import com.cobblemon.mod.common.entity.sensor.MateSensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.MateSensor
 import com.cobblemon.mod.common.entity.sensor.NPCBattlingSensor
-import com.cobblemon.mod.common.entity.sensor.NestSensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.NestSensor
 import java.util.function.Supplier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor

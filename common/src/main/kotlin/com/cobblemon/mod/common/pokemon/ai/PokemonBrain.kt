@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.config.ApplyPresets
 import com.cobblemon.mod.common.api.ai.config.BrainConfig
 import com.cobblemon.mod.common.entity.ai.*
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.*
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.toDF
@@ -59,7 +60,9 @@ object PokemonBrain {
         CobblemonSensors.POKEMON_DROWSY,
         CobblemonSensors.POKEMON_ADULT,
         SensorType.IS_IN_WATER,
-        CobblemonSensors.NEARBY_GROWABLE_CROPS
+        CobblemonSensors.NEARBY_GROWABLE_CROPS,
+        CobblemonSensors.MATE_SENSOR,
+        CobblemonSensors.NEST_SENSOR,
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -163,7 +166,9 @@ object PokemonBrain {
         MemoryModuleType.DISTURBANCE_LOCATION,
         CobblemonMemories.NEARBY_GROWABLE_CROPS,
         MemoryModuleType.AVOID_TARGET,
-        CobblemonMemories.POKEMON_SLEEPING
+        CobblemonMemories.POKEMON_SLEEPING,
+        CobblemonMemories.POTENTIAL_MATE,
+        CobblemonMemories.NEST_LOCATION
     )
 
     fun updateActivities(pokemon:PokemonEntity) {

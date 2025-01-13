@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.lang
-import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
@@ -70,6 +69,8 @@ interface TaskConfig {
             "flee_nearest_hostile" to FleeNearestHostileTaskConfig::class.java,
             "run_script" to RunScript::class.java,
             "look_in_direction" to LookInDirectionTaskConfig::class.java,
+            "path_to_nest" to PathToNestTaskConfig::class.java,
+            "breed_at_nest" to BreedAtNestTaskConfig::class.java
         )
 
         val runtime = MoLangRuntime().setup()
