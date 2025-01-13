@@ -57,8 +57,8 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                     val targetVec = Vec3.atCenterOf(nestLocation)
 
                     // Check proximity to the nest
-                    if (entity.distanceToSqr(targetVec) > 4.0 || mate.distanceToSqr(targetVec) > 4.0) {
-                        return@Trigger false // Ensure Pokémon are close to the nest
+                    if (entity.distanceToSqr(targetVec) > 4.0 && mate.distanceToSqr(targetVec) > 4.0) {
+                        return@Trigger false
                     }
 
                     // Access the nest block entity
@@ -76,7 +76,7 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                             species = result.species.resourceIdentifier,
                             parentOne = parentOne,
                             parentTwo = parentTwo,
-                            timeToHatch = 6000F // Example: 5 minutes in ticks
+                            timeToHatch = 6000F
                         )
                     } ?: return@Trigger false
 

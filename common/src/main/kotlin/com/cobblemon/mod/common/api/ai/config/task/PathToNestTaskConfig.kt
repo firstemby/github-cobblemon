@@ -63,6 +63,10 @@ class PathToNestTaskConfig : SingleTaskConfig {
                         MemoryModuleType.WALK_TARGET,
                         WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1)
                     )
+                    mate.brain.setMemory(
+                        MemoryModuleType.WALK_TARGET,
+                        WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1)
+                    )
 
                     return@Trigger true
                 }

@@ -46,7 +46,7 @@ class NestSensor : Sensor<LivingEntity>() {
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
 
-            blockState.block is NestBlock || blockEntity is NestBlockEntity
+            (blockState.block is NestBlock || blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null
         }
     }
 }
