@@ -1,6 +1,8 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.pokemon.breeding.BreedingLogic
+import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
 import net.minecraft.server.level.ServerLevel
@@ -47,14 +49,18 @@ class MateSensor : Sensor<LivingEntity>() {
         val mateGender = mate.pokemon.gender
 
         //todo delete this later
-        if (entity.pokemon.species.name == mate.pokemon.species.name) {
+        if (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) {
             val test = 1
         }
 
         return when {
-            entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto" -> true
-            gender == Gender.MALE && mateGender == Gender.FEMALE -> true
-            gender == Gender.FEMALE && mateGender == Gender.MALE -> true
+            (entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
+            (gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
+            (gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
+// todo use the below for when canBreed works properly
+            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
+            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
+            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
             else -> false
         }
     }

@@ -29,14 +29,17 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  */
 object BreedingLogicManager : BreedingLogic {
     override fun breed(mother: Pokemon, father: Pokemon): BreedingResult {
-        val baseBreedingResult = super.breed(mother, father)
+        // todo this was not working
+        return super.breed(mother, father)
+        /*val baseBreedingResult = super.breed(mother, father)
         var finalBreedingResult = baseBreedingResult
         CobblemonEvents.BREEDING_RESULT.post(BreedingResultEvent(baseBreedingResult, mother, father)) {
             finalBreedingResult = it.breedingResult
         }
-        return finalBreedingResult
+        return finalBreedingResult*/
     }
 
+    // todo this canBreed method is NOT working lmao
     override fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
         val initBreedBool = super.canBreed(mother, father)
         var finalBreedingResult = initBreedBool

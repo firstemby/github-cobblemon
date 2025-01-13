@@ -40,11 +40,15 @@ class NestSensor : Sensor<LivingEntity>() {
 
     private fun findNearbyNest(world: ServerLevel, entityPos: BlockPos): BlockPos? {
         return BlockPos.betweenClosed(
-            entityPos.offset(-10, -5, -10),
-            entityPos.offset(10, 5, 10)
+            entityPos.offset(-40, -5, -40),
+            entityPos.offset(40, 5, 40)
         ).firstOrNull { pos ->
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
+
+            if (blockEntity is NestBlockEntity && (blockEntity as NestBlockEntity).eggComponent?.egg == null){
+                val test = 1 // for breakpointing this shit
+            }
 
             (blockState.block is NestBlock || blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null
         }

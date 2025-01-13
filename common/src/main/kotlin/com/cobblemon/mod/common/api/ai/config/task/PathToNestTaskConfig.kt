@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -38,9 +39,10 @@ class PathToNestTaskConfig : SingleTaskConfig {
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.LOOK_TARGET),
+                it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.NEST_LOCATION),
                 it.present(CobblemonMemories.POTENTIAL_MATE)
-            ).apply(it) { lookTarget, nestMemory, mateMemory ->
+            ).apply(it) { lookTarget, walkTarget, nestMemory, mateMemory ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
@@ -54,19 +56,25 @@ class PathToNestTaskConfig : SingleTaskConfig {
                     val targetVec = Vec3.atCenterOf(nestLocation)
 
                     // Check if Pokémon are close enough to the nest
-                    if (entity.distanceToSqr(targetVec) <= 4.0 && mate.distanceToSqr(targetVec) <= 4.0) {
+                    if (entity.distanceToSqr(targetVec) <= 2.0 && mate.distanceToSqr(targetVec) <= 2.0) {
                         return@Trigger false // Task ends when both are close enough
                     }
 
-                    // Set the WalkTarget for navigation
-                    entity.brain.setMemory(
-                        MemoryModuleType.WALK_TARGET,
-                        WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1)
-                    )
+                    /*if ((entity as PokemonEntity).tethering.tetheringId != null) {
+                        val test1 = 1 // for breakpointing here to test my pastured mons
+                    }*/
+
+                    // try to get the main pokemon to path and look at the nest
+
+                    walkTarget.set(WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1))
+                    lookTarget.set(BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))
+
+                    // try to find a way to get the mate to pathfind and look at the nest too...
                     mate.brain.setMemory(
                         MemoryModuleType.WALK_TARGET,
                         WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1)
                     )
+                    mate.brain.setMemory(MemoryModuleType.LOOK_TARGET, BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))
 
                     return@Trigger true
                 }

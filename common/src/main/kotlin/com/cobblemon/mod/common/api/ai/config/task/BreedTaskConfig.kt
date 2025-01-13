@@ -51,13 +51,13 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
 
                     // Retrieve nest location and mate entity from memory
                     val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false
-                    val mate = mateMemory.value() as? PokemonEntity ?: return@Trigger false
+                    val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
 
                     // Convert nest location to Vec3
                     val targetVec = Vec3.atCenterOf(nestLocation)
 
                     // Check proximity to the nest
-                    if (entity.distanceToSqr(targetVec) > 4.0 && mate.distanceToSqr(targetVec) > 4.0) {
+                    if (entity.distanceToSqr(targetVec) > 2.0 && mate.distanceToSqr(targetVec) > 2.0) {
                         return@Trigger false
                     }
 
