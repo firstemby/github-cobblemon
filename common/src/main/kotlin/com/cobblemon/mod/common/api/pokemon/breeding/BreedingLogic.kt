@@ -77,8 +77,27 @@ interface BreedingLogic {
      * @author Apion, whatsy
      */
     fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
-        return true
+        // Check if either Pokémon is in the No Eggs Discovered egg group
+        if (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED)) {
+            return false
+        }
+
+        // Check if both Pokémon are Ditto
+        if (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO)) {
+            return false
+        }
+
+        // Check if at least one parent is Ditto
+        val anyDitto = mother.form.eggGroups.contains(EggGroup.DITTO) || father.form.eggGroups.contains(EggGroup.DITTO)
+        if (anyDitto) {
+            return true
+        }
+
+        // Check for shared egg groups and opposite genders
+        val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
+        return sharedEggGroups.isNotEmpty() && mother.gender != father.gender
     }
+
 
     /**
      * Determines the base pre-evolution of a [Pokemon] species.

@@ -41,11 +41,13 @@ object BreedingLogicManager : BreedingLogic {
 
     // todo this canBreed method is NOT working lmao
     override fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
-        val initBreedBool = super.canBreed(mother, father)
+        // todo this was not working
+        return super.canBreed(mother, father)
+        /*val initBreedBool = super.canBreed(mother, father)
         var finalBreedingResult = initBreedBool
         CobblemonEvents.BREEDING_ELIGIBLE.post(BreedingEligibilityEvent(initBreedBool, mother, father) ) {
             finalBreedingResult = it.canBreed
         }
-        return super.canBreed(mother, father)
+        return super.canBreed(mother, father)*/
     }
 }
