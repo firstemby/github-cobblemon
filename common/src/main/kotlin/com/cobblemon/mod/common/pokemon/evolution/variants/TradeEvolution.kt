@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.evolution.variants
 
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
@@ -31,7 +32,8 @@ open class TradeEvolution(
     override var optional: Boolean,
     override var consumeHeldItem: Boolean,
     override val requirements: MutableSet<EvolutionRequirement>,
-    override val learnableMoves: MutableSet<MoveTemplate>
+    override val learnableMoves: MutableSet<MoveTemplate>,
+    override val drops: DropTable,
 ) : ContextEvolution<Pokemon, PokemonProperties> {
     constructor(): this(
         id = "id",
@@ -41,7 +43,8 @@ open class TradeEvolution(
         optional = true,
         consumeHeldItem = true,
         requirements = mutableSetOf(),
-        learnableMoves = mutableSetOf()
+        learnableMoves = mutableSetOf(),
+        drops = DropTable(),
     )
 
     override fun testContext(pokemon: Pokemon, context: Pokemon) = this.requiredContext.matches(context)

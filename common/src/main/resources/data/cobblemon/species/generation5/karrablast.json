@@ -129,6 +129,15 @@
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "shelmet"
+    },
+    {
+      "id": "karrablast_escavalier_item",
+      "variant": "item_interact",
+      "result": "escavalier",
+      "consumeHeldItem": true,
+      "learnableMoves": [],
+      "requirements": [],
+      "requiredContext": "cobblemon:shell_helmet"
     }
   ],
   "baseScale": 1,

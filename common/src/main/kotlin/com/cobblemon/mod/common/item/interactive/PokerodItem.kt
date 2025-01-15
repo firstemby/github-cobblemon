@@ -195,7 +195,7 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         if (user.fishing != null) { // if the bobber is out yet
             if (!world.isClientSide) {
                 CobblemonEvents.POKEROD_REEL.postThen(
-                    PokerodReelEvent(itemStack),
+                    PokerodReelEvent(user, itemStack),
                     { event -> return InteractionResultHolder.fail(itemStack) },
                     { event ->
                         i = user.fishing!!.retrieve(itemStack)

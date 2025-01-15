@@ -66,6 +66,8 @@ import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -135,6 +137,20 @@ object CobblemonFabric : CobblemonImplementation {
 //                }
 //            }
 //        }
+
+        Cobblemon.builtinPacks
+            .filter { it.neededMods.all(Cobblemon.implementation::isModInstalled) }
+            .forEach {
+                val mod = FabricLoader.getInstance().getModContainer(Cobblemon.MODID).get()
+                val resourcePackActivationType = when (it.activationBehaviour) {
+                    ResourcePackActivationBehaviour.NORMAL -> ResourcePackActivationType.NORMAL
+                    ResourcePackActivationBehaviour.DEFAULT_ENABLED -> ResourcePackActivationType.DEFAULT_ENABLED
+                    ResourcePackActivationBehaviour.ALWAYS_ENABLED -> ResourcePackActivationType.ALWAYS_ENABLED
+                }
+                val id = cobblemonResource(it.id)
+                val subPath = "${ if (it.packType == PackType.CLIENT_RESOURCES) "resourcepacks" else "datapacks" }/${id.path}"
+                ResourceManagerHelperImpl.registerBuiltinResourcePack(id, subPath, mod, it.displayName, resourcePackActivationType)
+            }
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) {

@@ -10,7 +10,6 @@ package com.cobblemon.mod.neoforge.client
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
-import com.cobblemon.mod.common.ResourcePackActivationBehaviour
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
@@ -27,7 +26,6 @@ import com.cobblemon.mod.common.particle.SnowstormParticleType
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
-import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.function.Supplier
 import net.minecraft.client.Minecraft
@@ -47,15 +45,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.server.packs.PackLocationInfo
-import net.minecraft.server.packs.PackSelectionConfig
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.PathPackResources
-import net.minecraft.server.packs.repository.BuiltInPackSource
-import net.minecraft.server.packs.repository.KnownPack
-import net.minecraft.server.packs.repository.Pack
-import net.minecraft.server.packs.repository.Pack.Position
-import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ReloadableResourceManager
 import net.minecraft.world.InteractionHand
@@ -65,7 +54,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.neoforged.fml.ModList
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.ClientHooks
 import net.neoforged.neoforge.client.event.ClientTickEvent
@@ -78,7 +66,6 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers
 import net.neoforged.neoforge.common.NeoForge
-import net.neoforged.neoforge.event.AddPackFindersEvent
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
 object CobblemonNeoForgeClient : CobblemonClientImplementation {
@@ -91,7 +78,6 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             addListener(::register3dModels)
             addListener(::onRegisterReloadListener)
             addListener(::onShaderRegistration)
-            addListener(::onAddPackFindersEvent)
         }
         with(NeoForge.EVENT_BUS) {
             addListener(::onRenderGuiOverlayEvent)
@@ -242,37 +228,6 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     internal fun registerResourceReloader(reloader: PreparableReloadListener) {
         (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)
     }
-
-    //This event gets fired before init, so we need to put resource packs in EARLY
-    fun onAddPackFindersEvent(event: AddPackFindersEvent) {
-        if (event.packType != PackType.CLIENT_RESOURCES) {
-            return
-        }
-
-        val modFile = ModList.get().getModContainerById(Cobblemon.MODID).get().modInfo
-        CobblemonClient.builtinResourcePacks
-            .filter { it.neededMods.all(Cobblemon.implementation::isModInstalled) }
-            .forEach {
-                var packLocation = cobblemonResource("resourcepacks/${it.id}")
-                var resourcePath = modFile.owningFile.file.findResource(packLocation.path)
-
-                var version = modFile.version
-
-                var pack = Pack.readMetaAndCreate(PackLocationInfo("mod/$packLocation", it.displayName, PackSource.BUILT_IN, Optional.of(KnownPack("neoforge", "mod/$packLocation", version.toString()))),
-                    BuiltInPackSource.fromName { PathPackResources(it, resourcePath) },
-                    PackType.CLIENT_RESOURCES,
-                    PackSelectionConfig(it.activationBehaviour == ResourcePackActivationBehaviour.ALWAYS_ENABLED, Position.TOP, false)
-                )
-
-                if (pack == null) {
-                    Cobblemon.LOGGER.error("Failed to register built-in resource pack ${it.id}. If you are in dev you can ignore this")
-                    return@forEach
-                }
-
-                event.addRepositorySource { it.accept(pack) }
-            }
-    }
-
 
     private fun attemptModCompat() {
         // They have no Maven nor are they published on Modrinth :(

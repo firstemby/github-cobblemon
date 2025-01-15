@@ -8,8 +8,13 @@
 
 package com.cobblemon.mod.common.api.events.farming
 
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.apricorn.Apricorn
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.util.toArrayStruct
+import com.cobblemon.mod.common.util.worldRegistry
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.state.BlockState
@@ -26,4 +31,11 @@ class ApricornHarvestEvent(
     fun getBlock(): BlockState {
         return world.getBlockState(pos)
     }
+
+    val context = mutableMapOf(
+        "player" to player.asMoLangValue(),
+        "apricorn" to StringValue(apricorn.name),
+        "world" to world.worldRegistry.wrapAsHolder(world).asMoLangValue(Registries.DIMENSION),
+        "pos" to pos.toArrayStruct()
+    )
 }

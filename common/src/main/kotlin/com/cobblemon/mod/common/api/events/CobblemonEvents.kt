@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
+import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.MegaEvolutionEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.TerastallizationEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.ZMoveUsedEvent
@@ -111,6 +112,8 @@ object CobblemonEvents {
     val TERASTALLIZATION = EventObservable<TerastallizationEvent>()
     @JvmField
     val ZPOWER_USED = EventObservable<ZMoveUsedEvent>()
+    @JvmField
+    val FORME_CHANGE = EventObservable<FormeChangeEvent>()
 
     @JvmField
     val POKEMON_SENT_PRE = CancelableObservable<PokemonSentPreEvent>()
@@ -198,6 +201,8 @@ object CobblemonEvents {
     val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()
     @JvmField
     val POKEMON_SEEN = EventObservable<PokemonSeenEvent>()
+    @JvmField
+    val POKEMON_ASPECTS_CHANGED = EventObservable<PokemonAspectsChangedEvent>()
     @JvmField
     val POKEDEX_DATA_CHANGED_PRE = CancelableObservable<PokedexDataChangedEvent.Pre>()
     @JvmField

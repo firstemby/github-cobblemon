@@ -317,6 +317,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
     @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
+    @JvmField val SHELL_HELMET = heldItem("shell_helmet")
 
     private val berries = mutableMapOf<ResourceLocation, BerryItem>()
     // Plants
@@ -392,6 +393,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
+    @JvmField
+    val GALARICA_NUTS = create("galarica_nuts", GalaricaNutItem())
+
     // Medicine
     @JvmField
     val RARE_CANDY = candyItem("rare_candy") { _, pokemon -> pokemon.getExperienceToNextLevel() }
@@ -442,6 +446,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
             .saturationModifier(1.2F)
             .effect(MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1F)
             .alwaysEdible()
+            .usingConvertsTo(Items.BOWL)
             .build())) {
         override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
             user.removeAllEffects()
@@ -477,7 +482,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
     @JvmField
-    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", Item(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).build()).stacksTo(1)))
+    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", Item(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
     @JvmField
     val REVIVE = create("revive", ReviveItem(max = false))
     @JvmField

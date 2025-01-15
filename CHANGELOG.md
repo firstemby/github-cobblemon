@@ -8,6 +8,11 @@
 - Added molang particle queries for getting distance to targeted entities.
 - Added debug renderer for poseable entity locators.
 - Added `baseScale` property to NPCs.
+- Added the player to `PokerodReelEvent`.
+- Pokédex and Dialogue API screens now close when the inventory keybind is pressed.
+- Added Galarica Nuts, used for crafting Galarica Cuffs and Wreaths. Dropped from certain Pokémon.
+- Added specific compatibility with Repurposed Structures. (Thank you, TelepathicGrunt!)
+- Added an evolution method for Karrablast to evolve into Escavalier in single-player mode.
 
 ### Changes
 - Pokémon will now be dynamically revealed to the Pokédex as they're seen instead of revealing entire parties at the end of battle regardless.
@@ -23,9 +28,9 @@
 - Fixed Pokémon being collidable while being captured by a Poké Ball.
 - Fixed `full_party`, `own_zangoose_seviper`, `use_revive` and `use_candy` Advancement triggers.
 - Fixed `healing_machine` Advancement by using the correct 1.21 trigger.
+- Fix Display Cases not dropping items if destroyed through explosions.
 - Fixed an issue where the first Pokémon in the pastured Pokémon list clipped into the interface.
 - Fixed all Pokémon facing South on spawn.
-- Fixed not being able to retrieve a fossil from the Fossil Machine with an empty hand .
 - Parametric particle motion now works.
 - Event spawned particles now work.
 - Particles can now have independent coordinate spaces.
@@ -55,6 +60,30 @@
 - Fix some users being unable to open their PC if a Pokémon in said PC had a lot of pp raises beyond normal bounds
 - Fix some color variants (dubwool, conkeldurr and undyed wooloo) missing in the Pokédex
 - Fix invalid species or held_items causing Players to not be able to load into their world anymore (commonly happening after removing addons/mods)
+- Fixed Wooloo variants not being automatically registered in the owner's Pokédex when dyed.
+- Fixed Vivichoke Dip and Leek and Potato Stew not returning a bowl upon consumption.
+- Fixed Fossil Restoration Machine not accepting Hay Bales.
+- Fixed Potion items so that they no longer apply over double their intended healing value.
+
+### Molang & Datapacks  
+- Added flows for:
+  - `forme_change`: Triggered when a Pokémon changes form in battle.
+  - `mega_evolution`: Triggered when a Pokémon mega evolves in battle. (Note: Third party mods are required for this feature currently)
+  - `zpower_used`: Triggered when a Pokémon uses a Z-Power move in battle. (Note: Third party mods are required for this feature currently)
+  - `terastallization`: Triggered when a Pokémon terastallizes in battle. (Note: Third party mods are required for this feature currently)
+  - `battle_fainted`: Triggered when a Pokémon faints in battle.
+  - `battle_fled`: Triggered when a Player flees from battle.
+  - `battle_started_pre`: Triggered when a battle starts. Cancelable!
+  - `battle_started_post`: Triggered when a battle starts.
+  - `apricorn_harvested`: Triggered when an apricorn is harvested.
+  - `thrown_pokeball_hit`: Triggered when a thrown Pokéball hits a Pokémon.
+  - `level_up`: Triggered when a Pokémon levels up.
+  - `pokemon_fainted`: Triggered when a Pokémon faints.
+  - `pokemon_gained`: Triggered when a Player gains a Pokémon.
+- Added molang functions:
+  - For Pokémon:
+    - `pokemon.apply(PokemonProperties)`: Applies the given properties to the Pokémon.
+    - `pokemon.owner`: Returns the owner of the Pokémon or 0.0 if there is no owner or they are not online.
 
 ## [1.6.0 - The Record Catch Update (December 25th, 2024)](#1-6-0)
 #### "Now that there's a fishing mechanic, the mod is actually good!"

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.drop
 
+import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
@@ -40,17 +41,23 @@ interface DropEntry {
      * to be dropped.
      */
     val percentage: Float
+
     /**
      * The drop's quantity when doing selection from the [DropTable]. See the drop table documentation for more on how
      * this works.
      */
     val quantity: Int
+
     /**
      * The maximum number of times the item can be selected drop the [DropTable]. In most cases this will just be 1,
      * meaning that the item, once picked, cannot be picked again. A larger value will allow the same [DropEntry] from
      * appearing multiple times in a drop action.
      */
     val maxSelectableTimes: Int
+
+    /** Whether this is considered a possible drop at the moment or not */
+    fun canDrop(pokemon: Pokemon?): Boolean = true
+
     /** The logic to use to actually drop the thing. */
     fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?)
 }

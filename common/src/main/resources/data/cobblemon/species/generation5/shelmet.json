@@ -126,6 +126,38 @@
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "karrablast"
+    },
+    {
+      "id": "shelmet_accelgor_item",
+      "variant": "item_interact",
+      "result": "accelgor",
+      "consumeHeldItem": false,
+      "learnableMoves": [],
+      "requirements": [
+        {
+          "variant": "party_member",
+          "target": "karrablast",
+          "contains": true
+        }
+      ],
+      "requiredContext": "cobblemon:link_cable",
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shell_helmet",
+            "percentage": 100.0,
+            "requirements": [
+              {
+                "variant": "party_member",
+                "target": "karrablast",
+                "contains": true
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "baseScale": 1,
