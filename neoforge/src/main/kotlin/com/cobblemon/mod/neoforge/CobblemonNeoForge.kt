@@ -37,6 +37,7 @@ import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
 import com.cobblemon.mod.neoforge.permission.ForgePermissionValidator
 import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
+import java.util.Optional
 import java.util.UUID
 import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
@@ -46,7 +47,15 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackLocationInfo
+import net.minecraft.server.packs.PackSelectionConfig
 import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.PathPackResources
+import net.minecraft.server.packs.repository.BuiltInPackSource
+import net.minecraft.server.packs.repository.KnownPack
+import net.minecraft.server.packs.repository.Pack
+import net.minecraft.server.packs.repository.Pack.Position
+import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.CreativeModeTab
@@ -55,7 +64,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.block.ComposterBlock
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
 import net.neoforged.api.distmarker.Dist
@@ -68,6 +76,7 @@ import net.neoforged.fml.loading.FMLEnvironment
 import net.neoforged.neoforge.common.ItemAbilities
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.common.NeoForgeMod
+import net.neoforged.neoforge.event.AddPackFindersEvent
 import net.neoforged.neoforge.event.AddReloadListenerEvent
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.LootTableLoadEvent
@@ -107,16 +116,17 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(this@CobblemonNeoForge::on)
             addListener(networkManager::registerMessages)
             addListener(EventPriority.HIGH, ::onBuildContents)
+            addListener(::onAddPackFindersEvent)
         }
         with(NeoForge.EVENT_BUS) {
-            addListener(this@CobblemonNeoForge::onDataPackSync)
-            addListener(this@CobblemonNeoForge::onLogin)
-            addListener(this@CobblemonNeoForge::onLogout)
-            addListener(this@CobblemonNeoForge::wakeUp)
-            addListener(this@CobblemonNeoForge::handleBlockStripping)
-            addListener(this@CobblemonNeoForge::registerCommands)
-            addListener(this@CobblemonNeoForge::onReload)
-            addListener(this@CobblemonNeoForge::addCobblemonStructures)
+            addListener(::onDataPackSync)
+            addListener(::onLogin)
+            addListener(::onLogout)
+            addListener(::wakeUp)
+            addListener(::handleBlockStripping)
+            addListener(::registerCommands)
+            addListener(::onReload)
+            addListener(::addCobblemonStructures)
             addListener(::onVillagerTradesRegistry)
             addListener(::onWanderingTraderRegistry)
             addListener(::onLootTableLoad)
@@ -145,6 +155,34 @@ class CobblemonNeoForge : CobblemonImplementation {
             this.attemptModCompat()
         }
         Cobblemon.initialize()
+    }
+
+    // This event gets fired before init, so we need to put resource packs in EARLY
+    fun onAddPackFindersEvent(event: AddPackFindersEvent) {
+        val modFile = ModList.get().getModContainerById(Cobblemon.MODID).get().modInfo
+        Cobblemon.builtinPacks
+            .filter { it.neededMods.all(Cobblemon.implementation::isModInstalled) }
+            .filter { it.packType == event.packType }
+            .forEach {
+                val subPath = if (it.packType == PackType.CLIENT_RESOURCES) "resourcepacks" else "datapacks"
+                var packLocation = cobblemonResource("$subPath/${it.id}")
+                var resourcePath = modFile.owningFile.file.findResource(packLocation.path)
+
+                var version = modFile.version
+
+                var pack = Pack.readMetaAndCreate(PackLocationInfo("mod/$packLocation", it.displayName, PackSource.BUILT_IN, Optional.of(KnownPack("neoforge", "mod/$packLocation", version.toString()))),
+                    BuiltInPackSource.fromName { PathPackResources(it, resourcePath) },
+                    it.packType,
+                    PackSelectionConfig(it.activationBehaviour == ResourcePackActivationBehaviour.ALWAYS_ENABLED, Position.TOP, false)
+                )
+
+                if (pack == null) {
+                    Cobblemon.LOGGER.error("Failed to register built-in pack ${it.id}. If you are in dev you can ignore this")
+                    return@forEach
+                }
+
+                event.addRepositorySource { it.accept(pack) }
+            }
     }
 
     fun on(event: RegisterEvent) {

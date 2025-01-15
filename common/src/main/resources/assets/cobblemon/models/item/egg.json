@@ -1,6 +1,3224 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cobblemon:item/egg"
-    }
+        "layer0": "cobblemon:item/egg/mystery_egg"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "species": 0.0001
+            },
+            "model": "cobblemon:item/egg/bulbasaur_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0002
+            },
+            "model": "cobblemon:item/egg/charmander_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0003
+            },
+            "model": "cobblemon:item/egg/squirtle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0004
+            },
+            "model": "cobblemon:item/egg/caterpie_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0005
+            },
+            "model": "cobblemon:item/egg/weedle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0006
+            },
+            "model": "cobblemon:item/egg/pidgey_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0007
+            },
+            "model": "cobblemon:item/egg/rattata_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0008
+            },
+            "model": "cobblemon:item/egg/rattata_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0009
+            },
+            "model": "cobblemon:item/egg/spearow_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.001
+            },
+            "model": "cobblemon:item/egg/ekans_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0011
+            },
+            "model": "cobblemon:item/egg/sandshrew_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0012
+            },
+            "model": "cobblemon:item/egg/sandshrew_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0013
+            },
+            "model": "cobblemon:item/egg/nidoranm_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0014
+            },
+            "model": "cobblemon:item/egg/nidoranf_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0015
+            },
+            "model": "cobblemon:item/egg/vulpix_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0016
+            },
+            "model": "cobblemon:item/egg/vulpix_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0017
+            },
+            "model": "cobblemon:item/egg/zubat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0018
+            },
+            "model": "cobblemon:item/egg/oddish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0019
+            },
+            "model": "cobblemon:item/egg/paras_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.002
+            },
+            "model": "cobblemon:item/egg/venonat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0021
+            },
+            "model": "cobblemon:item/egg/diglett_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0022
+            },
+            "model": "cobblemon:item/egg/diglett_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0023
+            },
+            "model": "cobblemon:item/egg/meowth_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0024
+            },
+            "model": "cobblemon:item/egg/meowth_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0025
+            },
+            "model": "cobblemon:item/egg/meowth_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0026
+            },
+            "model": "cobblemon:item/egg/psyduck_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0027
+            },
+            "model": "cobblemon:item/egg/mankey_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0028
+            },
+            "model": "cobblemon:item/egg/growlithe_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0029
+            },
+            "model": "cobblemon:item/egg/growlithe_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.003
+            },
+            "model": "cobblemon:item/egg/poliwag_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0031
+            },
+            "model": "cobblemon:item/egg/abra_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0032
+            },
+            "model": "cobblemon:item/egg/machop_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0033
+            },
+            "model": "cobblemon:item/egg/bellsprout_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0034
+            },
+            "model": "cobblemon:item/egg/tentacool_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0035
+            },
+            "model": "cobblemon:item/egg/geodude_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0036
+            },
+            "model": "cobblemon:item/egg/geodude_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0037
+            },
+            "model": "cobblemon:item/egg/ponyta_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0038
+            },
+            "model": "cobblemon:item/egg/ponyta_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0039
+            },
+            "model": "cobblemon:item/egg/slowpoke_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.004
+            },
+            "model": "cobblemon:item/egg/slowpoke_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0041
+            },
+            "model": "cobblemon:item/egg/magnemite_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0042
+            },
+            "model": "cobblemon:item/egg/farfetchd_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0043
+            },
+            "model": "cobblemon:item/egg/farfetchd_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0044
+            },
+            "model": "cobblemon:item/egg/doduo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0045
+            },
+            "model": "cobblemon:item/egg/seel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0046
+            },
+            "model": "cobblemon:item/egg/grimer_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0047
+            },
+            "model": "cobblemon:item/egg/grimer_alola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0048
+            },
+            "model": "cobblemon:item/egg/shellder_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0049
+            },
+            "model": "cobblemon:item/egg/gastly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.005
+            },
+            "model": "cobblemon:item/egg/onix_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0051
+            },
+            "model": "cobblemon:item/egg/drowzee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0052
+            },
+            "model": "cobblemon:item/egg/krabby_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0053
+            },
+            "model": "cobblemon:item/egg/voltorb_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0054
+            },
+            "model": "cobblemon:item/egg/voltorb_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0055
+            },
+            "model": "cobblemon:item/egg/exeggcute_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0056
+            },
+            "model": "cobblemon:item/egg/cubone_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0057
+            },
+            "model": "cobblemon:item/egg/lickitung_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0058
+            },
+            "model": "cobblemon:item/egg/koffing_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0059
+            },
+            "model": "cobblemon:item/egg/rhyhorn_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.006
+            },
+            "model": "cobblemon:item/egg/tangela_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0061
+            },
+            "model": "cobblemon:item/egg/kangaskhan_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0062
+            },
+            "model": "cobblemon:item/egg/horsea_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0063
+            },
+            "model": "cobblemon:item/egg/goldeen_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0064
+            },
+            "model": "cobblemon:item/egg/staryu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0065
+            },
+            "model": "cobblemon:item/egg/scyther_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0066
+            },
+            "model": "cobblemon:item/egg/pinsir_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0067
+            },
+            "model": "cobblemon:item/egg/tauros_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0068
+            },
+            "model": "cobblemon:item/egg/tauros_paldea_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0069
+            },
+            "model": "cobblemon:item/egg/magikarp_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.007
+            },
+            "model": "cobblemon:item/egg/lapras_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0071
+            },
+            "model": "cobblemon:item/egg/ditto_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0072
+            },
+            "model": "cobblemon:item/egg/eevee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0073
+            },
+            "model": "cobblemon:item/egg/porygon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0074
+            },
+            "model": "cobblemon:item/egg/omanyte_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0075
+            },
+            "model": "cobblemon:item/egg/kabuto_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0076
+            },
+            "model": "cobblemon:item/egg/aerodactyl_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0077
+            },
+            "model": "cobblemon:item/egg/articuno_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0078
+            },
+            "model": "cobblemon:item/egg/articuno_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0079
+            },
+            "model": "cobblemon:item/egg/zapdos_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.008
+            },
+            "model": "cobblemon:item/egg/zapdos_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0081
+            },
+            "model": "cobblemon:item/egg/moltres_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0082
+            },
+            "model": "cobblemon:item/egg/moltres_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0083
+            },
+            "model": "cobblemon:item/egg/dratini_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0084
+            },
+            "model": "cobblemon:item/egg/mewtwo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0085
+            },
+            "model": "cobblemon:item/egg/mew_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0086
+            },
+            "model": "cobblemon:item/egg/chikorita_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0087
+            },
+            "model": "cobblemon:item/egg/cyndaquil_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0088
+            },
+            "model": "cobblemon:item/egg/cyndaquil_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0089
+            },
+            "model": "cobblemon:item/egg/totodile_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.009
+            },
+            "model": "cobblemon:item/egg/sentret_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0091
+            },
+            "model": "cobblemon:item/egg/hoothoot_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0092
+            },
+            "model": "cobblemon:item/egg/ledyba_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0093
+            },
+            "model": "cobblemon:item/egg/spinarak_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0094
+            },
+            "model": "cobblemon:item/egg/chinchou_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0095
+            },
+            "model": "cobblemon:item/egg/pichu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0096
+            },
+            "model": "cobblemon:item/egg/cleffa_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0097
+            },
+            "model": "cobblemon:item/egg/igglybuff_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0098
+            },
+            "model": "cobblemon:item/egg/togepi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0099
+            },
+            "model": "cobblemon:item/egg/natu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.01
+            },
+            "model": "cobblemon:item/egg/mareep_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0101
+            },
+            "model": "cobblemon:item/egg/azurill_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0102
+            },
+            "model": "cobblemon:item/egg/sudowoodo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0103
+            },
+            "model": "cobblemon:item/egg/hoppip_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0104
+            },
+            "model": "cobblemon:item/egg/aipom_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0105
+            },
+            "model": "cobblemon:item/egg/sunkern_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0106
+            },
+            "model": "cobblemon:item/egg/yanma_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0107
+            },
+            "model": "cobblemon:item/egg/wooper_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0108
+            },
+            "model": "cobblemon:item/egg/murkrow_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0109
+            },
+            "model": "cobblemon:item/egg/misdreavus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.011
+            },
+            "model": "cobblemon:item/egg/unown_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0111
+            },
+            "model": "cobblemon:item/egg/wobbuffet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0112
+            },
+            "model": "cobblemon:item/egg/girafarig_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0113
+            },
+            "model": "cobblemon:item/egg/pineco_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0114
+            },
+            "model": "cobblemon:item/egg/dunsparce_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0115
+            },
+            "model": "cobblemon:item/egg/gligar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0116
+            },
+            "model": "cobblemon:item/egg/snubbull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0117
+            },
+            "model": "cobblemon:item/egg/qwilfish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0118
+            },
+            "model": "cobblemon:item/egg/qwilfish_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0119
+            },
+            "model": "cobblemon:item/egg/shuckle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.012
+            },
+            "model": "cobblemon:item/egg/heracross_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0121
+            },
+            "model": "cobblemon:item/egg/sneasel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0122
+            },
+            "model": "cobblemon:item/egg/sneasel_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0123
+            },
+            "model": "cobblemon:item/egg/teddiursa_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0124
+            },
+            "model": "cobblemon:item/egg/slugma_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0125
+            },
+            "model": "cobblemon:item/egg/swinub_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0126
+            },
+            "model": "cobblemon:item/egg/corsola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0127
+            },
+            "model": "cobblemon:item/egg/corsola_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0128
+            },
+            "model": "cobblemon:item/egg/remoraid_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0129
+            },
+            "model": "cobblemon:item/egg/delibird_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.013
+            },
+            "model": "cobblemon:item/egg/mantyke_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0131
+            },
+            "model": "cobblemon:item/egg/skarmory_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0132
+            },
+            "model": "cobblemon:item/egg/houndour_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0133
+            },
+            "model": "cobblemon:item/egg/phanpy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0134
+            },
+            "model": "cobblemon:item/egg/stantler_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0135
+            },
+            "model": "cobblemon:item/egg/smeargle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0136
+            },
+            "model": "cobblemon:item/egg/miltank_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0137
+            },
+            "model": "cobblemon:item/egg/larvitar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0138
+            },
+            "model": "cobblemon:item/egg/entei_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0139
+            },
+            "model": "cobblemon:item/egg/raikou_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.014
+            },
+            "model": "cobblemon:item/egg/suicune_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0141
+            },
+            "model": "cobblemon:item/egg/lugia_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0142
+            },
+            "model": "cobblemon:item/egg/hooh_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0143
+            },
+            "model": "cobblemon:item/egg/celebi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0144
+            },
+            "model": "cobblemon:item/egg/treecko_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0145
+            },
+            "model": "cobblemon:item/egg/torchic_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0146
+            },
+            "model": "cobblemon:item/egg/mudkip_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0147
+            },
+            "model": "cobblemon:item/egg/zigzagoon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0148
+            },
+            "model": "cobblemon:item/egg/zigzagoon_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0149
+            },
+            "model": "cobblemon:item/egg/wurmple_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.015
+            },
+            "model": "cobblemon:item/egg/lotad_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0151
+            },
+            "model": "cobblemon:item/egg/seedot_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0152
+            },
+            "model": "cobblemon:item/egg/taillow_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0153
+            },
+            "model": "cobblemon:item/egg/wingull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0154
+            },
+            "model": "cobblemon:item/egg/ralts_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0155
+            },
+            "model": "cobblemon:item/egg/surskit_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0156
+            },
+            "model": "cobblemon:item/egg/shroomish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0157
+            },
+            "model": "cobblemon:item/egg/slakoth_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0158
+            },
+            "model": "cobblemon:item/egg/nincada_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0159
+            },
+            "model": "cobblemon:item/egg/whismur_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.016
+            },
+            "model": "cobblemon:item/egg/makuhita_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0161
+            },
+            "model": "cobblemon:item/egg/nosepass_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0162
+            },
+            "model": "cobblemon:item/egg/skitty_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0163
+            },
+            "model": "cobblemon:item/egg/sableye_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0164
+            },
+            "model": "cobblemon:item/egg/mawile_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0165
+            },
+            "model": "cobblemon:item/egg/aron_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0166
+            },
+            "model": "cobblemon:item/egg/meditite_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0167
+            },
+            "model": "cobblemon:item/egg/electrike_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0168
+            },
+            "model": "cobblemon:item/egg/plusle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0169
+            },
+            "model": "cobblemon:item/egg/minun_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.017
+            },
+            "model": "cobblemon:item/egg/volbeat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0171
+            },
+            "model": "cobblemon:item/egg/illumise_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0172
+            },
+            "model": "cobblemon:item/egg/roselia_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0173
+            },
+            "model": "cobblemon:item/egg/gulpin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0174
+            },
+            "model": "cobblemon:item/egg/carvanha_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0175
+            },
+            "model": "cobblemon:item/egg/wailmer_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0176
+            },
+            "model": "cobblemon:item/egg/numel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0177
+            },
+            "model": "cobblemon:item/egg/torkoal_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0178
+            },
+            "model": "cobblemon:item/egg/spoink_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0179
+            },
+            "model": "cobblemon:item/egg/trapinch_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.018
+            },
+            "model": "cobblemon:item/egg/cacnea_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0181
+            },
+            "model": "cobblemon:item/egg/swablu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0182
+            },
+            "model": "cobblemon:item/egg/zangoose_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0183
+            },
+            "model": "cobblemon:item/egg/seviper_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0184
+            },
+            "model": "cobblemon:item/egg/lunatone_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0185
+            },
+            "model": "cobblemon:item/egg/solrock_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0186
+            },
+            "model": "cobblemon:item/egg/barboach_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0187
+            },
+            "model": "cobblemon:item/egg/corphish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0188
+            },
+            "model": "cobblemon:item/egg/baltoy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0189
+            },
+            "model": "cobblemon:item/egg/lileep_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.019
+            },
+            "model": "cobblemon:item/egg/anorith_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0191
+            },
+            "model": "cobblemon:item/egg/feebas_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0192
+            },
+            "model": "cobblemon:item/egg/castform_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0193
+            },
+            "model": "cobblemon:item/egg/kecleon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0194
+            },
+            "model": "cobblemon:item/egg/shuppet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0195
+            },
+            "model": "cobblemon:item/egg/duskull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0196
+            },
+            "model": "cobblemon:item/egg/tropius_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0197
+            },
+            "model": "cobblemon:item/egg/chimecho_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0198
+            },
+            "model": "cobblemon:item/egg/absol_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0199
+            },
+            "model": "cobblemon:item/egg/wynaut_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.02
+            },
+            "model": "cobblemon:item/egg/snorunt_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0201
+            },
+            "model": "cobblemon:item/egg/spheal_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0202
+            },
+            "model": "cobblemon:item/egg/clamperl_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0203
+            },
+            "model": "cobblemon:item/egg/bagon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0204
+            },
+            "model": "cobblemon:item/egg/beldum_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0205
+            },
+            "model": "cobblemon:item/egg/kyogre_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0206
+            },
+            "model": "cobblemon:item/egg/groudon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0207
+            },
+            "model": "cobblemon:item/egg/rayquaza_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0208
+            },
+            "model": "cobblemon:item/egg/latias_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0209
+            },
+            "model": "cobblemon:item/egg/latios_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.021
+            },
+            "model": "cobblemon:item/egg/jirachi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0211
+            },
+            "model": "cobblemon:item/egg/deoxys_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0212
+            },
+            "model": "cobblemon:item/egg/turtwig_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0213
+            },
+            "model": "cobblemon:item/egg/chimchar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0214
+            },
+            "model": "cobblemon:item/egg/piplup_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0215
+            },
+            "model": "cobblemon:item/egg/starly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0216
+            },
+            "model": "cobblemon:item/egg/bidoof_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0217
+            },
+            "model": "cobblemon:item/egg/kricketot_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0218
+            },
+            "model": "cobblemon:item/egg/shinx_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0219
+            },
+            "model": "cobblemon:item/egg/budew_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.022
+            },
+            "model": "cobblemon:item/egg/cranidos_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0221
+            },
+            "model": "cobblemon:item/egg/shieldon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0222
+            },
+            "model": "cobblemon:item/egg/burmy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0223
+            },
+            "model": "cobblemon:item/egg/combee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0224
+            },
+            "model": "cobblemon:item/egg/pachirisu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0225
+            },
+            "model": "cobblemon:item/egg/buizel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0226
+            },
+            "model": "cobblemon:item/egg/cherubi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0227
+            },
+            "model": "cobblemon:item/egg/shellos_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0228
+            },
+            "model": "cobblemon:item/egg/drifloon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0229
+            },
+            "model": "cobblemon:item/egg/buneary_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.023
+            },
+            "model": "cobblemon:item/egg/glameow_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0231
+            },
+            "model": "cobblemon:item/egg/chingling_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0232
+            },
+            "model": "cobblemon:item/egg/stunky_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0233
+            },
+            "model": "cobblemon:item/egg/bronzor_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0234
+            },
+            "model": "cobblemon:item/egg/bonsly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0235
+            },
+            "model": "cobblemon:item/egg/happiny_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0236
+            },
+            "model": "cobblemon:item/egg/chatot_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0237
+            },
+            "model": "cobblemon:item/egg/spiritomb_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0238
+            },
+            "model": "cobblemon:item/egg/gible_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0239
+            },
+            "model": "cobblemon:item/egg/riolu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.024
+            },
+            "model": "cobblemon:item/egg/hippopotas_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0241
+            },
+            "model": "cobblemon:item/egg/skorupi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0242
+            },
+            "model": "cobblemon:item/egg/croagunk_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0243
+            },
+            "model": "cobblemon:item/egg/carnivine_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0244
+            },
+            "model": "cobblemon:item/egg/finneon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0245
+            },
+            "model": "cobblemon:item/egg/mantyke_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0246
+            },
+            "model": "cobblemon:item/egg/snover_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0247
+            },
+            "model": "cobblemon:item/egg/rotom_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0248
+            },
+            "model": "cobblemon:item/egg/dialga_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0249
+            },
+            "model": "cobblemon:item/egg/palkia_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.025
+            },
+            "model": "cobblemon:item/egg/giratina_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0251
+            },
+            "model": "cobblemon:item/egg/heatran_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0252
+            },
+            "model": "cobblemon:item/egg/regigigas_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0253
+            },
+            "model": "cobblemon:item/egg/cresselia_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0254
+            },
+            "model": "cobblemon:item/egg/manaphy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0255
+            },
+            "model": "cobblemon:item/egg/phione_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0256
+            },
+            "model": "cobblemon:item/egg/darkrai_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0257
+            },
+            "model": "cobblemon:item/egg/shaymin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0258
+            },
+            "model": "cobblemon:item/egg/arceus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0259
+            },
+            "model": "cobblemon:item/egg/snivy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.026
+            },
+            "model": "cobblemon:item/egg/tepig_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0261
+            },
+            "model": "cobblemon:item/egg/oshawott_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0262
+            },
+            "model": "cobblemon:item/egg/patrat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0263
+            },
+            "model": "cobblemon:item/egg/lillipup_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0264
+            },
+            "model": "cobblemon:item/egg/purrloin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0265
+            },
+            "model": "cobblemon:item/egg/pansage_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0266
+            },
+            "model": "cobblemon:item/egg/pansear_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0267
+            },
+            "model": "cobblemon:item/egg/panpour_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0268
+            },
+            "model": "cobblemon:item/egg/munna_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0269
+            },
+            "model": "cobblemon:item/egg/pidove_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.027
+            },
+            "model": "cobblemon:item/egg/blitzle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0271
+            },
+            "model": "cobblemon:item/egg/roggenrola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0272
+            },
+            "model": "cobblemon:item/egg/woobat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0273
+            },
+            "model": "cobblemon:item/egg/drilbur_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0274
+            },
+            "model": "cobblemon:item/egg/audino_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0275
+            },
+            "model": "cobblemon:item/egg/timburr_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0276
+            },
+            "model": "cobblemon:item/egg/tympole_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0277
+            },
+            "model": "cobblemon:item/egg/sewaddle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0278
+            },
+            "model": "cobblemon:item/egg/venipede_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0279
+            },
+            "model": "cobblemon:item/egg/cottonee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.028
+            },
+            "model": "cobblemon:item/egg/petilil_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0281
+            },
+            "model": "cobblemon:item/egg/basculin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0282
+            },
+            "model": "cobblemon:item/egg/sandile_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0283
+            },
+            "model": "cobblemon:item/egg/darumaka_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0284
+            },
+            "model": "cobblemon:item/egg/darumaka_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0285
+            },
+            "model": "cobblemon:item/egg/maractus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0286
+            },
+            "model": "cobblemon:item/egg/dwebble_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0287
+            },
+            "model": "cobblemon:item/egg/scraggy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0288
+            },
+            "model": "cobblemon:item/egg/sigilyph_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0289
+            },
+            "model": "cobblemon:item/egg/yamask_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.029
+            },
+            "model": "cobblemon:item/egg/yamask_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0291
+            },
+            "model": "cobblemon:item/egg/tirtouga_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0292
+            },
+            "model": "cobblemon:item/egg/archen_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0293
+            },
+            "model": "cobblemon:item/egg/trubbish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0294
+            },
+            "model": "cobblemon:item/egg/zorua_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0295
+            },
+            "model": "cobblemon:item/egg/zorua_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0296
+            },
+            "model": "cobblemon:item/egg/minccino_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0297
+            },
+            "model": "cobblemon:item/egg/gothita_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0298
+            },
+            "model": "cobblemon:item/egg/solosis_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0299
+            },
+            "model": "cobblemon:item/egg/ducklett_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.03
+            },
+            "model": "cobblemon:item/egg/vanillite_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0301
+            },
+            "model": "cobblemon:item/egg/deerling_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0302
+            },
+            "model": "cobblemon:item/egg/emolga_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0303
+            },
+            "model": "cobblemon:item/egg/karrablast_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0304
+            },
+            "model": "cobblemon:item/egg/foongus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0305
+            },
+            "model": "cobblemon:item/egg/frillish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0306
+            },
+            "model": "cobblemon:item/egg/alomomola_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0307
+            },
+            "model": "cobblemon:item/egg/joltik_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0308
+            },
+            "model": "cobblemon:item/egg/ferroseed_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0309
+            },
+            "model": "cobblemon:item/egg/klink_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.031
+            },
+            "model": "cobblemon:item/egg/tynamo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0311
+            },
+            "model": "cobblemon:item/egg/elgyem_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0312
+            },
+            "model": "cobblemon:item/egg/litwick_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0313
+            },
+            "model": "cobblemon:item/egg/axew_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0314
+            },
+            "model": "cobblemon:item/egg/cubchoo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0315
+            },
+            "model": "cobblemon:item/egg/cryogonal_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0316
+            },
+            "model": "cobblemon:item/egg/shelmet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0317
+            },
+            "model": "cobblemon:item/egg/stunfisk_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0318
+            },
+            "model": "cobblemon:item/egg/stunfisk_galar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0319
+            },
+            "model": "cobblemon:item/egg/mienfoo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.032
+            },
+            "model": "cobblemon:item/egg/druddigon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0321
+            },
+            "model": "cobblemon:item/egg/golett_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0322
+            },
+            "model": "cobblemon:item/egg/pawniard_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0323
+            },
+            "model": "cobblemon:item/egg/bouffalant_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0324
+            },
+            "model": "cobblemon:item/egg/rufflet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0325
+            },
+            "model": "cobblemon:item/egg/vullaby_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0326
+            },
+            "model": "cobblemon:item/egg/heatmor_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0327
+            },
+            "model": "cobblemon:item/egg/durant_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0328
+            },
+            "model": "cobblemon:item/egg/deino_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0329
+            },
+            "model": "cobblemon:item/egg/larvesta_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.033
+            },
+            "model": "cobblemon:item/egg/reshiram_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0331
+            },
+            "model": "cobblemon:item/egg/zekrom_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0332
+            },
+            "model": "cobblemon:item/egg/kyurem_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0333
+            },
+            "model": "cobblemon:item/egg/cobalion_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0334
+            },
+            "model": "cobblemon:item/egg/terrakion_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0335
+            },
+            "model": "cobblemon:item/egg/virizion_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0336
+            },
+            "model": "cobblemon:item/egg/tornadus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0337
+            },
+            "model": "cobblemon:item/egg/thundurus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0338
+            },
+            "model": "cobblemon:item/egg/landorus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0339
+            },
+            "model": "cobblemon:item/egg/keldeo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.034
+            },
+            "model": "cobblemon:item/egg/meloetta_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0341
+            },
+            "model": "cobblemon:item/egg/genesect_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0342
+            },
+            "model": "cobblemon:item/egg/chespin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0343
+            },
+            "model": "cobblemon:item/egg/fennekin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0344
+            },
+            "model": "cobblemon:item/egg/froakie_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0345
+            },
+            "model": "cobblemon:item/egg/bunnelby_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0346
+            },
+            "model": "cobblemon:item/egg/fletchling_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0347
+            },
+            "model": "cobblemon:item/egg/scatterbug_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0348
+            },
+            "model": "cobblemon:item/egg/litleo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0349
+            },
+            "model": "cobblemon:item/egg/flabebe_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.035
+            },
+            "model": "cobblemon:item/egg/skiddo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0351
+            },
+            "model": "cobblemon:item/egg/pancham_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0352
+            },
+            "model": "cobblemon:item/egg/furfrou_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0353
+            },
+            "model": "cobblemon:item/egg/espurr_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0354
+            },
+            "model": "cobblemon:item/egg/honedge_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0355
+            },
+            "model": "cobblemon:item/egg/spritzee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0356
+            },
+            "model": "cobblemon:item/egg/swirlix_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0357
+            },
+            "model": "cobblemon:item/egg/inkay_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0358
+            },
+            "model": "cobblemon:item/egg/binacle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0359
+            },
+            "model": "cobblemon:item/egg/skrelp_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.036
+            },
+            "model": "cobblemon:item/egg/clauncher_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0361
+            },
+            "model": "cobblemon:item/egg/helioptile_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0362
+            },
+            "model": "cobblemon:item/egg/tyrunt_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0363
+            },
+            "model": "cobblemon:item/egg/amaura_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0364
+            },
+            "model": "cobblemon:item/egg/hawlucha_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0365
+            },
+            "model": "cobblemon:item/egg/dedenne_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0366
+            },
+            "model": "cobblemon:item/egg/carbink_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0367
+            },
+            "model": "cobblemon:item/egg/goomy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0368
+            },
+            "model": "cobblemon:item/egg/klefki_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0369
+            },
+            "model": "cobblemon:item/egg/phantump_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.037
+            },
+            "model": "cobblemon:item/egg/pumpkaboo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0371
+            },
+            "model": "cobblemon:item/egg/bergmite_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0372
+            },
+            "model": "cobblemon:item/egg/noibat_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0373
+            },
+            "model": "cobblemon:item/egg/xerneas_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0374
+            },
+            "model": "cobblemon:item/egg/yveltal_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0375
+            },
+            "model": "cobblemon:item/egg/zygarde_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0376
+            },
+            "model": "cobblemon:item/egg/diancie_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0377
+            },
+            "model": "cobblemon:item/egg/hoopa_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0378
+            },
+            "model": "cobblemon:item/egg/volcanion_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0379
+            },
+            "model": "cobblemon:item/egg/rowlet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.038
+            },
+            "model": "cobblemon:item/egg/rowlet_hisui_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0381
+            },
+            "model": "cobblemon:item/egg/litten_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0382
+            },
+            "model": "cobblemon:item/egg/popplio_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0383
+            },
+            "model": "cobblemon:item/egg/pikipek_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0384
+            },
+            "model": "cobblemon:item/egg/yungoos_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0385
+            },
+            "model": "cobblemon:item/egg/grubbin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0386
+            },
+            "model": "cobblemon:item/egg/crabrawler_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0387
+            },
+            "model": "cobblemon:item/egg/oricorio_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0388
+            },
+            "model": "cobblemon:item/egg/cutiefly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0389
+            },
+            "model": "cobblemon:item/egg/rockruff_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.039
+            },
+            "model": "cobblemon:item/egg/wishiwashi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0391
+            },
+            "model": "cobblemon:item/egg/mareanie_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0392
+            },
+            "model": "cobblemon:item/egg/mudbray_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0393
+            },
+            "model": "cobblemon:item/egg/dewpider_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0394
+            },
+            "model": "cobblemon:item/egg/fomantis_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0395
+            },
+            "model": "cobblemon:item/egg/morelull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0396
+            },
+            "model": "cobblemon:item/egg/salandit_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0397
+            },
+            "model": "cobblemon:item/egg/stufful_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0398
+            },
+            "model": "cobblemon:item/egg/bounsweet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0399
+            },
+            "model": "cobblemon:item/egg/comfey_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.04
+            },
+            "model": "cobblemon:item/egg/oranguru_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0401
+            },
+            "model": "cobblemon:item/egg/passimian_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0402
+            },
+            "model": "cobblemon:item/egg/wimpod_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0403
+            },
+            "model": "cobblemon:item/egg/sandygast_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0404
+            },
+            "model": "cobblemon:item/egg/pyukumuku_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0405
+            },
+            "model": "cobblemon:item/egg/typenull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0406
+            },
+            "model": "cobblemon:item/egg/minior_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0407
+            },
+            "model": "cobblemon:item/egg/komala_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0408
+            },
+            "model": "cobblemon:item/egg/turtonator_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0409
+            },
+            "model": "cobblemon:item/egg/togedemaru_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.041
+            },
+            "model": "cobblemon:item/egg/mimikyu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0411
+            },
+            "model": "cobblemon:item/egg/bruxish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0412
+            },
+            "model": "cobblemon:item/egg/drampa_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0413
+            },
+            "model": "cobblemon:item/egg/dhelmise_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0414
+            },
+            "model": "cobblemon:item/egg/jangmoo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0415
+            },
+            "model": "cobblemon:item/egg/tapukoko_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0416
+            },
+            "model": "cobblemon:item/egg/tapulele_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0417
+            },
+            "model": "cobblemon:item/egg/tapubulu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0418
+            },
+            "model": "cobblemon:item/egg/tapufini_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0419
+            },
+            "model": "cobblemon:item/egg/cosmog_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.042
+            },
+            "model": "cobblemon:item/egg/typenull_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0421
+            },
+            "model": "cobblemon:item/egg/solgaleo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0422
+            },
+            "model": "cobblemon:item/egg/lunala_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0423
+            },
+            "model": "cobblemon:item/egg/necrozma_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0424
+            },
+            "model": "cobblemon:item/egg/nihilego_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0425
+            },
+            "model": "cobblemon:item/egg/buzzwole_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0426
+            },
+            "model": "cobblemon:item/egg/pheromosa_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0427
+            },
+            "model": "cobblemon:item/egg/xurkitree_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0428
+            },
+            "model": "cobblemon:item/egg/celesteela_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0429
+            },
+            "model": "cobblemon:item/egg/kartana_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.043
+            },
+            "model": "cobblemon:item/egg/guzzlord_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0431
+            },
+            "model": "cobblemon:item/egg/necrozma_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0432
+            },
+            "model": "cobblemon:item/egg/magearna_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0433
+            },
+            "model": "cobblemon:item/egg/marshadow_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0434
+            },
+            "model": "cobblemon:item/egg/poipole_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0435
+            },
+            "model": "cobblemon:item/egg/stakataka_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0436
+            },
+            "model": "cobblemon:item/egg/blacephalon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0437
+            },
+            "model": "cobblemon:item/egg/zeraora_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0438
+            },
+            "model": "cobblemon:item/egg/meltan_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0439
+            },
+            "model": "cobblemon:item/egg/grookey_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.044
+            },
+            "model": "cobblemon:item/egg/scorbunny_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0441
+            },
+            "model": "cobblemon:item/egg/sobble_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0442
+            },
+            "model": "cobblemon:item/egg/skwovet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0443
+            },
+            "model": "cobblemon:item/egg/rookidee_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0444
+            },
+            "model": "cobblemon:item/egg/blipbug_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0445
+            },
+            "model": "cobblemon:item/egg/nickit_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0446
+            },
+            "model": "cobblemon:item/egg/gossifleur_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0447
+            },
+            "model": "cobblemon:item/egg/wooloo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0448
+            },
+            "model": "cobblemon:item/egg/chewtle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0449
+            },
+            "model": "cobblemon:item/egg/yamper_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.045
+            },
+            "model": "cobblemon:item/egg/rolycoly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0451
+            },
+            "model": "cobblemon:item/egg/applin_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0452
+            },
+            "model": "cobblemon:item/egg/silicobra_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0453
+            },
+            "model": "cobblemon:item/egg/cramorant_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0454
+            },
+            "model": "cobblemon:item/egg/arrokuda_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0455
+            },
+            "model": "cobblemon:item/egg/toxel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0456
+            },
+            "model": "cobblemon:item/egg/sizzlipede_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0457
+            },
+            "model": "cobblemon:item/egg/clobbopus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0458
+            },
+            "model": "cobblemon:item/egg/sinistea_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0459
+            },
+            "model": "cobblemon:item/egg/hatenna_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.046
+            },
+            "model": "cobblemon:item/egg/impidimp_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0461
+            },
+            "model": "cobblemon:item/egg/milcery_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0462
+            },
+            "model": "cobblemon:item/egg/cufant_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0463
+            },
+            "model": "cobblemon:item/egg/dracozolt_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0464
+            },
+            "model": "cobblemon:item/egg/arctozolt_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0465
+            },
+            "model": "cobblemon:item/egg/dracovish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0466
+            },
+            "model": "cobblemon:item/egg/arctovish_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0467
+            },
+            "model": "cobblemon:item/egg/duraludon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0468
+            },
+            "model": "cobblemon:item/egg/dreepy_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0469
+            },
+            "model": "cobblemon:item/egg/kubfu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.047
+            },
+            "model": "cobblemon:item/egg/zacian_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0471
+            },
+            "model": "cobblemon:item/egg/zamazenta_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0472
+            },
+            "model": "cobblemon:item/egg/eternatus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0473
+            },
+            "model": "cobblemon:item/egg/kubfu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0474
+            },
+            "model": "cobblemon:item/egg/regieleki_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0475
+            },
+            "model": "cobblemon:item/egg/regidrago_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0476
+            },
+            "model": "cobblemon:item/egg/glastrier_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0477
+            },
+            "model": "cobblemon:item/egg/spectrier_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0478
+            },
+            "model": "cobblemon:item/egg/zarude_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0479
+            },
+            "model": "cobblemon:item/egg/calyrex_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.048
+            },
+            "model": "cobblemon:item/egg/sprigatito_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0481
+            },
+            "model": "cobblemon:item/egg/fuecoco_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0482
+            },
+            "model": "cobblemon:item/egg/quaxly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0483
+            },
+            "model": "cobblemon:item/egg/lechonk_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0484
+            },
+            "model": "cobblemon:item/egg/tarountula_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0485
+            },
+            "model": "cobblemon:item/egg/nymble_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0486
+            },
+            "model": "cobblemon:item/egg/pawmi_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0487
+            },
+            "model": "cobblemon:item/egg/tandemaus_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0488
+            },
+            "model": "cobblemon:item/egg/fidough_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0489
+            },
+            "model": "cobblemon:item/egg/smoliv_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.049
+            },
+            "model": "cobblemon:item/egg/squawkabilly_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0491
+            },
+            "model": "cobblemon:item/egg/nacli_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0492
+            },
+            "model": "cobblemon:item/egg/charcadet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0493
+            },
+            "model": "cobblemon:item/egg/tadbulb_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0494
+            },
+            "model": "cobblemon:item/egg/wattrel_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0495
+            },
+            "model": "cobblemon:item/egg/maschiff_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0496
+            },
+            "model": "cobblemon:item/egg/shroodle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0497
+            },
+            "model": "cobblemon:item/egg/klawf_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0498
+            },
+            "model": "cobblemon:item/egg/capsakid_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0499
+            },
+            "model": "cobblemon:item/egg/rellor_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.05
+            },
+            "model": "cobblemon:item/egg/flittle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0501
+            },
+            "model": "cobblemon:item/egg/wiglett_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0502
+            },
+            "model": "cobblemon:item/egg/bombirdier_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0503
+            },
+            "model": "cobblemon:item/egg/finizen_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0504
+            },
+            "model": "cobblemon:item/egg/varoom_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0505
+            },
+            "model": "cobblemon:item/egg/cyclizar_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0506
+            },
+            "model": "cobblemon:item/egg/orthworm_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0507
+            },
+            "model": "cobblemon:item/egg/glimmet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0508
+            },
+            "model": "cobblemon:item/egg/greavard_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0509
+            },
+            "model": "cobblemon:item/egg/flamigo_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.051
+            },
+            "model": "cobblemon:item/egg/cetoddle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0511
+            },
+            "model": "cobblemon:item/egg/tatsugiri_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0512
+            },
+            "model": "cobblemon:item/egg/frigibax_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0513
+            },
+            "model": "cobblemon:item/egg/gimmighoul_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0514
+            },
+            "model": "cobblemon:item/egg/koraidon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0515
+            },
+            "model": "cobblemon:item/egg/miraidon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0516
+            },
+            "model": "cobblemon:item/egg/tinglu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0517
+            },
+            "model": "cobblemon:item/egg/chienpao_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0518
+            },
+            "model": "cobblemon:item/egg/wochien_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0519
+            },
+            "model": "cobblemon:item/egg/chiyu_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.052
+            },
+            "model": "cobblemon:item/egg/walkingwake_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0521
+            },
+            "model": "cobblemon:item/egg/ironleaves_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0522
+            },
+            "model": "cobblemon:item/egg/greattusk_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0523
+            },
+            "model": "cobblemon:item/egg/screamtail_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0524
+            },
+            "model": "cobblemon:item/egg/brutebonnet_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0525
+            },
+            "model": "cobblemon:item/egg/fluttermane_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0526
+            },
+            "model": "cobblemon:item/egg/slitherwing_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0527
+            },
+            "model": "cobblemon:item/egg/sandyshocks_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0528
+            },
+            "model": "cobblemon:item/egg/roaringmoon_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0529
+            },
+            "model": "cobblemon:item/egg/irontreads_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.053
+            },
+            "model": "cobblemon:item/egg/ironbundle_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0531
+            },
+            "model": "cobblemon:item/egg/ironhands_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0532
+            },
+            "model": "cobblemon:item/egg/ironjugulis_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0533
+            },
+            "model": "cobblemon:item/egg/ironmoth_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0534
+            },
+            "model": "cobblemon:item/egg/ironthorns_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0535
+            },
+            "model": "cobblemon:item/egg/ragingbolt_egg"
+        },
+        {
+            "predicate": {
+                "species": 0.0536
+            },
+            "model": "cobblemon:item/egg/gougingfire_egg"
+        }
+    ]
 }

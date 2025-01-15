@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.ResourcePackActivationBehaviour
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
@@ -31,7 +30,6 @@ import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
-import com.cobblemon.mod.common.client.render.item.EggItemRenderer
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
@@ -91,14 +89,6 @@ object CobblemonClient {
         FossilModelRepository,
         BlockEntityModelRepository,
         GenericBedrockEntityModelRepository
-    )
-
-    @JvmStatic
-    val builtinResourcePacks = listOf<CobblemonResourcePack>(
-        CobblemonResourcePack(id = "adorncompatibility", name = "Adorn Compatibility", activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
-        CobblemonResourcePack(id = "gyaradosjump", name = "Gyarados Jump Patterns", activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
-        CobblemonResourcePack(id = "regionbiasforms", name = "Region Bias Forms", activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
-        CobblemonResourcePack(id = "uniqueshinyforms", name = "Shinies for Magikarp Jump", activationBehaviour = ResourcePackActivationBehaviour.NORMAL),
     )
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
@@ -331,7 +321,6 @@ object CobblemonClient {
 
     private fun registerBuiltinItemRenderers() {
         CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
-        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_EGG, EggItemRenderer())
     }
 
     fun reloadCodedAssets(resourceManager: ResourceManager) {
