@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -38,7 +39,7 @@ class PathToNestTaskConfig : SingleTaskConfig {
 
         return BehaviorBuilder.create {
             it.group(
-                it.absent(MemoryModuleType.LOOK_TARGET),
+                 it.present(MemoryModuleType.LOOK_TARGET), // todo This might need to be it.absent but only it.present works atm
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.NEST_LOCATION),
                 it.present(CobblemonMemories.POTENTIAL_MATE)
@@ -49,8 +50,11 @@ class PathToNestTaskConfig : SingleTaskConfig {
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
                     // Retrieve nest location and mate entity from memory
-                    val nestLocation = it.get(nestMemory)
-                    val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
+                    //val nestLocation = it.get(nestMemory)
+                    val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false
+
+                    //val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
+                    val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
 
                     // Create a target vector at the nest location
                     val targetVec = Vec3.atCenterOf(nestLocation)

@@ -48,19 +48,17 @@ class MateSensor : Sensor<LivingEntity>() {
         val gender = entity.pokemon.gender
         val mateGender = mate.pokemon.gender
 
-        //todo delete this later
+        //todo delete this later (this is for breakpointing only true returns)
         if (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) {
             val test = 1
         }
 
         return when {
-            (entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
-            (gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
-            (gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
-// todo use the below for when canBreed works properly
-            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
-            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
-            //BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon) && (gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
+            //(entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
+            //(gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
+            //(gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
+
+            (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) -> true
             else -> false
         }
     }
