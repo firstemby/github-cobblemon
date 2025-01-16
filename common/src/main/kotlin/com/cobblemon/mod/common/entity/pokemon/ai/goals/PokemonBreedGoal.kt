@@ -116,7 +116,7 @@ class PokemonBreedGoal(private val entity: PokemonEntity) : Goal() {
             println("Adding egg to the nest at $nestLocation") // Replace with actual logic
         }
 
-        // Broadcast a visual or sound effect to signal breeding success
+        // todo Broadcast a visual or sound effect to signal breeding success
         entity.level().broadcastEntityEvent(entity, 10.toByte())
         mate?.level()?.broadcastEntityEvent(mate, 10.toByte())
     }

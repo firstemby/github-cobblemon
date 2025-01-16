@@ -398,4 +398,21 @@ interface BreedingLogic {
     fun nonDittoPreferMother(mother: Pokemon, father: Pokemon): Pokemon {
         return if(mother.form.eggGroups.contains(EggGroup.DITTO)) father else mother
     }
+
+    fun resetBreedingCooldown(pokemon: Pokemon): Int {
+        val eggCycle = (pokemon.species.eggCycles).coerceAtLeast(1)
+        val minTicks: Int = 600 // Minimum cooldown in ticks (5 minutes = 6000 ticks / 10 = 600 ticks here)
+        val targetTicks: Int = 24000 // Cooldown at 40 egg cycles (20 minutes = 24000 ticks)
+        val targetEggCycle = 40 // Egg cycle value for target cooldown
+        val scaleFactor = 2.0 // Curve steepness factor
+
+        // Calculate the breeding cooldown in ticks
+        val cooldownTicks = minTicks + (
+                Math.log(1 + scaleFactor * (eggCycle - 5).coerceAtLeast(0) / (targetEggCycle - 5)) /
+                        Math.log(1 + scaleFactor)
+                ) * (targetTicks - minTicks)
+
+        return cooldownTicks.toInt() // Return the calculated cooldown
+    }
+
 }

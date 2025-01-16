@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
@@ -82,6 +83,15 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
 
                     // Set the egg in the nest
                     nestBlockEntity.setEgg(egg)
+
+                    // set cooldown for mother
+                    if (parentOne.gender == Gender.FEMALE || parentOne.species.name == "ditto") {
+                        // set breeding cooldown of parentOne
+                        (entity as PokemonEntity)
+                    } else if (parentTwo.gender == Gender.FEMALE || parentTwo.species.name == "ditto") {
+                        // set breeding cooldown of parentTwo
+                        mate.pokemon.breedingCooldown = mate.pokemon.species.eggCycles // todo use eggCycles to dictate cooldowns
+                    }
 
                     // Notify nearby players
                     world.players().forEach { player ->
