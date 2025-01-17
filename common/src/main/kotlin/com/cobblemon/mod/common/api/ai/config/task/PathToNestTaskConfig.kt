@@ -47,6 +47,9 @@ class PathToNestTaskConfig : SingleTaskConfig {
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
+                    // Don't do anything if the pokemon has a breeding cooldown
+                    if ((entity as PokemonEntity).pokemon.breedingCooldown != 0) return@Trigger false
+
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
                     // Retrieve nest location and mate entity from memory
@@ -55,6 +58,8 @@ class PathToNestTaskConfig : SingleTaskConfig {
 
                     //val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
                     val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
+
+                    // todo try to find a way to only have pairs of mates instead of an orgy
 
                     // Create a target vector at the nest location
                     val targetVec = Vec3.atCenterOf(nestLocation)

@@ -50,4 +50,8 @@ object BreedingLogicManager : BreedingLogic {
         }
         return super.canBreed(mother, father)*/
     }
+
+    override fun resetBreedingCooldown(pokemon: Pokemon): Int {
+        return super.resetBreedingCooldown(pokemon)
+    }
 }

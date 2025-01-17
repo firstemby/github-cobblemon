@@ -412,7 +412,7 @@ interface BreedingLogic {
                         Math.log(1 + scaleFactor)
                 ) * (targetTicks - minTicks)
 
-        return cooldownTicks.toInt() // Return the calculated cooldown
+        return cooldownTicks.toInt()
     }
 
 }

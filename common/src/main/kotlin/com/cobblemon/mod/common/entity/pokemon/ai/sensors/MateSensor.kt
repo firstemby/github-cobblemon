@@ -30,6 +30,9 @@ class MateSensor : Sensor<LivingEntity>() {
         // Ensure the entity is a PokemonEntity
         if (entity !is PokemonEntity) return
 
+        // Make sure the current pokemon has no breeding cooldown
+        if ((entity as PokemonEntity).pokemon.breedingCooldown != 0) return
+
         val potentialMate = world.getEntitiesOfClass(
             PokemonEntity::class.java,
             AABB(entity.blockPosition()).inflate(DETECTION_RADIUS)
@@ -53,11 +56,13 @@ class MateSensor : Sensor<LivingEntity>() {
             val test = 1
         }
 
+        // make sure the potetntial mate is not on a breeding cooldown
+        if (mate.pokemon.breedingCooldown != 0) return false
+
         return when {
             //(entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
             //(gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
             //(gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
-
             (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) -> true
             else -> false
         }

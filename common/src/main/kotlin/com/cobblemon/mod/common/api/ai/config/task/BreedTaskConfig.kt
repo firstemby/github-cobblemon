@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.breeding.BreedingLogic
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
@@ -66,6 +67,9 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                     val nestBlockEntity = world.getBlockEntity(nestLocation) as? NestBlockEntity
                         ?: return@Trigger false
 
+                    // double check to make sure the nest is not taken yet and cancel if it is
+                    if (nestBlockEntity.getEgg() != null) return@Trigger false
+
                     // Generate the egg using BreedingLogicManager
                     val parentOne = (entity as PokemonEntity).pokemon
                     val parentTwo = mate.pokemon
@@ -84,19 +88,16 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                     // Set the egg in the nest
                     nestBlockEntity.setEgg(egg)
 
-                    // set cooldown for mother
-                    if (parentOne.gender == Gender.FEMALE || parentOne.species.name == "ditto") {
-                        // set breeding cooldown of parentOne
-                        (entity as PokemonEntity)
-                    } else if (parentTwo.gender == Gender.FEMALE || parentTwo.species.name == "ditto") {
-                        // set breeding cooldown of parentTwo
-                        mate.pokemon.breedingCooldown = mate.pokemon.species.eggCycles // todo use eggCycles to dictate cooldowns
-                    }
+                    // set breeding cooldown for both
+                    parentOne.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentOne)
+                    parentTwo.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentTwo)
 
                     // Notify nearby players
                     world.players().forEach { player ->
                         player.displayClientMessage("An egg has been laid in the nest!".green(), true)
                     }
+
+                    // todo maybe have them fall asleep after?
 
                     return@Trigger true
                 }
