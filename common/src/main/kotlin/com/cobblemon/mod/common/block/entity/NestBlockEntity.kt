@@ -59,11 +59,14 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.ticks.TickPriority
+import java.util.UUID
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state) {
     var eggComponent: EggComponent? = null
         private set
     var renderState: BlockEntityRenderState? = null
+    var parents: Pair<UUID?, UUID?> = Pair(null, null)
+    var ownerUUID: UUID? = null // player UUID that placed this nest
 
     /**
      * Sets the EggComponent and synchronizes it.
@@ -95,6 +98,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     ?.result()
                     ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
         }
+
+        ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
     /**
@@ -109,6 +114,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     ?.result()
                     ?.orElse(null)
             //println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
+        }
+
+        if (tag.contains("OwnerUUID")) {
+            ownerUUID = tag.getUUID("OwnerUUID")
         }
     }
 
@@ -406,7 +415,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     companion object {
-        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick
+        private const val RANDOM_SPAWN_CHANCE = 100000 // 1 in 100 chance per random tick
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->

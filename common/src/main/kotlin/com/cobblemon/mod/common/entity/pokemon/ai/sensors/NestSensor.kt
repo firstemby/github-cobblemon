@@ -30,7 +30,7 @@ class NestSensor : Sensor<LivingEntity>() {
         // Ensure the entity is a PokemonEntity
         if (entity !is PokemonEntity) return
 
-        val nearbyNest = findNearbyNest(world, entity.blockPosition())
+        val nearbyNest = findNearbyNest((entity as PokemonEntity), world, entity.blockPosition()) // todo send in entity
         if (nearbyNest != null) { // WORKS
             entity.brain.setMemory(CobblemonMemories.NEST_LOCATION, nearbyNest)
         } else {
@@ -38,7 +38,7 @@ class NestSensor : Sensor<LivingEntity>() {
         }
     }
 
-    private fun findNearbyNest(world: ServerLevel, entityPos: BlockPos): BlockPos? {
+    private fun findNearbyNest(pokemonEntity: PokemonEntity, world: ServerLevel, entityPos: BlockPos): BlockPos? {
         return BlockPos.betweenClosed(
             entityPos.offset(-40, -5, -40),
             entityPos.offset(40, 5, 40)
@@ -46,18 +46,25 @@ class NestSensor : Sensor<LivingEntity>() {
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
 
-
-            // TODO IF pokemon is tethered in pasture (has a pastureID) then ignore wild nests (nests that have no "owner")
-
-
-            // TODO IF pokemon is not tethered in pasture (pastureID is null) then use wild nests (nests that have no "owner")
-
+            if (pokemonEntity.tethering?.tetheringId != null)  // TODO IF pokemon is tethered in pasture (has a pastureID) then ignore wild nests (nests that have no "owner")
+                (blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null && blockEntity.ownerUUID != null
+            else // TODO IF pokemon is not tethered in pasture (pastureID is null) then use wild nests (nests that have no "owner")
+                (blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null && blockEntity.ownerUUID == null
+            /*
 
             if (blockEntity is NestBlockEntity && (blockEntity as NestBlockEntity).eggComponent?.egg == null){
                 val test = 1 // for breakpointing this shit
-            }
+            }*/
 
-            (blockState.block is NestBlock || blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null
+            /*if ((blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null) {
+
+                if (pokemonEntity.tethering?.tetheringId != null && blockEntity.ownerUUID != null)
+                    true
+
+
+                if (pokemonEntity.tethering?.tetheringId == null && blockEntity.ownerUUID == null)
+                    true
+            }*/
         }
     }
 }

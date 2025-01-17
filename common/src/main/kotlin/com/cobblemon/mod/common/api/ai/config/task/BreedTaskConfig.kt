@@ -88,6 +88,11 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                     // Set the egg in the nest
                     nestBlockEntity.setEgg(egg)
 
+                    // set the parents of the nest if it/they are wild so they guard it
+                    if (nestBlockEntity.ownerUUID == null)
+                        nestBlockEntity.parents = Pair((entity as PokemonEntity).uuid, mate.uuid)
+
+
                     // set breeding cooldown for both
                     parentOne.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentOne)
                     parentTwo.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentTwo)
