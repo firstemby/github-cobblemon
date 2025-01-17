@@ -46,6 +46,13 @@ class NestSensor : Sensor<LivingEntity>() {
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
 
+
+            // TODO IF pokemon is tethered in pasture (has a pastureID) then ignore wild nests (nests that have no "owner")
+
+
+            // TODO IF pokemon is not tethered in pasture (pastureID is null) then use wild nests (nests that have no "owner")
+
+
             if (blockEntity is NestBlockEntity && (blockEntity as NestBlockEntity).eggComponent?.egg == null){
                 val test = 1 // for breakpointing this shit
             }
