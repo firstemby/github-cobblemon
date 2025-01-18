@@ -1,35 +1,27 @@
 {
   "implemented": true,
-  "name": "Gliscor",
   "nationalPokedexNumber": 472,
+  "name": "Gliscor",
   "primaryType": "ground",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 20,
+  "weight": 425,
+  "pokedex": [
+    "cobblemon.species.gliscor.desc"
+  ],
+  "labels": [
+    "gen4"
+  ],
+  "aspects": [],
   "abilities": [
     "hypercutter",
     "sandveil",
     "h:poisonheal"
   ],
-  "drops": {
-    "amount": 4,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:razor_fang",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:poison_barb",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:yache_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "bug"
+  ],
   "baseStats": {
     "hp": 75,
     "attack": 95,
@@ -38,68 +30,114 @@
     "special_defence": 75,
     "speed": 95
   },
-  "catchRate": 30,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 2,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 179,
   "experienceGroup": "medium_slow",
+  "catchRate": 30,
   "eggCycles": 20,
-  "eggGroups": [
-    "bug"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.9,
+  "hitbox": {
+    "width": 0.9,
+    "height": 1.5,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 4,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:razor_fang",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:poison_barb",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:yache_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:firefang",
-    "1:guillotine",
-    "1:harden",
+    "1:thunderfang",
     "1:icefang",
-    "1:knockoff",
+    "1:firefang",
     "1:poisonjab",
     "1:sandattack",
-    "1:thunderfang",
+    "1:harden",
+    "1:feintattack",
+    "1:guillotine",
+    "1:skyuppercut",
+    "1:mudbomb",
+    "1:poisonsting",
+    "1:slash",
     "13:quickattack",
     "16:furycutter",
-    "19:feintattack",
     "19:knockoff",
-    "20:furycutter",
     "22:acrobatics",
     "27:nightslash",
-    "27:screech",
     "30:uturn",
     "35:screech",
     "40:xscissor",
     "45:crabhammer",
-    "45:guillotine",
     "50:swordsdance",
+    "egg:counter",
+    "egg:crabhammer",
+    "egg:crosspoison",
+    "egg:doubleedge",
+    "egg:feint",
+    "egg:mudbomb",
+    "egg:nightslash",
+    "egg:powertrick",
+    "egg:razorwind",
+    "egg:wingattack",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
-    "tm:attract",
+    "tm:aquatail",
+    "tm:assurance",
     "tm:batonpass",
     "tm:breakingswipe",
     "tm:brickbreak",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:captivate",
-    "tm:confide",
+    "tm:counter",
+    "tm:crabhammer",
+    "tm:crosspoison",
     "tm:crunch",
     "tm:cut",
     "tm:darkpulse",
     "tm:defog",
-    "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:dualwingbeat",
     "tm:earthpower",
     "tm:earthquake",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:feint",
+    "tm:feintattack",
     "tm:firefang",
     "tm:fling",
-    "tm:frustration",
+    "tm:furycutter",
     "tm:gigaimpact",
+    "tm:guillotine",
     "tm:gunkshot",
-    "tm:hiddenpower",
+    "tm:harden",
+    "tm:headbutt",
     "tm:highhorsepower",
     "tm:honeclaws",
     "tm:hyperbeam",
@@ -108,29 +146,39 @@
     "tm:knockoff",
     "tm:lunge",
     "tm:metalclaw",
+    "tm:mudbomb",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:naturalgift",
+    "tm:nightslash",
     "tm:payback",
+    "tm:pinmissile",
     "tm:poisonjab",
+    "tm:poisonsting",
     "tm:poisontail",
+    "tm:powershift",
+    "tm:powertrick",
+    "tm:powerwhip",
     "tm:protect",
     "tm:psychicfangs",
+    "tm:quickattack",
     "tm:raindance",
+    "tm:razorwind",
     "tm:rest",
-    "tm:return",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:roost",
-    "tm:round",
+    "tm:sandattack",
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:scaleshot",
     "tm:scaryface",
-    "tm:secretpower",
+    "tm:screech",
     "tm:skittersmack",
+    "tm:skyattack",
+    "tm:skyuppercut",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:spikes",
@@ -141,7 +189,6 @@
     "tm:strugglebug",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:swordsdance",
     "tm:tailwind",
@@ -156,51 +203,9 @@
     "tm:toxicspikes",
     "tm:uturn",
     "tm:venoshock",
-    "tm:xscissor",
-    "tutor:aquatail",
-    "tutor:bugbite",
-    "tutor:darkpulse",
-    "tutor:defog",
-    "tutor:earthpower",
-    "tutor:furycutter",
-    "tutor:headbutt",
-    "tutor:irontail",
-    "tutor:knockoff",
-    "tutor:mudslap",
-    "tutor:roost",
-    "tutor:skyattack",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:swift",
-    "tutor:tailwind",
-    "tutor:throatchop"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.gliscor.desc"
+    "tm:wingattack",
+    "tm:xscissor"
   ],
   "preEvolution": "gligar",
-  "evolutions": [],
-  "baseScale": 0.9,
-  "hitbox": {
-    "width": 0.9,
-    "height": 1.5,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 2,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 20,
-  "weight": 425,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

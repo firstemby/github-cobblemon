@@ -1,26 +1,26 @@
 {
-  "name": "Oranguru",
   "nationalPokedexNumber": 765,
+  "name": "Oranguru",
   "primaryType": "normal",
   "secondaryType": "psychic",
+  "maleRatio": 0.5,
+  "height": 15,
+  "weight": 760,
+  "pokedex": [
+    "cobblemon.species.oranguru.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
     "innerfocus",
     "telepathy",
     "h:symbiosis"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "cobblemon:wise_glasses",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:nanab_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field"
+  ],
   "baseStats": {
     "hp": 90,
     "attack": 60,
@@ -29,23 +29,47 @@
     "special_defence": 110,
     "speed": 60
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 2,
+    "speed": 0
+  },
   "baseExperienceYield": 172,
   "experienceGroup": "slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "cobblemon:wise_glasses",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:nanab_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
     "1:confusion",
     "1:taunt",
+    "1:feintattack",
     "5:afteryou",
     "10:calmmind",
     "15:storedpower",
     "20:psychup",
-    "22:feintattack",
     "25:quash",
     "30:nastyplot",
     "35:zenheadbutt",
@@ -57,11 +81,10 @@
     "egg:dreameater",
     "egg:extrasensory",
     "egg:lastresort",
-    "egg:psychicterrain",
-    "egg:wonderroom",
     "egg:yawn",
+    "tm:afteryou",
     "tm:allyswitch",
-    "tm:attract",
+    "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:brutalswing",
@@ -69,8 +92,8 @@
     "tm:calmmind",
     "tm:chargebeam",
     "tm:chillingwater",
-    "tm:confide",
-    "tm:doubleteam",
+    "tm:confusion",
+    "tm:covet",
     "tm:dreameater",
     "tm:earthquake",
     "tm:embargo",
@@ -79,20 +102,23 @@
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
+    "tm:extrasensory",
     "tm:facade",
+    "tm:feintattack",
     "tm:fling",
     "tm:focusblast",
     "tm:foulplay",
-    "tm:frustration",
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:gravity",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:imprison",
+    "tm:instruct",
     "tm:knockoff",
+    "tm:lastresort",
     "tm:lightscreen",
+    "tm:magiccoat",
     "tm:magicroom",
     "tm:megakick",
     "tm:megapunch",
@@ -111,80 +137,31 @@
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
     "tm:rockslide",
-    "tm:round",
     "tm:safeguard",
     "tm:scaryface",
     "tm:shadowball",
     "tm:skillswap",
     "tm:sleeptalk",
-    "tm:snore",
+    "tm:snatch",
     "tm:storedpower",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:takedown",
     "tm:taunt",
+    "tm:telekinesis",
     "tm:terablast",
+    "tm:terrainpulse",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:trick",
     "tm:trickroom",
     "tm:wonderroom",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:afteryou",
-    "tutor:allyswitch",
-    "tutor:block",
-    "tutor:covet",
-    "tutor:expandingforce",
-    "tutor:foulplay",
-    "tutor:gravity",
-    "tutor:instruct",
-    "tutor:knockoff",
-    "tutor:magiccoat",
-    "tutor:magicroom",
-    "tutor:painsplit",
-    "tutor:psychic",
-    "tutor:psychicterrain",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:telekinesis",
-    "tutor:terrainpulse",
-    "tutor:trick",
-    "tutor:trickroom",
-    "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tm:yawn",
+    "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.oranguru.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 2,
-    "speed": 0
-  },
-  "height": 15,
-  "weight": 760,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

@@ -1,11 +1,26 @@
 {
   "implemented": true,
-  "name": "Popplio",
   "nationalPokedexNumber": 728,
+  "name": "Popplio",
   "primaryType": "water",
+  "maleRatio": 0.875,
+  "height": 4,
+  "weight": 75,
+  "pokedex": [
+    "cobblemon.species.popplio.desc"
+  ],
+  "labels": [
+    "gen7",
+    "starter"
+  ],
+  "aspects": [],
   "abilities": [
     "torrent",
     "h:liquidvoice"
+  ],
+  "eggGroups": [
+    "water_1",
+    "field"
   ],
   "baseStats": {
     "hp": 50,
@@ -15,30 +30,41 @@
     "special_defence": 56,
     "speed": 40
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": true,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 1,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 64,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 15,
-  "eggGroups": [
-    "water_1",
-    "field"
-  ],
+  "baseFriendship": 50,
+  "shoulderMountable": true,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.75,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
         "walkSpeed": 0.15
       },
       "swim": {
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "depth": "normal",
       "light": "0-4"
     }
   },
@@ -47,13 +73,13 @@
     "entries": [
       {
         "item": "cobblemon:mystic_water",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
   "moves": [
-    "1:growl",
     "1:pound",
+    "1:growl",
     "3:watergun",
     "6:disarmingvoice",
     "9:aquajet",
@@ -63,88 +89,71 @@
     "21:bubblebeam",
     "24:encore",
     "27:mistyterrain",
-    "29:doubleslap",
     "30:hypervoice",
     "33:moonblast",
     "36:hydropump",
-    "39:captivate",
-    "egg:amnesia",
     "egg:aquaring",
     "egg:aromaticmist",
-    "egg:charm",
+    "egg:captivate",
+    "egg:doubleslap",
     "egg:lifedew",
     "egg:perishsong",
-    "egg:wonderroom",
     "tm:acrobatics",
     "tm:amnesia",
-    "tm:attract",
+    "tm:aquajet",
+    "tm:aquaring",
+    "tm:aquatail",
+    "tm:aromaticmist",
+    "tm:babydolleyes",
     "tm:blizzard",
     "tm:brine",
+    "tm:bubblebeam",
+    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
-    "tm:confide",
+    "tm:covet",
     "tm:disarmingvoice",
     "tm:dive",
-    "tm:doubleteam",
+    "tm:doubleslap",
     "tm:drainingkiss",
     "tm:echoedvoice",
     "tm:encore",
     "tm:endure",
     "tm:facade",
     "tm:flipturn",
-    "tm:frustration",
+    "tm:growl",
     "tm:hail",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hydropump",
     "tm:hypervoice",
     "tm:icebeam",
     "tm:icespinner",
     "tm:icywind",
     "tm:irontail",
+    "tm:lifedew",
     "tm:mistyterrain",
+    "tm:moonblast",
+    "tm:perishsong",
     "tm:playrough",
+    "tm:pound",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
-    "tm:round",
-    "tm:scald",
+    "tm:sing",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:substitute",
     "tm:surf",
-    "tm:swagger",
     "tm:swift",
     "tm:terablast",
-    "tm:toxic",
     "tm:tripleaxel",
     "tm:uproar",
     "tm:waterfall",
+    "tm:watergun",
     "tm:waterpledge",
     "tm:waterpulse",
     "tm:whirlpool",
     "tm:wonderroom",
-    "tm:workup",
-    "tutor:aquatail",
-    "tutor:covet",
-    "tutor:flipturn",
-    "tutor:helpinghand",
-    "tutor:hypervoice",
-    "tutor:icywind",
-    "tutor:irontail",
-    "tutor:snore",
-    "tutor:tripleaxel",
-    "tutor:uproar",
-    "tutor:waterpledge",
-    "tutor:waterpulse",
-    "tutor:wonderroom"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.popplio.desc"
+    "tm:workup"
   ],
   "evolutions": [
     {
@@ -160,24 +169,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.9,
-    "height": 0.75,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 1,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 4,
-  "weight": 75,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

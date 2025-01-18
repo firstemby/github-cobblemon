@@ -1,21 +1,27 @@
 {
   "implemented": true,
-  "name": "Golisopod",
   "nationalPokedexNumber": 768,
+  "name": "Golisopod",
   "primaryType": "bug",
   "secondaryType": "water",
-  "abilities": [
-    "emergencyexit"
+  "maleRatio": 0.5,
+  "height": 20,
+  "weight": 1080,
+  "pokedex": [
+    "cobblemon.species.golisopod.desc"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:bluk_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
+  "abilities": [
+    "emergencyexit",
+    "h:emergencyexit"
+  ],
+  "eggGroups": [
+    "bug",
+    "water_3"
+  ],
   "baseStats": {
     "hp": 75,
     "attack": 125,
@@ -24,36 +30,54 @@
     "special_defence": 90,
     "speed": 40
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 2,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 186,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "bug",
-    "water_3"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.9,
+  "hitbox": {
+    "width": 1.5,
+    "height": 2.9,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
       "swim": {
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       }
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:bluk_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:defensecurl",
     "1:firstimpression",
+    "1:strugglebug",
     "1:sandattack",
     "1:spite",
-    "1:strugglebug",
+    "1:defensecurl",
     "4:rocksmash",
     "8:furycutter",
     "12:mudshot",
@@ -65,38 +89,50 @@
     "36:pinmissile",
     "40:swordsdance",
     "44:liquidation",
+    "egg:aquajet",
+    "egg:harden",
+    "egg:metalclaw",
+    "egg:rollout",
+    "egg:wideguard",
     "tm:aerialace",
+    "tm:aquajet",
     "tm:assurance",
-    "tm:attract",
     "tm:blizzard",
     "tm:brickbreak",
+    "tm:bugbite",
     "tm:bugbuzz",
     "tm:bulkup",
     "tm:closecombat",
-    "tm:confide",
     "tm:darkpulse",
+    "tm:defensecurl",
     "tm:dive",
-    "tm:doubleteam",
     "tm:drillrun",
+    "tm:dualchop",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:firstimpression",
     "tm:fling",
     "tm:focusblast",
     "tm:frostbreath",
-    "tm:frustration",
+    "tm:furycutter",
     "tm:gigaimpact",
     "tm:hail",
-    "tm:hiddenpower",
+    "tm:harden",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icywind",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:knockoff",
+    "tm:laserfocus",
     "tm:leechlife",
     "tm:liquidation",
+    "tm:metalclaw",
     "tm:muddywater",
     "tm:mudshot",
+    "tm:painsplit",
     "tm:payback",
     "tm:pinmissile",
     "tm:poisonjab",
@@ -105,72 +141,37 @@
     "tm:raindance",
     "tm:razorshell",
     "tm:rest",
-    "tm:return",
     "tm:rockslide",
+    "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
+    "tm:rollout",
+    "tm:sandattack",
     "tm:scald",
     "tm:screech",
     "tm:shadowclaw",
+    "tm:skittersmack",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:sludgewave",
     "tm:snarl",
-    "tm:snore",
     "tm:spikes",
+    "tm:spite",
+    "tm:strugglebug",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:surf",
-    "tm:swagger",
     "tm:swift",
     "tm:swordsdance",
     "tm:taunt",
+    "tm:terablast",
     "tm:throatchop",
-    "tm:toxic",
     "tm:venoshock",
     "tm:waterfall",
-    "tm:xscissor",
-    "tutor:bugbite",
-    "tutor:drillrun",
-    "tutor:dualchop",
-    "tutor:endeavor",
-    "tutor:icywind",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:knockoff",
-    "tutor:laserfocus",
-    "tutor:liquidation",
-    "tutor:painsplit",
-    "tutor:skittersmack",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:throatchop",
-    "tutor:waterpulse"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.golisopod.desc"
+    "tm:waterpulse",
+    "tm:wideguard",
+    "tm:xscissor"
   ],
   "preEvolution": "wimpod",
-  "evolutions": [],
-  "baseScale": 0.9,
-  "hitbox": {
-    "width": 1.5,
-    "height": 2.9,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 2,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 20,
-  "weight": 1080,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

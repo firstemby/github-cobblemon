@@ -1,10 +1,25 @@
 {
-  "name": "Great Tusk",
   "nationalPokedexNumber": 984,
+  "name": "Great Tusk",
   "primaryType": "ground",
   "secondaryType": "fighting",
+  "maleRatio": -1,
+  "height": 22,
+  "weight": 3200,
+  "pokedex": [
+    "cobblemon.species.greattusk.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 115,
@@ -14,10 +29,6 @@
     "special_defence": 53,
     "speed": 87
   },
-  "catchRate": 30,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -26,14 +37,15 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 30,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "behaviour": {},
   "moves": [
-    "1:defensecurl",
     "1:hornattack",
+    "1:defensecurl",
     "1:rollout",
     "1:sunnyday",
     "7:bulldoze",
@@ -55,6 +67,7 @@
     "tm:bulkup",
     "tm:bulldoze",
     "tm:closecombat",
+    "tm:defensecurl",
     "tm:dig",
     "tm:doubleedge",
     "tm:earthpower",
@@ -65,23 +78,29 @@
     "tm:firefang",
     "tm:flashcannon",
     "tm:gigaimpact",
+    "tm:headlongrush",
+    "tm:headsmash",
     "tm:heavyslam",
     "tm:highhorsepower",
+    "tm:hornattack",
     "tm:hyperbeam",
     "tm:icefang",
     "tm:icespinner",
     "tm:ironhead",
     "tm:knockoff",
+    "tm:megahorn",
     "tm:mudshot",
     "tm:mudslap",
     "tm:playrough",
     "tm:protect",
     "tm:psyshock",
+    "tm:rapidspin",
     "tm:rest",
     "tm:reversal",
     "tm:roar",
     "tm:rockslide",
     "tm:rocktomb",
+    "tm:rollout",
     "tm:sandstorm",
     "tm:scaryface",
     "tm:sleeptalk",
@@ -101,16 +120,5 @@
     "tm:thunderfang",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 22,
-  "weight": 3200,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.greattusk.desc"
-  ]
+  "evolutions": []
 }

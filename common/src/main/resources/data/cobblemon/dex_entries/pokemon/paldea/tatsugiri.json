@@ -9,6 +9,18 @@
       "unlockForms": [
         "Normal"
       ]
+    },
+    {
+      "displayForm": "Droopy",
+      "unlockForms": [
+        "Droopy"
+      ]
+    },
+    {
+      "displayForm": "Stretchy",
+      "unlockForms": [
+        "Stretchy"
+      ]
     }
   ],
   "variations": []

@@ -1,21 +1,27 @@
 {
   "implemented": true,
-  "name": "Turtwig",
   "nationalPokedexNumber": 387,
+  "name": "Turtwig",
   "primaryType": "grass",
+  "maleRatio": 0.875,
+  "height": 4,
+  "weight": 102,
+  "pokedex": [
+    "cobblemon.species.turtwig.desc"
+  ],
+  "labels": [
+    "gen4",
+    "starter"
+  ],
+  "aspects": [],
   "abilities": [
     "overgrow",
     "h:shellarmor"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:miracle_seed",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "monster",
+    "grass"
+  ],
   "baseStats": {
     "hp": 55,
     "attack": 68,
@@ -24,11 +30,30 @@
     "special_defence": 55,
     "speed": 31
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 64,
+  "experienceGroup": "medium_slow",
+  "catchRate": 45,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "shoulderMountable": true,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
@@ -37,16 +62,15 @@
       }
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": true,
-  "baseExperienceYield": 64,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "monster",
-    "grass"
-  ],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:miracle_seed",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
     "1:tackle",
     "5:withdraw",
@@ -60,15 +84,8 @@
     "37:crunch",
     "41:gigadrain",
     "45:leafstorm",
-    "egg:amnesia",
-    "egg:bodyslam",
     "egg:doubleedge",
-    "egg:earthpower",
-    "egg:grassyterrain",
     "egg:growth",
-    "egg:heavyslam",
-    "egg:sandtomb",
-    "egg:seedbomb",
     "egg:shellsmash",
     "egg:spitup",
     "egg:stockpile",
@@ -78,89 +95,75 @@
     "egg:tickle",
     "egg:wideguard",
     "egg:worryseed",
+    "tm:absorb",
     "tm:amnesia",
-    "tm:attract",
+    "tm:bite",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:bulletseed",
-    "tm:captivate",
-    "tm:confide",
     "tm:crunch",
     "tm:curse",
     "tm:cut",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:earthpower",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
     "tm:flash",
-    "tm:frustration",
     "tm:gigadrain",
     "tm:grassknot",
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growth",
+    "tm:headbutt",
     "tm:heavyslam",
-    "tm:hiddenpower",
     "tm:ironhead",
     "tm:irontail",
+    "tm:leafage",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lightscreen",
     "tm:magicalleaf",
+    "tm:megadrain",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
+    "tm:razorleaf",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockclimb",
     "tm:rocksmash",
-    "tm:round",
     "tm:safeguard",
     "tm:sandtomb",
-    "tm:secretpower",
     "tm:seedbomb",
+    "tm:shellsmash",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:solarbeam",
+    "tm:spitup",
     "tm:stealthrock",
+    "tm:stockpile",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:superpower",
+    "tm:swallow",
     "tm:swordsdance",
+    "tm:synthesis",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
-    "tm:toxic",
+    "tm:thrash",
+    "tm:tickle",
     "tm:trailblaze",
+    "tm:wideguard",
+    "tm:withdraw",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:absorb",
-    "tutor:earthpower",
-    "tutor:gigadrain",
-    "tutor:grasspledge",
-    "tutor:headbutt",
-    "tutor:irontail",
-    "tutor:mudslap",
-    "tutor:seedbomb",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:stockpile",
-    "tutor:superpower",
-    "tutor:synthesis",
-    "tutor:withdraw",
-    "tutor:worryseed"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.turtwig.desc"
+    "tm:worryseed",
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -176,24 +179,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.7,
-  "hitbox": {
-    "width": 0.75,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 4,
-  "weight": 102,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

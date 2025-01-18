@@ -1,11 +1,24 @@
 {
-  "name": "Espurr",
   "nationalPokedexNumber": 677,
+  "name": "Espurr",
   "primaryType": "psychic",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 35,
+  "pokedex": [
+    "cobblemon.species.espurr.desc"
+  ],
+  "labels": [
+    "gen6"
+  ],
+  "aspects": [],
   "abilities": [
     "keeneye",
     "infiltrator",
     "h:owntempo"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 62,
@@ -15,18 +28,38 @@
     "special_defence": 60,
     "speed": 68
   },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 1
+  },
   "baseExperienceYield": 71,
   "experienceGroup": "medium_fast",
+  "catchRate": 190,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:colbur_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:leer",
     "1:scratch",
+    "1:leer",
     "3:fakeout",
     "6:disarmingvoice",
     "9:confusion",
@@ -38,32 +71,34 @@
     "egg:assist",
     "egg:barrier",
     "egg:tickle",
-    "egg:trick",
     "egg:yawn",
     "tm:allyswitch",
-    "tm:attract",
+    "tm:assist",
+    "tm:barrier",
     "tm:calmmind",
     "tm:chargebeam",
     "tm:charm",
-    "tm:confide",
+    "tm:confusion",
+    "tm:covet",
     "tm:cut",
     "tm:darkpulse",
     "tm:disarmingvoice",
-    "tm:doubleteam",
     "tm:dreameater",
     "tm:echoedvoice",
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
     "tm:facade",
+    "tm:fakeout",
     "tm:faketears",
     "tm:flash",
-    "tm:frustration",
     "tm:gravity",
+    "tm:healbell",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:irontail",
+    "tm:leer",
     "tm:lightscreen",
+    "tm:magiccoat",
     "tm:magicroom",
     "tm:nastyplot",
     "tm:payback",
@@ -76,111 +111,68 @@
     "tm:psychup",
     "tm:psyshock",
     "tm:raindance",
+    "tm:recycle",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
-    "tm:round",
+    "tm:roleplay",
     "tm:safeguard",
-    "tm:secretpower",
+    "tm:scratch",
     "tm:shadowball",
+    "tm:shockwave",
+    "tm:signalbeam",
     "tm:skillswap",
     "tm:sleeptalk",
-    "tm:snore",
+    "tm:snatch",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
+    "tm:telekinesis",
     "tm:terablast",
     "tm:thunderbolt",
     "tm:thunderwave",
+    "tm:tickle",
     "tm:torment",
-    "tm:toxic",
     "tm:trick",
     "tm:trickroom",
     "tm:wonderroom",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:allyswitch",
-    "tutor:covet",
-    "tutor:expandingforce",
-    "tutor:gravity",
-    "tutor:healbell",
-    "tutor:helpinghand",
-    "tutor:irontail",
-    "tutor:magiccoat",
-    "tutor:magicroom",
-    "tutor:recycle",
-    "tutor:roleplay",
-    "tutor:shockwave",
-    "tutor:signalbeam",
-    "tutor:skillswap",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:telekinesis",
-    "tutor:trick",
-    "tutor:wonderroom",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.espurr.desc"
+    "tm:yawn",
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
       "id": "espurr_meowstic",
       "variant": "level_up",
-      "result": "meowstic",
+      "result": "meowstic male",
       "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "level",
           "minLevel": 25
+        },
+        {
+          "variant": "properties",
+          "target": "gender=male"
         }
       ]
     },
     {
-      "id": "espurr_meowstic",
+      "id": "espurr_meowsticf",
       "variant": "level_up",
-      "result": "meowstic f",
+      "result": "meowstic female",
       "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "level",
           "minLevel": 25
+        },
+        {
+          "variant": "properties",
+          "target": "gender=female"
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 1
-  },
-  "height": 3,
-  "weight": 35,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:colbur_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

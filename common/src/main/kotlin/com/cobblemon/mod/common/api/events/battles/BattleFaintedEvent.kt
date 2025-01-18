@@ -8,9 +8,16 @@
 
 package com.cobblemon.mod.common.api.events.battles
 
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.util.asArrayValue
+import java.util.function.Function
 
 /**
  * Event fired when a [BattlePokemon] faints. Exposes the [BattlePokemon] that fainted and the [BattleContext]
@@ -23,4 +30,20 @@ data class BattleFaintedEvent(
     override val battle: PokemonBattle,
     val killed: BattlePokemon,
     val context: BattleContext
-) : BattleEvent
+) : BattleEvent {
+    val structContext = mutableMapOf<String, MoValue>(
+        "battle" to battle.struct,
+        "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },
+        "npcs" to battle.actors.filter { it.type == ActorType.NPC }.asArrayValue { it.struct },
+        "wild_pokemon" to battle.actors.filter { it.type == ActorType.WILD }.asArrayValue { it.struct },
+        "pokemon" to killed.struct,
+        "context" to QueryStruct(
+            hashMapOf(
+                "type" to Function { StringValue(context.type.name) },
+                "origin" to Function { context.origin?.struct ?: DoubleValue(0.0) },
+                "id" to Function { StringValue(context.id) },
+                "turn_created" to Function { DoubleValue(context.turn.toDouble()) },
+            )
+        )
+    )
+}

@@ -1,31 +1,27 @@
 {
   "implemented": true,
-  "name": "Drifblim",
   "nationalPokedexNumber": 426,
+  "name": "Drifblim",
   "primaryType": "ghost",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 12,
+  "weight": 150,
+  "pokedex": [
+    "cobblemon.species.drifblim.desc"
+  ],
+  "labels": [
+    "gen4"
+  ],
+  "aspects": [],
   "abilities": [
     "aftermath",
     "unburden",
     "h:flareboost"
   ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:kasib_berry",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:air_balloon",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "amorphous"
+  ],
   "baseStats": {
     "hp": 150,
     "attack": 80,
@@ -34,15 +30,25 @@
     "special_defence": 54,
     "speed": 80
   },
-  "catchRate": 60,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 2,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 174,
   "experienceGroup": "fluctuating",
+  "catchRate": 60,
   "eggCycles": 30,
-  "eggGroups": [
-    "amorphous"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.6,
+    "height": 3.25,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "fly": {
@@ -51,76 +57,70 @@
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:kasib_berry",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:air_balloon",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
     "1:constrict",
-    "1:focusenergy",
-    "1:gust",
     "1:minimize",
+    "1:astonish",
+    "1:gust",
+    "1:focusenergy",
     "1:phantomforce",
     "1:strengthsap",
     "12:payback",
-    "13:focusenergy",
-    "14:focusenergy",
     "16:hex",
-    "16:payback",
-    "17:payback",
-    "20:ominouswind",
     "20:shadowball",
-    "22:hex",
-    "22:stockpile",
-    "24:spitup",
     "24:stockpile",
     "24:swallow",
-    "25:stockpile",
-    "27:hex",
-    "27:spitup",
-    "27:stockpile",
-    "27:swallow",
+    "24:spitup",
     "31:selfdestruct",
-    "32:ominouswind",
-    "32:spitup",
-    "32:swallow",
-    "34:spitup",
-    "34:swallow",
     "36:destinybond",
-    "37:batonpass",
-    "37:ominouswind",
-    "40:shadowball",
     "42:batonpass",
-    "44:batonpass",
-    "44:shadowball",
-    "46:amnesia",
     "48:tailwind",
-    "51:explosion",
-    "51:shadowball",
-    "52:batonpass",
     "54:explosion",
-    "56:explosion",
-    "60:explosion",
+    "egg:clearsmog",
+    "egg:defog",
+    "egg:disable",
+    "egg:haze",
+    "egg:hypnosis",
+    "egg:memento",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:aircutter",
     "tm:airslash",
     "tm:allyswitch",
     "tm:amnesia",
-    "tm:attract",
+    "tm:astonish",
     "tm:batonpass",
+    "tm:bind",
     "tm:bodyslam",
     "tm:brutalswing",
     "tm:calmmind",
-    "tm:captivate",
-    "tm:chargebeam",
-    "tm:confide",
+    "tm:clearsmog",
+    "tm:constrict",
     "tm:curse",
     "tm:cut",
     "tm:defog",
-    "tm:doubleteam",
+    "tm:destinybond",
+    "tm:disable",
     "tm:dreameater",
     "tm:embargo",
     "tm:endure",
@@ -130,44 +130,48 @@
     "tm:fling",
     "tm:fly",
     "tm:focusenergy",
-    "tm:frustration",
     "tm:gigaimpact",
+    "tm:gust",
     "tm:gyroball",
     "tm:haze",
     "tm:helpinghand",
     "tm:hex",
-    "tm:hiddenpower",
     "tm:hyperbeam",
+    "tm:hypnosis",
     "tm:icywind",
     "tm:imprison",
     "tm:knockoff",
-    "tm:naturalgift",
+    "tm:magiccoat",
+    "tm:memento",
+    "tm:minimize",
     "tm:nightshade",
+    "tm:ominouswind",
     "tm:painsplit",
     "tm:payback",
     "tm:phantomforce",
+    "tm:powershift",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
-    "tm:psychup",
     "tm:raindance",
     "tm:recycle",
     "tm:rest",
-    "tm:return",
-    "tm:round",
-    "tm:secretpower",
+    "tm:rollout",
     "tm:selfdestruct",
     "tm:shadowball",
     "tm:shockwave",
     "tm:silverwind",
     "tm:skillswap",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:spite",
+    "tm:spitup",
+    "tm:stockpile",
     "tm:storedpower",
+    "tm:strengthsap",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:swallow",
     "tm:swift",
     "tm:tailwind",
     "tm:telekinesis",
@@ -177,59 +181,11 @@
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:trick",
     "tm:trickroom",
     "tm:weatherball",
-    "tm:willowisp",
-    "tutor:aircutter",
-    "tutor:allyswitch",
-    "tutor:bind",
-    "tutor:defog",
-    "tutor:icywind",
-    "tutor:knockoff",
-    "tutor:magiccoat",
-    "tutor:mudslap",
-    "tutor:ominouswind",
-    "tutor:painsplit",
-    "tutor:recycle",
-    "tutor:rollout",
-    "tutor:shockwave",
-    "tutor:skillswap",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:suckerpunch",
-    "tutor:swift",
-    "tutor:tailwind",
-    "tutor:telekinesis",
-    "tutor:trick"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.drifblim.desc"
+    "tm:willowisp"
   ],
   "preEvolution": "drifloon",
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1.6,
-    "height": 3.25,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 2,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 12,
-  "weight": 150,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

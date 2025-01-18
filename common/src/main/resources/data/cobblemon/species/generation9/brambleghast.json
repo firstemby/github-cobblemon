@@ -1,11 +1,24 @@
 {
-  "name": "Brambleghast",
   "nationalPokedexNumber": 947,
+  "name": "Brambleghast",
   "primaryType": "grass",
   "secondaryType": "ghost",
+  "maleRatio": 0.5,
+  "height": 12,
+  "weight": 60,
+  "pokedex": [
+    "cobblemon.species.brambleghast.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "windrider",
     "h:infiltrator"
+  ],
+  "eggGroups": [
+    "grass"
   ],
   "baseStats": {
     "hp": 55,
@@ -15,10 +28,6 @@
     "special_defence": 70,
     "speed": 90
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 168,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 2,
@@ -27,15 +36,33 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 168,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 5,
+    "entries": [
+      {
+        "item": "minecraft:dead_bush",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "minecraft:stick",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:kasib_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
     "1:defensecurl",
     "1:rollout",
+    "1:astonish",
     "5:absorb",
     "9:rapidspin",
     "13:bulletseed",
@@ -48,9 +75,20 @@
     "45:curse",
     "50:painsplit",
     "55:powerwhip",
+    "egg:beatup",
+    "egg:block",
+    "egg:leechseed",
+    "egg:shadowsneak",
+    "egg:strengthsap",
+    "tm:absorb",
+    "tm:astonish",
+    "tm:beatup",
+    "tm:block",
     "tm:bulletseed",
     "tm:confuseray",
     "tm:curse",
+    "tm:defensecurl",
+    "tm:disable",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
@@ -61,50 +99,35 @@
     "tm:grassyterrain",
     "tm:hex",
     "tm:hyperbeam",
+    "tm:infestation",
     "tm:leafstorm",
+    "tm:leechseed",
+    "tm:megadrain",
     "tm:nightshade",
     "tm:painsplit",
     "tm:phantomforce",
     "tm:poltergeist",
     "tm:pounce",
+    "tm:powerwhip",
     "tm:protect",
+    "tm:rapidspin",
     "tm:rest",
+    "tm:rollout",
     "tm:scaryface",
     "tm:seedbomb",
     "tm:shadowball",
+    "tm:shadowsneak",
     "tm:skittersmack",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:spikes",
     "tm:spite",
+    "tm:strengthsap",
     "tm:substitute",
     "tm:terablast",
     "tm:thief",
     "tm:trailblaze"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 12,
-  "weight": 60,
   "preEvolution": "bramblin",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.brambleghast.desc"
-  ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:stick",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "cobblemon:kasib_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

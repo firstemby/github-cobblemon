@@ -7176,6 +7176,9 @@
   "pokemon.armarouge.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/armarouge/armarouge_cry", "volume": 0.8 } ]
   },
+  "pokemon.armarouge.battle_cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/armarouge/armarouge_battle_cry", "volume": 0.8 } ]
+  },
   "pokemon.ceruledge.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/ceruledge/ceruledge_cry", "volume": 0.8 } ]
   },

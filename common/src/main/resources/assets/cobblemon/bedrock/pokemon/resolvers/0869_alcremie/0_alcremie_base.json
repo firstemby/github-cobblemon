@@ -7,20 +7,6 @@
       "poser": "cobblemon:alcremie",
       "model": "cobblemon:alcremie.geo",
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_vanilla.png",
-      "layers": []
-    },
-    {
-      "aspects": ["decoration-berry"],
-      "layers": [
-        {
-          "name": "decoration",
-          "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_berry_decoration.png",
-          "emissive": false
-        }
-      ]
-    },
-    {
-      "aspects": ["decoration-strawberry"],
       "layers": [
         {
           "name": "decoration",
@@ -30,7 +16,33 @@
       ]
     },
     {
-      "aspects": ["decoration-clover"],
+      "aspects": [
+        "decoration-strawberry"
+      ],
+      "layers": [
+        {
+          "name": "decoration",
+          "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_strawberry_decoration.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "decoration-berry"
+      ],
+      "layers": [
+        {
+          "name": "decoration",
+          "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_berry_decoration.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "decoration-clover"
+      ],
       "layers": [
         {
           "name": "decoration",
@@ -40,7 +52,9 @@
       ]
     },
     {
-      "aspects": ["decoration-flower"],
+      "aspects": [
+        "decoration-flower"
+      ],
       "layers": [
         {
           "name": "decoration",
@@ -50,7 +64,9 @@
       ]
     },
     {
-      "aspects": ["decoration-love"],
+      "aspects": [
+        "decoration-love"
+      ],
       "layers": [
         {
           "name": "decoration",
@@ -60,7 +76,9 @@
       ]
     },
     {
-      "aspects": ["decoration-ribbon"],
+      "aspects": [
+        "decoration-ribbon"
+      ],
       "layers": [
         {
           "name": "decoration",
@@ -70,7 +88,9 @@
       ]
     },
     {
-      "aspects": ["decoration-star"],
+      "aspects": [
+        "decoration-star"
+      ],
       "layers": [
         {
           "name": "decoration",
@@ -80,43 +100,63 @@
       ]
     },
     {
-      "aspects": ["cream-vanilla"],
+      "aspects": [
+        "cream-vanilla"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_vanilla.png"
     },
     {
-      "aspects": ["cream-caramel_swirl"],
+      "aspects": [
+        "cream-caramel_swirl"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_caramel.png"
     },
     {
-      "aspects": ["cream-ruby"],
+      "aspects": [
+        "cream-ruby"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_ruby.png"
     },
     {
-      "aspects": ["cream-matcha"],
+      "aspects": [
+        "cream-matcha"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_matcha.png"
     },
     {
-      "aspects": ["cream-mint"],
+      "aspects": [
+        "cream-mint"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_mint.png"
     },
     {
-      "aspects": ["cream-lemon"],
+      "aspects": [
+        "cream-lemon"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_lemon.png"
     },
     {
-      "aspects": ["cream-salted"],
+      "aspects": [
+        "cream-salted"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_salted.png"
     },
     {
-      "aspects": ["cream-ruby_swirl"],
+      "aspects": [
+        "cream-ruby_swirl"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_rubyswirl.png"
     },
     {
-      "aspects": ["cream-rainbow_swirl"],
+      "aspects": [
+        "cream-rainbow_swirl"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_rainbowswirl.png"
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0869_alcremie/alcremie_shiny.png"
     }
   ]

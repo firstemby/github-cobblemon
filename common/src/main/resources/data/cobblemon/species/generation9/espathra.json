@@ -1,25 +1,26 @@
 {
   "implemented": true,
-  "name": "Espathra",
   "nationalPokedexNumber": 956,
+  "name": "Espathra",
   "primaryType": "psychic",
+  "maleRatio": 0.5,
+  "height": 19,
+  "weight": 900,
+  "pokedex": [
+    "cobblemon.species.espathra.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "opportunist",
     "frisk",
     "h:speedboost"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:chicken"
-      },
-      {
-        "item": "cobblemon:tanga_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "flying"
+  ],
   "baseStats": {
     "hp": 95,
     "attack": 60,
@@ -27,6 +28,25 @@
     "special_attack": 101,
     "special_defence": 60,
     "speed": 105
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
+  "baseExperienceYield": 168,
+  "experienceGroup": "medium_slow",
+  "catchRate": 60,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.87,
+  "hitbox": {
+    "width": 1.2,
+    "height": 2.1,
+    "fixed": false
   },
   "behaviour": {
     "moving": {
@@ -36,40 +56,27 @@
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "catchRate": 60,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 168,
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "flying"
-  ],
-  "baseScale": 0.87,
-  "hitbox": {
-    "width": 1.2,
-    "height": 2.1,
-    "fixed": false
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:chicken"
+      },
+      {
+        "item": "cobblemon:tanga_berry",
+        "percentage": 5
+      }
+    ]
   },
   "moves": [
-    "1:drillpeck",
-    "1:featherdance",
+    "1:luminacrash",
     "1:growl",
     "1:peck",
-    "1:luminacrash",
+    "1:drillpeck",
+    "1:featherdance",
     "5:confusion",
     "8:babydolleyes",
     "11:disarmingvoice",
@@ -81,16 +88,23 @@
     "43:dazzlinggleam",
     "49:psychic",
     "54:lastresort",
+    "egg:allyswitch",
+    "egg:hypnosis",
+    "egg:roost",
     "tm:aerialace",
     "tm:agility",
+    "tm:allyswitch",
+    "tm:babydolleyes",
     "tm:batonpass",
     "tm:bodyslam",
     "tm:bravebird",
     "tm:calmmind",
     "tm:confuseray",
+    "tm:confusion",
     "tm:dazzlinggleam",
     "tm:disarmingvoice",
     "tm:doubleedge",
+    "tm:drillpeck",
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
@@ -99,14 +113,20 @@
     "tm:flashcannon",
     "tm:foulplay",
     "tm:gigaimpact",
+    "tm:growl",
     "tm:helpinghand",
     "tm:hex",
     "tm:hyperbeam",
     "tm:hypervoice",
+    "tm:hypnosis",
+    "tm:lastresort",
     "tm:lightscreen",
     "tm:lowkick",
+    "tm:luminacrash",
     "tm:mudslap",
     "tm:nightshade",
+    "tm:peck",
+    "tm:pluck",
     "tm:pounce",
     "tm:protect",
     "tm:psybeam",
@@ -114,9 +134,11 @@
     "tm:psychicterrain",
     "tm:psychup",
     "tm:psyshock",
+    "tm:quickattack",
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
+    "tm:roost",
     "tm:sandstorm",
     "tm:seedbomb",
     "tm:shadowball",
@@ -135,16 +157,6 @@
     "tm:uturn",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 19,
-  "weight": 900,
   "preEvolution": "flittle",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.espathra.desc"
-  ]
+  "evolutions": []
 }

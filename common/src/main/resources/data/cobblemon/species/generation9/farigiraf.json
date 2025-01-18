@@ -1,13 +1,26 @@
 {
   "implemented": true,
-  "name": "Farigiraf",
   "nationalPokedexNumber": 981,
+  "name": "Farigiraf",
   "primaryType": "normal",
   "secondaryType": "psychic",
+  "maleRatio": 0.5,
+  "height": 32,
+  "weight": 1600,
+  "pokedex": [
+    "cobblemon.species.farigiraf.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "cudchew",
     "armortail",
     "h:sapsipper"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 120,
@@ -17,10 +30,6 @@
     "special_defence": 70,
     "speed": 60
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 260,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 3,
     "attack": 0,
@@ -29,17 +38,42 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 260,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1.5,
+  "hitbox": {
+    "width": 1.4,
+    "height": 4.23,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 4,
+    "entries": [
+      {
+        "item": "minecraft:leather",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:razor_fang",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:persim_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
-    "1:growl",
-    "1:guardswap",
-    "1:powerswap",
     "1:tackle",
+    "1:growl",
+    "1:astonish",
+    "1:powerswap",
+    "1:guardswap",
+    "1:odorsleuth",
     "5:confusion",
     "10:assurance",
     "14:stomp",
@@ -51,29 +85,51 @@
     "41:batonpass",
     "46:nastyplot",
     "50:psychic",
+    "egg:allyswitch",
+    "egg:beatup",
+    "egg:doublekick",
+    "egg:foresight",
+    "egg:futuresight",
+    "egg:meanlook",
+    "egg:mirrorcoat",
+    "egg:razorwind",
+    "egg:secretpower",
+    "egg:takedown",
+    "egg:uproar",
+    "egg:wish",
     "tm:agility",
+    "tm:allyswitch",
     "tm:amnesia",
+    "tm:assurance",
+    "tm:astonish",
     "tm:batonpass",
+    "tm:beatup",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:calmmind",
     "tm:chargebeam",
     "tm:confuseray",
+    "tm:confusion",
     "tm:crunch",
     "tm:curse",
     "tm:dazzlinggleam",
     "tm:doubleedge",
+    "tm:doublehit",
+    "tm:doublekick",
     "tm:earthquake",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
     "tm:facade",
+    "tm:foresight",
     "tm:foulplay",
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:gravity",
+    "tm:growl",
+    "tm:guardswap",
     "tm:helpinghand",
     "tm:highhorsepower",
     "tm:hyperbeam",
@@ -82,8 +138,12 @@
     "tm:ironhead",
     "tm:lightscreen",
     "tm:lowkick",
+    "tm:meanlook",
+    "tm:mirrorcoat",
     "tm:nastyplot",
     "tm:nightshade",
+    "tm:odorsleuth",
+    "tm:powerswap",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
@@ -93,17 +153,21 @@
     "tm:psychup",
     "tm:psyshock",
     "tm:raindance",
+    "tm:razorwind",
     "tm:reflect",
     "tm:rest",
     "tm:roar",
+    "tm:secretpower",
     "tm:shadowball",
     "tm:skillswap",
     "tm:sleeptalk",
+    "tm:stomp",
     "tm:stompingtantrum",
     "tm:storedpower",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swift",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
@@ -113,42 +177,11 @@
     "tm:trailblaze",
     "tm:trick",
     "tm:trickroom",
+    "tm:twinbeam",
     "tm:uproar",
+    "tm:wish",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "baseScale": 1.5,
-  "hitbox": {
-    "width": 1.4,
-    "height": 4.23,
-    "fixed": false
-  },
-  "height": 32,
-  "weight": 1600,
   "preEvolution": "girafarig",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.farigiraf.desc"
-  ],
-  "drops": {
-    "amount": 4,
-    "entries": [
-      {
-        "item": "minecraft:leather",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "cobblemon:razor_fang",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:persim_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

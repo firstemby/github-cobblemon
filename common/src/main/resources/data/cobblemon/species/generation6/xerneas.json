@@ -1,10 +1,28 @@
 {
   "implemented": true,
-  "name": "Xerneas",
   "nationalPokedexNumber": 716,
+  "name": "Xerneas",
   "primaryType": "fairy",
+  "maleRatio": -1,
+  "height": 30,
+  "weight": 2150,
+  "pokedex": [
+    "cobblemon.species.xerneas.desc"
+  ],
+  "labels": [
+    "gen6",
+    "legendary",
+    "restricted"
+  ],
+  "aspects": [
+    "neutral-mode"
+  ],
   "abilities": [
-    "fairyaura"
+    "fairyaura",
+    "h:fairyaura"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 126,
@@ -14,60 +32,26 @@
     "special_defence": 98,
     "speed": 99
   },
-  "catchRate": 45,
-  "maleRatio": -1,
-  "shoulderMountable": false,
-  "forms": [
-    {
-      "name": "Neutral",
-      "primaryType": "fairy",
-      "abilities": [
-        "fairyaura"
-      ],
-      "baseStats": {
-        "hp": 126,
-        "attack": 131,
-        "defence": 95,
-        "special_attack": 131,
-        "special_defence": 98,
-        "speed": 99
-      },
-      "catchRate": 45,
-      "maleRatio": -1,
-      "baseExperienceYield": 340,
-      "baseFriendship": 0,
-      "evYield": {
-        "hp": 3,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "experienceGroup": "slow",
-      "eggCycles": 120,
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "labels": [
-        "gen6",
-        "legendary"
-      ],
-      "aspects": [
-        "neutral"
-      ],
-      "height": 30,
-      "weight": 2150,
-      "cannotDynamax": false,
-      "battleOnly": false
-    }
-  ],
+  "evYield": {
+    "hp": 3,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 340,
   "experienceGroup": "slow",
+  "catchRate": 45,
   "eggCycles": 120,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 2,
+    "height": 4,
+    "fixed": false
+  },
+  "behaviour": {},
   "moves": [
     "1:gravity",
     "1:tackle",
@@ -88,31 +72,41 @@
     "75:closecombat",
     "80:outrage",
     "85:gigaimpact",
+    "tm:aromatherapy",
+    "tm:aurorabeam",
+    "tm:block",
     "tm:bodyslam",
     "tm:calmmind",
     "tm:closecombat",
-    "tm:confide",
     "tm:cut",
     "tm:dazzlinggleam",
-    "tm:doubleteam",
+    "tm:defog",
     "tm:drainingkiss",
     "tm:echoedvoice",
+    "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:flash",
     "tm:flashcannon",
     "tm:focusblast",
-    "tm:frustration",
+    "tm:geomancy",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:gravity",
     "tm:hail",
-    "tm:hiddenpower",
+    "tm:healpulse",
+    "tm:hornleech",
     "tm:hyperbeam",
     "tm:hypervoice",
+    "tm:ingrain",
+    "tm:laserfocus",
     "tm:lightscreen",
     "tm:megahorn",
+    "tm:mistyexplosion",
     "tm:mistyterrain",
+    "tm:moonblast",
     "tm:naturepower",
+    "tm:nightslash",
     "tm:outrage",
     "tm:playrough",
     "tm:protect",
@@ -122,72 +116,153 @@
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockslide",
-    "tm:round",
-    "tm:secretpower",
     "tm:sleeptalk",
     "tm:smartstrike",
-    "tm:snore",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
+    "tm:tackle",
+    "tm:takedown",
+    "tm:terablast",
+    "tm:terrainpulse",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:wonderroom",
-    "tm:zenheadbutt",
-    "tutor:aromatherapy",
-    "tutor:block",
-    "tutor:dazzlinggleam",
-    "tutor:defog",
-    "tutor:endeavor",
-    "tutor:focusblast",
-    "tutor:geomancy",
-    "tutor:grassknot",
-    "tutor:gravity",
-    "tutor:hornleech",
-    "tutor:hypervoice",
-    "tutor:ingrain",
-    "tutor:laserfocus",
-    "tutor:megahorn",
-    "tutor:mistyexplosion",
-    "tutor:moonblast",
-    "tutor:nightslash",
-    "tutor:outrage",
-    "tutor:snore",
-    "tutor:terrainpulse",
-    "tutor:wonderroom",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen6",
-    "legendary"
-  ],
-  "pokedex": [
-    "cobblemon.species.xerneas.desc"
+    "tm:zenheadbutt"
   ],
   "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 2,
-    "height": 4,
-    "fixed": false
-  },
-  "baseFriendship": 0,
-  "evYield": {
-    "hp": 3,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 30,
-  "weight": 2150,
-  "aspects": [],
-  "cannotDynamax": false
+  "forms": [
+    {
+      "name": "Active",
+      "primaryType": "fairy",
+      "maleRatio": -1,
+      "height": 30,
+      "weight": 2150,
+      "pokedex": [
+        "cobblemon.species.xerneas-active.desc"
+      ],
+      "labels": [
+        "gen6",
+        "legendary",
+        "restricted"
+      ],
+      "aspects": [
+        "active-mode"
+      ],
+      "abilities": [
+        "fairyaura",
+        "h:fairyaura"
+      ],
+      "eggGroups": [
+        "undiscovered"
+      ],
+      "baseStats": {
+        "hp": 126,
+        "attack": 131,
+        "defence": 95,
+        "special_attack": 131,
+        "special_defence": 98,
+        "speed": 99
+      },
+      "evYield": {
+        "hp": 3,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 0,
+        "speed": 0
+      },
+      "baseExperienceYield": 340,
+      "experienceGroup": "slow",
+      "catchRate": 45,
+      "eggCycles": 120,
+      "baseFriendship": 0,
+      "moves": [
+        "1:gravity",
+        "1:tackle",
+        "5:lightscreen",
+        "10:aurorabeam",
+        "15:naturepower",
+        "20:nightslash",
+        "25:aromatherapy",
+        "30:psychup",
+        "35:hornleech",
+        "40:mistyterrain",
+        "45:ingrain",
+        "50:takedown",
+        "55:geomancy",
+        "60:moonblast",
+        "65:healpulse",
+        "70:megahorn",
+        "75:closecombat",
+        "80:outrage",
+        "85:gigaimpact",
+        "tm:aromatherapy",
+        "tm:aurorabeam",
+        "tm:block",
+        "tm:bodyslam",
+        "tm:calmmind",
+        "tm:closecombat",
+        "tm:cut",
+        "tm:dazzlinggleam",
+        "tm:defog",
+        "tm:drainingkiss",
+        "tm:echoedvoice",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:facade",
+        "tm:flash",
+        "tm:flashcannon",
+        "tm:focusblast",
+        "tm:geomancy",
+        "tm:gigaimpact",
+        "tm:grassknot",
+        "tm:gravity",
+        "tm:hail",
+        "tm:healpulse",
+        "tm:hornleech",
+        "tm:hyperbeam",
+        "tm:hypervoice",
+        "tm:ingrain",
+        "tm:laserfocus",
+        "tm:lightscreen",
+        "tm:megahorn",
+        "tm:mistyexplosion",
+        "tm:mistyterrain",
+        "tm:moonblast",
+        "tm:naturepower",
+        "tm:nightslash",
+        "tm:outrage",
+        "tm:playrough",
+        "tm:protect",
+        "tm:psychic",
+        "tm:psychup",
+        "tm:psyshock",
+        "tm:raindance",
+        "tm:reflect",
+        "tm:rest",
+        "tm:roar",
+        "tm:rockslide",
+        "tm:sleeptalk",
+        "tm:smartstrike",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:swift",
+        "tm:tackle",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:terrainpulse",
+        "tm:thunder",
+        "tm:thunderbolt",
+        "tm:thunderwave",
+        "tm:wonderroom",
+        "tm:zenheadbutt"
+      ],
+      "evolutions": [],
+      "battleOnly": true
+    }
+  ]
 }

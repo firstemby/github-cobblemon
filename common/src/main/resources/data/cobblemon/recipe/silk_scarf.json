@@ -10,7 +10,7 @@
             "item": "minecraft:white_wool"
         },
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         }
     },
     "result": {

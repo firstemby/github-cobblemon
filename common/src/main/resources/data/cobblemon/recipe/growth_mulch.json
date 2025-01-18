@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "minecraft:bone_meal"
+            "tag": "c:fertilizers"
         },
         {
             "item": "cobblemon:mulch_base"

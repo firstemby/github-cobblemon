@@ -1,12 +1,64 @@
 {
   "implemented": true,
-  "name": "Cacnea",
   "nationalPokedexNumber": 331,
+  "name": "Cacnea",
   "primaryType": "grass",
+  "maleRatio": 0.5,
+  "height": 4,
+  "weight": 513,
+  "pokedex": [
+    "cobblemon.species.cacnea.desc"
+  ],
+  "labels": [
+    "gen3"
+  ],
+  "aspects": [],
   "abilities": [
     "sandveil",
     "h:waterabsorb"
   ],
+  "eggGroups": [
+    "grass",
+    "human_like"
+  ],
+  "baseStats": {
+    "hp": 50,
+    "attack": 85,
+    "defence": 40,
+    "special_attack": 85,
+    "special_defence": 40,
+    "speed": 35
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 1,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 67,
+  "experienceGroup": "medium_slow",
+  "catchRate": 190,
+  "eggCycles": 20,
+  "baseFriendship": 35,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 0.65,
+    "height": 0.75,
+    "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      }
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [
@@ -28,48 +80,15 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 50,
-    "attack": 85,
-    "defence": 40,
-    "special_attack": 85,
-    "special_defence": 40,
-    "speed": 35
-  },
-  "catchRate": 190,
-  "maleRatio": 0.7,
-  "shoulderMountable": false,
-  "baseExperienceYield": 67,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "grass",
-    "human_like"
-  ],
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
-      "light": "0-4"
-    },
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.25
-      }
-    }
-  },
   "moves": [
-    "1:leer",
     "1:poisonsting",
+    "1:leer",
     "4:absorb",
     "7:growth",
     "10:leechseed",
     "13:sandattack",
-    "16:bulletseed",
     "16:needlearm",
     "19:feintattack",
-    "19:powertrip",
     "22:ingrain",
     "26:payback",
     "30:spikes",
@@ -87,122 +106,97 @@
     "egg:dynamicpunch",
     "egg:fellstinger",
     "egg:grasswhistle",
-    "egg:lowkick",
-    "egg:magicalleaf",
-    "egg:nastyplot",
-    "egg:poweruppunch",
+    "egg:powertrip",
     "egg:rototiller",
-    "egg:seedbomb",
     "egg:smellingsalts",
     "egg:switcheroo",
     "egg:teeterdance",
-    "egg:worryseed",
-    "tm:attract",
+    "tm:absorb",
+    "tm:acid",
+    "tm:belch",
+    "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
     "tm:bulletseed",
-    "tm:captivate",
-    "tm:confide",
+    "tm:cottonspore",
+    "tm:counter",
     "tm:curse",
     "tm:cut",
     "tm:darkpulse",
+    "tm:destinybond",
     "tm:dig",
-    "tm:doubleteam",
+    "tm:disable",
     "tm:drainpunch",
+    "tm:dynamicpunch",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
+    "tm:feintattack",
+    "tm:fellstinger",
     "tm:flash",
     "tm:fling",
     "tm:focuspunch",
     "tm:foulplay",
-    "tm:frustration",
+    "tm:furycutter",
     "tm:gigadrain",
     "tm:grassknot",
+    "tm:grasswhistle",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growth",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
+    "tm:ingrain",
     "tm:leafstorm",
+    "tm:leechseed",
+    "tm:leer",
     "tm:lowkick",
     "tm:magicalleaf",
+    "tm:megapunch",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:naturepower",
+    "tm:needlearm",
     "tm:payback",
+    "tm:pinmissile",
     "tm:poisonjab",
+    "tm:poisonsting",
+    "tm:powertrip",
     "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
-    "tm:round",
+    "tm:roleplay",
+    "tm:rototiller",
+    "tm:sandattack",
     "tm:sandstorm",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:seedbomb",
     "tm:skittersmack",
     "tm:sleeptalk",
+    "tm:smellingsalts",
     "tm:solarbeam",
     "tm:spikes",
     "tm:spite",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
+    "tm:switcheroo",
     "tm:swordsdance",
+    "tm:synthesis",
     "tm:takedown",
+    "tm:teeterdance",
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
     "tm:thunderpunch",
-    "tm:toxic",
     "tm:toxicspikes",
     "tm:trailblaze",
     "tm:venoshock",
-    "tutor:absorb",
-    "tutor:block",
-    "tutor:bodyslam",
-    "tutor:counter",
-    "tutor:darkpulse",
-    "tutor:doubleedge",
-    "tutor:drainpunch",
-    "tutor:dynamicpunch",
-    "tutor:encore",
-    "tutor:endure",
-    "tutor:focuspunch",
-    "tutor:furycutter",
-    "tutor:gigadrain",
-    "tutor:headbutt",
-    "tutor:leer",
-    "tutor:lowkick",
-    "tutor:megapunch",
-    "tutor:mimic",
-    "tutor:mudslap",
-    "tutor:poisonsting",
-    "tutor:roleplay",
-    "tutor:seedbomb",
-    "tutor:seismictoss",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:substitute",
-    "tutor:suckerpunch",
-    "tutor:swagger",
-    "tutor:swordsdance",
-    "tutor:synthesis",
-    "tutor:teeterdance",
-    "tutor:thunderpunch",
-    "tutor:worryseed"
-  ],
-  "labels": [
-    "gen3"
-  ],
-  "pokedex": [
-    "cobblemon.species.cacnea.desc"
+    "tm:worryseed"
   ],
   "evolutions": [
     {
@@ -220,24 +214,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.7,
-  "hitbox": {
-    "width": 0.65,
-    "height": 0.75,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 1,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 4,
-  "weight": 513,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

@@ -1,13 +1,60 @@
 {
   "implemented": true,
-  "name": "Staravia",
   "nationalPokedexNumber": 397,
+  "name": "Staravia",
   "primaryType": "normal",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 6,
+  "weight": 155,
+  "pokedex": [
+    "cobblemon.species.staravia.desc"
+  ],
+  "labels": [
+    "gen4"
+  ],
+  "aspects": [],
   "abilities": [
     "intimidate",
     "h:reckless"
   ],
+  "eggGroups": [
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 55,
+    "attack": 75,
+    "defence": 50,
+    "special_attack": 40,
+    "special_defence": 40,
+    "speed": 80
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
+  "baseExperienceYield": 119,
+  "experienceGroup": "medium_slow",
+  "catchRate": 120,
+  "eggCycles": 15,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -24,38 +71,14 @@
       },
       {
         "item": "cobblemon:yache_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
-  "baseStats": {
-    "hp": 55,
-    "attack": 75,
-    "defence": 50,
-    "special_attack": 40,
-    "special_defence": 40,
-    "speed": 80
-  },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 119,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 15,
-  "eggGroups": [
-    "flying"
-  ],
-  "behaviour": {
-    "moving": {
-      "fly": {
-        "canFly": true
-      }
-    }
-  },
   "moves": [
+    "1:tackle",
     "1:growl",
     "1:quickattack",
-    "1:tackle",
     "9:wingattack",
     "13:doubleteam",
     "18:endeavor",
@@ -65,16 +88,25 @@
     "38:agility",
     "43:bravebird",
     "48:finalgambit",
+    "egg:astonish",
+    "egg:detect",
+    "egg:doubleedge",
+    "egg:featherdance",
+    "egg:foresight",
+    "egg:furyattack",
+    "egg:mirrormove",
+    "egg:pursuit",
+    "egg:sandattack",
+    "egg:uproar",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
     "tm:aircutter",
     "tm:airslash",
-    "tm:attract",
+    "tm:astonish",
     "tm:bravebird",
-    "tm:captivate",
-    "tm:confide",
     "tm:defog",
+    "tm:detect",
     "tm:doubleedge",
     "tm:doubleteam",
     "tm:dualwingbeat",
@@ -83,57 +115,42 @@
     "tm:endure",
     "tm:facade",
     "tm:featherdance",
+    "tm:finalgambit",
     "tm:fly",
-    "tm:frustration",
+    "tm:foresight",
+    "tm:furyattack",
+    "tm:growl",
     "tm:heatwave",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hurricane",
-    "tm:naturalgift",
+    "tm:mirrormove",
+    "tm:ominouswind",
     "tm:pluck",
     "tm:protect",
+    "tm:pursuit",
+    "tm:quickattack",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
-    "tm:return",
+    "tm:revenge",
     "tm:roost",
-    "tm:round",
-    "tm:secretpower",
+    "tm:sandattack",
     "tm:sleeptalk",
     "tm:steelwing",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
+    "tm:tackle",
     "tm:tailwind",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
-    "tm:toxic",
+    "tm:twister",
     "tm:uproar",
     "tm:uturn",
-    "tm:workup",
-    "tutor:aircutter",
-    "tutor:defog",
-    "tutor:endeavor",
-    "tutor:featherdance",
-    "tutor:heatwave",
-    "tutor:mudslap",
-    "tutor:ominouswind",
-    "tutor:roost",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:swift",
-    "tutor:tailwind",
-    "tutor:twister",
-    "tutor:uproar",
-    "tutor:wingattack"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.staravia.desc"
+    "tm:whirlwind",
+    "tm:wingattack",
+    "tm:workup"
   ],
   "preEvolution": "starly",
   "evolutions": [
@@ -152,24 +169,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "height": 6,
-  "weight": 155,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

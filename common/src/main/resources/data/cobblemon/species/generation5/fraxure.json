@@ -1,25 +1,26 @@
 {
-  "name": "Fraxure",
   "nationalPokedexNumber": 611,
+  "name": "Fraxure",
   "primaryType": "dragon",
+  "maleRatio": 0.5,
+  "height": 10,
+  "weight": 360,
+  "pokedex": [
+    "cobblemon.species.fraxure.desc"
+  ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
   "abilities": [
     "rivalry",
     "moldbreaker",
     "h:unnerve"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "cobblemon:dragon_fang",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:haban_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "monster",
+    "dragon"
+  ],
   "baseStats": {
     "hp": 66,
     "attack": 117,
@@ -28,22 +29,51 @@
     "special_defence": 50,
     "speed": 67
   },
-  "catchRate": 60,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 144,
   "experienceGroup": "slow",
+  "catchRate": 60,
   "eggCycles": 40,
-  "eggGroups": [
-    "monster",
-    "dragon"
-  ],
+  "baseFriendship": 35,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInLava": true
+      }
+    }
+  },
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "cobblemon:dragon_fang",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:haban_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:bite",
+    "1:scratch",
+    "1:leer",
     "1:dragonrage",
     "1:falseswipe",
-    "1:leer",
-    "1:scratch",
+    "1:bite",
     "9:assurance",
     "12:taunt",
     "15:slash",
@@ -52,100 +82,90 @@
     "24:crunch",
     "27:dragondance",
     "30:breakingswipe",
-    "30:dualchop",
     "33:focusenergy",
-    "33:laserfocus",
     "36:dragonpulse",
     "41:swordsdance",
     "46:outrage",
     "51:guillotine",
     "56:gigaimpact",
+    "egg:aquatail",
+    "egg:counter",
+    "egg:endeavor",
+    "egg:firstimpression",
+    "egg:harden",
+    "egg:irontail",
+    "egg:nightslash",
+    "egg:razorwind",
     "tm:aerialace",
+    "tm:aquatail",
     "tm:assurance",
-    "tm:attract",
+    "tm:bite",
     "tm:breakingswipe",
     "tm:brickbreak",
     "tm:bulldoze",
-    "tm:confide",
+    "tm:counter",
     "tm:crunch",
     "tm:cut",
     "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:dracometeor",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
+    "tm:dragonrage",
     "tm:dragontail",
+    "tm:dualchop",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:firstimpression",
     "tm:fling",
     "tm:focusenergy",
-    "tm:frustration",
     "tm:gigaimpact",
-    "tm:hiddenpower",
+    "tm:guillotine",
+    "tm:harden",
     "tm:honeclaws",
     "tm:incinerate",
     "tm:ironhead",
     "tm:irontail",
+    "tm:laserfocus",
+    "tm:leer",
     "tm:lowkick",
+    "tm:nightslash",
     "tm:outrage",
     "tm:payback",
     "tm:poisonjab",
     "tm:protect",
     "tm:raindance",
+    "tm:razorwind",
     "tm:rest",
-    "tm:return",
     "tm:reversal",
     "tm:roar",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
     "tm:scaleshot",
     "tm:scaryface",
-    "tm:secretpower",
+    "tm:scratch",
     "tm:shadowclaw",
+    "tm:shockwave",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
     "tm:stompingtantrum",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
     "tm:surf",
-    "tm:swagger",
     "tm:swift",
     "tm:swordsdance",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
-    "tm:toxic",
     "tm:trailblaze",
-    "tm:xscissor",
-    "tutor:aquatail",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:dualchop",
-    "tutor:endeavor",
-    "tutor:irontail",
-    "tutor:lowkick",
-    "tutor:outrage",
-    "tutor:scaleshot",
-    "tutor:shockwave",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:stompingtantrum",
-    "tutor:superpower"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.fraxure.desc"
+    "tm:xscissor"
   ],
   "preEvolution": "axew",
   "evolutions": [
@@ -162,24 +182,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 10,
-  "weight": 360,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

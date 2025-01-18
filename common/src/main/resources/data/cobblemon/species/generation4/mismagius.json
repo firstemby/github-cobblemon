@@ -1,28 +1,25 @@
 {
   "implemented": true,
-  "name": "Mismagius",
   "nationalPokedexNumber": 429,
+  "name": "Mismagius",
   "primaryType": "ghost",
-  "abilities": [
-    "levitate"
+  "maleRatio": 0.5,
+  "height": 9,
+  "weight": 44,
+  "pokedex": [
+    "cobblemon.species.mismagius.desc"
   ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:spell_tag",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:kasib_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "labels": [
+    "gen4"
+  ],
+  "aspects": [],
+  "abilities": [
+    "levitate",
+    "h:levitate"
+  ],
+  "eggGroups": [
+    "amorphous"
+  ],
   "baseStats": {
     "hp": 60,
     "attack": 60,
@@ -31,38 +28,78 @@
     "special_defence": 105,
     "speed": 105
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 1,
+    "special_defence": 1,
+    "speed": 0
+  },
   "baseExperienceYield": 173,
   "experienceGroup": "fast",
+  "catchRate": 45,
   "eggCycles": 25,
-  "eggGroups": [
-    "amorphous"
-  ],
+  "baseFriendship": 35,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 1,
+    "height": 2.2,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:spell_tag",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:kasib_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
-    "1:growl",
     "1:luckychant",
     "1:magicalleaf",
-    "1:mysticalfire",
-    "1:phantomforce",
-    "1:powergem",
+    "1:growl",
     "1:psywave",
     "1:spite",
-    "tm:aerialace",
-    "tm:attract",
+    "1:astonish",
+    "1:mysticalfire",
+    "1:powergem",
+    "1:phantomforce",
+    "1:meanlook",
+    "1:perishsong",
+    "1:confusion",
+    "egg:curse",
+    "egg:destinybond",
+    "egg:imprison",
+    "egg:mefirst",
+    "egg:memento",
+    "egg:screech",
+    "egg:shadowsneak",
+    "egg:spite",
+    "egg:suckerpunch",
+    "egg:wonderroom",
+    "tm:allyswitch",
+    "tm:astonish",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
-    "tm:confide",
     "tm:confuseray",
+    "tm:confusion",
     "tm:curse",
     "tm:darkpulse",
     "tm:dazzlinggleam",
-    "tm:doubleteam",
+    "tm:destinybond",
     "tm:drainingkiss",
     "tm:dreameater",
     "tm:echoedvoice",
@@ -73,24 +110,35 @@
     "tm:faketears",
     "tm:flash",
     "tm:foulplay",
-    "tm:frustration",
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:growl",
+    "tm:grudge",
+    "tm:headbutt",
+    "tm:healbell",
     "tm:helpinghand",
     "tm:hex",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icywind",
     "tm:imprison",
+    "tm:laserfocus",
     "tm:lashout",
+    "tm:luckychant",
     "tm:magicalleaf",
+    "tm:magiccoat",
+    "tm:magicroom",
+    "tm:meanlook",
+    "tm:mefirst",
+    "tm:memento",
+    "tm:mysticalfire",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:nightshade",
+    "tm:ominouswind",
     "tm:painsplit",
     "tm:payback",
+    "tm:perishsong",
     "tm:phantomforce",
     "tm:poltergeist",
     "tm:powergem",
@@ -100,13 +148,13 @@
     "tm:psychicnoise",
     "tm:psychup",
     "tm:psyshock",
+    "tm:psywave",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
-    "tm:round",
     "tm:scaryface",
-    "tm:secretpower",
+    "tm:screech",
     "tm:shadowball",
+    "tm:shadowsneak",
     "tm:shockwave",
     "tm:skillswap",
     "tm:sleeptalk",
@@ -115,8 +163,8 @@
     "tm:spite",
     "tm:storedpower",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:taunt",
     "tm:telekinesis",
@@ -126,60 +174,11 @@
     "tm:thunderbolt",
     "tm:thunderwave",
     "tm:torment",
-    "tm:toxic",
     "tm:trick",
     "tm:trickroom",
     "tm:willowisp",
-    "tutor:allyswitch",
-    "tutor:darkpulse",
-    "tutor:foulplay",
-    "tutor:headbutt",
-    "tutor:healbell",
-    "tutor:hypervoice",
-    "tutor:icywind",
-    "tutor:laserfocus",
-    "tutor:magiccoat",
-    "tutor:magicroom",
-    "tutor:ominouswind",
-    "tutor:painsplit",
-    "tutor:shockwave",
-    "tutor:skillswap",
-    "tutor:sleeptalk",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:suckerpunch",
-    "tutor:swift",
-    "tutor:telekinesis",
-    "tutor:trick",
-    "tutor:uproar",
-    "tutor:wonderroom"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.mismagius.desc"
+    "tm:wonderroom"
   ],
   "preEvolution": "misdreavus",
-  "evolutions": [],
-  "baseScale": 0.8,
-  "hitbox": {
-    "width": 1,
-    "height": 2.2,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 1,
-    "special_defence": 1,
-    "speed": 0
-  },
-  "height": 9,
-  "weight": 44,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

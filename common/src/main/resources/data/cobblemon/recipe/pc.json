@@ -10,10 +10,10 @@
             "item": "minecraft:glass"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "S": {
             "item": "minecraft:smooth_stone"

@@ -22,20 +22,33 @@ object CobblemonPokemonLabels {
     const val LEGENDARY = "legendary"
 
     /**
+     * Represents a Pokémon who is typically banned or has restricted usage in competitive sanctions.
+     * For example usage see this [VGC](https://www.pokemon.com/us/pokemon-news/trainers-can-once-again-use-a-restricted-pokemon-in-ranked-battles-series-10-starting-august-1-2021) page.
+     */
+    const val RESTRICTED = "restricted"
+
+    /**
      * Represents a mythical Pokémon.
      * In Cobblemon terms they do not exist since we do not share the concept of timed event only Pokémon but the official ones are still tagged.
      */
     const val MYTHICAL = "mythical"
 
     /**
-     * Represents Pokémon that originate from Ultra Space.
+     * Represents Pokémon that receive a boosted catch rate from the Beast Ball. (Due to Beast Boost)
+     * Does not include [thematically related](https://bulbapedia.bulbagarden.net/wiki/Ultra_Beast#Related_Pok%C3%A9mon) beasts.
      */
     const val ULTRA_BEAST = "ultra_beast"
 
     /**
-     * Represents the pseudo legendary Pokémon.
+     * Represents a Pokémon whose family could be derived from resurrecting a fossil.
      */
-    const val PSEUDO_LEGENDARY = "pseudo_legendary"
+    const val FOSSIL = "fossil"
+
+    /**
+     * Represents the "pseudo-legendary" Pokémon. (Slow-rate three-stage lines with a base stat total of 600)
+     * Term reference on this [Pokémon Center](https://www.pokemoncenter.com/search/powerhouse) page.
+     */
+    const val POWERHOUSE = "powerhouse"
 
     /**
      * Represents a baby Pokémon, this is not just a first stage Pokémon species, it is also unable to breed.
@@ -52,52 +65,55 @@ object CobblemonPokemonLabels {
     /**
      * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
      */
-    const val REGIONAL_OF_KANTO = "kanto_regional"
+    const val KANTONIAN_FORM = "kantonian_form"
+
+    /**
+     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
+     * Source for adjectival form: [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Johto#Trivia)
+     */
+    const val JOHTONIAN_FORM = "johtonian_form"
+
+    /**
+     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
+     * Source for adjectival form:[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Hoenn#Trivia)
+     */
+    const val HOENNIAN_FORM = "hoennian_form"
+
+    /**
+     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
+     * Source for adjectival form:[Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Sinnoh#Trivia)
+     */
+    const val SINNOHAN_FORM = "sinnohan_form"
 
     /**
      * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
      */
-    const val REGIONAL_OF_JOHTO = "johto_regional"
+    const val UNOVAN_FORM = "unovan_form"
 
     /**
      * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
      */
-    const val REGIONAL_OF_HOENN = "hoenn_regional"
-
-    /**
-     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
-     */
-    const val REGIONAL_OF_SINNOH = "sinnoh_regional"
-
-    /**
-     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
-     */
-    const val REGIONAL_OF_UNOVA = "unova_regional"
-
-    /**
-     * See [REGIONAL], this has no official regionals but it consists of the "base" form that comes from the region.
-     */
-    const val REGIONAL_OF_KALOS = "kalos_regional"
+    const val KALOSIAN_FORM = "kalosian_form"
 
     /**
      * See [REGIONAL] and this [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Regional_form#Alolan_Form) page.
      */
-    const val REGIONAL_OF_ALOLA = "alola_regional"
+    const val ALOLAN_FORM = "alolan_form"
 
     /**
      * See [REGIONAL] and this [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Regional_form#Galarian_Form) page.
      */
-    const val REGIONAL_OF_GALAR = "galar_regional"
+    const val GALARIAN_FORM = "galarian_form"
 
     /**
      * See [REGIONAL] and this [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Regional_form#Hisuian_Form) page.
      */
-    const val REGIONAL_OF_HISUI = "hisui_regional"
+    const val HISUIAN_FORM = "hisuian_form"
 
     /**
      * See [REGIONAL] and this [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Regional_form#Paldean_Form) page.
      */
-    const val REGIONAL_OF_PALDEA = "paldea_regional"
+    const val PALDEAN_FORM = "paldean_form"
 
     /**
      * Represents a mega evolution.
@@ -124,7 +140,7 @@ object CobblemonPokemonLabels {
     const val TOTEM = "totem"
 
     /**
-     * Represents a Paradox species.
+     * Represents Pokémon that trigger the Booster Energy item (due to Protosynthesis/Quark Drive)
      * For more information see the [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Paradox_Pok%C3%A9mon) page.
      */
     const val PARADOX = "paradox"
@@ -172,10 +188,22 @@ object CobblemonPokemonLabels {
     const val GENERATION_7 = "gen7"
 
     /**
+     * The "official" designation for Pokémon from Gen 7 (Unknown) and not the Alola region
+     * This may also include forms of Pokémon that had been previously introduced
+     */
+    const val GENERATION_7B = "gen7b"
+
+    /**
      * Pokémon from the national Pokédex of 810 to 905
      * This may also include forms of Pokémon that had been previously introduced
      */
     const val GENERATION_8 = "gen8"
+
+    /**
+     * The "official" designation for Pokémon from Gen 8 (Hisui) and not the Galar region
+     * This may also include forms of Pokémon that had been previously introduced
+     */
+    const val GENERATION_8A = "gen8a"
 
     /**
      * Pokémon from the national Pokédex from 906 to 1008

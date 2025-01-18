@@ -1,11 +1,27 @@
 {
-  "name": "Sinistcha",
   "nationalPokedexNumber": 1013,
+  "name": "Sinistcha",
   "primaryType": "grass",
   "secondaryType": "ghost",
+  "maleRatio": -1,
+  "height": 2,
+  "weight": 22,
+  "pokedex": [
+    "cobblemon.species.sinistcha.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [
+    "unremarkable"
+  ],
   "abilities": [
     "hospitality",
     "h:heatproof"
+  ],
+  "eggGroups": [
+    "mineral",
+    "amorphous"
   ],
   "baseStats": {
     "hp": 71,
@@ -15,10 +31,6 @@
     "special_defence": 80,
     "speed": 70
   },
-  "catchRate": 60,
-  "maleRatio": -1,
-  "baseExperienceYield": 0,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -27,16 +39,26 @@
     "special_defence": 0,
     "speed": 0
   },
-  "experienceGroup": "slow",
-  "eggCycles": 50,
-  "eggGroups": [
-    "mineral",
-    "amorphous"
-  ],
+  "baseExperienceYield": 178,
+  "experienceGroup": "medium_fast",
+  "catchRate": 60,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:rawst_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
+    "1:matchagotcha",
     "1:stunspore",
     "1:withdraw",
+    "1:astonish",
     "6:absorb",
     "12:lifedew",
     "18:foulplay",
@@ -47,6 +69,8 @@
     "48:shadowball",
     "54:memento",
     "60:leafstorm",
+    "tm:absorb",
+    "tm:astonish",
     "tm:calmmind",
     "tm:curse",
     "tm:endure",
@@ -59,7 +83,11 @@
     "tm:imprison",
     "tm:irondefense",
     "tm:leafstorm",
+    "tm:lifedew",
     "tm:magicalleaf",
+    "tm:matchagotcha",
+    "tm:megadrain",
+    "tm:memento",
     "tm:nastyplot",
     "tm:nightshade",
     "tm:painsplit",
@@ -67,6 +95,7 @@
     "tm:poltergeist",
     "tm:protect",
     "tm:psychup",
+    "tm:ragepowder",
     "tm:reflect",
     "tm:rest",
     "tm:scald",
@@ -74,28 +103,40 @@
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:spite",
+    "tm:strengthsap",
+    "tm:stunspore",
     "tm:substitute",
     "tm:terablast",
     "tm:trickroom",
-    "tm:uproar"
+    "tm:uproar",
+    "tm:withdraw"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 2,
-  "weight": 22,
-  "preEvolution": "poltchageist",
+  "preEvolution": "poltchageist matcha_authenticity=counterfeit",
   "evolutions": [],
-  "cannotDynamax": false,
   "forms": [
     {
       "name": "Masterpiece",
       "primaryType": "grass",
       "secondaryType": "ghost",
+      "maleRatio": -1,
+      "height": 2,
+      "weight": 22,
+      "pokedex": [
+        "cobblemon.species.sinistcha-masterpiece.desc"
+      ],
+      "labels": [
+        "gen9"
+      ],
+      "aspects": [
+        "masterpiece"
+      ],
       "abilities": [
         "hospitality",
         "h:heatproof"
+      ],
+      "eggGroups": [
+        "mineral",
+        "amorphous"
       ],
       "baseStats": {
         "hp": 71,
@@ -105,10 +146,6 @@
         "special_defence": 80,
         "speed": 70
       },
-      "catchRate": 60,
-      "maleRatio": -1,
-      "baseExperienceYield": 0,
-      "baseFriendship": 0,
       "evYield": {
         "hp": 0,
         "attack": 0,
@@ -117,15 +154,17 @@
         "special_defence": 0,
         "speed": 0
       },
-      "experienceGroup": "slow",
-      "eggCycles": 50,
-      "eggGroups": [
-        "undiscovered"
-      ],
+      "baseExperienceYield": 178,
+      "experienceGroup": "medium_fast",
+      "catchRate": 60,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "behaviour": {},
       "moves": [
-        "1:astonish",
+        "1:matchagotcha",
         "1:stunspore",
         "1:withdraw",
+        "1:astonish",
         "6:absorb",
         "12:lifedew",
         "18:foulplay",
@@ -136,6 +175,8 @@
         "48:shadowball",
         "54:memento",
         "60:leafstorm",
+        "tm:absorb",
+        "tm:astonish",
         "tm:calmmind",
         "tm:curse",
         "tm:endure",
@@ -148,7 +189,11 @@
         "tm:imprison",
         "tm:irondefense",
         "tm:leafstorm",
+        "tm:lifedew",
         "tm:magicalleaf",
+        "tm:matchagotcha",
+        "tm:megadrain",
+        "tm:memento",
         "tm:nastyplot",
         "tm:nightshade",
         "tm:painsplit",
@@ -156,6 +201,7 @@
         "tm:poltergeist",
         "tm:protect",
         "tm:psychup",
+        "tm:ragepowder",
         "tm:reflect",
         "tm:rest",
         "tm:scald",
@@ -163,34 +209,17 @@
         "tm:sleeptalk",
         "tm:solarbeam",
         "tm:spite",
+        "tm:strengthsap",
+        "tm:stunspore",
         "tm:substitute",
         "tm:terablast",
         "tm:trickroom",
-        "tm:uproar"
+        "tm:uproar",
+        "tm:withdraw"
       ],
-      "labels": [
-        "gen9"
-      ],
-      "aspects": [
-        "masterpiece"
-      ],
-      "height": 2,
-      "weight": 22,
-      "preEvolution": "poltchageist artisan",
-      "cannotDynamax": false,
+      "preEvolution": "poltchageist matcha_authenticity=artisan",
+      "evolutions": [],
       "battleOnly": false
     }
-  ],
-  "pokedex": [
-    "cobblemon.species.sinistcha.desc"
-  ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:rawst_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

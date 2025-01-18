@@ -20,6 +20,13 @@ class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         val pokemon = entity.pokemon
         pokemon.lockedEvolutions.filterIsInstance<TradeEvolution>().forEach { evolution ->
+            // Prevent Pokémon that require a specific trading partner for evolution (e.g., Shelmet and Karrablast)
+            // from evolving via link cable. These Pokémon must either be traded with another player or use an
+            // alternative single-player evolution method.
+            if (!evolution.requiredContext.originalString.isEmpty()) {
+                return@forEach
+            }
+
             // If an evolution is possible non-optional or has been successfully queued we will consume the item and stop
             // validate requirements to respect required held items and such.
             if (evolution.requirements.all { it.check(pokemon) } && evolution.evolve(pokemon)) {

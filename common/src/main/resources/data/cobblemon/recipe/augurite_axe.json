@@ -6,7 +6,7 @@
             "item": "cobblemon:black_augurite"
         },
         "S": {
-            "item": "minecraft:stick"
+            "tag": "c:rods/wooden"
         }
     },
     "pattern": [

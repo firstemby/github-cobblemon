@@ -1,4 +1,8 @@
 {
-  "pokemon": ["alcremie"],
-  "features": ["cream"]
+  "pokemon": [
+    "alcremie"
+  ],
+  "features": [
+    "cream"
+  ]
 }

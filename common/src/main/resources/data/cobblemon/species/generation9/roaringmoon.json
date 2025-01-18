@@ -1,10 +1,25 @@
 {
-  "name": "Roaring Moon",
   "nationalPokedexNumber": 1005,
+  "name": "Roaring Moon",
   "primaryType": "dragon",
   "secondaryType": "dark",
+  "maleRatio": -1,
+  "height": 20,
+  "weight": 3800,
+  "pokedex": [
+    "cobblemon.species.roaringmoon.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 105,
@@ -14,10 +29,6 @@
     "special_defence": 101,
     "speed": 119
   },
-  "catchRate": 10,
-  "maleRatio": -1,
-  "baseExperienceYield": 295,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -26,20 +37,21 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 295,
   "experienceGroup": "slow",
+  "catchRate": 10,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "behaviour": {},
   "moves": [
-    "1:bite",
-    "1:breakingswipe",
     "1:dragonbreath",
-    "1:focusenergy",
-    "1:jawlock",
     "1:leer",
-    "1:scaleshot",
+    "1:bite",
+    "1:focusenergy",
     "1:sunnyday",
+    "1:jawlock",
+    "1:breakingswipe",
+    "1:scaleshot",
     "7:incinerate",
     "14:headbutt",
     "21:scaryface",
@@ -56,6 +68,7 @@
     "tm:acrobatics",
     "tm:aerialace",
     "tm:airslash",
+    "tm:bite",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:breakingswipe",
@@ -65,10 +78,12 @@
     "tm:dig",
     "tm:doubleedge",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
+    "tm:dragonrush",
     "tm:dragontail",
     "tm:earthquake",
     "tm:endure",
@@ -78,21 +93,28 @@
     "tm:firespin",
     "tm:flamethrower",
     "tm:fly",
+    "tm:focusenergy",
     "tm:gigaimpact",
+    "tm:headbutt",
     "tm:heatwave",
     "tm:hurricane",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:hypervoice",
+    "tm:incinerate",
     "tm:ironhead",
+    "tm:jawlock",
     "tm:knockoff",
     "tm:lashout",
+    "tm:leer",
     "tm:metalclaw",
+    "tm:nightslash",
     "tm:outrage",
     "tm:protect",
     "tm:rest",
     "tm:roar",
     "tm:rockslide",
+    "tm:roost",
     "tm:scaleshot",
     "tm:scaryface",
     "tm:shadowclaw",
@@ -112,16 +134,5 @@
     "tm:xscissor",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 20,
-  "weight": 3800,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.roaringmoon.desc"
-  ]
+  "evolutions": []
 }

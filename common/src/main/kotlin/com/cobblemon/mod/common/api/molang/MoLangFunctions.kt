@@ -718,6 +718,11 @@ object MoLangFunctions {
             map.put("form") { StringValue(pokemon.form.name) }
             map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) }
             map.put("matches") { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
+            map.put("apply") { params ->
+                params.getString(0).toProperties().apply(pokemon)
+                DoubleValue.ONE
+            }
+            map.put("owner") { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
             map
         }
     )

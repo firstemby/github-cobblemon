@@ -7,8 +7,18 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Sandy",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Sandy",
+      "unlockForms": [
+        "Sandy"
+      ]
+    },
+    {
+      "displayForm": "Trash",
+      "unlockForms": [
         "Trash"
       ]
     }

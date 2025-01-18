@@ -1,21 +1,26 @@
 {
   "implemented": true,
-  "name": "Fuecoco",
   "nationalPokedexNumber": 909,
+  "name": "Fuecoco",
   "primaryType": "fire",
+  "maleRatio": 0.875,
+  "height": 4,
+  "weight": 98,
+  "pokedex": [
+    "cobblemon.species.fuecoco.desc"
+  ],
+  "labels": [
+    "gen9",
+    "starter"
+  ],
+  "aspects": [],
   "abilities": [
     "blaze",
     "h:unaware"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:charcoal_stick",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field"
+  ],
   "baseStats": {
     "hp": 67,
     "attack": 45,
@@ -24,10 +29,6 @@
     "special_defence": 40,
     "speed": 36
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "baseExperienceYield": 62,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 1,
     "attack": 0,
@@ -36,23 +37,37 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 62,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.8,
+    "height": 1.1,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:charcoal_stick",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:ember",
-    "1:leer",
     "1:tackle",
+    "1:leer",
+    "1:ember",
     "7:round",
     "12:bite",
     "15:incinerate",
@@ -66,11 +81,14 @@
     "egg:curse",
     "egg:encore",
     "egg:slackoff",
+    "tm:belch",
+    "tm:bite",
     "tm:bodyslam",
     "tm:crunch",
     "tm:curse",
     "tm:dig",
     "tm:disarmingvoice",
+    "tm:ember",
     "tm:encore",
     "tm:endure",
     "tm:facade",
@@ -84,31 +102,31 @@
     "tm:heatwave",
     "tm:helpinghand",
     "tm:hypervoice",
+    "tm:incinerate",
+    "tm:leer",
     "tm:mudslap",
     "tm:outrage",
     "tm:overheat",
     "tm:protect",
     "tm:rest",
     "tm:roar",
+    "tm:round",
     "tm:seedbomb",
+    "tm:slackoff",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:sunnyday",
+    "tm:tackle",
     "tm:takedown",
     "tm:temperflare",
     "tm:terablast",
     "tm:thunderfang",
     "tm:willowisp",
+    "tm:yawn",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 4,
-  "weight": 98,
   "evolutions": [
     {
       "id": "fuecoco_crocalor",
@@ -123,15 +141,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.8,
-    "height": 1.1,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.fuecoco.desc"
   ]
 }

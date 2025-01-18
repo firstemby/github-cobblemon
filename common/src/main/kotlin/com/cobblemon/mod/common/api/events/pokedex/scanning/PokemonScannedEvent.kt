@@ -8,9 +8,14 @@
 
 package com.cobblemon.mod.common.api.events.pokedex.scanning
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.LivingEntity
 
 data class PokemonScannedEvent(val player: ServerPlayer, val scannedPokemonEntityData: PokedexEntityData, val scannedEntity: ScannableEntity) {
     val pokedexEntityData: PokedexEntityData
@@ -18,4 +23,15 @@ data class PokemonScannedEvent(val player: ServerPlayer, val scannedPokemonEntit
 
     val isOwned: Boolean
         get() = scannedPokemonEntityData.ownerUUID == player.uuid
+
+    val context = mutableMapOf(
+        "player" to player.asMoLangValue(),
+        "pokemon" to scannedPokemonEntityData.struct,
+        "entity" to {
+            when (scannedEntity) {
+                is LivingEntity -> scannedEntity.asMostSpecificMoLangValue()
+                else -> DoubleValue(0.0)
+            }
+        },
+    )
 }

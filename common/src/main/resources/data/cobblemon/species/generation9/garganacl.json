@@ -1,12 +1,25 @@
 {
   "implemented": true,
-  "name": "Garganacl",
   "nationalPokedexNumber": 934,
+  "name": "Garganacl",
   "primaryType": "rock",
+  "maleRatio": 0.5,
+  "height": 23,
+  "weight": 2400,
+  "pokedex": [
+    "cobblemon.species.garganacl.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "purifyingsalt",
     "sturdy",
     "h:clearbody"
+  ],
+  "eggGroups": [
+    "mineral"
   ],
   "baseStats": {
     "hp": 100,
@@ -16,10 +29,6 @@
     "special_defence": 90,
     "speed": 35
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 250,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -28,21 +37,29 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 250,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "mineral"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.85,
+  "hitbox": {
+    "width": 2,
+    "height": 3,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInWater": false
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
@@ -50,23 +67,22 @@
     "amount": 4,
     "entries": [
       {
-        "item": "minecraft:quartz",
+        "item": "minecraft:calcite",
         "quantityRange": "0-3"
       },
       {
         "item": "cobblemon:passho_berry",
-        "percentage": 10.0
+        "percentage": 10
       }
     ]
   },
   "moves": [
+    "1:hammerarm",
     "1:block",
+    "1:tackle",
+    "1:wideguard",
     "1:harden",
     "1:rockblast",
-    "1:tackle",
-    "1:saltcure",
-    "1:hammerarm",
-    "1:wideguard",
     "5:rockthrow",
     "7:mudshot",
     "10:rocktomb",
@@ -80,7 +96,13 @@
     "49:earthquake",
     "54:stoneedge",
     "60:explosion",
+    "egg:ancientpower",
+    "egg:curse",
+    "egg:fissure",
+    "egg:powergem",
+    "tm:ancientpower",
     "tm:avalanche",
+    "tm:block",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:brickbreak",
@@ -91,14 +113,19 @@
     "tm:earthpower",
     "tm:earthquake",
     "tm:endure",
+    "tm:explosion",
     "tm:facade",
     "tm:firepunch",
+    "tm:fissure",
     "tm:flashcannon",
     "tm:fling",
     "tm:focuspunch",
     "tm:gigaimpact",
     "tm:gravity",
+    "tm:hammerarm",
+    "tm:harden",
     "tm:hardpress",
+    "tm:headbutt",
     "tm:heavyslam",
     "tm:helpinghand",
     "tm:hyperbeam",
@@ -110,10 +137,14 @@
     "tm:powergem",
     "tm:protect",
     "tm:raindance",
+    "tm:recover",
     "tm:rest",
     "tm:rockblast",
+    "tm:rockpolish",
     "tm:rockslide",
+    "tm:rockthrow",
     "tm:rocktomb",
+    "tm:saltcure",
     "tm:sandstorm",
     "tm:sleeptalk",
     "tm:smackdown",
@@ -122,27 +153,13 @@
     "tm:stoneedge",
     "tm:substitute",
     "tm:sunnyday",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunderpunch",
+    "tm:wideguard",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 25,
-  "weight": 2400,
   "preEvolution": "naclstack",
-  "evolutions": [],
-  "baseScale": 0.85,
-  "hitbox": {
-    "width": 2,
-    "height": 3,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.garganacl.desc"
-  ]
+  "evolutions": []
 }

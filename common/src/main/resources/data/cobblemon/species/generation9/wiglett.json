@@ -1,12 +1,25 @@
 {
   "implemented": true,
-  "name": "Wiglett",
   "nationalPokedexNumber": 960,
+  "name": "Wiglett",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 12,
+  "weight": 18,
+  "pokedex": [
+    "cobblemon.species.wiglett.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "gooey",
     "rattled",
     "h:sandveil"
+  ],
+  "eggGroups": [
+    "water_3"
   ],
   "baseStats": {
     "hp": 10,
@@ -16,10 +29,6 @@
     "special_defence": 25,
     "speed": 95
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 49,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -28,11 +37,27 @@
     "special_defence": 0,
     "speed": 1
   },
+  "baseExperienceYield": 49,
   "experienceGroup": "medium_fast",
+  "catchRate": 255,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_3"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.7,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInWater": true,
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
+      }
+    }
+  },
   "moves": [
     "1:sandattack",
     "1:watergun",
@@ -49,6 +74,7 @@
     "egg:finalgambit",
     "egg:memento",
     "tm:agility",
+    "tm:aquajet",
     "tm:blizzard",
     "tm:bulldoze",
     "tm:chillingwater",
@@ -56,49 +82,37 @@
     "tm:earthpower",
     "tm:endure",
     "tm:facade",
+    "tm:finalgambit",
     "tm:foulplay",
+    "tm:headbutt",
     "tm:helpinghand",
     "tm:hydropump",
     "tm:icebeam",
     "tm:liquidation",
+    "tm:memento",
     "tm:muddywater",
     "tm:mudshot",
     "tm:mudslap",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
+    "tm:sandattack",
     "tm:sandstorm",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:stompingtantrum",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:surf",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
     "tm:throatchop",
+    "tm:watergun",
     "tm:waterpulse",
-    "tm:whirlpool"
+    "tm:whirlpool",
+    "tm:wrap"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.9,
-    "height": 0.7,
-    "fixed": false
-  },
-  "aspects": [],
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true
-      }
-    }
-  },
-  "height": 12,
-  "weight": 18,
   "evolutions": [
     {
       "id": "wiglett_wugtrio",
@@ -113,9 +127,5 @@
         }
       ]
     }
-  ],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.wiglett.desc"
   ]
 }

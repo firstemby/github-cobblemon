@@ -10,7 +10,7 @@
             "item": "minecraft:chiseled_sandstone"
         },
         "G": {
-            "item": "minecraft:raw_gold"
+            "tag": "c:raw_materials/gold"
         },
         "S": {
             "item": "minecraft:sandstone"

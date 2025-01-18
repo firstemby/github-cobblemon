@@ -5,13 +5,13 @@
             "item": "cobblemon:vivichoke"
         },
         {
-            "item": "minecraft:milk_bucket"
+            "tag": "c:buckets/milk"
         },
         {
             "item": "minecraft:bowl"
         },
         {
-            "item": "minecraft:bread"
+            "tag": "c:foods/bread"
         }
     ],
     "result": {

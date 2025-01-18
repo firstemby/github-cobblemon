@@ -1,10 +1,24 @@
 {
-  "name": "Grapploct",
   "nationalPokedexNumber": 853,
+  "name": "Grapploct",
   "primaryType": "fighting",
+  "maleRatio": 0.5,
+  "height": 16,
+  "weight": 390,
+  "pokedex": [
+    "cobblemon.species.grapploct.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "limber",
     "h:technician"
+  ],
+  "eggGroups": [
+    "water_1",
+    "human_like"
   ],
   "baseStats": {
     "hp": 80,
@@ -14,87 +28,6 @@
     "special_defence": 80,
     "speed": 42
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 168,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 25,
-  "eggGroups": [
-    "water_1",
-    "human_like"
-  ],
-  "moves": [
-    "1:bind",
-    "1:feint",
-    "1:leer",
-    "1:octazooka",
-    "1:rocksmash",
-    "15:detect",
-    "20:brickbreak",
-    "25:bulkup",
-    "30:submission",
-    "35:taunt",
-    "40:reversal",
-    "45:superpower",
-    "50:topsyturvy",
-    "tm:attract",
-    "tm:bodyslam",
-    "tm:brickbreak",
-    "tm:brine",
-    "tm:brutalswing",
-    "tm:bulkup",
-    "tm:closecombat",
-    "tm:dig",
-    "tm:dive",
-    "tm:drainpunch",
-    "tm:endure",
-    "tm:facade",
-    "tm:focusblast",
-    "tm:gigaimpact",
-    "tm:hydropump",
-    "tm:hyperbeam",
-    "tm:icepunch",
-    "tm:liquidation",
-    "tm:megapunch",
-    "tm:muddywater",
-    "tm:mudshot",
-    "tm:payback",
-    "tm:protect",
-    "tm:rest",
-    "tm:retaliate",
-    "tm:revenge",
-    "tm:reversal",
-    "tm:round",
-    "tm:scaryface",
-    "tm:sleeptalk",
-    "tm:snore",
-    "tm:stompingtantrum",
-    "tm:substitute",
-    "tm:superpower",
-    "tm:surf",
-    "tm:taunt",
-    "tm:waterfall",
-    "tm:whirlpool",
-    "tm:workup",
-    "tutor:coaching",
-    "tutor:skittersmack"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.grapploct.desc"
-  ],
-  "preEvolution": "clobbopus",
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 2,
@@ -103,10 +36,27 @@
     "special_defence": 0,
     "speed": 0
   },
-  "height": 16,
-  "weight": 390,
-  "aspects": [],
-  "cannotDynamax": false,
+  "baseExperienceYield": 168,
+  "experienceGroup": "medium_slow",
+  "catchRate": 45,
+  "eggCycles": 25,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
+      }
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -116,8 +66,86 @@
       },
       {
         "item": "cobblemon:pinap_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
-  }
+  },
+  "moves": [
+    "1:octolock",
+    "1:octazooka",
+    "1:rocksmash",
+    "1:leer",
+    "1:feint",
+    "1:bind",
+    "15:detect",
+    "20:brickbreak",
+    "25:bulkup",
+    "30:submission",
+    "35:taunt",
+    "40:reversal",
+    "45:superpower",
+    "50:topsyturvy",
+    "egg:circlethrow",
+    "egg:painsplit",
+    "egg:poweruppunch",
+    "egg:seismictoss",
+    "egg:soak",
+    "egg:suckerpunch",
+    "tm:bind",
+    "tm:bodyslam",
+    "tm:brickbreak",
+    "tm:brine",
+    "tm:brutalswing",
+    "tm:bulkup",
+    "tm:circlethrow",
+    "tm:closecombat",
+    "tm:coaching",
+    "tm:detect",
+    "tm:dig",
+    "tm:dive",
+    "tm:drainpunch",
+    "tm:endure",
+    "tm:facade",
+    "tm:feint",
+    "tm:focusblast",
+    "tm:gigaimpact",
+    "tm:hydropump",
+    "tm:hyperbeam",
+    "tm:icepunch",
+    "tm:leer",
+    "tm:liquidation",
+    "tm:megapunch",
+    "tm:muddywater",
+    "tm:mudshot",
+    "tm:octazooka",
+    "tm:octolock",
+    "tm:painsplit",
+    "tm:payback",
+    "tm:poweruppunch",
+    "tm:protect",
+    "tm:rest",
+    "tm:retaliate",
+    "tm:revenge",
+    "tm:reversal",
+    "tm:rocksmash",
+    "tm:scaryface",
+    "tm:seismictoss",
+    "tm:skittersmack",
+    "tm:sleeptalk",
+    "tm:soak",
+    "tm:stompingtantrum",
+    "tm:submission",
+    "tm:substitute",
+    "tm:suckerpunch",
+    "tm:superpower",
+    "tm:surf",
+    "tm:taunt",
+    "tm:terablast",
+    "tm:topsyturvy",
+    "tm:waterfall",
+    "tm:whirlpool",
+    "tm:workup"
+  ],
+  "preEvolution": "clobbopus",
+  "evolutions": []
 }

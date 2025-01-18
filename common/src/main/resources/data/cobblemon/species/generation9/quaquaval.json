@@ -1,22 +1,27 @@
 {
   "implemented": true,
-  "name": "Quaquaval",
   "nationalPokedexNumber": 914,
+  "name": "Quaquaval",
   "primaryType": "water",
   "secondaryType": "fighting",
+  "maleRatio": 0.875,
+  "height": 18,
+  "weight": 619,
+  "pokedex": [
+    "cobblemon.species.quaquaval.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "torrent",
     "h:moxie"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:mystic_water",
-        "percentage": 25.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "flying",
+    "water_1"
+  ],
   "baseStats": {
     "hp": 85,
     "attack": 120,
@@ -25,10 +30,6 @@
     "special_defence": 75,
     "speed": 85
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "baseExperienceYield": 265,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -37,31 +38,47 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 265,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "flying",
-    "water_1"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 1,
+    "height": 3.2,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       },
       "walk": {
         "walkSpeed": 0.25
       }
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:mystic_water",
+        "percentage": 25
+      }
+    ]
+  },
   "moves": [
-    "1:counter",
-    "1:doublehit",
-    "1:growl",
-    "1:pound",
-    "1:watergun",
     "1:aquastep",
+    "1:pound",
+    "1:growl",
+    "1:watergun",
+    "1:doublehit",
+    "1:counter",
     "7:workup",
     "10:wingattack",
     "13:aquajet",
@@ -76,11 +93,18 @@
     "52:featherdance",
     "58:closecombat",
     "64:wavecrash",
+    "egg:detect",
+    "egg:lastresort",
+    "egg:rapidspin",
+    "egg:roost",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
     "tm:aircutter",
     "tm:airslash",
+    "tm:aquacutter",
+    "tm:aquajet",
+    "tm:aquastep",
     "tm:batonpass",
     "tm:bravebird",
     "tm:brickbreak",
@@ -88,7 +112,10 @@
     "tm:chillingwater",
     "tm:closecombat",
     "tm:coaching",
+    "tm:counter",
+    "tm:detect",
     "tm:disarmingvoice",
+    "tm:doublehit",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
@@ -96,7 +123,9 @@
     "tm:featherdance",
     "tm:fling",
     "tm:flipturn",
+    "tm:focusenergy",
     "tm:gigaimpact",
+    "tm:growl",
     "tm:helpinghand",
     "tm:hurricane",
     "tm:hydrocannon",
@@ -105,15 +134,20 @@
     "tm:icespinner",
     "tm:icywind",
     "tm:knockoff",
+    "tm:lastresort",
     "tm:liquidation",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:megakick",
     "tm:mistyterrain",
+    "tm:pound",
     "tm:protect",
     "tm:psychup",
     "tm:raindance",
+    "tm:rapidspin",
     "tm:rest",
     "tm:reversal",
+    "tm:roost",
     "tm:sleeptalk",
     "tm:substitute",
     "tm:surf",
@@ -125,26 +159,14 @@
     "tm:tripleaxel",
     "tm:upperhand",
     "tm:uturn",
+    "tm:watergun",
     "tm:waterpledge",
     "tm:waterpulse",
-    "tm:whirlpool"
+    "tm:wavecrash",
+    "tm:whirlpool",
+    "tm:wingattack",
+    "tm:workup"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 18,
-  "weight": 619,
   "preEvolution": "quaxwell",
-  "evolutions": [],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 1.0,
-    "height": 3.2,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.quaquaval.desc"
-  ]
+  "evolutions": []
 }

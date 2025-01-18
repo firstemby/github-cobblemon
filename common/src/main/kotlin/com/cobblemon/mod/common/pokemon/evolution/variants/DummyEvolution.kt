@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.evolution.variants
 
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
@@ -24,6 +25,7 @@ internal class DummyEvolution : Evolution {
     override var consumeHeldItem = false
     override val requirements: MutableSet<EvolutionRequirement> = mutableSetOf()
     override val learnableMoves: MutableSet<MoveTemplate> = mutableSetOf()
+    override val drops: DropTable = DropTable()
 
     override fun test(pokemon: Pokemon) = false
 
