@@ -19,11 +19,6 @@ plugins {
     id("cobblemon.publish-conventions")
 }
 
-architectury {
-    platformSetupLoomIde()
-    fabric()
-}
-
 val generatedResources = file("src/generated/resources")
 
 sourceSets {
@@ -42,45 +37,45 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    "developmentFabric"(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    bundle(project(path = ":common", configuration = "transformProductionFabric")) {
-        isTransitive = false
-    }
-    modLocalRuntime(libs.fabric.debugutils)
-    modImplementation(libs.fabric.loader)
-    modApi(libs.fabric.api)
-    modApi(libs.bundles.fabric)
-
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
-        isTransitive = false
-    }
-    modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
-//    modImplementation(libs.flywheelFabric)
-//    include(libs.flywheelFabric)
-
-    include(libs.fabric.kotlin)
-
-    listOf(
-        libs.graal,
-        libs.molang
-    ).forEach {
-        bundle(it)
-        runtimeOnly(it)
-    }
-
-    minecraftServerLibraries(libs.icu4j)
+//    implementation(project(":common", configuration = "namedElements")) {
+//        isTransitive = false
+//    }
+//    "developmentFabric"(project(":common", configuration = "namedElements")) {
+//        isTransitive = false
+//    }
+//    bundle(project(path = ":common", configuration = "transformProductionFabric")) {
+//        isTransitive = false
+//    }
+//    modLocalRuntime(libs.fabric.debugutils)
+//    modImplementation(libs.fabric.loader)
+//    modApi(libs.fabric.api)
+//    modApi(libs.bundles.fabric)
+//
+//    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+//        isTransitive = false
+//    }
+//    modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+////    modImplementation(libs.flywheelFabric)
+////    include(libs.flywheelFabric)
+//
+//    include(libs.fabric.kotlin)
+//
+//    listOf(
+//        libs.graal,
+//        libs.molang
+//    ).forEach {
+//        bundle(it)
+//        runtimeOnly(it)
+//    }
+//
+//    minecraftServerLibraries(libs.icu4j)
 
 }
 
 tasks {
     // The AW file is needed in :fabric project resources when the game is run.
     val copyAccessWidener by registering(Copy::class) {
-        from(loom.accessWidenerPath)
+//        from(loom.accessWidenerPath)
         into(generatedResources)
         dependsOn(checkLicenseMain)
     }

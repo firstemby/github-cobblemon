@@ -15,6 +15,8 @@ import utilities.version
  */
 
 plugins {
+    alias(libs.plugins.moddev)
+
     id("cobblemon.base-conventions")
     id("cobblemon.publish-conventions")
 
@@ -23,38 +25,38 @@ plugins {
     id("net.nemerosa.versioning") version "3.1.0"
 }
 
-architectury {
-    common("neoforge", "fabric")
+neoForge {
+    neoFormVersion = "1.21.1-20240808.144430"
 }
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
     maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://maven.neoforged.net/releases")
     mavenLocal()
 }
 
 dependencies {
     implementation(libs.bundles.kotlin)
-    modImplementation(libs.fabric.loader)
-    modApi(libs.molang)
+    implementation(libs.bundles.mixins)
 
-    // Integrations
+    api(libs.molang)
+    compileOnly(libs.graal)
+    compileOnly(libs.bundles.mongo)
+
     compileOnlyApi(libs.jei.api)
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
-        isTransitive = false
-    }
-    // Flywheel has no common dep so just pick one and don't use any platform specific code in common
-    // modCompileOnly(libs.flywheelFabric)
+//    compileOnly(libs.bundles.fabric.integrations.compileOnly) {
+//        isTransitive = false
+//    }
 
-    // Showdown
-    modCompileOnly(libs.graal)
-
-    // Data Storage
-    modCompileOnly(libs.bundles.mongo)
-
-    // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+    testRuntimeOnly(libs.junit.fabric)
+
+//    // Integrations
+//    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+//        isTransitive = false
+//    }
 }
 
 tasks.withType<Test> {
@@ -94,4 +96,10 @@ sourceSets {
             }
         }
     }
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module.isDownloadJavadoc = true
+    module.isDownloadSources = true
 }

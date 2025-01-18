@@ -8,9 +8,14 @@ shadow = "8.1.1"
 blossom = "2.1.0"
 idea-ext = "1.1.7"
 
-# Loom
-loom = "1.7-SNAPSHOT"
-architectury-plugin = "3.4-SNAPSHOT"
+# Minecraft Development
+loom = "1.9.2"
+moddev = "2.0.74"
+neoform = "1.21.1-20240808.144430"
+
+# Mixins
+mixin = "0.13.4+mixin.0.8.5"
+mixinExtras = "0.4.1"
 
 # Common
 molang = "1.1.18"
@@ -40,15 +45,21 @@ mockito = "5.2.0"
 mockk = "1.12.1"
 classgraph = "4.8.153"
 
+[plugins]
+loom = { id = "fabric-loom", version.ref="loom" }
+moddev = { id = "net.neoforged.moddev", version.ref="moddev" }
+
 [libraries]
 # General Buildscript Plugins
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-loom = { group = "dev.architectury", name = "architectury-loom", version.ref = "loom" }
-architectury = { group = "architectury-plugin", name = "architectury-plugin.gradle.plugin", version.ref = "architectury-plugin" }
 shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
 blossom = { group = "net.kyori", name = "blossom", version.ref = "blossom" }
 ideaExt = { group = "org.jetbrains.gradle.plugin.idea-ext", name = "org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "idea-ext"}
 licenser = { group = "gradle.plugin.org.cadixdev.gradle", name = "licenser", version.ref = "licenser" }
+
+# Mixins
+mixins-base = { group = "net.fabricmc", name = "sponge-mixin", version.ref = "mixin" }
+mixins-extras = { group = "io.github.llamalad7", name = "mixinextras-common", version.ref = "mixinExtras" }
 
 # Kotlin
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -82,7 +93,11 @@ mongo-driver-sync = { group = "org.mongodb", name = "mongodb-driver-sync", versi
 
 # Testing
 junit-fabric = { group = "net.fabricmc", name = "fabric-loader-junit", version.ref = "fabric-loader" }
+
+junit-core = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mock-kotlin = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref = "classgraph" }
@@ -93,4 +108,5 @@ fabric = [ "fabric-kotlin", "fabric-permissions" ]
 fabric-integrations-compileOnly = [ "adorn-fabric", "lambDynamicLights", "jei-api-fabric" ]
 fabric-integrations-runtimeOnly = [ "jei-fabric" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
-unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
+unitTesting = [ "junit-core", "junit-launcher", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
+mixins = [ "mixins-base", "mixins-extras" ]

@@ -13,16 +13,16 @@ plugins {
     id("cobblemon.publish-conventions")
 }
 
-architectury {
-    platformSetupLoomIde()
-    neoForge()
-}
-
-loom {
-    neoForge {
-
-    }
-}
+//architectury {
+//    platformSetupLoomIde()
+//    neoForge()
+//}
+//
+//loom {
+//    neoForge {
+//
+//    }
+//}
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
@@ -33,35 +33,35 @@ repositories {
 }
 
 dependencies {
-    neoForge(libs.neoforge)
-    //Because of the JEI mapping issues if we want
-    //a forge launch we gotta do some wacky stuff
-    //modImplementation(libs.jeiForge)
-    //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
-    //modImplementation(libs.flywheelForge)
-    //include(libs.flywheelForge)
-    modLocalRuntime(libs.neoforge.debugutils)
-    implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    implementation(libs.neo.kotlin.forge) {
-        exclude(group = "net.neoforged.fancymodloader", module = "loader")
-    }
-    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    bundle(project(path = ":common", configuration = "transformProductionNeoForge")) {
-        isTransitive = false
-    }
-    testImplementation(project(":common", configuration = "namedElements"))
-
-    listOf(
-        libs.graal,
-        libs.molang
-    ).forEach {
-        forgeRuntimeLibrary(it)
-        bundle(it)
-    }
+//    neoForge(libs.neoforge)
+//    //Because of the JEI mapping issues if we want
+//    //a forge launch we gotta do some wacky stuff
+//    //modImplementation(libs.jeiForge)
+//    //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
+//    //modImplementation(libs.flywheelForge)
+//    //include(libs.flywheelForge)
+//    modLocalRuntime(libs.neoforge.debugutils)
+//    implementation(project(":common", configuration = "namedElements")) {
+//        isTransitive = false
+//    }
+//    implementation(libs.neo.kotlin.forge) {
+//        exclude(group = "net.neoforged.fancymodloader", module = "loader")
+//    }
+//    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
+//        isTransitive = false
+//    }
+//    bundle(project(path = ":common", configuration = "transformProductionNeoForge")) {
+//        isTransitive = false
+//    }
+//    testImplementation(project(":common", configuration = "namedElements"))
+//
+//    listOf(
+//        libs.graal,
+//        libs.molang
+//    ).forEach {
+//        forgeRuntimeLibrary(it)
+//        bundle(it)
+//    }
 }
 
 tasks {
@@ -97,9 +97,9 @@ tasks {
 }
 
 //Stole from architect discord, replaces loom.forge.convertAccessWideners
-tasks.remapJar {
-    atAccessWideners.add("cobblemon-common.accesswidener")
-}
+//tasks.remapJar {
+//    atAccessWideners.add("cobblemon-common.accesswidener")
+//}
 
 
 //jar {

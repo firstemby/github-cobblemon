@@ -5,7 +5,6 @@ plugins {
     id("java")
     id("java-library")
     id("maven-publish")
-    id("dev.architectury.loom")
 }
 
 java {
@@ -25,16 +24,16 @@ publishing {
     }
 
     publications {
-        create<MavenPublication>(project.name) {
-            artifact(tasks.remapJar)
-            artifact(tasks.remapSourcesJar)
-
-            @Suppress("UnstableApiUsage")
-            loom.disableDeprecatedPomGeneration(this)
-
-            groupId = "com.cobblemon"
-            artifactId = project.findProperty("maven.artifactId")?.toString() ?: project.name
-            version = project.writeVersion(VersionType.PUBLISHING)
-        }
+//        create<MavenPublication>(project.name) {
+//            artifact(tasks.remapJar)
+//            artifact(tasks.remapSourcesJar)
+//
+//            @Suppress("UnstableApiUsage")
+//            loom.disableDeprecatedPomGeneration(this)
+//
+//            groupId = "com.cobblemon"
+//            artifactId = project.findProperty("maven.artifactId")?.toString() ?: project.name
+//            version = project.writeVersion(VersionType.PUBLISHING)
+//        }
     }
 }

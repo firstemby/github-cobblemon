@@ -8,6 +8,7 @@
  *
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import utilities.ACCESS_WIDENER
 
@@ -16,8 +17,6 @@ plugins {
     id("java-library")
 
     id("org.cadixdev.licenser")
-    id("dev.architectury.loom")
-    id("architectury-plugin")
     kotlin("jvm")
 }
 
@@ -42,23 +41,6 @@ license {
     header(rootProject.file("HEADER"))
 }
 
-architectury {
-    minecraft = project.property("mc_version").toString()
-}
-
-loom {
-    silentMojangMappingsLicense()
-    accessWidenerPath.set(project(":common").file(ACCESS_WIDENER))
-}
-
-dependencies {
-    minecraft("net.minecraft:minecraft:${rootProject.property("mc_version")}")
-    mappings(loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21:${rootProject.property("parchment_version")}")
-    })
-}
-
 tasks {
     withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -67,7 +49,7 @@ tasks {
     }
 
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "21"
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
 
     withType<Jar> {
