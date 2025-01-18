@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
-import com.cobblemon.mod.common.compat.LambDynamicLightsCompat
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
@@ -233,7 +232,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
         // They have no Maven nor are they published on Modrinth :(
         // Good thing is they are a copy pasta adapted to Forge :D
         if (Cobblemon.implementation.isModInstalled("dynamiclightsreforged")) {
-            LambDynamicLightsCompat.hookCompat()
+            //LambDynamicLightsCompat.hookCompat()
             Cobblemon.LOGGER.info("Dynamic Lights Reforged compatibility enabled")
         }
     }

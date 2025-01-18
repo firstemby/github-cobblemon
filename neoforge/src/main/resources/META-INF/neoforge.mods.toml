@@ -5,7 +5,7 @@ issueTrackerURL="https://gitlab.com/cable-mc/cobblemon/-/issues"
 
 [[mods]] #mandatory
 modId="cobblemon" #mandatory
-version="${version}" #mandatory
+version="1.6.0" #mandatory
 displayName="Cobblemon" #mandatory
 displayURL="https://cobblemon.com/"
 #logoFile="examplemod.png" #optional
@@ -27,7 +27,7 @@ config = "mixins.cobblemon-common.json"
 [[dependencies.cobblemon]]
 modId="minecraft"
 mandatory=true
-versionRange="[${minecraft_version}]"
+versionRange="[1.21.1]"
 
 [[dependencies.cobblemon]]
 modId="neoforge" #mandatory

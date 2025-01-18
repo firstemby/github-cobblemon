@@ -1,10 +1,38 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
+import org.jetbrains.kotlin.gradle.internal.ir.types.IdSignatureValues.result
 
 plugins {
     kotlin("jvm") version "2.1.0"
     id ("net.neoforged.moddev") version "2.0.75"
     id("net.kyori.blossom") version "2.1.0"
     id("com.cobblemon.gradle")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("maven-publish")
+}
+group = "com.cobblemon"
+version = "1.6.0-SNAPSHOT"
+
+tasks.create<Zip>("zipResources") {
+    dependsOn("processResources")
+    from(tasks.processResources.get().destinationDir)
+    this.archiveBaseName = "mod-resources"
+}
+
+tasks.jar {
+    this.archiveBaseName = "mod"
+    exclude {
+        it.file.absolutePath.startsWith(tasks.processResources.get().destinationDir.path)
+    }
+}
+
+tasks.assemble {
+    dependsOn(tasks.named("zipResources"))
+}
+
+artifacts {
+    //This basically allows the zipped resources to be added as a dependency by the loader specific
+    //projects. Gradle by default needs the 'default' configuration here, but it seems like MDG wants
+    //'runtimeElements'
+    add("archives", tasks.getByName<Zip>("zipResources"))
 }
 
 buildscript {
@@ -18,12 +46,10 @@ buildscript {
 
 repositories {
     mavenCentral()
-    gradlePluginPortal()
-    maven("https://maven.architectury.dev/")
     maven("https://maven.fabricmc.net/")
     maven("https://maven.blamejared.com/")
     maven("https://api.modrinth.com/maven")
-    maven(url = "${rootProject.projectDir}/deps")
+    maven(url = "../deps")
 }
 
 cobblemon {
@@ -64,7 +90,7 @@ sourceSets {
                 fun generateLicenseHeader() : String {
                     val builder = StringBuilder()
                     builder.append("/*\n")
-                    rootProject.file("HEADER").forEachLine {
+                    project.projectDir.parentFile.resolve("HEADER").forEachLine {
                         if(it.isEmpty()) {
                             builder.append(" *").append("\n")
                         } else {
@@ -78,7 +104,7 @@ sourceSets {
                 property("license", generateLicenseHeader())
                 property("modid", "cobblemon")
                 property("version", project.version as String)
-                property("isSnapshot", if(rootProject.property("snapshot") == "true") "true" else "false")
+                property("isSnapshot", "true")
                 /*
                 property("gitCommit", versioning.info.commit)
                 property("branch", versioning.info.branch)
