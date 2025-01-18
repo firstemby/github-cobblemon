@@ -1,7 +1,12 @@
 rootProject.name = "cobblemon"
 
+pluginManagement {
+    includeBuild("build-logic")
+}
+
 listOf(
-    "common",
-    "fabric"
+    "common"
+    //"fabric"
     //"neoforge"
 ).forEach { include(it) }
+

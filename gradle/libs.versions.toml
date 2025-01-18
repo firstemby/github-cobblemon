@@ -81,8 +81,7 @@ mongo-driver-core = { group = "org.mongodb", name = "mongodb-driver-core", versi
 mongo-driver-sync = { group = "org.mongodb", name = "mongodb-driver-sync", version.ref = "mongo" }
 
 # Testing
-junit-fabric = { group = "net.fabricmc", name = "fabric-loader-junit", version.ref = "fabric-loader" }
-junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mock-kotlin = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref = "classgraph" }
@@ -93,4 +92,4 @@ fabric = [ "fabric-kotlin", "fabric-permissions" ]
 fabric-integrations-compileOnly = [ "adorn-fabric", "lambDynamicLights", "jei-api-fabric" ]
 fabric-integrations-runtimeOnly = [ "jei-fabric" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
-unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]
+unitTesting = [ "junit", "mockito-core", "mock-kotlin", "classgraph" ]

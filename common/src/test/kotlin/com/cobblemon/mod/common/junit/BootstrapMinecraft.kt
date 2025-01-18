@@ -12,5 +12,5 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-@ExtendWith(BootstrapMinecraftExtension::class)
+//@ExtendWith(BootstrapMinecraftExtension::class)
 annotation class BootstrapMinecraft

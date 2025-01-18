@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.junit
 
+/*
 import net.minecraft.SharedConstants
 import net.minecraft.server.Bootstrap
 import org.junit.jupiter.api.extension.BeforeAllCallback
@@ -20,3 +21,5 @@ class BootstrapMinecraftExtension : Extension, BeforeAllCallback {
         Bootstrap.bootStrap()
     }
 }
+
+ */

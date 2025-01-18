@@ -14,8 +14,6 @@ import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.awt.Color
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.RenderType
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.HumanoidArm
 import net.minecraft.world.item.ItemDisplayContext
 import org.joml.Quaternionf
 
-@Environment(value = EnvType.CLIENT)
 class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : EntityRenderer<PokeRodFishingBobberEntity>(context) {
 
     override fun render(fishingBobberEntity: PokeRodFishingBobberEntity, elapsedPartialTicks: Float, tickDelta: Float, matrixStack: PoseStack, vertexConsumerProvider: MultiBufferSource, light: Int) {

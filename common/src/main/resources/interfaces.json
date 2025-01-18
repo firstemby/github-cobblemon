@@ -1,0 +1,5 @@
+{
+  "net/minecraft/client/model/geom/ModelPart": [
+    "com/cobblemon/mod/common/client/render/models/blockbench/pose/Bone"
+  ]
+}

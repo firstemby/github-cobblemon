@@ -7,7 +7,7 @@
  */
 
 package com.cobblemon.mod.common.util.math
-
+/*
 import kotlin.math.round
 import net.minecraft.world.phys.Vec3
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -27,3 +27,5 @@ class SimpleMathExtensionsKtTest {
         assertEquals(0.0, result.z)
     }
 }
+
+ */

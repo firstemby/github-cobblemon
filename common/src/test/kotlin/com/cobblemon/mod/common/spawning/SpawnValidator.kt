@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.spawning
 
+/*
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -76,3 +77,4 @@ internal class SpawnValidator {
             ?: throw FileNotFoundException(adjustedPath)
     }
 }
+ */

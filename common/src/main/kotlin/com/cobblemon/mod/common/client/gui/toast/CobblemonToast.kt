@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.client.gui.toast
 
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.components.toasts.ToastComponent
@@ -21,7 +19,6 @@ import net.minecraft.util.Mth
 import java.util.*
 import kotlin.math.min
 
-@Environment(EnvType.CLIENT)
 class CobblemonToast(
     val id: UUID,
     var icon: ItemStack,
