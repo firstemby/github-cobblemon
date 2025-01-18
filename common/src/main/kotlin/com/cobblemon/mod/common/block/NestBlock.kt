@@ -30,7 +30,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
@@ -120,6 +122,21 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
             Fluids.WATER.getSource(false)
         } else super.getFluidState(state)
     }
+
+    override fun setPlacedBy(
+        level: Level,
+        pos: BlockPos,
+        state: BlockState,
+        placer: LivingEntity?,
+        stack: ItemStack
+    ) {
+        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity
+        if (placer is Player) {
+            blockEntity?.ownerUUID = placer.uuid
+        }
+        super.setPlacedBy(level, pos, state, placer, stack)
+    }
+
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
         if (variant == NestVariant.WATER) {

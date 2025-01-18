@@ -8,16 +8,19 @@
       "presets": [
         "cobblemon:core",
         "cobblemon:looks_around",
-        "cobblemon:wanders"
+        "cobblemon:wanders",
+        "cobblemon:fights_melee",
+        "cobblemon:retaliates"
       ]
     },
     {
       "type": "add_tasks_to_activity",
       "activity": "idle",
       "tasksByPriority": {
-        "5": [
+        "0": [
           "path_to_nest",
-          "breed_at_nest"
+          "breed_at_nest",
+          "guard_nest"
         ]
       }
     }

@@ -168,7 +168,8 @@ object PokemonBrain {
         MemoryModuleType.AVOID_TARGET,
         CobblemonMemories.POKEMON_SLEEPING,
         CobblemonMemories.POTENTIAL_MATE,
-        CobblemonMemories.NEST_LOCATION
+        CobblemonMemories.NEST_LOCATION,
+        CobblemonMemories.PATERNAL_NEST_LOCATION
     )
 
     fun updateActivities(pokemon:PokemonEntity) {
