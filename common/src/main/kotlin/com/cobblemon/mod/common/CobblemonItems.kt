@@ -319,6 +319,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
     @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
+    @JvmField val SHELL_HELMET = heldItem("shell_helmet")
 
     private val berries = mutableMapOf<ResourceLocation, BerryItem>()
     // Plants

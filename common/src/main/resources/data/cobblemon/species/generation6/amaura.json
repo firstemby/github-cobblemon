@@ -1,12 +1,26 @@
 {
   "implemented": true,
-  "name": "Amaura",
   "nationalPokedexNumber": 698,
+  "name": "Amaura",
   "primaryType": "rock",
   "secondaryType": "ice",
+  "maleRatio": 0.875,
+  "height": 13,
+  "weight": 252,
+  "pokedex": [
+    "cobblemon.species.amaura.desc"
+  ],
+  "labels": [
+    "gen6",
+    "fossil"
+  ],
+  "aspects": [],
   "abilities": [
     "refrigerate",
     "h:snowwarning"
+  ],
+  "eggGroups": [
+    "monster"
   ],
   "baseStats": {
     "hp": 77,
@@ -16,10 +30,28 @@
     "special_defence": 63,
     "speed": 46
   },
+  "evYield": {
+    "hp": 1,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 72,
+  "experienceGroup": "medium_fast",
+  "catchRate": 45,
+  "eggCycles": 30,
+  "baseFriendship": 50,
+  "baseScale": 1.2,
+  "hitbox": {
+    "width": 1,
+    "height": 2.15,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
@@ -28,29 +60,27 @@
       }
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
-  "baseExperienceYield": 72,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 30,
-  "eggGroups": [
-    "monster"
-  ],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:never_melt_ice",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
     "1:growl",
     "1:powdersnow",
+    "1:rockthrow",
     "4:encore",
     "8:ancientpower",
-    "10:rockthrow",
     "12:icywind",
-    "15:takedown",
     "16:round",
     "20:mist",
     "24:aurorabeam",
     "28:thunderwave",
     "32:naturepower",
-    "34:avalanche",
     "36:freezedry",
     "40:icebeam",
     "44:lightscreen",
@@ -61,20 +91,22 @@
     "egg:barrier",
     "egg:discharge",
     "egg:haze",
-    "egg:magnetrise",
     "egg:mirrorcoat",
     "egg:rockthrow",
     "egg:takedown",
-    "tm:attract",
+    "tm:ancientpower",
+    "tm:aquatail",
+    "tm:aurorabeam",
+    "tm:auroraveil",
     "tm:avalanche",
+    "tm:barrier",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:calmmind",
     "tm:chargebeam",
-    "tm:confide",
     "tm:darkpulse",
-    "tm:doubleteam",
+    "tm:discharge",
     "tm:dragontail",
     "tm:dreameater",
     "tm:earthpower",
@@ -84,10 +116,11 @@
     "tm:facade",
     "tm:flash",
     "tm:flashcannon",
+    "tm:freezedry",
     "tm:frostbreath",
-    "tm:frustration",
+    "tm:growl",
     "tm:hail",
-    "tm:hiddenpower",
+    "tm:haze",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icebeam",
@@ -96,60 +129,40 @@
     "tm:ironhead",
     "tm:irontail",
     "tm:lightscreen",
+    "tm:magnetrise",
+    "tm:meteorbeam",
+    "tm:mirrorcoat",
+    "tm:mist",
     "tm:mudshot",
     "tm:naturepower",
     "tm:outrage",
+    "tm:powdersnow",
     "tm:protect",
     "tm:psychup",
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockblast",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
+    "tm:rockthrow",
     "tm:rocktomb",
     "tm:round",
     "tm:safeguard",
     "tm:sandstorm",
-    "tm:secretpower",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:stealthrock",
     "tm:stoneedge",
     "tm:substitute",
-    "tm:swagger",
+    "tm:takedown",
+    "tm:terablast",
     "tm:thunderbolt",
     "tm:thunderwave",
-    "tm:toxic",
+    "tm:waterpulse",
     "tm:weatherball",
-    "tm:zenheadbutt",
-    "tutor:aquatail",
-    "tutor:earthpower",
-    "tutor:growl",
-    "tutor:hypervoice",
-    "tutor:icywind",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:irontail",
-    "tutor:magnetrise",
-    "tutor:meteorbeam",
-    "tutor:outrage",
-    "tutor:powdersnow",
-    "tutor:rockthrow",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:thunderwave",
-    "tutor:waterpulse",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.amaura.desc"
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -157,7 +170,9 @@
       "variant": "level_up",
       "result": "aurorus",
       "consumeHeldItem": false,
-      "learnableMoves": [],
+      "learnableMoves": [
+        "freezedry"
+      ],
       "requirements": [
         {
           "variant": "level",
@@ -169,33 +184,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1.2,
-  "hitbox": {
-    "width": 1,
-    "height": 2.15,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 1,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 13,
-  "weight": 252,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:never_melt_ice",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

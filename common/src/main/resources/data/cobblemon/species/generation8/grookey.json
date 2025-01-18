@@ -1,11 +1,26 @@
 {
   "implemented": true,
-  "name": "Grookey",
   "nationalPokedexNumber": 810,
+  "name": "Grookey",
   "primaryType": "grass",
+  "maleRatio": 0.875,
+  "height": 3,
+  "weight": 50,
+  "pokedex": [
+    "cobblemon.species.grookey.desc"
+  ],
+  "labels": [
+    "gen8",
+    "starter"
+  ],
+  "aspects": [],
   "abilities": [
     "overgrow",
     "h:grassysurge"
+  ],
+  "eggGroups": [
+    "field",
+    "grass"
   ],
   "baseStats": {
     "hp": 50,
@@ -15,16 +30,26 @@
     "special_defence": 40,
     "speed": 65
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 62,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.8,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 2,
     "entries": [
@@ -34,13 +59,13 @@
       },
       {
         "item": "cobblemon:miracle_seed",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
   "moves": [
-    "1:growl",
     "1:scratch",
+    "1:growl",
     "6:branchpoke",
     "8:taunt",
     "12:razorleaf",
@@ -54,19 +79,19 @@
     "egg:growth",
     "egg:hammerarm",
     "egg:leechseed",
-    "egg:naturepower",
     "egg:strength",
     "egg:worryseed",
     "tm:acrobatics",
     "tm:assurance",
-    "tm:attract",
     "tm:bodyslam",
+    "tm:branchpoke",
     "tm:bulletseed",
     "tm:drainpunch",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
+    "tm:fakeout",
     "tm:falseswipe",
     "tm:fling",
     "tm:focusenergy",
@@ -75,21 +100,28 @@
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growl",
+    "tm:growth",
+    "tm:hammerarm",
     "tm:knockoff",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lowkick",
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
+    "tm:naturepower",
     "tm:protect",
+    "tm:razorleaf",
     "tm:rest",
-    "tm:round",
+    "tm:scratch",
     "tm:screech",
     "tm:seedbomb",
+    "tm:slam",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:solarbeam",
     "tm:solarblade",
+    "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swift",
@@ -101,15 +133,9 @@
     "tm:trailblaze",
     "tm:uproar",
     "tm:uturn",
+    "tm:woodhammer",
     "tm:workup",
-    "tutor:grasspledge",
-    "tutor:grassyglide"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.grookey.desc"
+    "tm:worryseed"
   ],
   "evolutions": [
     {
@@ -127,24 +153,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.8,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 3,
-  "weight": 50,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

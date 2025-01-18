@@ -6,7 +6,7 @@
 				"identifier": "geometry.goldeen_male",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
@@ -149,7 +149,7 @@
 				{
 					"name": "mouth",
 					"parent": "head",
-					"pivot": [-2.5, 9.125, -7.7],
+					"pivot": [0, 4.825, -11.2],
 					"cubes": [
 						{"origin": [-1.5, 4.325, -11.7], "size": [1, 1, 1], "uv": [3, 26]},
 						{"origin": [0.5, 4.325, -11.7], "size": [1, 1, 1], "uv": [0, 25]}
@@ -198,7 +198,7 @@
 				{
 					"name": "fin_right3",
 					"parent": "fin_right2",
-					"pivot": [-10.5, 6.9, 0.75],
+					"pivot": [-10.5, 6.9, -0.25],
 					"cubes": [
 						{"origin": [-15.5, 6.9, -10.25], "size": [5, 0, 12], "uv": [23, 18]}
 					]
@@ -230,7 +230,7 @@
 				{
 					"name": "tail_right1",
 					"parent": "torso",
-					"pivot": [-1, 6.3, 3],
+					"pivot": [-1, 6.3, 2],
 					"cubes": [
 						{"origin": [-3, 6.3, 2], "size": [4, 0, 3], "inflate": 0.01, "uv": [25, 0]}
 					]
@@ -310,7 +310,7 @@
 				{
 					"name": "tail_left1",
 					"parent": "torso",
-					"pivot": [1, 6.3, 3],
+					"pivot": [1, 6.3, 2],
 					"cubes": [
 						{"origin": [-1, 6.3, 2], "size": [4, 0, 3], "inflate": 0.02, "uv": [25, 0], "mirror": true}
 					]

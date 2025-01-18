@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
@@ -35,6 +37,7 @@ class FormeChangeInstruction(val message: BattleMessage): InterpreterInstruction
         battle.dispatchWaiting {
             battle.minorBattleActions[battlePokemon.uuid] = message
 
+            CobblemonEvents.FORME_CHANGE.post(FormeChangeEvent(battle, battlePokemon, formName))
             val pokemonName = battlePokemon.getName()
             val lang = when(formName) {
                 "busted", "hero", "complete" -> return@dispatchWaiting

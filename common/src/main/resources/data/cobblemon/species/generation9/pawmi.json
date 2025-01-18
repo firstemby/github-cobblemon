@@ -1,11 +1,24 @@
 {
-  "name": "Pawmi",
   "nationalPokedexNumber": 921,
+  "name": "Pawmi",
   "primaryType": "electric",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 25,
+  "pokedex": [
+    "cobblemon.species.pawmi.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "static",
     "naturalcure",
     "h:ironfist"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 45,
@@ -15,10 +28,6 @@
     "special_defence": 25,
     "speed": 60
   },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 48,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -27,14 +36,24 @@
     "special_defence": 0,
     "speed": 1
   },
+  "baseExperienceYield": 48,
   "experienceGroup": "medium_fast",
+  "catchRate": 190,
   "eggCycles": 15,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:cheri_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:growl",
     "1:scratch",
+    "1:growl",
     "3:thundershock",
     "6:quickattack",
     "8:charge",
@@ -54,29 +73,41 @@
     "egg:wish",
     "tm:agility",
     "tm:batonpass",
+    "tm:bite",
     "tm:charge",
     "tm:chargebeam",
     "tm:charm",
     "tm:crunch",
     "tm:dig",
+    "tm:discharge",
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
     "tm:electroweb",
     "tm:encore",
     "tm:endure",
+    "tm:entrainment",
     "tm:facade",
+    "tm:fakeout",
     "tm:fling",
+    "tm:growl",
     "tm:helpinghand",
+    "tm:machpunch",
     "tm:metalclaw",
+    "tm:nuzzle",
     "tm:playrough",
     "tm:protect",
+    "tm:quickattack",
     "tm:raindance",
     "tm:rest",
+    "tm:scratch",
+    "tm:slam",
     "tm:sleeptalk",
+    "tm:spark",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superfang",
+    "tm:sweetkiss",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
@@ -84,16 +115,12 @@
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderfang",
+    "tm:thundershock",
     "tm:thunderwave",
     "tm:voltswitch",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tm:wish"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 3,
-  "weight": 25,
   "evolutions": [
     {
       "id": "pawmi_pawmo",
@@ -110,18 +137,5 @@
         }
       ]
     }
-  ],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.pawmi.desc"
-  ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:cheri_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

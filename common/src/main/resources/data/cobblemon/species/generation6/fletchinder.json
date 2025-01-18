@@ -1,13 +1,60 @@
 {
   "implemented": true,
-  "name": "Fletchinder",
   "nationalPokedexNumber": 662,
+  "name": "Fletchinder",
   "primaryType": "fire",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 7,
+  "weight": 160,
+  "pokedex": [
+    "cobblemon.species.fletchinder.desc"
+  ],
+  "labels": [
+    "gen6"
+  ],
+  "aspects": [],
   "abilities": [
     "flamebody",
     "h:galewings"
   ],
+  "eggGroups": [
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 62,
+    "attack": 73,
+    "defence": 55,
+    "special_attack": 56,
+    "special_defence": 52,
+    "speed": 84
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
+  "baseExperienceYield": 134,
+  "experienceGroup": "medium_slow",
+  "catchRate": 120,
+  "eggCycles": 15,
+  "baseFriendship": 50,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.5,
+    "height": 0.9,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -24,116 +71,87 @@
       },
       {
         "item": "cobblemon:rawst_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
-  "baseStats": {
-    "hp": 62,
-    "attack": 73,
-    "defence": 55,
-    "special_attack": 56,
-    "special_defence": 52,
-    "speed": 84
-  },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 134,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 15,
-  "eggGroups": [
-    "flying"
-  ],
-  "behaviour": {
-    "moving": {
-      "fly": {
-        "canFly": true
-      }
-    }
-  },
   "moves": [
-    "1:ember",
-    "1:feint",
-    "1:growl",
-    "1:peck",
-    "1:quickattack",
     "1:tackle",
+    "1:growl",
+    "1:quickattack",
+    "1:peck",
+    "1:ember",
+    "1:razorwind",
+    "1:flamecharge",
+    "1:mefirst",
+    "1:naturalgift",
+    "1:feint",
     "15:flail",
     "22:acrobatics",
-    "27:razorwind",
     "29:agility",
-    "31:naturalgift",
     "36:aerialace",
-    "38:flamecharge",
     "43:tailwind",
-    "46:mefirst",
     "50:steelwing",
     "57:roost",
     "64:fly",
+    "egg:defog",
+    "egg:flamecharge",
+    "egg:mefirst",
+    "egg:naturalgift",
+    "egg:quickguard",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
     "tm:aircutter",
     "tm:airslash",
-    "tm:attract",
     "tm:bravebird",
-    "tm:confide",
+    "tm:defog",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:dualwingbeat",
+    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:featherdance",
+    "tm:feint",
     "tm:fireblast",
     "tm:firespin",
+    "tm:flail",
     "tm:flamecharge",
     "tm:flamethrower",
     "tm:flareblitz",
     "tm:fly",
-    "tm:frustration",
+    "tm:growl",
     "tm:heatwave",
-    "tm:hiddenpower",
     "tm:hurricane",
     "tm:incinerate",
+    "tm:mefirst",
+    "tm:naturalgift",
     "tm:overheat",
+    "tm:peck",
     "tm:protect",
+    "tm:quickattack",
+    "tm:quickguard",
     "tm:raindance",
+    "tm:razorwind",
     "tm:rest",
-    "tm:return",
     "tm:roost",
-    "tm:round",
-    "tm:secretpower",
     "tm:sleeptalk",
-    "tm:snore",
+    "tm:snatch",
     "tm:steelwing",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:swordsdance",
+    "tm:tackle",
     "tm:tailwind",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
     "tm:terablast",
     "tm:thief",
-    "tm:toxic",
     "tm:uturn",
     "tm:willowisp",
-    "tm:workup",
-    "tutor:defog",
-    "tutor:dualwingbeat",
-    "tutor:heatwave",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:tailwind"
-  ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.fletchinder.desc"
+    "tm:workup"
   ],
   "preEvolution": "fletchling",
   "evolutions": [
@@ -150,24 +168,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.8,
-  "hitbox": {
-    "width": 0.5,
-    "height": 0.9,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "height": 7,
-  "weight": 160,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

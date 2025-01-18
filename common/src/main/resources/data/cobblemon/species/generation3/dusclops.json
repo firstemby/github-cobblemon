@@ -1,29 +1,25 @@
 {
   "implemented": true,
-  "name": "Dusclops",
   "nationalPokedexNumber": 356,
+  "name": "Dusclops",
   "primaryType": "ghost",
+  "maleRatio": 0.5,
+  "height": 16,
+  "weight": 306,
+  "pokedex": [
+    "cobblemon.species.dusclops.desc"
+  ],
+  "labels": [
+    "gen3"
+  ],
+  "aspects": [],
   "abilities": [
     "pressure",
     "h:frisk"
   ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:reaper_cloth",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:kasib_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "amorphous"
+  ],
   "baseStats": {
     "hp": 40,
     "attack": 70,
@@ -32,15 +28,25 @@
     "special_defence": 130,
     "speed": 25
   },
-  "catchRate": 90,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 1,
+    "special_attack": 0,
+    "special_defence": 1,
+    "speed": 0
+  },
   "baseExperienceYield": 159,
   "experienceGroup": "fast",
+  "catchRate": 90,
   "eggCycles": 25,
-  "eggGroups": [
-    "amorphous"
-  ],
+  "baseFriendship": 35,
+  "baseScale": 0.85,
+  "hitbox": {
+    "width": 1.2,
+    "height": 2,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "fly": {
@@ -49,64 +55,86 @@
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:reaper_cloth",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:kasib_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
-    "1:bind",
-    "1:disable",
     "1:firepunch",
-    "1:gravity",
     "1:icepunch",
-    "1:leer",
-    "1:shadowpunch",
-    "1:shadowsneak",
     "1:thunderpunch",
+    "1:gravity",
+    "1:bind",
+    "1:leer",
+    "1:disable",
+    "1:foresight",
+    "1:astonish",
+    "1:shadowsneak",
+    "1:pursuit",
+    "1:shadowpunch",
     "12:confuseray",
-    "14:foresight",
     "16:nightshade",
     "20:payback",
-    "22:pursuit",
     "24:willowisp",
     "28:meanlook",
     "32:hex",
     "36:curse",
     "42:shadowball",
     "48:futuresight",
+    "egg:destinybond",
+    "egg:feintattack",
+    "egg:grudge",
+    "egg:haze",
+    "egg:memento",
+    "egg:painsplit",
+    "egg:pursuit",
     "tm:allyswitch",
-    "tm:attract",
+    "tm:astonish",
+    "tm:bind",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brickbreak",
-    "tm:bulldoze",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
-    "tm:confide",
     "tm:confuseray",
     "tm:curse",
     "tm:darkpulse",
-    "tm:doubleteam",
+    "tm:destinybond",
+    "tm:disable",
     "tm:dreameater",
-    "tm:earthquake",
     "tm:embargo",
     "tm:endure",
     "tm:facade",
+    "tm:feintattack",
     "tm:firepunch",
     "tm:flash",
     "tm:fling",
     "tm:focuspunch",
-    "tm:frustration",
+    "tm:foresight",
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:gravity",
+    "tm:grudge",
     "tm:haze",
+    "tm:headbutt",
     "tm:helpinghand",
     "tm:hex",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icepunch",
@@ -114,96 +142,50 @@
     "tm:imprison",
     "tm:infestation",
     "tm:leechlife",
+    "tm:leer",
+    "tm:meanlook",
     "tm:megakick",
     "tm:megapunch",
+    "tm:memento",
     "tm:metronome",
-    "tm:naturalgift",
     "tm:nightshade",
+    "tm:ominouswind",
     "tm:painsplit",
     "tm:payback",
     "tm:phantomforce",
     "tm:poltergeist",
+    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
     "tm:psychup",
+    "tm:pursuit",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:revenge",
-    "tm:rockslide",
     "tm:rocksmash",
-    "tm:rocktomb",
-    "tm:round",
-    "tm:secretpower",
     "tm:shadowball",
+    "tm:shadowpunch",
+    "tm:shadowsneak",
     "tm:skillswap",
     "tm:skittersmack",
     "tm:sleeptalk",
     "tm:snatch",
-    "tm:snore",
     "tm:spite",
     "tm:strength",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:taunt",
     "tm:telekinesis",
     "tm:terablast",
     "tm:thief",
     "tm:thunderpunch",
     "tm:torment",
-    "tm:toxic",
     "tm:trick",
     "tm:trickroom",
     "tm:willowisp",
-    "tm:wonderroom",
-    "tutor:allyswitch",
-    "tutor:bind",
-    "tutor:bodyslam",
-    "tutor:counter",
-    "tutor:darkpulse",
-    "tutor:doubleedge",
-    "tutor:dreameater",
-    "tutor:dynamicpunch",
-    "tutor:endure",
-    "tutor:firepunch",
-    "tutor:focuspunch",
-    "tutor:gravity",
-    "tutor:headbutt",
-    "tutor:icepunch",
-    "tutor:icywind",
-    "tutor:megakick",
-    "tutor:megapunch",
-    "tutor:metronome",
-    "tutor:mimic",
-    "tutor:mudslap",
-    "tutor:nightmare",
-    "tutor:ominouswind",
-    "tutor:painsplit",
-    "tutor:poltergeist",
-    "tutor:psychup",
-    "tutor:rockslide",
-    "tutor:seismictoss",
-    "tutor:skillswap",
-    "tutor:skittersmack",
-    "tutor:sleeptalk",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:substitute",
-    "tutor:suckerpunch",
-    "tutor:swagger",
-    "tutor:telekinesis",
-    "tutor:thunderpunch",
-    "tutor:trick",
-    "tutor:wonderroom"
-  ],
-  "labels": [
-    "gen3"
-  ],
-  "pokedex": [
-    "cobblemon.species.dusclops.desc"
+    "tm:wonderroom"
   ],
   "preEvolution": "duskull",
   "evolutions": [
@@ -220,24 +202,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.85,
-  "hitbox": {
-    "width": 1.2,
-    "height": 2.0,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 1,
-    "special_attack": 0,
-    "special_defence": 1,
-    "speed": 0
-  },
-  "height": 16,
-  "weight": 306,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

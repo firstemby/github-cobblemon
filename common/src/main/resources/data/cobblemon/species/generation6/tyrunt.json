@@ -1,12 +1,27 @@
 {
   "implemented": true,
-  "name": "Tyrunt",
   "nationalPokedexNumber": 696,
+  "name": "Tyrunt",
   "primaryType": "rock",
   "secondaryType": "dragon",
+  "maleRatio": 0.875,
+  "height": 8,
+  "weight": 260,
+  "pokedex": [
+    "cobblemon.species.tyrunt.desc"
+  ],
+  "labels": [
+    "gen6",
+    "fossil"
+  ],
+  "aspects": [],
   "abilities": [
     "strongjaw",
     "h:sturdy"
+  ],
+  "eggGroups": [
+    "monster",
+    "dragon"
   ],
   "baseStats": {
     "hp": 58,
@@ -16,36 +31,55 @@
     "special_defence": 45,
     "speed": 48
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 72,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 30,
-  "eggGroups": [
-    "monster",
-    "dragon"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.1,
+    "height": 1.45,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.19
+      },
+      "swim": {
+        "canSwimInLava": true
       }
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:razor_fang",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:tackle",
     "1:tailwhip",
+    "1:tackle",
+    "1:bide",
     "4:roar",
     "8:ancientpower",
-    "12:bide",
     "12:charm",
-    "15:stealthrock",
     "16:bite",
     "20:dragontail",
     "24:stomp",
@@ -56,26 +90,25 @@
     "44:earthquake",
     "48:horndrill",
     "egg:curse",
-    "egg:dragondance",
-    "egg:firefang",
-    "egg:icefang",
     "egg:poisonfang",
     "egg:rockpolish",
     "egg:rockthrow",
-    "egg:thunderfang",
     "tm:aerialace",
+    "tm:ancientpower",
     "tm:assurance",
-    "tm:attract",
+    "tm:bide",
+    "tm:bite",
+    "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
     "tm:charm",
     "tm:closecombat",
-    "tm:confide",
     "tm:crunch",
+    "tm:curse",
     "tm:darkpulse",
     "tm:dig",
-    "tm:doubleteam",
+    "tm:dracometeor",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
@@ -85,70 +118,46 @@
     "tm:endure",
     "tm:facade",
     "tm:firefang",
-    "tm:frustration",
-    "tm:hiddenpower",
     "tm:honeclaws",
+    "tm:horndrill",
     "tm:hypervoice",
     "tm:icefang",
     "tm:irondefense",
     "tm:ironhead",
     "tm:irontail",
+    "tm:lashout",
+    "tm:meteorbeam",
     "tm:outrage",
     "tm:playrough",
+    "tm:poisonfang",
     "tm:protect",
     "tm:psychicfangs",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockblast",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
+    "tm:rockthrow",
     "tm:rocktomb",
-    "tm:round",
     "tm:sandstorm",
+    "tm:scaleshot",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:stealthrock",
+    "tm:stomp",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:swagger",
+    "tm:tackle",
+    "tm:tailwhip",
+    "tm:terablast",
+    "tm:thrash",
     "tm:thunderfang",
-    "tm:toxic",
-    "tm:zenheadbutt",
-    "tutor:block",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:earthpower",
-    "tutor:hypervoice",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:irontail",
-    "tutor:lashout",
-    "tutor:meteorbeam",
-    "tutor:outrage",
-    "tutor:roar",
-    "tutor:scaleshot",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:stomp",
-    "tutor:stompingtantrum",
-    "tutor:superpower",
-    "tutor:tackle",
-    "tutor:tailwhip",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.tyrunt.desc"
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -156,7 +165,9 @@
       "variant": "level_up",
       "result": "tyrantrum",
       "consumeHeldItem": false,
-      "learnableMoves": [],
+      "learnableMoves": [
+        "rockslide"
+      ],
       "requirements": [
         {
           "variant": "level",
@@ -168,33 +179,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1.1,
-    "height": 1.45,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 8,
-  "weight": 260,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:razor_fang",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

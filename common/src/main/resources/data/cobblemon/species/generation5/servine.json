@@ -1,21 +1,26 @@
 {
   "implemented": true,
-  "name": "Servine",
   "nationalPokedexNumber": 496,
+  "name": "Servine",
   "primaryType": "grass",
+  "maleRatio": 0.875,
+  "height": 8,
+  "weight": 160,
+  "pokedex": [
+    "cobblemon.species.servine.desc"
+  ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
   "abilities": [
     "overgrow",
     "h:contrary"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:miracle_seed",
-        "percentage": 10.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field",
+    "grass"
+  ],
   "baseStats": {
     "hp": 60,
     "attack": 60,
@@ -24,109 +29,131 @@
     "special_defence": 75,
     "speed": 83
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
   "baseExperienceYield": 145,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.9,
+    "height": 1.7,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:miracle_seed",
+        "percentage": 10
+      }
+    ]
+  },
   "moves": [
-    "1:leer",
     "1:tackle",
+    "1:leer",
     "1:vinewhip",
     "1:wrap",
     "13:growth",
     "16:leaftornado",
-    "16:magicalleaf",
     "20:leechseed",
     "24:megadrain",
     "28:slam",
     "32:leafblade",
     "36:coil",
     "40:gigadrain",
-    "44:gastroacid",
     "44:wringout",
     "48:leafstorm",
+    "egg:captivate",
+    "egg:glare",
+    "egg:irontail",
+    "egg:meanlook",
+    "egg:mirrorcoat",
+    "egg:naturalgift",
+    "egg:pursuit",
+    "egg:sweetscent",
+    "egg:synthesis",
+    "egg:twister",
     "tm:aerialace",
-    "tm:attract",
+    "tm:aquatail",
+    "tm:bind",
     "tm:bulletseed",
     "tm:calmmind",
-    "tm:confide",
+    "tm:captivate",
+    "tm:coil",
     "tm:cut",
+    "tm:defog",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
     "tm:flash",
-    "tm:frustration",
+    "tm:gastroacid",
     "tm:gigadrain",
+    "tm:glare",
     "tm:grassknot",
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growth",
     "tm:helpinghand",
-    "tm:hiddenpower",
+    "tm:irontail",
     "tm:knockoff",
+    "tm:leafblade",
     "tm:leafstorm",
+    "tm:leaftornado",
+    "tm:leechseed",
+    "tm:leer",
     "tm:lightscreen",
     "tm:magicalleaf",
+    "tm:meanlook",
+    "tm:megadrain",
+    "tm:mirrorcoat",
+    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:protect",
+    "tm:pursuit",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
-    "tm:round",
     "tm:safeguard",
-    "tm:secretpower",
     "tm:seedbomb",
+    "tm:slam",
     "tm:sleeptalk",
+    "tm:snatch",
     "tm:solarbeam",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:sweetscent",
     "tm:swift",
     "tm:swordsdance",
+    "tm:synthesis",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
     "tm:torment",
-    "tm:toxic",
     "tm:trailblaze",
+    "tm:twister",
+    "tm:vinewhip",
     "tm:workup",
-    "tutor:aquatail",
-    "tutor:bind",
-    "tutor:defog",
-    "tutor:gastroacid",
-    "tutor:gigadrain",
-    "tutor:grasspledge",
-    "tutor:irontail",
-    "tutor:knockoff",
-    "tutor:seedbomb",
-    "tutor:sleeptalk",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:synthesis",
-    "tutor:worryseed"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.servine.desc"
+    "tm:worryseed",
+    "tm:wrap",
+    "tm:wringout"
   ],
   "preEvolution": "snivy",
   "evolutions": [
@@ -143,24 +170,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.9,
-    "height": 1.7,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "height": 8,
-  "weight": 160,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

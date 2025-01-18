@@ -1,10 +1,25 @@
 {
-  "name": "Sandy Shocks",
   "nationalPokedexNumber": 989,
+  "name": "Sandy Shocks",
   "primaryType": "electric",
   "secondaryType": "ground",
+  "maleRatio": -1,
+  "height": 23,
+  "weight": 600,
+  "pokedex": [
+    "cobblemon.species.sandyshocks.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 85,
@@ -14,10 +29,6 @@
     "special_defence": 85,
     "speed": 101
   },
-  "catchRate": 30,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,17 +37,18 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 30,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "behaviour": {},
   "moves": [
+    "1:thunderwave",
     "1:electricterrain",
-    "1:sunnyday",
     "1:supersonic",
     "1:thundershock",
-    "1:thunderwave",
+    "1:sunnyday",
     "7:spark",
     "14:bulldoze",
     "21:chargebeam",
@@ -55,6 +67,7 @@
     "tm:bulldoze",
     "tm:charge",
     "tm:chargebeam",
+    "tm:discharge",
     "tm:earthpower",
     "tm:earthquake",
     "tm:eerieimpulse",
@@ -71,7 +84,9 @@
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:lightscreen",
+    "tm:magneticflux",
     "tm:metalsound",
+    "tm:mirrorcoat",
     "tm:mudshot",
     "tm:powergem",
     "tm:protect",
@@ -80,32 +95,27 @@
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:scorchingsands",
+    "tm:screech",
     "tm:sleeptalk",
+    "tm:spark",
     "tm:spikes",
     "tm:stealthrock",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:sunnyday",
     "tm:supercellslam",
+    "tm:supersonic",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
+    "tm:thundershock",
     "tm:thunderwave",
+    "tm:triattack",
     "tm:voltswitch",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tm:zapcannon"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 23,
-  "weight": 600,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.sandyshocks.desc"
-  ]
+  "evolutions": []
 }

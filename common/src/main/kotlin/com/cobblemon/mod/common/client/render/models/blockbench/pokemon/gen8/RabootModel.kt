@@ -71,7 +71,7 @@ class RabootModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
             poseName = "battle_idle",
             poseTypes = PoseType.STATIONARY_POSES,
             condition = { it.isBattling },
-            quirks = arrayOf(blink, hipQuirk),
+            quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("raboot", "battle_idle")

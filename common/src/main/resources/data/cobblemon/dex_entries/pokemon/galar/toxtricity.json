@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Low-Key",
-        "Gmax",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Low-Key",
+      "unlockForms": [
+        "Low-Key"
+      ]
+    },
+    {
+      "displayForm": "Gmax",
+      "unlockForms": [
+        "Gmax"
+      ]
+    },
+    {
+      "displayForm": "Low-Key-Gmax",
+      "unlockForms": [
         "Low-Key-Gmax"
       ]
     }

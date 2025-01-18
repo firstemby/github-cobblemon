@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Rapid-Strike",
-        "Gmax",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Rapid-Strike",
+      "unlockForms": [
+        "Rapid-Strike"
+      ]
+    },
+    {
+      "displayForm": "Gmax",
+      "unlockForms": [
+        "Gmax"
+      ]
+    },
+    {
+      "displayForm": "Rapid-Strike-Gmax",
+      "unlockForms": [
         "Rapid-Strike-Gmax"
       ]
     }

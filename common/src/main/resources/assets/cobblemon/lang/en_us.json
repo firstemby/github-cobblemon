@@ -428,6 +428,8 @@
   "item.cobblemon.shed_shell.tooltip": "Allows the holder to switch out in any situation",
   "item.cobblemon.shell_bell": "Shell Bell",
   "item.cobblemon.shell_bell.tooltip": "Heals the holder for a fraction of damage dealt every turn",
+  "item.cobblemon.shell_helmet": "Shell Helmet",
+  "item.cobblemon.shell_helmet.tooltip": "Evolves Karrablast into Escavalier",
   "item.cobblemon.silk_scarf": "Silk Scarf",
   "item.cobblemon.silk_scarf.tooltip": "Boosts the power of the holder's Normal-type moves",
   "item.cobblemon.silver_powder": "Silver Powder",
@@ -2317,7 +2319,6 @@
   "tag.item.cobblemon.apricorns": "Apricorns",
   "tag.item.cobblemon.azalea_tree": "Azalea Trees",
   "tag.item.cobblemon.berries": "Berries",
-  "tag.item.cobblemon.cobblemon_seeds": "Seeds",
   "tag.item.cobblemon.evolution_items": "Evolution Items",
   "tag.item.cobblemon.evolution_stones": "Evolution Stones",
   "tag.item.cobblemon.experience_candies": "Experience Candies",
@@ -2405,6 +2406,7 @@
   "tag.item.cobblemon.evolution_stone_blocks": "Evolution Stone Blocks",
   "tag.item.cobblemon.pokedex": "Pokédexes",
   "tag.item.cobblemon.pokedex_screen": "Pokédex Screens",
+  "tag.item.cobblemon.gilded_chests": "Gilded Chests",
 
   "npc.sacchi.name": "Professor Sacchi",
 
@@ -4415,6 +4417,15 @@
   "entity.cobblemon.poke_bobber": "Poké Bobber",
   "entity.cobblemon.boat": "Boat",
   "entity.cobblemon.chest_boat": "Boat with Chest",
+  
+  "painting.cobblemon.premonition.title": "Premonition",
+  "painting.cobblemon.premonition.author": "PKMNCC",
+  "painting.cobblemon.slumber.title": "Slumber",
+  "painting.cobblemon.slumber.author": "PKMNCC",
+  "painting.cobblemon.altar.title": "Altar",
+  "painting.cobblemon.altar.author": "PKMNCC",
+  "painting.cobblemon.nomad.title": "Nomad",
+  "painting.cobblemon.nomad.author": "PKMNCC",
 
   "cobblemon.species.bulbasaur.name": "Bulbasaur",
   "cobblemon.species.bulbasaur.desc": "While rare and elusive in the wild, Bulbasaur’s calm and easygoing nature makes it a popular choice for beginning trainers. The bud on its back is still developing, so this Pokémon must expend large amounts of energy to fuel its growth. As a result, it is often seen rummaging through composters in search of precious fertilizer.",

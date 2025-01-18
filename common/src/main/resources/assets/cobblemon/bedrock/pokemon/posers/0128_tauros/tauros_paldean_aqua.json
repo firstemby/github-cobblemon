@@ -1,0 +1,51 @@
+{
+    "portraitScale": 1.9,
+    "portraitTranslation": [-0.7, -0.25, 0],
+    "profileScale": 0.75,
+    "profileTranslation": [0, 0.6, 0],
+    "rootBone": "tauros",
+    "animations": {
+      "cry": "q.bedrock_stateful('tauros_paldean_aqua', 'cry')",
+      "status": "q.bedrock_primary('tauros_paldean_aqua', 'cry', q.curve('symmetrical_wide'))"
+    },
+    "poses": {
+      "standing": {
+        "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('tauros_paldean_aqua', 'ground_idle')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('tauros_paldean_aqua', 'blink')"
+        ]
+      },
+      "walking": {
+        "poseTypes": ["WALK"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('tauros_paldean_aqua', 'ground_walk')"
+        ],
+        "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
+      },
+      "float": {
+        "poseTypes": ["FLOAT"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('tauros_paldean_aqua', 'ground_idle')"
+        ],
+        "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
+      },
+      "swim": {
+        "poseTypes": ["SWIM"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('tauros_paldean_aqua', 'ground_walk')"
+        ],
+        "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
+      },
+      "sleep": {
+        "poseTypes": ["SLEEP"],
+        "animations": ["q.bedrock('tauros_paldean_aqua', 'sleep')"]
+      }
+    }
+   }

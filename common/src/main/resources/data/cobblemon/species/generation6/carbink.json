@@ -1,12 +1,26 @@
 {
   "implemented": true,
-  "name": "Carbink",
   "nationalPokedexNumber": 703,
+  "name": "Carbink",
   "primaryType": "rock",
   "secondaryType": "fairy",
+  "maleRatio": -1,
+  "height": 3,
+  "weight": 57,
+  "pokedex": [
+    "cobblemon.species.carbink.desc"
+  ],
+  "labels": [
+    "gen6"
+  ],
+  "aspects": [],
   "abilities": [
     "clearbody",
     "h:sturdy"
+  ],
+  "eggGroups": [
+    "fairy",
+    "mineral"
   ],
   "baseStats": {
     "hp": 50,
@@ -16,25 +30,51 @@
     "special_defence": 150,
     "speed": 50
   },
-  "catchRate": 60,
-  "maleRatio": -1,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 1,
+    "special_attack": 0,
+    "special_defence": 1,
+    "speed": 0
+  },
   "baseExperienceYield": 100,
   "experienceGroup": "slow",
+  "catchRate": 60,
   "eggCycles": 25,
-  "eggGroups": [
-    "fairy",
-    "mineral"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 1,
+    "height": 1.15,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:diamond",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:babiri_berry",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:float_stone",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:harden",
     "1:tackle",
+    "1:harden",
+    "1:rockthrow",
+    "1:sharpen",
     "5:guardsplit",
-    "5:rockthrow",
-    "8:sharpen",
     "10:smackdown",
     "15:flail",
-    "18:reflect",
     "20:ancientpower",
     "25:rockpolish",
     "30:lightscreen",
@@ -44,38 +84,42 @@
     "50:stealthrock",
     "55:moonblast",
     "60:stoneedge",
-    "70:safeguard",
+    "tm:afteryou",
     "tm:allyswitch",
+    "tm:ancientpower",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:calmmind",
     "tm:charm",
-    "tm:confide",
+    "tm:covet",
     "tm:dazzlinggleam",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:earthpower",
     "tm:endeavor",
     "tm:endure",
     "tm:explosion",
     "tm:facade",
+    "tm:flail",
     "tm:flash",
     "tm:flashcannon",
-    "tm:frustration",
     "tm:gigaimpact",
     "tm:gravity",
+    "tm:guardsplit",
     "tm:guardswap",
     "tm:gyroball",
     "tm:hail",
+    "tm:harden",
     "tm:heavyslam",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
     "tm:lightscreen",
+    "tm:magiccoat",
+    "tm:magnetrise",
     "tm:meteorbeam",
     "tm:mistyexplosion",
     "tm:mistyterrain",
+    "tm:moonblast",
     "tm:naturepower",
     "tm:powergem",
     "tm:protect",
@@ -84,91 +128,31 @@
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
     "tm:rockblast",
     "tm:rockpolish",
     "tm:rockslide",
+    "tm:rockthrow",
     "tm:rocktomb",
-    "tm:round",
     "tm:safeguard",
     "tm:sandstorm",
     "tm:sandtomb",
-    "tm:secretpower",
+    "tm:sharpen",
     "tm:skillswap",
     "tm:sleeptalk",
     "tm:smackdown",
-    "tm:snore",
     "tm:spikes",
     "tm:stealthrock",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:tackle",
     "tm:takedown",
+    "tm:telekinesis",
     "tm:terablast",
-    "tm:toxic",
+    "tm:terrainpulse",
     "tm:trickroom",
-    "tm:wonderroom",
-    "tutor:afteryou",
-    "tutor:allyswitch",
-    "tutor:covet",
-    "tutor:earthpower",
-    "tutor:gravity",
-    "tutor:irondefense",
-    "tutor:magiccoat",
-    "tutor:magnetrise",
-    "tutor:meteorbeam",
-    "tutor:mistyexplosion",
-    "tutor:skillswap",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:stompingtantrum",
-    "tutor:telekinesis",
-    "tutor:terrainpulse",
-    "tutor:wonderroom"
+    "tm:wonderroom"
   ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.carbink.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 1,
-    "height": 1.15,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 1,
-    "special_attack": 0,
-    "special_defence": 1,
-    "speed": 0
-  },
-  "height": 3,
-  "weight": 57,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:diamond",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:babiri_berry",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:float_stone",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

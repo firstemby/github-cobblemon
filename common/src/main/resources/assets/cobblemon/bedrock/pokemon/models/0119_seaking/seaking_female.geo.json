@@ -12,12 +12,12 @@
 			},
 			"bones": [
 				{
-					"name": "seaking",
+					"name": "seaking_female",
 					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "body",
-					"parent": "seaking",
+					"parent": "seaking_female",
 					"pivot": [0, 10.5, 0]
 				},
 				{
@@ -176,7 +176,7 @@
 					]
 				},
 				{
-					"name": "tail_end",
+					"name": "torso_end",
 					"parent": "torso",
 					"pivot": [0, 10.5, 4],
 					"cubes": [
@@ -184,8 +184,13 @@
 					]
 				},
 				{
+					"name": "tail",
+					"parent": "torso_end",
+					"pivot": [0, 10.5, 4]
+				},
+				{
 					"name": "tail_back_right1",
-					"parent": "tail_end",
+					"parent": "tail",
 					"pivot": [-1.5, 8, 10],
 					"cubes": [
 						{"origin": [-1.5, 2.5, 10], "size": [0, 11, 17], "inflate": 0.01, "uv": [0, 46]}
@@ -217,7 +222,7 @@
 				},
 				{
 					"name": "tail_back_left1",
-					"parent": "tail_end",
+					"parent": "tail",
 					"pivot": [1.5, 8, 10],
 					"cubes": [
 						{"origin": [1.5, 2.5, 10], "size": [0, 11, 17], "inflate": 0.01, "uv": [34, 53]}

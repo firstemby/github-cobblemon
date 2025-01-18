@@ -286,7 +286,10 @@ class StorageWidget(
         }
 
         pastureWidget?.render(context, mouseX, mouseY, delta)
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, 1000.0)
         grabbedSlot?.render(context, mouseX, mouseY, delta)
+        matrices.popPose()
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {

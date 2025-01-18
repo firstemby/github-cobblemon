@@ -1,12 +1,54 @@
 {
   "implemented": true,
-  "name": "Zweilous",
   "nationalPokedexNumber": 634,
+  "name": "Zweilous",
   "primaryType": "dark",
   "secondaryType": "dragon",
-  "abilities": [
-    "hustle"
+  "maleRatio": 0.5,
+  "height": 14,
+  "weight": 500,
+  "pokedex": [
+    "cobblemon.species.zweilous.desc"
   ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
+  "abilities": [
+    "hustle",
+    "h:hustle"
+  ],
+  "eggGroups": [
+    "dragon"
+  ],
+  "baseStats": {
+    "hp": 72,
+    "attack": 85,
+    "defence": 70,
+    "special_attack": 65,
+    "special_defence": 70,
+    "speed": 58
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 147,
+  "experienceGroup": "slow",
+  "catchRate": 45,
+  "eggCycles": 40,
+  "baseFriendship": 35,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 1.5,
+    "height": 1.8,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
@@ -16,33 +58,16 @@
       },
       {
         "item": "cobblemon:roseli_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
-  "baseStats": {
-    "hp": 72,
-    "attack": 85,
-    "defence": 70,
-    "special_attack": 65,
-    "special_defence": 70,
-    "speed": 58
-  },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 147,
-  "experienceGroup": "slow",
-  "eggCycles": 40,
-  "eggGroups": [
-    "dragon"
-  ],
   "moves": [
-    "1:bite",
     "1:doublehit",
-    "1:dragonbreath",
     "1:dragonrage",
     "1:focusenergy",
+    "1:bite",
+    "1:dragonbreath",
     "1:tackle",
     "12:roar",
     "16:assurance",
@@ -57,26 +82,35 @@
     "54:dragonrush",
     "60:nastyplot",
     "66:outrage",
+    "egg:astonish",
+    "egg:belch",
+    "egg:doublehit",
+    "egg:headsmash",
+    "tm:aquatail",
     "tm:assurance",
-    "tm:attract",
+    "tm:astonish",
     "tm:beatup",
+    "tm:belch",
+    "tm:bite",
     "tm:bodyslam",
-    "tm:confide",
     "tm:crunch",
     "tm:darkpulse",
-    "tm:doubleteam",
+    "tm:doublehit",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonpulse",
+    "tm:dragonrage",
+    "tm:dragonrush",
     "tm:dragontail",
     "tm:earthpower",
     "tm:endure",
     "tm:facade",
     "tm:firefang",
     "tm:focusenergy",
-    "tm:frustration",
+    "tm:headbutt",
+    "tm:headsmash",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hypervoice",
     "tm:icefang",
     "tm:incinerate",
@@ -87,23 +121,21 @@
     "tm:psychup",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rocksmash",
-    "tm:round",
     "tm:scaryface",
     "tm:screech",
-    "tm:secretpower",
+    "tm:shockwave",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
     "tm:spite",
     "tm:stompingtantrum",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:swagger",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -111,30 +143,8 @@
     "tm:thunderfang",
     "tm:thunderwave",
     "tm:torment",
-    "tm:toxic",
-    "tm:uproar",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:aquatail",
-    "tutor:darkpulse",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:earthpower",
-    "tutor:hypervoice",
-    "tutor:outrage",
-    "tutor:shockwave",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:superpower",
-    "tutor:uproar",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.zweilous.desc"
+    "tm:zenheadbutt"
   ],
   "preEvolution": "deino",
   "evolutions": [
@@ -151,24 +161,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 1.5,
-    "height": 1.8,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 14,
-  "weight": 500,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

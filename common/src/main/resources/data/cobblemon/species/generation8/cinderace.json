@@ -1,11 +1,25 @@
 {
   "implemented": true,
-  "name": "Cinderace",
   "nationalPokedexNumber": 815,
+  "name": "Cinderace",
   "primaryType": "fire",
+  "maleRatio": 0.875,
+  "height": 14,
+  "weight": 330,
+  "pokedex": [
+    "cobblemon.species.cinderace.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "blaze",
     "h:libero"
+  ],
+  "eggGroups": [
+    "field",
+    "human_like"
   ],
   "baseStats": {
     "hp": 80,
@@ -15,63 +29,26 @@
     "special_defence": 75,
     "speed": 119
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
-  "forms": [
-    {
-      "name": "Gmax",
-      "primaryType": "fire",
-      "abilities": [
-        "blaze",
-        "h:libero"
-      ],
-      "baseStats": {
-        "hp": 80,
-        "attack": 116,
-        "defence": 75,
-        "special_attack": 65,
-        "special_defence": 75,
-        "speed": 119
-      },
-      "catchRate": 45,
-      "maleRatio": 0.875,
-      "baseExperienceYield": 265,
-      "baseFriendship": 50,
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 3
-      },
-      "experienceGroup": "medium_slow",
-      "eggCycles": 20,
-      "eggGroups": [
-        "field",
-        "human_like"
-      ],
-      "labels": [
-        "gen8",
-        "gmax"
-      ],
-      "aspects": [
-        "gmax"
-      ],
-      "height": 30,
-      "weight": 0,
-      "cannotDynamax": false,
-      "battleOnly": false
-    }
-  ],
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 3
+  },
   "baseExperienceYield": 265,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "human_like"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.9,
+    "height": 3,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 6,
     "entries": [
@@ -84,21 +61,21 @@
       },
       {
         "item": "minecraft:rabbit_foot",
-        "percentage": 25.0
+        "percentage": 25
       },
       {
         "item": "cobblemon:charcoal_stick",
-        "percentage": 25.0
+        "percentage": 25
       }
     ]
   },
   "moves": [
-    "1:ember",
-    "1:feint",
-    "1:growl",
-    "1:quickattack",
-    "1:tackle",
     "1:pyroball",
+    "1:feint",
+    "1:tackle",
+    "1:growl",
+    "1:ember",
+    "1:quickattack",
     "12:doublekick",
     "19:flamecharge",
     "24:agility",
@@ -107,11 +84,14 @@
     "46:bounce",
     "54:doubleedge",
     "62:courtchange",
+    "egg:highjumpkick",
+    "egg:sandattack",
+    "egg:suckerpunch",
+    "egg:superfang",
     "tm:acrobatics",
     "tm:agility",
     "tm:allyswitch",
     "tm:assurance",
-    "tm:attract",
     "tm:batonpass",
     "tm:blastburn",
     "tm:blazekick",
@@ -119,10 +99,15 @@
     "tm:bulkup",
     "tm:burningjealousy",
     "tm:coaching",
+    "tm:counter",
+    "tm:courtchange",
     "tm:doubleedge",
+    "tm:doublekick",
     "tm:electroball",
+    "tm:ember",
     "tm:endure",
     "tm:facade",
+    "tm:feint",
     "tm:fireblast",
     "tm:firefang",
     "tm:firepledge",
@@ -135,9 +120,12 @@
     "tm:focusblast",
     "tm:focusenergy",
     "tm:gigaimpact",
+    "tm:growl",
     "tm:gunkshot",
+    "tm:headbutt",
     "tm:heatwave",
     "tm:helpinghand",
+    "tm:highjumpkick",
     "tm:hyperbeam",
     "tm:ironhead",
     "tm:lowkick",
@@ -147,21 +135,24 @@
     "tm:mudslap",
     "tm:overheat",
     "tm:protect",
+    "tm:pyroball",
+    "tm:quickattack",
     "tm:rest",
     "tm:revenge",
     "tm:reversal",
-    "tm:round",
+    "tm:sandattack",
     "tm:scorchingsands",
     "tm:shadowball",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:snarl",
-    "tm:snore",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
     "tm:superfang",
     "tm:swift",
     "tm:swordsdance",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
@@ -171,37 +162,155 @@
     "tm:weatherball",
     "tm:willowisp",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:blastburn",
-    "tutor:coaching",
-    "tutor:firepledge",
-    "tutor:scorchingsands"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.cinderace.desc"
+    "tm:zenheadbutt"
   ],
   "preEvolution": "raboot",
   "evolutions": [],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.9,
-    "height": 3,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 3
-  },
-  "height": 14,
-  "weight": 330,
-  "aspects": [],
-  "cannotDynamax": false
+  "forms": [
+    {
+      "name": "Gmax",
+      "primaryType": "fire",
+      "maleRatio": 0.875,
+      "height": 270,
+      "weight": 0,
+      "pokedex": [
+        "cobblemon.species.cinderace-gmax.desc"
+      ],
+      "labels": [
+        "gen8",
+        "gmax"
+      ],
+      "aspects": [
+        "gmax"
+      ],
+      "abilities": [
+        "blaze",
+        "h:libero"
+      ],
+      "eggGroups": [
+        "field",
+        "human_like"
+      ],
+      "baseStats": {
+        "hp": 80,
+        "attack": 116,
+        "defence": 75,
+        "special_attack": 65,
+        "special_defence": 75,
+        "speed": 119
+      },
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 0,
+        "speed": 3
+      },
+      "baseExperienceYield": 265,
+      "experienceGroup": "medium_slow",
+      "catchRate": 45,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "dynamaxBlocked": true,
+      "behaviour": {},
+      "moves": [
+        "1:pyroball",
+        "1:feint",
+        "1:tackle",
+        "1:growl",
+        "1:ember",
+        "1:quickattack",
+        "12:doublekick",
+        "19:flamecharge",
+        "24:agility",
+        "30:headbutt",
+        "38:counter",
+        "46:bounce",
+        "54:doubleedge",
+        "62:courtchange",
+        "egg:highjumpkick",
+        "egg:sandattack",
+        "egg:suckerpunch",
+        "egg:superfang",
+        "tm:acrobatics",
+        "tm:agility",
+        "tm:allyswitch",
+        "tm:assurance",
+        "tm:batonpass",
+        "tm:blastburn",
+        "tm:blazekick",
+        "tm:bounce",
+        "tm:bulkup",
+        "tm:burningjealousy",
+        "tm:coaching",
+        "tm:counter",
+        "tm:courtchange",
+        "tm:doubleedge",
+        "tm:doublekick",
+        "tm:electroball",
+        "tm:ember",
+        "tm:endure",
+        "tm:facade",
+        "tm:feint",
+        "tm:fireblast",
+        "tm:firefang",
+        "tm:firepledge",
+        "tm:firepunch",
+        "tm:firespin",
+        "tm:flamecharge",
+        "tm:flamethrower",
+        "tm:flareblitz",
+        "tm:fling",
+        "tm:focusblast",
+        "tm:focusenergy",
+        "tm:gigaimpact",
+        "tm:growl",
+        "tm:gunkshot",
+        "tm:headbutt",
+        "tm:heatwave",
+        "tm:helpinghand",
+        "tm:highjumpkick",
+        "tm:hyperbeam",
+        "tm:ironhead",
+        "tm:lowkick",
+        "tm:lowsweep",
+        "tm:megakick",
+        "tm:mudshot",
+        "tm:mudslap",
+        "tm:overheat",
+        "tm:protect",
+        "tm:pyroball",
+        "tm:quickattack",
+        "tm:rest",
+        "tm:revenge",
+        "tm:reversal",
+        "tm:sandattack",
+        "tm:scorchingsands",
+        "tm:shadowball",
+        "tm:sleeptalk",
+        "tm:smackdown",
+        "tm:snarl",
+        "tm:substitute",
+        "tm:suckerpunch",
+        "tm:sunnyday",
+        "tm:superfang",
+        "tm:swift",
+        "tm:swordsdance",
+        "tm:tackle",
+        "tm:takedown",
+        "tm:taunt",
+        "tm:temperflare",
+        "tm:terablast",
+        "tm:trailblaze",
+        "tm:uturn",
+        "tm:weatherball",
+        "tm:willowisp",
+        "tm:workup",
+        "tm:zenheadbutt"
+      ],
+      "evolutions": [],
+      "battleOnly": true
+    }
+  ]
 }

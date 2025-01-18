@@ -1,10 +1,27 @@
 {
-  "name": "Morpeko",
   "nationalPokedexNumber": 877,
+  "name": "Morpeko",
   "primaryType": "electric",
   "secondaryType": "dark",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 30,
+  "pokedex": [
+    "cobblemon.species.morpeko.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [
+    "full_belly-mode"
+  ],
   "abilities": [
-    "hungerswitch"
+    "hungerswitch",
+    "h:hungerswitch"
+  ],
+  "eggGroups": [
+    "field",
+    "fairy"
   ],
   "baseStats": {
     "hp": 58,
@@ -14,19 +31,38 @@
     "special_defence": 58,
     "speed": 97
   },
-  "catchRate": 180,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
   "baseExperienceYield": 153,
   "experienceGroup": "medium_fast",
+  "catchRate": 180,
   "eggCycles": 10,
-  "eggGroups": [
-    "field",
-    "fairy"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:roseli_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:tailwhip",
     "1:thundershock",
+    "1:tailwhip",
     "5:leer",
     "10:powertrip",
     "15:quickattack",
@@ -49,8 +85,9 @@
     "egg:tickle",
     "tm:agility",
     "tm:assurance",
-    "tm:attract",
+    "tm:aurawheel",
     "tm:batonpass",
+    "tm:bite",
     "tm:brickbreak",
     "tm:bulletseed",
     "tm:charge",
@@ -65,78 +102,84 @@
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:fakeout",
     "tm:faketears",
     "tm:firefang",
+    "tm:flatter",
     "tm:fling",
     "tm:foulplay",
     "tm:icefang",
     "tm:knockoff",
     "tm:lashout",
+    "tm:leer",
     "tm:nastyplot",
     "tm:outrage",
+    "tm:partingshot",
     "tm:payback",
+    "tm:powertrip",
     "tm:protect",
     "tm:psychicfangs",
+    "tm:quash",
+    "tm:quickattack",
+    "tm:rapidspin",
     "tm:rest",
     "tm:revenge",
     "tm:reversal",
-    "tm:round",
+    "tm:risingvoltage",
     "tm:scaryface",
     "tm:seedbomb",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
+    "tm:spark",
     "tm:spite",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:superfang",
+    "tm:swagger",
     "tm:swift",
+    "tm:tailwhip",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
     "tm:thief",
+    "tm:thrash",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderfang",
     "tm:thunderpunch",
+    "tm:thundershock",
     "tm:thunderwave",
+    "tm:tickle",
+    "tm:torment",
     "tm:uproar",
     "tm:voltswitch",
-    "tm:wildcharge",
-    "tutor:lashout",
-    "tutor:risingvoltage"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.morpeko.desc"
+    "tm:wildcharge"
   ],
   "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "height": 3,
-  "weight": 30,
   "forms": [
     {
       "name": "Hangry",
       "primaryType": "electric",
       "secondaryType": "dark",
+      "maleRatio": 0.5,
+      "height": 3,
+      "weight": 30,
+      "pokedex": [
+        "cobblemon.species.morpeko-hangry.desc"
+      ],
+      "labels": [
+        "gen8"
+      ],
+      "aspects": [
+        "hangry-mode"
+      ],
       "abilities": [
-        "hungerswitch"
+        "hungerswitch",
+        "h:hungerswitch"
+      ],
+      "eggGroups": [
+        "field",
+        "fairy"
       ],
       "baseStats": {
         "hp": 58,
@@ -146,10 +189,6 @@
         "special_defence": 58,
         "speed": 97
       },
-      "catchRate": 180,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 153,
-      "baseFriendship": 50,
       "evYield": {
         "hp": 0,
         "attack": 0,
@@ -158,33 +197,109 @@
         "special_defence": 0,
         "speed": 2
       },
+      "baseExperienceYield": 153,
       "experienceGroup": "medium_fast",
+      "catchRate": 180,
       "eggCycles": 10,
-      "eggGroups": [
-        "field",
-        "fairy"
+      "baseFriendship": 50,
+      "behaviour": {},
+      "moves": [
+        "1:thundershock",
+        "1:tailwhip",
+        "5:leer",
+        "10:powertrip",
+        "15:quickattack",
+        "20:flatter",
+        "25:bite",
+        "30:spark",
+        "35:torment",
+        "40:agility",
+        "45:bulletseed",
+        "50:crunch",
+        "55:aurawheel",
+        "60:thrash",
+        "egg:charge",
+        "egg:fakeout",
+        "egg:partingshot",
+        "egg:quash",
+        "egg:rapidspin",
+        "egg:superfang",
+        "egg:swagger",
+        "egg:tickle",
+        "tm:agility",
+        "tm:assurance",
+        "tm:aurawheel",
+        "tm:batonpass",
+        "tm:bite",
+        "tm:brickbreak",
+        "tm:bulletseed",
+        "tm:charge",
+        "tm:chargebeam",
+        "tm:crunch",
+        "tm:darkpulse",
+        "tm:doubleedge",
+        "tm:eerieimpulse",
+        "tm:electricterrain",
+        "tm:electroball",
+        "tm:electroweb",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:facade",
+        "tm:fakeout",
+        "tm:faketears",
+        "tm:firefang",
+        "tm:flatter",
+        "tm:fling",
+        "tm:foulplay",
+        "tm:icefang",
+        "tm:knockoff",
+        "tm:lashout",
+        "tm:leer",
+        "tm:nastyplot",
+        "tm:outrage",
+        "tm:partingshot",
+        "tm:payback",
+        "tm:powertrip",
+        "tm:protect",
+        "tm:psychicfangs",
+        "tm:quash",
+        "tm:quickattack",
+        "tm:rapidspin",
+        "tm:rest",
+        "tm:revenge",
+        "tm:reversal",
+        "tm:risingvoltage",
+        "tm:scaryface",
+        "tm:seedbomb",
+        "tm:sleeptalk",
+        "tm:snarl",
+        "tm:spark",
+        "tm:spite",
+        "tm:stompingtantrum",
+        "tm:substitute",
+        "tm:superfang",
+        "tm:swagger",
+        "tm:swift",
+        "tm:tailwhip",
+        "tm:takedown",
+        "tm:taunt",
+        "tm:terablast",
+        "tm:thief",
+        "tm:thrash",
+        "tm:thunder",
+        "tm:thunderbolt",
+        "tm:thunderfang",
+        "tm:thunderpunch",
+        "tm:thundershock",
+        "tm:thunderwave",
+        "tm:tickle",
+        "tm:torment",
+        "tm:uproar",
+        "tm:voltswitch",
+        "tm:wildcharge"
       ],
-      "labels": [
-        "gen8"
-      ],
-      "aspects": [
-        "hangry"
-      ],
-      "height": 3,
-      "weight": 30,
-      "cannotDynamax": false,
+      "evolutions": [],
       "battleOnly": true
     }
-  ],
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:roseli_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

@@ -1,4 +1,9 @@
 {
-    "pokemon": ["shellos", "gastrodon"],
-    "features": ["sea"]
-  }
+  "pokemon": [
+    "shellos",
+    "gastrodon"
+  ],
+  "features": [
+    "sea"
+  ]
+}

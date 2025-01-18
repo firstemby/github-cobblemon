@@ -1,12 +1,25 @@
 {
   "implemented": true,
-  "name": "Incineroar",
   "nationalPokedexNumber": 727,
+  "name": "Incineroar",
   "primaryType": "fire",
   "secondaryType": "dark",
+  "maleRatio": 0.875,
+  "height": 18,
+  "weight": 830,
+  "pokedex": [
+    "cobblemon.species.incineroar.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
     "blaze",
     "h:intimidate"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 95,
@@ -16,15 +29,26 @@
     "special_defence": 90,
     "speed": 60
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 3,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 265,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 15,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.85,
+  "hitbox": {
+    "width": 1,
+    "height": 2.9,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.94,
   "behaviour": {
     "moving": {
       "walk": {
@@ -33,7 +57,6 @@
     },
     "resting": {
       "canSleep": true,
-      "times": "night",
       "willSleepOnBed": true
     }
   },
@@ -42,26 +65,26 @@
     "entries": [
       {
         "item": "cobblemon:charcoal_stick",
-        "percentage": 25.0
+        "percentage": 25
       },
       {
         "item": "cobblemon:expert_belt",
-        "percentage": 25.0
+        "percentage": 25
       }
     ]
   },
   "moves": [
-    "1:bulkup",
-    "1:crosschop",
     "1:darkestlariat",
+    "1:bulkup",
+    "1:throatchop",
+    "1:scratch",
     "1:ember",
     "1:growl",
     "1:lick",
-    "1:scratch",
-    "1:throatchop",
-    "1:darkestlariat",
+    "1:leer",
+    "1:outrage",
+    "1:crosschop",
     "9:roar",
-    "11:leer",
     "12:furyswipes",
     "15:bite",
     "20:doublekick",
@@ -71,12 +94,15 @@
     "44:flamethrower",
     "51:thrash",
     "58:flareblitz",
-    "60:outrage",
+    "egg:fakeout",
+    "egg:partingshot",
+    "egg:powertrip",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:assurance",
-    "tm:attract",
     "tm:batonpass",
+    "tm:bind",
+    "tm:bite",
     "tm:blastburn",
     "tm:blazekick",
     "tm:bodyslam",
@@ -86,18 +112,22 @@
     "tm:bulldoze",
     "tm:burningjealousy",
     "tm:closecombat",
-    "tm:confide",
+    "tm:covet",
+    "tm:crosschop",
     "tm:crunch",
     "tm:darkestlariat",
     "tm:darkpulse",
     "tm:doubleedge",
-    "tm:doubleteam",
+    "tm:doublekick",
     "tm:drainpunch",
+    "tm:dualchop",
     "tm:earthquake",
     "tm:embargo",
+    "tm:ember",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:fakeout",
     "tm:fireblast",
     "tm:firefang",
     "tm:firepledge",
@@ -109,17 +139,19 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:frustration",
+    "tm:furyswipes",
     "tm:gigaimpact",
+    "tm:growl",
     "tm:heatcrash",
     "tm:heatwave",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:ironhead",
     "tm:knockoff",
     "tm:lashout",
     "tm:leechlife",
+    "tm:leer",
+    "tm:lick",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:megakick",
@@ -127,21 +159,22 @@
     "tm:nastyplot",
     "tm:outrage",
     "tm:overheat",
+    "tm:partingshot",
     "tm:payday",
+    "tm:powertrip",
     "tm:protect",
     "tm:quash",
     "tm:rest",
-    "tm:return",
     "tm:revenge",
     "tm:reversal",
     "tm:roar",
-    "tm:round",
     "tm:scaryface",
     "tm:scorchingsands",
+    "tm:scratch",
     "tm:shadowclaw",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
+    "tm:snatch",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:sunnyday",
@@ -153,68 +186,15 @@
     "tm:temperflare",
     "tm:terablast",
     "tm:thief",
+    "tm:thrash",
     "tm:throatchop",
     "tm:thunderpunch",
     "tm:torment",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:uturn",
     "tm:willowisp",
-    "tm:workup",
-    "tutor:bind",
-    "tutor:blastburn",
-    "tutor:burningjealousy",
-    "tutor:covet",
-    "tutor:darkestlariat",
-    "tutor:drainpunch",
-    "tutor:dualchop",
-    "tutor:endeavor",
-    "tutor:fakeout",
-    "tutor:firepledge",
-    "tutor:firepunch",
-    "tutor:flareblitz",
-    "tutor:focuspunch",
-    "tutor:heatwave",
-    "tutor:ironhead",
-    "tutor:knockoff",
-    "tutor:lashout",
-    "tutor:lowkick",
-    "tutor:outrage",
-    "tutor:scorchingsands",
-    "tutor:snatch",
-    "tutor:snore",
-    "tutor:stompingtantrum",
-    "tutor:superpower",
-    "tutor:throatchop",
-    "tutor:thunderpunch",
-    "tutor:uturn"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.incineroar.desc"
+    "tm:workup"
   ],
   "preEvolution": "torracat",
-  "evolutions": [],
-  "standingEyeHeight": 0.94,
-  "baseScale": 0.85,
-  "hitbox": {
-    "width": 1,
-    "height": 2.9,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 3,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 18,
-  "weight": 830,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

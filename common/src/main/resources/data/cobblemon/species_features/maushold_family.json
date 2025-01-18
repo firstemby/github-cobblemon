@@ -3,7 +3,7 @@
   "keys": [
     "maushold_family"
   ],
-  "default": "random",
+  "default": "four",
   "choices": [
     "three",
     "four"

@@ -1,22 +1,27 @@
 {
   "implemented": true,
-  "name": "Meowscarada",
   "nationalPokedexNumber": 908,
+  "name": "Meowscarada",
   "primaryType": "grass",
   "secondaryType": "dark",
+  "maleRatio": 0.875,
+  "height": 15,
+  "weight": 312,
+  "pokedex": [
+    "cobblemon.species.meowscarada.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "overgrow",
     "h:protean"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:miracle_seed",
-        "percentage": 25.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field",
+    "grass"
+  ],
   "baseStats": {
     "hp": 76,
     "attack": 110,
@@ -25,10 +30,6 @@
     "special_defence": 70,
     "speed": 123
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "baseExperienceYield": 265,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -37,17 +38,21 @@
     "special_defence": 0,
     "speed": 3
   },
+  "baseExperienceYield": 265,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.67,
+  "hitbox": {
+    "width": 1,
+    "height": 3,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
@@ -56,12 +61,21 @@
       }
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:miracle_seed",
+        "percentage": 25
+      }
+    ]
+  },
   "moves": [
-    "1:doubleteam",
     "1:flowertrick",
     "1:leafage",
     "1:scratch",
     "1:tailwhip",
+    "1:doubleteam",
     "1:trick",
     "7:bite",
     "10:honeclaws",
@@ -77,14 +91,22 @@
     "52:knockoff",
     "58:grassyterrain",
     "64:leafstorm",
+    "egg:allyswitch",
+    "egg:copycat",
+    "egg:leechseed",
+    "egg:petalblizzard",
+    "egg:suckerpunch",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
+    "tm:allyswitch",
     "tm:aurasphere",
+    "tm:bite",
     "tm:brickbreak",
     "tm:bulletseed",
     "tm:charm",
     "tm:chillingwater",
+    "tm:copycat",
     "tm:darkpulse",
     "tm:disarmingvoice",
     "tm:doubleteam",
@@ -93,6 +115,7 @@
     "tm:facade",
     "tm:faketears",
     "tm:fling",
+    "tm:flowertrick",
     "tm:foulplay",
     "tm:frenzyplant",
     "tm:gigadrain",
@@ -102,31 +125,40 @@
     "tm:grassyglide",
     "tm:grassyterrain",
     "tm:helpinghand",
+    "tm:honeclaws",
     "tm:hyperbeam",
     "tm:knockoff",
     "tm:lashout",
+    "tm:leafage",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:magicalleaf",
     "tm:mudslap",
     "tm:nastyplot",
+    "tm:nightslash",
     "tm:petalblizzard",
     "tm:playrough",
     "tm:pollenpuff",
     "tm:powergem",
     "tm:protect",
     "tm:psychup",
+    "tm:quickattack",
     "tm:rest",
+    "tm:scratch",
     "tm:seedbomb",
     "tm:shadowball",
     "tm:shadowclaw",
     "tm:skillswap",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:spikes",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:swift",
+    "tm:tailwhip",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -138,24 +170,9 @@
     "tm:trick",
     "tm:trickroom",
     "tm:tripleaxel",
-    "tm:uturn"
+    "tm:uturn",
+    "tm:worryseed"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 15,
-  "weight": 312,
   "preEvolution": "floragato",
-  "evolutions": [],
-  "baseScale": 0.67,
-  "hitbox": {
-    "width": 1,
-    "height": 3.0,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.meowscarada.desc"
-  ]
+  "evolutions": []
 }

@@ -10,10 +10,10 @@
             "item": "minecraft:paper"
         },
         "W": {
-            "item": "minecraft:white_dye"
+            "tag": "c:dyes/white"
         },
         "R": {
-            "item": "minecraft:red_dye"
+            "tag": "c:dyes/red"
         }
     },
     "result": {

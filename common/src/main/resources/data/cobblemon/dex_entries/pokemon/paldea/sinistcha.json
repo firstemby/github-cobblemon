@@ -7,7 +7,12 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Masterpiece",
+      "unlockForms": [
         "Masterpiece"
       ]
     }

@@ -1,26 +1,26 @@
 {
   "implemented": true,
-  "name": "Luxio",
   "nationalPokedexNumber": 404,
+  "name": "Luxio",
   "primaryType": "electric",
+  "maleRatio": 0.5,
+  "height": 9,
+  "weight": 305,
+  "pokedex": [
+    "cobblemon.species.luxio.desc"
+  ],
+  "labels": [
+    "gen4"
+  ],
+  "aspects": [],
   "abilities": [
     "rivalry",
     "intimidate",
     "h:guts"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "cobblemon:quick_claw",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:shuca_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field"
+  ],
   "baseStats": {
     "hp": 60,
     "attack": 85,
@@ -29,59 +29,75 @@
     "special_defence": 49,
     "speed": 60
   },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 127,
   "experienceGroup": "medium_slow",
+  "catchRate": 120,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 100,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.9,
+    "height": 1.1,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "cobblemon:quick_claw",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:shuca_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:charge",
-    "1:leer",
     "1:tackle",
+    "1:leer",
+    "1:charge",
     "1:thundershock",
-    "9:charge",
     "12:bite",
-    "13:bite",
-    "13:spark",
-    "18:bite",
     "18:spark",
-    "23:roar",
     "24:roar",
-    "28:swagger",
     "31:voltswitch",
-    "33:crunch",
-    "33:thunderfang",
     "36:scaryface",
-    "38:crunch",
     "42:thunderwave",
-    "43:scaryface",
     "48:crunch",
-    "48:discharge",
-    "53:wildcharge",
     "54:discharge",
     "60:swagger",
     "68:wildcharge",
-    "tm:attract",
-    "tm:captivate",
+    "egg:babydolleyes",
+    "egg:doublekick",
+    "egg:howl",
+    "egg:nightslash",
+    "egg:quickattack",
+    "egg:shockwave",
+    "egg:takedown",
+    "tm:babydolleyes",
+    "tm:bite",
     "tm:charge",
     "tm:chargebeam",
-    "tm:confide",
     "tm:confuseray",
     "tm:crunch",
+    "tm:discharge",
     "tm:doubleedge",
-    "tm:doubleteam",
+    "tm:doublekick",
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
@@ -91,61 +107,47 @@
     "tm:faketears",
     "tm:firefang",
     "tm:flash",
-    "tm:frustration",
+    "tm:furycutter",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
+    "tm:howl",
     "tm:icefang",
     "tm:irontail",
+    "tm:leer",
     "tm:lightscreen",
-    "tm:naturalgift",
+    "tm:magnetrise",
+    "tm:nightslash",
     "tm:playrough",
     "tm:protect",
     "tm:psychicfangs",
+    "tm:quickattack",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
+    "tm:risingvoltage",
     "tm:roar",
-    "tm:round",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:shockwave",
+    "tm:signalbeam",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
+    "tm:spark",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swagger",
     "tm:swift",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderfang",
+    "tm:thundershock",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:voltswitch",
-    "tm:wildcharge",
-    "tutor:furycutter",
-    "tutor:headbutt",
-    "tutor:helpinghand",
-    "tutor:irontail",
-    "tutor:magnetrise",
-    "tutor:mudslap",
-    "tutor:risingvoltage",
-    "tutor:shockwave",
-    "tutor:signalbeam",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:swift"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.luxio.desc"
+    "tm:wildcharge"
   ],
   "preEvolution": "shinx",
   "evolutions": [
@@ -162,24 +164,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 0.9,
-    "height": 1.1,
-    "fixed": false
-  },
-  "baseFriendship": 100,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 9,
-  "weight": 305,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

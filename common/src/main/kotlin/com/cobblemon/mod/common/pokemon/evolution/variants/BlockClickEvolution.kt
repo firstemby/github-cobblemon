@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.evolution.variants
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
@@ -36,7 +37,8 @@ open class BlockClickEvolution(
     override var optional: Boolean,
     override var consumeHeldItem: Boolean,
     override val requirements: MutableSet<EvolutionRequirement>,
-    override val learnableMoves: MutableSet<MoveTemplate>
+    override val learnableMoves: MutableSet<MoveTemplate>,
+    override val drops: DropTable,
 ) : ContextEvolution<BlockClickEvolution.BlockInteractionContext, RegistryLikeCondition<Block>> {
     constructor(): this(
         id = "id",
@@ -46,7 +48,8 @@ open class BlockClickEvolution(
         optional = true,
         consumeHeldItem = true,
         requirements = mutableSetOf(),
-        learnableMoves = mutableSetOf()
+        learnableMoves = mutableSetOf(),
+        drops = DropTable(),
     )
 
     override fun testContext(pokemon: Pokemon, context: BlockInteractionContext): Boolean {

@@ -13,7 +13,7 @@
             "item": "minecraft:sugar"
         },
         "M": {
-            "item": "minecraft:milk_bucket"
+            "tag": "c:buckets/milk"
         },
         "H": {
             "item": "minecraft:honey_bottle"

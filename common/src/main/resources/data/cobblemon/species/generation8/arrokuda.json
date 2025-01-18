@@ -1,24 +1,25 @@
 {
   "implemented": true,
-  "name": "Arrokuda",
   "nationalPokedexNumber": 846,
+  "name": "Arrokuda",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 5,
+  "weight": 10,
+  "pokedex": [
+    "cobblemon.species.arrokuda.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "swiftswim",
     "h:propellertail"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:salmon"
-      },
-      {
-        "item": "minecraft:bone_meal",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "water_2"
+  ],
   "baseStats": {
     "hp": 41,
     "attack": 63,
@@ -27,15 +28,25 @@
     "special_defence": 30,
     "speed": 66
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 1
+  },
   "baseExperienceYield": 56,
   "experienceGroup": "slow",
+  "catchRate": 255,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_2"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.65,
+  "hitbox": {
+    "width": 0.7,
+    "height": 0.5,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
@@ -43,26 +54,36 @@
       },
       "swim": {
         "swimSpeed": 0.5,
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:salmon"
+      },
+      {
+        "item": "minecraft:bone_meal",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:aquajet",
     "1:peck",
+    "1:aquajet",
     "6:furyattack",
     "12:bite",
     "18:agility",
     "24:dive",
     "30:focusenergy",
-    "30:laserfocus",
     "36:crunch",
     "42:liquidation",
     "48:doubleedge",
@@ -70,9 +91,11 @@
     "egg:nightslash",
     "egg:slash",
     "egg:thrash",
+    "tm:acupressure",
     "tm:agility",
+    "tm:aquajet",
     "tm:assurance",
-    "tm:attract",
+    "tm:bite",
     "tm:bounce",
     "tm:brickbreak",
     "tm:chillingwater",
@@ -85,35 +108,30 @@
     "tm:facade",
     "tm:flipturn",
     "tm:focusenergy",
+    "tm:furyattack",
     "tm:hydropump",
     "tm:icefang",
+    "tm:laserfocus",
     "tm:liquidation",
-    "tm:poisonjab",
+    "tm:nightslash",
+    "tm:peck",
     "tm:protect",
     "tm:psychicfangs",
     "tm:raindance",
     "tm:rest",
-    "tm:round",
-    "tm:scald",
     "tm:scaleshot",
+    "tm:slash",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:substitute",
     "tm:surf",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
+    "tm:thrash",
     "tm:throatchop",
     "tm:waterfall",
     "tm:waterpulse",
-    "tm:whirlpool",
-    "tutor:scaleshot"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.arrokuda.desc"
+    "tm:whirlpool"
   ],
   "evolutions": [
     {
@@ -129,24 +147,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.65,
-  "hitbox": {
-    "width": 0.7,
-    "height": 0.5,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 1
-  },
-  "height": 5,
-  "weight": 10,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

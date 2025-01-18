@@ -7,11 +7,36 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Heat",
-        "Wash",
-        "Frost",
-        "Fan",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Heat",
+      "unlockForms": [
+        "Heat"
+      ]
+    },
+    {
+      "displayForm": "Wash",
+      "unlockForms": [
+        "Wash"
+      ]
+    },
+    {
+      "displayForm": "Frost",
+      "unlockForms": [
+        "Frost"
+      ]
+    },
+    {
+      "displayForm": "Fan",
+      "unlockForms": [
+        "Fan"
+      ]
+    },
+    {
+      "displayForm": "Mow",
+      "unlockForms": [
         "Mow"
       ]
     }

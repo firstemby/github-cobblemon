@@ -1,11 +1,26 @@
 {
   "implemented": true,
-  "name": "Turtonator",
   "nationalPokedexNumber": 776,
+  "name": "Turtonator",
   "primaryType": "fire",
   "secondaryType": "dragon",
+  "maleRatio": 0.5,
+  "height": 20,
+  "weight": 2120,
+  "pokedex": [
+    "cobblemon.species.turtonator.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
-    "shellarmor"
+    "shellarmor",
+    "h:shellarmor"
+  ],
+  "eggGroups": [
+    "monster",
+    "dragon"
   ],
   "baseStats": {
     "hp": 60,
@@ -15,19 +30,52 @@
     "special_defence": 85,
     "speed": 36
   },
-  "catchRate": 70,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 2,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 170,
   "experienceGroup": "medium_fast",
+  "catchRate": 70,
   "eggCycles": 20,
-  "eggGroups": [
-    "monster",
-    "dragon"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 2,
+    "height": 2.4,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInLava": true
+      }
+    }
+  },
+  "drops": {
+    "amount": 4,
+    "entries": [
+      {
+        "item": "minecraft:turtle_scute",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "minecraft:charcoal",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:haban_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:smog",
     "1:tackle",
+    "1:smog",
     "4:ember",
     "8:protect",
     "12:endure",
@@ -42,137 +90,80 @@
     "48:overheat",
     "52:explosion",
     "egg:curse",
-    "egg:firespin",
     "egg:headsmash",
     "egg:rapidspin",
-    "egg:revenge",
     "egg:wideguard",
-    "tm:attract",
+    "tm:block",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:brutalswing",
     "tm:bulkup",
     "tm:bulldoze",
+    "tm:burningjealousy",
     "tm:chargebeam",
-    "tm:confide",
-    "tm:doubleteam",
+    "tm:curse",
+    "tm:dracometeor",
     "tm:dragonclaw",
     "tm:dragonpulse",
     "tm:dragontail",
     "tm:earthquake",
+    "tm:ember",
+    "tm:endeavor",
     "tm:endure",
     "tm:explosion",
     "tm:facade",
     "tm:fireblast",
     "tm:firespin",
+    "tm:flail",
     "tm:flamecharge",
     "tm:flamethrower",
     "tm:flashcannon",
     "tm:fling",
     "tm:focusblast",
-    "tm:frustration",
     "tm:gigaimpact",
+    "tm:headsmash",
     "tm:heatcrash",
     "tm:heatwave",
     "tm:heavyslam",
-    "tm:hiddenpower",
     "tm:hyperbeam",
     "tm:hypervoice",
+    "tm:incinerate",
     "tm:irondefense",
     "tm:ironhead",
     "tm:irontail",
+    "tm:lashout",
     "tm:megakick",
     "tm:megapunch",
     "tm:outrage",
     "tm:overheat",
     "tm:payback",
     "tm:protect",
+    "tm:rapidspin",
     "tm:rest",
-    "tm:return",
     "tm:revenge",
     "tm:roar",
     "tm:rocktomb",
-    "tm:round",
+    "tm:scaleshot",
+    "tm:scorchingsands",
+    "tm:shellsmash",
+    "tm:shelltrap",
+    "tm:shockwave",
     "tm:sleeptalk",
     "tm:smackdown",
-    "tm:snore",
+    "tm:smog",
     "tm:solarbeam",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:tackle",
     "tm:taunt",
-    "tm:toxic",
+    "tm:terablast",
     "tm:uproar",
     "tm:venoshock",
+    "tm:wideguard",
     "tm:willowisp",
-    "tm:workup",
-    "tutor:block",
-    "tutor:bodyslam",
-    "tutor:burningjealousy",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:dragontail",
-    "tutor:endeavor",
-    "tutor:flamethrower",
-    "tutor:heatwave",
-    "tutor:hypervoice",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:irontail",
-    "tutor:lashout",
-    "tutor:outrage",
-    "tutor:scaleshot",
-    "tutor:scorchingsands",
-    "tutor:shelltrap",
-    "tutor:shockwave",
-    "tutor:snore",
-    "tutor:stompingtantrum",
-    "tutor:uproar",
-    "tutor:wideguard"
+    "tm:workup"
   ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.turtonator.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 2,
-    "height": 2.4,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 2,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 20,
-  "weight": 2120,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 4,
-    "entries": [
-      {
-        "item": "minecraft:turtle_scute",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "minecraft:charcoal",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:haban_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

@@ -1,10 +1,23 @@
 {
-  "name": "Greavard",
   "nationalPokedexNumber": 971,
+  "name": "Greavard",
   "primaryType": "ghost",
+  "maleRatio": 0.5,
+  "height": 6,
+  "weight": 350,
+  "pokedex": [
+    "cobblemon.species.greavard.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "pickup",
     "h:fluffy"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 50,
@@ -14,10 +27,6 @@
     "special_defence": 55,
     "speed": 34
   },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 58,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 1,
@@ -26,105 +35,12 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 58,
   "experienceGroup": "medium_slow",
+  "catchRate": 120,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
-  "moves": [
-    "1:growl",
-    "1:tackle",
-    "3:lick",
-    "6:bite",
-    "6:tailwhip",
-    "9:roar",
-    "12:headbutt",
-    "16:dig",
-    "24:rest",
-    "28:crunch",
-    "32:playrough",
-    "37:helpinghand",
-    "41:phantomforce",
-    "46:charm",
-    "52:doubleedge",
-    "egg:allyswitch",
-    "egg:destinybond",
-    "egg:disable",
-    "egg:howl",
-    "egg:memento",
-    "egg:shadowsneak",
-    "egg:yawn",
-    "tm:bulldoze",
-    "tm:charm",
-    "tm:confuseray",
-    "tm:crunch",
-    "tm:dig",
-    "tm:doubleedge",
-    "tm:endeavor",
-    "tm:endure",
-    "tm:facade",
-    "tm:firefang",
-    "tm:helpinghand",
-    "tm:hex",
-    "tm:icefang",
-    "tm:mudshot",
-    "tm:mudslap",
-    "tm:nightshade",
-    "tm:painsplit",
-    "tm:phantomforce",
-    "tm:playrough",
-    "tm:poltergeist",
-    "tm:protect",
-    "tm:psychicfangs",
-    "tm:raindance",
-    "tm:rest",
-    "tm:roar",
-    "tm:sandstorm",
-    "tm:scaryface",
-    "tm:shadowball",
-    "tm:sleeptalk",
-    "tm:snarl",
-    "tm:stompingtantrum",
-    "tm:substitute",
-    "tm:sunnyday",
-    "tm:takedown",
-    "tm:terablast",
-    "tm:thief",
-    "tm:thunderfang",
-    "tm:trick",
-    "tm:uproar"
-  ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 6,
-  "weight": 350,
-  "evolutions": [
-    {
-      "id": "greavard_houndstone",
-      "variant": "level_up",
-      "result": "houndstone",
-      "consumeHeldItem": false,
-      "learnableMoves": [
-        "lastrespects"
-      ],
-      "requirements": [
-        {
-          "variant": "level",
-          "minLevel": 30
-        },
-        {
-          "variant": "time_range",
-          "range": "night"
-        }
-      ]
-    }
-  ],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.greavard.desc"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
   "drops": {
     "amount": 5,
     "entries": [
@@ -145,5 +61,102 @@
         "percentage": 2.5
       }
     ]
-  }
+  },
+  "moves": [
+    "1:tackle",
+    "1:growl",
+    "3:lick",
+    "6:tailwhip",
+    "6:bite",
+    "9:roar",
+    "12:headbutt",
+    "16:dig",
+    "24:rest",
+    "28:crunch",
+    "32:playrough",
+    "37:helpinghand",
+    "41:phantomforce",
+    "46:charm",
+    "52:doubleedge",
+    "egg:allyswitch",
+    "egg:destinybond",
+    "egg:disable",
+    "egg:howl",
+    "egg:memento",
+    "egg:shadowsneak",
+    "egg:yawn",
+    "tm:allyswitch",
+    "tm:bite",
+    "tm:bulldoze",
+    "tm:charm",
+    "tm:confuseray",
+    "tm:crunch",
+    "tm:destinybond",
+    "tm:dig",
+    "tm:disable",
+    "tm:doubleedge",
+    "tm:endeavor",
+    "tm:endure",
+    "tm:facade",
+    "tm:firefang",
+    "tm:growl",
+    "tm:headbutt",
+    "tm:helpinghand",
+    "tm:hex",
+    "tm:howl",
+    "tm:icefang",
+    "tm:lick",
+    "tm:memento",
+    "tm:mudshot",
+    "tm:mudslap",
+    "tm:nightshade",
+    "tm:painsplit",
+    "tm:phantomforce",
+    "tm:playrough",
+    "tm:poltergeist",
+    "tm:protect",
+    "tm:psychicfangs",
+    "tm:raindance",
+    "tm:rest",
+    "tm:roar",
+    "tm:sandstorm",
+    "tm:scaryface",
+    "tm:shadowball",
+    "tm:shadowsneak",
+    "tm:sleeptalk",
+    "tm:snarl",
+    "tm:stompingtantrum",
+    "tm:substitute",
+    "tm:sunnyday",
+    "tm:tackle",
+    "tm:tailwhip",
+    "tm:takedown",
+    "tm:terablast",
+    "tm:thief",
+    "tm:thunderfang",
+    "tm:trick",
+    "tm:uproar",
+    "tm:yawn"
+  ],
+  "evolutions": [
+    {
+      "id": "greavard_houndstone",
+      "variant": "level_up",
+      "result": "houndstone",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "lastrespects"
+      ],
+      "requirements": [
+        {
+          "variant": "level",
+          "minLevel": 30
+        },
+        {
+          "variant": "time_range",
+          "range": "night"
+        }
+      ]
+    }
+  ]
 }

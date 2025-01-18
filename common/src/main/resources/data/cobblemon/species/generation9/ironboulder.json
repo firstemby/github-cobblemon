@@ -1,10 +1,25 @@
 {
-  "name": "Iron Boulder",
   "nationalPokedexNumber": 1022,
+  "name": "Iron Boulder",
   "primaryType": "rock",
   "secondaryType": "psychic",
+  "maleRatio": -1,
+  "height": 15,
+  "weight": 1625,
+  "pokedex": [
+    "cobblemon.species.ironboulder.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "quarkdrive"
+    "quarkdrive",
+    "h:quarkdrive"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 90,
@@ -14,10 +29,6 @@
     "special_defence": 108,
     "speed": 124
   },
-  "catchRate": 10,
-  "maleRatio": -1,
-  "baseExperienceYield": 0,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,16 +37,17 @@
     "special_defence": 0,
     "speed": 3
   },
+  "baseExperienceYield": 295,
   "experienceGroup": "slow",
+  "catchRate": 10,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "behaviour": {},
   "moves": [
-    "1:electricterrain",
     "1:hornattack",
     "1:leer",
     "1:rockthrow",
+    "1:electricterrain",
     "7:quickattack",
     "14:slash",
     "21:agility",
@@ -56,25 +68,36 @@
     "tm:brickbreak",
     "tm:bulldoze",
     "tm:closecombat",
+    "tm:counter",
     "tm:doubleedge",
     "tm:earthquake",
     "tm:electricterrain",
     "tm:endure",
     "tm:facade",
     "tm:gigaimpact",
+    "tm:hornattack",
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:leer",
+    "tm:megahorn",
     "tm:meteorbeam",
+    "tm:mightycleave",
     "tm:poisonjab",
     "tm:protect",
     "tm:psychic",
+    "tm:psychocut",
     "tm:psyshock",
+    "tm:quickattack",
+    "tm:quickguard",
     "tm:rest",
     "tm:rockblast",
+    "tm:rockthrow",
     "tm:rocktomb",
+    "tm:sacredsword",
     "tm:sandstorm",
     "tm:scaryface",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:solarblade",
     "tm:stoneedge",
@@ -88,16 +111,5 @@
     "tm:xscissor",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 15,
-  "weight": 1625,
-  "evolutions": [],
-  "pokedex": [
-    "cobblemon.species.ironboulder.desc"
-  ],
-  "cannotDynamax": false
+  "evolutions": []
 }

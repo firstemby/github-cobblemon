@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Impidimp",
   "nationalPokedexNumber": 859,
+  "name": "Impidimp",
   "primaryType": "dark",
   "secondaryType": "fairy",
+  "maleRatio": 1,
+  "height": 4,
+  "weight": 55,
+  "pokedex": [
+    "cobblemon.species.impidimp.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "prankster",
     "frisk",
     "h:pickpocket"
+  ],
+  "eggGroups": [
+    "fairy",
+    "human_like"
   ],
   "baseStats": {
     "hp": 45,
@@ -17,26 +31,43 @@
     "special_defence": 40,
     "speed": 50
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 1,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 53,
+  "experienceGroup": "medium_fast",
+  "catchRate": 255,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.2,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "catchRate": 255,
-  "maleRatio": 1,
-  "shoulderMountable": false,
-  "baseExperienceYield": 53,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "fairy",
-    "human_like"
-  ],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:roseli_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:confide",
     "1:fakeout",
+    "1:confide",
     "4:bite",
     "8:flatter",
     "12:faketears",
@@ -50,16 +81,19 @@
     "44:foulplay",
     "egg:partingshot",
     "tm:assurance",
-    "tm:attract",
+    "tm:bite",
     "tm:burningjealousy",
     "tm:chillingwater",
+    "tm:confide",
     "tm:darkpulse",
     "tm:dazzlinggleam",
     "tm:drainingkiss",
     "tm:drainpunch",
     "tm:endure",
     "tm:facade",
+    "tm:fakeout",
     "tm:faketears",
+    "tm:flatter",
     "tm:fling",
     "tm:foulplay",
     "tm:lashout",
@@ -71,34 +105,27 @@
     "tm:metronome",
     "tm:mistyterrain",
     "tm:nastyplot",
+    "tm:partingshot",
     "tm:playrough",
     "tm:protect",
     "tm:reflect",
     "tm:rest",
     "tm:retaliate",
     "tm:revenge",
-    "tm:round",
     "tm:scaryface",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:substitute",
+    "tm:suckerpunch",
+    "tm:swagger",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
     "tm:thunderwave",
+    "tm:torment",
     "tm:trailblaze",
-    "tm:trick",
-    "tm:uproar",
-    "tutor:burningjealousy",
-    "tutor:lashout"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.impidimp.desc"
+    "tm:trick"
   ],
   "evolutions": [
     {
@@ -116,33 +143,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.75,
-    "height": 1.2,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 1,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 4,
-  "weight": 55,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:roseli_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

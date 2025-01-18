@@ -5,10 +5,10 @@
             "item": "cobblemon:medicinal_brew"
         },
         {
-            "item": "minecraft:beetroot"
+            "tag": "c:crops/beetroot"
         },
         {
-            "item": "minecraft:beetroot"
+            "tag": "c:crops/beetroot"
         },
         {
             "item": "cobblemon:qualot_berry"

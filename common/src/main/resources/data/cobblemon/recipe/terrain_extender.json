@@ -10,16 +10,16 @@
             "item": "minecraft:iron_trapdoor"
         },
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         },
         "M": {
-            "item": "minecraft:bone_meal"
+            "tag": "c:fertilizers"
         },
 		"H": {
 			"item": "minecraft:rabbit_hide"
 		},
 		"B": {
-			"item": "minecraft:bucket"
+			"tag": "c:buckets/empty"
 		}
     },
     "result": {

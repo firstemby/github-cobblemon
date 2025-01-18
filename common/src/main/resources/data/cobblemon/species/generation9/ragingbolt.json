@@ -1,10 +1,25 @@
 {
-  "name": "Raging Bolt",
   "nationalPokedexNumber": 1021,
+  "name": "Raging Bolt",
   "primaryType": "electric",
   "secondaryType": "dragon",
+  "maleRatio": -1,
+  "height": 52,
+  "weight": 4800,
+  "pokedex": [
+    "cobblemon.species.ragingbolt.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 125,
@@ -14,10 +29,6 @@
     "special_defence": 89,
     "speed": 75
   },
-  "catchRate": 10,
-  "maleRatio": -1,
-  "baseExperienceYield": 0,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,17 +37,18 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 295,
   "experienceGroup": "slow",
+  "catchRate": 10,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "behaviour": {},
   "moves": [
-    "1:ancientpower",
+    "1:twister",
+    "1:sunnyday",
     "1:shockwave",
     "1:stomp",
-    "1:sunnyday",
-    "1:twister",
+    "1:ancientpower",
     "7:charge",
     "14:dragonbreath",
     "21:electricterrain",
@@ -50,6 +62,7 @@
     "77:zapcannon",
     "84:bodypress",
     "91:thunder",
+    "tm:ancientpower",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:breakingswipe",
@@ -57,9 +70,12 @@
     "tm:charge",
     "tm:chargebeam",
     "tm:crunch",
+    "tm:discharge",
     "tm:doubleedge",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
+    "tm:dragonhammer",
     "tm:dragonpulse",
     "tm:dragontail",
     "tm:earthquake",
@@ -76,11 +92,14 @@
     "tm:outrage",
     "tm:protect",
     "tm:rest",
+    "tm:risingvoltage",
     "tm:roar",
     "tm:scaryface",
+    "tm:shockwave",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:solarbeam",
+    "tm:stomp",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:sunnyday",
@@ -90,22 +109,14 @@
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
+    "tm:thunderclap",
     "tm:thunderfang",
     "tm:thunderwave",
+    "tm:twister",
     "tm:voltswitch",
     "tm:weatherball",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tm:zapcannon"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 52,
-  "weight": 4800,
-  "evolutions": [],
-  "pokedex": [
-    "cobblemon.species.ragingbolt.desc"
-  ],
-  "cannotDynamax": false
+  "evolutions": []
 }

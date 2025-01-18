@@ -232,7 +232,8 @@ def parse_drops(drops_str):
 
 
 def replace_names_in_string(drop_str, mapping_dict):
-    for natural_name, minecraft_id in mapping_dict.items():
+    # Replace the longest known substitutions first, this works around the issue of "Stone" and "Thunder Stone" both being known replacements.
+    for natural_name, minecraft_id in sorted(mapping_dict.items(), key=lambda item: 100-len(item[0])):
         if pd.isna(drop_str):
             break
         # if natural name is not of type str, show an error

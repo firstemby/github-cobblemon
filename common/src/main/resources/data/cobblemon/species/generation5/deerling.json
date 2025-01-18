@@ -1,14 +1,60 @@
 {
   "implemented": true,
-  "name": "Deerling",
   "nationalPokedexNumber": 585,
+  "name": "Deerling",
   "primaryType": "normal",
   "secondaryType": "grass",
+  "maleRatio": 0.5,
+  "height": 6,
+  "weight": 195,
+  "pokedex": [
+    "cobblemon.species.deerling.desc"
+  ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [
+    "on-spring-sea"
+  ],
   "abilities": [
     "chlorophyll",
     "sapsipper",
     "h:serenegrace"
   ],
+  "eggGroups": [
+    "field"
+  ],
+  "baseStats": {
+    "hp": 60,
+    "attack": 60,
+    "defence": 50,
+    "special_attack": 40,
+    "special_defence": 50,
+    "speed": 75
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 1
+  },
+  "baseExperienceYield": 67,
+  "experienceGroup": "medium_fast",
+  "catchRate": 190,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "features": [
+    "season"
+  ],
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.6,
+    "height": 1.1,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 2,
     "entries": [
@@ -22,43 +68,19 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 60,
-    "attack": 60,
-    "defence": 50,
-    "special_attack": 40,
-    "special_defence": 50,
-    "speed": 75
-  },
-  "features": [
-    "season"
-  ],
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 67,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
   "moves": [
-    "1:camouflage",
     "1:tackle",
+    "1:camouflage",
     "4:growl",
     "7:sandattack",
     "10:doublekick",
     "13:leechseed",
-    "16:bulletseed",
     "16:feintattack",
     "20:takedown",
     "24:jumpkick",
-    "24:zenheadbutt",
     "28:aromatherapy",
-    "28:energyball",
     "32:charm",
     "37:doubleedge",
-    "41:naturepower",
     "42:solarbeam",
     "egg:agility",
     "egg:batonpass",
@@ -71,76 +93,65 @@
     "egg:synthesis",
     "egg:worryseed",
     "tm:agility",
-    "tm:attract",
+    "tm:aromatherapy",
     "tm:batonpass",
     "tm:bodyslam",
+    "tm:bounce",
     "tm:bulldoze",
     "tm:bulletseed",
+    "tm:camouflage",
     "tm:charm",
-    "tm:confide",
     "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
+    "tm:doublekick",
     "tm:echoedvoice",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
     "tm:faketears",
+    "tm:feintattack",
     "tm:flash",
-    "tm:frustration",
     "tm:gigadrain",
     "tm:grassknot",
+    "tm:grasswhistle",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growl",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
+    "tm:jumpkick",
+    "tm:lastresort",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lightscreen",
     "tm:magicalleaf",
+    "tm:naturalgift",
     "tm:naturepower",
+    "tm:odorsleuth",
     "tm:playrough",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
-    "tm:return",
-    "tm:round",
     "tm:safeguard",
-    "tm:secretpower",
+    "tm:sandattack",
     "tm:seedbomb",
     "tm:shadowball",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:synthesis",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:wildcharge",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:aromatherapy",
-    "tutor:bounce",
-    "tutor:feintattack",
-    "tutor:gigadrain",
-    "tutor:jumpkick",
-    "tutor:lastresort",
-    "tutor:seedbomb",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:synthesis",
-    "tutor:takedown",
-    "tutor:worryseed"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.deerling.desc"
+    "tm:worryseed",
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -159,23 +170,453 @@
       ]
     }
   ],
-  "baseScale": 0.8,
-  "hitbox": {
-    "width": 0.6,
-    "height": 1.1,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 1
-  },
-  "height": 6,
-  "weight": 195,
-  "aspects": [],
-  "cannotDynamax": false
+  "forms": [
+    {
+      "name": "Summer",
+      "primaryType": "normal",
+      "secondaryType": "grass",
+      "maleRatio": 0.5,
+      "height": 6,
+      "weight": 195,
+      "pokedex": [
+        "cobblemon.species.deerling-summer.desc"
+      ],
+      "labels": [
+        "gen5"
+      ],
+      "aspects": [
+        "on-summer-sea"
+      ],
+      "abilities": [
+        "chlorophyll",
+        "sapsipper",
+        "h:serenegrace"
+      ],
+      "eggGroups": [
+        "field"
+      ],
+      "baseStats": {
+        "hp": 60,
+        "attack": 60,
+        "defence": 50,
+        "special_attack": 40,
+        "special_defence": 50,
+        "speed": 75
+      },
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 0,
+        "speed": 1
+      },
+      "baseExperienceYield": 67,
+      "experienceGroup": "medium_fast",
+      "catchRate": 190,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "moves": [
+        "1:tackle",
+        "1:camouflage",
+        "4:growl",
+        "7:sandattack",
+        "10:doublekick",
+        "13:leechseed",
+        "16:feintattack",
+        "20:takedown",
+        "24:jumpkick",
+        "28:aromatherapy",
+        "32:charm",
+        "37:doubleedge",
+        "42:solarbeam",
+        "egg:agility",
+        "egg:batonpass",
+        "egg:faketears",
+        "egg:grasswhistle",
+        "egg:headbutt",
+        "egg:naturalgift",
+        "egg:odorsleuth",
+        "egg:sleeptalk",
+        "egg:synthesis",
+        "egg:worryseed",
+        "tm:agility",
+        "tm:aromatherapy",
+        "tm:batonpass",
+        "tm:bodyslam",
+        "tm:bounce",
+        "tm:bulldoze",
+        "tm:bulletseed",
+        "tm:camouflage",
+        "tm:charm",
+        "tm:dig",
+        "tm:doubleedge",
+        "tm:doublekick",
+        "tm:echoedvoice",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:energyball",
+        "tm:facade",
+        "tm:faketears",
+        "tm:feintattack",
+        "tm:flash",
+        "tm:gigadrain",
+        "tm:grassknot",
+        "tm:grasswhistle",
+        "tm:grassyglide",
+        "tm:grassyterrain",
+        "tm:growl",
+        "tm:headbutt",
+        "tm:helpinghand",
+        "tm:jumpkick",
+        "tm:lastresort",
+        "tm:leafstorm",
+        "tm:leechseed",
+        "tm:lightscreen",
+        "tm:magicalleaf",
+        "tm:naturalgift",
+        "tm:naturepower",
+        "tm:odorsleuth",
+        "tm:playrough",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rest",
+        "tm:retaliate",
+        "tm:safeguard",
+        "tm:sandattack",
+        "tm:seedbomb",
+        "tm:shadowball",
+        "tm:sleeptalk",
+        "tm:solarbeam",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:synthesis",
+        "tm:tackle",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:thunderwave",
+        "tm:trailblaze",
+        "tm:wildcharge",
+        "tm:workup",
+        "tm:worryseed",
+        "tm:zenheadbutt"
+      ],
+      "evolutions": [
+        {
+          "id": "deerling_sawsbuck",
+          "variant": "level_up",
+          "result": "sawsbuck",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "hornleech"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 34
+            }
+          ]
+        }
+      ],
+      "battleOnly": false
+    },
+    {
+      "name": "Autumn",
+      "primaryType": "normal",
+      "secondaryType": "grass",
+      "maleRatio": 0.5,
+      "height": 6,
+      "weight": 195,
+      "pokedex": [
+        "cobblemon.species.deerling-autumn.desc"
+      ],
+      "labels": [
+        "gen5"
+      ],
+      "aspects": [
+        "on-autumn-sea"
+      ],
+      "abilities": [
+        "chlorophyll",
+        "sapsipper",
+        "h:serenegrace"
+      ],
+      "eggGroups": [
+        "field"
+      ],
+      "baseStats": {
+        "hp": 60,
+        "attack": 60,
+        "defence": 50,
+        "special_attack": 40,
+        "special_defence": 50,
+        "speed": 75
+      },
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 0,
+        "speed": 1
+      },
+      "baseExperienceYield": 67,
+      "experienceGroup": "medium_fast",
+      "catchRate": 190,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "moves": [
+        "1:tackle",
+        "1:camouflage",
+        "4:growl",
+        "7:sandattack",
+        "10:doublekick",
+        "13:leechseed",
+        "16:feintattack",
+        "20:takedown",
+        "24:jumpkick",
+        "28:aromatherapy",
+        "32:charm",
+        "37:doubleedge",
+        "42:solarbeam",
+        "egg:agility",
+        "egg:batonpass",
+        "egg:faketears",
+        "egg:grasswhistle",
+        "egg:headbutt",
+        "egg:naturalgift",
+        "egg:odorsleuth",
+        "egg:sleeptalk",
+        "egg:synthesis",
+        "egg:worryseed",
+        "tm:agility",
+        "tm:aromatherapy",
+        "tm:batonpass",
+        "tm:bodyslam",
+        "tm:bounce",
+        "tm:bulldoze",
+        "tm:bulletseed",
+        "tm:camouflage",
+        "tm:charm",
+        "tm:dig",
+        "tm:doubleedge",
+        "tm:doublekick",
+        "tm:echoedvoice",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:energyball",
+        "tm:facade",
+        "tm:faketears",
+        "tm:feintattack",
+        "tm:flash",
+        "tm:gigadrain",
+        "tm:grassknot",
+        "tm:grasswhistle",
+        "tm:grassyglide",
+        "tm:grassyterrain",
+        "tm:growl",
+        "tm:headbutt",
+        "tm:helpinghand",
+        "tm:jumpkick",
+        "tm:lastresort",
+        "tm:leafstorm",
+        "tm:leechseed",
+        "tm:lightscreen",
+        "tm:magicalleaf",
+        "tm:naturalgift",
+        "tm:naturepower",
+        "tm:odorsleuth",
+        "tm:playrough",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rest",
+        "tm:retaliate",
+        "tm:safeguard",
+        "tm:sandattack",
+        "tm:seedbomb",
+        "tm:shadowball",
+        "tm:sleeptalk",
+        "tm:solarbeam",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:synthesis",
+        "tm:tackle",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:thunderwave",
+        "tm:trailblaze",
+        "tm:wildcharge",
+        "tm:workup",
+        "tm:worryseed",
+        "tm:zenheadbutt"
+      ],
+      "evolutions": [
+        {
+          "id": "deerling_sawsbuck",
+          "variant": "level_up",
+          "result": "sawsbuck",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "hornleech"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 34
+            }
+          ]
+        }
+      ],
+      "battleOnly": false
+    },
+    {
+      "name": "Winter",
+      "primaryType": "normal",
+      "secondaryType": "grass",
+      "maleRatio": 0.5,
+      "height": 6,
+      "weight": 195,
+      "pokedex": [
+        "cobblemon.species.deerling-winter.desc"
+      ],
+      "labels": [
+        "gen5"
+      ],
+      "aspects": [
+        "on-winter-sea"
+      ],
+      "abilities": [
+        "chlorophyll",
+        "sapsipper",
+        "h:serenegrace"
+      ],
+      "eggGroups": [
+        "field"
+      ],
+      "baseStats": {
+        "hp": 60,
+        "attack": 60,
+        "defence": 50,
+        "special_attack": 40,
+        "special_defence": 50,
+        "speed": 75
+      },
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 0,
+        "speed": 1
+      },
+      "baseExperienceYield": 67,
+      "experienceGroup": "medium_fast",
+      "catchRate": 190,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "moves": [
+        "1:tackle",
+        "1:camouflage",
+        "4:growl",
+        "7:sandattack",
+        "10:doublekick",
+        "13:leechseed",
+        "16:feintattack",
+        "20:takedown",
+        "24:jumpkick",
+        "28:aromatherapy",
+        "32:charm",
+        "37:doubleedge",
+        "42:solarbeam",
+        "egg:agility",
+        "egg:batonpass",
+        "egg:faketears",
+        "egg:grasswhistle",
+        "egg:headbutt",
+        "egg:naturalgift",
+        "egg:odorsleuth",
+        "egg:sleeptalk",
+        "egg:synthesis",
+        "egg:worryseed",
+        "tm:agility",
+        "tm:aromatherapy",
+        "tm:batonpass",
+        "tm:bodyslam",
+        "tm:bounce",
+        "tm:bulldoze",
+        "tm:bulletseed",
+        "tm:camouflage",
+        "tm:charm",
+        "tm:dig",
+        "tm:doubleedge",
+        "tm:doublekick",
+        "tm:echoedvoice",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:energyball",
+        "tm:facade",
+        "tm:faketears",
+        "tm:feintattack",
+        "tm:flash",
+        "tm:gigadrain",
+        "tm:grassknot",
+        "tm:grasswhistle",
+        "tm:grassyglide",
+        "tm:grassyterrain",
+        "tm:growl",
+        "tm:headbutt",
+        "tm:helpinghand",
+        "tm:jumpkick",
+        "tm:lastresort",
+        "tm:leafstorm",
+        "tm:leechseed",
+        "tm:lightscreen",
+        "tm:magicalleaf",
+        "tm:naturalgift",
+        "tm:naturepower",
+        "tm:odorsleuth",
+        "tm:playrough",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rest",
+        "tm:retaliate",
+        "tm:safeguard",
+        "tm:sandattack",
+        "tm:seedbomb",
+        "tm:shadowball",
+        "tm:sleeptalk",
+        "tm:solarbeam",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:synthesis",
+        "tm:tackle",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:thunderwave",
+        "tm:trailblaze",
+        "tm:wildcharge",
+        "tm:workup",
+        "tm:worryseed",
+        "tm:zenheadbutt"
+      ],
+      "evolutions": [
+        {
+          "id": "deerling_sawsbuck",
+          "variant": "level_up",
+          "result": "sawsbuck",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "hornleech"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 34
+            }
+          ]
+        }
+      ],
+      "battleOnly": false
+    }
+  ]
 }

@@ -493,6 +493,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.RIBBON_SWEET)
         entries.accept(CobblemonItems.AUSPICIOUS_ARMOR)
         entries.accept(CobblemonItems.MALICIOUS_ARMOR)
+        entries.accept(CobblemonItems.SHELL_HELMET)
     }
 
     private fun heldItemEntries(displayContext: ItemDisplayParameters, entries: Output) {

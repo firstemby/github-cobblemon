@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sns",
+    "n n",
+    "sns"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "n": {
+      "item": "cobblemon:galarica_nuts"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "cobblemon:galarica_cuff"
+  }
+}

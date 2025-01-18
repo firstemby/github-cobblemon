@@ -1,12 +1,25 @@
 {
-  "name": "Kingambit",
   "nationalPokedexNumber": 983,
+  "name": "Kingambit",
   "primaryType": "dark",
   "secondaryType": "steel",
+  "maleRatio": 0.5,
+  "height": 20,
+  "weight": 1200,
+  "pokedex": [
+    "cobblemon.species.kingambit.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "defiant",
     "supremeoverlord",
     "h:pressure"
+  ],
+  "eggGroups": [
+    "human_like"
   ],
   "baseStats": {
     "hp": 100,
@@ -16,10 +29,6 @@
     "special_defence": 85,
     "speed": 50
   },
-  "catchRate": 25,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 275,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -28,18 +37,33 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 275,
   "experienceGroup": "medium_fast",
+  "catchRate": 25,
   "eggCycles": 20,
-  "eggGroups": [
-    "human_like"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "cobblemon:rocky_helmet",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:cheri_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:furycutter",
-    "1:leer",
+    "1:kowtowcleave",
     "1:metalburst",
     "1:metalclaw",
+    "1:furycutter",
     "1:scratch",
-    "1:kowtowcleave",
+    "1:leer",
+    "1:feintattack",
     "15:torment",
     "20:scaryface",
     "25:assurance",
@@ -51,37 +75,58 @@
     "57:ironhead",
     "64:swordsdance",
     "71:guillotine",
+    "egg:feintattack",
+    "egg:headbutt",
+    "egg:meanlook",
+    "egg:pursuit",
+    "egg:quickguard",
+    "egg:suckerpunch",
     "tm:aerialace",
     "tm:airslash",
+    "tm:assurance",
     "tm:brickbreak",
     "tm:darkpulse",
     "tm:dig",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:feintattack",
     "tm:flashcannon",
     "tm:fling",
     "tm:focusblast",
     "tm:foulplay",
+    "tm:furycutter",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:guillotine",
+    "tm:headbutt",
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:kowtowcleave",
     "tm:lashout",
+    "tm:leer",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:meanlook",
+    "tm:metalburst",
     "tm:metalclaw",
     "tm:metalsound",
+    "tm:nightslash",
     "tm:poisonjab",
     "tm:protect",
+    "tm:pursuit",
+    "tm:quickguard",
     "tm:raindance",
     "tm:rest",
+    "tm:retaliate",
     "tm:reversal",
     "tm:rocktomb",
     "tm:sandstorm",
     "tm:scaryface",
+    "tm:scratch",
     "tm:shadowclaw",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:spite",
@@ -89,6 +134,7 @@
     "tm:steelbeam",
     "tm:stoneedge",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:swordsdance",
     "tm:takedown",
     "tm:taunt",
@@ -96,32 +142,10 @@
     "tm:thief",
     "tm:throatchop",
     "tm:thunderwave",
+    "tm:torment",
     "tm:xscissor",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 20,
-  "weight": 1200,
   "preEvolution": "bisharp",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.kingambit.desc"
-  ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "cobblemon:rocky_helmet",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:cheri_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

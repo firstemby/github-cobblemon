@@ -1,14 +1,60 @@
 {
   "implemented": true,
-  "name": "Tinkatuff",
   "nationalPokedexNumber": 958,
+  "name": "Tinkatuff",
   "primaryType": "fairy",
   "secondaryType": "steel",
+  "maleRatio": 0,
+  "height": 7,
+  "weight": 591,
+  "pokedex": [
+    "cobblemon.species.tinkatuff.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "moldbreaker",
     "owntempo",
     "h:pickpocket"
   ],
+  "eggGroups": [
+    "fairy"
+  ],
+  "baseStats": {
+    "hp": 65,
+    "attack": 55,
+    "defence": 55,
+    "special_attack": 45,
+    "special_defence": 82,
+    "speed": 78
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 2,
+    "speed": 0
+  },
+  "baseExperienceYield": 133,
+  "experienceGroup": "medium_slow",
+  "catchRate": 90,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.1,
+    "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -18,42 +64,9 @@
       },
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
-  },
-  "baseStats": {
-    "hp": 65,
-    "attack": 55,
-    "defence": 55,
-    "special_attack": 45,
-    "special_defence": 82,
-    "speed": 78
-  },
-  "catchRate": 90,
-  "maleRatio": 0,
-  "baseExperienceYield": 133,
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 2,
-    "speed": 0
-  },
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "fairy"
-  ],
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
-      "light": "0-4"
-    }
   },
   "moves": [
     "1:astonish",
@@ -72,17 +85,29 @@
     "43:flatter",
     "47:skittersmack",
     "52:knockoff",
+    "egg:feint",
+    "egg:icehammer",
+    "egg:quash",
+    "tm:astonish",
+    "tm:babydolleyes",
     "tm:brickbreak",
+    "tm:brutalswing",
+    "tm:covet",
     "tm:drainingkiss",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:fairywind",
+    "tm:fakeout",
     "tm:faketears",
+    "tm:feint",
     "tm:flashcannon",
+    "tm:flatter",
     "tm:fling",
     "tm:foulplay",
     "tm:helpinghand",
+    "tm:icehammer",
     "tm:knockoff",
     "tm:lightscreen",
     "tm:metalclaw",
@@ -91,28 +116,26 @@
     "tm:playrough",
     "tm:pounce",
     "tm:protect",
+    "tm:quash",
     "tm:reflect",
     "tm:rest",
     "tm:rockslide",
+    "tm:rocksmash",
     "tm:rocktomb",
     "tm:skillswap",
     "tm:skittersmack",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:stealthrock",
     "tm:steelbeam",
     "tm:stoneedge",
     "tm:substitute",
+    "tm:sweetkiss",
     "tm:swordsdance",
     "tm:terablast",
     "tm:thief",
     "tm:thunderwave"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 7,
-  "weight": 591,
   "preEvolution": "tinkatink",
   "evolutions": [
     {
@@ -130,15 +153,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1.0,
-  "hitbox": {
-    "width": 0.7,
-    "height": 1.1,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.tinkatuff.desc"
   ]
 }

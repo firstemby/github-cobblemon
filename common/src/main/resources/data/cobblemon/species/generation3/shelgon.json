@@ -1,11 +1,24 @@
 {
   "implemented": true,
-  "name": "Shelgon",
   "nationalPokedexNumber": 372,
+  "name": "Shelgon",
   "primaryType": "dragon",
+  "maleRatio": 0.5,
+  "height": 11,
+  "weight": 1105,
+  "pokedex": [
+    "cobblemon.species.shelgon.desc"
+  ],
+  "labels": [
+    "gen3"
+  ],
+  "aspects": [],
   "abilities": [
     "rockhead",
     "h:overcoat"
+  ],
+  "eggGroups": [
+    "dragon"
   ],
   "baseStats": {
     "hp": 65,
@@ -15,6 +28,25 @@
     "special_defence": 50,
     "speed": 50
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 2,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 147,
+  "experienceGroup": "slow",
+  "catchRate": 45,
+  "eggCycles": 40,
+  "baseFriendship": 35,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.5,
+    "height": 1.55,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walking": {
@@ -22,22 +54,30 @@
       }
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 147,
-  "experienceGroup": "slow",
-  "eggCycles": 40,
-  "eggGroups": [
-    "dragon"
-  ],
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "cobblemon:dragon_fang",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:dragon_scale",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:yache_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:bite",
-    "1:dragonbreath",
-    "1:ember",
-    "1:leer",
-    "1:protect",
     "1:rage",
+    "1:bite",
+    "1:leer",
+    "1:ember",
+    "1:protect",
+    "1:dragonbreath",
     "15:headbutt",
     "20:scaryface",
     "25:crunch",
@@ -47,22 +87,28 @@
     "53:flamethrower",
     "60:outrage",
     "67:doubleedge",
-    "tm:aerialace",
-    "tm:attract",
+    "egg:defensecurl",
+    "egg:dragonrage",
+    "egg:dragonrush",
+    "egg:thrash",
+    "egg:twister",
+    "tm:bite",
     "tm:bodyslam",
     "tm:brickbreak",
-    "tm:captivate",
-    "tm:confide",
     "tm:crunch",
     "tm:cut",
+    "tm:defensecurl",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
+    "tm:dragonrage",
+    "tm:dragonrush",
     "tm:dragontail",
+    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
@@ -70,69 +116,40 @@
     "tm:firespin",
     "tm:flamethrower",
     "tm:focusenergy",
-    "tm:frustration",
+    "tm:furycutter",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:honeclaws",
     "tm:hydropump",
     "tm:hypervoice",
     "tm:incinerate",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:leer",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:outrage",
     "tm:protect",
+    "tm:rage",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
+    "tm:rollout",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:shadowclaw",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:takedown",
     "tm:temperflare",
     "tm:terablast",
+    "tm:thrash",
     "tm:thunderfang",
-    "tm:toxic",
-    "tm:zenheadbutt",
-    "tutor:bodyslam",
-    "tutor:defensecurl",
-    "tutor:doubleedge",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:endure",
-    "tutor:furycutter",
-    "tutor:headbutt",
-    "tutor:hypervoice",
-    "tutor:irondefense",
-    "tutor:mimic",
-    "tutor:mudslap",
-    "tutor:outrage",
-    "tutor:rockslide",
-    "tutor:rollout",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:substitute",
-    "tutor:swagger",
-    "tutor:twister",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen3"
-  ],
-  "pokedex": [
-    "cobblemon.species.shelgon.desc"
+    "tm:twister",
+    "tm:zenheadbutt"
   ],
   "preEvolution": "bagon",
   "evolutions": [
@@ -151,41 +168,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1.5,
-    "height": 1.55,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 2,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 11,
-  "weight": 1105,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "cobblemon:dragon_fang",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:dragon_scale",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:yache_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

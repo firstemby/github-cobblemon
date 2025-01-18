@@ -1,11 +1,24 @@
 {
-  "name": "Cyclizar",
   "nationalPokedexNumber": 967,
+  "name": "Cyclizar",
   "primaryType": "dragon",
   "secondaryType": "normal",
+  "maleRatio": 0.5,
+  "height": 16,
+  "weight": 630,
+  "pokedex": [
+    "cobblemon.species.cyclizar.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "shedskin",
     "h:regenerator"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 70,
@@ -15,10 +28,6 @@
     "special_defence": 65,
     "speed": 121
   },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 175,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -27,14 +36,24 @@
     "special_defence": 0,
     "speed": 2
   },
+  "baseExperienceYield": 175,
   "experienceGroup": "medium_slow",
+  "catchRate": 190,
   "eggCycles": 30,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:haban_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:growl",
     "1:tackle",
+    "1:growl",
     "7:rapidspin",
     "11:taunt",
     "14:breakingswipe",
@@ -54,6 +73,8 @@
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
+    "tm:aquatail",
+    "tm:bite",
     "tm:bodyslam",
     "tm:breakingswipe",
     "tm:crunch",
@@ -62,29 +83,38 @@
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragonpulse",
+    "tm:dragonrush",
     "tm:dragontail",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:firefang",
     "tm:gigaimpact",
+    "tm:growl",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icespinner",
     "tm:ironhead",
+    "tm:irontail",
     "tm:knockoff",
     "tm:mudshot",
     "tm:mudslap",
     "tm:outrage",
     "tm:overheat",
+    "tm:powerwhip",
     "tm:protect",
+    "tm:quickattack",
     "tm:raindance",
+    "tm:rapidspin",
     "tm:rest",
     "tm:scaleshot",
+    "tm:shedtail",
+    "tm:shiftgear",
     "tm:sleeptalk",
     "tm:substitute",
     "tm:sunnyday",
     "tm:supercellslam",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
@@ -97,24 +127,5 @@
     "tm:uturn",
     "tm:wildcharge"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 16,
-  "weight": 630,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.cyclizar.desc"
-  ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:haban_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

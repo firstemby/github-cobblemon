@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Kilowattrel",
   "nationalPokedexNumber": 941,
+  "name": "Kilowattrel",
   "primaryType": "electric",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 14,
+  "weight": 386,
+  "pokedex": [
+    "cobblemon.species.kilowattrel.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "windpower",
     "voltabsorb",
     "h:competitive"
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
   ],
   "baseStats": {
     "hp": 70,
@@ -17,10 +31,6 @@
     "special_defence": 60,
     "speed": 125
   },
-  "catchRate": 90,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 172,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -29,92 +39,30 @@
     "special_defence": 0,
     "speed": 2
   },
+  "baseExperienceYield": 172,
   "experienceGroup": "medium_slow",
+  "catchRate": 90,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "flying"
-  ],
-  "behaviour": {
-    "moving": {
-      "fly": {
-        "canFly": true
-      }
-    }
-  },
-  "moves": [
-    "1:growl",
-    "1:peck",
-    "1:electroball",
-    "4:thundershock",
-    "7:quickattack",
-    "11:pluck",
-    "15:spark",
-    "19:uproar",
-    "24:roost",
-    "30:dualwingbeat",
-    "36:agility",
-    "43:voltswitch",
-    "48:discharge",
-    "55:hurricane",
-    "tm:acrobatics",
-    "tm:aerialace",
-    "tm:agility",
-    "tm:aircutter",
-    "tm:airslash",
-    "tm:bravebird",
-    "tm:charge",
-    "tm:chargebeam",
-    "tm:dualwingbeat",
-    "tm:eerieimpulse",
-    "tm:electricterrain",
-    "tm:electroball",
-    "tm:electroweb",
-    "tm:endeavor",
-    "tm:endure",
-    "tm:facade",
-    "tm:featherdance",
-    "tm:fly",
-    "tm:gigaimpact",
-    "tm:hurricane",
-    "tm:hyperbeam",
-    "tm:protect",
-    "tm:rest",
-    "tm:scaryface",
-    "tm:sleeptalk",
-    "tm:substitute",
-    "tm:supercellslam",
-    "tm:swift",
-    "tm:tailwind",
-    "tm:takedown",
-    "tm:terablast",
-    "tm:thunder",
-    "tm:thunderbolt",
-    "tm:thunderwave",
-    "tm:uproar",
-    "tm:uturn",
-    "tm:voltswitch",
-    "tm:weatherball",
-    "tm:wildcharge"
-  ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 14,
-  "weight": 386,
-  "preEvolution": "wattrel",
-  "evolutions": [],
+  "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
     "width": 1,
     "height": 1.72,
     "fixed": false
   },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.kilowattrel.desc"
-  ],
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
+      }
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -131,8 +79,82 @@
       },
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
-  }
+  },
+  "moves": [
+    "1:electroball",
+    "1:growl",
+    "1:peck",
+    "4:thundershock",
+    "7:quickattack",
+    "11:pluck",
+    "15:spark",
+    "19:uproar",
+    "24:roost",
+    "30:dualwingbeat",
+    "36:agility",
+    "43:voltswitch",
+    "48:discharge",
+    "55:hurricane",
+    "egg:endeavor",
+    "egg:featherdance",
+    "egg:spitup",
+    "egg:stockpile",
+    "egg:swallow",
+    "egg:weatherball",
+    "tm:acrobatics",
+    "tm:aerialace",
+    "tm:agility",
+    "tm:aircutter",
+    "tm:airslash",
+    "tm:bravebird",
+    "tm:charge",
+    "tm:chargebeam",
+    "tm:discharge",
+    "tm:dualwingbeat",
+    "tm:eerieimpulse",
+    "tm:electricterrain",
+    "tm:electroball",
+    "tm:electroweb",
+    "tm:endeavor",
+    "tm:endure",
+    "tm:facade",
+    "tm:featherdance",
+    "tm:fly",
+    "tm:gigaimpact",
+    "tm:growl",
+    "tm:hurricane",
+    "tm:hyperbeam",
+    "tm:peck",
+    "tm:pluck",
+    "tm:protect",
+    "tm:quickattack",
+    "tm:rest",
+    "tm:roost",
+    "tm:scaryface",
+    "tm:sleeptalk",
+    "tm:spark",
+    "tm:spitup",
+    "tm:stockpile",
+    "tm:substitute",
+    "tm:supercellslam",
+    "tm:swallow",
+    "tm:swift",
+    "tm:tailwind",
+    "tm:takedown",
+    "tm:terablast",
+    "tm:thunder",
+    "tm:thunderbolt",
+    "tm:thundershock",
+    "tm:thunderwave",
+    "tm:uproar",
+    "tm:uturn",
+    "tm:voltswitch",
+    "tm:weatherball",
+    "tm:wildcharge"
+  ],
+  "preEvolution": "wattrel",
+  "evolutions": []
 }
