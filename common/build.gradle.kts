@@ -1,68 +1,115 @@
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
-import utilities.isSnapshot
-import utilities.version
-
-/*
- *
- *  * Copyright (C) 2023 Cobblemon Contributors
- *  *
- *  * This Source Code Form is subject to the terms of the Mozilla Public
- *  * License, v. 2.0. If a copy of the MPL was not distributed with this
- *  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- */
+import dev.architectury.at.AccessChange
+import dev.architectury.at.AccessTransform
+import dev.architectury.at.AccessTransformSet
+import dev.architectury.at.ModifierChange
+import dev.architectury.at.io.AccessTransformFormats
+import net.fabricmc.accesswidener.AccessWidenerReader
+import net.fabricmc.accesswidener.AccessWidenerVisitor
+import net.neoforged.nfrtgradle.CreateMinecraftArtifacts
+import org.cadixdev.bombe.type.signature.MethodSignature
+import java.io.FileWriter
+import java.io.StringWriter
+import java.io.Writer
+import java.nio.file.Files
+import java.nio.file.Path
 
 plugins {
-    id("cobblemon.base-conventions")
-    id("cobblemon.publish-conventions")
-
-    id("net.kyori.blossom")
-    id("org.jetbrains.gradle.plugin.idea-ext")
-    id("net.nemerosa.versioning") version "3.1.0"
+    kotlin("jvm") version "2.1.0"
+    id ("net.neoforged.moddev") version "2.0.75"
+    id("net.kyori.blossom") version "2.1.0"
 }
 
-architectury {
-    common("neoforge", "fabric")
+buildscript {
+    repositories {
+        maven("https://maven.architectury.dev/")
+        maven("https://maven.fabricmc.net/")
+    }
+    dependencies {
+        classpath("dev.architectury:at:1.0.1")
+        classpath("net.fabricmc:access-widener:2.1.0")
+        classpath("net.neoforged.moddev:net.neoforged.moddev.gradle.plugin:2.0.75")
+    }
 }
 
 repositories {
     maven(url = "${rootProject.projectDir}/deps")
-    maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://maven.neoforged.net/releases")
-    mavenLocal()
 }
 
 dependencies {
+    compileOnly(libs.bundles.mongo)
     implementation(libs.bundles.kotlin)
-    modImplementation(libs.fabric.loader)
-    modApi(libs.molang)
-
-    // Integrations
-    compileOnlyApi(libs.jei.api)
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
-        isTransitive = false
-    }
-    // Flywheel has no common dep so just pick one and don't use any platform specific code in common
-    // modCompileOnly(libs.flywheelFabric)
-
-    // Showdown
-    modCompileOnly(libs.graal)
-
-    // Data Storage
-    modCompileOnly(libs.bundles.mongo)
-
-    // Unit Testing
-    testImplementation(libs.bundles.unitTesting)
+    api(libs.molang)
+    compileOnly(libs.graal)
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-        setEvents(listOf("failed"))
-        setExceptionFormat("full")
+tasks.processResources {
+    exclude("*.accesswidener")
+}
+
+tasks.create("convertAw") {
+    inputs.file("E:\\Projects\\cobblemon\\common\\src\\main\\resources\\cobblemon-common.accesswidener")
+    outputs.file(project.layout.buildDirectory.get().dir("cobblemon-working").file("accesstransformer.cfg"))
+    doFirst {
+        fun toAt(access: AccessWidenerReader.AccessType): AccessTransform {
+            return when (access) {
+                AccessWidenerReader.AccessType.ACCESSIBLE -> AccessTransform.of(AccessChange.PUBLIC)
+                AccessWidenerReader.AccessType.EXTENDABLE, AccessWidenerReader.AccessType.MUTABLE -> AccessTransform.of(
+                    AccessChange.PUBLIC,
+                    ModifierChange.REMOVE
+                )
+            }
+        }
+        val awFile = Files.newBufferedReader(inputs.files.filter {it.toString().endsWith(".accesswidener")}.first().toPath())
+        val result = AccessTransformSet.create();
+
+        AccessWidenerReader(object : AccessWidenerVisitor {
+            override fun visitClass(name: String, access: AccessWidenerReader.AccessType, transitive: Boolean) {
+                result.getOrCreateClass(name).merge(toAt(access));
+            }
+
+            override fun visitMethod(owner: String, name: String, descriptor: String, access: AccessWidenerReader.AccessType, transitive: Boolean) {
+                result.getOrCreateClass(owner).mergeMethod(MethodSignature.of(name, descriptor), toAt(access));
+            }
+
+            override fun visitField(owner: String, name: String, descriptor: String, access: AccessWidenerReader.AccessType, transitive: Boolean) {
+                result.getOrCreateClass(owner).mergeField(name, toAt(access));
+            }
+        }).read(awFile)
+
+        val outputFile = project.layout.buildDirectory.get().dir("cobblemon-working").file("accesstransformer.cfg").asFile
+        var outputWriter: Writer? = null
+        try {
+             outputWriter = outputFile.writer()
+            AccessTransformFormats.FML.write(outputWriter, result)
+        }
+        finally {
+            outputWriter?.flush()
+            outputWriter?.close()
+        }
     }
+}
+
+tasks.withType(CreateMinecraftArtifacts::class.java) {
+    dependsOn(tasks.named("convertAw"))
+    this.accessTransformers = tasks.named("convertAw").get().outputs.files
+}
+
+neoForge {
+    neoFormVersion = "1.21-20240613.152323"
+
+    /*
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+        data {
+            data()
+        }
+    }
+     */
 }
 
 sourceSets {
@@ -85,12 +132,14 @@ sourceSets {
 
                 property("license", generateLicenseHeader())
                 property("modid", "cobblemon")
-                property("version", project.version())
-                property("isSnapshot", if(rootProject.isSnapshot()) "true" else "false")
+                property("version", project.version as String)
+                property("isSnapshot", if(rootProject.property("snapshot") == "true") "true" else "false")
+                /*
                 property("gitCommit", versioning.info.commit)
                 property("branch", versioning.info.branch)
                 System.getProperty("buildNumber")?.let { property("buildNumber", it) }
                 property("timestamp", OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss")) + " UTC")
+                 */
             }
         }
     }
