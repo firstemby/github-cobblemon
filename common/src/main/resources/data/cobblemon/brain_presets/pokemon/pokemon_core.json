@@ -17,7 +17,8 @@
       "tasksByPriority": {
         "5": [
           "path_to_nest",
-          "breed_at_nest"
+          "breed_at_nest",
+          "guard_nest"
         ]
       }
     }

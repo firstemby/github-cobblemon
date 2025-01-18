@@ -46,25 +46,30 @@ class NestSensor : Sensor<LivingEntity>() {
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
 
-            if (pokemonEntity.tethering?.tetheringId != null)  // TODO IF pokemon is tethered in pasture (has a pastureID) then ignore wild nests (nests that have no "owner")
-                (blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null && blockEntity.ownerUUID != null
-            else // TODO IF pokemon is not tethered in pasture (pastureID is null) then use wild nests (nests that have no "owner")
-                (blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null && blockEntity.ownerUUID == null
-            /*
+            if (blockEntity !is NestBlockEntity) return@firstOrNull false
 
-            if (blockEntity is NestBlockEntity && (blockEntity as NestBlockEntity).eggComponent?.egg == null){
-                val test = 1 // for breakpointing this shit
-            }*/
+            val nestBlockEntity = blockEntity as NestBlockEntity
 
-            /*if ((blockEntity is NestBlockEntity) && (blockEntity as NestBlockEntity).eggComponent?.egg == null) {
+            // Check if this Pokémon is a parent of the nest
+            if (nestBlockEntity.parents.first == pokemonEntity.uuid || nestBlockEntity.parents.second == pokemonEntity.uuid) {
+                pokemonEntity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, pos)
+                return@firstOrNull true // Prioritize the paternal nest
+            }
 
-                if (pokemonEntity.tethering?.tetheringId != null && blockEntity.ownerUUID != null)
-                    true
+            // Clear paternal nest memory if this isn't their nest
+            pokemonEntity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION) // I do worry that this will clear a parental nest if they get too close to another nest todo look into this case
 
+            // Check if the nest is valid based on tethering and ownership
+            val isWildNest = nestBlockEntity.ownerUUID == null
+            val isOwnedNest = nestBlockEntity.ownerUUID != null
+            val isEggless = nestBlockEntity.eggComponent?.egg == null
 
-                if (pokemonEntity.tethering?.tetheringId == null && blockEntity.ownerUUID == null)
-                    true
-            }*/
+            return@firstOrNull when {
+                // Pokémon is tethered: Use owned nests
+                pokemonEntity.tethering?.tetheringId != null -> isOwnedNest && isEggless
+                // Pokémon is not tethered: Use wild nests
+                else -> isWildNest && isEggless
+            }
         }
     }
 }

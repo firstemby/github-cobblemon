@@ -70,7 +70,8 @@ interface TaskConfig {
             "run_script" to RunScript::class.java,
             "look_in_direction" to LookInDirectionTaskConfig::class.java,
             "path_to_nest" to PathToNestTaskConfig::class.java,
-            "breed_at_nest" to BreedAtNestTaskConfig::class.java
+            "breed_at_nest" to BreedAtNestTaskConfig::class.java,
+            "guard_nest" to GuardNestTaskConfig::class.java
         )
 
         val runtime = MoLangRuntime().setup()

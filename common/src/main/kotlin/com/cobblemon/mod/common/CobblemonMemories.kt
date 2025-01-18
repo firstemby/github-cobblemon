@@ -30,6 +30,7 @@ object CobblemonMemories {
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
     val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
     val NEST_LOCATION = register<BlockPos>("nest_location")
+    val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
     val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
     val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)
