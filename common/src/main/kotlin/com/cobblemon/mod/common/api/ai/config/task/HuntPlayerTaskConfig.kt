@@ -48,8 +48,8 @@ class HuntPlayerTaskConfig : SingleTaskConfig {
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(MemoryModuleType.NEAREST_PLAYERS), // this will be null most of the time
                 it.present(MemoryModuleType.ANGRY_AT),
-                it.absent(MemoryModuleType.ATTACK_TARGET),
-                it.present(MemoryModuleType.DISTURBANCE_LOCATION),
+                it.registered(MemoryModuleType.ATTACK_TARGET),
+                it.registered(MemoryModuleType.DISTURBANCE_LOCATION),
             ).apply(it) { lookTarget, walkTarget, nearestPlayers, angryAt, attackTarget, disturbanceLocation ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity) return@Trigger false

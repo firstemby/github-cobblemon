@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -46,7 +47,7 @@ class GuardNestTaskConfig : SingleTaskConfig {
                 it.present(MemoryModuleType.LOOK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
-                it.present(MemoryModuleType.NEAREST_VISIBLE_PLAYER), // if player is invisible they do not patrol
+                it.registered(MemoryModuleType.NEAREST_VISIBLE_PLAYER), // if player is invisible they do not patrol
                 it.absent(MemoryModuleType.ANGRY_AT),
                 it.absent(MemoryModuleType.ATTACK_TARGET)
             ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt, attackTarget ->
@@ -61,17 +62,19 @@ class GuardNestTaskConfig : SingleTaskConfig {
                     val nestCenter = Vec3.atCenterOf(nestLocation)
 
                     // todo maybe cancel task if player is close to nest and set angry at task to that player
-                    val player = (nearestVisiblePlayer.value() as? IdF<Player>)?.value()
+                    val nearestPlayerOptional = entity.brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER)
+                    val player = nearestPlayerOptional.orElse(null) as? ServerPlayer
                     if (player != null) {
                         // Cancel task if a player is within 8 blocks of the nest and get mad at them
                         if (player.position().distanceToSqr(nestCenter) <= 8 * 8) {
-                            // todo have pokemon cry to indicate change in behavior
+                            // Pokémon cries to indicate behavior change
                             entity.cry()
                             angryAt.set(player.uuid)
                             attackTarget.set(player)
                             return@Trigger false
                         }
                     }
+
 
 
                     // Scan for a valid walkable position within an 8-block sphere
