@@ -46,9 +46,10 @@ class GuardNestTaskConfig : SingleTaskConfig {
                 it.present(MemoryModuleType.LOOK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
-                it.present(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
-                it.absent(MemoryModuleType.ANGRY_AT)
-            ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt ->
+                it.present(MemoryModuleType.NEAREST_VISIBLE_PLAYER), // if player is invisible they do not patrol
+                it.absent(MemoryModuleType.ANGRY_AT),
+                it.absent(MemoryModuleType.ATTACK_TARGET)
+            ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt, attackTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity) return@Trigger false
 
@@ -67,6 +68,7 @@ class GuardNestTaskConfig : SingleTaskConfig {
                             // todo have pokemon cry to indicate change in behavior
                             entity.cry()
                             angryAt.set(player.uuid)
+                            attackTarget.set(player)
                             return@Trigger false
                         }
                     }
