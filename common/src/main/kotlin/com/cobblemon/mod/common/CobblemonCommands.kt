@@ -32,6 +32,7 @@ object CobblemonCommands {
         HealPokemonCommand.register(dispatcher)
         StopBattleCommand.register(dispatcher)
         CheckSpawnsCommand.register(dispatcher)
+        CheckFishingSpawnsCommand.register(dispatcher)
         GetNBT.register(dispatcher)
         OpenStarterScreenCommand.register(dispatcher)
         SpawnAllPokemon.register(dispatcher)
