@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.net.serverhandling
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
@@ -17,13 +18,16 @@ import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleTypes
 import com.cobblemon.mod.common.battles.ChallengeManager
+import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
+import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleChallengeNotificationPacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.util.canInteractWith
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
 /**
@@ -48,10 +52,37 @@ object ChallengeHandler : ServerNetworkPacketHandler<BattleChallengePacket> {
         } ?: return
 
         val leadingPokemon = player.party()[packet.selectedPokemonId]?.uuid ?: return   // validate id
+        // get the memories of the pokemon entity to see if they have a paternal nest
+        val paternalNestLocation = targetedEntity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+
         if (targetedEntity is PokemonEntity && player.canInteractWith(targetedEntity, Cobblemon.config.battleWildMaxDistance) && targetedEntity.canBattle(player)) {
-            BattleBuilder.pve(player, targetedEntity, leadingPokemon)
-                .ifSuccessful { battle -> this.flagAsSeen(battle, targetedEntity) }
-                .ifErrored { it.sendTo(player) { it.red() } }
+            // if targeted entity has a parental nest check for mates to enter battle with
+            if (paternalNestLocation.isPresent && player.level() is ServerLevel) {
+                val nestBlockEntity = player.level().getBlockEntity(paternalNestLocation.get()) as? NestBlockEntity
+                val mateUUID = when (targetedEntity.uuid) {
+                    nestBlockEntity?.parents?.first -> nestBlockEntity.parents.second
+                    nestBlockEntity?.parents?.second -> nestBlockEntity.parents.first
+                    else -> null
+                }
+                val mate = mateUUID?.let { (player.level() as ServerLevel).getEntity(it) as? PokemonEntity }
+
+                if (mate != null) {
+                    BattleBuilder.pveDoubles(player, targetedEntity, mate, leadingPokemon)
+                            .ifSuccessful { battle ->
+                                this.flagAsSeen(battle, targetedEntity)
+                                this.flagAsSeen(battle, mate)
+                            }
+                            .ifErrored { it.sendTo(player) { it.red() } }
+                } else {
+                    BattleBuilder.pve(player, targetedEntity, leadingPokemon)
+                            .ifSuccessful { battle -> this.flagAsSeen(battle, targetedEntity) }
+                            .ifErrored { it.sendTo(player) { it.red() } }
+                }
+            } else {
+                BattleBuilder.pve(player, targetedEntity, leadingPokemon)
+                        .ifSuccessful { battle -> this.flagAsSeen(battle, targetedEntity) }
+                        .ifErrored { it.sendTo(player) { it.red() } }
+            }
         }
         else if (targetedEntity is ServerPlayer) {
             ChallengeManager.setLead(player, leadingPokemon)
