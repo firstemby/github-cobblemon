@@ -48,6 +48,9 @@ class NestSensor : Sensor<LivingEntity>() {
 
             if (blockEntity !is NestBlockEntity) return@firstOrNull false
 
+            // cancel sensor if it is a player sent out pokemon or in a battle
+            if (pokemonEntity.isBattling || pokemonEntity.isBattleClone() || (!pokemonEntity.pokemon.isWild() && pokemonEntity.tethering?.tetheringId == null)) return@firstOrNull false
+
             val nestBlockEntity = blockEntity as NestBlockEntity
 
             // Check if this Pokémon is a parent of the nest

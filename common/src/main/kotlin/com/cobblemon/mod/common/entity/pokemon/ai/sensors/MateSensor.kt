@@ -51,6 +51,9 @@ class MateSensor : Sensor<LivingEntity>() {
         val gender = entity.pokemon.gender
         val mateGender = mate.pokemon.gender
 
+        // cancel sensor if it is a player sent out pokemon or in a battle
+        if (entity.isBattling || entity.isBattleClone() || (!entity.pokemon.isWild() && entity.tethering?.tetheringId == null)) return@firstOrNull false
+
         //todo delete this later (this is for breakpointing only true returns)
         if (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) {
             val test = 1
