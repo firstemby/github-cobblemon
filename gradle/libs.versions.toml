@@ -35,10 +35,10 @@ debugutils-forge = "1.21-1.0.6-neoforge"
 mongo = "4.10.2"
 
 # Testing
-junit = "5.9.0"
-mockito = "5.2.0"
-mockk = "1.12.1"
-classgraph = "4.8.153"
+junit = "5.11.4"
+mockito = "5.14.2"
+mockk = "1.13.14"
+classgraph = "4.8.179"
 
 [libraries]
 # General Buildscript Plugins

@@ -232,9 +232,9 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     private fun attemptModCompat() {
         // They have no Maven nor are they published on Modrinth :(
         // Good thing is they are a copy pasta adapted to Forge :D
-        if (Cobblemon.implementation.isModInstalled("dynamiclightsreforged")) {
+        if (Cobblemon.implementation.isModInstalled("dynamiclightsreforged") || Cobblemon.implementation.isModInstalled("sodiumdynamiclights")) {
             LambDynamicLightsCompat.hookCompat()
-            Cobblemon.LOGGER.info("Dynamic Lights Reforged compatibility enabled")
+            Cobblemon.LOGGER.info("Dynamic Lights compatibility enabled")
         }
     }
 }

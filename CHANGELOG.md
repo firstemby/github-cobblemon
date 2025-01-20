@@ -157,6 +157,8 @@
 - Fixed Fast Ball capture rate applying to all Pokémon.
 - Fix "learned new move" messages appearing for already known moves on Pokémon evolutions.
 - Fix Pokémon Item Models breaking shadows nearby when being placed in Display Cases or Item Frames.
+- Fixed Berries not giving bonus yields when planted in their preferred biomes
+- Fix NeoForge not supporting "SodiumDynamicLights"
 
 ### Developer
 - Updated the Pokédex data updated events to always include a Pokemon instance, and optionally a DisguiseData instance.
