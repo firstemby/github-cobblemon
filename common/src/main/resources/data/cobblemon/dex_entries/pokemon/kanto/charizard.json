@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Mega-X",
-        "Mega-Y",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Mega-X",
+      "unlockForms": [
+        "Mega-X"
+      ]
+    },
+    {
+      "displayForm": "Mega-Y",
+      "unlockForms": [
+        "Mega-Y"
+      ]
+    },
+    {
+      "displayForm": "Gmax",
+      "unlockForms": [
         "Gmax"
       ]
     }

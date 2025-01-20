@@ -15,12 +15,12 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.item.PokemonItem
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.mojang.blaze3d.platform.Lighting
-import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.RenderType
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.MultiBufferSource
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
@@ -50,13 +50,16 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
 
         val transformations = positions[mode]!!
 
-        Lighting.setupForFlatItems()
+        if (mode == ItemDisplayContext.GUI) {
+            Lighting.setupForFlatItems()
+        }
+
         matrices.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z)
         matrices.translate(transformations.translation.x, transformations.translation.y, transformations.translation.z)
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
 
-        matrices.translate(model.profileTranslation.x, model.profileTranslation.y,  model.profileTranslation.z - 4.0)
+        matrices.translate(model.profileTranslation.x, model.profileTranslation.y, -4.0)
         matrices.scale(model.profileScale, model.profileScale, 0.15F)
 
         val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(transformations.rotation.x, transformations.rotation.y, transformations.rotation.z))
@@ -84,7 +87,10 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         model.setDefault()
         matrices.popPose()
         matrices.popPose()
-        Lighting.setupFor3DItems()
+
+        if (mode == ItemDisplayContext.GUI) {
+            Lighting.setupFor3DItems()
+        }
     }
 
     companion object {

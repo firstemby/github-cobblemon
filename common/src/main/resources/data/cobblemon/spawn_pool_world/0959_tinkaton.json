@@ -8,7 +8,6 @@
             "pokemon": "tinkaton",
             "presets": [
                 "natural",
-                "ruins",
                 "wild"
             ],
             "type": "pokemon",
@@ -21,6 +20,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         }

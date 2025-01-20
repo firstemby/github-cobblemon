@@ -27,7 +27,7 @@ object AbandonMultiTeam {
         val command = dispatcher.register(
                 Commands.literal("abandonmultiteam")
                         .permission(CobblemonPermissions.ABANDON_MULTITEAM)
-                        .executes { execute(it,) }
+                        .executes { execute(it) }
         )
         dispatcher.register(command.alias(ALIAS))
     }

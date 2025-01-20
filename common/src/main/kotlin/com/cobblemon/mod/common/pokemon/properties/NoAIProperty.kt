@@ -25,7 +25,7 @@ object NoAIProperty : CustomPokemonPropertyType<BooleanProperty> {
         key = keys.first(),
         value = value,
         pokemonApplicator = { _, _ -> },
-        entityApplicator = { pokemonEntity, noAI -> pokemonEntity.isNoAi = true },
+        entityApplicator = { pokemonEntity, noAI -> pokemonEntity.isNoAi = value },
         pokemonMatcher = { _, _ -> false },
         entityMatcher = { pokemonEntity, noAI -> pokemonEntity.isNoAi == noAI }
     )

@@ -32,7 +32,7 @@
             "context": "fishing",
             "bucket": "common",
             "level": "1-20",
-            "weight": 19.0,
+            "weight": 9.5,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

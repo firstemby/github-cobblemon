@@ -13,7 +13,7 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
-      "animations": ["q.look('head')", "q.bedrock('emboar', 'battle_idle')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('emboar', 'battle_idle')"],
       "quirks": [
         "q.bedrock_quirk('emboar', 'blink')",
         "q.bedrock_quirk('emboar', 'sniff_quirk')",
@@ -23,7 +23,7 @@
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('emboar', 'ground_idle')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('emboar', 'ground_idle')"],
       "quirks": [
         "q.bedrock_quirk('emboar', 'blink')",
         "q.bedrock_quirk('emboar', 'look_quirk')",
@@ -32,7 +32,7 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "animations": ["q.look('head')", "q.bedrock('emboar', 'ground_walk')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('emboar', 'ground_walk')"],
       "quirks": [
         "q.bedrock_quirk('emboar', 'blink')",
         "q.bedrock_quirk('emboar', 'look_quirk')",

@@ -1,10 +1,25 @@
 {
-  "name": "Iron Thorns",
   "nationalPokedexNumber": 995,
+  "name": "Iron Thorns",
   "primaryType": "rock",
   "secondaryType": "electric",
+  "maleRatio": -1,
+  "height": 16,
+  "weight": 3030,
+  "pokedex": [
+    "cobblemon.species.ironthorns.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "quarkdrive"
+    "quarkdrive",
+    "h:quarkdrive"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 100,
@@ -14,10 +29,6 @@
     "special_defence": 84,
     "speed": 72
   },
-  "catchRate": 30,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -26,18 +37,18 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 30,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
   "moves": [
-    "1:electricterrain",
+    "1:rockthrow",
     "1:firefang",
     "1:icefang",
     "1:irondefense",
-    "1:rockthrow",
     "1:thunderfang",
+    "1:electricterrain",
     "7:screech",
     "21:rocktomb",
     "28:bite",
@@ -50,6 +61,7 @@
     "77:stealthrock",
     "84:stoneedge",
     "91:gigaimpact",
+    "tm:bite",
     "tm:blizzard",
     "tm:bodypress",
     "tm:bodyslam",
@@ -91,16 +103,19 @@
     "tm:lowkick",
     "tm:metalclaw",
     "tm:meteorbeam",
+    "tm:pinmissile",
     "tm:powergem",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
     "tm:rockblast",
     "tm:rockslide",
+    "tm:rockthrow",
     "tm:rocktomb",
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:scaryface",
+    "tm:screech",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:snarl",
@@ -123,16 +138,5 @@
     "tm:voltswitch",
     "tm:wildcharge"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 16,
-  "weight": 3030,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.ironthorns.desc"
-  ]
+  "evolutions": []
 }

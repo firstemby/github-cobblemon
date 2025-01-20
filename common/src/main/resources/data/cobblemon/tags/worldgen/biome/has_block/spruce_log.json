@@ -84,6 +84,14 @@
       "required": false
     },
 	{
+      "id": "clifftree:bog",
+      "required": false 
+    },
+	{
+      "id": "clifftree:snowy_old_growth_taiga",
+      "required": false 
+    },
+	{
       "id": "terralith:alpine_grove",
       "required": false
     },

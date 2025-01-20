@@ -28,8 +28,7 @@
             "id": "comfey-2",
             "pokemon": "comfey",
             "presets": [
-                "natural",
-                "flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -42,7 +41,10 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "isRaining": false
+                "isRaining": false,
+                "neededNearbyBlocks": [
+                    "#cobblemon:flowers"
+                ]
             }
         },
         {

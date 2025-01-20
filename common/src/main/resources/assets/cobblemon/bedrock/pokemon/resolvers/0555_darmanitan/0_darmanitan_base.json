@@ -27,7 +27,7 @@
       ]
     },
     {
-      "aspects": ["zen_mode"],
+      "aspects": ["zen-mode"],
       "poser": "cobblemon:darmanitan_zen",
       "model": "cobblemon:darmanitan_zen.geo",
       "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen.png",
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "aspects": ["shiny", "zen_mode"],
+      "aspects": ["shiny", "zen-mode"],
       "texture": "cobblemon:textures/pokemon/0555_darmanitan/darmanitan_zen_shiny.png"
     }
   ]

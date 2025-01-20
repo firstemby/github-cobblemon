@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.evolution.variants
 
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.PassiveEvolution
@@ -30,6 +31,7 @@ open class LevelUpEvolution(
     override var consumeHeldItem: Boolean,
     override val requirements: MutableSet<EvolutionRequirement>,
     override val learnableMoves: MutableSet<MoveTemplate>,
+    override val drops: DropTable,
     override val permanent: Boolean
 ) : PassiveEvolution {
 
@@ -42,7 +44,8 @@ open class LevelUpEvolution(
         consumeHeldItem = true,
         requirements = mutableSetOf(),
         learnableMoves = mutableSetOf(),
-        permanent = false
+        drops = DropTable(),
+        permanent = false,
     )
 
     override fun equals(other: Any?) = other is LevelUpEvolution && other.id.equals(this.id, true)

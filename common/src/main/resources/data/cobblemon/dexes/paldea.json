@@ -1,7 +1,7 @@
 {
   "type": "cobblemon:simple_pokedex_def",
   "id": "cobblemon:paldea",
-  "sortOrder": 10,
+  "sortOrder": 11,
   "entries": [
     "cobblemon:sprigatito",
     "cobblemon:floragato",
@@ -43,6 +43,7 @@
     "cobblemon:mabosstiff",
     "cobblemon:shroodle",
     "cobblemon:grafaiai",
+    "cobblemon:tauros-paldea",
     "cobblemon:bramblin",
     "cobblemon:brambleghast",
     "cobblemon:toedscool",
@@ -76,9 +77,8 @@
     "cobblemon:veluza",
     "cobblemon:dondozo",
     "cobblemon:tatsugiri",
-    "cobblemon:tauros-paldean",
     "cobblemon:annihilape",
-    "cobblemon:wooper-paldean",
+    "cobblemon:wooper-paldea",
     "cobblemon:clodsire",
     "cobblemon:farigiraf",
     "cobblemon:dudunsparce",

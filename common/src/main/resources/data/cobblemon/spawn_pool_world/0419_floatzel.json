@@ -31,7 +31,7 @@
             "id": "floatzel-2",
             "pokemon": "floatzel",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -55,7 +55,7 @@
             "id": "floatzel-3",
             "pokemon": "floatzel",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -78,9 +78,6 @@
         {
             "id": "floatzel-4",
             "pokemon": "floatzel",
-            "presets": [
-                "freshwater"
-            ],
             "type": "pokemon",
             "context": "fishing",
             "bucket": "common",
@@ -90,7 +87,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },

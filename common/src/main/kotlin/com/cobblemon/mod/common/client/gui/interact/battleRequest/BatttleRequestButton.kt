@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -24,7 +25,7 @@ class BattleRequestButton(
         pX: Int, pY: Int,
         var text: MutableComponent,
         onPress: OnPress
-): Button(pX, pY, (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), text, onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), text, onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val WIDTH = 69F

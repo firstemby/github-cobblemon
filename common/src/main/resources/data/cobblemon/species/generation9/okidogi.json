@@ -1,11 +1,25 @@
 {
-  "name": "Okidogi",
   "nationalPokedexNumber": 1014,
+  "name": "Okidogi",
   "primaryType": "poison",
   "secondaryType": "fighting",
+  "maleRatio": 1,
+  "height": 18,
+  "weight": 922,
+  "pokedex": [
+    "cobblemon.species.okidogi.desc"
+  ],
+  "labels": [
+    "gen9",
+    "legendary"
+  ],
+  "aspects": [],
   "abilities": [
     "toxicchain",
     "h:guarddog"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 88,
@@ -15,10 +29,6 @@
     "special_defence": 86,
     "speed": 80
   },
-  "catchRate": 3,
-  "maleRatio": 1,
-  "baseExperienceYield": 0,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -27,15 +37,15 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 278,
   "experienceGroup": "slow",
-  "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "catchRate": 3,
+  "eggCycles": 120,
+  "baseFriendship": 0,
   "moves": [
     "1:bite",
-    "1:bulkup",
     "1:lowkick",
+    "1:bulkup",
     "8:howl",
     "16:poisonfang",
     "24:forcepalm",
@@ -45,11 +55,14 @@
     "56:crunch",
     "64:superpower",
     "72:gigaimpact",
+    "tm:bite",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:brickbreak",
+    "tm:brutalswing",
     "tm:bulkup",
     "tm:closecombat",
+    "tm:counter",
     "tm:crunch",
     "tm:curse",
     "tm:dig",
@@ -62,10 +75,12 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
+    "tm:forcepalm",
     "tm:gigaimpact",
     "tm:gunkshot",
     "tm:hardpress",
     "tm:highhorsepower",
+    "tm:howl",
     "tm:hyperbeam",
     "tm:icefang",
     "tm:icepunch",
@@ -76,6 +91,7 @@
     "tm:lowsweep",
     "tm:metalclaw",
     "tm:outrage",
+    "tm:poisonfang",
     "tm:poisonjab",
     "tm:poisontail",
     "tm:protect",
@@ -93,6 +109,7 @@
     "tm:spite",
     "tm:stompingtantrum",
     "tm:substitute",
+    "tm:superpower",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -104,16 +121,5 @@
     "tm:upperhand",
     "tm:uproar"
   ],
-  "labels": [
-    "gen9",
-    "legendary"
-  ],
-  "aspects": [],
-  "height": 18,
-  "weight": 920,
-  "evolutions": [],
-  "pokedex": [
-    "cobblemon.species.okidogi.desc"
-  ],
-  "cannotDynamax": false
+  "evolutions": []
 }

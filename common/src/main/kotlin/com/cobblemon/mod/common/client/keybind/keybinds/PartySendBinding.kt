@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.net.messages.server.RequestPlayerInteractionsPacket
 import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.common.util.traceFirstEntityCollision
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
@@ -43,7 +44,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         secondsSinceActioned = 0F
     }
 
-    fun canAction() = canApplyChange
+    fun canAction() = canApplyChange && Minecraft.getInstance().player?.isUsingPokedex() == false
 
     override fun onTick() {
         if (secondsSinceActioned < 100) {

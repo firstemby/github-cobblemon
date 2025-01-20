@@ -33,8 +33,7 @@
             "id": "electrode-2",
             "pokemon": "electrode",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -52,6 +51,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         },
@@ -84,8 +86,7 @@
             "id": "electrode-hisuian-4",
             "pokemon": "electrode hisuian",
             "presets": [
-                "natural",
-                "apricorns"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -103,6 +104,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:apricorns"
                 ]
             }
         }

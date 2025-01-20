@@ -16,13 +16,14 @@ import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.Add
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.encode
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.RegistryAccess
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RemoveEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 
-    constructor(pokemon: Pokemon, value: Evolution) : this({ pokemon }, value.convertToDisplay(pokemon))
+    constructor(pokemon: Pokemon, value: Evolution, registryAccess: RegistryAccess) : this({ pokemon }, value.convertToDisplay(pokemon, registryAccess))
 
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         this.value.encode(buffer)

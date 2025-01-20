@@ -11,12 +11,12 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('servine', 'ground_idle')"],
+      "animations": ["q.look('head_ai')", "q.bedrock('servine', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('servine', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK"],
-      "animations": ["q.look('head')", "q.bedrock('servine', 'ground_idle')"],
+      "animations": ["q.look('head_ai')", "q.bedrock('servine', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('servine', 'blink')"]
     },
     "sleep": {

@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.text.gold
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -35,7 +36,7 @@ class MoveSlotButton(
     val ppMax: Int,
     val enabled: Boolean = true,
     onPress: OnPress
-) : Button(x, y, WIDTH, HEIGHT, Component.literal("Move"), onPress, CreateNarration { "".text() }) {
+) : Button(x, y, WIDTH, HEIGHT, Component.literal("Move"), onPress, CreateNarration { "".text() }), CobblemonRenderable {
 
     companion object {
         private val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")

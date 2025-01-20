@@ -7,7 +7,7 @@
             "id": "wishiwashi-1",
             "pokemon": "wishiwashi",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -41,7 +41,7 @@
             "id": "wishiwashi-3",
             "pokemon": "wishiwashi",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

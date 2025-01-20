@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.battle.widgets
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.battle.ClientBattleMessageQueue
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
@@ -32,7 +33,7 @@ class BattleMessagePane(
     FRAME_HEIGHT, // height
     1, // top
     LINE_HEIGHT
-) {
+), CobblemonRenderable {
     var opacity = 1F
     private var scrolling = false
 

@@ -58,6 +58,8 @@ fun interface TaskConfig {
             "calm_down" to CalmDownTaskConfig::class.java,
             "flee_attacker" to FleeAttackerTaskConfig::class.java,
             "flee_nearest_hostile" to FleeNearestHostileTaskConfig::class.java,
+            "run_script" to RunScript::class.java,
+            "look_in_direction" to LookInDirectionTaskConfig::class.java,
         )
 
         val runtime = MoLangRuntime().setup()

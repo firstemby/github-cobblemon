@@ -11,54 +11,38 @@ package com.cobblemon.mod.neoforge.brewing
 import com.cobblemon.mod.common.brewing.BrewingRecipes
 import com.cobblemon.mod.common.brewing.ingredient.CobblemonItemIngredient
 import com.cobblemon.mod.common.brewing.ingredient.CobblemonPotionIngredient
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
-import net.neoforged.neoforge.common.brewing.IBrewingRecipe
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.alchemy.PotionContents
+import net.minecraft.world.item.crafting.Ingredient
+import net.neoforged.neoforge.common.brewing.BrewingRecipe
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 
 internal object CobblemonNeoForgeBrewingRegistry {
 
     fun register(e: RegisterBrewingRecipesEvent) {
-        this.registerIngredientTypes()
         this.registerRecipes(e)
-    }
-
-    private fun registerIngredientTypes() {
-        //CraftingHelper.register(cobblemonResource("potion"), ForgePotionIngredientSerializer)
     }
 
     private fun registerRecipes(e: RegisterBrewingRecipesEvent) {
         BrewingRecipes.recipes.forEach { (input, ingredient, output) ->
+            val inputIngredient = if (input is CobblemonItemIngredient) {
+                Ingredient.of(input.item)
+            } else {
+                input as CobblemonPotionIngredient
+                Ingredient.of(
+                    ItemStack(Items.POTION).also { it.set(DataComponents.POTION_CONTENTS, PotionContents(input.potion)) },
+                    ItemStack(Items.SPLASH_POTION).also { it.set(DataComponents.POTION_CONTENTS, PotionContents(input.potion)) },
+                    ItemStack(Items.LINGERING_POTION).also { it.set(DataComponents.POTION_CONTENTS, PotionContents(input.potion)) }
+                )
+            }
             e.builder.addRecipe(
-                object : IBrewingRecipe {
-                    override fun isInput(arg: ItemStack): Boolean {
-                        if (input is CobblemonItemIngredient) {
-                            return input.item == arg.item
-                        }
-                        else if (input is CobblemonPotionIngredient) {
-                            return input.matches(arg)
-                        }
-                        else {
-                            return false
-                        }
-                    }
-
-                    override fun isIngredient(arg: ItemStack): Boolean {
-                        if (input is CobblemonItemIngredient) {
-                            return input.item == arg.item
-                        }
-                        else if (input is CobblemonPotionIngredient) {
-                            return input.matches(arg)
-                        }
-                        else {
-                            return false
-                        }
-                    }
-
-                    override fun getOutput(arg: ItemStack, arg2: ItemStack): ItemStack {
-                        return output.defaultInstance
-                    }
-
-                }
+                BrewingRecipe(
+                    inputIngredient,
+                    Ingredient.of(ingredient),
+                    ItemStack(output)
+                )
             )
         }
     }

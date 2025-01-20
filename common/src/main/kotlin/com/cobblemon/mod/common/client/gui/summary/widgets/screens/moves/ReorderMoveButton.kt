@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -21,7 +22,7 @@ class ReorderMoveButton(
     val pX: Int, val pY: Int,
     private val isUp: Boolean,
     onPress: OnPress
-): Button((pX - OFFSET_X).toInt(), (pY + (if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN)), (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.empty(), onPress, DEFAULT_NARRATION) {
+): Button((pX - OFFSET_X).toInt(), (pY + (if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN)), (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val WIDTH = 8

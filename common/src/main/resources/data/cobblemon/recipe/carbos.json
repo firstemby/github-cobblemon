@@ -5,10 +5,10 @@
             "item": "cobblemon:medicinal_brew"
         },
         {
-            "item": "minecraft:wheat"
+            "tag": "c:crops/wheat"
         },
         {
-            "item": "minecraft:wheat"
+            "tag": "c:crops/wheat"
         },
         {
             "item": "cobblemon:tamato_berry"

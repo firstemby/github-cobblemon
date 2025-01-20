@@ -10,10 +10,10 @@
             "tag": "cobblemon:pokedex_screen"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "A": {
             "item": "cobblemon:pink_apricorn"

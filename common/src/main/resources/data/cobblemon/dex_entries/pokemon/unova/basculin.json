@@ -7,9 +7,13 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Blue-Striped",
-        "White-Striped"
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Blue-Striped",
+      "unlockForms": [
+        "Blue-Striped"
       ]
     }
   ],

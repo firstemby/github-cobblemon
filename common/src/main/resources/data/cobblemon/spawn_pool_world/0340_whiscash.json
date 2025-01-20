@@ -7,7 +7,7 @@
             "id": "whiscash-1",
             "pokemon": "whiscash",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -25,7 +25,7 @@
             "id": "whiscash-2",
             "pokemon": "whiscash",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -128,7 +128,7 @@
             "id": "whiscash-7",
             "pokemon": "whiscash",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

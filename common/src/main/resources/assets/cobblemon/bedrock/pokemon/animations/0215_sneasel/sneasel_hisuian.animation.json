@@ -122,7 +122,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "pokemon.sneasel.cry"
+					"effect": "pokemon.sneasel_hisuian.cry"
 				}
 			}
 		}

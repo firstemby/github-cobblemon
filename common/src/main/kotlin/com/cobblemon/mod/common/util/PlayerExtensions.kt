@@ -19,6 +19,9 @@ import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.takeFirst
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.TeamManager
+import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.TradeManager
@@ -30,6 +33,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.Mth
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Inventory
@@ -167,11 +171,14 @@ fun <T : Entity> Player.traceEntityCollision(
         AABB(startPos.subtract(maxDistanceVector), startPos.add(maxDistanceVector)),
         { entityClass.isInstance(it) }
     )
+
     while (step <= maxDistance) {
         val location = startPos.add(direction.scale(step.toDouble()))
         step += stepDistance
 
-        val collided = entities.filter { ignoreEntity != it && location in it.boundingBox }.filter { entityClass.isInstance(it) }
+        val collided = entities.filter {
+            ignoreEntity != it && location in it.boundingBox && entityClass.isInstance(it) && !it.isSpectator
+        }
 
         if (collided.isNotEmpty()) {
             if(collideBlock != null && level().clip(ClipContext(startPos, location, ClipContext.Block.COLLIDER, collideBlock, this)).type == HitResult.Type.BLOCK) {
@@ -405,3 +412,15 @@ fun Player.giveOrDropItemStack(stack: ItemStack, playSound: Boolean = true) {
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
 fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme?.let { BuiltInRegistries.SOUND_EVENT.get(it) } ?: CobblemonSounds.PVP_BATTLE
+
+
+/** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
+fun Player.isPartyBusy() =
+    if (this.level().isClientSide)
+        CobblemonClient.storage.myParty.find { it?.entity?.isBusy == true } != null
+    else
+        Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it?.entity?.isBusy == true } != null
+
+fun Player.isUsingPokedex() = isUsingItem &&
+    ((mainHandItem.item is PokedexItem && usedItemHand == InteractionHand.MAIN_HAND) ||
+    (offhandItem.item is PokedexItem && usedItemHand == InteractionHand.OFF_HAND))

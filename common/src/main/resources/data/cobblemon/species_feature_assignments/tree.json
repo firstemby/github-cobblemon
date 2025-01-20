@@ -1,4 +1,12 @@
 {
-  "pokemon": ["torterra", "komala", "phantump", "trevenant", "timburr"],
-  "features": ["tree"]
+  "pokemon": [
+    "torterra",
+    "komala",
+    "phantump",
+    "trevenant",
+    "timburr"
+  ],
+  "features": [
+    "tree"
+  ]
 }

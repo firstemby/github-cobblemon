@@ -31,7 +31,7 @@
             "id": "buizel-2",
             "pokemon": "buizel",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -55,7 +55,7 @@
             "id": "buizel-3",
             "pokemon": "buizel",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -87,7 +87,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },

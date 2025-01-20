@@ -10,7 +10,7 @@
       "translate": "advancements.cobblemon.craft_rod.description"
     }
   },
-  "parent": "cobblemon:root",
+  "parent": "cobblemon:craft_poke_ball",
   "criteria": {
     "craft_rod": {
       "trigger": "minecraft:inventory_changed",

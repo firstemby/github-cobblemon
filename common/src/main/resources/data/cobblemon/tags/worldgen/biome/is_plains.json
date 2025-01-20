@@ -9,11 +9,7 @@
       "required": false
     },
 	{
-      "id": "#c:plains",
-      "required": false
-    },
-	{
-      "id": "#forge:is_plains",
+      "id": "#c:is_plains",
       "required": false
     },
 	{
@@ -55,6 +51,10 @@
 	{
       "id": "biomesoplenty:seasonal_orchard",
       "required": false
+    },
+	{
+      "id": "clifftree:sparse_forest",
+      "required": false 
     },
 	{
       "id": "terralith:scrubland",

@@ -10,10 +10,10 @@
             "item": "minecraft:yellow_wool"
         },
         "D": {
-            "item": "minecraft:redstone"
+            "tag": "c:dusts/redstone"
         },
         "I": {
-            "item": "minecraft:gold_ingot"
+            "tag": "c:ingots/gold"
         }
     },
     "result": {

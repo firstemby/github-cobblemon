@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.startselection.widgets
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.starter.RenderableStarterCategory
@@ -37,7 +38,7 @@ class CategoryList(
     paneHeight,
     topOffset,
     entryHeight
-) {
+), CobblemonRenderable {
 
     companion object {
         private const val CATEGORY_BUTTON_WIDTH = 51.5f

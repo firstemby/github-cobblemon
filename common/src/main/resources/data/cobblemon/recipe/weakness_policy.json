@@ -7,7 +7,7 @@
     ],
     "key": {
         "B": {
-            "item": "minecraft:blue_dye"
+            "tag": "c:dyes/blue"
         },
         "S": {
             "item": "minecraft:fermented_spider_eye"

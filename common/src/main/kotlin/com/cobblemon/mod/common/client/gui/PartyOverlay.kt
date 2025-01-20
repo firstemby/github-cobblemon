@@ -92,7 +92,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
             if (!screenExemptions.contains(minecraft.screen?.javaClass as Class<out Screen>))
                 return
         }
-        if (minecraft.debugOverlay.showDebugScreen()) {
+        if (minecraft.options.hideGui || minecraft.debugOverlay.showDebugScreen()) {
             return
         }
         // Hiding if toggled via Keybind

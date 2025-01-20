@@ -7,7 +7,7 @@
             "id": "corsola-1",
             "pokemon": "corsola",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

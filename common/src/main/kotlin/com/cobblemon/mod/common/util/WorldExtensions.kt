@@ -28,6 +28,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.phys.AABB
@@ -153,6 +154,8 @@ val Level.enchantmentRegistry: Registry<Enchantment>
     get() = registryAccess().registryOrThrow(Registries.ENCHANTMENT)
 val Level.activityRegistry: Registry<Activity>
     get() = registryAccess().registryOrThrow(Registries.ACTIVITY)
+val Level.blockRegistry: Registry<Block>
+    get() = registryAccess().registryOrThrow(Registries.BLOCK)
 
 fun Vec3.traceDownwards(
     world: Level,

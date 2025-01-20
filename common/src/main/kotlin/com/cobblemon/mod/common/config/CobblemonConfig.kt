@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCa
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 
 class CobblemonConfig {
     companion object {
@@ -181,7 +182,7 @@ class CobblemonConfig {
     var displayNameForUnknownPokemon = false
 
     @NodeCategory(Category.Pokemon)
-    var displayEntityLabelsWhenCrouchingOnly  = true
+    var displayEntityLabelsWhenCrouchingOnly = false
 
     @NodeCategory(Category.Spawning)
     var shinyRate = 8192F
@@ -239,13 +240,17 @@ class CobblemonConfig {
     var tradeMaxDistance = 12F
 
     @NodeCategory(Category.Battles)
-    var BattlePvPMaxDistance = 32F
+    @SerializedName("battlePvPMaxDistance", alternate = ["BattlePvPMaxDistance"])
+    var battlePvPMaxDistance = 32F
 
     @NodeCategory(Category.Battles)
     var battleSpectateMaxDistance = 64F
 
-    @NodeCategory(Category.World)
-    var entityInteractionMaxDistance  = 64F
+    @NodeCategory(Category.Pokedex)
+    var maxPokedexScanningDetectionRange = 10.0
+
+    @NodeCategory(Category.Pokedex)
+    var hideUnimplementedPokemonInThePokedex = false
 
     @NodeCategory(Category.Debug)
     var enableDebugKeys = false

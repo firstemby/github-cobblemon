@@ -148,17 +148,17 @@
   },
   "item.pokedex.scan_open": {
     "subtitle": "cobblemon:subtitle.item.pokedex.scan_open",
-    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_open", "volume": 1.0 } ]
+    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_open", "volume": 0.6 } ]
   },
   "item.pokedex.scan_close": {
     "subtitle": "cobblemon:subtitle.item.pokedex.scan_close",
-    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_close", "volume": 1.0 } ]
+    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_close", "volume": 0.8 } ]
   },
   "item.pokedex.scan_loop": {
-    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_loop", "volume": 0.2 } ]
+    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_loop", "volume": 0.25 } ]
   },
   "item.pokedex.scan_detail": {
-    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_detail", "volume": 1.0 } ]
+    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_detail", "volume": 0.9 } ]
   },
   "item.pokedex.scan_register_pokemon": {
     "subtitle": "cobblemon:subtitle.item.pokedex.scan_register_pokemon",
@@ -169,7 +169,7 @@
     "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_register_aspect", "volume": 1.0 } ]
   },
   "item.pokedex.scan_zoom_increment": {
-    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_zoom_increment", "volume": 0.6 } ]
+    "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_zoom_increment", "volume": 0.7 } ]
   },
   "evolution.notification": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 0.7 } ]
@@ -653,11 +653,20 @@
       "cobblemon:block/gilded_chest/gilded_chest_step_4"
     ]
   },
-  "move.watersport.actor": {
-    "sounds": [ { "name": "cobblemon:move/water_sport/water_sport_actor", "volume": 0.8 } ]
+  "move.bite.target": {
+    "sounds": [ { "name": "cobblemon:move/bite/bite_target", "volume": 0.8 } ]
   },
-  "move.mudsport.actor": {
-    "sounds": [ { "name": "cobblemon:move/mud_sport/mud_sport_actor", "volume": 0.8 } ]
+  "move.cottonguard.actor": {
+    "sounds": [ { "name": "cobblemon:move/cotton_guard/cotton_guard_actor", "volume": 0.8 } ]
+  },
+  "move.crunch.target": {
+    "sounds": [ { "name": "cobblemon:move/crunch/crunch_target", "volume": 0.8 } ]
+  },
+  "move.ember.actor": {
+    "sounds": [ { "name": "cobblemon:move/ember/ember_actor", "volume": 0.8 } ]
+  },
+  "move.ember.target": {
+    "sounds": [ { "name": "cobblemon:move/ember/ember_target", "volume": 0.8 } ]
   },
   "move.flamethrower.actor": {
     "sounds": [ { "name": "cobblemon:move/flamethrower/flamethrower_actor", "volume": 0.8 } ]
@@ -665,11 +674,35 @@
   "move.flamethrower.target": {
     "sounds": [ { "name": "cobblemon:move/flamethrower/flamethrower_target", "volume": 0.8 } ]
   },
+  "move.hyperfang.target": {
+    "sounds": [ { "name": "cobblemon:move/hyper_fang/hyper_fang_target", "volume": 0.8 } ]
+  },
+  "move.kinesis.actor": {
+    "sounds": [ { "name": "cobblemon:move/kinesis/kinesis_actor", "volume": 0.7 } ]
+  },
+  "move.psychic.actor": {
+    "sounds": [ { "name": "cobblemon:move/psychic/psychic_actor", "volume": 0.7 } ]
+  },
+  "move.psychic.target": {
+    "sounds": [ { "name": "cobblemon:move/psychic/psychic_target", "volume": 0.8 } ]
+  },
+  "move.watersport.actor": {
+    "sounds": [ { "name": "cobblemon:move/water_sport/water_sport_actor", "volume": 0.8 } ]
+  },
+  "move.mudsport.actor": {
+    "sounds": [ { "name": "cobblemon:move/mud_sport/mud_sport_actor", "volume": 0.8 } ]
+  },
   "move.sandattack.actor": {
     "sounds": [ { "name": "cobblemon:move/sand_attack/sand_attack_actor", "volume": 0.8 } ]
   },
   "move.sandattack.target": {
     "sounds": [ { "name": "cobblemon:move/sand_attack/sand_attack_target", "volume": 0.8 } ]
+  },
+  "move.superfang.actor": {
+    "sounds": [ { "name": "cobblemon:move/super_fang/super_fang_actor", "volume": 0.6 } ]
+  },
+  "move.superfang.target": {
+    "sounds": [ { "name": "cobblemon:move/super_fang/super_fang_target", "volume": 0.8 } ]
   },
   "move.confusion.actor": {
     "sounds": [ { "name": "cobblemon:move/confusion/confusion_actor", "volume": 0.9 } ]
@@ -733,32 +766,11 @@
       { "name": "cobblemon:move/spore/spore_mushroom_4", "volume": 0.1 }
     ]
   },
-  "move.cottonguard.actor": {
-    "sounds": [ { "name": "cobblemon:move/cotton_guard/cotton_guard_actor", "volume": 0.8 } ]
-  },
-  "move.gust.actor": {
-    "sounds": [ { "name": "cobblemon:move/gust/gust_actor", "volume": 0.8 } ]
-  },
-  "move.gust.target": {
-    "sounds": [ { "name": "cobblemon:move/gust/gust_target", "volume": 0.8 } ]
-  },
   "move.haze.actor": {
     "sounds": [ { "name": "cobblemon:move/haze/haze_actor", "volume": 0.8 } ]
   },
   "move.lick.target": {
     "sounds": [ { "name": "cobblemon:move/lick/lick_target", "volume": 0.8 } ]
-  },
-  "move.mudbomb.actor": {
-    "sounds": [ { "name": "cobblemon:move/mud_bomb/mud_bomb_actor", "volume": 0.8 } ]
-  },
-  "move.mudbomb.target": {
-      "sounds": [ { "name": "cobblemon:move/mud_bomb/mud_bomb_target", "volume": 0.8 } ]
-  },
-  "move.powdersnow.actor": {
-    "sounds": [ { "name": "cobblemon:move/powder_snow/powder_snow_actor", "volume": 0.8 } ]
-  },
-  "move.powdersnow.target": {
-      "sounds": [ { "name": "cobblemon:move/powder_snow/powder_snow_target", "volume": 0.8 } ]
   },
   "move.pursuit.target": {
     "sounds": [ { "name": "cobblemon:move/pursuit/pursuit_target", "volume": 0.8 } ]
@@ -779,7 +791,7 @@
     "sounds": [ { "name": "cobblemon:move/seismic_toss/seismic_toss_target_2", "volume": 1.0 } ]
   },
   "move.sing.actor": {
-    "sounds": [ { "name": "cobblemon:move/sing/sing_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/sing/sing_actor", "volume": 0.6 } ]
   },
   "move.withdraw.actor": {
     "sounds": [ { "name": "cobblemon:move/withdraw/withdraw_actor", "volume": 0.8 } ]
@@ -5000,6 +5012,9 @@
     "subtitle": "cobblemon:subtitle.pokemon.sneasel.cry",
     "sounds": [ { "name": "cobblemon:pokemon/sneasel/sneasel_cry", "volume": 0.8 } ]
   },
+  "pokemon.sneasel_hisuian.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sneasel/sneasel_hisuian_cry", "volume": 0.8 } ]
+  },
   "pokemon.teddiursa.cry": {
     "subtitle": "cobblemon:subtitle.pokemon.teddiursa.cry",
     "sounds": [ { "name": "cobblemon:pokemon/teddiursa/teddiursa_cry", "volume": 0.8 } ]
@@ -8233,6 +8248,9 @@
   "pokemon.armarouge.cry": {
   "subtitle": "cobblemon:subtitle.pokemon.armarouge.cry",
     "sounds": [ { "name": "cobblemon:pokemon/armarouge/armarouge_cry", "volume": 0.8 } ]
+  },
+  "pokemon.armarouge.battle_cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/armarouge/armarouge_battle_cry", "volume": 0.8 } ]
   },
   "pokemon.ceruledge.cry": {
   "subtitle": "cobblemon:subtitle.pokemon.ceruledge.cry",

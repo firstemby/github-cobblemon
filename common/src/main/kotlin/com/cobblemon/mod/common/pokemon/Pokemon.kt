@@ -153,6 +153,7 @@ import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
 import kotlin.math.*
+import net.minecraft.util.Mth
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -648,7 +649,7 @@ open class Pokemon : ShowdownIdentifiable {
                     if (!spawnYaw.isFinite()) {
                         spawnYaw = 0.0
                     }
-                    it.entityData.set(PokemonEntity.SPAWN_DIRECTION, spawnYaw.toFloat())
+                    it.entityData.set(PokemonEntity.SPAWN_DIRECTION, Mth.wrapDegrees(spawnYaw.toFloat()))
                 }
                 if (owner != null) {
                     level.playSoundServer(owner.position(), CobblemonSounds.POKE_BALL_THROW, volume = 0.6F)
@@ -980,15 +981,25 @@ open class Pokemon : ShowdownIdentifiable {
         return CODEC.decode(ops, data).ifSuccess { this.copyFrom(it.first) }
     }
 
-    fun clone(newUUID: Boolean = true): Pokemon {
+    /**
+     * Clones the provided pokemon into a completely new instance.
+     *
+     * @param registryAccess Registry Access used for serialization context. WILL BECOME REQUIRED IN 1.7, currently falls back to server registry access
+     * @param newUUID Whether or not the pokemon should receive a new UUID or not, which will completely untie it from the original
+     *
+     * @return The cloned pokemon
+     */
+    fun clone(newUUID: Boolean = true, registryAccess: RegistryAccess? = null): Pokemon {
         // NBT is faster, ops type doesn't really matter
-        val encoded = CODEC.encodeStart(NbtOps.INSTANCE, this).orThrow
-        if (newUUID) {
-            NbtOps.INSTANCE.set(encoded, DataKeys.POKEMON_UUID, StringTag.valueOf(UUID.randomUUID().toString()))
-            NbtOps.INSTANCE.remove(encoded, DataKeys.TETHERING_ID)
-        }
-        val result = CODEC.decode(NbtOps.INSTANCE, encoded).orThrow.first
+        var ops = (registryAccess ?: server()?.registryAccess() ?: throw IllegalStateException("No registry access for cloning available"))
+            .createSerializationContext(NbtOps.INSTANCE)
+        val encoded = CODEC.encodeStart(ops, this).orThrow
+        val result = CODEC.decode(ops, encoded).orThrow.first
         result.isClient = this.isClient
+        if (newUUID) {
+            result.uuid = UUID.randomUUID()
+            result.tetheringId = null
+        }
         return result
     }
 
@@ -1204,7 +1215,12 @@ open class Pokemon : ShowdownIdentifiable {
          * aspect providers, and we want the server side to entirely manage them anyway.
          */
         if (!isClient) {
+            val oldAspects = aspects
             aspects = AspectProvider.providers.flatMap { it.provide(this) }.toSet() + forcedAspects
+
+            if (oldAspects != aspects && !isWild()) {
+                CobblemonEvents.POKEMON_ASPECTS_CHANGED.post(PokemonAspectsChangedEvent(getOwnerUUID(), this))
+            }
         } else {
             aspects = forcedAspects
         }
@@ -1343,7 +1359,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (this.isClient || ability.forced || ability.template == Abilities.DUMMY) {
             return ability
         }
-        val found = this.form.abilities.firstOrNull { potential -> potential.template == ability.template }
+        val found = this.form.abilities.firstOrNull { potential -> potential.template == ability.template && potential.priority == ability.priority }
             ?: return ability.apply { this.forced = true }
         val index = this.form.abilities.mapping[found.priority]
             ?.indexOf(found)
@@ -1622,7 +1638,7 @@ open class Pokemon : ShowdownIdentifiable {
     private val _state = registerObservable(SimpleObservable<PokemonState>()) { PokemonStateUpdatePacket({ this }, it) }
     private val _status = registerObservable(SimpleObservable<PersistentStatus?>()) { StatusUpdatePacket({ this }, it) }
     private val _caughtBall = registerObservable(SimpleObservable<PokeBall>()) { CaughtBallUpdatePacket({ this }, it) }
-    private val _benchedMoves = registerObservable(benchedMoves.observable) { BenchedMovesUpdatePacket({ this }, it) }
+    private val _benchedMoves = registerObservable(benchedMoves.observable) { BenchedMovesUpdatePacket({ this }, BenchedMoves().also {copy -> copy.copyFrom(it)}) }
     private val _ivs = registerObservable(ivs.observable) { IVsUpdatePacket({ this }, it as IVs) }
     private val _evs = registerObservable(evs.observable) { EVsUpdatePacket({ this }, it as EVs) }
     private val _aspects = registerObservable(SimpleObservable<Set<String>>()) { AspectsUpdatePacket({ this }, it) }

@@ -155,7 +155,7 @@ class FossilMultiblockStructure (
 
         // Reclaim the last fossil from the machine if their hand is empty
         if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty) {
-            if(!this.isRunning() && this.hasCreatedPokemon) {
+            if(!this.isRunning() && !this.hasCreatedPokemon) {
                 if (fossilInventory.isEmpty()) {
                     return InteractionResult.CONSUME
                 }

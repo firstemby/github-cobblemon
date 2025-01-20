@@ -67,7 +67,7 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
         .registerTypeAdapter(NPCVariationProvider::class.java, NPCVariationProviderAdapter)
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(MoValue::class.java, MoValueAdapter)
-        .registerTypeAdapter(Component::class.java, TextAdapter)
+        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(BrainConfig::class.java, BrainConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)

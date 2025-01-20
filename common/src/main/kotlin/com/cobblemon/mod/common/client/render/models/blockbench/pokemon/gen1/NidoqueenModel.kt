@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.BipedW
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.PoseType.Companion.MOVING_POSES
@@ -39,6 +40,8 @@ class NidoqueenModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     lateinit var sleep: Pose
     lateinit var standing: Pose
     lateinit var walk: Pose
+
+    override val cryAnimation = CryProvider { bedrockStateful("nidoqueen", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("nidoqueen", "blink")}

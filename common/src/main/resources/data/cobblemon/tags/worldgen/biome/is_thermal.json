@@ -6,6 +6,10 @@
       "required": false
     },
 	{
+      "id": "clifftree:inferno",
+      "required": false 
+    },
+	{
       "id": "terralith:caldera",
       "required": false
     },

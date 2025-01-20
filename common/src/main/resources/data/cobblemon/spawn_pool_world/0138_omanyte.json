@@ -26,7 +26,7 @@
             "id": "omanyte-2",
             "pokemon": "omanyte",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

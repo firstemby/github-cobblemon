@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -22,7 +23,7 @@ class DialogueTimerWidget(
     val y: Int,
     val width: Int,
     val height: Int,
-) : Renderable, GuiEventListener {
+) : CobblemonRenderable, GuiEventListener {
     companion object {
         val timerResource = cobblemonResource("textures/gui/dialogue/dialogue_timer_bar.png")
     }

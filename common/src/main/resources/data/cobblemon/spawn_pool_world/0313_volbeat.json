@@ -34,7 +34,7 @@
             "id": "volbeat-2",
             "pokemon": "volbeat",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -79,7 +79,7 @@
             "id": "volbeat-4",
             "pokemon": "volbeat",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",

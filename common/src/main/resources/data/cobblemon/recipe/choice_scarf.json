@@ -10,7 +10,7 @@
             "item": "minecraft:light_blue_wool"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         },
         "S": {
             "item": "cobblemon:silk_scarf"

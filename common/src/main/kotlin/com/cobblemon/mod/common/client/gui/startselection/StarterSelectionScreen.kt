@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.startselection.widgets.CategoryList
 import com.cobblemon.mod.common.client.gui.startselection.widgets.ExitButton
 import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.ArrowButton
@@ -47,7 +48,7 @@ import net.minecraft.network.chat.Component
  * @author Qu
  * @since 2022-06-18
  */
-class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()) {
+class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable {
 
     companion object {
         // Size of UI at scale 1
@@ -132,7 +133,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
                 pX = x + 85, pY = y + 50,
                 pWidth = 102, pHeight = 100,
                 pokemon = this,
-                baseScale = 2.0f
+                baseScale = 2.0f,
+                playCryOnClick = true,
             )
 
             typeWidget = typeWidget(this, x, y)

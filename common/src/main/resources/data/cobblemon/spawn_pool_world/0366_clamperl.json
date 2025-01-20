@@ -7,7 +7,7 @@
             "id": "clamperl-1",
             "pokemon": "clamperl",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -26,7 +26,7 @@
             "id": "clamperl-2",
             "pokemon": "clamperl",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -53,35 +53,10 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
             }
         },
         {
             "id": "clamperl-4",
-            "pokemon": "clamperl",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "10-35",
-            "weight": 1.9,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "clamperl-5",
             "pokemon": "clamperl",
             "type": "pokemon",
             "context": "fishing",
@@ -95,9 +70,29 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2
+            }
+        },
+        {
+            "id": "clamperl-5",
+            "pokemon": "clamperl",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "seafloor",
+            "bucket": "uncommon",
+            "level": "10-35",
+            "weight": 9.2,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         },
         {
@@ -105,23 +100,19 @@
             "pokemon": "clamperl",
             "type": "pokemon",
             "context": "fishing",
-            "bucket": "common",
+            "bucket": "rare",
             "level": "10-35",
-            "weight": 1.9,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
+            "weight": 5.25,
             "condition": {
                 "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 2
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

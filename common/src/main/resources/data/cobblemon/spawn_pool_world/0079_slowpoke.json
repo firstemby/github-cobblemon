@@ -62,7 +62,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },
@@ -93,7 +93,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },
@@ -128,7 +128,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },
@@ -161,7 +161,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
+                        "minLureLevel": "2",
                         "maxLureLevel": "2"
                     }
                 },

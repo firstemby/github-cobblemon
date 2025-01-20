@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 object AttackAngryAtTask {
-    fun create(): OneShot<in LivingEntity>  = BehaviorBuilder.create {
+    fun create(): OneShot<in LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ANGRY_AT),
             it.registered(MemoryModuleType.ATTACK_TARGET)

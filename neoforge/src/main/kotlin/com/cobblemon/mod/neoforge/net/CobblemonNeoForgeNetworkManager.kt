@@ -44,9 +44,6 @@ object CobblemonNeoForgeNetworkManager : NetworkManager {
             it.registerToClient(if (handleAsync) netRegistrar else registrar)
         }
         CobblemonNetwork.c2sPayloads.map { NeoForgePacketInfo(it) }.forEach { it.registerToServer(registrar) }
-
-        Cobblemon.LOGGER.info("Async packets: $asyncPackets")
-        Cobblemon.LOGGER.info("Sync packets: $syncPackets")
     }
 
     override fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) {

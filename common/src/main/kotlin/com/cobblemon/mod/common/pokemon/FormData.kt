@@ -208,6 +208,19 @@ class FormData(
             return this._lightingData
         }
 
+    val possibleGenders: Set<Gender>
+        get() {
+            return if (maleRatio == -1F) {
+                setOf(Gender.GENDERLESS)
+            } else if (maleRatio == 0F) {
+                setOf(Gender.FEMALE)
+            } else if (maleRatio == 1F) {
+                setOf(Gender.MALE)
+            } else {
+                setOf(Gender.FEMALE, Gender.MALE)
+            }
+        }
+
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)
     }

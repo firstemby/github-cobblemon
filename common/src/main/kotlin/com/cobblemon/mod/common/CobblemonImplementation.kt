@@ -8,25 +8,22 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.mojang.brigadier.arguments.ArgumentType
+import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
-import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
-import kotlin.reflect.KClass
 
 interface CobblemonImplementation {
     val modAPI: ModAPI
@@ -172,30 +169,12 @@ interface CobblemonImplementation {
     fun server(): MinecraftServer?
 
     /**
-     * Handles platform independent reloading of a [JsonDataRegistry].
-     *
-     * @param registry The [JsonDataRegistry] to reload.
-     * @param manager The [ResourceManager] to reload from.
-     */
-    fun <T> reloadJsonRegistry(registry: JsonDataRegistry<T>, manager: ResourceManager): HashMap<ResourceLocation, T>
-
-    /**
      * Registers an item to the [ComposterBlock].
      *
      * @param item The [ItemLike] being registered.
      * @param chance The chance % of increasing the composter level, 0 to 1 expected.
      */
     fun registerCompostable(item: ItemLike, chance: Float)
-
-    /**
-     * Registers a builtin resource pack.
-     *
-     * @param id The unique [ResourceLocation] of this pack.
-     * @param title The title displayed in the resource pack GUI, the description is still a part of the pack metadata.
-     * @param activationBehaviour The [ResourcePackActivationBehaviour] for this pack.
-     */
-    fun registerBuiltinResourcePack(id: ResourceLocation, title: Component, activationBehaviour: ResourcePackActivationBehaviour)
-
 }
 
 enum class ResourcePackActivationBehaviour {

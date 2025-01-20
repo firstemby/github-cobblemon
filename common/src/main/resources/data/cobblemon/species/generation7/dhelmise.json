@@ -1,11 +1,25 @@
 {
   "implemented": true,
-  "name": "Dhelmise",
   "nationalPokedexNumber": 781,
+  "name": "Dhelmise",
   "primaryType": "ghost",
   "secondaryType": "grass",
+  "maleRatio": -1,
+  "height": 39,
+  "weight": 2100,
+  "pokedex": [
+    "cobblemon.species.dhelmise.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
-    "steelworker"
+    "steelworker",
+    "h:steelworker"
+  ],
+  "eggGroups": [
+    "mineral"
   ],
   "baseStats": {
     "hp": 70,
@@ -15,34 +29,39 @@
     "special_defence": 90,
     "speed": 40
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 181,
+  "experienceGroup": "medium_fast",
+  "catchRate": 25,
+  "eggCycles": 25,
+  "baseFriendship": 50,
+  "baseScale": 1.1,
+  "hitbox": {
+    "width": 2.5,
+    "height": 4,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
       "canLook": false,
-      "walk": {
-        "avoidsLand": true
-      },
       "swim": {
         "swimSpeed": 0.2,
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canBreatheUnderwater": true,
+        "canSwimInWater": false
       }
     }
   },
-  "catchRate": 25,
-  "maleRatio": -1,
-  "shoulderMountable": false,
-  "baseExperienceYield": 181,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 25,
-  "eggGroups": [
-    "mineral"
-  ],
   "drops": {
     "amount": 4,
     "entries": [
@@ -75,103 +94,73 @@
     "56:energyball",
     "60:phantomforce",
     "64:powerwhip",
+    "tm:absorb",
     "tm:aerialace",
     "tm:allyswitch",
+    "tm:anchorshot",
     "tm:assurance",
-    "tm:attract",
+    "tm:astonish",
+    "tm:block",
     "tm:bodypress",
     "tm:brickbreak",
     "tm:brine",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:confide",
-    "tm:doubleteam",
     "tm:earthquake",
     "tm:embargo",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
     "tm:flashcannon",
-    "tm:frustration",
     "tm:gigadrain",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:grassyglide",
+    "tm:growth",
     "tm:gyroball",
     "tm:heavyslam",
     "tm:helpinghand",
     "tm:hex",
-    "tm:hiddenpower",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:knockoff",
     "tm:liquidation",
+    "tm:megadrain",
+    "tm:metalsound",
     "tm:muddywater",
+    "tm:painsplit",
     "tm:payback",
     "tm:phantomforce",
+    "tm:poltergeist",
     "tm:powerwhip",
     "tm:protect",
     "tm:raindance",
+    "tm:rapidspin",
     "tm:rest",
-    "tm:return",
     "tm:rockslide",
-    "tm:round",
+    "tm:roleplay",
     "tm:shadowball",
     "tm:shadowclaw",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:sludgewave",
-    "tm:snore",
     "tm:solarbeam",
     "tm:solarblade",
+    "tm:spite",
+    "tm:steelroller",
     "tm:substitute",
     "tm:sunnyday",
     "tm:surf",
-    "tm:swagger",
+    "tm:switcheroo",
     "tm:swordsdance",
+    "tm:synthesis",
+    "tm:telekinesis",
+    "tm:terablast",
     "tm:thief",
-    "tm:toxic",
     "tm:whirlpool",
-    "tutor:allyswitch",
-    "tutor:block",
-    "tutor:gigadrain",
-    "tutor:grassyglide",
-    "tutor:helpinghand",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:knockoff",
-    "tutor:painsplit",
-    "tutor:poltergeist",
-    "tutor:roleplay",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:steelroller",
-    "tutor:synthesis",
-    "tutor:telekinesis"
+    "tm:wrap"
   ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.dhelmise.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 1.1,
-  "hitbox": {
-    "width": 2.5,
-    "height": 4,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 39,
-  "weight": 2100,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

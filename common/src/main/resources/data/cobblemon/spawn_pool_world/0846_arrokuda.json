@@ -7,7 +7,7 @@
             "id": "arrokuda-1",
             "pokemon": "arrokuda",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -39,7 +39,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -60,7 +60,7 @@
             "id": "arrokuda-3",
             "pokemon": "arrokuda",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -94,7 +94,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {

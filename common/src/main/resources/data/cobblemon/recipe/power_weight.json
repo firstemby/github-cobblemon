@@ -13,7 +13,7 @@
             "item": "minecraft:lime_concrete"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         }
     },
     "result": {

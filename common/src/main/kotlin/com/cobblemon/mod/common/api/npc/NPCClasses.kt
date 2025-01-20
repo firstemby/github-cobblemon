@@ -70,7 +70,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
         .registerTypeAdapter(MoValue::class.java, MoValueAdapter)
         .registerTypeAdapter(NPCClass::class.java, NPCClassAdapter)
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
-        .registerTypeAdapter(Component::class.java, TextAdapter)
+        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(WeightedAspect::class.java, WeightedAspectAdapter)
         .registerTypeAdapter(BrainConfig::class.java, BrainConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)

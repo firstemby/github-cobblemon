@@ -28,7 +28,7 @@
             "id": "mareanie-2",
             "pokemon": "mareanie",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

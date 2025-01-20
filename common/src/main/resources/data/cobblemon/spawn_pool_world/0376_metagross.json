@@ -34,7 +34,7 @@
             "weight": 0.25,
             "condition": {
                 "biomes": [
-                    "#minecraft:is_end"
+                    "#cobblemon:is_end"
                 ]
             }
         },

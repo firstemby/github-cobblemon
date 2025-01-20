@@ -31,7 +31,7 @@
             "id": "wiglett-2",
             "pokemon": "wiglett",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",

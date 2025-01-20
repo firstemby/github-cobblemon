@@ -9,8 +9,8 @@
   },
   "poses": {
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "animations": ["q.look('head')", "q.bedrock('horsea', 'water_idle')"],
+      "poseTypes": ["STAND", "NONE"],
+      "animations": ["q.look('head')", "q.bedrock('horsea', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('horsea', 'blink')"]
     },
     "walking": {
@@ -19,7 +19,7 @@
       "quirks": ["q.bedrock_quirk('horsea', 'blink')"]
     },
     "float": {
-      "poseTypes": ["FLOAT"],
+      "poseTypes": ["FLOAT", "PORTRAIT", "PROFILE"],
       "animations": ["q.look('head')", "q.bedrock('horsea', 'water_idle')"],
       "quirks": ["q.bedrock_quirk('horsea', 'blink')"]
     },

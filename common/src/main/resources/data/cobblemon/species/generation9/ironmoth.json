@@ -1,10 +1,25 @@
 {
-  "name": "Iron Moth",
   "nationalPokedexNumber": 994,
+  "name": "Iron Moth",
   "primaryType": "fire",
   "secondaryType": "poison",
+  "maleRatio": -1,
+  "height": 12,
+  "weight": 360,
+  "pokedex": [
+    "cobblemon.species.ironmoth.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "quarkdrive"
+    "quarkdrive",
+    "h:quarkdrive"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 80,
@@ -14,10 +29,6 @@
     "special_defence": 110,
     "speed": 110
   },
-  "catchRate": 30,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,17 +37,17 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 30,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
   "moves": [
-    "1:acidspray",
-    "1:electricterrain",
-    "1:ember",
     "1:gust",
     "1:whirlwind",
+    "1:ember",
+    "1:acidspray",
+    "1:electricterrain",
     "7:strugglebug",
     "14:firespin",
     "21:takedown",
@@ -58,10 +69,13 @@
     "tm:chargebeam",
     "tm:confuseray",
     "tm:dazzlinggleam",
+    "tm:discharge",
     "tm:electricterrain",
+    "tm:ember",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
+    "tm:fierydance",
     "tm:fireblast",
     "tm:firespin",
     "tm:flamecharge",
@@ -69,6 +83,7 @@
     "tm:flareblitz",
     "tm:flashcannon",
     "tm:gigaimpact",
+    "tm:gust",
     "tm:heatwave",
     "tm:helpinghand",
     "tm:hurricane",
@@ -77,11 +92,13 @@
     "tm:lunge",
     "tm:metalsound",
     "tm:meteorbeam",
+    "tm:morningsun",
     "tm:overheat",
     "tm:pounce",
     "tm:protect",
     "tm:psychic",
     "tm:rest",
+    "tm:screech",
     "tm:sleeptalk",
     "tm:sludgewave",
     "tm:solarbeam",
@@ -94,18 +111,8 @@
     "tm:toxic",
     "tm:toxicspikes",
     "tm:uturn",
-    "tm:venoshock"
+    "tm:venoshock",
+    "tm:whirlwind"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 12,
-  "weight": 360,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.ironmoth.desc"
-  ]
+  "evolutions": []
 }

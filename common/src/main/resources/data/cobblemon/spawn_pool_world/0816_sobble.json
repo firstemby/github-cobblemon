@@ -23,7 +23,7 @@
             }
         },
         {
-            "id": "sobble-1",
+            "id": "sobble-2",
             "pokemon": "sobble",
             "presets": [
                 "natural"
@@ -45,11 +45,10 @@
             }
         },
         {
-            "id": "sobble-2",
+            "id": "sobble-3",
             "pokemon": "sobble",
             "presets": [
-                "freshwater",
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -65,7 +64,7 @@
             }
         },
         {
-            "id": "sobble-3",
+            "id": "sobble-4",
             "pokemon": "sobble",
             "type": "pokemon",
             "context": "fishing",
@@ -79,46 +78,6 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1
-            }
-        },
-        {
-            "id": "sobble-4",
-            "pokemon": "sobble",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "5-31",
-            "weight": 7.5,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "sobble-5",
-            "pokemon": "sobble",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "5-31",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 3
             }
         }
     ]

@@ -38,7 +38,7 @@
             "id": "flamigo-2",
             "pokemon": "flamigo",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",

@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.entity.boat
 import com.cobblemon.mod.common.CobblemonEntities
 import net.minecraft.core.NonNullList
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.HasCustomInventoryScreen
 import net.minecraft.world.entity.monster.piglin.PiglinAi
@@ -49,6 +51,28 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
             PiglinAi.angerNearbyPiglins(player, true)
         }
     }
+
+    override fun interact(player: Player, hand: InteractionHand): InteractionResult {
+        if (!player.isSecondaryUseActive) {
+            val interactionResult = super.interact(player, hand)
+            if (interactionResult != InteractionResult.PASS) {
+                return interactionResult
+            }
+        }
+
+        if (this.canAddPassenger(player) && !player.isSecondaryUseActive) {
+            return InteractionResult.PASS
+        } else {
+            val interactionResult: InteractionResult = this.interactWithContainerVehicle(player)
+            if (interactionResult.consumesAction()) {
+                this.gameEvent(GameEvent.CONTAINER_OPEN, player)
+                PiglinAi.angerNearbyPiglins(player, true)
+            }
+
+            return interactionResult
+        }
+    }
+
 
     override fun clearContent() = this.clearItemStacks()
 

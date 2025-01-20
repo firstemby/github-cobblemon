@@ -23,7 +23,7 @@
             }
         },
         {
-            "id": "drizzile-1",
+            "id": "drizzile-2",
             "pokemon": "drizzile",
             "presets": [
                 "natural"
@@ -45,11 +45,10 @@
             }
         },
         {
-            "id": "drizzile-2",
+            "id": "drizzile-3",
             "pokemon": "drizzile",
             "presets": [
-                "freshwater",
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -65,7 +64,7 @@
             }
         },
         {
-            "id": "drizzile-3",
+            "id": "drizzile-4",
             "pokemon": "drizzile",
             "type": "pokemon",
             "context": "fishing",
@@ -79,46 +78,6 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1
-            }
-        },
-        {
-            "id": "drizzile-4",
-            "pokemon": "drizzile",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "16-42",
-            "weight": 2.25,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "drizzile-5",
-            "pokemon": "drizzile",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "16-42",
-            "weight": 0.18,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 3
             }
         }
     ]

@@ -28,7 +28,7 @@
             "id": "gastrodon-east-2",
             "pokemon": "gastrodon sea=east",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -56,7 +56,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -98,7 +98,7 @@
             "id": "gastrodon-west-5",
             "pokemon": "gastrodon sea=west",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -126,7 +126,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -150,7 +150,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {
@@ -176,7 +176,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {

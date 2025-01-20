@@ -1,10 +1,25 @@
 {
-  "name": "Wo-Chien",
   "nationalPokedexNumber": 1001,
+  "name": "Wo-Chien",
   "primaryType": "dark",
   "secondaryType": "grass",
+  "maleRatio": -1,
+  "height": 15,
+  "weight": 742,
+  "pokedex": [
+    "cobblemon.species.wochien.desc"
+  ],
+  "labels": [
+    "gen9",
+    "legendary"
+  ],
+  "aspects": [],
   "abilities": [
-    "tabletsofruin"
+    "tabletsofruin",
+    "h:tabletsofruin"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 85,
@@ -14,10 +29,6 @@
     "special_defence": 135,
     "speed": 70
   },
-  "catchRate": 6,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,15 +37,15 @@
     "special_defence": 3,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 6,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
   "moves": [
     "1:absorb",
-    "1:meanlook",
     "1:spite",
+    "1:meanlook",
     "5:tickle",
     "10:payback",
     "15:poisonpowder",
@@ -51,6 +62,7 @@
     "65:grassyterrain",
     "70:knockoff",
     "75:leafstorm",
+    "tm:absorb",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:bulletseed",
@@ -63,20 +75,29 @@
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:grassyterrain",
+    "tm:growth",
     "tm:hex",
     "tm:hyperbeam",
+    "tm:ingrain",
     "tm:knockoff",
     "tm:lashout",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lightscreen",
     "tm:magicalleaf",
+    "tm:meanlook",
+    "tm:megadrain",
     "tm:mudshot",
     "tm:mudslap",
+    "tm:payback",
+    "tm:poisonpowder",
     "tm:pollenpuff",
+    "tm:powerwhip",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
+    "tm:ruination",
     "tm:scaryface",
     "tm:seedbomb",
     "tm:sleeptalk",
@@ -84,24 +105,15 @@
     "tm:solarbeam",
     "tm:solarblade",
     "tm:spite",
+    "tm:stunspore",
     "tm:substitute",
     "tm:sunnyday",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
+    "tm:tickle",
     "tm:trailblaze",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "legendary"
-  ],
-  "aspects": [],
-  "height": 15,
-  "weight": 742,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.wochien.desc"
-  ]
+  "evolutions": []
 }

@@ -27,15 +27,15 @@ import net.minecraft.world.entity.player.Player
  * @since February 21, 2024
  */
 
-class PlayerInstancedDataStoreManager {
+open class PlayerInstancedDataStoreManager {
     val factories = mutableMapOf<PlayerInstancedDataStoreType, PlayerInstancedDataFactory<*>>()
     val saveTasks = mutableMapOf<PlayerInstancedDataStoreType, ScheduledTask>()
-    fun setFactory(factory: PlayerInstancedDataFactory<*>, dataType: PlayerInstancedDataStoreType) {
+    open fun setFactory(factory: PlayerInstancedDataFactory<*>, dataType: PlayerInstancedDataStoreType) {
         factories[dataType] = factory
     }
 
 
-    fun setup(server: MinecraftServer) {
+    open fun setup(server: MinecraftServer) {
         factories.values.forEach {
             it.setup(server)
         }
@@ -57,62 +57,62 @@ class PlayerInstancedDataStoreManager {
             .build()
     }
 
-    fun get(playerId: UUID, dataType: PlayerInstancedDataStoreType): InstancedPlayerData {
+    open fun get(playerId: UUID, dataType: PlayerInstancedDataStoreType): InstancedPlayerData {
         if (!factories.contains(dataType)) {
             throw UnsupportedOperationException("No factory registered for $dataType")
         }
         return factories[dataType]!!.getForPlayer(playerId)
     }
 
-    fun get(player: Player, dataType: PlayerInstancedDataStoreType): InstancedPlayerData {
+    open fun get(player: Player, dataType: PlayerInstancedDataStoreType): InstancedPlayerData {
         return get(player.uuid, dataType)
     }
 
-    fun saveAllOfOneType(dataType: PlayerInstancedDataStoreType) {
+    open fun saveAllOfOneType(dataType: PlayerInstancedDataStoreType) {
         if (!factories.contains(dataType)) {
             throw UnsupportedOperationException("No factory registered for $dataType")
         }
         return factories[dataType]!!.saveAll()
     }
 
-    fun saveSingle(playerData: InstancedPlayerData, dataType: PlayerInstancedDataStoreType) {
+    open fun saveSingle(playerData: InstancedPlayerData, dataType: PlayerInstancedDataStoreType) {
         if (!factories.contains(dataType)) {
             throw UnsupportedOperationException("No factory registered for $dataType")
         }
         return factories[dataType]!!.saveSingle(playerData.uuid)
     }
 
-    fun onPlayerDisconnect(player: ServerPlayer) {
+    open fun onPlayerDisconnect(player: ServerPlayer) {
         factories.values.forEach {
             it.onPlayerDisconnect(player)
         }
     }
 
-    fun syncAllToPlayer(player: ServerPlayer) {
+    open fun syncAllToPlayer(player: ServerPlayer) {
         factories.values.forEach {
             it.sendToPlayer(player)
         }
     }
 
-    fun saveAllStores() {
+    open fun saveAllStores() {
         factories.values.forEach {
             it.saveAll()
         }
     }
 
-    fun getGenericData(player: ServerPlayer): GeneralPlayerData {
+    open fun getGenericData(player: ServerPlayer): GeneralPlayerData {
         return getGenericData(player.uuid)
     }
 
-    fun getGenericData(playerId: UUID): GeneralPlayerData {
+    open fun getGenericData(playerId: UUID): GeneralPlayerData {
         return get(playerId, PlayerInstancedDataStoreTypes.GENERAL) as GeneralPlayerData
     }
 
-    fun getPokedexData(player: ServerPlayer): PokedexManager {
+    open fun getPokedexData(player: ServerPlayer): PokedexManager {
         return getPokedexData(player.uuid)
     }
 
-    fun getPokedexData(playerId: UUID): PokedexManager {
+    open fun getPokedexData(playerId: UUID): PokedexManager {
         return get(playerId, PlayerInstancedDataStoreTypes.POKEDEX) as PokedexManager
     }
 }

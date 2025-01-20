@@ -16,7 +16,7 @@
         "cry": "q.bedrock_stateful('incineroar', 'battle_cry')"
       },
       "animations": [
-        "q.look('head')",
+        "q.look('head', 1, 1, 10, -35)",
         "q.bedrock('incineroar', 'battle_idle')"
       ],
       "quirks": [
@@ -29,7 +29,7 @@
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
       "animations": [
-        "q.look('head')",
+        "q.look('head', 1, 1, 10, -35)",
         "q.bedrock('incineroar', 'ground_idle')"
       ],
       "quirks": [
@@ -41,7 +41,7 @@
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.look('head')",
+        "q.look('head', 1, 1, 10, -35)",
         "q.bedrock('incineroar', 'ground_walk')"
       ],
       "quirks": [

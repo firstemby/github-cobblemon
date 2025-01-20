@@ -13,7 +13,7 @@
             "item": "minecraft:yellow_concrete"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         }
     },
     "result": {

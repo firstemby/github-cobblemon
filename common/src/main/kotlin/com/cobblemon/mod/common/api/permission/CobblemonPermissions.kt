@@ -82,6 +82,8 @@ object CobblemonPermissions {
 
     val ABANDON_MULTITEAM = this.create("${COMMAND_PREFIX}abandonmultiteam", PermissionLevel.NONE)
 
+    val RUN_MOLANG_SCRIPT = this.create("${COMMAND_PREFIX}runmolangscript", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
     fun all(): Iterable<Permission> = this.permissions
 
     private fun create(node: String, level: PermissionLevel): Permission {

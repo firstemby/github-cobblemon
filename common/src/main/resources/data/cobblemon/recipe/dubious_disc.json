@@ -9,7 +9,7 @@
             "item": "minecraft:tinted_glass"
         },
         "A": {
-            "item": "minecraft:amethyst_shard"
+            "tag": "c:gems/amethyst"
         },
         "S": {
             "item": "minecraft:sculk"

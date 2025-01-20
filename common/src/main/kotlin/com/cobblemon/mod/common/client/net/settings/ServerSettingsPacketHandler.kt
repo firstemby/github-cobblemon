@@ -18,6 +18,7 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.preventCompletePartyDeposit = packet.preventCompletePartyDeposit
         ServerSettings.displayEntityLevelLabel = packet.displayEntityLevelLabel
         ServerSettings.displayEntityNameLabel = packet.displayEntityNameLabel
+        ServerSettings.maxPokemonLevel = packet.maxPokemonLevel
     }
 
 }

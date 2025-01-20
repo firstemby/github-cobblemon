@@ -89,7 +89,7 @@ class BattleTargetSelection(
         val isAlly = target.isAllied(request.activePokemon)
         val teamSize = request.activePokemon.getSidePokemon().count()
         val fieldPos = if(isAlly) index % teamSize else teamSize - 1 - (index % teamSize)
-        val verticalAligned = true
+        val verticalAligned = false
         val x: Float
         val y: Float
         val arrowDirection: ArrowDirection

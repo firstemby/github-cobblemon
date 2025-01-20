@@ -7,8 +7,18 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Ice",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Ice",
+      "unlockForms": [
+        "Ice"
+      ]
+    },
+    {
+      "displayForm": "Shadow",
+      "unlockForms": [
         "Shadow"
       ]
     }

@@ -1,13 +1,64 @@
 {
   "implemented": true,
-  "name": "Mudbray",
   "nationalPokedexNumber": 749,
+  "name": "Mudbray",
   "primaryType": "ground",
+  "maleRatio": 0.5,
+  "height": 10,
+  "weight": 1100,
+  "pokedex": [
+    "cobblemon.species.mudbray.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
     "owntempo",
     "stamina",
     "h:innerfocus"
   ],
+  "eggGroups": [
+    "field"
+  ],
+  "baseStats": {
+    "hp": 70,
+    "attack": 100,
+    "defence": 70,
+    "special_attack": 45,
+    "special_defence": 55,
+    "speed": 45
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 77,
+  "experienceGroup": "medium_fast",
+  "catchRate": 190,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.23
+      }
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [
@@ -29,55 +80,23 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 70,
-    "attack": 100,
-    "defence": 70,
-    "special_attack": 45,
-    "special_defence": 55,
-    "speed": 45
-  },
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
-      "light": "0-4"
-    },
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.23
-      }
-    }
-  },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 77,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
   "moves": [
     "1:mudslap",
+    "1:mudsport",
+    "1:rototiller",
     "1:rocksmash",
-    "3:mudsport",
     "4:irondefense",
     "8:doublekick",
-    "8:rototiller",
     "12:bulldoze",
     "16:stomp",
     "20:strength",
-    "22:bide",
     "24:counter",
     "28:highhorsepower",
     "32:heavyslam",
     "36:earthquake",
     "40:megakick",
     "44:superpower",
-    "egg:bodyslam",
-    "egg:closecombat",
+    "egg:bide",
     "egg:doubleedge",
     "egg:endeavor",
     "egg:fissure",
@@ -85,67 +104,53 @@
     "egg:mudbomb",
     "egg:roar",
     "egg:smackdown",
-    "tm:attract",
+    "tm:bide",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:closecombat",
-    "tm:confide",
+    "tm:counter",
     "tm:curse",
     "tm:doubleedge",
-    "tm:doubleteam",
+    "tm:doublekick",
     "tm:earthpower",
     "tm:earthquake",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:frustration",
+    "tm:fissure",
     "tm:heavyslam",
-    "tm:hiddenpower",
     "tm:highhorsepower",
     "tm:irondefense",
     "tm:ironhead",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:magnitude",
     "tm:megakick",
+    "tm:mudbomb",
     "tm:mudslap",
+    "tm:mudsport",
     "tm:payback",
     "tm:protect",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockslide",
+    "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
+    "tm:rototiller",
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:sleeptalk",
     "tm:smackdown",
-    "tm:snore",
     "tm:stealthrock",
+    "tm:stomp",
     "tm:stompingtantrum",
     "tm:stoneedge",
+    "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:swagger",
     "tm:takedown",
-    "tm:terablast",
-    "tm:toxic",
-    "tutor:earthpower",
-    "tutor:endeavor",
-    "tutor:irondefense",
-    "tutor:ironhead",
-    "tutor:lowkick",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:stompingtantrum",
-    "tutor:superpower"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.mudbray.desc"
+    "tm:terablast"
   ],
   "evolutions": [
     {
@@ -161,24 +166,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 10,
-  "weight": 1100,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

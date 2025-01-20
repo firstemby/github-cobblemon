@@ -8,8 +8,16 @@
       "required": false
     },
 	{
-      "id": "#c:icy",
+      "id": "#c:is_icy",
       "required": false
+    },
+	{
+      "id": "clifftree:glacier_cliff",
+      "required": false 
+    },
+	{
+      "id": "clifftree:glacier_valley",
+      "required": false 
     },
 	{
       "id": "terralith:cave/frostfire_caves",

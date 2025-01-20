@@ -102,20 +102,32 @@ open class PlayerPartyStore(
             for (pokemon in this) {
                 // Awake from fainted
                 if (pokemon.isFainted()) {
-                    pokemon.faintedTimer -= 1
-                    if (pokemon.faintedTimer <= -1) {
-                        val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent)
-                        pokemon.currentHealth = php.toInt()
-                        player.sendSystemMessage(Component.translatable("cobblemon.party.faintRecover", pokemon.getDisplayName()))
+                    //Skip awaken logic check if config value is 0
+                    if (Cobblemon.config.faintAwakenHealthPercent > 0) {
+                        pokemon.faintedTimer -= 1
+                        if (pokemon.faintedTimer <= -1) {
+                            val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent)
+                            pokemon.currentHealth = php.toInt()
+                            player.sendSystemMessage(
+                                Component.translatable(
+                                    "cobblemon.party.faintRecover",
+                                    pokemon.getDisplayName()
+                                )
+                            )
+                        }
                     }
                 }
                 // Passive healing while less than full health
                 else if (pokemon.currentHealth < pokemon.maxHealth) {
-                    pokemon.healTimer--
-                    if (pokemon.healTimer <= -1) {
-                        pokemon.healTimer = Cobblemon.config.healTimer
-                        val healAmount = 1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
-                        pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt()
+                    //Skip passive healing logic check if config value is 0
+                    if (Cobblemon.config.healPercent > 0) {
+                        pokemon.healTimer--
+                        if (pokemon.healTimer <= -1) {
+                            pokemon.healTimer = Cobblemon.config.healTimer
+                            val healAmount =
+                                1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
+                            pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt()
+                        }
                     }
                 }
 

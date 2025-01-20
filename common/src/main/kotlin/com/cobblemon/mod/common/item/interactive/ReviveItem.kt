@@ -73,10 +73,11 @@ class ReviveItem(val max: Boolean): CobblemonItem(Properties()), HealingSource {
                         if (actor.canFitForcedAction() && bp.health <= 0 && battle.turn == turn && stack.isHeld(player)) {
                             player.playSound(CobblemonSounds.ITEM_USE, 1F, 1F)
                             actor.forceChoose(BagItemActionResponse(bagItem = bagItem, target = bp, data = bp.uuid.toString()))
+                            val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
                             if (!player.isCreative) {
                                 stack.shrink(1)
                             }
-                            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.effectedPokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
+                            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.effectedPokemon.species.resourceIdentifier, stackName))
                         }
                     }
                 }
@@ -93,10 +94,11 @@ class ReviveItem(val max: Boolean): CobblemonItem(Properties()), HealingSource {
                             amount = event.amount
                         }
                         pk.currentHealth = amount
+                        val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
                         if (!player.isCreative) {
                             stack.shrink(1)
                         }
-                        CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(pk.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
+                        CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(pk.species.resourceIdentifier, stackName))
                     }
                 }
             }

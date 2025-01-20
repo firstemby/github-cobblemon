@@ -78,7 +78,7 @@
             "id": "wimpod-4",
             "pokemon": "wimpod",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "seafloor",
@@ -154,7 +154,7 @@
                 "multiplier": 0.6,
                 "condition": {
                     "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "maxLureLevel": "1"
                 }
             },
             "condition": {

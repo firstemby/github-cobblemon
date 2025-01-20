@@ -15,11 +15,9 @@ object CobblemonFabricBreweryRegistry {
 
     fun isValidPotionSlot(stack: ItemStack): Boolean = BrewingRecipes.recipes.any { it.first.matches(stack) }
 
-    fun isValidIngredientSlot(stack: ItemStack): Boolean = BrewingRecipes.recipes.any { it.second.matches(stack) }
+    fun isValidIngredientSlot(stack: ItemStack): Boolean = BrewingRecipes.recipes.any { stack.`is`(it.second) }
 
-    fun hasRecipe(input: ItemStack, ingredient: ItemStack): Boolean = BrewingRecipes.recipes.any { it.first.matches(input) && it.second.matches(ingredient) }
+    fun hasRecipe(input: ItemStack, ingredient: ItemStack): Boolean = BrewingRecipes.recipes.any { it.first.matches(input) && ingredient.`is`(it.second) }
 
-    fun recipeResultOf(input: ItemStack, ingredient: ItemStack): ItemStack = BrewingRecipes.recipes.firstOrNull { it.first.matches(input) && it.second.matches(ingredient) }?.third?.defaultInstance ?: ItemStack.EMPTY
-
-
+    fun recipeResultOf(input: ItemStack, ingredient: ItemStack): ItemStack = BrewingRecipes.recipes.firstOrNull { it.first.matches(input) && ingredient.`is`(it.second) }?.third?.defaultInstance ?: ItemStack.EMPTY
 }

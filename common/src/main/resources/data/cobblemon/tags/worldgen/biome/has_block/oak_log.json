@@ -103,6 +103,10 @@
       "required": false
     },
 	{
+      "id": "clifftree:sparse_forest",
+      "required": false 
+    },
+	{
       "id": "terralith:alpha_islands",
       "required": false
     },

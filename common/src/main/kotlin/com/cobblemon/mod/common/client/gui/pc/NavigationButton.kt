@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.pc
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -21,7 +22,7 @@ class NavigationButton(
     pX: Int, pY: Int,
     private val forward: Boolean,
     onPress: OnPress
-): Button(pX, pY, (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private const val WIDTH = 8F

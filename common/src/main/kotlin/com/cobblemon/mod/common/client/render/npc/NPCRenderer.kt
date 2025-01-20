@@ -15,11 +15,11 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCMo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import kotlin.math.min
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.resources.ResourceLocation
+import kotlin.math.min
 
 class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEntityModel<NPCEntity>>(context, PosableNPCModel(), 0.5f) {
     override fun getTextureLocation(entity: NPCEntity): ResourceLocation {
@@ -47,8 +47,10 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
 
         model.setLayerContext(buffer, clientDelegate, NPCModelRepository.getLayers(entity.npc.resourceIdentifier, clientDelegate))
 
+        poseMatrix.pushPose()
+        poseMatrix.scale(entity.npc.modelScale, entity.npc.modelScale, entity.npc.modelScale)
         super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
-
+        poseMatrix.popPose()
         model.red = 1F
         model.green = 1F
         model.blue = 1F

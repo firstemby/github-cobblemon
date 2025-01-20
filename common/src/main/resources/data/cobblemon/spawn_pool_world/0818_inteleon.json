@@ -23,7 +23,7 @@
             }
         },
         {
-            "id": "inteleon-1",
+            "id": "inteleon-2",
             "pokemon": "inteleon",
             "presets": [
                 "natural"
@@ -45,11 +45,10 @@
             }
         },
         {
-            "id": "inteleon-2",
+            "id": "inteleon-3",
             "pokemon": "inteleon",
             "presets": [
-                "freshwater",
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -65,7 +64,7 @@
             }
         },
         {
-            "id": "inteleon-3",
+            "id": "inteleon-4",
             "pokemon": "inteleon",
             "type": "pokemon",
             "context": "fishing",
@@ -79,46 +78,6 @@
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_swamp"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1
-            }
-        },
-        {
-            "id": "inteleon-4",
-            "pokemon": "inteleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "35-53",
-            "weight": 0.25,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            }
-        },
-        {
-            "id": "inteleon-5",
-            "pokemon": "inteleon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "35-53",
-            "weight": 0.02,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 3
             }
         }
     ]

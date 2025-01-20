@@ -7,7 +7,7 @@
             "id": "gyarados-1",
             "pokemon": "gyarados",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -26,7 +26,7 @@
             "id": "gyarados-2",
             "pokemon": "gyarados",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -61,7 +61,7 @@
             "id": "gyarados-4",
             "pokemon": "gyarados",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

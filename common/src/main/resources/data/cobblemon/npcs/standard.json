@@ -30,11 +30,53 @@
   },
   "config": [
     {
-      "variableName": "challenge_distance",
-      "displayName": "cobblemon.npc.challenge_distance",
-      "description": "cobblemon.npc.challenge_distance.description",
-      "type": "number",
-      "default": "5"
+      "variableName": "challenge_cooldown",
+      "displayName": "Cooldown",
+      "description": "How long in ticks the NPC will be un-challengable from that player's last challenge.",
+      "type": "NUMBER",
+      "defaultValue": "5"
+    },
+    {
+      "variableName": "can_rechallenge",
+      "displayName": "Rechallenging",
+      "description": "This NPC can be battled multiple times.",
+      "type": "BOOLEAN",
+      "defaultValue": true
+    },
+    {
+      "variableName": "intro_text",
+      "displayName": "Intro Text",
+      "description": "The text that displays on the first page of the dialogue.",
+      "type": "TEXT",
+      "defaultValue": "Hello! I am a Cobblemon trainer. Would you like to challenge me?"
+    },
+    {
+      "variableName": "challenge_text",
+      "displayName": "Challenge Text",
+      "description": "The text that displays on the challenge option.",
+      "type": "TEXT",
+      "defaultValue": "Would you like to challenge me?"
+    },
+    {
+      "variableName": "challenge_accepted_text",
+      "displayName": "Accept Text",
+      "description": "The text that appears right before the challenge starts.",
+      "type": "TEXT",
+      "defaultValue": "Great! Let's battle!"
+    },
+    {
+      "variableName": "challenge_rejected_text",
+      "displayName": "Reject Text",
+      "description": "The text that appears when the player rejects the challenge.",
+      "type": "TEXT",
+      "defaultValue": "That's too bad. Maybe next time!"
+    },
+    {
+      "variableName": "challenge_cooldown_text",
+      "displayName": "Cooling Down Text",
+      "description": "The text that is displayed while the cooldown is in effect.",
+      "type": "TEXT",
+      "defaultValue": "I'm sorry, but I'm not ready for another battle yet. Please come back later."
     }
   ],
   "names": [

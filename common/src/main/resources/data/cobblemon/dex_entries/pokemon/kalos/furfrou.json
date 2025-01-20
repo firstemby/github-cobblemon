@@ -9,6 +9,60 @@
       "unlockForms": [
         "Normal"
       ]
+    },
+    {
+      "displayForm": "Heart",
+      "unlockForms": [
+        "Heart"
+      ]
+    },
+    {
+      "displayForm": "Star",
+      "unlockForms": [
+        "Star"
+      ]
+    },
+    {
+      "displayForm": "Diamond",
+      "unlockForms": [
+        "Diamond"
+      ]
+    },
+    {
+      "displayForm": "Debutante",
+      "unlockForms": [
+        "Debutante"
+      ]
+    },
+    {
+      "displayForm": "Matron",
+      "unlockForms": [
+        "Matron"
+      ]
+    },
+    {
+      "displayForm": "Dandy",
+      "unlockForms": [
+        "Dandy"
+      ]
+    },
+    {
+      "displayForm": "La-Reine",
+      "unlockForms": [
+        "La-Reine"
+      ]
+    },
+    {
+      "displayForm": "Kabuki",
+      "unlockForms": [
+        "Kabuki"
+      ]
+    },
+    {
+      "displayForm": "Pharaoh",
+      "unlockForms": [
+        "Pharaoh"
+      ]
     }
   ],
   "variations": []

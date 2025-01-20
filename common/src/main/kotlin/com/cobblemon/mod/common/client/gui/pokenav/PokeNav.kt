@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pokenav
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PokeNavigatorBinding
@@ -28,7 +29,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")) {
+class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), CobblemonRenderable {
 
     companion object {
         // Limiting

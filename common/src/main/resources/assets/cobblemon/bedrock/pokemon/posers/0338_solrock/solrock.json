@@ -48,7 +48,7 @@
     },
     "battle-sleep": {
       "poseTypes": ["SLEEP"],
-      "isStandingOnSandOrRedSand": true,
+      "condition": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
@@ -56,7 +56,7 @@
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
-      "isStandingOnSandOrRedSand": false,
+      "condition": "!q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },

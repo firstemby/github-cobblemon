@@ -52,8 +52,9 @@ interface BagItemLike {
         }
 
         battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon))
+        val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
         stack.shrink(1)
-        CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(battlePokemon.effectedPokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
+        CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(battlePokemon.effectedPokemon.species.resourceIdentifier, stackName))
         return true
     }
 }

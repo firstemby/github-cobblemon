@@ -13,6 +13,11 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.readText
+import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.writeText
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 
 /**
@@ -30,10 +35,38 @@ class NPCConfigVariable(
     val type: NPCVariableType = NPCVariableType.NUMBER,
     val defaultValue: String = "0",
 ) {
+    companion object {
+        fun decode(buffer: RegistryFriendlyByteBuf): NPCConfigVariable {
+            return NPCConfigVariable(
+                buffer.readString(),
+                buffer.readText(),
+                buffer.readText(),
+                buffer.readEnum(NPCVariableType::class.java),
+                buffer.readString()
+            )
+        }
+    }
+
     enum class NPCVariableType {
         NUMBER,
-        STRING,
-        BOOLEAN
+        TEXT,
+        BOOLEAN;
+
+        fun toMoValue(value: String): MoValue {
+            return when (this) {
+                TEXT -> StringValue(value)
+                BOOLEAN -> DoubleValue(value.let { it == "1" || it.toBooleanStrictOrNull() == true  })
+                else -> DoubleValue(value.toDouble())
+            }
+        }
+    }
+
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(variableName)
+        buffer.writeText(displayName)
+        buffer.writeText(description)
+        buffer.writeEnum(type)
+        buffer.writeString(defaultValue)
     }
 
     fun apply(npc: NPCEntity, value: MoValue) {
@@ -41,11 +74,6 @@ class NPCConfigVariable(
     }
 
     fun applyDefault(npc: NPCEntity) {
-        val value = when (type) {
-            NPCVariableType.STRING -> StringValue(defaultValue)
-            NPCVariableType.BOOLEAN -> DoubleValue(defaultValue.toBoolean())
-            else -> DoubleValue(defaultValue.toDouble())
-        }
-        npc.config.set(variableName.split(".").iterator(), value)
+        npc.config.setDirectly(variableName, type.toMoValue(defaultValue))
     }
 }

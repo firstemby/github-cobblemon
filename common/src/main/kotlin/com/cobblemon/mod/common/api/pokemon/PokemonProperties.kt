@@ -36,7 +36,7 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import com.cobblemon.mod.common.util.isInt
+import com.cobblemon.mod.common.util.isDouble
 import com.cobblemon.mod.common.util.isUuid
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.simplify
@@ -59,7 +59,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
@@ -187,10 +186,10 @@ open class PokemonProperties {
         private fun parseIntProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Int? {
             val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
             val value = matchingKeyPair.second
-            return if (value == null || !value.isInt()) {
+            return if (value == null || !value.isDouble()) {
                 null
             } else {
-                value.toInt()
+                value.toDouble().toInt()
             }
         }
 
@@ -467,6 +466,10 @@ open class PokemonProperties {
     fun matches(pokemonEntity: PokemonEntity): Boolean {
         // Custom properties check could be duplicated but can't assume 3rd party hasn't done anything type specific
         return this.commonMatches(pokemonEntity.pokemon) && this.customProperties.none { !it.matches(pokemonEntity) }
+    }
+
+    fun matches(properties: PokemonProperties): Boolean {
+        return properties.asString() == this.asString()
     }
 
     private fun commonMatches(pokemon: Pokemon): Boolean {
@@ -790,7 +793,7 @@ open class PokemonProperties {
     }
 
     fun copy(): PokemonProperties {
-        return PokemonProperties().loadFromJSON(saveToJSON())
+        return PokemonProperties().loadFromJSON(this.saveToJSON())
     }
 
     // If the config value is at least 1, then do 1/x and use that as the property chance

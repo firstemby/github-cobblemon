@@ -21,6 +21,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import net.minecraft.world.entity.Entity
 import java.lang.reflect.Type
 
 /**
@@ -43,35 +44,23 @@ class PoseAdapter(
         val pose = JsonPose(model, obj)
 
         val conditionsList = mutableListOf<(PosableState) -> Boolean>()
-        val mustBeTouchingWater = json.get("isTouchingWater")?.asBoolean
-        if (mustBeTouchingWater != null) {
-            conditionsList.add { mustBeTouchingWater == it.getEntity()?.isInWater }
+
+        fun addCondition(jsonKey: String, condition: (Entity, Boolean) -> Boolean) {
+            json.get(jsonKey)?.asBoolean?.let { expectedValue ->
+                conditionsList.add { it.getEntity()?.let { entity -> condition(entity, expectedValue) } ?: true }
+            }
         }
 
-        val mustBeTouchingWaterOrRain = json.get("isInWaterOrRain")?.asBoolean
-        if (mustBeTouchingWaterOrRain != null) {
-            conditionsList.add { mustBeTouchingWaterOrRain == it.getEntity()?.isInWaterOrRain }
-        }
-        val mustBeSubmergedInWater = json.get("isUnderWater")?.asBoolean
-        if (mustBeSubmergedInWater != null) {
-            conditionsList.add { mustBeSubmergedInWater == it.getEntity()?.isUnderWater }
-        }
-        val mustBeStandingOnRedSand = json.get("isStandingOnRedSand")?.asBoolean
-        if (mustBeStandingOnRedSand != null) {
-            conditionsList.add { mustBeStandingOnRedSand == it.getEntity()?.isStandingOnRedSand() }
-        }
-        val mustBeStandingOnSand = json.get("isStandingOnSand")?.asBoolean
-        if (mustBeStandingOnSand != null) {
-            conditionsList.add { mustBeStandingOnSand == it.getEntity()?.isStandingOnSand() }
-        }
-        val mustBeStandingOnSandOrRedSand = json.get("isStandingOnSandOrRedSand")?.asBoolean
-        if (mustBeStandingOnSandOrRedSand != null) {
-            conditionsList.add { mustBeStandingOnSandOrRedSand == it.getEntity()?.isStandingOnSandOrRedSand() }
-        }
-        val mustBeDusk = json.get("isDusk")?.asBoolean
-        if (mustBeDusk != null) {
-            conditionsList.add { mustBeDusk == it.getEntity()?.isDusk() }
-        }
+        addCondition("isTouchingWater") { entity, expectedValue -> entity.isInWater == expectedValue }
+        addCondition("isInWaterOrRain") { entity, expectedValue -> entity.isInWaterOrRain == expectedValue }
+        addCondition("isUnderWater") { entity, expectedValue -> entity.isUnderWater == expectedValue }
+
+        // Kept for compatibility
+        addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOnRedSand() == expectedValue }
+        addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOnSand() == expectedValue }
+        addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOnSandOrRedSand() == expectedValue }
+
+        addCondition("isDusk") { entity, expectedValue -> entity.isDusk() == expectedValue }
 
         conditionsList.addAll(poseConditionReader(json))
 

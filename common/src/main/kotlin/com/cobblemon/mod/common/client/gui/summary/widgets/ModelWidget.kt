@@ -23,7 +23,8 @@ class ModelWidget(
     var pokemon: RenderablePokemon,
     val baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
-    var offsetY: Double = 0.0
+    var offsetY: Double = 0.0,
+    val playCryOnClick: Boolean = false,
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
@@ -70,6 +71,15 @@ class ModelWidget(
         matrices.popPose()
     }
 
-    override fun onClick(pMouseX: Double, pMouseY: Double) {
+    override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        if (this.isHovered) playCry()
+        return super.mouseClicked(pMouseX, pMouseY, pButton)
+    }
+
+    private fun playCry() {
+        if (playCryOnClick) {
+            state.activeAnimations.clear()
+            state.addFirstAnimation(setOf("cry"))
+        }
     }
 }

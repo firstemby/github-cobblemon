@@ -25,7 +25,7 @@
     },
     "swim": {
       "poseTypes": ["SWIM"],
-      "animations": ["q.look('head')", "q.bedrock('kingdra', 'water_swim')"],
+      "animations": ["q.look('head')", "q.bedrock('kingdra', 'water_idle')"],
       "quirks": ["q.bedrock_quirk('kingdra', 'blink')"]
     }
   }

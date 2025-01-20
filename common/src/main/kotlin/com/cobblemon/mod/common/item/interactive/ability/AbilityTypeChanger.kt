@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.item.interactive.ability
 
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.*
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -20,13 +21,13 @@ open class AbilityTypeChanger<T : PotentialAbility>(
     private val supportsChangingFrom: (other: PotentialAbilityType<*>?) -> Boolean
 ) : AbilityChanger<T> {
 
-    override fun queryPossible(pokemon: Pokemon): Set<AbilityTemplate> {
+    override fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>> {
         val currentType = this.findCurrent(pokemon)
         val targetType = if (currentType == HiddenAbilityType) CommonAbilityType else this.type
 
         return pokemon.form.abilities
             .filter { it.type == targetType && it.template != pokemon.ability.template }
-            .map { it.template }
+            .map { it.template to it.priority }
             .toSet()
     }
 
@@ -38,7 +39,7 @@ open class AbilityTypeChanger<T : PotentialAbility>(
         val possible = this.queryPossible(pokemon)
         val picked = possible.randomOrNull() ?: return false
         val old = pokemon.ability.template
-        pokemon.updateAbility(picked.create(forced = false))
+        pokemon.updateAbility(picked.first.create(forced = false, priority = picked.second))
         return pokemon.ability.template != old
     }
 
