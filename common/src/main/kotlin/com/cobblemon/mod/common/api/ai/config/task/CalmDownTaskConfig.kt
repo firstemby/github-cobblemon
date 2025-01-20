@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.behavior.VillagerCalmDown
 
 class CalmDownTaskConfig : SingleTaskConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
-    override val variables = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

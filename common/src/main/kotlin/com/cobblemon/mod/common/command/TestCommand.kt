@@ -47,6 +47,7 @@ import net.minecraft.world.phys.AABB
 import com.mojang.serialization.JsonOps
 import java.io.File
 import java.io.PrintWriter
+import net.minecraft.core.BlockPos
 
 @Suppress("unused")
 object TestCommand {
@@ -67,6 +68,12 @@ object TestCommand {
         try {
             //this.testCodecOutput(context)
             val player = context.source.entity as ServerPlayer
+            val blockState = player.level().getBlockState(BlockPos(18, 62, -83))
+            val block = blockState.block
+            println(block.name.string)
+            println(blockState.isSolid)
+
+
             player.party().forEach { it.currentHealth = it.hp / 2 }
             val npc = NPCEntity(player.level())
             npc.setPos(player.x, player.y, player.z)

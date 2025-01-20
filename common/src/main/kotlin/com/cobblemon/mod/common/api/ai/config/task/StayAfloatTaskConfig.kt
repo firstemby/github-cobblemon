@@ -23,11 +23,10 @@ class StayAfloatTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "can_float", true).asExpressible()
     val chance = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "float_chance", 0.8F).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            chance
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        chance
+    ).asVariables()
 
     override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())

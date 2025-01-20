@@ -28,7 +28,7 @@ object MeleeAttackTask {
     fun create(range: Expression, cooldownTicks: Expression): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ATTACK_TARGET),
-            it.registered(MemoryModuleType.ATTACK_COOLING_DOWN)
+            it.absent(MemoryModuleType.ATTACK_COOLING_DOWN)
         ).apply(it) { attackTarget, cooldown ->
             Trigger { world, entity, _ ->
                 runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())

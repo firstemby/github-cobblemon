@@ -22,12 +22,11 @@ class MeleeAttackTaskConfig : SingleTaskConfig {
     val range = numberVariable(SharedEntityVariables.ATTACKING_CATEGORY, "melee_range", 1.5F).asExpressible()
     val cooldownTicks = numberVariable(SharedEntityVariables.ATTACKING_CATEGORY, "melee_cooldown", 30).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            range,
-            cooldownTicks
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        range,
+        cooldownTicks
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

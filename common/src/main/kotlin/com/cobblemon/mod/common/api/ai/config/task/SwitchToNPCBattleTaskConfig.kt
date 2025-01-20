@@ -15,7 +15,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class SwitchToNPCBattleTaskConfig : SingleTaskConfig {
-    override val variables = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

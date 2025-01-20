@@ -21,8 +21,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class AttackAngryAtTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.ATTACKING_CATEGORY, "should_attack_angry_at", true).asExpressible()
-    override val variables
-        get() = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

@@ -9,6 +9,8 @@
         "cobblemon:core",
         "cobblemon:looks_around",
         "cobblemon:wanders",
+        "cobblemon:pokemon_battles",
+        "cobblemon:wanders",
         "cobblemon:fights_melee",
         "cobblemon:retaliates"
       ]

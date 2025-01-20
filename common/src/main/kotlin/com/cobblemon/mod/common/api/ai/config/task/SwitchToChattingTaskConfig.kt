@@ -18,7 +18,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class SwitchToChattingTaskConfig : SingleTaskConfig {
-    override val variables = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

@@ -27,8 +27,7 @@ class FleeNearestHostileTaskConfig : SingleTaskConfig {
     var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
     var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(condition, speedMultiplier, desiredDistance).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition, speedMultiplier, desiredDistance).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

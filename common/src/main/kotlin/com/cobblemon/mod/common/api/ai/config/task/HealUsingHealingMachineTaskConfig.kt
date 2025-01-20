@@ -27,8 +27,7 @@ class HealUsingHealingMachineTaskConfig : SingleTaskConfig {
     val horizontalUseRange: ExpressionOrEntityVariable = Either.left("2".asExpression())
     val verticalUseRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

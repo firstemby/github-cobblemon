@@ -27,11 +27,10 @@ class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_when_hurt", true).asExpressible()
     var includePassiveDamage = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_from_passive_damage", true).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            includePassiveDamage
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        includePassiveDamage
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

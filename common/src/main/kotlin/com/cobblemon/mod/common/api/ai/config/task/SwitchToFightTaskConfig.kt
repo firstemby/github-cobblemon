@@ -22,8 +22,7 @@ import net.minecraft.world.entity.schedule.Activity
 class SwitchToFightTaskConfig : SingleTaskConfig {
     val activity = Activity.FIGHT
 
-    override val variables: List<MoLangConfigVariable>
-        get() = emptyList()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
 
     override fun createTask(
         entity: LivingEntity,

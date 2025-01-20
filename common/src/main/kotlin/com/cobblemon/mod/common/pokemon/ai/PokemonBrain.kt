@@ -69,17 +69,16 @@ object PokemonBrain {
     )
 
     fun makeBrain(entity: PokemonEntity, pokemon: Pokemon, brain: Brain<out PokemonEntity>): Brain<*> {
-        val brainConfigurations: List<BrainConfig>
+        var brainConfigurations: List<BrainConfig> = pokemon.form.baseAI + pokemon.form.ai
         if (entity.behavioursAreCustom) {
             brainConfigurations = listOf(ApplyPresets().apply { presets.addAll(entity.behaviours) })
-        } else {
-            brainConfigurations = (pokemon.form.baseAI + pokemon.form.ai).mapNotNull { CobblemonBrainConfigs.presets[it] }.flatMap { it.configurations }
-            entity.behaviours.clear()
-            entity.behaviours.addAll(brainConfigurations.filterIsInstance<ApplyPresets>().flatMap { it.presets }.toMutableList())
         }
         // Use brain configs, apply from some kind of pokemon species AI data if it isn't custom blabla
 
-        BrainConfigurationContext().apply(entity, brainConfigurations) // This redundancy will get cleaned up later when the rest of the framework is done
+        val ctx = BrainConfigurationContext()
+        ctx.apply(entity, brainConfigurations)
+        entity.behaviours.clear()
+        entity.behaviours.addAll(ctx.appliedBrainPresets)
 
         if (brainConfigurations.isNotEmpty()) {
             return brain

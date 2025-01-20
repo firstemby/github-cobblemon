@@ -37,8 +37,7 @@ class RunScript : SingleTaskConfig {
 
     val script = stringVariable(SCRIPT_CATEGORY, "script", "cobblemon:dummy_script").asExpressible()
 
-    override val variables
-        get() = listOf(script).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(script).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

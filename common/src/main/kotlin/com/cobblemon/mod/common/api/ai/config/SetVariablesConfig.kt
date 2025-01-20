@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity
 class SetVariablesConfig : BrainConfig {
     var variableValues = mutableMapOf<String, ExpressionLike>()
 
-    override val variables: List<MoLangConfigVariable> = emptyList()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
 
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         val runtime = MoLangRuntime().setup()

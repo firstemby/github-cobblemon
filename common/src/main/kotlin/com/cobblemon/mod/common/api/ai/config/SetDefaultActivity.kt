@@ -15,7 +15,7 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SetDefaultActivity : BrainConfig {
     val activity: Activity = Activity.IDLE
-    override val variables = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         brainConfigurationContext.defaultActivity = activity
     }

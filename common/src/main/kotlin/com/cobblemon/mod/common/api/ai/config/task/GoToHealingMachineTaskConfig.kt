@@ -26,8 +26,7 @@ class GoToHealingMachineTaskConfig : SingleTaskConfig {
     val completionRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
 
-    override val variables
-        get() = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
 
     companion object {
         const val SELF_HEALING = "self_healing"

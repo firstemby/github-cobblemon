@@ -27,7 +27,7 @@ class FollowWalkTargetTaskConfig : SingleTaskConfig {
     val minRunTicks: ExpressionOrEntityVariable = Either.left("150".asExpression())
     val maxRunTicks: ExpressionOrEntityVariable = Either.left("250".asExpression())
 
-    override val variables = listOf(minRunTicks, maxRunTicks).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(minRunTicks, maxRunTicks).asVariables()
 
     override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())

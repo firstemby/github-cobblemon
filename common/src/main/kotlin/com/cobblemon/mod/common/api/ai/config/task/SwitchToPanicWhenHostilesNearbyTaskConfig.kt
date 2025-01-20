@@ -25,8 +25,7 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToPanicWhenHostilesNearbyTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_when_hostiles_nearby", true).asExpressible()
-    override val variables
-        get() = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

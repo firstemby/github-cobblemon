@@ -15,7 +15,7 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SetCoreActivities : BrainConfig {
     val activities = mutableListOf<Activity>()
-    override val variables = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         brainConfigurationContext.coreActivities = activities.toSet()
     }

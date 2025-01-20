@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.entity.npc.ai.LookAtSpeakerTask
 import net.minecraft.world.entity.LivingEntity
 
 class LookAtSpeakerTaskConfig : SingleTaskConfig {
-    override val variables = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

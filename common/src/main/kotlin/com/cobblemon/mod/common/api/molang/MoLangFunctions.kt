@@ -714,6 +714,7 @@ object MoLangFunctions {
             }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
+            map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("species") { pokemon.species.struct }
             map.put("form") { StringValue(pokemon.form.name) }
             map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) }

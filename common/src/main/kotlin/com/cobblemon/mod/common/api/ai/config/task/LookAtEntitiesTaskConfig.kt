@@ -26,11 +26,10 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.LOOKING_CATEGORY, LOOK_AT_ENTITIES, true).asExpressible()
     val maxDistance = numberVariable(SharedEntityVariables.LOOKING_CATEGORY, SEE_DISTANCE, 15).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            maxDistance
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        maxDistance
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

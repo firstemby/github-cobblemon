@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
@@ -20,6 +21,7 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
+import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
@@ -48,6 +50,9 @@ interface TaskConfig {
             "switch_npc_to_battle" to SwitchToNPCBattleTaskConfig::class.java,
             "look_at_battling_pokemon" to LookAtBattlingPokemonTaskConfig::class.java,
             "switch_npc_from_battle" to SwitchFromNPCBattleTaskConfig::class.java,
+            "switch_pokemon_to_battle" to SwitchToPokemonBattleTaskConfig::class.java,
+            "look_at_targeted_battle_pokemon" to LookAtTargetedBattlePokemonTaskConfig::class.java,
+            "switch_pokemon_from_battle" to SwitchFromPokemonBattleTaskConfig::class.java,
             "go_to_healing_machine" to GoToHealingMachineTaskConfig::class.java,
             "heal_using_healing_machine" to HealUsingHealingMachineTaskConfig::class.java,
             "all_of" to AllOfTaskConfig::class.java,
@@ -73,6 +78,9 @@ interface TaskConfig {
             "breed_at_nest" to BreedAtNestTaskConfig::class.java,
             "guard_nest" to GuardNestTaskConfig::class.java,
             "hunt_player" to HuntPlayerTaskConfig::class.java
+            "wake_up" to WakeUpTaskConfig::class.java,
+            "go_to_sleep" to GoToSleepTaskConfig::class.java,
+            "find_resting_place" to FindRestingPlaceTaskConfig::class.java,
         )
 
         val runtime = MoLangRuntime().setup()
@@ -80,6 +88,11 @@ interface TaskConfig {
 
     val runtime: MoLangRuntime
         get() = Companion.runtime
+
+    fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        return expressionOrEntityVariable.resolveBoolean()
+    }
 
     fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })
     fun ExpressionOrEntityVariable.resolveString() = runtime.resolveString(asExpression())
@@ -107,7 +120,7 @@ interface TaskConfig {
     fun resolveNumberVariable(name: String) = runtime.resolveDouble(getVariableExpression(name))
 
     /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
-    val variables: List<MoLangConfigVariable>
+    fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
     fun createTasks(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

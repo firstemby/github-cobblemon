@@ -24,8 +24,7 @@ class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(ATTACKING_CATEGORY, GET_ANGRY_AT_ATTACKER, true).asExpressible()
 
-    override val variables
-        get() = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

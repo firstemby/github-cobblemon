@@ -11,12 +11,12 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
+import net.minecraft.world.entity.ai.behavior.RandomStroll
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -29,20 +29,19 @@ class WanderTaskConfig : SingleTaskConfig {
     }
 
     val condition = booleanVariable(WANDER, "wanders", true).asExpressible()
-    val wanderChance = numberVariable(WANDER, "wander_chance", 1/(20 * 8F)).asExpressible()
+    val wanderChance = numberVariable(WANDER, "wander_chance", 1/(20 * 6F)).asExpressible()
     val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 10).asExpressible()
     val verticalRange = numberVariable(WANDER, "vertical_wander_range", 5).asExpressible()
 
     val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            wanderChance,
-            horizontalRange,
-            verticalRange,
-            speedMultiplier
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        wanderChance,
+        horizontalRange,
+        verticalRange,
+        speedMultiplier
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
@@ -65,7 +64,8 @@ class WanderTaskConfig : SingleTaskConfig {
                     val wanderChance = wanderChance.resolveFloat()
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
-                    val targetVec = LandRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt()) ?: return@Trigger false
+//                    RandomStroll.stroll(speedMultiplier.resolveFloat(), horizontalRange.resolveInt(), verticalRange.resolveInt())
+                    val targetVec = LandRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt(), { 0.0 }) ?: return@Trigger false
                     walkTarget.set(WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1))
                     lookTarget.set(BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))
                     return@Trigger true

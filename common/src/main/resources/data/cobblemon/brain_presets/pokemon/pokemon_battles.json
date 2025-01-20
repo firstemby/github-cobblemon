@@ -1,0 +1,25 @@
+{
+  "name": "cobblemon.brain_preset.pokemon_battles.name",
+  "description": "cobblemon.brain_preset.pokemon_battles.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "cobblemon:battling",
+      "tasksByPriority": {
+        "0": [
+          "switch_pokemon_from_battle",
+          "look_at_targeted_battle_pokemon"
+        ]
+      }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "core",
+      "tasksByPriority": {
+        "9": [
+          "switch_pokemon_to_battle"
+        ]
+      }
+    }
+  ]
+}

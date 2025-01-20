@@ -20,8 +20,7 @@ import net.minecraft.world.entity.ai.behavior.StopBeingAngryIfTargetDead
 class StopBeingAngryIfAttackerDeadTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.ATTACKING_CATEGORY, "stop_being_angry_if_attacker_dead", true).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

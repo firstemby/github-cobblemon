@@ -26,12 +26,11 @@ class FleeAttackerTaskConfig : SingleTaskConfig {
     var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
     var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
 
-    override val variables // Use get() because JSON deserialization needs to put the values in first
-        get() = listOf(
-            condition,
-            speedMultiplier,
-            desiredDistance
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        speedMultiplier,
+        desiredDistance
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

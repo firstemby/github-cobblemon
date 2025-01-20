@@ -42,8 +42,7 @@ class RandomTaskConfig : TaskConfig {
     val condition: ExpressionLike = "true".asExpressionLike()
     val choices = mutableListOf<RandomTaskChoice>()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = choices.flatMap { it.task.variables }
+    override fun getVariables(entity: LivingEntity) = choices.flatMap { it.task.getVariables(entity) }
 
     override fun createTasks(
         entity: LivingEntity,

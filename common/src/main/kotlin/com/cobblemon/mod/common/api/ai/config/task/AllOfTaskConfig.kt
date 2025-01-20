@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -24,7 +25,13 @@ class AllOfTaskConfig : TaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasks: List<TaskConfig> = emptyList()
 
-    override val variables = tasks.flatMap { it.variables } + listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+        return if (checkCondition(entity, condition))
+            tasks.flatMap { it.getVariables(entity) } + listOf(condition).asVariables()
+        else
+            listOf(condition).asVariables()
+    }
+
     override fun createTasks(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext

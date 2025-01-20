@@ -35,7 +35,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 class ScriptBrainConfig : BrainConfig {
     val condition = "true".asExpressionLike()
     val script = cobblemonResource("dummy")
-    override val variables: MutableList<MoLangConfigVariable> = mutableListOf()
+    override fun getVariables(entity: LivingEntity) = mutableListOf<MoLangConfigVariable>()
 
     override fun configure(entity: LivingEntity, context: BrainConfigurationContext) {
         val runtime = MoLangRuntime().setup()

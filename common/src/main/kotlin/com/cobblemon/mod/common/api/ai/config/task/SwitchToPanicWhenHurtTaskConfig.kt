@@ -25,11 +25,10 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_when_hurt", true).asExpressible()
     var includePassiveDamage =  booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_on_passive_damage", false).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(
-            condition,
-            includePassiveDamage
-        ).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        includePassiveDamage
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

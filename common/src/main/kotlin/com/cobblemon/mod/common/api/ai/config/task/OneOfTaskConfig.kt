@@ -42,8 +42,7 @@ class OneOfTaskConfig : SingleTaskConfig {
     val condition: ExpressionLike = "true".asExpressionLike()
     val options = mutableListOf<OneOfTaskOption>()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = options.flatMap { it.task.variables }
+    override fun getVariables(entity: LivingEntity) = options.flatMap { it.task.getVariables(entity) }
 
     override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
