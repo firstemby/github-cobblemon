@@ -7,8 +7,18 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Midnight",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Midnight",
+      "unlockForms": [
+        "Midnight"
+      ]
+    },
+    {
+      "displayForm": "Dusk",
+      "unlockForms": [
         "Dusk"
       ]
     }

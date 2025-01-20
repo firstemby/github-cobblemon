@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3
 
 class FeraligatrModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("feraligatr")
-    override val head = getPart("head")
+    override val head = getPart("head_ai")
 
     override val leftLeg = getPart("leg_left")
     override val rightLeg = getPart("leg_right")

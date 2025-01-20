@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Dusk-Mane",
-        "Dawn-Wings",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Dusk-Mane",
+      "unlockForms": [
+        "Dusk-Mane"
+      ]
+    },
+    {
+      "displayForm": "Dawn-Wings",
+      "unlockForms": [
+        "Dawn-Wings"
+      ]
+    },
+    {
+      "displayForm": "Ultra",
+      "unlockForms": [
         "Ultra"
       ]
     }

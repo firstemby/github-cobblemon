@@ -14,9 +14,11 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
+import com.cobblemon.mod.common.battles.actor.MultiPokemonBattleActor
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -296,6 +298,99 @@ object BattleBuilder {
             errors
         }
     }
+
+    @JvmOverloads
+    fun pveDoubles(
+            player: ServerPlayer,
+            pokemonEntity1: PokemonEntity,
+            pokemonEntity2: PokemonEntity,
+            leadingPokemon: UUID? = null,
+            battleFormat: BattleFormat = BattleFormat.GEN_9_DOUBLES,
+            cloneParties: Boolean = false,
+            healFirst: Boolean = false,
+            fleeDistance: Float = Cobblemon.config.defaultFleeDistance,
+            party: PartyStore = player.party()
+    ): BattleStartResult {
+        // Prepare the player's team
+        val playerTeam = party.toBattleTeam(
+                clone = cloneParties,
+                healPokemon = healFirst,
+                leadingPokemon = leadingPokemon
+        ).sortedBy { it.health <= 0 }
+
+        val playerActor = PlayerBattleActor(player.uuid, playerTeam)
+
+        // Combine both wild Pokémon into a single BattleActor
+        val wildTeam = listOf(
+                BattlePokemon(pokemonEntity1.pokemon),
+                BattlePokemon(pokemonEntity2.pokemon)
+        )
+        val wildActor = MultiPokemonBattleActor(pokemonList = wildTeam, fleeDistance = Cobblemon.config.defaultFleeDistance)
+
+        val errors = ErroredBattleStart()
+
+        // Validate player's team
+        if (playerTeam.isNotEmpty() && playerTeam[0].health <= 0) {
+            errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
+                    actorEntity = player,
+                    requiredCount = battleFormat.battleType.slotsPerActor,
+                    hadCount = playerActor.pokemonList.size
+            )
+        }
+
+        if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+            errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
+                    actorEntity = player,
+                    requiredCount = battleFormat.battleType.slotsPerActor,
+                    hadCount = playerActor.pokemonList.size
+            )
+        }
+
+        // Validate opponent Pokémon entities
+        if (pokemonEntity1.battleId != null) {
+            errors.participantErrors[wildActor] += BattleStartError.alreadyInBattle(wildActor)
+        }
+
+        if (pokemonEntity2.battleId != null) {
+            errors.participantErrors[wildActor] += BattleStartError.alreadyInBattle(wildActor)
+        }
+
+        if (playerActor.pokemonList.any { it.entity?.isBusy == true }) {
+            errors.participantErrors[playerActor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
+        }
+
+        // Set battle themes
+        playerActor.battleTheme = pokemonEntity1.getBattleTheme()
+
+        return if (errors.isEmpty) {
+            println("Player actor: ${playerActor.pokemonList.size} Pokémon")
+            println("WildActor Pokémon: ${wildActor.pokemonList.map { it.effectedPokemon.species.translatedName }}")
+
+            val side1 = BattleSide(playerActor)
+            val side2 = BattleSide(wildActor)
+
+            println("Side1 actors: ${side1.actors.map { it.uuid }}")
+            println("Side2 actors: ${side2.actors.map { it.uuid }}")
+
+            BattleRegistry.startBattle(
+                    battleFormat = battleFormat,
+                    side1 = side1,
+                    side2 = side2
+            ).ifSuccessful { battle ->
+                println("Battle started with ID: ${battle.battleId}")
+                if (!cloneParties) {
+                    pokemonEntity1.battleId = battle.battleId
+                    pokemonEntity2.battleId = battle.battleId
+                }
+            }.ifErrored {
+                println("Battle start failed: ${it.errors}")
+            }
+        } else {
+            println("Battle failed due to validation errors: ${errors.errors}")
+            errors
+        }
+    }
+
 
     /**
      * Attempts to create a PvE battle against the given Pokémon.

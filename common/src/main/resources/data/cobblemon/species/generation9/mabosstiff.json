@@ -1,13 +1,54 @@
 {
   "implemented": true,
-  "name": "Mabosstiff",
   "nationalPokedexNumber": 943,
+  "name": "Mabosstiff",
   "primaryType": "dark",
+  "maleRatio": 0.5,
+  "height": 11,
+  "weight": 610,
+  "pokedex": [
+    "cobblemon.species.mabosstiff.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "intimidate",
     "guarddog",
     "h:stakeout"
   ],
+  "eggGroups": [
+    "field"
+  ],
+  "baseStats": {
+    "hp": 80,
+    "attack": 120,
+    "defence": 90,
+    "special_attack": 60,
+    "special_defence": 70,
+    "speed": 85
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 177,
+  "experienceGroup": "medium_slow",
+  "catchRate": 75,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 1.6,
+    "height": 1.9,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 5,
     "entries": [
@@ -21,40 +62,15 @@
       },
       {
         "item": "cobblemon:tanga_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
-  "baseStats": {
-    "hp": 80,
-    "attack": 120,
-    "defence": 90,
-    "special_attack": 60,
-    "special_defence": 70,
-    "speed": 85
-  },
-  "catchRate": 75,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 177,
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
   "moves": [
+    "1:comeuppance",
     "1:leer",
     "1:scaryface",
     "1:tackle",
-    "1:comeuppance",
     "4:lick",
     "7:snarl",
     "10:honeclaws",
@@ -68,11 +84,18 @@
     "48:jawlock",
     "55:doubleedge",
     "60:outrage",
+    "egg:destinybond",
+    "egg:endeavor",
+    "egg:playrough",
+    "egg:retaliate",
+    "tm:bite",
     "tm:bodyslam",
     "tm:charm",
+    "tm:comeuppance",
     "tm:crunch",
     "tm:curse",
     "tm:darkpulse",
+    "tm:destinybond",
     "tm:dig",
     "tm:doubleedge",
     "tm:endeavor",
@@ -81,18 +104,25 @@
     "tm:faketears",
     "tm:firefang",
     "tm:gigaimpact",
+    "tm:headbutt",
     "tm:helpinghand",
+    "tm:honeclaws",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icefang",
+    "tm:jawlock",
     "tm:lashout",
+    "tm:leer",
+    "tm:lick",
     "tm:outrage",
     "tm:painsplit",
+    "tm:payback",
     "tm:playrough",
     "tm:protect",
     "tm:psychicfangs",
     "tm:raindance",
     "tm:rest",
+    "tm:retaliate",
     "tm:reversal",
     "tm:roar",
     "tm:scaryface",
@@ -101,6 +131,8 @@
     "tm:spite",
     "tm:substitute",
     "tm:sunnyday",
+    "tm:swagger",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -109,22 +141,6 @@
     "tm:trailblaze",
     "tm:wildcharge"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 11,
-  "weight": 610,
   "preEvolution": "maschiff",
-  "evolutions": [],
-  "baseScale": 0.7,
-  "hitbox": {
-    "width": 1.6,
-    "height": 1.9,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.mabosstiff.desc"
-  ]
+  "evolutions": []
 }

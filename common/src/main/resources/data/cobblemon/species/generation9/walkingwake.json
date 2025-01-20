@@ -1,11 +1,26 @@
 {
   "implemented": true,
-  "name": "Walking Wake",
   "nationalPokedexNumber": 1009,
+  "name": "Walking Wake",
   "primaryType": "water",
   "secondaryType": "dragon",
+  "maleRatio": -1,
+  "height": 35,
+  "weight": 2800,
+  "pokedex": [
+    "cobblemon.species.walkingwake.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 99,
@@ -15,13 +30,28 @@
     "special_defence": 83,
     "speed": 109
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 3,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 295,
+  "experienceGroup": "slow",
   "catchRate": 5,
-  "maleRatio": -1,
+  "eggCycles": 50,
+  "baseFriendship": 0,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.9,
+    "height": 3.2,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
@@ -31,28 +61,13 @@
       }
     }
   },
-  "baseExperienceYield": 295,
-  "baseFriendship": 0,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 3,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "experienceGroup": "slow",
-  "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
   "moves": [
-    "1:aquajet",
-    "1:honeclaws",
     "1:leer",
     "1:roar",
-    "1:sunnyday",
     "1:twister",
+    "1:aquajet",
+    "1:sunnyday",
+    "1:honeclaws",
     "7:bite",
     "14:waterpulse",
     "21:nobleroar",
@@ -65,16 +80,20 @@
     "77:flamethrower",
     "84:hydropump",
     "tm:agility",
+    "tm:aquajet",
+    "tm:bite",
     "tm:bodyslam",
     "tm:breakingswipe",
     "tm:chillingwater",
     "tm:crunch",
     "tm:doubleedge",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
+    "tm:dragonrush",
     "tm:dragontail",
     "tm:endure",
     "tm:facade",
@@ -82,13 +101,17 @@
     "tm:flamethrower",
     "tm:flipturn",
     "tm:gigaimpact",
+    "tm:honeclaws",
     "tm:hurricane",
     "tm:hydropump",
+    "tm:hydrosteam",
     "tm:hyperbeam",
     "tm:knockoff",
+    "tm:leer",
     "tm:liquidation",
     "tm:lowkick",
     "tm:mudshot",
+    "tm:nobleroar",
     "tm:outrage",
     "tm:protect",
     "tm:raindance",
@@ -104,27 +127,11 @@
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
+    "tm:twister",
     "tm:waterfall",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 35,
-  "weight": 2800,
-  "evolutions": [],
-  "baseScale": 1.0,
-  "hitbox": {
-    "width": 1.9,
-    "height": 3.2,
-    "fixed": false
-  },
-  "pokedex": [
-    "cobblemon.species.walkingwake.desc"
-  ],
-  "cannotDynamax": false
+  "evolutions": []
 }

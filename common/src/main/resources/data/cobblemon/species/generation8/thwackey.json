@@ -1,11 +1,25 @@
 {
   "implemented": true,
-  "name": "Thwackey",
   "nationalPokedexNumber": 811,
+  "name": "Thwackey",
   "primaryType": "grass",
+  "maleRatio": 0.875,
+  "height": 7,
+  "weight": 140,
+  "pokedex": [
+    "cobblemon.species.thwackey.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "overgrow",
     "h:grassysurge"
+  ],
+  "eggGroups": [
+    "field",
+    "grass"
   ],
   "baseStats": {
     "hp": 70,
@@ -15,16 +29,26 @@
     "special_defence": 60,
     "speed": 80
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 147,
   "experienceGroup": "medium_slow",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.85,
+    "height": 1.65,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
@@ -34,14 +58,15 @@
       },
       {
         "item": "cobblemon:miracle_seed",
-        "percentage": 10.0
+        "percentage": 10
       }
     ]
   },
   "moves": [
-    "1:branchpoke",
-    "1:growl",
+    "1:doublehit",
     "1:scratch",
+    "1:growl",
+    "1:branchpoke",
     "1:taunt",
     "12:razorleaf",
     "19:screech",
@@ -50,17 +75,25 @@
     "36:uproar",
     "42:woodhammer",
     "48:endeavor",
+    "egg:fakeout",
+    "egg:growth",
+    "egg:hammerarm",
+    "egg:leechseed",
+    "egg:strength",
+    "egg:worryseed",
     "tm:acrobatics",
     "tm:assurance",
-    "tm:attract",
     "tm:bodyslam",
+    "tm:branchpoke",
     "tm:bulletseed",
     "tm:doubleedge",
+    "tm:doublehit",
     "tm:drainpunch",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
+    "tm:fakeout",
     "tm:falseswipe",
     "tm:fling",
     "tm:focusenergy",
@@ -69,22 +102,29 @@
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growl",
+    "tm:growth",
+    "tm:hammerarm",
     "tm:knockoff",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lowkick",
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
+    "tm:naturepower",
     "tm:protect",
+    "tm:razorleaf",
     "tm:rest",
-    "tm:round",
     "tm:scaryface",
+    "tm:scratch",
     "tm:screech",
     "tm:seedbomb",
+    "tm:slam",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:solarbeam",
     "tm:solarblade",
+    "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swift",
@@ -96,15 +136,9 @@
     "tm:trailblaze",
     "tm:uproar",
     "tm:uturn",
+    "tm:woodhammer",
     "tm:workup",
-    "tutor:grasspledge",
-    "tutor:grassyglide"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.thwackey.desc"
+    "tm:worryseed"
   ],
   "preEvolution": "grookey",
   "evolutions": [
@@ -123,24 +157,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.8,
-  "hitbox": {
-    "width": 0.85,
-    "height": 1.65,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 7,
-  "weight": 140,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

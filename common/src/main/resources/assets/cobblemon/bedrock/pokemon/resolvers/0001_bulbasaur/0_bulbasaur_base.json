@@ -6,12 +6,12 @@
       "aspects": [],
       "poser": "cobblemon:bulbasaur",
       "model": "cobblemon:bulbasaur.geo",
-      "texture": "cobblemon:textures/pokemon/0001_bulbasaur/bulbasaur_m.png",
+      "texture": "cobblemon:textures/pokemon/0001_bulbasaur/bulbasaur.png",
       "layers": []
     },
     {
       "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0001_bulbasaur/bulbasaur_m_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0001_bulbasaur/bulbasaur_shiny.png"
     }
   ]
 }

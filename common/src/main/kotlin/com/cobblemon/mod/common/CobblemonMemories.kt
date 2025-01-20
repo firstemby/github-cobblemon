@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
 import java.util.UUID
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
@@ -37,6 +38,7 @@ object CobblemonMemories {
     val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
     val NEST_LOCATION = register<BlockPos>("nest_location")
     val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
+    val IRRITATED_AT = register<UUID>("irritated_at")
     val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
     val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)

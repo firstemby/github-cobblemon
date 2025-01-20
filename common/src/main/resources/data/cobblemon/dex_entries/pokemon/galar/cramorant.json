@@ -7,8 +7,18 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Gulping",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Gulping",
+      "unlockForms": [
+        "Gulping"
+      ]
+    },
+    {
+      "displayForm": "Gorging",
+      "unlockForms": [
         "Gorging"
       ]
     }

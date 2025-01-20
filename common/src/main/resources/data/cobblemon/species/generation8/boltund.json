@@ -1,12 +1,63 @@
 {
   "implemented": true,
-  "name": "Boltund",
   "nationalPokedexNumber": 836,
+  "name": "Boltund",
   "primaryType": "electric",
+  "maleRatio": 0.5,
+  "height": 10,
+  "weight": 340,
+  "pokedex": [
+    "cobblemon.species.boltund.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "strongjaw",
     "h:competitive"
   ],
+  "eggGroups": [
+    "field"
+  ],
+  "baseStats": {
+    "hp": 69,
+    "attack": 90,
+    "defence": 60,
+    "special_attack": 90,
+    "special_defence": 60,
+    "speed": 121
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 2
+  },
+  "baseExperienceYield": 172,
+  "experienceGroup": "fast",
+  "catchRate": 45,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.65,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -16,46 +67,16 @@
       },
       {
         "item": "cobblemon:wepear_berry",
-        "percentage": 5.0
+        "percentage": 5
       }
     ]
   },
-  "baseStats": {
-    "hp": 69,
-    "attack": 90,
-    "defence": 60,
-    "special_attack": 90,
-    "special_defence": 60,
-    "speed": 121
-  },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 172,
-  "experienceGroup": "fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.25
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
-      "light": "0-4"
-    }
-  },
   "moves": [
-    "1:bite",
     "1:electrify",
-    "1:nuzzle",
     "1:tackle",
     "1:tailwhip",
+    "1:nuzzle",
+    "1:bite",
     "15:roar",
     "20:spark",
     "28:charm",
@@ -64,67 +85,58 @@
     "48:wildcharge",
     "55:playrough",
     "62:electricterrain",
+    "egg:discharge",
+    "egg:doubleedge",
+    "egg:flamecharge",
+    "egg:howl",
+    "egg:sandattack",
     "tm:agility",
-    "tm:attract",
+    "tm:bite",
     "tm:bulkup",
+    "tm:charge",
     "tm:charm",
     "tm:crunch",
     "tm:dig",
+    "tm:discharge",
+    "tm:doubleedge",
     "tm:eerieimpulse",
     "tm:electricterrain",
+    "tm:electrify",
     "tm:electroball",
     "tm:endure",
     "tm:facade",
     "tm:firefang",
+    "tm:flamecharge",
     "tm:focusenergy",
     "tm:gigaimpact",
     "tm:helpinghand",
+    "tm:howl",
     "tm:hyperbeam",
     "tm:hypervoice",
+    "tm:nuzzle",
     "tm:playrough",
     "tm:protect",
     "tm:psychicfangs",
     "tm:rest",
-    "tm:round",
+    "tm:risingvoltage",
+    "tm:roar",
+    "tm:sandattack",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
+    "tm:spark",
     "tm:substitute",
     "tm:swift",
+    "tm:tackle",
+    "tm:tailwhip",
+    "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderfang",
     "tm:thunderwave",
     "tm:uproar",
     "tm:voltswitch",
-    "tm:wildcharge",
-    "tutor:risingvoltage"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.boltund.desc"
+    "tm:wildcharge"
   ],
   "preEvolution": "yamper",
-  "evolutions": [],
-  "baseScale": 0.7,
-  "hitbox": {
-    "width": 0.7,
-    "height": 1.65,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 2
-  },
-  "height": 10,
-  "weight": 340,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

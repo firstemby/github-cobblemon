@@ -8,17 +8,6 @@
     "cry": "q.bedrock_stateful('serperior', 'cry')"
   },
   "poses": {
-    "water_surface": {
-      "poseTypes": [
-        "STAND"
-      ],
-      "isTouchingWater": true,
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('serperior', 'ground_walk')"
-      ],
-      "quirks": ["q.bedrock_quirk('serperior', 'blink')"]
-    },
     "standing": {
       "poseTypes": [
         "STAND",
@@ -26,7 +15,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": false,
       "animations": [
         "q.look('head')",
         "q.bedrock('serperior', 'ground_idle')"
@@ -51,6 +39,17 @@
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
       "animations": ["q.bedrock('serperior', 'sleep')"]
+    },
+    "water_surface": {
+      "poseTypes": [
+        "STAND"
+      ],
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('serperior', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('serperior', 'blink')"]
     }
   }
 }

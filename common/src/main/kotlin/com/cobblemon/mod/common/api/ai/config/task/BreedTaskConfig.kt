@@ -12,9 +12,12 @@ import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.util.sendParticlesServer
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -96,6 +99,31 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
                     // set breeding cooldown for both
                     parentOne.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentOne)
                     parentTwo.breedingCooldown = BreedingLogicManager.resetBreedingCooldown(parentTwo)
+
+                    // Display heart particles above parents
+
+                    (world as net.minecraft.server.level.ServerLevel).sendParticles(
+                            net.minecraft.core.particles.ParticleTypes.HEART,
+                            entity.getRandomX(1.0), // Particle X position with slight randomness
+                            entity.getRandomY() + 0.5, // Slightly raised Y position
+                            entity.getRandomZ(1.0), // Particle Z position with slight randomness
+                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                            0.2 * entity.random.nextGaussian(), // X velocity with slight variance
+                            0.1 * entity.random.nextGaussian(), // Y velocity with upwards variance
+                            0.2 * entity.random.nextGaussian(), // Z velocity with slight variance
+                            0.02 // Particle speed
+                    )
+                    (world as net.minecraft.server.level.ServerLevel).sendParticles(
+                            net.minecraft.core.particles.ParticleTypes.HEART,
+                            mate.getRandomX(1.0), // Particle X position with slight randomness
+                            mate.getRandomY() + 0.5, // Slightly raised Y position
+                            mate.getRandomZ(1.0), // Particle Z position with slight randomness
+                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                            0.2 * mate.random.nextGaussian(), // X velocity with slight variance
+                            0.1 * mate.random.nextGaussian(), // Y velocity with upwards variance
+                            0.2 * mate.random.nextGaussian(), // Z velocity with slight variance
+                            0.02 // Particle speed
+                    )
 
                     // Notify nearby players
                     world.players().forEach { player ->

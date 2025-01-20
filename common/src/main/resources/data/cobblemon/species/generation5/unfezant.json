@@ -1,14 +1,61 @@
 {
   "implemented": true,
-  "name": "Unfezant",
   "nationalPokedexNumber": 521,
+  "name": "Unfezant",
   "primaryType": "normal",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 12,
+  "weight": 290,
+  "pokedex": [
+    "cobblemon.species.unfezant.desc"
+  ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
   "abilities": [
     "bigpecks",
     "superluck",
     "h:rivalry"
   ],
+  "eggGroups": [
+    "flying"
+  ],
+  "baseStats": {
+    "hp": 80,
+    "attack": 115,
+    "defence": 80,
+    "special_attack": 65,
+    "special_defence": 55,
+    "speed": 93
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 3,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 244,
+  "experienceGroup": "medium_slow",
+  "catchRate": 45,
+  "eggCycles": 15,
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.8,
+    "height": 2.15,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 6,
     "entries": [
@@ -21,128 +68,85 @@
       },
       {
         "item": "cobblemon:sharp_beak",
-        "percentage": 5.0
+        "percentage": 5
       },
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 10.0
+        "percentage": 10
       }
     ]
   },
-  "baseStats": {
-    "hp": 80,
-    "attack": 115,
-    "defence": 80,
-    "special_attack": 65,
-    "special_defence": 55,
-    "speed": 93
-  },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 244,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 15,
-  "eggGroups": [
-    "flying"
-  ],
-  "behaviour": {
-    "moving": {
-      "fly": {
-        "canFly": true
-      }
-    }
-  },
   "moves": [
-    "1:growl",
     "1:gust",
+    "1:growl",
     "1:leer",
     "1:quickattack",
+    "1:razorwind",
     "12:taunt",
     "16:aircutter",
     "20:swagger",
     "26:featherdance",
     "36:detect",
-    "38:razorwind",
     "42:airslash",
     "50:roost",
-    "55:facade",
     "58:tailwind",
     "66:skyattack",
+    "egg:bestow",
+    "egg:defog",
+    "egg:hypnosis",
+    "egg:luckychant",
+    "egg:morningsun",
+    "egg:nightslash",
+    "egg:wish",
     "tm:aerialace",
     "tm:agility",
+    "tm:aircutter",
     "tm:airslash",
-    "tm:attract",
+    "tm:bestow",
     "tm:bravebird",
-    "tm:confide",
-    "tm:doubleteam",
+    "tm:defog",
+    "tm:detect",
+    "tm:dualwingbeat",
     "tm:echoedvoice",
     "tm:endure",
     "tm:facade",
+    "tm:featherdance",
     "tm:fly",
     "tm:focusenergy",
-    "tm:frustration",
     "tm:gigaimpact",
+    "tm:growl",
+    "tm:gust",
     "tm:heatwave",
-    "tm:hiddenpower",
     "tm:hurricane",
     "tm:hyperbeam",
+    "tm:hypnosis",
+    "tm:leer",
+    "tm:luckychant",
+    "tm:morningsun",
+    "tm:nightslash",
     "tm:pluck",
     "tm:protect",
     "tm:psychup",
+    "tm:quickattack",
     "tm:raindance",
+    "tm:razorwind",
     "tm:rest",
-    "tm:return",
     "tm:roost",
-    "tm:round",
-    "tm:secretpower",
+    "tm:skyattack",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:steelwing",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swagger",
     "tm:swift",
+    "tm:tailwind",
     "tm:taunt",
-    "tm:toxic",
+    "tm:terablast",
     "tm:uproar",
     "tm:uturn",
-    "tm:workup",
-    "tutor:defog",
-    "tutor:dualwingbeat",
-    "tutor:heatwave",
-    "tutor:roost",
-    "tutor:skyattack",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:tailwind",
-    "tutor:uproar"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.unfezant.desc"
+    "tm:wish",
+    "tm:workup"
   ],
   "preEvolution": "tranquill",
-  "evolutions": [],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.8,
-    "height": 2.15,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 3,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 12,
-  "weight": 290,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

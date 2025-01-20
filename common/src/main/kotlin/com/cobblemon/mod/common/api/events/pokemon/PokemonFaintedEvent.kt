@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -16,4 +17,9 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 data class PokemonFaintedEvent(
     val pokemon: Pokemon,
     var faintedTimer: Int
-)
+) {
+    val context = mutableMapOf(
+        "pokemon" to pokemon.struct,
+        "fainted_timer" to DoubleValue(faintedTimer)
+    )
+}

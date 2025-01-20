@@ -1,12 +1,25 @@
 {
-  "name": "Pawmot",
   "nationalPokedexNumber": 923,
+  "name": "Pawmot",
   "primaryType": "electric",
   "secondaryType": "fighting",
+  "maleRatio": 0.5,
+  "height": 9,
+  "weight": 410,
+  "pokedex": [
+    "cobblemon.species.pawmot.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "voltabsorb",
     "naturalcure",
     "h:ironfist"
+  ],
+  "eggGroups": [
+    "field"
   ],
   "baseStats": {
     "hp": 70,
@@ -16,10 +29,6 @@
     "special_defence": 60,
     "speed": 105
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 245,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -28,17 +37,26 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 245,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 15,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:cheri_berry",
+        "percentage": 10
+      }
+    ]
+  },
   "moves": [
-    "1:growl",
-    "1:scratch",
-    "1:wildcharge",
-    "1:armthrust",
     "1:revivalblessing",
+    "1:scratch",
+    "1:growl",
+    "1:wildcharge",
     "3:thundershock",
     "6:quickattack",
     "8:charge",
@@ -54,8 +72,14 @@
     "49:discharge",
     "54:agility",
     "60:doubleshock",
+    "egg:fakeout",
+    "egg:machpunch",
+    "egg:sweetkiss",
+    "egg:wish",
     "tm:agility",
+    "tm:armthrust",
     "tm:batonpass",
+    "tm:bite",
     "tm:bodypress",
     "tm:brickbreak",
     "tm:bulkup",
@@ -66,39 +90,52 @@
     "tm:coaching",
     "tm:crunch",
     "tm:dig",
+    "tm:discharge",
     "tm:doubleedge",
+    "tm:doubleshock",
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
     "tm:electroweb",
     "tm:encore",
     "tm:endure",
+    "tm:entrainment",
     "tm:facade",
+    "tm:fakeout",
     "tm:firepunch",
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:growl",
     "tm:helpinghand",
     "tm:hyperbeam",
     "tm:icepunch",
     "tm:knockoff",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:machpunch",
     "tm:metalclaw",
     "tm:metronome",
+    "tm:nuzzle",
     "tm:playrough",
     "tm:protect",
+    "tm:quickattack",
     "tm:raindance",
     "tm:rest",
+    "tm:revivalblessing",
     "tm:rocktomb",
+    "tm:scratch",
     "tm:seedbomb",
+    "tm:slam",
     "tm:sleeptalk",
+    "tm:spark",
     "tm:substitute",
     "tm:sunnyday",
     "tm:supercellslam",
     "tm:superfang",
+    "tm:sweetkiss",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
@@ -108,30 +145,13 @@
     "tm:thunderbolt",
     "tm:thunderfang",
     "tm:thunderpunch",
+    "tm:thundershock",
     "tm:thunderwave",
     "tm:upperhand",
     "tm:voltswitch",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tm:wish"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 9,
-  "weight": 410,
   "preEvolution": "pawmo",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.pawmot.desc"
-  ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:cheri_berry",
-        "percentage": 10.0
-      }
-    ]
-  }
+  "evolutions": []
 }

@@ -8,15 +8,85 @@
 - Added molang particle queries for getting distance to targeted entities.
 - Added debug renderer for poseable entity locators.
 - Added `baseScale` property to NPCs.
+- Added cry for Spinda.
 - Added the player to `PokerodReelEvent`.
 - Pokédex and Dialogue API screens now close when the inventory keybind is pressed.
 - Added Galarica Nuts, used for crafting Galarica Cuffs and Wreaths. Dropped from certain Pokémon.
 - Added specific compatibility with Repurposed Structures. (Thank you, TelepathicGrunt!)
+- Added an evolution method for Karrablast to evolve into Escavalier in single-player mode.
+- Pokédexes can now be placed in Chiseled Bookshelves.
+- Added crossover paintings from Close Combat, Premonition, Altar, Slumber, and Nomad.
 
 ### Changes
 - Pokémon will now be dynamically revealed to the Pokédex as they're seen instead of revealing entire parties at the end of battle regardless.
 - Unseen wild Pokémon will update their name from '???' to their real name as soon as a battle starts to reflect the battle UI showing the actual species name.
 - Pokémon under the illusion effect will reveal their disguise to the Pokédex first and then the base Pokémon once the disguise is broken.
+- Added more support for a variety of Fabric/NeoForge Convention tags.
+- Reformatted some tags to be more consistent.
+- Edited some recipes to utilize tags instead of direct item ids, for greater mod compatibility.
+- Berries will drop if broken at age 0
+- Improved Fortune drops on Mint Seeds
+- New Slowpoke shiny texture.
+- Updated drops for many Pokémon.
+
+### Pokémon Added
+
+#### Gen 5
+- Ducklett
+- Swanna
+- Shelmet
+- Accelgor
+- Karrablast
+- Escavalier
+- Rufflet
+- Braviary
+
+#### Gen 7
+- Dewpider
+- Araquanid
+
+#### Gen 8
+- Galarian Slowpoke
+- Galarian Slowbro
+- Galarian Slowking
+
+#### Gen 9
+- Paldean Tauros's
+
+### Animation updates for the following Pokémon
+- Primeape
+- Munchlax 
+- Snorlax
+- Poliwrath
+- Goldeen
+- Seaking
+- Dondozo
+- Wobbuffet
+- Charcadet
+- Armarouge
+- Ceruledge
+- Geodude
+- Graveler
+- Golem
+- Sandile
+- Krokorok
+- Krookodile
+
+### Model updates for the following Pokémon
+- Slowpoke
+- Slowbro
+- Slowking
+- Eiscue
+- Binacle
+- Barbaracle
+- Tauros
+- Goldeen
+- Seaking
+- Charcadet
+- Pinsir
+- Geodude
+- Graveler
+- Golem
 
 ### Fixes
 - Fixed Pokédex sometimes crashing when switching forms.
@@ -62,6 +132,30 @@
 - Fixed Wooloo variants not being automatically registered in the owner's Pokédex when dyed.
 - Fixed Vivichoke Dip and Leek and Potato Stew not returning a bowl upon consumption.
 - Fixed Fossil Restoration Machine not accepting Hay Bales.
+- Fixed Potion items so that they no longer apply over double their intended healing value.
+- Fixed Fast Ball capture rate applying to all Pokémon.
+- Fix "learned new move" messages appearing for already known moves on Pokémon evolutions.
+- Fix Pokémon Item Models breaking shadows nearby when being placed in Display Cases or Item Frames.
+
+### Molang & Datapacks  
+- Added flows for:
+  - `forme_change`: Triggered when a Pokémon changes form in battle.
+  - `mega_evolution`: Triggered when a Pokémon mega evolves in battle. (Note: Third party mods are required for this feature currently)
+  - `zpower_used`: Triggered when a Pokémon uses a Z-Power move in battle. (Note: Third party mods are required for this feature currently)
+  - `terastallization`: Triggered when a Pokémon terastallizes in battle. (Note: Third party mods are required for this feature currently)
+  - `battle_fainted`: Triggered when a Pokémon faints in battle.
+  - `battle_fled`: Triggered when a Player flees from battle.
+  - `battle_started_pre`: Triggered when a battle starts. Cancelable!
+  - `battle_started_post`: Triggered when a battle starts.
+  - `apricorn_harvested`: Triggered when an apricorn is harvested.
+  - `thrown_pokeball_hit`: Triggered when a thrown Pokéball hits a Pokémon.
+  - `level_up`: Triggered when a Pokémon levels up.
+  - `pokemon_fainted`: Triggered when a Pokémon faints.
+  - `pokemon_gained`: Triggered when a Player gains a Pokémon.
+- Added molang functions:
+  - For Pokémon:
+    - `pokemon.apply(PokemonProperties)`: Applies the given properties to the Pokémon.
+    - `pokemon.owner`: Returns the owner of the Pokémon or 0.0 if there is no owner or they are not online.
 
 ## [1.6.0 - The Record Catch Update (December 25th, 2024)](#1-6-0)
 #### "Now that there's a fishing mechanic, the mod is actually good!"

@@ -1,11 +1,26 @@
 {
   "implemented": true,
-  "name": "Cramorant",
   "nationalPokedexNumber": 845,
+  "name": "Cramorant",
   "primaryType": "flying",
   "secondaryType": "water",
+  "maleRatio": 0.5,
+  "height": 8,
+  "weight": 180,
+  "pokedex": [
+    "cobblemon.species.cramorant.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
-    "gulpmissile"
+    "gulpmissile",
+    "h:gulpmissile"
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
   ],
   "baseStats": {
     "hp": 70,
@@ -15,112 +30,61 @@
     "special_defence": 95,
     "speed": 85
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "forms": [
-    {
-      "name": "Gulping",
-      "primaryType": "flying",
-      "secondaryType": "water",
-      "abilities": [
-        "gulpmissile"
-      ],
-      "baseStats": {
-        "hp": 70,
-        "attack": 85,
-        "defence": 55,
-        "special_attack": 85,
-        "special_defence": 95,
-        "speed": 85
-      },
-      "catchRate": 45,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 166,
-      "baseFriendship": 50,
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 2,
-        "speed": 0
-      },
-      "experienceGroup": "medium_fast",
-      "eggCycles": 20,
-      "eggGroups": [
-        "water_1",
-        "flying"
-      ],
-      "labels": [
-        "gen8"
-      ],
-      "aspects": [
-        "gulping"
-      ],
-      "height": 8,
-      "weight": 180,
-      "cannotDynamax": false,
-      "battleOnly": true
-    },
-    {
-      "name": "Gorging",
-      "primaryType": "flying",
-      "secondaryType": "water",
-      "abilities": [
-        "gulpmissile"
-      ],
-      "baseStats": {
-        "hp": 70,
-        "attack": 85,
-        "defence": 55,
-        "special_attack": 85,
-        "special_defence": 95,
-        "speed": 85
-      },
-      "catchRate": 45,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 166,
-      "baseFriendship": 50,
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 2,
-        "speed": 0
-      },
-      "experienceGroup": "medium_fast",
-      "eggCycles": 20,
-      "eggGroups": [
-        "water_1",
-        "flying"
-      ],
-      "labels": [
-        "gen8"
-      ],
-      "aspects": [
-        "gorging"
-      ],
-      "height": 8,
-      "weight": 180,
-      "cannotDynamax": false,
-      "battleOnly": true
-    }
-  ],
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 2,
+    "speed": 0
+  },
   "baseExperienceYield": 166,
   "experienceGroup": "medium_fast",
+  "catchRate": 45,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "flying"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.6,
+    "height": 1.7,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
+      }
+    }
+  },
+  "drops": {
+    "amount": 6,
+    "entries": [
+      {
+        "item": "minecraft:feather",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "minecraft:chicken"
+      },
+      {
+        "item": "minecraft:cod",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:wacan_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
     "1:belch",
     "1:peck",
-    "1:spitup",
     "1:stockpile",
     "1:swallow",
+    "1:spitup",
     "7:watergun",
     "14:furyattack",
     "21:pluck",
@@ -141,18 +105,23 @@
     "tm:aircutter",
     "tm:airslash",
     "tm:amnesia",
+    "tm:aquacutter",
+    "tm:aquaring",
     "tm:assurance",
-    "tm:attract",
+    "tm:belch",
     "tm:blizzard",
     "tm:bravebird",
     "tm:chillingwater",
+    "tm:defog",
     "tm:dive",
+    "tm:drillpeck",
     "tm:dualwingbeat",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:featherdance",
     "tm:fly",
+    "tm:furyattack",
     "tm:gigaimpact",
     "tm:hurricane",
     "tm:hydropump",
@@ -160,74 +129,307 @@
     "tm:icebeam",
     "tm:icywind",
     "tm:liquidation",
+    "tm:peck",
+    "tm:pluck",
     "tm:pounce",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
     "tm:reversal",
-    "tm:round",
-    "tm:scald",
+    "tm:roost",
     "tm:sleeptalk",
-    "tm:snore",
+    "tm:spitup",
     "tm:steelwing",
+    "tm:stockpile",
     "tm:substitute",
     "tm:superpower",
     "tm:surf",
+    "tm:swallow",
     "tm:tailwind",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
+    "tm:thrash",
     "tm:throatchop",
     "tm:uproar",
+    "tm:watergun",
     "tm:waterpulse",
     "tm:weatherball",
-    "tm:whirlpool",
-    "tutor:dualwingbeat"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.cramorant.desc"
+    "tm:whirlpool"
   ],
   "evolutions": [],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.6,
-    "height": 1.7,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 2,
-    "speed": 0
-  },
-  "height": 8,
-  "weight": 180,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 6,
-    "entries": [
-      {
-        "item": "minecraft:feather",
-        "quantityRange": "0-2"
+  "forms": [
+    {
+      "name": "Gulping",
+      "primaryType": "flying",
+      "secondaryType": "water",
+      "maleRatio": 0.5,
+      "height": 8,
+      "weight": 180,
+      "pokedex": [
+        "cobblemon.species.cramorant-gulping.desc"
+      ],
+      "labels": [
+        "gen8"
+      ],
+      "aspects": [
+        "gulping-form"
+      ],
+      "abilities": [
+        "gulpmissile",
+        "h:gulpmissile"
+      ],
+      "eggGroups": [
+        "water_1",
+        "flying"
+      ],
+      "baseStats": {
+        "hp": 70,
+        "attack": 85,
+        "defence": 55,
+        "special_attack": 85,
+        "special_defence": 95,
+        "speed": 85
       },
-      {
-        "item": "minecraft:chicken"
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 2,
+        "speed": 0
       },
-      {
-        "item": "minecraft:cod",
-        "quantityRange": "0-2"
+      "baseExperienceYield": 166,
+      "experienceGroup": "medium_fast",
+      "catchRate": 45,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "canSwimInWater": true,
+            "canSwimInLava": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        }
       },
-      {
-        "item": "cobblemon:wacan_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+      "moves": [
+        "1:belch",
+        "1:peck",
+        "1:stockpile",
+        "1:swallow",
+        "1:spitup",
+        "7:watergun",
+        "14:furyattack",
+        "21:pluck",
+        "28:dive",
+        "35:drillpeck",
+        "42:amnesia",
+        "49:thrash",
+        "56:hydropump",
+        "egg:aerialace",
+        "egg:aquacutter",
+        "egg:aquaring",
+        "egg:defog",
+        "egg:featherdance",
+        "egg:roost",
+        "tm:acrobatics",
+        "tm:aerialace",
+        "tm:agility",
+        "tm:aircutter",
+        "tm:airslash",
+        "tm:amnesia",
+        "tm:aquacutter",
+        "tm:aquaring",
+        "tm:assurance",
+        "tm:belch",
+        "tm:blizzard",
+        "tm:bravebird",
+        "tm:chillingwater",
+        "tm:defog",
+        "tm:dive",
+        "tm:drillpeck",
+        "tm:dualwingbeat",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:facade",
+        "tm:featherdance",
+        "tm:fly",
+        "tm:furyattack",
+        "tm:gigaimpact",
+        "tm:hurricane",
+        "tm:hydropump",
+        "tm:hyperbeam",
+        "tm:icebeam",
+        "tm:icywind",
+        "tm:liquidation",
+        "tm:peck",
+        "tm:pluck",
+        "tm:pounce",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rest",
+        "tm:reversal",
+        "tm:roost",
+        "tm:sleeptalk",
+        "tm:spitup",
+        "tm:steelwing",
+        "tm:stockpile",
+        "tm:substitute",
+        "tm:superpower",
+        "tm:surf",
+        "tm:swallow",
+        "tm:tailwind",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:thief",
+        "tm:thrash",
+        "tm:throatchop",
+        "tm:uproar",
+        "tm:watergun",
+        "tm:waterpulse",
+        "tm:weatherball",
+        "tm:whirlpool"
+      ],
+      "evolutions": [],
+      "battleOnly": true
+    },
+    {
+      "name": "Gorging",
+      "primaryType": "flying",
+      "secondaryType": "water",
+      "maleRatio": 0.5,
+      "height": 8,
+      "weight": 180,
+      "pokedex": [
+        "cobblemon.species.cramorant-gorging.desc"
+      ],
+      "labels": [
+        "gen8"
+      ],
+      "aspects": [
+        "gorging-form"
+      ],
+      "abilities": [
+        "gulpmissile",
+        "h:gulpmissile"
+      ],
+      "eggGroups": [
+        "water_1",
+        "flying"
+      ],
+      "baseStats": {
+        "hp": 70,
+        "attack": 85,
+        "defence": 55,
+        "special_attack": 85,
+        "special_defence": 95,
+        "speed": 85
+      },
+      "evYield": {
+        "hp": 0,
+        "attack": 0,
+        "defence": 0,
+        "special_attack": 0,
+        "special_defence": 2,
+        "speed": 0
+      },
+      "baseExperienceYield": 166,
+      "experienceGroup": "medium_fast",
+      "catchRate": 45,
+      "eggCycles": 20,
+      "baseFriendship": 50,
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "canSwimInWater": true,
+            "canSwimInLava": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        }
+      },
+      "moves": [
+        "1:belch",
+        "1:peck",
+        "1:stockpile",
+        "1:swallow",
+        "1:spitup",
+        "7:watergun",
+        "14:furyattack",
+        "21:pluck",
+        "28:dive",
+        "35:drillpeck",
+        "42:amnesia",
+        "49:thrash",
+        "56:hydropump",
+        "egg:aerialace",
+        "egg:aquacutter",
+        "egg:aquaring",
+        "egg:defog",
+        "egg:featherdance",
+        "egg:roost",
+        "tm:acrobatics",
+        "tm:aerialace",
+        "tm:agility",
+        "tm:aircutter",
+        "tm:airslash",
+        "tm:amnesia",
+        "tm:aquacutter",
+        "tm:aquaring",
+        "tm:assurance",
+        "tm:belch",
+        "tm:blizzard",
+        "tm:bravebird",
+        "tm:chillingwater",
+        "tm:defog",
+        "tm:dive",
+        "tm:drillpeck",
+        "tm:dualwingbeat",
+        "tm:endeavor",
+        "tm:endure",
+        "tm:facade",
+        "tm:featherdance",
+        "tm:fly",
+        "tm:furyattack",
+        "tm:gigaimpact",
+        "tm:hurricane",
+        "tm:hydropump",
+        "tm:hyperbeam",
+        "tm:icebeam",
+        "tm:icywind",
+        "tm:liquidation",
+        "tm:peck",
+        "tm:pluck",
+        "tm:pounce",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rest",
+        "tm:reversal",
+        "tm:roost",
+        "tm:sleeptalk",
+        "tm:spitup",
+        "tm:steelwing",
+        "tm:stockpile",
+        "tm:substitute",
+        "tm:superpower",
+        "tm:surf",
+        "tm:swallow",
+        "tm:tailwind",
+        "tm:takedown",
+        "tm:terablast",
+        "tm:thief",
+        "tm:thrash",
+        "tm:throatchop",
+        "tm:uproar",
+        "tm:watergun",
+        "tm:waterpulse",
+        "tm:weatherball",
+        "tm:whirlpool"
+      ],
+      "evolutions": [],
+      "battleOnly": true
+    }
+  ]
 }

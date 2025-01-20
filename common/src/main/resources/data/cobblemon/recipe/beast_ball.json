@@ -7,7 +7,7 @@
     ],
     "key": {
         "G": {
-            "item": "minecraft:gold_ingot"
+            "tag": "c:ingots/gold"
         },
         "E": {
             "item": "minecraft:echo_shard"

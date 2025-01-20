@@ -1,10 +1,27 @@
 {
-  "name": "Runerigus",
   "nationalPokedexNumber": 867,
+  "name": "Runerigus",
   "primaryType": "ground",
   "secondaryType": "ghost",
+  "maleRatio": 0.5,
+  "height": 16,
+  "weight": 666,
+  "pokedex": [
+    "cobblemon.species.runerigus.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [
+    "galarian"
+  ],
   "abilities": [
-    "wanderingspirit"
+    "wanderingspirit",
+    "h:wanderingspirit"
+  ],
+  "eggGroups": [
+    "mineral",
+    "amorphous"
   ],
   "baseStats": {
     "hp": 58,
@@ -14,22 +31,42 @@
     "special_defence": 105,
     "speed": 30
   },
-  "catchRate": 90,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 2,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 169,
   "experienceGroup": "medium_fast",
+  "catchRate": 90,
   "eggCycles": 25,
-  "eggGroups": [
-    "mineral",
-    "amorphous"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:kasib_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
+    "1:shadowclaw",
+    "1:scaryface",
     "1:astonish",
+    "1:protect",
     "1:haze",
     "1:nightshade",
-    "1:protect",
-    "1:scaryface",
     "12:disable",
     "16:brutalswing",
     "20:craftyshield",
@@ -39,17 +76,22 @@
     "38:curse",
     "44:shadowball",
     "50:earthquake",
-    "56:guardsplit",
     "56:powersplit",
+    "56:guardsplit",
     "62:destinybond",
+    "egg:memento",
     "tm:allyswitch",
     "tm:amnesia",
-    "tm:attract",
+    "tm:astonish",
     "tm:bodypress",
     "tm:brutalswing",
     "tm:bulldoze",
     "tm:calmmind",
+    "tm:craftyshield",
+    "tm:curse",
     "tm:darkpulse",
+    "tm:destinybond",
+    "tm:disable",
     "tm:dragonpulse",
     "tm:earthpower",
     "tm:earthquake",
@@ -59,14 +101,21 @@
     "tm:faketears",
     "tm:gigaimpact",
     "tm:grassknot",
+    "tm:guardsplit",
     "tm:guardswap",
+    "tm:haze",
     "tm:hex",
     "tm:hyperbeam",
     "tm:imprison",
     "tm:irondefense",
+    "tm:meanlook",
+    "tm:memento",
     "tm:nastyplot",
+    "tm:nightshade",
     "tm:payback",
     "tm:phantomforce",
+    "tm:poltergeist",
+    "tm:powersplit",
     "tm:powerswap",
     "tm:protect",
     "tm:psychic",
@@ -76,7 +125,6 @@
     "tm:rockblast",
     "tm:rockslide",
     "tm:rocktomb",
-    "tm:round",
     "tm:safeguard",
     "tm:sandstorm",
     "tm:sandtomb",
@@ -84,55 +132,21 @@
     "tm:shadowball",
     "tm:shadowclaw",
     "tm:skillswap",
+    "tm:slam",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:stealthrock",
     "tm:stoneedge",
     "tm:substitute",
     "tm:taunt",
+    "tm:terablast",
     "tm:thief",
     "tm:toxicspikes",
     "tm:trick",
     "tm:trickroom",
     "tm:willowisp",
     "tm:wonderroom",
-    "tm:zenheadbutt",
-    "tutor:poltergeist"
-  ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.runerigus.desc"
+    "tm:zenheadbutt"
   ],
   "preEvolution": "yamask galarian",
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 2,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 16,
-  "weight": 666,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:kasib_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

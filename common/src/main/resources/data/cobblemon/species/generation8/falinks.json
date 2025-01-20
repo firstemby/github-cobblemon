@@ -1,25 +1,26 @@
 {
   "implemented": true,
-  "name": "Falinks",
   "nationalPokedexNumber": 870,
+  "name": "Falinks",
   "primaryType": "fighting",
+  "maleRatio": -1,
+  "height": 30,
+  "weight": 620,
+  "pokedex": [
+    "cobblemon.species.falinks.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "battlearmor",
     "h:defiant"
   ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:golden_helmet",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:nanab_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "fairy",
+    "mineral"
+  ],
   "baseStats": {
     "hp": 65,
     "attack": 100,
@@ -27,6 +28,25 @@
     "special_attack": 70,
     "special_defence": 60,
     "speed": 75
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 1,
+    "speed": 0
+  },
+  "baseExperienceYield": 165,
+  "experienceGroup": "medium_fast",
+  "catchRate": 45,
+  "eggCycles": 25,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 2,
+    "height": 0.8,
+    "fixed": false
   },
   "behaviour": {
     "moving": {
@@ -36,19 +56,22 @@
       }
     }
   },
-  "catchRate": 45,
-  "maleRatio": -1,
-  "shoulderMountable": false,
-  "baseExperienceYield": 165,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 25,
-  "eggGroups": [
-    "fairy",
-    "mineral"
-  ],
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:golden_helmet",
+        "percentage": 5
+      },
+      {
+        "item": "cobblemon:nanab_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:protect",
     "1:tackle",
+    "1:protect",
     "5:rocksmash",
     "10:focusenergy",
     "15:headbutt",
@@ -70,13 +93,16 @@
     "tm:bulkup",
     "tm:closecombat",
     "tm:coaching",
+    "tm:counter",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:firstimpression",
     "tm:focusblast",
     "tm:focusenergy",
     "tm:gigaimpact",
+    "tm:headbutt",
     "tm:helpinghand",
     "tm:highhorsepower",
     "tm:hyperbeam",
@@ -85,6 +111,7 @@
     "tm:knockoff",
     "tm:lunge",
     "tm:megahorn",
+    "tm:noretreat",
     "tm:payback",
     "tm:poisonjab",
     "tm:protect",
@@ -95,49 +122,23 @@
     "tm:revenge",
     "tm:reversal",
     "tm:rockslide",
+    "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
     "tm:screech",
     "tm:sleeptalk",
     "tm:smartstrike",
-    "tm:snore",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
     "tm:swordsdance",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:throatchop",
     "tm:trailblaze",
     "tm:upperhand",
     "tm:uproar",
-    "tm:zenheadbutt",
-    "tutor:coaching"
+    "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.falinks.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 2,
-    "height": 0.8,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 1,
-    "speed": 0
-  },
-  "height": 30,
-  "weight": 620,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

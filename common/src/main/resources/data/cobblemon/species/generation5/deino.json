@@ -1,12 +1,54 @@
 {
   "implemented": true,
-  "name": "Deino",
   "nationalPokedexNumber": 633,
+  "name": "Deino",
   "primaryType": "dark",
   "secondaryType": "dragon",
-  "abilities": [
-    "hustle"
+  "maleRatio": 0.5,
+  "height": 8,
+  "weight": 173,
+  "pokedex": [
+    "cobblemon.species.deino.desc"
   ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
+  "abilities": [
+    "hustle",
+    "h:hustle"
+  ],
+  "eggGroups": [
+    "dragon"
+  ],
+  "baseStats": {
+    "hp": 52,
+    "attack": 65,
+    "defence": 50,
+    "special_attack": 45,
+    "special_defence": 50,
+    "speed": 38
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 60,
+  "experienceGroup": "slow",
+  "catchRate": 45,
+  "eggCycles": 40,
+  "baseFriendship": 35,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.85,
+    "height": 1.4,
+    "fixed": false
+  },
+  "behaviour": {},
   "drops": {
     "amount": 2,
     "entries": [
@@ -20,27 +62,10 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 52,
-    "attack": 65,
-    "defence": 50,
-    "special_attack": 45,
-    "special_defence": 50,
-    "speed": 38
-  },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 60,
-  "experienceGroup": "slow",
-  "eggCycles": 40,
-  "eggGroups": [
-    "dragon"
-  ],
   "moves": [
+    "1:tackle",
     "1:dragonrage",
     "1:focusenergy",
-    "1:tackle",
     "4:dragonbreath",
     "8:bite",
     "12:roar",
@@ -56,35 +81,33 @@
     "52:dragonrush",
     "56:nastyplot",
     "60:outrage",
-    "egg:assurance",
     "egg:astonish",
     "egg:belch",
-    "egg:darkpulse",
     "egg:doublehit",
-    "egg:earthpower",
-    "egg:firefang",
     "egg:headsmash",
-    "egg:icefang",
-    "egg:screech",
-    "egg:thunderfang",
+    "tm:aquatail",
     "tm:assurance",
-    "tm:attract",
+    "tm:astonish",
+    "tm:belch",
+    "tm:bite",
     "tm:bodyslam",
-    "tm:confide",
     "tm:crunch",
     "tm:darkpulse",
-    "tm:doubleteam",
+    "tm:doublehit",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonpulse",
+    "tm:dragonrage",
+    "tm:dragonrush",
     "tm:dragontail",
     "tm:earthpower",
     "tm:endure",
     "tm:facade",
     "tm:firefang",
     "tm:focusenergy",
-    "tm:frustration",
-    "tm:hiddenpower",
+    "tm:headbutt",
+    "tm:headsmash",
     "tm:hypervoice",
     "tm:icefang",
     "tm:incinerate",
@@ -94,22 +117,20 @@
     "tm:psychup",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rocksmash",
-    "tm:round",
     "tm:scaryface",
     "tm:screech",
-    "tm:secretpower",
+    "tm:shockwave",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:snarl",
-    "tm:snore",
     "tm:spite",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:swagger",
+    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -117,32 +138,8 @@
     "tm:thunderfang",
     "tm:thunderwave",
     "tm:torment",
-    "tm:toxic",
-    "tm:uproar",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:aquatail",
-    "tutor:darkpulse",
-    "tutor:dracometeor",
-    "tutor:dragonpulse",
-    "tutor:dragonrage",
-    "tutor:earthpower",
-    "tutor:hypervoice",
-    "tutor:outrage",
-    "tutor:shockwave",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:superpower",
-    "tutor:tackle",
-    "tutor:uproar",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.deino.desc"
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -158,24 +155,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.85,
-    "height": 1.4,
-    "fixed": false
-  },
-  "baseFriendship": 35,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 8,
-  "weight": 173,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

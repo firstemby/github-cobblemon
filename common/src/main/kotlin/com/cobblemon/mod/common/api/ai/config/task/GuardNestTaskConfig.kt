@@ -48,9 +48,10 @@ class GuardNestTaskConfig : SingleTaskConfig {
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.registered(MemoryModuleType.NEAREST_VISIBLE_PLAYER), // if player is invisible they do not patrol
-                it.absent(MemoryModuleType.ANGRY_AT),
-                it.absent(MemoryModuleType.ATTACK_TARGET)
-            ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt, attackTarget ->
+                it.registered(MemoryModuleType.ANGRY_AT),
+                it.absent(MemoryModuleType.ATTACK_TARGET),
+                it.registered(CobblemonMemories.IRRITATED_AT)
+            ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt, attackTarget, irritatedAt ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity) return@Trigger false
 
@@ -64,14 +65,51 @@ class GuardNestTaskConfig : SingleTaskConfig {
                     // todo maybe cancel task if player is close to nest and set angry at task to that player
                     val nearestPlayerOptional = entity.brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER)
                     val player = nearestPlayerOptional.orElse(null) as? ServerPlayer
+                    val irritatedAtTarget = entity.brain.getMemory(CobblemonMemories.IRRITATED_AT)
+
                     if (player != null) {
-                        // Cancel task if a player is within 8 blocks of the nest and get mad at them
-                        if (player.position().distanceToSqr(nestCenter) <= 8 * 8) {
-                            // Pokémon cries to indicate behavior change
+                        val playerDistanceSquared = player.position().distanceToSqr(nestCenter)
+
+                        if (!irritatedAtTarget.isPresent && playerDistanceSquared <= 15 * 15) {
+                            // Player is within 15 blocks, set angry and cry
                             entity.cry()
+
+                            // set irritated at target to player near egg
+                            irritatedAt.set(player.uuid)
+
+                            // Display angry particles above parent
+                            (world as net.minecraft.server.level.ServerLevel).sendParticles(
+                                    net.minecraft.core.particles.ParticleTypes.ANGRY_VILLAGER,
+                                    entity.getRandomX(1.0), // Particle X position with slight randomness
+                                    entity.getRandomY() + 0.5, // Slightly raised Y position
+                                    entity.getRandomZ(1.0), // Particle Z position with slight randomness
+                                    4 + kotlin.random.Random.nextInt(2), // Particle count
+                                    0.2 * entity.random.nextGaussian(), // X velocity with slight variance
+                                    0.1 * entity.random.nextGaussian(), // Y velocity with upwards variance
+                                    0.2 * entity.random.nextGaussian(), // Z velocity with slight variance
+                                    0.02 // Particle speed
+                            )
+                        }
+
+                        if (playerDistanceSquared <= 8 * 8) {
+                            // Player is within 8 blocks, attack
+                            entity.cry()
+
+                            // Display angry particles above parent
+                            (world as net.minecraft.server.level.ServerLevel).sendParticles(
+                                    net.minecraft.core.particles.ParticleTypes.ANGRY_VILLAGER,
+                                    entity.getRandomX(1.0), // Particle X position with slight randomness
+                                    entity.getRandomY() + 0.5, // Slightly raised Y position
+                                    entity.getRandomZ(1.0), // Particle Z position with slight randomness
+                                    4 + kotlin.random.Random.nextInt(2), // Particle count
+                                    0.2 * entity.random.nextGaussian(), // X velocity with slight variance
+                                    0.1 * entity.random.nextGaussian(), // Y velocity with upwards variance
+                                    0.2 * entity.random.nextGaussian(), // Z velocity with slight variance
+                                    0.02 // Particle speed
+                            )
                             angryAt.set(player.uuid)
                             attackTarget.set(player)
-                            return@Trigger false
+                            return@Trigger false // Cancel the task
                         }
                     }
 

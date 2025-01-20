@@ -33,8 +33,8 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     override val rightLeg = getPart("leg_right")
     override val leftLeg = getPart("leg_left")
 
-    override var portraitScale = 2.5F
-    override var portraitTranslation = Vec3(-0.15, -0.45, 0.0)
+    override var portraitScale = 1.7F
+    override var portraitTranslation = Vec3(-0.15, 0.08, 0.0)
 
     override var profileScale = 0.8F
     override var profileTranslation = Vec3(0.0, 0.6, 0.0)

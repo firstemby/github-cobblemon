@@ -1,23 +1,27 @@
 {
   "implemented": true,
-  "name": "Grafaiai",
   "nationalPokedexNumber": 945,
+  "name": "Grafaiai",
   "primaryType": "poison",
   "secondaryType": "normal",
+  "maleRatio": 0.5,
+  "height": 7,
+  "weight": 272,
+  "pokedex": [
+    "cobblemon.species.grafaiai.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "unburden",
     "poisontouch",
     "h:prankster"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:nanab_berry",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field"
+  ],
   "baseStats": {
     "hp": 63,
     "attack": 95,
@@ -26,10 +30,6 @@
     "special_defence": 72,
     "speed": 110
   },
-  "catchRate": 90,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 170,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -38,16 +38,20 @@
     "special_defence": 0,
     "speed": 2
   },
+  "baseExperienceYield": 170,
   "experienceGroup": "medium_slow",
+  "catchRate": 90,
   "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.8,
+    "height": 1.1,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     },
     "moving": {
@@ -56,10 +60,20 @@
       }
     }
   },
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:nanab_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:leer",
-    "1:scratch",
     "1:doodle",
+    "1:scratch",
+    "1:leer",
+    "1:bite",
     "5:acidspray",
     "8:furyswipes",
     "11:switcheroo",
@@ -72,27 +86,42 @@
     "40:substitute",
     "45:knockoff",
     "51:gunkshot",
+    "egg:copycat",
+    "egg:crosspoison",
+    "egg:partingshot",
+    "egg:superfang",
+    "egg:swagger",
+    "egg:toxic",
     "tm:acidspray",
     "tm:acrobatics",
     "tm:batonpass",
+    "tm:bite",
+    "tm:copycat",
+    "tm:crosspoison",
     "tm:dig",
+    "tm:doodle",
     "tm:doubleedge",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:flatter",
     "tm:fling",
     "tm:foulplay",
+    "tm:furyswipes",
     "tm:gigaimpact",
     "tm:gunkshot",
     "tm:helpinghand",
     "tm:knockoff",
+    "tm:leer",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:metronome",
     "tm:mudshot",
     "tm:mudslap",
     "tm:nastyplot",
+    "tm:partingshot",
+    "tm:poisonfang",
     "tm:poisonjab",
     "tm:poisontail",
     "tm:pounce",
@@ -101,14 +130,18 @@
     "tm:raindance",
     "tm:rest",
     "tm:scaryface",
+    "tm:scratch",
     "tm:shadowclaw",
     "tm:skittersmack",
+    "tm:slash",
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:sludgewave",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superfang",
+    "tm:swagger",
+    "tm:switcheroo",
     "tm:swordsdance",
     "tm:takedown",
     "tm:taunt",
@@ -121,22 +154,6 @@
     "tm:venoshock",
     "tm:xscissor"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 7,
-  "weight": 272,
   "preEvolution": "shroodle",
-  "evolutions": [],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.8,
-    "height": 1.1,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.grafaiai.desc"
-  ]
+  "evolutions": []
 }

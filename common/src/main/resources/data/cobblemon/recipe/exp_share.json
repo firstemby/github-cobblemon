@@ -7,16 +7,16 @@
     ],
     "key": {
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "G": {
-            "item": "minecraft:amethyst_shard"
+            "tag": "c:gems/amethyst"
         },
         "C": {
-            "item": "minecraft:gold_ingot"
+            "tag": "c:ingots/gold"
         },
         "L": {
-            "item": "minecraft:lapis_lazuli"
+            "tag": "c:gems/lapis"
         },
         "H": {
             "item": "minecraft:iron_helmet"

@@ -7,16 +7,16 @@
     ],
     "key": {
         "W": {
-            "item": "minecraft:white_dye"
+            "tag": "c:dyes/white"
         },
         "R": {
-            "item": "minecraft:red_dye"
+            "tag": "c:dyes/red"
         },
         "P": {
             "item": "minecraft:paper"
         },
         "G": {
-            "item": "minecraft:gray_dye"
+            "tag": "c:dyes/gray"
         }
     },
     "result": {

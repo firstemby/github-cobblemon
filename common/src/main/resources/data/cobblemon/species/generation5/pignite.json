@@ -1,26 +1,26 @@
 {
   "implemented": true,
-  "name": "Pignite",
   "nationalPokedexNumber": 499,
+  "name": "Pignite",
   "primaryType": "fire",
   "secondaryType": "fighting",
+  "maleRatio": 0.875,
+  "height": 10,
+  "weight": 555,
+  "pokedex": [
+    "cobblemon.species.pignite.desc"
+  ],
+  "labels": [
+    "gen5"
+  ],
+  "aspects": [],
   "abilities": [
     "blaze",
     "h:thickfat"
   ],
-  "drops": {
-    "amount": 4,
-    "entries": [
-      {
-        "item": "minecraft:porkchop",
-        "quantityRange": "1-3"
-      },
-      {
-        "item": "cobblemon:charcoal_stick",
-        "percentage": 10.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field"
+  ],
   "baseStats": {
     "hp": 90,
     "attack": 93,
@@ -28,6 +28,25 @@
     "special_attack": 70,
     "special_defence": 55,
     "speed": 55
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 146,
+  "experienceGroup": "medium_slow",
+  "catchRate": 45,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.85,
+  "hitbox": {
+    "width": 1,
+    "height": 1.5,
+    "fixed": false
   },
   "behaviour": {
     "moving": {
@@ -40,27 +59,29 @@
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
-  "baseExperienceYield": 146,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field"
-  ],
+  "drops": {
+    "amount": 4,
+    "entries": [
+      {
+        "item": "minecraft:porkchop",
+        "quantityRange": "1-3"
+      },
+      {
+        "item": "cobblemon:charcoal_stick",
+        "percentage": 10
+      }
+    ]
+  },
   "moves": [
-    "1:armthrust",
-    "1:ember",
-    "1:endure",
-    "1:odorsleuth",
     "1:tackle",
     "1:tailwhip",
+    "1:ember",
+    "1:odorsleuth",
+    "1:armthrust",
+    "1:endure",
     "13:defensecurl",
     "15:flamecharge",
     "20:smog",
@@ -72,20 +93,29 @@
     "44:headsmash",
     "47:roar",
     "52:flareblitz",
-    "tm:attract",
+    "egg:burnup",
+    "egg:magnitude",
+    "egg:suckerpunch",
+    "egg:superpower",
+    "egg:thrash",
+    "egg:yawn",
+    "tm:armthrust",
+    "tm:assurance",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulkup",
     "tm:bulldoze",
+    "tm:burnup",
     "tm:closecombat",
     "tm:coaching",
-    "tm:confide",
+    "tm:covet",
     "tm:curse",
+    "tm:defensecurl",
     "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:drainpunch",
     "tm:echoedvoice",
+    "tm:ember",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
@@ -99,74 +129,58 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:frustration",
     "tm:grassknot",
     "tm:gyroball",
+    "tm:headsmash",
     "tm:heatcrash",
     "tm:heatwave",
     "tm:heavyslam",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:highhorsepower",
     "tm:incinerate",
+    "tm:irontail",
     "tm:knockoff",
     "tm:lowkick",
     "tm:lowsweep",
+    "tm:magnitude",
     "tm:mudslap",
+    "tm:odorsleuth",
     "tm:overheat",
     "tm:poisonjab",
     "tm:poweruppunch",
     "tm:protect",
     "tm:rest",
-    "tm:return",
     "tm:reversal",
     "tm:roar",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
+    "tm:rollout",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:sleeptalk",
+    "tm:smog",
     "tm:solarbeam",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:superpower",
+    "tm:tackle",
+    "tm:tailwhip",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
     "tm:terablast",
+    "tm:thrash",
     "tm:thunderpunch",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:wildcharge",
     "tm:willowisp",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:covet",
-    "tutor:endeavor",
-    "tutor:firepledge",
-    "tutor:firepunch",
-    "tutor:focuspunch",
-    "tutor:heatwave",
-    "tutor:helpinghand",
-    "tutor:irontail",
-    "tutor:lowkick",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:stompingtantrum",
-    "tutor:superpower",
-    "tutor:thunderpunch",
-    "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen5"
-  ],
-  "pokedex": [
-    "cobblemon.species.pignite.desc"
+    "tm:yawn",
+    "tm:zenheadbutt"
   ],
   "preEvolution": "tepig",
   "evolutions": [
@@ -183,24 +197,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.85,
-  "hitbox": {
-    "width": 1,
-    "height": 1.5,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 10,
-  "weight": 555,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

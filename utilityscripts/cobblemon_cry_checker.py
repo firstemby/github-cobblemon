@@ -44,9 +44,9 @@ def main(print_missing_models=True, print_missing_animations=True):
     gen_numbers = df.iloc[3:, 0]  # Column A
     dex_numbers = df.iloc[3:, 1]  # Column B
     pokemon_names = df.iloc[3:, 2]  # Column C
-    pokemon_in_game = df.iloc[3:, 7]  # Column H
-    cries_on_repo = df.iloc[3:, 53]  # Column BB
-    cries_in_game = df.iloc[3:, 54]  # Column BC [Cry Audio | In-Game]
+    pokemon_in_game = df.iloc[3:, 6]  # Column G
+    cries_on_repo = df.iloc[3:, 52]  # Column BA
+    cries_in_game = df.iloc[3:, 53]  # Column BB [Cry Audio | In-Game]
 
     # Initialize lists for false positives and negatives
     false_positives = []

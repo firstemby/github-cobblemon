@@ -1,12 +1,25 @@
 {
   "implemented": true,
-  "name": "Sandygast",
   "nationalPokedexNumber": 769,
+  "name": "Sandygast",
   "primaryType": "ghost",
   "secondaryType": "ground",
+  "maleRatio": 0.5,
+  "height": 5,
+  "weight": 700,
+  "pokedex": [
+    "cobblemon.species.sandygast.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
     "watercompaction",
     "h:sandveil"
+  ],
+  "eggGroups": [
+    "amorphous"
   ],
   "baseStats": {
     "hp": 55,
@@ -16,18 +29,46 @@
     "special_defence": 45,
     "speed": 15
   },
-  "catchRate": 140,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 1,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 64,
   "experienceGroup": "medium_fast",
+  "catchRate": 140,
   "eggCycles": 15,
-  "eggGroups": [
-    "amorphous"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.9,
+    "fixed": false
+  },
+  "behaviour": {},
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:sand",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "cobblemon:soft_sand",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:passho_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:absorb",
     "1:harden",
+    "1:absorb",
     "5:astonish",
     "10:sandtomb",
     "15:megadrain",
@@ -40,22 +81,24 @@
     "50:earthpower",
     "55:shoreup",
     "60:sandstorm",
-    "egg:amnesia",
     "egg:ancientpower",
     "egg:curse",
     "egg:destinybond",
     "egg:spitup",
     "egg:stockpile",
     "egg:swallow",
+    "tm:absorb",
+    "tm:afteryou",
     "tm:amnesia",
-    "tm:attract",
+    "tm:ancientpower",
+    "tm:astonish",
+    "tm:block",
     "tm:brine",
     "tm:bulldoze",
     "tm:chillingwater",
-    "tm:confide",
     "tm:confuseray",
     "tm:curse",
-    "tm:doubleteam",
+    "tm:destinybond",
     "tm:earthpower",
     "tm:earthquake",
     "tm:endure",
@@ -63,14 +106,15 @@
     "tm:facade",
     "tm:flashcannon",
     "tm:fling",
-    "tm:frustration",
     "tm:gigadrain",
     "tm:gravity",
+    "tm:harden",
     "tm:hex",
-    "tm:hiddenpower",
+    "tm:hypnosis",
     "tm:imprison",
     "tm:infestation",
     "tm:irondefense",
+    "tm:megadrain",
     "tm:mudshot",
     "tm:mudslap",
     "tm:nightshade",
@@ -79,52 +123,32 @@
     "tm:protect",
     "tm:psychic",
     "tm:raindance",
+    "tm:recycle",
     "tm:rest",
-    "tm:return",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocktomb",
-    "tm:round",
+    "tm:roleplay",
+    "tm:sandattack",
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:scaryface",
     "tm:scorchingsands",
     "tm:shadowball",
+    "tm:shoreup",
     "tm:skillswap",
     "tm:sleeptalk",
     "tm:sludgebomb",
-    "tm:snore",
     "tm:spite",
+    "tm:spitup",
     "tm:stealthrock",
+    "tm:stockpile",
     "tm:stoneedge",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
+    "tm:swallow",
     "tm:terablast",
-    "tm:toxic",
-    "tm:trick",
-    "tutor:afteryou",
-    "tutor:block",
-    "tutor:earthpower",
-    "tutor:gigadrain",
-    "tutor:gravity",
-    "tutor:irondefense",
-    "tutor:painsplit",
-    "tutor:poltergeist",
-    "tutor:recycle",
-    "tutor:roleplay",
-    "tutor:scorchingsands",
-    "tutor:skillswap",
-    "tutor:snore",
-    "tutor:spite",
-    "tutor:stealthrock",
-    "tutor:trick"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.sandygast.desc"
+    "tm:trick"
   ],
   "evolutions": [
     {
@@ -140,37 +164,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.9,
-    "height": 0.9,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 1,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 5,
-  "weight": 700,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "cobblemon:soft_sand",
-        "percentage": 2.5
-      },
-      {
-        "item": "cobblemon:passho_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

@@ -7,7 +7,7 @@
     ],
     "key": {
         "S": {
-            "tag": "cobblemon:seeds"
+            "tag": "minecraft:parrot_food"
         },
         "L": {
             "item": "cobblemon:leaf_stone"

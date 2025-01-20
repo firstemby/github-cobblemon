@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Sealeo",
   "nationalPokedexNumber": 364,
+  "name": "Sealeo",
   "primaryType": "ice",
   "secondaryType": "water",
+  "maleRatio": 0.5,
+  "height": 11,
+  "weight": 876,
+  "pokedex": [
+    "cobblemon.species.sealeo.desc"
+  ],
+  "labels": [
+    "gen3"
+  ],
+  "aspects": [],
   "abilities": [
     "thickfat",
     "icebody",
     "h:oblivious"
+  ],
+  "eggGroups": [
+    "water_1",
+    "field"
   ],
   "baseStats": {
     "hp": 90,
@@ -17,32 +31,55 @@
     "special_defence": 70,
     "speed": 45
   },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 2,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 144,
   "experienceGroup": "medium_slow",
+  "catchRate": 120,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1.35,
+  "hitbox": {
+    "width": 1.1,
+    "height": 1.1,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "swim": {
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       }
     }
   },
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:cod",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:chesto_berry",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:defensecurl",
     "1:growl",
-    "1:rollout",
-    "1:swagger",
     "1:watergun",
+    "1:rollout",
+    "1:defensecurl",
+    "1:swagger",
     "12:powdersnow",
-    "13:iceball",
     "16:rest",
     "20:snore",
     "24:brine",
@@ -53,76 +90,73 @@
     "52:blizzard",
     "58:hail",
     "64:sheercold",
-    "tm:attract",
+    "egg:aquaring",
+    "egg:bellydrum",
+    "egg:curse",
+    "egg:fissure",
+    "egg:spitup",
+    "egg:stockpile",
+    "egg:swallow",
+    "egg:waterpulse",
+    "egg:watersport",
+    "egg:yawn",
+    "tm:aquaring",
+    "tm:aquatail",
+    "tm:aurorabeam",
+    "tm:babydolleyes",
+    "tm:bellydrum",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brine",
     "tm:bulldoze",
-    "tm:captivate",
-    "tm:confide",
+    "tm:curse",
+    "tm:defensecurl",
     "tm:dive",
-    "tm:doubleteam",
     "tm:earthquake",
     "tm:echoedvoice",
     "tm:encore",
     "tm:endure",
     "tm:facade",
+    "tm:fissure",
     "tm:frostbreath",
-    "tm:frustration",
+    "tm:growl",
     "tm:hail",
-    "tm:hiddenpower",
+    "tm:headbutt",
+    "tm:iceball",
     "tm:icebeam",
     "tm:iciclespear",
     "tm:icywind",
     "tm:irontail",
-    "tm:naturalgift",
+    "tm:mudslap",
+    "tm:powdersnow",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
-    "tm:secretpower",
+    "tm:rollout",
+    "tm:sheercold",
+    "tm:signalbeam",
     "tm:sleeptalk",
     "tm:snore",
+    "tm:spitup",
+    "tm:steelroller",
+    "tm:stockpile",
     "tm:strength",
     "tm:substitute",
+    "tm:superfang",
     "tm:surf",
     "tm:swagger",
-    "tm:toxic",
+    "tm:swallow",
+    "tm:terablast",
     "tm:waterfall",
+    "tm:watergun",
     "tm:waterpulse",
+    "tm:watersport",
     "tm:whirlpool",
-    "tutor:aquatail",
-    "tutor:bodyslam",
-    "tutor:defensecurl",
-    "tutor:dive",
-    "tutor:doubleedge",
-    "tutor:endure",
-    "tutor:headbutt",
-    "tutor:icywind",
-    "tutor:irontail",
-    "tutor:mimic",
-    "tutor:mudslap",
-    "tutor:rockslide",
-    "tutor:rollout",
-    "tutor:signalbeam",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:steelroller",
-    "tutor:substitute",
-    "tutor:superfang",
-    "tutor:swagger",
-    "tutor:waterpulse"
-  ],
-  "labels": [
-    "gen3"
-  ],
-  "pokedex": [
-    "cobblemon.species.sealeo.desc"
+    "tm:yawn"
   ],
   "preEvolution": "spheal",
   "evolutions": [
@@ -131,7 +165,9 @@
       "variant": "level_up",
       "result": "walrein",
       "consumeHeldItem": false,
-      "learnableMoves": [],
+      "learnableMoves": [
+        "icefang"
+      ],
       "requirements": [
         {
           "variant": "level",
@@ -139,37 +175,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1.35,
-  "hitbox": {
-    "width": 1.1,
-    "height": 1.1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 2,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 11,
-  "weight": 876,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:cod",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "cobblemon:chesto_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  ]
 }

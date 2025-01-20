@@ -7,9 +7,13 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Zen",
-        "Galar-Zen"
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Zen",
+      "unlockForms": [
+        "Zen"
       ]
     }
   ],

@@ -1,21 +1,27 @@
 {
   "implemented": true,
-  "name": "Chimchar",
   "nationalPokedexNumber": 390,
+  "name": "Chimchar",
   "primaryType": "fire",
+  "maleRatio": 0.875,
+  "height": 5,
+  "weight": 62,
+  "pokedex": [
+    "cobblemon.species.chimchar.desc"
+  ],
+  "labels": [
+    "gen4",
+    "starter"
+  ],
+  "aspects": [],
   "abilities": [
     "blaze",
     "h:ironfist"
   ],
-  "drops": {
-    "amount": 1,
-    "entries": [
-      {
-        "item": "cobblemon:charcoal_stick",
-        "percentage": 5.0
-      }
-    ]
-  },
+  "eggGroups": [
+    "field",
+    "human_like"
+  ],
   "baseStats": {
     "hp": 44,
     "attack": 58,
@@ -24,27 +30,43 @@
     "special_defence": 44,
     "speed": 61
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 1
+  },
+  "baseExperienceYield": 62,
+  "experienceGroup": "medium_slow",
+  "catchRate": 45,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.35,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
-      "canSleep": false,
       "willSleepOnBed": true,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.875,
-  "shoulderMountable": false,
-  "baseExperienceYield": 62,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "field",
-    "human_like"
-  ],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:charcoal_stick",
+        "percentage": 5
+      }
+    ]
+  },
   "moves": [
-    "1:leer",
     "1:scratch",
+    "1:leer",
     "7:ember",
     "9:taunt",
     "15:furyswipes",
@@ -54,43 +76,40 @@
     "31:facade",
     "33:firespin",
     "39:acrobatics",
-    "39:slackoff",
-    "41:flamethrower",
     "41:slackoff",
     "47:flamethrower",
     "egg:assist",
-    "egg:blazekick",
     "egg:counter",
     "egg:doublekick",
     "egg:encore",
     "egg:fakeout",
     "egg:firepunch",
     "egg:focusenergy",
-    "egg:focuspunch",
     "egg:heatwave",
     "egg:helpinghand",
-    "egg:poweruppunch",
     "egg:quickguard",
     "egg:submission",
     "egg:switcheroo",
     "egg:thunderpunch",
     "tm:acrobatics",
-    "tm:aerialace",
     "tm:agility",
-    "tm:attract",
+    "tm:assist",
+    "tm:blazekick",
     "tm:brickbreak",
     "tm:bulkup",
     "tm:burningjealousy",
-    "tm:captivate",
-    "tm:confide",
+    "tm:counter",
+    "tm:covet",
     "tm:cut",
     "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
+    "tm:doublekick",
+    "tm:ember",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
+    "tm:fakeout",
     "tm:faketears",
     "tm:fireblast",
     "tm:firepledge",
@@ -98,46 +117,51 @@
     "tm:firespin",
     "tm:flamecharge",
     "tm:flamethrower",
+    "tm:flamewheel",
     "tm:flareblitz",
     "tm:fling",
+    "tm:focusenergy",
     "tm:focuspunch",
-    "tm:frustration",
+    "tm:furyswipes",
     "tm:grassknot",
     "tm:gunkshot",
+    "tm:headbutt",
     "tm:heatwave",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:honeclaws",
     "tm:incinerate",
     "tm:irontail",
     "tm:knockoff",
+    "tm:leer",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:metronome",
     "tm:mudslap",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:poisonjab",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychup",
+    "tm:quickguard",
     "tm:rest",
-    "tm:return",
     "tm:rockclimb",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
-    "tm:secretpower",
+    "tm:roleplay",
+    "tm:rollout",
+    "tm:scratch",
     "tm:shadowclaw",
+    "tm:slackoff",
     "tm:sleeptalk",
     "tm:stealthrock",
     "tm:strength",
+    "tm:submission",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
+    "tm:switcheroo",
     "tm:swordsdance",
     "tm:takedown",
     "tm:taunt",
@@ -146,46 +170,12 @@
     "tm:thief",
     "tm:thunderpunch",
     "tm:torment",
-    "tm:toxic",
     "tm:uproar",
     "tm:uturn",
     "tm:vacuumwave",
     "tm:willowisp",
     "tm:workup",
-    "tm:zenheadbutt",
-    "tutor:covet",
-    "tutor:ember",
-    "tutor:endeavor",
-    "tutor:fakeout",
-    "tutor:firepledge",
-    "tutor:firepunch",
-    "tutor:flamethrower",
-    "tutor:focuspunch",
-    "tutor:grassknot",
-    "tutor:gunkshot",
-    "tutor:headbutt",
-    "tutor:heatwave",
-    "tutor:helpinghand",
-    "tutor:irontail",
-    "tutor:leer",
-    "tutor:lowkick",
-    "tutor:mudslap",
-    "tutor:roleplay",
-    "tutor:rollout",
-    "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:stealthrock",
-    "tutor:swift",
-    "tutor:taunt",
-    "tutor:thunderpunch",
-    "tutor:uproar",
-    "tutor:vacuumwave"
-  ],
-  "labels": [
-    "gen4"
-  ],
-  "pokedex": [
-    "cobblemon.species.chimchar.desc"
+    "tm:zenheadbutt"
   ],
   "evolutions": [
     {
@@ -203,24 +193,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.6,
-  "hitbox": {
-    "width": 0.75,
-    "height": 1.35,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 1
-  },
-  "height": 5,
-  "weight": 62,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

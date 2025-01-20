@@ -1,9 +1,27 @@
 {
-  "name": "Terapagos",
   "nationalPokedexNumber": 1024,
+  "name": "Terapagos",
   "primaryType": "normal",
+  "maleRatio": 0.5,
+  "height": 2,
+  "weight": 65,
+  "pokedex": [
+    "cobblemon.species.terapagos.desc"
+  ],
+  "labels": [
+    "gen9",
+    "legendary",
+    "restricted"
+  ],
+  "aspects": [
+    "normal-form"
+  ],
   "abilities": [
-    "terashift"
+    "terashift",
+    "h:terashift"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 90,
@@ -13,10 +31,6 @@
     "special_defence": 85,
     "speed": 60
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 0,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -25,15 +39,16 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 90,
   "experienceGroup": "slow",
+  "catchRate": 255,
   "eggCycles": 5,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 50,
+  "behaviour": {},
   "moves": [
-    "1:rapidspin",
-    "1:triattack",
     "1:withdraw",
+    "1:triattack",
+    "1:rapidspin",
     "10:ancientpower",
     "20:headbutt",
     "30:protect",
@@ -43,6 +58,7 @@
     "70:doubleedge",
     "80:rockpolish",
     "90:gyroball",
+    "tm:ancientpower",
     "tm:aurasphere",
     "tm:bodypress",
     "tm:bodyslam",
@@ -64,6 +80,7 @@
     "tm:gigaimpact",
     "tm:gravity",
     "tm:gyroball",
+    "tm:headbutt",
     "tm:heatcrash",
     "tm:heavyslam",
     "tm:hyperbeam",
@@ -74,8 +91,10 @@
     "tm:powergem",
     "tm:protect",
     "tm:raindance",
+    "tm:rapidspin",
     "tm:rest",
     "tm:roar",
+    "tm:rockpolish",
     "tm:rockslide",
     "tm:scorchingsands",
     "tm:sleeptalk",
@@ -88,32 +107,42 @@
     "tm:supercellslam",
     "tm:surf",
     "tm:takedown",
+    "tm:terastarstorm",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:toxic",
+    "tm:triattack",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:wildcharge",
+    "tm:withdraw",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "legendary"
-  ],
-  "aspects": [],
-  "height": 2,
-  "weight": 65,
   "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.terapagos.desc"
-  ],
   "forms": [
     {
       "name": "Terastal",
       "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 3,
+      "weight": 160,
+      "pokedex": [
+        "cobblemon.species.terapagos-terastal.desc"
+      ],
+      "labels": [
+        "gen9",
+        "legendary",
+        "restricted"
+      ],
+      "aspects": [
+        "terastal-form"
+      ],
       "abilities": [
-        "terashell"
+        "terashell",
+        "h:terashell"
+      ],
+      "eggGroups": [
+        "undiscovered"
       ],
       "baseStats": {
         "hp": 95,
@@ -123,10 +152,6 @@
         "special_defence": 110,
         "speed": 85
       },
-      "catchRate": 255,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 0,
-      "baseFriendship": 50,
       "evYield": {
         "hp": 0,
         "attack": 0,
@@ -135,29 +160,111 @@
         "special_defence": 2,
         "speed": 0
       },
+      "baseExperienceYield": 120,
       "experienceGroup": "slow",
+      "catchRate": 255,
       "eggCycles": 5,
-      "eggGroups": [
-        "undiscovered"
+      "baseFriendship": 50,
+      "behaviour": {},
+      "moves": [
+        "1:withdraw",
+        "1:triattack",
+        "1:rapidspin",
+        "10:ancientpower",
+        "20:headbutt",
+        "30:protect",
+        "40:earthpower",
+        "50:heavyslam",
+        "60:terastarstorm",
+        "70:doubleedge",
+        "80:rockpolish",
+        "90:gyroball",
+        "tm:ancientpower",
+        "tm:aurasphere",
+        "tm:bodypress",
+        "tm:bodyslam",
+        "tm:bugbuzz",
+        "tm:calmmind",
+        "tm:crunch",
+        "tm:darkpulse",
+        "tm:dazzlinggleam",
+        "tm:doubleedge",
+        "tm:dragonpulse",
+        "tm:earthpower",
+        "tm:earthquake",
+        "tm:endure",
+        "tm:energyball",
+        "tm:facade",
+        "tm:flamethrower",
+        "tm:flareblitz",
+        "tm:flashcannon",
+        "tm:gigaimpact",
+        "tm:gravity",
+        "tm:gyroball",
+        "tm:headbutt",
+        "tm:heatcrash",
+        "tm:heavyslam",
+        "tm:hyperbeam",
+        "tm:icebeam",
+        "tm:icespinner",
+        "tm:ironhead",
+        "tm:meteorbeam",
+        "tm:powergem",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rapidspin",
+        "tm:rest",
+        "tm:roar",
+        "tm:rockpolish",
+        "tm:rockslide",
+        "tm:scorchingsands",
+        "tm:sleeptalk",
+        "tm:solarbeam",
+        "tm:stealthrock",
+        "tm:stoneedge",
+        "tm:storedpower",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:supercellslam",
+        "tm:surf",
+        "tm:takedown",
+        "tm:terastarstorm",
+        "tm:thunder",
+        "tm:thunderbolt",
+        "tm:toxic",
+        "tm:triattack",
+        "tm:waterpulse",
+        "tm:weatherball",
+        "tm:wildcharge",
+        "tm:withdraw",
+        "tm:zenheadbutt"
       ],
-      "labels": [
-        "gen9",
-        "legendary"
-      ],
-      "aspects": [
-        "terastal"
-      ],
-      "height": 3,
-      "weight": 160,
       "evolutions": [],
-      "cannotDynamax": false,
       "battleOnly": true
     },
     {
       "name": "Stellar",
       "primaryType": "normal",
+      "maleRatio": 0.5,
+      "height": 17,
+      "weight": 770,
+      "pokedex": [
+        "cobblemon.species.terapagos-stellar.desc"
+      ],
+      "labels": [
+        "gen9",
+        "legendary",
+        "restricted"
+      ],
+      "aspects": [
+        "stellar-form"
+      ],
       "abilities": [
-        "teraformzero"
+        "teraformzero",
+        "h:teraformzero"
+      ],
+      "eggGroups": [
+        "undiscovered"
       ],
       "baseStats": {
         "hp": 160,
@@ -167,10 +274,6 @@
         "special_defence": 110,
         "speed": 85
       },
-      "catchRate": 255,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 0,
-      "baseFriendship": 50,
       "evYield": {
         "hp": 3,
         "attack": 0,
@@ -179,22 +282,87 @@
         "special_defence": 0,
         "speed": 0
       },
+      "baseExperienceYield": 140,
       "experienceGroup": "slow",
+      "catchRate": 255,
       "eggCycles": 5,
-      "eggGroups": [
-        "undiscovered"
+      "baseFriendship": 50,
+      "dynamaxBlocked": true,
+      "behaviour": {},
+      "moves": [
+        "1:withdraw",
+        "1:triattack",
+        "1:rapidspin",
+        "10:ancientpower",
+        "20:headbutt",
+        "30:protect",
+        "40:earthpower",
+        "50:heavyslam",
+        "60:terastarstorm",
+        "70:doubleedge",
+        "80:rockpolish",
+        "90:gyroball",
+        "tm:ancientpower",
+        "tm:aurasphere",
+        "tm:bodypress",
+        "tm:bodyslam",
+        "tm:bugbuzz",
+        "tm:calmmind",
+        "tm:crunch",
+        "tm:darkpulse",
+        "tm:dazzlinggleam",
+        "tm:doubleedge",
+        "tm:dragonpulse",
+        "tm:earthpower",
+        "tm:earthquake",
+        "tm:endure",
+        "tm:energyball",
+        "tm:facade",
+        "tm:flamethrower",
+        "tm:flareblitz",
+        "tm:flashcannon",
+        "tm:gigaimpact",
+        "tm:gravity",
+        "tm:gyroball",
+        "tm:headbutt",
+        "tm:heatcrash",
+        "tm:heavyslam",
+        "tm:hyperbeam",
+        "tm:icebeam",
+        "tm:icespinner",
+        "tm:ironhead",
+        "tm:meteorbeam",
+        "tm:powergem",
+        "tm:protect",
+        "tm:raindance",
+        "tm:rapidspin",
+        "tm:rest",
+        "tm:roar",
+        "tm:rockpolish",
+        "tm:rockslide",
+        "tm:scorchingsands",
+        "tm:sleeptalk",
+        "tm:solarbeam",
+        "tm:stealthrock",
+        "tm:stoneedge",
+        "tm:storedpower",
+        "tm:substitute",
+        "tm:sunnyday",
+        "tm:supercellslam",
+        "tm:surf",
+        "tm:takedown",
+        "tm:terastarstorm",
+        "tm:thunder",
+        "tm:thunderbolt",
+        "tm:toxic",
+        "tm:triattack",
+        "tm:waterpulse",
+        "tm:weatherball",
+        "tm:wildcharge",
+        "tm:withdraw",
+        "tm:zenheadbutt"
       ],
-      "labels": [
-        "gen9",
-        "legendary"
-      ],
-      "aspects": [
-        "stellar"
-      ],
-      "height": 17,
-      "weight": 770,
       "evolutions": [],
-      "cannotDynamax": false,
       "battleOnly": true
     }
   ]
