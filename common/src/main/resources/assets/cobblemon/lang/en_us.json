@@ -7083,6 +7083,7 @@
   "cobblemon:subtitle.item.medicine.feather.use": "Feather used",
 
   "cobblemon:subtitle.item.berry.eat": "Berry eaten",
+  "cobblemon.subtitle.block.berry_bush.harvest": "Berry harvested",
 
   "cobblemon:subtitle.evolution.full": "Pokémon evolves",
 
@@ -7090,6 +7091,12 @@
   "cobblemon:subtitle.fishing.rod_cast": "Poké Rod Bobber thrown",
   "cobblemon:subtitle.fishing.rod_reel_in": "Poké Rod Bobber retrieved",
   "cobblemon:subtitle.fishing.bobber_land": "Poké Rod Bobber lands",
+
+  "cobblemon.subtitle.block.mulch.place": "Mulch applied",
+  "cobblemon.subtitle.block.mulch.remove": "Mulch removed",
+
+  "cobblemon.subtitle.block.gilded_chest.close": "Gilded Chest closes",
+  "cobblemon.subtitle.block.gilded_chest.open": "Gilded Chest opens",
 
   "cobblemon.subtitle.block.healing_machine.active": "Healing Machine activates",
 
@@ -7104,6 +7111,8 @@
   "cobblemon.subtitle.block.fossil_machine.retrieve_pokemon": "Fossil Pokémon retrieved",
   "cobblemon.subtitle.block.fossil_machine.unprotected": "Restoration Machine protection ends",
   "cobblemon.subtitle.block.fossil_machine.assemble": "Restoration Machine assembles",
+
+  "cobblemon.subtitle.pokemon.gimmighoul.give_item": "Gimmighoul picks treasure",
 
   "cobblemon:subtitle.pokemon.bulbasaur.cry": "Bulbasaur cries",
   "cobblemon:subtitle.pokemon.ivysaur.cry": "Ivysaur cries",

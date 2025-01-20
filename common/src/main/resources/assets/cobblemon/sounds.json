@@ -322,6 +322,7 @@
     "sounds": [ "cobblemon:block/fossil_machine/fossil_machine_unprotected" ]
   },
   "pokemon.gimmighoul.give_item": {
+    "subtitle": "cobblemon.subtitle.pokemon.gimmighoul.give_item",
     "sounds": [ "cobblemon:pokemon/gimmighoul/gimmighoul_give_item" ]
   },
   "pokemon.gimmighoul.reveal": {
@@ -500,6 +501,7 @@
     "sounds": [ "cobblemon:block/display_case/display_case_remove_item" ]
   },
   "block.mulch.place": {
+    "subtitle": "cobblemon.subtitle.block.mulch.place",
     "sounds": [
       "cobblemon:block/mulch/mulch_place_1",
       "cobblemon:block/mulch/mulch_place_2",
@@ -507,6 +509,7 @@
     ]
   },
   "block.mulch.remove": {
+    "subtitle": "cobblemon.subtitle.block.mulch.remove",
     "sounds": [
       "cobblemon:block/mulch/mulch_remove_1",
       "cobblemon:block/mulch/mulch_remove_2",
@@ -514,6 +517,7 @@
     ]
   },
   "block.berry_bush.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       "cobblemon:block/berry/berry_bush_break_1",
       "cobblemon:block/berry/berry_bush_break_2",
@@ -529,6 +533,7 @@
     ]
   },
   "block.berry_bush.harvest": {
+    "subtitle": "cobblemon.subtitle.block.berry_bush.harvest",
     "sounds": [
       "cobblemon:block/berry/berry_bush_harvest_1",
       "cobblemon:block/berry/berry_bush_harvest_2",
@@ -536,6 +541,7 @@
     ]
   },
   "block.big_root.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       "cobblemon:block/big_root/big_root_break_1",
       "cobblemon:block/big_root/big_root_break_2",
@@ -551,6 +557,7 @@
     ]
   },
   "block.medicinal_leek.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       "cobblemon:block/medicinal_leek/medicinal_leek_break_1",
       "cobblemon:block/medicinal_leek/medicinal_leek_break_2",
@@ -558,6 +565,7 @@
     ]
   },
   "block.medicinal_leek.plant": {
+    "subtitle": "subtitles.block.generic.place",
     "sounds": [
       { "name": "cobblemon:block/medicinal_leek/medicinal_leek_plant_1", "volume": 0.6 },
       { "name": "cobblemon:block/medicinal_leek/medicinal_leek_plant_2", "volume": 0.6 },
@@ -565,6 +573,7 @@
     ]
   },
   "block.vivichoke.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       "cobblemon:block/vivichoke/vivichoke_break_1",
       "cobblemon:block/vivichoke/vivichoke_break_2",
@@ -580,6 +589,7 @@
     ]
   },
   "block.mint.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       { "name": "cobblemon:block/mint/mint_break_1", "volume": 0.6 },
       { "name": "cobblemon:block/mint/mint_break_2", "volume": 0.6 },
@@ -595,6 +605,7 @@
     ]
   },
   "block.revival_herb.break": {
+    "subtitle": "subtitles.block.generic.break",
     "sounds": [
       { "name": "cobblemon:block/revival_herb/revival_herb_break_1", "volume": 0.5 },
       { "name": "cobblemon:block/revival_herb/revival_herb_break_2", "volume": 0.5 },
@@ -618,11 +629,13 @@
     ]
   },
   "block.gilded_chest.close": {
+    "subtitle": "cobblemon.subtitle.block.gilded_chest.close",
     "sounds": [
       "cobblemon:block/gilded_chest/gilded_chest_close"
     ]
   },
   "block.gilded_chest.open": {
+    "subtitle": "cobblemon.subtitle.block.gilded_chest.open",
     "sounds": [
       "cobblemon:block/gilded_chest/gilded_chest_open"
     ]
