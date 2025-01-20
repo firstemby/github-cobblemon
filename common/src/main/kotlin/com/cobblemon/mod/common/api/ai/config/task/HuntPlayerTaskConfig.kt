@@ -32,8 +32,10 @@ class HuntPlayerTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(BREED, "breeds", true).asExpressible()
     val speedMultiplier = numberVariable(BREED, "speed_multiplier", 0.6).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(condition, speedMultiplier).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        speedMultiplier
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,

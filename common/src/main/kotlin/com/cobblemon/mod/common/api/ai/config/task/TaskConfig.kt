@@ -77,7 +77,7 @@ interface TaskConfig {
             "path_to_nest" to PathToNestTaskConfig::class.java,
             "breed_at_nest" to BreedAtNestTaskConfig::class.java,
             "guard_nest" to GuardNestTaskConfig::class.java,
-            "hunt_player" to HuntPlayerTaskConfig::class.java
+            "hunt_player" to HuntPlayerTaskConfig::class.java,
             "wake_up" to WakeUpTaskConfig::class.java,
             "go_to_sleep" to GoToSleepTaskConfig::class.java,
             "find_resting_place" to FindRestingPlaceTaskConfig::class.java,

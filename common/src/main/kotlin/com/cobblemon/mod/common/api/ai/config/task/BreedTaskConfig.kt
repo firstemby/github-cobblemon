@@ -33,8 +33,9 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(BREED, "can_breed", true).asExpressible()
 
-    override val variables: List<MoLangConfigVariable>
-        get() = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
