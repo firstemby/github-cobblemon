@@ -16,6 +16,7 @@
       "displayName": "cobblemon.pokedex.variation.wood",
       "icon": "cobblemon:textures/gui/pokedex/variation/wood.png",
       "aspects": [
+        "tree-none",
         "tree-oak",
         "tree-birch",
         "tree-darkoak",

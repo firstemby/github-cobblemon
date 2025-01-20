@@ -96,15 +96,21 @@ abstract class AbstractPokedexManager {
     }
 
     fun getNewInformation(pokedexEntityData: PokedexEntityData): PokedexLearnedInformation {
-        val speciesRecord = getSpeciesRecord(pokedexEntityData.species.resourceIdentifier)
+        val speciesRecord = getSpeciesRecord(pokedexEntityData.getApparentSpecies().resourceIdentifier)
         if (speciesRecord == null || speciesRecord.getKnowledge() == PokedexEntryProgress.NONE) {
             return PokedexLearnedInformation.SPECIES
         }
-        val formRecord = speciesRecord.getFormRecord(pokedexEntityData.form.name)
+        val formRecord = speciesRecord.getFormRecord(pokedexEntityData.getApparentForm().name)
         if (formRecord == null || formRecord.knowledge == PokedexEntryProgress.NONE) {
             return PokedexLearnedInformation.FORM
         }
-        if (pokedexEntityData.aspects.any{ !speciesRecord.hasAspect(it) } || pokedexEntityData.gender !in formRecord.getGenders() || !formRecord.hasSeenShinyState(pokedexEntityData.shiny)) {
+
+        // Can't update aspects on a disguise
+        if (pokedexEntityData.disguise != null) {
+            return PokedexLearnedInformation.NONE
+        }
+
+        if (pokedexEntityData.pokemon.aspects.any { !speciesRecord.hasAspect(it) } || pokedexEntityData.pokemon.gender !in formRecord.getGenders() || !formRecord.hasSeenShinyState(pokedexEntityData.pokemon.shiny)) {
             return PokedexLearnedInformation.VARIATION
         }
         return PokedexLearnedInformation.NONE

@@ -1,5 +1,7 @@
 {
-  "keys": ["alolan"],
+  "keys": [
+    "alolan"
+  ],
   "type": "flag",
   "isAspect": true,
   "default": false

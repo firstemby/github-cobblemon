@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen2
 
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
@@ -32,7 +33,7 @@ class HitmontopModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     lateinit var walk: Pose
     lateinit var battleidle: Pose
 
-//    override val cryAnimation = CryProvider { bedrockStateful("hitmontop", "cry") }
+    override val cryAnimation = CryProvider { bedrockStateful("hitmontop", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("hitmontop", "blink") }

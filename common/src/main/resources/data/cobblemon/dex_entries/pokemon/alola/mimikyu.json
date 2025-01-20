@@ -7,10 +7,13 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Busted",
-        "Totem",
-        "Busted-Totem"
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Busted",
+      "unlockForms": [
+        "Busted"
       ]
     }
   ],

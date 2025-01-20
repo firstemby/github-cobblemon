@@ -7,8 +7,13 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "female"
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "F",
+      "unlockForms": [
+        "F"
       ]
     }
   ],

@@ -30,19 +30,19 @@ class PokedexManager(
     fun encounter(pokemon: Pokemon) {
         val speciesId = pokemon.species.resourceIdentifier
         val formName = pokemon.form.name
-        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(pokemon)
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(PokedexEntityData(pokemon = pokemon, disguise = null))
     }
 
     fun encounter(pokedexEntityData: PokedexEntityData) {
-        val speciesId = pokedexEntityData.species.resourceIdentifier
-        val formName = pokedexEntityData.form.name
+        val speciesId = pokedexEntityData.getApparentSpecies().resourceIdentifier
+        val formName = pokedexEntityData.getApparentForm().name
         getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(pokedexEntityData)
     }
 
     fun catch(pokemon: Pokemon) {
         val speciesId = pokemon.species.resourceIdentifier
         val formName = pokemon.form.name
-        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).caught(pokemon)
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).caught(PokedexEntityData(pokemon = pokemon, disguise = null))
     }
 
     override fun markDirty() {

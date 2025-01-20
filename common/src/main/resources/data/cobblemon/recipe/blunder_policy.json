@@ -10,7 +10,7 @@
             "item": "minecraft:rabbit_foot"
         },
         "D": {
-            "item": "minecraft:yellow_dye"
+            "tag": "c:dyes/yellow"
         },
         "I": {
             "item": "minecraft:ink_sac"

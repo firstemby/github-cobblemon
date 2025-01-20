@@ -40,7 +40,8 @@ import net.minecraft.sounds.SoundEvent
 class PCGUI(
     val pc: ClientPC,
     val party: ClientParty,
-    val configuration: PCGUIConfiguration
+    val configuration: PCGUIConfiguration,
+    val openOnBox: Int = 0
 ) : Screen(Component.translatable("cobblemon.ui.pc.title")), CobblemonRenderable {
 
     companion object {
@@ -110,6 +111,7 @@ class PCGUI(
             pc = pc,
             party = party
         )
+        this.storageWidget.box = openOnBox
 
         this.setPreviewPokemon(null)
         this.addRenderableWidget(storageWidget)

@@ -7,7 +7,7 @@
     ],
     "key": {
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         },
         "D": {
             "item": "minecraft:ghast_tear"

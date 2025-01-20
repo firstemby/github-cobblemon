@@ -1,10 +1,25 @@
 {
-  "name": "Flutter Mane",
   "nationalPokedexNumber": 987,
+  "name": "Flutter Mane",
   "primaryType": "ghost",
   "secondaryType": "fairy",
+  "maleRatio": -1,
+  "height": 14,
+  "weight": 40,
+  "pokedex": [
+    "cobblemon.species.fluttermane.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "protosynthesis"
+    "protosynthesis",
+    "h:protosynthesis"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 55,
@@ -14,10 +29,6 @@
     "special_defence": 135,
     "speed": 135
   },
-  "catchRate": 30,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,15 +37,27 @@
     "special_defence": 1,
     "speed": 1
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 30,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
+  "drops": {
+    "amount": 4,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "quantityRange": "0-3"
+      },
+      {
+        "item": "cobblemon:fairy_feather"
+      }
+    ]
+  },
   "moves": [
-    "1:astonish",
     "1:confuseray",
     "1:spite",
+    "1:astonish",
     "1:sunnyday",
     "7:psybeam",
     "14:meanlook",
@@ -49,6 +72,7 @@
     "77:painsplit",
     "84:moonblast",
     "91:perishsong",
+    "tm:astonish",
     "tm:calmmind",
     "tm:chargebeam",
     "tm:charm",
@@ -68,9 +92,14 @@
     "tm:icywind",
     "tm:imprison",
     "tm:magicalleaf",
+    "tm:meanlook",
+    "tm:memento",
     "tm:mistyterrain",
+    "tm:moonblast",
+    "tm:mysticalfire",
     "tm:nightshade",
     "tm:painsplit",
+    "tm:perishsong",
     "tm:phantomforce",
     "tm:poltergeist",
     "tm:powergem",
@@ -90,30 +119,8 @@
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
-    "tm:trickroom"
+    "tm:trickroom",
+    "tm:wish"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 14,
-  "weight": 40,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.fluttermane.desc"
-  ],
-  "drops": {
-    "amount": 4,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "quantityRange": "0-3"
-      },
-      {
-        "item": "cobblemon:fairy_feather"
-      }
-    ]
-  }
+  "evolutions": []
 }

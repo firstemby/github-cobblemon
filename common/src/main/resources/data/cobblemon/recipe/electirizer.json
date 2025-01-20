@@ -7,16 +7,16 @@
     ],
     "key": {
         "G": {
-            "item": "minecraft:glowstone"
+            "tag": "c:dusts/glowstone"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "B": {
             "item": "minecraft:iron_bars"
         },
         "R": {
-            "item": "minecraft:redstone"
+            "tag": "c:dusts/redstone"
         }
     },
     "result": {

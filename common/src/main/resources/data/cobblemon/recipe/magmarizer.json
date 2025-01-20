@@ -10,7 +10,7 @@
             "item": "minecraft:magma_block"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "B": {
             "item": "minecraft:iron_bars"

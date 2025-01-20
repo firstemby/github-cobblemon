@@ -34,9 +34,6 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
-import net.minecraft.client.Minecraft
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.protocol.game.ClientboundSoundPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
@@ -206,13 +203,18 @@ interface Evolution : EvolutionLike {
 
         val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
         movesToLearn.forEach { move ->
-            if (pokemon.moveSet.hasSpace()) {
-                pokemon.moveSet.add(move.create())
-            } else {
-                pokemon.benchedMoves.add(BenchedMove(move, 0))
-            }
+            val couldAddMove =
+                if (pokemon.moveSet.hasSpace()) {
+                    pokemon.moveSet.add(move.create())
+                } else {
+                    pokemon.benchedMoves.add(BenchedMove(move, 0))
+                }
 
-            pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
+            val previousSpeciesKnewMove = previousSpeciesLearnableMoves.any { move.name == it.name }
+
+            if (couldAddMove && !previousSpeciesKnewMove) {
+                pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
+            }
         }
 
         // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available

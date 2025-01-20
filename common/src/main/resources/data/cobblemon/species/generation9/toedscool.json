@@ -1,10 +1,24 @@
 {
-  "name": "Toedscool",
   "nationalPokedexNumber": 948,
+  "name": "Toedscool",
   "primaryType": "ground",
   "secondaryType": "grass",
+  "maleRatio": 0.5,
+  "height": 9,
+  "weight": 330,
+  "pokedex": [
+    "cobblemon.species.toedscool.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
-    "myceliummight"
+    "myceliummight",
+    "h:myceliummight"
+  ],
+  "eggGroups": [
+    "grass"
   ],
   "baseStats": {
     "hp": 40,
@@ -14,10 +28,6 @@
     "special_defence": 100,
     "speed": 70
   },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 67,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,14 +36,27 @@
     "special_defence": 1,
     "speed": 0
   },
+  "baseExperienceYield": 67,
   "experienceGroup": "medium_slow",
+  "catchRate": 190,
   "eggCycles": 20,
-  "eggGroups": [
-    "grass"
-  ],
+  "baseFriendship": 50,
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:brown_mushroom",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "cobblemon:yache_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:mudslap",
     "1:wrap",
+    "1:mudslap",
     "4:absorb",
     "8:poisonpowder",
     "8:stunspore",
@@ -57,7 +80,9 @@
     "egg:rapidspin",
     "egg:tickle",
     "egg:toxic",
+    "tm:absorb",
     "tm:acidspray",
+    "tm:acupressure",
     "tm:bulletseed",
     "tm:confuseray",
     "tm:dazzlinggleam",
@@ -70,41 +95,50 @@
     "tm:grassknot",
     "tm:grassyglide",
     "tm:grassyterrain",
+    "tm:growth",
     "tm:hex",
     "tm:knockoff",
     "tm:leafstorm",
+    "tm:leechseed",
     "tm:lightscreen",
     "tm:lunge",
     "tm:magicalleaf",
+    "tm:megadrain",
+    "tm:mirrorcoat",
     "tm:mudshot",
     "tm:mudslap",
     "tm:painsplit",
+    "tm:poisonpowder",
+    "tm:powerwhip",
     "tm:protect",
+    "tm:ragepowder",
     "tm:raindance",
+    "tm:rapidspin",
     "tm:reflect",
     "tm:rest",
     "tm:scaryface",
+    "tm:screech",
     "tm:seedbomb",
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:solarbeam",
     "tm:spikes",
+    "tm:spore",
+    "tm:stunspore",
     "tm:substitute",
+    "tm:supersonic",
     "tm:swift",
+    "tm:tackle",
     "tm:taunt",
     "tm:terablast",
+    "tm:tickle",
     "tm:toxic",
     "tm:toxicspikes",
     "tm:trailblaze",
     "tm:trickroom",
-    "tm:venoshock"
+    "tm:venoshock",
+    "tm:wrap"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 9,
-  "weight": 330,
   "evolutions": [
     {
       "id": "toedscool_toedscruel",
@@ -119,22 +153,5 @@
         }
       ]
     }
-  ],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.toedscool.desc"
-  ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:brown_mushroom",
-        "quantityRange": "0-1"
-      },
-      {
-        "item": "cobblemon:yache_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

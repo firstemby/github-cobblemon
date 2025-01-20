@@ -5,10 +5,10 @@
             "item": "minecraft:nautilus_shell"
         },
         {
-            "item": "minecraft:prismarine_crystals"
+            "tag": "c:gems/prismarine"
         },
         {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         }
     ],
     "result": {

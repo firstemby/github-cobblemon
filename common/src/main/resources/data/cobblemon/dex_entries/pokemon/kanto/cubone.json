@@ -11,14 +11,5 @@
       ]
     }
   ],
-  "variations": [
-    {
-      "displayName": "cobblemon.pokedex.variation.region_bias",
-      "icon": "cobblemon:textures/gui/pokedex/variation/globe.png",
-      "aspects": [
-        "region-bias-none",
-        "region-bias-alola"
-      ]
-    }
-  ]
+  "variations": []
 }

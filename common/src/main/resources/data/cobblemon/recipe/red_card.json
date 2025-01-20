@@ -10,7 +10,7 @@
             "item": "minecraft:paper"
         },
         "R": {
-            "item": "minecraft:red_dye"
+            "tag": "c:dyes/red"
         }
     },
     "result": {

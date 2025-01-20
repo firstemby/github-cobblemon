@@ -727,7 +727,7 @@
   "item.cobblemon.relic_coin": "Relic Coin",
   "block.cobblemon.relic_coin_pouch": "Relic Coin Pouch",
   "block.cobblemon.relic_coin_sack": "Relic Coin Sack",
-  
+
   "item.cobblemon.automaton_armor_trim_smithing_template": "Smithing Template",
   "trim_pattern.cobblemon.automaton": "Automaton Armor Trim",
 
@@ -937,6 +937,7 @@
   "cobblemon.command.clearparty.cleared": "Cleared %1$s's party.",
   "cobblemon.command.clearpc.cleared": "Cleared %1$s's PC.",
   "cobblemon.command.dialogue.invalid-dialogue": "Invalid dialogue identifier",
+  "cobblemon.command.pc.invalid-box": "Box number %1$s exceeds max boxes of %2$s.",
 
   "cobblemon.ui.generic.yes": "Yes",
   "cobblemon.ui.generic.no": "No",
@@ -2313,7 +2314,6 @@
   "tag.item.cobblemon.apricorns": "Apricorns",
   "tag.item.cobblemon.azalea_tree": "Azalea Trees",
   "tag.item.cobblemon.berries": "Berries",
-  "tag.item.cobblemon.cobblemon_seeds": "Seeds",
   "tag.item.cobblemon.evolution_items": "Evolution Items",
   "tag.item.cobblemon.evolution_stones": "Evolution Stones",
   "tag.item.cobblemon.experience_candies": "Experience Candies",
@@ -2401,6 +2401,7 @@
   "tag.item.cobblemon.evolution_stone_blocks": "Evolution Stone Blocks",
   "tag.item.cobblemon.pokedex": "Pokédexes",
   "tag.item.cobblemon.pokedex_screen": "Pokédex Screens",
+  "tag.item.cobblemon.gilded_chests": "Gilded Chests",
 
   "npc.sacchi.name": "Professor Sacchi",
   "npc.variable.challenge_cooldown.name": "Challenge Cooldown",
@@ -4277,6 +4278,15 @@
   "entity.cobblemon.poke_bobber": "Poké Bobber",
   "entity.cobblemon.boat": "Boat",
   "entity.cobblemon.chest_boat": "Boat with Chest",
+
+  "painting.cobblemon.premonition.title": "Premonition",
+  "painting.cobblemon.premonition.author": "PKMNCC",
+  "painting.cobblemon.slumber.title": "Slumber",
+  "painting.cobblemon.slumber.author": "PKMNCC",
+  "painting.cobblemon.altar.title": "Altar",
+  "painting.cobblemon.altar.author": "PKMNCC",
+  "painting.cobblemon.nomad.title": "Nomad",
+  "painting.cobblemon.nomad.author": "PKMNCC",
 
   "cobblemon.species.bulbasaur.name": "Bulbasaur",
   "cobblemon.species.bulbasaur.desc": "While rare and elusive in the wild, Bulbasaur’s calm and easygoing nature makes it a popular choice for beginning trainers. The bud on its back is still developing, so this Pokémon must expend large amounts of energy to fuel its growth. As a result, it is often seen rummaging through composters in search of precious fertilizer.",

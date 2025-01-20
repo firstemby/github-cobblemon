@@ -7,10 +7,10 @@
     ],
     "key": {
         "Q": {
-            "item": "minecraft:quartz"
+            "tag": "c:gems/quartz"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "P": {
             "item": "minecraft:ender_pearl"

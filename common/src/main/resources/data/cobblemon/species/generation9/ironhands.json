@@ -1,10 +1,25 @@
 {
-  "name": "Iron Hands",
   "nationalPokedexNumber": 992,
+  "name": "Iron Hands",
   "primaryType": "fighting",
   "secondaryType": "electric",
+  "maleRatio": -1,
+  "height": 18,
+  "weight": 3807,
+  "pokedex": [
+    "cobblemon.species.ironhands.desc"
+  ],
+  "labels": [
+    "gen9",
+    "paradox"
+  ],
+  "aspects": [],
   "abilities": [
-    "quarkdrive"
+    "quarkdrive",
+    "h:quarkdrive"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 154,
@@ -14,10 +29,6 @@
     "special_defence": 68,
     "speed": 50
   },
-  "catchRate": 50,
-  "maleRatio": -1,
-  "baseExperienceYield": 285,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 3,
@@ -26,17 +37,17 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 285,
   "experienceGroup": "slow",
+  "catchRate": 50,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
   "moves": [
-    "1:armthrust",
-    "1:electricterrain",
-    "1:focusenergy",
     "1:sandattack",
     "1:tackle",
+    "1:focusenergy",
+    "1:armthrust",
+    "1:electricterrain",
     "7:fakeout",
     "14:whirlwind",
     "21:thunderpunch",
@@ -50,22 +61,28 @@
     "77:heavyslam",
     "84:bellydrum",
     "91:focuspunch",
+    "tm:armthrust",
+    "tm:bellydrum",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
     "tm:charge",
     "tm:closecombat",
+    "tm:detect",
     "tm:doubleedge",
     "tm:drainpunch",
     "tm:earthquake",
     "tm:electricterrain",
     "tm:endure",
     "tm:facade",
+    "tm:fakeout",
     "tm:firepunch",
     "tm:fling",
     "tm:focusblast",
+    "tm:focusenergy",
     "tm:focuspunch",
+    "tm:forcepalm",
     "tm:gigaimpact",
     "tm:hardpress",
     "tm:heavyslam",
@@ -82,30 +99,24 @@
     "tm:reversal",
     "tm:rockslide",
     "tm:rocktomb",
+    "tm:sandattack",
     "tm:scaryface",
+    "tm:seismictoss",
+    "tm:slam",
     "tm:sleeptalk",
     "tm:stompingtantrum",
     "tm:substitute",
     "tm:supercellslam",
     "tm:swordsdance",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderpunch",
     "tm:voltswitch",
+    "tm:whirlwind",
     "tm:wildcharge"
   ],
-  "labels": [
-    "gen9",
-    "paradox"
-  ],
-  "aspects": [],
-  "height": 18,
-  "weight": 3807,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.ironhands.desc"
-  ]
+  "evolutions": []
 }

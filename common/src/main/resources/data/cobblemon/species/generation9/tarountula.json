@@ -1,10 +1,23 @@
 {
-  "name": "Tarountula",
   "nationalPokedexNumber": 917,
+  "name": "Tarountula",
   "primaryType": "bug",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 40,
+  "pokedex": [
+    "cobblemon.species.tarountula.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "insomnia",
     "h:stakeout"
+  ],
+  "eggGroups": [
+    "bug"
   ],
   "baseStats": {
     "hp": 35,
@@ -14,10 +27,6 @@
     "special_defence": 40,
     "speed": 20
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 42,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,14 +35,27 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 42,
   "experienceGroup": "erratic",
+  "catchRate": 255,
   "eggCycles": 15,
-  "eggGroups": [
-    "bug"
-  ],
+  "baseFriendship": 50,
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:string",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "minecraft:spider_eye",
+        "quantityRange": "0-1"
+      }
+    ]
+  },
   "moves": [
-    "1:stringshot",
     "1:tackle",
+    "1:stringshot",
     "5:strugglebug",
     "8:assurance",
     "11:feint",
@@ -50,18 +72,27 @@
     "egg:lunge",
     "egg:memento",
     "egg:suckerpunch",
+    "tm:assurance",
+    "tm:block",
     "tm:bodyslam",
     "tm:bugbite",
     "tm:bugbuzz",
     "tm:bulletseed",
+    "tm:circlethrow",
+    "tm:counter",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
+    "tm:feint",
+    "tm:firstimpression",
+    "tm:gastroacid",
     "tm:gigadrain",
     "tm:grassknot",
+    "tm:headbutt",
     "tm:knockoff",
     "tm:leechlife",
     "tm:lunge",
+    "tm:memento",
     "tm:poisonjab",
     "tm:pounce",
     "tm:protect",
@@ -71,9 +102,13 @@
     "tm:skittersmack",
     "tm:sleeptalk",
     "tm:spikes",
+    "tm:stickyweb",
+    "tm:stringshot",
     "tm:strugglebug",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
+    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
@@ -82,12 +117,6 @@
     "tm:trailblaze",
     "tm:xscissor"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 3,
-  "weight": 40,
   "evolutions": [
     {
       "id": "tarountula_spidops",
@@ -104,22 +133,5 @@
         }
       ]
     }
-  ],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.tarountula.desc"
-  ],
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:string",
-        "quantityRange": "0-1"
-      },
-      {
-        "item": "minecraft:spider_eye",
-        "quantityRange": "0-1"
-      }
-    ]
-  }
+  ]
 }

@@ -134,18 +134,21 @@ class MoveSet : Iterable<Move> {
         return json
     }
 
-    fun add(move: Move) {
+    fun add(move: Move): Boolean {
         if (any { it.template == move.template }) {
-            return
+            return false
         }
+
         for (i in 0 until MOVE_COUNT) {
             if (moves[i] == null) {
                 moves[i] = move
                 move.observable.subscribe { this.update() }
                 update()
-                return
+                return true
             }
         }
+
+        return false
     }
 
     fun update() {

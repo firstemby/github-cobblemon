@@ -1,10 +1,26 @@
 {
-  "name": "Miraidon",
   "nationalPokedexNumber": 1008,
+  "name": "Miraidon",
   "primaryType": "electric",
   "secondaryType": "dragon",
+  "maleRatio": -1,
+  "height": 35,
+  "weight": 2400,
+  "pokedex": [
+    "cobblemon.species.miraidon.desc"
+  ],
+  "labels": [
+    "gen9",
+    "legendary",
+    "restricted"
+  ],
+  "aspects": [],
   "abilities": [
-    "hadronengine"
+    "hadronengine",
+    "h:hadronengine"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 100,
@@ -14,10 +30,6 @@
     "special_defence": 115,
     "speed": 135
   },
-  "catchRate": 3,
-  "maleRatio": -1,
-  "baseExperienceYield": 335,
-  "baseFriendship": 0,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,15 +38,15 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 335,
   "experienceGroup": "slow",
+  "catchRate": 3,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
-  ],
+  "baseFriendship": 0,
   "moves": [
+    "1:thundershock",
     "1:dragonbreath",
     "1:electricterrain",
-    "1:thundershock",
     "7:shockwave",
     "14:charge",
     "21:paraboliccharge",
@@ -57,7 +69,9 @@
     "tm:confuseray",
     "tm:crunch",
     "tm:dazzlinggleam",
+    "tm:discharge",
     "tm:dracometeor",
+    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragonpulse",
@@ -65,6 +79,7 @@
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
+    "tm:electrodrift",
     "tm:endure",
     "tm:facade",
     "tm:flashcannon",
@@ -74,13 +89,16 @@
     "tm:hyperbeam",
     "tm:lightscreen",
     "tm:metalsound",
+    "tm:mirrorcoat",
     "tm:outrage",
     "tm:overheat",
+    "tm:paraboliccharge",
     "tm:powergem",
     "tm:protect",
     "tm:reflect",
     "tm:rest",
     "tm:scaryface",
+    "tm:shockwave",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:solarbeam",
@@ -92,22 +110,12 @@
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
+    "tm:thundershock",
     "tm:thunderwave",
     "tm:uturn",
     "tm:voltswitch",
     "tm:wildcharge",
     "tm:zenheadbutt"
   ],
-  "labels": [
-    "gen9",
-    "legendary"
-  ],
-  "aspects": [],
-  "height": 35,
-  "weight": 2400,
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.miraidon.desc"
-  ]
+  "evolutions": []
 }

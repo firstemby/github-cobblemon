@@ -17,10 +17,12 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
 import com.cobblemon.mod.common.util.*
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
+import net.minecraft.commands.Commands.argument
 
 object PcCommand {
 
@@ -30,23 +32,34 @@ object PcCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(literal(NAME)
             .permission(CobblemonPermissions.PC)
+            .then(argument("box", IntegerArgumentType.integer(1))
+                .executes(this::execute)
+            )
             .executes(this::execute)
         )
     }
 
     private fun execute(context: CommandContext<CommandSourceStack>): Int {
         val player = context.source.playerOrException
+        val box = try {
+            IntegerArgumentType.getInteger(context, "box")
+        } catch (e: IllegalArgumentException) {
+            1
+        }
         val pc = player.pc()
         if (player.isInBattle()) {
             throw IN_BATTLE_EXCEPTION.create()
         }
+        if (pc.boxes.size < box) {
+            throw SimpleCommandExceptionType(lang("command.pc.invalid-box", box, pc.boxes.size).red()).create()
+        }
         PCLinkManager.addLink(PermissiblePcLink(pc, player, CobblemonPermissions.PC))
-        OpenPCPacket(pc.uuid).sendToPlayer(player)
+        OpenPCPacket(pc.uuid, box - 1).sendToPlayer(player)
         context.source.level.playSoundServer(
-                position = context.source.player!!.position(),
-                sound = CobblemonSounds.PC_ON,
-                volume = 0.5F,
-                pitch = 1F
+            position = context.source.player!!.position(),
+            sound = CobblemonSounds.PC_ON,
+            volume = 0.5F,
+            pitch = 1F
         )
         return Command.SINGLE_SUCCESS
     }

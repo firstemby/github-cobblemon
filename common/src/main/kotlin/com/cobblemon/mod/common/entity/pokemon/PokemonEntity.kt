@@ -1583,17 +1583,15 @@ open class PokemonEntity(
     private fun sidedCodec(): Codec<Pokemon> = if (this.level().isClientSide) Pokemon.CLIENT_CODEC else Pokemon.CODEC
 
     override fun resolvePokemonScan(): PokedexEntityData? {
-        return PokemonSpecies.getByIdentifier(this.exposedSpecies.resourceIdentifier)?.let { species ->
-            PokedexEntityData(
-                species = species,
-                form = this.form,
-                gender = this.pokemon.gender,
-                aspects = this.aspects,
-                shiny = this.pokemon.shiny,
-                level = this.labelLevel(),
-                ownerUUID = this.ownerUUID
-            )
-        }
+        return PokedexEntityData(
+            pokemon = pokemon,
+            disguise = this.effects.mockEffect?.let {
+                PokedexEntityData.DisguiseData(
+                    species = it.exposedSpecies ?: pokemon.species,
+                    form = it.exposedForm ?: pokemon.form,
+                )
+            }
+        )
     }
 
     override fun resolveEntityScan(): LivingEntity {

@@ -73,10 +73,17 @@ class ServerEvolutionController(
     }
 
     override fun add(element: Evolution): Boolean {
+        // Removes duplicate evolutions that result in the same outcome, keeping only the most recent evolution.
+        // For example, Karrablast can evolve via trade or link cable, which otherwise creates duplicate
+        // entries in the summary screen.
+        val duplicatedEvolutions = this.filter { element.result.matches(it.result) }
+        duplicatedEvolutions.forEach { it -> this.remove(it) }
+
         if (this.evolutions.add(element)) {
             this.pokemon.notify(AddEvolutionPacket(this.pokemon, element, this.pokemon.getOwnerEntity()?.registryAccess() ?: server()?.registryAccess() ?: throw IllegalStateException("No registry access available")))
             return true
         }
+
         return false
     }
 
