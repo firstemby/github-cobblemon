@@ -66,11 +66,11 @@ object CobblemonEvents {
     @JvmField
     val FRIENDSHIP_UPDATED = EventObservable<FriendshipUpdatedEvent>()
     @JvmField
-    val TERATYPE_UPDATED = EventObservable<TeraTypeUpdatedEvent>()
+    val TERATYPE_UPDATED = CancelableObservable<TeraTypeUpdatedEvent>()
     @JvmField
-    val ABILITY_UPDATED = EventObservable<PokemonAbilityUpdatedEvent>()
+    val ABILITY_UPDATED = CancelableObservable<PokemonAbilityUpdatedEvent>()
     @JvmField
-    val EVS_GAINED = EventObservable<EVsGainedEvent>()
+    val EVS_GAINED = CancelableObservable<EVsGainedEvent>()
     @JvmField
     val POKEMON_FAINTED = EventObservable<PokemonFaintedEvent>()
     @JvmField

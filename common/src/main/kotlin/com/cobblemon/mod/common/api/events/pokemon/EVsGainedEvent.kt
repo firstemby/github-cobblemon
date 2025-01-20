@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.world.item.ItemStack
 
 /**
  * Event that is fired when a player owned Pokémon ia gaining ev values for a state.
@@ -20,6 +23,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  */
 data class EVsGainedEvent(
     val pokemon: Pokemon,
-    var stat: Stat,
-    var value: Int
-)
+    val stat: Stat,
+    var value: Int,
+    val stack: ItemStack?,
+    val battle: PokemonBattle?
+): Cancelable()

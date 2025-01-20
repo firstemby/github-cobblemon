@@ -9,9 +9,13 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.EVsGainedEvent
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import net.minecraft.world.item.ItemStack
 import kotlin.math.min
 
 class EVs : PokemonStats() {
@@ -33,23 +37,29 @@ class EVs : PokemonStats() {
      *
      * @param key The [Stat] being mutated.
      * @param value The amount to attempt to add, this wil safely be coerced to the highest possible value.
+     * @param pokemon The pokemon who owns the stat being mutated.
+     * @param stack ItemStack causing the stat addition. Can be null.
+     * @param battle Battle the stat addition occured in. Can be null if addition not battle related.
      * @return The amount added or 0 if the addition was impossible.
      */
-    fun add(key: Stat, value: Int): Int {
-        val currentTotal = this.sumOf { it.value }
-        if (currentTotal == MAX_TOTAL_VALUE && value > 0) {
-            return 0
-        }
-        val currentStat = this.getOrDefault(key)
-        val possibleForStat = MAX_STAT_VALUE - currentStat
-        val possibleForTotal = MAX_TOTAL_VALUE - currentTotal
-        val coercedValue = value.coerceIn(-currentStat, min(possibleForStat, possibleForTotal))
-        val newValue = currentStat + coercedValue
-        // avoid unnecessary updates
-        if (newValue != currentStat) {
-            this[key] = newValue
-            return coercedValue
-        }
+    fun add(key: Stat, value: Int, pokemon: Pokemon, stack: ItemStack? = null, battle: PokemonBattle? = null): Int {
+        CobblemonEvents.EVS_GAINED.postThen(EVsGainedEvent(pokemon, key, value, stack, battle), ifSucceeded = {
+            val currentTotal = this.sumOf { it.value }
+            if (currentTotal == MAX_TOTAL_VALUE && value > 0) {
+                return 0
+            }
+            val currentStat = this.getOrDefault(key)
+            val possibleForStat = MAX_STAT_VALUE - currentStat
+            val possibleForTotal = MAX_TOTAL_VALUE - currentTotal
+            val coercedValue = it.value.coerceIn(-currentStat, min(possibleForStat, possibleForTotal))
+            val newValue = currentStat + coercedValue
+            // avoid unnecessary updates
+            if (newValue != currentStat) {
+                this[key] = newValue
+                return coercedValue
+            }
+        })
+
         return 0
     }
 

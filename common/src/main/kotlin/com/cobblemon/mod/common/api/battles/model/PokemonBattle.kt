@@ -273,9 +273,7 @@ open class PokemonBattle(
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
-                            CobblemonEvents.EVS_GAINED.post(EVsGainedEvent(pokemon, stat, amount)) {
-                                pokemon.evs.add(stat, it.value)
-                            }
+                            pokemon.evs.add(stat, amount, pokemon, pokemon.heldItem(), this)
                         }
 
                     }

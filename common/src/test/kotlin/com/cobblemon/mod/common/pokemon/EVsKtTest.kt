@@ -38,7 +38,7 @@ internal class EVsKtTest {
         val evs = EVs.createEmpty()
         evs[Stats.HP] = EVs.MAX_STAT_VALUE
         evs[Stats.ATTACK] = EVs.MAX_STAT_VALUE
-        val added = evs.add(Stats.DEFENCE, 7)
+        val added = evs.add(Stats.DEFENCE, 7, Pokemon())
         assert(added == 6)
     }
 
@@ -52,6 +52,6 @@ internal class EVsKtTest {
     fun `decrement EVs`() {
         val evs = EVs.createEmpty()
         evs[Stats.HP] = EVs.MAX_STAT_VALUE
-        assert(evs.add(Stats.HP, -(EVs.MAX_STAT_VALUE + 1)) == -EVs.MAX_STAT_VALUE)
+        assert(evs.add(Stats.HP, -(EVs.MAX_STAT_VALUE + 1), Pokemon()) == -EVs.MAX_STAT_VALUE)
     }
 }

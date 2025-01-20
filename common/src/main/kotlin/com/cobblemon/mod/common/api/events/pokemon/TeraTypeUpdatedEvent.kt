@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.pokemon.Pokemon
 
@@ -20,4 +21,4 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 data class TeraTypeUpdatedEvent(
     val pokemon: Pokemon,
     var teraType: TeraType
-)
+): Cancelable()

@@ -351,9 +351,11 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var teraType: TeraType = TeraTypes.forElementalType(this.primaryType)
         set(value) {
-            TERATYPE_UPDATED.post(TeraTypeUpdatedEvent(this, value)) {
-                field = value
-                _teraType.emit(value)
+            if (field != value) {
+                TERATYPE_UPDATED.postThen(TeraTypeUpdatedEvent(this, value), ifSucceeded = {
+                    _teraType.emit(it.teraType)
+                    field = it.teraType
+                })
             }
         }
 
@@ -452,11 +454,11 @@ open class Pokemon : ShowdownIdentifiable {
     var ability: Ability = Abilities.DUMMY.create(false)
         // Keep internal for DTO & sync packet
         internal set(value) {
-            ABILITY_UPDATED.post(PokemonAbilityUpdatedEvent(this, value)) {
-                if (field != value) {
-                    _ability.emit(value)
-                }
-                field = value
+            if (field != value) {
+                ABILITY_UPDATED.postThen(PokemonAbilityUpdatedEvent(this, value), ifSucceeded = {
+                    _ability.emit(it.ability)
+                    field = it.ability
+                })
             }
         }
 
