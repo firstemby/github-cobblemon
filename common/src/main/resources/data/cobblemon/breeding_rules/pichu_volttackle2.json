@@ -1,0 +1,38 @@
+{
+  "parent1rules": {
+    "species": "charizard",
+    "form": null,
+    "ability": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": null
+  },
+  "parent2rules": {
+    "species": "charizard",
+    "form": null,
+    "ability": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": null
+  },
+  "species": "pichu",
+  "form" : null,
+  "nature" : "jolly",
+  "ability" : "speedboost",
+  "moves": {
+    "move1" : "volttackle",
+    "move2" : "fireblast",
+    "move3" : null,
+    "move4" : null
+  },
+  "ivs" : {
+    "hp": 31,
+    "attack" : null,
+    "defence" : 31,
+    "special_attack" : null,
+    "special_defence" : 31,
+    "speed" : null
+  },
+  "gender" : "male",
+  "pokeball" : "great_ball"
+}

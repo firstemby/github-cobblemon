@@ -8,26 +8,32 @@
 
 package com.cobblemon.mod.common.api.pokemon.breeding
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
-import com.cobblemon.mod.common.api.breeding.EggMove
-import com.cobblemon.mod.common.api.breeding.EggMoves
+import com.cobblemon.mod.common.api.abilities.AbilityPool
+import com.cobblemon.mod.common.api.abilities.AbilityTemplate
+import com.cobblemon.mod.common.api.breeding.BreedingRule
+import com.cobblemon.mod.common.api.breeding.BreedingRules
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.world.item.Item
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.Holder
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
 import kotlin.random.Random
 
 interface BreedingLogic {
@@ -41,32 +47,135 @@ interface BreedingLogic {
      * @author Apion, Nick, whatsy
      */
     // TODO we may want to call this method "hatch" now since we store parents on the egg itself now
-    fun breed(mother: Pokemon, father: Pokemon) : BreedingResult {
-        if(!this.canBreed(mother, father)) {
+    fun breed(mother: Pokemon, father: Pokemon): BreedingResult {
+        if (!this.canBreed(mother, father)) {
             return BreedingResult()
         }
-        val form: FormData = this.calculateForm(mother, father)
-        val nature: Nature = this.calculateNature(mother, father)
-        val ability: Ability = this.calculateAbility(mother, father, form)
-        val moveset: MoveSet = this.calculateMoveset(mother, father, form)
-        val ivs: IVs = this.calculateIVs(mother, father)
-        val gender = calculateGender(mother, father, form)
-        val pokeball: PokeBall = this.calculatePokeball(mother, father)
+        // Crab note: TODO Clean this shit up it is ugly af
 
+        // find matching breeding rule
+        val rule = BreedingRules.getBreedingRule(mother, father)
+
+        // Suppose we already have a fallbackForm: FormData
+        val fallbackForm: FormData = this.calculateForm(mother, father)
+
+        val finalSpecies: Species = if (rule?.species != null) {
+            PokemonSpecies.getByName(rule.species.lowercase()) ?: fallbackForm.species
+        } else {
+            fallbackForm.species
+        }
+
+        val finalForm: FormData = if (rule != null && rule.form != null) {
+            // find the species by rule.species or fallback
+            val speciesEntry = rule.species?.let { PokemonSpecies.getByName(it.lowercase()) } ?: fallbackForm.species
+            speciesEntry.forms.find { formData ->
+                // Compare ignoring case. formData.name might be "Normal", "Alolan", etc.
+                formData.name == rule.form.lowercase()
+            } ?: speciesEntry.standardForm
+        } else {
+            fallbackForm
+        }
+
+        // Calculate fallback IVs, then override stats from the rule if non-null
+        val finalIVs = mergeIvs(rule, mother, father)
+
+        // If the rule has a 'nature' field, use it, else fallback
+        val finalNature: Nature = if (rule?.nature != null) {
+            // If rule.nature = "adamant"
+            Natures.getNature(rule.nature.lowercase()) ?: this.calculateNature(mother, father)
+        } else {
+            this.calculateNature(mother, father)
+        }
+
+        // TODO get the ability to actually apply
+        // If the rule has an 'ability', use it, else fallback
+        val finalAbility: Ability = if (rule?.ability != null) {
+            Abilities.get(rule.ability.lowercase())?.create(true, Priority.HIGHEST) ?: this.calculateAbility(mother, father, finalForm)
+        } else {
+            this.calculateAbility(mother, father, finalForm)
+        }
+
+        // Handle moves from the rule. We read move1..move4 if present, turn them into MoveTemplates,
+        // then pass them as `eggMoves` to our `calculateMoveset`.
+        val ruleMoveTemplates: List<MoveTemplate> = if (rule != null) {
+            listOfNotNull(
+                    rule.moves.move1,
+                    rule.moves.move2,
+                    rule.moves.move3,
+                    rule.moves.move4
+            ).mapNotNull { moveString ->
+                // e.g. "flare_blitz"
+                Moves.getByName(moveString.lowercase())
+            }
+        } else {
+            emptyList()
+        }
+
+        // Pass these move templates to `calculateMoveset` as the optional egg moves.
+        val finalMoveSet = this.calculateMoveset(
+                mother,
+                father,
+                finalForm ?: fallbackForm,
+                eggMoves = ruleMoveTemplates
+        )
+
+        // Determine shiny randomly (or however your system does it)
+        val isShiny = (Random.nextFloat() < 1f / Cobblemon.config.shinyRate)
+
+        // If the rule has a 'gender' string, convert it to Gender; else fallback
+        val finalGender: Gender = if (rule?.gender != null) {
+            // e.g. "male" / "female"
+            Gender.entries.find { it.name.equals(rule.gender, ignoreCase = true) }
+                    ?: this.calculateGender(mother, father, finalForm)
+        } else {
+            this.calculateGender(mother, father, finalForm)
+        }
+
+        // If the rule has a 'pokeball', use it, else fallback
+        val finalPokeball: PokeBall = if (rule?.pokeball != null) {
+            PokeBalls.getPokeBall(cobblemonResource(rule.pokeball.lowercase())) ?: this.calculatePokeball(mother, father)
+        } else {
+            this.calculatePokeball(mother, father)
+        }
+
+        // create final egg from all this awful data
         val newPoke = EggPokemon(
-            ivs,
-            nature,
-            getPreEvoSpecies(form.species),
-            form,
-            ability,
-            moveset,
-            false,
-            gender,
-            pokeball
+                ivs = finalIVs,
+                nature = finalNature,
+                species = getPreEvoSpecies(finalSpecies),
+                formData = finalForm,
+                ability = finalAbility,
+                moveSet = finalMoveSet,
+                isShiny = isShiny,
+                gender = finalGender,
+                pokeball = finalPokeball
         )
 
         return BreedingResult(newPoke)
     }
+
+
+    private fun mergeIvs(
+            rule: BreedingRule?,
+            mother: Pokemon,
+            father: Pokemon
+    ): IVs {
+        val fallbackIvs = this.calculateIVs(mother, father)
+        if (rule == null) return fallbackIvs
+
+        // 3. For each stat, if rule.ivs.<stat> is non-null, override fallback
+        rule.ivs.hp?.let { fallbackIvs[Stats.HP] = it }
+        rule.ivs.attack?.let { fallbackIvs[Stats.ATTACK] = it }
+        rule.ivs.defence?.let { fallbackIvs[Stats.DEFENCE] = it }
+        rule.ivs.special_attack?.let { fallbackIvs[Stats.SPECIAL_ATTACK] = it }
+        rule.ivs.special_defence?.let { fallbackIvs[Stats.SPECIAL_DEFENCE] = it }
+        rule.ivs.speed?.let { fallbackIvs[Stats.SPEED] = it }
+
+        return fallbackIvs
+    }
+
+
+
 
     /**
      * Determines if two [Pokemon] can breed.
@@ -221,14 +330,15 @@ interface BreedingLogic {
      * @author Nick, Apion, whatsy
      */
     // TODO: This, based off of https://pokemondb.net/mechanics/breeding
-    fun calculateMoveset(mother: Pokemon, father: Pokemon, form: FormData): MoveSet {
-        val babySpecies = getPreEvoSpecies(form.species)
+    fun calculateMoveset(mother: Pokemon, father: Pokemon, form: FormData, eggMoves: List<MoveTemplate>? = null): MoveSet {
         val babyLearnset = form.moves.levelUpMoves[1] ?: emptySet()
         val inheritedMoves = mutableListOf<MoveTemplate>()
 
-        // Add Egg Moves using the JSON registry based on parents
-        val eggMoves = EggMoves.getEggMoveList(mother, father, babySpecies.resourceIdentifier)
-        inheritedMoves.addAll(eggMoves)
+        // Add Egg Moves using the JSON registry based on parent breeding rules
+        //val eggMoves = BreedingRules.getEggMoveList(mother, father, babySpecies.resourceIdentifier)
+        if (eggMoves != null) {
+            inheritedMoves.addAll(eggMoves)
+        }
 
         // Add TM/HM Moves from both mother and father
         val tmHmMoves = (mother.moveSet.getMoves() + father.moveSet.getMoves())
@@ -247,10 +357,11 @@ interface BreedingLogic {
         // Add Baby's Default Moves
         inheritedMoves.addAll(babyLearnset)
 
+        // TODO sort the moves properly
         // Limit to 4 moves, prioritizing certain moves first based off rules set by the games
         val finalMoves = inheritedMoves.distinct().sortedWith(compareBy(
                 { it.name == "volt_tackle" }, // Volt Tackle first
-                { eggMoves.contains(it) },    // Egg moves next
+                { eggMoves?.contains(it) },    // Egg moves next
                 { tmHmMoves.contains(it) },   // TM/HM moves after
                 { babyLearnset.contains(it) } // Default moves last
         )).take(4)
