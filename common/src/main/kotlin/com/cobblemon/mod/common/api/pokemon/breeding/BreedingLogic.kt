@@ -44,7 +44,7 @@ interface BreedingLogic {
      * @param mother The mother [Pokemon]
      * @param father The father [Pokemon]
      * @return The [BreedingResult] of the two [Pokemon]
-     * @author Apion, Nick, whatsy
+     * @author Apion, Nick, whatsy, plastered_crab
      */
     // TODO we may want to call this method "hatch" now since we store parents on the egg itself now
     fun breed(mother: Pokemon, father: Pokemon): BreedingResult {
@@ -70,7 +70,7 @@ interface BreedingLogic {
             val speciesEntry = rule.species?.let { PokemonSpecies.getByName(it.lowercase()) } ?: fallbackForm.species
             speciesEntry.forms.find { formData ->
                 // Compare ignoring case. formData.name might be "Normal", "Alolan", etc.
-                formData.name == rule.form.lowercase()
+                formData.name.lowercase() == rule.form.lowercase()
             } ?: speciesEntry.standardForm
         } else {
             fallbackForm
@@ -183,11 +183,34 @@ interface BreedingLogic {
      * @param mother The mother [Pokemon]
      * @param father The father [Pokemon]
      * @return Whether the two [Pokemon] can breed
-     * @author Apion, whatsy
+     * @author Apion, whatsy, plastered_crab
      */
     fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
-        return true
+        // check custom breeding rules first
+        if (BreedingRules.getBreedingRule(mother, father) != null)
+            return true
+
+        // Check if either Pokémon is in the No Eggs Discovered egg group
+        if (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED))
+            return false
+
+
+        // Check if both Pokémon are Ditto
+        if (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO))
+            return false
+
+
+        // Check if at least one parent is Ditto
+        val anyDitto = mother.form.eggGroups.contains(EggGroup.DITTO) || father.form.eggGroups.contains(EggGroup.DITTO)
+        if (anyDitto)
+            return true
+
+
+        // Check for shared egg groups and opposite genders
+        val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
+        return sharedEggGroups.isNotEmpty() && mother.gender != father.gender
     }
+
 
     /**
      * Determines the base pre-evolution of a [Pokemon] species.
@@ -359,12 +382,12 @@ interface BreedingLogic {
 
         // TODO sort the moves properly
         // Limit to 4 moves, prioritizing certain moves first based off rules set by the games
-        val finalMoves = inheritedMoves.distinct().sortedWith(compareBy(
-                { it.name == "volt_tackle" }, // Volt Tackle first
-                { eggMoves?.contains(it) },    // Egg moves next
-                { tmHmMoves.contains(it) },   // TM/HM moves after
-                { babyLearnset.contains(it) } // Default moves last
-        )).take(4)
+        val finalMoves = inheritedMoves.distinct().sortedWith(
+            compareByDescending<MoveTemplate> { it.name == "volt_tackle" } // Volt Tackle first
+                .thenByDescending { eggMoves?.contains(it) == true }       // Egg moves next
+                .thenByDescending { tmHmMoves.contains(it) }              // TM/HM moves after
+                .thenByDescending { babyLearnset.contains(it) }           // Default moves last
+        ).take(4)
 
         val moveSet = MoveSet()
         finalMoves.forEach { moveTemplate ->

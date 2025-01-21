@@ -58,14 +58,15 @@ object BreedingRules : JsonDataRegistry<BreedingRule> {
         // 2. Find all matching breeding rules in the registry.
         //    A rule matches if parent1rules & parent2rules match the mother/father conditions.
         //    If multiple rules match, we just return the first (or you could randomize).
-        val matchingRules = registry.values.filter { rule ->
-            rule.species != null &&
-                    checkParentRules(rule.parent1rules, motherRules) &&
-                    checkParentRules(rule.parent2rules, fatherRules)
+        val matchingRules = registry.values.firstOrNull { rule ->
+            rule.species != null && (
+                    (checkParentRules(rule.parent1rules, motherRules) && checkParentRules(rule.parent2rules, fatherRules)) ||
+                    (checkParentRules(rule.parent1rules, fatherRules) && checkParentRules(rule.parent2rules, motherRules))
+            )
         }
 
         // 3. If none match, return null. Otherwise return the first match.
-        return matchingRules.firstOrNull()
+        return matchingRules
     }
 
     /**

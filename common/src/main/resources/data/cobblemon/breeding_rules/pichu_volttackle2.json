@@ -1,6 +1,6 @@
 {
   "parent1rules": {
-    "species": "charizard",
+    "species": "manaphy",
     "form": null,
     "ability": null,
     "gender": null,
@@ -8,31 +8,31 @@
     "hasItem": null
   },
   "parent2rules": {
-    "species": "charizard",
+    "species": "ditto",
     "form": null,
     "ability": null,
     "gender": null,
     "hasMove": null,
     "hasItem": null
   },
-  "species": "pichu",
+  "species": "phione",
   "form" : null,
-  "nature" : "jolly",
-  "ability" : "speedboost",
+  "nature" : null,
+  "ability" : null,
   "moves": {
-    "move1" : "volttackle",
-    "move2" : "fireblast",
+    "move1" : null,
+    "move2" : null,
     "move3" : null,
     "move4" : null
   },
   "ivs" : {
-    "hp": 31,
+    "hp": null,
     "attack" : null,
-    "defence" : 31,
+    "defence" : null,
     "special_attack" : null,
-    "special_defence" : 31,
+    "special_defence" : null,
     "speed" : null
   },
-  "gender" : "male",
-  "pokeball" : "great_ball"
+  "gender" : null,
+  "pokeball" : null
 }

@@ -37,15 +37,15 @@ class EggPokemon(
         ivs.forEach {
             result.setIV(it.key, it.value)
         }
-        result.nature = nature
         result.species = species
-        result.form = formData
-        result.ability = ability
+        result.gender = gender
+        result.nature = nature
         result.moveSet.clear()
         result.moveSet.copyFrom(moveSet)
         result.shiny = isShiny
-        result.gender = gender
         result.caughtBall = pokeball
+        result.form = formData
+        result.ability = ability
         return result
 
     }
