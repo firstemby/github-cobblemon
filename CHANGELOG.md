@@ -17,6 +17,7 @@
 - Pokédexes can now be placed in Chiseled Bookshelves.
 - Added crossover paintings from Close Combat, Premonition, Altar, Slumber, and Nomad.
 - Added optional box argument to the /pc command
+- Added subtitles for every sound that needed to be subtitled, including cries for all Pokémon
 
 ### Changes
 - Pokémon will now be dynamically revealed to the Pokédex as they're seen instead of revealing entire parties at the end of battle regardless.
@@ -182,6 +183,7 @@
   - For Pokémon:
     - `pokemon.apply(PokemonProperties)`: Applies the given properties to the Pokémon.
     - `pokemon.owner`: Returns the owner of the Pokémon or 0.0 if there is no owner or they are not online.
+- Changed Eiscue's empty cries directory and split them into `eiscueice` and `eiscuenoice`
 
 ## [1.6.0 - The Record Catch Update (December 25th, 2024)](#1-6-0)
 #### "Now that there's a fishing mechanic, the mod is actually good!"

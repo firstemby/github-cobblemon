@@ -3752,7 +3752,10 @@
     "sounds": [ "cobblemon:pokemon/stonjourner/stonjourner_ambient" ]
   },
   "pokemon.eiscueice.ambient": {
-    "sounds": [ "cobblemon:pokemon/eiscueice/eiscueice_ambient" ]
+    "sounds": [ "cobblemon:pokemon/eiscue/eiscueice_ambient" ]
+  },
+  "pokemon.eiscuenoice.ambient": {
+    "sounds": [ "cobblemon:pokemon/eiscue/eiscuenoice_ambient" ]
   },
   "pokemon.indeedee.ambient": {
     "sounds": [ "cobblemon:pokemon/indeedee/indeedee_ambient" ]
@@ -7790,7 +7793,11 @@
   },
   "pokemon.eiscueice.cry": {
   "subtitle": "cobblemon:subtitle.pokemon.eiscueice.cry",
-    "sounds": [ { "name": "cobblemon:pokemon/eiscueice/eiscueice_cry", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:pokemon/eiscue/eiscueice_cry", "volume": 0.8 } ]
+  },
+  "pokemon.eiscuenoice.cry": {
+    "subtitle": "cobblemon:subtitle.pokemon.eiscuenoice.cry",
+    "sounds": [ { "name": "cobblemon:pokemon/eiscue/eiscuenoice_cry", "volume": 0.8 } ]
   },
   "pokemon.indeedee.cry": {
   "subtitle": "cobblemon:subtitle.pokemon.indeedee.cry",
