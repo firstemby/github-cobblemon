@@ -368,6 +368,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                                 species = breedResult.pokemon!!.species.resourceIdentifier, // Species
                                                 parentOne = motherPoke, // Mother UUID
                                                 parentTwo = fatherPoke, // Father UUID
+                                                form = breedResult.pokemon.formData.name.lowercase(),
                                                 timeToHatch = 200F // 10 seconds hatch time
                                         ))
 

@@ -449,6 +449,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                                     species = it.resourceIdentifier,
                                     parentOne = parent1.pokemon, // Parent one UUID
                                     parentTwo = parent2.pokemon, // Parent two UUID
+                                    form = childResult.pokemon.formData.name.lowercase(),
                                     timeToHatch = 200F // 10 seconds hatch time
                             )
                         }

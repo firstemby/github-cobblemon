@@ -35,7 +35,8 @@ object EggRenderHelper {
         rotation: Triple<Float, Float, Float> = Triple(0f, 0f, 0f)
     ) {
         val model = EggModelRepo.eggModels[cobblemonResource("egg")] ?: return
-        val texture = cobblemonResource("textures/egg/${egg.species.path}_egg.png")
+        val form = if (egg.form.lowercase() == "normal") "" else "_" + egg.form.lowercase()
+        val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
         matrices.pushPose()
         matrices.translate(translation.first, translation.second, translation.third)

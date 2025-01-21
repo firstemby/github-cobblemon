@@ -38,19 +38,21 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     companion object {
         val CODEC: Codec<EggBlockEntity> = RecordCodecBuilder.create { instance ->
             instance.group(
-                    ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it.getEgg()?.species ?: cobblemonResource("unknown") },
-                    Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { Optional.ofNullable(it.getEgg()?.parentOne) },
-                    Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { Optional.ofNullable(it.getEgg()?.parentTwo) },
-                    Codec.FLOAT.optionalFieldOf("timeToHatch", 0F).forGetter { it.getEgg()?.timeToHatch ?: 0F }
-            ).apply(instance) { species, parentOneOpt, parentTwoOpt, timeToHatch ->
+                ResourceLocation.CODEC.optionalFieldOf("species", cobblemonResource("unknown")).forGetter { it.getEgg()?.species ?: cobblemonResource("unknown") },
+                Pokemon.CODEC.optionalFieldOf("parentOne").forGetter { Optional.ofNullable(it.getEgg()?.parentOne) },
+                Pokemon.CODEC.optionalFieldOf("parentTwo").forGetter { Optional.ofNullable(it.getEgg()?.parentTwo) },
+                Codec.STRING.optionalFieldOf("form", "").forGetter { it.getEgg()?.form ?: "" },
+                Codec.FLOAT.optionalFieldOf("timeToHatch", 0F).forGetter { it.getEgg()?.timeToHatch ?: 0F }
+            ).apply(instance) { species, parentOneOpt, parentTwoOpt, form, timeToHatch ->
                 EggBlockEntity(BlockPos(0, 0, 0), Blocks.AIR.defaultBlockState()).apply {
                     setEgg(
-                            Egg(
-                                    species = species,
-                                    parentOne = parentOneOpt.orElse(null),
-                                    parentTwo = parentTwoOpt.orElse(null),
-                                    timeToHatch = timeToHatch
-                            )
+                        Egg(
+                            species = species,
+                            parentOne = parentOneOpt.orElse(null),
+                            parentTwo = parentTwoOpt.orElse(null),
+                            form = form,
+                            timeToHatch = timeToHatch
+                        )
                     )
                 }
             }
@@ -69,14 +71,6 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
     /**
      * Retrieves the Egg data from the EggComponent.
      */
-    /*fun getEgg(): Egg? {
-        return eggComponent?.egg ?: Egg(
-                species = cobblemonResource("unknown"),
-                parentOne = null,
-                parentTwo = null,
-                timeToHatch = 0
-        )
-    }*/
     fun getEgg(): Egg? {
         return eggComponent?.egg
     }
@@ -97,8 +91,8 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         super.saveAdditional(tag, registries)
         eggComponent?.egg?.let { egg ->
             Egg.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, egg)
-                    .result()
-                    ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
+                .result()
+                ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
         }
     }
 
@@ -110,7 +104,7 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         val currentEgg = getEgg() ?: return
 
         // Log before clearing
-        println("Dropping egg: ${currentEgg.species} at $pos")
+        println("Dropping egg: ${currentEgg.species}, Form: ${currentEgg.form} at $pos")
 
         // Create an ItemStack with the EggComponent
         val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {
@@ -156,12 +150,11 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         super.loadAdditional(tag, registries)
         if (tag.contains("EggComponent")) {
             val egg = Egg.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
-                    .result()
-                    ?.orElse(null)
+                .result()
+                ?.orElse(null)
             eggComponent = if (egg != null) EggComponent(egg) else null
         }
     }
-
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
         return ClientboundBlockEntityDataPacket.create(this)
@@ -171,5 +164,4 @@ class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBl
         val tag = saveWithoutMetadata(registryLookup)
         return tag
     }
-
 }
