@@ -244,7 +244,6 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             world.addFreshEntity(this)
         }
 
-        // todo WHY WON'T THEY CRY :(
         // Trigger cry animation
         afterOnServer(seconds = 1.0f) {
             spawnedEntity.cry()

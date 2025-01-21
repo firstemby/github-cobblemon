@@ -22,7 +22,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 
 class EggPokemon(
-    val IVs: IVs,
+    val ivs: IVs,
     val nature: Nature,
     val species: Species,
     val formData: FormData,
@@ -34,24 +34,24 @@ class EggPokemon(
 ) {
     fun generatePokemon(): Pokemon {
         val result = Pokemon()
-        IVs.forEach {
+        ivs.forEach {
             result.setIV(it.key, it.value)
         }
-        result.nature = nature
         result.species = species
-        result.form = formData
-        result.ability = ability
+        result.gender = gender
+        result.nature = nature
         result.moveSet.clear()
         result.moveSet.copyFrom(moveSet)
         result.shiny = isShiny
-        result.gender = gender
         result.caughtBall = pokeball
+        result.form = formData
+        result.ability = ability
         return result
 
     }
     fun toNbt(): CompoundTag {
         val result = CompoundTag()
-        val ivNbt = IVs.saveToNBT(CompoundTag())
+        val ivNbt = ivs.saveToNBT(CompoundTag())
 
         result.put(DataKeys.POKEMON_IVS, ivNbt)
         result.putString(DataKeys.POKEMON_NATURE, nature.name.toString())

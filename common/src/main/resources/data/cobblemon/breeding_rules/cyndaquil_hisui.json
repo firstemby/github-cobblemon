@@ -1,0 +1,38 @@
+{
+  "parent1rules": {
+    "species": "typhlosion",
+    "form": null,
+    "ability": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": "minecraft:grass_block"
+  },
+  "parent2rules": {
+    "species": "cyndaquil",
+    "form": null,
+    "ability": null,
+    "gender": "female",
+    "hasMove": null,
+    "hasItem": null
+  },
+  "species": "zigzagoon",
+  "form" : "galarian",
+  "nature" : "jolly",
+  "ability" : "wonderguard",
+  "moves": {
+    "move1" : "volttackle",
+    "move2" : "fireblast",
+    "move3" : "hyperbeam",
+    "move4" : "explosion"
+  },
+  "ivs" : {
+    "hp": 31,
+    "attack" : 31,
+    "defence" : 31,
+    "special_attack" : 31,
+    "special_defence" : 31,
+    "speed" : 31
+  },
+  "gender" : "male",
+  "pokeball" : "master_ball"
+}

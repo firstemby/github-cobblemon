@@ -1,0 +1,38 @@
+{
+  "parent1rules": {
+    "species": "manaphy",
+    "form": null,
+    "ability": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": null
+  },
+  "parent2rules": {
+    "species": "ditto",
+    "form": null,
+    "ability": null,
+    "gender": null,
+    "hasMove": null,
+    "hasItem": null
+  },
+  "species": "phione",
+  "form" : null,
+  "nature" : null,
+  "ability" : null,
+  "moves": {
+    "move1" : null,
+    "move2" : null,
+    "move3" : null,
+    "move4" : null
+  },
+  "ivs" : {
+    "hp": null,
+    "attack" : null,
+    "defence" : null,
+    "special_attack" : null,
+    "special_defence" : null,
+    "speed" : null
+  },
+  "gender" : null,
+  "pokeball" : null
+}
