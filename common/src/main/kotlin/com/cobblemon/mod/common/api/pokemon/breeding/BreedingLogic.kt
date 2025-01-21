@@ -90,7 +90,11 @@ interface BreedingLogic {
         // TODO get the ability to actually apply
         // If the rule has an 'ability', use it, else fallback
         val finalAbility: Ability = if (rule?.ability != null) {
-            Abilities.get(rule.ability.lowercase())?.create(true, Priority.HIGHEST) ?: this.calculateAbility(mother, father, finalForm)
+            Abilities.get(rule.ability.lowercase())?.create(true, Priority.HIGHEST) ?: this.calculateAbility(
+                mother,
+                father,
+                finalForm
+            )
         } else {
             this.calculateAbility(mother, father, finalForm)
         }
@@ -99,10 +103,10 @@ interface BreedingLogic {
         // then pass them as `eggMoves` to our `calculateMoveset`.
         val ruleMoveTemplates: List<MoveTemplate> = if (rule != null) {
             listOfNotNull(
-                    rule.moves.move1,
-                    rule.moves.move2,
-                    rule.moves.move3,
-                    rule.moves.move4
+                rule.moves.move1,
+                rule.moves.move2,
+                rule.moves.move3,
+                rule.moves.move4
             ).mapNotNull { moveString ->
                 // e.g. "flare_blitz"
                 Moves.getByName(moveString.lowercase())
@@ -113,10 +117,10 @@ interface BreedingLogic {
 
         // Pass these move templates to `calculateMoveset` as the optional egg moves.
         val finalMoveSet = this.calculateMoveset(
-                mother,
-                father,
-                finalForm ?: fallbackForm,
-                eggMoves = ruleMoveTemplates
+            mother,
+            father,
+            finalForm ?: fallbackForm,
+            eggMoves = ruleMoveTemplates
         )
 
         // Determine shiny randomly (or however your system does it)
@@ -126,29 +130,32 @@ interface BreedingLogic {
         val finalGender: Gender = if (rule?.gender != null) {
             // e.g. "male" / "female"
             Gender.entries.find { it.name.equals(rule.gender, ignoreCase = true) }
-                    ?: this.calculateGender(mother, father, finalForm)
+                ?: this.calculateGender(mother, father, finalForm)
         } else {
             this.calculateGender(mother, father, finalForm)
         }
 
         // If the rule has a 'pokeball', use it, else fallback
         val finalPokeball: PokeBall = if (rule?.pokeball != null) {
-            PokeBalls.getPokeBall(cobblemonResource(rule.pokeball.lowercase())) ?: this.calculatePokeball(mother, father)
+            PokeBalls.getPokeBall(cobblemonResource(rule.pokeball.lowercase())) ?: this.calculatePokeball(
+                mother,
+                father
+            )
         } else {
             this.calculatePokeball(mother, father)
         }
 
         // create final egg from all this awful data
         val newPoke = EggPokemon(
-                ivs = finalIVs,
-                nature = finalNature,
-                species = getPreEvoSpecies(finalSpecies),
-                formData = finalForm,
-                ability = finalAbility,
-                moveSet = finalMoveSet,
-                isShiny = isShiny,
-                gender = finalGender,
-                pokeball = finalPokeball
+            ivs = finalIVs,
+            nature = finalNature,
+            species = getPreEvoSpecies(finalSpecies),
+            formData = finalForm,
+            ability = finalAbility,
+            moveSet = finalMoveSet,
+            isShiny = isShiny,
+            gender = finalGender,
+            pokeball = finalPokeball
         )
 
         return BreedingResult(newPoke)
@@ -156,9 +163,9 @@ interface BreedingLogic {
 
 
     private fun mergeIvs(
-            rule: BreedingRule?,
-            mother: Pokemon,
-            father: Pokemon
+        rule: BreedingRule?,
+        mother: Pokemon,
+        father: Pokemon
     ): IVs {
         val fallbackIvs = this.calculateIVs(mother, father)
         if (rule == null) return fallbackIvs
@@ -210,13 +217,6 @@ interface BreedingLogic {
         val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
         return sharedEggGroups.isNotEmpty() && mother.gender != father.gender
     }
-
-
-        // Check for shared egg groups and opposite genders
-        val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
-        return sharedEggGroups.isNotEmpty() && mother.gender != father.gender
-    }
-
 
     /**
      * Determines the base pre-evolution of a [Pokemon] species.
