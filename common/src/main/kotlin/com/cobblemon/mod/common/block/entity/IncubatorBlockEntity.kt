@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
+import java.util.*
 
 class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     BlockEntity(CobblemonBlockEntities.INCUBATOR, pos, state), WorldlyContainer {
@@ -65,16 +66,37 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     private var eggItem: ItemStack = ItemStack.EMPTY
+    var ownerUUID: UUID? = null
 
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.put("EggItem", eggItem.saveOptional(registryLookup))
+        ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(tag, registryLookup)
         eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
+
+        if (tag.contains("OwnerUUID")) {
+            ownerUUID = tag.getUUID("OwnerUUID")
+        }
     }
+
+    fun getComparatorOutput(): Int {
+        val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
+        val egg = eggComponent?.egg ?: return 0
+
+        // Assuming timeToHatch ranges from 0F (ready) to some max value, e.g., 100F
+        val maxHatchTime = 100F // todo replace this with the egg's species expected time to hatch (will need a new algorithm method. Maybe based off of egg cycle + other stuff)
+        val currentHatchTime = egg.timeToHatch.coerceAtLeast(0F).coerceAtMost(maxHatchTime)
+
+        // Calculate progress: 0 (ready) to 15
+        val progress = ((maxHatchTime - currentHatchTime) / maxHatchTime * 15).toInt()
+
+        return progress
+    }
+
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
         return ClientboundBlockEntityDataPacket.create(this)

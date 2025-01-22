@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
@@ -30,7 +31,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
@@ -80,9 +83,47 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity ?: return InteractionResult.FAIL
+
+        val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg
+
+        // if the player interacting with the nest is not the owner of the nest we do not want them taking the egg or hatching
+        if (egg != null && entity.ownerUUID != player.uuid && entity.ownerUUID != null){
+            return InteractionResult.FAIL
+        }
+
+        // if the parent owner ID is null then something is wrong (maybe something happened to one of the parent datas)
+        if (egg != null && egg?.parentOne?.getOwnerUUID() == null || egg?.parentTwo?.getOwnerUUID() == null) {
+            return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
+        }
+
+        // if the person interacting is not the owner of one of the parents
+        if (egg != null && player.uuid != egg?.parentOne?.getOwnerUUID() || player.uuid != egg?.parentTwo?.getOwnerUUID()) {
+            return InteractionResult.FAIL
+        }
+
         return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
     }
 
+    override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
+        // Retrieve the block entity at the given position
+        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
+
+        // Check if the player is the owner of the nest
+        val isOwner = blockEntity.ownerUUID == player.uuid
+
+        // Check if there's an egg present in the nest
+        val hasEgg = !blockEntity.getItem(0).isEmpty
+
+        return if (!isOwner && hasEgg) {
+            // Reduce destroy speed by 80%, making it 5 times harder to break
+            super.getDestroyProgress(state, player, level, pos) * 0.2f
+        } else {
+            // Use the default destroy speed
+            super.getDestroyProgress(state, player, level, pos)
+        }
+    }
+
+    // todo we want destroying to take longer if it is not their nest
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? NestBlockEntity
 
@@ -120,6 +161,21 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
             Fluids.WATER.getSource(false)
         } else super.getFluidState(state)
     }
+
+    override fun setPlacedBy(
+            level: Level,
+            pos: BlockPos,
+            state: BlockState,
+            placer: LivingEntity?,
+            stack: ItemStack
+    ) {
+        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity
+        if (placer is Player) {
+            blockEntity?.ownerUUID = placer.uuid
+        }
+        super.setPlacedBy(level, pos, state, placer, stack)
+    }
+
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
         if (variant == NestVariant.WATER) {

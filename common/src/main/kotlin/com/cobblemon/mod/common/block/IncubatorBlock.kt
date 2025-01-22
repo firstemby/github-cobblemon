@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.AirItem
@@ -19,6 +20,7 @@ import net.minecraft.world.item.EggItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.BaseEntityBlock
@@ -51,6 +53,20 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         return defaultBlockState().setValue(FACING, ctx.horizontalDirection.opposite)
     }
 
+    override fun setPlacedBy(
+            level: Level,
+            pos: BlockPos,
+            state: BlockState,
+            placer: LivingEntity?,
+            stack: ItemStack
+    ) {
+        val blockEntity = level.getBlockEntity(pos) as? IncubatorBlockEntity
+        if (placer is Player) {
+            blockEntity?.ownerUUID = placer.uuid
+        }
+        super.setPlacedBy(level, pos, state, placer, stack)
+    }
+
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
     }
@@ -77,9 +93,14 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA)?.egg
 
-        // if the parent owner ID is null
+        // if the player interacting with the nest is not the owner of the nest we do not want them taking the egg or hatching
+        if (egg != null && entity.ownerUUID != player.uuid && entity.ownerUUID != null){
+            return InteractionResult.FAIL
+        }
+
+        // if the parent owner ID is null then something is wrong (maybe something happened to one of the parent datas)
         if (egg != null && egg?.parentOne?.getOwnerUUID() == null || egg?.parentTwo?.getOwnerUUID() == null) {
-            return InteractionResult.SUCCESS
+            return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
         }
 
         // if the person interacting is not the owner of one of the parents
@@ -88,6 +109,35 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         }
 
         return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
+    }
+
+    override fun hasAnalogOutputSignal(state: BlockState): Boolean {
+        return true
+    }
+
+    override fun getAnalogOutputSignal(state: BlockState, level: Level, pos: BlockPos): Int {
+        val blockEntity = level.getBlockEntity(pos) as? IncubatorBlockEntity
+        return blockEntity?.getComparatorOutput() ?: 0
+    }
+
+
+    override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
+        // Retrieve the block entity at the given position
+        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
+
+        // Check if the player is the owner of the nest
+        val isOwner = blockEntity.ownerUUID == player.uuid
+
+        // Check if there's an egg present in the nest
+        val hasEgg = !blockEntity.getItem(0).isEmpty
+
+        return if (!isOwner && hasEgg) {
+            // Reduce destroy speed by 80%, making it 5 times harder to break
+            super.getDestroyProgress(state, player, level, pos) * 0.2f
+        } else {
+            // Use the default destroy speed
+            super.getDestroyProgress(state, player, level, pos)
+        }
     }
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {

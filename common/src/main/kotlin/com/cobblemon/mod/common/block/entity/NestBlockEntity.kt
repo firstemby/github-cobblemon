@@ -64,9 +64,11 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.ticks.TickPriority
+import java.util.*
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
     private var eggItem: ItemStack = ItemStack.EMPTY
+    var ownerUUID: UUID? = null // player UUID that placed this nest
 
     /**
      * Sets the ItemStack and synchronizes it.
@@ -137,6 +139,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //if (!eggItem.isEmpty) {
             tag.put("EggItem", eggItem.saveOptional(registryLookup))
         //}
+        ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -144,6 +147,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //if (tag.contains("EggItem")) {
             eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
         //}
+        if (tag.contains("OwnerUUID")) {
+            ownerUUID = tag.getUUID("OwnerUUID")
+        }
+
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
@@ -488,7 +495,6 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                         }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                     }
-
                 }
             }
         }
