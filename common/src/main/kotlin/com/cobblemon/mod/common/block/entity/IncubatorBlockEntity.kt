@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
@@ -239,7 +240,15 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     override fun setChanged() {
+        val hasEgg = !eggItem.isEmpty
+
         level?.let {
+            if (blockState.getValue(IncubatorBlock.HAS_EGG) != hasEgg) {
+                // Update the block state with the new `HAS_EGG` value
+                val newState = blockState.setValue(IncubatorBlock.HAS_EGG, hasEgg)
+                level?.setBlock(worldPosition, newState, 3)
+            }
+
             it.blockEntityChanged(worldPosition)
             it.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
             it.updateNeighborsAt(worldPosition, blockState.block)

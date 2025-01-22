@@ -492,6 +492,9 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.BEDROCK.explosionResistance)
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK)
+        .lightLevel { state ->
+            if (state.getValue(IncubatorBlock.HAS_EGG)) 5 else 0 // Emit 5 light when HAS_EGG is true
+        }
     ))
 
     init {
