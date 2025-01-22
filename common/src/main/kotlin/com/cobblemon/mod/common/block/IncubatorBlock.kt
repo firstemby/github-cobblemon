@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
@@ -74,8 +75,15 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         val entity = level.getBlockEntity(blockPos) as? IncubatorBlockEntity ?: return InteractionResult.FAIL
 
-        val egg = entity.getEgg()
-        if (egg != null && player.uuid != egg?.parentOne?.getOwnerUUID() && player.uuid != egg?.parentTwo?.getOwnerUUID()) {
+        val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA)?.egg
+
+        // if the parent owner ID is null
+        if (egg != null && egg?.parentOne?.getOwnerUUID() == null || egg?.parentTwo?.getOwnerUUID() == null) {
+            return InteractionResult.SUCCESS
+        }
+
+        // if the person interacting is not the owner of one of the parents
+        if (egg != null && player.uuid != egg?.parentOne?.getOwnerUUID() || player.uuid != egg?.parentTwo?.getOwnerUUID()) {
             return InteractionResult.FAIL
         }
 
@@ -88,7 +96,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         entity?.let {
             if (!player.isCreative) {
-                it.dropEgg(state, level, pos)
+                it.dropItem(level, pos, state)
                 if (itemStack.item is PickaxeItem) {
                     val itemEntity = ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.INCUBATOR.defaultInstance)
                     level.addFreshEntity(itemEntity)

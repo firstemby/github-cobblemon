@@ -36,22 +36,16 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
 class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
-    BlockEntity(CobblemonBlockEntities.INCUBATOR, pos, state) {
+    BlockEntity(CobblemonBlockEntities.INCUBATOR, pos, state), WorldlyContainer {
 
     companion object {
        val TICKER = BlockEntityTicker<IncubatorBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
-            val egg = blockEntity.getEgg()
+            val egg = blockEntity.getItem(0)?.get(CobblemonItemComponents.EGG_DATA)?.egg
 
             if (egg != null) {
                 if (egg.timeToHatch <= 0) {
-                    // Try to find a nearby ServerPlayer to pass to hatchPokemon
-                    val nearestPlayer = world.getNearestPlayer(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 10.0, false)
-
-                    if (nearestPlayer is ServerPlayer) {
-                        // todo Crab Note: I removed this as it was auto-hatching eggs as soon as you got near them
-                        //blockEntity.hatchPokemon(state, world, pos, nearestPlayer)
-                    }
+                    // todo egg is ready to hatch
 
                     blockEntity.setChanged()
                     return@BlockEntityTicker
@@ -60,84 +54,26 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
                 // Decrease hatch time if the egg still has time left
                 if (egg.timeToHatch > 0F) { egg.timeToHatch -= 1.25F }
 
+                // todo is this needed?
                 // Sync to client every 10 seconds (200 ticks)
-                if (egg.timeToHatch % 200F == 0F) {
+                /*if (egg.timeToHatch % 200F == 0F) {
                     blockEntity.setEgg(egg) // Update component and synchronize
                     blockEntity.setChanged()
-                }
+                }*/
             }
         }
     }
 
-    var eggComponent: EggComponent? = null
-        private set
-
-    /**
-     * Updates the egg in the incubator when interacted with by a player.
-     */
-    fun updateEgg(player: Player, hand: InteractionHand): ItemInteractionResult {
-        val heldStack = player.getItemInHand(hand)
-
-        // Check for EggComponent in the player's held item
-        val eggComponent = heldStack.get(CobblemonItemComponents.EGG_DATA)
-
-        return when {
-            eggComponent != null && this.eggComponent == null -> {
-                this.eggComponent = eggComponent
-                if (!player.isCreative) {
-                    heldStack.shrink(1)
-                }
-                setChanged()
-                ItemInteractionResult.SUCCESS
-            }
-
-            this.eggComponent != null -> {
-                val eggStack = ItemStack(Items.AIR).apply {
-                    set(CobblemonItemComponents.EGG_DATA, this@IncubatorBlockEntity.eggComponent!!)
-                }
-                player.addItem(eggStack)
-                this.eggComponent = null
-                setChanged()
-                ItemInteractionResult.SUCCESS
-            }
-
-            else -> ItemInteractionResult.FAIL
-        }
-    }
-
-    /**
-     * Sets the EggComponent and synchronizes it.
-     */
-    fun setEgg(egg: Egg?) {
-        this.eggComponent = EggComponent(egg)
-        setChanged() // Mark the block entity as changed.
-        level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
-        //println("Egg data synchronized to client for NestBlockEntity at $blockPos: $egg")
-    }
-
-    /**
-     * Retrieves the EggComponent stored in the incubator.
-     */
-    fun getEgg(): Egg? = eggComponent?.egg
+    private var eggItem: ItemStack = ItemStack.EMPTY
 
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
-        eggComponent?.let {
-            CobblemonItemComponents.EGG_DATA.codec()
-                ?.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, it)
-                ?.result()
-                ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
-        }
+        tag.put("EggItem", eggItem.saveOptional(registryLookup))
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(tag, registryLookup)
-        if (tag.contains("EggComponent")) {
-            eggComponent = CobblemonItemComponents.EGG_DATA.codec()
-                ?.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
-                ?.result()
-                ?.orElse(null)
-        }
+        eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
@@ -150,35 +86,15 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
 
-    fun dropEgg(
-        state: BlockState,
-        world: Level,
-        pos: BlockPos
-    ) {
-        val currentEgg = getEgg() ?: return
-
-        // Log before clearing
-        println("Dropping egg: ${currentEgg.species} at $pos")
-
-        // Create an ItemStack with the EggComponent
-        val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, EggComponent(currentEgg))
+    fun dropItem(world: Level, pos: BlockPos, state: BlockState) {
+        if (!eggItem.isEmpty) {
+            val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItem.copy())
+            world.addFreshEntity(itemEntity)
+            eggItem = ItemStack.EMPTY
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
-
-        // Debug log to verify component data
-        val component = eggItemStack.get(CobblemonItemComponents.EGG_DATA)
-        println("EggComponent on dropped ItemStack: $component")
-
-        // Spawn the egg as an entity
-        val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItemStack)
-        world.addFreshEntity(itemEntity)
-
-        // Clear the egg from the nest
-        setEgg(null)
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS) // Notify client
     }
-
 
     fun onUse(
         state: BlockState,
@@ -188,28 +104,25 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         hand: InteractionHand,
         hit: BlockHitResult
     ): InteractionResult {
-        val currentEgg = getEgg()
+        val heldItem = player.getItemInHand(hand)
 
-        // If the nest has an egg
-        if (currentEgg != null) {
-            return if (currentEgg.timeToHatch <= 0F) {
-                hatchPokemon(state, world, pos, player) // Hatch if ready
-                InteractionResult.SUCCESS
-            } else {
-                dropEgg(state, world, pos) // Drop if not hatched yet
-                InteractionResult.SUCCESS
+        val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
+        if (!eggItem.isEmpty && eggComponent != null) {
+            // Hatch the Pokémon if the time to hatch is 0 or below
+            if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
+                hatchPokemon(state, world, pos, player)
+                return InteractionResult.SUCCESS
             }
+
+            // Otherwise, drop the egg
+            dropItem(world, pos, state)
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+            return InteractionResult.SUCCESS
         }
 
-        // If player is holding an egg, place it in the nest
-        val playerStack = player.getItemInHand(hand)
-        val eggComponent = playerStack.get(CobblemonItemComponents.EGG_DATA)
-
-        if (eggComponent != null) {
-            setEgg(eggComponent.egg)
-            if (!player.isCreative) {
-                playerStack.shrink(1) // Consume the egg if not in creative mode
-            }
+        // Place a new egg if the player is holding one
+        if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
+            setItem(0,heldItem.split(1))
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -224,17 +137,20 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         pos: BlockPos,
         player: ServerPlayer
     ) {
-        val egg = getEgg() ?: return
+        val eggItem = getItem(0) // Retrieve the egg item from the container
+        val egg = eggItem.get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
         if (world !is ServerLevel) return
 
         val parentOne = egg.parentOne
         val parentTwo = egg.parentTwo
 
+        // Validate parent Pokémon
         if (parentOne == null || parentTwo == null) {
             player.displayClientMessage("Hatching failed: Parent Pokémon not found.".red(), true)
             return
         }
 
+        // Perform breeding to generate the Pokémon
         val breedingResult = BreedingLogicManager.breed(parentOne, parentTwo)
         val hatchedPokemon = breedingResult.pokemon?.generatePokemon()
 
@@ -246,27 +162,78 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         val playerParty = Cobblemon.storage.getParty(player)
         val playerPC = Cobblemon.storage.getPC(player)
 
-        // If PC is full, prevent hatching
-        // todo find maybe a better way to check if PC is full
+        // Ensure PC has space for the Pokémon
         if (playerPC.getFirstAvailablePosition() == null) {
             player.displayClientMessage("Hatching failed: Your PC is full.".red(), true)
             return
         }
 
-        // If party has space, add Pokémon to the party
+        // Add Pokémon to the party or PC
         if (playerParty.getFirstAvailablePosition() != null) {
             playerParty.add(hatchedPokemon)
             player.displayClientMessage("The Pokémon was added to your party!".green(), true)
-        }
-
-        // If party is full but PC has space, add to PC and recall Pokémon
-        else if (playerPC.add(hatchedPokemon)) {
+        } else if (playerPC.add(hatchedPokemon)) {
             player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
+        } else {
+            player.displayClientMessage("Hatching failed: Unable to store Pokémon.".red(), true)
+            return
         }
 
-        // Clear the egg from the nest and update the block entity
-        setEgg(null)
+        // Clear the egg item and synchronize
+        setItem(0, ItemStack.EMPTY)
         setChanged()
         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+    }
+
+    override fun getContainerSize(): Int = 1
+
+    override fun isEmpty(): Boolean = eggItem.isEmpty
+
+    override fun getItem(slot: Int): ItemStack = if (slot == 0) eggItem else ItemStack.EMPTY
+
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
+        if (slot == 0 && !eggItem.isEmpty) {
+            val removed = eggItem.split(amount)
+            setChanged()
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
+        if (slot == 0) {
+            val removed = eggItem
+            eggItem = ItemStack.EMPTY
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun setItem(slot: Int, stack: ItemStack) {
+        if (slot == 0) {
+            eggItem = stack
+            setChanged()
+        }
+    }
+
+    override fun setChanged() {
+        level?.blockEntityChanged(worldPosition)
+        level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
+    }
+
+    override fun stillValid(player: Player): Boolean = true
+
+    override fun getSlotsForFace(direction: Direction): IntArray = intArrayOf(0)
+
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, direction: Direction?): Boolean {
+        return slot == 0 && stack.get(CobblemonItemComponents.EGG_DATA) != null
+    }
+
+    override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, direction: Direction): Boolean {
+        return slot == 0 && !eggItem.isEmpty
+    }
+
+    override fun clearContent() {
+        eggItem = ItemStack.EMPTY
     }
 }

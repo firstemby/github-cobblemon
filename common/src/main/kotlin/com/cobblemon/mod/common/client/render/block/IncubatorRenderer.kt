@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.client.render.block
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
@@ -28,7 +29,7 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         if (!isClientSide) return
 
         // Retrieve the egg data from the entity
-        val egg = entity.getEgg() ?: return
+        val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
         matrices.pushPose()
         // Render the egg model with the dynamically determined texture
         EggRenderHelper.renderEgg(

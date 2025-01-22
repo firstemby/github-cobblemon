@@ -468,7 +468,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             if (state?.block is NestBlock) {
                 val entity = level?.getBlockEntity(it) as NestBlockEntity
                 //Cobblemon.LOGGER.warn("Nest at ${it.toString()}")
-                if (entity.getItem().item == CobblemonItems.POKEMON_EGG.asItem()) {
+                if (entity.getItem().item != CobblemonItems.POKEMON_EGG.asItem()) {
                     res.add(it)
                 }
                 else
