@@ -11,7 +11,9 @@ package com.cobblemon.mod.common.client.render.models.blockbench.repository
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.reflect.TypeToken
 import net.minecraft.server.packs.PackType
@@ -21,20 +23,20 @@ import net.minecraft.resources.ResourceLocation
 /**
  *  A repo to load our ONE egg model lmao
  */
-object EggModelRepo : JsonDataRegistry<TexturedModel> {
-    override val gson = TexturedModel.GSON
-    override val typeToken = TypeToken.get(TexturedModel::class.java)
-    override val resourcePath = "bedrock/egg_models"
-    override val id = cobblemonResource("egg_models")
-    override val type = PackType.CLIENT_RESOURCES
-    override val observable = SimpleObservable<EggModelRepo>()
-    val eggModels = hashMapOf<ResourceLocation, TexturedModel>()
+object EggModelRepo : VaryingModelRepository<EggModel>() {
+    override val poserClass = EggModel::class.java
+    override val title = "Egg Model"
+    override val type = "egg"
+    override val variationDirectories: List<String> = emptyList()
+    override val poserDirectories: List<String> = emptyList()
+    override val modelDirectories: List<String> = listOf("bedrock/egg_models")
+    override val animationDirectories: List<String> = listOf("bedrock/egg_animations")
+    override val fallback = cobblemonResource("egg")
+    override val isForLivingEntityRenderer = false
 
-    override fun reload(data: Map<ResourceLocation, TexturedModel>) {
-        eggModels.putAll(data)
-    }
+    lateinit var eggModel: EggModel
 
-    override fun sync(player: ServerPlayer) {
-    }
-
+    override fun registerInBuiltPosers() {}
 }
+
+
