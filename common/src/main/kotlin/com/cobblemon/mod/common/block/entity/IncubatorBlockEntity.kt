@@ -87,14 +87,14 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
         val egg = eggComponent?.egg ?: return 0
 
-        // Assuming timeToHatch ranges from 0F (ready) to some max value, e.g., 100F
-        val maxHatchTime = 100F // todo replace this with the egg's species expected time to hatch (will need a new algorithm method. Maybe based off of egg cycle + other stuff)
+        /*val maxHatchTime = 100F // todo replace this with the egg's species expected time to hatch (will need a new algorithm method. Maybe based off of egg cycle + other stuff)
         val currentHatchTime = egg.timeToHatch.coerceAtLeast(0F).coerceAtMost(maxHatchTime)
 
         // Calculate progress: 0 (ready) to 15
         val progress = ((maxHatchTime - currentHatchTime) / maxHatchTime * 15).toInt()
 
-        return progress
+        return progress*/
+        if (egg.timeToHatch <= 0) return 15 else return 0 // send signal based on whether it is ready to hatch or now for now (we can make it more advanced later)
     }
 
 
@@ -239,8 +239,11 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     override fun setChanged() {
-        level?.blockEntityChanged(worldPosition)
-        level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
+        level?.let {
+            it.blockEntityChanged(worldPosition)
+            it.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
+            it.updateNeighborsAt(worldPosition, blockState.block)
+        }
     }
 
     override fun stillValid(player: Player): Boolean = true

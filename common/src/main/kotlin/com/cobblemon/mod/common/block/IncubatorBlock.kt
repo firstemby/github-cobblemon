@@ -123,7 +123,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
         // Retrieve the block entity at the given position
-        val blockEntity = level.getBlockEntity(pos) as? NestBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
+        val blockEntity = level.getBlockEntity(pos) as? IncubatorBlockEntity ?: return super.getDestroyProgress(state, player, level, pos)
 
         // Check if the player is the owner of the nest
         val isOwner = blockEntity.ownerUUID == player.uuid
