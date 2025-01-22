@@ -1,10 +1,12 @@
 package com.cobblemon.mod.common.client.render.block
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
 import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
@@ -28,7 +30,7 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         if (!isClientSide) return
 
         // Retrieve the egg data
-        val egg = entity.getEgg() ?: return
+        val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
 
         // Load the egg model
         val model = EggModelRepo.eggModels[cobblemonResource("egg")]

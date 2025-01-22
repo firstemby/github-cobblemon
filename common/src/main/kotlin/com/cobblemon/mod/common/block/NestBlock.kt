@@ -96,7 +96,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
                 }
                 level.addFreshEntity(itemEntity)
             }
-            it.dropEgg(state, level, pos)
+            it.dropItem( level, pos, state)
         }
         return super.playerWillDestroy(level, pos, state, player)
     }

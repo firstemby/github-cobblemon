@@ -10,7 +10,10 @@ package com.cobblemon.mod.common.api.pokemon.breeding
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
+import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -57,12 +60,17 @@ data class Egg(
         }
     }
 
-    fun asItemStack(blockEntityNbt: CompoundTag): ItemStack {
-        val stack = CobblemonBlocks.EGG.asItem().defaultInstance
-        // FIXME: Use properties
-        // BlockItem.setBlockEntityNbt(stack, CobblemonBlockEntities.EGG, blockEntityNbt)
-        return stack
+    fun createEggItemStack(egg: Egg): ItemStack {
+        // Create a new ItemStack using the Pokémon Egg item
+        val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance
+
+        // Add the EggData component to the ItemStack
+        val eggComponent = EggComponent(egg)
+        eggItemStack.set(CobblemonItemComponents.EGG_DATA, eggComponent)
+
+        return eggItemStack
     }
+
 }
 
     /*fun getPattern(): EggPattern? {
