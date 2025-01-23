@@ -68,6 +68,24 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         builder.add(BlockStateProperties.WATERLOGGED)
     }
 
+    override fun neighborChanged(
+            state: BlockState,
+            level: Level,
+            pos: BlockPos,
+            block: Block,
+            fromPos: BlockPos,
+            isMoving: Boolean
+    ) {
+        super.neighborChanged(state, level, pos, block, fromPos, isMoving)
+
+        // Check if the block below is air
+        val blockBelowPos = pos.below()
+        if (fromPos == blockBelowPos && level.getBlockState(blockBelowPos).isAir) {
+            // Remove the block without dropping items (loot table handles drops)
+            level.destroyBlock(pos, false)
+        }
+    }
+
     override fun useWithoutItem(
             blockState: BlockState,
             level: Level,
@@ -127,7 +145,8 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? NestBlockEntity
 
-        entity?.let {
+        // todo we do silk touch now
+        /*entity?.let {
             if (!player.isCreative) {
                 val itemEntity = when (this.variant) {
                     NestVariant.BASIC -> ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.BASE_NEST.defaultInstance)
@@ -138,7 +157,8 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
                 level.addFreshEntity(itemEntity)
             }
             it.dropItem( level, pos, state)
-        }
+        }*/
+
         return super.playerWillDestroy(level, pos, state, player)
     }
 
