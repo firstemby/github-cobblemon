@@ -10,6 +10,7 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
 import net.minecraft.core.BlockPos
@@ -39,6 +40,7 @@ import java.util.*
 
 class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     BlockEntity(CobblemonBlockEntities.INCUBATOR, pos, state), WorldlyContainer {
+    val eggState = EggState()
 
     companion object {
        val TICKER = BlockEntityTicker<IncubatorBlockEntity> { world, pos, state, blockEntity ->

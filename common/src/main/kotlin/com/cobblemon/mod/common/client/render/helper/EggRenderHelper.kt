@@ -1,15 +1,25 @@
 package com.cobblemon.mod.common.client.render.helper
 
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
 
 object EggRenderHelper {
+    val context = RenderContext().also {
+        it.put(RenderContext.DO_QUIRKS, true)
+        it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE) // todo make new one that is false
+    }
+
+    val eggState = EggState()
 
     /**
      * Renders the given egg with animations based on its time to hatch.
@@ -27,6 +37,7 @@ object EggRenderHelper {
      */
     fun renderEgg(
             egg: Egg,
+            state: EggState,
             matrices: PoseStack,
             vertexConsumers: MultiBufferSource,
             light: Int,
@@ -38,22 +49,29 @@ object EggRenderHelper {
             animTime: Float
     ) {
         // Retrieve the egg model
-        val model = EggModelRepo.eggModel ?: return
+        //val model = EggModelRepo. ?: return
 
         // Determine the texture
         val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
         val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
-        // Determine the animation based on time to hatch
-        val animationName = when {
-            egg.timeToHatch > 2000 -> null // No animation
-            egg.timeToHatch > 1000 -> "animation.egg.nestjiggletiny"
-            egg.timeToHatch > 500 -> "animation.egg.nestjigglesmall"
-            egg.timeToHatch > 200 -> "animation.egg.nestjigglemid"
-            else -> "animation.egg.nestjigglelarge"
-        }
+        // render state
+        val eggState = state
 
-        if (animationName == null) return
+        val eggModel = EggModelRepo.getPoser(cobblemonResource("egg.geo"), eggState)
+        eggModel.context = context
+
+        val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
+
+        eggState.currentModel = eggModel
+        val poseName = when {
+            egg.timeToHatch > 20000 -> "stage0" // No animation
+            egg.timeToHatch > 15000 -> "stage1"
+            egg.timeToHatch > 10000 -> "stage2"
+            egg.timeToHatch > 20 -> "stage3"
+            else -> "stage4"
+        }
+        eggState.setPose(poseName)
 
         matrices.pushPose()
         matrices.translate(translation.first, translation.second, translation.third)
@@ -62,26 +80,28 @@ object EggRenderHelper {
         matrices.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(rotation.third))
         matrices.scale(scale, scale, scale)
 
-        val buffer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
+        context.put(RenderContext.TEXTURE, texture)
+        context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
+        context.put(RenderContext.POSABLE_STATE, eggState)
 
-        // Apply animation
-        model.applyAnimations(
-                entity = null,
-                state = null,
-                headYaw = 0f,
-                headPitch = 0f,
-                limbSwing = 0f,
-                limbSwingAmount = 0f,
-                ageInTicks = animTime * 20f
+        matrices.pushPose() // todo may not need to push
+        eggModel.applyAnimations(
+            entity = null,
+            state = eggState,
+            headYaw = 0F,
+            headPitch = 0F,
+            limbSwing = 0F,
+            limbSwingAmount = 0F,
+            ageInTicks = animTime * 20
         )
 
-        // Render the model
-        model.render(null, matrices, buffer, light, overlay, -0x1)
-
-        // Apply and render additional layers
-        model.withLayerContext(vertexConsumers, null, listOf()) {
-            model.render(null, matrices, buffer, light, OverlayTexture.NO_OVERLAY, -0x1)
+        eggModel.render(context, matrices, vertexConsumer, light, overlay, -0x1)
+        eggModel.withLayerContext(vertexConsumers, eggState, EggModelRepo.getLayers(cobblemonResource("egg"), eggState)) {
+            eggModel.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
         }
+
+        eggModel.setDefault()
+        matrices.popPose()
         matrices.popPose()
     }
 }

@@ -28,13 +28,13 @@ object EggModelRepo : VaryingModelRepository<EggModel>() {
     override val title = "Egg Model"
     override val type = "egg"
     override val variationDirectories: List<String> = emptyList()
-    override val poserDirectories: List<String> = emptyList()
+    override val poserDirectories: List<String> = listOf("bedrock/eggs/posers")
     override val modelDirectories: List<String> = listOf("bedrock/eggs/models")
     override val animationDirectories: List<String> = listOf("bedrock/eggs/animations")
     override val fallback = cobblemonResource("egg")
     override val isForLivingEntityRenderer = false
 
-    lateinit var eggModel: EggModel
+    //lateinit var eggModel: EggModel
 
     override fun registerInBuiltPosers() {}
 }

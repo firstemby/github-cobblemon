@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.block.EggBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.PokedexItem
@@ -84,6 +85,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
                     // Render the egg using the EggRenderHelper
                     EggRenderHelper.renderEgg(
                         egg = egg,
+                        state = EggState(),
                         matrices = matrices,
                         vertexConsumers = vertexConsumers,
                         light = light,
@@ -91,8 +93,9 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
                         yRot = 0f,
                         scale = 1f,
                         translation = Triple(0.5f, 0.6f, 0.5f), // Adjust translation
-                        rotation = Triple(180f, 0f, 0f)           // Adjust rotation
-                    )
+                        rotation = Triple(180f, 0f, 0f),           // Adjust rotation
+                        animTime = 0F
+                        )
                 }
                 return // Exit early after rendering the egg
             }

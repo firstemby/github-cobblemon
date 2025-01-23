@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
@@ -69,6 +70,7 @@ import java.util.*
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null // player UUID that placed this nest
+    val eggState = EggState()
 
     /**
      * Sets the ItemStack and synchronizes it.

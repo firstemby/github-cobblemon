@@ -7,53 +7,53 @@
     },
     "stage1": {
       "poseTypes": ["NONE"],
-      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "animations": [],
       "quirks": [
         {
           "name": "quirk",
-          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "animations": ["q.bedrock_stateful('nestjiggletiny')"],
           "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 30,
-          "maxSecondsBetweenOccurrences": 60
+          "minSecondsBetweenOccurrences": 2,
+          "maxSecondsBetweenOccurrences": 5
         }
       ]
     },
     "stage2": {
       "poseTypes": ["NONE"],
-      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "animations": [],
       "quirks": [
         {
           "name": "quirk",
-          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "animations": ["q.bedrock_stateful('nestjigglesmall')"],
           "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 30,
-          "maxSecondsBetweenOccurrences": 60
+          "minSecondsBetweenOccurrences": 2,
+          "maxSecondsBetweenOccurrences": 5
         }
       ]
     },
     "stage3": {
       "poseTypes": ["NONE"],
-      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "animations": [],
       "quirks": [
         {
           "name": "quirk",
-          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "animations": ["q.bedrock_stateful('nestjigglemid')"],
           "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 30,
-          "maxSecondsBetweenOccurrences": 60
+          "minSecondsBetweenOccurrences": 2,
+          "maxSecondsBetweenOccurrences": 5
         }
       ]
     },
     "stage4": {
       "poseTypes": ["NONE"],
-      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "animations": [],
       "quirks": [
         {
           "name": "quirk",
-          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "animations": ["q.bedrock_stateful('nestjigglelarge2')"],
           "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 30,
-          "maxSecondsBetweenOccurrences": 60
+          "minSecondsBetweenOccurrences": 2,
+          "maxSecondsBetweenOccurrences": 5
         }
       ]
     }

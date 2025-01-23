@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggMo
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
@@ -29,19 +30,12 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         if (!isClientSide) return
 
         val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
-        val timeToHatch = egg.timeToHatch ?: return
 
-        val animationName = when {
-            timeToHatch < 200 -> "animation.egg.nestjiggletiny"
-            timeToHatch < 500 -> "animation.egg.nestjigglesmall"
-            timeToHatch < 1000 -> "animation.egg.nestjigglemid"
-            else -> "animation.egg.nestjigglelarge"
-        }
-
-        val animTime = (System.currentTimeMillis() % 2000) / 1000.0f
+        val animTime = Minecraft.getInstance().level?.gameTime?.toFloat()
 
         EggRenderHelper.renderEgg(
                 egg = egg,
+                state = entity.eggState,
                 matrices = matrices,
                 vertexConsumers = vertexConsumers,
                 light = light,
@@ -50,8 +44,7 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
                 scale = 1f,
                 translation = Triple(0.5f, 0.42f, 0.5f),
                 rotation = Triple(180f, 0f, 0f),
-                animation = animationName,
-                animTime = animTime
+                animTime = tickDelta
         )
     }
 }
