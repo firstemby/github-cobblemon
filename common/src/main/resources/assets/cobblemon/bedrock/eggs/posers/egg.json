@@ -1,0 +1,61 @@
+{
+  "poses": {
+    "stage0": {
+      "poseTypes": ["NONE"],
+      "animations": [],
+      "quirks": []
+    },
+    "stage1": {
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "quirks": [
+        {
+          "name": "quirk",
+          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "loopTimes": 1,
+          "minSecondsBetweenOccurrences": 30,
+          "maxSecondsBetweenOccurrences": 60
+        }
+      ]
+    },
+    "stage2": {
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "quirks": [
+        {
+          "name": "quirk",
+          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "loopTimes": 1,
+          "minSecondsBetweenOccurrences": 30,
+          "maxSecondsBetweenOccurrences": 60
+        }
+      ]
+    },
+    "stage3": {
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "quirks": [
+        {
+          "name": "quirk",
+          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "loopTimes": 1,
+          "minSecondsBetweenOccurrences": 30,
+          "maxSecondsBetweenOccurrences": 60
+        }
+      ]
+    },
+    "stage4": {
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock('aerodactyl_fetus', 'sleep')"],
+      "quirks": [
+        {
+          "name": "quirk",
+          "animations": ["q.bedrock_stateful('aerodactyl_fetus', 'quirk')"],
+          "loopTimes": 1,
+          "minSecondsBetweenOccurrences": 30,
+          "maxSecondsBetweenOccurrences": 60
+        }
+      ]
+    }
+  }
+}
