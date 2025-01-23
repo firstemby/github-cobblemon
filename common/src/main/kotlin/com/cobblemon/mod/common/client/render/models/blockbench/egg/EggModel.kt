@@ -11,16 +11,13 @@ import com.cobblemon.mod.common.entity.PoseType
  * This is based on the PosableModel framework.
  */
 class EggModel(root: Bone) : PosableModel(root) {
-    var yGrowthPoint = 0F
-    var maxScale = 1F
-    var yTranslation = 0F // Offset for alignment in the nest
     var eggAnimations: Array<PoseAnimation> = emptyArray()
     var eggQuirks: Array<ModelQuirk<*>> = emptyArray()
 
     override fun registerPoses() {
         // Register specific egg poses and animations
         registerPose(
-                poseType = PoseType.NONE, // todo maybe we need a new one idfk
+                poseType = PoseType.NONE,
                 animations = eggAnimations,
                 quirks = eggQuirks
         )
