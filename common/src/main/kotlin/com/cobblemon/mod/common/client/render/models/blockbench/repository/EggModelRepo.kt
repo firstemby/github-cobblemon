@@ -27,7 +27,7 @@ object EggModelRepo : VaryingModelRepository<EggModel>() {
     override val poserClass = EggModel::class.java
     override val title = "Egg Model"
     override val type = "egg"
-    override val variationDirectories: List<String> = emptyList()
+    override val variationDirectories: List<String> = listOf("bedrock/eggs/variations")
     override val poserDirectories: List<String> = listOf("bedrock/eggs/posers")
     override val modelDirectories: List<String> = listOf("bedrock/eggs/models")
     override val animationDirectories: List<String> = listOf("bedrock/eggs/animations")

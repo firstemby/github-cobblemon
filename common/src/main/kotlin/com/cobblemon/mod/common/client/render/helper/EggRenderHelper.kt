@@ -58,7 +58,7 @@ object EggRenderHelper {
         // render state
         val eggState = state
 
-        val eggModel = EggModelRepo.getPoser(cobblemonResource("egg.geo"), eggState)
+        val eggModel = EggModelRepo.getPoser(cobblemonResource("egg"), eggState)
         eggModel.context = context
 
         val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
