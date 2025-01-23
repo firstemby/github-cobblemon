@@ -4,7 +4,7 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
 import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
-import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
@@ -38,7 +38,7 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
                     scale = 1f,
                     translation = Triple(0.5f, 0.285f, 0.5f), // Adjust translation
                     rotation = Triple(180f, 0f, 0f),           // Adjust rotation
-                    animTime = 0F
+                    tickDelta = tickDelta //0F
                 )
             } finally {
                 matrices.popPose() // Ensure this is always called

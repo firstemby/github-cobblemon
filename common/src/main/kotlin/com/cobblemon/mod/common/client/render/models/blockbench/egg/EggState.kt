@@ -6,13 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.render.models.blockbench.fossil
+package com.cobblemon.mod.common.client.render.models.blockbench.egg
 
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 
 /**
- * Floating state for a fossil Pokémon in the resurrection machine.
+ * State for an egg.
  *
  * @author Hiroku
  * @since October 30th, 2023
@@ -21,7 +21,12 @@ class EggState() : PosableState() {
     var totalPartialTicks = 0F
 
     init {
+        age = (200F * Math.random()).toInt()
         currentPartialTicks = 0F
+    }
+
+    fun peekAge() : Int { // Need to find a way to do this with getAge that's not protected
+        return this.age
     }
 
     override fun getEntity() = null

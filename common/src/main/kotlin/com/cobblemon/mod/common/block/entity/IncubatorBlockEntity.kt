@@ -10,7 +10,7 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
-import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
 import net.minecraft.core.BlockPos

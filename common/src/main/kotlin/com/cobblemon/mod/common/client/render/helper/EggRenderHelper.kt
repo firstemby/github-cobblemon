@@ -3,7 +3,7 @@ package com.cobblemon.mod.common.client.render.helper
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
-import com.cobblemon.mod.common.client.render.models.blockbench.fossil.EggState
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -18,8 +18,6 @@ object EggRenderHelper {
         it.put(RenderContext.DO_QUIRKS, true)
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE) // todo make new one that is false
     }
-
-    val eggState = EggState()
 
     /**
      * Renders the given egg with animations based on its time to hatch.
@@ -46,7 +44,7 @@ object EggRenderHelper {
             scale: Float = 1.0f,
             translation: Triple<Float, Float, Float> = Triple(0.5f, 0.5f, 0.5f),
             rotation: Triple<Float, Float, Float> = Triple(0f, 0f, 0f),
-            animTime: Float
+            tickDelta: Float
     ) {
         // Retrieve the egg model
         //val model = EggModelRepo. ?: return
@@ -57,6 +55,7 @@ object EggRenderHelper {
 
         // render state
         val eggState = state
+        eggState.updatePartialTicks(tickDelta)
 
         val eggModel = EggModelRepo.getPoser(cobblemonResource("egg"), eggState)
         eggModel.context = context
@@ -92,7 +91,7 @@ object EggRenderHelper {
             headPitch = 0F,
             limbSwing = 0F,
             limbSwingAmount = 0F,
-            ageInTicks = animTime * 20
+            ageInTicks = eggState.animationSeconds * 20
         )
 
         eggModel.render(context, matrices, vertexConsumer, light, overlay, -0x1)

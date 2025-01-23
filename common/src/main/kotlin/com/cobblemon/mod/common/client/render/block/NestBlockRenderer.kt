@@ -44,7 +44,7 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
                 scale = 1f,
                 translation = Triple(0.5f, 0.42f, 0.5f),
                 rotation = Triple(180f, 0f, 0f),
-                animTime = tickDelta
+                tickDelta = tickDelta
         )
     }
 }

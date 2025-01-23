@@ -43,7 +43,7 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
             scale = 1f,
             translation = Triple(0.5f, 0.54f, 0.5f), // Adjust translation
             rotation = Triple(180f, 0f, 0f),           // Adjust rotation
-            animTime = tickDelta
+            tickDelta = tickDelta
         )
 
         matrices.popPose() // Restore the matrix stack
