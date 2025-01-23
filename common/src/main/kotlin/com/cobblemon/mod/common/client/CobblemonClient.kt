@@ -88,7 +88,8 @@ object CobblemonClient {
         NPCModelRepository,
         FossilModelRepository,
         BlockEntityModelRepository,
-        GenericBedrockEntityModelRepository
+        GenericBedrockEntityModelRepository,
+        EggModelRepo
     )
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
