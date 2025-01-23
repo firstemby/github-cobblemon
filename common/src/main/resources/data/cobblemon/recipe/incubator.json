@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "key": {
+        "I": {
+            "item": "minecraft:iron_ingot"
+        },
+        "C": {
+            "item": "minecraft:copper_bulb"
+        },
+        "M": {
+            "item": "minecraft:magma_cream"
+        }
+    },
+    "pattern": [
+        "ICI",
+        "GMG",
+        "ICI"
+    ],
+    "result": {
+        "id": "cobblemon:incubator"
+    }
+}
