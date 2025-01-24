@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggMo
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
@@ -25,34 +26,25 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
             light: Int,
             overlay: Int
     ) {
-        // Ensure the renderer runs only on the client
         val isClientSide = entity.level?.isClientSide ?: false
         if (!isClientSide) return
 
-        // Retrieve the egg data
         val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
 
-        // Load the egg model
-        val model = EggModelRepo.eggModels[cobblemonResource("egg")]
-        if (model == null) {
-            println("Egg model not found in EggModelRepo!")
-            return
-        }
-        matrices.pushPose()
+        val animTime = Minecraft.getInstance().level?.gameTime?.toFloat()
 
-        // Render the egg model with the dynamically determined texture
         EggRenderHelper.renderEgg(
-            egg = egg,
-            matrices = matrices,
-            vertexConsumers = vertexConsumers,
-            light = light,
-            overlay = overlay,
-            yRot = 0f,
-            scale = 1f,
-            translation = Triple(0.5f, 0.42f, 0.5f), // Adjust translation
-            rotation = Triple(180f, 0f, 0f)           // Adjust rotation
+                egg = egg,
+                state = entity.eggState,
+                matrices = matrices,
+                vertexConsumers = vertexConsumers,
+                light = light,
+                overlay = overlay,
+                yRot = 0f,
+                scale = 1f,
+                translation = Triple(0.5f, 0.42f, 0.5f),
+                rotation = Triple(180f, 0f, 0f),
+                tickDelta = tickDelta
         )
-
-        matrices.popPose() // Restore the matrix stack
     }
 }

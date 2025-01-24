@@ -34,6 +34,7 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
         // Render the egg model with the dynamically determined texture
         EggRenderHelper.renderEgg(
             egg = egg,
+            state = entity.eggState,
             matrices = matrices,
             vertexConsumers = vertexConsumers,
             light = light,
@@ -41,7 +42,8 @@ class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
             yRot = 0f,
             scale = 1f,
             translation = Triple(0.5f, 0.54f, 0.5f), // Adjust translation
-            rotation = Triple(180f, 0f, 0f)           // Adjust rotation
+            rotation = Triple(180f, 0f, 0f),           // Adjust rotation
+            tickDelta = tickDelta
         )
 
         matrices.popPose() // Restore the matrix stack

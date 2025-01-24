@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/mystery_egg.png",
+      "layers": []
+    }
+  ]
+}
