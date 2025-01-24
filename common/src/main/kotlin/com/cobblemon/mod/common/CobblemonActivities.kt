@@ -17,6 +17,7 @@ object CobblemonActivities {
     val NPC_CHATTING = register(Activity("npc_chatting"))
     val POKEMON_SLEEPING_ACTIVITY = register(Activity("pokemon_sleeping"))
     val POKEMON_GROW_CROP = register(Activity("pokemon_grow_crop"))
+    val GUARD_NEST = register(Activity("guard_nest"))
 
     fun register(activity: Activity): Activity {
         activities.add(activity)

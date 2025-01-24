@@ -1,0 +1,17 @@
+{
+  "name": "cobblemon.brain_preset.pokemon.pokemon_breeding.name",
+  "description": "cobblemon.brain_preset.pokemon.pokemon_breeding.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": [
+          "path_to_nest",
+          "breed_at_nest",
+          "guard_nest"
+        ]
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyPresets
 import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.task.GuardNestTaskConfig
 import com.cobblemon.mod.common.entity.ai.*
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
@@ -131,6 +132,13 @@ object PokemonBrain {
             ImmutableList.copyOf(growingPlantTasks(pokemon)),
             ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT))
         )
+        brain.addActivityWithConditions(
+            CobblemonActivities.GUARD_NEST,
+            ImmutableList.copyOf(growingPlantTasks(pokemon)), // todo change this with guard tasks
+            ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT),
+                            Pair.of(CobblemonMemories.PATERNAL_NEST_LOCATION, MemoryStatus.VALUE_PRESENT))
+        )
+
 
         brain.setCoreActivities(setOf(Activity.CORE))
         brain.setDefaultActivity(Activity.IDLE)
@@ -180,7 +188,8 @@ object PokemonBrain {
                 Activity.IDLE,
                 CobblemonActivities.BATTLING,
                 CobblemonActivities.POKEMON_SLEEPING_ACTIVITY,
-                CobblemonActivities.POKEMON_GROW_CROP
+                CobblemonActivities.POKEMON_GROW_CROP,
+                CobblemonActivities.GUARD_NEST
             )
         )
     }
@@ -238,8 +247,8 @@ object PokemonBrain {
         }
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.ATTACK_TARGET, Activity.FIGHT))
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.AVOID_TARGET, Activity.AVOID))
-
-//        add(0 toDF HuntPlayerTask()) // commenting this out to test other things
+        //        add(0 toDF HuntPlayerTask()) // commenting this out to test other things
+        //add(0 toDF GuardNestTask.create())
         add(1 toDF FertilizerTask())
 
         if (pokemon.species.primaryType.name.equals("fire", true)) {
