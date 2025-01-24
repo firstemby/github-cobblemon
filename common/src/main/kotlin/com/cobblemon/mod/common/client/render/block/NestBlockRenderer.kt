@@ -31,8 +31,6 @@ class NestBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityR
 
         val egg = entity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
 
-        val animTime = Minecraft.getInstance().level?.gameTime?.toFloat()
-
         EggRenderHelper.renderEgg(
                 egg = egg,
                 state = entity.eggState,

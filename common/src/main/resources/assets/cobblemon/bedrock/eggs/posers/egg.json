@@ -9,52 +9,28 @@
       "poseTypes": ["NONE"],
       "animations": ["q.bedrock_stateful('egg','idle')"],
       "quirks": [
-        {
-          "name": "quirk",
-          "animations": ["q.bedrock_stateful('egg','nestjiggletiny')"],
-          "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 2,
-          "maxSecondsBetweenOccurrences": 10
-        }
+        "q.bedrock_quirk('egg', q.array('nestjiggletiny', 'nestjiggletiny2', 'nestjiggletiny3'), 60, 120, 1)"
       ]
     },
     "stage2": {
       "poseTypes": ["NONE"],
       "animations": ["q.bedrock_stateful('egg','idle')"],
       "quirks": [
-        {
-          "name": "quirk",
-          "animations": ["q.bedrock_stateful('egg','nestjigglesmall')"],
-          "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 2,
-          "maxSecondsBetweenOccurrences": 10
-        }
+        "q.bedrock_quirk('egg', q.array('nestjigglesmall', 'nestjigglesmall2', 'nestjigglesmall3'), 30, 45, 1)"
       ]
     },
     "stage3": {
       "poseTypes": ["NONE"],
       "animations": ["q.bedrock_stateful('egg','idle')"],
       "quirks": [
-        {
-          "name": "quirk",
-          "animations": ["q.bedrock_stateful('egg','nestjigglemid')"],
-          "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 2,
-          "maxSecondsBetweenOccurrences": 10
-        }
+        "q.bedrock_quirk('egg', q.array('nestjigglemid', 'nestjigglemid2', 'nestjigglemid3'), 15, 30, 1)"
       ]
     },
     "stage4": {
       "poseTypes": ["NONE"],
       "animations": ["q.bedrock_stateful('egg','idle')"],
       "quirks": [
-        {
-          "name": "quirk",
-          "animations": ["q.bedrock_stateful('egg','nestjigglelarge2')"],
-          "loopTimes": 1,
-          "minSecondsBetweenOccurrences": 2,
-          "maxSecondsBetweenOccurrences": 10
-        }
+        "q.bedrock_quirk('egg', q.array('nestjigglelarge', 'nestjigglelarge2', 'nestjigglelarge3', 'nestjigglelarge4', 'nestjigglelarge (no hop)'), 3, 8, 1)"
       ]
     }
   }

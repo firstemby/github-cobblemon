@@ -128,7 +128,11 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         // Place a new egg if the player is holding one
         if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
-            setItem(heldItem.split(1))
+            if (!player.isCreative) {
+                setItem(heldItem.split(1))
+            } else {
+                setItem(heldItem.copy())
+            }
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -493,7 +497,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                             )
                         }
                         if (egg != null) {
-                            blockEntity.setItem(egg.createEggItemStack(egg))
+                            blockEntity.setItem(egg.createEggItemStack())
                         }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                     }

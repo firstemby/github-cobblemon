@@ -234,7 +234,7 @@ object CobblemonClient {
             CobblemonBlocks.PEP_UP_FLOWER,
             CobblemonBlocks.POTTED_PEP_UP_FLOWER,
             CobblemonBlocks.REVIVAL_HERB,
-            CobblemonBlocks.BASE_NEST,
+            CobblemonBlocks.BASIC_NEST,
             CobblemonBlocks.CAVE_NEST,
             CobblemonBlocks.NETHER_NEST,
             CobblemonBlocks.WATER_NEST,

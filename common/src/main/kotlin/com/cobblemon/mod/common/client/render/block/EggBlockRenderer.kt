@@ -38,7 +38,7 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
                     scale = 1f,
                     translation = Triple(0.5f, 0.285f, 0.5f), // Adjust translation
                     rotation = Triple(180f, 0f, 0f),           // Adjust rotation
-                    tickDelta = tickDelta //0F
+                    tickDelta = 0F
                 )
             } finally {
                 matrices.popPose() // Ensure this is always called

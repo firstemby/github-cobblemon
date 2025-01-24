@@ -60,12 +60,12 @@ data class Egg(
         }
     }
 
-    fun createEggItemStack(egg: Egg): ItemStack {
+    fun createEggItemStack(): ItemStack {
         // Create a new ItemStack using the Pokémon Egg item
         val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance
 
         // Add the EggData component to the ItemStack
-        val eggComponent = EggComponent(egg)
+        val eggComponent = EggComponent(this)
         eggItemStack.set(CobblemonItemComponents.EGG_DATA, eggComponent)
 
         return eggItemStack

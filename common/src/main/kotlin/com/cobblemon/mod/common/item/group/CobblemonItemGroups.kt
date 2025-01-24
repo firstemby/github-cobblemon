@@ -335,7 +335,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.DEEPSLATE_THUNDER_STONE_ORE)
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
-        entries.accept(CobblemonItems.BASE_NEST)
+        entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
         entries.accept(CobblemonItems.NETHER_NEST)
         entries.accept(CobblemonItems.WATER_NEST)

@@ -363,17 +363,18 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                     val nestTaken = nests.random()
                                     val nestStal = level?.getBlockState(nestTaken)
                                     val blockEntity = level?.getBlockEntity(nestTaken) as? NestBlockEntity
+                                    val avgEggCycle = (motherPoke.species.eggCycles + fatherPoke.species.eggCycles) / 2
                                     if (blockEntity != null && breedResult.pokemon != null) {
                                         val egg = Egg(
                                             species = breedResult.pokemon!!.species.resourceIdentifier, // Species
                                             parentOne = motherPoke, // Mother UUID
                                             parentTwo = fatherPoke, // Father UUID
                                             form = breedResult.pokemon.formData.name.lowercase(),
-                                            timeToHatch = 20000F // 10 seconds hatch time
+                                            timeToHatch = breedResult.timeToHatch.toFloat() // 10 seconds hatch time
                                         )
 
                                         //Most params here need to be gotten from the form when implemented properly
-                                        blockEntity.setItem(egg.createEggItemStack(egg))
+                                        blockEntity.setItem(egg.createEggItemStack())
 
                                         val isClientSide = this.level?.isClientSide ?: false
                                         if (isClientSide) {

@@ -63,12 +63,12 @@ object EggRenderHelper {
         val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
 
         eggState.currentModel = eggModel
-        val poseName = when {
-            egg.timeToHatch > 20000 -> "stage0" // No animation
-            egg.timeToHatch > 15000 -> "stage1"
-            egg.timeToHatch > 10000 -> "stage2"
-            egg.timeToHatch > 20 -> "stage3"
-            else -> "stage4"
+        val poseName = when { // todo polish these values
+            egg.timeToHatch > 9600 -> "stage0" // Above 8 minutes left has No animation
+            egg.timeToHatch > 2400 -> "stage1" // 8 minutes left
+            egg.timeToHatch > 1200 -> "stage2"  // 2 minutes left
+            egg.timeToHatch > 20 -> "stage3"    // 1 minute left
+            else -> "stage4"                    // Ready to hatch!
         }
         eggState.setPose(poseName)
 
