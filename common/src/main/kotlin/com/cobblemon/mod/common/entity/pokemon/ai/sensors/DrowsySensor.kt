@@ -25,7 +25,7 @@ class DrowsySensor : Sensor<PokemonEntity>(100) {
     override fun doTick(world: ServerLevel, entity: PokemonEntity) {
         val rest = entity.behaviour.resting
         val isDrowsy = entity.brain.getMemory(CobblemonMemories.POKEMON_DROWSY).orElse(false)
-        val shouldBeDrowsy = rest.canSleep && world.dayTime.toInt() in rest.times && entity.brain.getMemory(MemoryModuleType.ANGRY_AT).isEmpty
+        val shouldBeDrowsy = rest.canSleep && (world.dayTime.toInt() % 24000) in rest.times && entity.brain.getMemory(MemoryModuleType.ANGRY_AT).isEmpty
         if (!isDrowsy && shouldBeDrowsy) {
             entity.brain.setMemory(CobblemonMemories.POKEMON_DROWSY, true)
         } else if (isDrowsy && !shouldBeDrowsy) {

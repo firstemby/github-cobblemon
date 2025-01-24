@@ -42,6 +42,7 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.readEntityDimensions
@@ -53,6 +54,7 @@ import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.cobblemon.mod.common.util.writeString
+import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -113,7 +115,30 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var implemented = false
     var baseAI = mutableListOf<BrainConfig>(
         ApplyPresets().apply {
-            presets.add(cobblemonResource("pokemon_core"))
+            presets.addAll(
+                listOf(
+                    cobblemonResource("core"),
+                    cobblemonResource("looks_around"),
+                    cobblemonResource("pokemon_battles")
+                )
+            )
+        },
+        ApplyPresets().apply {
+            condition = Either.left("q.entity.is_in_party".asExpression())
+//            presets.add(cobblemonResource("follow_owner"))
+        },
+        ApplyPresets().apply {
+            condition = Either.left("!q.entity.is_in_party".asExpression())
+            presets.add(cobblemonResource("wanders"))
+            presets.add(cobblemonResource("pokemon_sleeps"))
+        },
+        ApplyPresets().apply {
+            condition = Either.left("q.entity.is_wild".asExpression())
+            // presets like aggression to players
+        },
+        ApplyPresets().apply {
+            condition = Either.left("!q.entity.is_wild".asExpression())
+            presets.add(cobblemonResource("pokemon_follows_owner"))
         }
     )
     var ai = mutableListOf<BrainConfig>()

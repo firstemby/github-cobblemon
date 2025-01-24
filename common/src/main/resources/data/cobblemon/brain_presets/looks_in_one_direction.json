@@ -7,8 +7,7 @@
       "activity": "core",
       "tasksByPriority": {
         "0": [
-          "look_in_direction",
-          "look_at_target"
+          "look_in_direction"
         ]
       }
     }

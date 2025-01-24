@@ -138,7 +138,7 @@ class EntityTraceResult<T : Entity>(
     val entities: Iterable<T>
 )
 
-fun <T : Entity> Player.traceFirstEntityCollision(
+fun <T : Entity> LivingEntity.traceFirstEntityCollision(
         maxDistance: Float = 10F,
         stepDistance: Float = 0.05F,
         entityClass: Class<T>,
@@ -154,16 +154,34 @@ fun <T : Entity> Player.traceFirstEntityCollision(
     )?.let { it.entities.minByOrNull { it.distanceTo(this) } }
 }
 
-fun <T : Entity> Player.traceEntityCollision(
+fun <T : Entity> LivingEntity.traceEntityCollision(
     maxDistance: Float = 10F,
     stepDistance: Float = 0.05F,
     entityClass: Class<T>,
     ignoreEntity: T? = null,
     collideBlock: ClipContext.Fluid?
 ): EntityTraceResult<T>? {
+    val direction = lookAngle
+    return traceEntityCollision(
+        maxDistance = maxDistance,
+        stepDistance = stepDistance,
+        entityClass = entityClass,
+        ignoreEntity = ignoreEntity,
+        collideBlock = collideBlock,
+        direction = direction
+    )
+}
+
+fun <T : Entity> LivingEntity.traceEntityCollision(
+    maxDistance: Float = 10F,
+    stepDistance: Float = 0.05F,
+    entityClass: Class<T>,
+    ignoreEntity: T? = null,
+    collideBlock: ClipContext.Fluid?,
+    direction: Vec3
+): EntityTraceResult<T>? {
     var step = stepDistance
     val startPos = eyePosition
-    val direction = lookAngle
     val maxDistanceVector = Vec3(1.0, 1.0, 1.0).scale(maxDistance.toDouble())
 
     val entities = level().getEntities(

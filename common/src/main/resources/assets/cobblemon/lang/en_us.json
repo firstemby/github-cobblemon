@@ -2575,8 +2575,14 @@
   "cobblemon.brain_preset.looks_around.name": "Looks Around",
   "cobblemon.brain_preset.looks_around.desc": "Looks around at nearby entities.",
 
-  "cobblemon.brain_preset.pokemon_core.name": "Pokémon Basics",
-  "cobblemon.brain_preset.pokemon_core.desc": "Core Pokémon behavior. Looking around and wandering.",
+  "cobblemon.brain_preset.pokemon_battles.name": "Pokémon Battles",
+  "cobblemon.brain_preset.pokemon_battles.desc": "Stops moving and looks at opponents during Pokémon battles.",
+
+  "cobblemon.brain_preset.pokemon_follows_owner.name": "Pokémon Follows Owner",
+  "cobblemon.brain_preset.pokemon_follows_owner.desc": "Follows the owner around, more rarely if in a pasture.",
+
+  "cobblemon.brain_preset.pokemon_sleeps.name": "Pokémon Sleeps",
+  "cobblemon.brain_preset.pokemon_sleeps.desc": "Pokémon can get drowsy and go to sleep if they aren't in battle or in a party.",
 
   "cobblemon.move.10000000voltthunderbolt": "10,000,000 Volt Thunderbolt",
   "cobblemon.move.10000000voltthunderbolt.desc": "The user, Pikachu wearing a cap, powers up a jolt of electricity using its Z-Power and unleashes it. Critical hits land more easily.",

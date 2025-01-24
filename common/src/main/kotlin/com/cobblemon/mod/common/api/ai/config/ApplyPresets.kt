@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
 class ApplyPresets : BrainConfig {
-    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+    var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val presets = mutableListOf<ResourceLocation>()
     override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
         return if (checkCondition(entity, condition)) {
@@ -34,6 +34,7 @@ class ApplyPresets : BrainConfig {
 
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         if (!checkCondition(entity, condition)) return
+
         val presetConfigs = presets.flatMap { CobblemonBrainConfigs.presets[it]?.takeIf { it.canBeApplied(entity) }?.configurations ?: return Cobblemon.LOGGER.warn("Preset $it not found") }
         // Why not just add the presets to the context directly?
         // Nested preset application is a thing, and I only want to track the top level presets.

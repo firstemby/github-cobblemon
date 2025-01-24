@@ -81,6 +81,7 @@ interface TaskConfig {
             "wake_up" to WakeUpTaskConfig::class.java,
             "go_to_sleep" to GoToSleepTaskConfig::class.java,
             "find_resting_place" to FindRestingPlaceTaskConfig::class.java,
+            "move_to_owner" to MoveToOwnerTaskConfig::class.java,
         )
 
         val runtime = MoLangRuntime().setup()

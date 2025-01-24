@@ -90,11 +90,13 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
@@ -418,6 +420,38 @@ object MoLangFunctions {
                 val amount = params.getDouble(0)
                 val source = DamageSource(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolder(DamageTypes.GENERIC).get())
                 entity.hurt(source, amount.toFloat())
+            }
+            map.put("distance_to_owner") {
+                if (entity !is TamableAnimal) {
+                    return@put DoubleValue.ZERO
+                }
+                val owner = entity.owner ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(entity.distanceTo(owner))
+            }
+            map.put("owner") {
+                if (entity !is TamableAnimal) {
+                    return@put DoubleValue.ZERO
+                }
+                val owner = entity.owner
+                return@put owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
+            }
+            map.put("can_see") { params ->
+                val target = params.get<MoValue>(0)
+                val range = params.getDoubleOrNull(1) ?: 32.0
+                if (target is ObjectValue<*>) {
+                    val targetEntity = target.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                    val vector = targetEntity.eyePosition.subtract(entity.eyePosition).normalize()
+                    val trace = entity.traceEntityCollision(
+                        maxDistance = range.toFloat(),
+                        stepDistance = 0.1F,
+                        direction = vector,
+                        entityClass = targetEntity.javaClass,
+                        collideBlock = ClipContext.Fluid.NONE
+                    )
+                    return@put DoubleValue(targetEntity in (trace?.entities ?: emptyList()))
+                } else {
+                    return@put DoubleValue.ZERO
+                }
             }
             map.put("walk_to") { params ->
                 val x = params.getDouble(0)

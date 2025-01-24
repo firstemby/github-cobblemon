@@ -8,7 +8,12 @@
       "tasksByPriority": {
         "0": [
           "switch_pokemon_from_battle",
-          "look_at_targeted_battle_pokemon"
+          "look_at_targeted_battle_pokemon",
+          {
+            "type": "look_at_target",
+            "minDurationTicks": 99999,
+            "maxDurationTicks": 99999
+          }
         ]
       }
     },

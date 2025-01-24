@@ -24,8 +24,8 @@ import net.minecraft.world.entity.ai.behavior.LookAtTargetSink
 
 class LookAtTargetTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
-    val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
-    val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+    val minDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+    val maxDurationTicks: ExpressionOrEntityVariable = Either.left("160".asExpression())
 
     override fun getVariables(entity: LivingEntity) = listOf(
         condition,
