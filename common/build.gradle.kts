@@ -50,9 +50,6 @@ tasks.assemble {
 }
 
 artifacts {
-    //This basically allows the zipped resources to be added as a dependency by the loader specific
-    //projects. Gradle by default needs the 'default' configuration here, but it seems like MDG wants
-    //'runtimeElements'
     add("rootResources", tasks.getByName<Zip>("zipResources"))
 }
 

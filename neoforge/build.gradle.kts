@@ -26,6 +26,11 @@ val includeRootResources = configurations.create("includeRootResources") {
     isCanBeConsumed = false
     isCanBeResolved = true
     isCanBeDeclared = true
+    //This exists because both
+    //  - com.cobblemon:mod
+    //  - com.cobblemon:mod-resources
+    //technically point to the same dependency (the :common project). To pick the proper artifact from that project
+    //we set attributes in that project and check for them here.
     attributes {
         attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.RESOURCES))
     }
@@ -33,8 +38,9 @@ val includeRootResources = configurations.create("includeRootResources") {
 
 //Something really fun here.
 //The order of these configs NEEDS to go cobblemon -> neoForge -> dependencies
-//Nasty, but cobblemon adds a dependency to MDGs minecraft source generation (access widener conversion)
-//And MDG only creates the additionalRuntimeConfiguration dependency scope if the "version" fiels has already been configured
+//Nasty, but cobblemon adds a dependency task to MDGs minecraft source generation task, so it needs to be configured first
+// (access widener conversion)
+//And MDG only creates the additionalRuntimeConfiguration dependency scope if the "version" field has already been configured
 cobblemon {
     accessWideners = provider {
         return@provider sourceSets.main.get().resources.filter() { file ->
@@ -61,9 +67,13 @@ neoForge {
 }
 
 dependencies {
+    //Originally I had this jar-in-jared, but the way that NF does class loading for JiJed dependencies
+    //Makes it so that they can't access minecraft classes. So instead we do an implementation dependency
+    //and make sure that the FMLModType variable is set in this jar's manifest
     implementation("com.cobblemon:mod:1.6.0-SNAPSHOT")
     includeRootResources("com.cobblemon:mod-resources:1.6.0-SNAPSHOT")
 
+    //additionalRuntimeClasspathLibraries are libraries that need to be added to the task runtime classpath
     api(libs.molang)
     "additionalRuntimeClasspath"(libs.molang)
 
@@ -89,6 +99,7 @@ dependencies {
     testImplementation(libs.bundles.unitTesting)
 }
 
+//TODO: Ensure updates to the mod resources in common are reflected without an explicit build of common
 tasks.register<Copy>("copyModResources") {
     dependsOn(includeRootResources)
     from(provider {
