@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.spawning.nest.NestSpawnCause
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
@@ -45,6 +46,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.nbt.NbtOps
@@ -55,70 +57,110 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.Container
+import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.ticks.TickPriority
+import java.util.*
 import java.util.UUID
 
-class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state) {
-    var eggComponent: EggComponent? = null
-        private set
+class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainter {
     var renderState: BlockEntityRenderState? = null
     var parents: Pair<UUID?, UUID?> = Pair(null, null)
     var ownerUUID: UUID? = null // player UUID that placed this nest
+    private var eggItem: ItemStack = ItemStack.EMPTY
+    val eggState = EggState()
 
     /**
-     * Sets the EggComponent and synchronizes it.
+     * Sets the ItemStack and synchronizes it.
      */
-    fun setEgg(egg: Egg?) {
-        this.eggComponent = EggComponent(egg)
+    fun setItem(itemStack: ItemStack) {
+        this.eggItem = itemStack
         setChanged() // Mark the block entity as changed.
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
-        //println("Egg data synchronized to client for NestBlockEntity at $blockPos: $egg")
-    }
-
-
-    /**
-     * Retrieves the EggComponent's Egg data.
-     */
-    fun getEgg(): Egg? {
-        return eggComponent?.egg
     }
 
     /**
-     * Save the EggComponent data manually to NBT.
+     * Retrieves the ItemStack.
      */
-    override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
-        super.saveAdditional(tag, registryLookup)
-        //println("Saving NestBlockEntity at $blockPos with eggComponent: $eggComponent")
-        eggComponent?.let {
-            CobblemonItemComponents.EGG_DATA.codec()
-                    ?.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, it)
-                    ?.result()
-                    ?.ifPresent { encoded -> tag.put("EggComponent", encoded) }
+    fun getItem(): ItemStack = eggItem
+
+    /**
+     * Drops the ItemStack in the world.
+     */
+    fun dropItem(world: Level, pos: BlockPos, state: BlockState) {
+        if (!eggItem.isEmpty) {
+            val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItem.copy())
+            world.addFreshEntity(itemEntity)
+            eggItem = ItemStack.EMPTY
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+        }
+    }
+
+    /**
+     * Handles interaction with the block.
+     */
+    fun onUse(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: ServerPlayer,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): InteractionResult {
+        val heldItem = player.getItemInHand(hand)
+
+        val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
+        if (!eggItem.isEmpty && eggComponent != null) {
+            // Hatch the Pokémon if the time to hatch is 0 or below
+            if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
+                hatchPokemon(state, world, pos, player)
+                return InteractionResult.SUCCESS
+            }
+
+
+            // Otherwise, drop the egg
+            dropItem(world, pos, state)
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+            return InteractionResult.SUCCESS
         }
 
+        // Place a new egg if the player is holding one
+        if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
+            if (!player.isCreative) {
+                setItem(heldItem.split(1))
+            } else {
+                setItem(heldItem.copy())
+            }
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+            return InteractionResult.SUCCESS
+        }
+
+        return InteractionResult.FAIL
+    }
+
+    override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
+        super.saveAdditional(tag, registryLookup)
+        //if (!eggItem.isEmpty) {
+            tag.put("EggItem", eggItem.saveOptional(registryLookup))
+        //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
-    /**
-     * Load the EggComponent data manually from NBT.
-     */
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(tag, registryLookup)
-        //println("Loading NestBlockEntity at $blockPos. EggComponent loaded: $eggComponent")
-        if (tag.contains("EggComponent")) {
-            eggComponent = CobblemonItemComponents.EGG_DATA.codec()
-                    ?.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag.get("EggComponent"))
-                    ?.result()
-                    ?.orElse(null)
-            //println("Client loaded EggComponent: ${eggComponent?.egg?.species}")
-        }
-
+        //if (tag.contains("EggItem")) {
+            eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
+        //}
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
         }
+
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
@@ -132,84 +174,13 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         return tag
     }
 
-
-
-    fun dropEgg(
-            state: BlockState,
-            world: Level,
-            pos: BlockPos
-    ) {
-        val currentEgg = getEgg() ?: return
-
-        // Log before clearing
-        println("Dropping egg: ${currentEgg.species} at $pos")
-
-        // Create an ItemStack with the EggComponent
-        val eggItemStack = CobblemonItems.POKEMON_EGG.defaultInstance.apply {
-            set(CobblemonItemComponents.EGG_DATA, EggComponent(currentEgg))
-        }
-
-        // Debug log to verify component data
-        val component = eggItemStack.get(CobblemonItemComponents.EGG_DATA)
-        println("EggComponent on dropped ItemStack: $component")
-
-        // Spawn the egg as an entity
-        val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItemStack)
-        world.addFreshEntity(itemEntity)
-
-        // Clear the egg from the nest
-        setEgg(null)
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS) // Notify client
-    }
-
-
-
-    fun onUse(
-            state: BlockState,
-            world: Level,
-            pos: BlockPos,
-            player: ServerPlayer,
-            hand: InteractionHand,
-            hit: BlockHitResult
-    ): InteractionResult {
-        val currentEgg = getEgg()
-
-        // If the nest has an egg
-        if (currentEgg != null) {
-            return if (currentEgg.timeToHatch <= 0F) {
-                hatchPokemon(state, world, pos, player) // Hatch if ready
-                InteractionResult.SUCCESS
-            } else {
-                dropEgg(state, world, pos) // Drop if not hatched yet
-                InteractionResult.SUCCESS
-            }
-        }
-
-        // If player is holding an egg, place it in the nest
-        val playerStack = player.getItemInHand(hand)
-        val eggComponent = playerStack.get(CobblemonItemComponents.EGG_DATA)
-
-        if (eggComponent != null) {
-            setEgg(eggComponent.egg)
-            if (!player.isCreative) {
-                playerStack.shrink(1) // Consume the egg if not in creative mode
-            }
-            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
-            return InteractionResult.SUCCESS
-        }
-
-        return InteractionResult.FAIL
-    }
-
-
     fun hatchPokemon(
             state: BlockState,
             world: Level,
             pos: BlockPos,
             player: ServerPlayer
     ) {
-        val egg = getEgg() ?: return
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA)?.egg ?: return
         if (world !is ServerLevel) return
 
         val parentOne = egg.parentOne
@@ -271,7 +242,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         // Clear the egg from the nest and update the block entity
-        setEgg(null)
+        setItem(Items.AIR.defaultInstance)
         setChanged()
         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }
@@ -413,16 +384,82 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         return buckets.first()  // Fallback
     }
 
+    // Hopper interaction methods
+    override fun getContainerSize(): Int = 1
+
+    override fun isEmpty(): Boolean = eggItem.isEmpty
+
+    override fun getItem(slot: Int): ItemStack = if (slot == 0) eggItem else ItemStack.EMPTY
+
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
+        if (slot == 0 && !eggItem.isEmpty) {
+            val removed = eggItem.split(amount)
+            setChanged()
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
+        if (slot == 0) {
+            val removed = eggItem
+            eggItem = ItemStack.EMPTY
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun setItem(slot: Int, stack: ItemStack) {
+        if (slot == 0) {
+            eggItem = stack
+            setChanged()
+        }
+    }
+
+    override fun setChanged() {
+        // Marks the block entity as modified
+        level?.blockEntityChanged(worldPosition)
+
+        // Schedules a block update to synchronize with the client
+        level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
+    }
+
+    override fun getSlotsForFace(direction: Direction): IntArray {
+        return intArrayOf(0)
+    }
+
+    /**
+     * Allows hoppers to insert items into the container.
+     */
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, direction: Direction?): Boolean {
+        // Allow only items with EggComponent to be inserted
+        return slot == 0 && stack.get(CobblemonItemComponents.EGG_DATA) != null
+    }
+
+    /**
+     * Allows hoppers to pull items out of the container.
+     */
+    override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, direction: Direction): Boolean {
+        // Allow items to be pulled out only if the slot contains an egg item
+        return slot == 0 && !eggItem.isEmpty
+    }
+
+    override fun stillValid(player: Player): Boolean = true
+
+    override fun clearContent() {
+        eggItem = ItemStack.EMPTY
+    }
+
     companion object {
-        private const val RANDOM_SPAWN_CHANCE = 100000 // 1 in 100 chance per random tick
+        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
             // Retrieve the Egg from the EggComponent
-            val egg = blockEntity.getEgg()
+            val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)?.egg
 
             if (egg != null) {
-                if (egg.timeToHatch <= 0) {
+                /*if (egg.timeToHatch <= 0) {
                     // Try to find a nearby ServerPlayer to pass to hatchPokemon
                     val nearestPlayer = world.getNearestPlayer(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 10.0, false)
 
@@ -433,15 +470,16 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
                     blockEntity.setChanged()
                     return@BlockEntityTicker
-                }
+                }*/
 
                 // Decrease hatch time if the egg still has time left
                 if (egg.timeToHatch > 0F) { egg.timeToHatch -- }
 
                 // Sync to client every 10 seconds (200 ticks)
                 if (egg.timeToHatch % 200F == 0F) {
-                    blockEntity.setEgg(egg) // Update component and synchronize
-                    blockEntity.setChanged()
+                    //blockEntity.setItem(egg) // Update component and synchronize
+                    //blockEntity.setChanged()
+                    val test = 1
                 }
             } else {
                 // Attempt to spawn a random egg in the nest with a small chance
@@ -458,15 +496,15 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                                     species = it.resourceIdentifier,
                                     parentOne = parent1.pokemon, // Parent one UUID
                                     parentTwo = parent2.pokemon, // Parent two UUID
+                                    form = childResult.pokemon.formData.name.lowercase(),
                                     timeToHatch = 200F // 10 seconds hatch time
                             )
                         }
                         if (egg != null) {
-                            blockEntity.setEgg(egg)
+                            blockEntity.setItem(egg.createEggItemStack())
                         }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                     }
-
                 }
             }
         }

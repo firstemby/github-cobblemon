@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.pasture.PastureLinkManager
@@ -362,14 +363,18 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                     val nestTaken = nests.random()
                                     val nestStal = level?.getBlockState(nestTaken)
                                     val blockEntity = level?.getBlockEntity(nestTaken) as? NestBlockEntity
+                                    val avgEggCycle = (motherPoke.species.eggCycles + fatherPoke.species.eggCycles) / 2
                                     if (blockEntity != null && breedResult.pokemon != null) {
+                                        val egg = Egg(
+                                            species = breedResult.pokemon!!.species.resourceIdentifier, // Species
+                                            parentOne = motherPoke, // Mother UUID
+                                            parentTwo = fatherPoke, // Father UUID
+                                            form = breedResult.pokemon.formData.name.lowercase(),
+                                            timeToHatch = breedResult.timeToHatch.toFloat() // 10 seconds hatch time
+                                        )
+
                                         //Most params here need to be gotten from the form when implemented properly
-                                        blockEntity.setEgg( Egg(
-                                                species = breedResult.pokemon!!.species.resourceIdentifier, // Species
-                                                parentOne = motherPoke, // Mother UUID
-                                                parentTwo = fatherPoke, // Father UUID
-                                                timeToHatch = 200F // 10 seconds hatch time
-                                        ))
+                                        blockEntity.setItem(egg.createEggItemStack())
 
                                         val isClientSide = this.level?.isClientSide ?: false
                                         if (isClientSide) {
@@ -464,7 +469,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             if (state?.block is NestBlock) {
                 val entity = level?.getBlockEntity(it) as NestBlockEntity
                 //Cobblemon.LOGGER.warn("Nest at ${it.toString()}")
-                if (entity.getEgg() == null) {
+                if (entity.getItem().item != CobblemonItems.POKEMON_EGG.asItem()) {
                     res.add(it)
                 }
                 else
