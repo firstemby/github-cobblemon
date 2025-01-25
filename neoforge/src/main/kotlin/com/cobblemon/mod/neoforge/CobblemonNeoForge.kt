@@ -111,6 +111,7 @@ class CobblemonNeoForge : CobblemonImplementation {
         with(MOD_BUS) {
             this@CobblemonNeoForge.commandArgumentTypes.register(this)
             addListener(this@CobblemonNeoForge::initialize)
+            val test = ResourceLocation.fromNamespaceAndPath("mincras", "asdfa")
             Cobblemon.preInitialize(this@CobblemonNeoForge)
             addListener(CobblemonBiomeModifiers::register)
             addListener(this@CobblemonNeoForge::on)

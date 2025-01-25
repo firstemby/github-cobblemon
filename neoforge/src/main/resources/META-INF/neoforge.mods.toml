@@ -24,6 +24,9 @@ config = "mixins.cobblemon-neoforge.json"
 [[mixins]]
 config = "mixins.cobblemon-common.json"
 
+[[accessTransformers]]
+file="META-INF/cobblemon-common.accesstransformer.cfg"
+
 [[dependencies.cobblemon]]
 modId="minecraft"
 mandatory=true

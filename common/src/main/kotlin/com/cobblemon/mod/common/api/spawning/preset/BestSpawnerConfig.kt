@@ -53,7 +53,7 @@ class BestSpawnerConfig {
             .create()
 
         const val CONFIG_NAME = "best-spawner-config"
-        const val INTERNAL_PATH = "/data/${Cobblemon.MODID}/spawning/$CONFIG_NAME.json"
+        const val INTERNAL_PATH = "data/${Cobblemon.MODID}/spawning/$CONFIG_NAME.json"
         const val EXTERNAL_PATH = "config/${Cobblemon.MODID}/spawning/$CONFIG_NAME.json"
 
         fun load(): BestSpawnerConfig {
@@ -77,7 +77,7 @@ class BestSpawnerConfig {
         }
 
         private fun loadInternal(): BestSpawnerConfig {
-            val reader = InputStreamReader(Cobblemon::class.java.getResourceAsStream(INTERNAL_PATH)!!)
+            val reader = InputStreamReader(Cobblemon.javaClass.classLoader.getResourceAsStream(INTERNAL_PATH)!!)
             val config = GSON.fromJson(reader, BestSpawnerConfig::class.java)
             reader.close()
             return config

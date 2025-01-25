@@ -68,6 +68,7 @@ transitive-accessible field net/minecraft/client/renderer/RenderStateShard NO_CU
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry ITEM_RECIPES Ljava/util/List;
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry POTION_RECIPES Ljava/util/List;
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry POTION_TYPES Ljava/util/List;
+transitive-accessible method net/minecraft/world/item/alchemy/PotionBrewing$Mix <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/item/crafting/Ingredient;Lnet/minecraft/core/Holder;)V
 transitive-accessible class net/minecraft/world/item/alchemy/PotionBrewing$Mix
 
 transitive-accessible class net/minecraft/util/datafix/fixes/ItemStackComponentizationFix$ItemStackData
@@ -76,6 +77,7 @@ accessible field net/minecraft/server/network/ServerCommonPacketListenerImpl con
 transitive-accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
 transitive-accessible field com/mojang/blaze3d/systems/RenderSystem shaderLightDirections [Lorg/joml/Vector3f;
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$PotionSlot
+transitive-accessible method net/minecraft/world/level/biome/Biome$ClimateSettings <init> (ZFLnet/minecraft/world/level/biome/Biome$TemperatureModifier;F)V
 transitive-accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
 accessible field net/minecraft/client/gui/components/toasts/AdvancementToast BACKGROUND_SPRITE Lnet/minecraft/resources/ResourceLocation;
 #accessible method net/minecraft/text/Text$Serialization fromJson (Lcom/google/gson/JsonElement;)Lnet/minecraft/text/MutableComponent;
@@ -90,7 +92,7 @@ transitive-accessible field net/minecraft/world/entity/ai/goal/FollowOwnerGoal s
 transitive-accessible field net/minecraft/world/level/levelgen/structure/pools/SinglePoolElement template Lcom/mojang/datafixers/util/Either;
 transitive-accessible class net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement$Placer
 transitive-accessible class net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement$PieceState
-transitive-accessible field net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement$PieceState piece Lnet/minecraft/world/level/levelgen/structure/PoolElementStructurePiece;
+transitive-accessible method net/minecraft/world/level/levelgen/structure/pools/JigsawPlacement$PieceState <init> (Lnet/minecraft/world/level/levelgen/structure/PoolElementStructurePiece;Lorg/apache/commons/lang3/mutable/MutableObject;I)V
 transitive-accessible method net/minecraft/client/resources/TextureAtlasHolder getSprite (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;
 transitive-accessible field net/minecraft/client/resources/TextureAtlasHolder textureAtlas Lnet/minecraft/client/renderer/texture/TextureAtlas;
 transitive-accessible field net/minecraft/client/renderer/texture/TextureAtlas width I

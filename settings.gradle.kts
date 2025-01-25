@@ -1,7 +1,11 @@
-import org.gradle.internal.impldep.com.google.common.collect.TreeTraverser.using
-
 rootProject.name = "cobblemon"
 
 includeBuild("build-logic")
-include("common")
+includeBuild("common") {
+    dependencySubstitution {
+        substitute(module("com.cobblemon:mod")).using(project(":"))
+        substitute(module("com.cobblemon:mod-resources")).using(project(":"))
+    }
+}
+
 include("neoforge")

@@ -19,9 +19,5 @@ class CobblemonGradle : Plugin<Project> {
             createArchiveTask.dependsOn(project.tasks.named(ConvertAccessWidenersTask.NAME))
             createArchiveTask.accessTransformers.from(project.tasks.named(ConvertAccessWidenersTask.NAME).get().outputs.files)
         }
-        val configuration = project.configurations.create("include")
-        configuration.setTransitive(false)
-        configuration.isCanBeResolved = true
-        configuration.isCanBeConsumed = true
     }
 }

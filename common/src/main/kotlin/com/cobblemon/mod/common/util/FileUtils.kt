@@ -21,7 +21,7 @@ import java.util.zip.ZipInputStream
 object FileUtils {
 
     private fun getResourceStream(internal: String): InputStream {
-        return Cobblemon::class.java.getResourceAsStream(internal)
+        return Cobblemon.javaClass.classLoader.getResourceAsStream(internal)
             ?: throw Exception("Could not read $internal")
     }
 

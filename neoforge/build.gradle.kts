@@ -22,23 +22,19 @@ repositories {
     maven(url = "../deps")
 }
 
-dependencies {
-    jarJar(implementation("com.cobblemon:mod:1.6.0-SNAPSHOT")) {}
-    include("com.cobblemon:mod-resources:1.6.0-SNAPSHOT@zip")
-    compileOnly(libs.bundles.mongo)
-    implementation(libs.bundles.kotlin)
-    api(libs.molang)
-    compileOnly(libs.graal)
-    api(libs.jei.api)
-    compileOnly(libs.bundles.fabric.integrations.compileOnly) {
-        isTransitive = false
+val includeRootResources = configurations.create("includeRootResources") {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    isCanBeDeclared = true
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.RESOURCES))
     }
-    compileOnly("net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7")
-    compileOnly("io.github.llamalad7:mixinextras-fabric:0.4.1")
-    testImplementation(libs.bundles.unitTesting)
-    implementation(libs.neo.kotlin.forge)
 }
 
+//Something really fun here.
+//The order of these configs NEEDS to go cobblemon -> neoForge -> dependencies
+//Nasty, but cobblemon adds a dependency to MDGs minecraft source generation (access widener conversion)
+//And MDG only creates the additionalRuntimeConfiguration dependency scope if the "version" fiels has already been configured
 cobblemon {
     accessWideners = provider {
         return@provider sourceSets.main.get().resources.filter() { file ->
@@ -53,19 +49,51 @@ neoForge {
         create("client") {
             client()
         }
+        create("server") {
+            server()
+        }
     }
     mods {
         create("cobblemon") {
-            sourceSets {
-                sourceSets.main
-            }
+            sourceSet(sourceSets.main.get())
         }
     }
 }
 
+dependencies {
+    implementation("com.cobblemon:mod:1.6.0-SNAPSHOT")
+    includeRootResources("com.cobblemon:mod-resources:1.6.0-SNAPSHOT")
+
+    api(libs.molang)
+    "additionalRuntimeClasspath"(libs.molang)
+
+    implementation("thedarkcolour:kotlinforforge-neoforge:5.7.0:slim")
+    "additionalRuntimeClasspath"("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
+    "additionalRuntimeClasspath"("org.jetbrains.kotlin:kotlin-reflect:2.1.0")
+    "additionalRuntimeClasspath"("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    "additionalRuntimeClasspath"("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3")
+    "additionalRuntimeClasspath"("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    compileOnly(libs.bundles.mongo)
+
+    compileOnly(libs.graal)
+    "additionalRuntimeClasspath"(libs.graal)
+
+    compileOnly("net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7")
+    compileOnly("io.github.llamalad7:mixinextras-fabric:0.4.1")
+    //api(libs.jei.api)
+    //compileOnly(libs.bundles.fabric.integrations.compileOnly) {
+    //    isTransitive = false
+    //}
+
+    testImplementation(libs.bundles.unitTesting)
+}
+
 tasks.register<Copy>("copyModResources") {
-    dependsOn(configurations.named("include"))
-    from(configurations.named("include").get().resolve().map { zipTree(it) })
+    dependsOn(includeRootResources)
+    from(provider {
+        includeRootResources.map { zipTree(it) }
+    })
     into(tasks.processResources.get().destinationDir)
 }
 

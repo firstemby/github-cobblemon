@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.gradle.internal.ir.types.IdSignatureValues.result
+import com.cobblemon.gradle.extension.tasks.ConvertAccessWidenersTask
 
 plugins {
     kotlin("jvm") version "2.1.0"
@@ -11,6 +11,24 @@ plugins {
 group = "com.cobblemon"
 version = "1.6.0-SNAPSHOT"
 
+val rootResources = configurations.create("rootResources") {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.RESOURCES))
+    }
+}
+
+tasks.processResources {
+    outputs.dir(this.destinationDir.resolve("META-INF"))
+
+    from(tasks.named(ConvertAccessWidenersTask.NAME)) {
+        into("META-INF")
+    }
+
+    exclude("*.accesswidener")
+}
+
 tasks.create<Zip>("zipResources") {
     dependsOn("processResources")
     from(tasks.processResources.get().destinationDir)
@@ -19,6 +37,9 @@ tasks.create<Zip>("zipResources") {
 
 tasks.jar {
     this.archiveBaseName = "mod"
+    manifest {
+        attributes(mapOf("FMLModType" to "GAMELIBRARY"))
+    }
     exclude {
         it.file.absolutePath.startsWith(tasks.processResources.get().destinationDir.path)
     }
@@ -32,7 +53,7 @@ artifacts {
     //This basically allows the zipped resources to be added as a dependency by the loader specific
     //projects. Gradle by default needs the 'default' configuration here, but it seems like MDG wants
     //'runtimeElements'
-    add("archives", tasks.getByName<Zip>("zipResources"))
+    add("rootResources", tasks.getByName<Zip>("zipResources"))
 }
 
 buildscript {
@@ -62,10 +83,10 @@ cobblemon {
 
 dependencies {
     compileOnly(libs.bundles.mongo)
-    implementation(libs.bundles.kotlin)
-    api(libs.molang)
+    compileOnly(libs.bundles.kotlin)
+    compileOnly(libs.molang)
     compileOnly(libs.graal)
-    api(libs.jei.api)
+    compileOnly(libs.jei.api)
     compileOnly(libs.bundles.fabric.integrations.compileOnly) {
         isTransitive = false
     }
@@ -74,13 +95,10 @@ dependencies {
     testImplementation(libs.bundles.unitTesting)
 }
 
-tasks.processResources {
-    exclude("*.accesswidener")
-}
-
 neoForge {
     neoFormVersion = "1.21.1-20240808.144430"
     interfaceInjectionData.from("src/main/resources/interfaces.json")
+    validateAccessTransformers = true
 }
 
 sourceSets {

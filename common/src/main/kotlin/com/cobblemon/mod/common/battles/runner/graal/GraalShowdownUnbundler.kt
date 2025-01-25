@@ -75,7 +75,7 @@ class GraalShowdownUnbundler {
 
     private fun loadShowdownMetadata() : ShowdownMetadata? {
         try {
-            val inputStream = javaClass.getResourceAsStream("/data/${Cobblemon.MODID}/showdown.json")!!
+            val inputStream = javaClass.classLoader.getResourceAsStream("data/${Cobblemon.MODID}/showdown.json")!!
             return gson.fromJson<ShowdownMetadata>(InputStreamReader(inputStream))
         } catch (exception: Exception) {
             exception.printStackTrace()
