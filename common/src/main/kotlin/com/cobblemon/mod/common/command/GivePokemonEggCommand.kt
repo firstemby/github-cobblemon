@@ -49,7 +49,7 @@ object GivePokemonEggCommand {
 
         val pokemon = pokemonProperties.create()
         val firstParent = pokemonProperties.create()
-        val secondParent = pokemonProperties.create()
+        val secondParent = pokemonProperties.create() // todo make sure they parent's can actually breed.....
         val egg = Egg(species = pokemon.species.resourceIdentifier, firstParent, secondParent, pokemon.species.forms.firstOrNull()?.name?.lowercase() ?: "normal", 0F)
         val eggItem = POKEMON_EGG.defaultInstance.apply {
             set(CobblemonItemComponents.EGG_DATA, EggComponent(egg))
