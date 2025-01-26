@@ -24,9 +24,6 @@
     ],
     "jei_mod_plugin": [
       "com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin"
-    ],
-    "dynamiclights": [
-      "com.cobblemon.mod.fabric.compat.lambdynamiclights.LambDynamicLightsCompatEntrypoint"
     ]
   },
   "mixins": [
@@ -35,9 +32,9 @@
   ],
   "accessWidener": "cobblemon-common.accesswidener",
   "depends": {
-    "fabricloader": ">=${fabric_loader_version}",
+    "fabricloader": ">=0.16.5",
     "fabric-api": "*",
-    "minecraft": ">=${minecraft_version}",
+    "minecraft": ">=1.21.1",
     "java": ">=17"
   },
   "custom": {

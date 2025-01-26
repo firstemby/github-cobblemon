@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
+/*
 package com.cobblemon.mod.fabric.compat.lambdynamiclights;
 
 import com.cobblemon.mod.common.Cobblemon;
@@ -22,3 +22,5 @@ public class LambDynamicLightsCompatEntrypoint implements DynamicLightsInitializ
         Cobblemon.LOGGER.info("Lamb Dynamic Lights compatibility enabled");
     }
 }
+
+ */

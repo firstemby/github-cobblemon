@@ -1,15 +1,14 @@
-import com.cobblemon.gradle.extension.tasks.ConvertAccessWidenersTask
-
 plugins {
     kotlin("jvm") version "2.1.0"
     id ("net.neoforged.moddev") version "2.0.75"
     id("net.kyori.blossom") version "2.1.0"
-    id("com.cobblemon.gradle")
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("maven-publish")
+    id("com.cobblemon.gradle")
 }
-group = "com.cobblemon"
-version = "1.6.0-SNAPSHOT"
+
+cobblemon {
+    additionalAccessWideners = files(sourceSets.main.get().resources).filter { it.extension == "accesswidener" }
+}
 
 val rootResources = configurations.create("rootResources") {
     isCanBeConsumed = true
@@ -19,13 +18,15 @@ val rootResources = configurations.create("rootResources") {
     }
 }
 
-tasks.processResources {
-    outputs.dir(this.destinationDir.resolve("META-INF"))
-
-    from(tasks.named(ConvertAccessWidenersTask.NAME)) {
-        into("META-INF")
+val accessWidenerExport = configurations.create("accessWidenerExport") {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.OBJECTS))
     }
+}
 
+tasks.processResources {
     exclude("*.accesswidener")
 }
 
@@ -35,22 +36,30 @@ tasks.create<Zip>("zipResources") {
     this.archiveBaseName = "mod-resources"
 }
 
+tasks.create<Zip>("zipAccessWideners") {
+    from(sourceSets.main.get().resources)
+    include("*.accesswidener")
+    this.archiveBaseName = "mod-accesswideners"
+}
+
 tasks.jar {
-    this.archiveBaseName = "mod"
+    archiveBaseName = "mod"
     manifest {
         attributes(mapOf("FMLModType" to "GAMELIBRARY"))
     }
     exclude {
-        it.file.absolutePath.startsWith(tasks.processResources.get().destinationDir.path)
+        it.file in tasks.processResources.get().outputs.files
     }
 }
 
 tasks.assemble {
     dependsOn(tasks.named("zipResources"))
+    dependsOn(tasks.named("zipAccessWideners"))
 }
 
 artifacts {
     add("rootResources", tasks.getByName<Zip>("zipResources"))
+    add("accessWidenerExport", tasks.getByName("zipAccessWideners"))
 }
 
 buildscript {
@@ -68,14 +77,6 @@ repositories {
     maven("https://maven.blamejared.com/")
     maven("https://api.modrinth.com/maven")
     maven(url = "../deps")
-}
-
-cobblemon {
-    accessWideners = provider {
-        return@provider sourceSets.main.get().resources.filter() { file ->
-            return@filter file.extension.equals("accesswidener")
-        }
-    }
 }
 
 dependencies {

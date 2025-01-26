@@ -1,16 +1,12 @@
+import org.gradle.internal.impldep.bsh.commands.dir
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
+import kotlin.io.path.name
+
 plugins {
     kotlin("jvm") version "2.1.0"
     id ("net.neoforged.moddev") version "2.0.75"
     id("com.cobblemon.gradle")
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven("https://maven.architectury.dev/")
-        maven("https://maven.fabricmc.net/")
-    }
 }
 
 repositories {
@@ -20,33 +16,6 @@ repositories {
     maven("https://api.modrinth.com/maven")
     maven(url = "https://thedarkcolour.github.io/KotlinForForge/")
     maven(url = "../deps")
-}
-
-val includeRootResources = configurations.create("includeRootResources") {
-    isCanBeConsumed = false
-    isCanBeResolved = true
-    isCanBeDeclared = true
-    //This exists because both
-    //  - com.cobblemon:mod
-    //  - com.cobblemon:mod-resources
-    //technically point to the same dependency (the :common project). To pick the proper artifact from that project
-    //we set attributes in that project and check for them here.
-    attributes {
-        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements.RESOURCES))
-    }
-}
-
-//Something really fun here.
-//The order of these configs NEEDS to go cobblemon -> neoForge -> dependencies
-//Nasty, but cobblemon adds a dependency task to MDGs minecraft source generation task, so it needs to be configured first
-// (access widener conversion)
-//And MDG only creates the additionalRuntimeConfiguration dependency scope if the "version" field has already been configured
-cobblemon {
-    accessWideners = provider {
-        return@provider sourceSets.main.get().resources.filter() { file ->
-            return@filter file.extension.equals("accesswidener")
-        }
-    }
 }
 
 neoForge {
@@ -72,6 +41,7 @@ dependencies {
     //and make sure that the FMLModType variable is set in this jar's manifest
     implementation("com.cobblemon:mod:1.6.0-SNAPSHOT")
     includeRootResources("com.cobblemon:mod-resources:1.6.0-SNAPSHOT")
+    "accessWidener"("com.cobblemon:mod-accesswideners:1.6.0-SNAPSHOT")
 
     //additionalRuntimeClasspathLibraries are libraries that need to be added to the task runtime classpath
     api(libs.molang)
@@ -99,15 +69,30 @@ dependencies {
     testImplementation(libs.bundles.unitTesting)
 }
 
-//TODO: Ensure updates to the mod resources in common are reflected without an explicit build of common
-tasks.register<Copy>("copyModResources") {
-    dependsOn(includeRootResources)
-    from(provider {
-        includeRootResources.map { zipTree(it) }
-    })
-    into(tasks.processResources.get().destinationDir)
+tasks.register("addAccessTransformersToToml") {
+    dependsOn(tasks.processResources)
+    doLast {
+        tasks.processResources.get().outputs.files.filter {
+            it.path.endsWith("accesstransformer.cfg")
+        }
+    }
 }
 
+//Add access tranformers to neoforge.mods.toml
 tasks.processResources {
-    dependsOn(tasks.named("copyModResources"))
+    val accessTransformers = mutableSetOf<String>()
+    eachFile {
+        if (name.endsWith("accesstransformer.cfg")) {
+            accessTransformers.add(relativeSourcePath.pathString)
+        }
+    }
+    doLast {
+        val modsFile = Files.walk(destinationDir.toPath()).filter { it.name == "neoforge.mods.toml" }.findFirst().orElse(null)
+        if (modsFile != null) {
+            val rawFile = Files.readString(modsFile)
+            val genAccessTransformersStr = accessTransformers.joinToString { "[[accessTransformers]]\nfile=\"$it\"\n" }
+            val transformedFile = rawFile.replace("ACCESS_TRANSFORMERS_TEMPLATE", genAccessTransformersStr)
+            Files.writeString(modsFile, transformedFile, StandardOpenOption.TRUNCATE_EXISTING)
+        }
+    }
 }

@@ -22,7 +22,7 @@ jei-api = "19.8.2.99"
 fabric-loader = "0.16.5"
 fabric-api = "0.104.0+1.21.1"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"
-fabric-permissions-api = "0.2-SNAPSHOT"
+fabric-permissions-api = "0.3.1"
 lambDynamicLights = "3.0.1+1.21.1"
 debugutils-fabric = "1.21-1.0.6-fabric"
 

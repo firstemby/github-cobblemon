@@ -65,8 +65,8 @@ class GraalShowdownUnbundler {
             }
 
             if (extract) {
-                FileUtils.copyInternalToExternal("/data/${Cobblemon.MODID}/showdown.zip", showdownZip.toPath())
-                FileUtils.copyInternalToExternal("/data/${Cobblemon.MODID}/showdown.json", showdownMetadataFile.toPath())
+                FileUtils.copyInternalToExternal("data/${Cobblemon.MODID}/showdown.zip", showdownZip.toPath())
+                FileUtils.copyInternalToExternal("data/${Cobblemon.MODID}/showdown.json", showdownMetadataFile.toPath())
                 FileUtils.unzipFile(showdownZip.toPath(), showdownDir.toPath())
                 showdownZip.delete()
             }
