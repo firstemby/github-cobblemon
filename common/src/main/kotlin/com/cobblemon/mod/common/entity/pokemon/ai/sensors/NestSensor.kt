@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import kotlin.collections.firstOrNull
@@ -65,7 +66,7 @@ class NestSensor : Sensor<LivingEntity>() {
             // Check if the nest is valid based on tethering and ownership
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
-            val isEggless = nestBlockEntity.eggComponent?.egg == null
+            val isEggless = nestBlockEntity.getItem(0) != ItemStack.EMPTY
 
             return@firstOrNull when {
                 // Pokémon is tethered: Use owned nests

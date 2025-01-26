@@ -2,10 +2,12 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.tasks.PathToNestTask
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
@@ -33,6 +35,14 @@ class PathToNestTaskConfig : SingleTaskConfig {
     ).asVariables()
 
     override fun createTask(
+        entity: LivingEntity,
+        brainConfigurationContext: BrainConfigurationContext
+    ): BehaviorControl<in LivingEntity>? {
+        return WrapperLivingEntityTask(PathToNestTask.create(), PokemonEntity::class.java)
+    }
+}
+
+    /*override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
@@ -71,9 +81,9 @@ class PathToNestTaskConfig : SingleTaskConfig {
                         return@Trigger false // Task ends when both are close enough
                     }
 
-                    /*if ((entity as PokemonEntity).tethering.tetheringId != null) {
+                    *//*if ((entity as PokemonEntity).tethering.tetheringId != null) {
                         val test1 = 1 // for breakpointing here to test my pastured mons
-                    }*/
+                    }*//*
 
                     // try to get the main pokemon to path and look at the nest
 
@@ -92,4 +102,4 @@ class PathToNestTaskConfig : SingleTaskConfig {
             }
         }
     }
-}
+}*/

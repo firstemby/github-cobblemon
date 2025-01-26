@@ -3,10 +3,12 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.tasks.GuardNestTask
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
 import net.minecraft.core.BlockPos
@@ -38,6 +40,13 @@ class GuardNestTaskConfig : SingleTaskConfig {
     ).asVariables()
 
     override fun createTask(
+        entity: LivingEntity,
+        brainConfigurationContext: BrainConfigurationContext
+    ): BehaviorControl<in LivingEntity>? {
+        return WrapperLivingEntityTask(GuardNestTask.create(), PokemonEntity::class.java)
+    }
+
+    /*override fun createTask(
         entity: LivingEntity,
         brainConfigurationContext: BrainConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
@@ -160,5 +169,5 @@ class GuardNestTaskConfig : SingleTaskConfig {
         }
 
         return null // No valid position found
-    }
+    }*/
 }

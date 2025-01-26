@@ -68,7 +68,7 @@ import net.minecraft.world.ticks.TickPriority
 import java.util.*
 import java.util.UUID
 
-class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainter {
+class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
     var renderState: BlockEntityRenderState? = null
     var parents: Pair<UUID?, UUID?> = Pair(null, null)
     var ownerUUID: UUID? = null // player UUID that placed this nest
