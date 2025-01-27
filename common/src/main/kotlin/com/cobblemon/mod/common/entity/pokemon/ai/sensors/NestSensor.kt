@@ -41,8 +41,8 @@ class NestSensor : Sensor<LivingEntity>() {
 
     private fun findNearbyNest(pokemonEntity: PokemonEntity, world: ServerLevel, entityPos: BlockPos): BlockPos? {
         return BlockPos.betweenClosed(
-            entityPos.offset(-40, -5, -40),
-            entityPos.offset(40, 5, 40)
+            entityPos.offset(-20, -5, -20),
+            entityPos.offset(20, 5, 20)
         ).firstOrNull { pos ->
             val blockState: BlockState = world.getBlockState(pos)
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
@@ -66,7 +66,7 @@ class NestSensor : Sensor<LivingEntity>() {
             // Check if the nest is valid based on tethering and ownership
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
-            val isEggless = nestBlockEntity.getItem(0) != ItemStack.EMPTY
+            val isEggless = nestBlockEntity.getItem(0) == ItemStack.EMPTY
 
             return@firstOrNull when {
                 // Pokémon is tethered: Use owned nests
