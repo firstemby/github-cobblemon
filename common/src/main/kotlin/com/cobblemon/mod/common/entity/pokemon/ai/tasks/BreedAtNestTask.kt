@@ -49,6 +49,13 @@ object BreedAtNestTask {
                     val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false
                     val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
 
+                    val nestEntity = when {
+                        world.getBlockEntity(nestLocation) == null-> null
+                        else -> (world.getBlockEntity(nestLocation) as NestBlockEntity)
+                    }
+                    if (nestEntity == null)
+                        return@Trigger false
+
                     // Convert nest location to Vec3
                     val targetVec = Vec3.atCenterOf(nestLocation)
 
@@ -57,12 +64,8 @@ object BreedAtNestTask {
                         return@Trigger false
                     }
 
-                    // Access the nest block entity
-                    val nestBlockEntity = world.getBlockEntity(nestLocation) as? NestBlockEntity
-                        ?: return@Trigger false
-
                     // double check to make sure the nest is not taken yet and cancel if it is
-                    if (nestBlockEntity.getItem(0) != ItemStack.EMPTY) return@Trigger false
+                    if (nestEntity.getItem(0) != ItemStack.EMPTY) return@Trigger false
 
                     // Generate the egg using BreedingLogicManager
                     val parentOne = (entity as PokemonEntity).pokemon
@@ -82,11 +85,11 @@ object BreedAtNestTask {
                     } ?: return@Trigger false
 
                     // Set the egg in the nest
-                    nestBlockEntity.setItem(egg.createEggItemStack())
+                    nestEntity.setItem(egg.createEggItemStack())
 
                     // set the parents of the nest if it/they are wild so they guard it
-                    if (nestBlockEntity.ownerUUID == null)
-                        nestBlockEntity.parents = Pair((entity as PokemonEntity).uuid, mate.uuid)
+                    if (nestEntity.ownerUUID == null)
+                        nestEntity.parents = Pair((entity as PokemonEntity).uuid, mate.uuid)
 
 
                     // set breeding cooldown for both

@@ -50,6 +50,13 @@ object PathToNestTask {
                     //val nestLocation = it.get(nestMemory)
                     val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false
 
+                    val nestEntity = when {
+                        world.getBlockEntity(nestLocation) == null-> null
+                        else -> (world.getBlockEntity(nestLocation) as NestBlockEntity)
+                    }
+                    if (nestEntity == null)
+                        return@Trigger false
+
                     //val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
                     val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
 
@@ -64,7 +71,7 @@ object PathToNestTask {
                     }
 
                     // cancel task if nest is taken
-                    if ((world.getBlockEntity(nestLocation) as NestBlockEntity).getItem(0) != ItemStack.EMPTY) {
+                    if (nestEntity.getItem(0) != ItemStack.EMPTY) {
                         return@Trigger false // Task ends when both are close enough
                     }
 

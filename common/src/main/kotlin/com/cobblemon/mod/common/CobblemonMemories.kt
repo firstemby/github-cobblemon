@@ -36,6 +36,7 @@ object CobblemonMemories {
     val DIALOGUES = register<List<ActiveDialogue>>("npc_dialogues")
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
     val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
+    val MATE_SCAN_COOLDOWN = register("mate_scan_cooldown", PrimitiveCodec.BOOL)
     val NEST_LOCATION = register<BlockPos>("nest_location")
     val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
     val IRRITATED_AT = register<UUID>("irritated_at")

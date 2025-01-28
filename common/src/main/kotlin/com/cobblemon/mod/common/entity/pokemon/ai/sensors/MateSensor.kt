@@ -12,6 +12,7 @@ import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.phys.AABB
 import kotlin.collections.firstOrNull
 import kotlin.jvm.java
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Sensor used to detect nearby Pokémon that are potential mates.
@@ -30,6 +31,11 @@ class MateSensor : Sensor<LivingEntity>() {
         // Ensure the entity is a PokemonEntity
         if (entity !is PokemonEntity) return
 
+        // make sure they are not on Mate Scan cooldown
+        if (entity.brain.getMemory(CobblemonMemories.MATE_SCAN_COOLDOWN).getOrNull() == true) {
+            return
+        }
+
         // Make sure the current pokemon has no breeding cooldown
         if ((entity as PokemonEntity).pokemon.breedingCooldown != 0) return
 
@@ -39,6 +45,9 @@ class MateSensor : Sensor<LivingEntity>() {
         ) { nearbyEntity ->
             nearbyEntity != entity && isValidMate(entity, nearbyEntity)
         }.firstOrNull()
+
+        // mate scan just got done so let's set a cooldown for a next scan
+        entity.brain.setMemoryWithExpiry(CobblemonMemories.MATE_SCAN_COOLDOWN, true, 1200)
 
         if (potentialMate != null) {
             entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)  // WORKS
@@ -57,16 +66,26 @@ class MateSensor : Sensor<LivingEntity>() {
         //todo delete this later (this is for breakpointing only true returns)
         if (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) {
             val test = 1
+            if (BreedingLogicManager.checkCompatibility(entity.pokemon, mate.pokemon)) {
+                val test2 = 1
+            }
         }
 
         // make sure the potetntial mate is not on a breeding cooldown
         if (mate.pokemon.breedingCooldown != 0) return false
 
+        val canBreed = BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)
+        if (!canBreed)
+            return false
+        val isCompatible = BreedingLogicManager.checkCompatibility(entity.pokemon, mate.pokemon)
+        val bothWild = (entity.pokemon.isWild() && mate.pokemon.isWild())
+        val bothOwned = (!entity.pokemon.isWild() && !mate.pokemon.isWild())
+
         return when {
             //(entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
             //(gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
             //(gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
-            (BreedingLogicManager.canBreed(entity.pokemon, mate.pokemon)) -> true
+            (canBreed && isCompatible && (bothWild || bothOwned)) -> true
             else -> false
         }
     }

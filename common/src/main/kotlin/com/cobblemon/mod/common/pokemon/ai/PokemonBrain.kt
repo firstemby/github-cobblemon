@@ -175,6 +175,7 @@ object PokemonBrain {
         MemoryModuleType.AVOID_TARGET,
         CobblemonMemories.POKEMON_SLEEPING,
         CobblemonMemories.POTENTIAL_MATE,
+        CobblemonMemories.MATE_SCAN_COOLDOWN,
         CobblemonMemories.NEST_LOCATION,
         CobblemonMemories.PATERNAL_NEST_LOCATION,
         CobblemonMemories.IRRITATED_AT
