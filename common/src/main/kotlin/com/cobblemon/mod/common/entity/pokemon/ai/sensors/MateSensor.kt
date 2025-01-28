@@ -80,12 +80,11 @@ class MateSensor : Sensor<LivingEntity>() {
         val isCompatible = BreedingLogicManager.checkCompatibility(entity.pokemon, mate.pokemon)
         val bothWild = (entity.pokemon.isWild() && mate.pokemon.isWild())
         val bothOwned = (!entity.pokemon.isWild() && !mate.pokemon.isWild())
+        val mateHasMate = mate.brain.getMemory(CobblemonMemories.POTENTIAL_MATE).getOrNull() != null
 
         return when {
-            //(entity.pokemon.species.name == "ditto" || mate.pokemon.species.name == "ditto") -> true
-            //(gender == Gender.MALE && mateGender == Gender.FEMALE) -> true
-            //(gender == Gender.FEMALE && mateGender == Gender.MALE) -> true
-            (canBreed && isCompatible && (bothWild || bothOwned)) -> true
+            // if the choice doesn't have a mate already, can breed with them, passes compatibility check, and both are either wild or owned
+            (!mateHasMate && canBreed && isCompatible && (bothWild || bothOwned)) -> true
             else -> false
         }
     }
