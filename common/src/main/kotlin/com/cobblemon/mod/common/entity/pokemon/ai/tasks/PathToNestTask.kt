@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
 object PathToNestTask {
@@ -58,6 +60,11 @@ object PathToNestTask {
 
                     // Check if Pokémon are close enough to the nest
                     if (entity.distanceToSqr(targetVec) <= 2.0 && mate.distanceToSqr(targetVec) <= 2.0) {
+                        return@Trigger false // Task ends when both are close enough
+                    }
+
+                    // cancel task if nest is taken
+                    if ((world.getBlockEntity(nestLocation) as NestBlockEntity).getItem(0) != ItemStack.EMPTY) {
                         return@Trigger false // Task ends when both are close enough
                     }
 
