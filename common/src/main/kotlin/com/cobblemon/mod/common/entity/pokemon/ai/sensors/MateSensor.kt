@@ -51,6 +51,7 @@ class MateSensor : Sensor<LivingEntity>() {
 
         if (potentialMate != null) {
             entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)  // WORKS
+            // todo set the brain of the mate to be set to this entity
         } else {
             entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
         }
