@@ -55,21 +55,12 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext): VoxelShape {
         return Shapes.or(
-                // Base of the incubator
-                Shapes.box(2.0 / 16.0, 1.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0),
-                Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 2.0 / 16.0, 13.0 / 16.0),
-
-                // Top of the incubator
-                Shapes.box(2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 16.0 / 16.0, 14.0 / 16.0),
-
-                // Glass walls
-                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 2.5 / 16.0), // Front
-                Shapes.box(13.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Right
-                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 2.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Left
-                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 13.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Back
-
-                // Cushion inside the incubator
-                Shapes.box(3.5 / 16.0, 3.0 / 16.0, 3.5 / 16.0, 12.5 / 16.0, 4.0 / 16.0, 12.5 / 16.0)
+                // Base
+                Shapes.box(2.0 / 16.0, 0.0, 2.0 / 16.0, 14.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0),
+                // Top
+                Shapes.box(2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 1.0, 14.0 / 16.0),
+                // Unified Glass Section (Covers all four glass sides as one box)
+                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0)
         )
     }
 
