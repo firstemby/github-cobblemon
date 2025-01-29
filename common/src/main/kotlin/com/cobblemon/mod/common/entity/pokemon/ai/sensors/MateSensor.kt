@@ -23,6 +23,7 @@ class MateSensor : Sensor<LivingEntity>() {
     companion object {
         val OUTPUT_MEMORY_MODULES = setOf(CobblemonMemories.POTENTIAL_MATE)
         private const val DETECTION_RADIUS = 10.0 // Radius to search for potential mates
+        private const val MATE_SCAN_COOLDOWN = 1200L
     }
 
     override fun requires(): Set<MemoryModuleType<*>> = OUTPUT_MEMORY_MODULES
@@ -36,6 +37,9 @@ class MateSensor : Sensor<LivingEntity>() {
             return
         }
 
+        // since this will be the first scan in a while due to the cooldown clear the memory of a mate
+        entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+
         // Make sure the current pokemon has no breeding cooldown
         if ((entity as PokemonEntity).pokemon.breedingCooldown != 0) return
 
@@ -47,11 +51,13 @@ class MateSensor : Sensor<LivingEntity>() {
         }.firstOrNull()
 
         // mate scan just got done so let's set a cooldown for a next scan
-        entity.brain.setMemoryWithExpiry(CobblemonMemories.MATE_SCAN_COOLDOWN, true, 1200)
+        entity.brain.setMemoryWithExpiry(CobblemonMemories.MATE_SCAN_COOLDOWN, true, MATE_SCAN_COOLDOWN)
 
         if (potentialMate != null) {
-            entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)  // WORKS
-            // todo set the brain of the mate to be set to this entity
+            entity.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, potentialMate)
+            // todo set the brain of the mate to be set to this entity and set cooldown so they are in sync
+            potentialMate.brain.setMemory(CobblemonMemories.POTENTIAL_MATE, entity)
+            potentialMate.brain.setMemoryWithExpiry(CobblemonMemories.MATE_SCAN_COOLDOWN, true, MATE_SCAN_COOLDOWN)
         } else {
             entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
         }
