@@ -47,6 +47,8 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
 class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
     override fun setPlacedBy(
@@ -68,9 +70,15 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)
     }
 
-    // try to kill shadows todo make custom occlusion shape
-    override fun isOcclusionShapeFullBlock(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean {
-        return false
+    override fun getShape(
+            state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext
+    ): VoxelShape {
+        return Shapes.or(
+                Shapes.box(5.0 / 16.0, 0.0, 5.0 / 16.0, 11.0 / 16.0, 2.0 / 16.0, 11.0 / 16.0), // Bottom section
+                Shapes.box(4.5 / 16.0, 1.25 / 16.0, 4.5 / 16.0, 11.5 / 16.0, 5.25 / 16.0, 11.5 / 16.0), // Middle section
+                Shapes.box(5.0 / 16.0, 5.25 / 16.0, 5.0 / 16.0, 11.0 / 16.0, 7.25 / 16.0, 11.0 / 16.0), // Upper section
+                Shapes.box(6.0 / 16.0, 7.25 / 16.0, 6.0 / 16.0, 10.0 / 16.0, 8.25 / 16.0, 10.0 / 16.0)  // Top small section
+        )
     }
 
     override fun useWithoutItem(

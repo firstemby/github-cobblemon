@@ -492,7 +492,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
         .ofFullCopy(Blocks.DRAGON_EGG)
-        .dynamicShape()
         .pushReaction(PushReaction.BLOCK)
         .sound(SoundType.BONE_BLOCK)
     ))
@@ -507,7 +506,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .lightLevel { state ->
             if (state.getValue(IncubatorBlock.HAS_EGG)) 5 else 0 // Emit 5 light when HAS_EGG is true
         }
-        .dynamicShape()
     ))
 
     init {
@@ -540,7 +538,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     private fun nestBlock(variant: NestBlock.NestVariant): NestBlock {
         val identifier = cobblemonResource(variant.serializedName)
-        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY).dynamicShape())
+        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
         return this.create(identifier.path, block)
     }
 

@@ -35,6 +35,8 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
 class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
@@ -51,9 +53,24 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         )
     }
 
-    // try to kill shadows todo make custom occlusion shape
-    override fun isOcclusionShapeFullBlock(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean {
-        return false
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext): VoxelShape {
+        return Shapes.or(
+                // Base of the incubator
+                Shapes.box(2.0 / 16.0, 1.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0),
+                Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 2.0 / 16.0, 13.0 / 16.0),
+
+                // Top of the incubator
+                Shapes.box(2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 16.0 / 16.0, 14.0 / 16.0),
+
+                // Glass walls
+                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 2.5 / 16.0), // Front
+                Shapes.box(13.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Right
+                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 2.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Left
+                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 13.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0), // Back
+
+                // Cushion inside the incubator
+                Shapes.box(3.5 / 16.0, 3.0 / 16.0, 3.5 / 16.0, 12.5 / 16.0, 4.0 / 16.0, 12.5 / 16.0)
+        )
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
