@@ -35,6 +35,8 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
 class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
@@ -48,6 +50,17 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, net.minecraft.core.Direction.NORTH)
             .setValue(HAS_EGG, false)
+        )
+    }
+
+    override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: net.minecraft.world.phys.shapes.CollisionContext): VoxelShape {
+        return Shapes.or(
+                // Base
+                Shapes.box(2.0 / 16.0, 0.0, 2.0 / 16.0, 14.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0),
+                // Top
+                Shapes.box(2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0, 1.0, 14.0 / 16.0),
+                // Unified Glass Section (Covers all four glass sides as one box)
+                Shapes.box(2.5 / 16.0, 3.0 / 16.0, 2.5 / 16.0, 13.5 / 16.0, 14.0 / 16.0, 13.5 / 16.0)
         )
     }
 

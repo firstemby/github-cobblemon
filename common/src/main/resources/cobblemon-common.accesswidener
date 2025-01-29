@@ -65,9 +65,11 @@ transitive-accessible field net/minecraft/client/renderer/RenderStateShard OVERL
 transitive-accessible field net/minecraft/client/renderer/RenderStateShard RENDERTYPE_CUTOUT_SHADER Lnet/minecraft/client/renderer/RenderStateShard$ShaderStateShard;
 transitive-accessible field net/minecraft/client/renderer/RenderStateShard LIGHTMAP Lnet/minecraft/client/renderer/RenderStateShard$LightmapStateShard;
 transitive-accessible field net/minecraft/client/renderer/RenderStateShard NO_CULL Lnet/minecraft/client/renderer/RenderStateShard$CullStateShard;
-transitive-accessible field net/minecraft/client/render/RenderPhase ENABLE_LIGHTMAP Lnet/minecraft/client/render/RenderPhase$Lightmap;
-transitive-accessible field net/minecraft/client/render/RenderPhase DISABLE_CULLING Lnet/minecraft/client/render/RenderPhase$Cull;
-transitive-accessible field net/minecraft/client/render/RenderPhase ENABLE_OVERLAY_COLOR Lnet/minecraft/client/render/RenderPhase$Overlay;
+
+# these were added when breeding branch was on 1.20.1 and idk if they are still needed
+#transitive-accessible field net/minecraft/client/render/RenderPhase ENABLE_LIGHTMAP Lnet/minecraft/client/render/RenderPhase$Lightmap;
+#transitive-accessible field net/minecraft/client/render/RenderPhase DISABLE_CULLING Lnet/minecraft/client/render/RenderPhase$Cull;
+#transitive-accessible field net/minecraft/client/render/RenderPhase ENABLE_OVERLAY_COLOR Lnet/minecraft/client/render/RenderPhase$Overlay;
 
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry ITEM_RECIPES Ljava/util/List;
 #transitive-accessible field  net/minecraft/recipe/BrewingRecipeRegistry POTION_RECIPES Ljava/util/List;

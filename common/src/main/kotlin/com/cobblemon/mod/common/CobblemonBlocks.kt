@@ -478,18 +478,29 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
+    val NEST_STICK = nestBlock(NestBlock.NestVariant.STICK)
+    val NEST_LEAF = nestBlock(NestBlock.NestVariant.LEAF)
+    val NEST_STONE = nestBlock(NestBlock.NestVariant.STONE)
+    val NEST_DEEPSLATE = nestBlock(NestBlock.NestVariant.DEEPSLATE)
+    val NEST_BASALT = nestBlock(NestBlock.NestVariant.BASALT)
+    val NEST_SNOW = nestBlock(NestBlock.NestVariant.SNOW)
+
     val BASIC_NEST = nestBlock(NestBlock.NestVariant.BASIC)
     val CAVE_NEST = nestBlock(NestBlock.NestVariant.CAVE)
     val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)
     val WATER_NEST = nestBlock(NestBlock.NestVariant.WATER)
 
-    val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DRAGON_EGG)))
+    val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
+        .ofFullCopy(Blocks.DRAGON_EGG)
+        .pushReaction(PushReaction.BLOCK)
+        .sound(SoundType.BONE_BLOCK)
+    ))
 
     @JvmField
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
         .mapColor(MapColor.COLOR_LIGHT_GRAY)
         .sound(SoundType.METAL)
-        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.BEDROCK.explosionResistance)
+        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.DIAMOND_ORE.explosionResistance)
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK)
         .lightLevel { state ->
