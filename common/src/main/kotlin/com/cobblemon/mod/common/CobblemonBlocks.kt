@@ -478,6 +478,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
+    val NEST_STICK = nestBlock(NestBlock.NestVariant.STICK)
+    val NEST_LEAF = nestBlock(NestBlock.NestVariant.LEAF)
+    val NEST_STONE = nestBlock(NestBlock.NestVariant.STONE)
+    val NEST_DEEPSLATE = nestBlock(NestBlock.NestVariant.DEEPSLATE)
+    val NEST_BASALT = nestBlock(NestBlock.NestVariant.BASALT)
+    val NEST_SNOW = nestBlock(NestBlock.NestVariant.SNOW)
+
     val BASIC_NEST = nestBlock(NestBlock.NestVariant.BASIC)
     val CAVE_NEST = nestBlock(NestBlock.NestVariant.CAVE)
     val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)

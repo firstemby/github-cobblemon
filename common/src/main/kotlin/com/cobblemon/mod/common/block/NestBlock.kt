@@ -56,6 +56,13 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     }
 
     enum class NestVariant(val id: String) : StringRepresentable {
+        STICK("nest_stick"),
+        LEAF("nest_leaf"),
+        STONE("nest_stone"),
+        DEEPSLATE("nest_deepslate"),
+        BASALT("nest_basalt"),
+        SNOW("nest_snow"),
+
         CAVE("cave_nest"),
         NETHER("nether_nest"),
         WATER("water_nest"),

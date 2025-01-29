@@ -395,6 +395,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
+    val NEST_STICK = blockItem(NestBlock.NestVariant.STICK.serializedName, CobblemonBlocks.NEST_STICK)
+    val NEST_LEAF = blockItem(NestBlock.NestVariant.LEAF.serializedName, CobblemonBlocks.NEST_LEAF)
+    val NEST_STONE = blockItem(NestBlock.NestVariant.STONE.serializedName, CobblemonBlocks.NEST_STONE)
+    val NEST_DEEPSLATE = blockItem(NestBlock.NestVariant.DEEPSLATE.serializedName, CobblemonBlocks.NEST_DEEPSLATE)
+    val NEST_BASALT = blockItem(NestBlock.NestVariant.BASALT.serializedName, CobblemonBlocks.NEST_BASALT)
+    val NEST_SNOW = blockItem(NestBlock.NestVariant.SNOW.serializedName, CobblemonBlocks.NEST_SNOW)
+
     val BASIC_NEST = blockItem(NestBlock.NestVariant.BASIC.serializedName, CobblemonBlocks.BASIC_NEST)
     val CAVE_NEST = blockItem(NestBlock.NestVariant.CAVE.serializedName, CobblemonBlocks.CAVE_NEST)
     val NETHER_NEST = blockItem(NestBlock.NestVariant.NETHER.serializedName, CobblemonBlocks.NETHER_NEST)
