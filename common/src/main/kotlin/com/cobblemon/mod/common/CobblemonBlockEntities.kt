@@ -85,6 +85,13 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val NEST: BlockEntityType<NestBlockEntity> = this.create("nest",
         BlockEntityType.Builder.of(
             ::NestBlockEntity,
+            CobblemonBlocks.NEST_STICK,
+            CobblemonBlocks.NEST_LEAF,
+            CobblemonBlocks.NEST_STONE,
+            CobblemonBlocks.NEST_DEEPSLATE,
+            CobblemonBlocks.NEST_BASALT,
+            CobblemonBlocks.NEST_SNOW,
+
             CobblemonBlocks.NETHER_NEST,
             CobblemonBlocks.WATER_NEST,
             CobblemonBlocks.CAVE_NEST,

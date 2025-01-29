@@ -37,6 +37,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
@@ -65,6 +66,11 @@ class EggBlock(properties: Properties) : BaseEntityBlock(properties) {
         }
 
         super.setPlacedBy(level, blockPos, blockState, placer, itemStack)
+    }
+
+    // try to kill shadows todo make custom occlusion shape
+    override fun isOcclusionShapeFullBlock(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean {
+        return false
     }
 
     override fun useWithoutItem(

@@ -51,6 +51,11 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         )
     }
 
+    // try to kill shadows todo make custom occlusion shape
+    override fun isOcclusionShapeFullBlock(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean {
+        return false
+    }
+
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
         return defaultBlockState().setValue(FACING, ctx.horizontalDirection.opposite)
     }

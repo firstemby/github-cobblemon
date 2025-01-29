@@ -45,6 +45,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
+import net.minecraft.world.phys.shapes.VoxelShape
 
 class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBlock(properties), SimpleWaterloggedBlock {
 
@@ -69,6 +70,11 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         BASIC("basic_nest");
 
         override fun getSerializedName() = id
+    }
+
+    // try to kill shadows todo make custom occlusion shape
+    override fun isOcclusionShapeFullBlock(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean {
+        return false
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {

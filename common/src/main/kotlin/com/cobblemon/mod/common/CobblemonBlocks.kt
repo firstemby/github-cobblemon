@@ -490,18 +490,24 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)
     val WATER_NEST = nestBlock(NestBlock.NestVariant.WATER)
 
-    val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DRAGON_EGG)))
+    val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
+        .ofFullCopy(Blocks.DRAGON_EGG)
+        .dynamicShape()
+        .pushReaction(PushReaction.BLOCK)
+        .sound(SoundType.BONE_BLOCK)
+    ))
 
     @JvmField
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
         .mapColor(MapColor.COLOR_LIGHT_GRAY)
         .sound(SoundType.METAL)
-        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.BEDROCK.explosionResistance)
+        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.DIAMOND_ORE.explosionResistance)
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK)
         .lightLevel { state ->
             if (state.getValue(IncubatorBlock.HAS_EGG)) 5 else 0 // Emit 5 light when HAS_EGG is true
         }
+        .dynamicShape()
     ))
 
     init {
@@ -534,7 +540,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     private fun nestBlock(variant: NestBlock.NestVariant): NestBlock {
         val identifier = cobblemonResource(variant.serializedName)
-        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY).dynamicShape())
         return this.create(identifier.path, block)
     }
 
