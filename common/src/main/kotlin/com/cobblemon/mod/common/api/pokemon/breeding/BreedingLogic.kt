@@ -52,16 +52,11 @@ interface BreedingLogic {
             return BreedingResult()
         }
 
-
-        // todo check for compatability here (OT, species, etc)
-        val compatible = checkCompatibility(mother, father)
-
         // Crab note: TODO Clean this shit up it is ugly af
 
         // find matching breeding rule
         val rule = BreedingRules.getBreedingRule(mother, father)
 
-        // Suppose we already have a fallbackForm: FormData
         val fallbackForm: FormData = this.calculateForm(mother, father)
 
         val finalSpecies: Species = if (rule?.species != null) {
@@ -71,10 +66,8 @@ interface BreedingLogic {
         }
 
         val finalForm: FormData = if (rule != null && rule.form != null) {
-            // find the species by rule.species or fallback
             val speciesEntry = rule.species?.let { PokemonSpecies.getByName(it.lowercase()) } ?: fallbackForm.species
             speciesEntry.forms.find { formData ->
-                // Compare ignoring case. formData.name might be "Normal", "Alolan", etc.
                 formData.name.lowercase() == rule.form.lowercase()
             } ?: speciesEntry.standardForm
         } else {
@@ -84,17 +77,14 @@ interface BreedingLogic {
         // Calculate fallback IVs, then override stats from the rule if non-null
         val finalIVs = mergeIvs(rule, mother, father)
 
-        // If the rule has a 'nature' field, use it, else fallback
         val finalNature: Nature = if (rule?.nature != null) {
-            // If rule.nature = "adamant"
             Natures.getNature(rule.nature.lowercase()) ?: this.calculateNature(mother, father)
         } else {
             this.calculateNature(mother, father)
         }
 
         // TODO get the ability to actually apply
-        // If the rule has an 'ability', use it, else fallback
-        val finalAbility: Ability = if (rule?.ability != null) {
+                val finalAbility: Ability = if (rule?.ability != null) {
             Abilities.get(rule.ability.lowercase())?.create(true, Priority.HIGHEST) ?: this.calculateAbility(mother, father, finalForm)
         } else {
             this.calculateAbility(mother, father, finalForm)
@@ -109,7 +99,6 @@ interface BreedingLogic {
                 rule.moves.move3,
                 rule.moves.move4
             ).mapNotNull { moveString ->
-                // e.g. "flare_blitz"
                 Moves.getByName(moveString.lowercase())
             }
         } else {
@@ -124,19 +113,21 @@ interface BreedingLogic {
             eggMoves = ruleMoveTemplates
         )
 
-        // Determine shiny randomly (or however your system does it)
-        val isShiny = (Random.nextFloat() < 1f / Cobblemon.config.shinyRate)
+        // Determine shiny based on masuda
+        val mssudaActive = masudaActive(mother,father)
+        val isShiny = when {
+            mssudaActive -> (Random.nextFloat() < 1f / Cobblemon.config.masudaShinyRate)
+            else -> (Random.nextFloat() < 1f / Cobblemon.config.shinyRate)
+        }
 
-        // If the rule has a 'gender' string, convert it to Gender; else fallback
         val finalGender: Gender = if (rule?.gender != null) {
-            // e.g. "male" / "female"
+
             Gender.entries.find { it.name.equals(rule.gender, ignoreCase = true) }
                 ?: this.calculateGender(mother, father, finalForm)
         } else {
             this.calculateGender(mother, father, finalForm)
         }
 
-        // If the rule has a 'pokeball', use it, else fallback
         val finalPokeball: PokeBall = if (rule?.pokeball != null) {
             PokeBalls.getPokeBall(cobblemonResource(rule.pokeball.lowercase())) ?: this.calculatePokeball(mother, father)
         } else {
@@ -179,8 +170,16 @@ interface BreedingLogic {
         return fallbackIvs
     }
 
+    fun masudaActive(mother: Pokemon, father: Pokemon) : Boolean {
+        val isDifferentOT = (mother.originalTrainer == father.originalTrainer)
+        val bothMaxFriendship = (mother.friendship == 255 && father.friendship == 255)
+        val requireBothOTs = Cobblemon.config.requireOTsForMasuda
 
-
+        return when {
+            requireBothOTs -> (isDifferentOT && bothMaxFriendship)
+            else -> (isDifferentOT || bothMaxFriendship)
+        }
+    }
 
     /**
      * Determines if two [Pokemon] can breed.
@@ -191,19 +190,61 @@ interface BreedingLogic {
      * @author Apion, whatsy, plastered_crab
      */
     fun canBreed(mother: Pokemon, father: Pokemon): Boolean {
+        val canBreedUndiscovered = Cobblemon.config.canBreedUndiscovered
+        val canBreedGenderless = Cobblemon.config.canBreedGenderless
+        val canBreedDitto = Cobblemon.config.canBreedDitto
+        val areSameSpecies = mother.species == father.species
+        val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
+
+        return when {
+            // check custom breeding rules first
+            (BreedingRules.getBreedingRule(mother, father) != null) -> true
+
+            // Check if config allows Undiscovered egg groups to breed
+            (canBreedUndiscovered && areSameSpecies && mother.form.eggGroups.contains(EggGroup.UNDISCOVERED)) -> true
+
+            // Check if either Pokémon is in the No Eggs Discovered egg group
+            (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED)) -> false
+
+            // check if config allows ditto to breed with each other
+            (canBreedDitto && areSameSpecies && mother.form.eggGroups.contains(EggGroup.DITTO)) -> true
+
+            // Check if both Pokémon are Ditto
+            (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO)) -> false
+
+            // check it config allows for same species genderless Pokemon can breed
+            (canBreedGenderless && (areSameSpecies && mother.gender == Gender.GENDERLESS)) -> true
+
+            // check for genderless breeding that is not with ditto
+            (mother.gender == Gender.GENDERLESS && !father.form.eggGroups.contains(EggGroup.DITTO)) ||
+            (father.gender == Gender.GENDERLESS && !mother.form.eggGroups.contains(EggGroup.DITTO)) -> false
+
+            // if either parent is ditto
+            (mother.form.eggGroups.contains(EggGroup.DITTO) || father.form.eggGroups.contains(EggGroup.DITTO)) -> true
+
+            // check if egg groups match
+            else -> sharedEggGroups.isNotEmpty() && mother.gender != father.gender
+        }
+/*
         // check custom breeding rules first
         if (BreedingRules.getBreedingRule(mother, father) != null)
             return true
 
-        // Check if either Pokémon is in the No Eggs Discovered egg group
-        if (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED))
+        // check if different species and Genderless
+        if (!areSameSpecies && (mother.gender == Gender.GENDERLESS))
             return false
 
+        // Check if either Pokémon is in the No Eggs Discovered egg group
+        if (!canBreedUndiscovered && (mother.form.eggGroups.contains(EggGroup.UNDISCOVERED) || father.form.eggGroups.contains(EggGroup.UNDISCOVERED)))
+            return false
 
         // Check if both Pokémon are Ditto
-        if (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO))
+        if (canBreedDitto && (mother.form.eggGroups.contains(EggGroup.DITTO) && father.form.eggGroups.contains(EggGroup.DITTO)))
             return false
 
+        // check if both parents are Genderless and same species
+        if (canBreedGenderless && (areSameSpecies && mother.gender == Gender.GENDERLESS))
+            return true
 
         // Check if at least one parent is Ditto
         val anyDitto = mother.form.eggGroups.contains(EggGroup.DITTO) || father.form.eggGroups.contains(EggGroup.DITTO)
@@ -213,7 +254,7 @@ interface BreedingLogic {
 
         // Check for shared egg groups and opposite genders
         val sharedEggGroups = mother.form.eggGroups.intersect(father.form.eggGroups)
-        return sharedEggGroups.isNotEmpty() && mother.gender != father.gender
+        return sharedEggGroups.isNotEmpty() && mother.gender != father.gender*/
     }
 
 

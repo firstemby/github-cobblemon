@@ -392,17 +392,22 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
 
                                         bredPokemon.add(fatherPoke)
                                         bredPokemon.add(motherPoke)
+
+                                        if (Cobblemon.config.canDestinyKnotBreak) {
+                                            if (fatherPokemon?.pokemon?.heldItem?.item == CobblemonItems.DESTINY_KNOT.asItem())
+                                                fatherPokemon.pokemon.heldItemNoCopy().damageValue += 1
+
+                                            if (motherPokemon?.pokemon?.heldItem?.item == CobblemonItems.DESTINY_KNOT.asItem())
+                                                motherPokemon.pokemon.heldItemNoCopy().damageValue += 1
+                                        }
                                     }
-
-
                                 }
-
                             }
                         }
                     }
                 }
                 bredPokemon.forEach {
-                    it.breedingCooldown = 20
+                    it.breedingCooldown = 20 // todo remove this when pasture doesn't do this anymore
                 }
             }
         }

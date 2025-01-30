@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.config
 enum class Category {
     Starter,
     Pokedex,
+    Breeding,
     Pokemon,
     Spawning,
     Battles,
