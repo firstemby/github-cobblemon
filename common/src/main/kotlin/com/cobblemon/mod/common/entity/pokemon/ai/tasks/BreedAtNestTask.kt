@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -86,6 +87,15 @@ object BreedAtNestTask {
 
                     // Set the egg in the nest
                     nestEntity.setItem(egg.createEggItemStack())
+
+                    // damage Destiny Knot if config permits it
+                    if (Cobblemon.config.canDestinyKnotBreak) {
+                        if (entity.pokemon.heldItem.item == CobblemonItems.DESTINY_KNOT.asItem())
+                            entity.pokemon.heldItemNoCopy().damageValue += 1
+
+                        if (mate.pokemon.heldItem.item == CobblemonItems.DESTINY_KNOT.asItem())
+                            mate.pokemon.heldItemNoCopy().damageValue += 1
+                    }
 
                     // set the parents of the nest if it/they are wild so they guard it
                     if (nestEntity.ownerUUID == null)
