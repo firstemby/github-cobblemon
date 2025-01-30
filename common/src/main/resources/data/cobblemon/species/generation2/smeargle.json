@@ -55,8 +55,7 @@
     }
   },
   "moves": [
-    "1:sketch",
-    "tm:sketch"
+    "1:sketch"
   ],
   "evolutions": []
 }

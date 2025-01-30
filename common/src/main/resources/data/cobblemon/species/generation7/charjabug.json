@@ -47,7 +47,6 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 4,
     "entries": [
@@ -57,11 +56,11 @@
       },
       {
         "item": "cobblemon:wepear_berry",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:cell_battery",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -82,20 +81,17 @@
     "egg:discharge",
     "egg:harden",
     "tm:batonpass",
-    "tm:bite",
     "tm:bugbite",
     "tm:charge",
     "tm:chargebeam",
     "tm:crunch",
     "tm:dig",
-    "tm:discharge",
     "tm:eerieimpulse",
     "tm:electricterrain",
     "tm:electroball",
     "tm:electroweb",
     "tm:endure",
     "tm:facade",
-    "tm:harden",
     "tm:irondefense",
     "tm:lightscreen",
     "tm:lunge",
@@ -112,8 +108,6 @@
     "tm:shockwave",
     "tm:skittersmack",
     "tm:sleeptalk",
-    "tm:spark",
-    "tm:stickyweb",
     "tm:stringshot",
     "tm:strugglebug",
     "tm:substitute",
@@ -122,10 +116,25 @@
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
-    "tm:visegrip",
     "tm:voltswitch",
     "tm:wildcharge",
-    "tm:xscissor"
+    "tm:xscissor",
+    "tutor:bugbite",
+    "tutor:chargebeam",
+    "tutor:electroweb",
+    "tutor:irondefense",
+    "tutor:magnetrise",
+    "tutor:mudslap",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:shockwave",
+    "tutor:skittersmack",
+    "tutor:sleeptalk",
+    "tutor:stringshot",
+    "tutor:thunderbolt",
+    "tutor:wildcharge",
+    "tutor:xscissor"
   ],
   "preEvolution": "grubbin",
   "evolutions": [

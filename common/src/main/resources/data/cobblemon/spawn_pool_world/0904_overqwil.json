@@ -78,8 +78,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {
@@ -106,8 +106,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -202,8 +202,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {
@@ -232,8 +232,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "1"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
@@ -306,8 +306,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {

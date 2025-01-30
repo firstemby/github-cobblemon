@@ -191,6 +191,8 @@ class BattleTargetSelection(
                 matrices.pushPose()
                 matrices.translate(x + TARGET_WIDTH - (25 / 2.0) - 2, y + 5.0, 0.0)
                 matrices.scale(2.5F, 2.5F, 1F)
+                // Grab aspects for right variant
+                state.currentAspects = battlePokemon.state.currentAspects
                 drawProfilePokemon(
                     species = battlePokemon.species.resourceIdentifier,
                     matrixStack = matrices,

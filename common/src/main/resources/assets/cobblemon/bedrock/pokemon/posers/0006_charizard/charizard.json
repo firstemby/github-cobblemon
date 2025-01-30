@@ -58,7 +58,9 @@
       "isTouchingWater": false,
       "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'ground_idle')"],
       "quirks": [
-        "q.bedrock_quirk('charizard', 'blink')"
+        "q.bedrock_quirk('charizard', 'blink')",
+        "q.bedrock_quirk('charizard', 'ground_quirk')",
+        "q.bedrock_primary_quirk('charizard', 'idle_quirk', 20, 40, 1, q.curve('symmetrical'))"
       ]
     },
     "walking": {

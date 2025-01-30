@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
+
 /**
  * Behavioural properties relating to a Pokémon's ability to look and move.
  *
@@ -23,4 +26,16 @@ class MoveBehaviour {
     val wanderSpeed = 1.0
     val canLook = true
     val looksAtEntities = true
+
+    @Transient
+    val struct = ObjectValue<MoveBehaviour>(this).also {
+        it.addFunction("walk") { walk.struct }
+        it.addFunction("swim") { swim.struct }
+        it.addFunction("fly") { fly.struct }
+        it.addFunction("step_height") { DoubleValue(stepHeight) }
+        it.addFunction("wander_chance") { DoubleValue(wanderChance) }
+        it.addFunction("wander_speed") { DoubleValue(wanderSpeed) }
+        it.addFunction("can_look") { DoubleValue(canLook) }
+        it.addFunction("looks_at_entities") { DoubleValue(looksAtEntities) }
+    }
 }

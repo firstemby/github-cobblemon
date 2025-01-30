@@ -372,24 +372,24 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     override fun tick(entity: PokemonEntity) {
         incrementAge(entity)
-        if(currentEntity.ownerUUID == null && currentEntity.pokemon.shiny && secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN && !currentEntity.isBattling) {
-            //wild shiny not looked at
-            playShinyEffect("cobblemon:shiny_sparkle_ambient_wild")
-            lastShinyParticle = System.currentTimeMillis()
-        }
-        getClientShinyPokemon()
+        playWildShinySounds()
     }
 
-    fun getClientShinyPokemon() {
+    fun playWildShinySounds() {
         val player = Minecraft.getInstance().player ?: return
         val isWithinRange = player.position().distanceTo(currentEntity.position()) <= Cobblemon.config.shinyNoticeParticlesDistance
 
-        if (currentEntity.pokemon.shiny && currentEntity.ownerUUID == null && !player.isSpectator ) {
-            if (isWithinRange && !shined) {
-                playShinyEffect("cobblemon:wild_shiny_ring")
-                shined = true
-                lastShinyParticle = System.currentTimeMillis()
-            } else if (!isWithinRange) {
+        if (currentEntity.pokemon.shiny && currentEntity.ownerUUID == null) {
+            if (isWithinRange) {
+                if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN && !currentEntity.isBattling) {
+                    playShinyEffect("cobblemon:shiny_sparkle_ambient_wild")
+                    lastShinyParticle = System.currentTimeMillis()
+                }
+                if (!shined && !player.isSpectator) {
+                    playShinyEffect("cobblemon:wild_shiny_ring")
+                    shined = true
+                }
+            } else {
                 shined = false
             }
         }

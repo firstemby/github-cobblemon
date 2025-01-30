@@ -90,7 +90,6 @@ object PokemonModelRepository : VaryingModelRepository<PokemonPosableModel>() {
         inbuilt("electabuzz", ::ElectabuzzModel)
         inbuilt("exeggcute", ::ExeggcuteModel)
         inbuilt("exeggutor", ::ExeggutorModel)
-        inbuilt("exeggutor_alolan", ::ExeggutorAlolanModel)
         inbuilt("farfetchd", ::FarfetchdModel)
         inbuilt("farfetchd_galarian", ::FarfetchdGalarianModel)
         inbuilt("fearow", ::FearowModel)

@@ -42,7 +42,6 @@
   "catchRate": 25,
   "eggCycles": 35,
   "baseFriendship": 50,
-  "behaviour": {},
   "drops": {
     "amount": 4,
     "entries": [
@@ -55,7 +54,7 @@
       },
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -105,22 +104,16 @@
     "tm:icywind",
     "tm:knockoff",
     "tm:lashout",
-    "tm:leer",
-    "tm:memento",
     "tm:nastyplot",
-    "tm:partingshot",
     "tm:payback",
-    "tm:peck",
     "tm:pluck",
     "tm:powergem",
-    "tm:powertrip",
     "tm:protect",
     "tm:psychup",
     "tm:raindance",
     "tm:rest",
     "tm:rockblast",
     "tm:rockslide",
-    "tm:rockthrow",
     "tm:rocktomb",
     "tm:roost",
     "tm:sandstorm",
@@ -140,8 +133,30 @@
     "tm:thief",
     "tm:torment",
     "tm:uturn",
-    "tm:whirlwind",
-    "tm:wingattack"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:darkpulse",
+    "tutor:drillrun",
+    "tutor:dualwingbeat",
+    "tutor:endeavor",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:hyperbeam",
+    "tutor:hypervoice",
+    "tutor:icywind",
+    "tutor:knockoff",
+    "tutor:lashout",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:roost",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:snarl",
+    "tutor:stealthrock",
+    "tutor:stoneedge",
+    "tutor:suckerpunch",
+    "tutor:tailwind"
   ],
   "evolutions": []
 }

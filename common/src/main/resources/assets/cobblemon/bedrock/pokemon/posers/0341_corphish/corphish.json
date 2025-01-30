@@ -14,7 +14,12 @@
     },
     "walking": {
       "poseTypes": ["WALK"],
-      "animations": ["q.bedrock('corphish', 'ground_idle')"]
+      "animations": [
+        "q.bedrock('corphish', 'ground_idle')",
+        "q.biped_walk(0.66, 0.6, 'leg_left_back', 'leg_right_back')",
+        "q.quadruped_walk(0.66, 0.6, 'leg_left_front', 'leg_right_front', 'leg_left_middle', 'leg_right_middle')",
+        "q.bimanual_swing(0.33, 0.3, 'arm_left', 'arm_right')"
+      ]
     }
   }
 }

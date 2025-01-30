@@ -230,14 +230,6 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:cobblemon_seeds</summary>
-
-- #cobblemon:mint_seeds
-- cobblemon:vivichoke_seeds
-
-</details>
-
-<details>
 <summary><b>Tag:</b> #item:cooked_meat</summary>
 
 - minecraft:cooked_beef
@@ -329,6 +321,7 @@ This file contains tags related to items in cobblemon.
 - cobblemon:reaper_cloth
 - cobblemon:ribbon_sweet
 - cobblemon:sachet
+- cobblemon:shell_helmet
 - cobblemon:star_sweet
 - cobblemon:strawberry_sweet
 - cobblemon:sweet_apple
@@ -430,6 +423,19 @@ This file contains tags related to items in cobblemon.
 - cobblemon:fossil_analyzer
 - cobblemon:monitor
 - cobblemon:restoration_tank
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #item:gilded_chests</summary>
+
+- cobblemon:black_gilded_chest
+- cobblemon:blue_gilded_chest
+- cobblemon:gilded_chest
+- cobblemon:green_gilded_chest
+- cobblemon:pink_gilded_chest
+- cobblemon:white_gilded_chest
+- cobblemon:yellow_gilded_chest
 
 </details>
 
@@ -590,9 +596,9 @@ This file contains tags related to items in cobblemon.
 - #cobblemon:apricorn_sprouts
 - #cobblemon:apricorns
 - #cobblemon:berries
-- #cobblemon:cobblemon_seeds
 - #cobblemon:herbs
 - #cobblemon:mint_leaf
+- #cobblemon:seeds
 - cobblemon:big_root
 - cobblemon:energy_root
 - cobblemon:medicinal_leek
@@ -820,12 +826,9 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:seeds</summary>
 
-- #cobblemon:cobblemon_seeds
-- minecraft:beetroot_seeds
-- minecraft:melon_seeds
-- minecraft:pumpkin_seeds
-- minecraft:torchflower_seeds
-- minecraft:wheat_seeds
+- #cobblemon:held/terrain_seeds
+- #cobblemon:mint_seeds
+- cobblemon:vivichoke_seeds
 
 </details>
 
@@ -882,6 +885,7 @@ This file contains tags related to items in cobblemon.
 
 - cobblemon:deepslate_sun_stone_ore
 - cobblemon:sun_stone_ore
+- cobblemon:terracotta_sun_stone_ore
 
 </details>
 
@@ -949,7 +953,7 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:tier_1_poke_ball_materials</summary>
 
-- minecraft:copper_ingot
+- #c:ingots/copper
 
 </details>
 
@@ -977,7 +981,7 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:tier_2_poke_ball_materials</summary>
 
-- minecraft:iron_ingot
+- #c:ingots/iron
 
 </details>
 
@@ -1000,7 +1004,7 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:tier_3_poke_ball_materials</summary>
 
-- minecraft:gold_ingot
+- #c:ingots/gold
 
 </details>
 
@@ -1015,7 +1019,7 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:tier_4_poke_ball_materials</summary>
 
-- minecraft:diamond
+- #c:gems/diamond
 
 </details>
 
@@ -1346,6 +1350,13 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
+<summary><b>Tag:</b> #item:bookshelf_books</summary>
+
+- #cobblemon:pokedex
+
+</details>
+
+<details>
 <summary><b>Tag:</b> #item:chest_boats</summary>
 
 - cobblemon:apricorn_chest_boat
@@ -1397,26 +1408,28 @@ This file contains tags related to items in cobblemon.
 <details>
 <summary><b>Tag:</b> #item:logs</summary>
 
-- cobblemon:apricorn_log
-- cobblemon:apricorn_wood
-- cobblemon:stripped_apricorn_log
-- cobblemon:stripped_apricorn_wood
+- #cobblemon:apricorn_logs
 
 </details>
 
 <details>
 <summary><b>Tag:</b> #item:logs_that_burn</summary>
 
-- cobblemon:apricorn_log
-- cobblemon:apricorn_wood
-- cobblemon:stripped_apricorn_log
-- cobblemon:stripped_apricorn_wood
+- #cobblemon:apricorn_logs
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #item:parrot_food</summary>
+
+- #cobblemon:seeds
 
 </details>
 
 <details>
 <summary><b>Tag:</b> #item:piglin_loved</summary>
 
+- #cobblemon:gilded_chests
 - cobblemon:relic_coin
 - cobblemon:relic_coin_pouch
 - cobblemon:relic_coin_sack

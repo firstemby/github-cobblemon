@@ -186,6 +186,7 @@ This file contains tags related to block in cobblemon.
 
 - #c:farmland
 - #c:farmlands
+- aether:aether_farmland
 - minecraft:farmland
 
 </details>
@@ -462,6 +463,19 @@ This file contains tags related to block in cobblemon.
 - #minecraft:emerald_ores
 - minecraft:amethyst_block
 - minecraft:budding_amethyst
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #block:gilded_chests</summary>
+
+- cobblemon:black_gilded_chest
+- cobblemon:blue_gilded_chest
+- cobblemon:gilded_chest
+- cobblemon:green_gilded_chest
+- cobblemon:pink_gilded_chest
+- cobblemon:white_gilded_chest
+- cobblemon:yellow_gilded_chest
 
 </details>
 
@@ -1172,6 +1186,7 @@ This file contains tags related to block in cobblemon.
 - botania:white_floating_flower
 - botania:white_mystical_flower
 - botania:white_shiny_flower
+- cobblemon:pep_up_flower
 - deep_aether:enchanted_blossom
 - farmersdelight:wild_carrots
 - minecraft:azure_bluet
@@ -1863,10 +1878,7 @@ This file contains tags related to block in cobblemon.
 <details>
 <summary><b>Tag:</b> #block:logs</summary>
 
-- cobblemon:apricorn_log
-- cobblemon:apricorn_wood
-- cobblemon:stripped_apricorn_log
-- cobblemon:stripped_apricorn_wood
+- #cobblemon:apricorn_logs
 
 </details>
 

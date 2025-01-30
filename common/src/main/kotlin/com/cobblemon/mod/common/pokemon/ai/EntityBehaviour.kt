@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.level.ServerPlayer
@@ -21,13 +23,20 @@ class EntityBehaviour {
 //    val avoidedByPhantom = false
     val avoidedBySkeleton = false
 
+    @Transient
+    val struct = ObjectValue(this).also {
+        it.addFunction("avoided_by_creeper") { DoubleValue(avoidedByCreeper) }
+//        it.addFunction("avoided_by_phantom") { DoubleValue(avoidedByPhantom) }
+        it.addFunction("avoided_by_skeleton") { DoubleValue(avoidedBySkeleton) }
+    }
+
     companion object {
         fun hasCreeperFearedShoulderMount(player: ServerPlayer) : Boolean {
-            return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.species.behaviour.entityInteract.avoidedByCreeper }
+            return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByCreeper }
         }
 
         fun hasSkeletonFearedShoulderMount(player: ServerPlayer) : Boolean {
-            return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.species.behaviour.entityInteract.avoidedBySkeleton }
+            return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedBySkeleton }
         }
     }
 }

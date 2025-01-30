@@ -22,7 +22,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krookodile', 'blink')",
-        "q.bedrock_quirk('krookodile', 'look_quirk')",
+        "q.bedrock_quirk('krookodile', 'look_quirk',20, 60, 1)",
         "q.bedrock_quirk('krookodile', 'shake_quirk')"
       ]
     },
@@ -40,7 +40,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krookodile', 'blink')",
-        "q.bedrock_quirk('krookodile', 'look_quirk')",
+        "q.bedrock_quirk('krookodile', 'look_quirk',20, 60, 1)",
         "q.bedrock_quirk('krookodile', 'shake_quirk')"
       ]
     },
@@ -59,7 +59,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krookodile', 'blink')",
-        "q.bedrock_quirk('krookodile', 'sand_look_quirk')"
+        "q.bedrock_quirk('krookodile', 'sand_look_quirk',20, 60, 1)"
       ]
     },
     "standing": {
@@ -73,7 +73,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krookodile', 'blink')",
-        "q.bedrock_quirk('krookodile', 'look_quirk')",
+        "q.bedrock_quirk('krookodile', 'look_quirk',20, 60, 1)",
         "q.bedrock_quirk('krookodile', 'shake_quirk')"
       ]
     },
@@ -90,7 +90,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krookodile', 'blink')",
-        "q.bedrock_quirk('krookodile', 'sand_look_quirk')"
+        "q.bedrock_quirk('krookodile', 'sand_look_quirk',20, 60, 1)"
       ]
     },
     "walking": {

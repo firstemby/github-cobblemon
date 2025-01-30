@@ -109,6 +109,14 @@
 				}
 			}
 		},
+		"animation.mudkip.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.mudkip.cry"
+				}
+			}
+		},
 		"animation.mudkip.blink": {
 			"animation_length": 0.1667,
 			"bones": {

@@ -36,6 +36,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -46,7 +47,10 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.HitResult
 import java.util.*
+import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.min
+import kotlin.math.sin
 
 // Stuff like getting their party
 fun ServerPlayer.party() = Cobblemon.storage.getParty(this)
@@ -414,7 +418,7 @@ fun Player.giveOrDropItemStack(stack: ItemStack, playSound: Boolean = true) {
     val inserted = this.inventory.add(stack)
     if (inserted && stack.isEmpty) {
         stack.count = 1
-        this.drop(stack, false)?.makeFakeItem()
+        this.dropFakeItem(stack)
         if (playSound) {
             this.level().playSound(null, this.x, this.y, this.z, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2f, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7f + 1.0f) * 2.0f)
         }
@@ -426,6 +430,31 @@ fun Player.giveOrDropItemStack(stack: ItemStack, playSound: Boolean = true) {
             itemEntity.setTarget(this.uuid)
         }
     }
+}
+
+/**
+ * Utility function to mimic the [Player.drop] method but as a fake item entity.
+ * Avoids cases where other mods listen to that drop method and expect a real item to be dropped.
+ */
+fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
+    val d = this.eyeY - 0.3
+    val itemEntity = ItemEntity(this.level(), this.x, d, this.z, stack)
+
+    val f = 0.3F
+    val g = sin(this.xRot * (PI / 180.0)).toFloat()
+    val h = cos(this.xRot * (PI / 180.0)).toFloat()
+    val i = sin(this.yRot * (PI / 180.0)).toFloat()
+    val j = cos(this.yRot * (PI / 180.0)).toFloat()
+    val k = this.random.nextFloat() * (PI * 2)
+    val l = 0.02F * this.random.nextFloat()
+    itemEntity.deltaMovement = Vec3(
+        (-i * h * f).toDouble() + cos(k) * l.toDouble(),
+        (-g * f + 0.1f + (this.random.nextFloat() - this.random.nextFloat()) * 0.1f).toDouble(),
+        (j * h * f).toDouble() + sin(k) * l.toDouble()
+    )
+
+    itemEntity.makeFakeItem()
+    return itemEntity
 }
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */

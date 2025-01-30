@@ -47,21 +47,20 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
       {
         "item": "cobblemon:black_belt",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:bluk_berry",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:expert_belt",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -81,16 +80,13 @@
     "45:endure",
     "50:reversal",
     "55:closecombat",
-    "tm:bide",
     "tm:block",
     "tm:brickbreak",
     "tm:bulkup",
     "tm:bulldoze",
     "tm:closecombat",
     "tm:coaching",
-    "tm:counter",
     "tm:dig",
-    "tm:doublekick",
     "tm:dualchop",
     "tm:earthquake",
     "tm:endure",
@@ -104,10 +100,8 @@
     "tm:grassknot",
     "tm:helpinghand",
     "tm:icepunch",
-    "tm:karatechop",
     "tm:knockoff",
     "tm:laserfocus",
-    "tm:leer",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:megakick",
@@ -117,7 +111,6 @@
     "tm:poisonjab",
     "tm:poweruppunch",
     "tm:protect",
-    "tm:quickguard",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
@@ -138,7 +131,32 @@
     "tm:throatchop",
     "tm:thunderpunch",
     "tm:workup",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:block",
+    "tutor:bulkup",
+    "tutor:bulldoze",
+    "tutor:coaching",
+    "tutor:dualchop",
+    "tutor:firepunch",
+    "tutor:focusenergy",
+    "tutor:focuspunch",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:icepunch",
+    "tutor:knockoff",
+    "tutor:laserfocus",
+    "tutor:lowkick",
+    "tutor:painsplit",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:sleeptalk",
+    "tutor:stoneedge",
+    "tutor:superpower",
+    "tutor:throatchop",
+    "tutor:thunderpunch",
+    "tutor:zenheadbutt"
   ],
   "evolutions": []
 }

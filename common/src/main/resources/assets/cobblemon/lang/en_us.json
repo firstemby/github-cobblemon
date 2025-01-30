@@ -727,7 +727,7 @@
   "item.cobblemon.relic_coin": "Relic Coin",
   "block.cobblemon.relic_coin_pouch": "Relic Coin Pouch",
   "block.cobblemon.relic_coin_sack": "Relic Coin Sack",
-  
+
   "item.cobblemon.automaton_armor_trim_smithing_template": "Smithing Template",
   "trim_pattern.cobblemon.automaton": "Automaton Armor Trim",
 
@@ -937,6 +937,7 @@
   "cobblemon.command.clearparty.cleared": "Cleared %1$s's party.",
   "cobblemon.command.clearpc.cleared": "Cleared %1$s's PC.",
   "cobblemon.command.dialogue.invalid-dialogue": "Invalid dialogue identifier",
+  "cobblemon.command.pc.invalid-box": "Box number %1$s exceeds max boxes of %2$s.",
 
   "cobblemon.ui.generic.yes": "Yes",
   "cobblemon.ui.generic.no": "No",
@@ -1090,7 +1091,7 @@
   "cobblemon.ui.pokedex.info.form.squawkabilly-color-green": "Green",
   "cobblemon.ui.pokedex.info.form.squawkabilly-color-yellow": "Yellow",
   "cobblemon.ui.pokedex.info.form.maushold-family-four": "Family",
-  "cobblemon.ui.pokedex.info.form.no_ice": "No Ice",
+  "cobblemon.ui.pokedex.info.form.noice-face": "Noice",
 
   "cobblemon.ui.pokedex.info.form.color-light_gray": "Light Gray",
   "cobblemon.ui.pokedex.info.form.color-gray": "Gray",
@@ -4423,7 +4424,7 @@
   "entity.cobblemon.poke_bobber": "Poké Bobber",
   "entity.cobblemon.boat": "Boat",
   "entity.cobblemon.chest_boat": "Boat with Chest",
-  
+
   "painting.cobblemon.premonition.title": "Premonition",
   "painting.cobblemon.premonition.author": "PKMNCC",
   "painting.cobblemon.slumber.title": "Slumber",
@@ -6206,7 +6207,7 @@
   "cobblemon.species.stonjourner.desc": "Once a year, on a specific date and at a specific time, they gather out of nowhere and form up in a circle.",
   "cobblemon.species.eiscue.name": "Eiscue",
   "cobblemon.species.eiscue.desc": "Eiscue live in coastal, frozen seas, making their nests on glaciers and sliding playfully along the ice. The single hair on their heads radiate an intense cold, freezing the seawater around them into a protective block of ice. Although this helmet is heavy, it is very buoyant, allowing Eiscue to travel long distances by simply floating on the current.",
-  "cobblemon.species.eiscue-noice.desc": "When subject to a particularly forceful blow, the ice blocks that cover an Eiscue's head shatters completely, leaving their small heads exposed. Although they usually tend to avoid this shattering, there are cases where they are seen causing it intentionally. Because they are much quicker without their block, they oftentimes shatter it before diving for their prey.",
+  "cobblemon.species.eiscue-noiceface.desc": "When subject to a particularly forceful blow, the ice blocks that cover an Eiscue's head shatters completely, leaving their small heads exposed. Although they usually tend to avoid this shattering, there are cases where they are seen causing it intentionally. Because they are much quicker without their block, they oftentimes shatter it before diving for their prey.",
   "cobblemon.species.indeedee.name": "Indeedee",
   "cobblemon.species.indeedee.desc": "Through its horns, it can pick up on the emotions of creatures around it. Positive emotions are the source of its strength.",
   "cobblemon.species.morpeko.name": "Morpeko",

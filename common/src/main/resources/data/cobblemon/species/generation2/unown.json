@@ -48,7 +48,6 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 1,
     "entries": [
@@ -59,8 +58,7 @@
     ]
   },
   "moves": [
-    "1:hiddenpower",
-    "tm:hiddenpower"
+    "1:hiddenpower"
   ],
   "evolutions": [],
   "forms": [
@@ -78,38 +76,6 @@
       ],
       "aspects": [
         "character-b"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -129,38 +95,6 @@
       "aspects": [
         "character-c"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -178,38 +112,6 @@
       ],
       "aspects": [
         "character-d"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -229,38 +131,6 @@
       "aspects": [
         "character-e"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -278,38 +148,6 @@
       ],
       "aspects": [
         "character-f"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -329,38 +167,6 @@
       "aspects": [
         "character-g"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -378,38 +184,6 @@
       ],
       "aspects": [
         "character-h"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -429,38 +203,6 @@
       "aspects": [
         "character-i"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -478,38 +220,6 @@
       ],
       "aspects": [
         "character-j"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -529,38 +239,6 @@
       "aspects": [
         "character-k"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -578,38 +256,6 @@
       ],
       "aspects": [
         "character-l"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -629,38 +275,6 @@
       "aspects": [
         "character-m"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -678,38 +292,6 @@
       ],
       "aspects": [
         "character-n"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -729,38 +311,6 @@
       "aspects": [
         "character-o"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -778,38 +328,6 @@
       ],
       "aspects": [
         "character-p"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -829,38 +347,6 @@
       "aspects": [
         "character-q"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -878,38 +364,6 @@
       ],
       "aspects": [
         "character-r"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -929,38 +383,6 @@
       "aspects": [
         "character-s"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -978,38 +400,6 @@
       ],
       "aspects": [
         "character-t"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -1029,38 +419,6 @@
       "aspects": [
         "character-u"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -1078,38 +436,6 @@
       ],
       "aspects": [
         "character-v"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -1129,38 +455,6 @@
       "aspects": [
         "character-w"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -1178,38 +472,6 @@
       ],
       "aspects": [
         "character-x"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -1229,38 +491,6 @@
       "aspects": [
         "character-y"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -1279,38 +509,6 @@
       "aspects": [
         "character-z"
       ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
-      ],
       "evolutions": [],
       "battleOnly": false
     },
@@ -1320,46 +518,11 @@
       "maleRatio": -1,
       "height": 5,
       "weight": 50,
-      "pokedex": [
-        "cobblemon.species.unown.desc"
-      ],
       "labels": [
         "gen3"
       ],
       "aspects": [
         "character-!"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -1370,46 +533,11 @@
       "maleRatio": -1,
       "height": 5,
       "weight": 50,
-      "pokedex": [
-        "cobblemon.species.unown.desc"
-      ],
       "labels": [
         "gen3"
       ],
       "aspects": [
         "character-?"
-      ],
-      "abilities": [
-        "levitate",
-        "h:levitate"
-      ],
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "baseStats": {
-        "hp": 48,
-        "attack": 72,
-        "defence": 48,
-        "special_attack": 72,
-        "special_defence": 48,
-        "speed": 48
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 1,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 118,
-      "experienceGroup": "medium_fast",
-      "catchRate": 225,
-      "eggCycles": 40,
-      "baseFriendship": 50,
-      "moves": [
-        "1:hiddenpower",
-        "tm:hiddenpower"
       ],
       "evolutions": [],
       "battleOnly": false

@@ -74,7 +74,7 @@
       },
       {
         "item": "minecraft:bone_meal",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -98,7 +98,6 @@
     "egg:takedown",
     "egg:waterpulse",
     "egg:watersport",
-    "tm:aquaring",
     "tm:aquatail",
     "tm:beatup",
     "tm:brine",
@@ -110,16 +109,13 @@
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:feintattack",
     "tm:flipturn",
-    "tm:growl",
     "tm:hail",
     "tm:helpinghand",
     "tm:hydropump",
     "tm:icebeam",
     "tm:irontail",
     "tm:liquidation",
-    "tm:mist",
     "tm:muddywater",
     "tm:mudshot",
     "tm:protect",
@@ -128,19 +124,30 @@
     "tm:scald",
     "tm:scaleshot",
     "tm:sleeptalk",
-    "tm:soak",
     "tm:substitute",
     "tm:surf",
     "tm:takedown",
-    "tm:tearfullook",
     "tm:terablast",
     "tm:uproar",
     "tm:uturn",
     "tm:waterfall",
-    "tm:watergun",
     "tm:waterpulse",
-    "tm:watersport",
-    "tm:whirlpool"
+    "tm:whirlpool",
+    "tutor:aquatail",
+    "tutor:bulldoze",
+    "tutor:covet",
+    "tutor:dive",
+    "tutor:endeavor",
+    "tutor:flipturn",
+    "tutor:helpinghand",
+    "tutor:icebeam",
+    "tutor:irontail",
+    "tutor:liquidation",
+    "tutor:rest",
+    "tutor:scaleshot",
+    "tutor:sleeptalk",
+    "tutor:uproar",
+    "tutor:waterpulse"
   ],
   "evolutions": [],
   "forms": [
@@ -159,13 +166,6 @@
       "aspects": [
         "school-form"
       ],
-      "abilities": [
-        "schooling",
-        "h:schooling"
-      ],
-      "eggGroups": [
-        "water_2"
-      ],
       "baseStats": {
         "hp": 45,
         "attack": 140,
@@ -174,19 +174,7 @@
         "special_defence": 135,
         "speed": 30
       },
-      "evYield": {
-        "hp": 1,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 0
-      },
       "baseExperienceYield": 217,
-      "experienceGroup": "fast",
-      "catchRate": 60,
-      "eggCycles": 15,
-      "baseFriendship": 50,
       "baseScale": 2,
       "hitbox": {
         "width": 3,
@@ -195,81 +183,18 @@
       },
       "behaviour": {
         "moving": {
+          "canLook": false,
           "walk": {
             "avoidsLand": true
           },
           "swim": {
+            "swimSpeed": "0.2",
             "canBreatheUnderwater": true,
             "canSwimInWater": true,
-            "canSwimInLava": false,
-            "swimSpeed": "0.2"
+            "canSwimInLava": false
           }
         }
       },
-      "moves": [
-        "1:watergun",
-        "1:growl",
-        "1:feintattack",
-        "4:helpinghand",
-        "8:beatup",
-        "12:brine",
-        "16:tearfullook",
-        "20:dive",
-        "24:soak",
-        "28:uproar",
-        "32:aquatail",
-        "36:aquaring",
-        "40:endeavor",
-        "44:hydropump",
-        "48:doubleedge",
-        "egg:mist",
-        "egg:takedown",
-        "egg:waterpulse",
-        "egg:watersport",
-        "tm:aquaring",
-        "tm:aquatail",
-        "tm:beatup",
-        "tm:brine",
-        "tm:bulldoze",
-        "tm:covet",
-        "tm:dive",
-        "tm:doubleedge",
-        "tm:earthquake",
-        "tm:endeavor",
-        "tm:endure",
-        "tm:facade",
-        "tm:feintattack",
-        "tm:flipturn",
-        "tm:growl",
-        "tm:hail",
-        "tm:helpinghand",
-        "tm:hydropump",
-        "tm:icebeam",
-        "tm:irontail",
-        "tm:liquidation",
-        "tm:mist",
-        "tm:muddywater",
-        "tm:mudshot",
-        "tm:protect",
-        "tm:raindance",
-        "tm:rest",
-        "tm:scald",
-        "tm:scaleshot",
-        "tm:sleeptalk",
-        "tm:soak",
-        "tm:substitute",
-        "tm:surf",
-        "tm:takedown",
-        "tm:tearfullook",
-        "tm:terablast",
-        "tm:uproar",
-        "tm:uturn",
-        "tm:waterfall",
-        "tm:watergun",
-        "tm:waterpulse",
-        "tm:watersport",
-        "tm:whirlpool"
-      ],
       "evolutions": [],
       "battleOnly": true
     }

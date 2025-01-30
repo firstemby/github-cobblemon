@@ -37,15 +37,15 @@ This file contains all current spawn presets of cobblemon.
 | **structures**         | `minecraft:end_city`                                                              |                |
 ## foliage
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **neededNearbyBlocks** | `#minecraft:leaves`; `#c:leaves` |  |
+| Key                    | Conditions                       | Anticonditions |
+|------------------------|----------------------------------|----------------|
+| **neededNearbyBlocks** | `#minecraft:leaves`; `#c:leaves` |                |
 ## illager_structures
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **minY** | `62` |  |
-| **structures** | `minecraft:pillager_outpost`; `minecraft:swamp_hut`; `minecraft:mansion` |  |
+| Key            | Conditions                                                               | Anticonditions |
+|----------------|--------------------------------------------------------------------------|----------------|
+| **minY**       | `62`                                                                     |                |
+| **structures** | `minecraft:pillager_outpost`; `minecraft:swamp_hut`; `minecraft:mansion` |                |
 ## jungle_pyramid
 
 | Key                    | Conditions                                              | Anticonditions |
@@ -54,12 +54,11 @@ This file contains all current spawn presets of cobblemon.
 | **neededBaseBlocks**   | `minecraft:cobblestone`; `#minecraft:mossy_cobblestone` |                |
 | **neededNearbyBlocks** | `#cobblemon:jungle_pyramid_blocks`                      |                |
 | **structures**         | `minecraft:jungle_pyramid`                              |                |
-
 ## lava
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **fluid** | `#minecraft:lava` |  |
+| Key       | Conditions        | Anticonditions |
+|-----------|-------------------|----------------|
+| **fluid** | `#minecraft:lava` |                |
 ## mansion
 
 | Key                    | Conditions                                                                                                                                                          | Anticonditions |
@@ -75,10 +74,10 @@ This file contains all current spawn presets of cobblemon.
 | **neededBaseBlocks** | `#cobblemon:natural` | `minecraft:farmland` |
 ## nether_fossil
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **neededNearbyBlocks** | `minecraft:bone_block` |  |
-| **structures** | `minecraft:nether_fossil` |  |
+| Key                    | Conditions                | Anticonditions |
+|------------------------|---------------------------|----------------|
+| **neededNearbyBlocks** | `minecraft:bone_block`    |                |
+| **structures**         | `minecraft:nether_fossil` |                |
 ## nether_structures
 
 | Key                    | Conditions                                                                                                                                                                                                              | Anticonditions |
@@ -120,17 +119,17 @@ This file contains all current spawn presets of cobblemon.
 | **structures**         | `#minecraft:ruined_portal` |                |
 ## salt
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **biomes** | `biomesoplenty:hot_springs`; `biomesoplenty:wasteland`; `biomesoplenty:wasteland_steppe`; `terralith:amethyst_canyon`; `terralith:amethyst_rainforest`; `terralith:skylands_winter`; `terralith:yellowstone`; `wythers:calcite_caverns`; `wythers:calcite_coast`; `wythers:mediterranean_island_thermal_spring`; `wythers:salt_lakes_pink`; `wythers:salt_lakes_turquoise`; `wythers:salt_lakes_white`; `wythers:thermal_taiga` |  |
+| Key        | Conditions                                                                                                                                                                                                                                                                                                                                                                                                                      | Anticonditions |
+|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| **biomes** | `biomesoplenty:hot_springs`; `biomesoplenty:wasteland`; `biomesoplenty:wasteland_steppe`; `terralith:amethyst_canyon`; `terralith:amethyst_rainforest`; `terralith:skylands_winter`; `terralith:yellowstone`; `wythers:calcite_caverns`; `wythers:calcite_coast`; `wythers:mediterranean_island_thermal_spring`; `wythers:salt_lakes_pink`; `wythers:salt_lakes_turquoise`; `wythers:salt_lakes_white`; `wythers:thermal_taiga` |                |
 ## stronghold
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **maxY** | `62` |  |
-| **neededBaseBlocks** | `#minecraft:stone_bricks` |  |
-| **neededNearbyBlocks** | `minecraft:cracked_stone_bricks`; `minecraft:mossy_stone_bricks` |  |
-| **structures** | `minecraft:stronghold` |  |
+| Key                    | Conditions                                                       | Anticonditions |
+|------------------------|------------------------------------------------------------------|----------------|
+| **maxY**               | `62`                                                             |                |
+| **neededBaseBlocks**   | `#minecraft:stone_bricks`                                        |                |
+| **neededNearbyBlocks** | `minecraft:cracked_stone_bricks`; `minecraft:mossy_stone_bricks` |                |
+| **structures**         | `minecraft:stronghold`                                           |                |
 ## trail_ruins
 
 | Key                    | Conditions                                                                                                                                                                                      | Anticonditions |
@@ -150,17 +149,16 @@ This file contains all current spawn presets of cobblemon.
 |------------------------|------------------------------|-----------------------------------------------|
 | **neededNearbyBlocks** | `#cobblemon:concrete_blocks` |                                               |
 | **structures**         |                              | `#minecraft:village`; `minecraft:trail_ruins` |
-
 ## water
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **fluid** | `#minecraft:water` |  |
+| Key       | Conditions         | Anticonditions |
+|-----------|--------------------|----------------|
+| **fluid** | `#minecraft:water` |                |
 ## webs
 
-| Key | Conditions | Anticonditions |
-| --- | ---------- | -------------- |
-| **biomes** | `biomesoplenty:spider_nest`; `terralith:cave/infested_caves`; `wythers:forbidden_forest`; `wythers:phantasmal_forest`; `wythers:phantasmal_swamp` |  |
+| Key        | Conditions                                                                                                                                        | Anticonditions |
+|------------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| **biomes** | `biomesoplenty:spider_nest`; `terralith:cave/infested_caves`; `wythers:forbidden_forest`; `wythers:phantasmal_forest`; `wythers:phantasmal_swamp` |                |
 ## wild
 
 | Key                    | Conditions | Anticonditions               |

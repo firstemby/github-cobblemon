@@ -14,7 +14,11 @@
     },
     "walking": {
       "poseTypes": ["WALK"],
-      "animations": ["q.bedrock('crawdaunt', 'ground_idle')"]
+      "animations": [
+        "q.bedrock('crawdaunt', 'ground_idle')",
+        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
+        "q.bimanual_swing(0.33, 0.3, 'shoulder_left', 'shoulder_right')"
+      ]
     }
   }
 }

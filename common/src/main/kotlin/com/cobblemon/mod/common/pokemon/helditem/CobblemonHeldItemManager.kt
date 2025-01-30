@@ -124,6 +124,10 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         if (battle.isPvP && !consumeHeldItems) {
             return
         }
+        // Block stealing from NPCs
+        if (battle.isPvN) {
+            return
+        }
         // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
         if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
             this.give(pokemon, itemID)

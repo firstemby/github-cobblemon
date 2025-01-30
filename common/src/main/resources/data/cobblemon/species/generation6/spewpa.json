@@ -88,16 +88,13 @@
     "egg:ragepowder",
     "egg:stunspore",
     "tm:bugbite",
-    "tm:harden",
     "tm:irondefense",
-    "tm:poisonpowder",
     "tm:pounce",
     "tm:protect",
-    "tm:ragepowder",
     "tm:strugglebug",
-    "tm:stunspore",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:irondefense"
   ],
   "preEvolution": "scatterbug",
   "evolutions": [

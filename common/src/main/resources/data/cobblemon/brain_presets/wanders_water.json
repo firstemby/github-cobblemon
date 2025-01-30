@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.brain_preset.wanders.name",
+  "description": "cobblemon.brain_preset.wanders.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          "water_wander"
+        ]
+      }
+    }
+  ]
+}

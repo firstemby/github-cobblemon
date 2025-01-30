@@ -209,6 +209,14 @@
 				}
 			}
 		},
+		"animation.swampert.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.swampert.cry"
+				}
+			}
+		},
 		"animation.swampert.blink": {
 			"animation_length": 0.1667,
 			"bones": {

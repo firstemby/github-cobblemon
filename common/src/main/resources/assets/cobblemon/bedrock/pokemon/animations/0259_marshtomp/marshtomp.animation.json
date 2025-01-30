@@ -75,6 +75,14 @@
 				}
 			}
 		},
+		"animation.marshtomp.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.marshtomp.cry"
+				}
+			}
+		},
 		"animation.marshtomp.blink": {
 			"animation_length": 0.1667,
 			"bones": {

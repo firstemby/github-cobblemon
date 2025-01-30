@@ -83,11 +83,13 @@
     "1:tackle",
     "tm:bugbite",
     "tm:electroweb",
-    "tm:harden",
     "tm:irondefense",
     "tm:stringshot",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:electroweb",
+    "tutor:irondefense",
+    "tutor:stringshot"
   ],
   "preEvolution": "caterpie",
   "evolutions": [

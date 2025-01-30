@@ -8,6 +8,10 @@
     {
       "id": "#c:farmlands",
       "required": false
+    },
+    {
+      "id": "aether:aether_farmland",
+      "required": false
     }
   ]
 }

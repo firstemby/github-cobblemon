@@ -52,7 +52,7 @@
     "moving": {
       "canLook": false,
       "walk": {
-        "walkSpeed": 0.12,
+        "walkSpeed": 0.17,
         "avoidsLand": true
       },
       "swim": {
@@ -71,15 +71,15 @@
       },
       {
         "item": "minecraft:bone_meal",
-        "percentage": 10
+        "percentage": 10.0
       },
       {
         "item": "cobblemon:mystic_water",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:wacan_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -106,9 +106,7 @@
     "egg:mudsport",
     "egg:psybeam",
     "egg:skullbash",
-    "tm:acupressure",
     "tm:agility",
-    "tm:aquaring",
     "tm:aquatail",
     "tm:blizzard",
     "tm:bodyslam",
@@ -117,15 +115,11 @@
     "tm:drillrun",
     "tm:endure",
     "tm:facade",
-    "tm:flail",
     "tm:flipturn",
-    "tm:furyattack",
     "tm:furycutter",
     "tm:gigaimpact",
     "tm:hail",
     "tm:haze",
-    "tm:hornattack",
-    "tm:horndrill",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:icebeam",
@@ -135,8 +129,6 @@
     "tm:muddywater",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:mudsport",
-    "tm:peck",
     "tm:poisonjab",
     "tm:protect",
     "tm:psybeam",
@@ -145,22 +137,38 @@
     "tm:scald",
     "tm:scaleshot",
     "tm:signalbeam",
-    "tm:skullbash",
     "tm:sleeptalk",
     "tm:smartstrike",
-    "tm:soak",
     "tm:substitute",
-    "tm:supersonic",
     "tm:surf",
     "tm:swift",
     "tm:swordsdance",
-    "tm:tailwhip",
     "tm:terablast",
     "tm:throatchop",
     "tm:waterfall",
     "tm:waterpulse",
-    "tm:watersport",
-    "tm:whirlpool"
+    "tm:whirlpool",
+    "tutor:aquatail",
+    "tutor:bounce",
+    "tutor:dive",
+    "tutor:drillrun",
+    "tutor:flipturn",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:knockoff",
+    "tutor:megahorn",
+    "tutor:mudslap",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:scaleshot",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:waterpulse"
   ],
   "preEvolution": "goldeen",
   "evolutions": []

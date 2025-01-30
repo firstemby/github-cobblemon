@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -50,4 +51,13 @@ class FormPokemonBehaviour {
 
     val combat: CombatBehaviour
         get() = _combat ?: parent.combat
+
+    @Transient
+    val struct = ObjectValue(this).also {
+        it.addFunction("resting") { resting.struct }
+        it.addFunction("moving") { moving.struct }
+        it.addFunction("idle") { idle.struct }
+        it.addFunction("entity_interact") { entityInteract.struct }
+        it.addFunction("combat") { combat.struct }
+    }
 }

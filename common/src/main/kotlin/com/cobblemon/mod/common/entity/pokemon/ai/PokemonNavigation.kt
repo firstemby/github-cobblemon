@@ -80,7 +80,7 @@ class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : Gr
                 (isTouchingLava && moving.swim.canSwimInLava) ||
                 this.mob.isPassenger
         if (pokemonEntity.behaviour.moving.swim.canSwimInWater) {
-            return isInLiquid || super.canUpdatePath()
+            return isInLiquid || ((this.mob.onGround() || this.pokemonEntity.isFlying()) || this.mob.isInLiquid() || this.mob.isPassenger())
         } else {
             return isAtValidPosition
         }

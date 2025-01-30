@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -64,7 +65,6 @@ class WanderTaskConfig : SingleTaskConfig {
                     val wanderChance = wanderChance.resolveFloat()
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
-//                    RandomStroll.stroll(speedMultiplier.resolveFloat(), horizontalRange.resolveInt(), verticalRange.resolveInt())
                     val targetVec = LandRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt(), { 0.0 }) ?: return@Trigger false
                     walkTarget.set(WalkTarget(targetVec, speedMultiplier.resolveFloat(), 1))
                     lookTarget.set(BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))

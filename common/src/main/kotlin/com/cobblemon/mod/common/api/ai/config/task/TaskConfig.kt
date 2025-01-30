@@ -39,6 +39,8 @@ interface TaskConfig {
         val types = mutableMapOf<String, Class<out TaskConfig>>(
             "one_of" to OneOfTaskConfig::class.java,
             "wander" to WanderTaskConfig::class.java,
+            "water_wander" to WaterWanderTaskConfig::class.java,
+            "air_wander" to AirWanderTaskConfig::class.java,
             "look_at_target" to LookAtTargetTaskConfig::class.java,
             "follow_walk_target" to FollowWalkTargetTaskConfig::class.java,
             "random" to RandomTaskConfig::class.java,

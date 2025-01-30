@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.QuadrupedWalkAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.QuadrupedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.CobblemonPose
 import com.cobblemon.mod.common.entity.PoseType.Companion.MOVING_POSES
@@ -36,6 +37,8 @@ class NidoranfModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Q
     lateinit var sleep: CobblemonPose
     lateinit var standing: CobblemonPose
     lateinit var walk: CobblemonPose
+
+    override val cryAnimation = CryProvider { bedrockStateful("nidoranf", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("nidoranf", "blink") }

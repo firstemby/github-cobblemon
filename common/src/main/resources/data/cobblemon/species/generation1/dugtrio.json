@@ -65,19 +65,23 @@
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 5,
     "entries": [
       {
+        "item": "minecraft:dirt",
+        "quantityRange": "0-2"
+      },
+      {
         "item": "minecraft:potato",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:big_root",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:soft_sand",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -113,7 +117,6 @@
     "tm:allyswitch",
     "tm:ancientpower",
     "tm:assurance",
-    "tm:astonish",
     "tm:beatup",
     "tm:bodyslam",
     "tm:bulldoze",
@@ -128,39 +131,26 @@
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:feintattack",
-    "tm:finalgambit",
-    "tm:fissure",
     "tm:foulplay",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:headbutt",
     "tm:helpinghand",
     "tm:honeclaws",
     "tm:hyperbeam",
-    "tm:magnitude",
-    "tm:memento",
-    "tm:mudbomb",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:nightslash",
     "tm:protect",
-    "tm:pursuit",
     "tm:rest",
     "tm:reversal",
     "tm:rockblast",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:rototiller",
-    "tm:sandattack",
     "tm:sandstorm",
     "tm:sandtomb",
     "tm:scorchingsands",
-    "tm:scratch",
     "tm:screech",
     "tm:shadowclaw",
-    "tm:slash",
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:sludgewave",
@@ -178,7 +168,30 @@
     "tm:throatchop",
     "tm:triattack",
     "tm:uproar",
-    "tm:workup"
+    "tm:workup",
+    "tutor:allyswitch",
+    "tutor:ancientpower",
+    "tutor:bulldoze",
+    "tutor:earthpower",
+    "tutor:endeavor",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:mudslap",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:scorchingsands",
+    "tutor:shadowclaw",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:stealthrock",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:suckerpunch",
+    "tutor:throatchop",
+    "tutor:uproar"
   ],
   "preEvolution": "diglett",
   "evolutions": [],
@@ -198,16 +211,12 @@
         "alolan_form"
       ],
       "aspects": [
-        "alolan",
         "alolan"
       ],
       "abilities": [
         "sandveil",
         "tanglinghair",
         "h:sandforce"
-      ],
-      "eggGroups": [
-        "field"
       ],
       "baseStats": {
         "hp": 35,
@@ -225,12 +234,6 @@
         "special_defence": 0,
         "speed": 0
       },
-      "baseExperienceYield": 149,
-      "experienceGroup": "medium_fast",
-      "catchRate": 50,
-      "eggCycles": 20,
-      "baseFriendship": 50,
-      "behaviour": {},
       "moves": [
         "1:sandtomb",
         "1:rototiller",
@@ -265,7 +268,6 @@
         "tm:allyswitch",
         "tm:ancientpower",
         "tm:assurance",
-        "tm:astonish",
         "tm:beatup",
         "tm:bodyslam",
         "tm:bulldoze",
@@ -279,36 +281,25 @@
         "tm:endeavor",
         "tm:endure",
         "tm:facade",
-        "tm:feintattack",
-        "tm:finalgambit",
-        "tm:fissure",
         "tm:flashcannon",
         "tm:foulplay",
         "tm:gigaimpact",
-        "tm:growl",
         "tm:headbutt",
         "tm:helpinghand",
         "tm:honeclaws",
         "tm:hyperbeam",
         "tm:irondefense",
         "tm:ironhead",
-        "tm:magnitude",
-        "tm:memento",
         "tm:metalclaw",
         "tm:metalsound",
-        "tm:mudbomb",
         "tm:mudshot",
         "tm:mudslap",
-        "tm:nightslash",
         "tm:protect",
-        "tm:pursuit",
         "tm:rest",
         "tm:reversal",
         "tm:rockblast",
         "tm:rockslide",
         "tm:rocktomb",
-        "tm:rototiller",
-        "tm:sandattack",
         "tm:sandstorm",
         "tm:sandtomb",
         "tm:scaryface",
@@ -330,11 +321,36 @@
         "tm:takedown",
         "tm:terablast",
         "tm:thief",
-        "tm:thrash",
         "tm:throatchop",
         "tm:triattack",
         "tm:uproar",
-        "tm:workup"
+        "tm:workup",
+        "tutor:allyswitch",
+        "tutor:ancientpower",
+        "tutor:bulldoze",
+        "tutor:earthpower",
+        "tutor:endeavor",
+        "tutor:flashcannon",
+        "tutor:foulplay",
+        "tutor:gigaimpact",
+        "tutor:helpinghand",
+        "tutor:hyperbeam",
+        "tutor:irondefense",
+        "tutor:ironhead",
+        "tutor:mudslap",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:scorchingsands",
+        "tutor:shadowclaw",
+        "tutor:sleeptalk",
+        "tutor:sludgebomb",
+        "tutor:stealthrock",
+        "tutor:steelbeam",
+        "tutor:stompingtantrum",
+        "tutor:stoneedge",
+        "tutor:suckerpunch",
+        "tutor:throatchop",
+        "tutor:uproar"
       ],
       "preEvolution": "diglett alolan",
       "evolutions": [],
@@ -348,15 +364,15 @@
           },
           {
             "item": "minecraft:potato",
-            "percentage": 5
+            "percentage": 5.0
           },
           {
             "item": "cobblemon:big_root",
-            "percentage": 5
+            "percentage": 5.0
           },
           {
             "item": "cobblemon:soft_sand",
-            "percentage": 5
+            "percentage": 5.0
           }
         ]
       }

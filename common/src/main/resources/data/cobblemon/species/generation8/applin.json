@@ -75,14 +75,14 @@
     "egg:recycle",
     "egg:rollout",
     "egg:suckerpunch",
-    "tm:astonish",
-    "tm:defensecurl",
     "tm:pounce",
     "tm:recycle",
     "tm:rollout",
     "tm:suckerpunch",
     "tm:terablast",
-    "tm:withdraw"
+    "tutor:recycle",
+    "tutor:rollout",
+    "tutor:suckerpunch"
   ],
   "evolutions": [
     {

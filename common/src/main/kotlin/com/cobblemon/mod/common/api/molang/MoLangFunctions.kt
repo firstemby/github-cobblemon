@@ -732,6 +732,8 @@ object MoLangFunctions {
             map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) }
             map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) }
             map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) }
+            map.put("behaviour") { pokemon.form.behaviour.struct }
+            map.put("behavior") { pokemon.form.behaviour.struct } // Inferior
             map.put("evs") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {

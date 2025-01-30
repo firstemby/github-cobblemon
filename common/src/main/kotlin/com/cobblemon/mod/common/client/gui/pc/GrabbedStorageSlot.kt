@@ -18,7 +18,7 @@ class GrabbedStorageSlot(
 ) : StorageSlot(x, y, parent, {}) {
 
     init {
-        isSelected = true
+        isSlotSelected = true
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

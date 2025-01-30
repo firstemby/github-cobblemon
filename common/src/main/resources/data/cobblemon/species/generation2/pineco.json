@@ -94,12 +94,10 @@
     "egg:swift",
     "egg:toxicspikes",
     "tm:autotomize",
-    "tm:bide",
     "tm:bodyslam",
     "tm:bugbite",
     "tm:bugbuzz",
     "tm:bulldoze",
-    "tm:counter",
     "tm:curse",
     "tm:dig",
     "tm:doubleedge",
@@ -107,7 +105,6 @@
     "tm:endure",
     "tm:explosion",
     "tm:facade",
-    "tm:flail",
     "tm:gigadrain",
     "tm:gravity",
     "tm:gyroball",
@@ -123,10 +120,8 @@
     "tm:pinmissile",
     "tm:poisonjab",
     "tm:pounce",
-    "tm:powertrick",
     "tm:protect",
     "tm:raindance",
-    "tm:rapidspin",
     "tm:reflect",
     "tm:rest",
     "tm:revenge",
@@ -150,11 +145,30 @@
     "tm:substitute",
     "tm:sunnyday",
     "tm:swift",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:toxicspikes",
-    "tm:venoshock"
+    "tm:venoshock",
+    "tutor:bugbite",
+    "tutor:bulldoze",
+    "tutor:drillrun",
+    "tutor:gigadrain",
+    "tutor:gravity",
+    "tutor:helpinghand",
+    "tutor:irondefense",
+    "tutor:painsplit",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:rollout",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:spikes",
+    "tutor:stealthrock",
+    "tutor:stringshot",
+    "tutor:swift",
+    "tutor:trick"
   ],
   "evolutions": [
     {
@@ -171,6 +185,28 @@
         {
           "variant": "level",
           "minLevel": 31
+        }
+      ]
+    },
+    {
+      "id": "pineco_forretressshulker",
+      "variant": "level_up",
+      "result": "forretress shulker",
+      "consumeHeldItem": true,
+      "permanent": true,
+      "learnableMoves": [
+        "mirrorshot",
+        "autotomize",
+        "heavyslam"
+      ],
+      "requirements": [
+        {
+          "variant": "level",
+          "minLevel": 31
+        },
+        {
+          "variant": "held_item",
+          "itemCondition": "minecraft:shulker_shell"
         }
       ]
     }

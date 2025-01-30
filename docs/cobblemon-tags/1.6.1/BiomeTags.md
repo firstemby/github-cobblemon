@@ -7,7 +7,8 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #biome:is_arid</summary>
 
-- #cobblemon:is_sandy
+- #cobblemon:is_badlands
+- #cobblemon:is_desert
 - #cobblemon:is_savanna
 
 </details>
@@ -1039,15 +1040,164 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:alolan</summary>
+<summary><b>Tag:</b> #regional:bergmite_hisuibiome</summary>
 
-- #cobblemon:is_tropical_island
-- #minecraft:is_beach
+- #cobblemon:is_freezing
+- #cobblemon:is_hills
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:cyndaquil_quilava_hisui_bias</summary>
+<summary><b>Tag:</b> #regional:bergmite_kalosbiome</summary>
+
+- #cobblemon:is_frozen_ocean
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:cubone_alolabiome</summary>
+
+- #cobblemon:is_beach
+- #cobblemon:is_volcanic
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:cubone_kantobiome</summary>
+
+- #cobblemon:is_arid
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:dartrix_alolabiome</summary>
+
+- #cobblemon:is_beach
+- #cobblemon:is_ocean
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:dartrix_hisuibiome</summary>
+
+- #cobblemon:is_freezing
+- #cobblemon:is_hills
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:dewott_hisuibiome</summary>
+
+- #cobblemon:is_coast
+- #cobblemon:is_cold_ocean
+- minecraft:snowy_beach
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:dewott_unovabiome</summary>
+
+- #cobblemon:is_beach
+- #cobblemon:is_ocean
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:exeggcute_alolabiome</summary>
+
+- #cobblemon:is_beach
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:exeggcute_kantobiome</summary>
+
+- #cobblemon:is_jungle
+- #cobblemon:is_savanna
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:goomy_hisuibiome</summary>
+
+- #cobblemon:is_dripstone
+- #cobblemon:is_lush
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:goomy_kalosbiome</summary>
+
+- #cobblemon:is_overworld
+- #cobblemon:is_swamp
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:koffing_galarbiome</summary>
+
+- #cobblemon:is_mushroom
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:koffing_kantobiome</summary>
+
+- #cobblemon:nether/is_toxic
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:mimejr_galarbiome</summary>
+
+- #cobblemon:is_freezing
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:mimejr_sinnohbiome</summary>
+
+- #cobblemon:is_temperate
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:petilil_hisuibiome</summary>
+
+- #cobblemon:is_freezing
+- #cobblemon:is_hills
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:petilil_unovabiome</summary>
+
+- #cobblemon:is_floral
+- #cobblemon:is_forest
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:pikachu_alolabiome</summary>
+
+- #cobblemon:is_beach
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:pikachu_kantobiome</summary>
+
+- #cobblemon:is_forest
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:quilava_hisuibiome</summary>
 
 - #cobblemon:is_taiga
 - #cobblemon:nether/is_crimson
@@ -1057,60 +1207,62 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:lilligant_unovan</summary>
+<summary><b>Tag:</b> #regional:quilava_johtobiome</summary>
+
+- #cobblemon:is_temperate
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:rufflet_hisuibiome</summary>
+
+- #cobblemon:is_freezing
+- #cobblemon:is_hills
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #regional:rufflet_unovabiome</summary>
+
+- #cobblemon:is_temperate
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:archipelago</summary>
+
+- #cobblemon:is_mushroom
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:archipelago_anti</summary>
+
+- #cobblemon:is_magical
+- #cobblemon:is_spooky
+- #cobblemon:is_swamp
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:continental</summary>
+
+- #cobblemon:is_plains
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:continental_anti</summary>
 
 - #cobblemon:is_floral
-- #cobblemon:is_forest
-- #cobblemon:is_tropical_island
+- #cobblemon:is_mushroom
+- #cobblemon:is_savanna
+- minecraft:sunflower_plains
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:oshawott_dewott_hisui_bias</summary>
-
-- #c:stony_shores
-- minecraft:snowy_beach
-- minecraft:stony_shore
-- terralith:basalt_cliffs
-- terralith:granite_cliffs
-- terralith:white_cliffs
-- wythers:calcite_coast
-- wythers:cold_island
-- wythers:cold_stony_shore
-- wythers:deepslate_shore
-- wythers:frigid_island
-- wythers:frozen_island
-- wythers:gravelly_beach
-- wythers:icy_shore
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #evolution:rowlet_dartrix_alolan</summary>
-
-- #cobblemon:is_forest
-- #cobblemon:is_taiga
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #evolution:rowlet_dartrix_hisui_bias</summary>
-
-- #cobblemon:is_snowy_forest
-- #cobblemon:is_snowy_taiga
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #evolution:sliggoo_hisuian</summary>
-
-- #cobblemon:is_dripstone
-- #cobblemon:is_lush
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #evolution:vivillon_elegant</summary>
+<summary><b>Tag:</b> #vivillon:elegant</summary>
 
 - #cobblemon:is_magical
 - #cobblemon:is_spooky
@@ -1118,7 +1270,123 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:vivillon_monsoon</summary>
+<summary><b>Tag:</b> #vivillon:elegant_anti</summary>
+
+- #cobblemon:is_mountain
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:fancy</summary>
+
+- #cobblemon:is_cherry_blossom
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:forsaken</summary>
+
+- #cobblemon:is_deep_dark
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:garden</summary>
+
+- #cobblemon:is_forest
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:garden_anti</summary>
+
+- #cobblemon:is_cherry_blossom
+- #cobblemon:is_floral
+- #cobblemon:is_jungle
+- #cobblemon:is_magical
+- #cobblemon:is_mountain
+- #cobblemon:is_mushroom
+- #cobblemon:is_plains
+- #cobblemon:is_spooky
+- #cobblemon:is_swamp
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:high_plains</summary>
+
+- #cobblemon:is_badlands
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:icy_snow</summary>
+
+- #cobblemon:is_taiga
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:icy_snow_anti</summary>
+
+- #cobblemon:is_mountain
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:inferno</summary>
+
+- #minecraft:is_nether
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:jungle</summary>
+
+- #cobblemon:is_jungle
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:jungle_anti</summary>
+
+- #cobblemon:is_mountain
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:marine</summary>
+
+- #cobblemon:is_ocean
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:marine_anti</summary>
+
+- #cobblemon:is_frozen_ocean
+- #cobblemon:is_warm_ocean
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:meadow</summary>
+
+- #cobblemon:is_floral
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:meadow_anti</summary>
+
+- #cobblemon:is_cherry_blossom
+- #cobblemon:is_magical
+- minecraft:sunflower_plains
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:monsoon</summary>
 
 - #cobblemon:is_mountain
 - #cobblemon:is_peak
@@ -1126,7 +1394,18 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:vivillon_ocean</summary>
+<summary><b>Tag:</b> #vivillon:monsoon_anti</summary>
+
+- #cobblemon:is_badlands
+- #cobblemon:is_desert
+- #cobblemon:is_floral
+- #cobblemon:is_mushroom
+- #cobblemon:is_tropical_island
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:ocean</summary>
 
 - #cobblemon:is_coast
 - #cobblemon:is_warm_ocean
@@ -1134,7 +1413,24 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:vivillon_river</summary>
+<summary><b>Tag:</b> #vivillon:ocean_anti</summary>
+
+- #cobblemon:is_cold_ocean
+- #cobblemon:is_frozen_ocean
+- #cobblemon:is_lukewarm_ocean
+- #cobblemon:is_temperate_ocean
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:polar</summary>
+
+- #cobblemon:is_frozen_ocean
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:river</summary>
 
 - #cobblemon:is_river
 - #cobblemon:is_swamp
@@ -1142,7 +1438,48 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:vivillon_sun</summary>
+<summary><b>Tag:</b> #vivillon:river_anti</summary>
+
+- #cobblemon:is_forest
+- #cobblemon:is_jungle
+- #cobblemon:is_magical
+- #cobblemon:is_spooky
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:sandstorm</summary>
+
+- #cobblemon:is_desert
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:sandstorm_anti</summary>
+
+- #cobblemon:is_badlands
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:savanna</summary>
+
+- #cobblemon:is_savanna
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:savanna_anti</summary>
+
+- #cobblemon:is_badlands
+- #cobblemon:is_desert
+- #cobblemon:is_floral
+- #cobblemon:is_mountain
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:sun</summary>
 
 - #cobblemon:is_sky
 - #cobblemon:is_volcanic
@@ -1151,11 +1488,25 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #evolution:vivillon_tundra</summary>
+<summary><b>Tag:</b> #vivillon:tundra</summary>
 
 - #cobblemon:is_glacial
 - #cobblemon:is_snowy_forest
 - #cobblemon:is_tundra
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:tundra_anti</summary>
+
+- #cobblemon:is_mountain
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #vivillon:void</summary>
+
+- #minecraft:is_end
 
 </details>
 
@@ -1439,6 +1790,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 <details>
 <summary><b>Tag:</b> #has_season:spring</summary>
 
+- #aether:is_aether
 - #cobblemon:is_floral
 - #cobblemon:is_lukewarm_ocean
 - #cobblemon:is_magical
@@ -1666,60 +2018,109 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional_bias_evolutions:alolan</summary>
+<summary><b>Tag:</b> #space:is_fiery</summary>
 
-- #cobblemon:is_tropical_island
-- #minecraft:is_beach
-
-</details>
-
-<details>
-<summary><b>Tag:</b> #regional_bias_evolutions:cyndaquil_quilava_hisui_bias</summary>
-
-- #cobblemon:is_taiga
-- #cobblemon:nether/is_crimson
-- #cobblemon:nether/is_forest
-- #cobblemon:nether/is_overgrowth
+- #stellaris:mercury_biomes
+- space:mercury_hotspot
+- space:mercury_plains
+- space:venus_highlands
+- space:venus_lava_caves
+- space:venus_lowlands
+- space:venus_midlands
+- space:venus_volcanic_plains
+- stellaris:infernal_venus_barrens
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional_bias_evolutions:oshawott_dewott_hisui_bias</summary>
+<summary><b>Tag:</b> #space:is_icy</summary>
 
-- #c:stony_shores
-- minecraft:snowy_beach
-- minecraft:stony_shore
-- terralith:basalt_cliffs
-- terralith:granite_cliffs
-- terralith:white_cliffs
-- wythers:calcite_coast
-- wythers:coastal_mangroves
-- wythers:cold_island
-- wythers:cold_stony_shore
-- wythers:deepslate_shore
-- wythers:frigid_island
-- wythers:frozen_island
-- wythers:gravelly_beach
-- wythers:icy_shore
-- wythers:mediterranean_island
-- wythers:temperate_island
-- wythers:tropical_island
-- wythers:warm_stony_shore
+- #space:ice_craters
+- stellaris:mars_ice_spikes
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional_bias_evolutions:rowlet_dartrix_alolan</summary>
+<summary><b>Tag:</b> #space:is_mars</summary>
 
-- #cobblemon:is_forest
-- #cobblemon:is_taiga
+- #stellaris:mars_biomes
+- #stellaris:mars_biomes
+- #stellaris:mars_biomes
+- space:mars_dripstone
+- space:mars_highlands
+- space:mars_ice
+- space:mars_lowlands
+- space:mars_lush_caves
+- space:mars_midlands
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional_bias_evolutions:rowlet_dartrix_hisui_bias</summary>
+<summary><b>Tag:</b> #space:is_mercury</summary>
 
-- #cobblemon:is_snowy_forest
-- #cobblemon:is_snowy_taiga
+- #stellaris:mercury_biomes
+- space:mercury_hotspot
+- space:mercury_ice
+- space:mercury_plains
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #space:is_moon</summary>
+
+- #stellaris:moon_biomes
+- space:moon_highlands
+- space:moon_ice
+- space:moon_lowlands
+- space:moon_midlands
+- space:moon_rocks
+- swe:moon
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #space:is_space</summary>
+
+- #stellaris:mars_biomes
+- #stellaris:mercury_biomes
+- #stellaris:moon_biomes
+- #stellaris:venus_biomes
+- space:mars_dripstone
+- space:mars_highlands
+- space:mars_ice
+- space:mars_lowlands
+- space:mars_lush_caves
+- space:mars_midlands
+- space:mercury_hotspot
+- space:mercury_ice
+- space:mercury_plains
+- space:moon_highlands
+- space:moon_ice
+- space:moon_lowlands
+- space:moon_midlands
+- space:moon_rocks
+- space:space
+- space:venus_highlands
+- space:venus_lava_caves
+- space:venus_lowlands
+- space:venus_midlands
+- space:venus_plankton_bloom
+- space:venus_sky
+- space:venus_volcanic_plains
+- swe:moon
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #space:is_venus</summary>
+
+- #stellaris:venus_biomes
+- space:venus_highlands
+- space:venus_lava_caves
+- space:venus_lowlands
+- space:venus_midlands
+- space:venus_plankton_bloom
+- space:venus_sky
+- space:venus_volcanic_plains
 
 </details>

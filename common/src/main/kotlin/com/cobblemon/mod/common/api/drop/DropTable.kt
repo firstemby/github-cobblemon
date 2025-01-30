@@ -95,8 +95,6 @@ class DropTable {
         pokemon: Pokemon? = null,
     ) {
         val drops = getDrops(amount, pokemon).toMutableList()
-        val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
-        if (!heldItem.isEmpty) entity?.spawnAtLocation(heldItem.item)
         LOOT_DROPPED.postThen(
             event = LootDroppedEvent(this, player, entity, drops),
             ifSucceeded = { it.drops.forEach { it.drop(entity, world, pos, player) } }

@@ -163,8 +163,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
-                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() },
-                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() }
+                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null },
+                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null }
             )
         )
 

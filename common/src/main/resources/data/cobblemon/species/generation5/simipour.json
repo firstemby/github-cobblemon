@@ -46,21 +46,20 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
       {
         "item": "cobblemon:water_stone",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:mystic_water",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:rindo_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -87,10 +86,7 @@
     "egg:roleplay",
     "egg:tickle",
     "tm:acrobatics",
-    "tm:aquaring",
     "tm:aquatail",
-    "tm:astonish",
-    "tm:bite",
     "tm:blizzard",
     "tm:brickbreak",
     "tm:brine",
@@ -107,7 +103,6 @@
     "tm:flipturn",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:furyswipes",
     "tm:gastroacid",
     "tm:gigaimpact",
     "tm:grassknot",
@@ -122,15 +117,11 @@
     "tm:icywind",
     "tm:irontail",
     "tm:knockoff",
-    "tm:leer",
-    "tm:lick",
     "tm:lowkick",
     "tm:lowsweep",
-    "tm:mudsport",
     "tm:nastyplot",
     "tm:naturalgift",
     "tm:payback",
-    "tm:playnice",
     "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
@@ -141,7 +132,6 @@
     "tm:rocktomb",
     "tm:roleplay",
     "tm:scald",
-    "tm:scratch",
     "tm:shadowclaw",
     "tm:sleeptalk",
     "tm:substitute",
@@ -152,15 +142,42 @@
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
-    "tm:tickle",
     "tm:torment",
     "tm:uproar",
     "tm:waterfall",
-    "tm:watergun",
     "tm:waterpledge",
     "tm:waterpulse",
-    "tm:watersport",
-    "tm:workup"
+    "tm:workup",
+    "tutor:aquatail",
+    "tutor:covet",
+    "tutor:dive",
+    "tutor:endeavor",
+    "tutor:flipturn",
+    "tutor:focuspunch",
+    "tutor:gastroacid",
+    "tutor:gigaimpact",
+    "tutor:gunkshot",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:irontail",
+    "tutor:knockoff",
+    "tutor:lowkick",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roleplay",
+    "tutor:shadowclaw",
+    "tutor:sleeptalk",
+    "tutor:superpower",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:uproar",
+    "tutor:waterpledge",
+    "tutor:waterpulse"
   ],
   "preEvolution": "panpour",
   "evolutions": []

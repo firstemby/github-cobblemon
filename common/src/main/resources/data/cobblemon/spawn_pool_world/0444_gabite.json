@@ -72,6 +72,25 @@
                     "#cobblemon:is_mountain"
                 ]
             }
+        },
+        {
+            "id": "gabite-4",
+            "pokemon": "gabite",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "rare",
+            "level": "24-47",
+            "weight": 2.25,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ]
+            }
         }
     ]
 }

@@ -24,7 +24,10 @@
     "ocean",
     "jungle",
     "fancy",
-    "poke-ball"
+    "poke-ball",
+    "inferno",
+    "void",
+    "forsaken"
   ],
   "isAspect": true,
   "aspectFormat": "vivillon-wings-{{choice}}"

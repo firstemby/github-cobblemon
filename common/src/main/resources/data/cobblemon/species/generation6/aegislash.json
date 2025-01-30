@@ -59,7 +59,7 @@
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:iron_nugget",
@@ -67,11 +67,15 @@
       },
       {
         "item": "minecraft:iron_sword",
-        "percentage": 25
+        "percentage": 10.0
       },
       {
         "item": "cobblemon:dusk_stone",
-        "percentage": 10
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:ability_shield",
+        "percentage": 10.0
       }
     ]
   },
@@ -99,13 +103,11 @@
     "tm:aerialace",
     "tm:afteryou",
     "tm:airslash",
-    "tm:autotomize",
     "tm:block",
     "tm:brickbreak",
     "tm:brutalswing",
     "tm:closecombat",
     "tm:cut",
-    "tm:destinybond",
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
@@ -113,19 +115,14 @@
     "tm:furycutter",
     "tm:gigaimpact",
     "tm:gyroball",
-    "tm:headsmash",
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
-    "tm:kingsshield",
     "tm:laserfocus",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:nightslash",
-    "tm:powertrick",
     "tm:protect",
     "tm:psychocut",
-    "tm:pursuit",
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
@@ -133,13 +130,10 @@
     "tm:reversal",
     "tm:rockslide",
     "tm:rocksmash",
-    "tm:sacredsword",
     "tm:screech",
     "tm:shadowball",
     "tm:shadowclaw",
-    "tm:shadowsneak",
     "tm:shockwave",
-    "tm:slash",
     "tm:sleeptalk",
     "tm:solarblade",
     "tm:spite",
@@ -147,9 +141,30 @@
     "tm:substitute",
     "tm:sunnyday",
     "tm:swordsdance",
-    "tm:tackle",
     "tm:terablast",
-    "tm:wideguard"
+    "tutor:aerialace",
+    "tutor:afteryou",
+    "tutor:block",
+    "tutor:falseswipe",
+    "tutor:flashcannon",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:laserfocus",
+    "tutor:magnetrise",
+    "tutor:psychocut",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:shadowball",
+    "tutor:shadowclaw",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:spite",
+    "tutor:steelbeam",
+    "tutor:trick"
   ],
   "preEvolution": "doublade",
   "evolutions": [],
@@ -170,13 +185,6 @@
       "aspects": [
         "blade-forme"
       ],
-      "abilities": [
-        "stancechange",
-        "h:stancechange"
-      ],
-      "eggGroups": [
-        "mineral"
-      ],
       "baseStats": {
         "hp": 60,
         "attack": 140,
@@ -192,19 +200,6 @@
         "special_attack": 1,
         "special_defence": 0,
         "speed": 0
-      },
-      "baseExperienceYield": 250,
-      "experienceGroup": "medium_fast",
-      "catchRate": 45,
-      "eggCycles": 20,
-      "baseFriendship": 50,
-      "behaviour": {
-        "moving": {
-          "swim": {
-            "avoidsWater": true,
-            "canSwimInWater": false
-          }
-        }
       },
       "moves": [
         "1:furycutter",
@@ -227,7 +222,6 @@
         "tm:aerialace",
         "tm:afteryou",
         "tm:airslash",
-        "tm:autotomize",
         "tm:block",
         "tm:brickbreak",
         "tm:brutalswing",
@@ -241,19 +235,14 @@
         "tm:furycutter",
         "tm:gigaimpact",
         "tm:gyroball",
-        "tm:headsmash",
         "tm:hyperbeam",
         "tm:irondefense",
         "tm:ironhead",
-        "tm:kingsshield",
         "tm:laserfocus",
         "tm:magnetrise",
         "tm:metalsound",
-        "tm:nightslash",
-        "tm:powertrick",
         "tm:protect",
         "tm:psychocut",
-        "tm:pursuit",
         "tm:raindance",
         "tm:reflect",
         "tm:rest",
@@ -261,13 +250,10 @@
         "tm:reversal",
         "tm:rockslide",
         "tm:rocksmash",
-        "tm:sacredsword",
         "tm:screech",
         "tm:shadowball",
         "tm:shadowclaw",
-        "tm:shadowsneak",
         "tm:shockwave",
-        "tm:slash",
         "tm:sleeptalk",
         "tm:solarblade",
         "tm:spite",
@@ -275,9 +261,31 @@
         "tm:substitute",
         "tm:sunnyday",
         "tm:swordsdance",
-        "tm:tackle",
         "tm:terablast",
-        "tm:wideguard"
+        "tm:wideguard",
+        "tutor:aerialace",
+        "tutor:afteryou",
+        "tutor:block",
+        "tutor:falseswipe",
+        "tutor:flashcannon",
+        "tutor:furycutter",
+        "tutor:gigaimpact",
+        "tutor:hyperbeam",
+        "tutor:irondefense",
+        "tutor:ironhead",
+        "tutor:laserfocus",
+        "tutor:magnetrise",
+        "tutor:psychocut",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:rocksmash",
+        "tutor:shadowball",
+        "tutor:shadowclaw",
+        "tutor:shockwave",
+        "tutor:sleeptalk",
+        "tutor:spite",
+        "tutor:steelbeam",
+        "tutor:trick"
       ],
       "evolutions": [],
       "battleOnly": true

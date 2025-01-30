@@ -8,32 +8,6 @@
             "pokemon": "caterpie",
             "presets": [
                 "natural",
-                "treetop"
-            ],
-            "type": "pokemon",
-            "context": "grounded",
-            "bucket": "common",
-            "level": "1-20",
-            "weight": 7.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_forest"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing",
-                    "#cobblemon:is_spooky"
-                ]
-            }
-        },
-        {
-            "id": "caterpie-2",
-            "pokemon": "caterpie",
-            "presets": [
-                "natural",
                 "foliage",
                 "treetop"
             ],
@@ -46,7 +20,16 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_plains"
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_plains",
+                    "aether:skyroot_forest",
+                    "aether:skyroot_woodland"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing",
+                    "#cobblemon:is_spooky"
                 ]
             }
         },

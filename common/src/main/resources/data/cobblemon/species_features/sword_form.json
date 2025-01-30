@@ -9,5 +9,5 @@
     "resolute"
   ],
   "isAspect": true,
-  "aspectFormat": "sword-form-{{choice}}"
+  "aspectFormat": "{{choice}}-form"
 }

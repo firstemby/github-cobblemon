@@ -49,7 +49,7 @@
           "namedAnimations": {
             "cry": "q.bedrock_stateful('dummy', 'cry')"
           },
-          "animations": ["q.bedrock('golem_alolan', math.random(0, 1) < 0.4 ? 'wild_sleep3' : 'wild_sleep2' : 'wild_sleep1')"]
+          "animations": ["q.bedrock('golem_alolan', math.random() < 0.4 ? 'wild_sleep3' : (math.random() < 0.5 ? 'wild_sleep2' : 'wild_sleep1'))"]
         }
     }
 }

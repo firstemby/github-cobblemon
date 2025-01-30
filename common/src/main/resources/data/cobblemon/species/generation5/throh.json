@@ -47,21 +47,20 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
       {
         "item": "cobblemon:black_belt",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:expert_belt",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -81,14 +80,12 @@
     "45:endure",
     "50:reversal",
     "55:superpower",
-    "tm:bide",
     "tm:bind",
     "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulkup",
     "tm:bulldoze",
-    "tm:circlethrow",
     "tm:coaching",
     "tm:dig",
     "tm:earthquake",
@@ -105,10 +102,8 @@
     "tm:icepunch",
     "tm:knockoff",
     "tm:laserfocus",
-    "tm:leer",
     "tm:lowkick",
     "tm:lowsweep",
-    "tm:matblock",
     "tm:megakick",
     "tm:megapunch",
     "tm:painsplit",
@@ -125,11 +120,9 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:scaryface",
-    "tm:seismictoss",
     "tm:sleeptalk",
     "tm:stompingtantrum",
     "tm:stoneedge",
-    "tm:stormthrow",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
@@ -137,10 +130,33 @@
     "tm:taunt",
     "tm:terablast",
     "tm:thunderpunch",
-    "tm:vitalthrow",
-    "tm:wideguard",
     "tm:workup",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:bind",
+    "tutor:block",
+    "tutor:bulkup",
+    "tutor:bulldoze",
+    "tutor:coaching",
+    "tutor:firepunch",
+    "tutor:focusenergy",
+    "tutor:focuspunch",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:icepunch",
+    "tutor:knockoff",
+    "tutor:laserfocus",
+    "tutor:lowkick",
+    "tutor:painsplit",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:superpower",
+    "tutor:thunderpunch",
+    "tutor:zenheadbutt"
   ],
   "evolutions": []
 }

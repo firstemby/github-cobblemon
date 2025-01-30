@@ -69,7 +69,7 @@
     }
   },
   "drops": {
-    "amount": 24,
+    "amount": 48,
     "entries": [
       {
         "item": "cobblemon:relic_coin",
@@ -80,7 +80,6 @@
   "moves": [
     "1:astonish",
     "1:tackle",
-    "tm:astonish",
     "tm:confuseray",
     "tm:endure",
     "tm:hex",
@@ -94,10 +93,12 @@
     "tm:shadowball",
     "tm:sleeptalk",
     "tm:substitute",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
-    "tm:thief"
+    "tm:thief",
+    "tutor:rest",
+    "tutor:shadowball",
+    "tutor:sleeptalk"
   ],
   "evolutions": [
     {
@@ -277,9 +278,6 @@
         "runaway",
         "h:runaway"
       ],
-      "eggGroups": [
-        "undiscovered"
-      ],
       "baseStats": {
         "hp": 45,
         "attack": 30,
@@ -288,19 +286,6 @@
         "special_defence": 45,
         "speed": 80
       },
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "baseExperienceYield": 60,
-      "experienceGroup": "slow",
-      "catchRate": 45,
-      "eggCycles": 50,
-      "baseFriendship": 50,
       "shoulderMountable": true,
       "baseScale": 0.7,
       "hitbox": {
@@ -317,7 +302,9 @@
             "swimSpeed": 0.3,
             "canSwimInWater": false,
             "canBreatheUnderwater": true
-          }
+          },
+          "wanderChance": 500,
+          "canLook": false
         },
         "resting": {
           "canSleep": true,
@@ -332,28 +319,6 @@
           }
         ]
       },
-      "moves": [
-        "1:astonish",
-        "1:tackle",
-        "tm:astonish",
-        "tm:confuseray",
-        "tm:endure",
-        "tm:hex",
-        "tm:lightscreen",
-        "tm:nastyplot",
-        "tm:nightshade",
-        "tm:powergem",
-        "tm:protect",
-        "tm:reflect",
-        "tm:rest",
-        "tm:shadowball",
-        "tm:sleeptalk",
-        "tm:substitute",
-        "tm:tackle",
-        "tm:takedown",
-        "tm:terablast",
-        "tm:thief"
-      ],
       "evolutions": [
         {
           "id": "gimmighoul_gholdengo",
