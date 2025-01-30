@@ -716,7 +716,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
-    val DESTINY_KNOT = heldItem("destiny_knot")
+    val DESTINY_KNOT = heldItem("destiny_knot", null, if (Cobblemon.config.canDestinyKnotBreak) Properties().durability(Cobblemon.config.destinyKnotDurability) else Properties())
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField
@@ -1285,7 +1285,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun heldItem(name: String, remappedName: String? = null, settings:Item.Properties = Item.Properties()): CobblemonItem = create(
         name,
-        CobblemonItem(Item.Properties()).also {
+        CobblemonItem(settings).also {
             if (remappedName != null) {
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
             }

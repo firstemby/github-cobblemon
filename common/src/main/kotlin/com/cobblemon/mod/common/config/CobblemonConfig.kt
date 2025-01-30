@@ -253,6 +253,12 @@ class CobblemonConfig {
     var hideUnimplementedPokemonInThePokedex = false
 
     @NodeCategory(Category.Breeding)
+    var canDestinyKnotBreak = true
+
+    @NodeCategory(Category.Breeding)
+    var destinyKnotDurability = 256
+
+    @NodeCategory(Category.Breeding)
     var requireOTsForMasuda = false
 
     @NodeCategory(Category.Breeding)
