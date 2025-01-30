@@ -252,6 +252,21 @@ class CobblemonConfig {
     @NodeCategory(Category.Pokedex)
     var hideUnimplementedPokemonInThePokedex = false
 
+    @NodeCategory(Category.Breeding)
+    var requireOTsForMasuda = false
+
+    @NodeCategory(Category.Breeding)
+    var masudaShinyRate = 1365f
+
+    @NodeCategory(Category.Breeding)
+    var canBreedGenderless = true
+
+    @NodeCategory(Category.Breeding)
+    var canBreedUndiscovered = true
+
+    @NodeCategory(Category.Breeding)
+    var canBreedDitto = true
+
     @NodeCategory(Category.Debug)
     var enableDebugKeys = false
 }
