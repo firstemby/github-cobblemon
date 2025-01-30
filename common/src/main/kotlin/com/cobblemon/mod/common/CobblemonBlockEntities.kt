@@ -91,8 +91,16 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
             CobblemonBlocks.NEST_DEEPSLATE,
             CobblemonBlocks.NEST_BASALT,
             CobblemonBlocks.NEST_SNOW,
+            CobblemonBlocks.NEST_NETHER,
+            CobblemonBlocks.NEST_SOUL_SAND,
+            CobblemonBlocks.NEST_WARM_OCEAN,
+            CobblemonBlocks.NEST_SEAGRASS,
+            CobblemonBlocks.NEST_LUSH,
+            CobblemonBlocks.NEST_HAY,
+            CobblemonBlocks.NEST_SAND,
+            CobblemonBlocks.NEST_RED_SAND,
+            CobblemonBlocks.NEST_CHORUS,
 
-            CobblemonBlocks.NETHER_NEST,
             CobblemonBlocks.WATER_NEST,
             CobblemonBlocks.CAVE_NEST,
             CobblemonBlocks.BASIC_NEST

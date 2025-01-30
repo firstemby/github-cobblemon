@@ -402,9 +402,18 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val NEST_BASALT = blockItem(NestBlock.NestVariant.BASALT.serializedName, CobblemonBlocks.NEST_BASALT)
     val NEST_SNOW = blockItem(NestBlock.NestVariant.SNOW.serializedName, CobblemonBlocks.NEST_SNOW)
 
+    val NEST_NETHER = blockItem(NestBlock.NestVariant.NETHER.serializedName, CobblemonBlocks.NEST_NETHER)
+    val NEST_SOUL_SAND = blockItem(NestBlock.NestVariant.SOUL_SAND.serializedName, CobblemonBlocks.NEST_SOUL_SAND)
+    val NEST_WARM_OCEAN = blockItem(NestBlock.NestVariant.WARM_OCEAN.serializedName, CobblemonBlocks.NEST_WARM_OCEAN)
+    val NEST_SEAGRASS = blockItem(NestBlock.NestVariant.SEAGRASS.serializedName, CobblemonBlocks.NEST_SEAGRASS)
+    val NEST_LUSH = blockItem(NestBlock.NestVariant.LUSH.serializedName, CobblemonBlocks.NEST_LUSH)
+    val NEST_HAY = blockItem(NestBlock.NestVariant.HAY.serializedName, CobblemonBlocks.NEST_HAY)
+    val NEST_SAND = blockItem(NestBlock.NestVariant.SAND.serializedName, CobblemonBlocks.NEST_SAND)
+    val NEST_RED_SAND = blockItem(NestBlock.NestVariant.RED_SAND.serializedName, CobblemonBlocks.NEST_RED_SAND)
+    val NEST_CHORUS = blockItem(NestBlock.NestVariant.CHORUS.serializedName, CobblemonBlocks.NEST_CHORUS)
+
     val BASIC_NEST = blockItem(NestBlock.NestVariant.BASIC.serializedName, CobblemonBlocks.BASIC_NEST)
     val CAVE_NEST = blockItem(NestBlock.NestVariant.CAVE.serializedName, CobblemonBlocks.CAVE_NEST)
-    val NETHER_NEST = blockItem(NestBlock.NestVariant.NETHER.serializedName, CobblemonBlocks.NETHER_NEST)
     val WATER_NEST = blockItem(NestBlock.NestVariant.WATER.serializedName, CobblemonBlocks.WATER_NEST)
 
     @JvmField
