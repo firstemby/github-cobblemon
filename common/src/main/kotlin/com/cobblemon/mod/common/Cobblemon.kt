@@ -184,6 +184,8 @@ object Cobblemon {
             this.LOGGER.info("  - Branch: ${CobblemonBuildDetails.BRANCH}")
         }
 
+        this.loadConfig()
+
         implementation.registerPermissionValidator()
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
@@ -206,7 +208,6 @@ object Cobblemon {
         ExperienceGroups.registerDefaults()
         CaptureCalculators.registerDefaults()
 
-        this.loadConfig()
 //        CobblemonBlockPredicates.touch()
         CobblemonOrePlacedFeatures.register()
         CobblemonPlacedFeatures.register()
