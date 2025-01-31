@@ -485,9 +485,21 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val NEST_BASALT = nestBlock(NestBlock.NestVariant.BASALT)
     val NEST_SNOW = nestBlock(NestBlock.NestVariant.SNOW)
 
+    val NEST_NETHER = nestBlock(NestBlock.NestVariant.NETHER)
+    val NEST_SOUL_SAND = nestBlock(NestBlock.NestVariant.SOUL_SAND)
+    val NEST_WARM_OCEAN = nestBlock(NestBlock.NestVariant.WARM_OCEAN)
+    val NEST_SEAGRASS = nestBlock(NestBlock.NestVariant.SEAGRASS)
+    val NEST_LUSH = nestBlock(NestBlock.NestVariant.LUSH)
+    val NEST_HAY = nestBlock(NestBlock.NestVariant.HAY)
+    val NEST_SAND = nestBlock(NestBlock.NestVariant.SAND)
+    val NEST_RED_SAND = nestBlock(NestBlock.NestVariant.RED_SAND)
+    val NEST_CHORUS = nestBlock(NestBlock.NestVariant.CHORUS)
+
+
+
     val BASIC_NEST = nestBlock(NestBlock.NestVariant.BASIC)
     val CAVE_NEST = nestBlock(NestBlock.NestVariant.CAVE)
-    val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)
+    //val NETHER_NEST = nestBlock(NestBlock.NestVariant.NETHER)
     val WATER_NEST = nestBlock(NestBlock.NestVariant.WATER)
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties

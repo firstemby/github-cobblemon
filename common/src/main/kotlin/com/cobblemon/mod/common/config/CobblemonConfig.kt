@@ -273,6 +273,18 @@ class CobblemonConfig {
     @NodeCategory(Category.Breeding)
     var canBreedDitto = true
 
+    @NodeCategory(Category.Breeding)
+    var nestHatchRate= 1f
+
+    @NodeCategory(Category.Breeding)
+    var incubatorHatchRate = 1.25f
+
+    @NodeCategory(Category.Breeding)
+    var netherNestHatchRate = 1.5f
+
+    @NodeCategory(Category.Breeding)
+    var netherIncubatorHatchRate = 1.75f
+
     @NodeCategory(Category.Debug)
     var enableDebugKeys = false
 }

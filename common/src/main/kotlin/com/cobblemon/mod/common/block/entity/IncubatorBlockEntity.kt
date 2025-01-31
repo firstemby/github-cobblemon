@@ -55,8 +55,15 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
                     return@BlockEntityTicker
                 }
 
-                // Decrease hatch time if the egg still has time left
-                if (egg.timeToHatch > 0F) { egg.timeToHatch -= 1.25F }
+                // Decrease hatch time if the egg still has time left (faster if in nether)
+                val isNether = if (world != null && world.dimension() == Level.NETHER) true else false
+
+                if (egg.timeToHatch > 0F) {
+                    egg.timeToHatch = when {
+                        isNether -> egg.timeToHatch - Cobblemon.config.netherIncubatorHatchRate
+                        else -> egg.timeToHatch - Cobblemon.config.incubatorHatchRate
+                    }
+                }
 
                 // todo is this needed?
                 // Sync to client every 10 seconds (200 ticks)

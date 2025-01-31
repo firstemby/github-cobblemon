@@ -345,7 +345,7 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
-        entries.accept(CobblemonItems.NETHER_NEST)
+        //entries.accept(CobblemonItems.NETHER_NEST)
         entries.accept(CobblemonItems.WATER_NEST)
         entries.accept(CobblemonItems.INCUBATOR)
 

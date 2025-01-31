@@ -64,9 +64,18 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         DEEPSLATE("nest_deepslate"),
         BASALT("nest_basalt"),
         SNOW("nest_snow"),
+        NETHER("nest_nether"),
+        SOUL_SAND("nest_soul_sand"),
+        WARM_OCEAN("nest_warm_ocean"),
+        SEAGRASS("nest_seagrass"),
+        LUSH("nest_lush"),
+        HAY("nest_hay"),
+        SAND("nest_sand"),
+        RED_SAND("nest_red_sand"),
+        CHORUS("mest_chorus"),
 
         CAVE("cave_nest"),
-        NETHER("nether_nest"),
+        //NETHER("nether_nest"),
         WATER("water_nest"),
         BASIC("basic_nest");
 
@@ -147,6 +156,14 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
             )
             NestVariant.WATER -> Shapes.box(0.2, 0.0, 0.2, 0.8, 0.3, 0.8)
             NestVariant.BASIC -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SOUL_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.WARM_OCEAN -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SEAGRASS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.LUSH -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.HAY -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.RED_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.CHORUS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
         }
     }
 
