@@ -3,6 +3,7 @@
 	"parent": "block/block",
 	"textures": {
 		"0": "cobblemon:block/nest_stick_base",
+		"1": "cobblemon:block/nest_stick_extra",
 		"2": "cobblemon:block/nest_leaves_extra",
 		"particle": "cobblemon:block/nest_stick_base"
 	},
