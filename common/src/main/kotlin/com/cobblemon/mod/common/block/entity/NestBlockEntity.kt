@@ -451,7 +451,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     companion object {
-        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick
+        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick // todo remove this
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
@@ -492,7 +492,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 // Attempt to spawn a random egg in the nest with a small chance
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0) {
 
-                    val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+                    val test = 1
+
+                    // todo remove this as we are not having nests spawn pokemon anymore
+                    /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
 
                     if (parent1 != null && parent2 != null) {
                         val childResult = BreedingLogicManager.breed(parent1.pokemon,parent2.pokemon)
@@ -511,7 +514,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                             blockEntity.setItem(egg.createEggItemStack())
                         }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
-                    }
+                    }*/
                 }
             }
         }
