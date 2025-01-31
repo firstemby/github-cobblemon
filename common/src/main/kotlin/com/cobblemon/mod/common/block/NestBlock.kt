@@ -156,14 +156,14 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
             )
             NestVariant.WATER -> Shapes.box(0.2, 0.0, 0.2, 0.8, 0.3, 0.8)
             NestVariant.BASIC -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.SOUL_SAND -> TODO()
-            NestVariant.WARM_OCEAN -> TODO()
-            NestVariant.SEAGRASS -> TODO()
-            NestVariant.LUSH -> TODO()
-            NestVariant.HAY -> TODO()
-            NestVariant.SAND -> TODO()
-            NestVariant.RED_SAND -> TODO()
-            NestVariant.CHORUS -> TODO()
+            NestVariant.SOUL_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.WARM_OCEAN -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SEAGRASS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.LUSH -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.HAY -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.RED_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.CHORUS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
         }
     }
 

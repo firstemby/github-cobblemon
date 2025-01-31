@@ -114,9 +114,9 @@ interface BreedingLogic {
         )
 
         // Determine shiny based on masuda
-        val mssudaActive = masudaActive(mother,father)
+        val masudaActive = masudaActive(mother,father)
         val isShiny = when {
-            mssudaActive -> (Random.nextFloat() < 1f / Cobblemon.config.masudaShinyRate)
+            masudaActive -> (Random.nextFloat() < 1f / Cobblemon.config.masudaShinyRate)
             else -> (Random.nextFloat() < 1f / Cobblemon.config.shinyRate)
         }
 
@@ -171,7 +171,7 @@ interface BreedingLogic {
     }
 
     fun masudaActive(mother: Pokemon, father: Pokemon) : Boolean {
-        val isDifferentOT = (mother.originalTrainer == father.originalTrainer)
+        val isDifferentOT = (mother.originalTrainer != father.originalTrainer)
         val bothMaxFriendship = (mother.friendship == 255 && father.friendship == 255)
         val requireBothOTs = Cobblemon.config.requireOTsForMasuda
 
