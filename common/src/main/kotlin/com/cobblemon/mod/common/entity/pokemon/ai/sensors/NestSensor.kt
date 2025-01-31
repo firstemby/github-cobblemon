@@ -67,6 +67,19 @@ class NestSensor : Sensor<LivingEntity>() {
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
             val isEggless = nestBlockEntity.getItem(0) == ItemStack.EMPTY
+            val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
+            val eggGroups = pokemonEntity.pokemon.species.eggGroups.map { it.name.lowercase() }
+            val hasWaterEggGroup = eggGroups.any { it in WATER_EGG_GROUPS }
+            val onlyWaterEggGroup = eggGroups.all { it in WATER_EGG_GROUPS }
+            val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
+
+            // make it so that only waterlogged nests can be used by pokemon with Water 1/2/3 egg groups
+            if (isNestWaterlogged && !hasWaterEggGroup)
+                return@firstOrNull false
+
+            // make it so that pokemon that only have Water 1/2/3 egg groups and nothing else can only breed in watterlogged nests
+            if (!isNestWaterlogged && onlyWaterEggGroup)
+                return@firstOrNull false
 
             return@firstOrNull when {
                 // Pokémon is tethered: Use owned nests
