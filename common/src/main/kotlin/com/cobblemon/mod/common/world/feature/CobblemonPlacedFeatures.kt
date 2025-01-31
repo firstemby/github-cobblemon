@@ -55,7 +55,7 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(BERRY_GROVE, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_LEAF, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_SNOW, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_SNOW, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.SPAWNS_COLD_VARIANT_FROGS)
 
         // todo add more nests and make sure they are in the right dimensions
     }
