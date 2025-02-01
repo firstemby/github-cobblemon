@@ -41,6 +41,10 @@ object CobblemonBiomeTags {
     @JvmField
     val HAS_REVIVAL_HERBS = create("has_feature/revival_herbs")
 
+    // Nests
+    @JvmField
+    val HAS_SNOW_NEST = create("has_nest/nest_snow")
+
     // Has Ore tags
     @JvmField
     val HAS_DAWN_STONE_ORE = create("has_ore/ore_dawn_stone_normal")
