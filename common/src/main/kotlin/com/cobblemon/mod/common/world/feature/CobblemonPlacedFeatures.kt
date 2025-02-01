@@ -41,9 +41,9 @@ object CobblemonPlacedFeatures {
     val BERRY_GROVE = of("berry_groves")
 
     // Wild Nests
-    val NEST_STICK = of ("nest_stick")
-    val NEST_LEAF = of ("nest_leaf")
-    val NEST_SNOW = of ("nest_snow")
+    val NEST_STICK = of ("nests/nest_stick")
+    val NEST_LEAF = of ("nests/nest_leaf")
+    val NEST_SNOW = of ("nests/nest_snow")
 
     fun register() {
         // We don't need to pass in any tags, the feature implementation handles it, while not a perfect system it works
