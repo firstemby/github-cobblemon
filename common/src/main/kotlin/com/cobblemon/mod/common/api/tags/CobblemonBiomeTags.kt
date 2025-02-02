@@ -41,6 +41,40 @@ object CobblemonBiomeTags {
     @JvmField
     val HAS_REVIVAL_HERBS = create("has_feature/revival_herbs")
 
+    // Nests
+    @JvmField
+    val HAS_STICK_NEST = create("has_nest/nest_stick")
+    @JvmField
+    val HAS_STICK_NEST_TREES = create("has_nest/nest_stick_trees")
+    @JvmField
+    val HAS_LEAF_NEST_TREES = create("has_nest/nest_leaf_trees")
+    @JvmField
+    val HAS_SNOW_NEST = create("has_nest/nest_snow")
+    @JvmField
+    val HAS_SAND_NEST = create("has_nest/nest_sand")
+    @JvmField
+    val HAS_RED_SAND_NEST = create("has_nest/nest_red_sand")
+    @JvmField
+    val HAS_SEAGRASS_NEST = create("has_nest/nest_seagrass")
+    @JvmField
+    val HAS_WARM_OCEAN_NEST = create("has_nest/nest_warm_ocean")
+    @JvmField
+    val HAS_STONE_NEST = create("has_nest/nest_stone")
+    @JvmField
+    val HAS_STONE_NEST_CAVES = create("has_nest/nest_stone_caves")
+    @JvmField
+    val HAS_DEEPSLATE_NEST_CAVES = create("has_nest/nest_deepslate_caves")
+    @JvmField
+    val HAS_LUSH_NEST_CAVES = create("has_nest/nest_lush_caves")
+    @JvmField
+    val HAS_BASALT_NEST = create("has_nest/nest_basalt")
+    @JvmField
+    val HAS_NETHER_NEST = create("has_nest/nest_nether")
+    @JvmField
+    val HAS_SOUL_SAND_NEST = create("has_nest/nest_soul_sand")
+    @JvmField
+    val HAS_CHORUS_NEST = create("has_nest/nest_chorus")
+
     // Has Ore tags
     @JvmField
     val HAS_DAWN_STONE_ORE = create("has_ore/ore_dawn_stone_normal")

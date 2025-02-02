@@ -43,11 +43,12 @@ object CobblemonConfiguredFeatures {
 
     // Wild Nests
     @JvmField
-    val NEST_STICK_KEY = of("nest_stick")
+    val NEST_STICK_KEY = of("nests/nest_stick")
     @JvmField
-    val NEST_LEAF_KEY = of("nest_leaf")
+    val NEST_LEAF_KEY = of("nests/nest_leaf")
     @JvmField
-    val NEST_SNOW_KEY = of("nest_snow")
+    val NEST_SNOW_KEY = of("nests/nest_snow")
+    // todo add the rest maybe
 
     private fun of(id: String): ResourceKey<ConfiguredFeature<*, *>> = ResourceKey.create(Registries.CONFIGURED_FEATURE, cobblemonResource(id))
 

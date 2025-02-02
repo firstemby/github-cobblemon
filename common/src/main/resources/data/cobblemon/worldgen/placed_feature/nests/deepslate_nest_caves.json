@@ -1,29 +1,22 @@
 {
-  "feature": "cobblemon:nest_stick",
+  "feature": "cobblemon:nests/deepslate_nest_caves",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 100
+      "count": 5
     },
     {
       "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:biome",
-      "biomes": [
-        "minecraft:plains",
-        "minecraft:forest"
-      ]
     },
     {
       "type": "minecraft:height_range",
       "height": {
         "type": "minecraft:uniform",
         "min_inclusive": {
-          "absolute": 40
+          "absolute": -60
         },
         "max_inclusive": {
-          "absolute": 200
+          "absolute": -1
         }
       }
     },
@@ -32,8 +25,7 @@
       "allowed_search_condition": {
         "type": "minecraft:matching_blocks",
         "blocks": [
-          "minecraft:grass_block",
-          "minecraft:dirt"
+          "minecraft:deepslate"
         ],
         "offset": [
           0,
@@ -49,6 +41,9 @@
           "minecraft:air"
         ]
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

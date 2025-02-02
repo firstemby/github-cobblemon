@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:is_beach",
+    "#cobblemon:is_lukewarm_ocean",
+    "#cobblemon:is_warm_ocean"
+  ]
+}

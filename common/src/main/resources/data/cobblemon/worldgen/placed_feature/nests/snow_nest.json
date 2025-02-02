@@ -1,29 +1,22 @@
 {
-  "feature": "cobblemon:nest_leaf",
+  "feature": "cobblemon:nests/snow_nest",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 100
+      "count": 5
     },
     {
       "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:biome",
-      "biomes": [
-        "minecraft:plains",
-        "minecraft:forest"
-      ]
     },
     {
       "type": "minecraft:height_range",
       "height": {
         "type": "minecraft:uniform",
         "min_inclusive": {
-          "absolute": 40
+          "absolute": 50
         },
         "max_inclusive": {
-          "absolute": 200
+          "absolute": 300
         }
       }
     },
@@ -32,11 +25,8 @@
       "allowed_search_condition": {
         "type": "minecraft:matching_blocks",
         "blocks": [
-          "minecraft:oak_leaves",
-          "minecraft:birch_leaves",
-          "minecraft:jungle_leaves",
-          "minecraft:acacia_leaves",
-          "minecraft:dark_oak_leaves"
+          "minecraft:grass_block",
+          "minecraft:snow_block"
         ],
         "offset": [
           0,
@@ -49,9 +39,13 @@
       "target_condition": {
         "type": "minecraft:matching_blocks",
         "blocks": [
-          "minecraft:air"
+          "minecraft:air",
+          "minecraft:snow"
         ]
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }
