@@ -7,11 +7,13 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.Vec3
 import kotlin.collections.firstOrNull
 
 /**
@@ -63,6 +65,9 @@ class NestSensor : Sensor<LivingEntity>() {
             // Clear paternal nest memory if this isn't their nest
             pokemonEntity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION) // I do worry that this will clear a parental nest if they get too close to another nest todo look into this case
 
+            // cancel if the nest cannot be reached by the entity
+            if (!canPathfindToTarget(pokemonEntity, nestBlockEntity.blockPos)) return@firstOrNull false
+
             // Check if the nest is valid based on tethering and ownership
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
@@ -88,5 +93,10 @@ class NestSensor : Sensor<LivingEntity>() {
                 else -> isWildNest && isEggless
             }
         }
+    }
+
+    private fun canPathfindToTarget(entity: PathfinderMob, targetPos: BlockPos): Boolean {
+        val path = entity.navigation.createPath(targetPos, 0)
+        return path != null && path.distToTarget < 1.75f
     }
 }
