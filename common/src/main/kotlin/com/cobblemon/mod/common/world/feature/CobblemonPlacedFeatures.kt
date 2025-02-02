@@ -69,8 +69,8 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(BERRY_GROVE, GenerationStep.Decoration.VEGETAL_DECORATION, BiomeTags.IS_OVERWORLD)
         // Nests
         Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STICK_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK_TREES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STICK_NEST_TREES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_LEAF_TREES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_LEAF_NEST_TREES)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_STICK_TREES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_STICK_NEST_TREES)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_LEAF_TREES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_LEAF_NEST_TREES)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_SNOW, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SNOW_NEST)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SAND_NEST)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_RED_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_RED_SAND_NEST)
@@ -79,11 +79,11 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(NEST_STONE, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STONE_NEST)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_STONE_CAVES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_STONE_NEST_CAVES)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_DEEPSLATE_CAVES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_DEEPSLATE_NEST_CAVES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_LUSH_CAVES, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_LUSH_NEST_CAVES)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_BASALT, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_BASALT_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_NETHER, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_NETHER_NEST)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_LUSH_CAVES, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_LUSH_NEST_CAVES)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_BASALT, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_BASALT_NEST)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_NETHER, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_NETHER_NEST)
         Cobblemon.implementation.addFeatureToWorldGen(NEST_SOUL_SAND, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_SOUL_SAND_NEST)
-        Cobblemon.implementation.addFeatureToWorldGen(NEST_CHORUS, GenerationStep.Decoration.VEGETAL_DECORATION, CobblemonBiomeTags.HAS_CHORUS_NEST)
+        Cobblemon.implementation.addFeatureToWorldGen(NEST_CHORUS, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, CobblemonBiomeTags.HAS_CHORUS_NEST)
 
         // todo add more nests and make sure they are in the right dimensions
     }

@@ -6,6 +6,7 @@
     "#cobblemon:is_bamboo",
     "#cobblemon:is_badlands",
     "#cobblemon:is_savanna",
+    "#cobblemon:is_plateau",
     "#cobblemon:is_jungle"
   ]
 }
