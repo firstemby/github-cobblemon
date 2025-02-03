@@ -21,12 +21,10 @@ import com.cobblemon.mod.common.client.render.models.blockbench.ExcludedLabels
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.appendage.ModelAppendageModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.sineFunction
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import com.cobblemon.mod.common.util.getBooleanOrNull
-import com.cobblemon.mod.common.util.getDoubleOrNull
-import com.cobblemon.mod.common.util.getStringOrNull
+import com.cobblemon.mod.common.util.*
 import java.util.function.Function
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -53,7 +51,7 @@ object ClientMoLangFunctions {
         "say" to java.util.function.Function { params -> Minecraft.getInstance().player?.sendSystemMessage(params.getString(0).text()) ?: Unit },
     )
 
-    val animationFunctions = hashMapOf<String, Function<PosableModel, Function<MoParams, Any>>>(
+    val posableModelFunctions = hashMapOf<String, Function<PosableModel, Function<MoParams, Any>>>(
         "exclude_labels" to Function { model -> Function { params ->
                 val labels = params.params.map { it.asString() }
                 ObjectValue(ExcludedLabels(labels))
@@ -244,6 +242,18 @@ object ClientMoLangFunctions {
                 )
             }
         },
+        "appendage_model" to Function {
+            model -> Function { params ->
+                val name = params.getString(0)
+                ObjectValue((ModelAppendageModelRepository to name.asResource()))
+            }
+        },
+        "vanilla_model" to Function {
+            model -> Function { params ->
+                val id = params.getString(0).asResource()
+                ObjectValue(id)
+            }
+        },
         "primary_animation" to Function { model ->
             Function { params ->
                 val animation = params.get<ObjectValue<ActiveAnimation>>(0)?.obj ?: return@Function DoubleValue.ZERO
@@ -344,7 +354,7 @@ object ClientMoLangFunctions {
         }
     )
 
-    fun PosableModel.animationFunctions(): HashMap<String, Function<MoParams, Any>> = animationFunctions.map { (k, v) -> k to v.apply(this) }.toHashMap()
+    fun PosableModel.animationFunctions(): HashMap<String, Function<MoParams, Any>> = posableModelFunctions.map { (k, v) -> k to v.apply(this) }.toHashMap()
 
     fun MoLangRuntime.setupClient(): MoLangRuntime {
         environment.query.addFunctions(clientFunctions)
