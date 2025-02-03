@@ -1,0 +1,564 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.egg.idle": {
+			"loop": true,
+			"bones": {
+				"egg": {
+					"rotation": [0, 0, 0],
+					"position": [0, 0, 0]
+				},
+				"body": {
+					"rotation": [0, 0, 0],
+					"position": [0, 0, 0]
+				},
+				"egg_shell1": {
+					"position": [0, "math.sin(q.anim_time*90+1)", 0]
+				},
+				"egg_shell2": {
+					"position": [0, "math.sin(q.anim_time*90+2)", 0]
+				},
+				"egg_shell3": {
+					"position": [0, "math.sin(q.anim_time*90+3)", 0]
+				},
+				"egg_shell4": {
+					"position": [0, "math.sin(q.anim_time*90+4)", 0]
+				},
+				"egg_shell5": {
+					"position": [0, "math.sin(q.anim_time*90+5)", 0]
+				},
+				"egg_shell6": {
+					"position": [0, "math.sin(q.anim_time*90+6)", 0]
+				},
+				"egg_shell7": {
+					"position": [0, "math.sin(q.anim_time*90+7)", 0]
+				},
+				"egg_shell8": {
+					"position": [0, "math.sin(q.anim_time*90+8)", 0]
+				},
+				"egg_shell9": {
+					"position": [0, "math.sin(q.anim_time*90+9)", 0]
+				},
+				"egg_shell10": {
+					"position": [0, "math.sin(q.anim_time*90+10)", 0]
+				},
+				"egg_shell11": {
+					"position": [0, "math.sin(q.anim_time*90+11)", 0]
+				},
+				"egg_shell12": {
+					"position": [0, "math.sin(q.anim_time*90+12)", 0]
+				},
+				"egg_shell13": {
+					"position": [0, "math.sin(q.anim_time*90+13)", 0]
+				},
+				"egg_shell14": {
+					"position": [0, "math.sin(q.anim_time*90+14)", 0]
+				},
+				"egg_shell15": {
+					"position": [0, "math.sin(q.anim_time*90+15)", 0]
+				},
+				"egg_shell16": {
+					"position": [0, "math.sin(q.anim_time*90+16)", 0]
+				},
+				"egg_shell17": {
+					"position": [0, "math.sin(q.anim_time*90+17)", 0]
+				},
+				"egg_shell18": {
+					"position": [0, "math.sin(q.anim_time*90+18)", 0]
+				},
+				"egg_shell19": {
+					"position": [0, "math.sin(q.anim_time*90+19)", 0]
+				},
+				"egg_shell20": {
+					"position": [0, "math.sin(q.anim_time*90+20)", 0]
+				},
+				"egg_shell21": {
+					"position": [0, "math.sin(q.anim_time*90+21)", 0]
+				},
+				"egg_shell22": {
+					"position": [0, "math.sin(q.anim_time*90+22)", 0]
+				},
+				"egg_shell23": {
+					"position": [0, "math.sin(q.anim_time*90+23)", 0]
+				},
+				"egg_shell24": {
+					"position": [0, "math.sin(q.anim_time*90+24)", 0]
+				},
+				"egg_shell25": {
+					"position": [0, "math.sin(q.anim_time*90+25)", 0]
+				},
+				"egg_shell26": {
+					"position": [0, "math.sin(q.anim_time*90+26)", 0]
+				},
+				"egg_shell27": {
+					"position": [0, "math.sin(q.anim_time*90+27)", 0]
+				},
+				"egg_shell28": {
+					"position": [0, "math.sin(q.anim_time*90+28)", 0]
+				},
+				"egg_shell29": {
+					"position": [0, "math.sin(q.anim_time*90+29)", 0]
+				},
+				"egg_shell30": {
+					"position": [0, "math.sin(q.anim_time*90+30)", 0]
+				},
+				"egg_shell31": {
+					"position": [0, "math.sin(q.anim_time*90+31)", 0]
+				},
+				"egg_shell32": {
+					"position": [0, "math.sin(q.anim_time*90+32)", 0]
+				},
+				"egg_shell33": {
+					"position": [0, "math.sin(q.anim_time*90+33)", 0]
+				},
+				"egg_shell34": {
+					"position": [0, "math.sin(q.anim_time*90+34)", 0]
+				},
+				"egg_shell35": {
+					"position": [0, "math.sin(q.anim_time*90+35)", 0]
+				},
+				"egg_shell36": {
+					"position": [0, "math.sin(q.anim_time*90+36)", 0]
+				},
+				"egg_shell37": {
+					"position": [0, "math.sin(q.anim_time*90+37)", 0]
+				},
+				"egg_shell38": {
+					"position": [0, "math.sin(q.anim_time*90+38)", 0]
+				},
+				"egg_shell39": {
+					"position": [0, "math.sin(q.anim_time*90+39)", 0]
+				},
+				"egg_shell40": {
+					"position": [0, "math.sin(q.anim_time*90+40)", 0]
+				},
+				"egg_shell41": {
+					"position": [0, "math.sin(q.anim_time*90+41)", 0]
+				},
+				"egg_shell42": {
+					"position": [0, "math.sin(q.anim_time*90+42)", 0]
+				},
+				"egg_shell43": {
+					"position": [0, "math.sin(q.anim_time*90+43)", 0]
+				},
+				"egg_shell44": {
+					"position": [0, "math.sin(q.anim_time*90+44)", 0]
+				},
+				"egg_shell45": {
+					"position": [0, "math.sin(q.anim_time*90+45)", 0]
+				},
+				"egg_shell46": {
+					"position": [0, "math.sin(q.anim_time*90+46)", 0]
+				},
+				"egg_shell47": {
+					"position": [0, "math.sin(q.anim_time*90+47)", 0]
+				},
+				"egg_shell48": {
+					"position": [0, "math.sin(q.anim_time*90+48)", 0]
+				},
+				"egg_shell49": {
+					"position": [0, "math.sin(q.anim_time*90+49)", 0]
+				},
+				"egg_shell50": {
+					"position": [0, "math.sin(q.anim_time*90+50)", 0]
+				},
+				"egg_shell51": {
+					"position": [0, "math.sin(q.anim_time*90+51)", 0]
+				},
+				"egg_shell52": {
+					"position": [0, "math.sin(q.anim_time*90+52)", 0]
+				},
+				"egg_shell53": {
+					"position": [0, "math.sin(q.anim_time*90+53)", 0]
+				},
+				"egg_shell54": {
+					"position": [0, "math.sin(q.anim_time*90+54)", 0]
+				},
+				"egg_shell55": {
+					"position": [0, "math.sin(q.anim_time*90+55)", 0]
+				},
+				"egg_shell56": {
+					"position": [0, "math.sin(q.anim_time*90+56)", 0]
+				},
+				"egg_shell57": {
+					"position": [0, "math.sin(q.anim_time*90+57)", 0]
+				},
+				"egg_shell58": {
+					"position": [0, "math.sin(q.anim_time*90+58)", 0]
+				},
+				"egg_shell59": {
+					"position": [0, "math.sin(q.anim_time*90+59)", 0]
+				},
+				"egg_shell60": {
+					"position": [0, "math.sin(q.anim_time*90+60)", 0]
+				},
+				"egg_shell61": {
+					"position": [0, "math.sin(q.anim_time*90+61)", 0]
+				},
+				"egg_shell62": {
+					"position": [0, "math.sin(q.anim_time*90+62)", 0]
+				},
+				"egg_shell63": {
+					"position": [0, "math.sin(q.anim_time*90+63)", 0]
+				},
+				"egg_shell64": {
+					"position": [0, "math.sin(q.anim_time*90+64)", 0]
+				},
+				"egg_shell65": {
+					"position": [0, "math.sin(q.anim_time*90+65)", 0]
+				},
+				"egg_shell66": {
+					"position": [0, "math.sin(q.anim_time*90+66)", 0]
+				},
+				"egg_shell67": {
+					"position": [0, "math.sin(q.anim_time*90+67)", 0]
+				},
+				"egg_shell68": {
+					"position": [0, "math.sin(q.anim_time*90+68)", 0]
+				},
+				"egg_shell69": {
+					"position": [0, "math.sin(q.anim_time*90+69)", 0]
+				},
+				"egg_shell70": {
+					"position": [0, "math.sin(q.anim_time*90+70)", 0]
+				},
+				"egg_shell71": {
+					"position": [0, "math.sin(q.anim_time*90+71)", 0]
+				},
+				"egg_shell72": {
+					"position": [0, "math.sin(q.anim_time*90+72)", 0]
+				},
+				"egg_shell73": {
+					"position": [0, "math.sin(q.anim_time*90+73)", 0]
+				},
+				"egg_shell74": {
+					"position": [0, "math.sin(q.anim_time*90+74)", 0]
+				},
+				"egg_shell75": {
+					"position": [0, "math.sin(q.anim_time*90+75)", 0]
+				},
+				"egg_shell76": {
+					"position": [0, "math.sin(q.anim_time*90+76)", 0]
+				},
+				"egg_shell77": {
+					"position": [0, "math.sin(q.anim_time*90+77)", 0]
+				},
+				"egg_shell78": {
+					"position": [0, "math.sin(q.anim_time*90+78)", 0]
+				},
+				"egg_shell79": {
+					"position": [0, "math.sin(q.anim_time*90+79)", 0]
+				},
+				"egg_shell80": {
+					"position": [0, "math.sin(q.anim_time*90+80)", 0]
+				},
+				"egg_shell81": {
+					"position": [0, "math.sin(q.anim_time*90+81)", 0]
+				},
+				"egg_shell82": {
+					"position": [0, "math.sin(q.anim_time*90+82)", 0]
+				},
+				"egg_shell83": {
+					"position": [0, "math.sin(q.anim_time*90+83)", 0]
+				},
+				"egg_shell84": {
+					"position": [0, "math.sin(q.anim_time*90+84)", 0]
+				},
+				"egg_shell85": {
+					"position": [0, "math.sin(q.anim_time*90+85)", 0]
+				},
+				"egg_shell86": {
+					"position": [0, "math.sin(q.anim_time*90+86)", 0]
+				},
+				"egg_shell87": {
+					"position": [0, "math.sin(q.anim_time*90+87)", 0]
+				},
+				"egg_shell88": {
+					"position": [0, "math.sin(q.anim_time*90+88)", 0]
+				},
+				"egg_shell89": {
+					"position": [0, "math.sin(q.anim_time*90+89)", 0]
+				},
+				"egg_shell90": {
+					"position": [0, "math.sin(q.anim_time*90+90)", 0]
+				},
+				"egg_shell91": {
+					"position": [0, "math.sin(q.anim_time*90+91)", 0]
+				},
+				"egg_shell92": {
+					"position": [0, "math.sin(q.anim_time*90+92)", 0]
+				},
+				"egg_shell93": {
+					"position": [0, "math.sin(q.anim_time*90+93)", 0]
+				},
+				"egg_shell94": {
+					"position": [0, "math.sin(q.anim_time*90+94)", 0]
+				},
+				"egg_shell95": {
+					"position": [0, "math.sin(q.anim_time*90+95)", 0]
+				},
+				"egg_shell96": {
+					"position": [0, "math.sin(q.anim_time*90+96)", 0]
+				},
+				"egg_shell97": {
+					"position": [0, "math.sin(q.anim_time*90+97)", 0]
+				},
+				"egg_shell98": {
+					"position": [0, "math.sin(q.anim_time*90+98)", 0]
+				},
+				"egg_shell99": {
+					"position": [0, "math.sin(q.anim_time*90+99)", 0]
+				},
+				"egg_shell100": {
+					"position": [0, "math.sin(q.anim_time*90+100)", 0]
+				},
+				"egg_shell105": {
+					"position": [0, "math.sin(q.anim_time*90+105+1)", 0]
+				},
+				"egg_shell106": {
+					"position": [0, "math.sin(q.anim_time*90+106+1)", 0]
+				},
+				"egg_shell107": {
+					"position": [0, "math.sin(q.anim_time*90+107+1)", 0]
+				},
+				"egg_shell108": {
+					"position": [0, "math.sin(q.anim_time*90+108+1)", 0]
+				},
+				"egg_shell109": {
+					"position": [0, "math.sin(q.anim_time*90+109+1)", 0]
+				},
+				"egg_shell110": {
+					"position": [0, "math.sin(q.anim_time*90+110+1)", 0]
+				},
+				"egg_shell111": {
+					"position": [0, "math.sin(q.anim_time*90+111+1)", 0]
+				},
+				"egg_shell112": {
+					"position": [0, "math.sin(q.anim_time*90+112+1)", 0]
+				},
+				"egg_shell113": {
+					"position": [0, "math.sin(q.anim_time*90+113+1)", 0]
+				},
+				"egg_shell114": {
+					"position": [0, "math.sin(q.anim_time*90+114+1)", 0]
+				},
+				"egg_shell115": {
+					"position": [0, "math.sin(q.anim_time*90+115+1)", 0]
+				},
+				"egg_shell116": {
+					"position": [0, "math.sin(q.anim_time*90+116+1)", 0]
+				},
+				"egg_shell117": {
+					"position": [0, "math.sin(q.anim_time*90+117+1)", 0]
+				},
+				"egg_shell118": {
+					"position": [0, "math.sin(q.anim_time*90+118+1)", 0]
+				},
+				"egg_shell119": {
+					"position": [0, "math.sin(q.anim_time*90+119+1)", 0]
+				},
+				"egg_shell120": {
+					"position": [0, "math.sin(q.anim_time*90+120+1)", 0]
+				},
+				"egg_shell121": {
+					"position": [0, "math.sin(q.anim_time*90+121+1)", 0]
+				},
+				"egg_shell123": {
+					"position": [0, "math.sin(q.anim_time*90+123+1)", 0]
+				},
+				"egg_shell124": {
+					"position": [0, "math.sin(q.anim_time*90+124+1)", 0]
+				},
+				"egg_shell125": {
+					"position": [0, "math.sin(q.anim_time*90+125+1)", 0]
+				},
+				"egg_shell126": {
+					"position": [0, "math.sin(q.anim_time*90+126+1)", 0]
+				},
+				"egg_shell127": {
+					"position": [0, "math.sin(q.anim_time*90+127+1)", 0]
+				},
+				"egg_shell128": {
+					"position": [0, "math.sin(q.anim_time*90+128+1)", 0]
+				},
+				"egg_shell129": {
+					"position": [0, "math.sin(q.anim_time*90+129+1)", 0]
+				},
+				"egg_shell130": {
+					"position": [0, "math.sin(q.anim_time*90+130+1)", 0]
+				},
+				"egg_shell131": {
+					"position": [0, "math.sin(q.anim_time*90+131+1)", 0]
+				},
+				"egg_shell132": {
+					"position": [0, "math.sin(q.anim_time*90+132+1)", 0]
+				},
+				"egg_shell133": {
+					"position": [0, "math.sin(q.anim_time*90+133+1)", 0]
+				},
+				"egg_shell134": {
+					"position": [0, "math.sin(q.anim_time*90+134+1)", 0]
+				},
+				"egg_shell135": {
+					"position": [0, "math.sin(q.anim_time*90+135+1)", 0]
+				},
+				"egg_shell136": {
+					"position": [0, "math.sin(q.anim_time*90+136+1)", 0]
+				},
+				"egg_shell137": {
+					"position": [0, "math.sin(q.anim_time*90+137+1)", 0]
+				},
+				"egg_shell138": {
+					"position": [0, "math.sin(q.anim_time*90+138+1)", 0]
+				},
+				"egg_shell139": {
+					"position": [0, "math.sin(q.anim_time*90+139+1)", 0]
+				},
+				"egg_shell140": {
+					"position": [0, "math.sin(q.anim_time*90+140+1)", 0]
+				},
+				"egg_shell141": {
+					"position": [0, "math.sin(q.anim_time*90+141+1)", 0]
+				},
+				"egg_shell142": {
+					"position": [0, "math.sin(q.anim_time*90+142+1)", 0]
+				},
+				"egg_shell143": {
+					"position": [0, "math.sin(q.anim_time*90+143+1)", 0]
+				},
+				"egg_shell144": {
+					"position": [0, "math.sin(q.anim_time*90+144+1)", 0]
+				},
+				"egg_shell145": {
+					"position": [0, "math.sin(q.anim_time*90+145+1)", 0]
+				},
+				"egg_shell146": {
+					"position": [0, "math.sin(q.anim_time*90+146+1)", 0]
+				},
+				"egg_shell147": {
+					"position": [0, "math.sin(q.anim_time*90+147+1)", 0]
+				},
+				"egg_shell148": {
+					"position": [0, "math.sin(q.anim_time*90+148+1)", 0]
+				},
+				"egg_shell149": {
+					"position": [0, "math.sin(q.anim_time*90+149+1)", 0]
+				},
+				"egg_shell150": {
+					"position": [0, "math.sin(q.anim_time*90+150+1)", 0]
+				},
+				"egg_shell151": {
+					"position": [0, "math.sin(q.anim_time*90+151+1)", 0]
+				},
+				"egg_shell152": {
+					"position": [0, "math.sin(q.anim_time*90+152+1)", 0]
+				},
+				"egg_shell153": {
+					"position": [0, "math.sin(q.anim_time*90+153+1)", 0]
+				},
+				"egg_shell154": {
+					"position": [0, "math.sin(q.anim_time*90+154+1)", 0]
+				},
+				"egg_shell155": {
+					"position": [0, "math.sin(q.anim_time*90+155+1)", 0]
+				},
+				"egg_shell156": {
+					"position": [0, "math.sin(q.anim_time*90+156+1)", 0]
+				},
+				"egg_shell157": {
+					"position": [0, "math.sin(q.anim_time*90+157+1)", 0]
+				},
+				"egg_shell158": {
+					"position": [0, "math.sin(q.anim_time*90+158+1)", 0]
+				},
+				"egg_shell159": {
+					"position": [0, "math.sin(q.anim_time*90+159+1)", 0]
+				},
+				"egg_shell160": {
+					"position": [0, "math.sin(q.anim_time*90+160+1)", 0]
+				},
+				"egg_shell161": {
+					"position": [0, "math.sin(q.anim_time*90+161+1)", 0]
+				},
+				"egg_shell162": {
+					"position": [0, "math.sin(q.anim_time*90+162+1)", 0]
+				},
+				"egg_shell163": {
+					"position": [0, "math.sin(q.anim_time*90+163+1)", 0]
+				},
+				"egg_shell164": {
+					"position": [0, "math.sin(q.anim_time*90+164+1)", 0]
+				},
+				"egg_shell165": {
+					"position": [0, "math.sin(q.anim_time*90+165+1)", 0]
+				},
+				"egg_shell166": {
+					"position": [0, "math.sin(q.anim_time*90+166+1)", 0]
+				},
+				"egg_shell167": {
+					"position": [0, "math.sin(q.anim_time*90+167+1)", 0]
+				},
+				"egg_shell168": {
+					"position": [0, "math.sin(q.anim_time*90+168+1)", 0]
+				},
+				"egg_shell169": {
+					"position": [0, "math.sin(q.anim_time*90+169+1)", 0]
+				},
+				"egg_shell170": {
+					"position": [0, "math.sin(q.anim_time*90+170+1)", 0]
+				},
+				"egg_shell171": {
+					"position": [0, "math.sin(q.anim_time*90+171+1)", 0]
+				},
+				"egg_shell172": {
+					"position": [0, "math.sin(q.anim_time*90+172+1)", 0]
+				},
+				"egg_shell173": {
+					"position": [0, "math.sin(q.anim_time*90+173+1)", 0]
+				},
+				"egg_shell174": {
+					"position": [0, "math.sin(q.anim_time*90+174+1)", 0]
+				},
+				"egg_shell175": {
+					"position": [0, "math.sin(q.anim_time*90+175+1)", 0]
+				},
+				"egg_shell176": {
+					"position": [0, "math.sin(q.anim_time*90+176+1)", 0]
+				},
+				"egg_shell177": {
+					"position": [0, "math.sin(q.anim_time*90+177+1)", 0]
+				},
+				"egg_shell178": {
+					"position": [0, "math.sin(q.anim_time*90+178+1)", 0]
+				},
+				"egg_shell179": {
+					"position": [0, "math.sin(q.anim_time*90+179+1)", 0]
+				},
+				"egg_shell180": {
+					"position": [0, "math.sin(q.anim_time*90+180+1)", 0]
+				},
+				"egg_shell181": {
+					"position": [0, "math.sin(q.anim_time*90+181+1)", 0]
+				},
+				"egg_shell182": {
+					"position": [0, "math.sin(q.anim_time*90+182+1)", 0]
+				},
+				"egg_shell183": {
+					"position": [0, "math.sin(q.anim_time*90+183+1)", 0]
+				},
+				"egg_shell184": {
+					"position": [0, "math.sin(q.anim_time*90+184+1)", 0]
+				},
+				"egg_shell185": {
+					"position": [0, "math.sin(q.anim_time*90+185+1)", 0]
+				},
+				"egg_body": {
+					"position": [0, 0, 0]
+				},
+				"egg_body185": {
+					"position": [0, 0, 5]
+				}
+			}
+		}
+	}
+}

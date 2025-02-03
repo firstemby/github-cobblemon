@@ -1,0 +1,10 @@
+{
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "transformTicks": 0,
+      "poseTypes": ["STAND"],
+      "animations": []
+    }
+  }
+}

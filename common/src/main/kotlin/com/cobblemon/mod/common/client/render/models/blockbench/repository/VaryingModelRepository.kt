@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.cobblemon.mod.common.client.util.exists
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.Vec3dAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
@@ -72,6 +73,7 @@ abstract class VaryingModelRepository<T : PosableModel> {
         GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
+            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
             .registerTypeAdapter(Vec3::class.java, Vec3dAdapter)
             .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
@@ -213,7 +215,7 @@ abstract class VaryingModelRepository<T : PosableModel> {
         Cobblemon.LOGGER.info("Loaded $models $title models.")
     }
 
-    fun reload(resourceManager: ResourceManager) {
+    open fun reload(resourceManager: ResourceManager) {
         Cobblemon.LOGGER.info("Loading $title assets...")
         this.variations.clear()
         this.posers.clear()

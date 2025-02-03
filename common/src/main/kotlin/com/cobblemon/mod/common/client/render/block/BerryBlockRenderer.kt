@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
+import com.cobblemon.mod.common.client.render.layer.CobblemonRenderTypes
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.setPosition
 import com.cobblemon.mod.common.util.math.geometry.Axis
@@ -54,7 +54,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         if (entity.renderState == null) {
             entity.renderState = BerryBlockEntityRenderState()
         }
-        val bf = vertexConsumers.getBuffer(CobblemonRenderLayers.BERRY_LAYER)
+        val bf = vertexConsumers.getBuffer(CobblemonRenderTypes.BERRY_LAYER)
         val renderState = entity.renderState as BerryBlockEntityRenderState
 //        if (renderState.needsRebuild || renderState.vboLightLevel != light) {
             renderToBuffer(entity, matrices, light, overlay, renderState, bf)

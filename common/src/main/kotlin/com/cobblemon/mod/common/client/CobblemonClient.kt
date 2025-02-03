@@ -47,6 +47,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscM
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokeBallModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.appendage.ModelAppendageModelRepository
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
@@ -100,7 +101,8 @@ object CobblemonClient {
         NPCModelRepository,
         FossilModelRepository,
         BlockEntityModelRepository,
-        GenericBedrockEntityModelRepository
+        GenericBedrockEntityModelRepository,
+        ModelAppendageModelRepository
     )
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
@@ -336,6 +338,7 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
+        ModelAppendageModelRepository.reload(resourceManager)
         LOGGER.info("Loaded assets")
     }
 

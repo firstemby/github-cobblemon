@@ -1,0 +1,8 @@
+{
+  "target_model": "cobblemon:charizard.geo",
+  "model": "cobblemon:egg",
+  "target_locator": "head",
+  "scale": [1.0, 1.0, 1.0],
+  "offset": [0.0, 0.0, 0.0],
+  "rotation": [0.0, 0.0, 0.0]
+}

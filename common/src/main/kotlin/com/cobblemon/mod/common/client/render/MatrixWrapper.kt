@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.render
 
 import com.cobblemon.mod.common.util.math.geometry.getOrigin
 import com.cobblemon.mod.common.util.math.geometry.transformPosition
+import com.mojang.blaze3d.vertex.PoseStack
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import org.joml.Matrix4f
 import net.minecraft.world.phys.Vec3
