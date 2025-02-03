@@ -1,0 +1,17 @@
+{
+  "name": "cobblemon.brain_preset.move_to_item_and_eat.name",
+  "description": "cobblemon.brain_preset.move_to_item_and_eat.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": [
+          {
+            "type": "move_to_item_and_eat"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DefendOwnerSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.ItemEntitySensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonAdultSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonGrowableCropSensor
 import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
@@ -35,6 +36,8 @@ object CobblemonSensors {
     val POKEMON_DEFEND_OWNER = register("pokemon_owner_under_attack", ::DefendOwnerSensor)
 
     val NEARBY_GROWABLE_CROPS = register("nearby_growable_crops", ::PokemonGrowableCropSensor)
+
+    val ITEM_SENSOR = register("item_sensor", ::ItemEntitySensor)
 
     fun <E : Entity, U : Sensor<E>> register(id: String, supplier: Supplier<U>): SensorType<U> {
         val sensor = SensorType(supplier)

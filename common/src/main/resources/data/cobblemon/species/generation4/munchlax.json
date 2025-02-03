@@ -14,6 +14,14 @@
     "baby"
   ],
   "aspects": [],
+  "ai": [
+    {
+      "type": "apply_presets",
+      "presets": [
+          "cobblemon:pokemon_move_to_item_and_eat"
+      ]
+    }
+  ],
   "abilities": [
     "pickup",
     "thickfat",
@@ -52,7 +60,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.118
+        "walkSpeed": 0.2
       }
     },
     "resting": {

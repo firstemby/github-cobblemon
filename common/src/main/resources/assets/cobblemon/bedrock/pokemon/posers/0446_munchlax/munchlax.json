@@ -6,7 +6,9 @@
   "rootBone": "munchlax",
   "animations": {
     "cry": "q.bedrock_stateful('munchlax', 'cry')",
-    "recoil": "q.bedrock_stateful('munchlax', 'recoil', q.curve('symmetrical_wide'))"
+    "recoil": "q.bedrock_stateful('munchlax', 'recoil', q.curve('symmetrical_wide'))",
+    "eat": "q.bedrock_stateful('munchlax', 'eat_food', 'endures_primary_animations')",
+    "eat_multiple": "q.bedrock_stateful('munchlax', 'eat_multiple_food', 'endures_primary_animations')"
   },
   "poses": {
     "battle-standing": {

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType.Companion.MOVING_POSES
 import com.cobblemon.mod.common.entity.PoseType.Companion.STATIONARY_POSES
 import com.cobblemon.mod.common.entity.PoseType.Companion.UI_POSES
+import com.cobblemon.mod.common.util.asExpressionLike
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
@@ -34,6 +35,9 @@ class MunchlaxModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val cryAnimation = CryProvider { bedrockStateful("munchlax", "cry") }
 
     override fun registerPoses() {
+        animations["eat"] = "q.bedrock_stateful('munchlax', 'eat_food', 'endures_primary_animations')".asExpressionLike()
+        animations["eat_multiple"] = "q.bedrock_stateful('munchlax', 'eat_multiple_food', 'endures_primary_animations')".asExpressionLike()
+
         val blink = quirk { bedrockStateful("munchlax", "blink") }
         standing = registerPose(
             poseName = "standing",
