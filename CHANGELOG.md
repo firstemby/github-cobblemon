@@ -21,6 +21,8 @@
 
 ### Additions
 - Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
+- Added the Model Appendages system, allowing for resolver-based bedrock model attachments to Pokémon models based on Locators.
+  - View the `egg` examples in `assets/cobblemon/bedrock/appendage` for an example of how to use this system.
 
 ## [1.6.1 (January 26th, 2025)](#1-6-1)
 

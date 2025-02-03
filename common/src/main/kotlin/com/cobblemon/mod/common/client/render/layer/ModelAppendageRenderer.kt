@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
+import org.joml.Vector3f
 
 object ModelAppendageRenderer {
 
@@ -31,11 +32,12 @@ object ModelAppendageRenderer {
     ) where T : PokemonEntity {
         val clientDelegate = livingEntity.delegate as PokemonClientDelegate
         val appendages = ModelAppendageModelRepository.getAppendagesForModelAndTarget(parentModel, locator) ?: return
+        // avoid editing the original context
+        val clonedContext = context.clone()
         appendages.forEach { appendage ->
             val model =
-                ModelAppendageModelRepository.getPoser(appendage.model, clientDelegate)
-            model.context = context
-            model.setupEntityTypeContext(livingEntity)
+                ModelAppendageModelRepository.getPoserNullable(appendage.model, clientDelegate) ?: return
+            model.context = clonedContext
             ModelAppendageModelRepository.variations[appendage.model]?.let { variation ->
                 appendages.forEach { appendage ->
                     model.setLayerContext(
@@ -46,16 +48,21 @@ object ModelAppendageRenderer {
                     poseStack.pushPose()
                     clientDelegate.locatorStates[locator]?.let { bone ->
                         val pos = bone.getOrigin().subtract(livingEntity.position())
-                        poseStack.translate(pos.x, pos.y - 0.6, pos.z)
-                        poseStack.mulPose(bone.matrix)
-//                        newStack.translate(appendage.offset.x(), appendage.offset.y(), appendage.offset.z())
-//                        newStack.mulPose(Axis.XP.rotationDegrees(appendage.rotation.x().toFloat()))
-//                        newStack.mulPose(Axis.YP.rotationDegrees(appendage.rotation.y().toFloat()))
-//                        newStack.mulPose(Axis.ZP.rotationDegrees(appendage.rotation.z().toFloat()))
-//                        newStack.scale(
-//                            appendage.scale.x().toFloat(), appendage.scale.y().toFloat(),
-//                            appendage.scale.z().toFloat()
-//                        )
+                        val scale = Vector3f()
+                        bone.matrix.getScale(scale)
+                        poseStack.scale(scale.x(), scale.y(), scale.z())
+                        poseStack.translate(pos.x, pos.y, pos.z)
+                        poseStack.mulPose(bone.clone().matrix.setTranslation(0.0f, 0.0f, 0.0f))
+                        poseStack.mulPose(Axis.XP.rotationDegrees(180f))
+                        poseStack.translate(0.0, -1.75, 0.0)
+                        poseStack.translate(appendage.offset.x(), appendage.offset.y(), appendage.offset.z())
+                        poseStack.mulPose(Axis.XP.rotationDegrees(appendage.rotation.x().toFloat()))
+                        poseStack.mulPose(Axis.YP.rotationDegrees(appendage.rotation.y().toFloat()))
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(appendage.rotation.z().toFloat()))
+                        poseStack.scale(
+                            appendage.scale.x().toFloat(), appendage.scale.y().toFloat(),
+                            appendage.scale.z().toFloat()
+                        )
                         model.applyAnimations(
                             livingEntity,
                             clientDelegate,
@@ -78,7 +85,7 @@ object ModelAppendageRenderer {
                             clientDelegate,
                             ModelAppendageModelRepository.getLayers(appendage.model, clientDelegate)
                         ) {
-                            model.render(context, poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
+                            model.render(clonedContext, poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
                         }
 
                     }

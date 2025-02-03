@@ -2,6 +2,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench.repository.appe
 
 import com.cobblemon.mod.common.client.render.layer.appendage.ModelAppendage
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.endsWith
@@ -55,6 +56,18 @@ object ModelAppendageModelRepository : VaryingModelRepository<PosableModel>() {
     }
 
     fun getAppendagesForModelAndTarget(model: ResourceLocation, target: String): List<ModelAppendage> {
-        return appendages.entries.filter { it.value.targetModel == model && it.value.targetLocator == target }.map { it.value }
+        return appendages.entries.filter { (it.value.targetModel == model || it.value.targetModel == null) && it.value.targetLocator == target }.map { it.value }
+    }
+
+    fun getPoserNullable(name: ResourceLocation, state: PosableState): PosableModel? {
+        try {
+            val poser = this.variations[name]?.getPoser(state)
+            if (poser != null) {
+                return poser
+            }
+        } catch(e: IllegalStateException) {
+//            e.printStackTrace()
+        }
+        return this.variations[fallback]?.getPoser(state)
     }
 }

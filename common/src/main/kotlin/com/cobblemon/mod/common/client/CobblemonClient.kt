@@ -338,7 +338,6 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
-        ModelAppendageModelRepository.reload(resourceManager)
         LOGGER.info("Loaded assets")
     }
 

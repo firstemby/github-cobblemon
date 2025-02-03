@@ -165,7 +165,7 @@ class PokemonRenderer(
                         0f,
                         0f,
                         entity.age + partialTicks,
-                        entityYaw,
+                        entity.lookAngle.y.toFloat(),
                         entity.lookAngle.x.toFloat(),
                         locatorKey,
                         model.context,

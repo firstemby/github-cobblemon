@@ -80,6 +80,12 @@ class RenderContext {
         this.context.remove(key)
     }
 
+    fun clone(): RenderContext {
+        val newContext = RenderContext()
+        newContext.context.putAll(this.context)
+        return newContext
+    }
+
     /**
      * Represents a key used for accessing values in the context.
      *

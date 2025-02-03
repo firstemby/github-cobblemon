@@ -3,7 +3,9 @@
   "order": 0,
   "variations": [
     {
-      "aspects": [],
+      "aspects": [
+        "shiny"
+      ],
       "poser": "cobblemon:egg",
       "model": "cobblemon:egg.geo",
       "texture": "cobblemon:textures/appendage/egg.png",

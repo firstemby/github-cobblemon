@@ -224,7 +224,7 @@ abstract class VaryingModelRepository<T : PosableModel> {
         registerVariations(resourceManager)
     }
 
-    fun getPoser(name: ResourceLocation, state: PosableState): T {
+    open fun getPoser(name: ResourceLocation, state: PosableState): T {
         try {
             val poser = this.variations[name]?.getPoser(state)
             if (poser != null) {

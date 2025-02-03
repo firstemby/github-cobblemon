@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 
 data class ModelAppendage(
-    @SerializedName("target_model") val targetModel: ResourceLocation,
+    @SerializedName("target_model") val targetModel: ResourceLocation?,
     @SerializedName("model") val model: ResourceLocation,
     @SerializedName("target_locator") val targetLocator: String,
     @SerializedName("scale") val scale: Vec3 = Vec3(1.0, 1.0, 1.0),

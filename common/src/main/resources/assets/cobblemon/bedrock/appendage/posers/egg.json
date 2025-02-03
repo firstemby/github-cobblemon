@@ -3,8 +3,10 @@
     "standing": {
       "poseName": "standing",
       "transformTicks": 0,
-      "poseTypes": ["STAND"],
-      "animations": []
+      "poseTypes": ["STAND", "WALK", "SLEEP", "HOVER", "FLY", "FLOAT", "SWIM", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.bedrock('egg', 'idle')"
+      ]
     }
   }
 }
