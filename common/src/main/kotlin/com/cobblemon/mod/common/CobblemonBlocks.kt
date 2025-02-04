@@ -355,17 +355,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if ((it.getValue(PCBlock.ON) as Boolean) && (it.getValue(PCBlock.PART) == PCBlock.PCPart.TOP)) 10 else 0 }))
 
     @JvmField
-    val STADIUM = create(
-        "stadium_terminal",
-        StadiumBlock(
-            AbstractBlock.Settings.create()
-                .mapColor(MapColor.IRON_GRAY)
-                .sounds(BlockSoundGroup.METAL)
-                .pistonBehavior(PistonBehavior.BLOCK)
-                .strength(2F)
-                .nonOpaque()
-        )
-    )
+    val STADIUM = create("stadium_terminal", StadiumBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F)))
 
     @JvmField
     val LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava()))

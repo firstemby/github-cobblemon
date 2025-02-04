@@ -1,25 +1,21 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
-import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.core.BlockPos
 
-class StadiumBlockEntity(blockPos: BlockPos?, blockState: BlockState?): BlockEntity(CobblemonBlockEntities.STADIUM, blockPos, blockState) {
-    fun getPlayer1Pos(): BlockPos? {
-        return pos.add(5, 0, 10)
+class StadiumBlockEntity(pos: BlockPos, state: BlockState): BlockEntity(CobblemonBlockEntities.STADIUM, pos, state) {
+    fun getPlayer1Pos(): BlockPos {
+        return blockPos.north(10)
     }
-
-    fun getPlayer2Pos(): BlockPos? {
-        return pos.add(5, 0, -10)
+    fun getPlayer2Pos(): BlockPos {
+        return blockPos.south(10)
     }
-
-    fun getPoke1Pos(): BlockPos? {
-        return pos.add(5, 0, 5)
+    fun getPoke1Pos(): BlockPos {
+        return blockPos.north(5)
     }
-
-    fun getPoke2Pos(): BlockPos? {
-        return pos.add(5, 0, -5)
+    fun getPoke2Pos(): BlockPos {
+        return blockPos.south(5)
     }
-
 }
