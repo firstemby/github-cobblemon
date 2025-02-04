@@ -131,6 +131,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             condition = Either.left("!q.entity.is_in_party".asExpression())
             presets.add(cobblemonResource("pokemon_sleeps"))
             presets.add(cobblemonResource("pokemon_breeding"))
+            presets.add(cobblemonResource("fights_melee"))
+            presets.add(cobblemonResource("retaliates"))
         },
         ApplyPresets().apply {
             condition = Either.left("q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land".asExpression())
