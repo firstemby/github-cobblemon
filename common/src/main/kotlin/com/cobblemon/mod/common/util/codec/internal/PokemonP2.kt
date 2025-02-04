@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
@@ -54,7 +54,7 @@ internal data class PokemonP2(
         other.faintedTimer = this.faintedTimer
         other.healTimer = this.healTimer
         this.evolutionController.ifPresent {
-            (other.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(it.create(other))
+            (other.evolutionProxy as? EvolutionProxy)?.overrideController(it.create(other))
         }
         other.customProperties.clear()
         other.customProperties += customProperties

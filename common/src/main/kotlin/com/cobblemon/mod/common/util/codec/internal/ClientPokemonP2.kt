@@ -10,14 +10,13 @@ package com.cobblemon.mod.common.util.codec.internal
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.tera.TeraType
-import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.convertToDisplay
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
@@ -54,7 +53,7 @@ internal data class ClientPokemonP2(
         other.faintedTimer = this.faintedTimer
         other.healTimer = this.healTimer
         this.evolutionController.ifPresent {
-            (other.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(it.create(other))
+            (other.evolutionProxy as? EvolutionProxy)?.overrideController(it.create(other))
         }
         other.shiny = this.shiny
         other.nature = this.nature

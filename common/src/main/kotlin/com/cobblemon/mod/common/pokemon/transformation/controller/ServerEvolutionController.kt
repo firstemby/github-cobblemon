@@ -11,8 +11,7 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionController
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreProcessor
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
@@ -22,126 +21,43 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
+/**
+ * Controller for managing evolutions on the server. These are data objects in the form of [Evolution]s.
+ *
+ * @author Licious
+ * @since April 28th, 2022
+ */
 class ServerEvolutionController(
     private val pokemon: Pokemon,
     evolutionIds: Set<String>,
     progress: Set<TransformationProgress<*>>,
-) : EvolutionController<Evolution, ServerEvolutionController.Intermediate> {
-
-    private val evolutions = hashSetOf<Evolution>()
-    private val progress = progress.toMutableSet()
-    private val evolutionIds = evolutionIds.toMutableSet()
+) : CobblemonServerTransformationController<Evolution, ServerEvolutionController.Intermediate>(pokemon, evolutionIds, progress) {
 
     init {
-        this.progress.removeIf { !it.shouldKeep(this.pokemon) }
-        val pokemonEvolutions = this.pokemon.evolutions.map { it.id }.toSet()
-        this.evolutionIds.removeIf { !pokemonEvolutions.contains(it.lowercase()) }
-        this.evolutionIds.forEach { this.findEvolutionFromId(it)?.let(this::add) }
+        val potentialEvolutions = this.pokemon.evolutions.map { it.id }.toSet()
+        this.transformationIds.removeIf { !potentialEvolutions.contains(it.lowercase()) }
+        this.transformationIds.forEach { this.findEvolutionFromId(it)?.let(this::add) }
     }
 
-    override val size: Int
-        get() = this.evolutions.size
+    private fun findEvolutionFromId(id: String): Evolution? = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
 
-    override fun pokemon(): Pokemon = this.pokemon
+    override fun addPacket(pokemon: Pokemon, evolution: Evolution) = AddEvolutionPacket(pokemon, evolution)
+
+    override fun clearPacket(pokemon: Pokemon) = ClearEvolutionsPacket { pokemon }
+
+    override fun removePacket(pokemon: Pokemon, evolution: Evolution) = RemoveEvolutionPacket(pokemon, evolution)
 
     override fun start(evolution: Evolution) {
         CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
             event = EvolutionAcceptedEvent(this.pokemon, evolution),
             ifSucceeded = {
                 // Evolution will clear the pending stuff after if successful
-                evolution.forceStart(this.pokemon)
+                super.start(evolution)
             }
         )
     }
 
-    override fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
-
-    override fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
-        this.progress.add(progress)
-        return progress
-    }
-
-    override fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
-        val existing = this.progress.firstOrNull(predicate)
-        if (existing == null) {
-            val created = progressFactory()
-            this.progress.add(created)
-            return created
-        }
-        return existing as P
-    }
-
-    override fun add(element: Evolution): Boolean {
-        if (this.evolutions.add(element)) {
-            this.pokemon.notify(AddEvolutionPacket(this.pokemon, element))
-            return true
-        }
-        return false
-    }
-
-    override fun addAll(elements: Collection<Evolution>): Boolean {
-        var result = false
-        elements.forEach { element ->
-            if (this.add(element)) {
-                result = true
-            }
-        }
-        return result
-    }
-
-    override fun clear() {
-        // We don't want to send unnecessary packets
-        val pokemon = this.pokemon
-        if (this.evolutions.isNotEmpty()) {
-            this.evolutions.clear()
-            this.pokemon.notify(ClearEvolutionsPacket { pokemon })
-        }
-        this.progress.clear()
-    }
-
-    override fun contains(element: Evolution) = this.evolutions.contains(element)
-
-    override fun containsAll(elements: Collection<Evolution>) = this.evolutions.containsAll(elements)
-
-    override fun isEmpty() = this.evolutions.isEmpty()
-
-    override fun iterator() = this.evolutions.iterator()
-
-    override fun remove(element: Evolution): Boolean {
-        if (this.evolutions.remove(element)) {
-            this.pokemon.notify(RemoveEvolutionPacket(this.pokemon, element))
-            return true
-        }
-        return false
-    }
-
-    override fun removeAll(elements: Collection<Evolution>): Boolean {
-        var result = false
-        elements.forEach { element ->
-            if (this.remove(element)) {
-                result = true
-            }
-        }
-        return result
-    }
-
-    override fun retainAll(elements: Collection<Evolution>): Boolean  {
-        var result = false
-        val comparedSet = elements.toSet()
-        val iterator = this.iterator()
-        while (iterator.hasNext()) {
-            val element = iterator.next()
-            if (!comparedSet.contains(element)) {
-                iterator.remove()
-                result = true
-            }
-        }
-        return result
-    }
-
-    override fun asIntermediate(): Intermediate = Intermediate(this.evolutions.map { it.id }.toSet(), this.progress)
-
-    private fun findEvolutionFromId(id: String) = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
+    override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
 
     data class Intermediate(
         val evolutionIds: Set<String>,
@@ -157,7 +73,6 @@ class ServerEvolutionController(
     companion object {
         private const val PENDING = "pending"
         private const val PROGRESS = "progress"
-        internal const val ID_KEY = "id"
 
         @JvmStatic
         val CODEC: Codec<Intermediate> = RecordCodecBuilder.create { instance ->

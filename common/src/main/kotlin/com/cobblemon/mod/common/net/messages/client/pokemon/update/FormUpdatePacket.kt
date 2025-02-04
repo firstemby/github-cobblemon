@@ -10,14 +10,15 @@ package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
-        this.value.encode(buffer)
+        buffer.writeString(this.value.name)
     }
 
     override fun set(pokemon: Pokemon, value: FormData) {
@@ -30,12 +31,10 @@ class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePac
         val ID: ResourceLocation = cobblemonResource("packets/form-update")
         fun decode(buffer: RegistryFriendlyByteBuf): FormUpdatePacket {
             val pokemon = decodePokemon(buffer)
-            /*
-            val form = FormData()
-            form.species = pokemon().species
-            form.decode(buffer)
-             */
-            return FormUpdatePacket(pokemon, TemporaryForm())   // TODO fix
+            val formName = buffer.readString()
+            val species = pokemon().species
+            val form = species.forms.find { it.name == formName } ?: species.standardForm
+            return FormUpdatePacket(pokemon, form)
         }
     }
 }

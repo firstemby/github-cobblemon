@@ -29,7 +29,7 @@ class SpawnPokemonPacket(
     private val speciesId: ResourceLocation,
     private val gender: Gender,
     private val shiny: Boolean,
-    private val formName: String,
+    private val formId: String,
     private val aspects: Set<String>,
     private val battleId: UUID?,
     private val phasingTargetId: Int,
@@ -79,7 +79,7 @@ class SpawnPokemonPacket(
         buffer.writeIdentifier(this.speciesId)
         buffer.writeEnumConstant(this.gender)
         buffer.writeBoolean(this.shiny)
-        buffer.writeString(this.formName)
+        buffer.writeString(this.formId)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
         buffer.writeNullable(this.battleId) { pb, value -> pb.writeUUID(value) }
         buffer.writeInt(this.phasingTargetId)
@@ -103,7 +103,7 @@ class SpawnPokemonPacket(
             species = this@SpawnPokemonPacket.speciesId.let { PokemonSpecies.getByIdentifier(it) ?: PokemonSpecies.random() }
             gender = this@SpawnPokemonPacket.gender
             shiny = this@SpawnPokemonPacket.shiny
-            form = this@SpawnPokemonPacket.formName.let { formName -> species.forms.find { it.formOnlyShowdownId() == formName }} ?: species.standardForm
+            form = this@SpawnPokemonPacket.formId.let { formId -> species.forms.find { it.formOnlyShowdownId() == formId }} ?: species.standardForm
             forcedAspects = this@SpawnPokemonPacket.aspects
             nickname = this@SpawnPokemonPacket.nickname
             PokeBalls.getPokeBall(this@SpawnPokemonPacket.caughtBall)?.let { caughtBall = it }

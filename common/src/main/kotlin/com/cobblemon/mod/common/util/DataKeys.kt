@@ -84,6 +84,8 @@ object DataKeys {
     // Evolution stuff
     const val POKEMON_EVOLUTIONS = "Evolutions"
 
+    const val POKEMON_FORMS = "Forms"
+
     const val BENCHED_MOVES = "BenchedMoves"
 
     const val PC_ID = "PCId"

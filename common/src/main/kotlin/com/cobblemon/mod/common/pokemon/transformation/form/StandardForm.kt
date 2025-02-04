@@ -16,13 +16,15 @@ class StandardForm(
     private val _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("temporaryForms")
     private val _temporaryForms: MutableList<TemporaryForm>? = null,
-    @SerializedName("regularForms")
+    @SerializedName("permanentForms")
     private val _permanentForms: MutableList<PermanentForm>? = null,
 ) : PermanentForm(_evolutions = _evolutions, _temporaryForms = _temporaryForms) {
 
+    // needed for gson
     val permanentForms: MutableList<PermanentForm>
         get() = _permanentForms ?: mutableListOf()
 
+    /** The forms this species is a parent of, including its child [TemporaryForm]s and [PermanentForm]s. Excludes itself. */
     override val forms: List<FormData> = this.temporaryForms + this.permanentForms
 
     /** Aggregates child forms and their nested forms. */

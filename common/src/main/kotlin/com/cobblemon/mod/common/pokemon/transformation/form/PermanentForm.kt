@@ -41,11 +41,14 @@ open class PermanentForm (
     val preEvolution: PreEvolution?
         get() = _preEvolution ?: species.preEvolution
 
+    // needed for gson
     val temporaryForms: MutableList<TemporaryForm>
         get() = _temporaryForms ?: mutableListOf()
 
+    /** The potential [TemporaryForm]s this form can transition to. */
     open val forms: List<FormData> get() = temporaryForms
 
+    /** The [TemporaryForm]s and [Evolution]s this form can transform to. */
     open val transformations: List<Transformation> get() = temporaryForms + evolutions
 
     override fun initialize(species: Species, parent: PermanentForm?): FormData {
@@ -67,5 +70,4 @@ open class PermanentForm (
             }
         }
     }
-
 }

@@ -10,6 +10,9 @@ package com.cobblemon.mod.common.util.codec.internal
 
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientFormController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
+import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -20,7 +23,8 @@ internal data class ClientPokemonP3(
     val originalTrainerType: OriginalTrainerType,
     val originalTrainer: Optional<String>,
     val originalTrainerName: Optional<String>,
-    val aspects: Set<String>
+    val aspects: Set<String>,
+    val formController: Optional<ClientFormController.Intermediate>
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -28,6 +32,9 @@ internal data class ClientPokemonP3(
         this.originalTrainer.ifPresent { other.originalTrainer = it }
         this.originalTrainerName.ifPresent { other.originalTrainerName = it }
         other.forcedAspects = this.aspects
+        this.formController.ifPresent {
+            (other.formProxy as? FormProxy)?.overrideController(it.create(other))
+        }
         return other
     }
 
@@ -38,6 +45,7 @@ internal data class ClientPokemonP3(
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(ClientPokemonP3::originalTrainer),
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(ClientPokemonP3::originalTrainerName),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::aspects),
+                ClientFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(ClientPokemonP3::formController)
             ).apply(instance, ::ClientPokemonP3)
         }
 
@@ -45,7 +53,10 @@ internal data class ClientPokemonP3(
             pokemon.originalTrainerType,
             Optional.ofNullable(pokemon.originalTrainer),
             Optional.ofNullable(pokemon.originalTrainerName),
-            pokemon.aspects + pokemon.forcedAspects
+            pokemon.aspects + pokemon.forcedAspects,
+            Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.let {
+                ClientFormController.Intermediate(it.map { it.convertToDisplay(pokemon) }.toSet())
+            }),
         )
     }
 

@@ -6,13 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.pokemon.transformation.evolution
+package com.cobblemon.mod.common.api.pokemon.transformation.proxy
 
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
  * TODO
  */
 fun interface PreProcessor {
-    fun create(pokemon: Pokemon): EvolutionController<*, *>
+    fun create(pokemon: Pokemon): TransformationController<*, *>
 }

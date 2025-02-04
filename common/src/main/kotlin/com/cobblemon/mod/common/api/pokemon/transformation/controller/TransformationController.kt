@@ -6,22 +6,24 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.pokemon.transformation.evolution
+package com.cobblemon.mod.common.api.pokemon.transformation.controller
 
+import com.cobblemon.mod.common.api.pokemon.transformation.TransformationLike
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonClientTransformationController
+import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonServerTransformationController
 
 /**
- * Responsible for holding all available [EvolutionLike]s in the [Pokemon].
+ * Responsible for holding all available [TransformationLike]s in the [Pokemon].
  * Also handles all the networking behind them.
- * For the Cobblemon default implementations see [ClientEvolutionController] & [ServerEvolutionController].
+ * For the Cobblemon default implementations see [CobblemonClientTransformationController] & [CobblemonServerTransformationController].
  *
  * @author Licious
  * @since April 28th, 2022
  */
-interface EvolutionController<T : EvolutionLike, out I : PreProcessor> : MutableSet<T> {
+interface TransformationController<T : TransformationLike, out I : PreProcessor> : MutableSet<T> {
 
     /**
      * Resolves the [Pokemon] attached to this controller.
@@ -31,12 +33,12 @@ interface EvolutionController<T : EvolutionLike, out I : PreProcessor> : Mutable
     fun pokemon(): Pokemon
 
     /**
-     * Starts the given evolution on this controller.
+     * Starts the given transformation on this controller.
      * All the necessary networking will be handled.
      *
-     * @param evolution The [EvolutionLike] starting.
+     * @param transformation The [TransformationLike] starting.
      */
-    fun start(evolution: T)
+    fun start(transformation: T)
 
     /**
      * Returns an immutable collection of [TransformationProgress]es attached to this controller.

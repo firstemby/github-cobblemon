@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.api.events.pokemon.evolution
 
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 
 /**
  * Fired before an evolution is sent to clients.

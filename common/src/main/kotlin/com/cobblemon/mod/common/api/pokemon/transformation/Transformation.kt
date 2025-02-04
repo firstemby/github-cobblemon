@@ -8,18 +8,20 @@
 
 package com.cobblemon.mod.common.api.pokemon.transformation
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
- * Represents a visual and species change in a Pokemon that is triggered by a player-driven or world-driven event.
+ * Represents a transformation of a [Pokemon]. This is the server side counterpart of [TransformationDisplay] and serves as
+ * the driver of the transformation. These are triggered by a player-driven or world-driven event.
  *
  * @author Segfault Guy
  * @since Sept 8th, 2023
  */
-interface Transformation {
+interface Transformation : TransformationLike {
 
     /** The [TransformationTrigger] to attempt this transformation. */
     val trigger: TransformationTrigger
@@ -47,6 +49,7 @@ interface Transformation {
      * @return Whether the [Transformation] was successful.
      */
     fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
+        Cobblemon.LOGGER.error(this.id)
         if (test(pokemon, context)) {
             forceStart(pokemon)
             return true
@@ -60,4 +63,12 @@ interface Transformation {
      * @param pokemon The [Pokemon] being transformed.
      */
     fun forceStart(pokemon: Pokemon) { this.requirements.forEach { it.fulfill(pokemon) } }
+
+    /**
+     * Converts this transformation to its client side representation.
+     *
+     * @param pokemon The [Pokemon] being transformed.
+     * @return The [TransformationDisplay] representing this transformation on the client.
+     */
+    fun convertToDisplay(pokemon: Pokemon): TransformationDisplay
 }

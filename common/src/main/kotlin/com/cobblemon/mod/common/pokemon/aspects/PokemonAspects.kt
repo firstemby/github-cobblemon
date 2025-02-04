@@ -9,10 +9,13 @@
 package com.cobblemon.mod.common.pokemon.aspects
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
 import com.cobblemon.mod.common.api.pokemon.aspect.SingleConditionalAspectProvider
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 
 val SHINY_ASPECT = object : SingleConditionalAspectProvider {
     override val aspect = "shiny"
@@ -31,4 +34,16 @@ val GENDER_ASPECT = object : AspectProvider {
 
     override fun provide(pokemon: Pokemon) = getAspectsForGender(pokemon.gender)
     override fun provide(properties: PokemonProperties) = properties.gender?.let { getAspectsForGender(it) } ?: emptySet()
+}
+
+/** [AspectProvider] for providing the aspects associated with a [Pokemon]'s active [FormData]. */
+val FORM_ASPECTS = object : AspectProvider {
+    override fun provide(pokemon: Pokemon): Set<String> = pokemon.form.aspects.toSet()
+
+    override fun provide(properties: PokemonProperties): Set<String> {
+        val formName = properties.form ?: return emptySet()
+        val speciesId = properties.species ?: return emptySet()
+        val form = PokemonSpecies.getByIdentifier(speciesId.asIdentifierDefaultingNamespace())?.getFormByName(formName) // TODO check by ID
+        return form?.aspects?.toSet() ?: emptySet()
+    }
 }

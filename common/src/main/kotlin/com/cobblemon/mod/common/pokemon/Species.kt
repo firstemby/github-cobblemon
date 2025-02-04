@@ -112,6 +112,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var weight = 1F
         private set
 
+    // TODO change form serialization/deserialization so that forms are under the same field
+
     var permanentForms = mutableListOf<PermanentForm>()
         private set
 
@@ -126,7 +128,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         ).initialize(this) as StandardForm
     }
 
-    val forms: Collection<FormData> get() = permanentForms + temporaryForms
+    /** Collection of all the potential forms this species can take, including its base [StandardForm]. */
+    val forms: Collection<FormData> get() = permanentForms + temporaryForms + standardForm
 
     val transformations: Collection<Transformation> get() = evolutions + temporaryForms
 

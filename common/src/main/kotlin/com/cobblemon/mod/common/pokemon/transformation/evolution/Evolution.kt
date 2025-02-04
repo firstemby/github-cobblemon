@@ -16,13 +16,12 @@ import com.cobblemon.mod.common.advancement.criterion.EvolvePokemonContext
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
+import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionDisplayEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionTestedEvent
 import com.cobblemon.mod.common.api.moves.BenchedMove
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionLike
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
@@ -57,7 +56,7 @@ class Evolution(
     var optional: Boolean = true,
     /** The [MoveTemplate]s that will be offered to be learnt upon evolving. */
     val learnableMoves: Set<MoveTemplate> = setOf()
-) : EvolutionLike, Transformation {
+) : Transformation {
 
     override fun test(pokemon: Pokemon, context: TriggerContext?): Boolean {
         val result = super.test(pokemon, context)
@@ -181,4 +180,12 @@ class Evolution(
         CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))
     }
 
+    override fun convertToDisplay(pokemon: Pokemon): EvolutionDisplay {
+        val result = pokemon.clone()
+        this.result.apply(result)
+        val expectedDisplay = EvolutionDisplay(this.id, result)
+        val event = EvolutionDisplayEvent(result, expectedDisplay, this)
+        CobblemonEvents.EVOLUTION_DISPLAY.post(event)
+        return event.display
+    }
 }

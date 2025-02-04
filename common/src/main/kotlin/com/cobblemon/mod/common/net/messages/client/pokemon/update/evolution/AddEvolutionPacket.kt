@@ -8,14 +8,11 @@
 
 package com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution
 
-import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionDisplayEvent
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.SingleUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionDisplay
+import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.*
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -40,15 +37,6 @@ class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : Sing
 
         fun decode(buffer: RegistryFriendlyByteBuf) = AddEvolutionPacket(decodePokemon(buffer), decodeDisplay(buffer))
 
-        internal fun Evolution.convertToDisplay(pokemon: Pokemon): EvolutionDisplay {
-            val result = pokemon.clone()
-            this.result.apply(result)
-            val expectedDisplay = CobblemonEvolutionDisplay(this.id, result)
-            val event = EvolutionDisplayEvent(result, expectedDisplay, this)
-            CobblemonEvents.EVOLUTION_DISPLAY.post(event)
-            return event.display
-        }
-
         internal fun EvolutionDisplay.encode(buffer: RegistryFriendlyByteBuf) {
             buffer.writeString(this.id)
             buffer.writeIdentifier(this.species.resourceIdentifier)
@@ -61,7 +49,7 @@ class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : Sing
             val species = PokemonSpecies.getByIdentifier(speciesIdentifier)
                 ?: throw IllegalArgumentException("Cannot resolve species from $speciesIdentifier")
             val aspects = buffer.readList(ByteBuf::readString).toSet()
-            return CobblemonEvolutionDisplay(id, species, aspects)
+            return EvolutionDisplay(id, species, aspects)
         }
     }
 }

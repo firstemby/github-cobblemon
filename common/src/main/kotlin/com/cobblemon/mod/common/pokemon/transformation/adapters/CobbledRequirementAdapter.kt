@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.adapters
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.transformation.adapters.RequirementAdapter
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.pokemon.transformation.requirements.*

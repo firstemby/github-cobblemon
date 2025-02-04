@@ -6,22 +6,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.pokemon.transformation.evolution
-
-import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+package com.cobblemon.mod.common.api.pokemon.transformation
 
 /**
- * Represents the base of an evolution.
- * It can either be the full data container present on the server side [Evolution].
- * Or the client side representation for display [EvolutionDisplay].
+ * Represents the base of a transformation.
+ * It can either be the full data container present on the server side [Transformation].
+ * Or the client side representation for display [TransformationDisplay].
  *
  * @author Licious
  * @since April 28th, 2022
  */
-interface EvolutionLike {
+interface TransformationLike {
 
     /**
-     * The unique id of the evolution.
+     * The unique id of the transformation.
      * It should be human-readable, I.E pikachu_level
      */
     val id: String

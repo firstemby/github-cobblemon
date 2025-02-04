@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon.transformation.progress
 
-import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
 import com.cobblemon.mod.common.pokemon.transformation.progress.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
@@ -19,7 +18,15 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import kotlin.jvm.Throws
 
+/**
+ * Registry of [TransformationProgressType]s.
+ *
+ * @author Licious
+ * @since July 6th, 2024
+ */
 object TransformationProgressTypes {
+
+    private const val ID_KEY = "id"
 
     private val REGISTRY: Registry<TransformationProgressType<*>> = MappedRegistry(
         ResourceKey.createRegistryKey(cobblemonResource("transformation_progress")), Lifecycle.stable()
@@ -37,7 +44,7 @@ object TransformationProgressTypes {
     val USE_MOVE = this.registerType(UseMoveTransformationProgress.ID, TransformationProgressType(UseMoveTransformationProgress.CODEC))
 
     /**
-     * Registers an evolution progress.
+     * Registers a transformation progress.
      *
      * @param T The type of the [TransformationProgress].
      * @param id The [ResourceLocation].
@@ -58,9 +65,8 @@ object TransformationProgressTypes {
      * @return The generated [Codec] of [TransformationProgress].
      */
     fun codec(): Codec<TransformationProgress<*>> = REGISTRY.byNameCodec().dispatch(
-        ServerEvolutionController.ID_KEY,
+        ID_KEY,
         { it.type() },
         { it.codec }
     )
-
 }

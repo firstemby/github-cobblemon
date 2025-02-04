@@ -164,6 +164,9 @@ import com.cobblemon.mod.common.net.serverhandling.trade.UpdateTradeOfferHandler
 import com.cobblemon.mod.common.net.messages.server.battle.*
 import com.cobblemon.mod.common.net.serverhandling.battle.*
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.AddFormPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.ClearFormsPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.RemoveFormPacket
 import com.cobblemon.mod.common.net.messages.client.trade.*
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
@@ -446,6 +449,11 @@ object CobblemonNetwork {
 
         // NPC packets
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
+
+        // Form packets
+        list.add(PacketRegisterInfo(AddFormPacket.ID, AddFormPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(ClearFormsPacket.ID, ClearFormsPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(RemoveFormPacket.ID, RemoveFormPacket::decode, PokemonUpdatePacketHandler()))
 
         return list
     }

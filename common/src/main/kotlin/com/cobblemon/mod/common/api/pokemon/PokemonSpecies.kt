@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.pokemon
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.AbilityTemplate
+import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.ai.SleepDepth
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
@@ -28,7 +29,6 @@ import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolutio
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
-import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -41,6 +41,7 @@ import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPack
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
+import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.transformation.adapters.*
@@ -83,7 +84,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(AbilityPool::class.java, AbilityPoolAdapter)
         .registerTypeAdapter(PreEvolution::class.java, CobblemonPreEvolutionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
+        //.registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
@@ -229,8 +230,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         }
         val genderRatio = if (this.gender == null)
             mapOf(
-                "maleRatio" to (form.maleRatio),
-                "femaleRation" to (1F - (form.maleRatio))
+                "M" to (form.maleRatio),
+                "F" to (1F - (form.maleRatio))
             ) else null
         val baseStats = Stats.PERMANENT.associateBy({ it.showdownId }, { form.baseStats[it] ?: 1 })
         val heightm = form.height / 10
@@ -238,21 +239,48 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         // This is ugly, but we already have it hardcoded in the mod anyway
         val maxHP = if (this.num == 292) 1 else null
         val cannotDynamax = form.dynamaxBlocked
+        val abilities = mapOf(
+            "0" to form.abilities.filter { it is CommonAbility }.firstOrNull()?.template?.name,
+            "1" to form.abilities.filter { it is CommonAbility }.lastOrNull()?.template?.name,
+            "H" to form.abilities.find { it is HiddenAbility }?.template?.name
+        )
+        //
+        val baseSpecies = if (form !is StandardForm) form.species.standardForm.showdownName() else null
+        val forme = if (form !is StandardForm) form.name else null
+
+        /**
+         * The following fields are optional and currently omitted
+         *
+         * cosmeticFormes   (not needed, we have species features)
+         * addedType        (tertiary type [by name or showdownid] added by moves or abilities)
+         * tier             (smogon tryhard bs)
+         * doublesTier      (smogon tryhard bs)
+         * natDexTier       (smogon tryhard bs)
+         * evoType          (the evolution method used to evolve from 'prevo'; trade', 'useItem', 'levelMove', 'levelExtra', 'levelFriendship', 'levelHold', 'other')
+         * evoMove          (the move [by name or showdownid] used to evolve from 'prevo')
+         * evoLevel         (the minimum level required to evolve from 'prevo')
+         * canHatch         (flag for baby pokemon)
+         * color            (color, value is arbitrary)
+         * tags             (flags for filtering pokemon; 'Mega', 'Mythical', 'Sub-Legendary', 'Restricted Legendary', 'Paradox')
+         * unreleasedHidden (whether this pokemon has an unreleased hidden ability)
+         * maleOnlyHidden   (whether it is only possible to get the hidden ability on a male pokemon)
+         * gmaxUnreleased   (whether this pokemon has an unreleased gmax form)
+         * pokemonGoData    (no one cares)
+         */
     }
 
     /**
      * The representation of a [PermanentForm] in the context of Showdown.
      *
-     * @param form The [PermanentForm] being converted into a species (Showdown considers them species).
+     * @param form The [PermanentForm] being converted into a species.
      */
     internal open class ShowdownPermanentForm(form: PermanentForm) : ShowdownSpecies(form) {
-        val forme = if (form !is StandardForm) form.name else null
-        val baseSpecies = if (form !is StandardForm) form.species.standardForm.showdownName() else null
-        val preevo = form.preEvolution?.form?.showdownName()
+        // species this form evolves from
+        val prevo = form.preEvolution?.form?.showdownName()
         // For the context of battles the content here doesn't matter whatsoever and due to how PokemonProperties work we can't guarantee an actual specific species is defined.
-        val evos = if (form.evolutions.isEmpty()) emptyList() else arrayListOf("")
+        val evos = form.evolutions.map { "" }
+        // not fully evolved
         val nfe = this.evos.isNotEmpty()
-        val canGigantamax = form.temporaryForms.firstOrNull { it.gigantamaxMove != null }?.gigantamaxMove
     }
 
     /**
@@ -261,34 +289,33 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param form The [StandardForm] being converted into a species.
      */
     internal class ShowdownStandardForm(form: StandardForm) : ShowdownPermanentForm(form) {
+        // list of all forms descending from this base species
         val otherFormes = form.flattenForms().map { it.showdownName() }
+        // list of forms [by name or showdownid] in the order they appear in game [union of baseSpecies, otherFormes, and cosmeticFormes] with the exception of ending with 'Gmax' forms
         val formeOrder = if (this.otherFormes.isNotEmpty()) arrayListOf(this.name, *this.otherFormes.toTypedArray()) else null
     }
 
     /**
      * The representation of a [TemporaryForm] in the context of Showdown.
      *
-     * @param form The [TemporaryForm] being converted into a species (Showdown considers them species).
-     * @param baseForm The [PermanentForm] that transitions into this [TemporaryForm].
+     * @param form The [TemporaryForm] being converted into a species.
      */
     internal class ShowdownTemporaryForm(form: TemporaryForm) : ShowdownSpecies(form) {
-        val forme = form.name
-        val baseSpecies = form.species.standardForm.showdownName()
-        // forms this form can change from during a battle
+        // form change can occur during a battle
         val battleOnly = if (form.battleOnly) form.showdownParentForm() else null
-        // forms this form can change from outside of battle (mutually exclusive with above)
+        // form change can occur outside of battle (mutually exclusive with above)
         val changesFrom = if (!form.battleOnly) form.showdownParentForm() else null
     }
 
     /** Accommodate for Showdown bullshit. */
-    private fun TemporaryForm.showdownParentForm(): Any? {
-        // megas and primal don't use battleOnly because... fuck you?
-        if (this.battleOnly && this.labels.any { it == CobblemonPokemonLabels.MEGA || it == CobblemonPokemonLabels.PRIMAL })
-            return null
-        // Necrozma-Ultra and Zygarde-Complete are the only forms where parent form != the forms it can change from
-        else if (this.parentOverrides.isNotEmpty())
-            return this.species.standardForm.flattenForms().filter { parentOverrides.contains(it.showdownId()) }.map { it.showdownName() }
+    private fun TemporaryForm.showdownParentForm(): Any {
+        if (this.parentOverrides.isNotEmpty())
+            return this.species.standardForm.flattenForms().filter {
+                parentOverrides.contains(it.showdownId())
+            }.map {
+                it.showdownName()
+            }
         else
-            return parentForm?.showdownName()
+            return parentForm.showdownName()
     }
 }

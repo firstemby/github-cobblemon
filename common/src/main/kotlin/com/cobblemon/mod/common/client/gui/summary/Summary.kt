@@ -80,6 +80,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         const val PARTY = 0
         const val MOVE_SWAP = 1
         const val EVOLVE = 2
+        const val FORM = 3
 
         // Resources
         private val baseResource = cobblemonResource("textures/gui/summary/summary_base.png")
@@ -91,6 +92,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private val tabIconInfo = cobblemonResource("textures/gui/summary/summary_tab_icon_info.png")
         private val tabIconMoves = cobblemonResource("textures/gui/summary/summary_tab_icon_moves.png")
         private val tabIconStats = cobblemonResource("textures/gui/summary/summary_tab_icon_stats.png")
+        private val formButtonResource = cobblemonResource("textures/gui/summary/summary_form_test_button.png")
         val iconShinyResource = cobblemonResource("textures/gui/summary/icon_shiny.png")
 
         /**
@@ -162,6 +164,20 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
+                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() },
+                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() }
+            )
+        )
+
+        // Form Button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 4F,
+                buttonY = y + 30F,
+                buttonWidth = 10,
+                buttonHeight = 10,
+                clickAction = {},
+                resource = formButtonResource,
                 renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() },
                 clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() }
             )
@@ -398,6 +414,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                         pokemon = selectedPokemon
                 )
             }
+
+            FORM -> {}
         }
         val element = sideScreen
         if (element is Renderable && element is NarratableEntry) {
@@ -598,7 +616,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
      */
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE || sideScreenIndex == FORM) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }

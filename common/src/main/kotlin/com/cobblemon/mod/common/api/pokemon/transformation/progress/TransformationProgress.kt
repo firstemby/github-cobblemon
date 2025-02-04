@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.pokemon.transformation.progress
 
 import com.cobblemon.mod.common.api.data.Identifiable
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionController
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
@@ -45,7 +45,7 @@ interface TransformationProgress<T> : Identifiable {
     fun reset()
 
     /**
-     * Used to decide if the given progress should be kept in the [pokemon]s [EvolutionController].
+     * Used to decide if the given progress should be kept in the [pokemon]s [TransformationController].
      *
      * @param pokemon The [Pokemon] being queried.
      * @return True if the progress is still required otherwise false.

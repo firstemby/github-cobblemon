@@ -8,9 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokemon.feature
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
 import com.cobblemon.mod.common.api.pokemon.aspect.FeatureAspectProvider
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.client.gui.summary.featurerenderers.SummarySpeciesFeatureRenderer
@@ -82,26 +80,21 @@ open class ChoiceSpeciesFeatureProvider(
         if (!matches(aspect)) return null
         val head = aspectFormat.substringBefore("{{choice}}")
         val tail = aspectFormat.substringAfter("{{choice}}").takeIf { it.isNotBlank() }
-        Cobblemon.LOGGER.error("PARSE HEAD: " + head + " / TAIL: " + tail)
 
         var value = aspect.substringAfter(head)
-        Cobblemon.LOGGER.error("val1: " + value)
         tail?.let { value = value.substringBefore(it) }
-        Cobblemon.LOGGER.error("val2: " + value)
-        return value// aspect.substringAfter(head).also { decap -> tail?.let { tail -> decap.substringBefore(tail) } }
+        return value
     }
 
     override fun matches(aspect: String): Boolean = this.isAspect && this.getAllAspects().contains(aspect)
 
     override fun from(aspect: String): SpeciesFeature<*>? {
         val value = parseValue(aspect)
-        Cobblemon.LOGGER.error("PARSE VALUE: " + value)
         return if (value != null && choices.contains(value)) this.fromString(value) else null
     }
 
     override fun set(pokemon: Pokemon, aspect: String) {
         val value = parseValue(aspect)
-        Cobblemon.LOGGER.error("PARSE VALUE: " + value)
         if (value != null && choices.contains(value)) this.get(pokemon)?.value = value
     }
 
@@ -153,7 +146,6 @@ open class ChoiceSpeciesFeatureProvider(
     override fun provide(pokemon: Pokemon): Set<String> {
         return if (isAspect) {
             get(pokemon)?.let {
-                Cobblemon.LOGGER.error("provided aspect: " + getAspect(it))
                 setOf(getAspect(it))
             } ?: emptySet()
         } else {
@@ -165,7 +157,6 @@ open class ChoiceSpeciesFeatureProvider(
         return if (isAspect) {
             val feature = properties.customProperties.filterIsInstance<StringSpeciesFeature>().find { it.name == keys.first() }
             if (feature != null) {
-                Cobblemon.LOGGER.error("provided aspect: " + getAspect(feature))
                 setOf(getAspect(feature))
             } else {
                 emptySet()

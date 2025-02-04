@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
+import com.cobblemon.mod.common.pokemon.aspects.FORM_ASPECTS
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.util.*
@@ -103,6 +104,8 @@ abstract class FormData(
     @SerializedName("lightingData")
     private var _lightingData: LightingData? = null
 ) : Decodable, Encodable, ShowdownIdentifiable {
+
+    /** The name of this form. This is unique among forms belonging to the same [Species]. */
     @SerializedName("name")
     var name: String = name
         private set
@@ -153,6 +156,7 @@ abstract class FormData(
     val drops: DropTable
         get() = _drops ?: species.drops
 
+    /** The aspects applied by this form. For application, see [FORM_ASPECTS]. */
     var aspects = mutableListOf<String>()
 
     val behaviour = FormPokemonBehaviour()
@@ -190,13 +194,6 @@ abstract class FormData(
 
     @delegate:Transient
     val species: Species by lazy { speciesInitializer }
-
-    /*
-    /** The [SpeciesFeatures] */
-    @delegate:Transient
-    val features: Collection<SpeciesFeature<*>> by lazy { featureInitializer }
-
-     */
 
     @Transient
     protected open var parentFormInitializer: PermanentForm? = null
@@ -275,7 +272,7 @@ abstract class FormData(
                 pb.writeString(ability.template.name)
             }
         }
-        //TODO encode/decode Transformation properties of TemporaryForms
+        // Transformation properties of TemporaryForms are only relevant to the server and are not synced with the client
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -315,25 +312,32 @@ abstract class FormData(
     }
 
     /**
-     * The literal Showdown ID of this [formOnlyShowdownId] appended to [Species.showdownId].
-     * For example Alolan Vulpix becomes 'vulpixalola'
-     *
-     * @return The literal Showdown ID of this species and form.
-     */
-    override fun showdownId(): String = this.parentForm?.let { parent -> parent.showdownId() + this.formOnlyShowdownId() } ?: this.species.showdownId()
-
-    /**
-     * The literal Showdown ID of this form [name].
+     * The literal Showdown ID of this form's [name].
      * This will be a lowercase version of the [name] with all the non-alphanumeric characters removed.
-     * For example Alolan Vulpix becomes 'alola'
+     * For example Vulpix-Alola becomes 'alola'
+     *
+     * NOTE: this identifier is used for serializing/deserializing the form property of [PokemonProperties],
+     * and should be used for uniquely identifying forms of the SAME species.
      *
      * @return The literal Showdown ID of this form only.
      */
     fun formOnlyShowdownId(): String = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
 
     /**
+     * The literal Showdown ID of this [formOnlyShowdownId] appended to [Species.showdownId].
+     * For example Vulpix-Alola becomes 'vulpixalola'
+     *
+     * NOTE: this identifier should be used for uniquely identifying forms of DIFFERENT species.
+     *
+     * @return The literal Showdown ID of this species and form.
+     */
+    override fun showdownId(): String = this.parentForm?.let { parent -> parent.showdownId() + this.formOnlyShowdownId() } ?: this.species.showdownId()
+
+    /**
      * The Showdown name of this form appended to [Species.showdownName].
      * For example form 'Gmax' of parent form 'Low-Key' of species 'Toxtricity' becomes 'Toxtricity-Low-Key-Gmax'.
+     *
+     * NOTE: [StandardForm]s do not have a valid form name in Showdown and instead default to the species name.
      *
      * @return The Showdown name of this species and form.
      */

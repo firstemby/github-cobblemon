@@ -37,11 +37,9 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
-import com.cobblemon.mod.common.api.pokemon.aspect.FeatureAspectProvider
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionController
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionDisplay
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.EvolutionProxy
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
@@ -55,6 +53,7 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
@@ -91,9 +90,7 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.PokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.evolution.CobblemonEvolutionProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
 import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
 import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
@@ -103,6 +100,8 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
@@ -179,6 +178,8 @@ open class Pokemon : ShowdownIdentifiable {
             }
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
+            // Reset form
+            this.form = value.standardForm
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
@@ -186,7 +187,6 @@ open class Pokemon : ShowdownIdentifiable {
                 evolutionProxy.current().clear()
             }
             updateAspects()
-            updateForm()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
@@ -195,16 +195,21 @@ open class Pokemon : ShowdownIdentifiable {
 
     var form: FormData = species.standardForm
         set(value) {
+            if (value == field)
+                return
+            else if (!this.isValidForm(value))
+                throw IllegalArgumentException("Cannot set a form that doesn't belong to the species")
+
             val old = field
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
-            this.updateFeatures(value)
             field = value
             this.sanitizeFormChangeMoves(old)
             // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
             this.evolutionProxy.current().clear()
             findAndLearnFormChangeMoves()
+            updateAspects()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
@@ -506,9 +511,6 @@ open class Pokemon : ShowdownIdentifiable {
         private set(value) {
             if (field != value) {
                 field = value
-                if (!isClient) {
-                    updateForm()
-                }
                 _aspects.emit(value)
             }
         }
@@ -517,24 +519,42 @@ open class Pokemon : ShowdownIdentifiable {
     internal var isClient = false
     val storeCoordinates = SettableObservable<StoreCoordinates<*>?>(null)
 
+    val preEvolution: PreEvolution? get() {
+        val form = this.form
+        return if (form is PermanentForm) form.preEvolution else this.species.preEvolution
+    }
+    // TODO Temporary Form should give prevo of parent
+
     // We want non-optional evolutions to trigger first to avoid unnecessary packets and any cost associate with an optional one that would just be lost
     val evolutions: Iterable<Evolution> get() {
         val form = this.form
         return if (form is PermanentForm) form.evolutions.sortedBy { evolution -> evolution.optional } else this.species.evolutions
     }
+    // TODO Temporary Form should give evolutions of parent
+
+    val changeableForms: Iterable<TemporaryForm> get() {
+        val form = this.form
+        return if (form is PermanentForm) form.forms.filterIsInstance<TemporaryForm>().sortedBy { form -> form.toggleable } else this.species.temporaryForms
+    }
+    // TODO Temporary Form should be able to transition to adjacent forms (i.e. rotom wash -> heat)
+
+    /** [Evolution]s that have not yet fulfilled their [TransformationRequirement]s nor been unlocked by a [TransformationTrigger]. */
     val lockedEvolutions: Iterable<Evolution>
         get() = evolutions.filter { it !in evolutionProxy.current() }
 
-    val preEvolution: PreEvolution? get() {
-        val form = this.form
-        return if (form is PermanentForm) form.preEvolution else this.species.preEvolution
-    }
+    /** [TemporaryForm]s that have not yet fulfilled their [TransformationRequirement]s nor been unlocked by a [TransformationTrigger]. */
+    val lockedForms: Iterable<TemporaryForm>
+        get() = changeableForms.filter { it !in formProxy.current() }
 
     /**
-     * Provides the sided [EvolutionController]s, these operations can be done safely with a simple side check.
-     * This can be done beforehand or using [EvolutionProxy.isClient].
+     * Provides the sided [TransformationController]s for managing [Evolution]s. These operations can be done safely with a simple side check.
+     * This can be done beforehand or using [TransformationProxy.isClient].
      */
-    var evolutionProxy: EvolutionProxy<EvolutionDisplay, Evolution, ClientEvolutionController.Intermediate, ServerEvolutionController.Intermediate> = CobblemonEvolutionProxy(this.self())
+    var evolutionProxy: EvolutionProxy = EvolutionProxy(this.self())
+        private set
+
+    /** Provides the sided [TransformationController]s for managing [TemporaryForm]s. */
+    var formProxy: FormProxy = FormProxy(this.self())
         private set
 
     val customProperties = mutableListOf<CustomPokemonProperty>()
@@ -547,7 +567,8 @@ open class Pokemon : ShowdownIdentifiable {
         CompoundTag()
         internal set
 
-    val transformations: Iterable<Transformation> get() = lockedEvolutions
+    /** Default pool of [Transformation]s that [TransformationTrigger]s query.  */
+    val transformations: Iterable<Transformation> get() = lockedEvolutions + lockedForms
 
     /**
      * The [ItemStack] this Pokémon is holding.
@@ -1032,7 +1053,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.caughtBall = other.caughtBall
         this.faintedTimer = other.faintedTimer
         this.healTimer = other.healTimer
-        (this.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(other.evolutionProxy.current().asIntermediate().create(this))
+        this.evolutionProxy.overrideController(other.evolutionProxy.current().asIntermediate().create(this))
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
@@ -1047,6 +1068,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
+        this.formProxy.overrideController(other.formProxy.current().asIntermediate().create(this))
         this.refreshOriginalTrainer()
         this.initialize()
         return this
@@ -1214,44 +1236,6 @@ open class Pokemon : ShowdownIdentifiable {
             aspects = AspectProvider.providers.flatMap { it.provide(this) }.toSet() + forcedAspects
         } else {
             aspects = forcedAspects
-        }
-    }
-
-    /** Configures [SpeciesFeature]s to provide the aspects needed for [newForm].  */
-    fun updateFeatures(newForm: FormData) {
-        if (!this.species.forms.contains(newForm) || this.form === newForm) return;
-
-        val presentForm = this.form
-        val formProviders = SpeciesFeatures.getFeaturesFor(this.species)
-            .filterIsInstance<FeatureAspectProvider>()
-            .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
-
-        // Features used for the present form
-        val presentProviders = presentForm.aspects.mapNotNull { aspect -> formProviders.find { provider -> (provider as FeatureAspectProvider).matches(aspect) } }
-        val presentFeatures = presentProviders.mapNotNull { provider -> provider.get(this) }
-
-        // Features needed for the new form
-        val newFeatures = newForm.aspects.map { aspect ->
-            val provider = formProviders.find { provider -> (provider as FeatureAspectProvider).matches(aspect) } ?: return
-            (provider as FeatureAspectProvider).from(aspect) ?: return
-        }
-
-        // Commit feature changes if no issue
-        presentFeatures.forEach { feature -> features.remove(feature) }
-        newFeatures.forEach { feature ->
-            features.removeIf { it.name == feature.name }   // just overwrite existing features
-            features.add(feature)
-        }
-
-        // a bit redundant since form (and thus updateFeatures) is updated on aspect update, but necessary for visual changes when setting form property
-        this.updateAspects()
-    }
-
-    fun updateForm() {
-        val newForm = species.getForm(aspects)
-        if (form != newForm) {
-            // Form updated!
-            form = newForm
         }
     }
 
@@ -1623,6 +1607,8 @@ open class Pokemon : ShowdownIdentifiable {
      */
     fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: TriggerContext? = null) =
         transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
+
+    private fun isValidForm(form: FormData) = this.species.forms.contains(form)
 
     private fun findAndLearnFormChangeMoves() {
         this.form.moves.formChangeMoves.forEach { move ->
