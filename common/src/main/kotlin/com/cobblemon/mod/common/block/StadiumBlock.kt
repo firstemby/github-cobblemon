@@ -11,41 +11,45 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.entity.StadiumBlockEntity
-import net.minecraft.block.BlockState
-import net.minecraft.block.BlockWithEntity
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.hit.BlockHitResult
-import net.minecraft.util.math.BlockPos
-import net.minecraft.world.World
+import com.mojang.serialization.MapCodec
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionResult
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.state.BlockBehaviour
+import net.minecraft.world.phys.BlockHitResult
 
-class StadiumBlock(properties: Settings): BlockWithEntity(properties) {
-    override fun createBlockEntity(blockPos: BlockPos?, blockState: BlockState?): BlockEntity = StadiumBlockEntity(blockPos, blockState)
+class StadiumBlock(properties: BlockBehaviour.Properties): BaseEntityBlock(properties) {
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
+        return StadiumBlockEntity(pos, state)
+    }
 
+    override fun codec(): MapCodec<out BaseEntityBlock> {
+        return DisplayCaseBlock.CODEC
+    }
 
-    @Deprecated("Deprecated in Java")
-    override fun onUse(
+    override fun useWithoutItem(
         blockState: BlockState,
-        world: World,
+        world: Level,
         blockPos: BlockPos,
-        player: PlayerEntity,
-        interactionHand: Hand,
+        player: Player,
         blockHitResult: BlockHitResult
-    ): ActionResult {
-        if (player !is ServerPlayerEntity) return ActionResult.SUCCESS
+    ): InteractionResult {
+        if (player !is ServerPlayer) return InteractionResult.SUCCESS
 
         val blockEntity = world.getBlockEntity(blockPos)
-        if (blockEntity !is StadiumBlockEntity) return ActionResult.SUCCESS
+        if (blockEntity !is StadiumBlockEntity) return InteractionResult.SUCCESS
 
-        val message = "Stadium Pos: " + blockEntity.pos +
+        val message = "Stadium Pos: " + blockEntity.blockPos +
                 "\nPlayer 1 Pos: " + blockEntity.getPlayer1Pos() +
                 "\nPoke 1 Pos: " + blockEntity.getPoke1Pos() +
                 "\nPlayer 2 Pos: " + blockEntity.getPlayer2Pos() +
                 "\nPoke 2 Pos: " + blockEntity.getPoke2Pos()
-        player.sendMessage(text(message).red())
-        return ActionResult.SUCCESS
+        player.sendSystemMessage(text(message).red())
+        return InteractionResult.SUCCESS
     }
 }
