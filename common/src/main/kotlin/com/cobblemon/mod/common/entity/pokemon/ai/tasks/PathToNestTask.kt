@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrNull
 
 object PathToNestTask {
     fun create(): OneShot<PokemonEntity> {
@@ -36,10 +37,29 @@ object PathToNestTask {
                 it.present(MemoryModuleType.LOOK_TARGET), // todo This might need to be it.absent but only it.present works atm
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.NEST_LOCATION),
-                it.present(CobblemonMemories.POTENTIAL_MATE)
-            ).apply(it) { lookTarget, walkTarget, nestMemory, mateMemory ->
+                it.present(CobblemonMemories.POTENTIAL_MATE),
+                it.registered(CobblemonMemories.PATERNAL_NEST_LOCATION),
+                it.registered(CobblemonMemories.EGG_IN_NEST),
+                it.registered(CobblemonMemories.HOLDING_EGG),
+            ).apply(it) { lookTarget, walkTarget, nestMemory, mateMemory, paternalNestLoc, eggInNest, holdingEgg ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
+
+                    val isHoldingEgg = entity.brain.getMemory(CobblemonMemories.HOLDING_EGG).orElse(false)
+                    val eggInNest = entity.brain.getMemory(CobblemonMemories.EGG_IN_NEST).orElse(false)
+                    val paternalNestLoc = entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null)
+
+                    if (isHoldingEgg && !eggInNest && paternalNestLoc != null) {
+                        val paternalNestVec = Vec3.atCenterOf(paternalNestLoc)
+
+                        // Set walk target to move towards the paternal nest
+                        walkTarget.set(WalkTarget(paternalNestVec, 1.0F, 1))
+
+                        // Set look target to focus on the paternal nest
+                        lookTarget.set(BlockPosTracker(paternalNestLoc))
+
+                        return@Trigger true
+                    }
 
                     // Don't do anything if the pokemon has a breeding cooldown
                     if ((entity as PokemonEntity).pokemon.breedingCooldown != 0) return@Trigger false
@@ -85,7 +105,6 @@ object PathToNestTask {
                     walkTarget.set(WalkTarget(targetVec, /*speedMultiplier.resolveFloat()*/ 1.0F, 1))
                     lookTarget.set(BlockPosTracker(targetVec.add(0.0, entity.eyeHeight.toDouble(), 0.0)))
 
-                    // try to find a way to get the mate to pathfind and look at the nest too...
                     mate.brain.setMemory(
                         MemoryModuleType.WALK_TARGET,
                         WalkTarget(targetVec, /*speedMultiplier.resolveFloat()*/ 1.0F, 1)

@@ -19,11 +19,11 @@ import kotlin.jvm.optionals.getOrNull
  *
  * @since January 12th, 2025
  */
-class MateSensor : Sensor<LivingEntity>() {
+class MateSensor : Sensor<LivingEntity>(1200) {
     companion object {
         val OUTPUT_MEMORY_MODULES = setOf(CobblemonMemories.POTENTIAL_MATE)
         private const val DETECTION_RADIUS = 10.0 // Radius to search for potential mates
-        private const val MATE_SCAN_COOLDOWN = 1200L
+        private const val MATE_SCAN_COOLDOWN = 1200L // todo remove this now that interval has been set
     }
 
     override fun requires(): Set<MemoryModuleType<*>> = OUTPUT_MEMORY_MODULES

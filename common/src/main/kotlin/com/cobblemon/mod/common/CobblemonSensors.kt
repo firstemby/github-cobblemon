@@ -10,6 +10,7 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DefendOwnerSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.EggSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonAdultSensor
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonGrowableCropSensor
 import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
@@ -29,6 +30,7 @@ object CobblemonSensors {
     val BATTLING_POKEMON = register("battling_pokemon", ::BattlingPokemonSensor)
     val MATE_SENSOR = register("mate_sensor", ::MateSensor)
     val NEST_SENSOR = register("nest_sensor", ::NestSensor)
+    val EGG_SENSOR = register("egg_sensor", :: EggSensor)
 //    val NPC_BATTLING = register("npc_battling", ::NPCBattlingSensor)
     val POKEMON_DROWSY = register("pokemon_drowsy", ::DrowsySensor)
 

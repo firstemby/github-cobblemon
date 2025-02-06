@@ -131,6 +131,13 @@ object BreedAtNestTask {
                         0.02 // Particle speed
                     )
 
+                    // set the paternal nest for both
+                    entity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, nestLocation)
+                    entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+                    mate.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, nestLocation)
+                    mate.brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+
+
                     // Notify nearby players
                     world.players().forEach { player ->
                         player.displayClientMessage("An egg has been laid in the nest!".green(), true)

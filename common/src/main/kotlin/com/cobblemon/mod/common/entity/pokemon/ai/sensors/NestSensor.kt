@@ -30,10 +30,39 @@ class NestSensor : Sensor<LivingEntity>() {
     override fun requires(): Set<MemoryModuleType<*>> = OUTPUT_MEMORY_MODULES
 
     override fun doTick(world: ServerLevel, entity: LivingEntity) {
-        // Ensure the entity is a PokemonEntity
         if (entity !is PokemonEntity) return
 
-        val nearbyNest = findNearbyNest((entity as PokemonEntity), world, entity.blockPosition()) // todo send in entity
+        val paternalNestLocation = entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null)
+
+        // Validate the paternal nest location
+        if (paternalNestLocation != null) {
+            val blockAtLocation = world.getBlockEntity(paternalNestLocation)
+            if (blockAtLocation !is NestBlockEntity) {
+                entity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+                entity.brain.eraseMemory(CobblemonMemories.EGG_IN_NEST)
+                entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            }
+            else if (blockAtLocation.parents.first == entity.uuid || blockAtLocation.parents.second == entity.uuid) {
+                entity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, paternalNestLocation)
+
+                // check for egg status in nest
+                if (blockAtLocation.getItem().item == ItemStack.EMPTY.item){
+                    entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+                    //entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+                }
+                else {
+                    entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+                    //entity.brain.setMemory(CobblemonMemories.EGG_LOCATION, paternalNestLocation)
+                }
+                return
+            } else {
+                entity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+                entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+                entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            }
+        }
+
+        val nearbyNest = findNearbyNest((entity as PokemonEntity), world, entity.blockPosition()) // todo send in entity?
         if (nearbyNest != null) { // WORKS
             entity.brain.setMemory(CobblemonMemories.NEST_LOCATION, nearbyNest)
         } else {
@@ -56,14 +85,14 @@ class NestSensor : Sensor<LivingEntity>() {
 
             val nestBlockEntity = blockEntity as NestBlockEntity
 
-            // Check if this Pokémon is a parent of the nest
+            /*// Check if this Pokémon is a parent of the nest
             if (nestBlockEntity.parents.first == pokemonEntity.uuid || nestBlockEntity.parents.second == pokemonEntity.uuid) {
                 pokemonEntity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, pos)
                 return@firstOrNull true // Prioritize the paternal nest
             }
 
             // Clear paternal nest memory if this isn't their nest
-            pokemonEntity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION) // I do worry that this will clear a parental nest if they get too close to another nest todo look into this case
+            pokemonEntity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)*/ // I do worry that this will clear a parental nest if they get too close to another nest todo look into this case
 
             // cancel if the nest cannot be reached by the entity
             if (!canPathfindToTarget(pokemonEntity, nestBlockEntity.blockPos)) return@firstOrNull false

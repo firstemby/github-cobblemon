@@ -48,6 +48,10 @@ object CobblemonMemories {
     val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
     val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
+    val EGG_THIEF = register<Player>("egg_thief") // Stores the player stealing the egg
+    val EGG_LOCATION = register<BlockPos>("egg_location") // Stores the last known location of the egg
+    val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
+    val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

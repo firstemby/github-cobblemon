@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.client.keybind.CobblemonBlockingKeyBinding
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.kinds.IdF
@@ -31,14 +32,21 @@ object GuardNestTask {
                 it.present(MemoryModuleType.LOOK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
-                it.registered(MemoryModuleType.NEAREST_VISIBLE_PLAYER), // if player is invisible they do not patrol
+                it.registered(CobblemonMemories.EGG_IN_NEST), // todo I want this to make it so the task only runs when the nest has the egg
+                it.present(CobblemonMemories.EGG_LOCATION),
+                it.absent(CobblemonMemories.EGG_THIEF),
+                it.registered(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
                 it.registered(MemoryModuleType.ANGRY_AT),
                 it.absent(MemoryModuleType.ATTACK_TARGET),
                 it.registered(CobblemonMemories.IRRITATED_AT)
-            ).apply(it) { lookTarget, walkTarget, paternalNest, nearestVisiblePlayer, angryAt, attackTarget, irritatedAt ->
+            ).apply(it) { lookTarget, walkTarget, paternalNest, eggInNest, eggLocation, eggThief, nearestVisiblePlayer, angryAt, attackTarget, irritatedAt ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity) return@Trigger false
 
+                    val eggInNest = entity.brain.getMemory(CobblemonMemories.EGG_IN_NEST).orElse(null)
+                    if (eggInNest != null && eggInNest == false) {
+                        return@Trigger false
+                    }
                     //runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
                     // Retrieve nest location and mate entity from memory

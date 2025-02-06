@@ -64,6 +64,7 @@ object PokemonBrain {
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.MATE_SENSOR,
         CobblemonSensors.NEST_SENSOR,
+        CobblemonSensors.EGG_SENSOR
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -178,7 +179,11 @@ object PokemonBrain {
         CobblemonMemories.MATE_SCAN_COOLDOWN,
         CobblemonMemories.NEST_LOCATION,
         CobblemonMemories.PATERNAL_NEST_LOCATION,
-        CobblemonMemories.IRRITATED_AT
+        CobblemonMemories.IRRITATED_AT,
+        CobblemonMemories.EGG_THIEF,
+        CobblemonMemories.HOLDING_EGG,
+        CobblemonMemories.EGG_LOCATION,
+        CobblemonMemories.EGG_IN_NEST
     )
 
     fun updateActivities(pokemon:PokemonEntity) {
