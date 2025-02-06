@@ -87,6 +87,7 @@ object MountedPlayerRenderer {
         state.runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing", DoubleValue(limbSwing.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing_amount", DoubleValue(limbSwingAmount.toDouble()))
+        //state.runtime.environment.setSimpleVariable(" ", DoubleValue(ground_speed.toDouble()))
 
         // TODO add the q.player reference, requires a cached thing or something on the client idk
 

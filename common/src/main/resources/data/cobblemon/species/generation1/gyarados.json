@@ -49,6 +49,20 @@
     "height": 3.3,
     "fixed": false
   },
+  "riding": {
+    "controller": {
+      "key": "cobblemon:swim/generic"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      }
+    ]
+  },
   "behaviour": {
     "moving": {
       "walk": {

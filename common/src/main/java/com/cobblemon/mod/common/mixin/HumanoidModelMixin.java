@@ -32,6 +32,8 @@ public class HumanoidModelMixin {
     @Shadow @Final
     public ModelPart head;
     @Shadow @Final
+    public ModelPart body;
+    @Shadow @Final
     public ModelPart rightArm;
     @Shadow @Final
     public ModelPart leftArm;
@@ -56,6 +58,7 @@ public class HumanoidModelMixin {
             relevantPartsByName.put("leg_left", leftLeg);
             relevantPartsByName.put("leg_right", rightLeg);
             relevantPartsByName.put("head", head);
+            relevantPartsByName.put("body", body);
         }
 
         Entity vehicle = entity.getVehicle();
