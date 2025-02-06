@@ -52,6 +52,11 @@ object PathToNestTask {
                     if (isHoldingEgg && !eggInNest && paternalNestLoc != null) {
                         val paternalNestVec = Vec3.atCenterOf(paternalNestLoc)
 
+                        // Check if Pokémon are close enough to the nest
+                        if (entity.distanceToSqr(paternalNestVec) <= 2.0) {
+                            return@Trigger false // Task ends when both are close enough
+                        }
+
                         // Set walk target to move towards the paternal nest
                         walkTarget.set(WalkTarget(paternalNestVec, 1.0F, 1))
 

@@ -37,13 +37,17 @@ object RetrieveEggTask {
                         return@Trigger false
                     }
 
-                    val eggPos: BlockPos = (eggLocation.value() as? BlockPos) ?: return@Trigger false
+                    val eggPos: BlockPos = entity.brain.getMemory(CobblemonMemories.EGG_LOCATION).get() ?: return@Trigger false
                     val eggCenter = Vec3.atCenterOf(eggPos)
 
                     // If already within pickup range, cancel task
                     if (entity.distanceToSqr(eggCenter) <= 2.0) {
+                        entity.brain.setMemory(CobblemonMemories.READY_TO_GRAB_EGG, true)
                         return@Trigger false
                     }
+
+                    // clear this memory
+                    entity.brain.eraseMemory(CobblemonMemories.READY_TO_GRAB_EGG)
 
                     // Move towards the egg
                     walkTarget.set(WalkTarget(eggCenter, 1.0F, 1))

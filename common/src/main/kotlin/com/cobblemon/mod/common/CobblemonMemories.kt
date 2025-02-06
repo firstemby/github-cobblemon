@@ -51,6 +51,7 @@ object CobblemonMemories {
     val EGG_THIEF = register<Player>("egg_thief") // Stores the player stealing the egg
     val EGG_LOCATION = register<BlockPos>("egg_location") // Stores the last known location of the egg
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
+    val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
     val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {

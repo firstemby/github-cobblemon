@@ -38,13 +38,20 @@ object BreedAtNestTask {
         return BehaviorBuilder.create {
             it.group(
                 it.present(CobblemonMemories.NEST_LOCATION),
+                it.registered(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.present(CobblemonMemories.POTENTIAL_MATE),
                 it.absent(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, mateMemory, walkTarget ->
+            ).apply(it) { nestMemory, paternalNestMemory, mateMemory, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
                     //runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                    val paternalNestLoc = entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null)
+
+                    // if wild and has a paternal nest already cancel task
+                    if (entity.pokemon.isWild() && paternalNestLoc != null) {
+                        return@Trigger false
+                    }
 
                     // Retrieve nest location and mate entity from memory
                     val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false

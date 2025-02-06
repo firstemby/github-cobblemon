@@ -40,14 +40,20 @@ object PlaceEggInNestTask {
             it.group(
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.present(CobblemonMemories.HOLDING_EGG),
-                it.absent(CobblemonMemories.EGG_IN_NEST),
+                it.registered(CobblemonMemories.EGG_IN_NEST),
                 it.absent(MemoryModuleType.WALK_TARGET)
             ).apply(it) { nestMemory, holdingEgg, EggInNest, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
                     //runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                    // Retrieve nest location and mate entity from memory
+
+                    // run this trigger if the egg is not in nest
+                    val eggInNest = entity.brain.getMemory(CobblemonMemories.EGG_IN_NEST).orElse(null)
+                    if (eggInNest != null && eggInNest == true) {
+                        return@Trigger false
+                    }
+
                     val nestLocation: BlockPos = (nestMemory.value() as? IdF<BlockPos>)?.value() ?: return@Trigger false
 
                     val nestEntity = when {

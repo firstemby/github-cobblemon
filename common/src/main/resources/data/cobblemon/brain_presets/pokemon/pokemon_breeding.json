@@ -12,6 +12,7 @@
           "guard_nest",
           "search_for_egg",
           "retrieve_egg",
+          "pick_up_egg",
           "place_egg_in_nest",
           "attack_egg_thief"
         ]

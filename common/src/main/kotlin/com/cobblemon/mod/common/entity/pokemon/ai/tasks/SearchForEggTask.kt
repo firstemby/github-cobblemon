@@ -41,9 +41,10 @@ object SearchForEggTask {
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.registered(CobblemonMemories.EGG_IN_NEST),
                 it.absent(CobblemonMemories.EGG_LOCATION),
+                it.absent(CobblemonMemories.HOLDING_EGG),
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.registered(MemoryModuleType.DISTURBANCE_LOCATION)
-            ).apply(it) { nestMemory, eggInNest, eggMemory, walkTarget, disturbanceMemory ->
+            ).apply(it) { nestMemory, eggInNest, eggMemory, holdingEgg, walkTarget, disturbanceMemory ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 

@@ -26,18 +26,25 @@ object PickUpEggTask {
         return BehaviorBuilder.create {
             it.group(
                 it.present(CobblemonMemories.PATERNAL_NEST_LOCATION),
-                /*it.absent(CobblemonMemories.EGG_IN_NEST),*/
+                it.present(CobblemonMemories.READY_TO_GRAB_EGG),
+                it.registered(CobblemonMemories.EGG_IN_NEST),
                 it.present(CobblemonMemories.EGG_LOCATION),
                 it.absent(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, /*eggInNest,*/ eggMemory, walkTarget ->
+            ).apply(it) { nestMemory, readyToGrabEgg, eggInNest, eggMemory, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
-                    val eggPos: BlockPos = (eggMemory.value() as? BlockPos) ?: return@Trigger false
+                    val eggInNest = entity.brain.getMemory(CobblemonMemories.EGG_IN_NEST).orElse(null)
+                    if (eggInNest != null && eggInNest == true) {
+                        return@Trigger false
+                    }
+
+                    val eggPos: BlockPos = entity.brain.getMemory(CobblemonMemories.EGG_LOCATION).get()
                     val eggCenter = Vec3.atCenterOf(eggPos)
 
                     // Ensure Pokémon is close enough
                     if (entity.distanceToSqr(eggCenter) > 2.0) {
+                        entity.brain.eraseMemory(CobblemonMemories.READY_TO_GRAB_EGG)
                         return@Trigger false
                     }
 

@@ -45,7 +45,7 @@ class EggSensor : Sensor<PokemonEntity>(100) {
 
         // If no egg is in the nest, clear EGG_LOCATION before looking around
         entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
-        entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+        entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION) // todo should I be doing this?
 
         // Detect egg items on the ground
         val nearbyEggItems = level.getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox.inflate(20.0)) { itemEntity ->
