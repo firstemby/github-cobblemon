@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.item.PokemonEggItem
  */
 
 class EggSensor : Sensor<PokemonEntity>(100) {
+    private val EGG_SEARCH_TIME = 2400L
     override fun requires(): Set<MemoryModuleType<*>> {
         return setOf(CobblemonMemories.PATERNAL_NEST_LOCATION )
     }
@@ -91,6 +92,7 @@ class EggSensor : Sensor<PokemonEntity>(100) {
             if (entity.brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent)
                 entity.brain.eraseMemory(MemoryModuleType.ANGRY_AT)
 
+            entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
             entity.brain.setMemory(CobblemonMemories.EGG_LOCATION, nearbyEggItems[0].blockPosition())
             entity.brain.eraseMemory(CobblemonMemories.EGG_THIEF)
         } else if (eggThief != null) {
@@ -100,10 +102,16 @@ class EggSensor : Sensor<PokemonEntity>(100) {
             // If no egg is on the ground but an Egg Thief is detected track the player
             entity.brain.setMemory(CobblemonMemories.EGG_THIEF, eggThief)
             entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
         } else {
             // If no egg is found and no thief detected clear memories
             entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
             entity.brain.eraseMemory(CobblemonMemories.EGG_THIEF)
+
+            // start search countdown
+            if (!entity.brain.hasMemoryValue(CobblemonMemories.EGG_SEARCH_COUNTDOWN)) {
+                entity.brain.setMemoryWithExpiry(CobblemonMemories.EGG_SEARCH_COUNTDOWN, true, EGG_SEARCH_TIME) // Start countdown if not already started
+            }
         }
     }
 

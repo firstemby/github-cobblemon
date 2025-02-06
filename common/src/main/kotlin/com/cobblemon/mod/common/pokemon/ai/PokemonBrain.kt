@@ -184,7 +184,8 @@ object PokemonBrain {
         CobblemonMemories.HOLDING_EGG,
         CobblemonMemories.READY_TO_GRAB_EGG,
         CobblemonMemories.EGG_LOCATION,
-        CobblemonMemories.EGG_IN_NEST
+        CobblemonMemories.EGG_IN_NEST,
+        CobblemonMemories.EGG_SEARCH_COUNTDOWN
     )
 
     fun updateActivities(pokemon:PokemonEntity) {

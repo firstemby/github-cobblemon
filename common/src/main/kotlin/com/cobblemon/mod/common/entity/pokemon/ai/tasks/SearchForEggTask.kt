@@ -29,6 +29,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrNull
 import kotlin.random.Random
 
 object SearchForEggTask {
@@ -43,8 +44,9 @@ object SearchForEggTask {
                 it.absent(CobblemonMemories.EGG_LOCATION),
                 it.absent(CobblemonMemories.HOLDING_EGG),
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.registered(MemoryModuleType.DISTURBANCE_LOCATION)
-            ).apply(it) { nestMemory, eggInNest, eggMemory, holdingEgg, walkTarget, disturbanceMemory ->
+                it.registered(MemoryModuleType.DISTURBANCE_LOCATION),
+                it.registered(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+            ).apply(it) { nestMemory, eggInNest, eggMemory, holdingEgg, walkTarget, disturbanceMemory, eggSearchCountdown ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
@@ -54,8 +56,24 @@ object SearchForEggTask {
                         return@Trigger false
                     }
 
-                    val nestPos: BlockPos = (nestMemory.value() as? BlockPos) ?: return@Trigger false
+                    val nestPos = entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return@Trigger false
                     val nestCenter = Vec3.atCenterOf(nestPos)
+
+                    val searchCountdownRemaining = entity.brain.getTimeUntilExpiry(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+
+                    // If search has lasted too long, clear memories
+                    if (searchCountdownRemaining <= 20) {
+                        // clear the parents of the paternal nest here too so that the nest sensor doesn't detect them as the parent of that nest anymore
+                        (world.getBlockEntity(nestPos) as NestBlockEntity).parents = Pair(null, null)
+
+                        entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+                        entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+                        entity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+                        entity.brain.eraseMemory(CobblemonMemories.EGG_IN_NEST)
+                        entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+
+                        return@Trigger false // Stop task
+                    }
 
                     // Check if there's a disturbance location in memory
                     val disturbancePos = disturbanceMemory.value()?.let { it as? BlockPos }

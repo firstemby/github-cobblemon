@@ -53,6 +53,7 @@ object CobblemonMemories {
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
     val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
     val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
+    val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))
