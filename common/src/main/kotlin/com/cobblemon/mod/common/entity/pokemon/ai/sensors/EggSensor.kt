@@ -3,6 +3,7 @@ package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
@@ -71,9 +72,9 @@ class EggSensor : Sensor<PokemonEntity>(100) {
         // Filter for the first visible player holding an egg that belongs to this Pokémon
         val eggThief = nearbyVisiblePlayers.firstOrNull { player ->
             player.inventory.items.any { itemStack ->
-                itemStack.item is PokemonEggItem &&
+                itemStack.item.asItem() == CobblemonItems.POKEMON_EGG.asItem() &&
                         itemStack.get(CobblemonItemComponents.EGG_DATA)?.egg?.let { egg ->
-                            egg.parentOne?.uuid == entity.uuid || egg.parentTwo?.uuid == entity.uuid
+                            egg.parentOne?.uuid == entity.pokemon.uuid || egg.parentTwo?.uuid == entity.pokemon.uuid
                         } == true
             }
         }
@@ -81,9 +82,21 @@ class EggSensor : Sensor<PokemonEntity>(100) {
         // Prioritize the egg item on the ground over the Egg Thief
         if (nearbyEggItems.isNotEmpty()) {
             // If an egg is found on the ground, store its location and clear EggThief memory
+            level.players().forEach { player ->
+                player.displayClientMessage("An egg has been found on the ground!".green(), true)
+            }
+            // if there is an attack target prioritize getting the egg back to the nest
+            if (entity.brain.getMemory(MemoryModuleType.ATTACK_TARGET).isPresent)
+                entity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
+            if (entity.brain.getMemory(MemoryModuleType.ANGRY_AT).isPresent)
+                entity.brain.eraseMemory(MemoryModuleType.ANGRY_AT)
+
             entity.brain.setMemory(CobblemonMemories.EGG_LOCATION, nearbyEggItems[0].blockPosition())
             entity.brain.eraseMemory(CobblemonMemories.EGG_THIEF)
         } else if (eggThief != null) {
+            level.players().forEach { player ->
+                player.displayClientMessage("An egg thief has been has been found!".green(), true)
+            }
             // If no egg is on the ground but an Egg Thief is detected track the player
             entity.brain.setMemory(CobblemonMemories.EGG_THIEF, eggThief)
             entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
