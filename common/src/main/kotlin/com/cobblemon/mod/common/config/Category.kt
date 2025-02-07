@@ -18,6 +18,6 @@ enum class Category(val lang: String) {
     Pokedex("pokedex"),
     Storage("storage"),
     Starter("starter"),
+    System("system"),
     Debug("debug"),
-    System("system")
 }

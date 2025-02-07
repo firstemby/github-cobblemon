@@ -1544,6 +1544,7 @@
   "cobblemon.config.ui.category.storage": "Storage",
   "cobblemon.config.ui.category.world": "World",
   "cobblemon.config.ui.category.debug": "Debug",
+  "cobblemon.config.ui.category.system": "System",
 
   "cobblemon.config.ui.max_pokemon_level": "Max Pokémon Level",
   "cobblemon.config.ui.max_pokemon_level.tooltip": "The maximum level Pokémon can get to.",
@@ -1691,6 +1692,8 @@
   "cobblemon.config.ui.hide_unimplemented_pokemon_in_the_pokedex.tooltip": "Whether to hide unimplemented Pokémon from the Pokédex.",
   "cobblemon.config.ui.enable_debug_keys": "Enable Debug Keys",
   "cobblemon.config.ui.enable_debug_keys.tooltip": "Enables additional commands and chat logging to assist with implementing Pokémon (see the wiki for a list of commands).",
+  "cobblemon.config.ui.time_zone_id": "Time Zone Id",
+  "cobblemon.config.ui.time_zone_id.tooltip": "Time Zone to use for some MoLangs and IRL time zone dates. Server Side only.",
 
   "cobblemon.config.ui.allow_starter_on_join": "Allow Starter on Join",
   "cobblemon.config.ui.prompt_starter_once_only": "Prompt Starter Once Only",

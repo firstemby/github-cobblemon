@@ -256,11 +256,11 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex")
     var hideUnimplementedPokemonInThePokedex = false
 
+    @CobblemonConfigField(Category.System, lang = "time_zone_id")
+    var timeZoneId: ZoneId = ZoneOffset.systemDefault()
+
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = false
-
-    @NodeCategory(Category.System, lang = "time_zone_id")
-    var timeZoneId: ZoneId = ZoneOffset.systemDefault()
 
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
