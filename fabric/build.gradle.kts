@@ -1,9 +1,12 @@
 import com.cobblemon.gradle.extension.tasks.UnzipAccessWidenersTask
+import net.fabricmc.loom.configuration.accesswidener.AccessWidenerJarProcessor
+import net.fabricmc.loom.extension.LoomGradleExtensionImpl
 
 plugins {
     kotlin("jvm") version "2.1.0"
     id("fabric-loom") version "1.9-SNAPSHOT"
-    id("com.cobblemon.gradle")}
+    id("com.cobblemon.gradle")
+}
 
 repositories {
     mavenCentral()
@@ -20,7 +23,6 @@ loom {
             sourceSet(sourceSets.main.get())
         }
     }
-    accessWidenerPath = file("E:\\Projects\\cobblemon\\common\\src\\main\\resources\\cobblemon-common.accesswidener")
 }
 
 cobblemon {
@@ -54,7 +56,7 @@ dependencies {
 
     compileOnly(libs.bundles.mongo)
 
-    implementation(libs.graal)
+    compileOnly(libs.graal)
     //"additionalRuntimeClasspath"(libs.graal)
 
     //compileOnly("net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7")
@@ -67,6 +69,16 @@ dependencies {
     testImplementation(libs.bundles.unitTesting)
 }
 
-tasks.named("generateRemapClasspath") {
+tasks.named("prepareKotlinBuildScriptModel") {
     dependsOn(tasks.named("unzipAccessWideners"))
+    doFirst {
+        val file = tasks.named<UnzipAccessWidenersTask>("unzipAccessWideners").get().outputFiles.get().first()
+        println(file.name)
+        val minecraftJarProcessors = loom.minecraftJarProcessors
+        val processorList = minecraftJarProcessors.get()
+        processorList.removeIf { it is AccessWidenerJarProcessor }
+        val newProp = project.objects.fileProperty()
+        newProp.set(file)
+        processorList.add(AccessWidenerJarProcessor("AccessWidener", true, newProp))
+    }
 }
