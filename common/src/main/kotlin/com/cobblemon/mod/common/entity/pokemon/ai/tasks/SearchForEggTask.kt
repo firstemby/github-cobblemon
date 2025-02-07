@@ -43,10 +43,11 @@ object SearchForEggTask {
                 it.registered(CobblemonMemories.EGG_IN_NEST),
                 it.absent(CobblemonMemories.EGG_LOCATION),
                 it.absent(CobblemonMemories.HOLDING_EGG),
+                it.absent(CobblemonMemories.EGG_THIEF),
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.registered(MemoryModuleType.DISTURBANCE_LOCATION),
                 it.registered(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
-            ).apply(it) { nestMemory, eggInNest, eggMemory, holdingEgg, walkTarget, disturbanceMemory, eggSearchCountdown ->
+            ).apply(it) { nestMemory, eggInNest, eggMemory, holdingEgg, eggThief, walkTarget, disturbanceMemory, eggSearchCountdown ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
@@ -60,9 +61,10 @@ object SearchForEggTask {
                     val nestCenter = Vec3.atCenterOf(nestPos)
 
                     val searchCountdownRemaining = entity.brain.getTimeUntilExpiry(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+                    val searchCountdownActive = entity.brain.getMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN).getOrNull()
 
                     // If search has lasted too long, clear memories
-                    if (searchCountdownRemaining <= 20) {
+                    if (searchCountdownRemaining <= 20 && searchCountdownActive != false && searchCountdownActive != null) {
                         // clear the parents of the paternal nest here too so that the nest sensor doesn't detect them as the parent of that nest anymore
                         (world.getBlockEntity(nestPos) as NestBlockEntity).parents = Pair(null, null)
 

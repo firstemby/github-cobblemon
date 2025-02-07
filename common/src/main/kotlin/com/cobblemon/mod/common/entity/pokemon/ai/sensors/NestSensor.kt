@@ -106,8 +106,15 @@ class NestSensor : Sensor<LivingEntity>() {
             val hasWaterEggGroup = eggGroups.any { it in WATER_EGG_GROUPS }
             val onlyWaterEggGroup = eggGroups.all { it in WATER_EGG_GROUPS }
             val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
+            val nestParentOneActive = nestBlockEntity.parents.first?.let { world.getEntity(it) }
+            val nestParentTwoActive = nestBlockEntity.parents.second?.let { world.getEntity(it) }
 
-            // make it so that only waterlogged nests can be used by pokemon with Water 1/2/3 egg groups
+            // check if nest without an egg has paternal wild pokemon that are presently roaming
+            if (isWildNest && isEggless && (nestParentOneActive != null || nestParentTwoActive != null)) {
+                return@firstOrNull false
+            }
+
+                    // make it so that only waterlogged nests can be used by pokemon with Water 1/2/3 egg groups
             if (isNestWaterlogged && !hasWaterEggGroup)
                 return@firstOrNull false
 

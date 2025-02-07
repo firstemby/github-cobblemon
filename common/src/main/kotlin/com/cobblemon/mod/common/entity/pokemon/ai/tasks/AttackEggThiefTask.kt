@@ -17,14 +17,12 @@ object AttackEggThiefTask {
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.present(MemoryModuleType.LOOK_TARGET),
+                //it.present(MemoryModuleType.LOOK_TARGET), // todo do we need this?
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.absent(CobblemonMemories.EGG_IN_NEST), // todo I want this to make it so the task only runs when the nest has the egg
-                it.absent(CobblemonMemories.EGG_LOCATION),
                 it.present(CobblemonMemories.EGG_THIEF),
                 it.registered(MemoryModuleType.ANGRY_AT),
                 it.absent(MemoryModuleType.ATTACK_TARGET),
-            ).apply(it) { lookTarget, walkTarget, eggInNest, eggLocation, eggThief, angryAt, attackTarget ->
+            ).apply(it) { /*lookTarget,*/ walkTarget, eggThief, angryAt, attackTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive || entity !is PokemonEntity) return@Trigger false
 

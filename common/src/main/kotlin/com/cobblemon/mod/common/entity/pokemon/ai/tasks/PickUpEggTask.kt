@@ -73,6 +73,7 @@ object PickUpEggTask {
                     // Clear egg-related memories
                     entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
                     entity.brain.setMemory(CobblemonMemories.HOLDING_EGG, true)
+                    entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
 
                     return@Trigger true
                 }

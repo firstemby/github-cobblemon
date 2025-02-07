@@ -41,6 +41,7 @@ class EggSensor : Sensor<PokemonEntity>(100) {
             if (!nestItem.isEmpty && nestItem.item.asItem() == CobblemonItems.POKEMON_EGG.asItem()) {
                 entity.brain.setMemory(CobblemonMemories.EGG_LOCATION, nestPos)
                 entity.brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+                entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
                 return
             }
         }
@@ -102,7 +103,10 @@ class EggSensor : Sensor<PokemonEntity>(100) {
             // If no egg is on the ground but an Egg Thief is detected track the player
             entity.brain.setMemory(CobblemonMemories.EGG_THIEF, eggThief)
             entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
-            entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+            entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN) // todo add attack target
+
+            // TODO remove this later once I get the dang ol' AttackEggThiefTask to work >:(
+            //entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, eggThief)
         } else {
             // If no egg is found and no thief detected clear memories
             entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
