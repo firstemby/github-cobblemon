@@ -47,6 +47,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.objectweb.asm.Opcodes;
@@ -298,6 +299,20 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
         return pokemonEntity.getRiding().shouldRoll(pokemonEntity);
     }
+
+    @Override
+    public Vec3 angRollVel() {
+        var ret = new Vec3(0.0, 0.0, 0.0);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return ret;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return ret;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return ret;
+
+        return pokemonEntity.getRiding().angRollVel(pokemonEntity, player);
+    }
+
 
     @Override
     public void clearRotation() {

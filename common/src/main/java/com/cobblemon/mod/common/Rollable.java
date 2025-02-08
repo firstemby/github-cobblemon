@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common;
 
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Vector3f;
@@ -116,6 +117,11 @@ public interface Rollable {
         var forwardVector = getForwardVector();
         return (float) Math.toDegrees(upVector.angleSigned(UP, forwardVector));
     }
+
+    /**
+     * Get the angular velocity in degrees per second as a Vec3
+     */
+    Vec3 angRollVel();
 
     boolean shouldRoll();
 

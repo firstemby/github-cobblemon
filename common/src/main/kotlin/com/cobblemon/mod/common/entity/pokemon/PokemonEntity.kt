@@ -1353,6 +1353,30 @@ open class PokemonEntity(
         }
     }
 
+
+    override fun isAffectedByFluids(): Boolean {
+        var fluidAffected = true
+
+        if( this.hasControllingPassenger() )
+        {
+            //Change this so it calls something from the controller to check
+            //if the specific controller wants to ignore fluid physics since 
+			//not every single one will want to
+            fluidAffected =  false
+        }
+
+        return fluidAffected
+    }
+
+    override fun onGround() : Boolean
+    {
+        if( this.hasControllingPassenger() )
+        {
+        return false
+        }
+        return super.onGround()
+    }
+
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
@@ -1762,8 +1786,9 @@ open class PokemonEntity(
         // Set back to land pose type?
     }
 
+	//I think already mentioned but should maybe be riding controller configurable
     override fun dismountsUnderwater(): Boolean {
-        return true
+        return false
     }
 
     override fun getDefaultGravity(): Double {

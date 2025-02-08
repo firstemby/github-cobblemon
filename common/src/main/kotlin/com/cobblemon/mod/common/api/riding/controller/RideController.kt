@@ -71,6 +71,8 @@ interface RideController : Encodable, Decodable {
      */
     fun rotation(entity: PokemonEntity, driver: LivingEntity) : Vec2
 
+    //fun angRollVel(entity: PokemonEntity, driver: Player) : Vec3
+
     fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {}
 
     fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {

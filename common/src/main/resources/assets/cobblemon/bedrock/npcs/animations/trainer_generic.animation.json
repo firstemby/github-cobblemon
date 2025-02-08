@@ -6,32 +6,32 @@
 			"bones": {
 				"arm_left": {
 					"rotation": [
-						"79+math.r2d(-math.cos(v.limb_swing * 38.17) * v.limb_swing_amount - math.sin(v.age_in_ticks * 5.16) * 0.05)",
-						0,
-						"-math.r2d(math.cos(v.age_in_ticks * 5.16) * 0.05 + 0.05)"
+						"-23.2941+math.r2d(-math.cos(v.limb_swing * 38.17) * v.limb_swing_amount - math.sin(v.age_in_ticks * 5.16) * 0.05)",
+						3.57079,
+						"6.5998-math.r2d(math.cos(v.age_in_ticks * 5.16) * 0.05 + 0.05)"
 					]
 				},
 				"arm_right": {
 					"rotation": [
-						"64+math.r2d(math.cos(v.limb_swing * 38.17) * v.limb_swing_amount + math.sin(v.age_in_ticks * 5.16) * 0.05)",
-						0,
-						"math.r2d(math.cos(v.age_in_ticks * 5.16) * 0.05 + 0.05)"
+						"-20.8359+math.r2d(math.cos(v.limb_swing * 38.17) * v.limb_swing_amount + math.sin(v.age_in_ticks * 5.16) * 0.05)",
+						-2.68108,
+						"-7.007+math.r2d(math.cos(v.age_in_ticks * 5.16) * 0.05 + 0.05)"
 					]
 				},
 				"pokeball": {
 					"scale": 0
 				},
 				"leg_right": {
-					"rotation": ["math.r2d(math.cos(v.limb_swing * 38.17 + 180) * v.limb_swing_amount * 1.4)", 0, 0]
+					"rotation": ["-87.8218+math.r2d(math.cos(v.limb_swing * 38.17 + 180) * v.limb_swing_amount * 1.4)", 8.11827, 0.65893]
 				},
 				"leg_left": {
-					"rotation": ["math.r2d(math.cos(v.limb_swing * 38.17) * v.limb_swing_amount * 1.4)", 0, 0]
+					"rotation": ["-88.8357+math.r2d(math.cos(v.limb_swing * 38.17) * v.limb_swing_amount * 1.4)", -8.23239, 1.90829]
 				},
 				"body": {
-					"rotation": [-32.5, 0, 0]
+					"rotation": [0, 0, 0]
 				},
-				"torso": {
-					"rotation": ["-25 + q.ground_speed*100", 0, 0]
+				"head": {
+					"rotation": ["7.5-v.velocity*10", 0, 0]
 				}
 			}
 		},

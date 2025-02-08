@@ -118,6 +118,18 @@ public class MouseHandlerMixin {
         var pitch = pitchSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
         var roll = rollSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
         rollable.rotate(0.0F, (float)pitch, (float)roll);
+		
+		//get the current velocity requested to be applied
+		//by the ride controller
+        var angRot = rollable.angRollVel();
+        //Multiply against deltatime to get a consistent turn 
+		//independent of framerate
+        var yaw = angRot.x * d;
+        var pitch2 = angRot.y * d;
+        var roll2 = angRot.z * d;
+        rollable.rotate((float)yaw , (float)pitch2, (float)roll2);
+
+
         return false;
     }
 

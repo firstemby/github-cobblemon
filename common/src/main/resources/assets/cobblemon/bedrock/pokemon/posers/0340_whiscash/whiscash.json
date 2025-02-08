@@ -21,7 +21,7 @@
       "isBattle": true,
       "isTouchingWater": true,
       "isUnderWater": true,
-      "animations": ["q.bedrock('whiscash', 'water_battle_idle')"],
+      "animations": ["q.bedrock('whiscash', 'water_idle')"],
       "quirks": ["q.bedrock_quirk('whiscash', 'blink')"]
     },
     "standing": {
