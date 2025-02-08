@@ -187,7 +187,9 @@ object PokemonBrain {
         CobblemonMemories.EGG_LOCATION,
         CobblemonMemories.EGG_IN_NEST,
         CobblemonMemories.EGG_SEARCH_COUNTDOWN,
-        CobblemonMemories.SENSED_NEST_MATERIAL
+        CobblemonMemories.SENSED_NEST_MATERIAL,
+        CobblemonMemories.NESTING_MATERIAL_LOCATION,
+        CobblemonMemories.READY_TO_BUILD_NEST
     )
 
     fun updateActivities(pokemon:PokemonEntity) {

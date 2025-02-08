@@ -55,34 +55,36 @@ object BuildNestTask {
 
                     // Get the held item and validate that it can make a nest
                     val heldItem = entity.getItemInHand(InteractionHand.MAIN_HAND)
-                    val nestItem = Nest.entries.firstNotNullOfOrNull { it.craftedNestResult(heldItem) }
-                    val readyToBuild = entity.brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST).orElse(false)
-                    if (!readyToBuild) {
+                    val craftResult = Nest.craftedNestResult(heldItem)
+
+                    if (!entity.brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST).orElse(false) || craftResult == null) {
                         return@Trigger false
                     }
 
-                    if (nestItem == null) {
+                    val (craftedNest, remainingItems) = craftResult
+
+                    // Find ground position for the nest TODO we might want a sensor to sense a perfect position for the nest based on species etc
+                    val nestPos = entity.blockPosition().below()
+
+                    // Ensure placement area is valid TODO have better validation for the placement area maybe?
+                    if (!world.getBlockState(nestPos).isAir && 1 == 2) {
                         return@Trigger false
-                    }
-
-                    // Find the ground position for the nest TODO find a better way to determine a suitable nest placement spot (maybe with a sensor)
-                    val nestPos = entity.blockPosition().below() // Assume placement on the block below
-
-                    // Ensure the area is valid for nest placement
-                    if (!world.getBlockState(nestPos).isAir) {
-                        return@Trigger false // Cancel if the block isn't air
                     }
 
                     // Place the nest block
-                    world.setBlock(nestPos, nestItem.block.defaultBlockState(), 3)
+                    world.setBlock(nestPos, craftedNest.block.defaultBlockState(), 3)
 
-                    // Remove the materials from the Pokémon's hand
-                    entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY)
+                    // Update held stack with remaining materials
+                    if (remainingItems > 0) {
+                        entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(heldItem.item, remainingItems))
+                    } else {
+                        entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY)
+                    }
 
-                    // clear memories
+                    // Clear memories
                     entity.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
 
-                    // Notify nearby players for debug :D
+                    // Notify nearby players for debug
                     (world as ServerLevel).players().forEach { player ->
                         player.displayClientMessage("A Pokémon has built a nest!".green(), true)
                     }

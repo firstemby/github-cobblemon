@@ -24,7 +24,7 @@ object PathToNestMaterialTask {
                 it.present(CobblemonMemories.POTENTIAL_MATE),
                 it.present(CobblemonMemories.NESTING_MATERIAL_LOCATION),
                 it.absent(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
-                it.registered(MemoryModuleType.WALK_TARGET)
+                it.absent(MemoryModuleType.WALK_TARGET)
             ).apply(it) { nestMemory, paternalNestMemory, readyToBuildNest, attackTarget, potentialMate, nestingMaterialLocation, nearbyVisiblePlayers, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
@@ -32,7 +32,7 @@ object PathToNestMaterialTask {
                     val itemPos: BlockPos = entity.brain.getMemory(CobblemonMemories.NESTING_MATERIAL_LOCATION).get() ?: return@Trigger false
                     val itemCenter = Vec3.atCenterOf(itemPos)
                     val readyToBuild = entity.brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST).orElse(false)
-                    if (!readyToBuild) {
+                    if (readyToBuild) {
                         return@Trigger false
                     }
 
