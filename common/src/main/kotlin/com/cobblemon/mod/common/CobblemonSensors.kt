@@ -8,16 +8,10 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DefendOwnerSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.EggSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonAdultSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonGrowableCropSensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.*
 import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
 import com.cobblemon.mod.common.entity.sensor.BattlingPokemonSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.MateSensor
 import com.cobblemon.mod.common.entity.sensor.NPCBattlingSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.NestSensor
 import java.util.function.Supplier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor
@@ -31,6 +25,7 @@ object CobblemonSensors {
     val MATE_SENSOR = register("mate_sensor", ::MateSensor)
     val NEST_SENSOR = register("nest_sensor", ::NestSensor)
     val EGG_SENSOR = register("egg_sensor", :: EggSensor)
+    val NEST_MATERIAL_SENSOR = register("nest_material_sensor", :: NestMaterialSensor)
 //    val NPC_BATTLING = register("npc_battling", ::NPCBattlingSensor)
     val POKEMON_DROWSY = register("pokemon_drowsy", ::DrowsySensor)
 

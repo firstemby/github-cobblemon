@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
 import java.util.UUID
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 
 object CobblemonMemories {
@@ -54,6 +55,9 @@ object CobblemonMemories {
     val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
     val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
+    val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
+    val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
+    val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

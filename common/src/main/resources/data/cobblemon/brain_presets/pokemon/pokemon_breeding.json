@@ -14,7 +14,10 @@
           "retrieve_egg",
           "pick_up_egg",
           "place_egg_in_nest",
-          "attack_egg_thief"
+          "attack_egg_thief",
+          "path_to_nest_material",
+          "pick_up_nest_material",
+          "build_nest"
         ]
       }
     }
