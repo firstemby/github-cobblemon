@@ -167,14 +167,6 @@ class PokemonRenderer(
         val driver = entity.firstPassenger ?: return
         val rollable = driver as? Rollable ?: return
 
-        //val camera = Minecraft.getInstance().gameRenderer.mainCamera
-        //val isThirdPerson = camera.isDetached
-
-        //val vehicleOrigin = entity.position()
-        //val driverOrigin = if (isThirdPerson) driver.position() else driver.eyePosition
-
-        //val offset = driverOrigin.subtract(vehicleOrigin)
-
         poseMatrix.pushPose()
 
         if(!DISABLE_ROLLING_DEBUG && rollable.shouldRoll()){

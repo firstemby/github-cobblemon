@@ -15,7 +15,11 @@ import org.joml.Vector3f;
 import java.util.function.Function;
 
 public interface Rollable {
+    //The directions specified by all of the vectors in this class are from the perspective
+    //of an observer looking at the front of the player model
 
+    //These vectors aren't actually accurate, since "forward" can be any of +x -x +z -z depending on the rotation about
+    //the world-Y axis of the player
     Vector3f FORWARDS = new Vector3f(0, 0, 1);
     Vector3f LEFT = new Vector3f(1, 0, 0);
     Vector3f UP = new Vector3f(0, 1, 0);
