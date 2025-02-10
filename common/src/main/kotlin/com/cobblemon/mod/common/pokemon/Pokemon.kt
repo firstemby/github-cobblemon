@@ -345,6 +345,10 @@ open class Pokemon : ShowdownIdentifiable {
 
     val types: Iterable<ElementalType>
         get() = form.types
+    var headpatTime: Long = 0L
+        set(value) {
+            field = value
+        }
 
     var teraType: TeraType = TeraTypes.forElementalType(this.primaryType)
         set(value) {

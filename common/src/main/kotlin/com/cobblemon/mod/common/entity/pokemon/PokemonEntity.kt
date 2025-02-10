@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonHeadpatEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
@@ -62,6 +63,7 @@ import com.cobblemon.mod.common.entity.pokemon.ai.goals.*
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
+import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
@@ -103,6 +105,10 @@ import net.minecraft.network.protocol.game.DebugPackets
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.SharedConstants
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
+import java.util.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerEntity
 import net.minecraft.server.level.ServerLevel
@@ -230,7 +236,7 @@ open class PokemonEntity(
         get() = entityData.get(FRIENDSHIP)
 
     var drops: DropTable? = null
-
+    var lastHeadpat: Long = 0L
     var tethering: PokemonPastureBlockEntity.Tethering? = null
 
     var queuedToDespawn = false
@@ -932,8 +938,9 @@ open class PokemonEntity(
                     player
                 )
             } else {
-                // TODO #105
                 if (this.attemptItemInteraction(player, player.getItemInHand(hand))) return InteractionResult.SUCCESS
+
+                onHeadpat(pokemon, player)
             }
         }
 
@@ -1562,6 +1569,25 @@ open class PokemonEntity(
         super.setLeashedTo(entity, bl)
         if (this.ownerUUID != null && this.ownerUUID != entity.uuid ) {
             dropLeash(true, true)
+        }
+    }
+
+    fun onHeadpat(pokemon: Pokemon, player: ServerPlayer) {
+        val currentTime = level().dayTime
+        if(currentTime - 30 < lastHeadpat){
+            return
+        }
+
+        lastHeadpat = currentTime
+        cry()
+        player.swing(InteractionHand.MAIN_HAND, true)
+        if(pokemon.headpatTime == 0L || lastHeadpat > (pokemon.headpatTime + (SharedConstants.TICKS_PER_MINUTE * 15))){
+            CobblemonEvents.POKEMON_HEADPAT.postThen(PokemonHeadpatEvent(this, player)) {
+                pokemon.headpatTime = currentTime
+                pokemon.incrementFriendship(2)
+                SpawnSnowstormEntityParticlePacket(cobblemonResource("happyheart"), id)
+                    .sendToPlayersAround(this.x, this.y, this.z, 16.0, this.level().dimension())
+            }
         }
     }
 
