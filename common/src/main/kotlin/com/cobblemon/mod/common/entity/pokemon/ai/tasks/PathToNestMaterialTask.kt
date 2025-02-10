@@ -20,12 +20,13 @@ object PathToNestMaterialTask {
                 it.absent(CobblemonMemories.NEST_LOCATION),
                 it.absent(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.registered(CobblemonMemories.READY_TO_BUILD_NEST),
+                it.absent(CobblemonMemories.IDEAL_NEST_LOCATION),
                 it.absent(MemoryModuleType.ATTACK_TARGET),
                 it.present(CobblemonMemories.POTENTIAL_MATE),
                 it.present(CobblemonMemories.NESTING_MATERIAL_LOCATION),
                 it.absent(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
                 it.absent(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, paternalNestMemory, readyToBuildNest, attackTarget, potentialMate, nestingMaterialLocation, nearbyVisiblePlayers, walkTarget ->
+            ).apply(it) { nestMemory, paternalNestMemory, readyToBuildNest, idealNestLocation, attackTarget, potentialMate, nestingMaterialLocation, nearbyVisiblePlayers, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 

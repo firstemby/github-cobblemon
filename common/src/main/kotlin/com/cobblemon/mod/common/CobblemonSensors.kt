@@ -26,6 +26,7 @@ object CobblemonSensors {
     val NEST_SENSOR = register("nest_sensor", ::NestSensor)
     val EGG_SENSOR = register("egg_sensor", :: EggSensor)
     val NEST_MATERIAL_SENSOR = register("nest_material_sensor", :: NestMaterialSensor)
+    val IDEAL_NEST_LOCATION_SENSOR = register("ideal_nest_location_sensor", ::IdealNestPlacementSensor)
 //    val NPC_BATTLING = register("npc_battling", ::NPCBattlingSensor)
     val POKEMON_DROWSY = register("pokemon_drowsy", ::DrowsySensor)
 

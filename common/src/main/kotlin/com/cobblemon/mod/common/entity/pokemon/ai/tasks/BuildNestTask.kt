@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrNull
 
 object BuildNestTask {
     fun create(): OneShot<PokemonEntity> {
@@ -44,9 +45,10 @@ object BuildNestTask {
                     it.absent(MemoryModuleType.ATTACK_TARGET),
                     it.present(CobblemonMemories.POTENTIAL_MATE),
                     it.present(CobblemonMemories.READY_TO_BUILD_NEST),
+                    it.present(CobblemonMemories.IDEAL_NEST_LOCATION),
                     it.absent(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
                     it.registered(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, paternalNestMemory, attackTarget, potentialMate, readyToBuildNest, nearbyVisiblePlayer, walkTarget ->
+            ).apply(it) { nestMemory, paternalNestMemory, attackTarget, potentialMate, readyToBuildNest, idealLocation, nearbyVisiblePlayer, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
@@ -61,18 +63,29 @@ object BuildNestTask {
                         return@Trigger false
                     }
 
+                    // Get the stored ideal nest location
+                    val idealNestPos: BlockPos = entity.brain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION).getOrNull()
+                        ?: return@Trigger false
+                    val nestCenter = Vec3.atCenterOf(idealNestPos)
+
+                    // check if close enough to ideal nest location
+                    if (entity.distanceToSqr(nestCenter) > 2.0) {
+                        return@Trigger false
+                    }
+
+
                     val (craftedNest, remainingItems) = craftResult
 
                     // Find ground position for the nest TODO we might want a sensor to sense a perfect position for the nest based on species etc
-                    val nestPos = entity.blockPosition().below()
+                    //val nestPos = entity.blockPosition().below()
 
                     // Ensure placement area is valid TODO have better validation for the placement area maybe?
-                    if (!world.getBlockState(nestPos).isAir && 1 == 2) {
+                    if (!world.getBlockState(idealNestPos).isAir && 1 == 2) {
                         return@Trigger false
                     }
 
                     // Place the nest block
-                    world.setBlock(nestPos, craftedNest.block.defaultBlockState(), 3)
+                    world.setBlock(idealNestPos, craftedNest.block.defaultBlockState(), 3)
 
                     // Update held stack with remaining materials
                     if (remainingItems > 0) {

@@ -17,6 +17,7 @@
           "attack_egg_thief",
           "path_to_nest_material",
           "pick_up_nest_material",
+          "path_to_ideal_nest_location",
           "build_nest"
         ]
       }

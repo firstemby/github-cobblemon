@@ -31,13 +31,14 @@ object PickUpNestMaterialTask {
                 it.absent(CobblemonMemories.NEST_LOCATION),
                 it.absent(CobblemonMemories.PATERNAL_NEST_LOCATION),
                 it.registered(CobblemonMemories.READY_TO_BUILD_NEST),
+                it.absent(CobblemonMemories.IDEAL_NEST_LOCATION),
                 it.absent(MemoryModuleType.ATTACK_TARGET),
                 it.present(CobblemonMemories.NESTING_MATERIAL_LOCATION),
                 it.present(CobblemonMemories.SENSED_NEST_MATERIAL),
                 it.present(CobblemonMemories.POTENTIAL_MATE),
                 it.absent(MemoryModuleType.NEAREST_VISIBLE_PLAYER),
                 it.registered(MemoryModuleType.WALK_TARGET)
-            ).apply(it) { nestMemory, paternalNestMemory, readyToBuildNest, attackTarget, nestingMaterialLocation, sensedNestMaterial, potentialMate, nearbyVisiblePlayer, walkTarget ->
+            ).apply(it) { nestMemory, paternalNestMemory, readyToBuildNest, idealNestLocation, attackTarget, nestingMaterialLocation, sensedNestMaterial, potentialMate, nearbyVisiblePlayer, walkTarget ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
@@ -81,6 +82,7 @@ object PickUpNestMaterialTask {
                     // Remove the item from the world
                     sensedNestMaterial.remove(Entity.RemovalReason.DISCARDED)
 
+                    // todo check with the mate to see if their combined materials can make a nest
                     // Check if materials in hand are enough to craft a nest
                     val craftResult = Nest.craftedNestResult(entity.getItemInHand(InteractionHand.MAIN_HAND))
 

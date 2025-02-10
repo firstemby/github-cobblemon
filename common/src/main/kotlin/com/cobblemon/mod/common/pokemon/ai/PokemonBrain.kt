@@ -65,7 +65,8 @@ object PokemonBrain {
         CobblemonSensors.MATE_SENSOR,
         CobblemonSensors.NEST_SENSOR,
         CobblemonSensors.EGG_SENSOR,
-        CobblemonSensors.NEST_MATERIAL_SENSOR
+        CobblemonSensors.NEST_MATERIAL_SENSOR,
+        CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -189,7 +190,8 @@ object PokemonBrain {
         CobblemonMemories.EGG_SEARCH_COUNTDOWN,
         CobblemonMemories.SENSED_NEST_MATERIAL,
         CobblemonMemories.NESTING_MATERIAL_LOCATION,
-        CobblemonMemories.READY_TO_BUILD_NEST
+        CobblemonMemories.READY_TO_BUILD_NEST,
+        CobblemonMemories.IDEAL_NEST_LOCATION
     )
 
     fun updateActivities(pokemon:PokemonEntity) {

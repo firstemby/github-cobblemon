@@ -85,6 +85,7 @@ interface TaskConfig {
             "retrieve_egg" to RetrieveEggTaskConfig::class.java,
             "pick_up_egg" to PickUpEggTaskConfig::class.java,
             "pick_up_nest_material" to PickUpNestMaterialTaskConfig::class.java,
+            "path_to_ideal_nest_location" to PathToIdealNestLocationTaskConfig::class.java,
             "place_egg_in_nest" to PlaceEggInNestTaskConfig::class.java,
             "build_nest" to BuildNestTaskConfig::class.java,
             "hunt_player" to HuntPlayerTaskConfig::class.java,

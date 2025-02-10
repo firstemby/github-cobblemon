@@ -57,6 +57,7 @@ object CobblemonMemories {
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
     val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
     val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
+    val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
