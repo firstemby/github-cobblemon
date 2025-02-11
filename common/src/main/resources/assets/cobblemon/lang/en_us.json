@@ -1264,6 +1264,7 @@
   "cobblemon.held_item.give": "%1$s was given %2$s to hold.",
   "cobblemon.held_item.replace": "You retrieved %1$s from %2$s and gave it %3$s to hold.",
   "cobblemon.held_item.take": "You retrieved %1$s from %2$s.",
+  "cobblemon.held_item.forbidden": "You can't give %1$s for %2$s to hold.",
   "cobblemon.held_item.already_holding": "%1$s is already holding %2$s!",
 
   "cobblemon.ui.pokemonteam": "Pokémon Team",

@@ -30,7 +30,6 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
@@ -43,6 +42,7 @@ import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
@@ -82,10 +82,6 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
-import java.util.EnumSet
-import java.util.Optional
-import java.util.UUID
-import java.util.concurrent.CompletableFuture
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -111,21 +107,12 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
-import net.minecraft.util.Mth.clamp
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.AgeableMob
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.ExperienceOrb
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Pose
-import net.minecraft.world.entity.Shearable
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
@@ -144,6 +131,8 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import java.util.concurrent.CompletableFuture
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -1102,32 +1091,51 @@ open class PokemonEntity(
         if (player !is ServerPlayer || this.isBusy || this.pokemon.getOwnerPlayer() != player) {
             return false
         }
+
+        if (!stack.isEmpty && (isBlacklisted(stack) || !isWhitelisted(stack))) {
+            player.sendSystemMessage(lang("held_item.forbidden", stack.hoverName, this.pokemon.getDisplayName()))
+            return false
+        }
+
         // We want the count of 1 in order to match the ItemStack#areEqual
         val giving = stack.copy().apply { count = 1 }
         val possibleReturn = this.pokemon.heldItemNoCopy()
         if (stack.isEmpty && possibleReturn.isEmpty) {
             return false
         }
+
         if (ItemStack.isSameItem(giving, possibleReturn)) {
             player.sendSystemMessage(lang("held_item.already_holding", this.pokemon.getDisplayName(), stack.hoverName))
             return true
         }
+
         val returned = this.pokemon.swapHeldItem(stack = stack, decrement = !player.isCreative)
         val text = when {
             giving.isEmpty -> lang("held_item.take", returned.hoverName, this.pokemon.getDisplayName())
             returned.isEmpty -> lang("held_item.give", this.pokemon.getDisplayName(), giving.hoverName)
             else -> lang("held_item.replace", returned.hoverName, this.pokemon.getDisplayName(), giving.hoverName)
         }
+
         player.giveOrDropItemStack(returned)
         player.sendSystemMessage(text)
+
         this.level().playSoundServer(
             position = this.position(),
             sound = SoundEvents.ITEM_PICKUP,
             volume = 0.6F,
             pitch = 1.4F
         )
+
         return true
     }
+
+    fun isBlacklisted(stack: ItemStack): Boolean =
+        BuiltInRegistries.ITEM.getTagOrEmpty(CobblemonItemTags.BLACKLISTED_ITEMS_TO_HOLD).any()
+        && stack.`is`(CobblemonItemTags.BLACKLISTED_ITEMS_TO_HOLD)
+
+    fun isWhitelisted(stack: ItemStack): Boolean =
+        BuiltInRegistries.ITEM.getTagOrEmpty(CobblemonItemTags.WHITELISTED_ITEMS_TO_HOLD).none()
+        || stack.`is`(CobblemonItemTags.WHITELISTED_ITEMS_TO_HOLD)
 
     fun tryMountingShoulder(player: ServerPlayer): Boolean {
         if (this.pokemon.belongsTo(player) && this.hasRoomToMount(player)) {

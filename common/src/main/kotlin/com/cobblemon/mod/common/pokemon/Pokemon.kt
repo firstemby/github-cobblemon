@@ -173,12 +173,15 @@ open class Pokemon : ShowdownIdentifiable {
                 throw IllegalArgumentException("Cannot set a species that isn't registered")
             }
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            val oldValue = field
             field = value
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
-                evolutionProxy.current().clear()
+                if (oldValue != value) {
+                    evolutionProxy.current().clear()
+                }
             }
             updateAspects()
             updateForm()

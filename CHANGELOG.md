@@ -4,6 +4,7 @@
 ### Additions
 - Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
 - Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
+- Added `blacklisted_items_to_hold` and `whitelisted_items_to_hold` tags to allow for controlling which items players can give to their Pokémon. If the whitelist is empty, it will consider all item as allowed (unless they are in the blacklist).
 
 ### Changes
 - Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
@@ -16,6 +17,8 @@
 - Fixed the consumption of friendship berries (or EV berries) not making any noise
 - Fixed Instantly breaking and replacing a fossil analyzer with any block entity crashing the game in a complete multi-structure
 - Fixed players getting disconnected when sidemods update a Pokémon's teratype
+- Fixed fling not using Item Names for minecraft held items that substitute Pokémon items
+- Fixed evolutions sometimes preventing players from logging in to servers
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -26,10 +29,6 @@
 - Removed the NbtItemPredicate class, all the mod usages now use the vanilla item predicate solution, this causes breaking changes on Fossil, HeldItemRequirement & ItemInteractionEvolution
 - Renamed Cobblemon's creative tabs to start with "Cobblemon: " to distinguish Cobblemon's tabs from tabs for other mods.
 - Various items now have a rarity value.
-
-- 
-### Additions
-- Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
 
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
