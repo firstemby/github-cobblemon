@@ -1,0 +1,29 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.drone_rotom.resting": {
+			"loop": true,
+			"bones": {
+				"rotom_drone": {
+					"rotation": ["math.sin(query.anim_time * 120) * 6", 0, "math.cos(query.anim_time * 100) * 4"],
+					"position": [0, "18 + math.sin(query.anim_time * 90) * 1", 0]
+				},
+				"head": {
+					"relative_to": {
+						"rotation": "entity"
+					},
+					"rotation": [0, 0, 0.01]
+				}
+			}
+		},
+		"animation.drone_rotom.simple_circle": {
+			"loop": true,
+			"bones": {
+				"rotom_drone": {
+					"rotation": [30, "90 - q.anim_time*90", 0],
+					"position": ["48*math.cos(q.anim_time*90)", 64, "48*math.sin(q.anim_time*90)"]
+				}
+			}
+		}
+	}
+}
