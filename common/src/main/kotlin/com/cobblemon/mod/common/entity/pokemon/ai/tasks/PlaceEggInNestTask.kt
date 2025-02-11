@@ -97,7 +97,6 @@ object PlaceEggInNestTask {
                         player.displayClientMessage("The Pokémon placed an egg in its nest!".green(), true)
                     }
 
-                    // todo maybe have them fall asleep after?
 
                     return@Trigger true
                 }
