@@ -138,12 +138,23 @@ object CobblemonEvents {
     @JvmField
     val POKEMON_ENTITY_SAVE_TO_WORLD = CancelableObservable<PokemonEntitySaveToWorldEvent>()
     @JvmField
-    val ENTITY_SPAWN = CancelableObservable<SpawnEvent<*>>()
+    val ENTITY_SPAWN_PRE = CancelableObservable<SpawnEvent<*>>()
+    @JvmField
+    val ENTITY_SPAWN_POST = EventObservable<SpawnEvent<*>>()
     @JvmField
     val SHINY_CHANCE_CALCULATION = EventObservable<ShinyChanceCalculationEvent>()
 
     @JvmField
-    val POKEMON_ENTITY_SPAWN = ENTITY_SPAWN
+    val POKEMON_ENTITY_SPAWN_PRE = ENTITY_SPAWN_PRE
+        .pipe(
+            filter { it.entity is PokemonEntity },
+            map {
+                @Suppress("UNCHECKED_CAST")
+                it as SpawnEvent<PokemonEntity>
+            }
+        )
+    @JvmField
+    val POKEMON_ENTITY_SPAWN = ENTITY_SPAWN_POST
         .pipe(
             filter { it.entity is PokemonEntity },
             map {
