@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
 object BuildNestTask {
@@ -52,57 +53,89 @@ object BuildNestTask {
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) return@Trigger false
 
-                    //runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-
-
-                    // Get the held item and validate that it can make a nest
-                    val heldItem = entity.getItemInHand(InteractionHand.MAIN_HAND)
-                    val craftResult = Nest.craftedNestResult(heldItem)
-
-                    if (!entity.brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST).orElse(false) || craftResult == null) {
-                        return@Trigger false
-                    }
-
-                    // Get the stored ideal nest location
+                    val mate = entity.brain.getMemory(CobblemonMemories.POTENTIAL_MATE).getOrNull() as? PokemonEntity ?: return@Trigger false
                     val idealNestPos: BlockPos = entity.brain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION).getOrNull()
-                        ?: return@Trigger false
+                            ?: return@Trigger false
                     val nestCenter = Vec3.atCenterOf(idealNestPos)
 
-                    // check if close enough to ideal nest location
-                    if (entity.distanceToSqr(nestCenter) > 2.0) {
+                    // Pokémon is ready and the craft result is valid
+                    if (!entity.brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST).orElse(false)) return@Trigger false
+
+                    // Both Pokémon are close enough to the nest location - we don't want them to be apart :c
+                    if (entity.distanceToSqr(nestCenter) > 2.0 || (mate.distanceToSqr(nestCenter)) > 2.0) {
                         return@Trigger false
                     }
 
+                    // Get the main Pokémon's held item
+                    var mainHeldItem = entity.getItemInHand(InteractionHand.MAIN_HAND)
 
-                    val (craftedNest, remainingItems) = craftResult
+                    // Check if the main Pokémon alone has enough materials to craft the nest
+                    var craftResult = Nest.craftedNestResult(mainHeldItem)
+                    if (craftResult == null && mate != null) {
+                        // If the main Pokémon doesn’t have enough materials, check if the mate can contribute
+                        val mateHeldItem = mate.getItemInHand(InteractionHand.MAIN_HAND)
 
-                    // Find ground position for the nest TODO we might want a sensor to sense a perfect position for the nest based on species etc
-                    //val nestPos = entity.blockPosition().below()
+                        // Only combine materials if they are the same item type
+                        if (!mainHeldItem.isEmpty && !mateHeldItem.isEmpty && mainHeldItem.item == mateHeldItem.item) {
+                            val combinedStackSize = mainHeldItem.count + mateHeldItem.count
+                            craftResult = Nest.craftedNestResult(ItemStack(mainHeldItem.item, combinedStackSize))
 
-                    // Ensure placement area is valid TODO have better validation for the placement area maybe?
-                    if (!world.getBlockState(idealNestPos).isAir && 1 == 2) {
-                        return@Trigger false
+                            // If a valid craft result is found keep trying to share
+                            if (craftResult != null) {
+                                val (craftedNest, requiredMaterials) = craftResult
+
+                                var remainingNeeded = requiredMaterials
+                                var fromMain = minOf(mainHeldItem.count, remainingNeeded)
+                                remainingNeeded -= fromMain
+
+                                var fromMate = minOf(mateHeldItem.count, remainingNeeded)
+                                remainingNeeded -= fromMate
+
+                                if (remainingNeeded > 0) return@Trigger false // Not enough materials
+
+                                // Deduct materials from both Pokémon
+                                entity.setItemInHand(InteractionHand.MAIN_HAND, if (mainHeldItem.count - fromMain > 0) ItemStack(mainHeldItem.item, mainHeldItem.count - fromMain) else ItemStack.EMPTY)
+                                mate.setItemInHand(InteractionHand.MAIN_HAND, if (mateHeldItem.count - fromMate > 0) ItemStack(mateHeldItem.item, mateHeldItem.count - fromMate) else ItemStack.EMPTY)
+
+                                // Place the nest
+                                world.setBlock(idealNestPos, craftedNest.block.defaultBlockState(), 3)
+
+                                // Clear memories
+                                entity.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
+                                entity.brain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
+                                mate.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
+                                mate.brain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
+
+                                // Notify nearby players for debug :D
+                                (world as ServerLevel).players().forEach { player ->
+                                    player.displayClientMessage("A Pokémon has built a nest using materials from both mates!".green(), true)
+                                }
+
+                                return@Trigger true
+                            }
+                        }
                     }
 
-                    // Place the nest block
-                    world.setBlock(idealNestPos, craftedNest.block.defaultBlockState(), 3)
+                    // If the main Pokémon already has enough materials, place the nest normally
+                    craftResult?.let { (craftedNest, requiredMaterials) ->
+                        // Deduct materials from the main Pokémon only
+                        entity.setItemInHand(InteractionHand.MAIN_HAND, if (mainHeldItem.count - requiredMaterials > 0) ItemStack(mainHeldItem.item, mainHeldItem.count - requiredMaterials) else ItemStack.EMPTY)
 
-                    // Update held stack with remaining materials
-                    if (remainingItems > 0) {
-                        entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(heldItem.item, remainingItems))
-                    } else {
-                        entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY)
+                        // Place the nest
+                        world.setBlock(idealNestPos, craftedNest.block.defaultBlockState(), 3)
+
+                        // Clear memories
+                        entity.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
+
+                        // Notify nearby players for debug
+                        (world as ServerLevel).players().forEach { player ->
+                            player.displayClientMessage("A Pokémon has built a nest!".green(), true)
+                        }
+
+                        return@Trigger true
                     }
 
-                    // Clear memories
-                    entity.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
-
-                    // Notify nearby players for debug
-                    (world as ServerLevel).players().forEach { player ->
-                        player.displayClientMessage("A Pokémon has built a nest!".green(), true)
-                    }
-
-                    return@Trigger true
+                    return@Trigger false
                 }
             }
         }

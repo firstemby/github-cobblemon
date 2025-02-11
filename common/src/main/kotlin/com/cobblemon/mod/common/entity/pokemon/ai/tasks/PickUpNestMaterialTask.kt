@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
+import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
 // pathing to found egg item in the world
@@ -55,6 +56,8 @@ object PickUpNestMaterialTask {
                         return@Trigger false
                     }
 
+                    val mate = entity.brain.getMemory(CobblemonMemories.POTENTIAL_MATE).getOrElse { return@Trigger false }
+
                     // Find the item entity at the location
                     val sensedNestMaterial = entity.brain.getMemory(CobblemonMemories.SENSED_NEST_MATERIAL).getOrNull() ?: return@Trigger false
                     val newItemStack = sensedNestMaterial.item.copy()
@@ -82,12 +85,18 @@ object PickUpNestMaterialTask {
                     // Remove the item from the world
                     sensedNestMaterial.remove(Entity.RemovalReason.DISCARDED)
 
-                    // todo check with the mate to see if their combined materials can make a nest
-                    // Check if materials in hand are enough to craft a nest
-                    val craftResult = Nest.craftedNestResult(entity.getItemInHand(InteractionHand.MAIN_HAND))
+                    // check with the mate to see if their combined materials can make a nest
+                    val mateHeldStack = mate.getItemInHand(InteractionHand.MAIN_HAND)
+                    if (!mateHeldStack.isEmpty && !heldItemStack.isEmpty && mateHeldStack.item == heldItemStack.item) {
+                        val combinedStackSize = mateHeldStack.count + heldItemStack.count
 
-                    if (craftResult != null) {
-                        entity.brain.setMemory(CobblemonMemories.READY_TO_BUILD_NEST, true)
+                        val craftedNest = Nest.craftedNestResult(ItemStack(mateHeldStack.item, combinedStackSize))
+
+                        if (craftedNest != null) {
+                            // Both Pokémon are ready to build a nest
+                            entity.brain.setMemory(CobblemonMemories.READY_TO_BUILD_NEST, true)
+                            mate.brain.setMemory(CobblemonMemories.READY_TO_BUILD_NEST, true)
+                        }
                     }
 
                     // Clear egg-related memories

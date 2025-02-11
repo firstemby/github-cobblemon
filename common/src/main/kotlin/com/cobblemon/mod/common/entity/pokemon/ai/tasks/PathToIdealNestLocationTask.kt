@@ -47,8 +47,6 @@ object PathToIdealNestLocationTask {
                         return@Trigger false
                     }
 
-                    // todo pathfind mate to location too
-
                     // Move towards the ideal nest location
                     walkTarget.set(WalkTarget(nestCenter, 1.0F, 1))
                     // todo set look target for entity
