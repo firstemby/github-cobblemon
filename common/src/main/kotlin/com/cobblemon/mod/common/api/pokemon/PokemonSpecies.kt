@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.abilities.CommonAbility
+import com.cobblemon.mod.common.api.abilities.PotentialAbility
 import com.cobblemon.mod.common.api.ai.SleepDepth
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
@@ -42,6 +43,7 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
+import com.cobblemon.mod.common.pokemon.abilities.SpecialAbility
 import com.cobblemon.mod.common.pokemon.transformation.predicate.NbtItemPredicate
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.transformation.adapters.*
@@ -84,7 +86,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(AbilityPool::class.java, AbilityPoolAdapter)
         .registerTypeAdapter(PreEvolution::class.java, CobblemonPreEvolutionAdapter)
-        //.registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
+        .registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
@@ -239,12 +241,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         // This is ugly, but we already have it hardcoded in the mod anyway
         val maxHP = if (this.num == 292) 1 else null
         val cannotDynamax = form.dynamaxBlocked
-        val abilities = mapOf(
-            "0" to form.abilities.filter { it is CommonAbility }.firstOrNull()?.template?.name,
-            "1" to form.abilities.filter { it is CommonAbility }.lastOrNull()?.template?.name,
-            "H" to form.abilities.find { it is HiddenAbility }?.template?.name
-        )
-        //
+        val abilities = form.showdownAbilityMapping()
+        // Common fields exempt from standard forms
         val baseSpecies = if (form !is StandardForm) form.species.standardForm.showdownName() else null
         val forme = if (form !is StandardForm) form.name else null
 
@@ -317,5 +315,29 @@ object PokemonSpecies : JsonDataRegistry<Species> {
             }
         else
             return parentForm.showdownName()
+    }
+
+    /**
+     * Constructs a mapping of the [PotentialAbility]s belonging to a [FormData] in Showdown identifiable format.
+     *
+     * @return A map of type (numeric for [CommonAbility]s, H for [HiddenAbility], S for [SpecialAbility]) to showdownid.
+     */
+    private fun FormData.showdownAbilityMapping(): Map<String, String>? {
+        // potential abilities
+        val commonAbilities = this.abilities.filterIsInstance<CommonAbility>()
+        val hiddenAbility = this.abilities.find { it is HiddenAbility }
+        val specialAbility = this.abilities.find { it is SpecialAbility }
+
+        // can have multiple common abilities
+        val abilities = mutableMapOf<String, String>()
+        val mapping: (String, PotentialAbility) -> Unit =  { key, ability ->
+            abilities.put(key, ability.template.showdownId())
+        }
+
+        // can only have one hidden and one special ability
+        commonAbilities.forEachIndexed { index, ability -> mapping(index.toString(), ability) }
+        hiddenAbility?.let { ability -> mapping("H", ability) }
+        specialAbility?.let { ability -> mapping("S", ability) }
+        return if (abilities.isEmpty()) null else abilities
     }
 }

@@ -33,7 +33,6 @@ import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -75,7 +74,6 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
-import com.cobblemon.mod.common.pokemon.transformation.requirements.LevelRequirement
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -982,12 +980,6 @@ open class PokemonEntity(
         if (stack.isEmpty) {
             return false
         }
-
-        Cobblemon.LOGGER.error("interaction")
-        this.pokemon.lockedEvolutions.forEach {
-            Cobblemon.LOGGER.error(it.id + " " + (it.trigger is PassiveTrigger) + " "  + (it.trigger is ItemInteractionTrigger) + " " + (it.requirements.find { it is LevelRequirement } != null))
-        }
-        this.pokemon.evolutions.forEach { Cobblemon.LOGGER.error(it.id) }
 
         if (player is ServerPlayer && isBattling) {
             val battle = battleId?.let(BattleRegistry::getBattle) ?: return false
