@@ -56,6 +56,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -273,6 +274,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
     @Override
     public Rollable updateOrientation(Function<Matrix3f, Matrix3f> update) {
+        //Disabled to allow non mouse inputs to modify roll
         if (!shouldRoll()) return this;
 
         if (this.orientation == null) {
@@ -298,6 +300,19 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return false;
 
         return pokemonEntity.getRiding().shouldRoll(pokemonEntity);
+    }
+
+    @Override
+    public boolean useMouseInputRoll() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return true;
+        if (player.isHolding(Items.DIAMOND)) return false;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return true;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return true;
+
+        return pokemonEntity.getRiding().useMouseInputRoll(pokemonEntity);
     }
 
     @Override

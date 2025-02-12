@@ -71,7 +71,13 @@ interface RideController : Encodable, Decodable {
      */
     fun rotation(entity: PokemonEntity, driver: LivingEntity) : Vec2
 
-    //fun angRollVel(entity: PokemonEntity, driver: Player) : Vec3
+    /**
+     * Sets the change current change in rotation for that tick in three
+     * dimensions
+     */
+    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+        return Vec3(0.0, 0.0, 0.0)
+    }
 
     fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {}
 
@@ -92,6 +98,12 @@ interface RideController : Encodable, Decodable {
     fun gravity(entity: PokemonEntity, regularGravity: Double) : Double? = null
 
     fun shouldRoll(entity: PokemonEntity): Boolean = false
+
+    fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+
+    fun turnOffOnGround(entity: PokemonEntity): Boolean = false
+
+    fun dismountOnShift(entity: PokemonEntity): Boolean = false
 
     fun getRuntime(entity: PokemonEntity) = entity.riding.runtime
 

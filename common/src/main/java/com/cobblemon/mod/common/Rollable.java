@@ -125,6 +125,8 @@ public interface Rollable {
 
     boolean shouldRoll();
 
+    boolean useMouseInputRoll();
+
     void clearRotation();
 
 }

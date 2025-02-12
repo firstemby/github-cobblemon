@@ -1354,29 +1354,6 @@ open class PokemonEntity(
     }
 
 
-    override fun isAffectedByFluids(): Boolean {
-        var fluidAffected = true
-
-        if( this.hasControllingPassenger() )
-        {
-            //Change this so it calls something from the controller to check
-            //if the specific controller wants to ignore fluid physics since 
-			//not every single one will want to
-            fluidAffected =  false
-        }
-
-        return fluidAffected
-    }
-
-    override fun onGround() : Boolean
-    {
-        if( this.hasControllingPassenger() )
-        {
-        return false
-        }
-        return super.onGround()
-    }
-
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
@@ -1623,6 +1600,9 @@ open class PokemonEntity(
         jumping = value
     }
 
+
+
+
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
         this.riding.tick(this, driver, movementInput)
@@ -1784,6 +1764,42 @@ open class PokemonEntity(
     override fun handleStopJump() {
         jumping = false
         // Set back to land pose type?
+    }
+
+    /*
+    These two functions (fluids and ground) need to become riding configurable and
+    dependent. Also, the onGround() function seems to affect quite a few spots in
+    code and would likely need to be changed to be something more robust instead of
+    just overriding this method.
+     */
+
+    override fun isAffectedByFluids(): Boolean {
+        var fluidAffected = true
+
+        if( this.hasControllingPassenger() )
+        {
+            //Change this so it calls something from the controller to check
+            //if the specific controller wants to ignore fluid physics since
+            //not every single one will want to
+            fluidAffected =  false
+        }
+
+        return fluidAffected
+    }
+
+
+    //this seems a bit hacky to me seeing as how many spots in the base classes its used.
+    //However, there are odd interactions with the controllers when they are meant to be
+    //flying or swimming but they are touching the ground and this needs to be prevented.
+    //Having it be able to be turned off by the flying or swimming controllers is the
+    //temp solution I have found.
+    override fun onGround() : Boolean
+    {
+        if( riding.turnOffOnGround( this ) )
+        {
+            return false
+        }
+        return super.onGround()
     }
 
 	//I think already mentioned but should maybe be riding controller configurable

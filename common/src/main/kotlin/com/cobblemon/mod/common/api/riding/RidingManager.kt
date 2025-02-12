@@ -119,31 +119,27 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.shouldRoll(entity)
     }
 
-    //I don't have this in the ride controllers as I didn't want to have to throw code into every
-    //single controller just to see if what I wanted to do would work. This would all be implemented
-    //controller to controller ideally. Just not sure if there's an easier way to do this.
-    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3? {
-
-        val controller = getController(entity) ?: return null
-        val rollable = driver as? Rollable
-
-        //this should be changed to be speed maybe?
-        val movingForce = driver.zza
-        if( rollable != null ) {
-            var yawAngVel = 60 * sin(Math.toRadians(rollable.roll.toDouble())).toFloat()
-            //if you are not pressing forward then don't turn
-            yawAngVel *= movingForce
-            //Ignore x,y,z its angular velocity:
-            //yaw, pitch, roll
-            return Vec3(yawAngVel.toDouble(), 0.0, 0.0)
-        }
-
-        //return controller.angRollVel(entity, driver)
-        return Vec3(0.0, 0.0, 0.0)
+    /**
+     * Determines whether mouse input will affect the rotation of
+     * the rollable object
+     */
+    fun useMouseInputRoll(entity: PokemonEntity): Boolean {
+        val controller = getController(entity) ?: return true
+        return controller.useMouseInputRoll(entity)
     }
 
-    //FIXME: Make this not just be true for all controllers lol
+    fun turnOffOnGround(entity: PokemonEntity): Boolean {
+        val controller = getController(entity) ?: return false
+        return controller.turnOffOnGround(entity)
+    }
+
+    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+        val controller = getController(entity) ?: return Vec3(0.0, 0.0, 0.0)
+        return controller.angRollVel(entity, driver)
+    }
+
     fun dismountOnShift(): Boolean {
-        return true
+        val controller = getController(entity) ?: return false
+        return controller.dismountOnShift(entity)
     }
 }

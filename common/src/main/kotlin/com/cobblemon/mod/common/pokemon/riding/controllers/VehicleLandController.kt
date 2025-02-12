@@ -72,7 +72,7 @@ class VehicleLandController : RideController {
             //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (entity.position().y)) {
                 val blockState = entity.level().getBlockState(it.below())
-                return@any !blockState.isAir && blockState.fluidState.isEmpty
+                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
             }
             true
         }
