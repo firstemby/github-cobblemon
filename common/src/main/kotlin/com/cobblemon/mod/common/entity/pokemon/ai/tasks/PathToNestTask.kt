@@ -84,9 +84,13 @@ object PathToNestTask {
 
                     //val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
                     val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
+                    // todo we will want to check to see if the claimed mons are still in the world
+
+                    val claimerEntityOne = nestEntity.nestClaimedBy.first?.let { world.getEntity(it) }
+                    val claimerEntityTwo = nestEntity.nestClaimedBy.second?.let { world.getEntity(it) }
 
                     // we probably want to set the claim of the nest here now that they are going to try to path to it and if claimed by someone else cancel
-                    if (nestEntity.nestClaimedBy.first != entity.uuid && nestEntity.nestClaimedBy.second != entity.uuid && nestEntity.nestClaimedBy != Pair(null, null))
+                    if ((claimerEntityOne != null && nestEntity.nestClaimedBy.first != entity.uuid) && (claimerEntityTwo != null && nestEntity.nestClaimedBy.second != entity.uuid))
                         return@Trigger false
 
                     // set the claim to this entity and it's mate to prevent others from trying to hoard towards this nest
