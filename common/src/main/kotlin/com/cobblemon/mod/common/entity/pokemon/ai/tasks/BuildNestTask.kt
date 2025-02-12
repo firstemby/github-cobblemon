@@ -100,6 +100,9 @@ object BuildNestTask {
                                 // Place the nest
                                 world.setBlock(idealNestPos, craftedNest.block.defaultBlockState(), 3)
 
+                                // claim nest so it can be used by these mons once it is built
+                                (world.getBlockEntity(idealNestPos) as NestBlockEntity).nestClaimedBy = Pair(entity.uuid, mate.uuid)
+
                                 // Clear memories
                                 entity.brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
                                 entity.brain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
