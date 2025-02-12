@@ -71,6 +71,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null // player UUID that placed this nest
     val eggState = EggState()
+    var nestClaimed = false
 
     /**
      * Sets the ItemStack and synchronizes it.
