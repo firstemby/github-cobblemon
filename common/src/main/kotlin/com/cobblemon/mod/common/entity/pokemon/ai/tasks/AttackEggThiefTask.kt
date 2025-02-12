@@ -47,6 +47,9 @@ object AttackEggThiefTask {
                         0.02 // Particle speed
                     )
 
+                    // clear SearchingForEggCountdown here too?
+                    entity.brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+
                     angryAt.set(eggThief.uuid)
                     attackTarget.set(eggThief)
 

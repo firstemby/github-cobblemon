@@ -104,9 +104,11 @@ object BreedAtNestTask {
                             mate.pokemon.heldItemNoCopy().damageValue += 1
                     }
 
-                    // set the parents of the nest if it/they are wild so they guard it
-                    if (nestEntity.ownerUUID == null)
+                    // set the parents and claimers of the nest if it/they are wild so they guard it
+                    if (nestEntity.ownerUUID == null) {
                         nestEntity.parents = Pair((entity as PokemonEntity).uuid, mate.uuid)
+                        nestEntity.nestClaimedBy = Pair((entity as PokemonEntity).uuid, mate.uuid) // we also set this in PathToNestTask as well so hopefully that doesn't conflict
+                    }
 
 
                     // set breeding cooldown for both

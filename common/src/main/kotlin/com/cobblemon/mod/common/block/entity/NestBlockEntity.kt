@@ -70,11 +70,11 @@ import java.util.UUID
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
     var renderState: BlockEntityRenderState? = null
-    var parents: Pair<UUID?, UUID?> = Pair(null, null)
-    var ownerUUID: UUID? = null // player UUID that placed this nest
+    var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
+    var ownerUUID: UUID? = null // player UUID that placed this nest // todo make sure this is synced
     private var eggItem: ItemStack = ItemStack.EMPTY
-    val eggState = EggState()
-    var nestClaimed = false
+    val eggState = EggState() // todo make sure this is synced
+    var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
 
     /**
      * Sets the ItemStack and synchronizes it.

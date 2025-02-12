@@ -100,17 +100,21 @@ class NestSensor : Sensor<LivingEntity>() {
             // Check if the nest is valid based on tethering and ownership
             val isWildNest = nestBlockEntity.ownerUUID == null
             val isOwnedNest = nestBlockEntity.ownerUUID != null
+            val isClaimed = nestBlockEntity.nestClaimedBy.first != null || nestBlockEntity.nestClaimedBy.second != null
             val isEggless = nestBlockEntity.getItem(0) == ItemStack.EMPTY
             val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
             val eggGroups = pokemonEntity.pokemon.species.eggGroups.map { it.name.lowercase() }
             val hasWaterEggGroup = eggGroups.any { it in WATER_EGG_GROUPS }
             val onlyWaterEggGroup = eggGroups.all { it in WATER_EGG_GROUPS }
             val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
+            val nestClaimerOne = nestBlockEntity.nestClaimedBy.first?.let { world.getEntity(it) }
+            val nestClaimerTwo = nestBlockEntity.nestClaimedBy.second?.let { world.getEntity(it) }
             val nestParentOneActive = nestBlockEntity.parents.first?.let { world.getEntity(it) }
             val nestParentTwoActive = nestBlockEntity.parents.second?.let { world.getEntity(it) }
 
-            // check if nest without an egg has paternal wild pokemon that are presently roaming
-            if (isWildNest && isEggless && (nestParentOneActive != null || nestParentTwoActive != null)) {
+
+            // check if nest without an egg has paternal wild pokemon that are presently roaming or claimed already
+            if (isWildNest && isEggless && ((nestParentOneActive != null || nestParentTwoActive != null) || (isClaimed && (nestClaimerOne != null || nestClaimerTwo != null)))) {
                 return@firstOrNull false
             }
 

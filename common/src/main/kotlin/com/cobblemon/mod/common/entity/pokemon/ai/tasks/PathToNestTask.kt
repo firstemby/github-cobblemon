@@ -85,7 +85,12 @@ object PathToNestTask {
                     //val mate = it.get(mateMemory) as? PokemonEntity ?: return@Trigger false
                     val mate = (mateMemory.value() as? IdF<PokemonEntity>)?.value() ?: return@Trigger false
 
-                    // todo try to find a way to only have pairs of mates instead of an orgy
+                    // we probably want to set the claim of the nest here now that they are going to try to path to it and if claimed by someone else cancel
+                    if (nestEntity.nestClaimedBy.first != entity.uuid && nestEntity.nestClaimedBy.second != entity.uuid && nestEntity.nestClaimedBy != Pair(null, null))
+                        return@Trigger false
+
+                    // set the claim to this entity and it's mate to prevent others from trying to hoard towards this nest
+                    nestEntity.nestClaimedBy = Pair(entity.uuid, mate.uuid)
 
                     // Create a target vector at the nest location
                     val targetVec = Vec3.atCenterOf(nestLocation)

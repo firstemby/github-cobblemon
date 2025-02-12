@@ -59,6 +59,7 @@ object SearchForEggTask {
 
                     val nestPos = entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return@Trigger false
                     val nestCenter = Vec3.atCenterOf(nestPos)
+                    val nestBlockEntity = if (world.getBlockEntity(nestPos) is NestBlockEntity) world.getBlockEntity(nestPos) as NestBlockEntity else null
 
                     val searchCountdownRemaining = entity.brain.getTimeUntilExpiry(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
                     val searchCountdownActive = entity.brain.getMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN).getOrNull()
@@ -73,6 +74,12 @@ object SearchForEggTask {
                         entity.brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
                         entity.brain.eraseMemory(CobblemonMemories.EGG_IN_NEST)
                         entity.brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+
+                        // if nest still exists then wipe parents and nest claims
+                        if (nestBlockEntity != null) {
+                            nestBlockEntity.parents = Pair(null, null)
+                            nestBlockEntity.nestClaimedBy = Pair(null, null)
+                        }
 
                         return@Trigger false // Stop task
                     }
