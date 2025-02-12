@@ -6,6 +6,8 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.core.BlockPos
 
 class StadiumBlockEntity(pos: BlockPos, state: BlockState): BlockEntity(CobblemonBlockEntities.STADIUM, pos, state) {
+    var isInUse = false
+
     fun getPlayer1Pos(): BlockPos {
         return blockPos.north(10)
     }
