@@ -31,18 +31,19 @@ class StadiumBlockRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Cont
         if (blockEntity !is StadiumBlockEntity) return
         poseStack.pushPose()
 
-        // TODO: Fix upside-down model
+        // Center the drone to aim at block centers instead of the corner
+        poseStack.translate(0.5, 0.0, 0.5)
+        // Fix upside-down model
+        poseStack.mulPose(Axis.XP.rotationDegrees(180F))
 
         if (blockEntity.isInUse) {
             // TODO
         } else {
-            // Centers the drone above the stadium block when idling
-            poseStack.translate(0.5, 1.8, 0.5)
             // Rotates the drone to match the block's rotation
             val blockState = if (blockEntity.level != null) blockEntity.blockState
             else (CobblemonBlocks.STADIUM.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
             val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
-            poseStack.mulPose(Axis.YP.rotationDegrees(-yRot))
+            poseStack.mulPose(Axis.YP.rotationDegrees(180F-yRot))
 
             drawDrone(poseStack, 1.0F, multiBufferSource, light)
         }
@@ -62,7 +63,8 @@ class StadiumBlockRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Cont
         poseStack.scale(scale, scale, scale)
 
         val buffer = ItemRenderer.getFoilBufferDirect(multiBufferSource, RenderType.entityCutout(textureResource), false, false)
-        model.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY, -0x1)
+        // TODO: Make drone lighting dynamic (simply using the light arg makes the drone always appear dark)
+        model.render(poseStack, buffer, 200, OverlayTexture.NO_OVERLAY, -0x1)
 
         poseStack.popPose()
     }
