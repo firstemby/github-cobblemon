@@ -21,7 +21,7 @@ import kotlin.collections.firstOrNull
  *
  * @since January 12th, 2025
  */
-class NestSensor : Sensor<LivingEntity>() {
+class NestSensor : Sensor<LivingEntity>(200) {
     companion object {
         val OUTPUT_MEMORY_MODULES = setOf(CobblemonMemories.NEST_LOCATION)
         private const val DETECTION_RADIUS = 10.0 // Radius to search for nests
