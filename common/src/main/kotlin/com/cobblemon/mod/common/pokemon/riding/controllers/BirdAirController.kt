@@ -95,6 +95,7 @@ class BirdAirController : RideController {
                 }
             }
         }
+        println(maxSpeed)
         return 1.0f * maxSpeed.toFloat()
     }
 
@@ -169,7 +170,27 @@ class BirdAirController : RideController {
 
         //In degrees per second? It was supposed to be I think but
         //I have messed something up
-        val rotationChangeRate = 4.0
+
+        val rotationChangeRate = 3.0
+        if( rollable != null ) {
+            var yawForce =  rotationChangeRate * sin( Math.toRadians( rollable.roll.toDouble() ))
+            //for a bit of correction on the rolls limit it to a quarter the amount
+            var pitchForce = -0.25 * rotationChangeRate * abs(sin( Math.toRadians( rollable.roll.toDouble() )))
+
+            //limit rotation modulation when pitched up heavily or pitched down heavily
+            yawForce *= abs(cos( Math.toRadians( rollable.pitch.toDouble() )))
+            pitchForce *= abs(cos( Math.toRadians( rollable.pitch.toDouble() )))
+
+            //Create a deadzone for easier leveling out
+            if( rollable.roll <= 5.0 && rollable.roll >= -5.0)
+            {
+                yawForce = 0.0
+                pitchForce = 0.0
+            }
+            return Vec3( yawForce, pitchForce, 0.0)
+        }
+
+        /*
         val rotLimit = 15.0
 
         var rollForce = -1.0 * driver.xxa * rotationChangeRate
@@ -199,9 +220,41 @@ class BirdAirController : RideController {
         }
 
 
+         */
+
 
 
         return Vec3(0.0, 0.0, 0.0)
+    }
+
+    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        if(driver !is Rollable) return
+
+        val rollable = driver as Rollable
+
+        val rotLimit = 65.0
+        val nextRollRot = rollable.roll + xMouse.toFloat()
+        if( xMouse > 0 )
+        {
+            if( rollable.roll > rotLimit / 3 )
+            {
+                val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
+                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
+                return
+            }
+
+        }else{
+            if( rollable.roll < -1.0 * rotLimit / 3 )
+            {
+                val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
+                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
+                return
+            }
+
+        }
+        //Ignore x,y,z its angular velocity:
+        //yaw, pitch, roll
+        rollable.rotate(0.0f, yMouse.toFloat(),  0.5f * xMouse.toFloat() )
     }
 
     override fun canJump(

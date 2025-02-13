@@ -102,7 +102,8 @@ class HelicopterAirController : RideController {
 
         //In degrees per second? It was supposed to be I think but
         //I have messed something up
-        val rotationChangeRate = 1.0
+        val rotationChangeRate = 2.0
+        val rotLimit = 30.0
 
         var pitchForce = driver.zza * rotationChangeRate
         var rollForce = -1.0 * driver.xxa * rotationChangeRate
@@ -113,7 +114,6 @@ class HelicopterAirController : RideController {
             //If the roll or pitch have exceeded the limit then do not modulate that
             //rotation in that direction further
 
-            val rotLim = 30.0
             //modulate the forces so that they trend towards 0 as they approach rotation limit.
             //The current function has it drop off very quickly which may not be ideal.
             //Prev function:
@@ -121,9 +121,9 @@ class HelicopterAirController : RideController {
 
             //The three denotes that the force will be 1/3 what it would have been at
             //the rotation limit
-            rollForce *= 3.0.pow(-1.0 * (abs(rollable.roll.toDouble()) / ROTATION_LIMIT))
+            rollForce *= 2.0.pow(-1.0 * (abs(rollable.roll.toDouble()) / ROTATION_LIMIT))
 
-            pitchForce *= 3.0.pow(-1.0 * (abs(rollable.pitch.toDouble()) / ROTATION_LIMIT))
+            pitchForce *= 2.0.pow(-1.0 * (abs(rollable.pitch.toDouble()) / ROTATION_LIMIT))
 
             if( rollable.roll >= ROTATION_LIMIT && rollForce > 0.0)
             {
