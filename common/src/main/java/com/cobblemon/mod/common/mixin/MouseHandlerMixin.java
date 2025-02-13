@@ -33,6 +33,8 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedScrollY;
     @Shadow @Final private Minecraft minecraft;
 
+    @Unique SmoothDouble xMouseSmoother = new SmoothDouble();
+    @Unique SmoothDouble yMouseSmoother = new SmoothDouble();
     @Unique SmoothDouble pitchSmoother = new SmoothDouble();
     @Unique SmoothDouble rollSmoother = new SmoothDouble();
     @Unique SmoothDouble yawSmoother = new SmoothDouble();
@@ -112,63 +114,45 @@ public class MouseHandlerMixin {
         if (!(player instanceof Rollable rollable)) return true;
 
         if (!rollable.shouldRoll()) {
+            xMouseSmoother.reset();
+            yMouseSmoother.reset();
             pitchSmoother.reset();
             rollSmoother.reset();
             yawSmoother.reset();
             return true;
         }
 
-        if ( rollable.useMouseInputRoll())
-        {
-            var pitchMouse = pitchSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
-            var rollMouse = rollSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
-            rollable.rotate(0.0F, (float)pitchMouse, (float)rollMouse);
+        //maybe have a rollable x mouse and rollable y mouse that take the xmousesmoother
+        //and y mouse smoother ( which are right now named pichsmoother and roll smoother)
+        // values and feed it to those rollable functions which will be called by the
+        //specific ride controller where rollable.rotate can then be called and used
+        //controller specific.
+        var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
+        var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
+        rollable.rotationOnMouseXY( yMouse, xMouse );
 
-            //get the current velocity requested to be applied
-            //by the ride controller
-            var angRot = rollable.angRollVel();
-            //Multiply against deltatime to get a consistent turn
-            //independent of framerate
-            if( angRot != null )
-            {
-                //var yaw = angRot.x * d;
-                var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
-                //var pitch = angRot.y * d;
-                var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
-                //var roll = angRot.z * d;
-                var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
-                rollable.rotate((float)yaw , (float)pitch, (float) roll);
-            }
+        //get the current angular velocity requested to be applied
+        //by the ride controller
+        var angRot = rollable.angRollVel();
+        //Multiply against deltatime to get a consistent turn
+        //independent of framerate
+        if( angRot != null ) {
+            //var yaw = angRot.x * d;
+            //Add the yaw to the mouse here... this all needs changed. It should
+            //just map which 0 1 or 2 of the three it is going to modulate with
+            //what
 
-            return false;
+            var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
+            //yaw += yawSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
+            //var pitch = angRot.y * d;
+            var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
+            //pitch += pitchSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
+            //var roll = angRot.z * d;
+            var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
+            rollable.rotate((float) yaw, (float) pitch, (float) roll);
         }
-        //code used in two spots. Need to refactor or rethink how this is done
-        //If riding maybe only ever use our way of doing mouse input?
-        //It creates a better feeling ride anyhow?
-        else
-        {
-            //get the current velocity requested to be applied
-            //by the ride controller
-            var angRot = rollable.angRollVel();
-            //Multiply against deltatime to get a consistent turn
-            //independent of framerate
-            if( angRot != null )
-            {
-                //var yaw = angRot.x * d;
-                //Add the yaw to the mouse here... this all needs changed. It should
-                //just map which 0 1 or 2 of the three it is going to modulate with
-                //what
-                var yaw = yawSmoother.getNewDeltaValue(angRot.x *  0.5f, d);
-                yaw += yawSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
-                //var pitch = angRot.y * d;
-                var pitch = pitchSmoother.getNewDeltaValue(angRot.y *  0.5f, d);
-                //var roll = angRot.z * d;
-                var roll = rollSmoother.getNewDeltaValue(angRot.z *  0.5f, d);
-                rollable.rotate((float)yaw , (float)pitch, (float) roll);
-            }
+        return false;
 
-            return true;
-        }
 
     }
 

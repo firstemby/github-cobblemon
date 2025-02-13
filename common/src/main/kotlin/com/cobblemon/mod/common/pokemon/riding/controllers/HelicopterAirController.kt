@@ -100,7 +100,8 @@ class HelicopterAirController : RideController {
 
         val rollable = driver as? Rollable
 
-        //In degrees per second
+        //In degrees per second? It was supposed to be I think but
+        //I have messed something up
         val rotationChangeRate = 1.0
 
         var pitchForce = driver.zza * rotationChangeRate
@@ -121,7 +122,6 @@ class HelicopterAirController : RideController {
             //The three denotes that the force will be 1/3 what it would have been at
             //the rotation limit
             rollForce *= 3.0.pow(-1.0 * (abs(rollable.roll.toDouble()) / ROTATION_LIMIT))
-
 
             pitchForce *= 3.0.pow(-1.0 * (abs(rollable.pitch.toDouble()) / ROTATION_LIMIT))
 
@@ -170,7 +170,14 @@ class HelicopterAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = true
 
-    override fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        if(driver !is Rollable) return
+
+        val rollable = driver as Rollable
+        //Ignore x,y,z its angular velocity:
+        //yaw, pitch, roll
+        rollable.rotate(xMouse.toFloat(), 0.0f, 0.0f )
+    }
 
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
         return 0.0

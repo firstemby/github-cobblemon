@@ -64,9 +64,8 @@ data class RidingManager(val entity: PokemonEntity) {
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
         //val speedPlayer = driver.deltaMovement.horizontalDistance()
         //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
-
         val speedEntity = entity.deltaMovement.horizontalDistance()
-        driver.displayClientMessage(Component.literal("Speed Entity: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedEntity b/t")), true)
+        driver.displayClientMessage(Component.literal("Speed Entity: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} b/t")), true)
 
     }
 
@@ -117,6 +116,11 @@ data class RidingManager(val entity: PokemonEntity) {
     fun shouldRoll(entity: PokemonEntity): Boolean {
         val controller = getController(entity) ?: return false
         return controller.shouldRoll(entity)
+    }
+
+    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        val controller = getController(entity) ?: return
+        controller.rotationOnMouseXY( entity, driver, yMouse, xMouse )
     }
 
     /**

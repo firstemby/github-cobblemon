@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.controller
 
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.riding.RidingState
@@ -100,6 +101,15 @@ interface RideController : Encodable, Decodable {
     fun shouldRoll(entity: PokemonEntity): Boolean = false
 
     fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+
+    //If function is not overwritten by controllers then just perform the defualt
+    //rolling function
+    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        if(driver !is Rollable) return
+
+        val rollable = driver as Rollable
+        rollable.rotate(0.0f, yMouse.toFloat(), xMouse.toFloat())
+    }
 
     fun turnOffOnGround(entity: PokemonEntity): Boolean = false
 

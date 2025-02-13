@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
@@ -122,6 +123,8 @@ public interface Rollable {
      * Get the angular velocity in degrees per second as a Vec3
      */
     Vec3 angRollVel();
+
+    public void rotationOnMouseXY( double yMouse, double xMouse );
 
     boolean shouldRoll();
 

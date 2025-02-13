@@ -303,6 +303,18 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
+    public void rotationOnMouseXY( double yMouse, double xMouse ) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return;
+
+        pokemonEntity.getRiding().rotationOnMouseXY(pokemonEntity, player, yMouse, xMouse);
+    }
+
+    @Override
     public boolean useMouseInputRoll() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return true;
