@@ -90,6 +90,10 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).velocity(entity, driver, input)
     }
 
+    override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+        return getActiveController(entity).angRollVel(entity, driver)
+    }
+
     override fun canJump(entity: PokemonEntity, driver: Player) = true
 
     override fun jumpForce(
@@ -113,6 +117,14 @@ class RunUpToFlightCompositeController : RideController {
     }
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = getActiveController(entity).shouldRoll(entity)
+
+    override fun useMouseInputRoll(entity: PokemonEntity): Boolean = getActiveController(entity).useMouseInputRoll(entity)
+
+    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        getActiveController(entity).rotationOnMouseXY( entity, driver, yMouse, xMouse )
+    }
+
+    override fun dismountOnShift(entity: PokemonEntity): Boolean = getActiveController(entity).dismountOnShift(entity)
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

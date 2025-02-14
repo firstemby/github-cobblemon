@@ -10,15 +10,19 @@ package com.cobblemon.mod.common.api.riding
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
+import kotlin.math.sin
 
 data class RidingManager(val entity: PokemonEntity) {
     var lastSpeed = 0F
@@ -58,8 +62,11 @@ data class RidingManager(val entity: PokemonEntity) {
 
         val pose = controller.pose(entity)
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
+        //val speedPlayer = driver.deltaMovement.horizontalDistance()
+        //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
+        val speedEntity = entity.deltaMovement.horizontalDistance()
+        driver.displayClientMessage(Component.literal("Speed Entity: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} b/t")), true)
 
-//        driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$lastSpeed b/t")), true)
     }
 
     fun speed(entity: PokemonEntity, driver: Player): Float {
@@ -121,8 +128,32 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.shouldRotatePokemonHead()
     }
 
-    //FIXME: Make this not just be false for all controllers lol
+    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
+        val controller = getController(entity) ?: return
+        controller.rotationOnMouseXY( entity, driver, yMouse, xMouse )
+    }
+
+    /**
+     * Determines whether mouse input will affect the rotation of
+     * the rollable object. Need to remove this as it's not used anymore
+     */
+    fun useMouseInputRoll(entity: PokemonEntity): Boolean {
+        val controller = getController(entity) ?: return true
+        return controller.useMouseInputRoll(entity)
+    }
+
+    fun turnOffOnGround(entity: PokemonEntity): Boolean {
+        val controller = getController(entity) ?: return false
+        return controller.turnOffOnGround(entity)
+    }
+
+    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+        val controller = getController(entity) ?: return Vec3(0.0, 0.0, 0.0)
+        return controller.angRollVel(entity, driver)
+    }
+
     fun dismountOnShift(): Boolean {
-        return false
+        val controller = getController(entity) ?: return false
+        return controller.dismountOnShift(entity)
     }
 }

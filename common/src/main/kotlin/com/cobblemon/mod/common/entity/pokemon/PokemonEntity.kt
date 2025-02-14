@@ -8,12 +8,8 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonEntities
-import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -87,9 +83,6 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
-import java.util.*
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -120,15 +113,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.AgeableMob
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.ExperienceOrb
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Pose
-import net.minecraft.world.entity.Shearable
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
@@ -150,6 +135,9 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
+import java.util.*
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -1353,6 +1341,7 @@ open class PokemonEntity(
         }
     }
 
+
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
@@ -1599,6 +1588,11 @@ open class PokemonEntity(
         jumping = value
     }
 
+ //   override fun moveRelative(amount: Float, relative: Vec3) {
+ //       val vec3 = this.getInputVector(relative, amount, this.yRot)
+ //       this.deltaMovement = deltaMovement.add(vec3)
+ //   }
+
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
         this.riding.tick(this, driver, movementInput)
@@ -1760,8 +1754,45 @@ open class PokemonEntity(
         // Set back to land pose type?
     }
 
+    /*
+    These two functions (fluids and ground) need to become riding configurable and
+    dependent. Also, the onGround() function seems to affect quite a few spots in
+    code and would likely need to be changed to be something more robust instead of
+    just overriding this method.
+     */
+
+    override fun isAffectedByFluids(): Boolean {
+        var fluidAffected = true
+
+        if( this.hasControllingPassenger() )
+        {
+            //Change this so it calls something from the controller to check
+            //if the specific controller wants to ignore fluid physics since
+            //not every single one will want to
+            fluidAffected =  false
+        }
+
+        return fluidAffected
+    }
+
+
+    //this seems a bit hacky to me seeing as how many spots in the base classes its used.
+    //However, there are odd interactions with the controllers when they are meant to be
+    //flying or swimming but they are touching the ground and this needs to be prevented.
+    //Having it be able to be turned off by the flying or swimming controllers is the
+    //temp solution I have found.
+    override fun onGround() : Boolean
+    {
+        if( riding.turnOffOnGround( this ) )
+        {
+            return false
+        }
+        return super.onGround()
+    }
+
+	//I think already mentioned but should maybe be riding controller configurable
     override fun dismountsUnderwater(): Boolean {
-        return true
+        return false
     }
 
     override fun getDefaultGravity(): Double {
