@@ -1,12 +1,24 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.entity.BlockEntity
+import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneState
 import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.state.BlockState
 
-class StadiumBlockEntity(pos: BlockPos, state: BlockState): BlockEntity(CobblemonBlockEntities.STADIUM, pos, state) {
+class StadiumBlockEntity(
+    pos: BlockPos,
+    blockState: BlockState
+): BlockEntity(
+    CobblemonBlockEntities.STADIUM,
+    pos,
+    blockState
+) {
     var isInUse = false
+    var animAge: Int = -1
+    var animPartialTicks: Float = 0F
+
+    val droneState = DroneState(animAge, animPartialTicks)
 
     fun getPlayer1Pos(): BlockPos {
         return blockPos.north(10)
