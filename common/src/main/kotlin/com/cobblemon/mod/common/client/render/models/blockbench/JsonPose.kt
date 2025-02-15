@@ -134,14 +134,8 @@ class JsonPose(model: PosableModel, json: JsonObject) {
         val animations: (state: PosableState) -> List<ActiveAnimation> = { _ ->
             // Animations can be as MoLang expression strings or, legacy, shit like bedrock(something, else)
             (json.get("animations")?.normalizeToArray()?.asJsonArray ?: JsonArray()).mapNotNull { animJson ->
-                try {
-                    val expr = animJson.asString.asExpressionLike()
-                    runtime.resolveObject(expr).obj as ActiveAnimation
-                } catch (e: Exception) {
-                    val animString = animJson.asString
-                    val anim = animString.substringBefore("(")
-                    return@mapNotNull ANIMATION_FACTORIES[anim]?.active(model, animString)
-                }
+                val expr = animJson.asString.asExpressionLike()
+                runtime.resolveObject(expr).obj as ActiveAnimation
             }
         }
 
