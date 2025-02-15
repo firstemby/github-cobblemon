@@ -79,13 +79,14 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
 
         val buffer = multiBufferSource.getBuffer(RenderType.entityCutout(texture))
         state.currentModel = model
-        state.setPoseToFirstSuitable()
+        state.setPose("sleep")
 
         model.context = context
         context.put(RenderContext.TEXTURE, texture)
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.BLOCK)
         context.put(RenderContext.POSABLE_STATE, state)
 
+        print(model.animations)
         model.applyAnimations(
             entity = null,
             state = state,
@@ -95,12 +96,13 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
             limbSwingAmount = 0F,
             ageInTicks = state.animationSeconds * 20
         )
+        print(model.animations)
 
         poseStack.scale(scale, scale, scale)
 
         // TODO: Make drone lighting dynamic (simply using the light arg makes the drone always appear dark)
         model.render(context, poseStack, buffer, 200, OverlayTexture.NO_OVERLAY, -0x1)
-
+        model.setDefault()
         poseStack.popPose()
     }
 }
