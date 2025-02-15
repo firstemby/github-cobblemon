@@ -182,7 +182,7 @@ class CobblemonConfig {
     var displayNameForUnknownPokemon = false
 
     @CobblemonConfigField(Category.Pokemon, lang = "display_entity_labels_when_crouching_only")
-    var displayEntityLabelsWhenCrouchingOnly = true
+    var displayEntityLabelsWhenCrouchingOnly = false
 
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate")
     var shinyRate = 8192F
@@ -251,6 +251,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex")
     var hideUnimplementedPokemonInThePokedex = false
+
+    @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor")
+    var summaryPokemonFollowCursor = true
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = false

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.events.pokemon
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.pokemon.stats.EvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
  * Fired during EV mutation.
@@ -24,6 +25,11 @@ interface EvGainedEvent {
      * The [Stat] having EVs added to itself.
      */
     val stat: Stat
+
+    /**
+     * @see EvSource.pokemon
+     */
+    val pokemon: Pokemon get() = this.source.pokemon
 
     /**
      * The [EvSource] that fired this event.

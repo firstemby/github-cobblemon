@@ -1548,6 +1548,7 @@
   "cobblemon.config.ui.category.healing": "Healing",
   "cobblemon.config.ui.category.storage": "Storage",
   "cobblemon.config.ui.category.world": "World",
+  "cobblemon.config.ui.category.interface": "Interface",
   "cobblemon.config.ui.category.debug": "Debug",
 
   "cobblemon.config.ui.max_pokemon_level": "Max Pokémon Level",
@@ -1694,6 +1695,8 @@
   "cobblemon.config.ui.max_pokedex_scanning_detection_range.tooltip": "The maximum distance at which the Pokédex can detect and scan Pokémon.",
   "cobblemon.config.ui.hide_unimplemented_pokemon_in_the_pokedex": "Hide Unimplemented Pokémon in the Pokédex",
   "cobblemon.config.ui.hide_unimplemented_pokemon_in_the_pokedex.tooltip": "Whether to hide unimplemented Pokémon from the Pokédex.",
+  "cobblemon.config.ui.summary_pokemon_follow_cursor": "Make Pokémon Follow Cursor",
+  "cobblemon.config.ui.summary_pokemon_follow_cursor.tooltip": "Whether or not Pokémon should follow the mouse cursor with their heads in the Summary screen.",
   "cobblemon.config.ui.enable_debug_keys": "Enable Debug Keys",
   "cobblemon.config.ui.enable_debug_keys.tooltip": "Enables additional commands and chat logging to assist with implementing Pokémon (see the wiki for a list of commands).",
 

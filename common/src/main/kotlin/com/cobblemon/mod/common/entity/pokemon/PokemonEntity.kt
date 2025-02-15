@@ -1178,12 +1178,17 @@ open class PokemonEntity(
         if (!super.setEntityOnShoulder(player)) {
             return false
         }
+        var isLeft = false
+        // Use copies because player doesn't expose a forceful update of shoulder data
         val nbt = when {
             player.shoulderEntityRight.isPokemonEntity() && player.shoulderEntityRight.getCompound(DataKeys.POKEMON)
-                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> player.shoulderEntityRight
+                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> player.shoulderEntityRight.copy()
 
             player.shoulderEntityLeft.isPokemonEntity() && player.shoulderEntityLeft.getCompound(DataKeys.POKEMON)
-                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> player.shoulderEntityLeft
+                .getUUID(DataKeys.POKEMON_UUID) == this.pokemon.uuid -> {
+                    isLeft = true
+                    player.shoulderEntityLeft.copy()
+                }
 
             else -> return true
         }
@@ -1192,6 +1197,7 @@ open class PokemonEntity(
         nbt.putString(DataKeys.SHOULDER_FORM, this.pokemon.form.name)
         nbt.put(DataKeys.SHOULDER_ASPECTS, this.pokemon.aspects.map(StringTag::valueOf).toNbtList())
         nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, this.pokemon.scaleModifier)
+        if (isLeft) player.shoulderEntityLeft = nbt else player.shoulderEntityRight = nbt
         return true
     }
 

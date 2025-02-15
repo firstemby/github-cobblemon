@@ -235,7 +235,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             pokemon = selectedPokemon.asRenderablePokemon(),
             baseScale = 2F,
             rotationY = 325F,
-            offsetY = -10.0
+            offsetY = -10.0,
+            shouldFollowCursor = true,
         )
         addRenderableOnly(this.modelWidget)
     }
@@ -274,9 +275,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
         children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
-        if (this::modelWidget.isInitialized) {
-            this.modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
+
+        if (::modelWidget.isInitialized) {
+            modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
         }
+
         if (this::nicknameEntryWidget.isInitialized) {
             this.nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
         }
@@ -591,12 +594,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
-
-    /*
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return children().any { it.mouseClicked(mouseX, mouseY, button) }
-    }
-     */
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)

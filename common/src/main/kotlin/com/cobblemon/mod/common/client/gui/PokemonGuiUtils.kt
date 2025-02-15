@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Rende
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
+import com.cobblemon.mod.common.util.math.toEulerXYZDegrees
 import com.cobblemon.mod.common.util.toHex
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.blaze3d.systems.RenderSystem
@@ -25,8 +26,10 @@ import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.atan
 
 fun drawProfilePokemon(
     renderablePokemon: RenderablePokemon,
@@ -41,7 +44,9 @@ fun drawProfilePokemon(
     r: Float = 1F,
     g: Float = 1F,
     b: Float = 1F,
-    a: Float = 1F
+    a: Float = 1F,
+    headYaw: Float = 0f,
+    headPitch: Float = 0f,
 ) = drawProfilePokemon(
     species = renderablePokemon.species.resourceIdentifier,
     matrixStack = matrixStack,
@@ -56,6 +61,8 @@ fun drawProfilePokemon(
     g = g,
     b = b,
     a = a,
+    headYaw = headYaw,
+    headPitch = headPitch,
 )
 
 fun drawProfilePokemon(
@@ -71,7 +78,9 @@ fun drawProfilePokemon(
     r: Float = 1F,
     g: Float = 1F,
     b: Float = 1F,
-    a: Float = 1F
+    a: Float = 1F,
+    headYaw: Float = 0f,
+    headPitch: Float = 0f,
 ) {
     RenderSystem.applyModelViewMatrix()
     matrixStack.scale(scale, scale, -scale)
@@ -100,7 +109,7 @@ fun drawProfilePokemon(
 
         state.setPoseToFirstSuitable(poseType)
         state.updatePartialTicks(partialTicks)
-        model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
+
         if (applyProfileTransform) {
             matrixStack.translate(
                 model.profileTranslation.x,
@@ -114,6 +123,9 @@ fun drawProfilePokemon(
             }
         }
         matrixStack.mulPose(rotation)
+
+        model.applyAnimations(null, state, 0F, 0F, 0F, headYaw, headPitch)
+
         Lighting.setupForEntityInInventory()
         val entityRenderDispatcher = Minecraft.getInstance().entityRenderDispatcher
         rotation.conjugate()
@@ -140,3 +152,29 @@ fun drawProfilePokemon(
     }
 }
 
+const val HEAD_YAW_FACTOR = 40f
+const val HEAD_PITCH_FACTOR = 20f
+const val SMOOTHING_FACTOR = 0.05f
+
+fun calculateHeadYawAndPitch(
+    xCoordinate: Float,
+    yCoordinate: Float,
+    rotation: Quaternionf,
+    mouseX: Int,
+    mouseY: Int,
+    currentYaw: Float,
+    currentPitch: Float,
+    resetToCenter: Boolean,
+): Pair<Float, Float> {
+    val horizontalAngle = atan(((xCoordinate - mouseX) / 40.0f).toDouble()).toFloat()
+    val verticalAngle = atan(((yCoordinate - mouseY) / 40.0f).toDouble()).toFloat()
+
+    val eulerXYZRotationDegrees = rotation.toEulerXYZDegrees()
+    val targetYaw = if (!resetToCenter) horizontalAngle * HEAD_YAW_FACTOR - eulerXYZRotationDegrees.y else 0f
+    val targetPitch = if (!resetToCenter) -verticalAngle * HEAD_PITCH_FACTOR - eulerXYZRotationDegrees.x else 0f
+
+    val newYaw = Mth.rotLerp(SMOOTHING_FACTOR, currentYaw, targetYaw)
+    val newPitch = Mth.rotLerp(SMOOTHING_FACTOR, currentPitch, targetPitch)
+
+    return Pair(newYaw, newPitch)
+}
