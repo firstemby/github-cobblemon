@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:rotom_drone",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:rotom_drone",
+      "model": "cobblemon:rotom_drone.geo",
+      "texture": "cobblemon:textures/drone/rotom_drone.png",
+      "layers": []
+    }
+  ]
+}

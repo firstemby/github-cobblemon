@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilModel
+import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.AncientPokeBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.BeastBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallModel
@@ -79,12 +80,14 @@ object VaryingModelRepository {
         "poke_balls",
         "generic",
         "block_entities",
+        "drone"
     )
 
     val poserDirectories: List<Pair<String, Class<out PosableModel>>> = listOf(
         "bedrock/posers" to PosableModel::class.java,
         "bedrock/pokemon/posers" to PokemonPosableModel::class.java,
         "bedrock/fossils/posers" to FossilModel::class.java,
+        "bedrock/drone/posers" to DroneModel::class.java,
         "bedrock/block_entities/posers" to BlockEntityModel::class.java,
         "bedrock/npcs/posers" to PosableModel::class.java,
         "bedrock/poke_balls/posers" to PosableModel::class.java,
@@ -116,6 +119,7 @@ object VaryingModelRepository {
             .registerTypeAdapter(PosableModel::class.java, JsonModelAdapter(::PosableModel))
             .registerTypeAdapter(PokemonPosableModel::class.java, JsonModelAdapter(::PokemonPosableModel))
             .registerTypeAdapter(FossilModel::class.java, JsonModelAdapter(::FossilModel))
+            .registerTypeAdapter(DroneModel::class.java, JsonModelAdapter(::DroneModel))
             .registerTypeAdapter(BlockEntityModel::class.java, JsonModelAdapter(::BlockEntityModel))
             .registerTypeAdapter(Pose::class.java, PoseAdapter { JsonModelAdapter.model!! })
             .registerTypeAdapter(ModelPartTransformation::class.java, ModelPartTransformationAdapter)
