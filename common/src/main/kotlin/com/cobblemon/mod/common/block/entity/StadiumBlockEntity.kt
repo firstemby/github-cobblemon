@@ -15,10 +15,8 @@ class StadiumBlockEntity(
     blockState
 ) {
     var isInUse = false
-    var animAge: Int = -1
-    var animPartialTicks: Float = 0F
 
-    val droneState = DroneState(animAge, animPartialTicks)
+    val droneState = DroneState()
 
     fun getPlayer1Pos(): BlockPos {
         return blockPos.north(10)

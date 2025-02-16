@@ -17,10 +17,11 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
  * @author Flarkinater
  * @since February 12th, 2025
  */
-class DroneState(startAge: Int = -1, startPartialTicks: Float = 0F) : PosableState() {
+class DroneState() : PosableState() {
     init {
-        age = if (startAge >= 0) startAge else 0
-        currentPartialTicks = if(startAge > 0f) startPartialTicks else 0F
+        setPose("sleep")
+        age = 0
+        currentPartialTicks = 0F
     }
 
     override fun getEntity() = null

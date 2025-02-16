@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.StadiumBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneModel
+import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -24,7 +25,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<StadiumBlockEntity> {
@@ -34,12 +34,24 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
     }
 
     override fun render(blockEntity: StadiumBlockEntity, tickDelta: Float, poseStack: PoseStack, multiBufferSource: MultiBufferSource, light: Int, overlay: Int) {
+        val isClientSide = blockEntity.level?.isClientSide == true
+        if (!isClientSide) return
+
+        val stadiumBlockState = blockEntity.level?.getBlockState(blockEntity.blockPos) ?: return
+        if (stadiumBlockState.block != CobblemonBlocks.STADIUM) {
+            // Block has been destroyed/replaced
+            return
+        }
+
+        val droneState = blockEntity.droneState
+
         poseStack.pushPose()
 
         // Center the drone to aim at block centers instead of the corner
         poseStack.translate(0.5, 0.0, 0.5)
         // Fix upside-down model
         poseStack.mulPose(Axis.XP.rotationDegrees(180F))
+        poseStack.mulPose(Axis.YP.rotationDegrees(180F))
 
         if (blockEntity.isInUse) {
             // TODO
@@ -48,29 +60,22 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
             val blockState = if (blockEntity.level != null) blockEntity.blockState
             else (CobblemonBlocks.STADIUM.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
             val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
-            poseStack.mulPose(Axis.YP.rotationDegrees(180F-yRot))
+            poseStack.mulPose(Axis.YP.rotationDegrees(-yRot))
 
-            renderDrone(blockEntity, tickDelta, poseStack, 1.0F, multiBufferSource, light)
+            renderDrone(droneState, "sleep", tickDelta, poseStack, 1.0F, multiBufferSource, light)
         }
     }
 
     fun renderDrone(
-        entity: StadiumBlockEntity,
+        state: DroneState,
+        pose: String,
         tickDelta: Float,
         poseStack: PoseStack,
         scale: Float = 1F,
         multiBufferSource: MultiBufferSource,
         light: Int,
     ) {
-        val stadiumBlockState = entity.level?.getBlockState(entity.blockPos) ?: return
-        if (stadiumBlockState.block != CobblemonBlocks.STADIUM) {
-            // Block has been destroyed/replaced
-            return
-        }
-
-        val state = entity.droneState
         state.updatePartialTicks(tickDelta)
-        state.currentAspects = emptySet<String>()
 
         val droneResource: ResourceLocation = cobblemonResource("rotom_drone")
 
@@ -78,15 +83,16 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
         val texture = VaryingModelRepository.getTexture(droneResource, state)
 
         val buffer = multiBufferSource.getBuffer(RenderType.entityCutout(texture))
+        model.bufferProvider = multiBufferSource
+
         state.currentModel = model
-        state.setPose("sleep")
+        state.setPose(pose)
 
         model.context = context
         context.put(RenderContext.TEXTURE, texture)
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.BLOCK)
         context.put(RenderContext.POSABLE_STATE, state)
 
-        print(model.animations)
         model.applyAnimations(
             entity = null,
             state = state,
@@ -96,12 +102,13 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
             limbSwingAmount = 0F,
             ageInTicks = state.animationSeconds * 20
         )
-        print(model.animations)
 
         poseStack.scale(scale, scale, scale)
 
         // TODO: Make drone lighting dynamic (simply using the light arg makes the drone always appear dark)
-        model.render(context, poseStack, buffer, 200, OverlayTexture.NO_OVERLAY, -0x1)
+        model.withLayerContext(multiBufferSource, state, VaryingModelRepository.getLayers(droneResource, state)) {
+            model.render(context, poseStack, buffer, 200, OverlayTexture.NO_OVERLAY, -0x1)
+        }
         model.setDefault()
         poseStack.popPose()
     }

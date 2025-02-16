@@ -26,8 +26,6 @@ class DroneModel(root: Bone) : PosableModel(root) {
     @Transient
     @SerializedName("So this name can be literally anything, huh?")
     override val rootPart = (root as ModelPart).registerChildWithAllChildren(root.children.entries.first().key)
-    var maxScale = 1F
-    var yTranslation = 0F
     var droneAnimations: Array<PoseAnimation> = emptyArray()
     var droneQuirks: Array<ModelQuirk<*>> = emptyArray()
 
