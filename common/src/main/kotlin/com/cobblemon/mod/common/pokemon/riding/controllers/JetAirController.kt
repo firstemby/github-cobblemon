@@ -66,7 +66,8 @@ class JetAirController : RideController {
             maxSpeed = max( maxSpeed * 0.90 , 0.0)
         }
 
-        return maxSpeed.toFloat()
+        return 1.0f
+        //return maxSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -94,7 +95,7 @@ class JetAirController : RideController {
             upForce *= 1.0
             forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
         }
-        val velocity = Vec3(leftForce , (upForce) * 0.5, forwardForce)
+        val velocity = Vec3(0.0 , (upForce), forwardForce)
 
         //entity.setDeltaMovement(velocity)
 
@@ -109,9 +110,9 @@ class JetAirController : RideController {
         var pitchForce = driver.zza.toDouble()
         pitchForce *= rotationChangeRate/3
 
-        val rollForce = -1.0 * driver.xxa * rotationChangeRate
+        val yawForce = -1.0 * driver.xxa * rotationChangeRate
 
-        return Vec3( 0.0, pitchForce, rollForce)
+        return Vec3( 0.25*yawForce, -1.5*pitchForce, 0.0)
     }
 
     override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
@@ -119,29 +120,9 @@ class JetAirController : RideController {
 
         val rollable = driver as Rollable
 
-        val rotLimit = 35.0
-        val nextRollRot = rollable.roll + xMouse.toFloat()
-        if( xMouse > 0 )
-        {
-            if( rollable.roll > rotLimit / 3 )
-            {
-                val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
-                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
-                return
-            }
-
-        }else{
-            if( rollable.roll < -1.0 * rotLimit / 3 )
-            {
-                val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
-                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
-                return
-            }
-
-        }
         //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
-        rollable.rotate(0.0f, 0.0f,  0.0f )
+        rollable.rotate(0.0f, 0.0f,  xMouse.toFloat() )
     }
 
     override fun canJump(

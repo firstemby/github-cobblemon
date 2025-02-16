@@ -45,7 +45,7 @@ class BirdAirController : RideController {
         private set
     var lastVelocity = Vec3(0.0,0.0,0.0)
         private set
-    var maxSpeed = 0.0
+    var maxSpeed = 0.2
         private set
 
     var lastPitch = 0.0f
@@ -53,18 +53,18 @@ class BirdAirController : RideController {
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         var drivingForce = driver.zza
-        val maxPropelSpeed = 0.3
-        var maxGlideSpeed = 1.0
+        val maxPropelSpeed = 0.5
+        var maxGlideSpeed = 1.5
         var glideSpeedChange = 0.01
         //speed up and slow down based on input
         if( drivingForce > 0 && maxSpeed < maxPropelSpeed)
         {
             if( maxSpeed <= 0.1 ){ maxSpeed = 0.1}
-            maxSpeed *= 1.05
+            maxSpeed += 0.005
         }
         else if ( drivingForce <  0)
         {
-            maxSpeed = max( maxSpeed * 0.90 , 0.0)
+            maxSpeed = max( maxSpeed -0.005 , 0.0)
         }
 
         val rollable = driver as? Rollable
@@ -83,7 +83,7 @@ class BirdAirController : RideController {
                 if( drivingForce <= 0 )
                 {
                     //speed decrease should be 2x speed increase?
-                    maxSpeed = max( maxSpeed * (1 + (0.05* glideSpeedChange) ), 0.0)
+                    maxSpeed = max( maxSpeed  + 0.05* glideSpeedChange , 0.0)
                 }
             }
             else
@@ -93,7 +93,7 @@ class BirdAirController : RideController {
                 if( maxSpeed < maxGlideSpeed )
                 {
                     if( maxSpeed < 0.1 ){ maxSpeed = 0.2}
-                    maxSpeed = min( maxSpeed * (1 + (0.2* glideSpeedChange) ), maxGlideSpeed)
+                    maxSpeed = min( maxSpeed  + 0.05 * glideSpeedChange , maxGlideSpeed)
                 }
             }
         }
@@ -142,7 +142,7 @@ class BirdAirController : RideController {
         if( rollable != null ) {
 
 
-            yVel = sin(Math.toRadians(rollable.pitch.toDouble() - lastPitch ))*-10
+            //yVel = sin(Math.toRadians(rollable.pitch.toDouble() - lastPitch ))*-10
 
 
 
@@ -171,7 +171,7 @@ class BirdAirController : RideController {
             entity.addDeltaMovement(jumpVector)
         }
         */
-        val velocity = Vec3(leftForce , (upForce + yVel) * 0.5, forwardForce)
+        val velocity = Vec3(leftForce , (upForce) * 0.5, forwardForce)
 
         //entity.setDeltaMovement(velocity)
 

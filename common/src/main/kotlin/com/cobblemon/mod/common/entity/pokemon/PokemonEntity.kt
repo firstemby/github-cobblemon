@@ -1341,11 +1341,51 @@ open class PokemonEntity(
         }
     }
 
+    private fun getInputVector(relative: Vec3, motionScaler: Float, facing: Float): Vec3 {
+        val d = relative.lengthSqr()
+        if (d < 1.0E-7) {
+            return Vec3.ZERO
+        }
+
+        // If the squared length is greater than 1, normalize; otherwise, use the vector as-is.
+        val vec3 = (if (d > 1.0) relative.normalize() else relative).scale(motionScaler.toDouble())
+
+        // Convert the facing angle (in degrees) to radians using the factor 0.017453292F.
+        val f = Mth.sin(facing * 0.017453292F)
+        val g = Mth.cos(facing * 0.017453292F)
+
+        // Rotate the vector by the facing angle.
+        return Vec3(
+            vec3.x * g - vec3.z * f,
+            vec3.y,
+            vec3.z * g + vec3.x * f
+        )
+    }
+
+    override fun moveRelative(amount: Float, relative: Vec3 ) {
+        super.moveRelative(amount, relative)
+        //val v = this.getInputVector(relative, 1.0f, this.getYRot());
+        //this.setDeltaMovement(v);
+    }
+
+
 
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
-            super.travel(movementInput)
+            //this.deltaMovement = movementInput
+
+            val riders = this.passengers.filterIsInstance<LivingEntity>()
+            //if ( !riders.isEmpty() ) {
+            if ( false ) {
+                val v = this.handleRelativeFrictionAndCalculateMovement(movementInput, 0.6f)
+                this.moveRelative(this.speed, v);
+            }
+            else
+            {
+                super.travel(movementInput)
+            }
+
             this.updateBlocksTraveled(prevBlockPos)
         }
         if (isBattling && this.isInWater) {
@@ -1601,6 +1641,14 @@ open class PokemonEntity(
         this.yHeadRot = this.yRot
         this.yBodyRot = this.yRot
         this.yRotO = this.yRot
+
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+        if ( !riders.isEmpty() ) {
+            val v = this.getInputVector(movementInput, 1.0f, this.getYRot());
+            this.setDeltaMovement(this.deltaMovement.lerp(v, 0.5));
+            this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+
+        }
 
         if (this.riding.canJump(this, driver)) {
             if (this.onGround()) {
