@@ -100,7 +100,7 @@ interface RideController : Encodable, Decodable {
 
     fun shouldRoll(entity: PokemonEntity): Boolean = false
 
-    fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+    fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
     //If function is not overwritten by controllers then just perform the defualt
     //rolling function

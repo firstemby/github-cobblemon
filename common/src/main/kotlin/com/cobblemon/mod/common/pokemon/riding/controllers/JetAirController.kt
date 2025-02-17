@@ -142,12 +142,12 @@ class JetAirController : RideController {
 
     //Going to use my own gravity calculations for now.
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
-        return 0.0
+        return 0.3
     }
 
     override fun shouldRoll(entity: PokemonEntity) = true
 
-    override fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = true
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

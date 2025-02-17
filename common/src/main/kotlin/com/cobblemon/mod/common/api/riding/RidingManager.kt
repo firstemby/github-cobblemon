@@ -64,8 +64,9 @@ data class RidingManager(val entity: PokemonEntity) {
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
         //val speedPlayer = driver.deltaMovement.horizontalDistance()
         //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
-        val speedEntity = entity.deltaMovement.horizontalDistance()
-        driver.displayClientMessage(Component.literal("Speed Entity: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} b/t")), true)
+        val speedEntity = (entity.speed * 20 * 60 * 60) / ( 1000 )
+        //println(speedEntity)
+        driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} km/h")), true)
 
     }
 
@@ -108,11 +109,14 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 
+    //Can be accomplished through the velocity controls
     fun gravity(entity: PokemonEntity, regularGravity: Double): Double? {
         val controller = getController(entity) ?: return null
         return controller.gravity(entity, regularGravity)
     }
 
+    //Maybe should be changed to be a function that conveys:
+    // "turn on use our camera system function"
     fun shouldRoll(entity: PokemonEntity): Boolean {
         val controller = getController(entity) ?: return false
         return controller.shouldRoll(entity)
@@ -128,6 +132,7 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.shouldRotatePokemonHead()
     }
 
+    //this is called just as often as
     fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
         val controller = getController(entity) ?: return
         controller.rotationOnMouseXY( entity, driver, yMouse, xMouse )
@@ -137,9 +142,10 @@ data class RidingManager(val entity: PokemonEntity) {
      * Determines whether mouse input will affect the rotation of
      * the rollable object. Need to remove this as it's not used anymore
      */
-    fun useMouseInputRoll(entity: PokemonEntity): Boolean {
+    //I think this might better serve as a "use smoothing on angular velocity"useAngVelSmoothing
+    fun useAngVelSmoothing(entity: PokemonEntity): Boolean {
         val controller = getController(entity) ?: return true
-        return controller.useMouseInputRoll(entity)
+        return controller.useAngVelSmoothing(entity)
     }
 
     fun turnOffOnGround(entity: PokemonEntity): Boolean {

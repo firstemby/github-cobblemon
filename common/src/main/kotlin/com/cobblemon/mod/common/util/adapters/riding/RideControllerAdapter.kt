@@ -35,7 +35,9 @@ object RideControllerAdapter : JsonDeserializer<RideController> {
         FallToFlightCompositeController.KEY to FallToFlightCompositeController::class.java,
         VehicleLandController.KEY to VehicleLandController::class.java,
         DolphinController.KEY to DolphinController::class.java,
-        JetAirController.KEY to JetAirController::class.java
+        JetAirController.KEY to JetAirController::class.java,
+        HelicopterMouseAirController.KEY to HelicopterMouseAirController::class.java
+
     )
 
     override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): RideController {

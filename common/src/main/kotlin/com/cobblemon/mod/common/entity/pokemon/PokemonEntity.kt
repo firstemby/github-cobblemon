@@ -1341,6 +1341,8 @@ open class PokemonEntity(
         }
     }
 
+
+    //Converted to kotin from the same named private function in entity.
     private fun getInputVector(relative: Vec3, motionScaler: Float, facing: Float): Vec3 {
         val d = relative.lengthSqr()
         if (d < 1.0E-7) {
@@ -1375,14 +1377,14 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
             //this.deltaMovement = movementInput
 
-            val riders = this.passengers.filterIsInstance<LivingEntity>()
+            //val riders = this.passengers.filterIsInstance<LivingEntity>()
             //if ( !riders.isEmpty() ) {
-            if ( false ) {
-                val v = this.handleRelativeFrictionAndCalculateMovement(movementInput, 0.6f)
-                this.moveRelative(this.speed, v);
-            }
-            else
-            {
+            //if ( false ) {
+                //val v = this.handleRelativeFrictionAndCalculateMovement(movementInput, 0.6f)
+                //this.moveRelative(this.speed, v);
+           //}
+            val riders = this.passengers.filterIsInstance<LivingEntity>()
+            if ( riders.isEmpty() ) {
                 super.travel(movementInput)
             }
 
@@ -1643,10 +1645,19 @@ open class PokemonEntity(
         this.yRotO = this.yRot
 
         val riders = this.passengers.filterIsInstance<LivingEntity>()
+
+        //These are the only functions that matter and I have isolated them.
+        //I think using speed to scale the movement vector will not be working.
+
         if ( !riders.isEmpty() ) {
             val v = this.getInputVector(movementInput, 1.0f, this.getYRot());
-            this.setDeltaMovement(this.deltaMovement.lerp(v, 0.5));
-            this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+            //changing this will give the ride more or less inertia/handling/drift?
+            //A bit of overlap with other things but.
+            this.setDeltaMovement(this.deltaMovement.lerp(v, 0.1));
+            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+
+            //maybe move this to the travel function. The jump below never gets used.
+            this.move(MoverType.SELF, this.deltaMovement.scale(this.speed.toDouble()));
 
         }
 

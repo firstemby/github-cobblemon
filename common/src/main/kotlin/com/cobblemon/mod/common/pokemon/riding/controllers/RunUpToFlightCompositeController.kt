@@ -118,7 +118,7 @@ class RunUpToFlightCompositeController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = getActiveController(entity).shouldRoll(entity)
 
-    override fun useMouseInputRoll(entity: PokemonEntity): Boolean = getActiveController(entity).useMouseInputRoll(entity)
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = getActiveController(entity).useAngVelSmoothing(entity)
 
     override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
         getActiveController(entity).rotationOnMouseXY( entity, driver, yMouse, xMouse )

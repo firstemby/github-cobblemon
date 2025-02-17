@@ -65,7 +65,7 @@ class HelicopterAirController : RideController {
         //Increased max speed to exaggerate movement.
         //This likely just needs to be a static number if it really is just
         //the scalar for the velocity vector
-        return getRuntime(entity).resolveFloat(speed)*4
+        return 2.0f
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {

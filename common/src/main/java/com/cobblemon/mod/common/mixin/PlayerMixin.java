@@ -313,7 +313,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
-    public boolean useMouseInputRoll() {
+    public boolean useAngVelSmoothing() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return true;
         if (player.isHolding(Items.DIAMOND)) return false;
@@ -322,7 +322,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (playerVehicle == null) return true;
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return true;
 
-        return pokemonEntity.getRiding().useMouseInputRoll(pokemonEntity);
+        return pokemonEntity.getRiding().useAngVelSmoothing(pokemonEntity);
     }
 
     @Override

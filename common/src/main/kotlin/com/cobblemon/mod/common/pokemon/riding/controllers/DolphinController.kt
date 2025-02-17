@@ -99,27 +99,21 @@ class DolphinController : RideController {
             g *= runtime.resolveFloat(this.reverseDriveFactor)
         }
 
-
-
-        //Get current angle looking up or down
-        //to determine how much the entity rises
-        //or falls
-        val currXRot = driver.xRot.toDouble()
-        //has to be flipped
-        val yComp = -1.0f * g.toDouble() *  sin(Math.toRadians(currXRot))
+        var yComp = 0.0
 
         //Get roll to add a left and right strafe during roll
         //Not sure if this is desired? Will need to mess around with this
         //a bit more
         var zComp = 0.0
         val rollable = driver as? Rollable
-        val currRoll = rollable?.roll
-        if (currRoll != null)
+        if (rollable != null)
         {
-            zComp = -1.0 * g.toDouble() * sin(Math.toRadians( currRoll.toDouble() ) )
+            //Can be used again if I better figure out how to deazone it near the tops?
+            zComp = -1.0 * g.toDouble() * sin(Math.toRadians( rollable.roll.toDouble() ) )
+            yComp = -1.0 * g.toDouble() * sin(Math.toRadians( rollable.pitch.toDouble() ) )
         }
 
-        val currVelocity = Vec3(zComp, yComp , g.toDouble())
+        val currVelocity = Vec3(0.0, yComp , g.toDouble())
         lastVelocity = currVelocity
         return currVelocity
     }

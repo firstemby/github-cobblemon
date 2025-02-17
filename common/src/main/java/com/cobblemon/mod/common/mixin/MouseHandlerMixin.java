@@ -131,22 +131,43 @@ public class MouseHandlerMixin {
         var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
         rollable.rotationOnMouseXY( yMouse, xMouse );
 
-        //get the current angular velocity requested to be applied
-        //by the ride controller
-        var angRot = rollable.angRollVel();
-        //Multiply against deltatime to get a consistent turn
-        //independent of framerate
-        if( angRot != null ) {
-            //var yaw = angRot.x * d;
-            //Add the yaw to the mouse here... this all needs changed. It should
-            //just map which 0 1 or 2 of the three it is going to modulate with
-            //what
+        if( rollable.useAngVelSmoothing() )
+        {
+            //get the current angular velocity requested to be applied
+            //by the ride controller
+            var angRot = rollable.angRollVel();
+            //Multiply against deltatime to get a consistent turn
+            //independent of framerate
+            if( angRot != null ) {
+                //var yaw = angRot.x * d;
+                //Add the yaw to the mouse here... this all needs changed. It should
+                //just map which 0 1 or 2 of the three it is going to modulate with
+                //what
 
-            var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
-            var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
-            var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
-            rollable.rotate((float) yaw, (float) pitch, (float) roll);
+                var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
+                var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
+                var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
+                rollable.rotate((float) yaw, (float) pitch, (float) roll);
+            }
 
+        }
+        else
+        {
+            //get the current angular velocity requested to be applied
+            //by the ride controller
+            var angRot = rollable.angRollVel();
+            //Multiply against deltatime to get a consistent turn
+            //independent of framerate
+            if( angRot != null ) {
+                //var yaw = angRot.x * d;
+                //Add the yaw to the mouse here... this all needs changed. It should
+                //just map which 0 1 or 2 of the three it is going to modulate with
+                //what
+
+                rollable.rotate((float) (angRot.x * 10 * d),
+                        (float) (angRot.y * 10 * d),
+                        (float) (angRot.z * 10 * d));
+            }
         }
         return false;
 

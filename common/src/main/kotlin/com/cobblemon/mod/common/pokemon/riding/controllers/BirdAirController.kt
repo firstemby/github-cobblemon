@@ -28,8 +28,8 @@ import kotlin.math.*
 class BirdAirController : RideController {
     override val key = KEY
     override val poseProvider = PoseProvider(PoseType.HOVER)
-        .with(PoseOption(PoseType.GLIDE) { it.deltaMovement.length() > 0.3 })
-        .with(PoseOption(PoseType.FLY) { it.deltaMovement.length() > 0.1 && it.deltaMovement.length() <= 0.3 })
+        .with(PoseOption(PoseType.GLIDE) { it.speed > 0.51 })
+        .with(PoseOption(PoseType.FLY) { it.speed > 0.1 && it.speed <= 0.51 })
 
     override val condition: (PokemonEntity) -> Boolean = { true }
 
@@ -45,13 +45,18 @@ class BirdAirController : RideController {
         private set
     var lastVelocity = Vec3(0.0,0.0,0.0)
         private set
-    var maxSpeed = 0.2
+    var maxSpeed = 0.0
         private set
 
     var lastPitch = 0.0f
         private set
 
+    //This function might just be good for syncing the ridecontroller speed
+    //with the entity speed?
     override fun speed(entity: PokemonEntity, driver: Player): Float {
+        //Set the speed since this will need to be done to transfer speed between rides?
+        maxSpeed = entity.speed.toDouble()
+
         var drivingForce = driver.zza
         val maxPropelSpeed = 0.5
         var maxGlideSpeed = 1.5
@@ -148,6 +153,7 @@ class BirdAirController : RideController {
 
             lastPitch = rollable.pitch
 
+            //Need to deadzone this when straight up or down
             leftForce = -1.0 * drivingForce * sin(Math.toRadians( rollable.roll.toDouble() ) )
 
             upForce = drivingForce * -1.0 * sin(Math.toRadians( rollable.pitch.toDouble() ))
@@ -171,7 +177,7 @@ class BirdAirController : RideController {
             entity.addDeltaMovement(jumpVector)
         }
         */
-        val velocity = Vec3(leftForce , (upForce) * 0.5, forwardForce)
+        val velocity = Vec3(0.0 , (upForce), forwardForce)
 
         //entity.setDeltaMovement(velocity)
 
@@ -294,7 +300,7 @@ class BirdAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity) = true
 
-    override fun useMouseInputRoll(entity: PokemonEntity): Boolean = false
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
