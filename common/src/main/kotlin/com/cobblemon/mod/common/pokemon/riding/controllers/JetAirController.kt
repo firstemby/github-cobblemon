@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.controllers.HelicopterAirController.Companion.ROTATION_LIMIT
 import com.cobblemon.mod.common.util.*
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -44,30 +45,31 @@ class JetAirController : RideController {
         private set
     var lastVelocity = Vec3(0.0,0.0,0.0)
         private set
-    var maxSpeed = 0.0
+    var maxSpeed = 0.4
         private set
 
     var lastPitch = 0.0f
         private set
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        val drivingForce = if (driver.jumping) 1.0
+        //maxSpeed = entity.speed.toDouble()
+
+        val drivingForce = if ( Minecraft.getInstance().options.keySprint.isDown() ) 1.0
         else if (driver.isShiftKeyDown) -1.0
         else(0.0)
-        val maxPropelSpeed = 1.5
+        val maxPropelSpeed = 2.0
         //speed up and slow down based on input
         if( drivingForce > 0 && maxSpeed < maxPropelSpeed)
         {
                  if( maxSpeed <= 0.1 ){ maxSpeed = 0.1}
-            maxSpeed *= 1.05
+            maxSpeed += 0.025
         }
         else if ( drivingForce <  0)
         {
-            maxSpeed = max( maxSpeed * 0.90 , 0.0)
+            maxSpeed = max( maxSpeed - 0.05 , 0.0)
         }
 
-        return 1.0f
-        //return maxSpeed.toFloat()
+        return 0.0f
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -95,7 +97,7 @@ class JetAirController : RideController {
             upForce *= 1.0
             forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
         }
-        val velocity = Vec3(0.0 , (upForce), forwardForce)
+        val velocity = Vec3(0.0 , (upForce)* maxSpeed, forwardForce * maxSpeed)
 
         //entity.setDeltaMovement(velocity)
 
@@ -105,10 +107,10 @@ class JetAirController : RideController {
     override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
 
         //In degrees per second?
-        val rotationChangeRate = 6.0
+        val rotationChangeRate = 2.0
 
         var pitchForce = driver.zza.toDouble()
-        pitchForce *= rotationChangeRate/3
+        pitchForce *= rotationChangeRate
 
         val yawForce = -1.0 * driver.xxa * rotationChangeRate
 
@@ -142,8 +144,14 @@ class JetAirController : RideController {
 
     //Going to use my own gravity calculations for now.
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
-        return 0.3
+
+        var grav = 0.0
+
+        if( maxSpeed <= 0.5 ) grav = 0.5 - maxSpeed
+
+        return grav
     }
+
 
     override fun shouldRoll(entity: PokemonEntity) = true
 

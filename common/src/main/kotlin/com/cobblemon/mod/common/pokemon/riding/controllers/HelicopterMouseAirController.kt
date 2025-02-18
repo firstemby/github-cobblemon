@@ -168,8 +168,12 @@ class HelicopterMouseAirController : RideController {
         return 0.0
     }
 
+    override fun inertia(entity: PokemonEntity ): Double = 0.1
+
     //Need to ensure that crouching lowers altitude and doesn't eject the player
     override fun dismountOnShift(entity: PokemonEntity): Boolean = false
+
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = true
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

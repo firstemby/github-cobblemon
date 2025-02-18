@@ -116,6 +116,10 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).gravity(entity, regularGravity)
     }
 
+    override fun inertia(entity: PokemonEntity): Double {
+        return getActiveController(entity).inertia(entity)
+    }
+
     override fun shouldRoll(entity: PokemonEntity): Boolean = getActiveController(entity).shouldRoll(entity)
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = getActiveController(entity).useAngVelSmoothing(entity)

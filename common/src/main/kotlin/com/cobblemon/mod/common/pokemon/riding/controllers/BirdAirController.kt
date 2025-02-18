@@ -28,8 +28,8 @@ import kotlin.math.*
 class BirdAirController : RideController {
     override val key = KEY
     override val poseProvider = PoseProvider(PoseType.HOVER)
-        .with(PoseOption(PoseType.GLIDE) { it.speed > 0.51 })
-        .with(PoseOption(PoseType.FLY) { it.speed > 0.1 && it.speed <= 0.51 })
+        .with(PoseOption(PoseType.GLIDE) { it.deltaMovement.length() > 0.51 })
+        .with(PoseOption(PoseType.FLY) { it.deltaMovement.length() > 0.1 && it.deltaMovement.length() <= 0.51 })
 
     override val condition: (PokemonEntity) -> Boolean = { true }
 
@@ -45,7 +45,7 @@ class BirdAirController : RideController {
         private set
     var lastVelocity = Vec3(0.0,0.0,0.0)
         private set
-    var maxSpeed = 0.0
+    var maxSpeed = 0.2
         private set
 
     var lastPitch = 0.0f
@@ -55,7 +55,7 @@ class BirdAirController : RideController {
     //with the entity speed?
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         //Set the speed since this will need to be done to transfer speed between rides?
-        maxSpeed = entity.speed.toDouble()
+        //maxSpeed = entity.speed.toDouble()
 
         var drivingForce = driver.zza
         val maxPropelSpeed = 0.5
@@ -65,11 +65,11 @@ class BirdAirController : RideController {
         if( drivingForce > 0 && maxSpeed < maxPropelSpeed)
         {
             if( maxSpeed <= 0.1 ){ maxSpeed = 0.1}
-            maxSpeed += 0.005
+            maxSpeed += 0.01
         }
         else if ( drivingForce <  0)
         {
-            maxSpeed = max( maxSpeed -0.005 , 0.0)
+            maxSpeed = max( maxSpeed -0.01 , 0.0)
         }
 
         val rollable = driver as? Rollable
@@ -88,7 +88,7 @@ class BirdAirController : RideController {
                 if( drivingForce <= 0 )
                 {
                     //speed decrease should be 2x speed increase?
-                    maxSpeed = max( maxSpeed  + 0.05* glideSpeedChange , 0.0)
+                    maxSpeed = max( maxSpeed  + 0.04* glideSpeedChange , 0.0)
                 }
             }
             else
@@ -98,16 +98,16 @@ class BirdAirController : RideController {
                 if( maxSpeed < maxGlideSpeed )
                 {
                     if( maxSpeed < 0.1 ){ maxSpeed = 0.2}
-                    maxSpeed = min( maxSpeed  + 0.05 * glideSpeedChange , maxGlideSpeed)
+                    maxSpeed = min( maxSpeed  + 0.02 * glideSpeedChange , maxGlideSpeed)
                 }
             }
         }
 
         //air resistance
-        maxSpeed *= 0.995
+        maxSpeed -= 0.002
 
         println(maxSpeed)
-        return 1.0f * maxSpeed.toFloat()
+        return 0.0f
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -177,7 +177,7 @@ class BirdAirController : RideController {
             entity.addDeltaMovement(jumpVector)
         }
         */
-        val velocity = Vec3(0.0 , (upForce), forwardForce)
+        val velocity = Vec3(0.0 , (upForce) * maxSpeed, forwardForce * maxSpeed)
 
         //entity.setDeltaMovement(velocity)
 
@@ -253,11 +253,11 @@ class BirdAirController : RideController {
 
         val rollable = driver as Rollable
 
-        val rotLimit = 35.0
+        val rotLimit = 45.0
         val nextRollRot = rollable.roll + xMouse.toFloat()
         if( xMouse > 0 )
         {
-            if( rollable.roll > rotLimit / 3 )
+            if( rollable.roll > rotLimit  )
             {
                 val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
                 rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
@@ -265,7 +265,7 @@ class BirdAirController : RideController {
             }
 
         }else{
-            if( rollable.roll < -1.0 * rotLimit / 3 )
+            if( rollable.roll < -1.0 * rotLimit  )
             {
                 val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
                 rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )

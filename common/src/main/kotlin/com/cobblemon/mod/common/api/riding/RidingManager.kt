@@ -64,9 +64,9 @@ data class RidingManager(val entity: PokemonEntity) {
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
         //val speedPlayer = driver.deltaMovement.horizontalDistance()
         //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
-        val speedEntity = (entity.speed * 20 * 60 * 60) / ( 1000 )
+        //val speedEntity = entity.deltaMovement.length()  //* 20 * 60 * 60) / ( 1000 )
         //println(speedEntity)
-        driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} km/h")), true)
+        //driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} km/h")), true)
 
     }
 
@@ -107,6 +107,16 @@ data class RidingManager(val entity: PokemonEntity) {
     fun jumpVelocity(entity: PokemonEntity, driver: Player, jumpStrength: Int): Vec3 {
         val controller = getController(entity) ?: return Vec3.ZERO
         return controller.jumpForce(entity, driver, jumpStrength)
+    }
+
+    /**
+     * Used to supply the dela for the lerp() between velocity
+     * vectors. Called inertia for now as the way it feels when
+     * affecting the ride is somewhat akin to inertia.
+     */
+    fun inertia(entity: PokemonEntity): Double {
+        val controller = getController(entity) ?: return 0.5
+        return controller.inertia(entity)
     }
 
     //Can be accomplished through the velocity controls

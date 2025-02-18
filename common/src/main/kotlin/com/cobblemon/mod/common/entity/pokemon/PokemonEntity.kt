@@ -1350,7 +1350,9 @@ open class PokemonEntity(
         }
 
         // If the squared length is greater than 1, normalize; otherwise, use the vector as-is.
-        val vec3 = (if (d > 1.0) relative.normalize() else relative).scale(motionScaler.toDouble())
+        // May not want to normalize this
+        //val vec3 = (if (d > 1.0) relative.normalize() else relative).scale(motionScaler.toDouble())
+        val vec3 = relative
 
         // Convert the facing angle (in degrees) to radians using the factor 0.017453292F.
         val f = Mth.sin(facing * 0.017453292F)
@@ -1364,13 +1366,31 @@ open class PokemonEntity(
         )
     }
 
-    override fun moveRelative(amount: Float, relative: Vec3 ) {
-        super.moveRelative(amount, relative)
+    //override fun moveRelative(amount: Float, relative: Vec3 ) {
+        //super.moveRelative(amount, relative)
         //val v = this.getInputVector(relative, 1.0f, this.getYRot());
         //this.setDeltaMovement(v);
+    //}
+
+    override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3 , friction: Float ): Vec3 {
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+        if ( riders.isEmpty() ) {
+            super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
+        }
+        //ignore this for now
+        else if( false )
+        {
+            val v = this.getInputVector(deltaMovement, 1.0f, this.getYRot());
+            //changing this will give the ride more or less inertia/handling/drift?
+            //A bit of overlap with other things but.
+            this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
+            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+
+            //maybe move this to the travel function. The jump below never gets used.
+            this.move( MoverType.SELF, this.deltaMovement );
+        }
+        return this.deltaMovement
     }
-
-
 
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
@@ -1387,6 +1407,8 @@ open class PokemonEntity(
             if ( riders.isEmpty() ) {
                 super.travel(movementInput)
             }
+
+            //super.travel(movementInput)
 
             this.updateBlocksTraveled(prevBlockPos)
         }
@@ -1650,14 +1672,14 @@ open class PokemonEntity(
         //I think using speed to scale the movement vector will not be working.
 
         if ( !riders.isEmpty() ) {
-            val v = this.getInputVector(movementInput, 1.0f, this.getYRot());
+            val v = this.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
             //changing this will give the ride more or less inertia/handling/drift?
             //A bit of overlap with other things but.
-            this.setDeltaMovement(this.deltaMovement.lerp(v, 0.1));
+            this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
             //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
 
             //maybe move this to the travel function. The jump below never gets used.
-            this.move(MoverType.SELF, this.deltaMovement.scale(this.speed.toDouble()));
+            this.move( MoverType.SELF, this.deltaMovement );
 
         }
 

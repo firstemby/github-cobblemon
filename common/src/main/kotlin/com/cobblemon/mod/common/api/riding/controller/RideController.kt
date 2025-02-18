@@ -98,6 +98,8 @@ interface RideController : Encodable, Decodable {
 
     fun gravity(entity: PokemonEntity, regularGravity: Double) : Double? = null
 
+    fun inertia(entity: PokemonEntity ) : Double = 0.5
+
     fun shouldRoll(entity: PokemonEntity): Boolean = false
 
     fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false

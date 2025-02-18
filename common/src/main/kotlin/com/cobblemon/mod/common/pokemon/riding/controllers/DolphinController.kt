@@ -54,7 +54,7 @@ class DolphinController : RideController {
 
     override val key: ResourceLocation = KEY
     override val poseProvider: PoseProvider = PoseProvider(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { it.entityData.get(PokemonEntity.MOVING) })
+        .with(PoseOption(PoseType.SWIM) { it.deltaMovement.length() >= 0.05 })
     override val condition: (PokemonEntity) -> Boolean = { entity ->
 
         //If there are only fluid blocks or air block below the ride
@@ -82,12 +82,17 @@ class DolphinController : RideController {
         return 0.0
     }
 
+    override fun inertia(entity: PokemonEntity ): Double
+    {
+        return 0.05
+    }
+
     override fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
         val runtime = getRuntime(entity)
 
         if (!entity.isInWater && !entity.isUnderWater)
         {
-            lastVelocity = Vec3(lastVelocity.x, -1.0, lastVelocity.z)
+            lastVelocity = Vec3(lastVelocity.x, lastVelocity.y - 0.035, lastVelocity.z)
             return lastVelocity
         }
 
@@ -108,7 +113,7 @@ class DolphinController : RideController {
         val rollable = driver as? Rollable
         if (rollable != null)
         {
-            //Can be used again if I better figure out how to deazone it near the tops?
+            //Can be used again if I better figure out how to deadzone it near the tops?
             zComp = -1.0 * g.toDouble() * sin(Math.toRadians( rollable.roll.toDouble() ) )
             yComp = -1.0 * g.toDouble() * sin(Math.toRadians( rollable.pitch.toDouble() ) )
         }

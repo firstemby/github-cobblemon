@@ -153,6 +153,11 @@ class HelicopterAirController : RideController {
         return Vec3(0.0, 0.0, 0.0)
     }
 
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = true
+
+
+    override fun inertia(entity: PokemonEntity ): Double = 0.1
+
     override fun canJump(
         entity: PokemonEntity,
         driver: Player
