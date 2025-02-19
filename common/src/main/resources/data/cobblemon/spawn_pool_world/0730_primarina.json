@@ -26,7 +26,7 @@
             "id": "primarina-2",
             "pokemon": "primarina",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -44,7 +44,7 @@
             "id": "primarina-3",
             "pokemon": "primarina",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -76,7 +76,6 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 1,
                 "biomes": [
                     "#cobblemon:is_freezing"
                 ]
@@ -85,55 +84,8 @@
         {
             "id": "primarina-5",
             "pokemon": "primarina",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "34-53",
-            "weight": 0.25,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "primarina-6",
-            "pokemon": "primarina",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "34-53",
-            "weight": 0.02,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "primarina-7",
-            "pokemon": "primarina",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -150,7 +102,7 @@
             }
         },
         {
-            "id": "primarina-8",
+            "id": "primarina-6",
             "pokemon": "primarina",
             "type": "pokemon",
             "context": "fishing",
@@ -166,58 +118,6 @@
                     "#cobblemon:is_ocean",
                     "#cobblemon:is_tropical_island"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "primarina-9",
-            "pokemon": "primarina",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "34-53",
-            "weight": 0.25,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "primarina-10",
-            "pokemon": "primarina",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "34-53",
-            "weight": 0.02,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

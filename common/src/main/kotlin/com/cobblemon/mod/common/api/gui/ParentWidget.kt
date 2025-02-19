@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.gui
 
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
@@ -22,9 +23,9 @@ abstract class ParentWidget(
     pX: Int, pY: Int,
     pWidth: Int, pHeight: Int,
     component: Component
-): Renderable, AbstractWidget(pX, pY, pWidth, pHeight, component) {
+): CobblemonRenderable, AbstractWidget(pX, pY, pWidth, pHeight, component) {
 
-    private val children: MutableList<GuiEventListener> = mutableListOf()
+    val children: MutableList<GuiEventListener> = mutableListOf()
 
     /**
      * Adds Widget to the children list

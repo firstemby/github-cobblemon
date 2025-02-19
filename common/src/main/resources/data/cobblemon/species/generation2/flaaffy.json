@@ -1,12 +1,64 @@
 {
   "implemented": true,
-  "name": "Flaaffy",
   "nationalPokedexNumber": 180,
+  "name": "Flaaffy",
   "primaryType": "electric",
+  "maleRatio": 0.5,
+  "height": 8,
+  "weight": 133,
+  "pokedex": [
+    "cobblemon.species.flaaffy.desc"
+  ],
+  "labels": [
+    "gen2"
+  ],
+  "aspects": [],
   "abilities": [
     "static",
     "h:plus"
   ],
+  "eggGroups": [
+    "monster",
+    "field"
+  ],
+  "baseStats": {
+    "hp": 70,
+    "attack": 55,
+    "defence": 55,
+    "special_attack": 80,
+    "special_defence": 60,
+    "speed": 45
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 2,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 128,
+  "experienceGroup": "medium_slow",
+  "catchRate": 120,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.3,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -23,39 +75,9 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 70,
-    "attack": 55,
-    "defence": 55,
-    "special_attack": 80,
-    "special_defence": 60,
-    "speed": 45
-  },
-  "catchRate": 120,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 128,
-  "experienceGroup": "medium_slow",
-  "eggCycles": 20,
-  "eggGroups": [
-    "monster",
-    "field"
-  ],
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.2
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "depth": "normal",
-      "light": "0-4"
-    }
-  },
   "moves": [
-    "1:growl",
     "1:tackle",
+    "1:growl",
     "6:thundershock",
     "9:thunderwave",
     "11:cottonspore",
@@ -67,22 +89,26 @@
     "38:discharge",
     "43:cottonguard",
     "47:dazzlinggleam",
-    "47:signalbeam",
     "52:lightscreen",
     "56:thunder",
+    "egg:afteryou",
+    "egg:agility",
+    "egg:eerieimpulse",
+    "egg:electricterrain",
+    "egg:electroweb",
+    "egg:flatter",
+    "egg:odorsleuth",
+    "egg:sandattack",
+    "tm:afteryou",
     "tm:agility",
-    "tm:attract",
     "tm:bodyslam",
     "tm:brickbreak",
-    "tm:captivate",
     "tm:charge",
     "tm:chargebeam",
-    "tm:confide",
     "tm:confuseray",
     "tm:dazzlinggleam",
     "tm:dig",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:echoedvoice",
     "tm:eerieimpulse",
     "tm:electricterrain",
@@ -95,32 +121,33 @@
     "tm:flash",
     "tm:fling",
     "tm:focuspunch",
-    "tm:frustration",
+    "tm:headbutt",
+    "tm:healbell",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:icepunch",
     "tm:irontail",
     "tm:lightscreen",
     "tm:lowkick",
-    "tm:naturalgift",
+    "tm:magnetrise",
+    "tm:megakick",
+    "tm:megapunch",
     "tm:powergem",
     "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:return",
+    "tm:risingvoltage",
     "tm:roar",
     "tm:rocksmash",
-    "tm:round",
     "tm:safeguard",
-    "tm:secretpower",
+    "tm:screech",
     "tm:shockwave",
+    "tm:signalbeam",
     "tm:sleeptalk",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
@@ -128,63 +155,32 @@
     "tm:thunderbolt",
     "tm:thunderpunch",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:trailblaze",
     "tm:voltswitch",
     "tm:wildcharge",
     "tutor:afteryou",
-    "tutor:attract",
-    "tutor:bodyslam",
-    "tutor:cottonspore",
-    "tutor:counter",
-    "tutor:curse",
-    "tutor:defensecurl",
-    "tutor:doubleedge",
-    "tutor:doubleteam",
-    "tutor:dynamicpunch",
+    "tutor:chargebeam",
+    "tutor:dazzlinggleam",
     "tutor:electroweb",
-    "tutor:endure",
+    "tutor:endeavor",
     "tutor:firepunch",
-    "tutor:flash",
     "tutor:focuspunch",
-    "tutor:frustration",
-    "tutor:growl",
-    "tutor:headbutt",
     "tutor:healbell",
-    "tutor:hiddenpower",
+    "tutor:helpinghand",
+    "tutor:icepunch",
     "tutor:irontail",
-    "tutor:lightscreen",
+    "tutor:lowkick",
     "tutor:magnetrise",
-    "tutor:megakick",
-    "tutor:megapunch",
-    "tutor:mimic",
-    "tutor:protect",
-    "tutor:raindance",
     "tutor:rest",
-    "tutor:return",
+    "tutor:risingvoltage",
     "tutor:rocksmash",
-    "tutor:seismictoss",
     "tutor:shockwave",
     "tutor:signalbeam",
     "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:strength",
-    "tutor:substitute",
-    "tutor:swagger",
     "tutor:swift",
-    "tutor:tackle",
-    "tutor:thunder",
+    "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:thundershock",
-    "tutor:thunderwave",
-    "tutor:toxic",
-    "tutor:zapcannon"
-  ],
-  "labels": [
-    "gen2"
-  ],
-  "pokedex": [
-    "cobblemon.species.flaaffy.desc"
+    "tutor:wildcharge"
   ],
   "preEvolution": "mareep",
   "evolutions": [
@@ -203,24 +199,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1.0,
-  "hitbox": {
-    "width": 0.7,
-    "height": 1.3,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 2,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 8,
-  "weight": 133,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

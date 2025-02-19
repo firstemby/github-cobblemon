@@ -7,11 +7,31 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Douse",
-        "Shock",
-        "Burn",
-        "Chill"
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Water",
+      "unlockForms": [
+        "Water"
+      ]
+    },
+    {
+      "displayForm": "Electric",
+      "unlockForms": [
+        "Electric"
+      ]
+    },
+    {
+      "displayForm": "Fire",
+      "unlockForms": [
+        "Fire"
+      ]
+    },
+    {
+      "displayForm": "Ice",
+      "unlockForms": [
+        "Ice"
       ]
     }
   ],

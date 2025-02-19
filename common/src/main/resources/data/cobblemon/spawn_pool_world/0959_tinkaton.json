@@ -8,7 +8,6 @@
             "pokemon": "tinkaton",
             "presets": [
                 "natural",
-                "ruins",
                 "wild"
             ],
             "type": "pokemon",
@@ -21,6 +20,28 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
+                ]
+            }
+        },
+        {
+            "id": "tinkaton-2",
+            "pokemon": "tinkaton",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "38-51",
+            "weight": 0.16,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
                 ]
             }
         }

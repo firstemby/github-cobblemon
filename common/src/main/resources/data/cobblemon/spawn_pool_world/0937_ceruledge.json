@@ -58,6 +58,25 @@
                     "#cobblemon:is_overworld"
                 ]
             }
+        },
+        {
+            "id": "ceruledge-3",
+            "pokemon": "ceruledge",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "21-53",
+            "weight": 0.4,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
+                ]
+            }
         }
     ]
 }

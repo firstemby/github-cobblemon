@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.SeasonResolver
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.drop.CommandDropEntry
 import com.cobblemon.mod.common.api.drop.DropEntry
+import com.cobblemon.mod.common.api.drop.EvolutionItemDropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
@@ -54,33 +55,25 @@ import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreManager
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
-import com.cobblemon.mod.common.api.storage.player.adapter.*
+import com.cobblemon.mod.common.api.storage.player.adapter.DexDataMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.DexDataNbtBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataJsonBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBackend
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.battles.BagItems
-import com.cobblemon.mod.common.battles.BattleFormat
-import com.cobblemon.mod.common.battles.BattleRegistry
-import com.cobblemon.mod.common.battles.BattleSide
-import com.cobblemon.mod.common.battles.ShowdownThread
+import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.command.argument.DexArgumentType
-import com.cobblemon.mod.common.command.argument.DialogueArgumentType
-import com.cobblemon.mod.common.command.argument.FormArgumentType
-import com.cobblemon.mod.common.command.argument.MoveArgumentType
-import com.cobblemon.mod.common.command.argument.NPCClassArgumentType
-import com.cobblemon.mod.common.command.argument.PartySlotArgumentType
-import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
-import com.cobblemon.mod.common.command.argument.PokemonStoreArgumentType
-import com.cobblemon.mod.common.command.argument.SpawnBucketArgumentType
-import com.cobblemon.mod.common.command.argument.SpeciesArgumentType
+import com.cobblemon.mod.common.client.CobblemonPack
+import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
 import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.config.starter.StarterConfig
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.events.AdvancementHandler
+import com.cobblemon.mod.common.events.FlowHandler
 import com.cobblemon.mod.common.events.PokedexHandler
 import com.cobblemon.mod.common.events.ServerTickHandler
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
@@ -92,13 +85,7 @@ import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
-import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
-import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
-import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
+import com.cobblemon.mod.common.pokemon.properties.*
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.pokemon.transformation.triggers.BlockClickTrigger
@@ -111,6 +98,17 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
+import net.minecraft.client.Minecraft
+import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
+import net.minecraft.world.item.NameTagItem
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.LevelResource
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -121,14 +119,6 @@ import kotlin.properties.Delegates
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
-import net.minecraft.client.Minecraft
-import net.minecraft.commands.synchronization.SingletonArgumentInfo
-import net.minecraft.resources.ResourceKey
-import net.minecraft.world.item.NameTagItem
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.storage.LevelResource
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 
 object Cobblemon {
     const val MODID = CobblemonBuildDetails.MOD_ID
@@ -162,6 +152,17 @@ object Cobblemon {
     var permissionValidator: PermissionValidator by Delegates.observable(LaxPermissionValidator().also { it.initialize() }) { _, _, newValue -> newValue.initialize() }
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
+    var wallpapers = mapOf<UUID, List<ResourceLocation>>()
+
+    @JvmStatic
+    val builtinPacks = listOf<CobblemonPack>(
+        CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
+        CobblemonPack(id = "gyaradosjump", name = "Gyarados Jump Patterns", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonPack(id = "regionbiasforms", name = "Region Bias Forms", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED),
+        CobblemonPack(id = "uniqueshinyforms", name = "Shinies for Magikarp Jump", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.NORMAL),
+
+        CobblemonPack(id = "repurposedstructurescobblemon", name = "Repurposed Structures Cobblemon", packType = PackType.SERVER_DATA, activationBehaviour = ResourcePackActivationBehaviour.DEFAULT_ENABLED, neededMods = setOf("repurposed_structures")),
+    )
 
     fun preInitialize(implementation: CobblemonImplementation) {
         this.implementation = implementation
@@ -189,6 +190,7 @@ object Cobblemon {
 
         DropEntry.register("command", CommandDropEntry::class.java)
         DropEntry.register("item", ItemDropEntry::class.java, isDefault = true)
+        DropEntry.register("evolution", EvolutionItemDropEntry::class.java)
 
         ExperienceGroups.registerDefaults()
         CaptureCalculators.registerDefaults()
@@ -207,7 +209,8 @@ object Cobblemon {
             storage.onPlayerDataSync(it)
             playerDataManager.syncAllToPlayer(it)
             starterHandler.handleJoin(it)
-            ServerSettingsPacket(this.config.preventCompletePartyDeposit, this.config.displayEntityLevelLabel, this.config.displayEntityNameLabel).sendToPlayer(it)
+            it.requestWallpapers()
+            sendServerSettingsPacketToPlayer(it)
         }
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -240,6 +243,8 @@ object Cobblemon {
         // Lowest priority because this applies after luxury ball bonus as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(Priority.LOWEST) { event ->
             var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
+            if (increment <= 0) //these affects are only meant to affect positive gains
+                return@subscribe
             // Our Luxury ball spec is diff from official, but we will still assume these stack
             if (event.pokemon.heldItemNoCopy().`is`(CobblemonItemTags.IS_FRIENDSHIP_BOOSTER)) {
                 increment += increment * 0.5F
@@ -248,8 +253,17 @@ object Cobblemon {
         }
 
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
+    }
 
-
+    fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
+        ServerSettingsPacket(
+            this.config.preventCompletePartyDeposit,
+            this.config.displayEntityLevelLabel,
+            this.config.displayEntityNameLabel,
+            this.config.maxPokemonLevel,
+            this.config.maxPokemonFriendship,
+            this.config.maxDynamaxLevel,
+        ).sendToPlayer(player)
     }
 
     fun initialize() {
@@ -283,6 +297,8 @@ object Cobblemon {
         CustomPokemonProperty.register(NoAIProperty)
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
+
+        FlowHandler.setup()
 
         ifDedicatedServer {
             isDedicatedServer = true
@@ -379,8 +395,13 @@ object Cobblemon {
                 BattleFormat.GEN_9_SINGLES,
                 BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
                 BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
-                true
-            ).ifSuccessful { it.mute = true }
+                false
+            ).ifSuccessful {
+                it.mute = true
+            }.ifErrored {
+                val errors = it.errors.joinToString("\n") { it.javaClass.name }
+                LOGGER.error("Failed to start dummy Showdown battle: $errors")
+            }
         }
 
         registerEventHandlers()
@@ -403,7 +424,23 @@ object Cobblemon {
         }
     }
 
+    private fun initializeConfig() {
+        loadCobblemonConfig()
+        saveConfig(this.config)
+        PokemonSpecies.observable.subscribe { starterConfig = this.loadStarterConfig() }
+    }
+
     fun loadConfig() {
+        initializeConfig()
+        bestSpawner.init()
+    }
+
+    fun reloadConfig() {
+        initializeConfig()
+        bestSpawner.reloadConfig()
+    }
+
+    private fun loadCobblemonConfig() {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
@@ -446,12 +483,6 @@ object Cobblemon {
         } else {
             this.config = CobblemonConfig()
         }
-
-        config.lastSavedVersion = VERSION
-        this.saveConfig()
-
-        bestSpawner.loadConfig()
-        PokemonSpecies.observable.subscribe { starterConfig = this.loadStarterConfig() }
     }
 
     fun loadStarterConfig(): StarterConfig {
@@ -474,12 +505,14 @@ object Cobblemon {
         }
     }
 
-    fun saveConfig() {
+    fun saveConfig(config: CobblemonConfig) {
+        config.lastSavedVersion = VERSION
+
         try {
             val configFile = File(CONFIG_PATH)
             val fileWriter = FileWriter(configFile)
             // Put the config to json then flush the writer to commence writing.
-            CobblemonConfig.GSON.toJson(this.config, fileWriter)
+            CobblemonConfig.GSON.toJson(config, fileWriter)
             fileWriter.flush()
             fileWriter.close()
         } catch (exception: Exception) {

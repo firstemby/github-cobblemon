@@ -5,7 +5,11 @@
     "minecraft:mangrove_swamp",
 	"#cobblemon:is_jungle",
     {
-      "id": "#c:vegetation_dense",
+      "id": "#c:is_dense_vegetation",
+      "required": false 
+    },
+	{
+      "id": "#c:is_dense_vegetation/overworld",
       "required": false 
     },
     {

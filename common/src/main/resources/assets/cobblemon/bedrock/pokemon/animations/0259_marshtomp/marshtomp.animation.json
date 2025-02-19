@@ -75,6 +75,14 @@
 				}
 			}
 		},
+		"animation.marshtomp.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.marshtomp.cry"
+				}
+			}
+		},
 		"animation.marshtomp.blink": {
 			"animation_length": 0.1667,
 			"bones": {
@@ -144,7 +152,7 @@
 				}
 			}
 		},
-		"animation.marshtomp.recoil": {
+		"animation.marshtomp.hurt": {
 			"loop": true,
 			"bones": {
 				"eye_recoil_left": {
@@ -152,14 +160,6 @@
 				},
 				"eye_recoil_right": {
 					"position": [0, 0, -0.1]
-				}
-			}
-		},
-		"animation.marshtomp.cry": {
-			"animation_length": 1.2,
-			"sound_effects": {
-				"0.04": {
-					"effect": "pokemon.marshtomp.cry"
 				}
 			}
 		}

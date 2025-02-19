@@ -7,8 +7,7 @@
             "id": "sigilyph-1",
             "pokemon": "sigilyph",
             "presets": [
-                "natural",
-                "ruins"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -19,7 +18,11 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_sandy"
+                    "#cobblemon:is_badlands",
+                    "#cobblemon:is_desert"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         },
@@ -99,12 +102,29 @@
             "weight": 6.0,
             "condition": {
                 "biomes": [
-                    "#minecraft:is_end"
+                    "#cobblemon:is_end"
                 ]
             }
         },
         {
-            "id": "sigilyph-6",
+            "id": "sigilyph-7",
+            "pokemon": "sigilyph",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "24-49",
+            "weight": 10.0,
+            "condition": {
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
+                ]
+            }
+        },
+        {
+            "id": "sigilyph-8",
             "pokemon": "sigilyph",
             "type": "pokemon",
             "context": "grounded",

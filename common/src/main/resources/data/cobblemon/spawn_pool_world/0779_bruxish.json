@@ -7,7 +7,7 @@
             "id": "bruxish-1",
             "pokemon": "bruxish",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -50,8 +50,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {
@@ -66,7 +66,7 @@
             "id": "bruxish-4",
             "pokemon": "bruxish",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -113,8 +113,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {

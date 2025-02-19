@@ -1,18 +1,14 @@
 {
   "display": {
     "icon": {
-			"id": "cobblemon:pokemon_model",
-	"components": {
-        "cobblemon:pokemon_item": {"species":"cobblemon:accelgor","aspects":[""]}
-      }
+			"id": "cobblemon:shell_helmet"
 		},
     "title": {
       "translate": "advancements.cobblemon.trade_shelmet_karrablast"
     },
     "description": {
       "translate": "advancements.cobblemon.trade_shelmet_karrablast.description"
-    },
-	"hidden": true
+    }
   },
   "parent": "cobblemon:trade_pokemon",
   "criteria": {

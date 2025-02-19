@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.resources.ResourceLocation
 import java.util.UUID
 
 /**
@@ -140,6 +141,14 @@ class ClientStorageManager {
 
     fun removeFromPC(storeID: UUID, pokemonID: UUID) {
         pcStores[storeID]?.remove(pokemonID)
+    }
+
+    fun renameBox(storeID: UUID, boxNumber: Int, name: String?) {
+        pcStores[storeID]?.renameBox(boxNumber, name)
+    }
+
+    fun changeBoxWallpaper(storeID: UUID, boxNumber: Int, wallpaper: ResourceLocation) {
+        pcStores[storeID]?.changeBoxWallpaper(boxNumber, wallpaper)
     }
 
     fun onLogin() {

@@ -30,12 +30,12 @@ import org.joml.Vector4f
  * @author Hiroku
  * @since May 14th, 2022
  */
-class VaryingRenderableResolver<T : PosableModel>(
+class VaryingRenderableResolver(
     val name: ResourceLocation,
     val variations: MutableList<ModelAssetVariation>
 ) {
-    lateinit var repository: VaryingModelRepository<T>
-    val posers = mutableMapOf<Pair<ResourceLocation, ResourceLocation>, T>()
+    lateinit var repository: VaryingModelRepository
+    val posers = mutableMapOf<Pair<ResourceLocation, ResourceLocation>, PosableModel>()
     val models = mutableMapOf<ResourceLocation, Bone>()
 
     fun getResolvedPoser(state: PosableState): ResourceLocation {
@@ -98,19 +98,19 @@ class VaryingRenderableResolver<T : PosableModel>(
             .create()
     }
 
-    fun initialize(repository: VaryingModelRepository<T>) {
+    fun initialize(repository: VaryingModelRepository) {
         this.repository = repository
         posers.clear()
         getAllModels().forEach { identifier ->
             try {
-                models[identifier] = repository.texturedModels[identifier]!!.invoke(repository.isForLivingEntityRenderer)
+                models[identifier] = repository.texturedModels[identifier]!!
             } catch (e: Exception) {
                 throw IllegalStateException("Unable to load model $identifier for $name", e)
             }
         }
     }
 
-    fun getPoser(state: PosableState): T {
+    fun getPoser(state: PosableState): PosableModel {
         val poserName = getResolvedPoser(state)
         val poserSupplier = repository.posers[poserName] ?: throw IllegalStateException("No poser found for name: $poserName for $name")
         val modelName = getResolvedModel(state)

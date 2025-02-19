@@ -54,7 +54,15 @@ class BenchedMoves : Iterable<BenchedMove> {
         }
     }
 
-    fun add(benchedMove: BenchedMove) = doThenEmit { benchedMoves.add(benchedMove) }
+    fun add(benchedMove: BenchedMove): Boolean {
+        if (any { it.moveTemplate == benchedMove.moveTemplate }) {
+            return false
+        }
+
+        doThenEmit { benchedMoves.add(benchedMove) }
+        return true
+    }
+
     fun addAll(benchedMoves: Iterable<BenchedMove>) = doThenEmit { this.benchedMoves.addAll(benchedMoves) }
     fun clear() = doThenEmit { benchedMoves.clear() }
     fun remove(benchedMove: BenchedMove) = doThenEmit { benchedMoves.remove(benchedMove) }

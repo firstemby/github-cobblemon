@@ -134,7 +134,7 @@
                             "Name": "minecraft:stone_brick_wall",
                             "Properties": {
                                 "east": "tall",
-                                "north": "false",
+                                "north": "none",
                                 "south": "tall",
                                 "west": "none",
                                 "up": "true",

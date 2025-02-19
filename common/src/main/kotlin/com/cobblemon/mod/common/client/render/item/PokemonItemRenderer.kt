@@ -9,18 +9,18 @@
 package com.cobblemon.mod.common.client.render.item
 
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.item.PokemonItem
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import com.mojang.blaze3d.platform.Lighting
-import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.RenderType
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.MultiBufferSource
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
@@ -38,7 +38,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         val state = FloatingState()
         state.currentAspects = aspects
         matrices.pushPose()
-        val model = PokemonModelRepository.getPoser(species.resourceIdentifier, state)
+        val model = VaryingModelRepository.getPoser(species.resourceIdentifier, state)
         model.context = context
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.PROFILE)
         context.put(RenderContext.SPECIES, species.resourceIdentifier)
@@ -46,17 +46,20 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         context.put(RenderContext.POSABLE_STATE, state)
         state.currentModel = model
 
-        val renderLayer = RenderType.entityCutout(PokemonModelRepository.getTexture(species.resourceIdentifier, state))
+        val renderLayer = RenderType.entityCutout(VaryingModelRepository.getTexture(species.resourceIdentifier, state))
 
         val transformations = positions[mode]!!
 
-        Lighting.setupForFlatItems()
+        if (mode == ItemDisplayContext.GUI) {
+            Lighting.setupForFlatItems()
+        }
+
         matrices.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z)
         matrices.translate(transformations.translation.x, transformations.translation.y, transformations.translation.z)
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
         model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
 
-        matrices.translate(model.profileTranslation.x, model.profileTranslation.y,  model.profileTranslation.z - 4.0)
+        matrices.translate(model.profileTranslation.x, model.profileTranslation.y, -4.0)
         matrices.scale(model.profileScale, model.profileScale, 0.15F)
 
         val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(transformations.rotation.x, transformations.rotation.y, transformations.rotation.z))
@@ -72,7 +75,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
 
         // x = red, y = green, z = blue, w = alpha
         val tint = pokemonItem.tint(stack)
-        model.withLayerContext(vertexConsumers, state, PokemonModelRepository.getLayers(species.resourceIdentifier, state)) {
+        model.withLayerContext(vertexConsumers, state, VaryingModelRepository.getLayers(species.resourceIdentifier, state)) {
             val tintRed = (tint.x * 255).toInt()
             val tintGreen = (tint.y * 255).toInt()
             val tintBlue = (tint.z * 255).toInt()
@@ -84,7 +87,10 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         model.setDefault()
         matrices.popPose()
         matrices.popPose()
-        Lighting.setupFor3DItems()
+
+        if (mode == ItemDisplayContext.GUI) {
+            Lighting.setupFor3DItems()
+        }
     }
 
     companion object {

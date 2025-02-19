@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.summary.widgets.common
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
@@ -29,7 +30,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
     HEIGHT, // height
     0, // top
     slotHeight
-) {
+), CobblemonRenderable {
     companion object {
         const val WIDTH = 108
         const val HEIGHT = 112

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.startselection.widgets.preview
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.ColourLibrary
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -25,7 +26,7 @@ class SelectionButton(
     pX: Int, pY: Int,
     pWidth: Int, pHeight: Int,
     onPress: OnPress
-): Button(pX, pY, pWidth, pHeight, Component.literal("SelectionButton"), onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, pWidth, pHeight, Component.literal("SelectionButton"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private val buttonTexture = cobblemonResource("textures/gui/starterselection/starterselection_button.png")

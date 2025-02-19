@@ -46,6 +46,14 @@
 				}
 			}
 		},
+		"animation.nidorino.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.nidorino.cry"
+				}
+			}
+		},
 		"animation.nidorino.blink": {
 			"animation_length": 1,
 			"bones": {

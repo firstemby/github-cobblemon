@@ -7,8 +7,7 @@
             "id": "florges-red-1",
             "pokemon": "florges flower=red",
             "presets": [
-                "natural",
-                "red_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -26,19 +25,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:poppy",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:red_flowers"
                 ]
             }
         },
@@ -46,8 +35,7 @@
             "id": "florges-yellow-2",
             "pokemon": "florges flower=yellow",
             "presets": [
-                "natural",
-                "yellow_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -65,19 +53,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:dandelion",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:yellow_flowers"
                 ]
             }
         },
@@ -85,8 +63,7 @@
             "id": "florges-orange-3",
             "pokemon": "florges flower=orange",
             "presets": [
-                "natural",
-                "orange_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -104,19 +81,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:orange_tulip",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:orange_flowers"
                 ]
             }
         },
@@ -124,8 +91,7 @@
             "id": "florges-blue-4",
             "pokemon": "florges flower=blue",
             "presets": [
-                "natural",
-                "blue_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -143,19 +109,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:cornflower",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:blue_flowers"
                 ]
             }
         },
@@ -163,8 +119,7 @@
             "id": "florges-white-5",
             "pokemon": "florges flower=white",
             "presets": [
-                "natural",
-                "white_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -182,19 +137,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:oxeye_daisy",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
                 ]
             }
         },
@@ -202,8 +147,7 @@
             "id": "florges-pink-6",
             "pokemon": "florges flower=pink",
             "presets": [
-                "natural",
-                "pink_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -221,24 +165,36 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 4,
-                "entries": [
-                    {
-                        "item": "minecraft:allium",
-                        "quantityRange": "0-3"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 10.0
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:pink_flowers"
                 ]
             }
         },
         {
-            "id": "florges-red-7",
+            "id": "florges-white-7",
+            "pokemon": "florges flower=white",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "32-55",
+            "weight": 0.05,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
+                ]
+            }
+        },
+        {
+            "id": "florges-red-8",
             "pokemon": "florges flower=red",
             "type": "pokemon",
             "context": "grounded",
@@ -263,7 +219,7 @@
             }
         },
         {
-            "id": "florges-yellow-7",
+            "id": "florges-yellow-8",
             "pokemon": "florges flower=yellow",
             "type": "pokemon",
             "context": "grounded",
@@ -288,7 +244,7 @@
             }
         },
         {
-            "id": "florges-orange-7",
+            "id": "florges-orange-8",
             "pokemon": "florges flower=orange",
             "type": "pokemon",
             "context": "grounded",
@@ -313,7 +269,7 @@
             }
         },
         {
-            "id": "florges-blue-7",
+            "id": "florges-blue-8",
             "pokemon": "florges flower=blue",
             "type": "pokemon",
             "context": "grounded",
@@ -338,7 +294,7 @@
             }
         },
         {
-            "id": "florges-white-7",
+            "id": "florges-white-8",
             "pokemon": "florges flower=white",
             "type": "pokemon",
             "context": "grounded",
@@ -363,7 +319,7 @@
             }
         },
         {
-            "id": "florges-pink-7",
+            "id": "florges-pink-8",
             "pokemon": "florges flower=pink",
             "type": "pokemon",
             "context": "grounded",

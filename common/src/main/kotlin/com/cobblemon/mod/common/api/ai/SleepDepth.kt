@@ -43,7 +43,8 @@ interface SleepDepth {
             "comatose" to comatose,
             "normal" to normal
         )
-        val adapter = StringIdentifiedObjectAdapter { depths[it] ?: throw IllegalArgumentException("Unknown sleep depth: $it") }
+
+        val adapter = StringIdentifiedObjectAdapter({ depths[it] ?: throw IllegalArgumentException("Unknown sleep depth: $it") })
     }
 
     fun canSleep(pokemonEntity: PokemonEntity): Boolean

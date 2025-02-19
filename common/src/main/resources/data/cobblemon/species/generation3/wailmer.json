@@ -1,12 +1,26 @@
 {
   "implemented": true,
-  "name": "Wailmer",
   "nationalPokedexNumber": 320,
+  "name": "Wailmer",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 20,
+  "weight": 1300,
+  "pokedex": [
+    "cobblemon.species.wailmer.desc"
+  ],
+  "labels": [
+    "gen3"
+  ],
+  "aspects": [],
   "abilities": [
     "waterveil",
     "oblivious",
     "h:pressure"
+  ],
+  "eggGroups": [
+    "field",
+    "water_2"
   ],
   "baseStats": {
     "hp": 130,
@@ -16,6 +30,25 @@
     "special_defence": 35,
     "speed": 60
   },
+  "evYield": {
+    "hp": 1,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 80,
+  "experienceGroup": "fluctuating",
+  "catchRate": 125,
+  "eggCycles": 40,
+  "baseFriendship": 50,
+  "baseScale": 1.8,
+  "hitbox": {
+    "width": 1,
+    "height": 1,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "canLook": false,
@@ -24,21 +57,12 @@
       },
       "swim": {
         "swimSpeed": 0.1,
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false
       }
     }
   },
-  "catchRate": 125,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 80,
-  "experienceGroup": "fluctuating",
-  "eggCycles": 40,
-  "eggGroups": [
-    "field",
-    "water_2"
-  ],
   "drops": {
     "amount": 2,
     "entries": [
@@ -56,7 +80,6 @@
     "1:splash",
     "3:growl",
     "6:astonish",
-    "10:rollout",
     "12:watergun",
     "15:mist",
     "18:waterpulse",
@@ -71,22 +94,18 @@
     "45:hydropump",
     "48:waterspout",
     "egg:aquaring",
-    "egg:bodyslam",
     "egg:clearsmog",
     "egg:curse",
     "egg:defensecurl",
     "egg:doubleedge",
     "egg:fissure",
     "egg:rollout",
-    "egg:sleeptalk",
     "egg:snore",
     "egg:soak",
     "egg:swagger",
     "egg:thrash",
     "egg:tickle",
-    "egg:zenheadbutt",
     "tm:amnesia",
-    "tm:attract",
     "tm:avalanche",
     "tm:blizzard",
     "tm:bodypress",
@@ -94,72 +113,56 @@
     "tm:bounce",
     "tm:brine",
     "tm:bulldoze",
-    "tm:captivate",
-    "tm:confide",
+    "tm:curse",
     "tm:dive",
-    "tm:doubleteam",
+    "tm:doubleedge",
     "tm:earthquake",
     "tm:echoedvoice",
     "tm:endure",
     "tm:facade",
-    "tm:frustration",
     "tm:hail",
+    "tm:headbutt",
     "tm:heavyslam",
-    "tm:hiddenpower",
     "tm:hydropump",
     "tm:hypervoice",
     "tm:icebeam",
     "tm:icywind",
-    "tm:naturalgift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
+    "tm:rollout",
     "tm:scald",
-    "tm:secretpower",
     "tm:selfdestruct",
     "tm:sleeptalk",
     "tm:snore",
+    "tm:steelroller",
     "tm:strength",
     "tm:substitute",
     "tm:surf",
     "tm:swagger",
-    "tm:toxic",
+    "tm:terablast",
     "tm:waterfall",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
     "tm:zenheadbutt",
-    "tutor:bodyslam",
     "tutor:bounce",
-    "tutor:defensecurl",
+    "tutor:bulldoze",
     "tutor:dive",
-    "tutor:doubleedge",
-    "tutor:endure",
-    "tutor:headbutt",
     "tutor:hypervoice",
+    "tutor:icebeam",
     "tutor:icywind",
-    "tutor:mimic",
+    "tutor:rest",
+    "tutor:rocksmash",
     "tutor:rollout",
-    "tutor:selfdestruct",
     "tutor:sleeptalk",
     "tutor:snore",
     "tutor:steelroller",
-    "tutor:substitute",
-    "tutor:swagger",
-    "tutor:watergun",
     "tutor:waterpulse",
     "tutor:zenheadbutt"
-  ],
-  "labels": [
-    "gen3"
-  ],
-  "pokedex": [
-    "cobblemon.species.wailmer.desc"
   ],
   "evolutions": [
     {
@@ -175,24 +178,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1.8,
-  "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 1,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 20,
-  "weight": 1300,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

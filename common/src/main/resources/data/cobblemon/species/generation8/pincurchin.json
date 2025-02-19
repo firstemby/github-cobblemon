@@ -1,11 +1,25 @@
 {
   "implemented": true,
-  "name": "Pincurchin",
   "nationalPokedexNumber": 871,
+  "name": "Pincurchin",
   "primaryType": "electric",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 10,
+  "pokedex": [
+    "cobblemon.species.pincurchin.desc"
+  ],
+  "labels": [
+    "gen8"
+  ],
+  "aspects": [],
   "abilities": [
     "lightningrod",
     "h:electricsurge"
+  ],
+  "eggGroups": [
+    "water_1",
+    "amorphous"
   ],
   "baseStats": {
     "hp": 48,
@@ -15,16 +29,25 @@
     "special_defence": 85,
     "speed": 15
   },
-  "catchRate": 75,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 152,
   "experienceGroup": "medium_fast",
+  "catchRate": 75,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "amorphous"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.75,
+  "hitbox": {
+    "width": 0.6,
+    "height": 0.6,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
@@ -32,8 +55,9 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true
+        "canSwimInWater": true,
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false
       },
       "wanderChance": 360
     }
@@ -56,7 +80,6 @@
     "egg:memento",
     "egg:suckerpunch",
     "tm:assurance",
-    "tm:attract",
     "tm:bodyslam",
     "tm:brine",
     "tm:charge",
@@ -82,13 +105,13 @@
     "tm:raindance",
     "tm:rest",
     "tm:reversal",
-    "tm:round",
+    "tm:risingvoltage",
     "tm:scald",
     "tm:selfdestruct",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:spikes",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:supercellslam",
     "tm:surf",
     "tm:swift",
@@ -102,32 +125,22 @@
     "tm:venomdrench",
     "tm:venoshock",
     "tm:wildcharge",
-    "tutor:risingvoltage"
+    "tutor:chargebeam",
+    "tutor:electroweb",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:liquidation",
+    "tutor:painsplit",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:sleeptalk",
+    "tutor:spikes",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:thunderbolt",
+    "tutor:wildcharge"
   ],
-  "labels": [
-    "gen8"
-  ],
-  "pokedex": [
-    "cobblemon.species.pincurchin.desc"
-  ],
-  "evolutions": [],
-  "baseScale": 0.75,
-  "hitbox": {
-    "width": 0.6,
-    "height": 0.6,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 3,
-  "weight": 10,
-  "aspects": [],
-  "cannotDynamax": false
+  "evolutions": []
 }

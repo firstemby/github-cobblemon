@@ -324,7 +324,7 @@
 					"name": "head_correction",
 					"parent": "head",
 					"pivot": [0, 6.2, -15],
-					"rotation": [-90, 0, 0]
+					"rotation": [0, 0, 0]
 				},
 				{
 					"name": "head_ai",
@@ -335,6 +335,7 @@
 					"name": "head_angle",
 					"parent": "head_ai",
 					"pivot": [0, 6.5, -16],
+					"rotation": [-90, 0, 0],
 					"cubes": [
 						{"origin": [-3.5, 2.49, -22], "size": [7, 7, 7], "uv": [0, 0]}
 					]

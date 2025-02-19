@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Sunny",
-        "Rainy",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Sunny",
+      "unlockForms": [
+        "Sunny"
+      ]
+    },
+    {
+      "displayForm": "Rainy",
+      "unlockForms": [
+        "Rainy"
+      ]
+    },
+    {
+      "displayForm": "Snowy",
+      "unlockForms": [
         "Snowy"
       ]
     }

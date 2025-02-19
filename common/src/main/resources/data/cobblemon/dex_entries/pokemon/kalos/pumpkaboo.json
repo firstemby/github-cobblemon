@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Small",
-        "Large",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Small",
+      "unlockForms": [
+        "Small"
+      ]
+    },
+    {
+      "displayForm": "Large",
+      "unlockForms": [
+        "Large"
+      ]
+    },
+    {
+      "displayForm": "Super",
+      "unlockForms": [
         "Super"
       ]
     }

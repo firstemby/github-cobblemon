@@ -125,6 +125,7 @@ object ClientMoLangFunctions {
                 val maxPitch = params.getDoubleOrNull(3) ?: 70F
                 val minPitch = params.getDoubleOrNull(4) ?: -45F
                 val maxYaw = params.getDoubleOrNull(5) ?: 45F
+                val minYaw = params.getDoubleOrNull(6) ?: -45F
                 ObjectValue(
                     SingleBoneLookAnimation(
                         bone = model.getPart(boneName),
@@ -132,7 +133,8 @@ object ClientMoLangFunctions {
                         yawMultiplier = yawMultiplier.toFloat(),
                         maxPitch = maxPitch.toFloat(),
                         minPitch = minPitch.toFloat(),
-                        maxYaw = maxYaw.toFloat()
+                        maxYaw = maxYaw.toFloat(),
+                        minYaw = minYaw.toFloat()
                     )
                 )
             }

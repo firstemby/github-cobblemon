@@ -27,6 +27,9 @@
     ],
     "dynamiclights": [
       "com.cobblemon.mod.fabric.compat.lambdynamiclights.LambDynamicLightsCompatEntrypoint"
+    ],
+    "modmenu": [
+      "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"
     ]
   },
   "mixins": [
@@ -45,8 +48,7 @@
       "links": {
         "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/cobblemon",
         "modmenu.modrinth": "https://modrinth.com/mod/cobblemon",
-        "modmenu.discord": "https://discord.gg/XnZwHjj2yS",
-        "modmenu.patreon": "https://www.patreon.com/cablemc"
+        "modmenu.discord": "https://discord.gg/cobblemon"
       }
     },
     "loom:injected_interfaces": {

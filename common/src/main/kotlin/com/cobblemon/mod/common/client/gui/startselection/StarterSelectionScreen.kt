@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.startselection.widgets.CategoryList
 import com.cobblemon.mod.common.client.gui.startselection.widgets.ExitButton
 import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.ArrowButton
@@ -47,7 +48,7 @@ import net.minecraft.network.chat.Component
  * @author Qu
  * @since 2022-06-18
  */
-class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()) {
+class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable {
 
     companion object {
         // Size of UI at scale 1
@@ -132,7 +133,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
                 pX = x + 85, pY = y + 50,
                 pWidth = 102, pHeight = 100,
                 pokemon = this,
-                baseScale = 2.0f
+                baseScale = 2.0f,
+                playCryOnClick = true,
             )
 
             typeWidget = typeWidget(this, x, y)
@@ -159,7 +161,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pX = x + 119, pY = height / 2 + 84,
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentPokemon,
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         starterRoundaboutLeft = StarterRoundabout(
@@ -167,7 +169,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentCategory.pokemon[leftOfCurrentSelection()],
             clickAction = { _, _ -> this.left()  },
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         starterRoundaboutRight = StarterRoundabout(
@@ -175,7 +177,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentCategory.pokemon[rightOfCurrentSelection()],
             clickAction = { _, _ -> this.right()  },
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         addRenderableWidget(starterRoundaboutLeft)

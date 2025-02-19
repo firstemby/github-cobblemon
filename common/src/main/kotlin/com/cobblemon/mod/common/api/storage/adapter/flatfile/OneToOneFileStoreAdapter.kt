@@ -42,6 +42,7 @@ abstract class OneToOneFileStoreAdapter<S>(
 ) : FileStoreAdapter<S>, CobblemonAdapterParent<S>() {
     abstract fun save(file: File, serialized: S)
     abstract fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T?
+
     fun getFile(storeClass: Class<out PokemonStore<*>>, uuid: UUID): File {
         val className = storeClass.simpleName.lowercase()
         val subfolder1 = if (folderPerClass) "$className/" else ""
@@ -56,34 +57,54 @@ abstract class OneToOneFileStoreAdapter<S>(
     override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: S) {
         val file = getFile(storeClass, uuid)
         val tempFile = File(file.absolutePath + ".temp")
+        val oldFile = File(file.absolutePath + ".old")
         tempFile.createNewFile()
         save(tempFile, serialized)
+        if (file.exists()) {
+            file.copyTo(oldFile, overwrite = true)
+        }
         tempFile.copyTo(file, overwrite = true)
         tempFile.delete()
     }
 
     override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
         val file = getFile(storeClass, uuid)
-        val tempFile = File(file.absolutePath + ".temp")
-        if (tempFile.exists()) {
-            try {
-                val tempLoaded = load(tempFile, storeClass, uuid, registryAccess)
-                if (tempLoaded != null) {
-                    save(file, serialize(tempLoaded, registryAccess))
-                    return tempLoaded
-                }
-            } finally {
-                tempFile.delete()
-            }
-        }
+        val oldFile = File(file.absolutePath + ".old")
 
-        return if (file.exists()) {
+        return if (file.exists() && file.length() > 0L) {
             load(file, storeClass, uuid, registryAccess)
                 ?: let {
-                    LOGGER.error("Pokémon save file for ${storeClass.simpleName} ($uuid) was corrupted. A fresh file will be created.")
-                    storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                    file.delete()
+                    if (oldFile.exists() && oldFile.length() > 0L) {
+                        var result = load(oldFile, storeClass, uuid, registryAccess) ?: let {
+                            LOGGER.error("Pokémon save file for ${storeClass.simpleName} ($uuid) was corrupted. A fresh file will be created.")
+                            var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                            save(storeClass, uuid, serialize(result, registryAccess))
+                            oldFile.delete()
+                            return result
+                        }
+                        LOGGER.warn("Loading old Pokémon save file for ${storeClass.simpleName} ($uuid) due to corruption of current file.")
+                        oldFile.copyTo(file, overwrite = true)
+                        result
+                    }
+                    else {
+                        storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                        var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                        save(storeClass, uuid, serialize(result, registryAccess))
+                        oldFile.delete()
+                        result
+                    }
                 }
         } else {
+            file.delete()
+            if (oldFile.exists() && oldFile.length() > 0L) {
+                var result = load(oldFile, storeClass, uuid, registryAccess) ?: let {
+                    oldFile.delete()
+                    return null
+                }
+                oldFile.copyTo(file, overwrite = true)
+                result
+            }
             null
         }
     }

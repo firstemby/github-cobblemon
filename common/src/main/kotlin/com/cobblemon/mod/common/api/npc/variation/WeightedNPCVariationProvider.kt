@@ -32,5 +32,5 @@ class WeightedNPCVariationProvider : NPCVariationProvider {
     override val aspects: Set<String>
         get() = options.flatMap(WeightedAspect::aspects).toSet()
 
-    override fun provideAspects(npcEntity: NPCEntity) = options.weightedSelection(WeightedAspect::weight)?.aspects ?: emptySet()
+    override fun provideAspects(npcEntity: NPCEntity) = options.weightedSelection { it.weight }?.aspects ?: emptySet()
 }

@@ -1,15 +1,11 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
-import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.form.FormDisplay
-import com.cobblemon.mod.common.util.asTranslated
 import com.mojang.serialization.Codec
-import net.minecraft.client.Minecraft
 
 /**
  * Controller for managing changeable forms on the client.
@@ -24,8 +20,7 @@ class ClientFormController(
 ) : CobblemonClientTransformationController<FormDisplay, ClientFormController.Intermediate>(pokemon, forms) {
 
     override fun notification() {
-        Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.form.hint".asTranslated(this.pokemon.getDisplayName()).green())
-        Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
+        // TODO
     }
 
     override fun acceptPacket(pokemon: Pokemon, form: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, form)

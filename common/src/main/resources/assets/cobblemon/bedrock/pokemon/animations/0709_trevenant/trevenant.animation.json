@@ -888,6 +888,7 @@
 			}
 		},
 		"animation.trevenant.sleep": {
+			"loop": true,
 			"animation_length": 8,
 			"bones": {
 				"body": {

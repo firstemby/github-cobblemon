@@ -4,7 +4,7 @@
         "item": "cobblemon:tumblestone_block"
     },
     "result": {
-        "id": "cobblemon:tumblestone_brick_slab"
-    },
+        "id": "cobblemon:tumblestone_brick_slab",
     "count": 2
+    }
 }

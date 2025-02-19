@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.util.weightedSelection
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 
 /**
  * A [SpawnAction] that will spawn a single [PokemonEntity].

@@ -32,9 +32,10 @@ class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString:
         if (searchString == "") return true
 
         val species = PokemonSpecies.getByIdentifier(entry.speciesId) ?: return false
-        if (pokedexManager.getHighestKnowledgeFor(entry) == PokedexEntryProgress.NONE) return false
+        val highestKnowledgeForEntry = pokedexManager.getHighestKnowledgeFor(entry)
+        if (highestKnowledgeForEntry == PokedexEntryProgress.NONE) return false
 
-        when(searchByType) {
+        when (searchByType) {
             SearchByType.ABILITIES -> {
                 if (pokedexManager.getHighestKnowledgeFor(entry) !== PokedexEntryProgress.CAUGHT) return false
                 val abilityList = mutableListOf<String>()

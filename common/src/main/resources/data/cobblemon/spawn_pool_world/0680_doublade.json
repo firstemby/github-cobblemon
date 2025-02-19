@@ -24,9 +24,6 @@
         {
             "id": "doublade-2",
             "pokemon": "doublade",
-            "presets": [
-                "ruins"
-            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "uncommon",
@@ -37,6 +34,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         },
@@ -56,6 +56,25 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ]
+            }
+        },
+        {
+            "id": "doublade-4",
+            "pokemon": "doublade",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "35-45",
+            "weight": 0.712,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
                 ]
             }
         }

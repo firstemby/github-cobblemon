@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.EvolvePokemonContext
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
@@ -27,6 +28,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigge
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -34,6 +36,8 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
@@ -55,7 +59,9 @@ class Evolution(
     /** If this evolution allows the user to choose when to start it or not. */
     var optional: Boolean = true,
     /** The [MoveTemplate]s that will be offered to be learnt upon evolving. */
-    val learnableMoves: Set<MoveTemplate> = setOf()
+    val learnableMoves: Set<MoveTemplate> = setOf(),
+    /** The items that will drop once the evolution finishes. */
+    val drops: DropTable = DropTable()
 ) : Transformation {
 
     override fun test(pokemon: Pokemon, context: TriggerContext?): Boolean {
@@ -102,7 +108,7 @@ class Evolution(
         owner.party().getFirstAvailablePosition() ?: return false
 
         // Add shed Pokemon to player's party
-        val shedPokemon = pokemon.clone()
+        val shedPokemon = pokemon.clone(registryAccess = owner.registryAccess())
         shedPokemon.removeHeldItem()
         innerShedder.apply(shedPokemon)
         shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
@@ -136,7 +142,7 @@ class Evolution(
             super.forceStart(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.busyLocks.add("evolving")
+            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
             pokemonEntity.navigation.stop()
             pokemonEntity.after(1F) {
                 evolutionAnimation(pokemonEntity)
@@ -147,7 +153,7 @@ class Evolution(
             }
             pokemonEntity.after( seconds = 12F ) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.busyLocks.remove("evolving")
+                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
         }
@@ -164,24 +170,50 @@ class Evolution(
     }
 
     fun evolutionMethod(pokemon: Pokemon) {
+        // This ensures the Pokémon doesn't lose moves during evolution
+        // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
+        val previousSpeciesLearnableMoves = pokemon.relearnableMoves
+
         this.result.apply(pokemon)
-        this.learnableMoves.forEach { move ->
-            if (pokemon.moveSet.hasSpace()) {
-                pokemon.moveSet.add(move.create())
-            } else {
-                pokemon.benchedMoves.add(BenchedMove(move, 0))
+
+        val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
+        movesToLearn.forEach { move ->
+            val couldAddMove =
+                if (pokemon.moveSet.hasSpace()) {
+                    pokemon.moveSet.add(move.create())
+                } else {
+                    pokemon.benchedMoves.add(BenchedMove(move, 0))
+                }
+
+            val previousSpeciesKnewMove = previousSpeciesLearnableMoves.any { move.name == it.name }
+
+            if (couldAddMove && !previousSpeciesKnewMove) {
+                pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
             }
-            pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
         }
+
         // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available
         pokemon.triggerTransformations(PassiveTrigger::class.java)
+
         this.shed(pokemon)
+
+        val ownerPlayer = pokemon.getOwnerPlayer()
+        if (ownerPlayer != null && ownerPlayer.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+            drops.drop(
+                pokemon.entity,
+                ownerPlayer.level() as ServerLevel,
+                pokemon.entity?.position() ?: ownerPlayer.position(),
+                ownerPlayer,
+                pokemon = pokemon
+            )
+        }
+
         CobblemonEvents.EVOLUTION_COMPLETE.post(EvolutionCompleteEvent(pokemon, this))
         CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))
     }
 
     override fun convertToDisplay(pokemon: Pokemon): EvolutionDisplay {
-        val result = pokemon.clone()
+        val result = pokemon.clone(true)
         this.result.apply(result)
         val expectedDisplay = EvolutionDisplay(this.id, result)
         val event = EvolutionDisplayEvent(result, expectedDisplay, this)

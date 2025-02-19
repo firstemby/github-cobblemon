@@ -36,7 +36,7 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import com.cobblemon.mod.common.util.isInt
+import com.cobblemon.mod.common.util.isDouble
 import com.cobblemon.mod.common.util.isUuid
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.simplify
@@ -59,7 +59,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
@@ -187,10 +186,10 @@ open class PokemonProperties {
         private fun parseIntProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Int? {
             val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
             val value = matchingKeyPair.second
-            return if (value == null || !value.isInt()) {
+            return if (value == null || !value.isDouble()) {
                 null
             } else {
-                value.toInt()
+                value.toDouble().toInt()
             }
         }
 
@@ -469,26 +468,19 @@ open class PokemonProperties {
         return this.commonMatches(pokemonEntity.pokemon) && this.customProperties.none { !it.matches(pokemonEntity) }
     }
 
+    fun matches(properties: PokemonProperties): Boolean {
+        // Custom properties check could be duplicated but can't assume 3rd party hasn't done anything type specific
+        return this.commonMatches(properties) && this.customProperties.containsAll(properties.customProperties)
+    }
+
+    // Undefined properties will match whatever they're compared with
     private fun commonMatches(pokemon: Pokemon): Boolean {
         level?.takeIf { it != pokemon.level }?.let { return false }
         shiny?.takeIf { it != pokemon.shiny }?.let { return false }
         gender?.takeIf { it != pokemon.gender }?.let { return false }
-        species?.run {
-            try {
-                val species = if (this == "random") {
-                    PokemonSpecies.species.random()
-                } else {
-                    PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace()) ?: return@run
-                }
-                if (pokemon.species != species) {
-                    return false
-                }
-            } catch (e: ResourceLocationException) {
-                return false
-            }
-        }
+        species?.takeIf { it.asSpecies() != pokemon.species }?.let { return false }
         nickname?.takeIf { it.string != pokemon.nickname?.string }?.let { return false }
-        form?.takeIf { !it.equals(pokemon.form.name, true) }?.let { return false }
+        form?.takeIf { !it.equals(pokemon.form.formOnlyShowdownId(), true) }?.let { return false }
         friendship?.takeIf { it != pokemon.friendship }?.let { return false }
         pokeball?.takeIf { it != pokemon.caughtBall.name.toString() }?.let { return false }
         nature?.takeIf { it != pokemon.nature.name.toString() }?.let { return false }
@@ -524,6 +516,36 @@ open class PokemonProperties {
 
             return@takeIf false
         }?.let { return false }
+        return true
+    }
+
+    // Undefined properties will match whatever they're compared with
+    private fun commonMatches(properties: PokemonProperties): Boolean {
+        level?.takeIf { it != properties.level }?.let { return false }
+        shiny?.takeIf { it != properties.shiny }?.let { return false }
+        gender?.takeIf { it != properties.gender }?.let { return false }
+        species?.takeIf { it.asSpecies() != properties.species?.asSpecies() }?.let { return false }
+        nickname?.takeIf { it.string != properties.nickname?.string }?.let { return false }
+        form?.takeIf { it != properties.form }?.let { return false }
+        friendship?.takeIf { it != properties.friendship }?.let { return false }
+        pokeball?.takeIf { it != properties.pokeball }?.let { return false }
+        nature?.takeIf { it != properties.nature }?.let { return false }
+        ability?.takeIf { it != properties.ability }?.let { return false }
+        status?.takeIf { it != properties.status }?.let { return false }
+        ivs?.forEach{ stat ->
+            if (stat.value != properties.ivs?.get(stat.key)) { return false }
+        }
+        evs?.forEach{ stat ->
+            if (stat.value != properties.evs?.get(stat.key)) { return false }
+        }
+        type?.takeIf { it != properties.type }?.let { return false }
+        teraType?.takeIf { it != properties.teraType }?.let { return false }
+        dmaxLevel?.takeIf { it != properties.dmaxLevel }?.let { return false }
+        gmaxFactor?.takeIf { it != properties.gmaxFactor }?.let { return false }
+        tradeable?.takeIf { it != properties.tradeable }?.let { return false }
+        originalTrainer?.takeIf { it != properties.originalTrainer }?.let{ return false }
+        originalTrainerType?.takeIf { it != properties.originalTrainerType }?.let{ return false }
+        moves?.takeIf { it.any { move -> properties.moves?.none { it == move } == true } }?.let { return false }
         return true
     }
 
@@ -790,7 +812,7 @@ open class PokemonProperties {
     }
 
     fun copy(): PokemonProperties {
-        return PokemonProperties().loadFromJSON(saveToJSON())
+        return PokemonProperties().loadFromJSON(this.saveToJSON())
     }
 
     // If the config value is at least 1, then do 1/x and use that as the property chance
@@ -806,7 +828,18 @@ open class PokemonProperties {
     private fun createAbility(id: String, form: FormData): Ability? {
         val ability = Abilities.get(id) ?: return null
         val potentialAbility = form.abilities.firstOrNull { potential -> potential.template == ability } ?: return ability.create(true)
-        return potentialAbility.template.create(false)
+        return potentialAbility.template.create(false, potentialAbility.priority)
     }
 
+    private fun String.asSpecies() =
+        try {
+            if (this == "random") {
+                PokemonSpecies.species.random()
+            } else {
+                PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace())
+            }
+         }
+        catch (e: ResourceLocationException) {
+            null
+        }
 }

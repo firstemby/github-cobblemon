@@ -7,7 +7,36 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Yellow",
+      "unlockForms": [
+        "Yellow"
+      ]
+    },
+    {
+      "displayForm": "Orange",
+      "unlockForms": [
+        "Orange"
+      ]
+    },
+    {
+      "displayForm": "Blue",
+      "unlockForms": [
+        "Blue"
+      ]
+    },
+    {
+      "displayForm": "White",
+      "unlockForms": [
+        "White"
+      ]
+    },
+    {
+      "displayForm": "Eternal",
+      "unlockForms": [
         "Eternal"
       ]
     }
@@ -17,10 +46,6 @@
       "displayName": "cobblemon.pokedex.variation.flower",
       "icon": "cobblemon:textures/gui/pokedex/variation/flower.png",
       "aspects": [
-        "flower-white",
-        "flower-orange",
-        "flower-yellow",
-        "flower-blue",
         "flower-red",
         "flower-pink"
       ]

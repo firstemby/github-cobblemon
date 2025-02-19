@@ -118,7 +118,7 @@ class RestorationTankBlockEntity(
         }
 
         override fun getSlotsForFace(side: Direction): IntArray {
-            return if (side == Direction.DOWN) intArrayOf(0, 1, 2, 3, 4, 5, 6, 7) else intArrayOf(-1)
+            return if (side == Direction.DOWN) intArrayOf(0, 1, 2, 3, 4, 5, 6, 7) else intArrayOf()
         }
 
         override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, direction: Direction?): Boolean {

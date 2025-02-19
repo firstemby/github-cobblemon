@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
+import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
@@ -178,10 +179,10 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Override @Nullable
     public PokedexEntityData resolvePokemonScan() {
-        if(CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityRight())){
+        if (CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityRight())){
             return getDataFromShoulderPokemon(this.getShoulderEntityRight());
         }
-        if(CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityLeft())){
+        if (CompoundTagUtilities.isShoulderPokemon(this.getShoulderEntityLeft())){
             return getDataFromShoulderPokemon(this.getShoulderEntityLeft());
         }
         return null;
@@ -190,30 +191,34 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Nullable @Unique
     private PokedexEntityData getDataFromShoulderPokemon(CompoundTag shoulderTag) {
         CompoundTag pokemonTag = shoulderTag.getCompound(DataKeys.POKEMON);
-        if(pokemonTag.isEmpty()) return null;
+        if (pokemonTag.isEmpty()) return null;
         Species species = PokemonSpecies.INSTANCE.getByIdentifier(ResourceLocation.parse(pokemonTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)));
-        if(species == null) return null;
+        if (species == null) return null;
         String formId = pokemonTag.getString(DataKeys.POKEMON_FORM_ID);
         FormData form = species.getStandardForm();
         List<FormData> formList = species.getForms().stream().filter(it -> it.formOnlyShowdownId().equals(formId)).toList();
-        if(!formList.isEmpty()) form = formList.getFirst();
-        if(form == null) return null;
+        if (!formList.isEmpty()) form = formList.getFirst();
+        if (form == null) return null;
         String genderString = pokemonTag.getString(DataKeys.POKEMON_GENDER);
-        if(genderString.isEmpty()) return null;
+        if (genderString.isEmpty()) return null;
         Gender gender = Gender.valueOf(genderString);
         boolean shiny = pokemonTag.getBoolean(DataKeys.POKEMON_SHINY);
         int level = pokemonTag.getInt(DataKeys.POKEMON_LEVEL);
         Set<String> aspects = shoulderTag.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING).stream().map(Tag::getAsString).collect(Collectors.toSet());
 
-        return new PokedexEntityData(
-                species,
-                form,
-                gender,
-                aspects,
-                shiny,
-                level,
-                this.getUUID()
-        );
+        Pokemon pokemon = new Pokemon();
+        if (level().isClientSide) {
+            pokemon.setSpecies(species);
+            pokemon.setForm(form);
+            pokemon.setGender(gender);
+            pokemon.setShiny(shiny);
+            pokemon.setLevel(level);
+            pokemon.setForcedAspects(aspects);
+        } else {
+            PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(this.getUUID(), this.registryAccess());
+            pokemon = party.get(shoulderTag.getUUID(DataKeys.SHOULDER_UUID));
+        }
+        return new PokedexEntityData(pokemon, null);
     }
 
     @Override

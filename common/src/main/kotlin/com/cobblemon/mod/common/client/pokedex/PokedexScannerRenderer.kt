@@ -116,7 +116,7 @@ class PokedexScannerRenderer {
                             drawScaledText(
                                 context = graphics,
                                 font = CobblemonResources.DEFAULT_LARGE,
-                                text = lang("ui.lv.number", pokedexEntityData.level).bold(),
+                                text = lang("ui.lv.number", pokedexEntityData.pokemon.level).bold(),
                                 x = centerX + xOffset + xOffsetText,
                                 y = centerY + yOffset + yOffsetText,
                                 shadow = true,
@@ -126,7 +126,7 @@ class PokedexScannerRenderer {
 
                         if (infoDisplayedCounter == 2) {
                             val hasTrainer = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)?.ownerUUID !== null
-                            val speciesName = pokedexEntityData.species.translatedName.bold()
+                            val speciesName = pokedexEntityData.getApparentSpecies().translatedName.bold()
                             var yOffsetName = if (hasTrainer) 2 else 0
                             if (hasTrainer) {
                                 drawScaledText(
@@ -149,7 +149,7 @@ class PokedexScannerRenderer {
                                 centered = true
                             )
 
-                            val gender = pokedexEntityData.gender
+                            val gender = pokedexEntityData.pokemon.gender
                             val speciesNameWidth = Minecraft.getInstance().font.width(speciesName.font(CobblemonResources.DEFAULT_LARGE))
                             if (gender != Gender.GENDERLESS) {
                                 val isMale = gender == Gender.MALE
@@ -179,14 +179,15 @@ class PokedexScannerRenderer {
                         }
 
                         if (infoDisplayedCounter == 3) {
-                            val typeText = lang("type.suffix", pokedexEntityData.form.types.map { it.displayName.copy() }.reduce { acc, next -> acc.plus("/").plus(next) }).bold()
+                            val typeText = lang("type.suffix", pokedexEntityData.getApparentForm().types.map { it.displayName.copy() }.reduce { acc, next -> acc.plus("/").plus(next) }).bold()
                             val typeWidth = Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
                             // Split into 2 lines if text width is too long
-                            if (typeWidth > (OUTER_INFO_FRAME_WIDTH - 8) && pokedexEntityData.form.secondaryType !== null) {
+                            if (typeWidth > (OUTER_INFO_FRAME_WIDTH - 8) && pokedexEntityData.getApparentForm().secondaryType !== null) {
+                                val splitLines = typeText.string.split("/")
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = lang("type.suffix", pokedexEntityData.form.primaryType.displayName).bold(),
+                                    text = text(splitLines[0], "/").bold(),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText - 4,
                                     shadow = true,
@@ -196,7 +197,7 @@ class PokedexScannerRenderer {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = lang("type.suffix", pokedexEntityData.form.secondaryType!!.displayName).bold(),
+                                    text = text(splitLines[1]).bold(),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText + 3,
                                     shadow = true,

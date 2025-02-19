@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon.transformation
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
@@ -49,7 +48,6 @@ interface Transformation : TransformationLike {
      * @return Whether the [Transformation] was successful.
      */
     fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
-        Cobblemon.LOGGER.error(this.id)
         if (test(pokemon, context)) {
             forceStart(pokemon)
             return true

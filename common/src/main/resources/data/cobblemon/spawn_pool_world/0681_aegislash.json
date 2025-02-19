@@ -24,9 +24,6 @@
         {
             "id": "aegislash-2",
             "pokemon": "aegislash",
-            "presets": [
-                "ruins"
-            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "uncommon",
@@ -37,6 +34,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         },
@@ -56,6 +56,25 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ]
+            }
+        },
+        {
+            "id": "aegislash-4",
+            "pokemon": "aegislash",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "40-50",
+            "weight": 0.048,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
                 ]
             }
         }

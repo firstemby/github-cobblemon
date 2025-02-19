@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.properties
 
+import com.cobblemon.mod.common.api.abilities.CommonAbilityType
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -23,21 +24,28 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 object HiddenAbilityPropertyType : CustomPokemonPropertyType<HiddenAbilityProperty> {
     override val keys = setOf("hiddenability", "ha")
     override val needsKey = true
-    override fun fromString(value: String?) = HiddenAbilityProperty()
-    override fun examples() = emptySet<String>()
+    override fun fromString(value: String?) =
+        when {
+            value == null || value.lowercase() in listOf("true", "yes") -> HiddenAbilityProperty(true)
+            value.lowercase() in listOf("false", "no") -> HiddenAbilityProperty(false)
+            else -> null
+        }
+    override fun examples() = setOf("yes", "no")
 }
 
-class HiddenAbilityProperty : CustomPokemonProperty {
+class HiddenAbilityProperty (var value: Boolean) : CustomPokemonProperty {
     override fun asString() = "hiddenability"
     override fun apply(pokemon: Pokemon) {
         val possible = pokemon.form.abilities.mapping.flatMap { it.value }
-            .filter { it.type == HiddenAbilityType }
+            .filter { it.type == getAbilityType() }
         val picked = possible.randomOrNull() ?: return
-        pokemon.updateAbility(picked.template.create(false))
+        pokemon.updateAbility(picked.template.create(false, picked.priority))
     }
 
     override fun matches(pokemon: Pokemon) = pokemon.form.abilities.mapping
         .flatMap { it.value }
         .find { it.template == pokemon.ability.template }
-        ?.type == HiddenAbilityType
+        ?.type == getAbilityType()
+
+    private fun getAbilityType() = if (this.value) HiddenAbilityType else CommonAbilityType
 }

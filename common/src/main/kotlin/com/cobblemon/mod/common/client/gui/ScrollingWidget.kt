@@ -31,7 +31,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     height, // Height
     top, // Top
     slotHeight // Slot Height
-) {
+), CobblemonRenderable {
     override fun renderListBackground(guiGraphics: GuiGraphics) {}
     override fun renderSelection(context: GuiGraphics, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
     override fun renderDecorations(context: GuiGraphics, mouseX: Int, mouseY: Int) {}

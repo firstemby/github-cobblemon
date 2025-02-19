@@ -12,7 +12,10 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
-      "animations": ["q.look('head')", "q.bedrock('venusaur', 'battle_idle')"],
+      "animations": [
+        "q.look('head', 1, 0, 10, -20)",
+        "q.look('leaf_front', 1, 0, 3, -13)",
+        "q.bedrock('venusaur', 'battle_idle')"],
       "quirks": [
         "q.bedrock_quirk('venusaur', 'blink')",
         "q.bedrock_quirk('venusaur', 'look_quirk')"
@@ -21,7 +24,10 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('venusaur', 'ground_idle')"],
+      "animations": [
+        "q.look('head', 1, 0, 10, -20)",
+        "q.look('leaf_front', 1, 0, 3, -13)",
+        "q.bedrock('venusaur', 'ground_idle')"],
       "quirks": [
         "q.bedrock_quirk('venusaur', 'blink')",
         "q.bedrock_quirk('venusaur', 'look_quirk')"
@@ -29,7 +35,10 @@
     },
     "walking": {
       "poseTypes": ["WALK"],
-      "animations": ["q.look('head')", "q.bedrock('venusaur', 'ground_walk')"],
+      "animations": [
+        "q.look('head', 1, 0, 10, -20)",
+        "q.look('leaf_front', 1, 0, 0, -13)",
+        "q.bedrock('venusaur', 'ground_walk')"],
       "quirks": [
         "q.bedrock_quirk('venusaur', 'blink')",
         "q.bedrock_quirk('venusaur', 'look_quirk')"

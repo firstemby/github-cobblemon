@@ -7,7 +7,7 @@
             "id": "relicanth-1",
             "pokemon": "relicanth",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -25,7 +25,7 @@
             "id": "relicanth-2",
             "pokemon": "relicanth",
             "presets": [
-                "underwater",
+                "water",
                 "ocean_ruins"
             ],
             "type": "pokemon",
@@ -44,7 +44,7 @@
             "id": "relicanth-3",
             "pokemon": "relicanth",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -94,7 +94,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -119,7 +119,6 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_deep_ocean"
                 ]
@@ -127,33 +126,6 @@
         },
         {
             "id": "relicanth-7",
-            "pokemon": "relicanth",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "24-49",
-            "weight": 2.0,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ]
-            }
-        },
-        {
-            "id": "relicanth-8",
             "pokemon": "relicanth",
             "type": "pokemon",
             "context": "fishing",
@@ -177,7 +149,7 @@
             }
         },
         {
-            "id": "relicanth-9",
+            "id": "relicanth-8",
             "pokemon": "relicanth",
             "type": "pokemon",
             "context": "fishing",
@@ -187,7 +159,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -207,10 +179,10 @@
             }
         },
         {
-            "id": "relicanth-10",
+            "id": "relicanth-9",
             "pokemon": "relicanth",
             "presets": [
-                "underwater",
+                "water",
                 "ocean_ruins"
             ],
             "type": "pokemon",
@@ -228,7 +200,7 @@
             }
         },
         {
-            "id": "relicanth-11",
+            "id": "relicanth-10",
             "pokemon": "relicanth",
             "type": "pokemon",
             "context": "fishing",
@@ -244,14 +216,59 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_deep_ocean"
                 ]
             }
         },
         {
+            "id": "relicanth-11",
+            "pokemon": "relicanth",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "uncommon",
+            "level": "24-49",
+            "weight": 2.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            }
+        },
+        {
             "id": "relicanth-12",
+            "pokemon": "relicanth",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "uncommon",
+            "level": "24-49",
+            "weight": 2.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "relicanth-13",
             "pokemon": "relicanth",
             "type": "pokemon",
             "context": "fishing",
@@ -261,22 +278,20 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
                 "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ]
+                "minLureLevel": 1,
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

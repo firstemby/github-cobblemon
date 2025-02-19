@@ -8,13 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
-import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.gui.drawProfile
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
-import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.resources.ResourceLocation
 
@@ -23,41 +20,39 @@ class NPCRenderWidget(
     val y: Int,
     var identifier: ResourceLocation,
     val aspects: MutableSet<String>
-) : Renderable, GuiEventListener {
+) : CobblemonRenderable, GuiEventListener {
     val state = FloatingState().also {
         it.currentAspects = aspects
     }
 
     companion object {
-        val profileBackgroundResource = cobblemonResource("textures/gui/npc/profile_background.png")
-        const val WIDTH = 66
-        const val HEIGHT = 66
+        const val WIDTH = 116
+        const val HEIGHT = 112
     }
 
     override fun isFocused() = false
     override fun setFocused(focused: Boolean) {}
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        blitk(
-            matrixStack = context.pose(),
-            texture = profileBackgroundResource,
-            x = x,
-            y = y,
-            width = WIDTH,
-            height = HEIGHT
-        )
 
+        context.enableScissor(
+            x,
+            y,
+            x + WIDTH,
+            y + HEIGHT
+        )
         context.pose().pushPose()
-        context.pose().translate(x + WIDTH / 2F, y + HEIGHT / 2F, 0F)
+        // Decrease on Z-axis to prevent model from rendering above other components like tooltips
+        context.pose().translate(x + (WIDTH / 2F), y + HEIGHT + (HEIGHT / 4F), -500F)
 
         drawProfile(
-            repository = NPCModelRepository,
             resourceIdentifier = identifier,
             matrixStack = context.pose(),
             partialTicks = delta,
-            scale = 30F,
+            scale = 120F,
             state = state
         )
 
         context.pose().popPose()
+        context.disableScissor()
     }
 }

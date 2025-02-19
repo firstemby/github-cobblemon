@@ -11,11 +11,10 @@ package com.cobblemon.mod.fabric
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
-import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
-import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
@@ -30,7 +29,6 @@ import com.cobblemon.mod.common.platform.events.ServerTickEvent
 import com.cobblemon.mod.common.sherds.CobblemonSherds
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.didSleep
-import com.cobblemon.mod.common.util.endsWith
 import com.cobblemon.mod.common.world.CobblemonStructures
 import com.cobblemon.mod.common.world.feature.CobblemonFeatures
 import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifierTypes
@@ -40,9 +38,7 @@ import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProc
 import com.cobblemon.mod.fabric.net.CobblemonFabricNetworkManager
 import com.cobblemon.mod.fabric.permission.FabricPermissionValidator
 import com.mojang.brigadier.arguments.ArgumentType
-import java.io.File
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor
 import kotlin.reflect.KClass
 import net.fabricmc.api.EnvType
@@ -71,12 +67,12 @@ import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -126,6 +122,35 @@ object CobblemonFabric : CobblemonImplementation {
 
             playerEntity.didSleep()
         }
+
+        // This doesn't work (yet) because Fabric does not let us make non-potion ingredients/inputs/outputs.
+        // Throws an exception about the ingredient not being a potion. Maybe one day?
+//        FabricBrewingRecipeRegistryBuilder.BUILD.register { builder ->
+//            BrewingRecipes.recipes.forEach { (input, ingredient, output) ->
+//                if (input is CobblemonPotionIngredient) {
+//                    // This doesn't respect the specific potion types that are considered inputs. This is less than perfect
+//                    // but will at least let JEI/EMI etc fill in the ingredients.
+//                    builder.addContainerRecipe(Items.POTION, ingredient, output)
+//                } else {
+//                    input as CobblemonItemIngredient
+//                    builder.addContainerRecipe(input.item, ingredient, output)
+//                }
+//            }
+//        }
+
+        Cobblemon.builtinPacks
+            .filter { it.neededMods.all(Cobblemon.implementation::isModInstalled) }
+            .forEach {
+                val mod = FabricLoader.getInstance().getModContainer(Cobblemon.MODID).get()
+                val resourcePackActivationType = when (it.activationBehaviour) {
+                    ResourcePackActivationBehaviour.NORMAL -> ResourcePackActivationType.NORMAL
+                    ResourcePackActivationBehaviour.DEFAULT_ENABLED -> ResourcePackActivationType.DEFAULT_ENABLED
+                    ResourcePackActivationBehaviour.ALWAYS_ENABLED -> ResourcePackActivationType.ALWAYS_ENABLED
+                }
+                val id = cobblemonResource(it.id)
+                val subPath = "${ if (it.packType == PackType.CLIENT_RESOURCES) "resourcepacks" else "datapacks" }/${id.path}"
+                ResourceManagerHelperImpl.registerBuiltinResourcePack(id, subPath, mod, it.displayName, resourcePackActivationType)
+            }
 
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register { player, isLogin ->
             if (isLogin) {
@@ -189,8 +214,6 @@ object CobblemonFabric : CobblemonImplementation {
         }
 
         CommandRegistrationCallback.EVENT.register(CobblemonCommands::register)
-
-        this.attemptModCompat()
     }
 
     override fun isModInstalled(id: String) = FabricLoader.getInstance().isModLoaded(id)
@@ -308,84 +331,8 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun server(): MinecraftServer? = if (this.environment() == Environment.CLIENT) Minecraft.getInstance().singleplayerServer else this.server
 
-    override fun <T> reloadJsonRegistry(registry: JsonDataRegistry<T>, manager: ResourceManager): HashMap<ResourceLocation, T> {
-        val data = hashMapOf<ResourceLocation, T>()
-
-        if (!Cobblemon.isDedicatedServer) {
-            manager.listResources(registry.resourcePath) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }.forEach { (identifier, resource) ->
-                if (identifier.namespace == "pixelmon") {
-                    return@forEach
-                }
-
-                resource.open().use { stream ->
-                    stream.bufferedReader().use { reader ->
-                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                        try {
-                            data[resolvedIdentifier] = registry.gson.fromJson(reader, registry.typeToken.type)
-                        } catch (exception: Exception) {
-                            throw ExecutionException("Error loading JSON for data: $identifier", exception)
-                        }
-                    }
-                }
-            }
-        } else {
-            // Currently in Fabric API, the ResourceManager does not work as expected when using findResources.
-            // It will treat built-in resources as priority over datapack resources.
-            manager.listResourceStacks(registry.resourcePath) { path -> path.endsWith(JsonDataRegistry.JSON_EXTENSION) }.forEach { (identifier, resources) ->
-                if (identifier.namespace == "pixelmon") {
-                    return@forEach
-                }
-
-                if (resources.isEmpty()) {
-                    return@forEach
-                }
-
-                val orderedResources = if (resources.size > 1) {
-                    val sorted = resources.sortedBy { it.sourcePackId().replace("file/", "") }.toMutableList()
-                    val fabric = sorted.find { it.sourcePackId() == "fabric" }
-
-                    if (fabric != null) {
-                        sorted.remove(fabric)
-                        sorted.add(fabric)
-                    }
-                    sorted
-                } else {
-                    resources
-                }
-
-                orderedResources[0].open().use { stream ->
-                    stream.bufferedReader().use { reader ->
-                        val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                        try {
-                            data[resolvedIdentifier] = registry.gson.fromJson(reader, registry.typeToken.type)
-                        } catch (exception: Exception) {
-                            throw ExecutionException("Error loading JSON for data: $identifier", exception)
-                        }
-                    }
-                }
-            }
-        }
-        return data
-    }
-
     override fun registerCompostable(item: ItemLike, chance: Float) {
         CompostingChanceRegistry.INSTANCE.add(item, chance)
-    }
-
-    override fun registerBuiltinResourcePack(id: ResourceLocation, title: Component, activationBehaviour: ResourcePackActivationBehaviour) {
-        val mod = FabricLoader.getInstance().getModContainer(Cobblemon.MODID).get()
-        val resourcePackActivationType = when (activationBehaviour) {
-            ResourcePackActivationBehaviour.NORMAL -> ResourcePackActivationType.NORMAL
-            ResourcePackActivationBehaviour.DEFAULT_ENABLED -> ResourcePackActivationType.DEFAULT_ENABLED
-            ResourcePackActivationBehaviour.ALWAYS_ENABLED -> ResourcePackActivationType.ALWAYS_ENABLED
-        }
-        ResourceManagerHelper.registerBuiltinResourcePack(id, mod, title, resourcePackActivationType)
-    }
-
-    private fun attemptModCompat() {
-        if(isModInstalled("adorn")) {
-            registerBuiltinResourcePack(cobblemonResource("adorncompatibility"), Component.literal("Adorn Compatibility"), ResourcePackActivationBehaviour.ALWAYS_ENABLED)
-        }
     }
 
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {

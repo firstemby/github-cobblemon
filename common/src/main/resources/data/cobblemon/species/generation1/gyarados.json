@@ -1,12 +1,26 @@
 {
   "implemented": true,
-  "name": "Gyarados",
   "nationalPokedexNumber": 130,
+  "name": "Gyarados",
   "primaryType": "water",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 65,
+  "weight": 2350,
+  "pokedex": [
+    "cobblemon.species.gyarados.desc"
+  ],
+  "labels": [
+    "gen1"
+  ],
+  "aspects": [],
   "abilities": [
     "intimidate",
     "h:moxie"
+  ],
+  "eggGroups": [
+    "water_2",
+    "dragon"
   ],
   "baseStats": {
     "hp": 95,
@@ -16,77 +30,36 @@
     "special_defence": 100,
     "speed": 81
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "forms": [
-    {
-      "name": "Mega",
-      "primaryType": "water",
-      "secondaryType": "dark",
-      "abilities": [
-        "moldbreaker"
-      ],
-      "baseStats": {
-        "hp": 95,
-        "attack": 155,
-        "defence": 109,
-        "special_attack": 70,
-        "special_defence": 130,
-        "speed": 81
-      },
-      "catchRate": 45,
-      "maleRatio": 0.5,
-      "baseExperienceYield": 189,
-      "baseFriendship": 50,
-      "evYield": {
-        "hp": 0,
-        "attack": 2,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "experienceGroup": "slow",
-      "eggCycles": 5,
-      "eggGroups": [
-        "water_2",
-        "dragon"
-      ],
-      "labels": [
-        "gen6",
-        "mega"
-      ],
-      "aspects": [
-        "mega"
-      ],
-      "height": 65,
-      "weight": 3050,
-      "cannotDynamax": false,
-      "battleOnly": true
-    }
-  ],
+  "evYield": {
+    "hp": 0,
+    "attack": 2,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 189,
   "experienceGroup": "slow",
+  "catchRate": 45,
   "eggCycles": 5,
-  "eggGroups": [
-    "water_2",
-    "dragon"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 2,
+    "height": 3.3,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
-        "canWalk": true,
         "avoidsLand": true
-      },
-      "fly": {
-        "canFly": false
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": true,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "canSwimInWater": true,
+        "canSwimInLava": false
       }
     }
   },
@@ -108,11 +81,12 @@
   },
   "moves": [
     "1:bite",
-    "1:flail",
+    "1:dragonrage",
     "1:leer",
+    "1:twister",
+    "1:flail",
     "1:splash",
     "1:tackle",
-    "1:twister",
     "4:whirlpool",
     "8:icefang",
     "12:brine",
@@ -122,12 +96,11 @@
     "28:raindance",
     "32:aquatail",
     "36:dragondance",
-    "36:dragonrage",
     "40:hydropump",
     "44:hurricane",
     "48:thrash",
     "52:hyperbeam",
-    "tm:attract",
+    "tm:aquatail",
     "tm:avalanche",
     "tm:blizzard",
     "tm:bodyslam",
@@ -135,14 +108,11 @@
     "tm:brine",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:captivate",
     "tm:chillingwater",
-    "tm:confide",
     "tm:crunch",
     "tm:darkpulse",
     "tm:dive",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:dragoncheer",
     "tm:dragondance",
     "tm:dragonpulse",
@@ -153,11 +123,10 @@
     "tm:facade",
     "tm:fireblast",
     "tm:flamethrower",
-    "tm:frustration",
     "tm:gigaimpact",
     "tm:hail",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hurricane",
     "tm:hydropump",
     "tm:hyperbeam",
@@ -169,31 +138,25 @@
     "tm:irontail",
     "tm:lashout",
     "tm:muddywater",
-    "tm:naturalgift",
     "tm:outrage",
     "tm:payback",
     "tm:powerwhip",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:roar",
     "tm:rocksmash",
-    "tm:round",
     "tm:sandstorm",
     "tm:scald",
     "tm:scaleshot",
     "tm:scaryface",
-    "tm:secretpower",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:spite",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:surf",
-    "tm:swagger",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
@@ -202,40 +165,20 @@
     "tm:thunderbolt",
     "tm:thunderwave",
     "tm:torment",
-    "tm:toxic",
-    "tm:uproar",
+    "tm:twister",
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
     "tutor:aquatail",
-    "tutor:attract",
-    "tutor:bide",
-    "tutor:bind",
-    "tutor:bite",
-    "tutor:blizzard",
-    "tutor:bodyslam",
     "tutor:bounce",
-    "tutor:bubblebeam",
-    "tutor:crunch",
-    "tutor:curse",
+    "tutor:bulldoze",
     "tutor:darkpulse",
     "tutor:dive",
-    "tutor:doubleedge",
-    "tutor:doubleteam",
-    "tutor:dragonbreath",
-    "tutor:dragondance",
     "tutor:dragonpulse",
-    "tutor:dragonrage",
-    "tutor:dragontail",
-    "tutor:earthquake",
-    "tutor:endure",
-    "tutor:facade",
-    "tutor:fireblast",
+    "tutor:endeavor",
     "tutor:flamethrower",
-    "tutor:frustration",
-    "tutor:headbutt",
-    "tutor:hiddenpower",
-    "tutor:hydropump",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:icebeam",
     "tutor:icefang",
@@ -243,69 +186,67 @@
     "tutor:ironhead",
     "tutor:irontail",
     "tutor:lashout",
-    "tutor:leer",
-    "tutor:mimic",
     "tutor:outrage",
-    "tutor:protect",
-    "tutor:rage",
-    "tutor:raindance",
-    "tutor:reflect",
     "tutor:rest",
-    "tutor:return",
-    "tutor:roar",
     "tutor:rocksmash",
-    "tutor:sandstorm",
-    "tutor:scald",
     "tutor:scaleshot",
-    "tutor:skullbash",
     "tutor:sleeptalk",
-    "tutor:snore",
     "tutor:spite",
-    "tutor:strength",
-    "tutor:substitute",
-    "tutor:surf",
-    "tutor:swagger",
-    "tutor:tackle",
-    "tutor:takedown",
-    "tutor:taunt",
-    "tutor:thrash",
-    "tutor:thunder",
+    "tutor:stoneedge",
     "tutor:thunderbolt",
-    "tutor:thunderwave",
-    "tutor:toxic",
     "tutor:twister",
-    "tutor:uproar",
-    "tutor:waterfall",
-    "tutor:watergun",
-    "tutor:waterpulse",
-    "tutor:whirlpool",
-    "tutor:zapcannon"
-  ],
-  "labels": [
-    "gen1"
-  ],
-  "pokedex": [
-    "cobblemon.species.gyarados.desc"
+    "tutor:waterpulse"
   ],
   "preEvolution": "magikarp",
   "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 2,
-    "height": 3.3,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 2,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 65,
-  "weight": 2350,
-  "aspects": [],
-  "cannotDynamax": false
+  "forms": [
+    {
+      "name": "Mega",
+      "primaryType": "water",
+      "secondaryType": "dark",
+      "maleRatio": 0.5,
+      "height": 65,
+      "weight": 3050,
+      "pokedex": [
+        "cobblemon.species.gyarados-mega.desc"
+      ],
+      "labels": [
+        "gen6",
+        "mega"
+      ],
+      "aspects": [
+        "mega"
+      ],
+      "abilities": [
+        "moldbreaker",
+        "h:moldbreaker"
+      ],
+      "baseStats": {
+        "hp": 95,
+        "attack": 155,
+        "defence": 109,
+        "special_attack": 70,
+        "special_defence": 130,
+        "speed": 81
+      },
+      "baseExperienceYield": 224,
+      "dynamaxBlocked": true,
+      "behaviour": {
+        "moving": {
+          "walk": {
+            "avoidsLand": true
+          },
+          "swim": {
+            "swimSpeed": "0.2",
+            "canBreatheUnderwater": true,
+            "canWalkOnWater": true,
+            "canSwimInWater": true,
+            "canSwimInLava": false
+          }
+        }
+      },
+      "evolutions": [],
+      "battleOnly": true
+    }
+  ]
 }

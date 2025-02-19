@@ -11,7 +11,7 @@
 					"rotation": [37.5, 10, 0.00001]
 				},
 				"neck2": {
-					"rotation": [-32.75616, -8.17884, 5.42386]
+					"rotation": ["-32.7562+Math.cos((query.anim_time-0.6) * 90 * 1) * 4", -8.17884, 5.42386]
 				},
 				"neck3": {
 					"rotation": [-17.5, 0, 0]
@@ -20,7 +20,7 @@
 					"rotation": [-10, 0, 0]
 				},
 				"head_angle": {
-					"rotation": [27.5, 0, 0]
+					"rotation": ["27.5+Math.cos((query.anim_time-0.8) * 90 * 1) * -6", 0, 0]
 				},
 				"ear_left": {
 					"rotation": [0, 0, 7.5]
@@ -47,7 +47,7 @@
 					"rotation": [29.8359, 0.59944, -31.49325]
 				},
 				"segment3": {
-					"rotation": [0, 0, 42.5]
+					"rotation": [0, 0, "42.5+Math.cos((query.anim_time) * 90 * 1) * 1"]
 				},
 				"segment4": {
 					"rotation": [-12.5, 0, 40]
@@ -59,13 +59,13 @@
 					"rotation": [27.81308, -5.7287, 46.31672]
 				},
 				"segment7": {
-					"rotation": [24.15616, 7.47099, 40.01878]
+					"rotation": ["24.1562+Math.cos((query.anim_time-0.2) * 90 * 1) * -4", "7.471+Math.cos((query.anim_time-0.6) * 90 * 1) * -4", 40.01878]
 				},
 				"segment8": {
 					"rotation": [-10, 0, 30]
 				},
 				"segment9": {
-					"rotation": [-10, 0, 22.5]
+					"rotation": ["-10+Math.cos((query.anim_time-1) * 90 * 1) * -4", 0, 22.5]
 				},
 				"neck_leaves": {
 					"rotation": [-2.5, 0, 0]
@@ -133,10 +133,10 @@
 					"position": [0, -3, "-13+Math.cos((query.anim_time) * 90 * 2) * 1"]
 				},
 				"neck": {
-					"rotation": [17.5, 0, 0]
+					"rotation": [10, 0, 0]
 				},
 				"neck2": {
-					"rotation": [-35, 0, 0]
+					"rotation": ["-35+math.cos((query.anim_time-0.3) * 90 * 2) * +12.5", 0, 0]
 				},
 				"arm_left": {
 					"rotation": [24.51604, -45.05075, 57.20219]
@@ -157,7 +157,7 @@
 					"rotation": [0, 0, -52.5]
 				},
 				"neck3": {
-					"rotation": [-2.5, 0, 0]
+					"rotation": ["-2.5+Math.cos((query.anim_time-0.3) * 90 * 2) * -5", 0, 0]
 				},
 				"neck_leaves": {
 					"rotation": [-7.5, 0, 0]
@@ -166,7 +166,7 @@
 					"rotation": [20, 0, 0]
 				},
 				"head_angle": {
-					"rotation": [17.5, 0, 0]
+					"rotation": ["12.5+Math.cos((query.anim_time-0.5) * 90 * 2) * 5", 0, 0]
 				},
 				"ear_left": {
 					"rotation": [-5, 0, 7.5]
@@ -215,6 +215,12 @@
 				},
 				"segment9": {
 					"rotation": [0, 0, "math.sin(q.anim_time*90*4-460)*5"]
+				},
+				"neck_leave_left2_rotation": {
+					"rotation": ["4+Math.cos((query.anim_time-0.3) * 90 * 2) * -5", 0, 0]
+				},
+				"neck_leave_right2_rotation": {
+					"rotation": ["4+Math.cos((query.anim_time-0.3) * 90 * 2) * -5", 0, 0]
 				}
 			}
 		},

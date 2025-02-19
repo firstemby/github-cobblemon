@@ -1,13 +1,28 @@
 {
   "implemented": true,
-  "name": "Dragapult",
   "nationalPokedexNumber": 887,
+  "name": "Dragapult",
   "primaryType": "dragon",
   "secondaryType": "ghost",
+  "maleRatio": 0.5,
+  "height": 30,
+  "weight": 500,
+  "pokedex": [
+    "cobblemon.species.dragapult.desc"
+  ],
+  "labels": [
+    "gen8",
+    "powerhouse"
+  ],
+  "aspects": [],
   "abilities": [
     "clearbody",
     "infiltrator",
     "h:cursedbody"
+  ],
+  "eggGroups": [
+    "amorphous",
+    "dragon"
   ],
   "baseStats": {
     "hp": 88,
@@ -17,11 +32,29 @@
     "special_defence": 75,
     "speed": 142
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 3
+  },
+  "baseExperienceYield": 300,
+  "experienceGroup": "slow",
+  "catchRate": 45,
+  "eggCycles": 40,
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.2,
+    "height": 3,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "swim": {
         "swimSpeed": 0.3,
-        "canSwimInWater": true,
         "canBreatheUnderwater": true,
         "canWalkOnWater": true
       },
@@ -31,29 +64,29 @@
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "catchRate": 45,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 300,
-  "experienceGroup": "slow",
-  "eggCycles": 40,
-  "eggGroups": [
-    "amorphous",
-    "dragon"
-  ],
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:phantom_membrane",
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:haban_berry",
+        "percentage": 10.0
+      }
+    ]
+  },
   "moves": [
     "1:dragondarts",
-    "1:astonish",
-    "1:bite",
     "1:dragonbreath",
+    "1:astonish",
     "1:infestation",
     "1:quickattack",
-    "1:suckerpunch",
+    "1:bite",
     "6:lockon",
     "12:assurance",
     "18:hex",
@@ -66,11 +99,17 @@
     "63:dragonrush",
     "70:doubleedge",
     "78:lastresort",
+    "egg:confuseray",
+    "egg:curse",
+    "egg:disable",
+    "egg:doubleteam",
+    "egg:dragontail",
+    "egg:grudge",
+    "egg:suckerpunch",
     "tm:acrobatics",
     "tm:agility",
     "tm:allyswitch",
     "tm:assurance",
-    "tm:attract",
     "tm:batonpass",
     "tm:beatup",
     "tm:bodyslam",
@@ -80,6 +119,7 @@
     "tm:curse",
     "tm:dive",
     "tm:doubleedge",
+    "tm:doubleteam",
     "tm:dracometeor",
     "tm:dragoncheer",
     "tm:dragonclaw",
@@ -96,6 +136,8 @@
     "tm:hex",
     "tm:hydropump",
     "tm:hyperbeam",
+    "tm:infestation",
+    "tm:lastresort",
     "tm:lightscreen",
     "tm:nightshade",
     "tm:outrage",
@@ -105,14 +147,12 @@
     "tm:psychicfangs",
     "tm:reflect",
     "tm:rest",
-    "tm:round",
-    "tm:scald",
     "tm:shadowball",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:solarbeam",
     "tm:steelwing",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
     "tm:surf",
     "tm:swift",
@@ -125,47 +165,24 @@
     "tm:triattack",
     "tm:uturn",
     "tm:willowisp",
-    "tutor:dracometeor"
-  ],
-  "labels": [
-    "gen8",
-    "pseudo_legendary"
-  ],
-  "pokedex": [
-    "cobblemon.species.dragapult.desc"
+    "tutor:allyswitch",
+    "tutor:dive",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:lastresort",
+    "tutor:outrage",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:shadowball",
+    "tutor:sleeptalk",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:thunderbolt"
   ],
   "preEvolution": "drakloak",
-  "evolutions": [],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1.2,
-    "height": 3,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 3
-  },
-  "height": 30,
-  "weight": 500,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:phantom_membrane",
-        "percentage": 10.0
-      },
-      {
-        "item": "cobblemon:haban_berry",
-        "percentage": 10.0
-      }
-    ]
-  }
+  "evolutions": []
 }

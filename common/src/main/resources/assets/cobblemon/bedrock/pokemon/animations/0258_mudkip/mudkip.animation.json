@@ -109,33 +109,29 @@
 				}
 			}
 		},
+		"animation.mudkip.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.mudkip.cry"
+				}
+			}
+		},
 		"animation.mudkip.blink": {
 			"animation_length": 0.1667,
 			"bones": {
 				"eyelid_left": {
 					"position": {
 						"0.0": [0, 0, -0.1],
-						"0.125": {
-							"pre": [0, 0, -0.1],
-							"post": [0, 0, -0.1]
-						},
-						"0.1667": {
-							"pre": [0, 0, -0.1],
-							"post": [0, 0, -0.1]
-						}
+						"0.125": {"pre": [0, 0, -0.1], "post": [0, 0, -0.1]},
+						"0.1667": {"pre": [0, 0, -0.1], "post": [0, 0, -0.1]}
 					}
 				},
 				"eyelid_right": {
 					"position": {
 						"0.0": [0, 0, -0.1],
-						"0.125": {
-							"pre": [0, 0, -0.1],
-							"post": [0, 0, -0.1]
-						},
-						"0.1667": {
-							"pre": [0, 0, -0.1],
-							"post": [0, 0, -0.1]
-						}
+						"0.125": {"pre": [0, 0, -0.1], "post": [0, 0, -0.1]},
+						"0.1667": {"pre": [0, 0, -0.1], "post": [0, 0, -0.1]}
 					}
 				}
 			}
@@ -190,7 +186,7 @@
 				}
 			}
 		},
-		"animation.mudkip.recoil": {
+		"animation.mudkip.hurt": {
 			"loop": true,
 			"bones": {
 				"eyelid_recoil_left": {
@@ -198,14 +194,6 @@
 				},
 				"eyelid_recoil_right": {
 					"position": [0, 0, -0.1]
-				}
-			}
-		},
-		"animation.mudkip.cry": {
-			"animation_length": 1.2,
-			"sound_effects": {
-				"0.04": {
-					"effect": "pokemon.mudkip.cry"
 				}
 			}
 		}

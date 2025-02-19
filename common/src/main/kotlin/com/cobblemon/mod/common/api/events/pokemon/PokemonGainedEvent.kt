@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.pokemon.Pokemon
 import java.util.UUID
 
@@ -15,4 +16,8 @@ data class PokemonGainedEvent(
     val playerId: UUID,
     val pokemon: Pokemon
 ) {
+    val context = mutableMapOf(
+        "player_id" to StringValue(playerId.toString()),
+        "pokemon" to pokemon.struct
+    )
 }

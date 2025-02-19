@@ -2,7 +2,7 @@
     "type": "minecraft:stonecutting",
     "count": 1,
     "ingredient": {
-        "item": "minecraft:iron_block"
+        "tag": "c:storage_blocks/iron"
     },
     "result": {
         "id": "cobblemon:iron_ball"

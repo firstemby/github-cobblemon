@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.item.interactive
 
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
@@ -20,8 +21,9 @@ class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         val pokemon = entity.pokemon
 
-        // Skip trigger evaluation and force the transformation
-        val transformed = pokemon.triggerTransformations(TradeTrigger::class.java)
+        // empty properties provided - this will fail for Pokémon that require a specific trading partner
+        val context = TradeTrigger.Context(PokemonProperties())
+        val transformed = pokemon.triggerTransformations(TradeTrigger::class.java, context)
         if (transformed.any()) {
             this.consumeItem(player, stack)
             return true

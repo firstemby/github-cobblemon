@@ -36,16 +36,16 @@ class ServerEvolutionController(
     init {
         val potentialEvolutions = this.pokemon.evolutions.map { it.id }.toSet()
         this.transformationIds.removeIf { !potentialEvolutions.contains(it.lowercase()) }
-        this.transformationIds.forEach { this.findEvolutionFromId(it)?.let(this::add) }
+        this.transformationIds.forEach { this.findEvolutionFromId(it)?.let(this::silentAdd) }
     }
 
     private fun findEvolutionFromId(id: String): Evolution? = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
 
-    override fun addPacket(pokemon: Pokemon, evolution: Evolution) = AddEvolutionPacket(pokemon, evolution)
+    override fun addPacket(evolution: Evolution) = AddEvolutionPacket(this.pokemon, evolution)
 
-    override fun clearPacket(pokemon: Pokemon) = ClearEvolutionsPacket { pokemon }
+    override fun clearPacket() = ClearEvolutionsPacket { this.pokemon }
 
-    override fun removePacket(pokemon: Pokemon, evolution: Evolution) = RemoveEvolutionPacket(pokemon, evolution)
+    override fun removePacket(evolution: Evolution) = RemoveEvolutionPacket(this.pokemon, evolution)
 
     override fun start(evolution: Evolution) {
         CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
@@ -56,6 +56,8 @@ class ServerEvolutionController(
             }
         )
     }
+
+    override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
 

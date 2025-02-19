@@ -27,6 +27,10 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
     transformations: Set<T>,
 ) : TransformationController<T, I> {
 
+    init {
+        if (transformations.isNotEmpty()) this.notification()
+    }
+
     protected val transformations = transformations.toMutableSet()
 
     override val size: Int
@@ -59,7 +63,7 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
 
     override fun add(element: T): Boolean {
         val result = this.transformations.add(element)
-        if(result) this.notification()
+        if (result) this.notification()
         return result
     }
 

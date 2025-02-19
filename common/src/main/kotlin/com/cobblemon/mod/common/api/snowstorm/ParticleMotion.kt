@@ -77,16 +77,17 @@ class ParametricParticleMotion(
 
     override fun getInitialVelocity(runtime: MoLangRuntime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3) = Vec3.ZERO
     override fun getVelocity(runtime: MoLangRuntime, particle: SnowstormParticle, velocity: Vec3): Vec3 {
-        val stormPosition = Vec3(
-            particle.storm.getX(),
-            particle.storm.getY(),
-            particle.storm.getZ()
+        val particlePositionWS = Vec3(
+            particle.getX(),
+            particle.getY(),
+            particle.getZ()
         )
-        val offset = runtime.resolveVec3d(this.offset)
-        val particlePosition =
-            Vec3(particle.getX(), particle.getY(), particle.getZ())
-        val desiredPosition = stormPosition.add(offset)
-        return desiredPosition.subtract(particlePosition)
+        val matrix = particle.matrixWrapper
+
+        val targetPosPS = runtime.resolveVec3d(offset)
+        val targetPosWS = matrix.transformPosition(targetPosPS)
+
+        return targetPosWS.subtract(particlePositionWS)
     }
 
     override fun getParticleDirection(runtime: MoLangRuntime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = runtime.resolveVec3d(direction).normalize()
@@ -277,7 +278,7 @@ class CustomMotionDirection(
             runtime.resolveDouble(direction.second),
             runtime.resolveDouble(direction.third)
         )
-        return storm.matrixWrapper.matrix.transformDirection(v)
+        return storm.emitterSpaceMatrix.matrix.transformDirection(v)
     }
 
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)

@@ -33,7 +33,7 @@
             "id": "dewgong-2",
             "pokemon": "dewgong",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -71,8 +71,8 @@
                 {
                     "multiplier": 0.6,
                     "condition": {
-                        "minLureLevel": "0",
-                        "maxLureLevel": "0"
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
                     }
                 }
             ],
@@ -88,7 +88,7 @@
             "id": "dewgong-4",
             "pokemon": "dewgong",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -128,8 +128,8 @@
                 {
                     "multiplier": 0.6,
                     "condition": {
-                        "minLureLevel": "0",
-                        "maxLureLevel": "0"
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
                     }
                 }
             ],

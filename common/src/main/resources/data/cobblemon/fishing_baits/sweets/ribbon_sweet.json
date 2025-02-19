@@ -1,0 +1,8 @@
+{
+  "item": "cobblemon:ribbon_sweet",
+  "effects": [
+    {
+      "type": "cobblemon:inert"
+    }
+  ]
+}

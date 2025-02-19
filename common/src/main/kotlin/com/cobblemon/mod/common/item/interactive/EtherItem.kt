@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
 /**
@@ -34,7 +35,11 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since June 30th, 2023
  */
-class EtherItem(val max: Boolean): CobblemonItem(Properties()), PokemonAndMoveSelectingItem {
+class EtherItem(
+    val max: Boolean
+) : CobblemonItem(Properties().apply {
+    if (max) rarity(Rarity.UNCOMMON)
+}), PokemonAndMoveSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_ether" else "ether" }"
         override val returnItem = Items.GLASS_BOTTLE

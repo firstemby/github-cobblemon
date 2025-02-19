@@ -1,6 +1,6 @@
 {
-  "portraitScale": 1.45,
-  "portraitTranslation": [-0.02, -0.54, 0],
+  "portraitScale": 1.59,
+  "portraitTranslation": [-0.05, -0.63, 0],
   "profileScale": 0.87,
   "profileTranslation": [-0.04, 0.3, 0],
   "rootBone": "feebas",
@@ -11,8 +11,6 @@
     "standing": {
       "poseTypes": [
         "STAND",
-        "PORTRAIT",
-        "PROFILE",
         "NONE"
       ],
       "animations": [
@@ -30,7 +28,11 @@
       "quirks": ["q.bedrock_quirk('feebas', 'blink')"]
     },
     "float": {
-      "poseTypes": ["FLOAT"],
+      "poseTypes": [
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
       "animations": [
         "q.bedrock('feebas', 'water_idle')"
       ],

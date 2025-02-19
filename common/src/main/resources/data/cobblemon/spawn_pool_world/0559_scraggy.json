@@ -48,8 +48,7 @@
             "id": "scraggy-3",
             "pokemon": "scraggy",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -61,6 +60,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_arid"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             },
             "anticondition": {

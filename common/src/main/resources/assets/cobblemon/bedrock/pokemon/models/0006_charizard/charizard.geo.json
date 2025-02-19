@@ -116,7 +116,8 @@
 				{
 					"name": "head_correction",
 					"parent": "head",
-					"pivot": [0, 43.5, -0.5]
+					"pivot": [0, 43.5, -0.5],
+					"rotation": [-95, 0, 0]
 				},
 				{
 					"name": "head_ai",
@@ -127,6 +128,7 @@
 					"name": "head_angle",
 					"parent": "head_ai",
 					"pivot": [0, 43.5, -0.5],
+					"rotation": [95, 0, 0],
 					"cubes": [
 						{"origin": [-3.5, 41.5, -2], "size": [7, 7, 5], "uv": [48, 0]},
 						{"origin": [-3.5, 41.5, -4], "size": [7, 4, 2], "uv": [95, 64]},
@@ -150,7 +152,15 @@
 					"pivot": [0, 48.75, -3],
 					"rotation": [-90, 0, 0],
 					"locators": {
-						"mouth": [0, 48.75, -3],
+						"mouth": [0, 48.75, -3]
+					}
+				},
+				{
+					"name": "locator_special_attack",
+					"parent": "head_angle",
+					"pivot": [0, 48.75, -3],
+					"rotation": [-90, 0, 0],
+					"locators": {
 						"special_attack": [0, 48.75, -3]
 					}
 				},

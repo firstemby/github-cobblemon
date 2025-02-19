@@ -10,16 +10,16 @@
             "item": "minecraft:white_wool"
         },
         "L": {
-            "item": "minecraft:lapis_lazuli"
+            "tag": "c:gems/lapis"
         },
         "R": {
-            "item": "minecraft:redstone"
+            "tag": "c:dusts/redstone"
         },
         "M": {
             "item": "cobblemon:muscle_band"
         },
         "Q": {
-            "item": "minecraft:quartz"
+            "tag": "c:gems/quartz"
         }
     },
     "result": {

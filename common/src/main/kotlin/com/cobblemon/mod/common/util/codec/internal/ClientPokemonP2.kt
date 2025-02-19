@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common.util.codec.internal
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.types.tera.TeraType
+import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
@@ -69,6 +69,9 @@ internal data class ClientPokemonP2(
     }
 
     companion object {
+        /**
+         * do not use cobblemon.config in here, as this is used by the client whose config is different to server, always use [ServerSettings]
+         */
         internal val CODEC: MapCodec<ClientPokemonP2> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 ShoulderedState.CODEC.optionalFieldOf(DataKeys.POKEMON_STATE).forGetter(ClientPokemonP2::state),
@@ -84,7 +87,7 @@ internal data class ClientPokemonP2(
                 CompoundTag.CODEC.fieldOf(DataKeys.POKEMON_PERSISTENT_DATA).forGetter(ClientPokemonP2::persistentData),
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf(DataKeys.TETHERING_ID).forGetter(ClientPokemonP2::tetheringId),
                 TeraType.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_TERA_TYPE).forGetter(ClientPokemonP2::teraType),
-                CodecUtils.dynamicIntRange(0) { Cobblemon.config.maxDynamaxLevel }.fieldOf(DataKeys.POKEMON_DMAX_LEVEL).forGetter(ClientPokemonP2::dmaxLevel),
+                CodecUtils.dynamicIntRange(0) { ServerSettings.maxDynamaxLevel }.fieldOf(DataKeys.POKEMON_DMAX_LEVEL).forGetter(ClientPokemonP2::dmaxLevel),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_GMAX_FACTOR).forGetter(ClientPokemonP2::gmaxFactor),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_TRADEABLE).forGetter(ClientPokemonP2::tradeable)
             ).apply(instance, ::ClientPokemonP2)

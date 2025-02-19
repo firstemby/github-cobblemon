@@ -1,4 +1,9 @@
 {
-  "pokemon": ["tandemaus", "maushold"],
-  "features": ["maushold_family"]
+  "pokemon": [
+    "tandemaus",
+    "maushold"
+  ],
+  "features": [
+    "maushold_family"
+  ]
 }

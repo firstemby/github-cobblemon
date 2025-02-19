@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.battles
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
@@ -178,19 +179,35 @@ object BattleRegistry {
         ShowdownService.service.startBattle(battle, messages.toTypedArray())
     }
 
+    /**
+     * Instantiates a new [PokemonBattle] and launches the Showdown service.
+     *
+     * @param battleFormat The format to use for the battle.
+     * @param side1 The first side for the battle.
+     * @param side2 The second side for the battle.
+     * @param canPreempt Whether the battle can be blocked by subscribers to [CobblemonEvents.BATTLE_STARTED_PRE].
+     *
+     * NOTE: this does NOT validate the [battleFormat] or sides before launching Showdown.
+     * This creates the battle and hands it off to Showdown - YOU WILL GET ISSUES IF THE BATTLE IS INVALID!
+     * See [BattleBuilder] functions for how the various types of battles are built and validated.
+     */
     fun startBattle(
         battleFormat: BattleFormat,
         side1: BattleSide,
         side2: BattleSide,
-        silent: Boolean = false
+        canPreempt: Boolean = true
     ): BattleStartResult {
         val battle = PokemonBattle(battleFormat, side1, side2)
-        if (silent) return SuccessfulBattleStart(battle)
+        val start: () -> Unit = {
+            battleMap[battle.battleId] = battle
+            startShowdown(battle)
+        }
+
+        if (!canPreempt) start().also { return SuccessfulBattleStart(battle) }
 
         val preBattleEvent = BattleStartedPreEvent(battle)
         CobblemonEvents.BATTLE_STARTED_PRE.postThen(preBattleEvent) {
-            battleMap[battle.battleId] = battle
-            startShowdown(battle)
+            start()
             CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedPostEvent(battle))
             return SuccessfulBattleStart(battle)
         }

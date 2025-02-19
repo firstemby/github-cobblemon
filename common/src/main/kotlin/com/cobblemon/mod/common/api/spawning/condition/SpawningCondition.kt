@@ -59,10 +59,6 @@ abstract class SpawningCondition<T : SpawningContext> {
     var isThundering: Boolean? = null
     var timeRange: TimeRange? = null
     var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
-    var minLureLevel: Int? = null
-    var maxLureLevel: Int? = null
-    var bait: ResourceLocation? = null
-    var rodType: ResourceLocation? = null
     var isSlimeChunk: Boolean? = null
 
     @Transient
@@ -116,24 +112,6 @@ abstract class SpawningCondition<T : SpawningContext> {
             }
         ) {
             return false
-        } else if (minLureLevel != null && ctx is FishingSpawningContext) { // check for the lureLevel of the rod
-            val pokerodStack = (ctx as FishingSpawningContext).rodStack
-            val lureLevel = EnchantmentHelper.getItemEnchantmentLevel(ctx.enchantmentRegistry.getHolder(Enchantments.LURE).get(), pokerodStack)
-            if (lureLevel < minLureLevel!!) {
-                return false
-            } else if (maxLureLevel != null && lureLevel > maxLureLevel!!) {
-                return false
-            }
-        } else if (bait != null && ctx is FishingSpawningContext) { // check for the bait on the bobber
-            val pokerodBait = (ctx as FishingSpawningContext).rodBait?.item
-            if (pokerodBait != bait) {
-                return false
-            }
-        } else if (rodType != null && ctx is FishingSpawningContext) { // check for the type of pokerod being used
-            val pokerodItem = (ctx as FishingSpawningContext).rodItem
-            if (pokerodItem?.pokeRodId != rodType) {
-                return false
-            }
         } else if (isSlimeChunk != null && isSlimeChunk != false) {
             val isSlimeChunk = WorldgenRandom.seedSlimeChunk(ctx.position.x shr 4, ctx.position.z shr 4, ctx.world.seed, 987234911L).nextInt(10) == 0
 
@@ -151,15 +129,6 @@ abstract class SpawningCondition<T : SpawningContext> {
             val random = Random(seed)
             return random.nextInt(10) == 0*/
         }
-
-        /*else if (ctx is FishingSpawningContext && (ctx as FishingSpawningContext).rodItem != null) { // check if the bait attracts certain EV yields
-            val pokerodItem = (ctx as FishingSpawningContext).rodItem
-
-            // todo check if the EV yield of the berry matches the bait EV attract maybe?
-
-            if (// todo if bait EV yield != EV yield of pokemon consideration        //Registries.ITEM.getId(pokerodItem?.bait?.item).path == )
-                return false
-        }*/
 
         return true
     }

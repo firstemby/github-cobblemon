@@ -107,7 +107,7 @@ interface Targetable {
             MoveTarget.adjacentAllyOrSelf -> null
             MoveTarget.adjacentFoe -> null
             MoveTarget.foeSide -> getAllActivePokemon().filter { !it.isAllied(this) }
-            MoveTarget.scripted -> null
+            MoveTarget.scripted -> listOf(this)
             else -> null
         }
     }

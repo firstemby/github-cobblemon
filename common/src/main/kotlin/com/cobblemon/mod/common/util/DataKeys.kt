@@ -68,6 +68,7 @@ object DataKeys {
     const val POKEMON_PLATFORM_TYPE = "PlatformType"
 
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
+    const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
@@ -92,6 +93,8 @@ object DataKeys {
     const val STORE_SLOT = "Slot"
     const val STORE_SLOT_COUNT = "SlotCount"
     const val STORE_BOX = "Box"
+    const val STORE_BOX_NAME = "BoxName"
+    const val STORE_BOX_WALLPAPER = "BoxWallpaper"
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
@@ -204,6 +207,7 @@ object DataKeys {
     const val NPC_PARTY = "Party"
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
+    const val NPC_VARIATION_ASPECTS = "VariationAspects"
     const val NPC_DATA = "Data"
     const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
@@ -220,6 +224,12 @@ object DataKeys {
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    const val NPC_BASE_SCALE = "BaseScale"
+    const val NPC_HITBOX = "Hitbox"
+    const val NPC_HITBOX_WIDTH = "Width"
+    const val NPC_HITBOX_HEIGHT = "Height"
+    const val NPC_HITBOX_FIXED = "Fixed"
+    const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

@@ -50,6 +50,8 @@ class SpeciesDexRecord {
     lateinit var id: ResourceLocation
     private val aspects: MutableSet<String> = mutableSetOf()
     private val formRecords: MutableMap<String, FormDexRecord> = mutableMapOf()
+    val isFormRecordsEmpty: Boolean
+        get() = formRecords.isEmpty()
 
     fun describe(): String {
         return "SpeciesDexRecord(aspects=$aspects, formRecords=$formRecords)"
@@ -95,7 +97,7 @@ class SpeciesDexRecord {
     }
 
     fun addInformation(pokedexEntityData: PokedexEntityData, knowledge: PokedexEntryProgress) {
-        aspects.addAll(pokedexEntityData.aspects)
+        aspects.addAll(pokedexEntityData.pokemon.aspects)
     }
 
     fun addAspects(addedAspects: Set<String>) {
@@ -105,7 +107,7 @@ class SpeciesDexRecord {
     /** Returns true if the given Pokémon contains new information. Internal because it's only to be called from [FormDexRecord.wouldBeDifferent]. */
     internal fun wouldBeDifferent(pokemon: Pokemon) = pokemon.aspects.any { it !in aspects }
 
-    internal fun wouldBeDifferent(pokedexEntityData: PokedexEntityData) = pokedexEntityData.aspects.any { it !in aspects }
+    internal fun wouldBeDifferent(pokedexEntityData: PokedexEntityData) = pokedexEntityData.pokemon.aspects.any { it !in aspects }
 
     fun getOrCreateFormRecord(formName: String): FormDexRecord {
         return formRecords.getOrPut(formName.lowercase()) {

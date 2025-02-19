@@ -173,3 +173,14 @@ The 'flee_nearest_hostile' type creates a task that will make the entity flee fr
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
 - `speedMultiplier`: A MoLang expression that determines the speed multiplier for fleeing from the nearest hostile. Defaults to 0.5 which is an elevated speed to usual.
 - `desiredDistance`: A MoLang expression that determines the distance from the nearest hostile that the entity should try to maintain. Defaults to 9.
+
+### run_script
+The 'run_script' type creates a task that will run a MoLang script every tick on this entity. This has the risk of being very laggy
+if the script is doing expensive things. Remember to use `q.entity.world.game_time` and `math.mod` to do intermittent actions inside
+the script to avoid lagging the game.
+- `script`: A resource location identifying the script to run. This should be in the `molang` datapack folder.
+
+### look_in_direction
+The 'look_in_direction' type creates a task that will make the entity look in a specific direction at all times where they aren't being told to look elsewhere.
+- `yaw`: A MoLang expression that determines the yaw angle (degrees) of the entity. Defaults to `0`.
+- `pitch`: A MoLang expression that determines the pitch angle (degrees) of the entity. Defaults to `0`.

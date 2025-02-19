@@ -19,7 +19,7 @@
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_black_forehead.png"
     },
     {
-      "aspects": ["magikarp-jump-black-masked"],
+      "aspects": ["magikarp-jump-black-mask"],
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_black_mask.png"
     },
     {
@@ -43,24 +43,20 @@
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_brown_zebra.png"
     },
     {
+      "aspects": ["magikarp-jump-calico-orange-gold"],
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_orange_gold.png"
+    },
+    {
       "aspects": ["magikarp-jump-calico-orange-white"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_1.png"
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_orange_white.png"
     },
     {
       "aspects": ["magikarp-jump-calico-orange-white-black"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_2.png"
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_orange_white_black.png"
     },
     {
       "aspects": ["magikarp-jump-calico-white-orange"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_3.png"
-    },
-    {
-      "aspects": ["magikarp-jump-calico-orange-gold"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_4.png"
-    },
-    {
-      "aspects": ["magikarp-jump-orange-dapples"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_dapples.png"
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_calico_white_orange.png"
     },
     {
       "aspects": ["magikarp-jump-gray-bubbles"],
@@ -75,16 +71,24 @@
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_gray_patches.png"
     },
     {
+      "aspects": ["magikarp-jump-orange-dapples"],
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orange_dapples.png"
+    },
+    {
       "aspects": ["magikarp-jump-orange-forehead"],
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orange_forehead.png"
     },
     {
-      "aspects": ["magikarp-jump-orange-masked"],
+      "aspects": ["magikarp-jump-orange-mask"],
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orange_mask.png"
     },
     {
       "aspects": ["magikarp-jump-orange-orca"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orca.png"
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orange_orca.png"
+    },
+    {
+      "aspects": ["magikarp-jump-orange-two-tone"],
+      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_orange_two_tone.png"
     },
     {
       "aspects": ["magikarp-jump-pink-dapples"],
@@ -113,10 +117,6 @@
     {
       "aspects": ["magikarp-jump-skelly"],
       "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_skelly.png"
-    },
-    {
-      "aspects": ["magikarp-jump-orange-two-tone"],
-      "texture": "cobblemon:textures/pokemon/0129_magikarp/magikarp_jump/magikarp_two_tone.png"
     },
     {
       "aspects": ["magikarp-jump-violet-raindrops"],

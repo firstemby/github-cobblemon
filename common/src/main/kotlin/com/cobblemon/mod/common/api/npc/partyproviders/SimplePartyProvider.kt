@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.toProperties
 import com.google.gson.JsonElement
+import net.minecraft.server.level.ServerPlayer
 
 /**
  * A basic party provider that just produces a [NPCPartyStore] based on a simple list of [PokemonProperties].
@@ -52,7 +53,7 @@ class SimplePartyProvider : NPCPartyProvider {
         }
     }
 
-    override fun provide(npc: NPCEntity, level: Int): NPCPartyStore {
+    override fun provide(npc: NPCEntity, level: Int, players: List<ServerPlayer>): NPCPartyStore {
         val pokemon = pokemon.map { it.copy().also { it.level = it.level ?: level }.create() }
         val party = NPCPartyStore(npc)
         pokemon.forEach(party::add)

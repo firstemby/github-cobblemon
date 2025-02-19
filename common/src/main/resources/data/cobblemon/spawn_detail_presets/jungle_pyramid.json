@@ -9,10 +9,7 @@
 	  "#minecraft:mossy_cobblestone"
     ],
 	"neededNearbyBlocks": [
-      "minecraft:chiseled_stone_bricks",
-	  "minecraft:cobblestone",
-	  "minecraft:cobblestone_stairs",
-	  "minecraft:mossy_cobblestone"
+      "#cobblemon:jungle_pyramid_blocks"
 	]
   }
 }

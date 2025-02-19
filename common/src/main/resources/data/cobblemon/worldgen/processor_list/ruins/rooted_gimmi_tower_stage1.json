@@ -160,7 +160,7 @@
                             "Name": "minecraft:deepslate_brick_wall",
                             "Properties": {
                                 "east": "tall",
-                                "north": "false",
+                                "north": "none",
                                 "south": "tall",
                                 "west": "none",
                                 "up": "false",

@@ -26,16 +26,17 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 20th, 2022
  */
-class OpenPCPacket(val storeID: UUID) : NetworkPacket<OpenPCPacket> {
+class OpenPCPacket(val storeID: UUID, val box: Int = 0) : NetworkPacket<OpenPCPacket> {
 
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(storeID)
+        buffer.writeInt(box)
     }
 
     companion object {
         val ID = cobblemonResource("open_pc")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(buffer.readUUID())
+        fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(buffer.readUUID(), buffer.readInt())
     }
 }

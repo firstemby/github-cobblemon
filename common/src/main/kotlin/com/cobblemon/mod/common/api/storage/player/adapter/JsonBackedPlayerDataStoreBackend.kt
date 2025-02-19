@@ -28,29 +28,26 @@ abstract class JsonBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     abstract val classToken: TypeToken<T>
 
     override fun save(playerData: T) {
-        val file = filePath(playerData.uuid)
-        file.parentFile.mkdirs()
-        val pw = PrintWriter(filePath(playerData.uuid))
-        pw.write(gson.toJson(playerData))
-        pw.flush()
-        pw.close()
+        val fileTmp = filePath(playerData.uuid, TEMPORARY_FILE_EXTENSION)
+        fileTmp.parentFile.mkdirs()
+        fileTmp.printWriter().use { pw ->
+            pw.write(gson.toJson(playerData))
+        }
+        postSaveFileMoving(playerData)
     }
 
     override fun load(uuid: UUID): T {
-        val playerFile = filePath(uuid)
-        playerFile.parentFile.mkdirs()
-        return if (playerFile.exists()) {
-            gson.fromJson(BufferedReader(FileReader(playerFile)), classToken).also {
-                // Resolves old data that's missing new properties
-                val newProps = it::class.memberProperties.filterIsInstance<KMutableProperty<*>>().filter { member -> member.getter.call(it) == null }
-                if (newProps.isNotEmpty()) {
-                    val defaultData = defaultData(uuid)
-                    newProps.forEach { member -> member.setter.call(it, member.getter.call(defaultData)) }
+        return loadWithFallback(uuid) {
+            it.reader().use { reader ->
+                gson.fromJson(reader, classToken).also {
+                    // Resolves old data that's missing new properties
+                    val newProps = it::class.memberProperties.filterIsInstance<KMutableProperty<*>>().filter { member -> member.getter.call(it) == null }
+                    if (newProps.isNotEmpty()) {
+                        val defaultData = defaultData(uuid)
+                        newProps.forEach { member -> member.setter.call(it, member.getter.call(defaultData)) }
+                    }
                 }
             }
-        } else {
-            defaultData.invoke(uuid).also(::save)
-        }.also { it.initialize() }
+        }
     }
-
 }

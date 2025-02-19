@@ -7,7 +7,7 @@
             "id": "dragonair-1",
             "pokemon": "dragonair",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -27,7 +27,7 @@
             "id": "dragonair-2",
             "pokemon": "dragonair",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -47,7 +47,7 @@
             "id": "dragonair-3",
             "pokemon": "dragonair",
             "presets": [
-                "underwater",
+                "water",
                 "ocean_ruins"
             ],
             "type": "pokemon",
@@ -74,40 +74,14 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "maxY": 32
-            },
-            "anticondition": {
-                "minLureLevel": 2
             }
         },
         {
             "id": "dragonair-5",
-            "pokemon": "dragonair",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "30-42",
-            "weight": 0.18,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "maxY": 32,
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "dragonair-6",
             "pokemon": "dragonair",
             "type": "pokemon",
             "context": "fishing",
@@ -117,33 +91,10 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_magical",
                     "#cobblemon:is_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "dragonair-7",
-            "pokemon": "dragonair",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "30-42",
-            "weight": 2.25,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
             },
             "anticondition": {
                 "biomes": [
@@ -152,32 +103,10 @@
             }
         },
         {
-            "id": "dragonair-8",
-            "pokemon": "dragonair",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "30-42",
-            "weight": 0.18,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 3
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "dragonair-9",
+            "id": "dragonair-6",
             "pokemon": "dragonair",
             "presets": [
-                "underwater",
+                "water",
                 "ocean_ruins"
             ],
             "type": "pokemon",
@@ -195,7 +124,7 @@
             }
         },
         {
-            "id": "dragonair-10",
+            "id": "dragonair-7",
             "pokemon": "dragonair",
             "type": "pokemon",
             "context": "fishing",
@@ -207,59 +136,10 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_magical",
                     "#cobblemon:is_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "dragonair-11",
-            "pokemon": "dragonair",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "30-42",
-            "weight": 2.25,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "dragonair-12",
-            "pokemon": "dragonair",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "30-42",
-            "weight": 0.18,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

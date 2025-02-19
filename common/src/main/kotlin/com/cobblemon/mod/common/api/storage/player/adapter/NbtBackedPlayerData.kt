@@ -24,29 +24,24 @@ abstract class NbtBackedPlayerData<T : InstancedPlayerData>(
     type: PlayerInstancedDataStoreType
 ) : FileBasedPlayerDataStoreBackend<T>(subfolder, type, "nbt") {
     abstract val codec: Codec<T>
+
     override fun save(playerData: T) {
-        val file = filePath(playerData.uuid)
-        file.parentFile.mkdirs()
-        val os = DataOutputStream(FileOutputStream(filePath(playerData.uuid)))
-        val encodeResult = NbtOps.INSTANCE.withEncoder(codec).apply(playerData)
-        NbtIo.write(encodeResult.result().get() as CompoundTag, os)
-        os.flush()
-        os.close()
+        val fileTmp = filePath(playerData.uuid, TEMPORARY_FILE_EXTENSION)
+        fileTmp.parentFile.mkdirs()
+        val encodeResult = codec.encodeStart(NbtOps.INSTANCE, playerData)
+        NbtIo.write(encodeResult.result().get() as CompoundTag, fileTmp.toPath())
+        postSaveFileMoving(playerData)
     }
 
     override fun load(uuid: UUID): T {
-        val playerFile = filePath(uuid)
-        playerFile.parentFile.mkdirs()
-        return if (playerFile.exists()) {
-            val input = NbtIo.read(playerFile.toPath())
-            val decodeResult = NbtOps.INSTANCE.withDecoder(codec).apply(input)
-            decodeResult.getPartialOrThrow {
-                Cobblemon.LOGGER.error("Error decoding pokedex for player uuid ${uuid}")
+        return loadWithFallback(uuid) {
+            val input = NbtIo.read(it.toPath())
+            val decodeResult = codec.decode(NbtOps.INSTANCE, input)
+            decodeResult.getOrThrow {
+                Cobblemon.LOGGER.error("Error decoding $subfolder for player uuid $uuid")
                 Cobblemon.LOGGER.error(it)
                 throw UnsupportedOperationException()
             }.first
-        } else {
-            defaultData.invoke(uuid).also(::save)
-        }.also { it.initialize() }
+        }
     }
 }

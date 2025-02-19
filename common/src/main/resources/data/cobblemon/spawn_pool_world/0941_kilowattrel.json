@@ -6,6 +6,9 @@
         {
             "id": "kilowattrel-1",
             "pokemon": "kilowattrel",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",
@@ -35,6 +38,9 @@
         {
             "id": "kilowattrel-2",
             "pokemon": "kilowattrel",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",
@@ -65,7 +71,7 @@
             "id": "kilowattrel-3",
             "pokemon": "kilowattrel",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -143,7 +149,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],

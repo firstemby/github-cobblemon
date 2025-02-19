@@ -7,7 +7,7 @@
             "id": "tentacruel-1",
             "pokemon": "tentacruel",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -26,7 +26,7 @@
             "id": "tentacruel-2",
             "pokemon": "tentacruel",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -50,7 +50,7 @@
             "id": "tentacruel-3",
             "pokemon": "tentacruel",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -58,6 +58,7 @@
             "level": "30-52",
             "weight": 1.6,
             "condition": {
+                "canSeeSky": false,
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
@@ -66,6 +67,11 @@
                 "maxY": 48
             },
             "anticondition": {
+                "structures": [
+                    "#cobblemon:shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -76,7 +82,7 @@
             "id": "tentacruel-4",
             "pokemon": "tentacruel",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -117,11 +123,12 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "0",
-                    "maxLureLevel": "0"
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
                 }
             },
             "condition": {
+                "canSeeSky": false,
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
@@ -129,6 +136,11 @@
                 ]
             },
             "anticondition": {
+                "structures": [
+                    "#cobblemon:shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -137,53 +149,6 @@
         },
         {
             "id": "tentacruel-7",
-            "pokemon": "tentacruel",
-            "presets": [
-                "underwater"
-            ],
-            "type": "pokemon",
-            "context": "submerged",
-            "bucket": "common",
-            "level": "30-52",
-            "weight": 1.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ],
-                "maxY": 48
-            }
-        },
-        {
-            "id": "tentacruel-8",
-            "pokemon": "tentacruel",
-            "presets": [
-                "underwater"
-            ],
-            "type": "pokemon",
-            "context": "submerged",
-            "bucket": "common",
-            "level": "30-52",
-            "weight": 0.6,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "maxY": 48
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ]
-            }
-        },
-        {
-            "id": "tentacruel-9",
             "pokemon": "tentacruel",
             "type": "pokemon",
             "context": "fishing",
@@ -197,6 +162,49 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
+            }
+        },
+        {
+            "id": "tentacruel-8",
+            "pokemon": "tentacruel",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "common",
+            "level": "30-52",
+            "weight": 1.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            }
+        },
+        {
+            "id": "tentacruel-9",
+            "pokemon": "tentacruel",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "30-52",
+            "weight": 1.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

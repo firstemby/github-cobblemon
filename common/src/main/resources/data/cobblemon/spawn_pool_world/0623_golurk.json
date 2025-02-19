@@ -26,8 +26,7 @@
             "id": "golurk-2",
             "pokemon": "golurk",
             "presets": [
-                "natural",
-                "ruins"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -39,6 +38,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:ruin"
                 ]
             }
         },

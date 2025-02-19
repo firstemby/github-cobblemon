@@ -8,13 +8,11 @@
 
 package com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution
 
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.SingleUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.*
-import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
@@ -35,21 +33,6 @@ class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : Sing
 
         val ID = cobblemonResource("add_evolution")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = AddEvolutionPacket(decodePokemon(buffer), decodeDisplay(buffer))
-
-        internal fun EvolutionDisplay.encode(buffer: RegistryFriendlyByteBuf) {
-            buffer.writeString(this.id)
-            buffer.writeIdentifier(this.species.resourceIdentifier)
-            buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
-        }
-
-        internal fun decodeDisplay(buffer: RegistryFriendlyByteBuf): EvolutionDisplay {
-            val id = buffer.readString()
-            val speciesIdentifier = buffer.readIdentifier()
-            val species = PokemonSpecies.getByIdentifier(speciesIdentifier)
-                ?: throw IllegalArgumentException("Cannot resolve species from $speciesIdentifier")
-            val aspects = buffer.readList(ByteBuf::readString).toSet()
-            return EvolutionDisplay(id, species, aspects)
-        }
+        fun decode(buffer: RegistryFriendlyByteBuf) = AddEvolutionPacket(decodePokemon(buffer), EvolutionDisplay.decodeDisplay(buffer))
     }
 }

@@ -18,7 +18,8 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
-                    "#cobblemon:is_sandy"
+                    "#cobblemon:is_badlands",
+                    "#cobblemon:is_desert"
                 ],
                 "minY": 0
             },
@@ -49,7 +50,7 @@
             }
         },
         {
-            "id": "claydol-3",
+            "id": "claydol-4",
             "pokemon": "claydol",
             "type": "pokemon",
             "context": "grounded",

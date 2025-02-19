@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.api.events.battles
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.util.asArrayValue
 import net.minecraft.network.chat.MutableComponent
 
 /**
@@ -21,7 +23,14 @@ import net.minecraft.network.chat.MutableComponent
  * @author Segfault Guy
  * @since March 26th 2023
  */
-data class BattleStartedPreEvent (override val battle: PokemonBattle, var reason: MutableComponent? = null) : BattleEvent, Cancelable()
+data class BattleStartedPreEvent (override val battle: PokemonBattle, var reason: MutableComponent? = null) : BattleEvent, Cancelable() {
+    val context = mutableMapOf(
+        "battle" to battle.struct,
+        "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },
+        "npcs" to battle.actors.filter { it.type == ActorType.NPC }.asArrayValue { it.struct },
+        "wild_pokemon" to battle.actors.filter { it.type == ActorType.WILD }.asArrayValue { it.struct }
+    )
+}
 
 /**
  * Event fired after a [PokemonBattle] starts.
@@ -29,4 +38,11 @@ data class BattleStartedPreEvent (override val battle: PokemonBattle, var reason
  * @author Segfault Guy
  * @since March 26th 2023
  */
-data class BattleStartedPostEvent (override val battle: PokemonBattle) : BattleEvent
+data class BattleStartedPostEvent (override val battle: PokemonBattle) : BattleEvent {
+    val context = mutableMapOf(
+        "battle" to battle.struct,
+        "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },
+        "npcs" to battle.actors.filter { it.type == ActorType.NPC }.asArrayValue { it.struct },
+        "wild_pokemon" to battle.actors.filter { it.type == ActorType.WILD }.asArrayValue { it.struct }
+    )
+}

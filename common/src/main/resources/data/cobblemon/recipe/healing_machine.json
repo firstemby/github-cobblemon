@@ -7,16 +7,16 @@
     ],
     "key": {
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "G": {
             "item": "minecraft:ghast_tear"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         },
         "R": {
             "item": "cobblemon:revive"

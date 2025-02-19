@@ -57,7 +57,6 @@ class StorageWidget(
         const val PARTY_SLOT_PADDING = 6
 
         private val partyPanelResource = cobblemonResource("textures/gui/pc/party_panel.png")
-        private val screenOverlayResource = cobblemonResource("textures/gui/pc/pc_screen_overlay.png")
     }
 
     private val partySlots = arrayListOf<PartyStorageSlot>()
@@ -82,6 +81,7 @@ class StorageWidget(
             // Else it's greater than max, wrap around to start
             else 0
             this.setupStorageSlots()
+            this.pcGui.updateBoxName()
         }
 
     init {
@@ -255,7 +255,7 @@ class StorageWidget(
         // Screen Overlay
         blitk(
             matrixStack = matrices,
-            texture = screenOverlayResource,
+            texture = pc.boxes[box].wallpaper,
             x = x - 17,
             y = y - 17,
             width = 208,
@@ -286,7 +286,10 @@ class StorageWidget(
         }
 
         pastureWidget?.render(context, mouseX, mouseY, delta)
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, 1000.0)
         grabbedSlot?.render(context, mouseX, mouseY, delta)
+        matrices.popPose()
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
@@ -345,7 +348,7 @@ class StorageWidget(
         }
 
         if (grabbedSlot == null) {
-            if (clickedPokemon != null) {
+            if (clickedPokemon != null && pcGui.search.passes(clickedPokemon)) {
                 val shiftClicked = Screen.hasShiftDown()
                 if (shiftClicked) {
                     if (clickedPosition is PCPosition) {

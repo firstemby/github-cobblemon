@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.particle
 
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
+import com.cobblemon.mod.common.api.snowstorm.ParticleMotionType
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.SnowstormParticle
 import com.mojang.serialization.MapCodec
@@ -53,12 +56,32 @@ class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
             velocityY: Double,
             velocityZ: Double
         ): Particle {
+            //Particles with local position move with their emitter
+            val isLocal = parameters.effect.space.localPosition
+            val storm = ParticleStorm.contextStorm!!
+
+            //Particles may need to have variables that are specific to the instance of the particle
+            //For instance, distance variables are different per particle, it can't be tied to the emitter
+            //since the emitter can move separately from the particle
+            //We keep everything else from the storm. Just separate var structs
+            val runtime = MoLangRuntime()
+            runtime.environment.query = storm.runtime.environment.query
+            val mapClone = storm.runtime.environment.variable.map.entries.associateBy({it.key}, {it.value})
+            val varStruct = VariableStruct(mapClone)
+            storm.lockParticleVars(varStruct)
+            runtime.environment.variable = varStruct
+            runtime.environment.context = storm.runtime.environment.context
+            runtime.environment.temp = storm.runtime.environment.temp
+
+
             return SnowstormParticle(
-                ParticleStorm.contextStorm!!,
+                storm,
                 world,
                 x, y, z,
                 Vec3(velocityX, velocityY, velocityZ),
-                invisible = false
+                runtime,
+                invisible = false,
+                matrixWrapper = if (isLocal) storm.emitterSpaceMatrix else storm.emitterSpaceMatrix.clone()
             )
         }
     }

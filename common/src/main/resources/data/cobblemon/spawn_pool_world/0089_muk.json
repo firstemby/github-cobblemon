@@ -7,7 +7,7 @@
             "id": "muk-1",
             "pokemon": "muk",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -32,7 +32,7 @@
             "id": "muk-2",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
+                "water",
                 "urban"
             ],
             "type": "pokemon",
@@ -63,8 +63,7 @@
             "id": "muk-3",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
-                "village"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -82,6 +81,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             },
             "anticondition": {
@@ -94,7 +96,7 @@
             "id": "muk-4",
             "pokemon": "muk",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "fishing",
@@ -105,14 +107,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -127,7 +129,7 @@
             "id": "muk-5",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
+                "water",
                 "urban"
             ],
             "type": "pokemon",
@@ -139,14 +141,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -166,8 +168,7 @@
             "id": "muk-6",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
-                "village"
+                "water"
             ],
             "type": "pokemon",
             "context": "fishing",
@@ -178,14 +179,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -193,6 +194,9 @@
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             },
             "anticondition": {
@@ -222,7 +226,7 @@
             "id": "muk-8",
             "pokemon": "muk",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "fishing",
@@ -233,14 +237,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -257,7 +261,7 @@
             "id": "muk-9",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
+                "water",
                 "urban"
             ],
             "type": "pokemon",
@@ -269,14 +273,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -298,8 +302,7 @@
             "id": "muk-10",
             "pokemon": "muk",
             "presets": [
-                "water_surface",
-                "village"
+                "water"
             ],
             "type": "pokemon",
             "context": "fishing",
@@ -310,14 +313,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -327,6 +330,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             },
             "anticondition": {

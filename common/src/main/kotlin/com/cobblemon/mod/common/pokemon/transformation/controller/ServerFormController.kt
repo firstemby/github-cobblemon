@@ -26,18 +26,21 @@ class ServerFormController(
     init {
         val potentialForms = this.pokemon.changeableForms.map { it.id }.toSet()
         this.transformationIds.removeIf { !potentialForms.contains(it.lowercase()) }
-        this.transformationIds.forEach { this.findFormFromId(it)?.let(this::add) }
+        this.transformationIds.forEach { this.findFormFromId(it)?.let(this::silentAdd) }
     }
 
     private fun findFormFromId(id: String): TemporaryForm? = this.pokemon.changeableForms.firstOrNull { form -> form.id.equals(id, true) }
 
-    override fun addPacket(pokemon: Pokemon, form: TemporaryForm) = AddFormPacket(pokemon, form)
+    override fun addPacket(form: TemporaryForm) = AddFormPacket(this.pokemon, form)
 
-    override fun clearPacket(pokemon: Pokemon) = ClearFormsPacket { pokemon }
+    override fun clearPacket() = ClearFormsPacket { this.pokemon }
 
-    override fun removePacket(pokemon: Pokemon, form: TemporaryForm) = RemoveFormPacket(pokemon, form)
+    override fun removePacket(form: TemporaryForm) = RemoveFormPacket(this.pokemon, form)
 
     // TODO form events
+
+    // NOTE: TemporaryForm does not have a 'result' property like Evolution - TemporaryForm's transformation is only a single field toggle
+    override fun isDuplicate(element: TemporaryForm) = this.find { it.name == element.name } != null
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
 

@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
 /**
@@ -32,7 +33,13 @@ import net.minecraft.world.level.Level
  * @author Licious
  * @since May 5th, 2022
  */
-class CandyItem(val calculator: Calculator) : CobblemonItem(Properties()), PokemonSelectingItem {
+class CandyItem(
+    val item_rarity: Rarity,
+    val calculator: Calculator
+) : CobblemonItem(Properties().apply {
+    rarity(item_rarity)
+}), PokemonSelectingItem {
+
     override val bagItem = null
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

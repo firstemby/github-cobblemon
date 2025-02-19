@@ -26,7 +26,7 @@
             "id": "kabutops-2",
             "pokemon": "kabutops",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",

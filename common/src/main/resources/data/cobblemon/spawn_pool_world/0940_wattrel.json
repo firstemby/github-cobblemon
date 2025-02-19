@@ -6,6 +6,9 @@
         {
             "id": "wattrel-1",
             "pokemon": "wattrel",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",
@@ -35,6 +38,9 @@
         {
             "id": "wattrel-2",
             "pokemon": "wattrel",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",
@@ -65,7 +71,7 @@
             "id": "wattrel-3",
             "pokemon": "wattrel",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -143,7 +149,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],

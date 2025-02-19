@@ -1,6 +1,6 @@
 {
-  "portraitScale": 1.49,
-  "portraitTranslation": [-1.39, 1.99, 0],
+  "portraitScale": 1.26,
+  "portraitTranslation": [-1.09, 1.71, 0],
   "profileScale": 0.38,
   "profileTranslation": [-0.15, 1.18, -10],
   "rootBone": "gyarados",
@@ -11,6 +11,7 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
+      "isTouchingWater": false,
       "animations": ["q.look('head')", "q.bedrock('gyarados', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('gyarados', 'blink')"]
     },

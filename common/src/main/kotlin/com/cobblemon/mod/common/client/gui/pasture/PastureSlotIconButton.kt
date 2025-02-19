@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pasture
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -18,7 +19,7 @@ import net.minecraft.network.chat.Component
 class PastureSlotIconButton(
     var xPos: Int, var yPos: Int,
     onPress: OnPress
-) : Button(xPos, yPos, (SIZE * SCALE).toInt(), (SIZE * SCALE).toInt(), Component.literal("Pasture Move"), onPress, DEFAULT_NARRATION) {
+) : Button(xPos, yPos, (SIZE * SCALE).toInt(), (SIZE * SCALE).toInt(), Component.literal("Pasture Move"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         const val SIZE = 14

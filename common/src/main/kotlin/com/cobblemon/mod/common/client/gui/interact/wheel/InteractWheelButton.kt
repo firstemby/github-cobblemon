@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -29,7 +30,7 @@ class InteractWheelButton(
         private val colour: () -> Vector3f?,
         onPress: OnPress,
         private val canHover: (Double, Double) -> Boolean
-) : Button(x, y, BUTTON_SIZE, BUTTON_SIZE, Component.literal("Interact"), onPress, DEFAULT_NARRATION) {
+) : Button(x, y, BUTTON_SIZE, BUTTON_SIZE, Component.literal("Interact"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         const val BUTTON_SIZE = 69
@@ -112,11 +113,15 @@ class InteractWheelButton(
     override fun playDownSound(soundManager: SoundManager) {}
 
     private fun isHovered(mouseX: Float, mouseY: Float): Boolean {
-        val xMin = x.toFloat()
-        val xMax = xMin + BUTTON_SIZE
-        val yMin = y.toFloat()
-        val yMax = yMin + BUTTON_SIZE
+        val xMin = x.toFloat() + 1
+        val xMax = xMin + BUTTON_SIZE - 2
+        val yMin = y.toFloat() + 1
+        val yMax = yMin + BUTTON_SIZE - 2
         return canHover(mouseX.toDouble(), mouseY.toDouble()) && mouseX in xMin..xMax && mouseY in yMin..yMax
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        return if (isHovered(mouseX.toFloat(), mouseY.toFloat())) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     override fun getTooltip(): Tooltip? {

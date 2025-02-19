@@ -34,6 +34,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
 
 /** Handles purely server logic for a Pokémon */
@@ -107,8 +108,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
 
-        //used getOwnerPlayer().uuid instead of getOwnerUUID() to avoid a potential NPE
-        entity.ownerUUID = entity.pokemon.getOwnerPlayer()?.uuid
+        entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
@@ -259,6 +259,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
             if (entity.ownerUUID == null && entity.owner == null) {
                 entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
                 if(entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+                    val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
+                    if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
                     (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
                 }
             }

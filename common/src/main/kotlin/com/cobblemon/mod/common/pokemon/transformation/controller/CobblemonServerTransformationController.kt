@@ -10,6 +10,10 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 /**
  * Default implementation of the [TransformationController] for server [Transformation] management.
  *
+ * @param pokemon The [Pokemon] attached to this controller
+ * @param transformationIds
+ * @param progress
+ *
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
@@ -27,14 +31,34 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
         this.progress.removeIf { !it.shouldKeep(this.pokemon) }
     }
 
-    abstract fun addPacket(pokemon: Pokemon, transformation: T): PokemonUpdatePacket<*>
+    /** Creates a [PokemonUpdatePacket] for adding a [TransformationDisplay] to this [pokemon]'s attached client [TransformationController]. */
+    abstract fun addPacket(transformation: T): PokemonUpdatePacket<*>
 
-    abstract fun removePacket(pokemon: Pokemon, transformation: T): PokemonUpdatePacket<*>
+    /** Creates a [PokemonUpdatePacket] for removing a [TransformationDisplay] from this [pokemon]'s attached client [TransformationController]. */
+    abstract fun removePacket(transformation: T): PokemonUpdatePacket<*>
 
-    abstract fun clearPacket(pokemon: Pokemon): PokemonUpdatePacket<*>
+    /** Creates a [PokemonUpdatePacket] for clearing all [TransformationDisplay]s from this [pokemon]'s attached client [TransformationController]. */
+    abstract fun clearPacket(): PokemonUpdatePacket<*>
 
-    override val size: Int
-        get() = this.transformations.size
+    /**
+     * Validates if the provided transformation is a duplicate of an existing entry in the controller. Duplication is not
+     * determined by equivalency, but whether the result of the transformation is the same.
+     *
+     * @param element A valid [Transformation] to this controller.
+     * @return Whether the result of [element] matches the result of an existing transformation belonging to this controller.
+     */
+    protected abstract fun isDuplicate(element: T): Boolean
+
+    /**
+     * Silently adds the transformation to the controller without syncing with the client counterpart. This is used
+     * during data loading to ensure the server doesn't send update packets before the client is ready.
+     *
+     * @param element A [Transformation] to add to this controller.
+     * @return Whether [element] was added to the controller.
+     */
+    protected fun silentAdd(element: T) = !this.isDuplicate(element) && this.transformations.add(element)
+
+    // FROM TransformationController
 
     override fun pokemon(): Pokemon = this.pokemon
 
@@ -57,9 +81,18 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
         return existing as P
     }
 
+    // FROM MutableSet
+
+    override val size: Int get() = this.transformations.size
+
     override fun add(element: T): Boolean {
-        if (this.transformations.add(element)) {
-            this.pokemon.notify(addPacket(pokemon, element))
+        /**
+         * Prevents duplicate transformations that result in the same outcome. For example, Karrablast can evolve via
+         * trade or item interact, which otherwise creates duplicate entries in the summary screen and wastes an item
+         * if the evolution was already unlocked.
+         */
+        if (!this.isDuplicate(element) && this.transformations.add(element)) {
+            this.pokemon.notify(addPacket(element))
             return true
         }
         return false
@@ -77,10 +110,9 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
 
     override fun clear() {
         // We don't want to send unnecessary packets
-        val pokemon = this.pokemon
         if (this.transformations.isNotEmpty()) {
             this.transformations.clear()
-            this.pokemon.notify(clearPacket(pokemon))
+            this.pokemon.notify(clearPacket())
         }
         this.progress.clear()
     }
@@ -95,7 +127,7 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
 
     override fun remove(element: T): Boolean {
         if (this.transformations.remove(element)) {
-            this.pokemon.notify(removePacket(pokemon, element))
+            this.pokemon.notify(removePacket(element))
             return true
         }
         return false

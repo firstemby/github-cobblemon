@@ -33,6 +33,11 @@ open class PlayerLevelRangeInfluence(
     val noPokemonRange: IntRange = 1 .. config.minimumLevelRangeMax,
     val recalculationMillis: Long = 5000L
 ) : SpawningInfluence {
+    companion object {
+        /** The internally tuned variation for player level range influences */
+        val TYPICAL_VARIATION = 5
+    }
+
     val uuid = player.uuid
     var lastCalculatedTime: Long = 0
     var previousRange: IntRange = noPokemonRange

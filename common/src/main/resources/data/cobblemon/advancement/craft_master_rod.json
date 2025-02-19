@@ -11,7 +11,7 @@
     },
     "frame": "challenge"
   },
-  "parent": "cobblemon:use_bait",
+  "parent": "cobblemon:craft_rod",
   "criteria": {
     "craft_rod": {
       "trigger": "minecraft:inventory_changed",
@@ -25,5 +25,8 @@
         ]
       }
     }
+  },
+  "rewards": {
+    "experience": 100
   }
 }

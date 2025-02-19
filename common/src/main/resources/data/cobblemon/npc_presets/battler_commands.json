@@ -1,0 +1,18 @@
+{
+  "config": [
+    {
+      "variableName": "player_win_command",
+      "displayName": "npc.variable.player_win_command.name",
+      "description": "npc.variable.player_win_command.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    },
+    {
+      "variableName": "player_lose_command",
+      "displayName": "npc.variable.player_lose_command.name",
+      "description": "npc.variable.player_lose_command.desc",
+      "type": "TEXT",
+      "defaultValue": ""
+    }
+  ]
+}
