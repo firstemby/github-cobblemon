@@ -123,7 +123,7 @@ class DolphinController : RideController {
         return currVelocity
     }
 
-    override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         if (!entity.isInWater && !entity.isUnderWater)
         {

@@ -36,8 +36,11 @@ import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.Rideable
 import com.cobblemon.mod.common.api.riding.RidingManager
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.riding.Seat
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinitions
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -142,8 +145,6 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
 import java.util.*
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -230,6 +231,10 @@ open class PokemonEntity(
         get() = entityData.get(FRIENDSHIP)
     val seats: List<Seat>
         get() = form.riding.seats
+    val rideProp: RidingProperties
+        get() = form.riding
+
+
 
     var drops: DropTable? = null
 

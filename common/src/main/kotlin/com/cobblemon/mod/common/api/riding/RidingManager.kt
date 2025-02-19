@@ -143,9 +143,9 @@ data class RidingManager(val entity: PokemonEntity) {
     }
 
     //this is called just as often as
-    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
-        val controller = getController(entity) ?: return
-        controller.rotationOnMouseXY( entity, driver, yMouse, xMouse )
+    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+        val controller = getController(entity) ?: return Vec3.ZERO
+        return controller.rotationOnMouseXY( entity, driver, yMouse, xMouse, deltaTime )
     }
 
     /**
@@ -163,9 +163,9 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.turnOffOnGround(entity)
     }
 
-    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
         val controller = getController(entity) ?: return Vec3(0.0, 0.0, 0.0)
-        return controller.angRollVel(entity, driver)
+        return controller.angRollVel(entity, driver, deltaTime)
     }
 
     fun dismountOnShift(): Boolean {

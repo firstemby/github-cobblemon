@@ -36,7 +36,7 @@ object RideControllerAdapter : JsonDeserializer<RideController> {
         VehicleLandController.KEY to VehicleLandController::class.java,
         DolphinController.KEY to DolphinController::class.java,
         JetAirController.KEY to JetAirController::class.java,
-        HelicopterMouseAirController.KEY to HelicopterMouseAirController::class.java
+        JetAltAirController.KEY to JetAltAirController::class.java
 
     )
 

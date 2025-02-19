@@ -6,7 +6,7 @@
 				"identifier": "geometry.dragonite",
 				"texture_width": 256,
 				"texture_height": 128,
-				"visible_bounds_width": 8,
+				"visible_bounds_width": 9,
 				"visible_bounds_height": 5.5,
 				"visible_bounds_offset": [0, 2.25, 0]
 			},
@@ -34,7 +34,10 @@
 					"pivot": [0, 21, -0.5],
 					"cubes": [
 						{"origin": [-8, 19.5, -8], "size": [16, 9, 15], "inflate": 0.01, "uv": [33, 35]}
-					]
+					],
+					"locators": {
+						"seat_1": [0, 26, 7]
+					}
 				},
 				{
 					"name": "chest2",
@@ -196,7 +199,6 @@
 					"name": "head",
 					"parent": "neck",
 					"pivot": [0, 46, 1],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-5, 41, -6], "size": [10, 11, 11], "inflate": 0.01, "uv": [0, 0]}
 					]

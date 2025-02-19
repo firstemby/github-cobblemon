@@ -122,9 +122,9 @@ public interface Rollable {
     /**
      * Get the angular velocity in degrees per second as a Vec3
      */
-    Vec3 angRollVel();
+    Vec3 angRollVel( double deltaTime );
 
-    public void rotationOnMouseXY( double yMouse, double xMouse );
+    public Vec3 rotationOnMouseXY( double yMouse, double xMouse, double deltaTime );
 
     boolean shouldRoll();
 

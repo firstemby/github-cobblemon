@@ -184,7 +184,7 @@ class BirdAirController : RideController {
         return velocity
     }
 
-    override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         val rollable = driver as? Rollable
 
@@ -248,8 +248,8 @@ class BirdAirController : RideController {
         return Vec3(0.0, 0.0, 0.0)
     }
 
-    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
-        if(driver !is Rollable) return
+    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, partialTick: Double ): Vec3 {
+        if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
 
@@ -259,23 +259,23 @@ class BirdAirController : RideController {
         {
             if( rollable.roll > rotLimit  )
             {
-                val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
-                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
-                return
+                //val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
+                return Vec3(0.0, yMouse, 0.0 )
+
             }
 
         }else{
             if( rollable.roll < -1.0 * rotLimit  )
             {
-                val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
-                rollable.rotate(0.0f, yMouse.toFloat(), adjustedX.toFloat() )
-                return
+                //val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
+                return Vec3(0.0, yMouse, 0.0 )
+
             }
 
         }
         //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
-        rollable.rotate(0.0f, yMouse.toFloat(),  0.5f * xMouse.toFloat() )
+        return Vec3(0.0, yMouse,  0.5f * xMouse )
     }
 
     override fun canJump(

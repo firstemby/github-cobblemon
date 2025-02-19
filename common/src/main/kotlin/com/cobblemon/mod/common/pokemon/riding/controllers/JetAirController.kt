@@ -11,9 +11,11 @@ package com.cobblemon.mod.common.pokemon.riding.controllers
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.controllers.HelicopterAirController.Companion.ROTATION_LIMIT
@@ -51,25 +53,35 @@ class JetAirController : RideController {
     var lastPitch = 0.0f
         private set
 
+    var currSpeed = MINSPEED
+        private set
+
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        //maxSpeed = entity.speed.toDouble()
+        //0 boost so just the base value.
+        //This should be a function in pokemonEntity.kt so it can easily be called.
+        val speedStat = entity.rideProp.calculate(RidingStat.SPEED, RidingStyle.AIR, 0 )
+        //now calculate the true top  speed value using the speed stat
+        val topSpeed = (((MAXTOPSPEED - MINTOPSPEED) / 100) * speedStat) + MINTOPSPEED
+
+        val accelStat = entity.rideProp.calculate(RidingStat.ACCELERATION, RidingStyle.AIR, 0 )
+        val accel = (((MAXACCEL - MINACCEL) / 100) * accelStat) + MINACCEL
 
         val drivingForce = if ( Minecraft.getInstance().options.keySprint.isDown() ) 1.0
         else if (driver.isShiftKeyDown) -1.0
         else(0.0)
-        val maxPropelSpeed = 2.0
+
         //speed up and slow down based on input
-        if( drivingForce > 0 && maxSpeed < maxPropelSpeed)
+        if( driver.zza > 0.0 && currSpeed < topSpeed)
         {
-                 if( maxSpeed <= 0.1 ){ maxSpeed = 0.1}
-            maxSpeed += 0.025
+            currSpeed = min( currSpeed + accel , topSpeed)
         }
-        else if ( drivingForce <  0)
+        else if ( driver.zza < 0.0 && currSpeed > MINSPEED)
         {
-            maxSpeed = max( maxSpeed - 0.05 , 0.0)
+            //should slowdown be faster or slower than speed up?
+            currSpeed = max( currSpeed - (accel / 2) , MINSPEED)
         }
 
-        return 0.0f
+        return currSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -97,34 +109,52 @@ class JetAirController : RideController {
             upForce *= 1.0
             forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
         }
-        val velocity = Vec3(0.0 , (upForce)* maxSpeed, forwardForce * maxSpeed)
+        val velocity = Vec3(0.0 , (upForce)* currSpeed, forwardForce * currSpeed)
 
         //entity.setDeltaMovement(velocity)
 
         return velocity
     }
 
-    override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
-        //In degrees per second?
-        val rotationChangeRate = 2.0
+        //Get handling in degrees per second
+        val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
+        var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
 
-        var pitchForce = driver.zza.toDouble()
-        pitchForce *= rotationChangeRate
+        //convert it to partial ticks
+        handling *= (deltaTime)
 
-        val yawForce = -1.0 * driver.xxa * rotationChangeRate
+        //Convert to half of base handling since yaw should be slower
+        handling /= 2
 
-        return Vec3( 0.25*yawForce, -1.5*pitchForce, 0.0)
+        //A+D to yaw
+        val yawForce = -2.0 * driver.xxa * handling
+
+        return Vec3( yawForce, 0.0, 0.0)
     }
 
-    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
-        if(driver !is Rollable) return
+    override fun  rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+        if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
 
+        //Get handling in degrees per second
+        val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
+        var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
+
+        //convert it to partial ticks
+        handling *= (deltaTime)
+
+
+        val pitchRot = min( handling, max(-handling,  yMouse ) )
+
+        //mult by 2 so you can roll twice as fast as you can pitch.
+        val rollRot = min( handling*2, max(-handling*2,  xMouse ) )
+
         //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
-        rollable.rotate(0.0f, 0.0f,  xMouse.toFloat() )
+        return Vec3(0.0, pitchRot,  rollRot)
     }
 
     override fun canJump(
@@ -184,5 +214,22 @@ class JetAirController : RideController {
 
     companion object {
         val KEY = cobblemonResource("air/jet")
+        //I need a top and a bottom for the speed stat
+        // I need a minimum speed stat for this ride specifically so that it caps
+        // at this or slows below it and falls
+        // 32 bl/s and 8 bl/s
+        // min is 4 bl/s
+        val MAXTOPSPEED = 1.6 //32 bl/s
+        val MINTOPSPEED = 0.4 // 8 bl/s
+        val MINSPEED = 0.2 // 4 bl/s
+
+        //Accel will lie between 1.0 second and 5.0 seconds
+        val MAXACCEL = (MAXTOPSPEED - MINTOPSPEED) / 20 //1.0 second to max speed
+        val MINACCEL = (MAXTOPSPEED - MINTOPSPEED) / (20*5) // 5 seconds to max speed
+
+        //full 180 in 1 second.
+        //30 degrees in 1 second.
+        val MAXHANDLING = 180.0
+        val MINHANDLING = 30.0
     }
 }

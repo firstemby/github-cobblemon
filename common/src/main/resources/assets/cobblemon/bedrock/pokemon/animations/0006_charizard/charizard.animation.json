@@ -18824,7 +18824,7 @@
 					"rotation": [0, 0, 0]
 				},
 				"wing_right_mid": {
-					"rotation": [0, -2.5, "-17.5 - 10 - 20*math.sin(query.body_x_rotation)"]
+					"rotation": [0, -2.5, -17.5]
 				},
 				"wing_right_mid_membrane_hidden": {
 					"rotation": [0, 0, 7.5]

@@ -49,15 +49,9 @@
       "SPEED": {
         "displayName": "Running",
         "description": "How fast Gliscor zoom zooms",
-        "baseStats": {
-          "LAND": {
-            "min": 10,
-            "max": 2
-          },
-          "AIR": {
-            "min": 50,
-            "max": 90
-          }
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "50-90"
         }
       }
     },

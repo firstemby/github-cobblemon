@@ -96,7 +96,7 @@ class HelicopterAirController : RideController {
     }
 
 
-    override fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         val rollable = driver as? Rollable
 
@@ -175,13 +175,13 @@ class HelicopterAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = true
 
-    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
-        if(driver !is Rollable) return
+    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, partialTick: Double ): Vec3 {
+        if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
         //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
-        rollable.rotate(xMouse.toFloat(), 0.0f, 0.0f )
+        return Vec3(xMouse, 0.0, 0.0 )
     }
 
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {

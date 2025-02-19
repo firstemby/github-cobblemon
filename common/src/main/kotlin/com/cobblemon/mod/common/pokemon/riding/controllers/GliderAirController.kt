@@ -9,9 +9,11 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
@@ -54,6 +56,7 @@ class GliderAirController : RideController {
         val xVector = if (getRuntime(entity).resolveBoolean(canStrafe)) driver.xxa.toDouble() else 0.0
         val yVector = -getRuntime(entity).resolveDouble(glideSpeed)
         val zVector = driver.zza.toDouble()
+        val statSpeed = entity.rideProp.calculate(RidingStat.SPEED, RidingStyle.AIR, 0 )
 
         return Vec3(xVector, yVector, zVector)
     }

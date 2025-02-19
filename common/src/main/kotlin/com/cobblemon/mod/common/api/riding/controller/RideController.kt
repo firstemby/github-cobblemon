@@ -76,7 +76,7 @@ interface RideController : Encodable, Decodable {
      * Sets the change current change in rotation for that tick in three
      * dimensions
      */
-    fun angRollVel(entity: PokemonEntity, driver: Player): Vec3 {
+    fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
         return Vec3(0.0, 0.0, 0.0)
     }
 
@@ -105,12 +105,12 @@ interface RideController : Encodable, Decodable {
     fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
     //If function is not overwritten by controllers then just perform the defualt
-    //rolling function
-    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double ){
-        if(driver !is Rollable) return
+    //rolling function which is roll on mousex and pitch on mousey
+    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+        if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
-        rollable.rotate(0.0f, yMouse.toFloat(), xMouse.toFloat())
+        return Vec3(0.0, yMouse, xMouse )
     }
 
     fun turnOffOnGround(entity: PokemonEntity): Boolean = false

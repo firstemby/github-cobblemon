@@ -301,15 +301,15 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
-    public void rotationOnMouseXY( double yMouse, double xMouse ) {
+    public Vec3 rotationOnMouseXY( double yMouse, double xMouse, double partialTick ) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (!this.equals(player)) return;
+        if (!this.equals(player)) return Vec3.ZERO;
 
         var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return;
+        if (playerVehicle == null) return Vec3.ZERO;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
-        pokemonEntity.getRiding().rotationOnMouseXY(pokemonEntity, player, yMouse, xMouse);
+        return pokemonEntity.getRiding().rotationOnMouseXY( pokemonEntity, player, yMouse, xMouse, partialTick );
     }
 
     @Override
@@ -326,7 +326,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
-    public Vec3 angRollVel() {
+    public Vec3 angRollVel( double deltaTime ) {
         var ret = new Vec3(0.0, 0.0, 0.0);
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return ret;
@@ -335,7 +335,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (playerVehicle == null) return ret;
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return ret;
 
-        return pokemonEntity.getRiding().angRollVel(pokemonEntity, player);
+        return pokemonEntity.getRiding().angRollVel( pokemonEntity, player, deltaTime );
     }
 
 

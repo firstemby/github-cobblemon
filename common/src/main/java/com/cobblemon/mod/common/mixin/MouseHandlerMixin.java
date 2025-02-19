@@ -14,11 +14,13 @@ import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.SmoothDouble;
+import net.minecraft.world.phys.Vec3;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,6 +48,8 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedDX;
 
     @Shadow private double accumulatedDY;
+
+    @Shadow private double accumulatedScrollX;
 
     @Inject(
             method = "onScroll",
@@ -98,7 +102,12 @@ public class MouseHandlerMixin {
                     target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"
             )
     )
-    public boolean cobblemon$modifyRotation(LocalPlayer player, double cursorDeltaX, double cursorDeltaY, @Local(argsOnly = true) double d) {
+    public boolean cobblemon$modifyRotation(LocalPlayer player,
+                                            double cursorDeltaX,
+                                            double cursorDeltaY,
+                                            @Local(argsOnly = true) double d,
+                                            @Local(argsOnly = true) double movementTime
+                                            ) {
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
@@ -127,15 +136,35 @@ public class MouseHandlerMixin {
         // values and feed it to those rollable functions which will be called by the
         //specific ride controller where rollable.rotate can then be called and used
         //controller specific.
-        var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
-        var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
-        rollable.rotationOnMouseXY( yMouse, xMouse );
+
+        //return a vec3 of the yaw pitch and roll that are wanted.
+        //multiply by sensitivity before passing it in
+
+        var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.05f, d);
+        var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.05f, d);
+
+        Vec3 angVecMouse = rollable.rotationOnMouseXY( yMouse, xMouse, movementTime );
+
+        //make this configurable maybe?
+
+        //var mRoll = rollSmoother.getNewDeltaValue(angVecMouse.z * 0.15f, d);
+
+        rollable.rotate((float) angVecMouse.x,
+                    (float) angVecMouse.y,
+                    (float) angVecMouse.z);
+
+        //var yMouse = yMouseSmoother.getNewDeltaValue(angVecMouse.y * 0.15f, d);
+        //var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
+
+        //get the current angular velocity requested to be applied
+        //by the ride controller
+        var angRot = rollable.angRollVel(movementTime);
 
         if( rollable.useAngVelSmoothing() )
         {
             //get the current angular velocity requested to be applied
             //by the ride controller
-            var angRot = rollable.angRollVel();
+
             //Multiply against deltatime to get a consistent turn
             //independent of framerate
             if( angRot != null ) {
@@ -153,9 +182,6 @@ public class MouseHandlerMixin {
         }
         else
         {
-            //get the current angular velocity requested to be applied
-            //by the ride controller
-            var angRot = rollable.angRollVel();
             //Multiply against deltatime to get a consistent turn
             //independent of framerate
             if( angRot != null ) {
