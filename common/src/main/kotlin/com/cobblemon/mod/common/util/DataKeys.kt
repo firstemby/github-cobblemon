@@ -91,6 +91,8 @@ object DataKeys {
     const val STORE_SLOT = "Slot"
     const val STORE_SLOT_COUNT = "SlotCount"
     const val STORE_BOX = "Box"
+    const val STORE_BOX_NAME = "BoxName"
+    const val STORE_BOX_WALLPAPER = "BoxWallpaper"
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"

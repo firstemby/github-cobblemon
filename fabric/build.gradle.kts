@@ -39,6 +39,7 @@ repositories {
     mavenLocal()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://maven.terraformersmc.com/")
 }
 
 dependencies {
@@ -56,10 +57,13 @@ dependencies {
     modApi(libs.fabric.api)
     modApi(libs.bundles.fabric)
 
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+    modCompileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false
     }
+
+    modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
 

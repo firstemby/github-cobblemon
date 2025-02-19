@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
+import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
@@ -31,6 +32,7 @@ import java.util.function.Supplier
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
 import net.minecraft.client.color.item.ItemColor
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.model.geom.ModelLayerLocation
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.particle.ParticleProvider
@@ -54,6 +56,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.neoforged.fml.ModContainer
+import net.neoforged.fml.ModList
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.neoforge.client.ClientHooks
 import net.neoforged.neoforge.client.event.ClientTickEvent
@@ -64,6 +68,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
 import net.neoforged.neoforge.client.event.RegisterShadersEvent
 import net.neoforged.neoforge.client.event.RenderGuiEvent
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers
 import net.neoforged.neoforge.common.NeoForge
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
@@ -93,6 +98,11 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             CobblemonModelPredicateRegistry.registerPredicates()
         }
         NeoForgeClientPlatformEventHandler.register()
+
+        val modContainer = ModList.get().getModContainerById(Cobblemon.MODID).get()
+        modContainer.registerExtensionPoint(IConfigScreenFactory::class.java, object : IConfigScreenFactory {
+            override fun createScreen(modContainer: ModContainer, arg: Screen): Screen = CobblemonConfigScreen(arg)
+        })
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {

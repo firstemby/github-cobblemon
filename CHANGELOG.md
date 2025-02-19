@@ -1,14 +1,44 @@
 # Changelog
 ## [1.7.0 (Month xth, 2025)](#1-7-0)
 
+### Additions
+- Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
+- Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
+- Added `blacklisted_items_to_hold` and `whitelisted_items_to_hold` tags to allow for controlling which items players can give to their Pokémon. If the whitelist is empty, it will consider all item as allowed (unless they are in the blacklist).
+- Pokémon now follow the mouse cursor on the Summary screen, with an option to disable this in the settings.
+
+### Changes
+- Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
+
 ### Fixes
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
 - Fixed PCs always opening at box 2 instead of box 1.
+- Fixed not being able to do complex item requirements aside from just NBT with evolution conditions, requirements and fossil items.
+- Fixed the usage `hiddenability` in `pokegive` or other spawn commands resulting in a forced hidden ability
+- Fixed the consumption of friendship berries (or EV berries) not making any noise
+- Fixed Instantly breaking and replacing a fossil analyzer with any block entity crashing the game in a complete multi-structure
+- Fixed players getting disconnected when sidemods update a Pokémon's teratype
+- Fixed fling not using Item Names for minecraft held items that substitute Pokémon items
+- Fixed evolutions sometimes preventing players from logging in to servers
+- Fixed rendering of shoulder-mounted Pokémon desyncing between clients
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
 - Dialogues are correctly removed from memory when they are stopped.
 - Dialogues with variably-set initial pages now properly start timeout tracking.
+- Added `EvGainedEvent.Pre` and `EvGainedEvent.Post`.
+- Deprecated `EVs#add(Stat, Int)`, you will not be able to compile against this code please migrate to the `EVs#add(Stat, Int, EvSource)` you most likely want to use `SidemodEvSource` but please check other implementations or make your own.
+- Removed the NbtItemPredicate class, all the mod usages now use the vanilla item predicate solution, this causes breaking changes on Fossil, HeldItemRequirement & ItemInteractionEvolution
+- Renamed Cobblemon's creative tabs to start with "Cobblemon: " to distinguish Cobblemon's tabs from tabs for other mods.
+- Various items now have a rarity value.
+
+### Changes
+- When using the `cobblemon` or `generation_9` capture calculators a critical capture with a single shake will always play for successful captures when you've already registered the Pokémon as caught in your Pokédex.
+### MoLang & Datapacks
+- The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
+  - The `requiredContext` for an item interaction evolution
+  - The `itemCondition` for a held item evolution requirement
+  - The `fossils` for a fossil entry
 
 ## [1.6.1 (January 26th, 2025)](#1-6-1)
 

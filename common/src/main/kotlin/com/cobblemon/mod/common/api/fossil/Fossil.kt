@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.fossil
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
 class Fossil(
     identifier: ResourceLocation,
     val result: PokemonProperties,
-    val fossils: List<NbtItemPredicate>
+    val fossils: List<ItemPredicate>
 ): StringRepresentable {
 
     @Transient

@@ -45,6 +45,22 @@
   "baseFriendship": 50,
   "baseScale": 0.9,
   "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Running",
+        "description": "How fast Gliscor zoom zooms",
+        "baseStats": {
+          "LAND": {
+            "min": 10,
+            "max": 2
+          },
+          "AIR": {
+            "min": 50,
+            "max": 90
+          }
+        }
+      }
+    },
     "controller": {
       "key": "cobblemon:composite/fall_to_flight",
       "minimumForwardSpeed": "0.0",

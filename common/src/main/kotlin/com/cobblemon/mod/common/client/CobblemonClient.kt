@@ -40,13 +40,8 @@ import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.BlockEntityModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.FossilModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.GenericBedrockEntityModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokeBallModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
@@ -77,10 +72,12 @@ import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
+import java.util.UUID
 
 object CobblemonClient {
 
@@ -94,15 +91,6 @@ object CobblemonClient {
     var checkedStarterScreen = false
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
-    var posableModelRepositories = listOf(
-        PokemonModelRepository,
-        PokeBallModelRepository,
-        NPCModelRepository,
-        FossilModelRepository,
-        BlockEntityModelRepository,
-        GenericBedrockEntityModelRepository
-    )
-
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
@@ -330,9 +318,9 @@ object CobblemonClient {
         // Animations come next because models need them.
         BedrockAnimationRepository.loadAnimations(
             resourceManager = resourceManager,
-            directories = posableModelRepositories.flatMap { it.animationDirectories }
+            directories = VaryingModelRepository.animationDirectories
         )
-        posableModelRepositories.forEach { it.reload(resourceManager) }
+        VaryingModelRepository.reload(resourceManager)
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)

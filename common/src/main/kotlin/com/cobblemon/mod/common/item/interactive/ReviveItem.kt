@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 import kotlin.math.ceil
 
@@ -42,7 +43,12 @@ import kotlin.math.ceil
  * @author Hiroku
  * @since July 7th, 2023
  */
-class ReviveItem(val max: Boolean): CobblemonItem(Properties()), HealingSource {
+class ReviveItem(
+    val max: Boolean
+) : CobblemonItem(Properties().apply {
+        if (max) rarity(Rarity.UNCOMMON)
+}), HealingSource {
+
     val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_revive" else "revive" }"
         override val returnItem = Items.AIR

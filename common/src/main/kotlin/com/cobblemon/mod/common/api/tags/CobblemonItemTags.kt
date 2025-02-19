@@ -111,6 +111,9 @@ object CobblemonItemTags {
     @JvmField val EXPERIENCE_SHARE = create("held/experience_share")
     @JvmField val IS_FRIENDSHIP_BOOSTER = create("is_friendship_booster")
     @JvmField val ANY_HELD_ITEM = create("held/is_held_item")
+    @JvmField val BLACKLISTED_ITEMS_TO_HOLD = create("held/blacklisted_items_to_hold")
+    @JvmField val WHITELISTED_ITEMS_TO_HOLD = create("held/whitelisted_items_to_hold")
+
     /** Tag that flags items as being able to "create" [CobblemonItems.LEFTOVERS]. */
     @JvmField val LEAVES_LEFTOVERS = create("held/leaves_leftovers")
     @JvmField val LUCKY_EGG = create("held/lucky_egg")

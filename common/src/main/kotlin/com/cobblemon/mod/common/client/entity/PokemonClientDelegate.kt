@@ -29,7 +29,7 @@ import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.ease
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -102,7 +102,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentPose = null
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
-                currentModel = PokemonModelRepository.getPoser(identifier, this)
+                currentModel = VaryingModelRepository.getPoser(identifier, this)
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
                 currentEntity.pokemon.shiny = currentAspects.contains("shiny")

@@ -83,8 +83,9 @@ object BestSpawner {
     var defaultPokemonDespawner: Despawner<PokemonEntity> = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
     lateinit var fishingSpawner: FishingSpawner
 
-    fun loadConfig() {
+    fun init() {
         LOGGER.info("Starting the Best Spawner...")
+
         SpawningCondition.register(BasicSpawningCondition.NAME, BasicSpawningCondition::class.java)
         SpawningCondition.register(AreaSpawningCondition.NAME, AreaSpawningCondition::class.java)
         SpawningCondition.register(SubmergedSpawningCondition.NAME, SubmergedSpawningCondition::class.java)
@@ -94,6 +95,7 @@ object BestSpawner {
         SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition::class.java)
 
         LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
+
         SpawningContextCalculator.register(GroundedSpawningContextCalculator)
         SpawningContextCalculator.register(SeafloorSpawningContextCalculator)
         SpawningContextCalculator.register(LavafloorSpawningContextCalculator)
@@ -113,10 +115,19 @@ object BestSpawner {
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
-        config = BestSpawnerConfig.load()
+        loadConfig()
 
         SpawnDetailPresets.registerPresetType(BasicSpawnDetailPreset.NAME, BasicSpawnDetailPreset::class.java)
         SpawnDetailPresets.registerPresetType(PokemonSpawnDetailPreset.NAME, PokemonSpawnDetailPreset::class.java)
+    }
+
+    fun loadConfig() {
+        config = BestSpawnerConfig.load()
+    }
+
+    fun reloadConfig() {
+        loadConfig()
+        spawnerManagers.forEach(SpawnerManager::onConfigReload)
     }
 
     fun onServerStarted() {

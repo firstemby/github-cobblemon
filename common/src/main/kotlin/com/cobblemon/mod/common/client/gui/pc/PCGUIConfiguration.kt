@@ -14,6 +14,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 open class PCGUIConfiguration(
     val exitFunction: (PCGUI) -> Unit = { it.closeNormally(unlink = true) },
     val selectOverride: ((PCGUI, StorePosition, Pokemon?) -> Unit)? = null,
-    val showParty: Boolean = true,
+    var showParty: Boolean = true,
     val canSelect: (Pokemon) -> Boolean = { true }
 )

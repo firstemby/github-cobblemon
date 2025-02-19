@@ -100,7 +100,6 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
-import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -131,7 +130,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.StringTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
@@ -176,12 +174,15 @@ open class Pokemon : ShowdownIdentifiable {
                 throw IllegalArgumentException("Cannot set a species that isn't registered")
             }
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            val oldValue = field
             field = value
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
-                evolutionProxy.current().clear()
+                if (oldValue != value) {
+                    evolutionProxy.current().clear()
+                }
             }
             updateAspects()
             updateForm()

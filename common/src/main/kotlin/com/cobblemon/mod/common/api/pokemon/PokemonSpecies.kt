@@ -44,8 +44,7 @@ import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonRequirementAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.NbtItemPredicateAdapter
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
+import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.adapters.riding.RideControllerAdapter
@@ -54,8 +53,10 @@ import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -96,13 +97,14 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
         .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(Component::class.java, TextAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Structure::class.java).type, StructureLikeConditionAdapter)
         .registerTypeAdapter(EggGroup::class.java, EggGroupAdapter)
         .registerTypeAdapter(MobEffect::class.java, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
-        .registerTypeAdapter(NbtItemPredicate::class.java, NbtItemPredicateAdapter)
+        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
         .registerTypeAdapter(RideController::class.java, RideControllerAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .disableHtmlEscaping()

@@ -42,7 +42,10 @@ import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
+import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
+import com.cobblemon.mod.common.api.events.storage.RenamePCBoxEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperCollectionEvent
 import com.cobblemon.mod.common.api.events.world.BigRootPropagatedEvent
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
@@ -160,9 +163,27 @@ object CobblemonEvents {
     val EXPERIENCE_CANDY_USE_POST = EventObservable<ExperienceCandyUseEvent.Post>()
 
     @JvmField
+    val EV_GAINED_EVENT_PRE = CancelableObservable<EvGainedEvent.Pre>()
+    @JvmField
+    val EV_GAINED_EVENT_POST = EventObservable<EvGainedEvent.Post>()
+
+    @JvmField
     val POKEMON_RELEASED_EVENT_PRE = CancelableObservable<ReleasePokemonEvent.Pre>()
     @JvmField
     val POKEMON_RELEASED_EVENT_POST = EventObservable<ReleasePokemonEvent.Post>()
+
+    @JvmField
+    val RENAME_PC_BOX_EVENT_PRE = CancelableObservable<RenamePCBoxEvent.Pre>()
+    @JvmField
+    val RENAME_PC_BOX_EVENT_POST = EventObservable<RenamePCBoxEvent.Post>()
+
+    @JvmField
+    val WALLPAPER_COLLECTION_EVENT = EventObservable<WallpaperCollectionEvent>()
+
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_PRE = CancelableObservable<ChangePCBoxWallpaperEvent.Pre>()
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_POST = EventObservable<ChangePCBoxWallpaperEvent.Post>()
 
     @JvmField
     val LOOT_DROPPED = CancelableObservable<LootDroppedEvent>()

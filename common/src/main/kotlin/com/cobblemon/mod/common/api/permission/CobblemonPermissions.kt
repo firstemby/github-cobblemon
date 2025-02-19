@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.api.permission
 
-import com.cobblemon.mod.common.command.AbandonMultiTeam
-
 object CobblemonPermissions {
 
     private const val COMMAND_PREFIX = "command."
@@ -18,6 +16,7 @@ object CobblemonPermissions {
     val CHANGE_EYE_HEIGHT = this.create("${COMMAND_PREFIX}changeeyeheight", PermissionLevel.ALL_COMMANDS)
     val CHANGE_SCALE_AND_SIZE = this.create("${COMMAND_PREFIX}changescaleandsize", PermissionLevel.ALL_COMMANDS)
     val CHANGE_WALK_SPEED = this.create("${COMMAND_PREFIX}changewalkspeed", PermissionLevel.ALL_COMMANDS)
+    val CHANGE_JOINT_SCALE = this.create("${COMMAND_PREFIX}changejointscale", PermissionLevel.ALL_COMMANDS)
     val CHECKSPAWNS = this.create("${COMMAND_PREFIX}checkspawns", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     val GET_NBT = this.create("${COMMAND_PREFIX}getnbt", PermissionLevel.ALL_COMMANDS)
@@ -64,6 +63,9 @@ object CobblemonPermissions {
 
     val POKEBOX = this.create("${COMMAND_PREFIX}pokebox", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
+    val RENAMEBOX = this.create("${COMMAND_PREFIX}renamebox", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    val CHANGE_WALLPAPER = this.create("${COMMAND_PREFIX}changewallpaper", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
     val TEST_STORE = this.create("${COMMAND_PREFIX}teststore", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     val QUERY_LEARNSET = this.create("${COMMAND_PREFIX}querylearnset", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
@@ -83,6 +85,8 @@ object CobblemonPermissions {
     val ABANDON_MULTITEAM = this.create("${COMMAND_PREFIX}abandonmultiteam", PermissionLevel.NONE)
 
     val RUN_MOLANG_SCRIPT = this.create("${COMMAND_PREFIX}runmolangscript", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    val COBBLEMON_CONFIG_RELOAD = this.create("${COMMAND_PREFIX}cobblemonconfig.reload", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     fun all(): Iterable<Permission> = this.permissions
 
