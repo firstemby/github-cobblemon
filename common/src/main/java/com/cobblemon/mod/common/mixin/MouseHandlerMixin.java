@@ -140,10 +140,10 @@ public class MouseHandlerMixin {
         //return a vec3 of the yaw pitch and roll that are wanted.
         //multiply by sensitivity before passing it in
 
-        var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.05f, d);
-        var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.05f, d);
+        //var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.05f, d);
+        //var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.05f, d);
 
-        Vec3 angVecMouse = rollable.rotationOnMouseXY( yMouse, xMouse, movementTime );
+        Vec3 angVecMouse = rollable.rotationOnMouseXY( cursorDeltaY * 0.05 * d, cursorDeltaX * 0.05 * d, movementTime );
 
         //make this configurable maybe?
 

@@ -99,6 +99,11 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.velocity(entity, driver, input)
     }
 
+    fun fuelBar(entity: PokemonEntity, driver: Player): Float {
+        val controller = getController(entity) ?: return 0.0f
+        return controller.fuelBar(entity, driver)
+    }
+
     fun canJump(entity: PokemonEntity, driver: Player): Boolean {
         val controller = getController(entity) ?: return false
         return controller.canJump(entity, driver)

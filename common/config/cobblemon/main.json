@@ -3,7 +3,6 @@
   "maxPokemonLevel": 100,
   "maxPokemonFriendship": 255,
   "announceDropItems": true,
-  "defaultDropItemMethod": "ON_ENTITY",
   "ambientPokemonCryTicks": 1080,
   "defaultBoxCount": 30,
   "pokemonSaveIntervalSeconds": 30,
@@ -44,7 +43,7 @@
   },
   "infiniteHealerCharge": false,
   "maxHealerCharge": 6.0,
-  "chargeGainedPerTick": 3.33333E-4,
+  "secondsToChargeHealingMachine": 900.0,
   "defaultFaintTimer": 300,
   "faintAwakenHealthPercent": 0.2,
   "healPercent": 0.05,
@@ -76,5 +75,6 @@
   "battleSpectateMaxDistance": 64.0,
   "maxPokedexScanningDetectionRange": 10.0,
   "hideUnimplementedPokemonInThePokedex": false,
+  "summaryPokemonFollowCursor": true,
   "enableDebugKeys": false
 }

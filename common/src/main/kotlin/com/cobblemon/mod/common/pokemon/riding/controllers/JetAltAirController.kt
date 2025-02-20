@@ -217,7 +217,7 @@ class JetAltAirController : RideController {
     companion object {
         val KEY = cobblemonResource("air/jetalt")
         //I need a top and a bottom for the speed stat
-        // I need a minmum speed stat for this ride specifically so that it caps at this or slows below it and falls
+        // I need a minimum speed stat for this ride specifically so that it caps at this or slows below it and falls
         // 32 bl/s and 8 bl/s
         //min is 4 bl/s
         val MAXTOPSPEED = 1.6
@@ -230,6 +230,6 @@ class JetAltAirController : RideController {
 
         //Max to hopefully be something like a full 180 in 1 second.
         val MAXHANDLING = 180.0
-        val MINHANDLING = 30.0
+        val MINHANDLING = 60.0
     }
 }

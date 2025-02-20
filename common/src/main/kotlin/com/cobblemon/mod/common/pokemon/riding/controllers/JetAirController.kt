@@ -56,6 +56,12 @@ class JetAirController : RideController {
     var currSpeed = MINSPEED
         private set
 
+    var currMouseXForce = 0.0
+        private set
+
+    var currMouseYForce = 0.0
+        private set
+
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         //0 boost so just the base value.
         //This should be a function in pokemonEntity.kt so it can easily be called.
@@ -116,20 +122,20 @@ class JetAirController : RideController {
         return velocity
     }
 
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = true
+
     override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         //Get handling in degrees per second
         val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
-        var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
+        //var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
+        var handlingYaw = (((MAXYAWHANDLING - MINYAWHANDLING) / 100) * handlingStat) + MINYAWHANDLING
 
         //convert it to partial ticks
-        handling *= (deltaTime)
-
-        //Convert to half of base handling since yaw should be slower
-        handling /= 2
+        handlingYaw *= (deltaTime)
 
         //A+D to yaw
-        val yawForce = -2.0 * driver.xxa * handling
+        val yawForce = -2.0 * driver.xxa * handlingYaw
 
         return Vec3( yawForce, 0.0, 0.0)
     }
@@ -137,31 +143,59 @@ class JetAirController : RideController {
     override fun  rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
         if(driver !is Rollable) return Vec3.ZERO
 
-        val rollable = driver as Rollable
+        //Cap at a rate of 5fps so frame skips dont lead to huge jumps
+        val cappedDeltaTime = min( deltaTime, 0.2)
+
+
+        // Accumulate the mouse input
+        currMouseXForce = (currMouseXForce + (xMouse * 2 * 20 * cappedDeltaTime)).coerceIn(-1.0, 1.0)
+        currMouseYForce = (currMouseYForce + (yMouse * 2 * 20 * cappedDeltaTime)).coerceIn(-1.0, 1.0)
 
         //Get handling in degrees per second
         val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
         var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
 
         //convert it to partial ticks
-        handling *= (deltaTime)
+        handling *= (cappedDeltaTime)
+
+        val poke = driver.vehicle as? PokemonEntity
 
 
-        val pitchRot = min( handling, max(-handling,  yMouse ) )
+
+        //val pitchRot = min( handling, max(-handling,  yMouse ) )
+
+        //increase on an amount.
+
+        //if its below 0.2 it should be zero force.
+        // And then between 0.2-1.0 it should map to a value between 0.0 and 1.0
+        //val yInput = if(currMouseYForce < 0.2)  0.0 else ( ( currMouseYForce - 0.2 ) / 0.8)
+        //val xInput = if(currMouseXForce < 0.2)  0.0 else ( ( currMouseXForce - 0.2 ) / 0.8)
+
+        //create deadzones for the constant input values.
+        val xInput = remapWithDeadzone(currMouseXForce, 0.025, 1.0)
+        val yInput = remapWithDeadzone(currMouseYForce, 0.025, 1.0)
+
+        val pitchRot = handling * yInput
+        //double roll
+        val rollRot =  handling * 1.5 * xInput
 
         //mult by 2 so you can roll twice as fast as you can pitch.
-        val rollRot = min( handling*2, max(-handling*2,  xMouse ) )
+        //val rollRot = min( handling*2, max(-handling*2,  xMouse ) )
 
         //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
         return Vec3(0.0, pitchRot,  rollRot)
     }
 
+    override fun fuelBar(entity: PokemonEntity, driver: Player): Float {
+        return 0.5f
+    }
+
     override fun canJump(
         entity: PokemonEntity,
         driver: Player
     ): Boolean {
-        return true
+        return false
     }
 
     override fun jumpForce(
@@ -185,7 +219,6 @@ class JetAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity) = true
 
-    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = true
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
@@ -219,17 +252,39 @@ class JetAirController : RideController {
         // at this or slows below it and falls
         // 32 bl/s and 8 bl/s
         // min is 4 bl/s
-        val MAXTOPSPEED = 1.6 //32 bl/s
+        val MAXTOPSPEED = 2.5 // 50 bl/s
         val MINTOPSPEED = 0.4 // 8 bl/s
         val MINSPEED = 0.2 // 4 bl/s
 
         //Accel will lie between 1.0 second and 5.0 seconds
-        val MAXACCEL = (MAXTOPSPEED - MINTOPSPEED) / 20 //1.0 second to max speed
-        val MINACCEL = (MAXTOPSPEED - MINTOPSPEED) / (20*5) // 5 seconds to max speed
+        val MAXACCEL = (MAXTOPSPEED - MINSPEED) / 20 //1.0 second to max speed
+        val MINACCEL = (MAXTOPSPEED - MINSPEED) / (20*5) // 5 seconds to max speed
 
         //full 180 in 1 second.
         //30 degrees in 1 second.
         val MAXHANDLING = 180.0
-        val MINHANDLING = 30.0
+        val MINHANDLING = 60.0
+
+
+        val MAXYAWHANDLING = 20.0
+        val MINYAWHANDLING = 10.0
+
+        //Fuel measured by seconds at full throttle.
+        //minimum speed will consume a quarter of the fuel.
+        //val MAXSTAMINA =
+    }
+
+    //helper functions
+
+    //Creates a deadzone around zero that extends out to deadzoneLow in both +- and then remaps
+    //the value linearly between -1.0 and 1.0 outside of the deadzone
+    fun remapWithDeadzone(value: Double, deadzoneLow: Double = 0.2, deadzoneHigh: Double = 1.0): Double {
+        // If the absolute value is below the deadzone, return 0.
+        if (kotlin.math.abs(value) < deadzoneLow) return 0.0
+        // Otherwise, subtract the deadzone and remap the remaining range to 0-1 (preserving the sign).
+        val sign = kotlin.math.sign(value)
+        val adjusted = (kotlin.math.abs(value) - deadzoneLow) / (deadzoneHigh - deadzoneLow)
+        //Attach the sign back to the vale
+        return adjusted * sign
     }
 }

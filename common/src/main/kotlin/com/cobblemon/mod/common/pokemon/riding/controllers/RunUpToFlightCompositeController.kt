@@ -94,7 +94,9 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).angRollVel(entity, driver, deltaTime)
     }
 
-    override fun canJump(entity: PokemonEntity, driver: Player) = true
+    override fun canJump(entity: PokemonEntity, driver: Player): Boolean {
+        return getActiveController(entity).canJump(entity, driver)
+    }
 
     override fun jumpForce(
         entity: PokemonEntity,
