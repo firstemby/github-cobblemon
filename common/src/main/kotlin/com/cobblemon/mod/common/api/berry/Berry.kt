@@ -99,7 +99,6 @@ class Berry(
     val weight: Float,
     val boneMealChance: Float
 ) {
-
     @Transient
     var identifier: ResourceLocation = identifier
         internal set
@@ -159,7 +158,7 @@ class Berry(
      * Calculates the yield for a berry tree being planted or replanted after a life cycle.
      * Triggers [BerryYieldCalculationEvent].
      *
-     * @param world The [World] the tree is present in.
+     * @param world The [Level] the tree is present in.
      * @param state The [BlockState] of the tree.
      * @param pos The [BlockPos] of the tree.
      * @param placer The [LivingEntity] tending to the tree, if any.
@@ -173,9 +172,10 @@ class Berry(
         if (BerryBlock.getMulch(treeEntity) == MulchVariant.RICH) {
             //I hope the upper bound isnt exclusive, especially when there's a method called nextBetweenExclusive
             // update: it was meant to be exclusive, which caused #1124. I've lowered the upper bound from 3 to 2.
-            yield += world.random.nextIntBetweenInclusive(1, 2)
+            yield += world.random.nextIntBetweenInclusive(RICH_MULCH_MIN, RICH_MULCH_MAX)
             treeEntity.decrementMulchDuration(world, pos, state)
         }
+        yield = yield.coerceAtMost(growthPoints.size)
         val event = BerryYieldCalculationEvent(this, world, state, pos, placer, yield, bonus.second)
         CobblemonEvents.BERRY_YIELD.post(event) { yield = it.yield }
         return yield
@@ -193,7 +193,7 @@ class Berry(
      *
      * @return The maximum possible yield.
      */
-    fun maxYield() = this.baseYield.last + this.growthFactors.sumOf { it.maxYield() }
+    fun maxYield() = this.baseYield.last + this.growthFactors.sumOf { it.maxYield() } + RICH_MULCH_MAX
 
     /**
      * Checks if this berry can mutate with the given [partner].
@@ -231,6 +231,7 @@ class Berry(
     }
 
     // A cheat since gson doesn't invoke init block
+    // well I actually suspect it does but
     internal fun validate() {
         if (this.baseYield.first < 0 || this.baseYield.last < 0) {
             throw IllegalArgumentException("A berry base yield must be a positive range")
@@ -247,10 +248,6 @@ class Berry(
         }
          */
         this.growthFactors.forEach { it.validateArguments() }
-        val maxYield = this.maxYield()
-        if (this.growthPoints.size < maxYield) {
-            throw IllegalArgumentException("Anchor points must have enough elements for the max possible yield of $maxYield you've provided ${this.growthPoints.size} points")
-        }
         this.shapedFlower = hashMapOf()
         this.shapedFruit = hashMapOf()
         this.sproutShape = this.createAndUniteShapes(this.sproutShapeBoxes)
@@ -339,6 +336,8 @@ class Berry(
     }
 
     companion object {
+        const val RICH_MULCH_MIN = 1
+        const val RICH_MULCH_MAX = 2
 
         internal fun decode(buffer: RegistryFriendlyByteBuf): Berry {
             val identifier = buffer.readIdentifier()

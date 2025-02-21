@@ -196,4 +196,14 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
     fun registerStackRemap(remap: Function<ItemStack, String?>) {
         this.stackRemaps.add(remap)
     }
+
+    override fun nameOf(showdownId: String): Component {
+        // Check Remaps before defaulting to super
+        for (remap in remaps) {
+            if (remap.value == showdownId) {
+                return remap.key.description
+            }
+        }
+        return super.nameOf(showdownId)
+    }
 }

@@ -14,18 +14,16 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
 import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
-import com.cobblemon.mod.common.registry.ItemIdentifierCondition
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
 /**
- * Represents a [ContextEvolution] with [NbtItemPredicate] context.
+ * Represents a [ContextEvolution] with [ItemPredicate] context.
  * These are triggered upon interaction with any [ItemStack] that matches the given predicate.
  *
- * @property requiredContext The [NbtItemPredicate] expected to match.
+ * @property requiredContext The [ItemPredicate] expected to match.
  * @author Licious
  * @since March 20th, 2022
  */
@@ -33,18 +31,18 @@ open class ItemInteractionEvolution(
     override val id: String,
     override val result: PokemonProperties,
     override val shedder: PokemonProperties?,
-    override val requiredContext: NbtItemPredicate,
+    override val requiredContext: ItemPredicate,
     override var optional: Boolean,
     override var consumeHeldItem: Boolean,
     override val requirements: MutableSet<EvolutionRequirement>,
     override val learnableMoves: MutableSet<MoveTemplate>,
     override val drops: DropTable,
-) : ContextEvolution<ItemInteractionEvolution.ItemInteractionContext, NbtItemPredicate> {
+) : ContextEvolution<ItemInteractionEvolution.ItemInteractionContext, ItemPredicate> {
     constructor(): this(
         id = "id",
         result = PokemonProperties(),
         shedder = null,
-        requiredContext = NbtItemPredicate(ItemIdentifierCondition(ResourceLocation.fromNamespaceAndPath("minecraft", "fish")), null),
+        requiredContext = ItemPredicate.Builder.item().of(Items.EGG).build(),
         optional = true,
         consumeHeldItem = true,
         requirements = mutableSetOf(),
@@ -52,9 +50,7 @@ open class ItemInteractionEvolution(
         drops = DropTable(),
     )
 
-    override fun testContext(pokemon: Pokemon, context: ItemInteractionContext): Boolean =
-        this.requiredContext.item.fits(context.stack.item, context.world.registryAccess().registryOrThrow(Registries.ITEM))
-        && this.requiredContext.nbt?.matches(context.stack) ?: true
+    override fun testContext(pokemon: Pokemon, context: ItemInteractionContext): Boolean = this.requiredContext.test(context.stack)
 
     override fun equals(other: Any?) = other is ItemInteractionEvolution && other.id.equals(this.id, true)
 

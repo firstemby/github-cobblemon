@@ -320,7 +320,7 @@ a single battle challenge and this is a dynamic party, there will also be a `q.p
             "pokemon": "weedle",
             "weight": "10",
             "selectableTimes": "2",
-            "levelVariation": "2"
+            "levelVariation": "2",
             "npcLevels": "1-8"
           },
           {

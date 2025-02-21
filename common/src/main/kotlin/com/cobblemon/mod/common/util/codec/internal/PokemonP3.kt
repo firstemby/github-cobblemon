@@ -29,6 +29,7 @@ internal data class PokemonP3(
     val originalTrainer: Optional<String>,
     val forcedAspects: Set<String>,
     val features: List<CompoundTag>,
+    val heldItemVisible: Optional<Boolean>
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -53,6 +54,7 @@ internal data class PokemonP3(
             other.features.removeIf { it.name == feature.name }
             other.features.add(feature)
         }
+        this.heldItemVisible.ifPresent { other.heldItemVisible = it }
         return other
     }
 
@@ -62,8 +64,9 @@ internal data class PokemonP3(
                 OriginalTrainerType.CODEC.optionalFieldOfWithDefault(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE, OriginalTrainerType.NONE).forGetter(PokemonP3::originalTrainerType),
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(PokemonP3::originalTrainer),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).forGetter { it.forcedAspects.toMutableList() },
-                Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features)
-            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features) }
+                Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
+                Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible)
+            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible) }
         }
 
         internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
@@ -74,7 +77,8 @@ internal data class PokemonP3(
                 val nbt = CompoundTag()
                 nbt.putString(FEATURE_ID, feature.name)
                 feature.saveToNBT(nbt)
-            }
+            },
+            Optional.ofNullable(pokemon.heldItemVisible)
         )
     }
 

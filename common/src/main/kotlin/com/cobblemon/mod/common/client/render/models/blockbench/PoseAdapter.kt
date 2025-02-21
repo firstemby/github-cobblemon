@@ -10,9 +10,11 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.isBattling
 import com.cobblemon.mod.common.util.isDusk
 import com.cobblemon.mod.common.util.isStandingOnRedSand
 import com.cobblemon.mod.common.util.isStandingOnSand
@@ -31,7 +33,6 @@ import java.lang.reflect.Type
  * @since October 18th, 2022
  */
 class PoseAdapter(
-    val poseConditionReader: (JsonObject) -> List<(PosableState) -> Boolean>,
     val modelFinder: () -> PosableModel
 ) : JsonDeserializer<Pose> {
     companion object {
@@ -62,7 +63,10 @@ class PoseAdapter(
 
         addCondition("isDusk") { entity, expectedValue -> entity.isDusk() == expectedValue }
 
-        conditionsList.addAll(poseConditionReader(json))
+        val mustBeInBattle = json.get("isBattle")?.asBoolean
+        if (mustBeInBattle != null) {
+            conditionsList.add { mustBeInBattle == it.isBattling }
+        }
 
         if (json.has("conditions")) {
             val conditionSet = json.get("conditions").asJsonArray.map { it.asString.asExpressionLike() }

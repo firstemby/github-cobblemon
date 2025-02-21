@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBuildDetails
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -58,6 +59,8 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
@@ -97,7 +100,6 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
-import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -128,7 +130,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.StringTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
@@ -173,12 +174,15 @@ open class Pokemon : ShowdownIdentifiable {
                 throw IllegalArgumentException("Cannot set a species that isn't registered")
             }
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            val oldValue = field
             field = value
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
-                evolutionProxy.current().clear()
+                if (oldValue != value) {
+                    evolutionProxy.current().clear()
+                }
             }
             updateAspects()
             updateForm()
@@ -190,15 +194,13 @@ open class Pokemon : ShowdownIdentifiable {
 
     var form = species.standardForm
         set(value) {
-            val old = field
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
-            this.sanitizeFormChangeMoves(old)
+            this.updateMovesOnFormChange(value)
             // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
             this.evolutionProxy.current().clear()
-            findAndLearnFormChangeMoves()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
@@ -541,6 +543,14 @@ open class Pokemon : ShowdownIdentifiable {
     //Number of ticks before pokemon can breed again
     var breedingCooldown: Int = 0
 
+    /**
+     * Whether this Pokémon's held item is visible or not
+     */
+    var heldItemVisible: Boolean = true
+
+    val riding: RidingProperties
+        get() = this.form.riding
+
     init {
         storeCoordinates.subscribe { if (it != null && it.store !is PCStore && this.tetheringId != null) afterOnServer(seconds = 0.05F) { this.tetheringId = null } }
         storeCoordinates.subscribe {
@@ -549,6 +559,7 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
     }
+
 
     open fun getStat(stat: Stat) = Cobblemon.statProvider.getStatForPokemon(this, stat)
 
@@ -1602,33 +1613,34 @@ open class Pokemon : ShowdownIdentifiable {
      */
     open fun self(): Pokemon = this
 
-    private fun findAndLearnFormChangeMoves() {
-        this.form.moves.formChangeMoves.forEach { move ->
-            if (this.benchedMoves.none { it.moveTemplate == move }) {
-                this.benchedMoves.add(BenchedMove(move, 0))
-            }
+    private fun updateMovesOnFormChange(newForm: FormData) {
+        if (this.isClient) {
+            return
         }
-    }
-
-    private fun sanitizeFormChangeMoves(old: FormData) {
         for (i in 0 until MoveSet.MOVE_COUNT) {
             val move = this.moveSet[i]
-            if (move != null && LearnsetQuery.FORM_CHANGE.canLearn(move.template, old.moves) && !LearnsetQuery.ANY.canLearn(move.template, this.form.moves)) {
+            if (move != null && !LearnsetQuery.ANY.canLearn(move.template, newForm.moves)) {
                 this.moveSet.setMove(i, null)
             }
         }
         val benchedIterator = this.benchedMoves.iterator()
         while (benchedIterator.hasNext()) {
             val benchedMove = benchedIterator.next()
-            if (LearnsetQuery.FORM_CHANGE.canLearn(benchedMove.moveTemplate, old.moves) && !LearnsetQuery.ANY.canLearn(benchedMove.moveTemplate, this.form.moves)) {
+            if (!LearnsetQuery.ANY.canLearn(benchedMove.moveTemplate, newForm.moves)) {
                 benchedIterator.remove()
             }
         }
+        // Add form change moves
+        newForm.moves.formChangeMoves.forEach { move ->
+            // Under the hood these check if the moves already exist
+            this.benchedMoves.add(BenchedMove(move, 0))
+        }
+        // If moveset is empty try to find one valid move to fill it
         if (this.moveSet.filterNotNull().isEmpty()) {
             val benchedMove = this.benchedMoves.firstOrNull()
+            // This shouldn't ever be null, but you never know with data driven
             if (benchedMove != null) {
                 this.moveSet.setMove(0, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
-                return
             }
         }
     }

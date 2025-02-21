@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
+import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -44,13 +45,11 @@ class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(
 
         val increasedFriendship = pokemon.incrementFriendship(friendshipRaiseAmount)
 
-        val currentStat = pokemon.evs.getOrDefault(stat)
-        val newEV = max(currentStat - genericRuntime.resolveInt(CobblemonMechanics.berries.evLowerAmount), 0)
-        pokemon.setEV(stat, newEV)
-        val decreasedEVs = currentStat != pokemon.evs.getOrDefault(stat)
+        val evLowerAmount = max(genericRuntime.resolveInt(CobblemonMechanics.berries.evLowerAmount), 0)
+        val decreasedEVs = pokemon.evs.add(stat, -evLowerAmount, ItemEvSource(player, stack, pokemon)) != 0
 
         return if (increasedFriendship || decreasedEVs) {
-            player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+            pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
             if (!player.isCreative) {
                 stack.shrink(1)
             }

@@ -31,9 +31,18 @@ import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
-class PotionItem(val type: PotionType) : CobblemonItem(Properties()), PokemonSelectingItem, HealingSource {
+class PotionItem(
+    val type: PotionType
+) : CobblemonItem(Properties().apply {
+    when (type.name) {
+        PotionType.MAX_POTION.name -> rarity(Rarity.UNCOMMON)
+        PotionType.FULL_RESTORE.name -> rarity(Rarity.UNCOMMON)
+    }
+}), PokemonSelectingItem, HealingSource {
+
     override val bagItem = type
     override fun canUseOnPokemon(pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

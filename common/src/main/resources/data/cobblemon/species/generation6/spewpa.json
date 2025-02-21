@@ -659,7 +659,7 @@
         },
         {
           "variant": "advancement",
-          "advancement": "cobblemon:catch_all_vivillon"
+          "requiredAdvancement": "cobblemon:catch_all_vivillon"
         }
       ]
     }

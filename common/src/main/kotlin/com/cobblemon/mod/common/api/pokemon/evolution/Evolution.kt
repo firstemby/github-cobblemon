@@ -105,6 +105,9 @@ interface Evolution : EvolutionLike {
      * @param pokemon The [Pokemon] being evolved.
      */
     fun evolve(pokemon: Pokemon): Boolean {
+        if (this.consumeHeldItem) {
+            pokemon.swapHeldItem(ItemStack.EMPTY)
+        }
         if (this.optional) {
             // All the networking is handled under the hood, see EvolutionController.
             return pokemon.evolutionProxy.server().add(this)
@@ -219,10 +222,6 @@ interface Evolution : EvolutionLike {
         pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }
 
         this.shed(pokemon)
-
-        if (this.consumeHeldItem) {
-            pokemon.swapHeldItem(ItemStack.EMPTY)
-        }
 
         val ownerPlayer = pokemon.getOwnerPlayer()
         if (ownerPlayer != null && ownerPlayer.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {

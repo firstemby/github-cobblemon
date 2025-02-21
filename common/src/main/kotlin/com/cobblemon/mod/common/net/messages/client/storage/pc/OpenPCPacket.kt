@@ -26,7 +26,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 20th, 2022
  */
-class OpenPCPacket(val storeID: UUID, val box: Int = 1) : NetworkPacket<OpenPCPacket> {
+class OpenPCPacket(val storeID: UUID, val box: Int = 0) : NetworkPacket<OpenPCPacket> {
 
     override val id = ID
 

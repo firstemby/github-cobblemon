@@ -24,6 +24,8 @@ object InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket
                     return
                 }
                 pokemonEntity.tryMountingShoulder(player)
+            } else if (packet.ride) {
+                player.startRiding(pokemonEntity)
             } else {
                 pokemonEntity.offerHeldItem(player, player.mainHandItem)
             }

@@ -23,6 +23,7 @@ object CobblemonCommands {
         ChangeEyeHeight.register(dispatcher)
         ChangeScaleAndSize.register(dispatcher)
         ChangeWalkSpeed.register(dispatcher)
+        ChangeJointScaleCommand.register(dispatcher)
         TestCommand.register(dispatcher)
         ReloadShowdownCommand.register(dispatcher)
         ClickTextCommand.register(dispatcher)
@@ -56,10 +57,13 @@ object CobblemonCommands {
         AbandonMultiTeam.register(dispatcher)
         FreezePokemonCommand.register(dispatcher)
         ApplyPlayerTextureCommand.register(dispatcher)
+        RenameBoxCommand.register(dispatcher)
+        ChangeBoxWallpaperCommand.register(dispatcher)
         RunMolangScriptCommand.register(dispatcher)
         BrainEditCommand.register(dispatcher)
         GivePokemonEggCommand.register(dispatcher)
         GiveAllPokemonEggCommand.register(dispatcher)
+        CobblemonConfigCommand.register(dispatcher)
 
         // Possibly lock down registration if and only if under dev environment or running in an environment
         // with a certain system environment variable set

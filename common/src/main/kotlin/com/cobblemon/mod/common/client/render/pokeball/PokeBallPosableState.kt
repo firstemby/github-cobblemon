@@ -21,8 +21,9 @@ import kotlin.random.Random
 abstract class PokeBallPosableState : PosableState(), Schedulable {
     abstract val stateEmitter: SettableObservable<EmptyPokeBallEntity.CaptureState>
     abstract val shakeEmitter: Observable<Unit>
-    private val group: String
+    protected open val group: String
         get() = if (this.currentModel is AncientPokeBallModel) "ancient_poke_ball" else "poke_ball"
+    protected open var lastKnownState: EmptyPokeBallEntity.CaptureState? = null
 
     open fun initSubscriptions() {
         stateEmitter.subscribe { state ->
@@ -44,9 +45,17 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
                 }
 
                 EmptyPokeBallEntity.CaptureState.FALL -> {}
-                EmptyPokeBallEntity.CaptureState.SHAKE -> {
+                EmptyPokeBallEntity.CaptureState.CRITICAL -> {
                     doLater {
-                        setActiveAnimations(currentModel!!.bedrockStateful(group, "bounce"))
+                        setActiveAnimations(currentModel!!.bedrockStateful(group, "critical"))
+                    }
+                }
+                EmptyPokeBallEntity.CaptureState.SHAKE -> {
+                    if (this.lastKnownState != EmptyPokeBallEntity.CaptureState.CRITICAL) {
+                        // Skip the bounce on a critical capture, the animation replaces this step
+                        doLater {
+                            setActiveAnimations(currentModel!!.bedrockStateful(group, "bounce"))
+                        }
                     }
                     shakeEmitter
                         .pipe(Observable.emitWhile { stateEmitter.get() == EmptyPokeBallEntity.CaptureState.SHAKE })
@@ -60,11 +69,6 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
                         setActiveAnimations(currentModel!!.bedrockStateful(group, "capture"))
                     }
                 }
-                EmptyPokeBallEntity.CaptureState.CAPTURED_CRITICAL -> {
-                    doLater {
-                        setActiveAnimations(currentModel!!.bedrockStateful(group, "critical"))
-                    }
-                }
                 EmptyPokeBallEntity.CaptureState.BROKEN_FREE -> {
                     doLater {
                         setActiveAnimations(currentModel!!.bedrockStateful(group, "break"))
@@ -72,6 +76,7 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
                 }
                 else -> {}
             }
+            this.lastKnownState = state
         }
     }
 }

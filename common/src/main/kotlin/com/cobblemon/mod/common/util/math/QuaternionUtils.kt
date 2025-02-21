@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.util.math
 
+import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import kotlin.math.cos
 import kotlin.math.sin
 import org.joml.Quaternionf
@@ -38,4 +39,18 @@ fun Quaternionf.hamiltonProduct(other: Quaternionf): Quaternionf {
     this.z = i * l + f * k - g * j + h * m
     this.w = i * m - f * j - g * k - h * l
     return this
+}
+
+fun Quaternionf.toEulerXYZ(): Vector3f {
+   return getEulerAnglesXYZ(Vector3f(0F, 0F, 0F))
+}
+
+fun Quaternionf.toEulerXYZDegrees(): Vector3f {
+    val vector = toEulerXYZ()
+
+    vector.x = vector.x.toDegrees()
+    vector.y = vector.y.toDegrees()
+    vector.z = vector.z.toDegrees()
+
+    return vector
 }

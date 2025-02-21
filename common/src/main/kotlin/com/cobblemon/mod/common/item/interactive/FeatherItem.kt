@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.item.interactive
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
+import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.EVs
@@ -35,7 +36,7 @@ class FeatherItem(val stat: Stat) : CobblemonItem(Properties()), PokemonSelectin
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack> {
-        val evsGained = pokemon.evs.add(stat, EV_YIELD)
+        val evsGained = pokemon.evs.add(stat, EV_YIELD, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_FEATHER_USE, 1F, 1F)
             if (!player.isCreative) {

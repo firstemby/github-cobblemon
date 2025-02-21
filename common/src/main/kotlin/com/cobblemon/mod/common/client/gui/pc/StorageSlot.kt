@@ -212,7 +212,15 @@ open class StorageSlot(
     }
 
     open fun shouldRender(): Boolean {
-        return true
+        return parent.pcGui.search.passes(getPokemon())
+    }
+
+    open fun clickable(): Boolean {
+        return getPokemon() == null || parent.pcGui.search.passes(getPokemon())
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        return if (clickable()) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))

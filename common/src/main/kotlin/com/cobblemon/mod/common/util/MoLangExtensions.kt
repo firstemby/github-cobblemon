@@ -177,6 +177,7 @@ fun List<Expression>.resolveObject(runtime: MoLangRuntime, context: Map<String, 
 fun <T : MoValue> MoParams.getOrNull(index: Int) = if (params.size > index) get<T>(index) else null
 fun MoParams.getStringOrNull(index: Int) = if (params.size > index) getString(index) else null
 fun MoParams.getDoubleOrNull(index: Int) = if (params.size > index) getDouble(index) else null
+fun MoParams.getBoolean(index: Int) = getDouble(index) == 1.0
 fun MoParams.getBooleanOrNull(index: Int) = if (params.size > index) getDouble(index) == 1.0 else null
 fun MoParams.getIntOrNull(index: Int) = if (params.size > index) getDouble(index).toInt() else null
 

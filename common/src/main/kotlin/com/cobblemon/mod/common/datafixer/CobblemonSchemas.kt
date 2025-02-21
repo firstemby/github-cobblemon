@@ -9,16 +9,7 @@
 package com.cobblemon.mod.common.datafixer
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.datafixer.fix.BlockPosUpdateFix
-import com.cobblemon.mod.common.datafixer.fix.EvolutionProxyNestingFix
-import com.cobblemon.mod.common.datafixer.fix.FeatureFix
-import com.cobblemon.mod.common.datafixer.fix.IvEvToIdentifierFix
-import com.cobblemon.mod.common.datafixer.fix.MovesetJsonFix
-import com.cobblemon.mod.common.datafixer.fix.NicknameFix
-import com.cobblemon.mod.common.datafixer.fix.RaisedPPStagesFix
-import com.cobblemon.mod.common.datafixer.fix.ShoulderStateJsonFix
-import com.cobblemon.mod.common.datafixer.fix.TeraTypeFix
-import com.cobblemon.mod.common.datafixer.fix.TradeableMissingFix
+import com.cobblemon.mod.common.datafixer.fix.*
 import com.cobblemon.mod.common.datafixer.schema.CobblemonRootSchema
 import com.cobblemon.mod.common.datafixer.schema.CobblemonSchemaV2
 import com.google.common.util.concurrent.ThreadFactoryBuilder

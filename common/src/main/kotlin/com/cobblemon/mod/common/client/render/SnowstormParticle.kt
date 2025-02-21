@@ -204,8 +204,8 @@ class SnowstormParticle(
         val spriteURange = sprite.u1 - sprite.u0
         val spriteVRange = sprite.v1 - sprite.v0
 
-        val maxU = uvs.startU * spriteURange + sprite.u0
-        val minU = uvs.endU * spriteURange + sprite.u0
+        val minU = uvs.startU * spriteURange + sprite.u0
+        val maxU = uvs.endU * spriteURange + sprite.u0
         val minV = uvs.startV * spriteVRange + sprite.v0
         val maxV = uvs.endV * spriteVRange + sprite.v0
 

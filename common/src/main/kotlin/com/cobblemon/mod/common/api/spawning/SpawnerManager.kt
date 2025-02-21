@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
 import com.cobblemon.mod.common.util.server
@@ -55,6 +56,12 @@ open class SpawnerManager {
         spawners.remove(spawner)
         if (spawner !is TickingSpawner) {
             spawner.influences.removeAll(influences)
+        }
+    }
+
+    open fun onConfigReload() {
+        spawners.filterIsInstance<PlayerSpawner>().forEach {
+            it.ticksBetweenSpawns = Cobblemon.config.ticksBetweenSpawnAttempts
         }
     }
 

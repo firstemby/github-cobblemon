@@ -44,6 +44,51 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "baseScale": 0.9,
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Running",
+        "description": "How fast Gliscor zoom zooms",
+        "baseStats": {
+          "LAND": {
+            "min": 10,
+            "max": 2
+          },
+          "AIR": {
+            "min": 50,
+            "max": 90
+          }
+        }
+      }
+    },
+    "controller": {
+      "key": "cobblemon:composite/fall_to_flight",
+      "minimumForwardSpeed": "0.0",
+      "minimumFallSpeed": "0.55",
+      "landController": {
+        "key": "cobblemon:land/generic",
+        "speed": "0.15",
+        "jumpVector": [0, "0.3*q.jump_strength/50", 0],
+        "driveFactor": 1.0,
+        "strafeFactor": 0.2
+      },
+      "flightController": {
+        "key": "cobblemon:air/glider",
+        "canStrafe": false,
+        "speed": 0.75
+
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      }
+    ]
+  },
   "hitbox": {
     "width": 0.9,
     "height": 1.5,

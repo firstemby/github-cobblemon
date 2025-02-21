@@ -8,11 +8,13 @@
 
 package com.cobblemon.mod.common.pokemon
 
+import com.cobblemon.mod.common.api.pokemon.stats.SidemodEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.junit.BootstrapMinecraft
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 @BootstrapMinecraft
@@ -34,11 +36,12 @@ internal class EVsKtTest {
     }
 
     @Test
+    @Disabled("Requires GameTest due to need to access Pokemon")
     fun `attempt to add an illegal amount of evs`() {
         val evs = EVs.createEmpty()
         evs[Stats.HP] = EVs.MAX_STAT_VALUE
         evs[Stats.ATTACK] = EVs.MAX_STAT_VALUE
-        val added = evs.add(Stats.DEFENCE, 7)
+        val added = evs.add(Stats.DEFENCE, 7, SidemodEvSource("test", Pokemon()))
         assert(added == 6)
     }
 
@@ -49,9 +52,11 @@ internal class EVsKtTest {
     }
 
     @Test
+    @Disabled("Requires GameTest due to need to access Pokemon")
     fun `decrement EVs`() {
         val evs = EVs.createEmpty()
         evs[Stats.HP] = EVs.MAX_STAT_VALUE
-        assert(evs.add(Stats.HP, -(EVs.MAX_STAT_VALUE + 1)) == -EVs.MAX_STAT_VALUE)
+        assert(evs.add(Stats.HP, -(EVs.MAX_STAT_VALUE + 1), SidemodEvSource("test", Pokemon())) == -EVs.MAX_STAT_VALUE)
     }
+
 }
