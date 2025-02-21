@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.entity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.player.Player
 
 interface PokemonSideDelegate : EntitySideDelegate<PokemonEntity> {

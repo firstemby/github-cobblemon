@@ -120,3 +120,6 @@ transitive-accessible method net/minecraft/client/renderer/block/model/ItemOverr
 transitive-accessible field net/minecraft/world/level/material/MapColor MATERIAL_COLORS [Lnet/minecraft/world/level/material/MapColor;
 
 transitive-accessible field net/minecraft/client/Minecraft textureManager Lnet/minecraft/client/renderer/texture/TextureManager;
+transitive-accessible field net/minecraft/world/entity/LivingEntity jumping Z
+transitive-accessible field net/minecraft/world/entity/Entity FLAG_SHIFT_KEY_DOWN I
+transitive-accessible field net/minecraft/world/entity/Entity DATA_SHARED_FLAGS_ID Lnet/minecraft/network/syncher/EntityDataAccessor;

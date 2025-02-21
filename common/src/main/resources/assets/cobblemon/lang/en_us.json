@@ -1029,6 +1029,7 @@
   "cobblemon.ui.interact.decline": "Decline",
   "cobblemon.ui.interact.failed": "Target is obstructed or too far away.",
   "cobblemon.ui.interact.mount.shoulder": "Shoulder",
+  "cobblemon.ui.interact.ride": "Ride",
   "cobblemon.ui.interact.team_leave": "Abandon team",
   "cobblemon.ui.interact.team_request": "Team up",
   "cobblemon.ui.interact.too_far": "Target is too far away!",

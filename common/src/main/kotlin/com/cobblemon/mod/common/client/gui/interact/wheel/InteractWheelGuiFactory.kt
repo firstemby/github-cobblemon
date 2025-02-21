@@ -21,18 +21,18 @@ import com.cobblemon.mod.common.net.messages.server.trade.OfferTradePacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
+import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-import java.util.*
 import org.joml.Vector3f
 
-fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean): InteractWheelGUI {
+fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canRide: Boolean): InteractWheelGUI {
     val mountShoulder = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/icon_shoulder.png"),
         tooltipText = "cobblemon.ui.interact.mount.shoulder",
         onPress = {
             if (canMountShoulder) {
-                InteractPokemonPacket(pokemonID, true).sendToServer()
+                InteractPokemonPacket(pokemonID, true, false).sendToServer()
                 closeGUI()
             }
         }
@@ -41,15 +41,32 @@ fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean): Intera
         iconResource = cobblemonResource("textures/gui/interact/icon_held_item.png"),
         tooltipText = "cobblemon.ui.interact.give.item",
         onPress = {
-            InteractPokemonPacket(pokemonID, false).sendToServer()
+            InteractPokemonPacket(pokemonID, false, false).sendToServer()
             closeGUI()
         }
     )
+
+    val ride = InteractWheelOption(
+        iconResource = cobblemonResource("textures/gui/interact/icon_held_item.png"),
+        tooltipText = "cobblemon.ui.interact.ride",
+        onPress = {
+            if (canRide) {
+                InteractPokemonPacket(pokemonID, false, true).sendToServer()
+                closeGUI()
+            }
+        }
+    )
+
     val options: Multimap<Orientation, InteractWheelOption> = ArrayListMultimap.create()
     options.put(Orientation.TOP_RIGHT, giveItem)
+    if(canRide) {
+        options.put(Orientation.BOTTOM_LEFT, ride)
+    }
+
     if (canMountShoulder) {
         options.put(Orientation.TOP_LEFT, mountShoulder)
     }
+
     CobblemonEvents.POKEMON_INTERACTION_GUI_CREATION.post(PokemonInteractionGUICreationEvent(pokemonID, canMountShoulder, options))
     return InteractWheelGUI(options, Component.translatable("cobblemon.ui.interact.pokemon"))
 }

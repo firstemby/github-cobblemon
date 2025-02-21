@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon
 
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -32,9 +34,12 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
+import org.joml.Matrix3f
+import org.joml.Vector3f
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
@@ -211,7 +216,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
     }
 
     fun updatePoseType() {
-        if (!entity.enablePoseTypeRecalculation) {
+        if (!entity.enablePoseTypeRecalculation || entity.passengers.isNotEmpty()) {
             return
         }
 

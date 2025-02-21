@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.mixin;
+package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides;
 import java.util.List;
