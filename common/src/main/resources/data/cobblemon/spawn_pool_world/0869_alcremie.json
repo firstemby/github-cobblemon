@@ -13,6 +13,7 @@
             "weight": 0.5,
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [
@@ -30,6 +31,7 @@
             "weight": 0.16,
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [

@@ -172,7 +172,29 @@
             }
         },
         {
-            "id": "flabebe-red-7",
+            "id": "flabebe-white-7",
+            "pokemon": "flabebe flower=white",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "5-30",
+            "weight": 9.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
+                ]
+            }
+        },
+        {
+            "id": "flabebe-red-8",
             "pokemon": "flabebe flower=red",
             "type": "pokemon",
             "context": "grounded",
@@ -197,7 +219,7 @@
             }
         },
         {
-            "id": "flabebe-yellow-7",
+            "id": "flabebe-yellow-8",
             "pokemon": "flabebe flower=yellow",
             "type": "pokemon",
             "context": "grounded",
@@ -222,7 +244,7 @@
             }
         },
         {
-            "id": "flabebe-orange-7",
+            "id": "flabebe-orange-8",
             "pokemon": "flabebe flower=orange",
             "type": "pokemon",
             "context": "grounded",
@@ -247,7 +269,7 @@
             }
         },
         {
-            "id": "flabebe-blue-7",
+            "id": "flabebe-blue-8",
             "pokemon": "flabebe flower=blue",
             "type": "pokemon",
             "context": "grounded",
@@ -272,7 +294,7 @@
             }
         },
         {
-            "id": "flabebe-white-7",
+            "id": "flabebe-white-8",
             "pokemon": "flabebe flower=white",
             "type": "pokemon",
             "context": "grounded",
@@ -297,7 +319,7 @@
             }
         },
         {
-            "id": "flabebe-pink-7",
+            "id": "flabebe-pink-8",
             "pokemon": "flabebe flower=pink",
             "type": "pokemon",
             "context": "grounded",

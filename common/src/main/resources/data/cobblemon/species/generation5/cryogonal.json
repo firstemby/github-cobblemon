@@ -64,11 +64,11 @@
     "entries": [
       {
         "item": "cobblemon:never_melt_ice",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:aspear_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -96,10 +96,8 @@
     "egg:auroraveil",
     "egg:explosion",
     "egg:frostbreath",
-    "tm:acidarmor",
     "tm:acrobatics",
     "tm:ancientpower",
-    "tm:aurorabeam",
     "tm:auroraveil",
     "tm:avalanche",
     "tm:bind",
@@ -112,14 +110,12 @@
     "tm:explosion",
     "tm:facade",
     "tm:flashcannon",
-    "tm:freezedry",
     "tm:frostbreath",
     "tm:gigaimpact",
     "tm:hail",
     "tm:haze",
     "tm:hyperbeam",
     "tm:icebeam",
-    "tm:iceshard",
     "tm:icespinner",
     "tm:iciclespear",
     "tm:icywind",
@@ -127,21 +123,14 @@
     "tm:laserfocus",
     "tm:lightscreen",
     "tm:magiccoat",
-    "tm:mist",
-    "tm:nightslash",
     "tm:poisonjab",
     "tm:protect",
     "tm:raindance",
-    "tm:rapidspin",
-    "tm:recover",
     "tm:reflect",
     "tm:rest",
     "tm:scaryface",
     "tm:selfdestruct",
-    "tm:sharpen",
-    "tm:sheercold",
     "tm:signalbeam",
-    "tm:slash",
     "tm:sleeptalk",
     "tm:snowscape",
     "tm:solarbeam",
@@ -149,7 +138,24 @@
     "tm:takedown",
     "tm:terablast",
     "tm:tripleaxel",
-    "tm:waterpulse"
+    "tm:waterpulse",
+    "tutor:ancientpower",
+    "tutor:bind",
+    "tutor:defog",
+    "tutor:flashcannon",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:irondefense",
+    "tutor:laserfocus",
+    "tutor:magiccoat",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:tripleaxel",
+    "tutor:waterpulse"
   ],
   "evolutions": []
 }

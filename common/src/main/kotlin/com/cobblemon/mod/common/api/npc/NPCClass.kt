@@ -57,6 +57,7 @@ class NPCClass {
     var isInvulnerable = false
     var isLeashable = true
     var allowProjectileHits = true
+    var hideNameTag = false
 
     // If you're adding stuff here, add it to NPCPreset and NPCClassAdapter too
 
@@ -97,6 +98,7 @@ class NPCClass {
         buffer.writeBoolean(isInvulnerable)
         buffer.writeBoolean(isLeashable)
         buffer.writeBoolean(allowProjectileHits)
+        buffer.writeBoolean(hideNameTag)
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -148,5 +150,6 @@ class NPCClass {
         isInvulnerable = buffer.readBoolean()
         isLeashable = buffer.readBoolean()
         allowProjectileHits = buffer.readBoolean()
+        hideNameTag = buffer.readBoolean()
     }
 }

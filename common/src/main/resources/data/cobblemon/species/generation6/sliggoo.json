@@ -52,7 +52,6 @@
     "height": 1.65,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
@@ -62,7 +61,7 @@
       },
       {
         "item": "cobblemon:haban_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -85,27 +84,19 @@
     "56:muddywater",
     "egg:counter",
     "egg:lifedew",
-    "tm:absorb",
-    "tm:acidarmor",
     "tm:acidspray",
-    "tm:bide",
     "tm:blizzard",
     "tm:bodyslam",
-    "tm:bubble",
     "tm:charm",
     "tm:chillingwater",
-    "tm:counter",
     "tm:curse",
     "tm:dracometeor",
-    "tm:dragonbreath",
     "tm:dragonpulse",
     "tm:endure",
     "tm:facade",
-    "tm:flail",
     "tm:icebeam",
     "tm:infestation",
     "tm:irontail",
-    "tm:lifedew",
     "tm:muddywater",
     "tm:mudshot",
     "tm:outrage",
@@ -120,14 +111,25 @@
     "tm:sludgewave",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:toxic",
-    "tm:watergun",
-    "tm:waterpulse"
+    "tm:waterpulse",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:icebeam",
+    "tutor:irontail",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:shockwave",
+    "tutor:skittersmack",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:thunderbolt",
+    "tutor:waterpulse"
   ],
   "preEvolution": "goomy",
   "evolutions": [
@@ -187,9 +189,6 @@
         "shellarmor",
         "h:gooey"
       ],
-      "eggGroups": [
-        "dragon"
-      ],
       "baseStats": {
         "hp": 58,
         "attack": 75,
@@ -198,26 +197,11 @@
         "special_defence": 113,
         "speed": 40
       },
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 2,
-        "speed": 0
-      },
-      "baseExperienceYield": 158,
-      "experienceGroup": "slow",
-      "catchRate": 45,
-      "eggCycles": 40,
-      "baseFriendship": 35,
-      "baseScale": 0.65,
       "hitbox": {
         "width": 1.45,
         "height": 1.75,
         "fixed": false
       },
-      "behaviour": {},
       "drops": {
         "amount": 5,
         "entries": [
@@ -231,7 +215,7 @@
           },
           {
             "item": "cobblemon:bluk_berry",
-            "percentage": 5
+            "percentage": 5.0
           }
         ]
       },
@@ -254,23 +238,16 @@
         "56:muddywater",
         "egg:counter",
         "egg:lifedew",
-        "tm:absorb",
-        "tm:acidarmor",
         "tm:acidspray",
-        "tm:bide",
         "tm:blizzard",
         "tm:bodyslam",
-        "tm:bubble",
         "tm:charm",
         "tm:chillingwater",
-        "tm:counter",
         "tm:curse",
         "tm:dracometeor",
-        "tm:dragonbreath",
         "tm:dragonpulse",
         "tm:endure",
         "tm:facade",
-        "tm:flail",
         "tm:flashcannon",
         "tm:gyroball",
         "tm:heavyslam",
@@ -278,7 +255,6 @@
         "tm:icespinner",
         "tm:ironhead",
         "tm:irontail",
-        "tm:lifedew",
         "tm:muddywater",
         "tm:mudshot",
         "tm:outrage",
@@ -288,7 +264,6 @@
         "tm:rockslide",
         "tm:rocktomb",
         "tm:sandstorm",
-        "tm:shelter",
         "tm:skittersmack",
         "tm:sleeptalk",
         "tm:sludgebomb",
@@ -296,13 +271,26 @@
         "tm:steelbeam",
         "tm:substitute",
         "tm:sunnyday",
-        "tm:tackle",
         "tm:takedown",
         "tm:terablast",
         "tm:thunder",
         "tm:thunderbolt",
-        "tm:watergun",
-        "tm:waterpulse"
+        "tm:waterpulse",
+        "tutor:dracometeor",
+        "tutor:dragonpulse",
+        "tutor:flashcannon",
+        "tutor:icebeam",
+        "tutor:ironhead",
+        "tutor:irontail",
+        "tutor:outrage",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:skittersmack",
+        "tutor:sleeptalk",
+        "tutor:sludgebomb",
+        "tutor:steelbeam",
+        "tutor:thunderbolt",
+        "tutor:waterpulse"
       ],
       "preEvolution": "goomy",
       "evolutions": [

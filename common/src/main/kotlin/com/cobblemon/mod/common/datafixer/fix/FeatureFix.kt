@@ -29,14 +29,14 @@ class FeatureFix(output: Schema) : PokemonFix(output) {
         if (features.result().isPresent) {
             return dynamic //already has Features nbt format... no work needed
         }
-        var featureTag = emptyList<CompoundTag>()
+        var featureTag = mutableListOf<CompoundTag>()
         if (dynamic.value is CompoundTag) {
             var rootTag = dynamic.value as CompoundTag
             var species = PokemonSpecies.getByIdentifier(rootTag.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER).asResource())
             if (species == null) {
                 return dynamic
             }
-            SpeciesFeatures.getFeaturesFor(species!!).forEach {
+            SpeciesFeatures.getFeaturesFor(species).forEach {
                 val feature = it(rootTag) ?: return@forEach
                 var tag = CompoundTag()
                 tag.putString(FEATURE_ID, feature.name)
@@ -51,7 +51,10 @@ class FeatureFix(output: Schema) : PokemonFix(output) {
         } else if (dynamic.value is JsonElement) {
             var rootTag = (dynamic.value as JsonElement).asJsonObject
             var species = PokemonSpecies.getByIdentifier(rootTag.get(DataKeys.POKEMON_SPECIES_IDENTIFIER).asString.asResource())
-            SpeciesFeatures.getFeaturesFor(species!!).forEach {
+            if (species == null) {
+                return dynamic
+            }
+            SpeciesFeatures.getFeaturesFor(species).forEach {
                 val feature = it(rootTag) ?: return@forEach
                 var tag = CompoundTag()
                 tag.putString(FEATURE_ID, feature.name)

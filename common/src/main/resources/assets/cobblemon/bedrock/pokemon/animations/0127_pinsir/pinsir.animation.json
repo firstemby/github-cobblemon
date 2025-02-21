@@ -1495,7 +1495,7 @@
 			},
 			"sound_effects": {
 				"0.2083": {
-					"effect": "pinsir_ambient"
+					"effect": "pokemon.pinsir.cry"
 				}
 			}
 		}

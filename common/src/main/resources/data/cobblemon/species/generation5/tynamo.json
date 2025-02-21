@@ -76,10 +76,12 @@
     "tm:knockoff",
     "tm:magnetrise",
     "tm:risingvoltage",
-    "tm:spark",
-    "tm:tackle",
     "tm:terablast",
-    "tm:thunderwave"
+    "tm:thunderwave",
+    "tutor:chargebeam",
+    "tutor:knockoff",
+    "tutor:magnetrise",
+    "tutor:risingvoltage"
   ],
   "evolutions": [
     {

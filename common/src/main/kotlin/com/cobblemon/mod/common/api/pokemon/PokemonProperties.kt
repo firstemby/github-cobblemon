@@ -8,9 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon
 
-import com.bedrockk.molang.runtime.struct.VariableStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
@@ -775,17 +772,6 @@ open class PokemonProperties {
         return pieces.joinToString(separator)
     }
 
-    fun asStruct(): VariableStruct {
-        val struct = VariableStruct()
-        species?.let { struct.setDirectly("species", StringValue(it)) }
-        level?.let { struct.setDirectly("level", DoubleValue(it)) }
-        shiny?.let { struct.setDirectly("shiny", DoubleValue(it)) }
-        // add more of the optional properties to the struct as doubles or strings
-        gender?.let { struct.setDirectly("gender", StringValue(it.name)) }
-        friendship?.let { struct.setDirectly("friendship", DoubleValue(it)) }
-        return struct
-    }
-
     fun updateAspects() {
         val aspects = mutableSetOf<String>()
         AspectProvider.providers.forEach { aspects.addAll(it.provide(this)) }
@@ -809,7 +795,7 @@ open class PokemonProperties {
     private fun createAbility(id: String, form: FormData): Ability? {
         val ability = Abilities.get(id) ?: return null
         val potentialAbility = form.abilities.firstOrNull { potential -> potential.template == ability } ?: return ability.create(true)
-        return potentialAbility.template.create(false)
+        return potentialAbility.template.create(false, potentialAbility.priority)
     }
 
 }

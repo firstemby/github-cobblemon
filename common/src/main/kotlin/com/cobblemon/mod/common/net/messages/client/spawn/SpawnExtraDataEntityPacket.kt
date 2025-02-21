@@ -18,7 +18,7 @@ import net.minecraft.network.protocol.PacketUtils
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.world.phys.Vec3
 
-abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(private val vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {
+abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         this.encodeEntityData(buffer)
         this.vanillaSpawnPacket.write(buffer)

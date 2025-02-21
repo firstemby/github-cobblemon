@@ -83,6 +83,7 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("isInvulnerable")?.let { npcClass.isInvulnerable = it.asBoolean }
         obj.get("isLeashable")?.let { npcClass.isLeashable = it.asBoolean }
         obj.get("allowProjectileHits")?.let { npcClass.allowProjectileHits = it.asBoolean }
+        obj.get("hideNameTag")?.let { npcClass.hideNameTag = it.asBoolean }
 
         return npcClass
     }

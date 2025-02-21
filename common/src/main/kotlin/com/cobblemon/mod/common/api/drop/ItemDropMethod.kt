@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.drop
 
 import com.cobblemon.mod.common.api.serialization.StringIdentifiedObjectAdapter
+import com.google.gson.annotations.SerializedName
 
 /**
  * The way an item will be dropped.
@@ -28,6 +29,9 @@ enum class ItemDropMethod(val methodName: String) {
     TO_INVENTORY("to-inventory");
 
     companion object {
-        val adapter = StringIdentifiedObjectAdapter { str -> values().firstOrNull { it.methodName == str } }
+        val adapter = StringIdentifiedObjectAdapter(
+            { str -> ItemDropMethod.entries.firstOrNull { it.methodName == str } },
+            { value -> (value ?: ON_ENTITY).methodName },
+        )
     }
 }

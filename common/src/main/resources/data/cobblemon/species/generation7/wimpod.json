@@ -81,14 +81,11 @@
     "egg:metalclaw",
     "egg:rollout",
     "egg:wideguard",
-    "tm:aquajet",
     "tm:assurance",
     "tm:bugbuzz",
-    "tm:defensecurl",
     "tm:endure",
     "tm:facade",
     "tm:hail",
-    "tm:harden",
     "tm:leechlife",
     "tm:metalclaw",
     "tm:mudshot",
@@ -96,7 +93,6 @@
     "tm:raindance",
     "tm:rest",
     "tm:rollout",
-    "tm:sandattack",
     "tm:scald",
     "tm:screech",
     "tm:skittersmack",
@@ -109,7 +105,13 @@
     "tm:taunt",
     "tm:terablast",
     "tm:waterfall",
-    "tm:wideguard"
+    "tutor:leechlife",
+    "tutor:rest",
+    "tutor:rollout",
+    "tutor:skittersmack",
+    "tutor:sleeptalk",
+    "tutor:spikes",
+    "tutor:swift"
   ],
   "evolutions": [
     {

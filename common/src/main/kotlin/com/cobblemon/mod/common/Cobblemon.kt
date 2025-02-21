@@ -62,11 +62,7 @@ import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBacken
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.battles.BagItems
-import com.cobblemon.mod.common.battles.BattleFormat
-import com.cobblemon.mod.common.battles.BattleRegistry
-import com.cobblemon.mod.common.battles.BattleSide
-import com.cobblemon.mod.common.battles.ShowdownThread
+import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.client.CobblemonPack
@@ -89,22 +85,11 @@ import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
-import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
-import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
-import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
-import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.properties.*
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.util.DataKeys
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.ifDedicatedServer
-import com.cobblemon.mod.common.util.isLaterVersion
-import com.cobblemon.mod.common.util.party
-import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -112,25 +97,27 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.PrintWriter
-import java.util.UUID
-import kotlin.math.roundToInt
-import kotlin.properties.Delegates
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaField
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.NameTagItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.LevelResource
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.PrintWriter
+import java.util.*
+import kotlin.math.roundToInt
+import kotlin.properties.Delegates
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 
 object Cobblemon {
     const val MODID = CobblemonBuildDetails.MOD_ID
@@ -164,6 +151,7 @@ object Cobblemon {
     var permissionValidator: PermissionValidator by Delegates.observable(LaxPermissionValidator().also { it.initialize() }) { _, _, newValue -> newValue.initialize() }
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
+    var wallpapers = mapOf<UUID, List<ResourceLocation>>()
 
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
@@ -221,7 +209,8 @@ object Cobblemon {
             storage.onPlayerDataSync(it)
             playerDataManager.syncAllToPlayer(it)
             starterHandler.handleJoin(it)
-            ServerSettingsPacket(this.config.preventCompletePartyDeposit, this.config.displayEntityLevelLabel, this.config.displayEntityNameLabel, this.config.maxPokemonLevel).sendToPlayer(it)
+            it.requestWallpapers()
+            sendServerSettingsPacketToPlayer(it)
         }
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -259,6 +248,8 @@ object Cobblemon {
         // Lowest priority because this applies after luxury ball bonus as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(Priority.LOWEST) { event ->
             var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
+            if (increment <= 0) //these affects are only meant to affect positive gains
+                return@subscribe
             // Our Luxury ball spec is diff from official, but we will still assume these stack
             if (event.pokemon.heldItemNoCopy().`is`(CobblemonItemTags.IS_FRIENDSHIP_BOOSTER)) {
                 increment += increment * 0.5F
@@ -267,8 +258,17 @@ object Cobblemon {
         }
 
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
+    }
 
-
+    fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
+        ServerSettingsPacket(
+            this.config.preventCompletePartyDeposit,
+            this.config.displayEntityLevelLabel,
+            this.config.displayEntityNameLabel,
+            this.config.maxPokemonLevel,
+            this.config.maxPokemonFriendship,
+            this.config.maxDynamaxLevel,
+        ).sendToPlayer(player)
     }
 
     fun initialize() {
@@ -428,7 +428,23 @@ object Cobblemon {
         }
     }
 
+    private fun initializeConfig() {
+        loadCobblemonConfig()
+        saveConfig(this.config)
+        PokemonSpecies.observable.subscribe { starterConfig = this.loadStarterConfig() }
+    }
+
     fun loadConfig() {
+        initializeConfig()
+        bestSpawner.init()
+    }
+
+    fun reloadConfig() {
+        initializeConfig()
+        bestSpawner.reloadConfig()
+    }
+
+    private fun loadCobblemonConfig() {
         val configFile = File(CONFIG_PATH)
         configFile.parentFile.mkdirs()
 
@@ -471,12 +487,6 @@ object Cobblemon {
         } else {
             this.config = CobblemonConfig()
         }
-
-        config.lastSavedVersion = VERSION
-        this.saveConfig()
-
-        bestSpawner.loadConfig()
-        PokemonSpecies.observable.subscribe { starterConfig = this.loadStarterConfig() }
     }
 
     fun loadStarterConfig(): StarterConfig {
@@ -499,12 +509,14 @@ object Cobblemon {
         }
     }
 
-    fun saveConfig() {
+    fun saveConfig(config: CobblemonConfig) {
+        config.lastSavedVersion = VERSION
+
         try {
             val configFile = File(CONFIG_PATH)
             val fileWriter = FileWriter(configFile)
             // Put the config to json then flush the writer to commence writing.
-            CobblemonConfig.GSON.toJson(this.config, fileWriter)
+            CobblemonConfig.GSON.toJson(config, fileWriter)
             fileWriter.flush()
             fileWriter.close()
         } catch (exception: Exception) {

@@ -88,16 +88,13 @@
     "egg:ragepowder",
     "egg:stunspore",
     "tm:bugbite",
-    "tm:harden",
     "tm:irondefense",
-    "tm:poisonpowder",
     "tm:pounce",
     "tm:protect",
-    "tm:ragepowder",
     "tm:strugglebug",
-    "tm:stunspore",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:irondefense"
   ],
   "preEvolution": "scatterbug",
   "evolutions": [
@@ -662,7 +659,7 @@
         },
         {
           "variant": "advancement",
-          "advancement": "cobblemon:catch_all_vivillon"
+          "requiredAdvancement": "cobblemon:catch_all_vivillon"
         }
       ]
     }

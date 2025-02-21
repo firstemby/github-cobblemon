@@ -49,21 +49,20 @@
     "height": 1.15,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
       {
         "item": "minecraft:diamond",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:babiri_berry",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:float_stone",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -99,16 +98,13 @@
     "tm:endure",
     "tm:explosion",
     "tm:facade",
-    "tm:flail",
     "tm:flash",
     "tm:flashcannon",
     "tm:gigaimpact",
     "tm:gravity",
-    "tm:guardsplit",
     "tm:guardswap",
     "tm:gyroball",
     "tm:hail",
-    "tm:harden",
     "tm:heavyslam",
     "tm:hyperbeam",
     "tm:irondefense",
@@ -119,7 +115,6 @@
     "tm:meteorbeam",
     "tm:mistyexplosion",
     "tm:mistyterrain",
-    "tm:moonblast",
     "tm:naturepower",
     "tm:powergem",
     "tm:protect",
@@ -131,12 +126,10 @@
     "tm:rockblast",
     "tm:rockpolish",
     "tm:rockslide",
-    "tm:rockthrow",
     "tm:rocktomb",
     "tm:safeguard",
     "tm:sandstorm",
     "tm:sandtomb",
-    "tm:sharpen",
     "tm:skillswap",
     "tm:sleeptalk",
     "tm:smackdown",
@@ -146,13 +139,43 @@
     "tm:stoneedge",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:tackle",
     "tm:takedown",
     "tm:telekinesis",
     "tm:terablast",
     "tm:terrainpulse",
     "tm:trickroom",
-    "tm:wonderroom"
+    "tm:wonderroom",
+    "tutor:afteryou",
+    "tutor:allyswitch",
+    "tutor:ancientpower",
+    "tutor:calmmind",
+    "tutor:covet",
+    "tutor:dazzlinggleam",
+    "tutor:earthpower",
+    "tutor:endeavor",
+    "tutor:flashcannon",
+    "tutor:gigaimpact",
+    "tutor:gravity",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:magiccoat",
+    "tutor:magnetrise",
+    "tutor:meteorbeam",
+    "tutor:mistyexplosion",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:skillswap",
+    "tutor:sleeptalk",
+    "tutor:spikes",
+    "tutor:stealthrock",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:telekinesis",
+    "tutor:terrainpulse",
+    "tutor:trick",
+    "tutor:wonderroom"
   ],
   "evolutions": []
 }

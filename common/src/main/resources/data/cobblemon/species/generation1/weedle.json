@@ -79,10 +79,13 @@
     "9:bugbite",
     "tm:bugbite",
     "tm:electroweb",
-    "tm:poisonsting",
     "tm:skittersmack",
     "tm:stringshot",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:electroweb",
+    "tutor:skittersmack",
+    "tutor:stringshot"
   ],
   "evolutions": [
     {

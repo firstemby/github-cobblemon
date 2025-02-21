@@ -660,6 +660,28 @@
                     "#cobblemon:is_mountain"
                 ]
             }
+        },
+        {
+            "id": "vivillon-fancy-21",
+            "pokemon": "vivillon vivillon_wings=fancy",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "12-41",
+            "weight": 2.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:flowers"
+                ]
+            }
         }
     ]
 }

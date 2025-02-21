@@ -48,13 +48,12 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 1,
     "entries": [
       {
         "item": "cobblemon:razz_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -71,7 +70,6 @@
     "tm:bodypress",
     "tm:bugbuzz",
     "tm:calmmind",
-    "tm:confusion",
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
@@ -91,7 +89,6 @@
     "tm:psychic",
     "tm:psychicterrain",
     "tm:psyshock",
-    "tm:recover",
     "tm:reflect",
     "tm:rest",
     "tm:safeguard",
@@ -99,16 +96,30 @@
     "tm:skillswap",
     "tm:sleeptalk",
     "tm:solarbeam",
-    "tm:stickyweb",
     "tm:storedpower",
     "tm:strugglebug",
     "tm:substitute",
-    "tm:supersonic",
     "tm:terablast",
     "tm:trick",
     "tm:trickroom",
     "tm:wonderroom",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:allyswitch",
+    "tutor:calmmind",
+    "tutor:energyball",
+    "tutor:expandingforce",
+    "tutor:helpinghand",
+    "tutor:irondefense",
+    "tutor:leechlife",
+    "tutor:magicroom",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:shadowball",
+    "tutor:skillswap",
+    "tutor:sleeptalk",
+    "tutor:trick",
+    "tutor:wonderroom",
+    "tutor:zenheadbutt"
   ],
   "preEvolution": "blipbug",
   "evolutions": [

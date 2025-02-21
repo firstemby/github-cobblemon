@@ -18,7 +18,15 @@
   "favoriteMulches": [
     "coarse"
   ],
-  "growthFactors": [],
+  "growthFactors": [
+    {
+      "variant": "cobblemon:preferred_biome",
+      "bonusYield": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ],
   "randomizedGrowthPoints": true,
   "spawnConditions": [],
   "growthPoints": [
@@ -154,11 +162,11 @@
   "sproutShape": "tall-sprout",
   "matureShape": "tall-mature",
   "flavors": {
-    "SPICY": 20,
-    "DRY": 20,
-    "SWEET": 20,
-    "BITTER": 20,
-    "SOUR": 20
+    "SPICY": 15,
+    "DRY": 15,
+    "SWEET": 15,
+    "BITTER": 15,
+    "SOUR": 15
   },
   "weight": 1.0,
   "tintIndexes": [],

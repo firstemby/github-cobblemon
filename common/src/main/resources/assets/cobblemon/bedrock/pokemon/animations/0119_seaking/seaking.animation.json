@@ -515,8 +515,24 @@
 					"position": {
 						"0.0": [0, 0.2, 2],
 						"0.25": [0, 0, 5.4],
-						"0.4167": [0, "-0.5+math.clamp(math.sin(q.anim_time*90*2-0),0,1)*4", "-0.25+math.sin(q.anim_time*90*3+30)*4"],
-						"1.0417": [0, "0.5+math.clamp(math.sin(q.anim_time*90*2-0),0,1)*4", "math.sin(q.anim_time*90*3+10)*4"],
+						"0.4167": {
+							"pre": [0, 3.1, 2.35],
+							"post": [0, 3.1, 2.35],
+							"lerp_mode": "catmullrom"
+						},
+						"0.625": {
+							"post": [0, 3.41, -0.99],
+							"lerp_mode": "catmullrom"
+						},
+						"0.8333": {
+							"post": [0, 2.13, -3.54],
+							"lerp_mode": "catmullrom"
+						},
+						"0.9583": {
+							"post": [0, 1.09, -4.05],
+							"lerp_mode": "catmullrom"
+						},
+						"1.0417": [0, 0.55, -3.8],
 						"1.0833": [0, 0.5, -3.34552],
 						"1.5": [0, 0.2, 2]
 					}

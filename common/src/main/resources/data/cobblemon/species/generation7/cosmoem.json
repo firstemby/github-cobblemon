@@ -48,14 +48,11 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "moves": [
     "1:cosmicpower",
     "1:teleport",
     "1:splash",
-    "tm:cosmicpower",
-    "tm:splash",
-    "tm:teleport"
+    "tm:cosmicpower"
   ],
   "preEvolution": "cosmog",
   "evolutions": [

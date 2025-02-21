@@ -65,7 +65,7 @@
     "entries": [
       {
         "item": "cobblemon:colbur_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -80,12 +80,8 @@
     "1:amnesia",
     "tm:amnesia",
     "tm:charm",
-    "tm:counter",
-    "tm:destinybond",
     "tm:encore",
-    "tm:mirrorcoat",
-    "tm:safeguard",
-    "tm:splash"
+    "tm:safeguard"
   ],
   "preEvolution": "wynaut",
   "evolutions": []

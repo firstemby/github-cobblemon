@@ -1,21 +1,72 @@
 # Changelog
-## [1.6.1 (Release TBD)](#1-6-1)
+## [1.7.0 (Month xth, 2025)](#1-7-0)
 
 ### Additions
-- Added config setting `maxPokedexScanningDetectionRange` to control from what distance the player can scan Pokémon using the Pokédex.
-- Added the `is_standing_on_blocks(depth, blocks...)` MoLang function, which returns whether the specified entity is standing on a specific block or set of blocks. Example usage: `q.is_standing_on_blocks(2, minecraft:sand)` 
-- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
-- Added molang particle queries for getting distance to targeted entities.
-- Added debug renderer for poseable entity locators.
-- Added `baseScale` property to NPCs.
-- Added cry for Spinda.
-- Added the player to `PokerodReelEvent`.
-- Pokédex and Dialogue API screens now close when the inventory keybind is pressed.
-- Added Galarica Nuts, used for crafting Galarica Cuffs and Wreaths. Dropped from certain Pokémon.
-- Added specific compatibility with Repurposed Structures. (Thank you, TelepathicGrunt!)
-- Added an evolution method for Karrablast to evolve into Escavalier in single-player mode.
+- Added an in-game configuration screen, allowing all settings from `main.json` to be edited directly in-game.
+- Added `/cobblemonconfig reload` command to reload `main.json` configuration. **Note:** Some settings require a server restart to take effect; use this command cautiously.
+- Added `blacklisted_items_to_hold` and `whitelisted_items_to_hold` tags to allow for controlling which items players can give to their Pokémon. If the whitelist is empty, it will consider all item as allowed (unless they are in the blacklist).
+- Pokémon now follow the mouse cursor on the Summary screen, with an option to disable this in the settings.
+- Pokémon's held items can now be rendered, with a visibility toggle in the Summary screen.
+- Added `visibility/hidden`, `visibility/hat` and `visibility/face` tags to control where and how certain items are rendered.
+
+### Changes
+- Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
+
+### Fixes
+- Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
+- Fixed PCs always opening at box 2 instead of box 1.
+- Fixed not being able to do complex item requirements aside from just NBT with evolution conditions, requirements and fossil items.
+- Fixed the usage `hiddenability` in `pokegive` or other spawn commands resulting in a forced hidden ability
+- Fixed the consumption of friendship berries (or EV berries) not making any noise
+- Fixed Instantly breaking and replacing a fossil analyzer with any block entity crashing the game in a complete multi-structure
+- Fixed players getting disconnected when sidemods update a Pokémon's teratype
+- Fixed fling not using Item Names for minecraft held items that substitute Pokémon items
+- Fixed evolutions sometimes preventing players from logging in to servers
+- Fixed rendering of shoulder-mounted Pokémon desyncing between clients
+- Fixed apricorn chest boats forgetting their inventories when being unloaded
+- Fixed moves not updating correctly between form changes resulting in illegal movesets
+- Fixed crash sometimes occurring with the "Oritech" mod
+- Fixed crashes due to an incorrect Java version handing out an obscure crash.
+- Fixed some berries being able to rarely get too many berries and cause a crash.
+- Fixed status curing berries not playing the berry eating sound, same for healing berries used mid-battle.
+- Fixed owned Pokémon sometimes being un-interactable after the player relogs fast
+- Fixed field name in evolution requirements for Spewpa Pokeball.
+
+### Developer
+- A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
+- Dialogues are correctly removed from memory when they are stopped.
+- Dialogues with variably-set initial pages now properly start timeout tracking.
+- Added `EvGainedEvent.Pre` and `EvGainedEvent.Post`.
+- Deprecated `EVs#add(Stat, Int)`, you will not be able to compile against this code please migrate to the `EVs#add(Stat, Int, EvSource)` you most likely want to use `SidemodEvSource` but please check other implementations or make your own.
+- Removed the NbtItemPredicate class, all the mod usages now use the vanilla item predicate solution, this causes breaking changes on Fossil, HeldItemRequirement & ItemInteractionEvolution
+- Renamed Cobblemon's creative tabs to start with "Cobblemon: " to distinguish Cobblemon's tabs from tabs for other mods.
+- Various items now have a rarity value.
+
+### Changes
+- When using the `cobblemon` or `generation_9` capture calculators a critical capture with a single shake will always play for successful captures when you've already registered the Pokémon as caught in your Pokédex.
+
+### MoLang & Datapacks
+- The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
+  - The `requiredContext` for an item interaction evolution
+  - The `itemCondition` for a held item evolution requirement
+  - The `fossils` for a fossil entry
+- Added MoLang flows for `poke_ball_capture_calculated`, `evolution_tested`, `evolution_accepted`, `evolution_completed`
+
+## [1.6.1 (January 26th, 2025)](#1-6-1)
+
+### Additions
+- Added crossover paintings from Close Combat: Premonition, Altar, Slumber, and Nomad.
+- Added Galarica Nuts, used for crafting Galarica Cuffs and Wreaths. Dropped from certain Pokémon. Take a wild guess which.
+- Added compatibility with Repurposed Structures. (Thank you, TelepathicGrunt!)
+- Added an evolution method for Karrablast to evolve into Escavalier in singleplayer.
 - Pokédexes can now be placed in Chiseled Bookshelves.
+- Added optional box argument to the /pc command.
+- Pokédex and Dialogue screens now close when the inventory keybind is pressed.
+- Added config setting `maxPokedexScanningDetectionRange` to control from what distance the player can scan Pokémon using the Pokédex.
+- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
+- Added debug renderer for posable entity locators.
 - Added crossover paintings from Close Combat, Premonition, Altar, Slumber, and Nomad.
+- Added optional box argument to the /pc command
 
 ### Changes
 - Pokémon will now be dynamically revealed to the Pokédex as they're seen instead of revealing entire parties at the end of battle regardless.
@@ -28,6 +79,8 @@
 - Improved Fortune drops on Mint Seeds
 - New Slowpoke shiny texture.
 - Updated drops for many Pokémon.
+- Completely resynced Pokémon move and stat data based on later games. Learnsets have changed considerably to maximise available moves.
+- Cobblemon save data now saves .old files where applicable as a means to recover from file corruption due to crashes or similar abrupt stops
 
 ### Pokémon Added
 
@@ -40,10 +93,19 @@
 - Escavalier
 - Rufflet
 - Braviary
+- Foongus
+- Amoonguss
+
+#### Gen 6
+- Binacle
+- Barbaracle
 
 #### Gen 7
 - Dewpider
 - Araquanid
+- Alolan Geodude
+- Alolan Graveler
+- Alolan Golem
 
 #### Gen 8
 - Galarian Slowpoke
@@ -51,11 +113,18 @@
 - Galarian Slowking
 
 #### Gen 9
-- Paldean Tauros's
+- Paldean Tauros
+
+### Added cries to the following Pokémon
+- All Nidorans
+- Shellder, Cloyster
+- Pinsir
+- Tyrogue, Hitmontop
+- Spinda
 
 ### Animation updates for the following Pokémon
 - Primeape
-- Munchlax 
+- Munchlax
 - Snorlax
 - Poliwrath
 - Goldeen
@@ -77,46 +146,60 @@
 - Slowbro
 - Slowking
 - Eiscue
-- Binacle
-- Barbaracle
 - Tauros
 - Goldeen
 - Seaking
 - Charcadet
+- Armarouge
+- Ceruledge
 - Pinsir
 - Geodude
 - Graveler
 - Golem
 
+### Cry updates for the following Pokémon
+- Sceptile
+
+### Changes
+- Completely re-synced Pokémon move and stat data based on later games. Learnsets have changed considerably to maximise available moves.
+- Pokémon will now be dynamically revealed to the Pokédex as they're seen in battle instead of revealing entire parties at the end of battle.
+- Unseen wild Pokémon will update their name from '???' to their real name as soon as a battle starts to match how the battle UI shows the actual species name.
+- Pokémon under the illusion effect will reveal their disguise to the Pokédex first and then the base Pokémon once the disguise is broken.
+- Berries will now drop from berry trees if broken at age 0 so you aren't punished for mistaken planting.
+- Increased Fortune drops on Mint Seeds.
+- Updated Slowpoke's shiny texture.
+- Updated drops for many Pokémon.
+- Adjusted the evolution sound to match the timing of the particle effect.
+- Made berry trees shear-able by dispenser blocks. I'm sure nobody will make unholy contraptions with this.
+- Edited some recipes to utilize tags instead of direct item IDs, for better mod compatibility.
+- Added more support for a variety of Fabric/NeoForge conventional tags.
+- Reformatted some tags to be more consistent.
+
 ### Fixes
 - Fixed Pokédex sometimes crashing when switching forms.
 - Fixed Pokédex interface not transitioning out when closed.
-- Fixed texture dimensions for the interact interface.
-- Fixed crash related to Tom's Simple Storage mod and Fossil Machine.
+- Fixed texture dimensions for the player and Pokémon interact interface.
+- Fixed crash related to Tom's Simple Storage mod and the Fossil Machine.
 - Fixed not being able to retrieve a fossil from the Fossil Machine with an empty hand.
-- Fixed Pokémon being collidable while being captured by a Poké Ball.
+- Fixed Pokémon being collidable (collidible? collissionable? kaleidoscopable?) while being captured by a Poké Ball.
 - Fixed `full_party`, `own_zangoose_seviper`, `use_revive` and `use_candy` Advancement triggers.
 - Fixed `healing_machine` Advancement by using the correct 1.21 trigger.
 - Fix Display Cases not dropping items if destroyed through explosions.
 - Fixed an issue where the first Pokémon in the pastured Pokémon list clipped into the interface.
 - Fixed all Pokémon facing South on spawn.
-- Parametric particle motion now works.
-- Event spawned particles now work.
-- Particles can now have independent coordinate spaces.
-- Fixed bait being consumed when not reeling in any Pokémon.
+- Fixed bait being consumed even when not reeling in any Pokémon.
 - Fixed Miltank milk magically disappearing out of your bucket.
 - Fixed Pokémon nicknames migrating from 1.5.2 not being displayed properly.
-- Fixed capitalization in one of our config fields, but allowing typo'd version to still be valid.
-- Fixed Poké Rods not working if lure or luck of the sea enchantments get removed by other mods.
-- Fixed crashes related to Pokémon when they are ready to evolve while holding an enchanted item.
-- Fixed crashes that sometimes occur when evolving Nincada.
-- Fixed plants not being compostible on NeoForge.
+- Fixed capitalization in one of our config options. It was a very important fix. Very important. Old configs are fine.
+- Fixed Poké Rods not working if Lure or Luck of the Sea enchantments get removed by other mods.
+- Fixed crashes related to Pokémon when they are ready to evolve while holding an enchanted item. Very specific.
+- Fixed a crash that sometimes occurred when evolving Nincada.
+- Fixed Cobblemon plants not being compostable on NeoForge.
 - Fixed hide UI (F1 key) not hiding the party overlay.
 - Fixed NPC MoLang command `player_lose_command` not working.
-- Corrected misaligned tooltips with editboxes in the NPC editor screen.
+- Fixed misaligned tooltips with edit boxes in the NPC editor screen.
 - Fixed Pokémon riding two boats when attempting to deploy a platform on water.
-- Made berry trees be shearable by dispenser blocks.
-- Fixed the summary screen showing there's experience to reach the next level when at level cap.
+- Fixed the summary screen showing there's experience to reach the next level when they are at the level cap.
 - Fixed Pokémon forgetting moves when evolving on specific cases.
 - Fixed Adorn compatibility, including improvements when using JEI/REI (Apricorn items now show up under the collapsed entries rather than standalone).
 - Fixed error message appearing on battle log when using Solar Beam with Sunny Day.
@@ -124,38 +207,68 @@
 - Fixed `/pokedex grant all` command not giving male/female/shininess completion for some Pokémon.
 - Fixed `/pokedex grant only` and `/pokedex remove only` not respecting the form parameter passed.
 - Fixed variant forms appearing incorrectly in the Pokédex when the normal form had not been unlocked.
-- Fixed Pokémon occasionally being shot into the sky during battle.
+- Fixed Pokémon occasionally being shot into the sky during battle. No Pokémon were harmed by this bug, probably.
 - Fixed NPC editing GUI not updating aspects until a game restart.
-- Fix some users being unable to open their PC if a Pokémon in said PC had a lot of pp raises beyond normal bounds
-- Fix some color variants (dubwool, conkeldurr and undyed wooloo) missing in the Pokédex
-- Fix invalid species or held_items causing Players to not be able to load into their world anymore (commonly happening after removing addons/mods)
+- Fixed some users being unable to open their PC if a Pokémon in it had a lot of PP raises beyond normal bounds. How did you get those, anyway? Tell me or the Bellossom gets it.
+- Fixed some color variants (Dubwool, Conkeldurr and Undyed wooloo) being missing in the Pokédex.
+- Fixed invalid species or held items causing Players to not be able to load into their world anymore (commonly happening after removing addons/mods).
 - Fixed Wooloo variants not being automatically registered in the owner's Pokédex when dyed.
-- Fixed Vivichoke Dip and Leek and Potato Stew not returning a bowl upon consumption.
-- Fixed Fossil Restoration Machine not accepting Hay Bales.
-- Fixed Potion items so that they no longer apply over double their intended healing value.
-- Fixed Fast Ball capture rate applying to all Pokémon.
-- Fix "learned new move" messages appearing for already known moves on Pokémon evolutions.
-- Fix Pokémon Item Models breaking shadows nearby when being placed in Display Cases or Item Frames.
+- Fixed Vivichoke Dip and Leek & Potato Stew not returning a bowl upon consumption.
+- Fixed Fossil Restoration Tank not accepting Hay Bales as organic material.
+- Fixed Potion items applying double their intended healing value.
+- Fixed Fast Ball capture bonuses applying to all Pokémon, making it the Best Ball instead of the Mediocre Edge-Case Ball. 
+- Fixed "learned new move" messages appearing for already-known moves on Pokémon evolutions.
+- Fixed Pokémon Item Models breaking shadows nearby when being placed in Display Cases or Item Frames.
+- Fixed berries not giving bonus yields when planted in their preferred biomes. I'm sure we've fixed that 5 times now.
+- Fixed the NeoForge version not supporting "SodiumDynamicLights".
+- Fixed players disconnecting from servers if they made changes to certain config options.
+- Fixed players with shouldered Pokémon not being able to rejoin their 1.5.2 worlds using 1.6.
+- Fixed `PokemonProperties` utilizing `ability=<some ability>` being treated as a forced ability even when it is a legal ability for the Pokémon.
+- Fixed type formatting in Pokédex scanner mode when dual types require two lines.
+- Fixed trading sometimes crashing the game or server. 
+- Fixed Wild shiny sounds not respecting the `shinyNoticeParticlesDistance` config setting.
+- Fixed Pokémon being able to evolve mid-battle.
+- Fixed NPC held items being able to be stolen by players. Don't be a thief!
+- Fixed evolutions that require a held item consuming it as soon as meeting requirements when it should only be consumed upon evolution.
+- Fixed Pokémon showing only the default form when selecting them as a target in battle.
+- Fixed a possible error coming out of reeling fishing rods in specific situations.
+- Fixed incorrect weights being used when Poké Fishing with Luck of the Sea.
+- Parametric particle motion now works.
+- Event-spawned particles now work.
+- Particles can now have independent coordinate spaces.
 
-### Molang & Datapacks  
+### Developer
+- Updated the Pokédex data updated events to always include a `Pokemon` instance, and optionally a `DisguiseData` instance.
+- Updated fields in `SpawnNPCPacket` and `SpawnPokemonPacket` to be visible and mutable.
+- Updated `UnvalidatedPlaySoundS2CPacket` to be public instead of internal and made its fields mutable.
+- Added `hideNameTag` field and `HideNPCNameTag` nbt tag to `NPCEntity` to allow hiding the name tag of the NPC.
+- Added the player to `PokerodReelEvent` so you know who is doing the reeling.
+
+### MoLang & Datapacks
 - Added flows for:
   - `forme_change`: Triggered when a Pokémon changes form in battle.
-  - `mega_evolution`: Triggered when a Pokémon mega evolves in battle. (Note: Third party mods are required for this feature currently)
-  - `zpower_used`: Triggered when a Pokémon uses a Z-Power move in battle. (Note: Third party mods are required for this feature currently)
-  - `terastallization`: Triggered when a Pokémon terastallizes in battle. (Note: Third party mods are required for this feature currently)
+  - `mega_evolution`: Triggered when a Pokémon mega evolves in battle. (Note: Third-party mods are required for this feature currently)
+  - `zpower_used`: Triggered when a Pokémon uses a Z-Power move in battle. (Note: Third-party mods are required for this feature currently)
+  - `terastallization`: Triggered when a Pokémon terastallizes in battle. (Note: Third-party mods are required for this feature currently)
   - `battle_fainted`: Triggered when a Pokémon faints in battle.
-  - `battle_fled`: Triggered when a Player flees from battle.
+  - `battle_fled`: Triggered when a player flees from battle.
   - `battle_started_pre`: Triggered when a battle starts. Cancelable!
   - `battle_started_post`: Triggered when a battle starts.
-  - `apricorn_harvested`: Triggered when an apricorn is harvested.
+  - `apricorn_harvested`: Triggered when an Apricorn is harvested.
   - `thrown_pokeball_hit`: Triggered when a thrown Pokéball hits a Pokémon.
   - `level_up`: Triggered when a Pokémon levels up.
   - `pokemon_fainted`: Triggered when a Pokémon faints.
-  - `pokemon_gained`: Triggered when a Player gains a Pokémon.
-- Added molang functions:
+  - `pokemon_gained`: Triggered when a player gains a Pokémon.
+- Added MoLang functions:
   - For Pokémon:
     - `pokemon.apply(PokemonProperties)`: Applies the given properties to the Pokémon.
     - `pokemon.owner`: Returns the owner of the Pokémon or 0.0 if there is no owner or they are not online.
+  - For all entities:
+    - `entity.is_standing_on_blocks(depth, blocks...)`: Returns whether the specified entity is standing on a specific block or set of blocks. Example usage: `q.is_standing_on_blocks(2, minecraft:sand)`
+- Added NPC field:
+  - `hideNameTag`: Hides the name tag of the NPC.
+  - Added `baseScale` property to NPCs.
+- Added MoLang particle queries for getting distance to targeted entities.
 
 ## [1.6.0 - The Record Catch Update (December 25th, 2024)](#1-6-0)
 #### "Now that there's a fishing mechanic, the mod is actually good!"
@@ -2059,4 +2172,3 @@ Thank you so much to all of our community translators that bring the mod to the 
 
 ## [1.0.0 (November 12th, 2022)](#1-0-0)
 - Initial release.
-

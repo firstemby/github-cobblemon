@@ -96,7 +96,6 @@
     "tm:charge",
     "tm:chargebeam",
     "tm:curse",
-    "tm:discharge",
     "tm:doubleedge",
     "tm:eerieimpulse",
     "tm:electricterrain",
@@ -114,10 +113,8 @@
     "tm:hyperbeam",
     "tm:lightscreen",
     "tm:magiccoat",
-    "tm:magneticflux",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:mirrorcoat",
     "tm:protect",
     "tm:raindance",
     "tm:recycle",
@@ -130,14 +127,11 @@
     "tm:shockwave",
     "tm:signalbeam",
     "tm:sleeptalk",
-    "tm:sonicboom",
-    "tm:spark",
     "tm:steelroller",
     "tm:substitute",
     "tm:suckerpunch",
     "tm:supercellslam",
     "tm:swift",
-    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:telekinesis",
@@ -145,11 +139,31 @@
     "tm:thief",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:thundershock",
     "tm:thunderwave",
     "tm:torment",
     "tm:voltswitch",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tutor:chargebeam",
+    "tutor:electroweb",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:magiccoat",
+    "tutor:magnetrise",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:rollout",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:steelroller",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:telekinesis",
+    "tutor:thunderbolt",
+    "tutor:wildcharge"
   ],
   "preEvolution": "voltorb",
   "evolutions": [],
@@ -169,46 +183,8 @@
         "hisuian_form"
       ],
       "aspects": [
-        "hisuian",
         "hisuian"
       ],
-      "abilities": [
-        "soundproof",
-        "static",
-        "h:aftermath"
-      ],
-      "eggGroups": [
-        "mineral"
-      ],
-      "baseStats": {
-        "hp": 60,
-        "attack": 50,
-        "defence": 70,
-        "special_attack": 80,
-        "special_defence": 80,
-        "speed": 150
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 2
-      },
-      "baseExperienceYield": 172,
-      "experienceGroup": "medium_fast",
-      "catchRate": 60,
-      "eggCycles": 20,
-      "baseFriendship": 50,
-      "behaviour": {
-        "moving": {
-          "swim": {
-            "avoidsWater": true,
-            "canSwimInWater": false
-          }
-        }
-      },
       "drops": {
         "amount": 5,
         "entries": [
@@ -222,7 +198,7 @@
           },
           {
             "item": "cobblemon:cheri_berry",
-            "percentage": 5
+            "percentage": 5.0
           }
         ]
       },
@@ -252,9 +228,7 @@
         "tm:bulletseed",
         "tm:charge",
         "tm:chargebeam",
-        "tm:chloroblast",
         "tm:curse",
-        "tm:discharge",
         "tm:doubleedge",
         "tm:electricterrain",
         "tm:electroball",
@@ -273,7 +247,6 @@
         "tm:hyperbeam",
         "tm:iceball",
         "tm:leafstorm",
-        "tm:leechseed",
         "tm:protect",
         "tm:raindance",
         "tm:recycle",
@@ -286,22 +259,37 @@
         "tm:selfdestruct",
         "tm:sleeptalk",
         "tm:solarbeam",
-        "tm:stunspore",
         "tm:substitute",
         "tm:supercellslam",
         "tm:swift",
-        "tm:tackle",
         "tm:takedown",
         "tm:taunt",
         "tm:terablast",
         "tm:thief",
         "tm:thunder",
         "tm:thunderbolt",
-        "tm:thundershock",
         "tm:thunderwave",
         "tm:voltswitch",
         "tm:wildcharge",
-        "tm:worryseed"
+        "tm:worryseed",
+        "tutor:chargebeam",
+        "tutor:electroweb",
+        "tutor:energyball",
+        "tutor:foulplay",
+        "tutor:gigadrain",
+        "tutor:gigaimpact",
+        "tutor:grassyglide",
+        "tutor:hyperbeam",
+        "tutor:iceball",
+        "tutor:recycle",
+        "tutor:rest",
+        "tutor:rollout",
+        "tutor:seedbomb",
+        "tutor:sleeptalk",
+        "tutor:swift",
+        "tutor:thunderbolt",
+        "tutor:wildcharge",
+        "tutor:worryseed"
       ],
       "preEvolution": "voltorb hisuian",
       "evolutions": [],

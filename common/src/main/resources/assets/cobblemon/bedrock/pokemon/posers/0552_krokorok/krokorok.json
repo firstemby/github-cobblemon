@@ -22,7 +22,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krokorok', 'blink')",
-        "q.bedrock_quirk('krokorok', 'look_quirk')"
+        "q.bedrock_quirk('krokorok', 'look_quirk',20, 60, 1)"
       ]
     },
     "battle-standing": {
@@ -40,7 +40,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krokorok', 'blink')",
-        "q.bedrock_quirk('krokorok', 'look_quirk')"
+        "q.bedrock_quirk('krokorok', 'look_quirk',20, 60, 1)"
       ]
     },
     "sand-battle-standing": {
@@ -71,7 +71,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('krokorok', 'blink')",
-        "q.bedrock_quirk('krokorok', 'look_quirk')"
+        "q.bedrock_quirk('krokorok', 'look_quirk',20, 60, 1)"
       ]
     },
     "sand-standing": {

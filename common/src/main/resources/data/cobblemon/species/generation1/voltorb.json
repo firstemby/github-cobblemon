@@ -94,7 +94,6 @@
     "tm:assurance",
     "tm:charge",
     "tm:chargebeam",
-    "tm:discharge",
     "tm:doubleedge",
     "tm:eerieimpulse",
     "tm:electricterrain",
@@ -112,7 +111,6 @@
     "tm:magiccoat",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:mirrorcoat",
     "tm:protect",
     "tm:raindance",
     "tm:recycle",
@@ -124,24 +122,38 @@
     "tm:shockwave",
     "tm:signalbeam",
     "tm:sleeptalk",
-    "tm:sonicboom",
-    "tm:spark",
     "tm:steelroller",
     "tm:substitute",
     "tm:suckerpunch",
     "tm:swift",
-    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
     "tm:thief",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:thundershock",
     "tm:thunderwave",
     "tm:torment",
     "tm:voltswitch",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tutor:chargebeam",
+    "tutor:electroweb",
+    "tutor:foulplay",
+    "tutor:helpinghand",
+    "tutor:magiccoat",
+    "tutor:magnetrise",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:rollout",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:steelroller",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:thunderbolt",
+    "tutor:wildcharge"
   ],
   "evolutions": [
     {
@@ -176,43 +188,6 @@
       "aspects": [
         "hisuian"
       ],
-      "abilities": [
-        "soundproof",
-        "static",
-        "h:aftermath"
-      ],
-      "eggGroups": [
-        "mineral"
-      ],
-      "baseStats": {
-        "hp": 40,
-        "attack": 30,
-        "defence": 50,
-        "special_attack": 55,
-        "special_defence": 55,
-        "speed": 100
-      },
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 0,
-        "special_defence": 0,
-        "speed": 1
-      },
-      "baseExperienceYield": 66,
-      "experienceGroup": "medium_fast",
-      "catchRate": 190,
-      "eggCycles": 20,
-      "baseFriendship": 50,
-      "behaviour": {
-        "moving": {
-          "swim": {
-            "avoidsWater": true,
-            "canSwimInWater": false
-          }
-        }
-      },
       "drops": {
         "amount": 3,
         "entries": [
@@ -255,7 +230,6 @@
         "tm:bulletseed",
         "tm:charge",
         "tm:chargebeam",
-        "tm:discharge",
         "tm:doubleedge",
         "tm:electricterrain",
         "tm:electroball",
@@ -272,7 +246,6 @@
         "tm:gyroball",
         "tm:iceball",
         "tm:leafstorm",
-        "tm:leechseed",
         "tm:protect",
         "tm:raindance",
         "tm:recycle",
@@ -284,21 +257,34 @@
         "tm:selfdestruct",
         "tm:sleeptalk",
         "tm:solarbeam",
-        "tm:stunspore",
         "tm:substitute",
         "tm:swift",
-        "tm:tackle",
         "tm:takedown",
         "tm:taunt",
         "tm:terablast",
         "tm:thief",
         "tm:thunder",
         "tm:thunderbolt",
-        "tm:thundershock",
         "tm:thunderwave",
         "tm:voltswitch",
         "tm:wildcharge",
-        "tm:worryseed"
+        "tm:worryseed",
+        "tutor:chargebeam",
+        "tutor:electroweb",
+        "tutor:energyball",
+        "tutor:foulplay",
+        "tutor:gigadrain",
+        "tutor:grassyglide",
+        "tutor:iceball",
+        "tutor:recycle",
+        "tutor:rest",
+        "tutor:rollout",
+        "tutor:seedbomb",
+        "tutor:sleeptalk",
+        "tutor:swift",
+        "tutor:thunderbolt",
+        "tutor:wildcharge",
+        "tutor:worryseed"
       ],
       "evolutions": [
         {

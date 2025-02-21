@@ -16,7 +16,7 @@
       "displayName": "cobblemon.pokedex.variation.color",
       "icon": "cobblemon:textures/gui/pokedex/variation/color.png",
       "aspects": [
-        "mooshtank-none",
+        "mooshtank-false",
         "mooshtank-red",
         "mooshtank-brown"
       ]

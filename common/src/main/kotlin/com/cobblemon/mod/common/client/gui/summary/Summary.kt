@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.summary
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
@@ -35,7 +36,8 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwa
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -89,6 +91,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private val typeSpacerDoubleResource = cobblemonResource("textures/gui/summary/type_spacer_double.png")
         private val sideSpacerResource = cobblemonResource("textures/gui/summary/summary_side_spacer.png")
         private val evolveButtonResource = cobblemonResource("textures/gui/summary/summary_evolve_button.png")
+        private val itemVisibleResource = cobblemonResource("textures/gui/summary/item_visible.png")
+        private val itemHiddenResource = cobblemonResource("textures/gui/summary/item_hidden.png")
         private val tabIconInfo = cobblemonResource("textures/gui/summary/summary_tab_icon_info.png")
         private val tabIconMoves = cobblemonResource("textures/gui/summary/summary_tab_icon_moves.png")
         private val tabIconStats = cobblemonResource("textures/gui/summary/summary_tab_icon_stats.png")
@@ -163,10 +167,44 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
-                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() },
-                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() }
+                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null },
+                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null }
             )
         )
+
+        //Item Visibility Button
+        val hideHeldItemBtn = SummaryButton(
+            buttonX = x + 22f,
+            buttonY = y + 101f,
+            buttonWidth = 13,
+            buttonHeight = 9,
+            clickAction = {
+                selectedPokemon.heldItemVisible=!selectedPokemon.heldItemVisible
+                modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
+                // Send item visibility update to server
+                sendToServer(
+                    SetItemHiddenPacket(
+                        selectedPokemon.uuid,
+                        selectedPokemon.heldItemVisible
+                    )
+                )
+            },
+            resource = itemVisibleResource,
+            renderRequirement = { selectedPokemon.heldItemVisible },
+            clickRequirement = { true },
+        )
+        val showHeldItemBtn = SummaryButton(
+            buttonX = x + 22f,
+            buttonY = y + 101f,
+            buttonWidth = 13,
+            buttonHeight = 9,
+            clickAction = { },
+            resource = itemHiddenResource,
+            renderRequirement = { !selectedPokemon.heldItemVisible },
+            clickRequirement = { false },
+        )
+        addRenderableWidget(showHeldItemBtn)
+        addRenderableWidget(hideHeldItemBtn)
 
         // Init Tabs
         summaryTabs.clear()
@@ -235,7 +273,9 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             pokemon = selectedPokemon.asRenderablePokemon(),
             baseScale = 2F,
             rotationY = 325F,
-            offsetY = -10.0
+            offsetY = -10.0,
+            shouldFollowCursor = true,
+            heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
         )
         addRenderableOnly(this.modelWidget)
     }
@@ -274,9 +314,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
         children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
-        if (this::modelWidget.isInitialized) {
-            this.modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
+
+        if (::modelWidget.isInitialized) {
+            modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
+            modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
         }
+
         if (this::nicknameEntryWidget.isInitialized) {
             this.nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
         }
@@ -592,12 +635,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
-    /*
-    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        return children().any { it.mouseClicked(mouseX, mouseY, button) }
-    }
-     */
-
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
@@ -619,7 +656,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             this.focused = null
         }
         if (Cobblemon.config.enableDebugKeys) {
-            val model = PokemonModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
+            val model = VaryingModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
             if (keyCode == InputConstants.KEY_UP) {
                 model.profileTranslation = model.profileTranslation.add(0.0, -0.01, 0.0)
             }
@@ -648,7 +685,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     override fun onClose() {
         if (Cobblemon.config.enableDebugKeys) {
-            val model = PokemonModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
+            val model = VaryingModelRepository.getPoser(selectedPokemon.species.resourceIdentifier, modelWidget.state)
             Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Profile Translation: ${model.profileTranslation}"))
             Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Profile Scale: ${model.profileScale}"))
             Cobblemon.LOGGER.info("override var profileTranslation = Vec3d(${model.profileTranslation.x}, ${model.profileTranslation.y}, ${model.profileTranslation.z})")

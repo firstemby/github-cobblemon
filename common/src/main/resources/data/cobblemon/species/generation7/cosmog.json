@@ -48,12 +48,9 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "moves": [
     "1:splash",
-    "1:teleport",
-    "tm:splash",
-    "tm:teleport"
+    "1:teleport"
   ],
   "evolutions": [
     {

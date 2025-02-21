@@ -46,21 +46,20 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
       {
         "item": "cobblemon:leaf_stone",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:miracle_seed",
-        "percentage": 5
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:occa_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -88,8 +87,6 @@
     "egg:spikyshield",
     "egg:tickle",
     "tm:acrobatics",
-    "tm:astonish",
-    "tm:bite",
     "tm:brickbreak",
     "tm:bulletseed",
     "tm:covet",
@@ -105,13 +102,11 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:furyswipes",
     "tm:gastroacid",
     "tm:gigadrain",
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:grasspledge",
-    "tm:grasswhistle",
     "tm:grassyglide",
     "tm:gunkshot",
     "tm:helpinghand",
@@ -120,9 +115,6 @@
     "tm:irontail",
     "tm:knockoff",
     "tm:leafstorm",
-    "tm:leechseed",
-    "tm:leer",
-    "tm:lick",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:magicalleaf",
@@ -130,7 +122,6 @@
     "tm:naturalgift",
     "tm:naturepower",
     "tm:payback",
-    "tm:playnice",
     "tm:poweruppunch",
     "tm:protect",
     "tm:recycle",
@@ -139,12 +130,10 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:roleplay",
-    "tm:scratch",
     "tm:seedbomb",
     "tm:shadowclaw",
     "tm:sleeptalk",
     "tm:solarbeam",
-    "tm:spikyshield",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
@@ -154,12 +143,40 @@
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
-    "tm:tickle",
     "tm:torment",
     "tm:uproar",
-    "tm:vinewhip",
     "tm:workup",
-    "tm:worryseed"
+    "tm:worryseed",
+    "tutor:covet",
+    "tutor:endeavor",
+    "tutor:energyball",
+    "tutor:focuspunch",
+    "tutor:gastroacid",
+    "tutor:gigadrain",
+    "tutor:gigaimpact",
+    "tutor:grasspledge",
+    "tutor:grassyglide",
+    "tutor:gunkshot",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:irontail",
+    "tutor:knockoff",
+    "tutor:lowkick",
+    "tutor:magicalleaf",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roleplay",
+    "tutor:seedbomb",
+    "tutor:shadowclaw",
+    "tutor:sleeptalk",
+    "tutor:superpower",
+    "tutor:swift",
+    "tutor:synthesis",
+    "tutor:throatchop",
+    "tutor:uproar",
+    "tutor:worryseed"
   ],
   "preEvolution": "pansage",
   "evolutions": []

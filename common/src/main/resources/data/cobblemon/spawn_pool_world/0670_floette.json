@@ -172,7 +172,29 @@
             }
         },
         {
-            "id": "floette-red-7",
+            "id": "floette-white-7",
+            "pokemon": "floette flower=white",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "19-37",
+            "weight": 0.95,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
+                ]
+            }
+        },
+        {
+            "id": "floette-red-8",
             "pokemon": "floette flower=red",
             "type": "pokemon",
             "context": "grounded",
@@ -197,7 +219,7 @@
             }
         },
         {
-            "id": "floette-yellow-7",
+            "id": "floette-yellow-8",
             "pokemon": "floette flower=yellow",
             "type": "pokemon",
             "context": "grounded",
@@ -222,7 +244,7 @@
             }
         },
         {
-            "id": "floette-orange-7",
+            "id": "floette-orange-8",
             "pokemon": "floette flower=orange",
             "type": "pokemon",
             "context": "grounded",
@@ -247,7 +269,7 @@
             }
         },
         {
-            "id": "floette-blue-7",
+            "id": "floette-blue-8",
             "pokemon": "floette flower=blue",
             "type": "pokemon",
             "context": "grounded",
@@ -272,7 +294,7 @@
             }
         },
         {
-            "id": "floette-white-7",
+            "id": "floette-white-8",
             "pokemon": "floette flower=white",
             "type": "pokemon",
             "context": "grounded",
@@ -297,7 +319,7 @@
             }
         },
         {
-            "id": "floette-pink-7",
+            "id": "floette-pink-8",
             "pokemon": "floette flower=pink",
             "type": "pokemon",
             "context": "grounded",

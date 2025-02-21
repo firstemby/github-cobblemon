@@ -83,10 +83,13 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:steelbeam",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:steelbeam",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [
     {

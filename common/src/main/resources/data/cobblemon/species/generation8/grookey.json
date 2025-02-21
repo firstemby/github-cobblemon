@@ -49,7 +49,6 @@
     "height": 1,
     "fixed": false
   },
-  "behaviour": {},
   "drops": {
     "amount": 2,
     "entries": [
@@ -59,7 +58,7 @@
       },
       {
         "item": "cobblemon:miracle_seed",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -84,14 +83,12 @@
     "tm:acrobatics",
     "tm:assurance",
     "tm:bodyslam",
-    "tm:branchpoke",
     "tm:bulletseed",
     "tm:drainpunch",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:facade",
-    "tm:fakeout",
     "tm:falseswipe",
     "tm:fling",
     "tm:focusenergy",
@@ -100,24 +97,17 @@
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
-    "tm:growl",
-    "tm:growth",
-    "tm:hammerarm",
     "tm:knockoff",
     "tm:leafstorm",
-    "tm:leechseed",
     "tm:lowkick",
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
     "tm:naturepower",
     "tm:protect",
-    "tm:razorleaf",
     "tm:rest",
-    "tm:scratch",
     "tm:screech",
     "tm:seedbomb",
-    "tm:slam",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:solarblade",
@@ -133,9 +123,25 @@
     "tm:trailblaze",
     "tm:uproar",
     "tm:uturn",
-    "tm:woodhammer",
     "tm:workup",
-    "tm:worryseed"
+    "tm:worryseed",
+    "tutor:drainpunch",
+    "tutor:endeavor",
+    "tutor:energyball",
+    "tutor:falseswipe",
+    "tutor:focusenergy",
+    "tutor:gigadrain",
+    "tutor:grasspledge",
+    "tutor:grassyglide",
+    "tutor:knockoff",
+    "tutor:lowkick",
+    "tutor:magicalleaf",
+    "tutor:rest",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:uproar",
+    "tutor:worryseed"
   ],
   "evolutions": [
     {

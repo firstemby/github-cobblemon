@@ -42,6 +42,7 @@
   "eggCycles": 35,
   "baseFriendship": 50,
   "shoulderMountable": true,
+  "standingEyeHeight": 0.67,
   "baseScale": 0.55,
   "hitbox": {
     "width": 0.6,
@@ -91,12 +92,7 @@
     "egg:destinybond",
     "egg:disable",
     "egg:spite",
-    "tm:astonish",
-    "tm:clearsmog",
     "tm:confuseray",
-    "tm:destinybond",
-    "tm:disable",
-    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
@@ -107,8 +103,6 @@
     "tm:heatwave",
     "tm:helpinghand",
     "tm:incinerate",
-    "tm:lavaplume",
-    "tm:leer",
     "tm:nightshade",
     "tm:overheat",
     "tm:protect",
@@ -119,7 +113,13 @@
     "tm:sunnyday",
     "tm:takedown",
     "tm:terablast",
-    "tm:willowisp"
+    "tm:willowisp",
+    "tutor:flamethrower",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:rest",
+    "tutor:sleeptalk",
+    "tutor:spite"
   ],
   "evolutions": [
     {

@@ -25,5 +25,7 @@ object ServerSettings {
     var displayEntityLevelLabel = Cobblemon.config.displayEntityLevelLabel
     var displayEntityNameLabel = Cobblemon.config.displayEntityNameLabel
     var maxPokemonLevel = Cobblemon.config.maxPokemonLevel
+    var maxPokemonFriendship = Cobblemon.config.maxPokemonFriendship
+    var maxDynamaxLevel = Cobblemon.config.maxDynamaxLevel
 
 }

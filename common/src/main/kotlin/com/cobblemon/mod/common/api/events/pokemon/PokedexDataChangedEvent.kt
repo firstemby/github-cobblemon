@@ -13,20 +13,19 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokedex.FormDexRecord
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
-import com.mojang.datafixers.util.Either
 import java.util.UUID
 
 /**
  * Event that fires when a Pokémon's information is gained or updated in the Pokédex.
  */
 sealed interface PokedexDataChangedEvent {
-    val dataSource: Either<PokedexEntityData, Pokemon>
+    val dataSource: PokedexEntityData
     val knowledge: PokedexEntryProgress
     val playerUUID: UUID
     val record: FormDexRecord
@@ -37,22 +36,24 @@ sealed interface PokedexDataChangedEvent {
     fun getContext(): MutableMap<String, MoValue> {
         return mutableMapOf(
             "player" to (playerUUID.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "pokemon" to dataSource.map({ DoubleValue.ZERO }, { it.struct }),
-            "data" to dataSource.map({ it.struct }, { DoubleValue.ZERO }),
+            "pokemon" to dataSource.pokemon.struct,
+            "disguise" to (dataSource.disguise?.struct ?: DoubleValue.ZERO),
             "knowledge" to StringValue(knowledge.name.lowercase()),
             "pokedex" to pokedexManager.struct
         )
     }
 
     class Pre(
-        override val dataSource: Either<PokedexEntityData, Pokemon>,
+        override val dataSource: PokedexEntityData,
         override val knowledge: PokedexEntryProgress,
         override val playerUUID: UUID,
         override val record: FormDexRecord
-    ) : PokedexDataChangedEvent, Cancelable()
+    ) : PokedexDataChangedEvent, Cancelable() {
+        val functions = moLangFunctionMap(cancelFunc)
+    }
 
     class Post(
-        override val dataSource: Either<PokedexEntityData, Pokemon>,
+        override val dataSource: PokedexEntityData,
         override val knowledge: PokedexEntryProgress,
         override val playerUUID: UUID,
         override val record: FormDexRecord

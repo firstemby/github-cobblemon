@@ -64,7 +64,7 @@
     "entries": [
       {
         "item": "cobblemon:miracle_seed",
-        "percentage": 10
+        "percentage": 10.0
       }
     ]
   },
@@ -92,9 +92,7 @@
     "egg:tickle",
     "egg:wideguard",
     "egg:worryseed",
-    "tm:absorb",
     "tm:amnesia",
-    "tm:bite",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:bulletseed",
@@ -112,22 +110,18 @@
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
-    "tm:growth",
     "tm:headbutt",
     "tm:heavyslam",
     "tm:ironhead",
     "tm:irontail",
     "tm:leafage",
     "tm:leafstorm",
-    "tm:leechseed",
     "tm:lightscreen",
     "tm:magicalleaf",
-    "tm:megadrain",
     "tm:mudshot",
     "tm:mudslap",
     "tm:naturepower",
     "tm:protect",
-    "tm:razorleaf",
     "tm:reflect",
     "tm:rest",
     "tm:roar",
@@ -136,31 +130,41 @@
     "tm:safeguard",
     "tm:sandtomb",
     "tm:seedbomb",
-    "tm:shellsmash",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:solarbeam",
-    "tm:spitup",
     "tm:stealthrock",
-    "tm:stockpile",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:swallow",
     "tm:swordsdance",
     "tm:synthesis",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
-    "tm:thrash",
-    "tm:tickle",
     "tm:trailblaze",
-    "tm:wideguard",
-    "tm:withdraw",
     "tm:workup",
     "tm:worryseed",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:bulldoze",
+    "tutor:earthpower",
+    "tutor:energyball",
+    "tutor:gigadrain",
+    "tutor:grasspledge",
+    "tutor:grassyglide",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:magicalleaf",
+    "tutor:mudslap",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:stealthrock",
+    "tutor:superpower",
+    "tutor:synthesis",
+    "tutor:worryseed",
+    "tutor:zenheadbutt"
   ],
   "preEvolution": "turtwig",
   "evolutions": [
@@ -184,6 +188,7 @@
       "variant": "level_up",
       "result": "torterra tree=oak",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -203,6 +208,7 @@
       "variant": "level_up",
       "result": "torterra tree=swamp",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -226,6 +232,7 @@
       "variant": "level_up",
       "result": "torterra tree=birch",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -245,6 +252,7 @@
       "variant": "level_up",
       "result": "torterra tree=darkoak",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -264,6 +272,7 @@
       "variant": "level_up",
       "result": "torterra tree=acacia",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -283,6 +292,7 @@
       "variant": "level_up",
       "result": "torterra tree=azalea",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -302,6 +312,7 @@
       "variant": "level_up",
       "result": "torterra tree=jungle",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -321,6 +332,7 @@
       "variant": "level_up",
       "result": "torterra tree=spruce",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -340,6 +352,7 @@
       "variant": "level_up",
       "result": "torterra tree=mangrove",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -359,6 +372,7 @@
       "variant": "level_up",
       "result": "torterra tree=cherry",
       "consumeHeldItem": true,
+      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],

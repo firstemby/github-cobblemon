@@ -21,7 +21,15 @@
     "coarse",
     "sandy"
   ],
-  "growthFactors": [],
+  "growthFactors": [
+    {
+      "variant": "cobblemon:preferred_biome",
+      "bonusYield": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ],
   "randomizedGrowthPoints": true,
   "spawnConditions": [
     {

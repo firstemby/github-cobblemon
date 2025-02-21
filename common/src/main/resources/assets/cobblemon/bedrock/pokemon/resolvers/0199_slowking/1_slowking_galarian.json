@@ -4,7 +4,7 @@
   "variations": [
     {
       "aspects": ["galarian"],
-      "poser": "cobblemon:slowking",
+      "poser": "cobblemon:slowking_galarian",
       "model": "cobblemon:slowking_galarian.geo",
       "texture": "cobblemon:textures/pokemon/0199_slowking/slowking_galarian.png",
       "layers": []

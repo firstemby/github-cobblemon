@@ -82,6 +82,25 @@
                     }
                 ]
             }
+        },
+        {
+            "id": "larvesta-4",
+            "pokemon": "larvesta",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "11-36",
+            "weight": 9.0,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
+                ]
+            }
         }
     ]
 }

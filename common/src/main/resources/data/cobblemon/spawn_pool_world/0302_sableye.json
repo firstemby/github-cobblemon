@@ -18,6 +18,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [

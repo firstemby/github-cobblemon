@@ -40,7 +40,6 @@
   "catchRate": 25,
   "eggCycles": 35,
   "baseFriendship": 50,
-  "behaviour": {},
   "drops": {
     "amount": 3,
     "entries": [
@@ -50,7 +49,7 @@
       },
       {
         "item": "cobblemon:shuca_berry",
-        "percentage": 5
+        "percentage": 5.0
       }
     ]
   },
@@ -75,7 +74,6 @@
     "tm:bodypress",
     "tm:bodyslam",
     "tm:bulldoze",
-    "tm:coil",
     "tm:curse",
     "tm:dig",
     "tm:doubleedge",
@@ -85,7 +83,6 @@
     "tm:facade",
     "tm:flashcannon",
     "tm:gigaimpact",
-    "tm:harden",
     "tm:heavyslam",
     "tm:helpinghand",
     "tm:highhorsepower",
@@ -93,7 +90,6 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:irontail",
-    "tm:metalburst",
     "tm:metalsound",
     "tm:mudshot",
     "tm:mudslap",
@@ -104,7 +100,6 @@
     "tm:rocktomb",
     "tm:sandstorm",
     "tm:sandtomb",
-    "tm:shedtail",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:spikes",
@@ -112,10 +107,26 @@
     "tm:steelbeam",
     "tm:stompingtantrum",
     "tm:substitute",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
-    "tm:wrap"
+    "tutor:bulldoze",
+    "tutor:earthpower",
+    "tutor:flashcannon",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:mudslap",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:sleeptalk",
+    "tutor:spikes",
+    "tutor:stealthrock",
+    "tutor:steelbeam",
+    "tutor:stompingtantrum"
   ],
   "evolutions": []
 }

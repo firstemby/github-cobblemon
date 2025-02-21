@@ -149,7 +149,7 @@
     "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 0.7 } ]
   },
   "evolution.full": {
-    "sounds": [ "cobblemon:evolution/evolution_full" ]
+    "sounds": [ { "name": "cobblemon:evolution/evolution_full", "volume": 0.9 } ]
   },
   "evolution.ui": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_ui", "volume": 0.2 } ]
@@ -1003,24 +1003,24 @@
   "particle.wild_shiny_chime": {
     "subtitle": "cobblemon.subtitle.pokemon.wild_shiny_shine",
     "sounds": [
-      { "name": "cobblemon:shiny/wild_shiny_appear_chime", "volume": 2.0 }
+      { "name": "cobblemon:shiny/wild_shiny_appear_chime", "volume": 1.0, "attenuation_distance": 128.0 }
     ]
   },
   "particle.shiny_ambient_chime": {
     "sounds": [
-      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.3 }
+      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.8 }
     ]
   },
   "particle.wild_shiny_ambient_chime": {
     "subtitle": "cobblemon.subtitle.pokemon.shiny_ambient",
     "sounds": [
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_1", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_2", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_3", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 1.5 }
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_1", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_2", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_3", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 0.8, "attenuation_distance": 128.0 }
     ]
   },
   "pokemon.bulbasaur.ambient": {

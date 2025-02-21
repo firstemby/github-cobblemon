@@ -7,7 +7,7 @@
         "paldean",
         "aqua-breed"
       ],
-      "poser": "cobblemon:tauros",
+      "poser": "cobblemon:tauros_paldean_aqua",
       "model": "cobblemon:tauros_paldean_aqua.geo",
       "texture": "cobblemon:textures/pokemon/0128_tauros/tauros_paldean_aqua.png",
       "layers": [

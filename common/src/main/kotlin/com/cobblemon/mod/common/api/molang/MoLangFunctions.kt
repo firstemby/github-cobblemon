@@ -36,6 +36,8 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.pokedex.SeenCount
 import com.cobblemon.mod.common.api.pokedex.SeenPercent
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -60,8 +62,12 @@ import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimati
 import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
+import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
+import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
+import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
 import java.util.UUID
@@ -1002,6 +1008,82 @@ object MoLangFunctions {
         }
     )
 
+    val pokemonPropertiesFunctions: MutableList<(PokemonProperties) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
+        { props ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+
+            map.put("level") { DoubleValue(props.level?.toDouble() ?: 0) }
+            map.put("set_level") { params ->
+                props.level = params.getIntOrNull(0)
+                return@put DoubleValue.ONE
+            }
+            map.put("shiny") { DoubleValue(props.shiny) }
+            map.put("set_shiny") { params ->
+                props.shiny = params.getBooleanOrNull(0)
+                return@put DoubleValue.ONE
+            }
+            map.put("species") { props.species?.let { StringValue(it) } ?: DoubleValue.ZERO }
+            map.put("set_species") { params ->
+                props.species = params.getStringOrNull(0)
+                return@put DoubleValue.ONE
+            }
+            map.put("gender") { props.gender?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
+            map.put("set_gender") { params ->
+                props.gender = params.getStringOrNull(0)?.let { Gender.valueOf(it) }
+                return@put DoubleValue.ONE
+            }
+            map.put("form") { props.form?.let { StringValue(it) } ?: DoubleValue.ZERO }
+            map.put("ivs") {
+                val ivs = props.ivs
+                if (ivs == null) {
+                    return@put DoubleValue.ZERO
+                } else {
+                    return@put ivs.struct
+                }
+            }
+            map.put("evs") {
+                val evs = props.evs
+                if (evs == null) {
+                    return@put DoubleValue.ZERO
+                } else {
+                    return@put evs.struct
+                }
+            }
+            map.put("friendship") { DoubleValue(props.friendship?.toDouble() ?: DoubleValue.ZERO) }
+            map.put("set_friendship") { params ->
+                props.friendship = params.getIntOrNull(0)
+                return@put DoubleValue.ONE
+            }
+            map.put("create") { params ->
+                val pokemon = props.create()
+                return@put pokemon.struct
+            }
+
+            map
+        }
+    )
+
+    val evolutionFunctions: MutableList<(Evolution) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
+        { evolution ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+
+            map.put("result") { evolution.result.asMoLangValue() }
+
+            if (evolution is LevelUpEvolution) {
+                map.put("is_level_up") { DoubleValue.ONE }
+            } else if (evolution is TradeEvolution) {
+                map.put("is_trade") { DoubleValue.ONE }
+            } else if (evolution is ItemInteractionEvolution) {
+                map.put("is_item") { DoubleValue.ONE }
+            }
+
+            map.put("is_optional") { DoubleValue(evolution.optional) }
+            map.put("consumes_held_item") { DoubleValue(evolution.consumeHeldItem) }
+
+            map
+        }
+    )
+
     fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME).addFunctions(biomeFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
     fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION).addFunctions(worldFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
     fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK).addFunctions(blockFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -1031,6 +1113,24 @@ object MoLangFunctions {
         )
         value.addFunctions(pokemonStoreFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(partyFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+        return value
+    }
+
+    fun PokemonProperties.asMoLangValue(): ObjectValue<PokemonProperties> {
+        val value = ObjectValue(
+            obj = this,
+            stringify = { it.asString() }
+        )
+        value.addFunctions(pokemonPropertiesFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+        return value
+    }
+
+    fun Evolution.asMoLangValue(): ObjectValue<Evolution> {
+        val value = ObjectValue(
+            obj = this,
+            stringify = { it.toString() }
+        )
+        value.addFunctions(evolutionFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
     }
 
@@ -1168,6 +1268,24 @@ object MoLangFunctions {
     fun <T : QueryStruct> T.addFunctions(functions: Map<String, java.util.function.Function<MoParams, Any>>): T {
         this.functions.putAll(functions)
         return this
+    }
+
+    fun moLangFunctionMap(
+        vararg functions: Pair<String, (MoParams) -> MoValue>
+    ): Map<String, (MoParams) -> MoValue> {
+        return functions.toMap()
+    }
+
+    fun queryStructOf(
+        vararg functions: Pair<String, (MoParams) -> MoValue>
+    ): QueryStruct {
+        return QueryStruct(
+            hashMapOf<String, java.util.function.Function<MoParams, Any>>(
+                *functions.map { (name, func) ->
+                    name to java.util.function.Function<MoParams, Any> { params -> func(params) }
+                }.toTypedArray()
+            )
+        )
     }
 
     fun MoLangRuntime.setup(): MoLangRuntime {
