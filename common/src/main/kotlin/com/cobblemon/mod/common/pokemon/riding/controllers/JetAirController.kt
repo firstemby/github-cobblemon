@@ -83,8 +83,8 @@ class JetAirController : RideController {
         }
         else if ( driver.zza < 0.0 && currSpeed > MINSPEED)
         {
-            //should slowdown be faster or slower than speed up?
-            currSpeed = max( currSpeed - (accel / 2) , MINSPEED)
+            //Decelerate is now always a constant half of max acceleration.
+            currSpeed = max( currSpeed - (MAXACCEL / 2) , MINSPEED)
         }
 
         return currSpeed.toFloat()
@@ -148,8 +148,8 @@ class JetAirController : RideController {
 
 
         // Accumulate the mouse input
-        currMouseXForce = (currMouseXForce + (xMouse * 2 * 20 * cappedDeltaTime)).coerceIn(-1.0, 1.0)
-        currMouseYForce = (currMouseYForce + (yMouse * 2 * 20 * cappedDeltaTime)).coerceIn(-1.0, 1.0)
+        currMouseXForce = (currMouseXForce + ( 0.8 * xMouse * cappedDeltaTime )).coerceIn(-1.0, 1.0)
+        currMouseYForce = (currMouseYForce + ( 0.8 * yMouse * cappedDeltaTime )).coerceIn(-1.0, 1.0)
 
         //Get handling in degrees per second
         val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
@@ -253,8 +253,8 @@ class JetAirController : RideController {
         // 32 bl/s and 8 bl/s
         // min is 4 bl/s
         val MAXTOPSPEED = 2.5 // 50 bl/s
-        val MINTOPSPEED = 0.4 // 8 bl/s
-        val MINSPEED = 0.2 // 4 bl/s
+        val MINTOPSPEED = 0.5 // 10 bl/s
+        val MINSPEED = 0.3 // 6 bl/s
 
         //Accel will lie between 1.0 second and 5.0 seconds
         val MAXACCEL = (MAXTOPSPEED - MINSPEED) / 20 //1.0 second to max speed
@@ -262,12 +262,12 @@ class JetAirController : RideController {
 
         //full 180 in 1 second.
         //30 degrees in 1 second.
-        val MAXHANDLING = 180.0
-        val MINHANDLING = 60.0
+        val MAXHANDLING = 140.0
+        val MINHANDLING = 30.0
 
 
-        val MAXYAWHANDLING = 20.0
-        val MINYAWHANDLING = 10.0
+        val MAXYAWHANDLING = 16.0
+        val MINYAWHANDLING = 8.0
 
         //Fuel measured by seconds at full throttle.
         //minimum speed will consume a quarter of the fuel.

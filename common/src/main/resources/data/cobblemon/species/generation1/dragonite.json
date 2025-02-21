@@ -57,7 +57,7 @@
         "description": "Its top speed",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "30-60"
+          "AIR": "10-70"
         }
       },
       "ACCELERATION": {
@@ -65,7 +65,7 @@
         "description": "How fast it can speed up",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "30-65"
+          "AIR": "10-70"
         }
       },
       "SKILL": {
@@ -73,7 +73,7 @@
         "description": "How fast it can turn",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "30-60"
+          "AIR": "10-70"
         }
       },
       "JUMP": {
@@ -81,7 +81,7 @@
         "description": "How high it can fly",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "30-60"
+          "AIR": "10-70"
         }
       },
       "STAMINA": {
@@ -89,7 +89,7 @@
         "description": "How long it can stay off the ground",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "35-75"
+          "AIR": "10-70"
         }
       }
     },
@@ -103,7 +103,7 @@
         "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
       },
       "flightController": {
-        "key": "cobblemon:air/jetalt",
+        "key": "cobblemon:air/jet",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [0, "0.3*q.jump_strength/50", 0]
