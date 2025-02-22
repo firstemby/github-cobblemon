@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -90,7 +91,13 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).velocity(entity, driver, input)
     }
 
-    override fun canJump(entity: PokemonEntity, driver: Player) = true
+    override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
+        return getActiveController(entity).angRollVel(entity, driver, deltaTime)
+    }
+
+    override fun canJump(entity: PokemonEntity, driver: Player): Boolean {
+        return getActiveController(entity).canJump(entity, driver)
+    }
 
     override fun jumpForce(
         entity: PokemonEntity,
@@ -112,7 +119,35 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).gravity(entity, regularGravity)
     }
 
+    override fun inertia(entity: PokemonEntity): Double {
+        return getActiveController(entity).inertia(entity)
+    }
+
     override fun shouldRoll(entity: PokemonEntity): Boolean = getActiveController(entity).shouldRoll(entity)
+
+    override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = getActiveController(entity).useAngVelSmoothing(entity)
+
+    override fun rotationOnMouseXY
+                (entity: PokemonEntity,
+                 driver: Player,
+                 yMouse: Double,
+                 xMouse: Double,
+                 yMouseSmoother: SmoothDouble,
+                 xMouseSmoother: SmoothDouble,
+                 sensitivity: Double,
+                 deltaTime: Double ): Vec3
+    {
+        return getActiveController(entity).rotationOnMouseXY(entity,
+                                                            driver,
+                                                            yMouse,
+                                                            xMouse,
+                                                            yMouseSmoother,
+                                                            xMouseSmoother,
+                                                            sensitivity,
+                                                            deltaTime )
+    }
+
+    override fun dismountOnShift(entity: PokemonEntity): Boolean = getActiveController(entity).dismountOnShift(entity)
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

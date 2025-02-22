@@ -50,6 +50,48 @@
     "fixed": false
   },
   "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can fly",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can stay off the ground",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      }
+    },
     "controller": {
       "key": "cobblemon:composite/run_up_to_flight",
       "minimumSpeed": "0.2",
@@ -70,8 +112,8 @@
       {
         "offset": {
           "x": 0,
-          "y": 1.5,
-          "z": -0.5
+          "y": 0.0,
+          "z": 0
         },
         "poseOffsets": [
           {
@@ -80,8 +122,8 @@
             ],
             "offset": {
               "x": 0,
-              "y": 0.7,
-              "z": -1
+              "y": 0,
+              "z": 0
             }
           },
           {
@@ -90,8 +132,8 @@
             ],
             "offset": {
               "x": 0,
-              "y": 0.2,
-              "z": -1
+              "y": 0.0,
+              "z": 0
             }
           }
         ]

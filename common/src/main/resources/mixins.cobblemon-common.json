@@ -40,6 +40,7 @@
     "ItemStackComponentizationFixMixin",
     "LecternBlockMixin",
     "LivingEntityMixin",
+    "LocalPlayerMixin",
     "MinecraftDedicatedServerMixin",
     "NbtUtilsMixin",
     "PiglinBarterMixin",

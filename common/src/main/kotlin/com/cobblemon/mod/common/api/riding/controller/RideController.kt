@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.controller
 
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.riding.RidingState
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -71,6 +73,14 @@ interface RideController : Encodable, Decodable {
      */
     fun rotation(entity: PokemonEntity, driver: LivingEntity) : Vec2
 
+    /**
+     * Sets the change current change in rotation for that tick in three
+     * dimensions
+     */
+    fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
+        return Vec3(0.0, 0.0, 0.0)
+    }
+
     fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {}
 
     fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
@@ -84,12 +94,42 @@ interface RideController : Encodable, Decodable {
      */
     fun velocity(entity: PokemonEntity, driver: Player, input: Vec3) : Vec3
 
+    fun fuelBar(entity: PokemonEntity, driver: Player): Float = 0.0f
+
     fun canJump(entity: PokemonEntity, driver: Player) : Boolean
+
     fun jumpForce(entity: PokemonEntity, driver: Player, jumpStrength: Int) : Vec3
 
     fun gravity(entity: PokemonEntity, regularGravity: Double) : Double? = null
 
+    fun inertia(entity: PokemonEntity ) : Double = 0.5
+
     fun shouldRoll(entity: PokemonEntity): Boolean = false
+
+    fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
+
+    //If function is not overwritten by controllers then just perform the defualt
+    //rolling function which is roll on mousex and pitch on mousey
+    fun rotationOnMouseXY
+                (entity: PokemonEntity,
+                 driver: Player,
+                 yMouse: Double,
+                 xMouse: Double,
+                 yMouseSmoother: SmoothDouble,
+                 xMouseSmoother: SmoothDouble,
+                 sensitivity: Double,
+                 deltaTime: Double ): Vec3
+    {
+        if(driver !is Rollable) return Vec3.ZERO
+
+        //Might need to add the somothing here for default.
+        val rollable = driver as Rollable
+        return Vec3(0.0, yMouse, xMouse )
+    }
+
+    fun turnOffOnGround(entity: PokemonEntity): Boolean = false
+
+    fun dismountOnShift(entity: PokemonEntity): Boolean = false
 
     fun getRuntime(entity: PokemonEntity) = entity.riding.runtime
 

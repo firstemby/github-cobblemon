@@ -8,12 +8,8 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonEntities
-import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -38,10 +34,10 @@ import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.api.riding.Rideable
-import com.cobblemon.mod.common.api.riding.RidingManager
-import com.cobblemon.mod.common.api.riding.Seat
+import com.cobblemon.mod.common.api.riding.*
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinitions
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -84,6 +80,8 @@ import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MAXTOPSPEED
+import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MINTOPSPEED
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -123,15 +121,7 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.AgeableMob
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.EquipmentSlot
-import net.minecraft.world.entity.ExperienceOrb
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Pose
-import net.minecraft.world.entity.Shearable
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
@@ -153,6 +143,7 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
+import java.util.*
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -240,6 +231,10 @@ open class PokemonEntity(
         get() = entityData.get(FRIENDSHIP)
     val seats: List<Seat>
         get() = form.riding.seats
+    val rideProp: RidingProperties
+        get() = form.riding
+
+
 
     var shownItem: ItemStack
         get() = entityData.get(SHOWN_HELD_ITEM)
@@ -1389,10 +1384,75 @@ open class PokemonEntity(
         }
     }
 
+
+    //Converted to kotin from the same named private function in entity.
+    private fun getInputVector(relative: Vec3, motionScaler: Float, facing: Float): Vec3 {
+        val d = relative.lengthSqr()
+        if (d < 1.0E-7) {
+            return Vec3.ZERO
+        }
+
+        // If the squared length is greater than 1, normalize; otherwise, use the vector as-is.
+        // May not want to normalize this
+        //val vec3 = (if (d > 1.0) relative.normalize() else relative).scale(motionScaler.toDouble())
+        val vec3 = relative
+
+        // Convert the facing angle (in degrees) to radians using the factor 0.017453292F.
+        val f = Mth.sin(facing * 0.017453292F)
+        val g = Mth.cos(facing * 0.017453292F)
+
+        // Rotate the vector by the facing angle.
+        return Vec3(
+            vec3.x * g - vec3.z * f,
+            vec3.y,
+            vec3.z * g + vec3.x * f
+        )
+    }
+
+    //override fun moveRelative(amount: Float, relative: Vec3 ) {
+        //super.moveRelative(amount, relative)
+        //val v = this.getInputVector(relative, 1.0f, this.getYRot());
+        //this.setDeltaMovement(v);
+    //}
+
+    override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3 , friction: Float ): Vec3 {
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+        if ( riders.isEmpty() ) {
+            super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
+        }
+        //ignore this for now
+        else if( false )
+        {
+            val v = this.getInputVector(deltaMovement, 1.0f, this.getYRot());
+            //changing this will give the ride more or less inertia/handling/drift?
+            //A bit of overlap with other things but.
+            this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
+            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+
+            //maybe move this to the travel function. The jump below never gets used.
+            this.move( MoverType.SELF, this.deltaMovement );
+        }
+        return this.deltaMovement
+    }
+
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
-            super.travel(movementInput)
+            //this.deltaMovement = movementInput
+
+            //val riders = this.passengers.filterIsInstance<LivingEntity>()
+            //if ( !riders.isEmpty() ) {
+            //if ( false ) {
+                //val v = this.handleRelativeFrictionAndCalculateMovement(movementInput, 0.6f)
+                //this.moveRelative(this.speed, v);
+           //}
+            val riders = this.passengers.filterIsInstance<LivingEntity>()
+            if ( riders.isEmpty() ) {
+                super.travel(movementInput)
+            }
+
+            //super.travel(movementInput)
+
             this.updateBlocksTraveled(prevBlockPos)
         }
         if (isBattling && this.isInWater) {
@@ -1616,6 +1676,17 @@ open class PokemonEntity(
         return platform == PlatformType.NONE && super.canRide(entity)
     }
 
+    // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
+    // stat based on the boost of that pokemons stat
+    fun getRideStat( stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double ): Double {
+        //Currenlty zero boost since aprijuice isn't implemented yet
+        val stat = this.rideProp.calculate(stat, style, 0 )
+
+        val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
+
+        return statVal
+    }
+
     override fun canAddPassenger(passenger: Entity): Boolean {
         return passengers.size < seats.size
     }
@@ -1625,6 +1696,11 @@ open class PokemonEntity(
         jumping = value
     }
 
+ //   override fun moveRelative(amount: Float, relative: Vec3) {
+ //       val vec3 = this.getInputVector(relative, amount, this.yRot)
+ //       this.deltaMovement = deltaMovement.add(vec3)
+ //   }
+
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
         this.riding.tick(this, driver, movementInput)
@@ -1633,6 +1709,23 @@ open class PokemonEntity(
         this.yHeadRot = this.yRot
         this.yBodyRot = this.yRot
         this.yRotO = this.yRot
+
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+
+        //These are the only functions that matter and I have isolated them.
+        //I think using speed to scale the movement vector will not be working.
+
+        if ( !riders.isEmpty() ) {
+            val v = this.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
+            //changing this will give the ride more or less inertia/handling/drift?
+            //A bit of overlap with other things but.
+            this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
+            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
+
+            //maybe move this to the travel function. The jump below never gets used.
+            this.move( MoverType.SELF, this.deltaMovement );
+
+        }
 
         if (this.riding.canJump(this, driver)) {
             if (this.onGround()) {
@@ -1786,8 +1879,45 @@ open class PokemonEntity(
         // Set back to land pose type?
     }
 
+    /*
+    These two functions (fluids and ground) need to become riding configurable and
+    dependent. Also, the onGround() function seems to affect quite a few spots in
+    code and would likely need to be changed to be something more robust instead of
+    just overriding this method.
+     */
+
+    override fun isAffectedByFluids(): Boolean {
+        var fluidAffected = true
+
+        if( this.hasControllingPassenger() )
+        {
+            //Change this so it calls something from the controller to check
+            //if the specific controller wants to ignore fluid physics since
+            //not every single one will want to
+            fluidAffected =  false
+        }
+
+        return fluidAffected
+    }
+
+
+    //this seems a bit hacky to me seeing as how many spots in the base classes its used.
+    //However, there are odd interactions with the controllers when they are meant to be
+    //flying or swimming but they are touching the ground and this needs to be prevented.
+    //Having it be able to be turned off by the flying or swimming controllers is the
+    //temp solution I have found.
+    override fun onGround() : Boolean
+    {
+        if( riding.turnOffOnGround( this ) )
+        {
+            return false
+        }
+        return super.onGround()
+    }
+
+	//I think already mentioned but should maybe be riding controller configurable
     override fun dismountsUnderwater(): Boolean {
-        return true
+        return false
     }
 
     override fun getDefaultGravity(): Double {

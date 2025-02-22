@@ -26,6 +26,7 @@ enum class PoseType {
     FLY,
     FLOAT,
     SWIM,
+    GLIDE,
     /** A pose for rendering on the left shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
     SHOULDER_LEFT,
     /** A pose for rendering on the right shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
@@ -41,7 +42,7 @@ enum class PoseType {
 
     companion object {
         val ALL_POSES = EnumSet.allOf(PoseType::class.java)
-        val FLYING_POSES = EnumSet.of(FLY, HOVER)
+        val FLYING_POSES = EnumSet.of(FLY, HOVER, GLIDE)
         val SWIMMING_POSES = EnumSet.of(SWIM, FLOAT)
         val STANDING_POSES = EnumSet.of(STAND, WALK)
         val SHOULDER_POSES = EnumSet.of(SHOULDER_LEFT, SHOULDER_RIGHT)

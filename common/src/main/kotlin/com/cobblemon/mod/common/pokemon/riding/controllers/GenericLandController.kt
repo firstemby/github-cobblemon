@@ -74,7 +74,7 @@ class GenericLandController : RideController {
     }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        return getRuntime(entity).resolveFloat(speed)
+        return 0.0f
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -82,6 +82,8 @@ class GenericLandController : RideController {
     }
 
     override fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
+        val currSpeed = 1.0
+
         val runtime = getRuntime(entity)
         val driveFactor = runtime.resolveFloat(this.driveFactor)
         val strafeFactor = runtime.resolveFloat(this.strafeFactor)
@@ -90,8 +92,8 @@ class GenericLandController : RideController {
         if (g <= 0.0f) {
             g *= runtime.resolveFloat(this.reverseDriveFactor)
         }
-
-        val velocity = Vec3(f.toDouble(), 0.0, g.toDouble())
+        val gravity = -0.8
+        val velocity = Vec3(f.toDouble() * currSpeed, gravity, g.toDouble()*0.7 * currSpeed)
 
         return velocity
     }
@@ -104,6 +106,12 @@ class GenericLandController : RideController {
         val jumpVector = jumpVector.map { runtime.resolveFloat(it) }
         return Vec3(jumpVector[0].toDouble(), jumpVector[1].toDouble(), jumpVector[2].toDouble())
     }
+
+    override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
+        return 0.0
+    }
+
+    override fun inertia(entity: PokemonEntity ): Double = 0.3
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

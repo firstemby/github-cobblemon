@@ -11,6 +11,7 @@
     },
     {
       "aspects": ["whiscash_nero"],
+      "poser": "cobblemon:whiscash",
       "model": "cobblemon:whiscash_nero.geo",
       "texture": "cobblemon:textures/pokemon/0340_whiscash/whiscash_nero.png"
     },
