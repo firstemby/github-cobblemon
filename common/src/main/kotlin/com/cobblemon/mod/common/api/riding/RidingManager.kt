@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -148,9 +149,25 @@ data class RidingManager(val entity: PokemonEntity) {
     }
 
     //this is called just as often as
-    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+    fun rotationOnMouseXY
+                ( entity: PokemonEntity,
+                  driver: Player,
+                  yMouse: Double,
+                  xMouse: Double,
+                  yMouseSmoother: SmoothDouble,
+                  xMouseSmoother: SmoothDouble,
+                  sensitivity: Double,
+                  deltaTime: Double ): Vec3
+    {
         val controller = getController(entity) ?: return Vec3.ZERO
-        return controller.rotationOnMouseXY( entity, driver, yMouse, xMouse, deltaTime )
+        return controller.rotationOnMouseXY( entity,
+                                            driver,
+                                            yMouse,
+                                            xMouse,
+                                            yMouseSmoother,
+                                            xMouseSmoother,
+                                            sensitivity,
+                                            deltaTime )
     }
 
     /**

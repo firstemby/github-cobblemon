@@ -146,7 +146,13 @@ public class MouseHandlerMixin {
         var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6000000238418579 + 0.20000000298023224;
         var ridingSensitivity = Math.pow(defaultSensitivity, 3);
 
-        Vec3 angVecMouse = rollable.rotationOnMouseXY( cursorDeltaY * ridingSensitivity, cursorDeltaX * ridingSensitivity, movementTime );
+        Vec3 angVecMouse = rollable.rotationOnMouseXY
+                ( cursorDeltaY,
+                cursorDeltaX ,
+                yMouseSmoother,
+                xMouseSmoother,
+                ridingSensitivity,
+                movementTime );
 
         //make this configurable maybe?
 

@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -175,7 +176,16 @@ class HelicopterAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = true
 
-    override fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, partialTick: Double ): Vec3 {
+    override fun rotationOnMouseXY
+                (entity: PokemonEntity,
+                 driver: Player,
+                 yMouse: Double,
+                 xMouse: Double,
+                 yMouseSmoother: SmoothDouble,
+                 xMouseSmoother: SmoothDouble,
+                 sensitivity: Double,
+                 deltaTime: Double ): Vec3
+    {
         if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable

@@ -38,6 +38,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -301,7 +302,13 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
-    public Vec3 rotationOnMouseXY( double yMouse, double xMouse, double partialTick ) {
+    public Vec3 rotationOnMouseXY(double yMouse,
+                                  double xMouse,
+                                  SmoothDouble yMouseSmoother,
+                                  SmoothDouble xMouseSmoother,
+                                  double sensitivity,
+                                  double deltaTime )
+    {
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return Vec3.ZERO;
 
@@ -309,7 +316,17 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (playerVehicle == null) return Vec3.ZERO;
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
-        return pokemonEntity.getRiding().rotationOnMouseXY( pokemonEntity, player, yMouse, xMouse, partialTick );
+        //this is ridiculous. There likely needs to be some sort of mouseInfo class.
+        return pokemonEntity.getRiding().rotationOnMouseXY
+                (
+                pokemonEntity,
+                player,
+                yMouse,
+                xMouse,
+                yMouseSmoother,
+                xMouseSmoother,
+                sensitivity,
+                deltaTime );
     }
 
     @Override

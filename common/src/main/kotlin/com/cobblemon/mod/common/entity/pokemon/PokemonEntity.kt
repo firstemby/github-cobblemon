@@ -34,10 +34,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.api.riding.Rideable
-import com.cobblemon.mod.common.api.riding.RidingManager
-import com.cobblemon.mod.common.api.riding.RidingProperties
-import com.cobblemon.mod.common.api.riding.Seat
+import com.cobblemon.mod.common.api.riding.*
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinitions
@@ -83,6 +80,8 @@ import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MAXTOPSPEED
+import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MINTOPSPEED
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -1677,6 +1676,17 @@ open class PokemonEntity(
 
     override fun canRide(entity: Entity): Boolean {
         return platform == PlatformType.NONE && super.canRide(entity)
+    }
+
+    // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
+    // stat based on the boost of that pokemons stat
+    fun getRideStat( stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double ): Double {
+        //Currenlty zero boost since aprijuice isn't implemented yet
+        val stat = this.rideProp.calculate(stat, style, 0 )
+
+        val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
+
+        return statVal
     }
 
     override fun canAddPassenger(passenger: Entity): Boolean {

@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.pokemon.riding.controllers.HelicopterAirControll
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -140,7 +141,16 @@ class JetAirController : RideController {
         return Vec3( yawForce, 0.0, 0.0)
     }
 
-    override fun  rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+    override fun rotationOnMouseXY
+                (entity: PokemonEntity,
+                 driver: Player,
+                 yMouse: Double,
+                 xMouse: Double,
+                 yMouseSmoother: SmoothDouble,
+                 xMouseSmoother: SmoothDouble,
+                 sensitivity: Double,
+                 deltaTime: Double ): Vec3
+    {
         if(driver !is Rollable) return Vec3.ZERO
 
         //Cap at a rate of 5fps so frame skips dont lead to huge jumps
@@ -148,15 +158,15 @@ class JetAirController : RideController {
 
 
         // Accumulate the mouse input
-        currMouseXForce = (currMouseXForce + ( 0.8 * xMouse * cappedDeltaTime )).coerceIn(-1.0, 1.0)
-        currMouseYForce = (currMouseYForce + ( 0.8 * yMouse * cappedDeltaTime )).coerceIn(-1.0, 1.0)
+        currMouseXForce = (currMouseXForce + ( 0.0015 * xMouse )).coerceIn(-1.0, 1.0)
+        currMouseYForce = (currMouseYForce + ( 0.0015 * yMouse )).coerceIn(-1.0, 1.0)
 
         //Get handling in degrees per second
         val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
         var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
 
         //convert it to partial ticks
-        handling *= (cappedDeltaTime)
+        handling *= (deltaTime)
 
         val poke = driver.vehicle as? PokemonEntity
 
@@ -175,9 +185,9 @@ class JetAirController : RideController {
         val xInput = remapWithDeadzone(currMouseXForce, 0.025, 1.0)
         val yInput = remapWithDeadzone(currMouseYForce, 0.025, 1.0)
 
-        val pitchRot = handling * yInput
+        val pitchRot = handling * currMouseYForce
         //double roll
-        val rollRot =  handling * 1.5 * xInput
+        val rollRot =  handling * 1.5 * currMouseXForce
 
         //mult by 2 so you can roll twice as fast as you can pitch.
         //val rollRot = min( handling*2, max(-handling*2,  xMouse ) )
@@ -253,8 +263,8 @@ class JetAirController : RideController {
         // 32 bl/s and 8 bl/s
         // min is 4 bl/s
         val MAXTOPSPEED = 2.5 // 50 bl/s
-        val MINTOPSPEED = 0.5 // 10 bl/s
-        val MINSPEED = 0.3 // 6 bl/s
+        val MINTOPSPEED = 0.35 // 7 bl/s
+        val MINSPEED = 0.25 // 5 bl/s
 
         //Accel will lie between 1.0 second and 5.0 seconds
         val MAXACCEL = (MAXTOPSPEED - MINSPEED) / 20 //1.0 second to max speed
@@ -263,7 +273,7 @@ class JetAirController : RideController {
         //full 180 in 1 second.
         //30 degrees in 1 second.
         val MAXHANDLING = 140.0
-        val MINHANDLING = 30.0
+        val MINHANDLING = 20.0
 
 
         val MAXYAWHANDLING = 16.0

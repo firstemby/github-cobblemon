@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
@@ -109,9 +110,19 @@ interface RideController : Encodable, Decodable {
 
     //If function is not overwritten by controllers then just perform the defualt
     //rolling function which is roll on mousex and pitch on mousey
-    fun rotationOnMouseXY( entity: PokemonEntity, driver: Player, yMouse: Double, xMouse: Double, deltaTime: Double ): Vec3 {
+    fun rotationOnMouseXY
+                (entity: PokemonEntity,
+                 driver: Player,
+                 yMouse: Double,
+                 xMouse: Double,
+                 yMouseSmoother: SmoothDouble,
+                 xMouseSmoother: SmoothDouble,
+                 sensitivity: Double,
+                 deltaTime: Double ): Vec3
+    {
         if(driver !is Rollable) return Vec3.ZERO
 
+        //Might need to add the somothing here for default.
         val rollable = driver as Rollable
         return Vec3(0.0, yMouse, xMouse )
     }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common;
 
 import net.minecraft.util.Mth;
+import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -124,7 +125,12 @@ public interface Rollable {
      */
     Vec3 angRollVel( double deltaTime );
 
-    public Vec3 rotationOnMouseXY( double yMouse, double xMouse, double deltaTime );
+    public Vec3 rotationOnMouseXY(double yMouse,
+                                  double xMouse,
+                                  SmoothDouble yMouseSmoother,
+                                  SmoothDouble xMouseSmoother,
+                                  double sensitivity,
+                                  double deltaTime );
 
     boolean shouldRoll();
 
