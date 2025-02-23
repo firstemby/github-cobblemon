@@ -27,22 +27,13 @@ public abstract class LocalPlayerMixin {
         LocalPlayer player = (LocalPlayer) (Object) this;
         if (player.isPassenger() && player.getVehicle() instanceof PokemonEntity) {
             PokemonEntity ride = (PokemonEntity) player.getVehicle();
-            //ride.getRiding().canJump()
+
+            //Use custom jump bar logic if the current ride does not jump using it.
             if( !ride.getRiding().canJump(ride, player))
             {
+                //TODO: tie this into a ride controller method.
                 cir.setReturnValue(0.5f);
             }
         }
-
-
-        // Check if the player is riding your custom entity (for example, a Pokemon)
-        /*
-        if (player.isRiding() && player.getVehicle() instanceof PokemonEntity) {
-            PokemonEntity rideable = (PokemonEntity) player.getVehicle();
-            // Get your custom fuel ratio (a value from 0.0 to 1.0)
-            float fuelRatio = rideable.getRidingFuelRatio();
-            cir.setReturnValue(fuelRatio);
-        }
-        */
     }
 }

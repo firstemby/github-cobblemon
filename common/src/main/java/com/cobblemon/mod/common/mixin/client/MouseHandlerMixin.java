@@ -131,21 +131,11 @@ public class MouseHandlerMixin {
             return true;
         }
 
-        //maybe have a rollable x mouse and rollable y mouse that take the xmousesmoother
-        //and y mouse smoother ( which are right now named pichsmoother and roll smoother)
-        // values and feed it to those rollable functions which will be called by the
-        //specific ride controller where rollable.rotate can then be called and used
-        //controller specific.
-
-        //return a vec3 of the yaw pitch and roll that are wanted.
-        //multiply by sensitivity before passing it in
-
-        //var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.05f, d);
-        //var yMouse = yMouseSmoother.getNewDeltaValue(cursorDeltaY * 0.05f, d);
-
         var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6000000238418579 + 0.20000000298023224;
         var ridingSensitivity = Math.pow(defaultSensitivity, 3);
 
+        //Send mouse input to be interpreted into rotation
+        //deltas by the ride controller
         Vec3 angVecMouse = rollable.rotationOnMouseXY
                 ( cursorDeltaY,
                 cursorDeltaX ,
@@ -154,51 +144,30 @@ public class MouseHandlerMixin {
                 ridingSensitivity,
                 movementTime );
 
-        //make this configurable maybe?
-
-        //var mRoll = rollSmoother.getNewDeltaValue(angVecMouse.z * 0.15f, d);
-
+        //Perform Rotation using mouse influenced rotation deltas.
         rollable.rotate((float) angVecMouse.x,
                     (float) angVecMouse.y,
                     (float) angVecMouse.z);
 
-        //var yMouse = yMouseSmoother.getNewDeltaValue(angVecMouse.y * 0.15f, d);
-        //var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
 
-        //get the current angular velocity requested to be applied
-        //by the ride controller
+        //Gather and apply the current rotation deltas
         var angRot = rollable.angRollVel(movementTime);
 
+        //Apply smoothing if requested by the controller.
+        //This Might be best if done by the controller itself?
         if( rollable.useAngVelSmoothing() )
         {
-            //get the current angular velocity requested to be applied
-            //by the ride controller
-
-            //Multiply against deltatime to get a consistent turn
-            //independent of framerate
             if( angRot != null ) {
-                //var yaw = angRot.x * d;
-                //Add the yaw to the mouse here... this all needs changed. It should
-                //just map which 0 1 or 2 of the three it is going to modulate with
-                //what
-
                 var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
                 var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
                 var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
                 rollable.rotate((float) yaw, (float) pitch, (float) roll);
             }
-
         }
+        //Otherwise simply apply the smoothing
         else
         {
-            //Multiply against deltatime to get a consistent turn
-            //independent of framerate
             if( angRot != null ) {
-                //var yaw = angRot.x * d;
-                //Add the yaw to the mouse here... this all needs changed. It should
-                //just map which 0 1 or 2 of the three it is going to modulate with
-                //what
-
                 rollable.rotate((float) (angRot.x * 10 * d),
                         (float) (angRot.y * 10 * d),
                         (float) (angRot.z * 10 * d));

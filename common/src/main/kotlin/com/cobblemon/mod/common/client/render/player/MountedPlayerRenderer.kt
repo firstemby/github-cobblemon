@@ -45,8 +45,7 @@ object MountedPlayerRenderer {
             val locatorOffset = locator.matrix.getTranslation(Vector3f())
 
             val center = Vector3f(0f, entity.bbHeight/2, 0f)
-            var locatorOffsetToCenter = locatorOffset.sub(center, Vector3f())
-            //locatorOffsetToCenter.y -= 0.5f
+            val locatorOffsetToCenter = locatorOffset.sub(center, Vector3f())
 
             val transformationMatrix = Matrix4f()
             if (player is Rollable && player.shouldRoll()){
@@ -114,7 +113,6 @@ object MountedPlayerRenderer {
         state.runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing", DoubleValue(limbSwing.toDouble()))
         state.runtime.environment.setSimpleVariable("limb_swing_amount", DoubleValue(limbSwingAmount.toDouble()))
-        state.runtime.environment.setSimpleVariable("velocity", DoubleValue(pokemonEntity.deltaMovement.horizontalDistance()))
 
         // TODO add the q.player reference, requires a cached thing or something on the client idk
 

@@ -52,7 +52,7 @@
   },
   "riding": {
     "controller": {
-      "key": "cobblemon:land/generic",
+      "key": "cobblemon:swim/generic",
       "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.07, 0, 0.08)",
       "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
     },

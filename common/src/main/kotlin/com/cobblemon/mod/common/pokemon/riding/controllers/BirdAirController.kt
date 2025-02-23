@@ -39,14 +39,9 @@ class BirdAirController : RideController {
             player.zza == 0.0f && it.deltaMovement.length() > 0.3 })
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
-            player.zza > 0.0f // Checks if the player is actively controlling movement // Checks if the player is actively controlling movement
+            player.zza > 0.0f // Checks if the player is actively attempting to move forward
         })
 
-        //.with(PoseOption(PoseType.FLY) { entity ->
-        //    val player = entity.passengers.firstOrNull() as? Player ?: false
-        //    player.// This is the `zza` value })
-        //.with(PoseOption(PoseType.GLIDE) { it.deltaMovement.length() > 0.51 })
-        //.with(PoseOption(PoseType.FLY) { it.deltaMovement.length() > 0.1 && it.deltaMovement.length() <= 0.51 })
 
     override val condition: (PokemonEntity) -> Boolean = { true }
 
@@ -69,12 +64,7 @@ class BirdAirController : RideController {
     var lastPitch = 0.0f
         private set
 
-    //This function might just be good for syncing the ridecontroller speed
-    //with the entity speed?
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        //Set the speed since this will need to be done to transfer speed between rides?
-        //maxSpeed = entity.speed.toDouble()
-
 
         //retrieve stats
         val topSpeed = entity.getRideStat( RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED )
@@ -90,7 +80,7 @@ class BirdAirController : RideController {
         }
         else if ( driver.zza < 0.0 && currSpeed > 0.0)
         {
-            //Decelerate is now always a constant half of max acceleration.
+            //Decelerate is currently always a constant half of max acceleration.
             currSpeed = max( currSpeed - (MAXACCEL / 2) , 0.0)
         }
 
@@ -115,7 +105,7 @@ class BirdAirController : RideController {
             {
                 // only add to the speed if it hasn't exceeded the current
                 //glide angles maximum amount of speed that it can give.
-                currSpeed = min( currSpeed  + ((MAXACCEL * 2) * glideSpeedChange) , topSpeed * 2)
+                currSpeed = min( currSpeed  + ((MAXACCEL * 2) * glideSpeedChange) , maxGlideSpeed)
             }
         }
 
@@ -139,14 +129,10 @@ class BirdAirController : RideController {
         val rollable = driver as? Rollable
         if( rollable != null ) {
 
-
-            //yVel = sin(Math.toRadians(rollable.pitch.toDouble() - lastPitch ))*-10
-
-
-
             lastPitch = rollable.pitch
 
             //Need to deadzone this when straight up or down
+            // test with and without strafing added. May be wanted while moving
             leftForce = -1.0 * sin(Math.toRadians( rollable.roll.toDouble() ) )
 
             upForce = -1.0 * sin(Math.toRadians( rollable.pitch.toDouble() ))
@@ -179,7 +165,7 @@ class BirdAirController : RideController {
 
         val rollable = driver as? Rollable
 
-
+        //TODO: Tie in handling
         val handling = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINHANDLING, MAXHANDLING)
         val rotationChangeRate = 10.0
 
@@ -202,38 +188,6 @@ class BirdAirController : RideController {
             return Vec3( yawForce, pitchForce, 0.0)
         }
 
-        /*
-        val rotLimit = 15.0
-
-        var rollForce = -1.0 * driver.xxa * rotationChangeRate
-
-        //TODO: Fix accumulated movement causing pitch and roll out of set bounds
-        if( rollable != null ) {
-            //If the roll or pitch have exceeded the limit then do not modulate that
-            //rotation in that direction further
-
-            val rotLim = 30.0
-
-            rollForce *= 1.0.pow(-1.0 * (abs(rollable.roll.toDouble()) / rotLimit))
-
-
-            if( rollable.roll >= rotLimit && rollForce > 0.0)
-            {
-                rollForce = 0.0;
-            }
-            if( rollable.roll <= -rotLimit && rollForce < 0.0)
-            {
-                rollForce = 0.0;
-            }
-
-            //Ignore x,y,z its angular velocity:
-            //yaw, pitch, roll
-            return Vec3( 0.0, 0.0, rollForce)
-        }
-
-
-         */
-
         return Vec3(0.0, 0.0, 0.0)
     }
 
@@ -253,63 +207,32 @@ class BirdAirController : RideController {
 
         val handling = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINHANDLING, MAXHANDLING)
 
-        //var yMouse = yMouseSmoother.getNewDeltaValue(angVecMouse.y * 0.15f, d);
-        //var xMouse = xMouseSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
-
-        var xInput = xMouseSmoother.getNewDeltaValue(xMouse * 0.1, deltaTime * 4);
-        val YInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1, deltaTime * 4);
+        //Smooth out mouse input.
+        val smoothingSpeed = 4
+        var xInput = xMouseSmoother.getNewDeltaValue(xMouse * 0.1, deltaTime * smoothingSpeed);
+        val YInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1, deltaTime * smoothingSpeed);
 
         //limit rolling based on healing
+        //Currenlty 1.5 as the range needs more testing.
         val rotLimit = handling * 1.5
 
+        //Limit roll by non linearly decreasing inputs towards
+        // a rotation limit based on the current distance from
+        // that rotation limit
         if( abs( rollable.roll + xInput ) < rotLimit )
         {
             if( sign(xInput) == sign( rollable.roll ).toDouble() ) {
-                val s = sign(rollable.roll)
                 val d = abs(abs(rollable.roll) - rotLimit)
                 xInput *= (d.pow(2)) / (rotLimit.pow(2))
             }
         }
-
-        //if( abs(rollable.roll) > rotLimit  )
         else
         {
-            val s = sign(rollable.roll)
-            val d = abs(rollable.roll) - rotLimit
             if( sign(xInput) == sign( rollable.roll ).toDouble() ) {
                 xInput = 0.0
             }
         }
 
-        /*
-        if( xMouse > 0 )
-        {
-            if( rollable.roll > rotLimit  )
-            {
-                //val adjustedX =  0.5* xMouse * ( (rotLimit - rollable.roll) / ( rotLimit) )
-                return Vec3(0.0, YInput, 0.0 )
-
-            }
-            else
-            {
-                return Vec3(0.0, YInput, xInput * -0.1 )
-            }
-
-        }else{
-            if( rollable.roll < -1.0 * rotLimit  )
-            {
-                //val adjustedX = 0.5* xMouse * ( (rotLimit + rollable.roll) / ( rotLimit) )
-                return Vec3(0.0, YInput, 0.0 )
-
-            }
-            else
-            {
-                return Vec3(0.0, YInput, xInput * -0.1 )
-            }
-
-        }
-         */
-        //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
         return Vec3(0.0, YInput,   xInput )
     }
@@ -329,7 +252,6 @@ class BirdAirController : RideController {
         return Vec3.ZERO
     }
 
-    //Going to use my own gravity calculations for now.
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
         return 0.0
     }
@@ -364,9 +286,9 @@ class BirdAirController : RideController {
     companion object {
         val KEY = cobblemonResource("air/bird")
 
+        //TODO: ensure there is consensus on these values
         val MAXTOPSPEED = 1.0 // 20 bl/s
         val MINTOPSPEED = 0.35 // 7 bl/s
-        //val MINSPEED = 0.25 // 5 bl/s
 
         //Accel will lie between 1.0 second and 5.0 seconds
         val MAXACCEL = (MAXTOPSPEED ) / (20*3) //3.0 second to max speed

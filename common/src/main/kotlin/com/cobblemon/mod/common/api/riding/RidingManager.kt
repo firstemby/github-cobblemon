@@ -116,7 +116,7 @@ data class RidingManager(val entity: PokemonEntity) {
     }
 
     /**
-     * Used to supply the dela for the lerp() between velocity
+     * Used to supply the delta for the lerp() between velocity
      * vectors. Called inertia for now as the way it feels when
      * affecting the ride is somewhat akin to inertia.
      */
@@ -125,7 +125,6 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.inertia(entity)
     }
 
-    //Can be accomplished through the velocity controls
     fun gravity(entity: PokemonEntity, regularGravity: Double): Double? {
         val controller = getController(entity) ?: return null
         return controller.gravity(entity, regularGravity)

@@ -18,9 +18,7 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.riding.controllers.HelicopterAirController.Companion.ROTATION_LIMIT
 import com.cobblemon.mod.common.util.*
-import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -51,9 +49,6 @@ class JetAirController : RideController {
     var maxSpeed = 0.4
         private set
 
-    var lastPitch = 0.0f
-        private set
-
     var currSpeed = MINSPEED
         private set
 
@@ -64,18 +59,11 @@ class JetAirController : RideController {
         private set
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        //0 boost so just the base value.
-        //This should be a function in pokemonEntity.kt so it can easily be called.
-        val speedStat = entity.rideProp.calculate(RidingStat.SPEED, RidingStyle.AIR, 0 )
-        //now calculate the true top  speed value using the speed stat
-        val topSpeed = (((MAXTOPSPEED - MINTOPSPEED) / 100) * speedStat) + MINTOPSPEED
 
-        val accelStat = entity.rideProp.calculate(RidingStat.ACCELERATION, RidingStyle.AIR, 0 )
-        val accel = (((MAXACCEL - MINACCEL) / 100) * accelStat) + MINACCEL
+        //Gather needed stats
+        val topSpeed = entity.getRideStat( RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED )
+        val accel = entity.getRideStat( RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL )
 
-        val drivingForce = if ( Minecraft.getInstance().options.keySprint.isDown() ) 1.0
-        else if (driver.isShiftKeyDown) -1.0
-        else(0.0)
 
         //speed up and slow down based on input
         if( driver.zza > 0.0 && currSpeed < topSpeed)
@@ -84,10 +72,11 @@ class JetAirController : RideController {
         }
         else if ( driver.zza < 0.0 && currSpeed > MINSPEED)
         {
-            //Decelerate is now always a constant half of max acceleration.
+            //Decelerate currently always a constant half of max acceleration.
             currSpeed = max( currSpeed - (MAXACCEL / 2) , MINSPEED)
         }
 
+        //Returning is redundant as the logic is not connected currently
         return currSpeed.toFloat()
     }
 
@@ -97,28 +86,18 @@ class JetAirController : RideController {
 
     override fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
 
-        var yVel = 0.0
-        var leftForce = 0.0
         var upForce = 0.0
         var forwardForce = 0.0
         val rollable = driver as? Rollable
+
         if( rollable != null ) {
 
-
-            yVel = sin(Math.toRadians(rollable.pitch.toDouble() - lastPitch ))*-10
-
-            lastPitch = rollable.pitch
-
-            leftForce = -1.0  * sin(Math.toRadians( rollable.roll.toDouble() ) )
-
             upForce =  -1.0 * sin(Math.toRadians( rollable.pitch.toDouble() ))
-            //limit how fast you can descend?
-            upForce *= 1.0
+
             forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
+
         }
         val velocity = Vec3(0.0 , (upForce)* currSpeed, forwardForce * currSpeed)
-
-        //entity.setDeltaMovement(velocity)
 
         return velocity
     }
@@ -128,14 +107,13 @@ class JetAirController : RideController {
     override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         //Get handling in degrees per second
-        val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
-        //var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
-        var handlingYaw = (((MAXYAWHANDLING - MINYAWHANDLING) / 100) * handlingStat) + MINYAWHANDLING
+        val yawRotRate = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINYAWHANDLING, MAXYAWHANDLING)
 
-        //convert it to partial ticks
-        handlingYaw *= (deltaTime)
+        //Base the change off of deltatime.
+        val handlingYaw = yawRotRate * (deltaTime)
 
         //A+D to yaw
+        //TODO: Currently doubled, check if this makes the most sense to have it this high.
         val yawForce = -2.0 * driver.xxa * handlingYaw
 
         return Vec3( yawForce, 0.0, 0.0)
@@ -152,6 +130,8 @@ class JetAirController : RideController {
                  deltaTime: Double ): Vec3
     {
         if(driver !is Rollable) return Vec3.ZERO
+
+        //TODO: figure out a cleaner solution to this issue
 
         //Cap at a rate of 5fps so frame skips dont lead to huge jumps
         val cappedDeltaTime = min( deltaTime, 0.2)
@@ -170,29 +150,14 @@ class JetAirController : RideController {
 
         val poke = driver.vehicle as? PokemonEntity
 
-
-
-        //val pitchRot = min( handling, max(-handling,  yMouse ) )
-
-        //increase on an amount.
-
-        //if its below 0.2 it should be zero force.
-        // And then between 0.2-1.0 it should map to a value between 0.0 and 1.0
-        //val yInput = if(currMouseYForce < 0.2)  0.0 else ( ( currMouseYForce - 0.2 ) / 0.8)
-        //val xInput = if(currMouseXForce < 0.2)  0.0 else ( ( currMouseXForce - 0.2 ) / 0.8)
-
+        //TODO: reevaluate if deadzones are needed and if they are still causing issues.
         //create deadzones for the constant input values.
         val xInput = remapWithDeadzone(currMouseXForce, 0.025, 1.0)
         val yInput = remapWithDeadzone(currMouseYForce, 0.025, 1.0)
 
         val pitchRot = handling * currMouseYForce
-        //double roll
         val rollRot =  handling * 1.5 * currMouseXForce
 
-        //mult by 2 so you can roll twice as fast as you can pitch.
-        //val rollRot = min( handling*2, max(-handling*2,  xMouse ) )
-
-        //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
         return Vec3(0.0, pitchRot,  rollRot)
     }
@@ -216,7 +181,6 @@ class JetAirController : RideController {
         return Vec3.ZERO
     }
 
-    //Going to use my own gravity calculations for now.
     override fun gravity(entity: PokemonEntity, regularGravity: Double): Double {
 
         var grav = 0.0
@@ -226,9 +190,7 @@ class JetAirController : RideController {
         return grav
     }
 
-
     override fun shouldRoll(entity: PokemonEntity) = true
-
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
@@ -257,35 +219,34 @@ class JetAirController : RideController {
 
     companion object {
         val KEY = cobblemonResource("air/jet")
-        //I need a top and a bottom for the speed stat
-        // I need a minimum speed stat for this ride specifically so that it caps
-        // at this or slows below it and falls
-        // 32 bl/s and 8 bl/s
-        // min is 4 bl/s
+
+        //TODO: ensure there is consensus on these values
+
         val MAXTOPSPEED = 2.5 // 50 bl/s
         val MINTOPSPEED = 0.35 // 7 bl/s
         val MINSPEED = 0.25 // 5 bl/s
 
-        //Accel will lie between 1.0 second and 5.0 seconds
+        //Accel currently lies between 1.0 second and 5.0 seconds
         val MAXACCEL = (MAXTOPSPEED - MINSPEED) / 20 //1.0 second to max speed
         val MINACCEL = (MAXTOPSPEED - MINSPEED) / (20*5) // 5 seconds to max speed
 
-        //full 180 in 1 second.
-        //30 degrees in 1 second.
+        //Degrees of rotation per second
         val MAXHANDLING = 140.0
         val MINHANDLING = 20.0
 
-
+        //Degrees of rotation per second of yaw
         val MAXYAWHANDLING = 16.0
         val MINYAWHANDLING = 8.0
+
+        //TODO: add feul/stamina
 
         //Fuel measured by seconds at full throttle.
         //minimum speed will consume a quarter of the fuel.
         //val MAXSTAMINA =
     }
 
-    //helper functions
 
+    //This likely needs moved to somewhere that all ride contollers can share it. Maybe a ride utilities file?
     //Creates a deadzone around zero that extends out to deadzoneLow in both +- and then remaps
     //the value linearly between -1.0 and 1.0 outside of the deadzone
     fun remapWithDeadzone(value: Double, deadzoneLow: Double = 0.2, deadzoneHigh: Double = 1.0): Double {

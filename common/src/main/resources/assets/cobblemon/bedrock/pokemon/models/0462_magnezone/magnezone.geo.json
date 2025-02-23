@@ -31,8 +31,7 @@
 					"locators": {
 						"sparks1": [11.5, 14.5, -4.5],
 						"sparks2": [-8, 15.5, 8],
-						"sparks3": [-1.5, 5.5, -11.5],
-						"seat_1": [0, 18, 4]
+						"sparks3": [-1.5, 5.5, -11.5]
 					}
 				},
 				{
@@ -187,7 +186,8 @@
 				{
 					"name": "magnet_back",
 					"parent": "body",
-					"pivot": [0, 8, 12]
+					"pivot": [0, 8, 12],
+					"rotation": [0, 0, 0]
 				},
 				{
 					"name": "magnet_back_rotation",

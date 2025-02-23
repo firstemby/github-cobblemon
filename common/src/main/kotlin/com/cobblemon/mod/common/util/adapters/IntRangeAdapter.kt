@@ -37,8 +37,6 @@ object IntRangeAdapter : JsonSerializer<IntRange>, JsonDeserializer<IntRange> {
     }
 
     override fun deserialize(json: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
-        val value = json.asString
-        println("Deserializing IntRange from: $value")
         val (start, end) = PATTERN.find(json.asString)!!.destructured
         return if (end.isEmpty()) {
             IntRange(start.toInt(), start.toInt())

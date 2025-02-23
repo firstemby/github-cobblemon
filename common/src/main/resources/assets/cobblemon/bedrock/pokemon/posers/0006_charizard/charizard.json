@@ -92,15 +92,6 @@
         "q.bedrock_quirk('charizard', 'air_fly_quirk')"
       ]
     },
-    "glide": {
-      "poseTypes": ["GLIDE"],
-      "isBattle": false,
-      "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'air_glide_TEST')"],
-      "quirks": [
-        "q.bedrock_quirk('charizard', 'blink')",
-        "q.bedrock_quirk('charizard', 'air_fly_quirk')"
-      ]
-    },
     "surface_idle": {
       "poseTypes": ["STAND", "FLOAT"],
       "isTouchingWater": true,

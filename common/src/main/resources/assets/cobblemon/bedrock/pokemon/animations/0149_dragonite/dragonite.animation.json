@@ -1152,13 +1152,13 @@
 					"rotation": [-7.32417, 1.61888, "12.3963+math.sin(q.anim_time*90*1-120)*6"]
 				},
 				"tail1": {
-					"rotation": [-52.5, "-math.sin(q.anim_time*90*2-40)*4", 0]
+					"rotation": [-47.5, "0-math.sin(q.anim_time*90*2-40)*4", 0]
 				},
 				"tail2": {
-					"rotation": ["math.sin(q.anim_time*90*2-200)*2", "-math.sin(q.anim_time*90*2-80)*4", 0]
+					"rotation": ["5+math.sin(q.anim_time*90*2-200)*2", "0-math.sin(q.anim_time*90*2-80)*4", 0]
 				},
 				"tail3": {
-					"rotation": ["7.5+math.sin(q.anim_time*90*2-240)*2", "-math.sin(q.anim_time*90*2-120)*4", 0]
+					"rotation": ["10+math.sin(q.anim_time*90*2-240)*2", "-math.sin(q.anim_time*90*2-120)*4", 0]
 				},
 				"tail4": {
 					"rotation": ["-2.5+math.sin(q.anim_time*90*2-280)*2", "0-math.sin(q.anim_time*90*2-160)*8", 0]
@@ -1207,16 +1207,16 @@
 					"rotation": [-7.32417, -1.61888, "-12.3963-math.sin(q.anim_time*90*1-120)*6"]
 				},
 				"wing_left2": {
-					"rotation": [0, "27.5+math.sin(q.anim_time*90*2-60)*10", 0]
+					"rotation": [0, "27.5+math.sin(q.anim_time*90*2-60)*40", 0]
 				},
 				"wing_right2": {
-					"rotation": [0, "-27.5+math.sin(q.anim_time*90*2-60)*-10", 0]
+					"rotation": [0, "-27.5-math.sin(q.anim_time*90*2-60)*40", 0]
 				},
 				"wing_left": {
-					"rotation": ["0.1201+math.cos(q.anim_time*90*2+60)*5", "-19.9232+math.sin(q.anim_time*90*2+60)*10", 4.11867]
+					"rotation": ["0.1201+math.cos(q.anim_time*90*2+60)*20", "-19.9232+math.sin(q.anim_time*90*2+60)*40", 4.11867]
 				},
 				"wing_right": {
-					"rotation": ["0.1201+math.cos(q.anim_time*90*2+60)*5", "19.9232+math.sin(q.anim_time*90*2+60)*-10", -4.11867]
+					"rotation": ["0.1201+math.cos(q.anim_time*90*2+60)*20", "19.9232-math.sin(q.anim_time*90*2+60)*40", -4.11867]
 				},
 				"neck": {
 					"rotation": ["-5+math.sin(q.anim_time*90*2-160)*3", 0, 0]
@@ -1234,7 +1234,7 @@
 					"rotation": [0, 0, "math.sin(q.anim_time*90*1-360)*9"]
 				},
 				"body": {
-					"rotation": ["15-math.sin(q.anim_time*90*2-120)*4", 0, 0],
+					"rotation": ["-math.sin(q.anim_time*90*2-120)*4", 0, 0],
 					"position": [0, "7.8+math.sin(q.anim_time*90*2)*2", -5.6]
 				}
 			}

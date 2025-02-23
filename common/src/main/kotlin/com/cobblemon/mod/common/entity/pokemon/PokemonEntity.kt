@@ -8,8 +8,12 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
-import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -80,8 +84,6 @@ import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MAXTOPSPEED
-import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MINTOPSPEED
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -143,7 +145,6 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
-import java.util.*
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -1409,6 +1410,8 @@ open class PokemonEntity(
         )
     }
 
+    //TODO: reintroduce the minecraft physics back to the pokemon ride movement.
+
     //override fun moveRelative(amount: Float, relative: Vec3 ) {
         //super.moveRelative(amount, relative)
         //val v = this.getInputVector(relative, 1.0f, this.getYRot());
@@ -1420,38 +1423,30 @@ open class PokemonEntity(
         if ( riders.isEmpty() ) {
             super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
         }
-        //ignore this for now
-        else if( false )
+        /*
+        else
         {
             val v = this.getInputVector(deltaMovement, 1.0f, this.getYRot());
             //changing this will give the ride more or less inertia/handling/drift?
             //A bit of overlap with other things but.
             this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
-            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
 
             //maybe move this to the travel function. The jump below never gets used.
             this.move( MoverType.SELF, this.deltaMovement );
         }
+         */
         return this.deltaMovement
     }
 
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
-            //this.deltaMovement = movementInput
 
-            //val riders = this.passengers.filterIsInstance<LivingEntity>()
-            //if ( !riders.isEmpty() ) {
-            //if ( false ) {
-                //val v = this.handleRelativeFrictionAndCalculateMovement(movementInput, 0.6f)
-                //this.moveRelative(this.speed, v);
-           //}
+            //Prevent current travel logic when riding a pokemon.
             val riders = this.passengers.filterIsInstance<LivingEntity>()
             if ( riders.isEmpty() ) {
                 super.travel(movementInput)
             }
-
-            //super.travel(movementInput)
 
             this.updateBlocksTraveled(prevBlockPos)
         }
@@ -1678,7 +1673,7 @@ open class PokemonEntity(
 
     // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
     // stat based on the boost of that pokemons stat
-    fun getRideStat( stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double ): Double {
+    fun getRideStat(stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double ): Double {
         //Currenlty zero boost since aprijuice isn't implemented yet
         val stat = this.rideProp.calculate(stat, style, 0 )
 
@@ -1696,10 +1691,6 @@ open class PokemonEntity(
         jumping = value
     }
 
- //   override fun moveRelative(amount: Float, relative: Vec3) {
- //       val vec3 = this.getInputVector(relative, amount, this.yRot)
- //       this.deltaMovement = deltaMovement.add(vec3)
- //   }
 
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
@@ -1712,17 +1703,16 @@ open class PokemonEntity(
 
         val riders = this.passengers.filterIsInstance<LivingEntity>()
 
-        //These are the only functions that matter and I have isolated them.
-        //I think using speed to scale the movement vector will not be working.
-
+        //These are the only functions that matter and I have isolated them to
+        //avoid minecrafts changes they do to velocity so that the ride controllers
+        //can be tested without that interference.
         if ( !riders.isEmpty() ) {
             val v = this.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
             //changing this will give the ride more or less inertia/handling/drift?
             //A bit of overlap with other things but.
             this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
-            //this.setDeltaMovement(this.deltaMovement.scale(this.speed.toDouble()));
 
-            //maybe move this to the travel function. The jump below never gets used.
+            //maybe move this to the travel function. The jump below never gets properly used
             this.move( MoverType.SELF, this.deltaMovement );
 
         }

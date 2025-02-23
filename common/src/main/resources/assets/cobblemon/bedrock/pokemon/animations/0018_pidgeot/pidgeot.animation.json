@@ -105,7 +105,7 @@
 		},
 		"animation.pidgeot.air_idle": {
 			"loop": true,
-			"animation_length": 1.3333,
+			"animation_length": 1.33333,
 			"bones": {
 				"body": {
 					"rotation": ["-10+math.sin(q.anim_time*90*3-60)*-1", 0, 0],
@@ -116,8 +116,7 @@
 				},
 				"wing_closed_left": {
 					"rotation": [-93.47882, -7.48957, -87.29442],
-					"position": [-3.8, -1, 6],
-					"scale": 0.1
+					"position": [0, -1, 6]
 				},
 				"wing_closed_left2": {
 					"rotation": [5.08957, -4.43385, -2.31336]
@@ -382,8 +381,7 @@
 				},
 				"wing_closed_right": {
 					"rotation": [-93.47882, 7.48957, 87.29442],
-					"position": [3.8, -1, 6],
-					"scale": 0.1
+					"position": [0, -1, 6]
 				},
 				"wing_closed_right2": {
 					"rotation": [5.08957, 4.43385, 2.31336]
@@ -550,9 +548,8 @@
 					"rotation": ["-17.5+math.sin(q.anim_time*90*0.8-90)*-1", 0, "0+math.sin(q.anim_time*90*0.5-120)*1"]
 				},
 				"wing_closed_left": {
-					"rotation": [-93.47882, -7.48957, -87.29442],
-					"position": [-3.8, -1, 6],
-					"scale": 0.1
+					"rotation": [-92.46677, -7.8791, -94.85228],
+					"position": [0, -1, 6]
 				},
 				"wing_closed_left2": {
 					"rotation": [5.08145, 3.03671, -1.64897]
@@ -690,9 +687,8 @@
 					"rotation": [0, 0, "-7.5+math.sin(q.anim_time*90*0.8-240)*10+math.sin(q.anim_time*90*12-120)*-0.4"]
 				},
 				"wing_closed_right": {
-					"rotation": [-93.47882, 7.48957, 87.29442],
-					"position": [3.8, -1, 6],
-					"scale": 0.1
+					"rotation": [-92.46677, 7.8791, 94.85228],
+					"position": [0, -1, 6]
 				},
 				"wing_closed_right2": {
 					"rotation": [5.08145, -3.03671, 1.64897]

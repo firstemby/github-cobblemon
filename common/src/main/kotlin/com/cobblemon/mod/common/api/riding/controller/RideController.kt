@@ -122,7 +122,7 @@ interface RideController : Encodable, Decodable {
     {
         if(driver !is Rollable) return Vec3.ZERO
 
-        //Might need to add the somothing here for default.
+        //Might need to add the smoothing here for default.
         val rollable = driver as Rollable
         return Vec3(0.0, yMouse, xMouse )
     }

@@ -315,7 +315,6 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (playerVehicle == null) return Vec3.ZERO;
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
-        //this is ridiculous. There likely needs to be some sort of mouseInfo class.
         return pokemonEntity.getRiding().rotationOnMouseXY
                 (
                 pokemonEntity,

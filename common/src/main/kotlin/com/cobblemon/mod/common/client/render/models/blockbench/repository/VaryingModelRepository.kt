@@ -533,6 +533,7 @@ object VaryingModelRepository {
         inbuilt("spewpa", ::SpewpaModel)
         inbuilt("vivillon", ::VivillonModel)
         inbuilt("barboach", ::BarboachModel)
+        inbuilt("whiscash", ::WhiscashModel)
         inbuilt("combee", ::CombeeModel)
         inbuilt("vespiquen", ::VespiquenModel)
         inbuilt("lillipup", ::LillipupModel)
