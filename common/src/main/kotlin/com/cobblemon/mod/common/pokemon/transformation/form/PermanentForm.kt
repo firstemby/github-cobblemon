@@ -1,7 +1,5 @@
 package com.cobblemon.mod.common.pokemon.transformation.form
 
-import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.pokemon.FormData
@@ -11,8 +9,7 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * A form of a [Species] that is noninterchangeable with the [StandardForm]. These forms behave like a different species,
- * and can have a unique set of interchangeable [TemporaryForm]s, but share the same dex number. They are a variation
- * determined by [Evolution] or [SpeciesFeature].
+ * and can have a unique set of interchangeable [TemporaryForm]s, but share the same dex number.
  *
  * For example:
  * https://bulbapedia.bulbagarden.net/wiki/Regional_form
@@ -22,34 +19,30 @@ import com.google.gson.annotations.SerializedName
  * @since October 21st, 2023
  */
 open class PermanentForm (
-    @SerializedName("evolutions")
-    private val _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("preEvolution")
     private val _preEvolution: PreEvolution? = null,
-    @SerializedName("temporaryForms")
-    private val _temporaryForms: MutableList<TemporaryForm>? = null,
+    @SerializedName("evolutions")
+    private val _evolutions: MutableSet<Evolution>? = null,
+    @SerializedName("forms")
+    private val _temporaryForms: MutableList<TemporaryForm>? = null,  // nested forms can only be temporary
 ) : FormData() {
 
-    /**
-     * Contains the evolutions of this form.
-     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
-     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
-     */
-    val evolutions: MutableSet<Evolution>
-        get() = _evolutions ?: mutableSetOf()
-
-    val preEvolution: PreEvolution?
+    override val preEvolution: PreEvolution?
         get() = _preEvolution ?: species.preEvolution
 
-    // needed for gson
-    val temporaryForms: MutableList<TemporaryForm>
+    override val evolutions: MutableSet<Evolution>
+        get() = _evolutions ?: mutableSetOf()
+
+    /** The forms this species is a parent of. */
+    open val forms: Collection<FormData>
         get() = _temporaryForms ?: mutableListOf()
 
-    /** The potential [TemporaryForm]s this form can transition to. */
-    open val forms: List<FormData> get() = temporaryForms
+    // for pure PermanentForms (not standard), this is equivalent to the forms property
+    override val changeableForms: Collection<TemporaryForm>
+        get() = this.forms.filterIsInstance<TemporaryForm>()
 
     /** The [TemporaryForm]s and [Evolution]s this form can transform to. */
-    open val transformations: List<Transformation> get() = temporaryForms + evolutions
+    val transformations: List<Transformation> get() = forms.filterIsInstance<TemporaryForm>() + evolutions
 
     override fun initialize(species: Species, parent: PermanentForm?): FormData {
         super.initialize(species, parent)

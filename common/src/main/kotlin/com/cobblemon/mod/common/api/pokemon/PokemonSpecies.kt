@@ -68,6 +68,7 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.phys.AABB
+import java.text.Normalizer.Form
 
 object PokemonSpecies : JsonDataRegistry<Species> {
 
@@ -105,6 +106,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(TransformationTrigger::class.java, CobblemonTriggerAdapter)
         .registerTypeAdapter(TransformationRequirement::class.java, CobblemonRequirementAdapter)
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+        .registerTypeAdapter(FormData::class.java, FormAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
@@ -300,12 +302,13 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     internal class ShowdownTemporaryForm(form: TemporaryForm) : ShowdownSpecies(form) {
         // form change can occur during a battle
-        val battleOnly = if (form.battleOnly) form.showdownParentForm() else null
+        //val battleOnly = if (form.battleOnly) form.parentForm else null
         // form change can occur outside of battle (mutually exclusive with above)
-        val changesFrom = if (!form.battleOnly) form.showdownParentForm() else null
+        //val changesFrom = if (!form.battleOnly) form.parentForm else null
     }
 
     /** Accommodate for Showdown bullshit. */
+    /*
     private fun TemporaryForm.showdownParentForm(): Any {
         if (this.parentOverrides.isNotEmpty())
             return this.species.standardForm.flattenForms().filter {
@@ -316,6 +319,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         else
             return parentForm.showdownName()
     }
+
+     */
 
     /**
      * Constructs a mapping of the [PotentialAbility]s belonging to a [FormData] in Showdown identifiable format.

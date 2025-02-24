@@ -124,26 +124,38 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var weight = 1F
         private set
 
-    // TODO change form serialization/deserialization so that forms are under the same field
-
-    var permanentForms = mutableListOf<PermanentForm>()
-        private set
-
-    var temporaryForms = mutableListOf<TemporaryForm>()
-        private set
-
+    /**
+     * The [FormData] representation of this species.
+     *
+     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
+     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
+     */
     val standardForm by lazy {
         StandardForm(
-            _evolutions = this.evolutions,
-            _permanentForms = this.permanentForms,
-            _temporaryForms = this.temporaryForms
+            preEvolution = this.preEvolution,
+            evolutions = this.evolutions,
+            forms = this.forms
         ).initialize(this) as StandardForm
     }
 
-    /** Collection of all the potential forms this species can take, including its base [StandardForm]. */
-    val forms: Collection<FormData> get() = permanentForms + temporaryForms + standardForm
+    /** Aggregates child forms, their nested forms, and the base standard form. This is all possible forms of the species. */
+    val allForms: Collection<FormData>
+        get() = this.standardForm.flattenForms() + this.standardForm
 
-    val transformations: Collection<Transformation> get() = evolutions + temporaryForms
+    /** The [PermanentForm]s that belong to the [standardForm]. */
+    val permanentForms: Collection<PermanentForm> get() = this.forms.filterIsInstance<PermanentForm>()
+
+    /** The [TemporaryForm]s that belong to the [standardForm]. */
+    val temporaryForms: Collection<TemporaryForm> get() = this.forms.filterIsInstance<TemporaryForm>()
+
+    /**
+     * The child forms belonging to this species' base [standardForm].
+     *
+     * This does not include the standard form itself nor any nested forms belonging to [permanentForms] of the standard form.
+     * For an exhaustive list of all possible forms, use [allForms].
+     */
+    var forms: MutableList<FormData> = mutableListOf()
+        private set
 
     var labels = hashSetOf<String>()
         private set
@@ -255,8 +267,6 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.moves.encode(buffer)
         buffer.writeCollection(this.pokedex) { pb, line -> pb.writeString(line) }
         buffer.writeIdentifier(this.battleTheme)
-        buffer.writeCollection(this.permanentForms) { _, form -> form.encode(buffer) }
-        buffer.writeCollection(this.temporaryForms) { _, form -> form.encode(buffer) }
         buffer.writeCollection(this.features) { pb, feature -> pb.writeString(feature) }
         buffer.writeNullable(this.lightingData) { pb, data ->
             pb.writeInt(data.lightLevel)
@@ -290,10 +300,6 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.pokedex.clear()
         this.pokedex += buffer.readList { pb -> pb.readString() }
         this.battleTheme = buffer.readIdentifier()
-        this.permanentForms.clear()
-        this.permanentForms += buffer.readList{ PermanentForm().apply { decode(buffer) } }.filterNotNull()
-        this.temporaryForms.clear()
-        this.temporaryForms += buffer.readList{ TemporaryForm().apply { decode(buffer) } }.filterNotNull()
         this.features.clear()
         this.features += buffer.readList { pb -> pb.readString() }
         this.lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }

@@ -69,6 +69,7 @@ class DamageTakenTransformationProgress : TransformationProgress<DamageTakenTran
                 }
             }
         }
+        // TODO improve (see triggerTransformations)
 
     }
 

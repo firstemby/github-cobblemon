@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
@@ -25,6 +26,7 @@ import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType
@@ -34,7 +36,9 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.aspects.FORM_ASPECTS
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -183,15 +187,41 @@ abstract class FormData(
         get() = _labels ?: species.labels
 
     /**
+     * The evolution preceding this form.
+     *
+     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
+     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
+     */
+    abstract val preEvolution: PreEvolution?
+
+    /**
+     * The evolutions of this form.
+     *
+     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
+     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
+     */
+    abstract val evolutions: MutableSet<Evolution>
+
+    /** The [TemporaryForm]s that are interchangeable with this form. */
+    abstract val changeableForms: Collection<TemporaryForm>
+
+    /**
      * The [PermanentForm] that precedes this form. Null if a parent form does not exist.
      *
      * For example the parent of Toxtricity's 'Gmax' form can be either its  'Low-Key' or 'Standard' form.
      * The parent of Toxtricity's 'Low-Key' form is its 'Standard' form.
      * And the parent of Toxtricity's 'Standard' form is null (does not exist).
+     *
+     * This is initialized during species registration, and is not safe to access until [PokemonSpecies.observable] is emitted.
      */
     @delegate:Transient
     open val parentForm: PermanentForm? by lazy { parentFormInitializer }
 
+    /**
+     * The base [Species] of this form.
+     *
+     * This is initialized during species registration, and is not safe to access until [PokemonSpecies.observable] is emitted.
+     */
     @delegate:Transient
     val species: Species by lazy { speciesInitializer }
 
@@ -236,7 +266,9 @@ abstract class FormData(
         else -> this.standingEyeHeight
     }
 
+    // WHY THE FUCK IS THIS NOT WORKING FOR ASH AND BOND??????:??
     open fun initialize(species: Species, parent: PermanentForm? = null): FormData {
+        Cobblemon.LOGGER.error("FormData initialize " + this.name)
         this.speciesInitializer = species
         this.species
         this.parentFormInitializer = parent
@@ -285,7 +317,6 @@ abstract class FormData(
                 pb.writeString(ability.template.name)
             }
         }
-        // Transformation properties of TemporaryForms are only relevant to the server and are not synced with the client
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {

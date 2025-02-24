@@ -1,12 +1,14 @@
 package com.cobblemon.mod.common.pokemon.transformation.form
 
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 
 /**
@@ -27,11 +29,6 @@ open class TemporaryForm (
     val battleOnly: Boolean = false,
     /** Whether this form can be freely toggled after requirements are initially met. */
     val toggleable: Boolean = false,
-    /**
-     * When populated by form name(s) in [showdownId] format, overrides the [parentForm] that this form may transform from
-     * (e.g. Necrozma's 'Ultra' from is special can transform from its 'Dawn-Wings' or 'Dusk-Mane forms').
-     */
-    val parentOverrides: List<String> = emptyList(),
     /** The [TransformationTrigger] to attempt this transformation OUTSIDE of battle. */
     override val trigger: TransformationTrigger = ItemInteractionTrigger(),
     /** The [TransformationRequirement]s that need to be satisfied for this transformation OUTSIDE of battle. */
@@ -40,8 +37,21 @@ open class TemporaryForm (
 
     override val id: String = this.formOnlyShowdownId()
 
+    /* Temporary forms DO NOT have their own preevo/evolutions/forms and have to fallback on the parent. Because parentForm
+        is not initialized until AFTER species registration, none of these  properties are safe to access until [PokemonSpecies.observable] */
+
+    override val preEvolution: PreEvolution? get() = parentForm.preEvolution
+
+    // allows preevos to have their own form changes
+    override val evolutions: MutableSet<Evolution> get() = parentForm.evolutions
+
+    // allows for adjacent form changes
+    // it's fine for the collection to includes 'this' for now
+    override val changeableForms: Collection<TemporaryForm> get() = parentForm.changeableForms
+
     @delegate:Transient
-    override val parentForm: PermanentForm by lazy { parentFormInitializer ?: throw IllegalStateException("Unable to find parent form of ${this.name}") }
+    override val parentForm: PermanentForm by lazy { parentFormInitializer ?:
+        throw IllegalStateException("Unable to find parent form of ${this.name}") } // temp forms MUST have a parent
 
     /**
      * Starts this form change or queues it if [toggleable] is true.

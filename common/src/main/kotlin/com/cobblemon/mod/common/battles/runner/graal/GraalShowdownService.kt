@@ -158,9 +158,9 @@ class GraalShowdownService : ShowdownService {
         var index = 0L
         PokemonSpecies.species.forEach { species ->
             jsArray.setArrayElement(index++, this.gson.toJson(PokemonSpecies.ShowdownStandardForm(species.standardForm)))
-            species.permanentForms.forEach { form ->
-                jsArray.setArrayElement(index++, this.gson.toJson(PokemonSpecies.ShowdownPermanentForm(form)))
-                form.temporaryForms.forEach { tempForm ->
+            species.permanentForms.forEach { permForm ->
+                jsArray.setArrayElement(index++, this.gson.toJson(PokemonSpecies.ShowdownPermanentForm(permForm)))
+                permForm.changeableForms.forEach { tempForm ->
                     jsArray.setArrayElement(index++, this.gson.toJson(PokemonSpecies.ShowdownTemporaryForm(tempForm)))
                 }
             }

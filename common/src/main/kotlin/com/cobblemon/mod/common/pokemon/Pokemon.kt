@@ -521,24 +521,15 @@ open class Pokemon : ShowdownIdentifiable {
     internal var isClient = false
     val storeCoordinates = SettableObservable<StoreCoordinates<*>?>(null)
 
-    val preEvolution: PreEvolution? get() {
-        val form = this.form
-        return if (form is PermanentForm) form.preEvolution else this.species.preEvolution
-    }
-    // TODO Temporary Form should give prevo of parent
+    val preEvolution: PreEvolution?
+        get() = form.preEvolution
 
     // We want non-optional evolutions to trigger first to avoid unnecessary packets and any cost associate with an optional one that would just be lost
-    val evolutions: Iterable<Evolution> get() {
-        val form = this.form
-        return if (form is PermanentForm) form.evolutions.sortedBy { evolution -> evolution.optional } else this.species.evolutions
-    }
-    // TODO Temporary Form should give evolutions of parent
+    val evolutions: Iterable<Evolution>
+        get() = form.evolutions.sortedBy { evolution -> evolution.optional }
 
-    val changeableForms: Iterable<TemporaryForm> get() {
-        val form = this.form
-        return if (form is PermanentForm) form.forms.filterIsInstance<TemporaryForm>().sortedBy { form -> form.toggleable } else this.species.temporaryForms
-    }
-    // TODO Temporary Form should be able to transition to adjacent forms (i.e. rotom wash -> heat)
+    val changeableForms: Iterable<TemporaryForm>
+        get() = form.changeableForms.sortedBy { form -> form.toggleable }
 
     /** [Evolution]s that have not yet fulfilled their [TransformationRequirement]s nor been unlocked by a [TransformationTrigger]. */
     val lockedEvolutions: Iterable<Evolution>
@@ -1639,7 +1630,7 @@ open class Pokemon : ShowdownIdentifiable {
     fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: TriggerContext? = null) =
         transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
 
-    private fun isValidForm(form: FormData) = this.species.forms.contains(form)
+    private fun isValidForm(form: FormData) = this.species.allForms.contains(form)
 
     private fun findAndLearnFormChangeMoves() {
         this.form.moves.formChangeMoves.forEach { move ->

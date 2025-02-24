@@ -138,9 +138,9 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         acknowledge()
         PokemonSpecies.species.forEach { species ->
             sendSpeciesData(PokemonSpecies.ShowdownStandardForm(species.standardForm))
-            species.permanentForms.forEach { form ->
-                sendSpeciesData(PokemonSpecies.ShowdownPermanentForm(form))
-                form.temporaryForms.forEach { tempForm ->
+            species.permanentForms.forEach { permForm ->
+                sendSpeciesData(PokemonSpecies.ShowdownPermanentForm(permForm))
+                permForm.changeableForms.forEach { tempForm ->
                     sendSpeciesData(PokemonSpecies.ShowdownTemporaryForm(tempForm))
                 }
             }
