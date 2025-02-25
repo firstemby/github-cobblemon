@@ -179,14 +179,17 @@ open class Pokemon : ShowdownIdentifiable {
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             val oldValue = field
             field = value
-            // Reset form
-            this.form = value.standardForm
+            // Reset form (only if invalid - when creating pokemon from properties, species is set twice and would overwrite)
+            if (!this.isValidForm(this.form)) {
+                this.form = value.standardForm
+            }
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
                 if (oldValue != value) {
                     evolutionProxy.current().clear()
+                    formProxy.current().clear()
                 }
             }
             updateAspects()
@@ -1630,7 +1633,7 @@ open class Pokemon : ShowdownIdentifiable {
     fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: TriggerContext? = null) =
         transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
 
-    private fun isValidForm(form: FormData) = this.species.allForms.contains(form)
+    private fun isValidForm(form: FormData) = this.species.allForms.any { it === form }
 
     private fun findAndLearnFormChangeMoves() {
         this.form.moves.formChangeMoves.forEach { move ->

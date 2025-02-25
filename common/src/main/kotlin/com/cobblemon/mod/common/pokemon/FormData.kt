@@ -268,7 +268,6 @@ abstract class FormData(
 
     // WHY THE FUCK IS THIS NOT WORKING FOR ASH AND BOND??????:??
     open fun initialize(species: Species, parent: PermanentForm? = null): FormData {
-        Cobblemon.LOGGER.error("FormData initialize " + this.name)
         this.speciesInitializer = species
         this.species
         this.parentFormInitializer = parent
