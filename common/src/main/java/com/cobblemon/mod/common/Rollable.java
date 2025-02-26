@@ -125,12 +125,14 @@ public interface Rollable {
      */
     Vec3 angRollVel( double deltaTime );
 
-    public Vec3 rotationOnMouseXY(double yMouse,
-                                  double xMouse,
-                                  SmoothDouble yMouseSmoother,
-                                  SmoothDouble xMouseSmoother,
-                                  double sensitivity,
-                                  double deltaTime );
+    public Vec3 rotationOnMouseXY(
+        double yMouse,
+        double xMouse,
+        SmoothDouble yMouseSmoother,
+        SmoothDouble xMouseSmoother,
+        double sensitivity,
+        double deltaTime
+    );
 
     boolean shouldRoll();
 

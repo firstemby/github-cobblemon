@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.riding.states.CompositeState
+import com.cobblemon.mod.common.pokemon.riding.states.*
 import com.cobblemon.mod.common.util.adapters.riding.RideControllerAdapter
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -51,7 +51,7 @@ class RunUpToFlightCompositeController : RideController {
     }
 
     fun getActiveController(entity: PokemonEntity): RideController {
-        val state = getState(entity, ::CompositeState)
+        val state = getState(entity, ::RunUpToFlightCompositeState)
         return state.activeController ?: let {
             val controller = if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
                 entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
@@ -70,9 +70,15 @@ class RunUpToFlightCompositeController : RideController {
         entity: PokemonEntity,
         driver: Player
     ): Float {
-        val state = getState(entity, ::CompositeState)
+        val state = getState(entity, ::RunUpToFlightCompositeState)
         if (state.activeController == flightController && entity.onGround() && state.timeTransitioned + 20 < entity.level().gameTime) {
-            getState(entity, ::CompositeState).activeController = landController
+
+            //Pass the speed to the next state
+            val flightState = flightController.getState( entity, ::BirdAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
+            groundState.currSpeed = flightState.currSpeed
+
+            getState(entity, ::RunUpToFlightCompositeState).activeController = landController
             entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
         }
 
@@ -106,7 +112,13 @@ class RunUpToFlightCompositeController : RideController {
     ): Vec3 {
         val controller = getActiveController(entity)
         if (controller == landController && jumpStrength >= getRuntime(entity).resolveInt(minimumJump)) {
-            getState(entity, ::CompositeState).let {
+
+            //Pass the speed to the next state
+            val flightState = flightController.getState( entity, ::BirdAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
+            flightState.currSpeed = groundState.currSpeed
+
+            getState(entity, ::RunUpToFlightCompositeState).let {
                 it.activeController = flightController
                 entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
                 it.timeTransitioned = entity.level().gameTime

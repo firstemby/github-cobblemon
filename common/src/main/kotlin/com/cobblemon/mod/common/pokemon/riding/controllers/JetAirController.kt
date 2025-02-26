@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.riding.states.JetAirState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
@@ -42,42 +43,47 @@ class JetAirController : RideController {
         private set
     var verticalAcceleration: Expression = "0.1".asExpression()
         private set
-    var speed: Expression = "1.0".asExpression()
-        private set
-    var lastVelocity = Vec3(0.0,0.0,0.0)
-        private set
-    var maxSpeed = 0.4
-        private set
 
-    var currSpeed = MINSPEED
+    //5 bl/s. Minimum speed so long as jets have no gravity.
+    var minSpeed: Expression = "0.8".asExpression()
         private set
-
-    var currMouseXForce = 0.0
+    var handlingExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (140.0 - 20.0) + 20.0".asExpression()
         private set
-
-    var currMouseYForce = 0.0
+    var handlingYawExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (16.0 - 8.0) + 20.0".asExpression()
+        private set
+    var topSpeedExpr: Expression = "(q.get_ride_stats('SPEED', 'AIR') / 100) * (2.5 - 1.0) + 1.0".asExpression()
+        private set
+    //Same equation as above except the minimum accel is 8 seconds from the minimum accel to 1 second.
+    //This likely needs simplified to probably just the amount of seconds to reach max from zero?
+    var accelExpr: Expression = ("(q.get_ride_stats('ACCELERATION', 'AIR') / 100.0) * " +
+            "( ((2.5 - 0.35) / 20)  - ((2.5 - 0.35) / (20 * 5))) + ((2.5 - 0.35) / (20 * 5))").asExpression()
         private set
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
-        //Gather needed stats
-        val topSpeed = entity.getRideStat( RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED )
-        val accel = entity.getRideStat( RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL )
+        //retrieve stats
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val accel = getRuntime(entity).resolveDouble(accelExpr)
 
+        //retrieve state
+        val state = getState(entity, ::JetAirState)
+
+        //retrieve minSpeed
+        val mSpeed = getRuntime(entity).resolveDouble(minSpeed)
 
         //speed up and slow down based on input
-        if( driver.zza > 0.0 && currSpeed < topSpeed)
+        if( driver.zza > 0.0 && state.currSpeed < topSpeed)
         {
-            currSpeed = min( currSpeed + accel , topSpeed)
+            state.currSpeed = min( state.currSpeed + accel , topSpeed)
         }
-        else if ( driver.zza < 0.0 && currSpeed > MINSPEED)
+        else if ( driver.zza < 0.0 && state.currSpeed > getRuntime(entity).resolveDouble(minSpeed))
         {
             //Decelerate currently always a constant half of max acceleration.
-            currSpeed = max( currSpeed - (MAXACCEL / 2) , MINSPEED)
+            state.currSpeed = max( state.currSpeed - (((2.5 - 0.35) / 20) / 2) , 1.2)
         }
 
         //Returning is redundant as the logic is not connected currently
-        return currSpeed.toFloat()
+        return state.currSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -97,7 +103,11 @@ class JetAirController : RideController {
             forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
 
         }
-        val velocity = Vec3(0.0 , (upForce)* currSpeed, forwardForce * currSpeed)
+
+        //Gather state information
+        val state = getState(entity, ::JetAirState)
+
+        val velocity = Vec3(0.0 , (upForce)* state.currSpeed, forwardForce * state.currSpeed)
 
         return velocity
     }
@@ -107,7 +117,7 @@ class JetAirController : RideController {
     override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         //Get handling in degrees per second
-        val yawRotRate = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINYAWHANDLING, MAXYAWHANDLING)
+        val yawRotRate = getRuntime(entity).resolveDouble(handlingYawExpr)
 
         //Base the change off of deltatime.
         val handlingYaw = yawRotRate * (deltaTime)
@@ -131,19 +141,19 @@ class JetAirController : RideController {
     {
         if(driver !is Rollable) return Vec3.ZERO
 
-        //TODO: figure out a cleaner solution to this issue
-
+        //TODO: figure out a cleaner solution to this issue of large jumps when skipping frames or lagging
         //Cap at a rate of 5fps so frame skips dont lead to huge jumps
         val cappedDeltaTime = min( deltaTime, 0.2)
 
+        //Retrieve state
+        val state = getState(entity, ::JetAirState)
 
         // Accumulate the mouse input
-        currMouseXForce = (currMouseXForce + ( 0.0015 * xMouse )).coerceIn(-1.0, 1.0)
-        currMouseYForce = (currMouseYForce + ( 0.0015 * yMouse )).coerceIn(-1.0, 1.0)
+        state.currMouseXForce = (state.currMouseXForce + ( 0.0015 * xMouse )).coerceIn(-1.0, 1.0)
+        state.currMouseYForce = (state.currMouseYForce + ( 0.0015 * yMouse )).coerceIn(-1.0, 1.0)
 
         //Get handling in degrees per second
-        val handlingStat = entity.rideProp.calculate(RidingStat.SKILL, RidingStyle.AIR, 0 )
-        var handling = (((MAXHANDLING - MINHANDLING) / 100) * handlingStat) + MINHANDLING
+        var handling = getRuntime(entity).resolveDouble(handlingExpr)
 
         //convert it to partial ticks
         handling *= (deltaTime)
@@ -152,18 +162,30 @@ class JetAirController : RideController {
 
         //TODO: reevaluate if deadzones are needed and if they are still causing issues.
         //create deadzones for the constant input values.
-        val xInput = remapWithDeadzone(currMouseXForce, 0.025, 1.0)
-        val yInput = remapWithDeadzone(currMouseYForce, 0.025, 1.0)
+        val xInput = remapWithDeadzone(state.currMouseXForce, 0.025, 1.0)
+        val yInput = remapWithDeadzone(state.currMouseYForce, 0.025, 1.0)
 
-        val pitchRot = handling * currMouseYForce
-        val rollRot =  handling * 1.5 * currMouseXForce
+        val pitchRot = handling * state.currMouseYForce
+        //Roll is 1.5 times as fast as pitch
+        val rollRot =  handling * 1.5 * state.currMouseXForce
 
         //yaw, pitch, roll
         return Vec3(0.0, pitchRot,  rollRot)
     }
 
-    override fun fuelBar(entity: PokemonEntity, driver: Player): Float {
-        return 0.5f
+    //TODO: bring in stamina stats
+    override fun setRideBar(entity: PokemonEntity, driver: Player): Float {
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val mSpeed = getRuntime(entity).resolveDouble(minSpeed)
+
+        //Retrieve stamina from state and tick down based on current speed vs top speed.
+        val state = getState(entity, ::JetAirState)
+        //For now 1.0 is a temp min speed.
+        //At max speed it will tick down 0.1 a second so the stamina will last ten seconds
+        //There has got to be a better way to express this equation. It interpolates between 0.5 and 1.0
+        val staminaLoss = ((( state.currSpeed - 1.2 ) / ( topSpeed - 1.2 )) / 2 + 0.5) * ( ( 1.0 / 20.0 ) * 0.1)
+        state.stamina = max(state.stamina - staminaLoss,0.0).toFloat()
+        return (state.stamina / 1.0f)
     }
 
     override fun canJump(
@@ -185,7 +207,8 @@ class JetAirController : RideController {
 
         var grav = 0.0
 
-        if( maxSpeed <= 0.5 ) grav = 0.5 - maxSpeed
+        //TODO: create a better gravity equation.
+        //if( maxSpeed <= 0.5 ) grav = 0.5 - maxSpeed
 
         return grav
     }
@@ -197,54 +220,27 @@ class JetAirController : RideController {
         buffer.writeString(gravity.toString())
         buffer.writeString(horizontalAcceleration.toString())
         buffer.writeString(verticalAcceleration.toString())
-        buffer.writeString(speed.toString())
-        buffer.writeDouble(maxSpeed)
-        buffer.writeDouble(this.lastVelocity.x)
-        buffer.writeDouble(this.lastVelocity.y)
-        buffer.writeDouble(this.lastVelocity.z)
+        buffer.writeString(minSpeed.toString())
+        buffer.writeString(handlingExpr.toString())
+        buffer.writeString(handlingYawExpr.toString())
+        buffer.writeString(topSpeedExpr.toString())
+        buffer.writeString(accelExpr.toString())
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         gravity = buffer.readString().asExpression()
         horizontalAcceleration = buffer.readString().asExpression()
         verticalAcceleration = buffer.readString().asExpression()
-        speed = buffer.readString().asExpression()
-        this.maxSpeed = buffer.readDouble()
-        val x = buffer.readDouble()
-        val y = buffer.readDouble()
-        val z = buffer.readDouble()
-        this.lastVelocity = Vec3(x, y, z)
+        minSpeed = buffer.readString().asExpression()
+        handlingExpr = buffer.readString().asExpression()
+        handlingYawExpr = buffer.readString().asExpression()
+        topSpeedExpr = buffer.readString().asExpression()
+        accelExpr = buffer.readString().asExpression()
     }
-
 
     companion object {
         val KEY = cobblemonResource("air/jet")
-
-        //TODO: ensure there is consensus on these values
-
-        val MAXTOPSPEED = 2.5 // 50 bl/s
-        val MINTOPSPEED = 0.35 // 7 bl/s
-        val MINSPEED = 0.25 // 5 bl/s
-
-        //Accel currently lies between 1.0 second and 5.0 seconds
-        val MAXACCEL = (MAXTOPSPEED - MINSPEED) / 20 //1.0 second to max speed
-        val MINACCEL = (MAXTOPSPEED - MINSPEED) / (20*5) // 5 seconds to max speed
-
-        //Degrees of rotation per second
-        val MAXHANDLING = 140.0
-        val MINHANDLING = 20.0
-
-        //Degrees of rotation per second of yaw
-        val MAXYAWHANDLING = 16.0
-        val MINYAWHANDLING = 8.0
-
-        //TODO: add feul/stamina
-
-        //Fuel measured by seconds at full throttle.
-        //minimum speed will consume a quarter of the fuel.
-        //val MAXSTAMINA =
     }
-
 
     //This likely needs moved to somewhere that all ride contollers can share it. Maybe a ride utilities file?
     //Creates a deadzone around zero that extends out to deadzoneLow in both +- and then remaps

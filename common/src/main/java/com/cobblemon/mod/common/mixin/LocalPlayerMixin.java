@@ -31,8 +31,7 @@ public abstract class LocalPlayerMixin {
             //Use custom jump bar logic if the current ride does not jump using it.
             if( !ride.getRiding().canJump(ride, player))
             {
-                //TODO: tie this into a ride controller method.
-                cir.setReturnValue(0.5f);
+                cir.setReturnValue(ride.setRideBar());
             }
         }
     }

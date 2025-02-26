@@ -18,10 +18,7 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.riding.controllers.HelicopterAirController.Companion.ROTATION_LIMIT
-import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion
-import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MAXTOPSPEED
-import com.cobblemon.mod.common.pokemon.riding.controllers.JetAirController.Companion.MINSPEED
+import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
@@ -34,14 +31,15 @@ import kotlin.math.*
 class BirdAirController : RideController {
     override val key = KEY
     override val poseProvider = PoseProvider(PoseType.HOVER)
-        .with(PoseOption(PoseType.GLIDE) {
+        .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
-            player.zza == 0.0f && it.deltaMovement.length() > 0.3 })
+            it.deltaMovement.length() > 0.3 })
+        /*
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
             player.zza > 0.0f // Checks if the player is actively attempting to move forward
         })
-
+         */
 
     override val condition: (PokemonEntity) -> Boolean = { true }
 
@@ -53,35 +51,40 @@ class BirdAirController : RideController {
         private set
     var verticalAcceleration: Expression = "0.1".asExpression()
         private set
-    var speed: Expression = "1.0".asExpression()
-        private set
-    var lastVelocity = Vec3(0.0,0.0,0.0)
-        private set
 
-    var currSpeed = 0.0
+    // Where 90 is the width of the range and 45 is the offset.
+    // So the handling interpolates between 135 and 45
+    var handlingExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * 90 + 45".asExpression()
         private set
-
-    var lastPitch = 0.0f
+    var topSpeedExpr: Expression = "(q.get_ride_stats('SPEED', 'AIR') / 100) * (1.0 - 0.35) + 0.35".asExpression()
+        private set
+    //Reaches max top speed from a standstill at minimum 8 seconds and max 3 seconds.
+    //This is a bit of a confusing expression and likely should be cleaned up to be more readable
+    var accelExpr: Expression = "(q.get_ride_stats('ACCELERATION', 'AIR') / 100) * (0.01666666666 - 0.00625) + 0.00625".asExpression()
         private set
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
+        //Retrieve the current bird controller state
+        //val state = entity.riding.getState(KEY) { e -> BirdAirControllerState(e) }
+        val state = getState(entity, ::BirdAirState)
+
         //retrieve stats
-        val topSpeed = entity.getRideStat( RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED )
-        val accel = entity.getRideStat( RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL )
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val accel = getRuntime(entity).resolveDouble(accelExpr)
 
         val maxGlideSpeed = topSpeed * 2
         var glideSpeedChange = 0.00
 
         //speed up and slow down based on input
-        if( driver.zza > 0.0 && currSpeed < topSpeed)
+        if( driver.zza > 0.0 && state.currSpeed < topSpeed)
         {
-            currSpeed = min( currSpeed + accel , topSpeed)
+            state.currSpeed = min( state.currSpeed + accel , topSpeed)
         }
-        else if ( driver.zza < 0.0 && currSpeed > 0.0)
+        else if ( driver.zza < 0.0 && state.currSpeed > 0.0)
         {
             //Decelerate is currently always a constant half of max acceleration.
-            currSpeed = max( currSpeed - (MAXACCEL / 2) , 0.0)
+            state.currSpeed = max( state.currSpeed - (0.0166 / 2) , 0.0)
         }
 
         val rollable = driver as? Rollable
@@ -98,22 +101,21 @@ class BirdAirController : RideController {
                 if( driver.zza <= 0 )
                 {
                     //speed decrease should be 2x speed increase?
-                    currSpeed = max( currSpeed  + (MAXACCEL) * glideSpeedChange , 0.0 )
+                    state.currSpeed = max( state.currSpeed  + (0.0166) * glideSpeedChange , 0.0 )
                 }
             }
             else
             {
                 // only add to the speed if it hasn't exceeded the current
                 //glide angles maximum amount of speed that it can give.
-                currSpeed = min( currSpeed  + ((MAXACCEL * 2) * glideSpeedChange) , maxGlideSpeed)
+                state.currSpeed = min( state.currSpeed  + ((0.0166 * 2) * glideSpeedChange) , maxGlideSpeed)
             }
         }
 
         //air resistance
-        currSpeed = max( currSpeed - 0.005, 0.0)
+        state.currSpeed = max( state.currSpeed - 0.005, 0.0)
 
-        println(currSpeed)
-        return 0.0f
+        return state.currSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -128,8 +130,6 @@ class BirdAirController : RideController {
         var forwardForce = 0.0
         val rollable = driver as? Rollable
         if( rollable != null ) {
-
-            lastPitch = rollable.pitch
 
             //Need to deadzone this when straight up or down
             // test with and without strafing added. May be wanted while moving
@@ -155,8 +155,10 @@ class BirdAirController : RideController {
             entity.addDeltaMovement(jumpVector)
         }
         */
+        //Retrieve the current composite controller state
+        val state = getState(entity, ::BirdAirState)
 
-        val velocity = Vec3(0.0 , upForce * currSpeed, forwardForce * currSpeed)
+        val velocity = Vec3(0.0 , upForce * state.currSpeed, forwardForce * state.currSpeed)
 
         return velocity
     }
@@ -166,7 +168,7 @@ class BirdAirController : RideController {
         val rollable = driver as? Rollable
 
         //TODO: Tie in handling
-        val handling = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINHANDLING, MAXHANDLING)
+        val handling = getRuntime(entity).resolveDouble(handlingExpr)
         val rotationChangeRate = 10.0
 
         if( rollable != null )
@@ -191,21 +193,21 @@ class BirdAirController : RideController {
         return Vec3(0.0, 0.0, 0.0)
     }
 
-    override fun rotationOnMouseXY
-                (entity: PokemonEntity,
-                 driver: Player,
-                 yMouse: Double,
-                 xMouse: Double,
-                 yMouseSmoother: SmoothDouble,
-                 xMouseSmoother: SmoothDouble,
-                 sensitivity: Double,
-                 deltaTime: Double ): Vec3
-    {
+    override fun rotationOnMouseXY(
+        entity: PokemonEntity,
+        driver: Player,
+        yMouse: Double,
+        xMouse: Double,
+        yMouseSmoother: SmoothDouble,
+        xMouseSmoother: SmoothDouble,
+        sensitivity: Double,
+        deltaTime: Double
+    ): Vec3 {
         if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
 
-        val handling = entity.getRideStat( RidingStat.SKILL, RidingStyle.AIR, MINHANDLING, MAXHANDLING)
+        val handling = getRuntime(entity).resolveDouble(handlingExpr)
 
         //Smooth out mouse input.
         val smoothingSpeed = 4
@@ -213,8 +215,7 @@ class BirdAirController : RideController {
         val YInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1, deltaTime * smoothingSpeed);
 
         //limit rolling based on healing
-        //Currenlty 1.5 as the range needs more testing.
-        val rotLimit = handling * 1.5
+        val rotLimit = handling
 
         //Limit roll by non linearly decreasing inputs towards
         // a rotation limit based on the current distance from
@@ -265,41 +266,22 @@ class BirdAirController : RideController {
         buffer.writeString(gravity.toString())
         buffer.writeString(horizontalAcceleration.toString())
         buffer.writeString(verticalAcceleration.toString())
-        buffer.writeString(speed.toString())
-        buffer.writeDouble(this.lastVelocity.x)
-        buffer.writeDouble(this.lastVelocity.y)
-        buffer.writeDouble(this.lastVelocity.z)
+        buffer.writeString(topSpeedExpr.toString())
+        buffer.writeString(accelExpr.toString())
+        buffer.writeString(handlingExpr.toString())
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         gravity = buffer.readString().asExpression()
         horizontalAcceleration = buffer.readString().asExpression()
         verticalAcceleration = buffer.readString().asExpression()
-        speed = buffer.readString().asExpression()
-        val x = buffer.readDouble()
-        val y = buffer.readDouble()
-        val z = buffer.readDouble()
-        this.lastVelocity = Vec3(x, y, z)
+        topSpeedExpr = buffer.readString().asExpression()
+        accelExpr = buffer.readString().asExpression()
+        handlingExpr = buffer.readString().asExpression()
     }
 
 
     companion object {
         val KEY = cobblemonResource("air/bird")
-
-        //TODO: ensure there is consensus on these values
-        val MAXTOPSPEED = 1.0 // 20 bl/s
-        val MINTOPSPEED = 0.35 // 7 bl/s
-
-        //Accel will lie between 1.0 second and 5.0 seconds
-        val MAXACCEL = (MAXTOPSPEED ) / (20*3) //3.0 second to max speed
-        val MINACCEL = (MAXTOPSPEED ) / (20*8) // 8 seconds to max speed
-
-        //Can rotate 90 degrees
-        val MAXHANDLING = 90.0
-        val MINHANDLING = 30.0
-
-
-        val MAXYAWHANDLING = 16.0
-        val MINYAWHANDLING = 8.0
     }
 }

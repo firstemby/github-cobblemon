@@ -121,7 +121,7 @@ class VehicleLandController : RideController {
         else if ( driver.zza < 0.0 && currSpeed > 0.0)
         {
             //Decelerate is now always a constant half of max acceleration.
-            currSpeed = max( currSpeed - (BirdAirController.MAXACCEL / 2) , 0.0)
+            currSpeed = max( currSpeed - (MAXACCEL / 2) , 0.0)
         }
 
 

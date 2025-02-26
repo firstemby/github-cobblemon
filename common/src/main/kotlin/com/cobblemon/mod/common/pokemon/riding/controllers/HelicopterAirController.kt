@@ -30,7 +30,7 @@ import kotlin.math.*
  * Allows for flight like a bird controller, except you don't have to do any "flapping" motion,
  * you can just go up and down like creative
  *
- * @author Apion/Jackowes
+ * @author Apion, Jackowes
  * @since January 1, 2025
  */
 class HelicopterAirController : RideController {
@@ -176,20 +176,19 @@ class HelicopterAirController : RideController {
 
     override fun shouldRoll(entity: PokemonEntity): Boolean = true
 
-    override fun rotationOnMouseXY
-                (entity: PokemonEntity,
-                 driver: Player,
-                 yMouse: Double,
-                 xMouse: Double,
-                 yMouseSmoother: SmoothDouble,
-                 xMouseSmoother: SmoothDouble,
-                 sensitivity: Double,
-                 deltaTime: Double ): Vec3
-    {
+    override fun rotationOnMouseXY(
+        entity: PokemonEntity,
+        driver: Player,
+        yMouse: Double,
+        xMouse: Double,
+        yMouseSmoother: SmoothDouble,
+        xMouseSmoother: SmoothDouble,
+        sensitivity: Double,
+        deltaTime: Double
+    ): Vec3 {
         if(driver !is Rollable) return Vec3.ZERO
 
         val rollable = driver as Rollable
-        //Ignore x,y,z its angular velocity:
         //yaw, pitch, roll
         return Vec3(xMouse, 0.0, 0.0 )
     }

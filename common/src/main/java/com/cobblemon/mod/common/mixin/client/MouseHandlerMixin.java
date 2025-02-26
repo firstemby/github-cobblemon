@@ -102,12 +102,13 @@ public class MouseHandlerMixin {
                     target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"
             )
     )
-    public boolean cobblemon$modifyRotation(LocalPlayer player,
-                                            double cursorDeltaX,
-                                            double cursorDeltaY,
-                                            @Local(argsOnly = true) double d,
-                                            @Local(argsOnly = true) double movementTime
-                                            ) {
+    public boolean cobblemon$modifyRotation(
+        LocalPlayer player,
+        double cursorDeltaX,
+        double cursorDeltaY,
+        @Local(argsOnly = true) double d,
+        @Local(argsOnly = true) double movementTime
+        ) {
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
@@ -136,18 +137,21 @@ public class MouseHandlerMixin {
 
         //Send mouse input to be interpreted into rotation
         //deltas by the ride controller
-        Vec3 angVecMouse = rollable.rotationOnMouseXY
-                ( cursorDeltaY,
-                cursorDeltaX ,
-                yMouseSmoother,
-                xMouseSmoother,
-                ridingSensitivity,
-                movementTime );
+        Vec3 angVecMouse = rollable.rotationOnMouseXY(
+            cursorDeltaY,
+            cursorDeltaX ,
+            yMouseSmoother,
+            xMouseSmoother,
+            ridingSensitivity,
+            movementTime
+        );
 
         //Perform Rotation using mouse influenced rotation deltas.
-        rollable.rotate((float) angVecMouse.x,
-                    (float) angVecMouse.y,
-                    (float) angVecMouse.z);
+        rollable.rotate(
+            (float) angVecMouse.x,
+            (float) angVecMouse.y,
+            (float) angVecMouse.z
+        );
 
 
         //Gather and apply the current rotation deltas
@@ -168,9 +172,11 @@ public class MouseHandlerMixin {
         else
         {
             if( angRot != null ) {
-                rollable.rotate((float) (angRot.x * 10 * d),
-                        (float) (angRot.y * 10 * d),
-                        (float) (angRot.z * 10 * d));
+                rollable.rotate((float) (
+                    angRot.x * 10 * d),
+                    (float) (angRot.y * 10 * d),
+                    (float) (angRot.z * 10 * d)
+                );
             }
         }
         return false;

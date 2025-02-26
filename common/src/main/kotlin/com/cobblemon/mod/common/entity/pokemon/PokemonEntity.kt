@@ -234,9 +234,6 @@ open class PokemonEntity(
         get() = form.riding.seats
     val rideProp: RidingProperties
         get() = form.riding
-
-
-
     var shownItem: ItemStack
         get() = entityData.get(SHOWN_HELD_ITEM)
         set(value) = entityData.set(SHOWN_HELD_ITEM, value)
@@ -1385,57 +1382,32 @@ open class PokemonEntity(
         }
     }
 
-
-    //Converted to kotin from the same named private function in entity.
-    private fun getInputVector(relative: Vec3, motionScaler: Float, facing: Float): Vec3 {
-        val d = relative.lengthSqr()
-        if (d < 1.0E-7) {
-            return Vec3.ZERO
-        }
-
-        // If the squared length is greater than 1, normalize; otherwise, use the vector as-is.
-        // May not want to normalize this
-        //val vec3 = (if (d > 1.0) relative.normalize() else relative).scale(motionScaler.toDouble())
-        val vec3 = relative
-
-        // Convert the facing angle (in degrees) to radians using the factor 0.017453292F.
-        val f = Mth.sin(facing * 0.017453292F)
-        val g = Mth.cos(facing * 0.017453292F)
-
-        // Rotate the vector by the facing angle.
-        return Vec3(
-            vec3.x * g - vec3.z * f,
-            vec3.y,
-            vec3.z * g + vec3.x * f
-        )
-    }
-
-    //TODO: reintroduce the minecraft physics back to the pokemon ride movement.
-
-    //override fun moveRelative(amount: Float, relative: Vec3 ) {
-        //super.moveRelative(amount, relative)
-        //val v = this.getInputVector(relative, 1.0f, this.getYRot());
-        //this.setDeltaMovement(v);
-    //}
-
     override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3 , friction: Float ): Vec3 {
         val riders = this.passengers.filterIsInstance<LivingEntity>()
         if ( riders.isEmpty() ) {
             super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
         }
-        /*
+        //Handle ridden pokemon differently to allow vector lerp instead of simple addition.
         else
         {
-            val v = this.getInputVector(deltaMovement, 1.0f, this.getYRot());
-            //changing this will give the ride more or less inertia/handling/drift?
-            //A bit of overlap with other things but.
+            val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), 1.0f, this.getYRot());
+            //changing this will give the ride more or less inertia/handling/drift
             this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
 
-            //maybe move this to the travel function. The jump below never gets used.
-            this.move( MoverType.SELF, this.deltaMovement );
+            this.move( MoverType.SELF, this.deltaMovement.scale( this.speed.toDouble() ) );
         }
-         */
+
         return this.deltaMovement
+    }
+
+    override fun shouldDiscardFriction(): Boolean {
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+        if ( riders.isEmpty() ) {
+            return super.shouldDiscardFriction()
+        }
+        else{
+            return true
+        }
     }
 
     override fun travel(movementInput: Vec3) {
@@ -1443,10 +1415,14 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
 
             //Prevent current travel logic when riding a pokemon.
+            /*
             val riders = this.passengers.filterIsInstance<LivingEntity>()
             if ( riders.isEmpty() ) {
                 super.travel(movementInput)
             }
+             */
+
+            super.travel(movementInput)
 
             this.updateBlocksTraveled(prevBlockPos)
         }
@@ -1674,11 +1650,9 @@ open class PokemonEntity(
     // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
     // stat based on the boost of that pokemons stat
     fun getRideStat(stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double ): Double {
-        //Currenlty zero boost since aprijuice isn't implemented yet
+        //TODO: Change from static zero boost once aprijuice is implemented.
         val stat = this.rideProp.calculate(stat, style, 0 )
-
         val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
-
         return statVal
     }
 
@@ -1690,7 +1664,6 @@ open class PokemonEntity(
     fun setIsJumping(value: Boolean) {
         jumping = value
     }
-
 
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
@@ -1706,8 +1679,8 @@ open class PokemonEntity(
         //These are the only functions that matter and I have isolated them to
         //avoid minecrafts changes they do to velocity so that the ride controllers
         //can be tested without that interference.
-        if ( !riders.isEmpty() ) {
-            val v = this.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
+        if ( false ) {
+            val v = Entity.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
             //changing this will give the ride more or less inertia/handling/drift?
             //A bit of overlap with other things but.
             this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
@@ -1879,8 +1852,7 @@ open class PokemonEntity(
     override fun isAffectedByFluids(): Boolean {
         var fluidAffected = true
 
-        if( this.hasControllingPassenger() )
-        {
+        if( this.hasControllingPassenger() ) {
             //Change this so it calls something from the controller to check
             //if the specific controller wants to ignore fluid physics since
             //not every single one will want to
@@ -1896,10 +1868,8 @@ open class PokemonEntity(
     //flying or swimming but they are touching the ground and this needs to be prevented.
     //Having it be able to be turned off by the flying or swimming controllers is the
     //temp solution I have found.
-    override fun onGround() : Boolean
-    {
-        if( riding.turnOffOnGround( this ) )
-        {
+    override fun onGround() : Boolean {
+        if( riding.turnOffOnGround( this ) ) {
             return false
         }
         return super.onGround()
@@ -1916,6 +1886,11 @@ open class PokemonEntity(
             return regularGravity
         }
         return riding.gravity(this, regularGravity) ?: regularGravity
+    }
+
+    fun setRideBar(): Float {
+        val driver = this.controllingPassenger as? Player ?: return 0.0f
+        return this.riding.setRideBar(this, driver)
     }
 
     /**

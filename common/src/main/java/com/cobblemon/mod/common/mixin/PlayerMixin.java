@@ -301,13 +301,14 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
     }
 
     @Override
-    public Vec3 rotationOnMouseXY(double yMouse,
-                                  double xMouse,
-                                  SmoothDouble yMouseSmoother,
-                                  SmoothDouble xMouseSmoother,
-                                  double sensitivity,
-                                  double deltaTime )
-    {
+    public Vec3 rotationOnMouseXY(
+        double yMouse,
+        double xMouse,
+        SmoothDouble yMouseSmoother,
+        SmoothDouble xMouseSmoother,
+        double sensitivity,
+        double deltaTime
+    ) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return Vec3.ZERO;
 
@@ -315,23 +316,22 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         if (playerVehicle == null) return Vec3.ZERO;
         if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
-        return pokemonEntity.getRiding().rotationOnMouseXY
-                (
-                pokemonEntity,
-                player,
-                yMouse,
-                xMouse,
-                yMouseSmoother,
-                xMouseSmoother,
-                sensitivity,
-                deltaTime );
+        return pokemonEntity.getRiding().rotationOnMouseXY(
+            pokemonEntity,
+            player,
+            yMouse,
+            xMouse,
+            yMouseSmoother,
+            xMouseSmoother,
+            sensitivity,
+            deltaTime
+        );
     }
 
     @Override
     public boolean useAngVelSmoothing() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (!this.equals(player)) return true;
-        if (player.isHolding(Items.DIAMOND)) return false;
 
         var playerVehicle = player.getVehicle();
         if (playerVehicle == null) return true;

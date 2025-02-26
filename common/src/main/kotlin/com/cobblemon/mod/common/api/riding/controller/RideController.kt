@@ -94,7 +94,7 @@ interface RideController : Encodable, Decodable {
      */
     fun velocity(entity: PokemonEntity, driver: Player, input: Vec3) : Vec3
 
-    fun fuelBar(entity: PokemonEntity, driver: Player): Float = 0.0f
+    fun setRideBar(entity: PokemonEntity, driver: Player): Float = 0.0f
 
     fun canJump(entity: PokemonEntity, driver: Player) : Boolean
 
@@ -110,16 +110,16 @@ interface RideController : Encodable, Decodable {
 
     //If function is not overwritten by controllers then just perform the defualt
     //rolling function which is roll on mousex and pitch on mousey
-    fun rotationOnMouseXY
-                (entity: PokemonEntity,
-                 driver: Player,
-                 yMouse: Double,
-                 xMouse: Double,
-                 yMouseSmoother: SmoothDouble,
-                 xMouseSmoother: SmoothDouble,
-                 sensitivity: Double,
-                 deltaTime: Double ): Vec3
-    {
+    fun rotationOnMouseXY(
+        entity: PokemonEntity,
+        driver: Player,
+        yMouse: Double,
+        xMouse: Double,
+        yMouseSmoother: SmoothDouble,
+        xMouseSmoother: SmoothDouble,
+        sensitivity: Double,
+        deltaTime: Double
+    ): Vec3 {
         if(driver !is Rollable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.

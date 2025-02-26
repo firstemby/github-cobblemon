@@ -42,7 +42,7 @@ enum class PoseType {
 
     companion object {
         val ALL_POSES = EnumSet.allOf(PoseType::class.java)
-        val FLYING_POSES = EnumSet.of(FLY, HOVER, GLIDE)
+        val FLYING_POSES = EnumSet.of(FLY, HOVER)
         val SWIMMING_POSES = EnumSet.of(SWIM, FLOAT)
         val STANDING_POSES = EnumSet.of(STAND, WALK)
         val SHOULDER_POSES = EnumSet.of(SHOULDER_LEFT, SHOULDER_RIGHT)

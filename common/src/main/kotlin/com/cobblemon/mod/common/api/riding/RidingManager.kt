@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.riding.controller.RideController
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.ChatFormatting
@@ -36,6 +37,12 @@ data class RidingManager(val entity: PokemonEntity) {
             .withQueryValue("entity", entity.struct)
             .also {
                 it.environment.query.addFunction("passenger_count") { DoubleValue(entity.passengers.size.toDouble()) }
+                it.environment.query.addFunction("get_ride_stats") { params ->
+                    val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
+                    val rideStyle = RidingStyle.valueOf(params.getString(1).uppercase())
+                    //TODO: Use the mons actual boost once implemented
+                    DoubleValue(entity.rideProp.calculate(rideStat, rideStyle, 0))
+                }
             }
     }
 
@@ -100,9 +107,9 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.velocity(entity, driver, input)
     }
 
-    fun fuelBar(entity: PokemonEntity, driver: Player): Float {
+    fun setRideBar(entity: PokemonEntity, driver: Player): Float {
         val controller = getController(entity) ?: return 0.0f
-        return controller.fuelBar(entity, driver)
+        return controller.setRideBar(entity, driver)
     }
 
     fun canJump(entity: PokemonEntity, driver: Player): Boolean {
@@ -147,33 +154,33 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.shouldRotatePokemonHead()
     }
 
-    //this is called just as often as
-    fun rotationOnMouseXY
-                ( entity: PokemonEntity,
-                  driver: Player,
-                  yMouse: Double,
-                  xMouse: Double,
-                  yMouseSmoother: SmoothDouble,
-                  xMouseSmoother: SmoothDouble,
-                  sensitivity: Double,
-                  deltaTime: Double ): Vec3
-    {
+    fun rotationOnMouseXY(
+        entity: PokemonEntity,
+        driver: Player,
+        yMouse: Double,
+        xMouse: Double,
+        yMouseSmoother: SmoothDouble,
+        xMouseSmoother: SmoothDouble,
+        sensitivity: Double,
+        deltaTime: Double
+    ): Vec3 {
         val controller = getController(entity) ?: return Vec3.ZERO
-        return controller.rotationOnMouseXY( entity,
-                                            driver,
-                                            yMouse,
-                                            xMouse,
-                                            yMouseSmoother,
-                                            xMouseSmoother,
-                                            sensitivity,
-                                            deltaTime )
-    }
+        return controller.rotationOnMouseXY(
+            entity,
+            driver,
+            yMouse,
+            xMouse,
+            yMouseSmoother,
+            xMouseSmoother,
+            sensitivity,
+            deltaTime
+        ) }
 
     /**
      * Determines whether mouse input will affect the rotation of
      * the rollable object. Need to remove this as it's not used anymore
      */
-    //I think this might better serve as a "use smoothing on angular velocity"useAngVelSmoothing
+    //I think this might better serve as a "use smoothing on angular velocity"
     fun useAngVelSmoothing(entity: PokemonEntity): Boolean {
         val controller = getController(entity) ?: return true
         return controller.useAngVelSmoothing(entity)

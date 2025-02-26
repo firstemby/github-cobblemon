@@ -94,7 +94,7 @@
       }
     },
     "controller": {
-      "key": "cobblemon:composite/run_up_to_flight",
+      "key": "cobblemon:composite/run_up_to_jet_flight",
       "minimumSpeed": "0.2",
       "minimumJump": "80",
       "landController": {

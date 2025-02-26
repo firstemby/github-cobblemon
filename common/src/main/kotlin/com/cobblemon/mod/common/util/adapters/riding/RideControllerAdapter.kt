@@ -29,6 +29,7 @@ object RideControllerAdapter : JsonDeserializer<RideController> {
         GenericLiquidController.KEY to GenericLiquidController::class.java,
         SwimDashController.KEY to SwimDashController::class.java,
         RunUpToFlightCompositeController.KEY to RunUpToFlightCompositeController::class.java,
+        RunUpToJetFlightCompositeController.KEY to RunUpToJetFlightCompositeController::class.java,
         BirdAirController.KEY to BirdAirController::class.java,
         HelicopterAirController.KEY to HelicopterAirController::class.java,
         GliderAirController.KEY to GliderAirController::class.java,
