@@ -252,40 +252,39 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex")
     var hideUnimplementedPokemonInThePokedex = false
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var canDestinyKnotBreak = true
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "destiny_knot_durability")
     var destinyKnotDurability = 256
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "requires_ots_for_masuda")
     var requireOTsForMasuda = false
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "masuda_shiny_rate")
     var masudaShinyRate = 1365f
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var canBreedGenderless = true
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var canBreedUndiscovered = true
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var canBreedDitto = true
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var nestHatchRate= 1f
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var incubatorHatchRate = 1.25f
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var netherNestHatchRate = 1.5f
 
-    @NodeCategory(Category.Breeding)
+    @CobblemonConfigField(Category.Breeding, lang = "can_destiny_knot_break")
     var netherIncubatorHatchRate = 1.75f
 
-    @NodeCategory(Category.Debug)
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor")
     var summaryPokemonFollowCursor = true
 

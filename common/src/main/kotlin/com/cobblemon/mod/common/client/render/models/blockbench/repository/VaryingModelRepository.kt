@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.client.render.VaryingRenderableResolver
 import com.cobblemon.mod.common.client.render.models.blockbench.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
 import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.AncientPokeBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.BeastBallModel
@@ -79,6 +80,7 @@ object VaryingModelRepository {
         "poke_balls",
         "generic",
         "block_entities",
+        "eggs"
     )
 
     val poserDirectories: List<Pair<String, Class<out PosableModel>>> = listOf(
@@ -89,6 +91,7 @@ object VaryingModelRepository {
         "bedrock/npcs/posers" to PosableModel::class.java,
         "bedrock/poke_balls/posers" to PosableModel::class.java,
         "bedrock/generic/posers" to PosableModel::class.java,
+        "bedrock/eggs/posers" to EggModel::class.java,
     )
 
     val variationDirectories: List<String> = listOf(
@@ -116,6 +119,7 @@ object VaryingModelRepository {
             .registerTypeAdapter(PosableModel::class.java, JsonModelAdapter(::PosableModel))
             .registerTypeAdapter(PokemonPosableModel::class.java, JsonModelAdapter(::PokemonPosableModel))
             .registerTypeAdapter(FossilModel::class.java, JsonModelAdapter(::FossilModel))
+            .registerTypeAdapter(EggModel::class.java, JsonModelAdapter(::EggModel))
             .registerTypeAdapter(BlockEntityModel::class.java, JsonModelAdapter(::BlockEntityModel))
             .registerTypeAdapter(Pose::class.java, PoseAdapter { JsonModelAdapter.model!! })
             .registerTypeAdapter(ModelPartTransformation::class.java, ModelPartTransformationAdapter)

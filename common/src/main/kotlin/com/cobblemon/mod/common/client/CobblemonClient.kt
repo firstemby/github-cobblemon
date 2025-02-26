@@ -87,7 +87,7 @@ object CobblemonClient {
     var checkedStarterScreen = false
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
-    var posableModelRepositories = listOf(
+    /*var posableModelRepositories = listOf(
         PokemonModelRepository,
         PokeBallModelRepository,
         NPCModelRepository,
@@ -95,7 +95,7 @@ object CobblemonClient {
         BlockEntityModelRepository,
         GenericBedrockEntityModelRepository,
         EggModelRepo
-    )
+    )*/
 
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
@@ -356,7 +356,6 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
-        EggModelRepo.reload(resourceManager)
         LOGGER.info("Loaded assets")
     }
 

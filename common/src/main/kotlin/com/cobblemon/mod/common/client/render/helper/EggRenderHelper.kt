@@ -4,8 +4,10 @@ import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
+import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
@@ -57,7 +59,7 @@ object EggRenderHelper {
         val eggState = state
         eggState.updatePartialTicks(tickDelta)
 
-        val eggModel = EggModelRepo.getPoser(cobblemonResource("egg"), eggState)
+        val eggModel = VaryingModelRepository.getPoser(cobblemonResource("egg"), eggState) as EggModel
         eggModel.context = context
 
         val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
@@ -95,7 +97,7 @@ object EggRenderHelper {
         )
 
         eggModel.render(context, matrices, vertexConsumer, light, overlay, -0x1)
-        eggModel.withLayerContext(vertexConsumers, eggState, EggModelRepo.getLayers(cobblemonResource("egg"), eggState)) {
+        eggModel.withLayerContext(vertexConsumers, eggState, VaryingModelRepository.getLayers(cobblemonResource("egg"), eggState)) {
             eggModel.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
         }
 

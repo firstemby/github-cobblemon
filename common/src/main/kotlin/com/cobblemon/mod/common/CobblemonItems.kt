@@ -1257,9 +1257,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
     @JvmField
-    val POKEMON_EGG = blockItem("egg", CobblemonBlocks.EGG, Item.Properties().stacksTo(1))
+    val POKEMON_EGG = eggItem("egg", CobblemonBlocks.EGG, Item.Properties().stacksTo(1))
 
-    private fun blockItem(name: String, block: Block, settings: Item.Properties = Item.Properties()): BlockItem = this.create(name, BlockItem(block, settings))
+    private fun eggItem(name: String, block: Block, settings: Item.Properties = Item.Properties()): BlockItem = this.create(name, BlockItem(block, settings))
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
