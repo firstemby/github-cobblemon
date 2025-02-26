@@ -73,8 +73,9 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
     var ownerUUID: UUID? = null // player UUID that placed this nest // todo make sure this is synced
     private var eggItem: ItemStack = ItemStack.EMPTY
-    val eggState = EggState() // todo make sure this is synced
-    var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
+    var ownerUUID: UUID? = null // player UUID that placed this nest
+    val eggState = EggState()
+    var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null)
 
     /**
      * Sets the ItemStack and synchronizes it.
