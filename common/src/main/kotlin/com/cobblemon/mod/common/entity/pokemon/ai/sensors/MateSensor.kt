@@ -32,6 +32,11 @@ class MateSensor : Sensor<LivingEntity>(1200) {
         // Ensure the entity is a PokemonEntity
         if (entity !is PokemonEntity) return
 
+        // make sure the mon doesn't have a paternal nest already
+        if (entity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).getOrNull() != null) {
+            return
+        }
+
         // make sure they are not on Mate Scan cooldown
         if (entity.brain.getMemory(CobblemonMemories.MATE_SCAN_COOLDOWN).getOrNull() == true) {
             return

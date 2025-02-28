@@ -43,7 +43,8 @@ class NestSensor : Sensor<LivingEntity>(200) {
                 entity.brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
             }
             else if (blockAtLocation.parents.first == entity.uuid || blockAtLocation.parents.second == entity.uuid) {
-                entity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, paternalNestLocation)
+                entity.brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, paternalNestLocation) // Crab Note: This line is probably redundant and not needed
+                entity.brain.setMemory(CobblemonMemories.NEST_LOCATION, paternalNestLocation) // make sure the Nest Location gets synced too
 
                 // check for egg status in nest
                 if (blockAtLocation.getItem().item == ItemStack.EMPTY.item){
