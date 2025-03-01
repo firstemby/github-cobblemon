@@ -33,37 +33,96 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.BLOCK)
     }
 
-    override fun render(blockEntity: StadiumBlockEntity, tickDelta: Float, poseStack: PoseStack, multiBufferSource: MultiBufferSource, light: Int, overlay: Int) {
+    private var pathIndex = 0
+    private var animationTime = 0.0
+    private val droneSpeed = 0.10
+
+    override fun render(
+            blockEntity: StadiumBlockEntity,
+            tickDelta: Float,
+            poseStack: PoseStack,
+            multiBufferSource: MultiBufferSource,
+            light: Int,
+            overlay: Int
+    ) {
+        val blockState = blockEntity.blockState
+        val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
+
         val isClientSide = blockEntity.level?.isClientSide == true
         if (!isClientSide) return
 
         val stadiumBlockState = blockEntity.level?.getBlockState(blockEntity.blockPos) ?: return
         if (stadiumBlockState.block != CobblemonBlocks.STADIUM) {
-            // Block has been destroyed/replaced
             return
         }
 
         val droneState = blockEntity.droneState
 
+
         poseStack.pushPose()
-
-        // Center the drone to aim at block centers instead of the corner
-        poseStack.translate(0.5, 0.0, 0.5)
-        // Fix upside-down model
-        poseStack.mulPose(Axis.XP.rotationDegrees(180F))
-        poseStack.mulPose(Axis.YP.rotationDegrees(180F))
-
         if (blockEntity.isInUse) {
-            // TODO
-        } else {
-            // Rotates the drone to match the block's rotation
-            val blockState = if (blockEntity.level != null) blockEntity.blockState
-            else (CobblemonBlocks.STADIUM.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
-            val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
+            if (blockEntity.pathPoints.isEmpty()) {
+
+                poseStack.popPose()
+                return
+            }
+
+            spawnDebugParticles(blockEntity) // debug particles
+
+            // Center the drone at the block's center
+            poseStack.translate(0.5, -3.0, 0.5)
+            //poseStack.mulPose(Axis.XP.rotationDegrees(180F))
+            //poseStack.mulPose(Axis.YP.rotationDegrees(180F))
+
+            val points = blockEntity.pathPoints
+            val nextIndex = (pathIndex + 1) % points.size
+
+            val currentPoint = points[pathIndex]
+            val nextPoint = points[nextIndex]
+
+            animationTime += tickDelta * droneSpeed
+            if (animationTime >= 1.0) {
+                animationTime = 0.0
+                pathIndex = nextIndex
+            }
+
+            val interpolatedPos = currentPoint.lerp(nextPoint, animationTime.toDouble())
+
+            println("DEBUG: Drone moving between points:")
+            println("  - Current Point: ${currentPoint}")
+            println("  - Next Point: ${nextPoint}")
+            println("  - Interpolated Position: $interpolatedPos")
+
+            poseStack.translate(interpolatedPos.x - blockEntity.blockPos.x,
+                    interpolatedPos.y - blockEntity.blockPos.y,
+                    interpolatedPos.z - blockEntity.blockPos.z)
+
+            println("DEBUG: Drone position interpolated to: $interpolatedPos")
+
             poseStack.mulPose(Axis.YP.rotationDegrees(-yRot))
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180F)) // flip the drone right side up
 
             renderDrone(droneState, "sleep", tickDelta, poseStack, 1.0F, multiBufferSource, light)
+        } else {
+            val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
+
+            val poseEntry = poseStack.last()
+            val matrix = poseEntry.pose()
+
+            poseStack.translate(0.5, 0.0, 0.5)
+            poseStack.mulPose(Axis.YP.rotationDegrees(yRot))
+
+            val posX = matrix.m03()
+            val posY = matrix.m13()
+            val posZ = matrix.m23()
+
+            println("DEBUG: Drone is NOT in use. Rendering default position at: x=$posX, y=$posY, z=$posZ")
+
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180F))
+            renderDrone(droneState, "sleep", tickDelta, poseStack, 1.0F, multiBufferSource, light)
         }
+
+        poseStack.popPose()
     }
 
     fun renderDrone(
@@ -110,6 +169,28 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
             model.render(context, poseStack, buffer, 200, OverlayTexture.NO_OVERLAY, -0x1)
         }
         model.setDefault()
-        poseStack.popPose()
+    }
+
+    private fun spawnDebugParticles(blockEntity: StadiumBlockEntity) {
+        val world = blockEntity.level ?: return
+        if (!world.isClientSide) return // Only run on the client-side
+
+        for (point in blockEntity.pathPoints) {
+            world.addParticle(
+                    net.minecraft.core.particles.ParticleTypes.FLAME, // Test particle (changeable)
+                    point.x, point.y, point.z, // Position of the particle
+                    0.0, 0.02, 0.0 // Slight upward motion
+            )
+        }
+
+        // Spawn a special particle at the next interpolation point
+        if (blockEntity.pathPoints.isNotEmpty()) {
+            val nextPoint = blockEntity.pathPoints[(pathIndex + 1) % blockEntity.pathPoints.size]
+            world.addParticle(
+                    net.minecraft.core.particles.ParticleTypes.END_ROD, // Different effect for next point
+                    nextPoint.x, nextPoint.y, nextPoint.z,
+                    0.0, 0.05, 0.0
+            )
+        }
     }
 }

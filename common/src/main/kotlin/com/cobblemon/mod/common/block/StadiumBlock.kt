@@ -82,12 +82,32 @@ class StadiumBlock(properties: Properties): BaseEntityBlock(properties) {
         val blockEntity = world.getBlockEntity(blockPos)
         if (blockEntity !is StadiumBlockEntity) return InteractionResult.SUCCESS
 
+        // Toggle isInUse state
+        blockEntity.isInUse = !blockEntity.isInUse
+
+        // debug
+        val activateMessage = if (blockEntity.isInUse) "Stadium Activated!" else "Stadium Deactivated!"
+        player.sendSystemMessage(text(activateMessage).red())
+
+        if (blockEntity.isInUse) {
+            // Generate flight path when activated
+            blockEntity.generateFlightPath(world, radiusX = 5.0, radiusZ = 3.0, height = 10.0, steps = 20)
+
+        } else {
+            // Clear path when deactivated
+            blockEntity.pathPoints.clear()
+        }
+
         val message = "Stadium Pos: " + blockEntity.blockPos +
                 "\nPlayer 1 Pos: " + blockEntity.getPlayer1Pos() +
                 "\nPoke 1 Pos: " + blockEntity.getPoke1Pos() +
                 "\nPlayer 2 Pos: " + blockEntity.getPlayer2Pos() +
                 "\nPoke 2 Pos: " + blockEntity.getPoke2Pos()
         player.sendSystemMessage(text(message).red())
+
+        blockEntity.setChanged()
+        world.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
+
         return InteractionResult.SUCCESS
     }
 }
