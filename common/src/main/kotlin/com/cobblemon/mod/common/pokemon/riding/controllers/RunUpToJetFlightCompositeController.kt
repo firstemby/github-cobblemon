@@ -142,28 +142,18 @@ class RunUpToJetFlightCompositeController : RideController {
         return getActiveController(entity).setRideBar(entity, driver)
     }
 
+    override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).rideFovMult(entity, driver)
+    }
+
+
+
     override fun jumpForce(
         entity: PokemonEntity,
         driver: Player,
         jumpStrength: Int
     ): Vec3 {
         val controller = getActiveController(entity)
-        /*
-        if (controller == landController && jumpStrength >= getRuntime(entity).resolveInt(minimumJump)) {
-
-            //Pass the data to the next state
-            val flightState = flightController.getState( entity, ::JetAirState )
-            val groundState = landController.getState( entity, ::GenericLandState )
-            flightState.currSpeed = groundState.currSpeed
-            flightState.stamina = groundState.stamina
-
-            getState(entity, ::RunUpToFlightCompositeState).let {
-                it.activeController = flightController
-                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-                it.timeTransitioned = entity.level().gameTime
-            }
-        }
-         */
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 

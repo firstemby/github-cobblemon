@@ -1390,11 +1390,13 @@ open class PokemonEntity(
         //Handle ridden pokemon differently to allow vector lerp instead of simple addition.
         else
         {
-            val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), 1.0f, this.getYRot());
+            val rvec = riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO)
+            val vecMag = rvec.length()
+            val v = Entity.getInputVector(rvec, 1.0f, this.getYRot());
             //changing this will give the ride more or less inertia/handling/drift
             this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
 
-            this.move( MoverType.SELF, this.deltaMovement.scale( this.speed.toDouble() ) );
+            this.move( MoverType.SELF, this.deltaMovement.scale(vecMag) );
         }
 
         return this.deltaMovement
@@ -1891,6 +1893,11 @@ open class PokemonEntity(
     fun setRideBar(): Float {
         val driver = this.controllingPassenger as? Player ?: return 0.0f
         return this.riding.setRideBar(this, driver)
+    }
+
+    fun rideFovMult(): Float {
+        val driver = this.controllingPassenger as? Player ?: return 1.0f
+        return this.riding.rideFovMult(this, driver)
     }
 
     /**

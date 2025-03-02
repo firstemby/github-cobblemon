@@ -66,7 +66,6 @@ class BirdAirController : RideController {
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
         //Retrieve the current bird controller state
-        //val state = entity.riding.getState(KEY) { e -> BirdAirControllerState(e) }
         val state = getState(entity, ::BirdAirState)
 
         //retrieve stats

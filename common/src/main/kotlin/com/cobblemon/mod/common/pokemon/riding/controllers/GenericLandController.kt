@@ -97,7 +97,7 @@ class GenericLandController : RideController {
         if (g <= 0.0f) {
             g *= runtime.resolveFloat(this.reverseDriveFactor)
         }
-        val gravity = -0.8
+        val gravity = -1.0
 
         val state = getState(entity, ::GenericLandState)
 
@@ -106,7 +106,7 @@ class GenericLandController : RideController {
         return velocity
     }
 
-    override fun canJump(entity: PokemonEntity, driver: Player) = getRuntime(entity).resolveBoolean(canJump)
+    override fun canJump(entity: PokemonEntity, driver: Player) =  false
 
     //TODO: bring in stamina stats
     override fun setRideBar(entity: PokemonEntity, driver: Player): Float {
