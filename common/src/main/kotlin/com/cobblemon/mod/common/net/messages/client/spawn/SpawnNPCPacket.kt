@@ -22,7 +22,6 @@ import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import com.cobblemon.mod.common.util.writeText
-import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
@@ -33,7 +32,7 @@ class SpawnNPCPacket(
     var npcClass: ResourceLocation,
     var aspects: Set<String>,
     var level: Int,
-    var battleIds: Set<UUID>,
+    var battleIds: Set<String>,
     var name: Component,
     var poseType: PoseType,
     var texture: NPCPlayerTexture,
@@ -59,7 +58,7 @@ class SpawnNPCPacket(
         buffer.writeIdentifier(this.npcClass)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
         buffer.writeInt(this.level)
-        buffer.writeCollection(this.battleIds) { pb, value -> pb.writeUUID(value) }
+        buffer.writeCollection(this.battleIds) { pb, value -> pb.writeString(value) }
         buffer.writeText(name)
         buffer.writeEnumConstant(this.poseType)
         buffer.writeEnumConstant(this.texture.model)
@@ -88,7 +87,7 @@ class SpawnNPCPacket(
             val npc = buffer.readIdentifier()
             val aspects = buffer.readList { buffer.readString() }.toSet()
             val level = buffer.readInt()
-            val battleIds = buffer.readList { buffer.readUUID() }.toSet()
+            val battleIds = buffer.readList { buffer.readString() }.toSet()
             val name = buffer.readText()
             val poseType = buffer.readEnumConstant(PoseType::class.java)
             val model = buffer.readEnumConstant(NPCPlayerModelType::class.java)

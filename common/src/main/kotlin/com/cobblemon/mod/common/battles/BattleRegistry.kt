@@ -28,7 +28,7 @@ object BattleRegistry {
         .disableHtmlEscaping()
         .registerTypeAdapter(ShowdownMoveset::class.java, ShowdownMovesetAdapter)
         .create()
-    private val battleMap = ConcurrentHashMap<UUID, PokemonBattle>()
+    private val battleMap = ConcurrentHashMap<String, PokemonBattle>()
 
     fun onServerStarted() {
         battleMap.clear()
@@ -219,7 +219,7 @@ object BattleRegistry {
         battleMap.remove(battle.battleId)
     }
 
-    fun getBattle(id: UUID) : PokemonBattle? {
+    fun getBattle(id: String) : PokemonBattle? {
         return battleMap[id]
     }
 

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonBuildDetails
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -59,7 +58,6 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
-import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -603,7 +601,7 @@ open class Pokemon : ShowdownIdentifiable {
         source: LivingEntity,
         level: ServerLevel,
         position: Vec3,
-        battleId: UUID? = null,
+        battleId: String = "",
         doCry: Boolean = true,
         illusion: IllusionEffect? = null,
         mutation: (PokemonEntity) -> Unit = {},
@@ -720,7 +718,7 @@ open class Pokemon : ShowdownIdentifiable {
         player: ServerPlayer,
         level: ServerLevel,
         targetPosition: Vec3,
-        battleId: UUID? = null,
+        battleId: String = "",
         doCry: Boolean = true,
         illusion: IllusionEffect? = null,
         mutation: (PokemonEntity) -> Unit = {}

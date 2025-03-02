@@ -108,7 +108,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         get() = (opacity - MIN_OPACITY) / (MAX_OPACITY - MIN_OPACITY)
     var passedSeconds = 0F
 
-    var lastKnownBattle: UUID? = null
+    var lastKnownBattle: String = ""
     lateinit var messagePane: BattleMessagePane
     var hidePortraits = false
     override val schedulingTracker = SchedulingTracker()
@@ -530,7 +530,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
     fun onLogout() {
         this.opacity = MIN_OPACITY
         this.passedSeconds = 0F
-        this.lastKnownBattle = null
+        this.lastKnownBattle = ""
     }
 
 }

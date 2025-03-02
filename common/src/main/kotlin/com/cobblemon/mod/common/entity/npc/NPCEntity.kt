@@ -164,7 +164,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
 
-    val battleIds: Set<UUID>
+    val battleIds: Set<String>
         get() = entityData.get(BATTLE_IDS)
 
     var actionEffect: ActionEffectContext? = null
@@ -207,7 +207,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         val NPC_CLASS = SynchedEntityData.defineId(NPCEntity::class.java, IdentifierDataSerializer)
         val ASPECTS = SynchedEntityData.defineId(NPCEntity::class.java, StringSetDataSerializer)
         val POSE_TYPE = SynchedEntityData.defineId(NPCEntity::class.java, PoseTypeDataSerializer)
-        val BATTLE_IDS = SynchedEntityData.defineId(NPCEntity::class.java, UUIDSetDataSerializer)
+        val BATTLE_IDS = SynchedEntityData.defineId(NPCEntity::class.java, StringSetDataSerializer)
         val NPC_PLAYER_TEXTURE = SynchedEntityData.defineId(NPCEntity::class.java, NPCPlayerTextureSerializer)
         val LEVEL = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.INT)
         val HIDE_NAME_TAG = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.BOOLEAN)

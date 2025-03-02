@@ -88,7 +88,6 @@ import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
 import java.util.EnumSet
 import java.util.Optional
-import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.math.PI
 import net.minecraft.core.BlockPos
@@ -168,7 +167,7 @@ open class PokemonEntity(
         @JvmStatic val PHASING_TARGET_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
         @JvmStatic val PLATFORM_TYPE = SynchedEntityData.defineId(PokemonEntity::class.java, PlatformTypeDataSerializer)
         @JvmStatic val BEAM_MODE = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BYTE)
-        @JvmStatic val BATTLE_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.OPTIONAL_UUID)
+        @JvmStatic val BATTLE_ID = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val ASPECTS = SynchedEntityData.defineId(PokemonEntity::class.java, StringSetDataSerializer)
         @JvmStatic val DYING_EFFECTS_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val POSE_TYPE = SynchedEntityData.defineId(PokemonEntity::class.java, PoseTypeDataSerializer)
@@ -229,11 +228,11 @@ open class PokemonEntity(
         get() = busyLocks.isNotEmpty()
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
-    var battleId: UUID?
-        get() = entityData.get(BATTLE_ID).orElse(null)
-        set(value) = entityData.set(BATTLE_ID, Optional.ofNullable(value))
+    var battleId: String
+        get() = entityData.get(BATTLE_ID) ?: ""
+        set(value) = entityData.set(BATTLE_ID, value ?: "")
     val isBattling: Boolean
-        get() = entityData.get(BATTLE_ID).isPresent
+        get() = entityData.get(BATTLE_ID) != ""
     val friendship: Int
         get() = entityData.get(FRIENDSHIP)
     val seats: List<Seat>
@@ -329,7 +328,7 @@ open class PokemonEntity(
         builder.define(BEAM_MODE, 0)
         builder.define(PLATFORM_TYPE, PlatformType.NONE)
         builder.define(PHASING_TARGET_ID, -1)
-        builder.define(BATTLE_ID, Optional.empty())
+        builder.define(BATTLE_ID, "")
         builder.define(ASPECTS, emptySet())
         builder.define(DYING_EFFECTS_STARTED, false)
         builder.define(POSE_TYPE, PoseType.STAND)
@@ -614,8 +613,8 @@ open class PokemonEntity(
             nbt.put(DataKeys.POKEMON, pokemon.saveToNBT(registryAccess()))
         }
         val battleIdToSave = battleId
-        if (battleIdToSave != null) {
-            nbt.putUUID(DataKeys.POKEMON_BATTLE_ID, battleIdToSave)
+        if (battleIdToSave != "") {
+            nbt.putString(DataKeys.POKEMON_BATTLE_ID, battleIdToSave)
         }
         nbt.putString(DataKeys.POKEMON_POSE_TYPE, entityData.get(POSE_TYPE).name)
         nbt.putByte(DataKeys.POKEMON_BEHAVIOUR_FLAGS, entityData.get(BEHAVIOUR_FLAGS))
@@ -683,7 +682,7 @@ open class PokemonEntity(
         }
 
         val savedBattleId =
-            if (nbt.hasUUID(DataKeys.POKEMON_BATTLE_ID)) nbt.getUUID(DataKeys.POKEMON_BATTLE_ID) else null
+            if (nbt.contains(DataKeys.POKEMON_BATTLE_ID)) nbt.getString(DataKeys.POKEMON_BATTLE_ID) else ""
         if (savedBattleId != null) {
             val battle = BattleRegistry.getBattle(savedBattleId)
             if (battle != null) {

@@ -13,16 +13,17 @@ import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readSizedInt
+import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeSizedInt
-import java.util.UUID
+import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BattleSelectActionsPacket(val battleId: UUID, val showdownActionResponses: List<ShowdownActionResponse>) : NetworkPacket<BattleSelectActionsPacket> {
+class BattleSelectActionsPacket(val battleId: String, val showdownActionResponses: List<ShowdownActionResponse>) : NetworkPacket<BattleSelectActionsPacket> {
 
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeUUID(battleId)
+        buffer.writeString(battleId)
         buffer.writeSizedInt(IntSize.U_BYTE, showdownActionResponses.size)
         showdownActionResponses.forEach { it.saveToBuffer(buffer) }
     }
@@ -30,7 +31,7 @@ class BattleSelectActionsPacket(val battleId: UUID, val showdownActionResponses:
     companion object {
         val ID = cobblemonResource("battle_select_actions")
         fun decode(buffer: RegistryFriendlyByteBuf): BattleSelectActionsPacket {
-            val battleId = buffer.readUUID()
+            val battleId = buffer.readString()
             val responses = mutableListOf<ShowdownActionResponse>()
             repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
                 responses.add(ShowdownActionResponse.loadFromBuffer(buffer))

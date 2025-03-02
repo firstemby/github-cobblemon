@@ -108,7 +108,7 @@ open class PokemonBattle(
     val players = playerUUIDs.mapNotNull { it.getPlayer() }
     val spectators = mutableSetOf<UUID>()
 
-    val battleId = UUID.randomUUID()
+    val battleId = UUID.randomUUID().toString()
 
     val showdownMessages = mutableListOf<String>()
     val battleLog = mutableListOf<String>()

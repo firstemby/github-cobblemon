@@ -72,12 +72,10 @@ import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
-import java.util.UUID
 
 object CobblemonClient {
 
@@ -329,7 +327,7 @@ object CobblemonClient {
 
     fun endBattle() {
         battle = null
-        battleOverlay.lastKnownBattle = null
+        battleOverlay.lastKnownBattle = ""
         BattleMusicController.endMusic()
     }
 

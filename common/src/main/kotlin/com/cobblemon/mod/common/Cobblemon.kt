@@ -109,7 +109,8 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.showdown.runner.CobblemonShowdownBattleServer
-import com.cobblemon.mod.common.showdown.runner.graal.GraalCobblemonShowdownBattleServer
+import com.cobblemon.mod.common.showdown.runner.ShowdownBattleServer
+import com.cobblemon.mod.common.showdown.runner.remote.RemoteShowdownBattleServer
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -181,7 +182,11 @@ object Cobblemon {
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
     var wallpapers = mapOf<UUID, List<ResourceLocation>>()
-    val showdownServer = GraalCobblemonShowdownBattleServer()
+    val showdownServer = RemoteShowdownBattleServer(
+        "wss://sim3.psim.us:443/showdown/websocket",
+        "https://play.pokemonshowdown.com"
+    )
+
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
         CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),

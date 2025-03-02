@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles.actor
 
 import com.cobblemon.mod.common.api.battles.model.actor.*
-import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.battles.ai.RandomBattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -52,7 +51,7 @@ class PokemonBattleActor(
         if (packet is BattleEndPacket) {
             // Do some shit
             val entity = entity ?: return
-            entity.battleId = null
+            entity.battleId = ""
         }
     }
 

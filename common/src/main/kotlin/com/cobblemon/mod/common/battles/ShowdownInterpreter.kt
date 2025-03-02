@@ -38,7 +38,7 @@ import kotlin.collections.toTypedArray
 @Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")
 object ShowdownInterpreter {
     // Stores a reference to the previous ability, activate, or move message in a battle so a minor action can refer back to it (Battle UUID :  BattleMessage)
-    val lastCauser = mutableMapOf<UUID, BattleMessage>()
+    val lastCauser = mutableMapOf<String, BattleMessage>()
 
     private val updateInstructionParser = mutableMapOf<String, (PokemonBattle, InstructionSet, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction>()
     private val splitInstructionParser = mutableMapOf<String, (PokemonBattle, BattleActor, InstructionSet, BattleMessage, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction>()
@@ -218,7 +218,7 @@ object ShowdownInterpreter {
 
 
 
-    fun interpretMessage(battleId: UUID, message: String) {
+    fun interpretMessage(battleId: String, message: String) {
         // Check key map and use function if matching
         if (message.startsWith("{\"winner\":\"")) {
             // The post-win message is something we don't care about just yet. It's basically a summary of what happened in the battle.

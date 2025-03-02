@@ -18,7 +18,6 @@ import java.io.OutputStreamWriter
 import java.net.InetAddress
 import java.net.Socket
 import java.nio.charset.Charset
-import java.util.UUID
 
 class SocketCobblemonShowdownBattleServer(
     val host: String = "127.0.0.1",
@@ -94,7 +93,7 @@ class SocketCobblemonShowdownBattleServer(
                 val message = readMessage(false)
                 if (message != null) {
                     val args = message.split("~")
-                    ShowdownInterpreter.interpretMessage(UUID.fromString(args[0]), args[1])
+                    ShowdownInterpreter.interpretMessage(args[0], args[1])
                 }
             }
             .build()

@@ -190,7 +190,7 @@ class GraalCobblemonShowdownBattleServer : CobblemonShowdownBattleServer {
 
     @Export
     fun sendFromShowdown(battleId: String, message: String) {
-        ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), message)
+        ShowdownInterpreter.interpretMessage(battleId, message)
     }
 
     @Export

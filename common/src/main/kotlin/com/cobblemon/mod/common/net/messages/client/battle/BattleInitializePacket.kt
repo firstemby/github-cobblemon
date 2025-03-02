@@ -29,10 +29,10 @@ import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeMapK
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.cobblemon.mod.common.util.writeString
-import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
+import java.util.UUID
 
 /**
  * Initializes the client's understanding of a battle. This can be for a participant or for a spectator.
@@ -46,7 +46,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
 
     override val id = ID
 
-    lateinit var battleId: UUID
+    lateinit var battleId: String
     lateinit var battleFormat: BattleFormat
 
     lateinit var side1: BattleSideDTO
@@ -79,7 +79,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeUUID(battleId)
+        buffer.writeString(battleId)
         battleFormat.saveToBuffer(buffer)
         for (side in arrayOf(side1, side2)) {
             buffer.writeSizedInt(IntSize.U_BYTE, side.actors.size)
@@ -98,7 +98,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
     }
 
     private fun decode(buffer: RegistryFriendlyByteBuf) {
-        battleId = buffer.readUUID()
+        battleId = buffer.readString()
         battleFormat = BattleFormat.loadFromBuffer(buffer)
         val sides = mutableListOf<BattleSideDTO>()
         repeat(times = 2) {

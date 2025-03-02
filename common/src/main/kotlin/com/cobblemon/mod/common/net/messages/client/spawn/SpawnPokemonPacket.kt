@@ -15,13 +15,21 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.util.*
-import java.util.UUID
-import net.minecraft.world.entity.Entity
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.readText
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.writeText
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
+import java.util.UUID
 
 class SpawnPokemonPacket(
     var ownerId: UUID?,
@@ -31,7 +39,7 @@ class SpawnPokemonPacket(
     var shiny: Boolean,
     var formName: String,
     var aspects: Set<String>,
-    var battleId: UUID?,
+    var battleId: String,
     var phasingTargetId: Int,
     var beamMode: Byte,
     var platform: PlatformType,
@@ -81,7 +89,7 @@ class SpawnPokemonPacket(
         buffer.writeBoolean(this.shiny)
         buffer.writeString(this.formName)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
-        buffer.writeNullable(this.battleId) { pb, value -> pb.writeUUID(value) }
+        buffer.writeString(this.battleId)
         buffer.writeInt(this.phasingTargetId)
         buffer.writeByte(this.beamMode.toInt())
         buffer.writeEnumConstant(this.platform)
@@ -135,7 +143,7 @@ class SpawnPokemonPacket(
             val shiny = buffer.readBoolean()
             val formName = buffer.readString()
             val aspects = buffer.readList { it.readString() }.toSet()
-            val battleId = buffer.readNullable { buffer.readUUID() }
+            val battleId = buffer.readString()
             val phasingTargetId = buffer.readInt()
             val beamModeEmitter = buffer.readByte()
             val platform = buffer.readEnumConstant(PlatformType::class.java)
