@@ -36,6 +36,8 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin)
+    implementation("jakarta.websocket:jakarta.websocket-api:2.2.0")
+
     modImplementation(libs.fabric.loader)
     modApi(libs.molang)
 

@@ -57,7 +57,7 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
         }
 
         battle.actors.forEach { actor ->
-            actor.sendUpdate(BattleSetTeamPokemonPacket(actor.pokemonList.map { it.effectedPokemon }))
+            actor.sendUpdate(BattleSetTeamPokemonPacket(actor.battlePokemonProvider.getKnownPokemon().map { it.effectedPokemon }))
             val req = actor.request ?: return@forEach
             actor.sendUpdate(BattleQueueRequestPacket(req))
         }

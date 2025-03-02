@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.battles.model.actor.StaticBattlePokemonProvider
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.experience.BattleExperienceSource
 import com.cobblemon.mod.common.api.text.red
@@ -30,7 +31,7 @@ import net.minecraft.world.phys.Vec3
 class PlayerBattleActor(
     uuid: UUID,
     pokemonList: List<BattlePokemon>,
-) : BattleActor(uuid, pokemonList.toMutableList()), EntityBackedBattleActor<ServerPlayer> {
+) : BattleActor(uuid, StaticBattlePokemonProvider(pokemonList.toMutableList())), EntityBackedBattleActor<ServerPlayer> {
 
     override val initialPos: Vec3?
     override val entity: ServerPlayer?

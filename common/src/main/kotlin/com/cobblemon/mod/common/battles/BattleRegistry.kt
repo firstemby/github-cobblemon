@@ -161,18 +161,18 @@ object BattleRegistry {
             repeat(battle.format.battleType.slotsPerActor) {
                 actor.activePokemon.add(ActiveBattlePokemon(actor))
             }
-            val entities = actor.pokemonList.mapNotNull { it.entity }
+            val entities = actor.battlePokemonProvider.getKnownPokemon().mapNotNull { it.entity }
             entities.forEach { it.battleId = battle.battleId }
         }
 
         // -> Add the players and team
         for (actor in battle.actors.sortedBy { it.showdownId }) {
-            messages.add(""">player ${actor.showdownId} {"name":"${actor.uuid}","team":"${actor.pokemonList.packTeam()}"}""")
+            messages.add(""">player ${actor.showdownId} {"name":"${actor.uuid}","team":"${actor.battlePokemonProvider.getKnownPokemon().packTeam()}"}""")
         }
 
         // -> Set team size
         for (actor in battle.actors.sortedBy { it.showdownId }) {
-            messages.add(">${actor.showdownId} team ${actor.pokemonList.count()}")
+            messages.add(">${actor.showdownId} team ${actor.battlePokemonProvider.getKnownPokemon().count()}")
         }
 
         // Compiles the request and sends it off

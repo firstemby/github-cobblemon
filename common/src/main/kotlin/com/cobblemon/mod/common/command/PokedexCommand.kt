@@ -37,7 +37,6 @@ import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
 
 object PokedexCommand {
-
     private const val NAME = "pokedex"
     private const val GRANT_NAME = "grant"
     private const val REVOKE_NAME = "revoke"

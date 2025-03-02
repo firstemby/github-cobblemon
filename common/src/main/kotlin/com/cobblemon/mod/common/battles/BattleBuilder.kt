@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.storage.party.PartyStore
@@ -92,15 +91,15 @@ object BattleBuilder {
         val errors = ErroredBattleStart()
 
         for ((player, actor) in arrayOf(player1 to player1Actor, player2 to player2Actor)) {
-            if (actor.pokemonList.filter { it.health > 0 }.size < battleFormat.battleType.slotsPerActor) {
+            if (actor.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }.size < battleFormat.battleType.slotsPerActor) {
                 errors.participantErrors[actor] += BattleStartError.insufficientPokemon(
                     actorEntity = player,
                     requiredCount = battleFormat.battleType.slotsPerActor,
-                    hadCount = actor.pokemonList.filter { it.health > 0 }.size
+                    hadCount = actor.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }.size
                 )
             }
 
-            if (actor.pokemonList.any { it.entity?.isBusy == true }) {
+            if (actor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
                 errors.participantErrors[actor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
             }
 
@@ -171,15 +170,15 @@ object BattleBuilder {
         }
 
         for ((player, actor) in players.zip(playerActors)) {
-            if (actor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+            if (actor.battlePokemonProvider.getKnownPokemon().size < battleFormat.battleType.slotsPerActor) {
                 errors.participantErrors[actor] += BattleStartError.insufficientPokemon(
                     actorEntity = player,
                     requiredCount = battleFormat.battleType.slotsPerActor,
-                    hadCount = actor.pokemonList.size
+                    hadCount = actor.battlePokemonProvider.getKnownPokemon().size
                 )
             }
 
-            if (actor.pokemonList.any { it.entity?.isBusy == true }) {
+            if (actor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
                 errors.participantErrors[actor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
             }
 
@@ -256,19 +255,19 @@ object BattleBuilder {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                actorEntity = player,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = playerActor.pokemonList.size
+                hadCount = playerActor.battlePokemonProvider.getKnownPokemon().size
             )
         }
 
-        if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+        if (playerActor.battlePokemonProvider.getKnownPokemon().size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = playerActor.pokemonList.size
+                hadCount = playerActor.battlePokemonProvider.getKnownPokemon().size
             )
         }
 
-        if (playerActor.pokemonList.any { it.entity?.isBusy == true }) {
+        if (playerActor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
             errors.participantErrors[playerActor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
         }
 
@@ -323,11 +322,11 @@ object BattleBuilder {
         val npcParty = npcEntity.getPartyForChallenge(listOf(player))
         val errors = ErroredBattleStart()
 
-        if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+        if (playerActor.battlePokemonProvider.getKnownPokemon().size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = playerActor.pokemonList.size
+                hadCount = playerActor.battlePokemonProvider.getKnownPokemon().size
             )
         }
 
@@ -340,20 +339,20 @@ object BattleBuilder {
             return errors
         }
 
-        val npcActor = NPCBattleActor(npcEntity, npcParty, npcEntity.skill ?: npcEntity.npc.skill)
+        val npcActor = NPCBattleActor(npcEntity, npcParty)
 //        if (npcEntity.battleIds.get().isPresent) {
 //            errors.participantErrors[npcActor] += BattleStartError.alreadyInBattle(npcActor)
 //        }
 
-        if (npcActor.pokemonList.filter { it.health > 0 }.size < battleFormat.battleType.slotsPerActor) {
+        if (npcActor.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }.size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[npcActor] += BattleStartError.insufficientPokemon(
                 actorEntity = npcEntity,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = npcActor.pokemonList.size
+                hadCount = npcActor.battlePokemonProvider.getKnownPokemon().size
             )
         }
 
-        if (playerActor.pokemonList.any { it.entity?.isBusy == true }) {
+        if (playerActor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
             errors.participantErrors[playerActor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
         }
 

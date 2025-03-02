@@ -46,7 +46,7 @@ interface PokemonSelectingItem {
 
         player.getBattleState()?.let { (_, actor) ->
             if (bagItem == null) return InteractionResultHolder.fail(stack)
-            val battlePokemon = actor.pokemonList.find { it.effectedPokemon == entity?.pokemon }
+            val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
 
             if (!actor.canFitForcedAction()) {
                 player.sendSystemMessage(battleLang("bagitem.cannot").red())
@@ -142,9 +142,9 @@ interface PokemonSelectingItem {
     fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack> {
         PartySelectCallbacks.createBattleSelect(
             player = player,
-            pokemon = actor.pokemonList,
-            canSelect = { pk -> canUseOnBattlePokemon(actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) },
-            handler = { pk -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) }
+            pokemon = actor.battlePokemonProvider.getKnownPokemon(),
+            canSelect = { pk -> canUseOnBattlePokemon(actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk.effectedPokemon }!!) },
+            handler = { pk -> applyToBattlePokemon(player, stack, actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
 
         return InteractionResultHolder.success(stack)

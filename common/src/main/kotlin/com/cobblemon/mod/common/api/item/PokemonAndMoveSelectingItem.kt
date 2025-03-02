@@ -52,7 +52,7 @@ interface PokemonAndMoveSelectingItem {
                 player.sendSystemMessage(battleLang("bagitem.cannot").red())
                 return InteractionResultHolder.fail(stack)
             }
-            val battlePokemon = actor.pokemonList.find { it.effectedPokemon == entity?.pokemon }
+            val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
             if (entity == null) {
                 return interactGeneralBattle(player, stack, actor)
             } else if (battlePokemon != null) {
@@ -142,11 +142,11 @@ interface PokemonAndMoveSelectingItem {
     fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack>? {
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
-            pokemon = actor.pokemonList.map { it.effectedPokemon },
-            moves = { pk -> actor.pokemonList.find { it.effectedPokemon == pk }!!.moveSet.getMoves() },
-            canSelectPokemon = { pk -> canUseOnBattlePokemon(actor.pokemonList.find { it.effectedPokemon == pk }!!) },
+            pokemon = actor.battlePokemonProvider.getKnownPokemon().map { it.effectedPokemon },
+            moves = { pk -> actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk }!!.moveSet.getMoves() },
+            canSelectPokemon = { pk -> canUseOnBattlePokemon(actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk }!!) },
             canSelectMove = ::canUseOnMove,
-            handler = { pk, mv -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk }!!, mv) }
+            handler = { pk, mv -> applyToBattlePokemon(player, stack, actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk }!!, mv) }
         )
 
         return InteractionResultHolder.success(stack)

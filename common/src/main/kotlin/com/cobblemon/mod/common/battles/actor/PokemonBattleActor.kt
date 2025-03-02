@@ -8,10 +8,7 @@
 
 package com.cobblemon.mod.common.battles.actor
 
-import com.cobblemon.mod.common.api.battles.model.actor.AIBattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.ActorType
-import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
+import com.cobblemon.mod.common.api.battles.model.actor.*
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.battles.ai.RandomBattleAI
@@ -27,9 +24,8 @@ import net.minecraft.world.phys.Vec3
 class PokemonBattleActor(
     uuid: UUID,
     val pokemon: BattlePokemon,
-    override val fleeDistance: Float,
-    artificialDecider: BattleAI = RandomBattleAI()
-) : AIBattleActor(uuid, listOf(pokemon), artificialDecider), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
+    override val fleeDistance: Float
+) : BattleActor(uuid, StaticBattlePokemonProvider(listOf(pokemon))), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
 
     override val initialPos: Vec3?
     init {

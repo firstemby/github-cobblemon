@@ -13,8 +13,6 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
-import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
-import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.util.asArrayValue
 
 /**

@@ -351,7 +351,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
             forceSwitch: Boolean
     ): ShowdownActionResponse {
         if (forceSwitch || activeBattlePokemon.isGone()) {
-            val switchTo = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }.randomOrNull()
+            val switchTo = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { it.canBeSentOut() }.randomOrNull()
                     ?: return DefaultActionResponse() //throw IllegalStateException("Need to switch but no Pokémon to switch to")
             switchTo.willBeSwitchedIn = true
             return SwitchActionResponse(switchTo.uuid)
@@ -629,14 +629,14 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         if (forceSwitch || activeBattlePokemon.isGone()) {
             if ((forceSwitch && battle.turn == 1) || (activeBattlePokemon.isGone() && battle.turn == 1)) {
-                val switchTo = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }.randomOrNull()
+                val switchTo = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { it.canBeSentOut() }.randomOrNull()
                         ?: return DefaultActionResponse() //throw IllegalStateException("Need to switch but no Pokémon to switch to")
                 switchTo.willBeSwitchedIn = true
                 return SwitchActionResponse(switchTo.uuid)
             }
             else if ((forceSwitch && battle.turn > 1) || (activeBattlePokemon.isGone() && battle.turn > 1)) {
 
-                val availableSwitches = activeBattlePokemon.actor.pokemonList.filter { (it.health > 0) && (it.uuid != (activeBattlePokemon.battlePokemon?.uuid ?: true)) } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                val availableSwitches = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { (it.health > 0) && (it.uuid != (activeBattlePokemon.battlePokemon?.uuid ?: true)) } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
 
                 // this gets null error after NPC faints
                 val bestEstimation = availableSwitches.maxOfOrNull { estimatePartyMatchup(request, battle, it.effectedPokemon) }
@@ -651,7 +651,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
                 //return SwitchActionResponse(switchTo.uuid)
 
-                /*val availableSwitches = p2Actor.pokemonList.filter { it.health > 0 } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                /*val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
                 val bestEstimation = availableSwitches.maxOfOrNull { estimateMatchup(request, battle, it.effectedPokemon) }
                 *//*availableSwitches.forEach {
                     estimateMatchup(request, battle, it.effectedPokemon)
@@ -774,8 +774,8 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         // switch out based on current matchup on the field
         if (checkSwitchOutSkill(skill) && shouldSwitchOut(request, battle, activeBattlePokemon, moveset)) {
-            val availableSwitches = p2Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
-            val availablePlayerSwitches = p1Actor.pokemonList.filter { it.uuid != opponent.pokemon!!.uuid && it.health > 0 }
+            val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+            val availablePlayerSwitches = p1Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != opponent.pokemon!!.uuid && it.health > 0 }
 
             // todo try to detect a player switch-in based on if they do that a lot
             // todo if player is in bad matchup against current AI pokemon, and they have switched out before, then they have a chance of switching to a favorable matchup
@@ -850,10 +850,10 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
             // Deal with non-weather related field changing effects
             for (move in moveset.moves.filter { !it.disabled }) {
-                val availableSwitches = p2Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
                 
                 // Tailwind
-                if (move.pp > 0 && move.id == "tailwind" && move.id != npcSideTailwindCondition && p2Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 2) {
+                if (move.pp > 0 && move.id == "tailwind" && move.id != npcSideTailwindCondition && p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 2) {
                     return chooseMove(move, activeBattlePokemon)
                 }
 
@@ -874,7 +874,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 // Light Screen
                 if (move.pp > 0 && move.id == "lightscreen" && move.id != npcSideScreenCondition
                         && getBaseStats(opponent.pokemon!!, "spa") > getBaseStats(opponent.pokemon!!, "atk")
-                        && p2Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 1) {
+                        && p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 1) {
                     return chooseMove(move, activeBattlePokemon)
                 }
 
@@ -882,7 +882,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 // Reflect
                 if (move.pp > 0 && move.id == "reflect" && move.id != npcSideScreenCondition
                         && getBaseStats(opponent.pokemon!!, "atk") > getBaseStats(opponent.pokemon!!, "spa")
-                        && p2Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 1) {
+                        && p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 1) {
                     return chooseMove(move, activeBattlePokemon)
                 }
             }
@@ -1275,7 +1275,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         // switch out
         if (shouldSwitchOut(request, battle, activeBattlePokemon, moveset)) {
-            val availableSwitches = p1Actor.pokemonList.filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+            val availableSwitches = p1Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
             val bestEstimation = availableSwitches.maxOfOrNull { estimateMatchup(activeBattlePokemon, request, battle, it.effectedPokemon) }
             /*availableSwitches.forEach {
                 estimateMatchup(request, battle, it.effectedPokemon)
@@ -1477,7 +1477,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         //val requestActor = request.side?.
         //val availableSwitches = request.side?.pokemon?.filter { !it.active && getHpFraction(it.condition) != 0.0 }
         //val playerAvailableSwitches =
-        val availableSwitches = p2Actor.pokemonList.filter { it.uuid != mon.activePokemon.pokemon!!.uuid && it.health > 0 }
+        val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.activePokemon.pokemon!!.uuid && it.health > 0 }
 
         val currentNPCAbility = request.side?.pokemon!!.first().ability
 
@@ -1784,7 +1784,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         val p1Boosts = battle.side1.activePokemon.firstOrNull()?.battlePokemon?.statChanges
         val playerSide1 = battle.side1.actors.first()
-        val numPlayerPokemon = playerSide1.pokemonList.count()
+        val numPlayerPokemon = playerSide1.battlePokemonProvider.getKnownPokemon().count()
 
 
         /*val lastMajorBattleMessage = if (battle.majorBattleActions.entries.isNotEmpty()) battle.majorBattleActions?.entries?.last()?.value?.rawMessage else ""
@@ -1829,9 +1829,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
         val pokemon2 = battle.side2.activePokemon.firstOrNull()?.battlePokemon?.effectedPokemon
         val p2Boosts = battle.side2.activePokemon.firstOrNull()?.battlePokemon?.statChanges
         val playerSide2 = battle.side2.actors.first()
-        val numNPCPokemon = playerSide2.pokemonList.count()
+        val numNPCPokemon = playerSide2.battlePokemonProvider.getKnownPokemon().count()
 
-        //val nextAvailablePokemon = playerSide2.pokemonList.filter { it.health != 0 }.first().effectedPokemon.uuid
+        //val nextAvailablePokemon = playerSide2.battlePokemonProvider.getKnownPokemon().filter { it.health != 0 }.first().effectedPokemon.uuid
         // todo make nice function for knowing what is the best switchout
 
         // convert p2Boosts to a regular Map rather than a MutableMap
@@ -1858,7 +1858,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         //mon.stats = pokemon.stats
         p1.activePokemon.moves = pokemon1.moveSet.getMoves()
         p1.nRemainingMons = battle.side1.actors.sumOf { actor ->
-            actor.pokemonList.count { pokemon ->
+            actor.battlePokemonProvider.getKnownPokemon().count { pokemon ->
                 pokemon.health != 0
             }
         }
@@ -1871,7 +1871,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
             p1.party[partyPokemonIndex] = p1.activePokemon
         }
 
-        //p1.availableSwitches = playerSide1.pokemonList.filter { it.uuid != p1.pokemon.uuid && it.health > 0 }
+        //p1.availableSwitches = playerSide1.battlePokemonProvider.getKnownPokemon().filter { it.uuid != p1.pokemon.uuid && it.health > 0 }
         //p1.sideConditions = pokemon.sideConditions   //todo what the hell does this mean
 
         p2.activePokemon = getActiveTrackerPokemon(p2, pokemon2?.uuid)
@@ -1889,7 +1889,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         //mon.stats = pokemon.stats
         p2.activePokemon.moves = pokemon2.moveSet.getMoves()
         p2.nRemainingMons = battle.side2.actors.sumOf { actor ->
-            actor.pokemonList.count { pokemon ->
+            actor.battlePokemonProvider.getKnownPokemon().count { pokemon ->
                 pokemon.health != 0
             }
         }

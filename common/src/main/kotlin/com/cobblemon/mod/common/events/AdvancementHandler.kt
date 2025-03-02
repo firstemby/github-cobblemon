@@ -110,7 +110,7 @@ object AdvancementHandler : EventHandler {
                         val advancementData = playerData.advancementData
                         event.battle.actors.forEach { battleActor ->
                             if (!event.winners.contains(battleActor) && battleActor.type == ActorType.WILD) {
-                                battleActor.pokemonList.forEach { battlePokemon ->
+                                battleActor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
                                     advancementData.updateTotalDefeatedCount(battlePokemon.originalPokemon)
                                 }
                             }

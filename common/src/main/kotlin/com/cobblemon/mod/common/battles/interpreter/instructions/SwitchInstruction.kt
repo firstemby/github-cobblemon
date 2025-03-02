@@ -167,7 +167,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             val sendOutFuture = CompletableFuture<Unit>()
             (pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)).thenApply {
                 // Queue actual swap and send-in after the animation has ended
-                actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
+                //actor.battlePokemonProvider.getKnownPokemon().swap(actor.activePokemon.indexOf(activePokemon), actor.battlePokemonProvider.getKnownPokemon().indexOf(newPokemon))
                 activePokemon.battlePokemon = newPokemon
                 activePokemon.illusion = illusion
                 battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
@@ -201,7 +201,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
         }
 
         fun createNonEntitySwitch(battle: PokemonBattle, actor: BattleActor, pnx: String, activePokemon: ActiveBattlePokemon, newPokemon: BattlePokemon, illusion: BattlePokemon? = null): DispatchResult {
-            actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
+            //actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
             activePokemon.battlePokemon = newPokemon
             activePokemon.illusion = illusion
             battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))

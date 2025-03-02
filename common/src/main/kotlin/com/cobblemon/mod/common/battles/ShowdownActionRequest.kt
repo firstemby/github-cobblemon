@@ -212,7 +212,7 @@ data class SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse
     }
 
     override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
-        val pokemon = activeBattlePokemon.actor.pokemonList.find { it.uuid == newPokemonId }
+        val pokemon = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().find { it.uuid == newPokemonId }
         return when {
             pokemon == null -> false // No such Pokémon
             (!activeBattlePokemon.actor.request?.side?.pokemon?.any{ it.uuid == activeBattlePokemon.battlePokemon?.uuid && it.reviving }!! && pokemon.health <= 0) -> false // Checks if the active Pokémon is reviving, if so ignore this check. If not, return false if dead
@@ -223,7 +223,7 @@ data class SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse
     }
 
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
-        return "switch ${activeBattlePokemon.actor.pokemonList.indexOfFirst { it.uuid == newPokemonId } + 1}"
+        return "switch ${activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().indexOfFirst { it.uuid == newPokemonId } + 1}"
     }
 }
 

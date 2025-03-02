@@ -30,7 +30,7 @@ class RandomBattleAI : BattleAI {
         forceSwitch: Boolean
     ): ShowdownActionResponse {
         if (forceSwitch || activeBattlePokemon.isGone()) {
-            val switchTo = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }.randomOrNull()
+            val switchTo = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { it.canBeSentOut() }.randomOrNull()
                 ?: return DefaultActionResponse() //throw IllegalStateException("Need to switch but no Pokémon to switch to")
             switchTo.willBeSwitchedIn = true
             return SwitchActionResponse(switchTo.uuid)

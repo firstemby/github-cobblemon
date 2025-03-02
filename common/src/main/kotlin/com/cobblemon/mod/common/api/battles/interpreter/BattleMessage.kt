@@ -120,7 +120,7 @@ class BattleMessage(rawMessage: String) {
     }
 
     fun pokemonByUuid(index: Int, battle: PokemonBattle): BattlePokemon? {
-        return this.argumentAt(index)?.let { UUID.fromString(it) }?.let { uuid -> battle.actors.flatMap { it.pokemonList }.find { it.uuid == uuid } }
+        return this.argumentAt(index)?.let { UUID.fromString(it) }?.let { uuid -> battle.actors.flatMap { it.battlePokemonProvider.getKnownPokemon() }.find { it.uuid == uuid } }
     }
 
     /**

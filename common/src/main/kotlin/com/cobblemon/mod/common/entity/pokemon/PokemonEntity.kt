@@ -1066,7 +1066,7 @@ open class PokemonEntity(
             val bagItemLike = BagItems.getConvertibleForStack(stack) ?: return false
 
             val battlePokemon =
-                battle.actors.flatMap { it.pokemonList }.find { it.effectedPokemon.uuid == pokemon.uuid }
+                battle.actors.flatMap { it.battlePokemonProvider.getKnownPokemon() }.find { it.effectedPokemon.uuid == pokemon.uuid }
                     ?: return false // Shouldn't be possible but anyway
             if (battlePokemon.actor.getSide().actors.none { it.isForPlayer(player) }) {
                 return true

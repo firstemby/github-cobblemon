@@ -65,7 +65,7 @@ class ReviveItem(
             val battle = BattleRegistry.getBattleByParticipatingPlayer(player)
             if (battle != null) {
                 val actor = battle.getActor(player)!!
-                val battlePokemon = actor.pokemonList
+                val battlePokemon = actor.battlePokemonProvider.getKnownPokemon()
                 if (!actor.canFitForcedAction()) {
                     player.sendSystemMessage(battleLang("bagitem.cannot").red(), true)
                     return InteractionResultHolder.consume(stack)

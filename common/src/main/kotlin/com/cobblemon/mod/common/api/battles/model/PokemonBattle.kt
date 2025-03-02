@@ -90,7 +90,7 @@ open class PokemonBattle(
         side2.battle = this
         this.actors.forEach { actor ->
             actor.battle = this
-            actor.pokemonList.forEach { battlePokemon ->
+            actor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
                 battlePokemon.effectedPokemon.evolutionProxy.current().progress()
                     .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
                     .forEach { it.reset() }
@@ -213,7 +213,7 @@ open class PokemonBattle(
     fun getBattlePokemon(pnx: String, pokemonID: String): BattlePokemon {
         val actor = actors.find { it.showdownId == pnx.substring(0, 2) }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
-        return actor.pokemonList.find { it.uuid.toString() == pokemonID }
+        return actor.battlePokemonProvider.getKnownPokemon().find { it.uuid.toString() == pokemonID }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
     }
 
@@ -244,9 +244,9 @@ open class PokemonBattle(
     fun end() {
         ended = true
         this.actors.forEach { actor ->
-            val faintedPokemons = actor.pokemonList.filter { it.health <= 0 }
+            val faintedPokemons = actor.battlePokemonProvider.getKnownPokemon().filter { it.health <= 0 }
             actor.getSide().getOppositeSide().actors.forEach { opponent ->
-                val opponentNonFaintedPokemons = opponent.pokemonList.filter { it.health > 0 }
+                val opponentNonFaintedPokemons = opponent.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }
                 faintedPokemons.forEach { faintedPokemon ->
                     for (opponentPokemon in opponentNonFaintedPokemons) {
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
@@ -269,7 +269,7 @@ open class PokemonBattle(
                             else -> continue
                         }
                         val experience = Cobblemon.experienceCalculator.calculate(opponentPokemon, faintedPokemon, multiplier)
-                        if (experience > 0 && actor.pokemonList.all { it.health <= 0 }) {
+                        if (experience > 0 && actor.battlePokemonProvider.getKnownPokemon().all { it.health <= 0 }) {
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
@@ -302,7 +302,7 @@ open class PokemonBattle(
             .filterIsInstance<PokemonEntity>()
             .forEach{it.pokemon.heal()}
         actors.forEach { actor ->
-            actor.pokemonList.forEach { battlePokemon ->
+            actor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
                 battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
                 if (battlePokemon.effectedPokemon.entity != null
                         && battlePokemon.effectedPokemon.entity?.beamMode == 0

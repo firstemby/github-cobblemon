@@ -69,7 +69,7 @@ object ChallengeHandler : ServerNetworkPacketHandler<BattleChallengePacket> {
     private fun flagAsSeen(battle: PokemonBattle, entity: PokemonEntity) {
         // Wild actor is tied to Pokemon UUID not entity
         val actor = battle.getActor(entity.pokemon.uuid) as? PokemonBattleActor ?: return
-        val battlePokemon = actor.pokemonList.firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
+        val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
         battle.playerUUIDs.forEach { uuid ->
             CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
         }

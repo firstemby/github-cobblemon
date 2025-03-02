@@ -31,10 +31,10 @@ import net.minecraft.server.level.ServerPlayer
 
 abstract class BattleActor(
     val uuid: UUID,
-    val pokemonList: MutableList<BattlePokemon>
+    val battlePokemonProvider: BattlePokemonProvider
 ) {
     init {
-        pokemonList.forEach { it.actor = this }
+        battlePokemonProvider.getKnownPokemon().forEach { it.actor = this }
     }
 
     val struct = asMoLangValue()
