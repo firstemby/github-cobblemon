@@ -182,8 +182,8 @@ class VehicleLandController : RideController {
             val driftSpeed =  (1.0 - ((abs(state.currDrift) - 1.0) / (5.0 - 1.0))) * 0.5 + 0.3
 
             velocity = Vec3((1.0 * state.currSpeed) * (driftSpeed / 2.0) * -sign(state.currDrift) + min(state.driftBoost, 0.5) * 1.25,
-                grav,
-                (1.0 * state.currSpeed) * driftSpeed + min(state.driftBoost, 0.5) * 1.25)
+                            grav,
+                         (1.0 * state.currSpeed) * driftSpeed + min(state.driftBoost, 0.5) * 1.25)
         }else{
             velocity = Vec3(0.0 , grav, state.currSpeed + min(state.driftBoost, 0.5) * 1.25)
         }
@@ -202,7 +202,7 @@ class VehicleLandController : RideController {
     override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
         val f = Mth.wrapDegrees(driver.yRot - entity.yRot)
         val runtime = getRuntime(entity)
-        val lookYawLimit = 180.0f
+        val lookYawLimit = 120.0f
         val g = Mth.clamp(f, -lookYawLimit, lookYawLimit)
         driver.yRotO += g - f
         driver.yRot = driver.yRot + g - f
@@ -226,7 +226,6 @@ class VehicleLandController : RideController {
         return 0.1
     }
 
-    /*
     override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
         val state = getState(entity, ::LandVehicleState)
 
@@ -235,7 +234,6 @@ class VehicleLandController : RideController {
         return 1.0f + fovIncrease
 
     }
-     */
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)

@@ -97,7 +97,7 @@ class GenericLandController : RideController {
         if (g <= 0.0f) {
             g *= runtime.resolveFloat(this.reverseDriveFactor)
         }
-        val gravity = -0.8
+        val gravity = -1.0
 
         val state = getState(entity, ::GenericLandState)
 

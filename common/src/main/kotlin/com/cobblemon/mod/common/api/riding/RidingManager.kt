@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sin
+import kotlin.math.sin
 
 data class RidingManager(val entity: PokemonEntity) {
     var lastSpeed = 0F
@@ -37,6 +38,12 @@ data class RidingManager(val entity: PokemonEntity) {
             .withQueryValue("entity", entity.struct)
             .also {
                 it.environment.query.addFunction("passenger_count") { DoubleValue(entity.passengers.size.toDouble()) }
+                it.environment.query.addFunction("get_ride_stats") { params ->
+                    val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
+                    val rideStyle = RidingStyle.valueOf(params.getString(1).uppercase())
+                    //TODO: Use the mons actual boost once implemented
+                    DoubleValue(entity.rideProp.calculate(rideStat, rideStyle, 0))
+                }
                 it.environment.query.addFunction("get_ride_stats") { params ->
                     val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
                     val rideStyle = RidingStyle.valueOf(params.getString(1).uppercase())
@@ -70,6 +77,11 @@ data class RidingManager(val entity: PokemonEntity) {
 
         val pose = controller.pose(entity)
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
+        //val speedPlayer = driver.deltaMovement.horizontalDistance()
+        //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
+        //val speedEntity = entity.deltaMovement.length()  //* 20 * 60 * 60) / ( 1000 )
+        //println(speedEntity)
+        //driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} km/h")), true)
         //val speedPlayer = driver.deltaMovement.horizontalDistance()
         //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
         //val speedEntity = entity.deltaMovement.length()  //* 20 * 60 * 60) / ( 1000 )
@@ -110,6 +122,11 @@ data class RidingManager(val entity: PokemonEntity) {
     fun setRideBar(entity: PokemonEntity, driver: Player): Float {
         val controller = getController(entity) ?: return 0.0f
         return controller.setRideBar(entity, driver)
+    }
+
+    fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
+        val controller = getController(entity) ?: return 1.0f
+        return controller.rideFovMult(entity, driver)
     }
 
     fun canJump(entity: PokemonEntity, driver: Player): Boolean {

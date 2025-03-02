@@ -96,8 +96,9 @@ interface RideController : Encodable, Decodable {
 
     fun setRideBar(entity: PokemonEntity, driver: Player): Float = 0.0f
 
-    fun canJump(entity: PokemonEntity, driver: Player) : Boolean
+    fun rideFovMult(entity: PokemonEntity, driver: Player): Float = 1.0f
 
+    fun canJump(entity: PokemonEntity, driver: Player) : Boolean
     fun jumpForce(entity: PokemonEntity, driver: Player, jumpStrength: Int) : Vec3
 
     fun gravity(entity: PokemonEntity, regularGravity: Double) : Double? = null

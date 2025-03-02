@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -73,12 +74,12 @@ class RunUpToJetFlightCompositeController : RideController {
         driver: Player
     ): Float {
         val state = getState(entity, ::RunUpToFlightCompositeState)
-        if ((state.activeController == flightController && entity.onGround() && state.timeTransitioned + 20 < entity.level().gameTime) ||
-            (Minecraft.getInstance().options.keySprint.isDown && state.activeController == flightController && state.timeTransitioned + 20 < entity.level().gameTime)) {
+        if (( state.activeController == flightController && entity.onGround() && state.timeTransitioned + 20 < entity.level().gameTime) ||
+            ( Minecraft.getInstance().options.keySprint.isDown() && state.activeController == flightController && state.timeTransitioned + 20 < entity.level().gameTime)) {
 
             //Pass the data to the next state
-            val flightState = flightController.getState(entity, ::JetAirState)
-            val groundState = landController.getState(entity, ::GenericLandState)
+            val flightState = flightController.getState( entity, ::JetAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
             groundState.currSpeed = flightState.currSpeed
             groundState.stamina = flightState.stamina
 
@@ -102,8 +103,8 @@ class RunUpToJetFlightCompositeController : RideController {
             )
         {
             //Pass the data to the next state
-            val flightState = flightController.getState(entity, ::JetAirState)
-            val groundState = landController.getState(entity, ::GenericLandState)
+            val flightState = flightController.getState( entity, ::JetAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
             flightState.currSpeed = groundState.currSpeed
             flightState.stamina = groundState.stamina
 
@@ -141,28 +142,18 @@ class RunUpToJetFlightCompositeController : RideController {
         return getActiveController(entity).setRideBar(entity, driver)
     }
 
+    override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).rideFovMult(entity, driver)
+    }
+
+
+
     override fun jumpForce(
         entity: PokemonEntity,
         driver: Player,
         jumpStrength: Int
     ): Vec3 {
         val controller = getActiveController(entity)
-        /*
-        if (controller == landController && jumpStrength >= getRuntime(entity).resolveInt(minimumJump)) {
-
-            //Pass the data to the next state
-            val flightState = flightController.getState( entity, ::JetAirState )
-            val groundState = landController.getState( entity, ::GenericLandState )
-            flightState.currSpeed = groundState.currSpeed
-            flightState.stamina = groundState.stamina
-
-            getState(entity, ::RunUpToFlightCompositeState).let {
-                it.activeController = flightController
-                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-                it.timeTransitioned = entity.level().gameTime
-            }
-        }
-         */
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 

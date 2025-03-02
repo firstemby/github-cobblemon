@@ -88,6 +88,67 @@
       }
     ]
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LIQUID": "100-100"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LIQUID": "100-100"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LIQUID": "100-100"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can fly",
+        "ranges": {
+          "LIQUID": "100-100"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can stay off the ground",
+        "ranges": {
+          "LIQUID": "100-100"
+        }
+      }
+    },
+    "controller": {
+      "key": "cobblemon:swim/dolphin"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseAnimations": [
+          {
+            "animations": [
+              {
+                "fileName": "trainer_generic",
+                "animationName": "animation.trainer_generic.ride_test"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "moves": [
     "1:firepunch",
     "1:thunderpunch",

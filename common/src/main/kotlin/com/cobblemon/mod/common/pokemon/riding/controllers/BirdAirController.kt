@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -27,10 +28,21 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import kotlin.math.*
+import kotlin.math.*
 
 class BirdAirController : RideController {
     override val key = KEY
     override val poseProvider = PoseProvider(PoseType.HOVER)
+        .with(PoseOption(PoseType.FLY) {
+            val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
+            it.deltaMovement.length() > 0.3 })
+        /*
+        .with(PoseOption(PoseType.FLY) {
+            val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
+            player.zza > 0.0f // Checks if the player is actively attempting to move forward
+        })
+         */
+
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
             it.deltaMovement.length() > 0.3 })
@@ -61,7 +73,7 @@ class BirdAirController : RideController {
     //Reaches max top speed from a standstill at minimum 8 seconds and max 3 seconds.
     //This is a bit of a confusing expression and likely should be cleaned up to be more readable
     var accelExpr: Expression = "(q.get_ride_stats('ACCELERATION', 'AIR') / 100) * (0.01666666666 - 0.00625) + 0.00625".asExpression()
-        private set
+
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
@@ -147,9 +159,7 @@ class BirdAirController : RideController {
         */
         //Retrieve the current composite controller state
         val state = getState(entity, ::BirdAirState)
-
         val velocity = Vec3(0.0 , upForce * state.currSpeed, forwardForce * state.currSpeed)
-
         return velocity
     }
 
@@ -252,12 +262,18 @@ class BirdAirController : RideController {
         buffer.writeString(topSpeedExpr.toString())
         buffer.writeString(accelExpr.toString())
         buffer.writeString(handlingExpr.toString())
+        buffer.writeString(topSpeedExpr.toString())
+        buffer.writeString(accelExpr.toString())
+        buffer.writeString(handlingExpr.toString())
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         gravity = buffer.readString().asExpression()
         horizontalAcceleration = buffer.readString().asExpression()
         verticalAcceleration = buffer.readString().asExpression()
+        topSpeedExpr = buffer.readString().asExpression()
+        accelExpr = buffer.readString().asExpression()
+        handlingExpr = buffer.readString().asExpression()
         topSpeedExpr = buffer.readString().asExpression()
         accelExpr = buffer.readString().asExpression()
         handlingExpr = buffer.readString().asExpression()

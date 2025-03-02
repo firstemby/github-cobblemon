@@ -1690,6 +1690,22 @@ open class PokemonEntity(
         this.yBodyRot = this.yRot
         this.yRotO = this.yRot
 
+        val riders = this.passengers.filterIsInstance<LivingEntity>()
+
+        //These are the only functions that matter and I have isolated them to
+        //avoid minecrafts changes they do to velocity so that the ride controllers
+        //can be tested without that interference.
+        if ( false ) {
+            val v = Entity.getInputVector(riding.velocity(this, driver, Vec3.ZERO), 1.0f, this.getYRot());
+            //changing this will give the ride more or less inertia/handling/drift?
+            //A bit of overlap with other things but.
+            this.setDeltaMovement(this.deltaMovement.lerp(v, riding.inertia(this)));
+
+            //maybe move this to the travel function. The jump below never gets properly used
+            this.move( MoverType.SELF, this.deltaMovement );
+
+        }
+
         if (this.riding.canJump(this, driver)) {
             if (this.onGround()) {
                 if (this.jumpInputStrength > 0) {
@@ -1891,6 +1907,11 @@ open class PokemonEntity(
     fun setRideBar(): Float {
         val driver = this.controllingPassenger as? Player ?: return 0.0f
         return this.riding.setRideBar(this, driver)
+    }
+
+    fun rideFovMult(): Float {
+        val driver = this.controllingPassenger as? Player ?: return 1.0f
+        return this.riding.rideFovMult(this, driver)
     }
 
     /**
