@@ -62,11 +62,24 @@ import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBacken
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.battles.BattleFormat
+import com.cobblemon.mod.common.battles.BattleRegistry
+import com.cobblemon.mod.common.battles.BattleSide
+import com.cobblemon.mod.common.battles.ShowdownThread
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.client.CobblemonPack
-import com.cobblemon.mod.common.command.argument.*
+import com.cobblemon.mod.common.command.argument.DexArgumentType
+import com.cobblemon.mod.common.command.argument.DialogueArgumentType
+import com.cobblemon.mod.common.command.argument.FormArgumentType
+import com.cobblemon.mod.common.command.argument.MoveArgumentType
+import com.cobblemon.mod.common.command.argument.NPCClassArgumentType
+import com.cobblemon.mod.common.command.argument.PartySlotArgumentType
+import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
+import com.cobblemon.mod.common.command.argument.PokemonStoreArgumentType
+import com.cobblemon.mod.common.command.argument.SpawnBucketArgumentType
+import com.cobblemon.mod.common.command.argument.SpeciesArgumentType
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
 import com.cobblemon.mod.common.config.constraint.IntConstraint
@@ -86,11 +99,25 @@ import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.properties.*
+import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
+import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
+import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
+import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
+import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
+import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
+import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
+import com.cobblemon.mod.common.showdown.runner.CobblemonShowdownBattleServer
+import com.cobblemon.mod.common.showdown.runner.graal.GraalCobblemonShowdownBattleServer
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.ifDedicatedServer
+import com.cobblemon.mod.common.util.isLaterVersion
+import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.requestWallpapers
+import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -113,7 +140,8 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
-import java.util.*
+import java.util.UUID
+import kotlin.collections.set
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 import kotlin.reflect.full.memberProperties
@@ -153,7 +181,7 @@ object Cobblemon {
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
     var wallpapers = mapOf<UUID, List<ResourceLocation>>()
-
+    val showdownServer = GraalCobblemonShowdownBattleServer()
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
         CobblemonPack(id = "adorncompatibility", name = "Adorn Compatibility", packType = PackType.CLIENT_RESOURCES, activationBehaviour = ResourcePackActivationBehaviour.ALWAYS_ENABLED, neededMods = setOf("adorn")),
@@ -315,6 +343,7 @@ object Cobblemon {
         }
         PlatformEvents.SERVER_TICK_PRE.subscribe {
             ServerRealTimeTaskTracker.update()
+            showdownServer.onTick()
         }
         PlatformEvents.SERVER_STARTING.subscribe { event ->
             val server = event.server
@@ -391,21 +420,24 @@ object Cobblemon {
         PlatformEvents.SERVER_STARTED.subscribe {
             bestSpawner.onServerStarted()
             battleRegistry.onServerStarted()
+            showdownServer.onServerStarted()
         }
         PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
 
-        BagItems.observable.subscribe {
-            LOGGER.info("Starting dummy Showdown battle to force it to pre-load data.")
-            battleRegistry.startBattle(
-                BattleFormat.GEN_9_SINGLES,
-                BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
-                BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
-                false
-            ).ifSuccessful {
-                it.mute = true
-            }.ifErrored {
-                val errors = it.errors.joinToString("\n") { it.javaClass.name }
-                LOGGER.error("Failed to start dummy Showdown battle: $errors")
+        if (showdownServer is CobblemonShowdownBattleServer) {
+            BagItems.observable.subscribe {
+                LOGGER.info("Starting dummy Showdown battle to force it to pre-load data.")
+                battleRegistry.startBattle(
+                    BattleFormat.GEN_9_SINGLES,
+                    BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
+                    BattleSide(PokemonBattleActor(UUID.randomUUID(), BattlePokemon(Pokemon().initialize()), -1F)),
+                    false
+                ).ifSuccessful {
+                    it.mute = true
+                }.ifErrored {
+                    val errors = it.errors.joinToString("\n") { it.javaClass.name }
+                    LOGGER.error("Failed to start dummy Showdown battle: $errors")
+                }
             }
         }
 

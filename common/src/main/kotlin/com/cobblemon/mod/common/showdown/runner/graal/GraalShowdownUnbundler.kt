@@ -6,20 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.battles.runner.graal
+package com.cobblemon.mod.common.showdown.runner.graal
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.util.FileUtils
-import com.cobblemon.mod.common.util.extractTo
 import com.cobblemon.mod.common.util.fromJson
 import com.google.gson.GsonBuilder
-import net.minecraft.resources.ResourceLocation
-import oshi.util.FileUtil
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 /**
  * Unbundles a zipped Showdown file found within {@code resources/data/showdown.zip} for use within the GraalShowdownService.

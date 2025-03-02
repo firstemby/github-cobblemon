@@ -25,7 +25,7 @@ class PokemonBattleActor(
     uuid: UUID,
     val pokemon: BattlePokemon,
     override val fleeDistance: Float
-) : BattleActor(uuid, StaticBattlePokemonProvider(listOf(pokemon))), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
+) : BattleActor(uuid, StaticBattlePokemonProvider(listOf(pokemon)), RandomBattleAI()), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
 
     override val initialPos: Vec3?
     init {

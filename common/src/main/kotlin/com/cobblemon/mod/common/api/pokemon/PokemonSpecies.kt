@@ -47,8 +47,29 @@ import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolution
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.showdown.runner.CobblemonShowdownBattleServer
+import com.cobblemon.mod.common.util.adapters.AbilityPoolAdapter
+import com.cobblemon.mod.common.util.adapters.AbilityTemplateAdapter
+import com.cobblemon.mod.common.util.adapters.BiomeLikeConditionAdapter
+import com.cobblemon.mod.common.util.adapters.BlockLikeConditionAdapter
+import com.cobblemon.mod.common.util.adapters.BoxAdapter
+import com.cobblemon.mod.common.util.adapters.DropEntryAdapter
+import com.cobblemon.mod.common.util.adapters.EggGroupAdapter
+import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
+import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
+import com.cobblemon.mod.common.util.adapters.ItemLikeConditionAdapter
+import com.cobblemon.mod.common.util.adapters.LazySetAdapter
+import com.cobblemon.mod.common.util.adapters.LearnsetAdapter
+import com.cobblemon.mod.common.util.adapters.NbtCompoundAdapter
+import com.cobblemon.mod.common.util.adapters.RegistryElementAdapter
 import com.cobblemon.mod.common.util.adapters.RideControllerAdapter
+import com.cobblemon.mod.common.util.adapters.RidingStatDefinitionAdapter
+import com.cobblemon.mod.common.util.adapters.StructureLikeConditionAdapter
+import com.cobblemon.mod.common.util.adapters.TextAdapter
+import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
@@ -130,8 +151,10 @@ object PokemonSpecies : JsonDataRegistry<Species> {
             this.species.forEach(Species::initialize)
             this.species.forEach(Species::resolveEvolutionMoves)
             Cobblemon.showdownThread.queue {
-                it.registerSpecies()
-                it.indicateSpeciesInitialized()
+                if (it is CobblemonShowdownBattleServer) {
+                    it.registerSpecies()
+                    it.indicateSpeciesInitialized()
+                }
                 // Reload this with the mod
                 CobblemonHeldItemManager.load()
                 Cobblemon.LOGGER.info("Loaded {} Pokémon species", this.speciesByIdentifier.size)

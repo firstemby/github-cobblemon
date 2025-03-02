@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.common.collect.HashBiMap
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -32,11 +31,7 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
 
     internal open fun load() {
         this.itemIds.clear()
-        val itemsJson = ShowdownService.service.getItemIds()
-        val showdownIds = hashSetOf<String>()
-        for (i in 0 until itemsJson.size()) {
-            showdownIds += itemsJson[i].asString
-        }
+        val showdownIds = Cobblemon.showdownServer.getItemIds()
         BuiltInRegistries.ITEM.forEach { item ->
             val identifier = BuiltInRegistries.ITEM.getKey(item)
             if (identifier.namespace == Cobblemon.MODID) {

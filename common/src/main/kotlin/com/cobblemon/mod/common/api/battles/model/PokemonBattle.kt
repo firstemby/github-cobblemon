@@ -41,7 +41,6 @@ import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
@@ -51,6 +50,7 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import com.cobblemon.mod.common.pokemon.evolution.progress.DefeatEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.requirements.DefeatRequirement
+import com.cobblemon.mod.common.showdown.runner.ShowdownBattle
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.giveOrDropItemStack
@@ -74,16 +74,15 @@ import net.minecraft.world.item.ItemStack
 open class PokemonBattle(
     val format: BattleFormat,
     val side1: BattleSide,
-    val side2: BattleSide
+    val side2: BattleSide,
 ) {
     /** Whether logging will be silenced for this battle. */
     var mute = true
     val struct = this.asMoLangValue()
     val runtime = MoLangRuntime().also { it.environment.query = struct }
-
     val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf()
-
     val battlePartyStores = mutableListOf<PlayerPartyStore>()
+    lateinit var showdownBattle: ShowdownBattle
 
     init {
         side1.battle = this
@@ -225,7 +224,7 @@ open class PokemonBattle(
 
     fun writeShowdownAction(vararg messages: String) {
         log(messages.joinToString("\n"))
-        ShowdownService.service.send(battleId, messages.toList().toTypedArray())
+        showdownBattle.sendMessages(messages.toList())
     }
 
     fun turn(newTurnNumber: Int) {

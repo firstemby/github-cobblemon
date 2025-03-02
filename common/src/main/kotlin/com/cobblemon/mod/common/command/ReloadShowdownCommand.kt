@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.command
 
-import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.showdown.runner.CobblemonShowdownBattleServer
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
@@ -27,10 +28,13 @@ object ReloadShowdownCommand {
 
     private fun execute(context: CommandContext<CommandSourceStack>): Int {
         try {
-            ShowdownService.service.closeConnection()
-            ShowdownService.service.openConnection()
-            ShowdownService.service.registerSpecies()
-            ShowdownService.service.registerBagItems()
+            Cobblemon.showdownServer.disconnect()
+            Cobblemon.showdownServer.connect()
+            val showdownServer = Cobblemon.showdownServer
+            if (showdownServer is CobblemonShowdownBattleServer) {
+                showdownServer.registerSpecies()
+                showdownServer.registerBagItems()
+            }
             context.source.sendSystemMessage(Component.literal("Reloaded showdown"))
         } catch (e: Exception) {
             e.printStackTrace()

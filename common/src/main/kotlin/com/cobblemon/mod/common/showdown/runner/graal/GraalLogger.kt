@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.battles.runner.graal
+package com.cobblemon.mod.common.showdown.runner.graal
 
 import com.cobblemon.mod.common.Cobblemon
 import java.util.logging.Handler

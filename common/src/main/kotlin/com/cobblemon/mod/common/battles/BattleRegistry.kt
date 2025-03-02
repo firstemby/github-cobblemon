@@ -17,11 +17,10 @@ import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.gson.GsonBuilder
+import net.minecraft.server.level.ServerPlayer
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
-import net.minecraft.server.level.ServerPlayer
 
 object BattleRegistry {
 
@@ -176,7 +175,8 @@ object BattleRegistry {
         }
 
         // Compiles the request and sends it off
-        ShowdownService.service.startBattle(battle, messages.toTypedArray())
+        val showdownBattle = Cobblemon.showdownServer.initializeNewBattle(battle.battleId.toString(), messages.toTypedArray())
+        battle.showdownBattle = showdownBattle
     }
 
     /**

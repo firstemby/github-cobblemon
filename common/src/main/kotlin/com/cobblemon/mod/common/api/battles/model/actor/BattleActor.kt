@@ -8,15 +8,12 @@
 
 package com.cobblemon.mod.common.api.battles.model.actor
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.battles.ActiveBattlePokemon
-import com.cobblemon.mod.common.battles.ForcePassActionResponse
-import com.cobblemon.mod.common.battles.ShowdownActionRequest
-import com.cobblemon.mod.common.battles.ShowdownActionResponse
+import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.exception.IllegalActionChoiceException
@@ -31,7 +28,8 @@ import net.minecraft.server.level.ServerPlayer
 
 abstract class BattleActor(
     val uuid: UUID,
-    val battlePokemonProvider: BattlePokemonProvider
+    val battlePokemonProvider: BattlePokemonProvider,
+    val battleAi: BattleAI? = null
 ) {
     init {
         battlePokemonProvider.getKnownPokemon().forEach { it.actor = this }
@@ -73,7 +71,7 @@ abstract class BattleActor(
     open fun isForPlayer(serverPlayerEntity: ServerPlayer) = serverPlayerEntity.uuid in getPlayerUUIDs()
     open fun isForPokemon(pokemonEntity: PokemonEntity) = activePokemon.any { it.battlePokemon?.effectedPokemon?.entity == pokemonEntity }
 
-  fun turn() {
+     open fun turn() {
         val request = request ?: return
         responses.clear()
         if(activePokemon.any { it.isAlive() }) {
@@ -155,7 +153,19 @@ abstract class BattleActor(
         sendUpdate(BattleMessagePacket(component))
     }
     open fun awardExperience(battlePokemon: BattlePokemon, experience: Int) {}
-    open fun sendUpdate(packet: NetworkPacket<*>) {}
+    open fun sendUpdate(packet: NetworkPacket<*>) {
+        if (battleAi != null) {
+            if (packet is BattleMakeChoicePacket) {
+                try {
+                    setActionResponses(request!!.iterate(this.activePokemon, battleAi::choose))
+                } catch (exception: IllegalActionChoiceException) {
+                    LOGGER.error("AI was unable to choose a move, we're going to need to pass!")
+                    exception.printStackTrace()
+                    setActionResponses(request!!.iterate(this.activePokemon) { _, _, _ -> PassActionResponse })
+                }
+            }
+        }
+    }
 
     open fun win(otherWinners: List<BattleActor>, losers: List<BattleActor>) {}
     open fun lose(winners: List<BattleActor>, otherLosers: List<BattleActor>) {}

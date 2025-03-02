@@ -13,9 +13,9 @@ import com.cobblemon.mod.common.api.PrioritizedList
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.battles.BagItems.bagItems
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.item.battle.BagItemLike
+import com.cobblemon.mod.common.showdown.runner.CobblemonShowdownBattleServer
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -42,7 +42,11 @@ object BagItems : DataRegistry {
 
     init {
         observable.subscribe {
-            Cobblemon.showdownThread.queue(ShowdownService::registerBagItems)
+            if (Cobblemon.showdownServer is CobblemonShowdownBattleServer) {
+                Cobblemon.showdownThread.queue {
+                    (Cobblemon.showdownServer as CobblemonShowdownBattleServer).registerBagItems()
+                }
+            }
         }
     }
 

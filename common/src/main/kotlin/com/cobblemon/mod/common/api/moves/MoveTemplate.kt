@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -21,7 +22,10 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.lang
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
 import net.minecraft.network.chat.MutableComponent
@@ -118,6 +122,56 @@ open class MoveTemplate(
             ElementalTypes.DRAGON,
             ElementalTypes.DARK
         )
+
+        fun decodeJsonMove(json: JsonObject, id: String? = null): MoveTemplate {
+            val id = id ?: json.get("id").asString
+            val num = json.get("num").asInt
+            val elementalType = ElementalTypes.getOrException(json.get("type").asString)
+            val damageCategory = DamageCategories.getOrException(json.get("category").asString)
+            val power = json.get("basePower").asDouble
+            val target = MoveTarget.fromShowdownId(json.get("target").asString)
+            // If not a double it's always true
+            val accuracyJson = json.get("accuracy").asJsonPrimitive
+            val accuracy = if (accuracyJson.isNumber) accuracyJson.asDouble else -1.0
+            val pp = json.get("pp").asInt
+            val priority = json.get("priority").asInt
+            val critRatio = json.get("critRatio")?.asDouble ?: 1.0
+            val effectChances = arrayListOf<Double>()
+            val secondariesMember = json.get("secondaries")
+            val secondaryMember = json.get("secondary")
+            if (secondariesMember != null && secondariesMember is JsonArray) {
+                for (j in 0 until secondariesMember.size()) {
+                    val element = secondariesMember[j].asJsonObject
+                    // They declare moves without data on secondary effects for sheer force compatibility
+                    if (element.has("chance")) {
+                        effectChances += element.get("chance").asDouble
+                    }
+                }
+            } else if (secondaryMember != null && secondaryMember is JsonObject) {
+                // They declare moves without data on secondary effects for sheer force compatibility
+                if (secondaryMember.has("chance")) {
+                    effectChances += secondaryMember.get("chance").asDouble
+                }
+            }
+            val actionEffect = ActionEffects.actionEffects[id.asIdentifierDefaultingNamespace()]
+                ?: run {
+                    ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
+                }
+            return MoveTemplate(
+                id,
+                num,
+                elementalType,
+                damageCategory,
+                power,
+                target,
+                accuracy,
+                pp,
+                priority,
+                critRatio,
+                effectChances.toTypedArray(),
+                actionEffect
+            )
+        }
     }
 
     /**
