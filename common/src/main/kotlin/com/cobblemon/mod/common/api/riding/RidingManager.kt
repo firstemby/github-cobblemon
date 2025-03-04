@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.toProperties
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
@@ -41,14 +42,13 @@ data class RidingManager(val entity: PokemonEntity) {
                 it.environment.query.addFunction("get_ride_stats") { params ->
                     val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
                     val rideStyle = RidingStyle.valueOf(params.getString(1).uppercase())
+                    val maxVal = params.getDouble(2)
+                    val minVal = params.getDouble(3)
                     //TODO: Use the mons actual boost once implemented
-                    DoubleValue(entity.rideProp.calculate(rideStat, rideStyle, 0))
-                }
-                it.environment.query.addFunction("get_ride_stats") { params ->
-                    val rideStat = RidingStat.valueOf(params.getString(0).uppercase())
-                    val rideStyle = RidingStyle.valueOf(params.getString(1).uppercase())
-                    //TODO: Use the mons actual boost once implemented
-                    DoubleValue(entity.rideProp.calculate(rideStat, rideStyle, 0))
+                    val normalizedStat = entity.rideProp.calculate(rideStat, rideStyle, 0) / 100.0f
+                    val trueStatVal = (normalizedStat *  (maxVal - minVal)) + minVal
+
+                    DoubleValue(trueStatVal)
                 }
             }
     }

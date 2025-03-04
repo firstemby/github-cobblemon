@@ -54,16 +54,18 @@ class VehicleLandController : RideController {
     var lookYawLimit = "101".asExpression()
         private set
 
-    var handlingExpr: Expression = "(q.get_ride_stats('SKILL', 'LAND') / 100) * (140.0 - 20.0) + 20.0".asExpression()
+    // TODO: Tweak these stats to a workable state.
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
         private set
-    var topSpeedExpr: Expression = "(q.get_ride_stats('SPEED', 'LAND') / 100) * (1.0 - 0.5) + 0.5".asExpression()
+    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.5)".asExpression()
         private set
-    var accelExpr: Expression = ("(q.get_ride_stats('ACCELERATION', 'LAND') / 100.0) * " +
-            "( (1.0 / (1.0 * 2))  - (1.0 / (20 * 6.0))) + (1.0 / (20 * 6.0))").asExpression()
+    // Max accel is a whole 1.0 in 2 seconds. The conversion in the function below is to convert seconds to ticks
+    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 2.0)), (1.0 / (20.0 * 6.0)))".asExpression()
         private set
-    var staminaExpr: Expression = "(q.get_ride_stats('SKILL', 'LAND') / 100) * (60.0 - 10.0) + 10.0".asExpression()
+    // Between 60 seconds and 10 seconds at the lowest when at full speed.
+    var staminaExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 60.0, 10.0)".asExpression()
         private set
-    var jumpExpr: Expression = "(q.get_ride_stats('SKILL', 'LAND') / 100) * (300.0 - 128.0) + 128.0".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 300.0, 128.0)".asExpression()
         private set
 
 

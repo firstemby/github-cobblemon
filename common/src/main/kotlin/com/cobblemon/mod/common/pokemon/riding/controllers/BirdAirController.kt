@@ -64,15 +64,12 @@ class BirdAirController : RideController {
     var verticalAcceleration: Expression = "0.1".asExpression()
         private set
 
-    // Where 90 is the width of the range and 45 is the offset.
-    // So the handling interpolates between 135 and 45
-    var handlingExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * 90 + 45".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression()
         private set
-    var topSpeedExpr: Expression = "(q.get_ride_stats('SPEED', 'AIR') / 100) * (1.0 - 0.35) + 0.35".asExpression()
+    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
         private set
-    //Reaches max top speed from a standstill at minimum 8 seconds and max 3 seconds.
-    //This is a bit of a confusing expression and likely should be cleaned up to be more readable
-    var accelExpr: Expression = "(q.get_ride_stats('ACCELERATION', 'AIR') / 100) * (0.01666666666 - 0.00625) + 0.00625".asExpression()
+    // Max accel is a whole 1.0 in 3 seconds. The conversion in the function below is to convert seconds to ticks
+    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
 
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {

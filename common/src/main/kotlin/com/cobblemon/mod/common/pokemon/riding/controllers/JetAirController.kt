@@ -41,23 +41,22 @@ class JetAirController : RideController {
     //5 bl/s. Minimum speed so long as jets have no gravity.
     var minSpeed: Expression = "1.2".asExpression()
         private set
-    var handlingExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (140.0 - 20.0) + 20.0".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
         private set
-    var handlingYawExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (16.0 - 8.0) + 20.0".asExpression()
+    var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 16.0, 8.0)".asExpression()
         private set
-    var topSpeedExpr: Expression = "(q.get_ride_stats('SPEED', 'AIR') / 100) * (2.5 - 1.0) + 1.0".asExpression()
+    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression()
         private set
-    //Same equation as above except the minimum accel is 8 seconds from the minimum accel to 1 second.
-    //This likely needs simplified to probably just the amount of seconds to reach max from zero?
-    var accelExpr: Expression = ("(q.get_ride_stats('ACCELERATION', 'AIR') / 100.0) * " +
-            "( ((2.5 - 0.35) / 20)  - ((2.5 - 0.35) / (20 * 5))) + ((2.5 - 0.35) / (20 * 5))").asExpression()
+    // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
+    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
         private set
-    //Between 60 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (60.0 - 10.0) + 10.0".asExpression()
+    // Between 60 seconds and 10 seconds at the lowest when at full speed.
+    var staminaExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 60.0, 10.0)".asExpression()
         private set
-    var jumpExpr: Expression = "(q.get_ride_stats('SKILL', 'AIR') / 100) * (300.0 - 128.0) + 128.0".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 300.0, 128.0)".asExpression()
         private set
-    //Make configurable by json
+
+    // Make configurable by json
     var infiniteStamina: Expression = "false".asExpression()
         private set
     var infiniteAltitude: Expression = "false".asExpression()
