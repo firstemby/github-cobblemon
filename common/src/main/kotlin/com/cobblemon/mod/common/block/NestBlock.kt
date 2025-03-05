@@ -277,7 +277,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         state: BlockState,
         fluid: Fluid
     ): Boolean {
-        return variant == NestVariant.WATER && super.canPlaceLiquid(player, level, pos, state, fluid)
+        return (variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN) && super.canPlaceLiquid(player, level, pos, state, fluid)
     }
 
     override fun getFluidState(state: BlockState): FluidState {
@@ -302,7 +302,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
 
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        if (variant == NestVariant.WATER) {
+        if (variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN) {
             return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, ctx.level.getFluidState(ctx.clickedPos).type == Fluids.WATER)
         }
         return defaultBlockState()

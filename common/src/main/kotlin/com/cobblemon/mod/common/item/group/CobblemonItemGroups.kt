@@ -342,6 +342,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.NEST_DEEPSLATE)
         entries.accept(CobblemonItems.NEST_BASALT)
         entries.accept(CobblemonItems.NEST_SNOW)
+        entries.accept(CobblemonItems.NEST_SEAGRASS)
 
         entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
