@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "GYG",
+        "YPY",
+        "GYG"
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:gold_ingot"
+        },
+        "Y": {
+            "item": "cobblemon:yellow_apricorn"
+        },
+        "P": {
+            "item": "cobblemon:poke_ball"
+        }
+    },
+    "result": {
+        "id": "cobblemon:max_repel"
+    }
+}

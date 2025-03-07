@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IWI",
+        "WPW",
+        "IWI"
+    ],
+    "key": {
+        "I": {
+            "item": "minecraft:iron_ingot"
+        },
+        "W": {
+            "item": "cobblemon:white_apricorn"
+        },
+        "P": {
+            "item": "cobblemon:poke_ball"
+        }
+    },
+    "result": {
+        "id": "cobblemon:super_repel"
+    }
+}

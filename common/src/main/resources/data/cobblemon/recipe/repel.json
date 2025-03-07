@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CGC",
+        "GPG",
+        "CGC"
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:copper_ingot"
+        },
+        "G": {
+            "item": "cobblemon:green_apricorn"
+        },
+        "P": {
+            "item": "cobblemon:poke_ball"
+        }
+    },
+    "result": {
+        "id": "cobblemon:repel"
+    }
+}

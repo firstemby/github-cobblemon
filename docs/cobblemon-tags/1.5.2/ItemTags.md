@@ -5,6 +5,13 @@ This file contains tags related to items in cobblemon.
 ## Tags:
 
 <details>
+<summary><b>Tag:</b> #items:repels</summary>
+- cobblemon:repel
+- cobblemon:super_repel
+- cobblemon:max_repel
+</details>
+
+<details>
 <summary><b>Tag:</b> #items:ability_changers</summary>
 
 - cobblemon:ability_capsule
