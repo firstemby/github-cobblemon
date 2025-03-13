@@ -403,7 +403,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
         after(seconds = 0.1F) {
             pokemon.beamMode = 0
-            pokemon.busyLocks.remove(this)
+            pokemon.busyLocks.remove(PokemonEntity.CAPTURE)
             captureFuture.complete(false)
             val ballType =
                 this.pokeBall.name.path.toString().toLowerCase().replace("_", "")
@@ -426,7 +426,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     override fun getDimensions(pPose: Pose) = DIMENSIONS
 
     private fun attemptCatch(pokemonEntity: PokemonEntity) {
-        pokemonEntity.busyLocks.add(this)
+        pokemonEntity.busyLocks.add(PokemonEntity.CAPTURE)
         val displace = deltaMovement
         captureState = CaptureState.HIT
         val mul = if (random.nextBoolean()) 1 else -1

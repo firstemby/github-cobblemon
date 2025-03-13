@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokemon.transformation
 
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
@@ -27,6 +28,12 @@ interface Transformation : TransformationLike {
 
     /** The [TransformationRequirement]s that need to be satisfied for this transformation. */
     val requirements: Set<TransformationRequirement>
+
+    /** If this transformation can be deferred by the user and started whenever. */
+    val optional: Boolean
+
+    /** If this transformation needs its requirements reevaluated to remain valid in a [TransformationController]. */
+    val reevaluate: Boolean
 
     /** Checks if all [TransformationRequirement]s are met. */
     fun checkRequirements(pokemon: Pokemon) = this.requirements.all { requirement -> requirement.check(pokemon) }
@@ -69,4 +76,13 @@ interface Transformation : TransformationLike {
      * @return The [TransformationDisplay] representing this transformation on the client.
      */
     fun convertToDisplay(pokemon: Pokemon): TransformationDisplay
+
+    /**
+     * Validates whether a transformation still meets the [TransformationRequirement]s to [start] for a pokemon.
+     * If [Transformation.reevaluate] is false, this check will be bypassed.
+     *
+     * @param pokemon the [Pokemon] to test against.
+     * @return Whether this transformation is still valid and can be made for [pokemon].
+     */
+    fun reevaluate(pokemon: Pokemon) = !this.reevaluate || this.checkRequirements(pokemon)
 }

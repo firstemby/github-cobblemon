@@ -12,9 +12,7 @@
   "labels": [
     "gen7"
   ],
-  "aspects": [
-    "solo-form"
-  ],
+  "aspects": [],
   "abilities": [
     "schooling",
     "h:schooling"
@@ -152,6 +150,7 @@
   "evolutions": [],
   "forms": [
     {
+      "type": "temporary",
       "name": "School",
       "primaryType": "water",
       "maleRatio": 0.5,
@@ -164,7 +163,7 @@
         "gen7"
       ],
       "aspects": [
-        "school-form"
+        "schooling"
       ],
       "baseStats": {
         "hp": 45,
@@ -196,7 +195,11 @@
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "toggleable": true,
+      "trigger": {
+        "variant": "level_up"
+      }
     }
   ]
 }

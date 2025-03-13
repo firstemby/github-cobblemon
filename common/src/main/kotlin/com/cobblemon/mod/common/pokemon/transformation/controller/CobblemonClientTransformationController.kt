@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -33,15 +34,28 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
 
     protected val transformations = transformations.toMutableSet()
 
+    abstract fun acceptPacket(pokemon: Pokemon, transformation: T): NetworkPacket<*>
+
+    abstract fun notification()
+
+    // FROM TransformationController ----------------------------------------------------------------------------------
+
     override val size: Int
         get() = this.transformations.size
 
-    abstract fun acceptPacket(pokemon: Pokemon, transformation: T): NetworkPacket<*>
-
     override fun pokemon(): Pokemon = this.pokemon
 
+    override fun canStart() = this.isNotEmpty() &&
+        !CobblemonClient.isBusy() &&
+        !pokemon.isBusy()
+
+    override fun canStart(transformation: T): Boolean =
+        this.canStart() &&
+        this.any { it === transformation }
+
     override fun start(transformation: T) {
-        CobblemonNetwork.sendToServer(acceptPacket(this.pokemon, transformation))
+        if (this.canStart(transformation))
+            CobblemonNetwork.sendToServer(acceptPacket(this.pokemon, transformation))
     }
 
     override fun progress(): Collection<TransformationProgress<*>> {
@@ -59,7 +73,7 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
         return progressFactory()
     }
 
-    abstract fun notification()
+    // FROM MutableSet ------------------------------------------------------------------------------------------------
 
     override fun add(element: T): Boolean {
         val result = this.transformations.add(element)

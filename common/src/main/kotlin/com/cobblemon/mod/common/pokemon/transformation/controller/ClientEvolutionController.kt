@@ -43,6 +43,12 @@ class ClientEvolutionController(
         override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
     }
 
+    override fun canRevert(): Boolean = false
+
+    override fun revert() {
+        TODO("Not yet implemented")
+    }
+
     companion object {
         @JvmStatic
         val CODEC: Codec<Intermediate> = EvolutionDisplay.CODEC.listOf()

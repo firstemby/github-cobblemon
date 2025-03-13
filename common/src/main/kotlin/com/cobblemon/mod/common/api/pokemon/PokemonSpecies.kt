@@ -68,7 +68,6 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.phys.AABB
-import java.text.Normalizer.Form
 
 object PokemonSpecies : JsonDataRegistry<Species> {
 
@@ -122,6 +121,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     val species: Collection<Species>
         get() = this.speciesByIdentifier.values
     val implemented = mutableListOf<Species>()
+
+    // TODO store forms in here for reference by pokemonproperties argument (cache all species-unique ids)
 
     init {
         SpeciesAdditions.observable.subscribe {

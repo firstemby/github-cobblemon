@@ -52,12 +52,12 @@ class Evolution(
     override val id: String = "",
     override val requirements: Set<TransformationRequirement> = setOf(),
     override val trigger: TransformationTrigger = ItemInteractionTrigger(),
+    override val optional: Boolean = true,
+    override val reevaluate: Boolean = true,
     /** The result of this evolution. */
     val result: PokemonProperties = PokemonProperties(),
     /** The shed result of this evolution. */
     val shedder: PokemonProperties? = null,
-    /** If this evolution allows the user to choose when to start it or not. */
-    var optional: Boolean = true,
     /** The [MoveTemplate]s that will be offered to be learnt upon evolving. */
     val learnableMoves: Set<MoveTemplate> = setOf(),
     /** The items that will drop once the evolution finishes. */
@@ -80,7 +80,8 @@ class Evolution(
      */
     override fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
         if (this.test(pokemon, context)) {
-            return if (this.optional) pokemon.evolutionProxy.server().add(this)
+            return if (this.optional)
+                pokemon.evolutionProxy.server().add(this)
             else {
                 this.forceStart(pokemon)
                 true

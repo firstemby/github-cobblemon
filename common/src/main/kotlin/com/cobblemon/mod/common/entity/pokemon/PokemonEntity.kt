@@ -163,9 +163,12 @@ open class PokemonEntity(
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val FORM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
+        @JvmStatic val BUSY_LOCKED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
 
-        const val BATTLE_LOCK = "battle"
-        const val EVOLUTION_LOCK = "evolving"
+        // Cobblemon busy locks
+        val SHOULDER_MOUNT_LOCK = cobblemonResource("shoulder_mount")
+        val CAPTURE = cobblemonResource("capture")
 
         fun createAttributes(): AttributeSupplier.Builder = LivingEntity.createLivingAttributes()
             .add(Attributes.FOLLOW_RANGE)
@@ -205,9 +208,22 @@ open class PokemonEntity(
     var evolutionEntity: GenericBedrockEntity? = null
 
     var ticksLived = 0
-    val busyLocks = mutableListOf<Any>()
+
+    /**
+     * Custom locks for marking an entity as busy. When populated, [isBusy] and [BUSY_LOCKED] will always evaluate as TRUE.
+     *
+     * NOTE: [BUSY_LOCKED] is NOT a comprehensive check of whether an entity is busy. [isBusy] evaluates Cobblemon-specific
+     * busy conditions that should ALWAYS be checked.
+     */
+    val busyLocks = mutableListOf<ResourceLocation>()
+
+    /**
+     * Whether this entity is performing a blocking action.
+     *
+     * To track an action as blocking, add it to the [busyLocks].
+     */
     val isBusy: Boolean
-        get() = busyLocks.isNotEmpty()
+        get() = entityData.get(BUSY_LOCKED) || isBattling || isEvolving
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
     var battleId: UUID?
@@ -315,6 +331,8 @@ open class PokemonEntity(
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
         builder.define(EVOLUTION_STARTED, false)
+        builder.define(FORM, "")
+        builder.define(BUSY_LOCKED, false)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -333,24 +351,6 @@ open class PokemonEntity(
                     setNoGravity(true)
                 } else {
                     setNoGravity(false)
-                }
-            }
-
-            BATTLE_ID -> {
-                if (battleId != null) {
-                    busyLocks.remove(BATTLE_LOCK) // Remove in case it's hopped across to another battle, don't want extra battle locks
-                    busyLocks.add(BATTLE_LOCK)
-                } else {
-                    busyLocks.remove(BATTLE_LOCK)
-                }
-            }
-
-            EVOLUTION_STARTED -> {
-                if (isEvolving) {
-                    busyLocks.remove(EVOLUTION_LOCK)
-                    busyLocks.add(EVOLUTION_LOCK)
-                } else {
-                    busyLocks.remove(EVOLUTION_LOCK)
                 }
             }
         }
@@ -1139,10 +1139,9 @@ open class PokemonEntity(
             ) {
                 val dirToPlayer = player.eyePosition.subtract(position()).multiply(1.0, 0.0, 1.0).normalize()
                 deltaMovement = dirToPlayer.scale(0.8).add(0.0, 0.5, 0.0)
-                val lock = Any()
-                busyLocks.add(lock)
+                busyLocks.add(SHOULDER_MOUNT_LOCK)
                 after(seconds = 0.5F) {
-                    busyLocks.remove(lock)
+                    busyLocks.remove(SHOULDER_MOUNT_LOCK)
                     if (!isBusy && isAlive) {
                         val isLeft = player.shoulderEntityLeft.isEmpty
                         if (isLeft || player.shoulderEntityRight.isEmpty) {

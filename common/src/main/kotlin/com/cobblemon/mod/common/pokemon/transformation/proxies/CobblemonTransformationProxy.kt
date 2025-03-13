@@ -31,10 +31,13 @@ abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Trans
     protected abstract var clientController: CobblemonClientTransformationController<C, CI>
     protected abstract var serverController: CobblemonServerTransformationController<S, SI>
 
+    /** @return whether this proxy is on the client or server. */
     override fun isClient(): Boolean = this.pokemon.isClient
 
+    /** @return the [TransformationProxy] of this controller matching the current side. */
     override fun current(): TransformationController<out TransformationLike, *> = if (this.isClient()) this.clientController else this.serverController
 
+    /** @return the [CobblemonClientTransformationController] belonging to this proxy. */
     override fun client(): CobblemonClientTransformationController<C, CI> {
         if (!this.isClient()) {
             throw ClassCastException("Cannot use the client implementation from the server side")
@@ -42,6 +45,7 @@ abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Trans
         return this.clientController
     }
 
+    /** @return the [CobblemonServerTransformationController] belonging to this proxy. */
     override fun server(): CobblemonServerTransformationController<S, SI> {
         if (this.isClient()) {
             throw ClassCastException("Cannot use the server implementation from the client side")
@@ -49,6 +53,12 @@ abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Trans
         return this.serverController
     }
 
+    /**
+     * Replaces the existing [CobblemonServerTransformationController] or [CobblemonClientTransformationController].
+     *
+     * NOTE: the [TransformationLike] and [PreProcessor] generic types of [newInstance] are not checked against the types
+     * of the existing controller. They are casted to the types of this proxy. YOU HAVE BEEN WARNED!
+     */
     internal fun overrideController(newInstance: TransformationController<out TransformationLike, PreProcessor>) {
         when (newInstance) {
             is CobblemonClientTransformationController -> {

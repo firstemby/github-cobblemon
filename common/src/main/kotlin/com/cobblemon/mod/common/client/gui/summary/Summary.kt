@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.summary
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
@@ -25,10 +26,11 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
-import com.cobblemon.mod.common.client.gui.summary.widgets.EvolutionSelectScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.EvolutionTestSelectScreen
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.FormSelectScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
@@ -36,6 +38,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWi
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -94,6 +97,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private val tabIconMoves = cobblemonResource("textures/gui/summary/summary_tab_icon_moves.png")
         private val tabIconStats = cobblemonResource("textures/gui/summary/summary_tab_icon_stats.png")
         private val formButtonResource = cobblemonResource("textures/gui/summary/summary_form_test_button.png")
+        private val revertButtonResource = cobblemonResource("textures/gui/summary/summary_revert_test_button.png")
         val iconShinyResource = cobblemonResource("textures/gui/summary/icon_shiny.png")
 
         /**
@@ -165,10 +169,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
-                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null },
-                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null }
+                renderRequirement = {  selectedPokemon.evolutionProxy.client().canStart() },
+                clickRequirement = { selectedPokemon.evolutionProxy.client().canStart() }
             )
         )
+
+        // TODO form and revert button are temp for debugging
 
         // Form Button
         addRenderableWidget(
@@ -177,10 +183,28 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 buttonY = y + 30F,
                 buttonWidth = 10,
                 buttonHeight = 10,
-                clickAction = {},
+                clickAction = {
+                    momentarily { displaySideScreen(if (sideScreenIndex == FORM) PARTY else FORM) }
+                },
                 resource = formButtonResource,
-                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() },
-                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() }
+                renderRequirement = { selectedPokemon.formProxy.client().canStart() },
+                clickRequirement = { selectedPokemon.formProxy.client().canStart() }
+            )
+        )
+
+        // Temporary form revert button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 4F,
+                buttonY = y + 50F,
+                buttonWidth = 10,
+                buttonHeight = 10,
+                clickAction = {
+                    momentarily { CobblemonNetwork.sendToServer(RevertFormPacket(selectedPokemon.uuid)) }
+                },
+                resource = revertButtonResource,
+                renderRequirement = { selectedPokemon.formProxy.client().canRevert() },
+                clickRequirement = { selectedPokemon.formProxy.client().canRevert() }
             )
         )
 
@@ -290,7 +314,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         moveSetSubscription?.unsubscribe()
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
-        children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
+        children().find { it is EvolutionTestSelectScreen }?.let(this::removeWidget)
 
         if (::modelWidget.isInitialized) {
             modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
@@ -412,14 +436,20 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             }
 
             EVOLVE -> {
-                sideScreen = EvolutionSelectScreen(
+                sideScreen = EvolutionTestSelectScreen(
                         x + 216,
                         y + 23,
                         pokemon = selectedPokemon
                 )
             }
 
-            FORM -> {}
+            FORM -> {
+                sideScreen = FormSelectScreen(
+                    x + 216,
+                    y + 23,
+                    pokemon = selectedPokemon
+                )
+            }
         }
         val element = sideScreen
         if (element is Renderable && element is NarratableEntry) {

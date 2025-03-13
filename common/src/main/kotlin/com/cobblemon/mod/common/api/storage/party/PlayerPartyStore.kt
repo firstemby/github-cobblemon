@@ -18,8 +18,8 @@ import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.*
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import java.util.*
@@ -143,6 +143,15 @@ open class PlayerPartyStore(
 
                 // Passive evolutions and form changes
                 pokemon.triggerTransformations(PassiveTrigger::class.java)
+
+                // Reevaluate active form
+                val form = pokemon.form
+                if (form is TemporaryForm && !form.reevaluate(pokemon))
+                    pokemon.formProxy.server().revert()
+
+                // Reevaluate transformation requirements and remove invalid transformations from the controller
+                pokemon.formProxy.server().reevaluate()
+                pokemon.evolutionProxy.server().reevaluate()
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

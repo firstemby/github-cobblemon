@@ -449,13 +449,15 @@ fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
 fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme?.let { BuiltInRegistries.SOUND_EVENT.get(it) } ?: CobblemonSounds.PVP_BATTLE
 
+/** Checks if the player is preoccupied and cannot accept an action. */
+fun ServerPlayer.isBusy() = this.isInBattle() || this.isTrading()
 
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
     if (this.level().isClientSide)
         CobblemonClient.storage.myParty.find { it?.entity?.isBusy == true } != null
     else
-        Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it?.entity?.isBusy == true } != null
+        Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it.entity?.isBusy == true } != null
 
 fun Player.isUsingPokedex() = isUsingItem &&
     ((mainHandItem.item is PokedexItem && usedItemHand == InteractionHand.MAIN_HAND) ||

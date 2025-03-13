@@ -54,7 +54,8 @@ import net.minecraft.resources.ResourceLocation
  * @since Dec 30th, 2021
  */
 abstract class FormData(
-    name: String = "Standard",
+    @SerializedName("name")
+    private var _name: String? = null,
     // Internal for the sake of the base stat provider
     @SerializedName("baseStats")
     internal var _baseStats: MutableMap<Stat, Int>? = null,
@@ -109,10 +110,9 @@ abstract class FormData(
     private var _lightingData: LightingData? = null
 ) : Decodable, Encodable, ShowdownIdentifiable {
 
-    /** The name of this form. This is unique among forms belonging to the same [Species]. */
-    @SerializedName("name")
-    var name: String = name
-        private set
+    /** The name of this form. This is unique among forms belonging to the same [parentForm]. */
+    val name: String
+        get() = _name ?: "Standard"
 
     val baseStats: Map<Stat, Int>
         get() = _baseStats ?: species.baseStats
@@ -266,7 +266,6 @@ abstract class FormData(
         else -> this.standingEyeHeight
     }
 
-    // WHY THE FUCK IS THIS NOT WORKING FOR ASH AND BOND??????:??
     open fun initialize(species: Species, parent: PermanentForm? = null): FormData {
         this.speciesInitializer = species
         this.species
@@ -319,7 +318,7 @@ abstract class FormData(
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        this.name = buffer.readString()
+        this._name = buffer.readString()
         this.aspects = buffer.readList { buffer.readString() }.toMutableList()
         buffer.readNullable { mapBuffer ->
             this._baseStats = mapBuffer.readMap(
@@ -385,4 +384,17 @@ abstract class FormData(
      * @return The Showdown name of this species and form.
      */
     open fun showdownName(): String = this.parentForm?.let { parent -> parent.showdownName() + "-" + this.name } ?: this.species.showdownName()
+
+    // TODO - these only work when retrieved at runtime because setting them on deserializaiton gives defaults... maybe by lazy?
+
+    /**
+     * Checks if two forms are interchangeable with each other.
+     * This covers the following scenarios:
+     * 1. This form is a [PermanentForm] and contains the other as a [TemporaryForm]
+     * 2. Other form is a [PermanentForm] and contains this form as a [TemporaryForm]
+     * 3. Both forms are [TemporaryForm]s and have the same [parentForm]
+     *
+     * @return Whether [other] is interchangeable with this form.
+     */
+    fun isInterchangeableWith(other: FormData) = this.changeableForms.any { it === other } || other.changeableForms.any { it === this }
 }

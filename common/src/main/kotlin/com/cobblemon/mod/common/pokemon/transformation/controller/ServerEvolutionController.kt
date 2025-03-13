@@ -48,6 +48,7 @@ class ServerEvolutionController(
     override fun removePacket(evolution: Evolution) = RemoveEvolutionPacket(this.pokemon, evolution)
 
     override fun start(evolution: Evolution) {
+        if (!canStart(evolution)) return
         CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
             event = EvolutionAcceptedEvent(this.pokemon, evolution),
             ifSucceeded = {
@@ -56,6 +57,10 @@ class ServerEvolutionController(
             }
         )
     }
+
+    override fun canRevert() = false  // TODO evolutions are currently one-way, but modders may appreciate reversion support
+
+    override fun revert() { TODO("Not yet implemented") }  // This is blocked by canRevert
 
     override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
 

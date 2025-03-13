@@ -121,6 +121,7 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.SPAWN_DIRECTION, spawnYaw)
         entity.entityData.set(PokemonEntity.FRIENDSHIP, friendship)
         entity.entityData.set(PokemonEntity.FREEZE_FRAME, freezeFrame)
+        entity.entityData.set(PokemonEntity.FORM, formId)
     }
 
     override fun checkType(entity: Entity): Boolean = entity is PokemonEntity

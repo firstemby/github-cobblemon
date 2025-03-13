@@ -6,10 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.gui.summary.widgets
+package com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.TypeIcon
@@ -20,25 +23,25 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class EvolutionSelectScreen(
+abstract class EvolutionSelectScreen<C : TransformationDisplay, S : Transformation>(
     x: Int,
     y: Int,
-    val pokemon: Pokemon
-): SummaryScrollList<EvolutionSelectScreen.EvolveSlot>(
+    lang: MutableComponent,
+    val pokemon: Pokemon,
+): SummaryScrollList<EvolutionSelectScreen.TransformationSlot<C, S>>(
     x,
     y,
-    lang("ui.evolution"),
+    lang,
     SLOT_HEIGHT + SLOT_SPACING
 ) {
     companion object {
@@ -50,24 +53,30 @@ class EvolutionSelectScreen(
         private val buttonResource = cobblemonResource("textures/gui/summary/summary_evolve_select_button.png")
     }
 
+    abstract fun getSlots(pokemon: Pokemon): Collection<TransformationSlot<C, S>>
+
     private var entriesCreated = false
 
-    public override fun addEntry(entry: EvolveSlot): Int {
+    public override fun addEntry(entry: TransformationSlot<C, S>): Int {
         return super.addEntry(entry)
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         if (!entriesCreated) {
             entriesCreated = true
-            pokemon.evolutionProxy.client().map { EvolveSlot(pokemon, it) }.forEach { entry -> this.addEntry(entry) }
+            getSlots(pokemon).forEach { entry -> this.addEntry(entry) }
         }
         super.renderWidget(context, mouseX, mouseY, partialTicks)
     }
 
-    class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
+    abstract class TransformationSlot<C : TransformationDisplay, S : Transformation>(
+        private val pokemon: Pokemon,
+        private val display: C,
+        text: MutableComponent
+    ) : Entry<TransformationSlot<C, S>>() {
         val client: Minecraft = Minecraft.getInstance()
         val state = FloatingState()
-        val form: FormData = evolution.species.getForm(evolution.aspects)
+        val form: FormData = display.species.getForm(display.aspects)
         val selectButton: SummaryButton = SummaryButton(
             buttonX = 0F,
             buttonY = 0F,
@@ -76,20 +85,22 @@ class EvolutionSelectScreen(
             clickAction = {
                 Minecraft.getInstance().player?.clientSideCloseContainer()
                 playSound(CobblemonSounds.GUI_CLICK)
-                pokemon.evolutionProxy.client().start(this.evolution)
+                getProxy(pokemon).client().start(this.display)
             },
-            text = lang("ui.evolve"),
+            text = text,
             resource = buttonResource,
             boldText = true,
             largeText = false,
             textScale = 0.5F
         )
 
+        abstract fun getProxy(pokemon: Pokemon): TransformationProxy<C, S, *, *>
+
         fun playSound(soundEvent: SoundEvent) {
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
         }
 
-        override fun getNarration() = evolution.species.translatedName
+        override fun getNarration() = display.species.translatedName
 
         override fun render(
             context: GuiGraphics,
@@ -107,7 +118,7 @@ class EvolutionSelectScreen(
             val y = rowTop
             val matrices = context.pose()
 
-            state.currentAspects = evolution.aspects
+            state.currentAspects = display.aspects
 
             blitk(
                 matrixStack = matrices,
@@ -121,7 +132,7 @@ class EvolutionSelectScreen(
             drawScaledText(
                 context = context,
                 font = CobblemonResources.DEFAULT_LARGE,
-                text = evolution.species.translatedName.bold(),
+                text = display.species.translatedName.bold(),
                 x = x + 4,
                 y = y + 2,
                 shadow = true
@@ -146,7 +157,7 @@ class EvolutionSelectScreen(
             matrices.translate(x + (PORTRAIT_DIAMETER / 2) + 65.0, y - 5.0, 0.0)
             matrices.scale(2.5F, 2.5F, 1F)
             drawProfilePokemon(
-                species = this.evolution.species.resourceIdentifier,
+                species = this.display.species.resourceIdentifier,
                 matrixStack = matrices,
                 rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                 state = state,

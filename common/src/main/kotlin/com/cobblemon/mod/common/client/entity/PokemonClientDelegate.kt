@@ -14,7 +14,6 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -100,6 +99,11 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
+            }
+            // TODO form for client (MAKE SURE TO CHECK ILLUSION BECAUSE THAT SHIT WILL PROBABLY BREAK!)
+            else if (data == PokemonEntity.FORM) {
+                val formId = currentEntity.entityData.get(PokemonEntity.FORM)
+                currentEntity.pokemon.form = currentEntity.pokemon.species.getFormByShowdownId(formId)
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
                 currentEntity.pokemon.shiny = currentAspects.contains("shiny")

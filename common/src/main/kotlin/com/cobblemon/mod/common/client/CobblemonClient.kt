@@ -340,4 +340,10 @@ object CobblemonClient {
         }
     }
 
+    /**
+     *
+     * This is the client equivalent of [Player].
+     *
+     */
+    fun isBusy() = battle != null || trade != null
 }

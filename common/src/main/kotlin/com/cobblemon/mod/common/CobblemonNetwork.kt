@@ -164,6 +164,8 @@ import com.cobblemon.mod.common.net.serverhandling.storage.party.SwapPartyPokemo
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.AddFormPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.ClearFormsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.RemoveFormPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.pc.*
 import com.cobblemon.mod.common.net.serverhandling.trade.*
 import com.cobblemon.mod.common.util.server
@@ -365,6 +367,12 @@ object CobblemonNetwork {
 
         // Pokédex scanning
         list.add(PacketRegisterInfo(ServerConfirmedRegisterPacket.ID, ServerConfirmedRegisterPacket::decode, ServerConfirmedRegisterHandler))
+
+        // Form packets
+        list.add(PacketRegisterInfo(AddFormPacket.ID, AddFormPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(ClearFormsPacket.ID, ClearFormsPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(RemoveFormPacket.ID, RemoveFormPacket::decode, PokemonUpdatePacketHandler()))
+
         return list
     }
 
@@ -458,10 +466,9 @@ object CobblemonNetwork {
         // NPC packets
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
 
-        // Form packets
-        list.add(PacketRegisterInfo(AddFormPacket.ID, AddFormPacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(ClearFormsPacket.ID, ClearFormsPacket::decode, PokemonUpdatePacketHandler()))
-        list.add(PacketRegisterInfo(RemoveFormPacket.ID, RemoveFormPacket::decode, PokemonUpdatePacketHandler()))
+        // Form Packets
+        list.add(PacketRegisterInfo(AcceptFormPacket.ID, AcceptFormPacket::decode, AcceptFormHandler))
+        list.add(PacketRegisterInfo(RevertFormPacket.ID, RevertFormPacket::decode, RevertFormHandler))
 
         return list
     }

@@ -1292,6 +1292,11 @@
   "cobblemon.ui.evolve.hint": "%1$s seems ready to evolve!",
   "cobblemon.ui.evolve.into": "%1$s evolved into %2$s!",
 
+  "cobblemon.ui.forms": "Forms",
+  "cobblemon.ui.forms.select": "Change",
+  "cobblemon.ui.forms.hint": "%1$s is able to change form!",
+  "cobblemon.ui.forms.into.generic": "%1$s changed to its %2$s form!",
+
   "cobblemon.label.lv": "Lv. %1$s",
 
   "cobblemon.challenge_label": "Press %1$s to battle.",

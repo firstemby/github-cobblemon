@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.isBusy
 
 /**
  * Default implementation of the [TransformationController] for server [Transformation] management.
@@ -32,13 +33,13 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
     }
 
     /** Creates a [PokemonUpdatePacket] for adding a [TransformationDisplay] to this [pokemon]'s attached client [TransformationController]. */
-    abstract fun addPacket(transformation: T): PokemonUpdatePacket<*>
+    protected abstract fun addPacket(transformation: T): PokemonUpdatePacket<*>
 
     /** Creates a [PokemonUpdatePacket] for removing a [TransformationDisplay] from this [pokemon]'s attached client [TransformationController]. */
-    abstract fun removePacket(transformation: T): PokemonUpdatePacket<*>
+    protected abstract fun removePacket(transformation: T): PokemonUpdatePacket<*>
 
     /** Creates a [PokemonUpdatePacket] for clearing all [TransformationDisplay]s from this [pokemon]'s attached client [TransformationController]. */
-    abstract fun clearPacket(): PokemonUpdatePacket<*>
+    protected abstract fun clearPacket(): PokemonUpdatePacket<*>
 
     /**
      * Validates if the provided transformation is a duplicate of an existing entry in the controller. Duplication is not
@@ -47,7 +48,7 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
      * @param element A valid [Transformation] to this controller.
      * @return Whether the result of [element] matches the result of an existing transformation belonging to this controller.
      */
-    protected abstract fun isDuplicate(element: T): Boolean
+    abstract fun isDuplicate(element: T): Boolean
 
     /**
      * Silently adds the transformation to the controller without syncing with the client counterpart. This is used
@@ -56,13 +57,25 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
      * @param element A [Transformation] to add to this controller.
      * @return Whether [element] was added to the controller.
      */
-    protected fun silentAdd(element: T) = !this.isDuplicate(element) && this.transformations.add(element)
+    fun silentAdd(element: T) = !this.isDuplicate(element) && this.transformations.add(element)
 
-    // FROM TransformationController
+    /** Reevaluates the existing transformations of this controller and removes any that no longer satisfy [Transformation.test] for [pokemon]. */
+    fun reevaluate() = this.forEach { if (!it.reevaluate(this.pokemon)) this.remove(it) }
+
+    // FROM TransformationController ----------------------------------------------------------------------------------
 
     override fun pokemon(): Pokemon = this.pokemon
 
-    override fun start(transformation: T) = transformation.forceStart(this.pokemon)
+    override fun canStart(transformation: T): Boolean =
+        this.canStart() &&
+        this.any { it === transformation }
+
+    override fun canStart(): Boolean =
+        !this.pokemon.isBusy() &&
+        this.pokemon.getOwnerPlayer()?.isBusy() == false &&
+        this.isNotEmpty()
+
+    override fun start(transformation: T) { if (this.canStart(transformation)) transformation.forceStart(this.pokemon) }
 
     override fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
 
@@ -81,7 +94,7 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
         return existing as P
     }
 
-    // FROM MutableSet
+    // FROM MutableSet ------------------------------------------------------------------------------------------------
 
     override val size: Int get() = this.transformations.size
 

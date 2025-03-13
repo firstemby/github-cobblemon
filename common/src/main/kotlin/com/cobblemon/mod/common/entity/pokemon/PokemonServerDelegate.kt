@@ -8,20 +8,20 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
-import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getIsSubmerged
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.update
@@ -107,6 +107,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedNickname =  mock?.nickname ?: entity.pokemon.nickname ?: Component.empty()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
+        val trackedForm = mock?.form ?: entity.pokemon.form.formOnlyShowdownId()
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
@@ -118,6 +119,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.MOVING, entity.platform == PlatformType.NONE && entity.deltaMovement.multiply(1.0, if (entity.onGround()) 0.0 else 1.0, 1.0).length() > 0.005F)
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
+        entity.entityData.set(PokemonEntity.FORM, trackedForm) // have this get form from aspects...?
+        entity.entityData.set(PokemonEntity.BUSY_LOCKED, entity.busyLocks.isNotEmpty())
 
         updatePoseType()
     }
@@ -166,13 +169,22 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         val battle = getBattle()
-        if (entity.ticksLived % 20 == 0 && battle != null) {
-            val activeBattlePokemon = battle
-                .activePokemon
-                .find { it.battlePokemon?.uuid == entity.pokemon.uuid }
+        if (entity.ticksLived % 20 == 0) {
+            if (battle != null) {
+                val activeBattlePokemon = battle
+                    .activePokemon
+                    .find { it.battlePokemon?.uuid == entity.pokemon.uuid }
 
-            if (activeBattlePokemon != null) {
-                activeBattlePokemon.position = entity.level() as ServerLevel to entity.position()
+                if (activeBattlePokemon != null) {
+                    activeBattlePokemon.position = entity.level() as ServerLevel to entity.position()
+                }
+            }
+            //TODO check form if not owned
+            else if (entity.owner == null) {
+                entity.pokemon.triggerTransformations(PassiveTrigger::class.java).forEach {
+                    Cobblemon.LOGGER.error("TRIGGERED WILD: " + it.id + " for " + entity.pokemon.species.name)
+                }
+                entity.pokemon.formProxy.server().reevaluate()
             }
         }
 

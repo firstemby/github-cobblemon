@@ -44,6 +44,10 @@ class ServerFormController(
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
 
+    override fun revert() { if (this.canRevert()) this.pokemon.form = (this.pokemon.form as TemporaryForm).parentForm } // assignment already handles this
+
+    override fun canRevert(): Boolean = pokemon.form is TemporaryForm && (pokemon.form as TemporaryForm).toggleable
+
     data class Intermediate(
         val formIds: Set<String>,
         val progress: Set<TransformationProgress<*>>,

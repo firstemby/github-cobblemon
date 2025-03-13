@@ -99,7 +99,6 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
-import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -179,7 +178,7 @@ open class Pokemon : ShowdownIdentifiable {
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             val oldValue = field
             field = value
-            // Reset form (only if invalid - when creating pokemon from properties, species is set twice and would overwrite)
+            // Reset form (only if invalid - when creating pokemon from properties, species is set twice and would overwrite form)
             if (!this.isValidForm(this.form)) {
                 this.form = value.standardForm
             }
@@ -201,7 +200,7 @@ open class Pokemon : ShowdownIdentifiable {
 
     var form: FormData = species.standardForm
         set(value) {
-            if (value == field)
+            if (value === field)
                 return
             else if (!this.isValidForm(value))
                 throw IllegalArgumentException("Cannot set a form that doesn't belong to the species")
@@ -212,8 +211,16 @@ open class Pokemon : ShowdownIdentifiable {
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
             this.sanitizeFormChangeMoves(old)
-            // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
-            this.evolutionProxy.current().clear()
+            // if old and new are not interchangeable, wipe unlocked evolutions and forms
+            if (!old.isInterchangeableWith(value)) {
+                this.evolutionProxy.current().clear()
+                this.formProxy.current().clear()
+            }
+            // if old is interchangeable with new, toggleable, and still valid - re-add it to the controller
+            else if (!isClient && old is TemporaryForm && old.toggleable && old.reevaluate(this))
+            {
+                this.formProxy.server().silentAdd(old)
+            }
             findAndLearnFormChangeMoves()
             updateAspects()
             checkGender()
@@ -1665,6 +1672,14 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
     }
+
+    /**
+     * Checks if this pokemon's entity is in the middle of performing a blocking action. While busy, it's recommended that
+     * the pokemon does NOT undertake any mutable actions.
+     *
+     * @return whether this pokemon has an entity that is busy.
+     */
+    fun isBusy() = this.entity?.isBusy == true
 
     private val _form = registerObservable(SimpleObservable<FormData>()) { FormUpdatePacket({ this }, it) }
     private val _species = registerObservable(SimpleObservable<Species>()) { SpeciesUpdatePacket({ this }, it) }
