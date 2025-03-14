@@ -9,17 +9,13 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
-import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
-import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
@@ -27,7 +23,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import kotlin.math.*
 import kotlin.math.*
 
 class BirdAirController : RideController {
@@ -42,7 +37,6 @@ class BirdAirController : RideController {
             player.zza > 0.0f // Checks if the player is actively attempting to move forward
         })
          */
-
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
             it.deltaMovement.length() > 0.3 })

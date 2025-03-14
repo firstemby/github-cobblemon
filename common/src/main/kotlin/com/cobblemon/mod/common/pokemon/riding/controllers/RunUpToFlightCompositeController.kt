@@ -85,6 +85,19 @@ class RunUpToFlightCompositeController : RideController {
                 it.timeTransitioned = entity.level().gameTime
             }
         }
+        else if (state.activeController == landController && Minecraft.getInstance().options.keyJump.isDown && state.timeTransitioned + 20 < entity.level().gameTime) {
+
+            //Pass the speed to the next state
+            val flightState = flightController.getState( entity, ::BirdAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
+            flightState.currSpeed = groundState.currSpeed
+
+            getState(entity, ::RunUpToFlightCompositeState).let {
+                it.activeController = flightController
+                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
+                it.timeTransitioned = entity.level().gameTime
+            }
+        }
 
         return getActiveController(entity).speed(entity, driver)
     }
@@ -117,19 +130,7 @@ class RunUpToFlightCompositeController : RideController {
         val controller = getActiveController(entity)
         val state = getState(entity, ::CompositeState)
         val isJumping = Minecraft.getInstance().options.keyJump.isDown
-        if (controller == landController && Minecraft.getInstance().options.keySprint.isDown && state.timeTransitioned + 20 < entity.level().gameTime) {
 
-            //Pass the speed to the next state
-            val flightState = flightController.getState( entity, ::BirdAirState )
-            val groundState = landController.getState( entity, ::GenericLandState )
-            flightState.currSpeed = groundState.currSpeed
-
-            getState(entity, ::RunUpToFlightCompositeState).let {
-                it.activeController = flightController
-                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-                it.timeTransitioned = entity.level().gameTime
-            }
-        }
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 

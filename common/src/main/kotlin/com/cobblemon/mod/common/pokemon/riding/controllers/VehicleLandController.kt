@@ -10,19 +10,21 @@ package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.RidingOnPlayerSoundEventInstance
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.riding.controllers.BirdAirController.Companion
 import com.cobblemon.mod.common.pokemon.riding.states.LandVehicleState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
+import net.minecraft.client.player.LocalPlayer
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -45,6 +47,9 @@ class VehicleLandController : RideController {
     var driveFactor = "1.0".asExpression()
         private set
     var reverseDriveFactor = "0.25".asExpression()
+        private set
+
+    var sound = "minecraft:item.elytra.flying".asExpression()
         private set
 
     var minimumSpeedToTurn = "0.1".asExpression()
@@ -152,6 +157,24 @@ class VehicleLandController : RideController {
                 state.turnSmoother.reset()
                 state.currDrift = 0.0
                 state.driftBoost = min(state.driftBoost + 1.0, 2.0)
+                driver.level().playSound(
+                    null as Player?,
+                    driver.getX(),
+                    driver.getY(),
+                    driver.getZ(), SoundEvents.PLAYER_ATTACK_WEAK,
+                    driver.getSoundSource(), 1.0f, 0.2f
+                )
+
+                /*
+                val lp = driver as? LocalPlayer
+                lp?.let {
+                    val resourceLocation = ResourceLocation.tryParse(getRuntime(entity).resolveString(sound))
+                    val soundEvent = BuiltInRegistries.SOUND_EVENT.getOptional(resourceLocation).orElse(null)
+                    val soundInstance = RidingOnPlayerSoundEventInstance(it, soundEvent)
+                    Minecraft.getInstance().soundManager.play(soundInstance)
+                }
+                 */
+
             }
 
             //Restrict turning while boost is active
@@ -235,6 +258,10 @@ class VehicleLandController : RideController {
         val fovIncrease = (min( state.driftBoost, 0.5 ) * 0.3).toFloat()
         return 1.0f + fovIncrease
 
+    }
+
+    override fun shouldRoll(entity: PokemonEntity): Boolean {
+        return !entity.onGround()
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {

@@ -61,6 +61,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.item.Item
@@ -108,6 +109,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
         .registerTypeAdapter(RideController::class.java, RideControllerAdapter)
         .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
+        .registerTypeAdapter(SoundEvent::class.java, SoundEventAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()

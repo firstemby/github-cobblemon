@@ -9,29 +9,24 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.GenericLandState
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.blockPositionsAsListRounded
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.getString
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.*
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
 
 class GenericLandController : RideController {
     companion object {
@@ -78,8 +73,8 @@ class GenericLandController : RideController {
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         val state = getState(entity, ::GenericLandState)
-        state.currSpeed = 1.0
-        return state.currSpeed.toFloat()
+        //TODO:Is this not performant enough?
+        return state.currVel.length().toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -101,12 +96,64 @@ class GenericLandController : RideController {
 
         val state = getState(entity, ::GenericLandState)
 
-        val velocity = Vec3(f.toDouble() * state.currSpeed, gravity, g.toDouble() * state.currSpeed)
+        //state.currVel.add(f.toDouble() * state.currSpeed, gravity, g.toDouble() * state.currSpeed)
+        val deltLimx = 1.0
+        val deltLimy = 3.0
+        val deltLimz = 1.0
 
-        return velocity
+
+        if( abs(state.currVel.x) < deltLimx ) {
+            state.currVel = state.currVel.add( f.toDouble() / 20.0, 0.0 , 0.0)
+        }
+        if( state.currVel.y > -deltLimy ) {
+            state.currVel = state.currVel.add( 0.0, gravity / 10.0 , 0.0)
+        }
+        if( abs(state.currVel.z) < deltLimz ) {
+            state.currVel = state.currVel.add( 0.0, 0.0 , g.toDouble() / 10.0)
+        }
+
+        //Jump the thang!
+        if (Minecraft.getInstance().options.keyJump.isDown() && entity.onGround()) {
+            state.currVel = Vec3(state.currVel.x, 2.0, state.currVel.z)
+        }
+
+        //This is cheap.
+        //Also make it stop quicker the slower it is.
+        val maxSpeed = 1.0
+
+        state.currVel = state.currVel.lerp( Vec3(0.0, state.currVel.y, 0.0), 1.0/20.0 )
+
+
+        //entity.deltaMovement = entity.deltaMovement.lerp(velocity, 1.0)
+        //state.currVel = state.currVel.add( f.toDouble() / 20.0, gravity / 20.0 , g.toDouble() / 20.0)
+        return state.currVel
     }
 
-    override fun canJump(entity: PokemonEntity, driver: Player) = getRuntime(entity).resolveBoolean(canJump)
+    override fun shouldRoll(entity: PokemonEntity): Boolean {
+        return !entity.onGround()
+    }
+
+    override fun rotationOnMouseXY(
+        entity: PokemonEntity,
+        driver: Player,
+        yMouse: Double,
+        xMouse: Double,
+        yMouseSmoother: SmoothDouble,
+        xMouseSmoother: SmoothDouble,
+        sensitivity: Double,
+        deltaTime: Double
+    ): Vec3 {
+
+        //Smooth out mouse input.
+        val smoothingSpeed = 4
+        val xInput = xMouseSmoother.getNewDeltaValue(xMouse * 0.1, deltaTime * smoothingSpeed);
+        val yInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1, deltaTime * smoothingSpeed);
+
+        //yaw, pitch, roll
+        return Vec3(0.0, yInput, xInput)
+    }
+
+    override fun canJump(entity: PokemonEntity, driver: Player) = false
 
     //TODO: bring in stamina stats
     override fun setRideBar(entity: PokemonEntity, driver: Player): Float {

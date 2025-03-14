@@ -14,5 +14,6 @@ import net.minecraft.world.phys.Vec3
 
 data class GenericLandState(val entity: PokemonEntity) : RidingState {
     var currSpeed: Double = 0.0
+    var currVel: Vec3 = Vec3.ZERO
     var stamina: Float = 1.0f
 }

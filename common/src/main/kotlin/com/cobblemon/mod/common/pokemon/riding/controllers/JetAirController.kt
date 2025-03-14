@@ -196,7 +196,6 @@ class JetAirController : RideController {
                  deltaTime: Double ): Vec3
     {
         if(driver !is Rollable) return Vec3.ZERO
-
         //TODO: figure out a cleaner solution to this issue of large jumps when skipping frames or lagging
         //Cap at a rate of 5fps so frame skips dont lead to huge jumps
         val cappedDeltaTime = min( deltaTime, 0.2)

@@ -1417,6 +1417,7 @@ open class PokemonEntity(
         return this.deltaMovement
     }
 
+    /*
     override fun shouldDiscardFriction(): Boolean {
         val riders = this.passengers.filterIsInstance<LivingEntity>()
         if (riders.isEmpty()) {
@@ -1425,6 +1426,7 @@ open class PokemonEntity(
             return true
         }
     }
+     */
 
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
