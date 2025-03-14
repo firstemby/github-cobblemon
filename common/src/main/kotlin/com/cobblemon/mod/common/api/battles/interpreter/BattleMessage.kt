@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
+import com.cobblemon.mod.common.battles.pokemon.AbstractBattlePokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import java.util.UUID
 
@@ -119,7 +120,7 @@ class BattleMessage(rawMessage: String) {
         return this
     }
 
-    fun pokemonByUuid(index: Int, battle: PokemonBattle): BattlePokemon? {
+    fun pokemonByUuid(index: Int, battle: PokemonBattle): AbstractBattlePokemon? {
         return this.argumentAt(index)?.let { UUID.fromString(it) }?.let { uuid -> battle.actors.flatMap { it.battlePokemonProvider.getKnownPokemon() }.find { it.uuid == uuid } }
     }
 
@@ -142,7 +143,7 @@ class BattleMessage(rawMessage: String) {
      * @param battle The [PokemonBattle] being queried.
      * @return The [BattlePokemon] if the argument exists and is successfully parsed; otherwise null.
      */
-    fun battlePokemon(index: Int, battle: PokemonBattle): BattlePokemon? {
+    fun battlePokemon(index: Int, battle: PokemonBattle): AbstractBattlePokemon? {
         val (actorID, pokemonID) = this.pnxAndUuid(index) ?: return null
         return this.battlePokemon(actorID, pokemonID, battle)
     }
@@ -154,7 +155,7 @@ class BattleMessage(rawMessage: String) {
      * @param battle The [PokemonBattle] being queried.
      * @return The [BattlePokemon] if the argument exists and is successfully parsed; otherwise null.
      */
-    fun battlePokemonFromOptional(battle: PokemonBattle, optionalArg: String = "of"): BattlePokemon? {
+    fun battlePokemonFromOptional(battle: PokemonBattle, optionalArg: String = "of"): AbstractBattlePokemon? {
         val optional = this.optionalArguments.get(optionalArg) ?: return null
         val pokemonID = optional.takeIf { it.length >= 2 }?.split(":")?.takeIf { it.size == 2 } ?: return null
         val pnx = pokemonID[0].takeIf { it.matches(PNX_MATCHER) || it.matches(PN_MATCHER) } ?: return null
@@ -237,7 +238,7 @@ class BattleMessage(rawMessage: String) {
         null
     }
 
-    private fun battlePokemon(pnx: String, pokemonID: String, battle: PokemonBattle): BattlePokemon? = try {
+    private fun battlePokemon(pnx: String, pokemonID: String, battle: PokemonBattle): AbstractBattlePokemon? = try {
         battle.getBattlePokemon(pnx, pokemonID)
     } catch (_: Exception) {
         null

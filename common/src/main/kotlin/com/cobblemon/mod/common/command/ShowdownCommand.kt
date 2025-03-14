@@ -36,7 +36,7 @@ object ShowdownCommand {
             return Command.SINGLE_SUCCESS
         }
         val assertion = ShowdownGameServerLoginManager.loginGuest(name, showdownServer.getLoginState())
-        showdownServer.setLoginState(ShowdownGameServerLoginState(assertion = assertion))
+        showdownServer.setLoginState(ShowdownGameServerLoginState(assertion = assertion, username = name))
         showdownServer.sendServerMessage("|/trn $name,0,$assertion")
         return Command.SINGLE_SUCCESS
     }

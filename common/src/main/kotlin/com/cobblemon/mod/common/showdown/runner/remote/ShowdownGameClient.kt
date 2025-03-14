@@ -50,7 +50,7 @@ class ShowdownGameClient(val socketUri: String) {
         }
 
         override fun onText(webSocket: WebSocket?, data: CharSequence?, last: Boolean): CompletionStage<*>? {
-            client.messageQueue.addAll(data.toString().split("\n"))
+            client.messageQueue.add(data.toString())
             if (!last) {
                 webSocket?.request(1L)
             }

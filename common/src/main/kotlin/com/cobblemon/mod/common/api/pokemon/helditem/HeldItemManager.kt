@@ -15,8 +15,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.helditem.BaseCobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonEmptyHeldItemManager
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
 
 /**
  * Responsible for querying [BattlePokemon] for the presence of held items and their consumption.

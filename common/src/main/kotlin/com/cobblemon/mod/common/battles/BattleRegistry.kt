@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.showdown.runner.remote.RemoteShowdownBattle
 import com.google.gson.GsonBuilder
 import net.minecraft.server.level.ServerPlayer
 import java.util.UUID
@@ -213,6 +214,26 @@ object BattleRegistry {
         }
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
     }
+
+    fun initializeShowdownControlledBattle(showdownBattle: RemoteShowdownBattle, playerId: UUID) {
+        /*
+        val battleId = showdownBattle.id
+        val battle = PokemonBattle(
+            BattleFormat.GEN_9_SINGLES,
+            BattleSide(
+                PlayerBattleActor(playerId, )
+            )
+        )
+
+         */
+    }
+
+    /*
+    private fun createBattlePokemonFromShowdownJson(jsonObject: JsonObject): BattlePokemon {
+        val pokemon = PokemonProperties.parse("")
+    }
+
+     */
 
     fun closeBattle(battle: PokemonBattle) {
         battle.onEndHandlers.forEach { it(battle) }

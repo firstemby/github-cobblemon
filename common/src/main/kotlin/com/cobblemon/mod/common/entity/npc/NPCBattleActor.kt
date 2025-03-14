@@ -11,8 +11,6 @@ package com.cobblemon.mod.common.entity.npc
 import com.cobblemon.mod.common.api.battles.model.actor.*
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.party.PartyStore
-import com.cobblemon.mod.common.battles.ai.StrongBattleAI
-import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.chainFutures

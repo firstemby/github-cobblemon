@@ -40,6 +40,7 @@ import com.cobblemon.mod.common.battles.dispatch.DispatchResult
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
+import com.cobblemon.mod.common.battles.pokemon.AbstractBattlePokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
@@ -89,11 +90,13 @@ open class PokemonBattle(
         side2.battle = this
         this.actors.forEach { actor ->
             actor.battle = this
-            actor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
-                battlePokemon.effectedPokemon.evolutionProxy.current().progress()
-                    .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
-                    .forEach { it.reset() }
-            }
+            actor.battlePokemonProvider.getKnownPokemon()
+                .filterIsInstance<BattlePokemon>()
+                .forEach { battlePokemon ->
+                    battlePokemon.effectedPokemon.evolutionProxy.current().progress()
+                        .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
+                        .forEach { it.reset() }
+                }
         }
     }
 
@@ -209,7 +212,7 @@ open class PokemonBattle(
      *
      * Returns null if the pnx key is invalid or the uuid does not exist.
      */
-    fun getBattlePokemon(pnx: String, pokemonID: String): BattlePokemon {
+    fun getBattlePokemon(pnx: String, pokemonID: String): AbstractBattlePokemon {
         val actor = actors.find { it.showdownId == pnx.substring(0, 2) }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
         return actor.battlePokemonProvider.getKnownPokemon().find { it.uuid.toString() == pokemonID }
@@ -243,9 +246,13 @@ open class PokemonBattle(
     fun end() {
         ended = true
         this.actors.forEach { actor ->
-            val faintedPokemons = actor.battlePokemonProvider.getKnownPokemon().filter { it.health <= 0 }
+            val faintedPokemons = actor.battlePokemonProvider.getKnownPokemon()
+                .filter { it.health <= 0 }
+                .filterIsInstance<BattlePokemon>()
             actor.getSide().getOppositeSide().actors.forEach { opponent ->
-                val opponentNonFaintedPokemons = opponent.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }
+                val opponentNonFaintedPokemons = opponent.battlePokemonProvider.getKnownPokemon()
+                    .filter { it.health > 0 }
+                    .filterIsInstance<BattlePokemon>()
                 faintedPokemons.forEach { faintedPokemon ->
                     for (opponentPokemon in opponentNonFaintedPokemons) {
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
@@ -301,13 +308,15 @@ open class PokemonBattle(
             .filterIsInstance<PokemonEntity>()
             .forEach{it.pokemon.heal()}
         actors.forEach { actor ->
-            actor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
-                battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
-                if (battlePokemon.effectedPokemon.entity != null
-                        && battlePokemon.effectedPokemon.entity?.beamMode == 0
-                        && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
-                    battlePokemon.effectedPokemon.tryRecallWithAnimation()
-                }
+            actor.battlePokemonProvider.getKnownPokemon()
+                .filterIsInstance<BattlePokemon>()
+                .forEach { battlePokemon ->
+                    battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
+                    if (battlePokemon.effectedPokemon.entity != null
+                            && battlePokemon.effectedPokemon.entity?.beamMode == 0
+                            && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
+                        battlePokemon.effectedPokemon.tryRecallWithAnimation()
+                    }
             }
         }
         sendUpdate(BattleEndPacket())

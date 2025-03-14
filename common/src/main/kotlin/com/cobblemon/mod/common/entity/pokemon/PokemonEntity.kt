@@ -51,6 +51,7 @@ import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.entity.PlatformType
@@ -87,7 +88,6 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
 import java.util.EnumSet
-import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import kotlin.math.PI
 import net.minecraft.core.BlockPos
@@ -1064,9 +1064,9 @@ open class PokemonEntity(
 
             val bagItemLike = BagItems.getConvertibleForStack(stack) ?: return false
 
-            val battlePokemon =
-                battle.actors.flatMap { it.battlePokemonProvider.getKnownPokemon() }.find { it.effectedPokemon.uuid == pokemon.uuid }
-                    ?: return false // Shouldn't be possible but anyway
+            val battlePokemon = battle.actors.flatMap { it.battlePokemonProvider.getKnownPokemon() }
+                .filterIsInstance<BattlePokemon>()
+                .find { it.effectedPokemon.uuid == pokemon.uuid } ?: return false
             if (battlePokemon.actor.getSide().actors.none { it.isForPlayer(player) }) {
                 return true
             }

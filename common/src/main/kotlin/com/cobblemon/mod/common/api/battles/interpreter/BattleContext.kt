@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.battles.interpreter
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
+import com.cobblemon.mod.common.battles.pokemon.AbstractBattlePokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 
 /**
@@ -30,8 +31,8 @@ interface BattleContext {
     /** The [BattleContext.Type] tied to this [BattleContext]. */
     val type: Type
 
-    /** The [BattlePokemon] that directly or indirectly caused this [BattleContext]. */
-    val origin: BattlePokemon?
+    /** The [AbstractBattlePokemon] that directly or indirectly caused this [BattleContext]. */
+    val origin: AbstractBattlePokemon?
 
     fun getStruct() = queryStructOf(
         "type" to { StringValue(type.name) },
@@ -69,10 +70,10 @@ interface BattleContext {
 }
 
 data class BasicContext(
-        override val id: String,
-        override val turn: Int,
-        override val type: BattleContext.Type,
-        override val origin: BattlePokemon?
+    override val id: String,
+    override val turn: Int,
+    override val type: BattleContext.Type,
+    override val origin: AbstractBattlePokemon?
 ) : BattleContext
 
 data class MissingContext(

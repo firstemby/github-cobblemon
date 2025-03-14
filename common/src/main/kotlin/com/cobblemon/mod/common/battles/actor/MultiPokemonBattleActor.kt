@@ -8,13 +8,10 @@
 
 package com.cobblemon.mod.common.battles.actor
 
-import com.cobblemon.mod.common.api.battles.model.actor.BattleAIProvider
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.StaticBattlePokemonProvider
-import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.battles.ai.RandomBattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent

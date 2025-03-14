@@ -12,21 +12,23 @@ class ShowdownGameServerInterpreter(
     val serverConnectionState: ShowdownGameServerConnectionState
 ) {
     val messageDispatchMap = mutableMapOf<String, (String) -> Unit>()
+    //Maps a command name to a function that takes a room name and command
     val scopedMessageDispatchMap = mutableMapOf<String, (String, String) -> Unit>()
     //For slash commands sent in PMs
     val commandDispatchMap = mutableMapOf<String, (String, String) -> Unit>()
-    //Messages that should be processed by the normal ShowdownInterpreter
-    val delegatedMessages = mutableSetOf<String>()
 
     private val gson = GsonBuilder().create()
-    private val showdownServer = Cobblemon.showdownServer
 
     init {
         messageDispatchMap.put("formats", {})
         messageDispatchMap.put("challstr", ::handleChallStr)
         messageDispatchMap.put("pm", ::handlePrivateMessage)
         messageDispatchMap.put("updatesearch", ::handleUpdateSearch)
-        scopedMessageDispatchMap.put("request", ::handleRequestCommand)
+
+        scopedMessageDispatchMap.put("request", ::handleRequest)
+        scopedMessageDispatchMap.put("player", ::handlePlayer)
+        scopedMessageDispatchMap.put("start", ::handleStart)
+        scopedMessageDispatchMap.put("gametype", ::handleGameType)
 
         commandDispatchMap.put("challenge", ::handleChallengeCommand)
     }
@@ -38,30 +40,26 @@ class ShowdownGameServerInterpreter(
         val roomId = if(isLocal) lines[0].substring(1) else null
         val startIndex = if(isLocal) 1 else 0
         for (line in lines.slice(startIndex until lines.size)) {
-            val args = message.split("|")
+            val args = line.split("|")
             if (args.size == 1) {
                 return
             }
             val messageType = args[1]
-            if (messageType in delegatedMessages) {
-                if (roomId == null) {
-                    Cobblemon.LOGGER.error("Received delegated message with no room id")
-                    return
+            if (isLocal) {
+                val handler = scopedMessageDispatchMap.get(messageType)
+                if (handler == null) {
+                    Cobblemon.LOGGER.warn("Showdown server interpreter received an unknown message type for room: $messageType")
                 }
-                /*
-                val battle = BattleRegistry.getBattle(roomId)
-                if (battle == null) {
-                    Cobblemon.LOGGER.error("Received message for nonexistent battle")
-                    return
+                handler?.invoke(line, roomId!!)
+            }
+            else {
+                val messageHandler = messageDispatchMap[messageType]
+                if (messageHandler == null) {
+                    Cobblemon.LOGGER.warn("Showdown server interpreter received an unknown message type: $messageType")
                 }
-                ShowdownInterpreter.interpret(battle, message)
-                 */
+                messageHandler?.invoke(message)
             }
-            val messageHandler = messageDispatchMap[messageType]
-            if (messageHandler == null) {
-                Cobblemon.LOGGER.warn("Showdown server interpreter received an unknown message type: $messageType")
-            }
-            messageHandler?.invoke(message)
+
         }
     }
 
@@ -101,37 +99,37 @@ class ShowdownGameServerInterpreter(
         }
     }
 
-    fun handleRequestCommand(message: String, roomId: String) {
-        /*
-        if (BattleRegistry.getBattle(roomId) == null) {
-            val player = server()!!.playerList.players.first()
-            val npcEntity = server()!!.overworld().getNearestEntity(
-                NPCEntity::class.java,
-                TargetingConditions.DEFAULT,
-                player,
-                64.0,
-                64.0,
-                64.0,
-                AABB.ofSize(player.position(), 64.0, 64.0, 64.0)
-            )
-
-            if (npcEntity == null) {
-                Cobblemon.LOGGER.error("Couldn't find NPC entity")
-                return
-            }
-            BattleRegistry.initShowdownControlledBattle(
-                roomId,
-                player.uuid,
-                npcEntity,
-                "",
-            )
+    fun handleRequest(message: String, roomId: String) {
+        val params = message.split("|")
+        if (params[2].isEmpty()) {
+            serverConnectionState.battlesBeingCreated[roomId] = RemoteShowdownBattle.Builder(roomId)
         }
+        else {
+            serverConnectionState.battlesBeingCreated[roomId]?.teamStr = params[2]
+        }
+    }
 
-         */
+    fun handleStart(message: String, roomId: String) {
+        println("Hit")
+    }
+
+    fun handlePlayer(message: String, roomId: String) {
+        val params = message.split("|")
+        if (params[3].trim() == serverConnectionState.loginState.username) {
+            val battleBuilder = serverConnectionState.battlesBeingCreated[roomId]!!
+            battleBuilder.localSide = params[3]
+        }
+    }
+
+    fun handleGameType(message: String, roomId: String) {
+        val params = message.split("|")
+        val battleBuilder = serverConnectionState.battlesBeingCreated[roomId]!!
+        battleBuilder.gameType = params[2]
     }
 
     //Just auto accepts challenges
     fun handleChallengeCommand(command: String, sender: String) {
+        val showdownServer = Cobblemon.showdownServer
         showdownServer.sendServerMessage(("|/utm null}"))
         showdownServer.sendServerMessage("|/accept ${sender.lowercase()}")
     }

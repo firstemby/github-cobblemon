@@ -10,32 +10,31 @@ package com.cobblemon.mod.common.battles.ai
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.abilities.Abilities
-import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
-import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.*
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.pokemon.status.Status
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.battles.*
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.battles.ActiveBattlePokemon
+import com.cobblemon.mod.common.battles.DefaultActionResponse
+import com.cobblemon.mod.common.battles.InBattleMove
+import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.PassActionResponse
+import com.cobblemon.mod.common.battles.ShowdownActionRequest
+import com.cobblemon.mod.common.battles.ShowdownActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
+import com.cobblemon.mod.common.battles.SwitchActionResponse
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.status.PersistentStatus
-import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
-import com.cobblemon.mod.common.util.party
-import net.minecraft.world.item.ItemStack
+import java.util.UUID
 import kotlin.random.Random
-import java.util.*
 
 /**
  * AI that tries to choose the best move for the given situations. Based off of the Pokemon Trainer Tournament Simulator Github
@@ -629,14 +628,19 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         if (forceSwitch || activeBattlePokemon.isGone()) {
             if ((forceSwitch && battle.turn == 1) || (activeBattlePokemon.isGone() && battle.turn == 1)) {
-                val switchTo = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { it.canBeSentOut() }.randomOrNull()
+                val switchTo = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon()
+                    .filterIsInstance<BattlePokemon>()
+                    .filter { it.canBeSentOut() }
+                    .randomOrNull()
                         ?: return DefaultActionResponse() //throw IllegalStateException("Need to switch but no Pokémon to switch to")
                 switchTo.willBeSwitchedIn = true
                 return SwitchActionResponse(switchTo.uuid)
             }
             else if ((forceSwitch && battle.turn > 1) || (activeBattlePokemon.isGone() && battle.turn > 1)) {
 
-                val availableSwitches = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon().filter { (it.health > 0) && (it.uuid != (activeBattlePokemon.battlePokemon?.uuid ?: true)) } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                val availableSwitches = activeBattlePokemon.actor.battlePokemonProvider.getKnownPokemon()
+                    .filterIsInstance<BattlePokemon>()
+                    .filter { (it.health > 0) && (it.uuid != (activeBattlePokemon.battlePokemon?.uuid ?: true)) } //it.uuid != mon.pokemon!!.uuid && it.health > 0 }
 
                 // this gets null error after NPC faints
                 val bestEstimation = availableSwitches.maxOfOrNull { estimatePartyMatchup(request, battle, it.effectedPokemon) }
@@ -774,7 +778,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         // switch out based on current matchup on the field
         if (checkSwitchOutSkill(skill) && shouldSwitchOut(request, battle, activeBattlePokemon, moveset)) {
-            val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+            val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon()
+                .filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                .filterIsInstance<BattlePokemon>()
             val availablePlayerSwitches = p1Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != opponent.pokemon!!.uuid && it.health > 0 }
 
             // todo try to detect a player switch-in based on if they do that a lot
@@ -850,7 +856,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
             // Deal with non-weather related field changing effects
             for (move in moveset.moves.filter { !it.disabled }) {
-                val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon()
+                    .filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                    .filterIsInstance<BattlePokemon>()
                 
                 // Tailwind
                 if (move.pp > 0 && move.id == "tailwind" && move.id != npcSideTailwindCondition && p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }.size > 2) {
@@ -1275,7 +1283,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
         // switch out
         if (shouldSwitchOut(request, battle, activeBattlePokemon, moveset)) {
-            val availableSwitches = p1Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+            val availableSwitches = p1Actor.battlePokemonProvider.getKnownPokemon()
+                .filter { it.uuid != mon.pokemon!!.uuid && it.health > 0 }
+                .filterIsInstance<BattlePokemon>()
             val bestEstimation = availableSwitches.maxOfOrNull { estimateMatchup(activeBattlePokemon, request, battle, it.effectedPokemon) }
             /*availableSwitches.forEach {
                 estimateMatchup(request, battle, it.effectedPokemon)
@@ -1477,7 +1487,9 @@ class StrongBattleAI(skill: Int) : BattleAI {
         //val requestActor = request.side?.
         //val availableSwitches = request.side?.pokemon?.filter { !it.active && getHpFraction(it.condition) != 0.0 }
         //val playerAvailableSwitches =
-        val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon().filter { it.uuid != mon.activePokemon.pokemon!!.uuid && it.health > 0 }
+        val availableSwitches = p2Actor.battlePokemonProvider.getKnownPokemon()
+            .filter { it.uuid != mon.activePokemon.pokemon!!.uuid && it.health > 0 }
+            .filterIsInstance<BattlePokemon>()
 
         val currentNPCAbility = request.side?.pokemon!!.first().ability
 

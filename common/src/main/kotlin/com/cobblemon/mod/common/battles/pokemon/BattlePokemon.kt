@@ -8,28 +8,19 @@
 
 package com.cobblemon.mod.common.battles.pokemon
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
-import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
-import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.battles.actor.MultiPokemonBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
-import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket
-import com.cobblemon.mod.common.pokemon.IVs
-import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.server
-import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
 import java.util.function.Function
 
@@ -37,8 +28,48 @@ open class BattlePokemon(
     val originalPokemon: Pokemon,
     val effectedPokemon: Pokemon = originalPokemon,
     val postBattleEntityOperation: (PokemonEntity) -> Unit = {}
-) {
-    lateinit var actor: BattleActor
+) : AbstractBattlePokemon() {
+    override val uuid = effectedPokemon.uuid
+    override var health = effectedPokemon.currentHealth
+    override val maxHealth = effectedPokemon.maxHealth
+    override val nature = effectedPokemon.nature
+    override val moveSet = effectedPokemon.moveSet
+    override val entity = effectedPokemon.entity
+    override val heldItemManager: HeldItemManager by lazy {
+        HeldItemProvider.provide(this)
+    }
+
+    var willBeSwitchedIn = false
+
+    override fun canBeSentOut(): Boolean {
+        return if (actor.request?.side?.pokemon?.any { it.reviving } == true) {
+            !isSentOut() && !willBeSwitchedIn && health <= 0
+        } else {
+            !isSentOut() && !willBeSwitchedIn && health > 0
+        }
+    }
+
+    override fun getName(): MutableComponent {
+        val displayPokemon = ((getIllusion() ?: this) as BattlePokemon).effectedPokemon
+        return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
+            displayPokemon.getDisplayName()
+        } else {
+            battleLang("owned_pokemon", actor.getName(), displayPokemon.getDisplayName())
+        }
+    }
+
+    override fun sendUpdate() {
+        actor.sendUpdate(BattleUpdateTeamPokemonPacket(effectedPokemon))
+    }
+
+    init {
+        struct.addFunctions(mutableMapOf(
+            "pokemon" to Function { effectedPokemon.asStruct() },
+            "original_pokemon" to Function {
+                originalPokemon.asStruct()
+            },
+        ))
+    }
 
     companion object {
         fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
@@ -61,74 +92,4 @@ open class BattlePokemon(
             }
         )
     }
-
-    val struct = QueryStruct(
-        hashMapOf(
-            "pokemon" to Function { effectedPokemon.asStruct() },
-            "original_pokemon" to Function {
-                originalPokemon.asStruct()
-            },
-            "actor" to Function { actor.struct },
-            "battle" to Function { actor.battle.struct },
-            "uuid" to Function { StringValue(uuid.toString()) },
-            "health" to Function { DoubleValue(health.toDouble()) },
-            "max_health" to Function { DoubleValue(maxHealth.toDouble()) },
-            "ivs" to Function { effectedPokemon.ivs.struct },
-            "nature" to Function { StringValue(effectedPokemon.nature.name.toString()) },
-            "moveset" to Function { effectedPokemon.moveSet.toStruct() }
-        ))
-
-    val uuid: UUID
-        get() = effectedPokemon.uuid
-    val health: Int
-        get() = effectedPokemon.currentHealth
-    val maxHealth: Int
-        get() = effectedPokemon.maxHealth
-    val ivs: IVs
-        get() = effectedPokemon.ivs
-    val nature: Nature
-        get() = effectedPokemon.nature
-    val moveSet: MoveSet
-        get() = effectedPokemon.moveSet
-    val statChanges = mutableMapOf<Stat, Int>()
-    var gone = false
-    // etc
-
-    val entity: PokemonEntity?
-        get() = effectedPokemon.entity
-
-    var willBeSwitchedIn = false
-
-    /** A set of all the BattlePokemon that they faced during the battle (for exp purposes) */
-    val facedOpponents = mutableSetOf<BattlePokemon>()
-
-    /**
-     * The [HeldItemManager] backing this [BattlePokemon].
-     */
-    val heldItemManager: HeldItemManager by lazy { HeldItemProvider.provide(this) }
-
-    val contextManager = ContextManager()
-
-    open fun getName(): MutableComponent {
-        val displayPokemon = getIllusion()?.effectedPokemon ?: effectedPokemon
-        return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
-            displayPokemon.getDisplayName()
-        } else {
-            battleLang("owned_pokemon", actor.getName(), displayPokemon.getDisplayName())
-        }
-    }
-
-    fun sendUpdate() {
-        actor.sendUpdate(BattleUpdateTeamPokemonPacket(effectedPokemon))
-    }
-
-    fun isSentOut() = actor.battle.activePokemon.any { it.battlePokemon == this }
-    fun canBeSentOut() =
-        if (actor.request?.side?.pokemon?.any { it.reviving } == true) {
-            !isSentOut() && !willBeSwitchedIn && health <= 0
-        } else {
-            !isSentOut() && !willBeSwitchedIn && health > 0
-        }
-
-    fun getIllusion(): BattlePokemon? = this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
 }

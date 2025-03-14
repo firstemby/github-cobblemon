@@ -25,7 +25,6 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
-import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
@@ -59,7 +58,9 @@ class DamageInstruction(
         val recoiling = privateMessage.optionalArgument("from")?.equals("recoil", true) == true
         val lastCauser  = instructionSet.getMostRecentCauser(comparedTo = this)
         if (recoiling) {
-            doRecoilEvoChecks(battlePokemon)
+            if (battlePokemon is BattlePokemon) {
+                doRecoilEvoChecks(battlePokemon)
+            }
             if (lastCauser is MoveInstruction) {
                 battle.dispatch {
                     //Is the recoil hold currently used anywhere?
@@ -98,9 +99,12 @@ class DamageInstruction(
         var status = effect?.id?.let { Statuses.getStatus(it) }
         battle.dispatch {
             val pokemon = privateMessage.battlePokemon(0, battle) ?: return@dispatch GO
+            //FIXME: This should be tracked on the AbstractBattlePokemon
             //Showdown doesnt tell us on damage if its poison or toxic so we gotta consult the entity
             if (status is PoisonStatus) {
-                status = pokemon.effectedPokemon.status?.status ?: status
+                if (pokemon is BattlePokemon) {
+                    status = pokemon.effectedPokemon.status?.status ?: status
+                }
             }
 
             // Damage effects without a action effect receive the generic damage effect
@@ -109,7 +113,7 @@ class DamageInstruction(
             } ?: return@dispatch GO
 
             val providers = mutableListOf<Any>(battle)
-            battlePokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
+            battlePokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
 
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
@@ -167,7 +171,7 @@ class DamageInstruction(
             if (causedFaint) {
                 newHealthRatio = 0F
                 battle.dispatch {
-                    battlePokemon.effectedPokemon.currentHealth = 0
+                    battlePokemon.health = 0
                     battlePokemon.sendUpdate()
                     GO
                 }
@@ -177,7 +181,7 @@ class DamageInstruction(
                 val difference = maxHealth - remainingHealth
                 newHealthRatio = remainingHealth.toFloat() / maxHealth
                 battle.dispatchToFront {
-                    battlePokemon.effectedPokemon.currentHealth = remainingHealth
+                    battlePokemon.curr = remainingHealth
                     if (difference > 0) {
                         battlePokemon.effectedPokemon.let { pokemon ->
                             if (DamageTakenEvolutionProgress.supports(pokemon)) {

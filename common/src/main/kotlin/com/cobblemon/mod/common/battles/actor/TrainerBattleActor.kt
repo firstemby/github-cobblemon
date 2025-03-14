@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles.actor
 
 import com.cobblemon.mod.common.api.battles.model.actor.*
-import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.battleLang

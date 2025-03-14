@@ -19,11 +19,11 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.interpreter.ContextManager
 import com.cobblemon.mod.common.battles.interpreter.instructions.*
+import com.cobblemon.mod.common.battles.pokemon.AbstractBattlePokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.runOnServer
 import net.minecraft.world.phys.Vec3
-import java.util.UUID
 import kotlin.collections.Iterator
 import kotlin.collections.filter
 import kotlin.collections.forEach
@@ -290,13 +290,13 @@ object ShowdownInterpreter {
         }
     }
 
-    fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: BattlePokemon) {
+    fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: AbstractBattlePokemon) {
         if (effect == null) return
         broadcastAbility(battle, effect, pokemon)
     }
 
     // Broadcasts a generic lang to notify players of ability activations (effects are broadcasted separately)
-    fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
+    fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: AbstractBattlePokemon) {
         if (effect.type != Effect.Type.ABILITY) return
         battle.dispatchWaiting(0.5F) {
             val lang = battleLang("ability.generic", pokemon.getName(), effect.typelessData).yellow()

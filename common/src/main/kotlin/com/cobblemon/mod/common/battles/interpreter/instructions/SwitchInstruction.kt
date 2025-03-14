@@ -29,7 +29,6 @@ import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
-import com.cobblemon.mod.common.util.swap
 import java.util.concurrent.CompletableFuture
 import kotlin.random.Random
 import net.minecraft.server.level.ServerLevel

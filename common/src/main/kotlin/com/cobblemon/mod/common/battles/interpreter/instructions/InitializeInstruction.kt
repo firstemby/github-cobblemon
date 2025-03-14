@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -16,6 +15,7 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.dispatch.DispatchResult
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleQueueRequestPacket
@@ -57,7 +57,12 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
         }
 
         battle.actors.forEach { actor ->
-            actor.sendUpdate(BattleSetTeamPokemonPacket(actor.battlePokemonProvider.getKnownPokemon().map { it.effectedPokemon }))
+            actor.sendUpdate(BattleSetTeamPokemonPacket(
+                actor.battlePokemonProvider.getKnownPokemon()
+                    .filterIsInstance<BattlePokemon>()
+                    .map { it.effectedPokemon }
+                    .toList()
+            ))
             val req = actor.request ?: return@forEach
             actor.sendUpdate(BattleQueueRequestPacket(req))
         }

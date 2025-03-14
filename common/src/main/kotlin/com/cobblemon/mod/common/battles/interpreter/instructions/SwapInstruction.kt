@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
-import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.battle.BattleSwapPokemonPacket
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.setPositionSafely
