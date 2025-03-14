@@ -38,12 +38,11 @@ class JetAirController : RideController {
     var gravity: Expression = "0".asExpression()
         private set
 
-    //5 bl/s. Minimum speed so long as jets have no gravity.
     var minSpeed: Expression = "1.2".asExpression()
         private set
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
         private set
-    var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 16.0, 8.0)".asExpression()
+    var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 25.0, 8.0)".asExpression()
         private set
     var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression()
         private set
@@ -66,9 +65,7 @@ class JetAirController : RideController {
 
         //retrieve stats
         val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val accel = getRuntime(entity).resolveDouble(accelExpr)
-        val stamina = getRuntime(entity).resolveDouble(staminaExpr)
-        val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
+        val staminaStat = getRuntime(entity).resolveDouble(staminaExpr)
 
         //retrieve state
         val state = getState(entity, ::JetAirState)
@@ -76,50 +73,25 @@ class JetAirController : RideController {
         //retrieve minSpeed
         val minSpeed = getRuntime(entity).resolveDouble(minSpeed)
 
-        //actually be used.
-        //Give no altitude limit if at max jump stat.
-        val pushingHeightLimit = if(getRuntime(entity).resolveBoolean(infiniteStamina)) false else (entity.y >= altitudeLimit && entity.xRot <= 0)
-
-        //speed up and slow down based on input
-        if( driver.zza > 0.0 && state.currSpeed < topSpeed && state.stamina > 0.0f && !pushingHeightLimit)
-        {
-            //modify acceleration to be slower when at closer speeds to top speed
-            val accelMod = max( -(normalizeSpeed(state.currSpeed, minSpeed, topSpeed)) + 1, 0.0)
-            state.currSpeed = min( state.currSpeed + (accel * accelMod) , topSpeed)
-        }
-        else if( driver.zza >= 0.0 && (state.stamina == 0.0f || pushingHeightLimit) )
-        {
-            state.currSpeed = max( state.currSpeed - ((accel) / 4) , minSpeed)
-        }
-        else if ( driver.zza < 0.0 && state.currSpeed > minSpeed)
-        {
-            //modify deccel to be slower when at closer speeds to minimum speed
-            val deccelMod = max( (normalizeSpeed(state.currSpeed, minSpeed, topSpeed) - 1).pow(2), 0.1)
-
-            //Decelerate currently always a constant half of max acceleration.
-            state.currSpeed = max( state.currSpeed - ((accel * deccelMod) / 2) , minSpeed)
-        }
-
         //Reduce stamina unless stamina is infinite
         if( !getRuntime(entity).resolveBoolean(infiniteStamina)) {
             //Calculate stamina loss due to speed
             //At max speed it will tick down 0.1 a second so the stamina will last ten seconds
             //There has got to be a better way to express this equation. It interpolates between 0.5 and 1.0
-            var staminaRate = (normalizeSpeed(state.currSpeed, minSpeed, topSpeed))
+            var staminaRate = (normalizeSpeed(state.rideVel.length(), minSpeed, topSpeed))
 
             //interpolate between 0.25 and 1.0 so that you always have at least a min of 0.25 stam loss
             staminaRate = 0.25 + (0.75 * staminaRate.pow(3))
 
             //Calculate stamina loss in seconds achievable at top speed
-            val staminaLoss = staminaRate * (1.0 / (20.0 * stamina))
+            val staminaLoss = staminaRate * (1.0 / (20.0 * staminaStat))
             state.stamina = max(state.stamina - staminaLoss, 0.0).toFloat()
         }
         else{
             state.stamina = 1.0f
         }
 
-        //Should the magnitude of the velocity vector be returned instead?
-        return state.currSpeed.toFloat()
+        return state.rideVel.length().toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -130,18 +102,23 @@ class JetAirController : RideController {
 
         var upForce = 0.0
         var forwardForce = 0.0
-        val rollable = driver as? Rollable
-
-        if( rollable != null ) {
-
-            upForce =  -1.0 * sin(Math.toRadians( rollable.pitch.toDouble() ))
-
-            forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() ))
-
-        }
 
         //Gather state information
         val state = getState(entity, ::JetAirState)
+
+        val rollable = driver as? Rollable
+
+        //Calculate ride space velocity
+        calculateRideSpaceVel(entity, driver, state)
+
+        //Translate ride space velocity to world space velocity.
+        if( rollable != null ) {
+
+            upForce =  -1.0 * sin(Math.toRadians( rollable.pitch.toDouble() )) * state.rideVel.z
+
+            forwardForce =  cos(Math.toRadians( rollable.pitch.toDouble() )) * state.rideVel.z
+
+        }
 
         //If stamina has run out then initiate forced glide down.
         upForce = if(state.stamina > 0.0) upForce else -0.7
@@ -156,7 +133,7 @@ class JetAirController : RideController {
         upForce = if(pushingHeightLimit)  upForce - upForce * ((entity.y - altitudeLimit) / 30) - 0.5
                   else upForce
 
-        val velocity = Vec3(0.0 , (upForce)* state.currSpeed, forwardForce * state.currSpeed)
+        val velocity = Vec3(0.0 , upForce, forwardForce )
 
         return velocity
     }
@@ -180,7 +157,7 @@ class JetAirController : RideController {
         handlingYaw *= if(state.stamina > 0.0) 1.0 else 0.5
 
         //A+D to yaw
-        val yawForce = driver.xxa * handlingYaw
+        val yawForce = driver.xxa * handlingYaw * -1
 
         return Vec3( yawForce, 0.0, 0.0)
     }
@@ -267,7 +244,7 @@ class JetAirController : RideController {
         val state = getState(entity, ::JetAirState)
 
         //Must I ensure that topspeed is greater than minimum?
-        val normalizedSpeed = normalizeSpeed(state.currSpeed, minSpeed, topSpeed)
+        val normalizedSpeed = normalizeSpeed(state.rideVel.length(), minSpeed, topSpeed)
 
         //TODO: Determine if this should be based on max possible speed instead of top speed.
         //Only ever want the fov change to be a max of 0.2 and for it to have non linear scaling.
@@ -306,6 +283,40 @@ class JetAirController : RideController {
         val KEY = cobblemonResource("air/jet")
     }
 
+    /*
+    *  Calculates the change in the ride space vector due to player input and ride state
+    */
+    fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: JetAirState){
+
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val accel = getRuntime(entity).resolveDouble(accelExpr)
+        val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
+        val minSpeed = getRuntime(entity).resolveDouble(minSpeed)
+        val speed = state.rideVel.length()
+
+        //Give no altitude limit if at max jump stat.
+        val pushingHeightLimit = if(getRuntime(entity).resolveBoolean(infiniteStamina)) false
+                                 else (entity.y >= altitudeLimit && entity.xRot <= 0)
+
+
+        //speed up and slow down based on input
+        if( driver.zza > 0.0 && speed < topSpeed && state.stamina > 0.0f && !pushingHeightLimit) {
+            //modify acceleration to be slower when at closer speeds to top speed
+            val accelMod = max( -(normalizeSpeed(speed, minSpeed, topSpeed)) + 1, 0.0)
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, min( state.rideVel.z + (accel * accelMod) , topSpeed))
+        }
+        else if( driver.zza >= 0.0 && (state.stamina == 0.0f || pushingHeightLimit) ) {
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max( state.rideVel.z - ((accel) / 4) , minSpeed))
+        }
+        else if ( driver.zza < 0.0 && speed > minSpeed) {
+            //modify deccel to be slower when at closer speeds to minimum speed
+            val deccelMod = max( (normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2), 0.1)
+
+            //Decelerate currently always a constant half of max acceleration.
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max( state.rideVel.z - ((accel * deccelMod) / 2) , minSpeed))
+        }
+    }
+
     //TODO: Move these functions to a riding util class.
     /*
     *  Normalizes the current speed between minSpeed and maxSpeed.
@@ -329,4 +340,6 @@ class JetAirController : RideController {
         //Attach the sign back to the vale
         return adjusted * sign
     }
+
+
 }

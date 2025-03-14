@@ -82,6 +82,7 @@ class RunUpToJetFlightCompositeController : RideController {
             val groundState = landController.getState( entity, ::GenericLandState )
             groundState.currSpeed = flightState.currSpeed
             groundState.stamina = flightState.stamina
+            groundState.rideVel = flightState.rideVel
 
             //Clear accumulated rotation input when transferring to ground input
             flightState.currMouseXForce = 0.0
@@ -107,6 +108,7 @@ class RunUpToJetFlightCompositeController : RideController {
             val groundState = landController.getState( entity, ::GenericLandState )
             flightState.currSpeed = groundState.currSpeed
             flightState.stamina = groundState.stamina
+            flightState.rideVel = groundState.rideVel
 
             getState(entity, ::RunUpToFlightCompositeState).let {
                 it.activeController = flightController

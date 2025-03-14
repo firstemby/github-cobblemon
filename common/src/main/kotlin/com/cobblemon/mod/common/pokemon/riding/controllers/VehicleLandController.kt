@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.pokemon.riding.states.LandVehicleState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
+import net.minecraft.client.resources.sounds.Sound
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -165,15 +166,14 @@ class VehicleLandController : RideController {
                     driver.getSoundSource(), 1.0f, 0.2f
                 )
 
-                /*
+
                 val lp = driver as? LocalPlayer
                 lp?.let {
-                    val resourceLocation = ResourceLocation.tryParse(getRuntime(entity).resolveString(sound))
-                    val soundEvent = BuiltInRegistries.SOUND_EVENT.getOptional(resourceLocation).orElse(null)
-                    val soundInstance = RidingOnPlayerSoundEventInstance(it, soundEvent)
+                    //val resourceLocation = ResourceLocation.tryParse(getRuntime(entity).resolveString(sound))
+                    //val soundEvent = BuiltInRegistries.SOUND_EVENT.getOptional(resourceLocation).orElse(null)
+                    val soundInstance = RidingOnPlayerSoundEventInstance(it, SoundEvents.AMBIENT_UNDERWATER_LOOP)
                     Minecraft.getInstance().soundManager.play(soundInstance)
                 }
-                 */
 
             }
 
@@ -261,7 +261,7 @@ class VehicleLandController : RideController {
     }
 
     override fun shouldRoll(entity: PokemonEntity): Boolean {
-        return !entity.onGround()
+        return false
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {

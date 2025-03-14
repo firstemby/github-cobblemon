@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
@@ -16,6 +17,7 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.GenericLandState
+import com.cobblemon.mod.common.pokemon.riding.states.JetAirState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -48,6 +50,20 @@ class GenericLandController : RideController {
     var strafeFactor = "0.2".asExpression()
         private set
 
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 140.0, 20.0)".asExpression()
+        private set
+    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.3)".asExpression()
+        private set
+    // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
+    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'LAND', (1.0 / (20.0 * 0.5)), (1.0 / (20.0 * 5.0)))".asExpression()
+        private set
+    // Between 30 seconds and 10 seconds at the lowest when at full speed.
+    var staminaExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 30.0, 10.0)".asExpression()
+        private set
+    //Between a one block jump and a ten block jump
+    var jumpExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 10.0, 1.0)".asExpression()
+        private set
+
     @Transient
     override val key: ResourceLocation = KEY
     @Transient
@@ -73,8 +89,7 @@ class GenericLandController : RideController {
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         val state = getState(entity, ::GenericLandState)
-        //TODO:Is this not performant enough?
-        return state.currVel.length().toFloat()
+        return state.rideVel.length().toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -96,41 +111,27 @@ class GenericLandController : RideController {
 
         val state = getState(entity, ::GenericLandState)
 
-        //state.currVel.add(f.toDouble() * state.currSpeed, gravity, g.toDouble() * state.currSpeed)
-        val deltLimx = 1.0
-        val deltLimy = 3.0
-        val deltLimz = 1.0
 
-
-        if( abs(state.currVel.x) < deltLimx ) {
-            state.currVel = state.currVel.add( f.toDouble() / 20.0, 0.0 , 0.0)
-        }
-        if( state.currVel.y > -deltLimy ) {
-            state.currVel = state.currVel.add( 0.0, gravity / 10.0 , 0.0)
-        }
-        if( abs(state.currVel.z) < deltLimz ) {
-            state.currVel = state.currVel.add( 0.0, 0.0 , g.toDouble() / 10.0)
-        }
+        calculateRideSpaceVel(entity, driver, state)
 
         //Jump the thang!
         if (Minecraft.getInstance().options.keyJump.isDown() && entity.onGround()) {
-            state.currVel = Vec3(state.currVel.x, 2.0, state.currVel.z)
+            state.rideVel = Vec3(state.rideVel.x, 2.0, state.rideVel.z)
         }
 
         //This is cheap.
         //Also make it stop quicker the slower it is.
         val maxSpeed = 1.0
-
-        state.currVel = state.currVel.lerp( Vec3(0.0, state.currVel.y, 0.0), 1.0/20.0 )
+        //state.currVel = state.currVel.lerp( Vec3(0.0, state.currVel.y, 0.0), 1.0/20.0 )
 
 
         //entity.deltaMovement = entity.deltaMovement.lerp(velocity, 1.0)
         //state.currVel = state.currVel.add( f.toDouble() / 20.0, gravity / 20.0 , g.toDouble() / 20.0)
-        return state.currVel
+        return state.rideVel
     }
 
     override fun shouldRoll(entity: PokemonEntity): Boolean {
-        return !entity.onGround()
+        return false
     }
 
     override fun rotationOnMouseXY(
@@ -201,5 +202,51 @@ class GenericLandController : RideController {
         this.driveFactor = buffer.readString().asExpression()
         this.reverseDriveFactor = buffer.readString().asExpression()
         this.strafeFactor = buffer.readString().asExpression()
+    }
+
+    /*
+    *  Normalizes the current speed between minSpeed and maxSpeed.
+    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minSpeed and 1.0 represents maxSpeed.
+    */
+    fun normalizeSpeed(currSpeed: Double, minSpeed: Double, maxSpeed: Double): Double {
+        require(maxSpeed > minSpeed) { "maxSpeed must be greater than minSpeed" }
+        return ((currSpeed - minSpeed) / (maxSpeed - minSpeed)).coerceIn(0.0, 1.0)
+    }
+
+    fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: GenericLandState){
+
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val accel = getRuntime(entity).resolveDouble(accelExpr)
+        val speed = state.rideVel.length()
+
+        //Minimum speed aka how fast you can go backwards.
+        //val minSpeed = -( topSpeed / 3.0)
+        val minSpeed = 0.0
+
+        //speed up and slow down based on input
+        if( driver.zza > 0.0 && speed <= topSpeed && state.stamina > 0.0f ) {
+            //modify acceleration to be slower when at closer speeds to top speed
+            val accelMod = max( (normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2), 0.1)
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, min( state.rideVel.z + (accel * accelMod) , topSpeed))
+        }
+        else if( driver.zza >= 0.0 && (state.stamina == 0.0f) || speed > topSpeed) {
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max( state.rideVel.z - ((accel) / 4) , minSpeed))
+        }
+        //The minimumspeed you can
+        else if ( driver.zza < 0.0 && speed > minSpeed) {
+            //modify deccel to be slower when at closer speeds to minimum speed
+            val deccelMod = max( -(normalizeSpeed(speed, minSpeed, topSpeed)) + 1, 0.0)
+
+            //Decelerate currently always a constant half of max acceleration.
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max( state.rideVel.z - ((accel * deccelMod) / 2) , minSpeed))
+        }
+
+        state.rideVel= Vec3(state.rideVel.x, max(state.rideVel.y - 0.2, -1.0) , state.rideVel.z)
+
+        if( entity.onGround())
+        {
+            state.rideVel= Vec3(state.rideVel.x, 0.0 , state.rideVel.z)
+        }
+
     }
 }

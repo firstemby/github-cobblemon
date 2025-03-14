@@ -56,7 +56,7 @@
         "displayName": "Speed",
         "description": "Its top speed",
         "ranges": {
-          "LAND": "2-10",
+          "LAND": "100-101",
           "AIR": "100-101"
         }
       },
@@ -64,7 +64,7 @@
         "displayName": "Acceleration",
         "description": "How fast it can speed up",
         "ranges": {
-          "LAND": "2-10",
+          "LAND": "100-101",
           "AIR": "100-101"
         }
       },
@@ -72,7 +72,7 @@
         "displayName": "Handling",
         "description": "How fast it can turn",
         "ranges": {
-          "LAND": "2-10",
+          "LAND": "100-101",
           "AIR": "100-101"
         }
       },
@@ -80,7 +80,7 @@
         "displayName": "Altitude",
         "description": "How high it can fly",
         "ranges": {
-          "LAND": "2-10",
+          "LAND": "100-101",
           "AIR": "100-101"
         }
       },
@@ -88,7 +88,7 @@
         "displayName": "Fuel/Stamina",
         "description": "How long it can stay off the ground",
         "ranges": {
-          "LAND": "2-10",
+          "LAND": "100-101",
           "AIR": "100-101"
         }
       }
