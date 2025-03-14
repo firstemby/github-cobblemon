@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
@@ -16,8 +17,11 @@ import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
+import com.cobblemon.mod.common.pokemon.riding.states.JetAirState
 import com.cobblemon.mod.common.util.*
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -30,7 +34,7 @@ class BirdAirController : RideController {
     override val poseProvider = PoseProvider(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
-            it.deltaMovement.length() > 0.3 })
+            it.deltaMovement.length() > 0.5 })
         /*
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
@@ -39,7 +43,7 @@ class BirdAirController : RideController {
          */
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
-            it.deltaMovement.length() > 0.3 })
+            it.deltaMovement.length() > 0.5 })
         /*
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
@@ -69,48 +73,9 @@ class BirdAirController : RideController {
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
         //Retrieve the current bird controller state
-        //val state = entity.riding.getState(KEY) { e -> BirdAirControllerState(e) }
         val state = getState(entity, ::BirdAirState)
 
-        //retrieve stats
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val accel = getRuntime(entity).resolveDouble(accelExpr)
-
-        val maxGlideSpeed = topSpeed * 2
-        var glideSpeedChange = 0.00
-
-        //speed up and slow down based on input
-        if (driver.zza > 0.0 && state.currSpeed < topSpeed) {
-            state.currSpeed = min(state.currSpeed + accel , topSpeed)
-        } else if (driver.zza < 0.0 && state.currSpeed > 0.0) {
-            //Decelerate is currently always a constant half of max acceleration.
-            state.currSpeed = max(state.currSpeed - (0.0166 / 2), 0.0)
-        }
-
-        val rollable = driver as? Rollable
-        if (rollable != null) {
-            glideSpeedChange = sin(Math.toRadians(rollable.pitch.toDouble()))
-            glideSpeedChange = glideSpeedChange.pow(3)
-
-            //TODO: Possibly create a deadzone around parallel where speed isn't taken away from?
-            if (glideSpeedChange <= 0.0) {
-                //Ensures that a propelling force is still able to be applied when
-                //climbing in height
-                if (driver.zza <= 0) {
-                    //speed decrease should be 2x speed increase?
-                    state.currSpeed = max(state.currSpeed + (0.0166) * glideSpeedChange, 0.0 )
-                }
-            } else {
-                // only add to the speed if it hasn't exceeded the current
-                //glide angles maximum amount of speed that it can give.
-                state.currSpeed = min(state.currSpeed + ((0.0166 * 2) * glideSpeedChange), maxGlideSpeed)
-            }
-        }
-
-        //air resistance
-        state.currSpeed = max(state.currSpeed - 0.005, 0.0)
-
-        return state.currSpeed.toFloat()
+        return state.rideVel.length().toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -122,35 +87,26 @@ class BirdAirController : RideController {
         var leftForce = 0.0
         var upForce = 0.0
         var forwardForce = 0.0
+        val state = getState(entity, ::BirdAirState)
+
+        //Perform ride velocity update
+        calculateRideSpaceVel(entity, driver, state)
+
+        //Translate ride space velocity to world space velocity.
         val rollable = driver as? Rollable
         if (rollable != null) {
             //Need to deadzone this when straight up or down
-            // test with and without strafing added. May be wanted while moving
-            leftForce = -1.0 * sin(Math.toRadians(rollable.roll.toDouble()))
 
-            upForce = -1.0 * sin(Math.toRadians(rollable.pitch.toDouble()))
+            upForce += -1.0 * sin(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
+            forwardForce += cos(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
 
-            forwardForce = cos(Math.toRadians(rollable.pitch.toDouble()))
+            upForce += cos(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.y
+            forwardForce += sin(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.y
         }
 
         //TODO: Add in an upwards and downwards force when pressing space maybe?
 
-        //Leave out tap to flap right now
-        /*
-        var jumpVector = Vec3.ZERO
-        if (entity.jumpInputStrength > 0) {
-            val runtime = getRuntime(entity)
-            runtime.environment.query.addFunction("jump_strength") { DoubleValue(entity.jumpInputStrength.toDouble()) }
-            val jumpForces = this.jumpVector.map { runtime.resolveFloat(it) }
-            jumpVector = Vec3(jumpForces[0].toDouble(), jumpForces[1].toDouble(), jumpForces[2].toDouble())
-            jumpVector = jumpVector.toVector3f().mul((driver as Rollable).orientation).toVec3d()
-            entity.jumpInputStrength = 0
-            entity.addDeltaMovement(jumpVector)
-        }
-        */
-        //Retrieve the current composite controller state
-        val state = getState(entity, ::BirdAirState)
-        val velocity = Vec3(0.0 , upForce * state.currSpeed, forwardForce * state.currSpeed)
+        val velocity = Vec3(state.rideVel.x , upForce, forwardForce)
         return velocity
     }
 
@@ -226,7 +182,7 @@ class BirdAirController : RideController {
         entity: PokemonEntity,
         driver: Player
     ): Boolean {
-        return true
+        return false
     }
 
     override fun jumpForce(
@@ -241,7 +197,24 @@ class BirdAirController : RideController {
         return 0.0
     }
 
-    override fun shouldRoll(entity: PokemonEntity) = true
+    override fun shouldRoll(entity: PokemonEntity) = !Minecraft.getInstance().options.keyShift.isDown()
+
+    /*
+    override fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        driver.yRot += (entity.riding.deltaRotation.y)
+        driver.setYHeadRot(driver.yHeadRot + (entity.riding.deltaRotation.y))
+    }
+
+    override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        val f = Mth.wrapDegrees(driver.yRot - entity.yRot)
+        val runtime = getRuntime(entity)
+        val lookYawLimit = 120.0f
+        val g = Mth.clamp(f, -lookYawLimit, lookYawLimit)
+        driver.yRotO += g - f
+        driver.yRot = driver.yRot + g - f
+        driver.setYHeadRot(driver.yRot)
+    }
+     */
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
@@ -273,5 +246,111 @@ class BirdAirController : RideController {
 
     companion object {
         val KEY = cobblemonResource("air/bird")
+    }
+
+    /*
+    *  Calculates the change in the ride space vector due to player input and ride state
+    */
+    fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: BirdAirState){
+
+
+        //retrieve stats
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val accel = getRuntime(entity).resolveDouble(accelExpr)
+
+        val maxGlideSpeed = topSpeed * 2
+        var glideSpeedChange = 0.00
+
+        val currSpeed = state.rideVel.length()
+
+        //speed up and slow down based on input
+        if (driver.zza != 0.0f) {
+            //state.currSpeed = min(state.currSpeed + accel , topSpeed)
+            state.rideVel = Vec3(
+                state.rideVel.x,
+                state.rideVel.y,
+                (state.rideVel.z + (accel * driver.zza)).coerceIn(-topSpeed / 3.0, topSpeed))
+        }
+        /*
+        else if (driver.zza < 0.0 ) {
+            //Decelerate is currently always a constant half of max acceleration.
+            //state.currSpeed = max(state.currSpeed - (0.0166 / 2), 0.0)
+            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max(state.rideVel.z - (0.0166 / 2), 0.0))
+        }
+        */
+
+        val rollable = driver as? Rollable
+        if (rollable != null) {
+            //Base glide speed change on current pitch of the ride.
+            glideSpeedChange = sin(Math.toRadians(rollable.pitch.toDouble()))
+            glideSpeedChange = glideSpeedChange.pow(3)
+
+            //TODO: Possibly create a deadzone around parallel where glide doesn't affect speed?
+            if (glideSpeedChange <= 0.0) {
+                //Ensures that a propelling force is still able to be applied when
+                //climbing in height
+                if (driver.zza <= 0) {
+                    //speed decrease should be 2x speed increase?
+                    //state.currSpeed = max(state.currSpeed + (0.0166) * glideSpeedChange, 0.0 )
+                    state.rideVel = Vec3(
+                        state.rideVel.x,
+                        state.rideVel.y,
+                        lerp( state.rideVel.z, 0.0,(0.0166) * glideSpeedChange ))
+                }
+            } else {
+                // only add to the speed if it hasn't exceeded the current
+                //glide angles maximum amount of speed that it can give.
+                //state.currSpeed = min(state.currSpeed + ((0.0166 * 2) * glideSpeedChange), maxGlideSpeed)
+                state.rideVel = Vec3(
+                    state.rideVel.x,
+                    state.rideVel.y,
+                    min(state.rideVel.z + ((0.0166 * 2) * glideSpeedChange), maxGlideSpeed))
+            }
+        }
+
+        //Lateral movement based on driver input.
+        val latTopSpeed = topSpeed / 2.0
+        if(driver.xxa != 0.0f){
+            state.rideVel = Vec3(
+                (state.rideVel.x + (accel * driver.xxa)).coerceIn(-latTopSpeed, latTopSpeed),
+                state.rideVel.y,
+                state.rideVel.z)
+        }
+        else{
+            state.rideVel = Vec3(
+                lerp(state.rideVel.x, 0.0, latTopSpeed / 20.0),
+                state.rideVel.y,
+                state.rideVel.z)
+        }
+
+        //Vertical movement based on driver input.
+        val vertTopSpeed = topSpeed / 2.0
+        val vertInput = when {
+            Minecraft.getInstance().options.keyJump.isDown() -> 1.0
+            Minecraft.getInstance().options.keyShift.isDown() -> -1.0
+            else -> 0.0
+        }
+        if(vertInput != 0.0) {
+            state.rideVel = Vec3(
+                state.rideVel.x,
+                (state.rideVel.y + (accel * vertInput)).coerceIn(-vertTopSpeed, vertTopSpeed),
+                state.rideVel.z)
+        }
+        else {
+            state.rideVel = Vec3(
+                state.rideVel.x,
+                lerp(state.rideVel.y, 0.0, vertTopSpeed / 20.0),
+                state.rideVel.z)
+        }
+
+        //air resistance
+        //TODO: This should not affect the ride if the player is inputting a force?
+        //state.currSpeed = max(state.currSpeed - 0.005, 0.0)
+        //Ensure it would take ten whole seconds to come to a complete stop through air resistance.
+        state.rideVel = Vec3(
+            state.rideVel.x,
+            state.rideVel.y,
+            lerp( state.rideVel.z,0.0, topSpeed / ( 20.0 * 10.0)))
+
     }
 }
