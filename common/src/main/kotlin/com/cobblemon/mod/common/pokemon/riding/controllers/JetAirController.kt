@@ -123,14 +123,12 @@ class JetAirController : RideController {
         upForce = if(state.stamina > 0.0) upForce else -0.7
 
         val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
-        val pushingHeightLimit = if(getRuntime(entity).resolveBoolean(infiniteAltitude)) false
-                                 else (entity.y >= 128 && entity.xRot <= 0)
 
-
-        //Incorporate the altitude limiter.
-        //Apply downwards force if limit is reached. Resist upwards force on a buffer of 30 blocks past the limit.
-        upForce = if(pushingHeightLimit)  upForce - upForce * ((entity.y - altitudeLimit) / 30) - 0.5
-                  else upForce
+        //Only limit altitude if altitude is not infinite
+        if (!getRuntime(entity).resolveBoolean(infiniteAltitude)) {
+            //Provide a hard limit on altitude
+            upForce = if (entity.y >= altitudeLimit && upForce > 0) 0.0 else upForce
+        }
 
         val velocity = Vec3(0.0 , upForce, forwardForce )
 
