@@ -78,6 +78,8 @@ class RunUpToFlightCompositeController : RideController {
             val flightState = flightController.getState( entity, ::BirdAirState )
             val groundState = landController.getState( entity, ::GenericLandState )
             groundState.currSpeed = flightState.currSpeed
+            groundState.rideVel = flightState.rideVel
+            groundState.stamina = flightState.stamina
 
             getState(entity, ::RunUpToFlightCompositeState).let {
                 it.activeController = landController
@@ -91,6 +93,8 @@ class RunUpToFlightCompositeController : RideController {
             val flightState = flightController.getState( entity, ::BirdAirState )
             val groundState = landController.getState( entity, ::GenericLandState )
             flightState.currSpeed = groundState.currSpeed
+            flightState.rideVel = groundState.rideVel
+            flightState.stamina = groundState.stamina
 
             getState(entity, ::RunUpToFlightCompositeState).let {
                 it.activeController = flightController
@@ -116,6 +120,14 @@ class RunUpToFlightCompositeController : RideController {
 
     override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
         return getActiveController(entity).angRollVel(entity, driver, deltaTime)
+    }
+
+    override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).rideFovMult(entity, driver)
+    }
+
+    override fun setRideBar(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).setRideBar(entity, driver)
     }
 
     override fun canJump(entity: PokemonEntity, driver: Player): Boolean {
