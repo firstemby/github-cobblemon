@@ -58,6 +58,8 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -331,6 +333,25 @@ open class Pokemon : ShowdownIdentifiable {
                 onChange(FriendshipUpdatePacket({ this }, it.newFriendship))
             }
         }
+
+    /**
+     * TODO: Give a description and move the set and get to te appropriate place
+     */
+    /*
+    var rideBoost: MutableMap<RidingStyle, MutableMap<RidingStat, Int>> = mutableMapOf()
+        private set(value) {
+            field = value
+            onChange(RideBoostUpdatePacket({ this }, value))
+        }
+
+    fun setRideBoost(rideStyle: RidingStyle, rideStat: RidingStat, value: Int) {
+        rideBoost.getOrPut(rideStyle) { mutableMapOf() }[rideStat] = value
+    }
+
+    fun getRideBoost(rideStyle: RidingStyle, rideStat: RidingStat): Int {
+        return rideBoost[rideStyle]?.get(rideStat) ?: 0 // Default to 0 if missing
+    }
+     */
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
