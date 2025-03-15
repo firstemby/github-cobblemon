@@ -49,9 +49,9 @@ class JetAirController : RideController {
     var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
         private set
     // Between 60 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 60.0, 10.0)".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
         private set
-    var jumpExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 300.0, 128.0)".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
         private set
 
     // Make configurable by json
@@ -123,14 +123,12 @@ class JetAirController : RideController {
         upForce = if(state.stamina > 0.0) upForce else -0.7
 
         val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
-        val pushingHeightLimit = if(getRuntime(entity).resolveBoolean(infiniteAltitude)) false
-                                 else (entity.y >= 128 && entity.xRot <= 0)
 
-
-        //Incorporate the altitude limiter.
-        //Apply downwards force if limit is reached. Resist upwards force on a buffer of 30 blocks past the limit.
-        upForce = if(pushingHeightLimit)  upForce - upForce * ((entity.y - altitudeLimit) / 30) - 0.5
-                  else upForce
+        //Only limit altitude if altitude is not infinite
+        if (!getRuntime(entity).resolveBoolean(infiniteAltitude)) {
+            //Provide a hard limit on altitude
+            upForce = if (entity.y >= altitudeLimit && upForce > 0) 0.0 else upForce
+        }
 
         val velocity = Vec3(0.0 , upForce, forwardForce )
 
