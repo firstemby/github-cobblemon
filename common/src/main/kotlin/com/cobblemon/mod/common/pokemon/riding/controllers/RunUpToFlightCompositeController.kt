@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.writeString
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -74,12 +75,32 @@ class RunUpToFlightCompositeController : RideController {
         if (state.activeController == flightController && entity.onGround() && state.timeTransitioned + 20 < entity.level().gameTime) {
 
             //Pass the speed to the next state
-            val flightState = flightController.getState(entity, ::BirdAirState)
-            val groundState = landController.getState(entity, ::GenericLandState)
+            val flightState = flightController.getState( entity, ::BirdAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
             groundState.currSpeed = flightState.currSpeed
+            groundState.rideVel = flightState.rideVel
+            groundState.stamina = flightState.stamina
 
-            getState(entity, ::RunUpToFlightCompositeState).activeController = landController
-            entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
+            getState(entity, ::RunUpToFlightCompositeState).let {
+                it.activeController = landController
+                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
+                it.timeTransitioned = entity.level().gameTime
+            }
+        }
+        else if (state.activeController == landController && Minecraft.getInstance().options.keyJump.isDown && state.timeTransitioned + 20 < entity.level().gameTime) {
+
+            //Pass the speed to the next state
+            val flightState = flightController.getState( entity, ::BirdAirState )
+            val groundState = landController.getState( entity, ::GenericLandState )
+            flightState.currSpeed = groundState.currSpeed
+            flightState.rideVel = groundState.rideVel
+            flightState.stamina = groundState.stamina
+
+            getState(entity, ::RunUpToFlightCompositeState).let {
+                it.activeController = flightController
+                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
+                it.timeTransitioned = entity.level().gameTime
+            }
         }
 
         return getActiveController(entity).speed(entity, driver)
@@ -101,6 +122,14 @@ class RunUpToFlightCompositeController : RideController {
         return getActiveController(entity).angRollVel(entity, driver, deltaTime)
     }
 
+    override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).rideFovMult(entity, driver)
+    }
+
+    override fun setRideBar(entity: PokemonEntity, driver: Player): Float {
+        return getActiveController(entity).setRideBar(entity, driver)
+    }
+
     override fun canJump(entity: PokemonEntity, driver: Player): Boolean {
         return getActiveController(entity).canJump(entity, driver)
     }
@@ -111,19 +140,9 @@ class RunUpToFlightCompositeController : RideController {
         jumpStrength: Int
     ): Vec3 {
         val controller = getActiveController(entity)
-        if (controller == landController && jumpStrength >= getRuntime(entity).resolveInt(minimumJump)) {
+        val state = getState(entity, ::CompositeState)
+        val isJumping = Minecraft.getInstance().options.keyJump.isDown
 
-            //Pass the speed to the next state
-            val flightState = flightController.getState(entity, ::BirdAirState )
-            val groundState = landController.getState(entity, ::GenericLandState)
-            flightState.currSpeed = groundState.currSpeed
-
-            getState(entity, ::RunUpToFlightCompositeState).let {
-                it.activeController = flightController
-                entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-                it.timeTransitioned = entity.level().gameTime
-            }
-        }
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 
