@@ -1812,6 +1812,11 @@ open class PokemonEntity(
         return this.riding.speed(this, controller)
     }
 
+    fun useRidingAltPose(): Boolean {
+        val driver = this.controllingPassenger as? Player ?: return false
+        return this.riding.useRidingAltPose(this, driver)
+    }
+
     var jumpInputStrength: Int = 0 // move this
     override fun onPlayerJump(strength: Int) {
         // See if this controls the hot bar element

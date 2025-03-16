@@ -111,6 +111,8 @@ interface RideController : Encodable, Decodable {
 
     fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
+    fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean = false
+
     //If function is not overwritten by controllers then just perform the defualt
     //rolling function which is roll on mousex and pitch on mousey
     fun rotationOnMouseXY(

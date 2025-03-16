@@ -64,7 +64,6 @@ class BirdAirController : RideController {
         //Retrieve the current bird controller state and stats
         val state = getState(entity, ::BirdAirState)
 
-
         return state.rideVel.length().toFloat()
     }
 
@@ -96,7 +95,7 @@ class BirdAirController : RideController {
 
 
         //Bring the ride out of the sky when stamina is depleted.
-        if  (state.stamina <= 0.0) {
+        if (state.stamina <= 0.0) {
             upForce -= 0.3
         }
 
@@ -130,22 +129,6 @@ class BirdAirController : RideController {
             //limit rotation modulation when pitched up heavily or pitched down heavily
             yawForce *= abs(cos(Math.toRadians(rollable.pitch.toDouble())))
             pitchForce *= abs(cos(Math.toRadians(rollable.pitch.toDouble()))) * 1.5
-
-            //Fully ignore roll influenced angle changes when looking a certain amount up or down
-            if( abs(cos(Math.toRadians(rollable.pitch.toDouble()))) <= 0.25 )
-            {
-                yawForce =  0.0
-                pitchForce = 0.0
-            }
-
-
-            //TODO: is the deadzone needed?
-            /*
-            if (rollable.roll <= 0.0 && rollable.roll >= -0.0) {
-                yawForce = 0.0
-                pitchForce = 0.0
-            }
-             */
 
             return Vec3(yawForce, pitchForce, 0.0)
         }
@@ -245,6 +228,11 @@ class BirdAirController : RideController {
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
+    override fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
+        val state = getState(entity, ::BirdAirState)
+        return state.gliding
+    }
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeString(topSpeedExpr.toString())
@@ -286,7 +274,7 @@ class BirdAirController : RideController {
     /*
     *  Calculates the change in the ride space vector due to player input and ride state
     */
-    fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: BirdAirState){
+    fun calculateRideSpaceVel(entity: PokemonEntity, driver: Player, state: BirdAirState) {
 
 
         //retrieve stats
@@ -299,8 +287,8 @@ class BirdAirController : RideController {
 
         val currSpeed = state.rideVel.length()
 
-        //Flag for determining if stamina should be lost
-        var loseStamina = false
+        //Flag for determining if player is actively inputting
+        var activeInput = false
 
         //speed up and slow down based on input
         if (driver.zza != 0.0f && state.stamina > 0.0) {
@@ -316,7 +304,7 @@ class BirdAirController : RideController {
                 state.rideVel.y,
                 (state.rideVel.z + (accel * forwardInput.toDouble())))
 
-            loseStamina = true
+            activeInput = true
         }
 
         val rollable = driver as? Rollable
@@ -355,7 +343,7 @@ class BirdAirController : RideController {
                 (state.rideVel.x + (accel * driver.xxa)).coerceIn(-latTopSpeed, latTopSpeed),
                 state.rideVel.y,
                 state.rideVel.z)
-            loseStamina = true
+            activeInput = true
         }
         else {
             state.rideVel = Vec3(
@@ -377,7 +365,7 @@ class BirdAirController : RideController {
                 state.rideVel.x,
                 (state.rideVel.y + (accel * vertInput)).coerceIn(-vertTopSpeed, vertTopSpeed),
                 state.rideVel.z)
-            loseStamina = true
+            activeInput = true
         }
         else {
             state.rideVel = Vec3(
@@ -386,9 +374,16 @@ class BirdAirController : RideController {
                 state.rideVel.z)
         }
 
+        //Check if the ride should be gliding
+        if (activeInput && state.stamina > 0.0) {
+            state.gliding = false
+        }else {
+            state.gliding = true
+        }
+
         //Only perform stamina logic if the ride does not have infinite stamina
-        if (getRuntime(entity).resolveBoolean(infiniteStamina)) {
-            if (loseStamina) {
+        if (!getRuntime(entity).resolveBoolean(infiniteStamina)) {
+            if (activeInput) {
                 state.stamina -= (0.05 / staminaStat).toFloat()
             }
 

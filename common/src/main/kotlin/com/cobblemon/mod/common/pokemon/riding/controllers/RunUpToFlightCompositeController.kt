@@ -72,7 +72,8 @@ class RunUpToFlightCompositeController : RideController {
         driver: Player
     ): Float {
         val state = getState(entity, ::RunUpToFlightCompositeState)
-        if (state.activeController == flightController && entity.onGround() && state.timeTransitioned + 20 < entity.level().gameTime) {
+        if (state.activeController == flightController && entity.onGround() &&
+            state.timeTransitioned + 20 < entity.level().gameTime) {
 
             //Pass the speed to the next state
             val flightState = flightController.getState( entity, ::BirdAirState )
@@ -87,7 +88,8 @@ class RunUpToFlightCompositeController : RideController {
                 it.timeTransitioned = entity.level().gameTime
             }
         }
-        else if (state.activeController == landController && Minecraft.getInstance().options.keyJump.isDown && state.timeTransitioned + 20 < entity.level().gameTime) {
+        else if (state.activeController == landController && Minecraft.getInstance().options.keyJump.isDown &&
+            state.timeTransitioned + 20 < entity.level().gameTime) {
 
             //Pass the speed to the next state
             val flightState = flightController.getState( entity, ::BirdAirState )
@@ -157,6 +159,10 @@ class RunUpToFlightCompositeController : RideController {
     override fun shouldRoll(entity: PokemonEntity): Boolean = getActiveController(entity).shouldRoll(entity)
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = getActiveController(entity).useAngVelSmoothing(entity)
+
+    override fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
+        return getActiveController(entity).useRidingAltPose(entity, driver)
+    }
 
     override fun rotationOnMouseXY
                 (entity: PokemonEntity,
