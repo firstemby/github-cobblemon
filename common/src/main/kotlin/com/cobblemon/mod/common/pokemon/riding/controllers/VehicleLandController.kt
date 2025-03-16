@@ -13,7 +13,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
-import com.cobblemon.mod.common.api.riding.RidingOnPlayerSoundEventInstance
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.LandVehicleState
@@ -165,15 +164,6 @@ class VehicleLandController : RideController {
                     driver.getZ(), SoundEvents.PLAYER_ATTACK_WEAK,
                     driver.getSoundSource(), 1.0f, 0.2f
                 )
-
-
-                val lp = driver as? LocalPlayer
-                lp?.let {
-                    //val resourceLocation = ResourceLocation.tryParse(getRuntime(entity).resolveString(sound))
-                    //val soundEvent = BuiltInRegistries.SOUND_EVENT.getOptional(resourceLocation).orElse(null)
-                    val soundInstance = RidingOnPlayerSoundEventInstance(it, SoundEvents.AMBIENT_UNDERWATER_LOOP)
-                    Minecraft.getInstance().soundManager.play(soundInstance)
-                }
 
             }
 
