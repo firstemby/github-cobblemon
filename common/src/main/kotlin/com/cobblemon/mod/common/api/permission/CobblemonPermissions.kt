@@ -14,6 +14,9 @@ object CobblemonPermissions {
     private val permissions = arrayListOf<Permission>()
 
     @JvmStatic
+    val ALTER_SHINY_CHANCE = this.create("${COMMAND_PREFIX}altershinychance", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    @JvmStatic
     val CHANGE_EYE_HEIGHT = this.create("${COMMAND_PREFIX}changeeyeheight", PermissionLevel.ALL_COMMANDS)
     @JvmStatic
     val CHANGE_SCALE_AND_SIZE = this.create("${COMMAND_PREFIX}changescaleandsize", PermissionLevel.ALL_COMMANDS)
