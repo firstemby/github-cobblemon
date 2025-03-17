@@ -72,7 +72,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         HAY("nest_hay"),
         SAND("nest_sand"),
         RED_SAND("nest_red_sand"),
-        CHORUS("mest_chorus"),
+        CHORUS("nest_chorus"),
 
         CAVE("cave_nest"),
         //NETHER("nether_nest"),
