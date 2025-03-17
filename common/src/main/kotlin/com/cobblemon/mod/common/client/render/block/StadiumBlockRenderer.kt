@@ -38,6 +38,18 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
     private val droneSpeed = 0.10
 
     override fun render(
+        blockEntity: StadiumBlockEntity,
+        partialTick: Float,
+        poseStack: PoseStack,
+        bufferSource: MultiBufferSource,
+        packedLight: Int,
+        packedOverlay: Int
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    /*
+    override fun render(
             blockEntity: StadiumBlockEntity,
             tickDelta: Float,
             poseStack: PoseStack,
@@ -193,4 +205,5 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
             )
         }
     }
+    */
 }

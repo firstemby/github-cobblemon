@@ -25,6 +25,13 @@ class StadiumBlockEntity(
     pos,
     blockState
 ) {
+    var storedPlayers = mutableListOf<ServerPlayer>()
+
+    var battleDefenition =
+
+    fun addPlayer()
+
+    /*
     var isInUse = false
 
     val droneState = DroneState()
@@ -128,5 +135,5 @@ class StadiumBlockEntity(
         return tag
     }
 
-
+    */
 }

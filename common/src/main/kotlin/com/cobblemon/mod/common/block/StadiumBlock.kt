@@ -70,6 +70,7 @@ class StadiumBlock(properties: Properties): BaseEntityBlock(properties) {
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
 
+    /*
     override fun useWithoutItem(
         blockState: BlockState,
         world: Level,
@@ -110,4 +111,5 @@ class StadiumBlock(properties: Properties): BaseEntityBlock(properties) {
 
         return InteractionResult.SUCCESS
     }
+    */
 }
