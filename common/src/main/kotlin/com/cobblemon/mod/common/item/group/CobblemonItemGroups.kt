@@ -336,20 +336,29 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
+        entries.accept(CobblemonItems.NEST_HAY)
         entries.accept(CobblemonItems.NEST_STICK)
         entries.accept(CobblemonItems.NEST_LEAF)
         entries.accept(CobblemonItems.NEST_STONE)
         entries.accept(CobblemonItems.NEST_DEEPSLATE)
-        entries.accept(CobblemonItems.NEST_BASALT)
+        entries.accept(CobblemonItems.NEST_LUSH)
         entries.accept(CobblemonItems.NEST_SNOW)
         entries.accept(CobblemonItems.NEST_SEAGRASS)
+        entries.accept(CobblemonItems.NEST_WARM_OCEAN)
+        entries.accept(CobblemonItems.NEST_SAND)
+        entries.accept(CobblemonItems.NEST_RED_SAND)
+        entries.accept(CobblemonItems.NEST_NETHER)
+        entries.accept(CobblemonItems.NEST_BASALT)
+        entries.accept(CobblemonItems.NEST_SOUL_SAND)
+        entries.accept(CobblemonItems.NEST_CHORUS)
+
+        entries.accept(CobblemonItems.INCUBATOR)
 
         entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
         //entries.accept(CobblemonItems.NETHER_NEST)
         entries.accept(CobblemonItems.WATER_NEST)
-        entries.accept(CobblemonItems.INCUBATOR)
-
+        
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)

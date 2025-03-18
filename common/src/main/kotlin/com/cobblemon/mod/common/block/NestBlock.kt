@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
@@ -38,6 +39,7 @@ import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.StateDefinition
@@ -198,9 +200,18 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         }
     }
 
+    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+        super.onPlace(state, level, pos, oldState, isMoving)
+        checkAndBreakIfSubmerged(state, level, pos)
+    }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(BlockStateProperties.WATERLOGGED)
+    }
+
+    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+        checkAndBreakIfSubmerged(state, level, pos)
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos)
     }
 
     override fun neighborChanged(
@@ -216,9 +227,24 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         // Check if the block below is air
         val blockBelowPos = pos.below()
         if (fromPos == blockBelowPos && level.getBlockState(blockBelowPos).isAir) {
-            // Remove the block without dropping items (loot table handles drops)
             level.destroyBlock(pos, false)
         }
+
+        checkAndBreakIfSubmerged(state, level, pos)
+    }
+
+    private fun checkAndBreakIfSubmerged(state: BlockState, levelAccessor: LevelAccessor, pos: BlockPos) {
+        val fluidState = levelAccessor.getFluidState(pos)
+
+        if ((fluidState.type == Fluids.WATER || fluidState.isSource) && !canBeWaterlogged()) {
+            if (levelAccessor is Level) {
+                levelAccessor.destroyBlock(pos, true)
+            }
+        }
+    }
+
+    private fun canBeWaterlogged(): Boolean {
+        return variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN
     }
 
     override fun useWithoutItem(
@@ -230,10 +256,10 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     ): InteractionResult {
         // Ensure this logic only runs on the server
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS // Client-side only needs to show the hand animation
+            return InteractionResult.SUCCESS
         }
 
-        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
+        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity ?: return InteractionResult.FAIL
 
@@ -268,10 +294,9 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         val hasEgg = !blockEntity.getItem(0).isEmpty
 
         return if (!isOwner && hasEgg) {
-            // Reduce destroy speed by 80%, making it 5 times harder to break
+            // Reduce destroy speed making it 5 times harder to break
             super.getDestroyProgress(state, player, level, pos) * 0.2f
         } else {
-            // Use the default destroy speed
             super.getDestroyProgress(state, player, level, pos)
         }
     }
@@ -332,10 +357,19 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     }
 
 
-    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        if (variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN) {
-            return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, ctx.level.getFluidState(ctx.clickedPos).type == Fluids.WATER)
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
+        val fluidState = ctx.level.getFluidState(ctx.clickedPos)
+
+        // If the nest variant can be waterlogged, set it accordingly
+        if (canBeWaterlogged()) {
+            return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.type == Fluids.WATER)
         }
+
+        // Prevent placement if the block is submerged in water
+        if (!canBeWaterlogged() && fluidState.type == Fluids.WATER) {
+            return null
+        }
+
         return defaultBlockState()
     }
 
