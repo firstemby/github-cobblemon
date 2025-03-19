@@ -4,6 +4,15 @@
   "profileScale": 0.61,
   "profileTranslation": [-0.01, 0.86, 0],
   "rootBone": "charmander",
+  "properties": {
+    "item_display_context": "THIRD_PERSON_RIGHT_HAND"
+  },
+  "transformedParts": [
+    {
+      "part": "locator_item",
+      "scale": [2.5, 2.5, 2.5]
+    }
+  ],
   "animations": {
     "cry": "q.bedrock_stateful('charmander', 'cry')",
     "special": "q.bedrock_primary('charmander', 'special', q.curve('symmetrical_wide'))"

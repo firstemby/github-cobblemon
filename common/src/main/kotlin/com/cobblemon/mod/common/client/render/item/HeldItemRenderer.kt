@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags.WEARABLE_FACE_ITEMS
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags.WEARABLE_HAT_ITEMS
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.MatrixWrapper
-import com.cobblemon.mod.common.client.render.models.blockbench.NullObjectParser
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
@@ -64,10 +63,8 @@ class HeldItemRenderer() {
                 poseStack.scale(.68f * scale, .68f * scale, .68f * scale)
             }
             (locators.containsKey("item")) -> {
-                updateModifiers("item",locators)
-                poseStack.mulPose(locators["item"]!!.matrix)
-
                 displayContext = model.getLocatorDisplayContext(ITEM) ?: ItemDisplayContext.FIXED
+                poseStack.mulPose(locators["item"]!!.matrix)
 
                 when (displayContext) {
                     ItemDisplayContext.FIXED -> {
@@ -119,17 +116,5 @@ class HeldItemRenderer() {
         val locators: Map<String, MatrixWrapper> = delegate.locatorStates
 
         render(entity, model, shownItem, locators, poseStack, buffer, light, 0)
-    }
-
-    private fun updateModifiers(name: String, locators: Map<String, MatrixWrapper>) {
-        locators.forEach { (locator: String, m: MatrixWrapper) ->
-            val modifiers: Map<String, Float>
-            if (locator.startsWith("_null_$name[")) {
-                modifiers = NullObjectParser.parseNullObject(locator).modifiers
-                if (modifiers.containsKey("scale")) scale = modifiers["scale"]!!
-                if (modifiers.containsKey("mode")) displayContext = ItemDisplayContext.entries[((modifiers["mode"]!!).toInt()) % 9]
-                return
-            }
-        }
     }
 }
