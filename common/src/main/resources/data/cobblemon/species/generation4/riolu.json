@@ -183,7 +183,7 @@
       "id": "riolu_lucario",
       "variant": "level_up",
       "result": "lucario",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "aurasphere"
       ],

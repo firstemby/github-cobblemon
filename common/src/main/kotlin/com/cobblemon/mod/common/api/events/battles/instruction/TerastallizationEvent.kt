@@ -26,7 +26,7 @@ data class TerastallizationEvent(
     val battle: PokemonBattle,
     val pokemon: BattlePokemon,
     val teraType: TeraType
-    ) {
+) {
     val context = mutableMapOf<String, MoValue>(
         "battle" to battle.struct,
         "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },

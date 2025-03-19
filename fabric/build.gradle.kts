@@ -94,12 +94,14 @@ tasks {
         inputs.property("version", rootProject.version)
         inputs.property("fabric_loader_version", libs.fabric.loader.get().version)
         inputs.property("minecraft_version", rootProject.property("mc_version").toString())
+        inputs.property("java_version", rootProject.property("java_version").toString())
 
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to rootProject.version,
                 "fabric_loader_version" to libs.fabric.loader.get().version,
-                "minecraft_version" to rootProject.property("mc_version").toString()
+                "minecraft_version" to rootProject.property("mc_version").toString(),
+                "java_version" to rootProject.property("java_version").toString()
             )
         }
     }

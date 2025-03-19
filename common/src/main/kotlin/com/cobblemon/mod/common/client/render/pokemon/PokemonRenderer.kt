@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBallDisplay
@@ -18,6 +19,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate.Companion.BE
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate.Companion.BEAM_SHRINK_TIME
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
+import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PosablePokemonEntityModel
@@ -40,7 +42,6 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
-import kotlin.math.*
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
@@ -56,10 +57,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.joml.Math
-import org.joml.Quaternionf
-import org.joml.Vector3f
-import org.joml.Vector4f
+import org.joml.*
+import kotlin.math.*
 
 class PokemonRenderer(
     context: EntityRendererProvider.Context
@@ -80,11 +79,14 @@ class PokemonRenderer(
 
         private const val SPACE = " "
 
+        private const val DISABLE_ROLLING_DEBUG = false
     }
 
     val ballContext = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
+
+    private val heldItemRenderer = HeldItemRenderer()
 
     override fun getTextureLocation(entity: PokemonEntity): ResourceLocation {
         return VaryingModelRepository.getTexture(entity.pokemon.species.resourceIdentifier, entity.delegate as PokemonClientDelegate)
@@ -140,7 +142,12 @@ class PokemonRenderer(
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
 
 
-        super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+        if (entity.passengers.isNotEmpty()) {
+            renderRiding(entity, partialTicks, poseMatrix, buffer, packedLight)
+        }
+        else {
+            super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+        }
 
         modelNow.green = 1F
         modelNow.blue = 1F
@@ -149,6 +156,48 @@ class PokemonRenderer(
             this.renderNameTag(entity, entity.effectiveName(), poseMatrix, buffer, packedLight, partialTicks)
         }
 //        Minecraft.getInstance().bufferBuilders.entityVertexConsumers.draw()
+
+        //Render Held Item
+        heldItemRenderer.renderOnEntity(
+            entity,
+            clientDelegate,
+            model.posableModel,
+            poseMatrix,
+            buffer,
+            packedLight
+        )
+    }
+
+    fun renderRiding(
+        entity: PokemonEntity,
+        partialTicks: Float,
+        poseMatrix: PoseStack,
+        buffer: MultiBufferSource,
+        packedLight: Int
+    ) {
+        val driver = entity.firstPassenger ?: return
+        val rollable = driver as? Rollable ?: return
+
+        poseMatrix.pushPose()
+
+        if(!DISABLE_ROLLING_DEBUG && rollable.shouldRoll()){
+            val matrix = poseMatrix.last().pose()
+            val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
+            val center = Vector3f(0f, entity.bbHeight/2, 0f)
+            val transformationMatrix = Matrix4f()
+            //Move origin to center of Pokemon
+            transformationMatrix.translate(center)
+            transformationMatrix.mul(Matrix4f(rollable.orientation))
+            //Move origin to base of the entity
+            transformationMatrix.translate(center.negate(Vector3f()))
+
+            //Pre-undo yaw rotation
+            transformationMatrix.rotate(Axis.YP.rotationDegrees(yaw+180f))
+            matrix.mul(transformationMatrix)
+        }
+
+        super.render(entity, 0f, partialTicks, poseMatrix, buffer, packedLight)
+        poseMatrix.popPose()
     }
 
     fun renderTransition(

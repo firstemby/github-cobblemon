@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -41,8 +42,11 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
+import org.joml.Matrix3f
+import org.joml.Vector3f
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     companion object {
@@ -383,7 +387,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         val player = Minecraft.getInstance().player ?: return
         val isWithinRange = player.position().distanceTo(currentEntity.position()) <= Cobblemon.config.shinyNoticeParticlesDistance
 
-        if (currentEntity.pokemon.shiny && currentEntity.ownerUUID == null) {
+        if (currentEntity.pokemon.shiny && currentEntity.ownerUUID == null && !currentEntity.isSilent) {
             if (isWithinRange) {
                 if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN && !currentEntity.isBattling) {
                     playShinyEffect("cobblemon:shiny_sparkle_ambient_wild")
@@ -421,7 +425,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     }
 
     override fun spawnShinyParticle(player: Player) {
-        if(secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN) {
+        if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN) {
             playShinyEffect("cobblemon:ambient_shiny_sparkle")
             lastShinyParticle = System.currentTimeMillis()
         }

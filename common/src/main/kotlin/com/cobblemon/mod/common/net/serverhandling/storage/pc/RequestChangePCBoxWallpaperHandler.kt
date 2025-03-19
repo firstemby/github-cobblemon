@@ -9,12 +9,13 @@
 package com.cobblemon.mod.common.net.serverhandling.storage.pc
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
-import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
+import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -25,6 +26,14 @@ object RequestChangePCBoxWallpaperHandler : ServerNetworkPacketHandler<RequestCh
         if (pc.boxes.size <= packet.boxNumber || Cobblemon.wallpapers[player.uuid]?.contains(packet.wallpaper) == false) {
             return
         }
+
+        CobblemonUnlockableWallpapers.unlockableWallpapers.values.find { it.texture == packet.wallpaper }?.let { unlockable ->
+            if (!unlockable.enabled || unlockable.id !in pc.unlockedWallpapers) {
+                // Bro did you just try to hack on a wallpaper? How embarrassing.
+                return
+            }
+        }
+
 
         val box = pc.boxes[packet.boxNumber]
         val event = ChangePCBoxWallpaperEvent.Pre(player, box, packet.wallpaper)

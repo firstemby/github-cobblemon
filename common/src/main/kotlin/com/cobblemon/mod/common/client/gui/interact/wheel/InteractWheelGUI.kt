@@ -104,7 +104,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
             tooltipText = option?.tooltipText,
             x = x,
             y = y,
-            isEnabled = option != null,
+            isEnabled = option != null && option.enabled,
             colour = option?.colour ?: { null },
             onPress = { option?.onPress?.invoke() },
             canHover = { a: Double, b: Double -> !isMouseInCenter(a, b)}

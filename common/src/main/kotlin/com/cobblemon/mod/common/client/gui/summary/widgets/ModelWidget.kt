@@ -12,10 +12,12 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.calculateHeadYawAndPitch
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
+import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -28,6 +30,7 @@ class ModelWidget(
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,
     val shouldFollowCursor: Boolean = false,
+    var heldItem: ItemStack? = null
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
@@ -39,7 +42,10 @@ class ModelWidget(
         set (value) {
             field = value
             currentYawAndPitch = Pair(0f, 0f)
+            state = FloatingState()
         }
+
+    private val heldItemRenderer = HeldItemRenderer()
 
     var state = FloatingState()
     var lookStartTime: Long? = null
@@ -104,6 +110,14 @@ class ModelWidget(
             partialTicks = partialTicks,
             headYaw = currentYawAndPitch.first,
             headPitch = currentYawAndPitch.second,
+        )
+
+        heldItemRenderer.renderOnModel(
+            state.currentModel!!,
+            heldItem?: ItemStack.EMPTY,
+            state.locatorStates,
+            matrices,
+            context.bufferSource()
         )
 
         matrices.popPose()

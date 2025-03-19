@@ -15,17 +15,21 @@ import com.cobblemon.mod.common.pokemon.transformation.controller.ClientFormCont
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
 import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.*
+import net.minecraft.world.item.ItemStack
 
 internal data class ClientPokemonP3(
     val originalTrainerType: OriginalTrainerType,
     val originalTrainer: Optional<String>,
     val originalTrainerName: Optional<String>,
     val aspects: Set<String>,
-    val formController: Optional<ClientFormController.Intermediate>
+    val formController: Optional<ClientFormController.Intermediate>,
+    val heldItemVisible: Optional<Boolean>,
+    val cosmeticItem: Optional<ItemStack>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -36,6 +40,8 @@ internal data class ClientPokemonP3(
         this.formController.ifPresent {
             (other.formProxy as? FormProxy)?.overrideController(it.create(other))
         }
+        this.heldItemVisible.ifPresent { other.heldItemVisible = it }
+        other.cosmeticItem = this.cosmeticItem.orElse(ItemStack.EMPTY)
         return other
     }
 
@@ -49,7 +55,9 @@ internal data class ClientPokemonP3(
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(ClientPokemonP3::originalTrainer),
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER_NAME).forGetter(ClientPokemonP3::originalTrainerName),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::aspects),
-                ClientFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(ClientPokemonP3::formController)
+                ClientFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(ClientPokemonP3::formController),
+                Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(ClientPokemonP3::heldItemVisible),
+                ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter(ClientPokemonP3::cosmeticItem)
             ).apply(instance, ::ClientPokemonP3)
         }
 
@@ -61,6 +69,8 @@ internal data class ClientPokemonP3(
             Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.let {
                 ClientFormController.Intermediate(it.map { it.convertToDisplay(pokemon) }.toSet())
             }),
+            Optional.ofNullable(pokemon.heldItemVisible),
+            Optional.ofNullable(pokemon.cosmeticItem.takeIf { !it.isEmpty })
         )
     }
 

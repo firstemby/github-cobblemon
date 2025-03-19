@@ -69,11 +69,11 @@ class LocatorAccess(
      * Updates all of the locator states with the position at this current frame.
      * This is the same logic as ModelPart uses, that's why we reuse ModelPart#rotate.
      */
-    fun update(matrixStack: PoseStack, entity: Entity, scale: Float, state: MutableMap<String, MatrixWrapper>, isRoot: Boolean = false) {
+    fun update(matrixStack: PoseStack, entity: Entity?, scale: Float, state: MutableMap<String, MatrixWrapper>, isRoot: Boolean = false) {
         matrixStack.pushPose()
         joint.transform(matrixStack)
 
-        if (isRoot) {
+        if (isRoot && null!=entity) {
             matrixStack.pushPose()
             matrixStack.scale(-1F, -1F, 1F)
             state.getOrPut("root") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())

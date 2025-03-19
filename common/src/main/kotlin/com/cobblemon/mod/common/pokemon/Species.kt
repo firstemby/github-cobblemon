@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType.Companion.FLYING_POSES
@@ -157,6 +158,9 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var forms: MutableList<FormData> = mutableListOf()
         private set
 
+    var riding: RidingProperties = RidingProperties()
+        private set
+
     var labels = hashSetOf<String>()
         private set
 
@@ -278,6 +282,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             pb.writeBoolean(ability is CommonAbility)
             pb.writeString(ability.template.name)
         }
+
+        this.riding.encode(buffer)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -317,6 +323,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
                 pool.add(Priority.NORMAL, it)
             }
         }
+        this.riding = RidingProperties.decode(buffer)
         this.initialize()
     }
 

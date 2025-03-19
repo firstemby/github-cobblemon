@@ -154,7 +154,7 @@
       "id": "duraludon_archaludon",
       "variant": "item_interact",
       "result": "archaludon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "electroshot"
       ],

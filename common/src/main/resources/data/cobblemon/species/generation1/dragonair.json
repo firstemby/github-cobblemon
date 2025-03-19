@@ -199,5 +199,41 @@
         }
       ]
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LIQUID": "25-50",
+          "AIR": "25-50"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LIQUID": "30-60",
+          "AIR": "30-60"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LIQUID": "30-60",
+          "AIR": "30-60"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LIQUID": "25-50",
+          "AIR": "25-50"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LIQUID": "35-70",
+          "AIR": "35-70"
+        }
+      }
+    },
+    "seats": [],
+    "controller": null
+  }
 }

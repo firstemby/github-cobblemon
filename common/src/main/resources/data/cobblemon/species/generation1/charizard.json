@@ -49,6 +49,134 @@
     "height": 2.65,
     "fixed": false
   },
+  "riding": {
+	"stats": {
+	      "SPEED": {
+	        "displayName": "Speed",
+	        "description": "Its top speed",
+	        "ranges": {
+	          "LAND": "2-10",
+	          "AIR": "100-101"
+	        }
+	      },
+	      "ACCELERATION": {
+	        "displayName": "Acceleration",
+	        "description": "How fast it can speed up",
+	        "ranges": {
+	          "LAND": "2-10",
+	          "AIR": "100-101"
+	        }
+	      },
+	      "SKILL": {
+	        "displayName": "Handling",
+	        "description": "How fast it can turn",
+	        "ranges": {
+	          "LAND": "2-10",
+	          "AIR": "100-101"
+	        }
+	      },
+	      "JUMP": {
+	        "displayName": "Altitude",
+	        "description": "How high it can fly",
+	        "ranges": {
+	          "LAND": "2-10",
+	          "AIR": "100-101"
+	        }
+	      },
+	      "STAMINA": {
+	        "displayName": "Fuel/Stamina",
+	        "description": "How long it can stay off the ground",
+	        "ranges": {
+	          "LAND": "2-10",
+	          "AIR": "100-101"
+	        }
+	      }
+	    },
+    "controller": {
+      "key": "cobblemon:composite/run_up_to_flight",
+      "minimumSpeed": "0.2",
+      "minimumJump": "80",
+      "landController": {
+        "key": "cobblemon:land/generic",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
+      },
+      "flightController": {
+        "key": "cobblemon:air/bird",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ]
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -262,7 +390,51 @@
       "baseExperienceYield": 317,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-60"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "90-100",
+              "AIR": "20-50"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "50-100"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-50"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "35-70"
+            }
+          }
+        },
+        "seats": [],
+        "controller": {
+          "key": "cobblemon:composite/run_up_to_flight",
+          "flightController": {
+            "key": "cobblemon:air/bird"
+          },
+          "landController": {
+            "key": "cobblemon:land/generic"
+          }
+        }
+      }
     },
     {
       "name": "Mega-Y",
@@ -296,7 +468,51 @@
       "baseExperienceYield": 317,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-60"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "90-100",
+              "AIR": "20-50"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "50-100"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-50"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "35-70"
+            }
+          }
+        },
+        "seats": [],
+        "controller": {
+          "key": "cobblemon:composite/run_up_to_flight",
+          "flightController": {
+            "key": "cobblemon:air/bird"
+          },
+          "landController": {
+            "key": "cobblemon:land/generic"
+          }
+        }
+      }
     },
     {
       "name": "Gmax",

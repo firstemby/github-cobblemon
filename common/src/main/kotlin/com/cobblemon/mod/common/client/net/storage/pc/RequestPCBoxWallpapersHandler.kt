@@ -17,6 +17,6 @@ import net.minecraft.client.Minecraft
 object RequestPCBoxWallpapersHandler : ClientNetworkPacketHandler<RequestPCBoxWallpapersPacket> {
     override fun handle(packet: RequestPCBoxWallpapersPacket, client: Minecraft) {
         PCBoxWallpaperRepository.findWallpapers(client.resourceManager)
-        PCBoxWallpapersPacket(PCBoxWallpaperRepository.wallpapers).sendToServer()
+        PCBoxWallpapersPacket(PCBoxWallpaperRepository.availableWallpapers).sendToServer()
     }
 }

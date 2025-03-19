@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.api.gui.getPixelRGB
 import com.cobblemon.mod.common.api.storage.StorePosition
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
@@ -20,6 +21,7 @@ import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.gui.pasture.PastureWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.client.storage.ClientPC
 import com.cobblemon.mod.common.client.storage.ClientParty
@@ -37,6 +39,7 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 
 class StorageWidget(
@@ -49,6 +52,8 @@ class StorageWidget(
     companion object {
         const val WIDTH = 263
         const val HEIGHT = 155
+        const val SCREEN_WIDTH = 174
+        const val SCREEN_HEIGHT = 155
         const val BOX_SLOT_START_OFFSET_X = 7
         const val BOX_SLOT_START_OFFSET_Y = 11
         const val PARTY_SLOT_START_OFFSET_X = 193
@@ -57,6 +62,9 @@ class StorageWidget(
         const val PARTY_SLOT_PADDING = 6
 
         private val partyPanelResource = cobblemonResource("textures/gui/pc/party_panel.png")
+        private val screenOverlayResource = cobblemonResource("textures/gui/pc/pc_screen_overlay.png")
+        private val screenGridResource = cobblemonResource("textures/gui/pc/pc_screen_grid.png")
+        private val screenGlowResource = cobblemonResource("textures/gui/pc/pc_screen_glow.png")
     }
 
     private val partySlots = arrayListOf<PartyStorageSlot>()
@@ -81,7 +89,6 @@ class StorageWidget(
             // Else it's greater than max, wrap around to start
             else 0
             this.setupStorageSlots()
-            this.pcGui.updateBoxName()
         }
 
     init {
@@ -147,13 +154,13 @@ class StorageWidget(
                 && grabbedSlot != null
     }
 
-    private fun setupStorageSlots() {
+    fun setupStorageSlots() {
         this.resetStorageSlots()
         var index = 0
 
         // Box Slots
         val boxStartX = x + BOX_SLOT_START_OFFSET_X
-        val boxStartY = y + BOX_SLOT_START_OFFSET_Y
+        val boxStartY = y + BOX_SLOT_START_OFFSET_Y + (if (pcGui.displayOptions) 5 else 0)
 
         for (row in 1..5) {
             for (col in 1..6) {
@@ -173,32 +180,30 @@ class StorageWidget(
         }
 
         // Party Slots
-        if (pcGui.configuration.showParty) {
-            for (partyIndex in 0..5) {
-                var partyX = x + PARTY_SLOT_START_OFFSET_X
-                var partyY = y + PARTY_SLOT_START_OFFSET_Y
+        for (partyIndex in 0..5) {
+            var partyX = x + PARTY_SLOT_START_OFFSET_X
+            var partyY = y + PARTY_SLOT_START_OFFSET_Y
 
-                if (partyIndex > 0) {
-                    val isEven = partyIndex % 2 == 0
-                    val offsetIndex = (partyIndex - (if (isEven) 0 else 1)) / 2
-                    val offsetX = if (isEven) 0 else (StorageSlot.SIZE + PARTY_SLOT_PADDING)
-                    val offsetY = if (isEven) 0 else 8
+            if (partyIndex > 0) {
+                val isEven = partyIndex % 2 == 0
+                val offsetIndex = (partyIndex - (if (isEven) 0 else 1)) / 2
+                val offsetX = if (isEven) 0 else (StorageSlot.SIZE + PARTY_SLOT_PADDING)
+                val offsetY = if (isEven) 0 else 8
 
-                    partyX += offsetX
-                    partyY += ((StorageSlot.SIZE + PARTY_SLOT_PADDING) * offsetIndex) + offsetY
-                }
+                partyX += offsetX
+                partyY += ((StorageSlot.SIZE + PARTY_SLOT_PADDING) * offsetIndex) + offsetY
+            }
 
-                PartyStorageSlot(
-                    x = partyX,
-                    y = partyY,
-                    parent = this,
-                    party = party,
-                    position = PartyPosition(partyIndex),
-                    onPress = { this.onStorageSlotClicked(it) }
-                ).also { widget ->
-                    this.addWidget(widget)
-                    this.partySlots.add(widget)
-                }
+            PartyStorageSlot(
+                x = partyX,
+                y = partyY,
+                parent = this,
+                party = party,
+                position = PartyPosition(partyIndex),
+                onPress = { this.onStorageSlotClicked(it) }
+            ).also { widget ->
+                this.addWidget(widget)
+                this.partySlots.add(widget)
             }
         }
     }
@@ -235,7 +240,6 @@ class StorageWidget(
                 shadow = true
             )
 
-
             if (canDeleteSelected() && displayConfirmRelease) {
                 drawScaledText(
                     context = context,
@@ -252,15 +256,64 @@ class StorageWidget(
             this.releaseNoButton.render(context, mouseX, mouseY, delta)
         }
 
-        // Screen Overlay
+        val boxWallpaper = pc.boxes[box].wallpaper
+        val screenResource: Pair<ResourceLocation, ResourceLocation?> =
+            PCBoxWallpaperRepository.allWallpapers.find { it.first == boxWallpaper }
+            ?: PCBoxWallpaperRepository.allWallpapers.find { it.first == PCBoxWallpaperRepository.defaultWallpaper }
+            ?: Pair(PCBoxWallpaperRepository.defaultWallpaper, null)
+
         blitk(
             matrixStack = matrices,
-            texture = pc.boxes[box].wallpaper,
-            x = x - 17,
-            y = y - 17,
-            width = 208,
-            height = 189,
+            texture = screenResource.first,
+            x = x,
+            y = y,
+            width = SCREEN_WIDTH,
+            height = SCREEN_HEIGHT,
             alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
+        )
+
+        if (screenResource.second !== null) {
+            blitk(
+                matrixStack = matrices,
+                texture = screenResource.second,
+                x = x - 17,
+                y = y - 17,
+                width = 208,
+                height = 189,
+                alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
+            )
+        } else {
+            val rgb = getPixelRGB(x + (SCREEN_WIDTH / 2), y + (SCREEN_HEIGHT / 2))
+            blitk(
+                matrixStack = matrices,
+                texture = screenGlowResource,
+                x = x - 17,
+                y = y - 17,
+                width = 208,
+                height = 189,
+                red = rgb.first / 255F,
+                green = rgb.second / 255F,
+                blue = rgb.third / 255F,
+                alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
+            )
+        }
+
+        blitk(
+            matrixStack = matrices,
+            texture = screenGridResource,
+            x = x + 7,
+            y = y + if (pcGui.displayOptions) 16 else 11,
+            width = 160,
+            height = 133
+        )
+
+        blitk(
+            matrixStack = matrices,
+            texture = screenOverlayResource,
+            x = x,
+            y = y,
+            width = SCREEN_WIDTH,
+            height = SCREEN_HEIGHT
         )
 
         if (screenLoaded) {

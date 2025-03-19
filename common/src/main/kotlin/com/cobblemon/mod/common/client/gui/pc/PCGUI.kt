@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.pc
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
 import com.cobblemon.mod.common.api.storage.pc.search.Search
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
@@ -23,6 +24,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNature
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.storage.ClientPC
 import com.cobblemon.mod.common.client.storage.ClientParty
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MarkPCBoxWallpapersSeenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket
 import com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -39,12 +41,14 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import kotlin.isInitialized
+import net.minecraft.resources.ResourceLocation
 
 class PCGUI(
     val pc: ClientPC,
     val party: ClientParty,
     val configuration: PCGUIConfiguration,
-    val openOnBox: Int = 0
+    val openOnBox: Int = 0,
+    val unseenWallpapers: MutableSet<ResourceLocation> = mutableSetOf()
 ) : Screen(Component.translatable("cobblemon.ui.pc.title")), CobblemonRenderable {
 
     companion object {
@@ -61,6 +65,10 @@ class PCGUI(
 
         private val baseResource = cobblemonResource("textures/gui/pc/pc_base.png")
         private val portraitBackgroundResource = cobblemonResource("textures/gui/pc/portrait_background.png")
+
+        private val buttonOptionsResource = cobblemonResource("textures/gui/pc/pc_icon_options.png")
+        private val buttonWallpaperResource = cobblemonResource("textures/gui/pc/pc_button_set_wallpaper.png")
+
         private val topSpacerResource = cobblemonResource("textures/gui/pc/pc_spacer_top.png")
         private val bottomSpacerResource = cobblemonResource("textures/gui/pc/pc_spacer_bottom.png")
         private val rightSpacerResource = cobblemonResource("textures/gui/pc/pc_spacer_right.png")
@@ -71,17 +79,21 @@ class PCGUI(
 
     private lateinit var storageWidget: StorageWidget
     private lateinit var boxNameWidget: BoxNameWidget
-    private lateinit var searchWidget: SearchWidget
+    private lateinit var filterWidget: FilterWidget
     private lateinit var wallpaperWidget: WallpapersScrollingWidget
+
     private var modelWidget: ModelWidget? = null
     internal var previewPokemon: Pokemon? = null
+
+    private val optionButtons: MutableList<IconButton> = mutableListOf()
 
     var search: Search = Search.DEFAULT
     var ticksElapsed = 0
     var selectPointerOffsetY = 0
     var selectPointerOffsetIncrement = false
+    var displayOptions = false
 
-    override fun renderBlurredBackground(delta: Float) { }
+    override fun renderBlurredBackground(delta: Float) {}
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
@@ -90,40 +102,44 @@ class PCGUI(
         val y = (height - BASE_HEIGHT) / 2
 
         // Add Exit Button
-        this.addRenderableWidget(ExitButton(pX = x + 320, pY = y + 186) { configuration.exitFunction(this) })
+        this.addRenderableWidget(
+            ExitButton(pX = x + 320, pY = y + 186) {
+                if (::wallpaperWidget.isInitialized && wallpaperWidget.visible) {
+                    wallpaperWidget.visible = false
+                    configuration.showParty = true
+                    for (button in optionButtons) button.highlighted = false
+                    playSound(CobblemonSounds.PC_CLICK)
+                } else {
+                    configuration.exitFunction(this)
+                }
+            }
+        )
 
         // Add Forward Button
         this.addRenderableWidget(
             NavigationButton(
-                pX = x + 221,
-                pY = y + 17,
+                pX = x + 220,
+                pY = y + 16,
                 forward = true
-            ) {
-                storageWidget.box += 1
-            }
+            ) { storageWidget.box += 1 }
         )
 
         // Add Backwards Button
         this.addRenderableWidget(
             NavigationButton(
-                pX = x + 119,
-                pY = y + 17,
+                pX = x + 117,
+                pY = y + 16,
                 forward = false
-            ) {
-                storageWidget.box -= 1
-            }
+            ) { storageWidget.box -= 1 }
         )
 
-        // Add Sort Button
-        addRenderableWidget(
-            SortButton(
-                pX = x + 85,
-                pY = y + 12,
-                onPress = { it as SortButton
-                    SortPCBoxPacket(pc.uuid, storageWidget.box, it.sortMode, hasShiftDown()).sendToServer()
-                }
-            )
+        // Add Filter Widget
+        this.filterWidget = FilterWidget(
+            pX = x + 126,
+            pY = y + 183,
+            update = { search = Search.of(filterWidget.value) }
         )
+        this.addRenderableWidget(filterWidget)
 
         // Add Storage
         this.storageWidget = StorageWidget(
@@ -134,48 +150,97 @@ class PCGUI(
             party = party
         )
         this.storageWidget.box = openOnBox
+        this.addRenderableWidget(storageWidget)
 
         // Add Box Name
         this.boxNameWidget = BoxNameWidget(
-            pX = x + 172,
-            pY = y + 15,
+            pX = x + 126,
+            pY = y + 12,
             pcGui = this,
             storageWidget = storageWidget
         )
+        this.addRenderableWidget(boxNameWidget)
 
-        // Add Search Widget
-        this.searchWidget = SearchWidget(
-            pX = x + 117,
-            pY = y + 183,
-            update = { search = Search.of(searchWidget.value) }
-        )
-
-        // Add Wallpaper Button
-        this.addRenderableWidget(
-            WallpaperButton(
-                pX = x + 235,
-                pY = y + 12,
-                onPress = {
-                    configuration.showParty = wallpaperWidget.visible
-                    wallpaperWidget.visible = !wallpaperWidget.visible
-                },
-                pcGui = this
+        // Initialise box options if not pasture
+        if (storageWidget.pastureWidget == null) {
+            optionButtons.clear()
+            addRenderableWidget(
+                IconButton(
+                    pX = x + 218,
+                    pY = y + 186,
+                    buttonWidth = 16,
+                    buttonHeight = 16,
+                    resource = buttonOptionsResource,
+                    label = "options"
+                ) {
+                    displayOptions = !displayOptions
+                    if (!displayOptions && wallpaperWidget.visible) {
+                        configuration.showParty = true
+                        wallpaperWidget.visible = false
+                    }
+                    (it as IconButton).highlighted = displayOptions
+                    storageWidget.setupStorageSlots()
+                    for (button in optionButtons) {
+                        button.visible = displayOptions
+                        button.highlighted = false
+                    }
+                }.also { it.highlighted = displayOptions }
             )
-        )
 
-        // Add Wallpaper Widget
-        this.wallpaperWidget = WallpapersScrollingWidget(
-            pX = x + 275,
-            pY = y + 30,
-            pcGui = this,
-            storageWidget = storageWidget
-        )
+            // Add Wallpaper Widget
+            this.wallpaperWidget = WallpapersScrollingWidget(
+                pX = x + 274,
+                pY = y + 29,
+                pcGui = this,
+                storageWidget = storageWidget
+            ).also {
+                // Set default component visibility
+                it.visible = false
+                configuration.showParty = true
+            }
+            this.addRenderableWidget(wallpaperWidget)
+
+            // Add Wallpaper Settings Button
+            this.addRenderableWidget(IconButton(
+                pX = x + 242,
+                pY = y + 31,
+                buttonWidth = 20,
+                buttonHeight = 20,
+                resource = buttonWallpaperResource,
+                label = "open_wallpaper_settings"
+            ) {
+                val isVisible = wallpaperWidget.visible
+                configuration.showParty = isVisible
+                wallpaperWidget.visible = !isVisible
+                (it as IconButton).highlighted = !isVisible
+                if (!unseenWallpapers.isEmpty()) MarkPCBoxWallpapersSeenPacket(unseenWallpapers).sendToServer()
+            }.also {
+                it.visible = displayOptions
+                optionButtons.add(it)
+            })
+
+            PokemonSortMode.entries.forEachIndexed { index, sortType ->
+                val typeName = sortType.name.lowercase()
+                this.addRenderableWidget(IconButton(
+                    pX = x + 92 + (12 * index),
+                    pY = y + 31,
+                    buttonWidth = 20,
+                    buttonHeight = 20,
+                    resource = cobblemonResource("textures/gui/pc/pc_button_sort_${typeName}.png"),
+                    altResource = cobblemonResource("textures/gui/pc/pc_button_sort_${typeName}_reverse.png"),
+                    tooltipKey = "ui.sort.${typeName}",
+                    label = "sort_${typeName}"
+                ) {
+                    SortPCBoxPacket(pc.uuid, storageWidget.box, sortType, hasShiftDown()).sendToServer()
+                }.also {
+                    it.visible = displayOptions
+                    optionButtons.add(it)
+                })
+            }
+        }
 
         this.setPreviewPokemon(null)
-        this.addRenderableWidget(storageWidget)
-        this.addRenderableWidget(boxNameWidget)
-        this.addRenderableWidget(searchWidget)
-        this.addRenderableWidget(wallpaperWidget)
+
         super.init()
     }
 
@@ -460,6 +525,10 @@ class PCGUI(
             scale = SCALE
         )
 
+        if (!optionButtons.isEmpty() && displayOptions) {
+            for (button in optionButtons) button.showAlt = hasShiftDown()
+        }
+
         super.render(context, mouseX, mouseY, delta)
 
         // Item Tooltip
@@ -485,60 +554,59 @@ class PCGUI(
         }
     }
 
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        // Trigger child component function as they will need to check the entire screen click area
+        if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(mouseX, mouseY, button)
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
+
     override fun mouseScrolled(mouseX: Double, mouseY: Double, amount: Double, verticalAmount: Double): Boolean {
-        if (storageWidget.pastureWidget != null) storageWidget.pastureWidget!!.pastureScrollList.mouseScrolled(
-            mouseX,
-            mouseY,
-            amount,
-            verticalAmount
-        )
+        if (storageWidget.pastureWidget != null) storageWidget.pastureWidget!!.pastureScrollList.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
         return children().any { it.mouseScrolled(mouseX, mouseY, amount, verticalAmount) }
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (storageWidget.pastureWidget != null) storageWidget.pastureWidget!!.pastureScrollList.mouseDragged(
-            mouseX,
-            mouseY,
-            button,
-            deltaX,
-            deltaY
-        )
+        if (storageWidget.pastureWidget != null) storageWidget.pastureWidget!!.pastureScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        val boxNameSelected = this::boxNameWidget.isInitialized && boxNameWidget.isFocused
-        val searchSelected = this::searchWidget.isInitialized && searchWidget.isFocused
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !boxNameSelected && !searchSelected) {
+        val boxNameFocused = this::boxNameWidget.isInitialized && boxNameWidget.isFocused
+        val filterFocused = this::filterWidget.isInitialized && filterWidget.isFocused
+
+        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !boxNameFocused && !filterFocused) {
             playSound(CobblemonSounds.PC_OFF)
             UnlinkPlayerFromPCPacket().sendToServer()
             Minecraft.getInstance().setScreen(null)
             return true
         }
 
-        if ((keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)
-            && (boxNameSelected || searchSelected)) {
+        if (!filterFocused && !boxNameFocused) {
+            when (keyCode) {
+                InputConstants.KEY_ESCAPE -> {
+                    playSound(CobblemonSounds.PC_OFF)
+                    UnlinkPlayerFromPCPacket().sendToServer()
+                    onClose()
+                    return true
+                }
+                InputConstants.KEY_RIGHT -> {
+                    playSound(CobblemonSounds.PC_CLICK)
+                    this.storageWidget.box += 1
+                    return true
+                }
+                InputConstants.KEY_LEFT -> {
+                    playSound(CobblemonSounds.PC_CLICK)
+                    this.storageWidget.box -= 1
+                    return true
+                }
+            }
+        } else if (keyCode == InputConstants.KEY_ESCAPE) {
+            // Escape from text box
+            if (::boxNameWidget.isInitialized) boxNameWidget.keyPressed(keyCode, scanCode, modifiers)
             this.focused = null
+            return true
         }
 
-        when (keyCode) {
-            InputConstants.KEY_ESCAPE -> {
-                playSound(CobblemonSounds.PC_OFF)
-                UnlinkPlayerFromPCPacket().sendToServer()
-                onClose()
-                return true
-            }
-            InputConstants.KEY_RIGHT -> {
-                playSound(CobblemonSounds.PC_CLICK)
-                this.storageWidget.box += 1
-                return true
-            }
-            InputConstants.KEY_LEFT -> {
-                playSound(CobblemonSounds.PC_CLICK)
-                this.storageWidget.box -= 1
-                return true
-            }
-        }
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
@@ -579,12 +647,6 @@ class PCGUI(
         } else {
             previewPokemon = null
             modelWidget = null
-        }
-    }
-
-    fun updateBoxName() {
-        if (this::boxNameWidget.isInitialized) {
-            boxNameWidget.update()
         }
     }
 }

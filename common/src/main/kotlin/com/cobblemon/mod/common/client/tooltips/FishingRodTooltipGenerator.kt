@@ -14,12 +14,16 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import net.minecraft.client.Minecraft
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
 object FishingRodTooltipGenerator : TooltipGenerator() {
     override fun generateTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
+            return null
+        }
         val resultLines = mutableListOf<Component>()
 
         val rod = (stack.item as? PokerodItem)?.pokeRodId?.let { PokeRods.getPokeRod(it) } ?: return null

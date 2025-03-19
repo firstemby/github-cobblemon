@@ -37,9 +37,9 @@ class Search(
                 if (inverted) {
                     filter = filter.substring(1)
                 }
-                
+
                 val pokemonFilter: PokemonFilter = when (filter) {
-                    "holding" -> PokemonFilter { pokemon -> !pokemon.heldItem().isEmpty }
+                    "holding", "helditem", "held_item" -> PokemonFilter { pokemon -> !pokemon.heldItem().isEmpty }
                     "fainted" -> PokemonFilter { pokemon -> pokemon.isFainted() }
                     "legendary" -> PokemonFilter { pokemon -> pokemon.isLegendary() }
                     "mythical" -> PokemonFilter { pokemon -> pokemon.isMythical() }

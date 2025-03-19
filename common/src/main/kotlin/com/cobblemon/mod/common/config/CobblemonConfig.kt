@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.config
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.client.gui.portrait.PortraitStyle
 import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCalculator
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
@@ -254,6 +255,24 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor")
     var summaryPokemonFollowCursor = true
+
+    @CobblemonConfigField(Category.Interface, lang = "party_portrait_animations")
+    var partyPortraitAnimations = PortraitStyle.NEVER_ANIMATE
+
+    @CobblemonConfigField(Category.Riding, lang = "invert_roll")
+    var invertRoll = false
+
+    @CobblemonConfigField(Category.Riding, lang = "invert_pitch")
+    var invertPitch = false
+
+    @CobblemonConfigField(Category.Riding, lang = "invert_yaw")
+    var invertYaw = false
+
+    @CobblemonConfigField(Category.Riding, lang = "automatic_righting_delay")
+    var rightingDelay = -1.0
+
+    @CobblemonConfigField(Category.Riding, lang = "disable_roll")
+    var disableRoll = false
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = false

@@ -1278,6 +1278,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
                 CobblemonHeldItemManager.registerRemap(Items.BONE, "thickclub")
                 CobblemonHeldItemManager.registerRemap(Items.SNOWBALL, "snowball")
+                CobblemonHeldItemManager.registerRemap(Items.GOLD_BLOCK, "bignugget")
             }
         }
     )

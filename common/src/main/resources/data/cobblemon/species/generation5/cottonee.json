@@ -152,7 +152,7 @@
       "id": "cottonee_whimsicott",
       "variant": "item_interact",
       "result": "whimsicott",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:sun_stone"

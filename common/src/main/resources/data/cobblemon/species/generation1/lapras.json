@@ -50,6 +50,52 @@
     "height": 2.8,
     "fixed": false
   },
+  "riding": {
+    "controller": null,
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.4,
+          "z": 0.0
+        },
+        "poseAnimations": [
+          {
+            "animations": [
+              {
+                "fileName": "trainer_generic",
+                "animationName": "animation.trainer_generic.idle"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.7,
+          "z": -1.0
+        }
+      }
+    ],
+    "stats": {
+      "SPEED": {
+        "ranges": "35-60"
+      },
+      "ACCELERATION": {
+        "ranges": "25-50"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "45-100"
+      }
+    }
+  },
   "behaviour": {
     "moving": {
       "swim": {

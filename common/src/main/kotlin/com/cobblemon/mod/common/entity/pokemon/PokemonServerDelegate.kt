@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
@@ -122,6 +123,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.FORM, trackedForm) // have this get form from aspects...?
         entity.entityData.set(PokemonEntity.BUSY_LOCKED, entity.busyLocks.isNotEmpty())
 
+        updateShownItem()
         updatePoseType()
     }
 
@@ -207,8 +209,23 @@ class PokemonServerDelegate : PokemonSideDelegate {
         updateTrackedValues()
     }
 
+    fun updateShownItem() {
+        val trackedShownItem = when {
+            // Show Hand Item if Held item is hidden
+            !entity.pokemon.heldItemVisible -> entity.mainHandItem
+            // Show Held Item unless it is empty
+            else -> (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy()?.takeUnless { it.isEmpty }
+            // Show Hand Item if Held item is empty
+            ?: entity.mainHandItem
+        }.copy()
+        /* Hide items tagged as hidden (If the item is in this list, it will not render) */
+        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS)) ItemStack.EMPTY else it}
+
+        entity.entityData.set(PokemonEntity.SHOWN_HELD_ITEM, trackedShownItem)
+    }
+
     fun updatePoseType() {
-        if (!entity.enablePoseTypeRecalculation) {
+        if (!entity.enablePoseTypeRecalculation || entity.passengers.isNotEmpty()) {
             return
         }
 

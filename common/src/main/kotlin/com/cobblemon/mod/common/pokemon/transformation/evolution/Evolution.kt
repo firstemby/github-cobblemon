@@ -152,7 +152,7 @@ class Evolution(
                 evolutionMethod(pokemon)
                 super.forceStart(pokemon)
             }
-            pokemonEntity.after( seconds = 12F ) {
+            pokemonEntity.after(seconds = 12F) {
                 cryAnimation(pokemonEntity)
                 pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))

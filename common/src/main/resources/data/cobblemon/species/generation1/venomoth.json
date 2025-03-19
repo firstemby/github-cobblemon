@@ -191,5 +191,28 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "venonat",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-30"
+      },
+      "ACCELERATION": {
+        "ranges": "75-100"
+      },
+      "SKILL": {
+        "ranges": "10-60"
+      },
+      "JUMP": {
+        "ranges": "10-30"
+      },
+      "STAMINA": {
+        "ranges": "10-40"
+      }
+    },
+    "seats": [],
+    "controller": {
+      "key": "cobblemon:air/glider"
+    }
+  }
 }

@@ -8,19 +8,17 @@
 
 package com.cobblemon.mod.common.api.storage.player.adapter
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.storage.player.InstancedPlayerData
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mongodb.client.MongoClient
 import com.mongodb.client.model.ReplaceOptions
-import org.bson.Document
-import java.io.BufferedReader
-import java.io.FileReader
-import java.io.PrintWriter
 import java.util.UUID
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
+import org.bson.Document
 
 abstract class MongoBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     mongoClient: MongoClient, databaseName: String, collectionName: String, type: PlayerInstancedDataStoreType
@@ -31,11 +29,14 @@ abstract class MongoBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     abstract val classToken: TypeToken<T>
 
     override fun save(playerData: T) {
-        collection.replaceOne(
-            Document("uuid", playerData.uuid.toString()),
-            Document.parse(gson.toJson(playerData)),
-            ReplaceOptions().upsert(true)
-        )
+        val json = gson.toJson(playerData)
+        Cobblemon.playerDataManager.saveExecutor.execute {
+            collection.replaceOne(
+                Document("uuid", playerData.uuid.toString()),
+                Document.parse(json),
+                ReplaceOptions().upsert(true)
+            )
+        }
     }
 
     override fun load(uuid: UUID): T {

@@ -316,5 +316,43 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "35-75"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "70-90",
+          "AIR": "25-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "30-60",
+          "AIR": "50-80"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "25-60"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "seats": [],
+    "controller": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

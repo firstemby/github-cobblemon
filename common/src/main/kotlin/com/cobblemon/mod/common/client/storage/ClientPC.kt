@@ -62,7 +62,6 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
     fun renameBox(boxNumber: Int, name: String?) {
         if (boxes.size > boxNumber) {
             boxes[boxNumber].name = if (name.isNullOrBlank()) null else Component.literal(name).bold()
-            (Minecraft.getInstance().screen as? PCGUI)?.updateBoxName()
         }
     }
 

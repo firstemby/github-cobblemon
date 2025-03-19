@@ -25,13 +25,16 @@ import java.util.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
+import net.minecraft.world.item.ItemStack
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
     val originalTrainer: Optional<String>,
     val forcedAspects: Set<String>,
     val features: List<CompoundTag>,
-    val formController: Optional<ServerFormController.Intermediate>
+    val formController: Optional<ServerFormController.Intermediate>,
+    val heldItemVisible: Optional<Boolean>,
+    val cosmeticItem: ItemStack
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -59,6 +62,8 @@ internal data class PokemonP3(
         this.formController.ifPresent {
             (other.formProxy as? FormProxy)?.overrideController(it.create(other))
         }
+        this.heldItemVisible.ifPresent { other.heldItemVisible = it }
+        this.cosmeticItem.let { other.cosmeticItem = it }
         return other
     }
 
@@ -69,8 +74,10 @@ internal data class PokemonP3(
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(PokemonP3::originalTrainer),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).forGetter { it.forcedAspects.toMutableList() },
                 Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
-                ServerFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP3::formController)
-            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, formController -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, formController) }
+                ServerFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP3::formController),
+                Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible),
+                ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter { Optional.ofNullable(it.cosmeticItem.takeIf { !it.isEmpty }) }
+            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, formController, heldItemVisible, cosmeticItem -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features,formController, heldItemVisible, cosmeticItem.orElse(ItemStack.EMPTY)) }
         }
 
         internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
@@ -82,7 +89,9 @@ internal data class PokemonP3(
                 nbt.putString(FEATURE_ID, feature.name)
                 feature.saveToNBT(nbt)
             },
-            Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.asIntermediate())
+            Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.asIntermediate()),
+            Optional.ofNullable(pokemon.heldItemVisible),
+            pokemon.cosmeticItem
         )
     }
 

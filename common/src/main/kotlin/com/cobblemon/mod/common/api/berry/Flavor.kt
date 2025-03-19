@@ -15,12 +15,10 @@ package com.cobblemon.mod.common.api.berry
  * @author Licious
  * @since November 28th, 2022
  */
-enum class Flavor {
-
-    SPICY,
-    DRY,
-    SWEET,
-    BITTER,
-    SOUR
-
+enum class Flavor(val colour: Int) {
+    SPICY(0x00FF00),
+    DRY(0xFF0000),
+    SWEET(0x0000FF),
+    BITTER(0xFFFF00),
+    SOUR(0xFF00FF);
 }

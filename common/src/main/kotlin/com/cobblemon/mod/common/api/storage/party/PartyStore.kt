@@ -73,7 +73,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     }
 
     fun trackPokemon(pokemon: Pokemon) {
-        pokemon.getChangeObservable()
+        pokemon.changeObservable
             .pipe(stopAfter { pokemon.storeCoordinates.get()?.store != this })
             .subscribe { anyChangeObservable.emit(Unit) }
     }

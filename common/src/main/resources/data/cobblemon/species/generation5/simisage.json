@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 512,
   "name": "Simisage",
   "primaryType": "grass",
@@ -40,12 +41,13 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.94,
+    "height": 2.3,
     "fixed": false
   },
+  "standingEyeHeight": 0.56,
   "drops": {
     "amount": 3,
     "entries": [

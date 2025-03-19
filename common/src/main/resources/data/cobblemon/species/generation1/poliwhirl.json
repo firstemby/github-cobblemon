@@ -181,7 +181,7 @@
       "id": "poliwhirl_poliwrath",
       "variant": "item_interact",
       "result": "poliwrath",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "submission",
         "dynamicpunch"

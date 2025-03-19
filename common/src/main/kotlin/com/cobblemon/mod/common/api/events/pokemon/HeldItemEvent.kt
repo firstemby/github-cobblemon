@@ -9,13 +9,11 @@
 package com.cobblemon.mod.common.api.events.pokemon
 
 import com.cobblemon.mod.common.api.events.Cancelable
-import com.cobblemon.mod.common.api.events.pokemon.HeldItemEvent.Post
-import com.cobblemon.mod.common.api.events.pokemon.HeldItemEvent.Pre
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.item.ItemStack
 
 /**
- * The base for all the events related to held items.
+ * The base for all the events related to held items and cosmetic items.
  *
  * @see [Pre]
  * @see [Post]
@@ -28,7 +26,7 @@ interface HeldItemEvent {
     val pokemon: Pokemon
 
     /**
-     * Fired at the start of [Pokemon.swapHeldItem].
+     * Fired at the start of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
      *
      * This event should be used to mutate the results of this transaction.
      *
@@ -44,7 +42,7 @@ interface HeldItemEvent {
     data class Pre(override val pokemon: Pokemon, var receiving: ItemStack, var returning: ItemStack, var decrement: Boolean) : HeldItemEvent, Cancelable()
 
     /**
-     * Fired at the end of [Pokemon.swapHeldItem].
+     * Fired at the end of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
      *
      * @property pokemon The [Pokemon] triggering this event.
      * @property received The [ItemStack] considered as received and set to the [pokemon]. This is a copy and mutation will not be taken into account.

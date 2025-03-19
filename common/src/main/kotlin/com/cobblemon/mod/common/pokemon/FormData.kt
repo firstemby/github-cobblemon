@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType
@@ -104,6 +105,8 @@ abstract class FormData(
     private var _height: Float? = null,
     @SerializedName("weight")
     private var _weight: Float? = null,
+    @SerializedName("riding")
+    private var _riding: RidingProperties? = null,
     @SerializedName("battleTheme")
     private var _battleTheme: ResourceLocation? = null,
     @SerializedName("lightingData")
@@ -170,6 +173,8 @@ abstract class FormData(
 
     val eggGroups: Set<EggGroup>
         get() = _eggGroups ?: species.eggGroups
+    val riding: RidingProperties
+        get() = _riding ?: species.riding
 
     /**
      * The height in decimeters
@@ -315,6 +320,7 @@ abstract class FormData(
                 pb.writeString(ability.template.name)
             }
         }
+        buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -351,6 +357,7 @@ abstract class FormData(
                 }.forEach { add(Priority.NORMAL, it) }
             }
         }
+        this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
     }
 
     /**

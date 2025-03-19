@@ -155,7 +155,7 @@
       "id": "cetoddle_cetitan",
       "variant": "item_interact",
       "result": "cetitan",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:ice_stone"

@@ -166,7 +166,7 @@
       "id": "growlithe_arcanine",
       "variant": "item_interact",
       "result": "arcanine",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "extremespeed"
       ],
@@ -297,7 +297,7 @@
           "id": "growlithe_arcaninehisui",
           "variant": "item_interact",
           "result": "arcanine hisuian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "extremespeed"
           ],

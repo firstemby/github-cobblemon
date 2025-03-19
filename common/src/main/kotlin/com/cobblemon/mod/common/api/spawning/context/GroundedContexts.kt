@@ -11,9 +11,12 @@ package com.cobblemon.mod.common.api.spawning.context
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.WorldSlice
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.util.blockRegistry
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 
 /**
@@ -36,6 +39,7 @@ abstract class FlooredSpawningContext(
 ) : AreaSpawningContext(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, slice) {
     /** The block that the spawning is occurring on. */
     val baseBlock = slice.getBlockState(position.x, position.y, position.z)
+    val baseBlockHolder: Holder<Block> by lazy { world.blockRegistry.wrapAsHolder(baseBlock.block) }
 }
 
 /**

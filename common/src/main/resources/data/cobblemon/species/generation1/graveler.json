@@ -387,5 +387,28 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "5-15"
+      },
+      "ACCELERATION": {
+        "ranges": "5-100"
+      },
+      "SKILL": {
+        "ranges": "20-40"
+      },
+      "JUMP": {
+        "ranges": "5-15"
+      },
+      "STAMINA": {
+        "ranges": "15-30"
+      }
+    },
+    "seats": [],
+    "controller": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

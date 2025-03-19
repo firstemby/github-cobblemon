@@ -491,16 +491,16 @@ class PokedexGUI private constructor(
 
         when (tabIndex) {
             TAB_DESCRIPTION -> {
-                tabInfoElement = DescriptionWidget( x + 180, y + 135)
+                tabInfoElement = DescriptionWidget(x + 180, y + 135)
             }
             TAB_ABILITIES -> {
-                tabInfoElement = AbilitiesWidget( x + 180, y + 135)
+                tabInfoElement = AbilitiesWidget(x + 180, y + 135)
             }
             TAB_SIZE -> {
-                tabInfoElement = SizeWidget( x + 180, y + 135)
+                tabInfoElement = SizeWidget(x + 180, y + 135)
             }
             TAB_STATS -> {
-                tabInfoElement = StatsWidget( x + 180, y + 135)
+                tabInfoElement = StatsWidget(x + 180, y + 135)
             }
             TAB_DROPS -> {
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)

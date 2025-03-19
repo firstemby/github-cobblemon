@@ -43,11 +43,13 @@ object DataKeys {
     const val POKEMON_NATURE = "Nature"
     const val POKEMON_MINTED_NATURE = "MintedNature"
     const val HELD_ITEM = "HeldItem"
+    const val HELD_ITEM_VISIBLE = "HeldItemVisible"
     const val POKEMON_TERA_TYPE = "TeraType"
     const val POKEMON_DMAX_LEVEL = "DmaxLevel"
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
     const val POKEMON_TRADEABLE = "Tradeable"
     const val POKEMON_FORCED_ASPECTS = "ForcedAspects"
+    const val POKEMON_COSMETIC_ITEM = "CosmeticItem"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -98,6 +100,8 @@ object DataKeys {
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
+    const val STORE_UNLOCKED_WALLPAPERS = "UnlockedWallpapers"
+    const val STORE_UNSEEN_WALLPAPERS = "UnseenWallpapers"
 
     // Pokédex Keys
     const val POKEDEX_TYPE = "PokedexType"
@@ -164,6 +168,7 @@ object DataKeys {
     const val SHOULDER_FORM = "shoulder_form"
     const val SHOULDER_ASPECTS = "shoulder_aspects"
     const val SHOULDER_SCALE_MODIFIER = "shoulder_scale"
+    const val SHOULDER_ITEM = "shoulder_item"
 
     // Multi-Block
     const val MULTIBLOCK_STORAGE = "MultiblockStore"

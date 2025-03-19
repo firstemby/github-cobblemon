@@ -40,6 +40,8 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val PC_RELEASE = this.create("pc.release")
     @JvmField
     val PC_CLICK = this.create("pc.click")
+    @JvmField
+    val PC_WALLPAPER_UNLOCK = this.create("pc.wallpaper.unlock")
 
     @JvmField
     val VILLAGER_WORK_NURSE = this.create("entity.villager.work_nurse")

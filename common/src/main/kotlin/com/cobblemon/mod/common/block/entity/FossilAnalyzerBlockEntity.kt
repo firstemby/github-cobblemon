@@ -94,7 +94,7 @@ class FossilAnalyzerBlockEntity(
                 return stack?.let { Fossils.isFossilIngredient(it) } == true
                         && structure.fossilInventory.size < Cobblemon.config.maxInsertedFossilItems
                         && structure.isRunning() == false && structure.resultingFossil == null
-                        && Fossils.getSubFossilByItemStacks( structure.fossilInventory + mutableListOf(stack) ) != null
+                        && Fossils.getSubFossilByItemStacks(structure.fossilInventory + mutableListOf(stack)) != null
             }
             return false
         }

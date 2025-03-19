@@ -11,9 +11,11 @@ package com.cobblemon.mod.common.api.pokemon
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 enum class PokemonSortMode(val comparator: Comparator<Pokemon?>, val reverseComparator: Comparator<Pokemon?>) {
-    NAME( { it?.getDisplayName()?.string } ),
-    LEVEL( { it?.level } ),
-    TYPE( { it?.primaryType?.name } );
+    NAME({ it?.getDisplayName()?.string }),
+    LEVEL({ it?.level }),
+    TYPE({ it?.primaryType?.name }),
+    POKEDEX_NUMBER({ it?.species?.nationalPokedexNumber }),
+    GENDER({ it?.gender });
 
     constructor(mapper: (Pokemon?) -> Comparable<*>?) : this(compareBy({ it == null }, mapper),
         compareBy<Pokemon?> { it == null }.thenComparing(compareBy(mapper).reversed()))
