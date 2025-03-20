@@ -70,6 +70,23 @@ class StadiumBlock(properties: Properties): BaseEntityBlock(properties) {
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
 
+    override fun useWithoutItem(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: Player,
+        hitResult: BlockHitResult
+    ): InteractionResult {
+        if (player !is ServerPlayer) return InteractionResult.SUCCESS
+
+        val blockEntity = world.getBlockEntity(pos)
+        if (blockEntity !is StadiumBlockEntity) return InteractionResult.SUCCESS
+
+        player.sendSystemMessage(text("Adding you to Battle").red())
+        blockEntity.addPlayer(player)
+        return InteractionResult.SUCCESS
+    }
+
     /*
     override fun useWithoutItem(
         blockState: BlockState,
