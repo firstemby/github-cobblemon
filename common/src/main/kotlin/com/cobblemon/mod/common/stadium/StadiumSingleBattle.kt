@@ -4,9 +4,11 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.StadiumBlockEntity
+import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
+import java.util.*
 
 class StadiumSingleBattle: StadiumBattleDefenition {
     @JvmField
@@ -14,7 +16,7 @@ class StadiumSingleBattle: StadiumBattleDefenition {
 
     var parentEntity: StadiumBlockEntity? = null
 
-    var participants = mutableListOf<ServerPlayer>()
+    override var participants = mutableListOf<UUID>()
 
     var player1Position = Vec3(0.0,0.0,0.0)
     var player2Position = Vec3(0.0,0.0,0.0)
@@ -34,20 +36,22 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     }
 
     override fun addPlayer(player: ServerPlayer) {
-        if (canAddPlayer(player)) participants.add(player)
+        if (canAddPlayer(player)) participants.add(player.uuid)
     }
 
     override fun getPlayers(): MutableList<ServerPlayer> {
-        return participants
+        return participants.mapNotNull { it.getPlayer() }.toMutableList()
     }
 
     override fun initializeBattle() {
         //if (parentEntity == null) return
         if (!readyForBattle()) return
 
+        val players = getPlayers()
+
         //Teleport players to their positions
-        val player1 = participants[0]
-        val player2 = participants[1]
+        val player1 = players[0]
+        val player2 = players[1]
 
         val battleResult = BattleBuilder.pvp1v1(player1, player2)
         var errored = false
