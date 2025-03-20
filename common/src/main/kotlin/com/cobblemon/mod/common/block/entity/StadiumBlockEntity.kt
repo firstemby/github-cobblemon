@@ -2,6 +2,7 @@ package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneState
+import com.cobblemon.mod.common.stadium.StadiumSingleBattle
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -27,9 +28,12 @@ class StadiumBlockEntity(
 ) {
     var storedPlayers = mutableListOf<ServerPlayer>()
 
-    var battleDefenition =
+    var battleDefenition = StadiumSingleBattle()
 
-    fun addPlayer()
+    fun addPlayer(player: ServerPlayer) {
+        battleDefenition.addPlayer(player)
+        if (battleDefenition.readyForBattle()) battleDefenition.initializeBattle()
+    }
 
     /*
     var isInUse = false

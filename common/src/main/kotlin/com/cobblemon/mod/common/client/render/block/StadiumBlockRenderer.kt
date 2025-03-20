@@ -45,7 +45,7 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
         packedLight: Int,
         packedOverlay: Int
     ) {
-        TODO("Not yet implemented")
+
     }
 
     /*

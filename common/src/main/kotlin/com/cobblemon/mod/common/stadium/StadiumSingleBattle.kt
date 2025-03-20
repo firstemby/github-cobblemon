@@ -14,7 +14,7 @@ class StadiumSingleBattle: StadiumBattleDefenition {
 
     var parentEntity: StadiumBlockEntity? = null
 
-    var players = mutableListOf<ServerPlayer>()
+    var participants = mutableListOf<ServerPlayer>()
 
     var player1Position = Vec3(0.0,0.0,0.0)
     var player2Position = Vec3(0.0,0.0,0.0)
@@ -25,7 +25,7 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     var activeBattle: PokemonBattle? = null
 
     override fun readyForBattle(): Boolean {
-        return getPlayers().count() == MAX_PLAYERS
+        return this.getPlayers().count() == MAX_PLAYERS
     }
 
     override fun canAddPlayer(player: ServerPlayer): Boolean {
@@ -34,20 +34,20 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     }
 
     override fun addPlayer(player: ServerPlayer) {
-        if (canAddPlayer(player)) players.add(player)
+        if (canAddPlayer(player)) participants.add(player)
     }
 
     override fun getPlayers(): MutableList<ServerPlayer> {
-        return players
+        return participants
     }
 
     override fun initializeBattle() {
-        if (parentEntity == null) return
+        //if (parentEntity == null) return
         if (!readyForBattle()) return
 
         //Teleport players to their positions
-        val player1 = players[0]
-        val player2 = players[1]
+        val player1 = participants[0]
+        val player2 = participants[1]
 
         val battleResult = BattleBuilder.pvp1v1(player1, player2)
         var errored = false
@@ -58,6 +58,6 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     }
 
     override fun getCurrentCamera(): StadiumCameraDefenition {
-        TODO("Not yet implemented")
+        return StaticCamera(Vec3(0.0,0.0,0.0), Vec3(0.0,0.0,0.0))
     }
 }
