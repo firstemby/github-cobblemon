@@ -1253,6 +1253,7 @@
   "key.cobblemon.translateportraitleft": "Translate Portrait Left",
   "key.cobblemon.translateportraitright": "Translate Portrait Right",
   "key.cobblemon.printmodelsettings": "Print Model Settings",
+  "key.cobblemon.toggleshowdowndebugui": "Toggle Showdown Debugger UI",
   "key.cobblemon.categories.cobblemon.debug": "Cobblemon Debug",
 
   "cobblemon.subtitle.poke_ball.capture_succeeded": "Poké Ball capture succeeds",

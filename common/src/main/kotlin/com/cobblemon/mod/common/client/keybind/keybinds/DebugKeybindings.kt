@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.gui.debug.ShowdownDebugGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -26,8 +27,10 @@ object DebugKeybindings {
         TranslateRightKeybinding(),
         TranslateUpKeybinding(),
         TranslateDownKeybinding(),
-        PrintModelSettingsKeybinding()
+        PrintModelSettingsKeybinding(),
+        ToggleShowdownDebugGUIKeybinding()
     )
+
     class ScaleUpKeybinding: CobblemonKeyBinding(
         "key.cobblemon.scaleportraitup",
         InputConstants.Type.KEYSYM,
@@ -143,6 +146,17 @@ object DebugKeybindings {
                 Cobblemon.LOGGER.info("override var portraitTranslation = Vec3d(${model.portraitTranslation.x}, ${model.portraitTranslation.y}, ${model.portraitTranslation.z})")
                 Cobblemon.LOGGER.info("override var portraitScale = ${model.portraitScale}F")
             }
+        }
+    }
+
+    class ToggleShowdownDebugGUIKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.toggleshowdowndebuggui",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_APOSTROPHE,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            Minecraft.getInstance().setScreen(ShowdownDebugGUI())
         }
     }
 }
