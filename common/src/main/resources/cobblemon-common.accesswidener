@@ -119,3 +119,5 @@ transitive-accessible class net/minecraft/client/renderer/RenderStateShard$Light
 transitive-accessible field net/minecraft/world/entity/LivingEntity jumping Z
 transitive-accessible field net/minecraft/world/entity/Entity FLAG_SHIFT_KEY_DOWN I
 transitive-accessible field net/minecraft/world/entity/Entity DATA_SHARED_FLAGS_ID Lnet/minecraft/network/syncher/EntityDataAccessor;
+
+transitive-accessible method net/minecraft/client/Camera setPosition (Lnet/minecraft/world/phys/Vec3;)V

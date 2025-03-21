@@ -17,6 +17,7 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     var parentEntity: StadiumBlockEntity? = null
 
     override var participants = mutableListOf<UUID>()
+    override var spectators = mutableListOf<UUID>()
 
     var player1Position = Vec3(0.0,0.0,0.0)
     var player2Position = Vec3(0.0,0.0,0.0)
