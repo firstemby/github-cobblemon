@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.QuirkData
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
@@ -129,6 +130,22 @@ abstract class PosableState : Schedulable {
         .addFunction("anim_time") {
             reusableAnimTime.value = animationSeconds.toDouble()
             reusableAnimTime
+        }
+        .addFunction("smooth_delta_x") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val currMoveX = pokemon.deltaMovement.x
+            val prevMoveX = pokemon.prevDeltaMovement.x
+            val ret = (currMoveX - prevMoveX) * currentPartialTicks + prevMoveX
+            return@addFunction DoubleValue(ret)
+        }
+        .addFunction("smooth_delta_y") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val currMoveY = pokemon.deltaMovement.y
+            val prevMoveY = pokemon.prevDeltaMovement.y
+            val ret = (currMoveY - prevMoveY) * currentPartialTicks + prevMoveY
+            return@addFunction DoubleValue(ret)
         }
         .addFunction("current_aspects") { ArrayStruct(currentAspects.mapIndexed { index, s -> "$index" to StringValue(s)}.toMap())}
         .addFunction("has_aspect") { params -> DoubleValue(params.get<MoValue>(0).asString() in currentAspects) }

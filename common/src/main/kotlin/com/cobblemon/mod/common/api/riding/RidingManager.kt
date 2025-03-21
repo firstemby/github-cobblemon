@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.toProperties
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.authlib.minecraft.client.MinecraftClient
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -32,6 +33,7 @@ data class RidingManager(val entity: PokemonEntity) {
     var lastSpeed = 0F
     var states: MutableMap<ResourceLocation, RidingState> = mutableMapOf()
     var deltaRotation = Vec2.ZERO
+    var deltaRotationPerSec = Vec3.ZERO
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -96,6 +98,9 @@ data class RidingManager(val entity: PokemonEntity) {
         val previousRotation = entity.rotationVector
         val rotation = controller.rotation(entity, driver)
         this.deltaRotation = Vec2(rotation.x - previousRotation.x, rotation.y - previousRotation.y)
+
+        //Record the current change in rotation per second
+        this.deltaRotationPerSec = Vec3(rotation.x - previousRotation.x.toDouble(), rotation.y - previousRotation.y.toDouble(), 0.0)
         return rotation
     }
 
