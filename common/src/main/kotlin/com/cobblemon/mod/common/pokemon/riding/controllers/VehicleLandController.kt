@@ -8,34 +8,54 @@
 
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
-import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.riding.states.LandVehicleState
-import com.cobblemon.mod.common.util.*
-import net.minecraft.client.Minecraft
-import net.minecraft.client.player.LocalPlayer
-import net.minecraft.client.resources.sounds.Sound
-import net.minecraft.core.registries.BuiltInRegistries
+import com.cobblemon.mod.common.pokemon.riding.controllers.BirdAirController.Companion
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.blockPositionsAsListRounded
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.getString
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.writeString
+import kotlin.math.absoluteValue
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import kotlin.math.*
+import kotlin.math.max
+import kotlin.math.min
 
 class VehicleLandController : RideController {
     companion object {
         val KEY: ResourceLocation = cobblemonResource("land/vehicle")
+
+        val MAXTOPSPEED = 1.0 // 20 bl/s
+        val MINTOPSPEED = 0.35 // 7 bl/s
+        //val MINSPEED = 0.25 // 5 bl/s
+
+        //Accel will lie between 1.0 second and 5.0 seconds
+        val MAXACCEL = (MAXTOPSPEED ) / (20*3) //3.0 second to max speed
+        val MINACCEL = (MAXTOPSPEED ) / (20*8) // 8 seconds to max speed
+
+        //Can rotate 90 degrees
+        val MAXHANDLING = 90.0
+        val MINHANDLING = 30.0
+
+
+        val MAXYAWHANDLING = 16.0
+        val MINYAWHANDLING = 8.0
     }
 
     var canJump = "true".asExpression()
@@ -49,9 +69,6 @@ class VehicleLandController : RideController {
     var reverseDriveFactor = "0.25".asExpression()
         private set
 
-    var sound = "minecraft:item.elytra.flying".asExpression()
-        private set
-
     var minimumSpeedToTurn = "0.1".asExpression()
         private set
     var rotationSpeed = "45/20".asExpression()
@@ -59,20 +76,8 @@ class VehicleLandController : RideController {
     var lookYawLimit = "101".asExpression()
         private set
 
-    // TODO: Tweak these stats to a workable state.
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
+    var currSpeed = 0.0
         private set
-    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.5)".asExpression()
-        private set
-    // Max accel is a whole 1.0 in 2 seconds. The conversion in the function below is to convert seconds to ticks
-    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 2.0)), (1.0 / (20.0 * 6.0)))".asExpression()
-        private set
-    // Between 60 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 60.0, 10.0)".asExpression()
-        private set
-    var jumpExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 300.0, 128.0)".asExpression()
-        private set
-
 
     @Transient
     override val key: ResourceLocation = KEY
@@ -88,47 +93,32 @@ class VehicleLandController : RideController {
             if (entity.isInWater || entity.isUnderWater) {
                 return@any false
             }
-            /*
             //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (entity.position().y)) {
                 val blockState = entity.level().getBlockState(it.below())
-                return@any (!blockState.isAir && blockState.fluidState.isEmpty)
+                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
             }
-            */
             true
         }
     }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
-        //Retrieve Vehicle state
-        val state = getState(entity, ::LandVehicleState)
-
-        //retrieve stats
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr) * 2
-        val accel = getRuntime(entity).resolveDouble(accelExpr) * 2
+        val topSpeed = entity.getRideStat(RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED)
+        val accel = entity.getRideStat(RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL)
 
         //speed up and slow down based on input
-        if( driver.zza > 0.0 && state.currSpeed < topSpeed)
-        {
-            state.currSpeed = min( state.currSpeed + accel , topSpeed)
-        }
-        else if ( driver.zza < 0.0 && state.currSpeed > 0.0)
-        {
-            //Decelerate is currently always half of accel
-            state.currSpeed = max( state.currSpeed - (accel * 2) , 0.0)
-        }
-        else{
-            state.currSpeed = max( state.currSpeed - (accel / 2.0) , 0.0)
+        if (driver.zza > 0.0 && currSpeed < topSpeed) {
+            currSpeed = min(currSpeed + accel , topSpeed)
+        } else if (driver.zza < 0.0 && currSpeed > 0.0) {
+            //Decelerate is now always a constant half of max acceleration.
+            currSpeed = max(currSpeed - (MAXACCEL / 2), 0.0)
         }
 
-        return state.currSpeed.toFloat()
+        return currSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
-        //Retrieve Vehicle state
-        val state = getState(entity, ::LandVehicleState)
-
         val rotationDegrees = driver.xxa * getRuntime(entity).resolveFloat(this.rotationSpeed)
 
         if( Minecraft.getInstance().options.keyJump.isDown() ){
@@ -177,34 +167,16 @@ class VehicleLandController : RideController {
     }
 
     override fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
-        //Retrieve Vehicle state
-        val state = getState(entity, ::LandVehicleState)
-
         val runtime = getRuntime(entity)
         val driveFactor = runtime.resolveFloat(this.driveFactor)
         var g = driver.zza * driveFactor
         if (g <= 0.0f) {
             g *= runtime.resolveFloat(this.reverseDriveFactor)
         }
-        val grav = -1.0
-        var velocity = Vec3(0.0,0.0,0.0)
-
-        //If the vehicle is currently drifting then do a "poor mans" rotation of the velocity vector to offset it
-        //from the front of the vehicle. This likely needs cleaned up to be
-        if( state.currDrift != 0.0){
-            //Drift speed should be slower the higher the drift is
-            //normalize the drift speed
-            val driftSpeed =  (1.0 - ((abs(state.currDrift) - 1.0) / (5.0 - 1.0))) * 0.5 + 0.3
-
-            velocity = Vec3((1.0 * state.currSpeed) * (driftSpeed / 2.0) * -sign(state.currDrift) + min(state.driftBoost, 0.5) * 1.25,
-                            grav,
-                         (1.0 * state.currSpeed) * driftSpeed + min(state.driftBoost, 0.5) * 1.25)
-        }else{
-            velocity = Vec3(0.0 , grav, state.currSpeed + min(state.driftBoost, 0.5) * 1.25)
+        if (driver.xxa != 0F && g.absoluteValue < runtime.resolveFloat(this.minimumSpeedToTurn)) {
+            driver.xxa = 0F
         }
-
-        //tick down boost
-        state.driftBoost = max( state.driftBoost - (1.0 / (20.0 * 2)), 0.0)
+        val velocity = Vec3(0.0 /* Maybe do drifting here later */, 0.0, g.toDouble() * currSpeed)
 
         return velocity
     }
@@ -217,7 +189,7 @@ class VehicleLandController : RideController {
     override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
         val f = Mth.wrapDegrees(driver.yRot - entity.yRot)
         val runtime = getRuntime(entity)
-        val lookYawLimit = 120.0f
+        val lookYawLimit = runtime.resolveFloat(this.lookYawLimit)
         val g = Mth.clamp(f, -lookYawLimit, lookYawLimit)
         driver.yRotO += g - f
         driver.yRot = driver.yRot + g - f
@@ -233,27 +205,6 @@ class VehicleLandController : RideController {
         return Vec3(jumpVector[0].toDouble(), jumpVector[1].toDouble(), jumpVector[2].toDouble())
     }
 
-    override fun inertia(entity: PokemonEntity ) : Double {
-        val state = getState(entity, ::LandVehicleState)
-
-        //val inertia = if(Minecraft.getInstance().options.keyJump.isDown()) 0.1 else 0.5
-
-        return 0.1
-    }
-
-    override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
-        val state = getState(entity, ::LandVehicleState)
-
-        //Only increase fov when actively using the boost.
-        val fovIncrease = (min( state.driftBoost, 0.5 ) * 0.3).toFloat()
-        return 1.0f + fovIncrease
-
-    }
-
-    override fun shouldRoll(entity: PokemonEntity): Boolean {
-        return false
-    }
-
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeString(this.speed.getString())
@@ -266,11 +217,6 @@ class VehicleLandController : RideController {
         buffer.writeString(this.minimumSpeedToTurn.getString())
         buffer.writeString(this.rotationSpeed.getString())
         buffer.writeString(this.lookYawLimit.getString())
-        buffer.writeString(this.handlingExpr.getString())
-        buffer.writeString(this.staminaExpr.getString())
-        buffer.writeString(this.jumpExpr.getString())
-        buffer.writeString(this.topSpeedExpr.getString())
-        buffer.writeString(this.accelExpr.getString())
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -286,11 +232,6 @@ class VehicleLandController : RideController {
         this.minimumSpeedToTurn = buffer.readString().asExpression()
         this.rotationSpeed = buffer.readString().asExpression()
         this.lookYawLimit = buffer.readString().asExpression()
-        this.handlingExpr = buffer.readString().asExpression()
-        this.staminaExpr = buffer.readString().asExpression()
-        this.jumpExpr = buffer.readString().asExpression()
-        this.topSpeedExpr = buffer.readString().asExpression()
-        this.accelExpr = buffer.readString().asExpression()
     }
 
 }

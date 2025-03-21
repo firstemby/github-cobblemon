@@ -43,67 +43,6 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "baseScale": 1,
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint for.",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      }
-    },
-    "controller": {
-      "key": "cobblemon:land/generic"
-    },
-    "seats": [
-      {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseAnimations": [
-          {
-            "animations": [
-              {
-                "fileName": "trainer_generic",
-                "animationName": "animation.trainer_generic.ride_test"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
   "hitbox": {
     "width": 1.3,
     "height": 2.6,

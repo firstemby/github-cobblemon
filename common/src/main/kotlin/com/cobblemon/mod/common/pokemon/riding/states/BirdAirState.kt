@@ -16,4 +16,5 @@ data class BirdAirState(val entity: PokemonEntity) : RidingState {
     var currSpeed: Double = 0.0
     var stamina: Float = 1.0f
     var rideVel: Vec3 = Vec3.ZERO
+    var gliding: Boolean = false
 }
