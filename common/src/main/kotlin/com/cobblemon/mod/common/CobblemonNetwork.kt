@@ -163,6 +163,8 @@ import com.cobblemon.mod.common.net.serverhandling.storage.party.ReleasePCPokemo
 import com.cobblemon.mod.common.net.serverhandling.storage.party.SwapPartyPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.pc.*
 import com.cobblemon.mod.common.net.serverhandling.trade.*
+import com.cobblemon.mod.common.stadium.StadiumJoinHandler
+import com.cobblemon.mod.common.stadium.StadiumJoinPacket
 import com.cobblemon.mod.common.util.server
 import net.minecraft.server.level.ServerPlayer
 
@@ -454,6 +456,9 @@ object CobblemonNetwork {
 
         // NPC packets
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
+
+        // Stadium packets
+        list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
 
         return list
     }
