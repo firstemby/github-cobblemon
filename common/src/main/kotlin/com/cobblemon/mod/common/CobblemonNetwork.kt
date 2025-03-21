@@ -209,6 +209,9 @@ import com.cobblemon.mod.common.net.serverhandling.trade.ChangeTradeAcceptanceHa
 import com.cobblemon.mod.common.net.serverhandling.trade.OfferTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.PerformTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.UpdateTradeOfferHandler
+import com.cobblemon.mod.common.net.serverhandling.trade.*
+import com.cobblemon.mod.common.stadium.StadiumJoinHandler
+import com.cobblemon.mod.common.stadium.StadiumJoinPacket
 import com.cobblemon.mod.common.util.server
 import net.minecraft.server.level.ServerPlayer
 
@@ -510,6 +513,9 @@ object CobblemonNetwork {
 
         // Orientation packet(s)
         list.add(PacketRegisterInfo(C2SUpdateOrientationPacket.ID, C2SUpdateOrientationPacket::decode, OrientationPacketHandler))
+
+        // Stadium packets
+        list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
 
         return list
     }

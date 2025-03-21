@@ -5,12 +5,13 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.*
 
-class StadiumJoinPacket(val joiningPlayer: UUID): NetworkPacket<StadiumJoinPacket> {
+class StadiumJoinPacket(val joiningBattle: UUID): NetworkPacket<StadiumJoinPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeUUID(joiningPlayer)
+        buffer.writeUUID(joiningBattle)
     }
     companion object {
         val ID = cobblemonResource("stadium_join")
+        fun decode(buffer: RegistryFriendlyByteBuf) = StadiumJoinPacket(buffer.readUUID())
     }
 }
