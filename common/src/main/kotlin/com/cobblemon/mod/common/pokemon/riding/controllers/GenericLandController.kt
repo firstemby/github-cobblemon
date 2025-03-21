@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -92,8 +94,44 @@ class GenericLandController : RideController {
         return state.rideVel.length().toFloat()
     }
 
+
+    override fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+
+        //Take the inverse so that it cancels out how
+        //much the entity rotates.
+        val turnAmount = calcRotAmount(entity, driver)
+
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val state = getState(entity, ::GenericLandState)
+        val maxYawDiff = 90.0f
+
+        //Normalize the current rotation diff
+        val rotMod = Mth.wrapDegrees(driver.yRot - entity.yRot) / maxYawDiff
+
+        val rotAmount = 10.0f
+
+        //Take the inverse so that you turn more at higher speeds
+        val normSpeed = 1.0f - 0.5f*normalizeVal(state.rideVel.length(), 0.0, topSpeed).toFloat()
+
+        //driver.yRot += (entity.riding.deltaRotation.y - turnAmount)
+        //driver.setYHeadRot(driver.yHeadRot + (entity.riding.deltaRotation.y) - turnAmount)
+    }
+
+    override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        val f = Mth.wrapDegrees(driver.yRot - entity.yRot)
+        val runtime = getRuntime(entity)
+        val lookYawLimit = 90.0f
+        val g = Mth.clamp(f, -lookYawLimit, lookYawLimit)
+        driver.yRotO += g - f
+        driver.yRot = driver.yRot + g - f
+        driver.setYHeadRot(driver.yRot)
+    }
+
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
-        return Vec2(driver.xRot * 0.5f, driver.yRot)
+
+        val turnAmount =  calcRotAmount(entity, driver)
+
+        return Vec2(driver.xRot, entity.yRot + turnAmount )
     }
 
     override fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
@@ -205,12 +243,39 @@ class GenericLandController : RideController {
     }
 
     /*
-    *  Normalizes the current speed between minSpeed and maxSpeed.
-    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minSpeed and 1.0 represents maxSpeed.
+    *  Normalizes the given value between a min and a max.
+    *  The result is clamped between 0.0 and 1.0, where 0.0 represents x is at or below min
+    *  and 1.0 represents x is at or above it.
     */
-    fun normalizeSpeed(currSpeed: Double, minSpeed: Double, maxSpeed: Double): Double {
-        require(maxSpeed > minSpeed) { "maxSpeed must be greater than minSpeed" }
-        return ((currSpeed - minSpeed) / (maxSpeed - minSpeed)).coerceIn(0.0, 1.0)
+    fun normalizeVal(x: Double, min: Double, max: Double): Double {
+        require(max > min) { "max must be greater than min" }
+        return ((x - min) / (max - min)).coerceIn(0.0, 1.0)
+    }
+
+    /*
+    *  Calculates the rotation amount given the difference between
+    *  the current player y rot and entity y rot. This gives the
+    *  affect of influencing a rides rotation through the mouse
+    *  without it being instant.
+    */
+    fun calcRotAmount(entity: PokemonEntity, driver: LivingEntity): Float {
+        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val state = getState(entity, ::GenericLandState)
+        val maxYawDiff = 90.0f
+
+        //Normalize the current rotation diff
+        val rotDiffNorm = Mth.wrapDegrees(driver.yRot - entity.yRot) / maxYawDiff
+
+        //Take the square root so that the ride levels out quicker when at lower differences between entity
+        //y and driver y
+        val rotMod = (sqrt(abs(rotDiffNorm)) * rotDiffNorm.sign)
+
+        val rotAmount = 10.0f
+
+        //Take the inverse so that you turn more at higher speeds
+        val normSpeed = 1.0f - 0.5f*normalizeVal(state.rideVel.length(), 0.0, topSpeed).toFloat()
+
+        return rotAmount * rotMod * normSpeed
     }
 
     fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: GenericLandState){
@@ -219,27 +284,36 @@ class GenericLandController : RideController {
         val accel = getRuntime(entity).resolveDouble(accelExpr)
         val speed = state.rideVel.length()
 
-        val minSpeed = 0.0
+        val reverseMod = 1.0 / 3.0
 
         //speed up and slow down based on input
-        if (driver.zza > 0.0 && speed <= topSpeed && state.stamina > 0.0f) {
-            //modify acceleration to be slower when at closer speeds to top speed
-            val accelMod = max((normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2), 0.1)
-            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, min(state.rideVel.z + (accel * accelMod) , topSpeed))
-        }
-        else if (driver.zza >= 0.0 && state.stamina == 0.0f || speed > topSpeed) {
-            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max(state.rideVel.z - ((accel) / 4) , minSpeed))
-        }
-        else if (driver.zza < 0.0 && speed > minSpeed) {
-            //modify deccel to be slower when at closer speeds to minimum speed
-            val deccelMod = max( -(normalizeSpeed(speed, minSpeed, topSpeed)) + 1, 0.0)
+        if (driver.zza != 0.0f) {
+            //make sure it can't exceed top speed
+            val forwardInput = when {
+                driver.zza > 0 && state.rideVel.z > topSpeed -> 0.0
+                driver.zza < 0 && state.rideVel.z < (-topSpeed * reverseMod) -> 0.0
+                else -> driver.zza.sign
+            }
 
-            //Decelerate currently always a constant half of max acceleration.
-            state.rideVel = Vec3(state.rideVel.x, state.rideVel.y, max( state.rideVel.z - ((accel * deccelMod) / 2) , minSpeed))
+            state.rideVel = Vec3(
+                state.rideVel.x,
+                state.rideVel.y,
+                (state.rideVel.z + (accel * forwardInput.toDouble())))
         }
-
+        //Otherwise if there is no input then apply deceleration
+        else {
+            //Make deceleration constant no matter the stats
+            val decelRate = 1.0 / 20.0
+            state.rideVel = Vec3(
+                state.rideVel.x,
+                state.rideVel.y,
+                lerp( state.rideVel.z, 0.0, decelRate )
+            )
+        }
+        //Apply gravity
         state.rideVel = Vec3(state.rideVel.x, max(state.rideVel.y - 0.2, -1.0) , state.rideVel.z)
 
+        //If on the ground then stop the increase of rideVel's gravity velocity
         if (entity.onGround()) {
             state.rideVel = Vec3(state.rideVel.x, 0.0 , state.rideVel.z)
         }
