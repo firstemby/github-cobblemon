@@ -8,7 +8,7 @@ import java.util.*
 class StadiumJoinPacket(val joiningBattle: UUID): NetworkPacket<StadiumJoinPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeUUID(joiningBattle)
+        buffer.writeUUID(this.joiningBattle)
     }
     companion object {
         val ID = cobblemonResource("stadium_join")

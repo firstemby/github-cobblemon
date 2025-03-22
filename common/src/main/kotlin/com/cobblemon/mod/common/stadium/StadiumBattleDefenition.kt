@@ -3,19 +3,21 @@ package com.cobblemon.mod.common.stadium
 import net.minecraft.server.level.ServerPlayer
 import java.util.*
 
-interface StadiumBattleDefenition {
-    var participants: MutableList<UUID>
-    var spectators: MutableList<UUID>
+abstract class StadiumBattleDefenition {
+    var stadiumBattleID: UUID = UUID.randomUUID()
 
-    fun readyForBattle(): Boolean
+    var participants: MutableList<UUID> = mutableListOf<UUID>()
+    var spectators: MutableList<UUID> = mutableListOf<UUID>()
 
-    fun canAddPlayer(player: ServerPlayer): Boolean
+    abstract fun readyForBattle(): Boolean
 
-    fun addPlayer(player: ServerPlayer)
+    abstract fun canAddPlayer(player: ServerPlayer): Boolean
 
-    fun getPlayers(): MutableList<ServerPlayer>
+    abstract fun addPlayer(player: ServerPlayer)
 
-    fun initializeBattle()
+    abstract fun getPlayers(): MutableList<ServerPlayer>
 
-    fun getCurrentCamera(): StadiumCameraDefenition
+    abstract fun initializeBattle()
+
+    abstract fun getCurrentCamera(): StadiumCameraDefenition
 }

@@ -1,5 +1,8 @@
 package com.cobblemon.mod.common.stadium
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
@@ -10,14 +13,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-class StadiumSingleBattle: StadiumBattleDefenition {
+class StadiumSingleBattle: StadiumBattleDefenition() {
     @JvmField
     val MAX_PLAYERS = 2
-
-    var parentEntity: StadiumBlockEntity? = null
-
-    override var participants = mutableListOf<UUID>()
-    override var spectators = mutableListOf<UUID>()
 
     var player1Position = Vec3(0.0,0.0,0.0)
     var player2Position = Vec3(0.0,0.0,0.0)
@@ -37,7 +35,10 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     }
 
     override fun addPlayer(player: ServerPlayer) {
-        if (canAddPlayer(player)) participants.add(player.uuid)
+        if (canAddPlayer(player)) {
+            participants.add(player.uuid)
+            player.sendPacket(StadiumJoinPacket(player.uuid))
+        }
     }
 
     override fun getPlayers(): MutableList<ServerPlayer> {
@@ -45,12 +46,10 @@ class StadiumSingleBattle: StadiumBattleDefenition {
     }
 
     override fun initializeBattle() {
-        //if (parentEntity == null) return
         if (!readyForBattle()) return
 
         val players = getPlayers()
 
-        //Teleport players to their positions
         val player1 = players[0]
         val player2 = players[1]
 

@@ -65,7 +65,7 @@ public class GameRendererMixin {
 
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     public void renderLevel(DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (StadiumClientManager.INSTANCE.shouldUseStadiumCamera() || true) {
+        if (StadiumClientManager.INSTANCE.shouldUseStadiumCamera()) {
             float f = deltaTracker.getGameTimeDeltaPartialTick(true);
             this.lightTexture.updateLightTexture(f);
             if (this.minecraft.getCameraEntity() == null) {
