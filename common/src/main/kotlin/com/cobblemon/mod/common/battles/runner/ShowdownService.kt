@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.battles.runner
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.runner.graal.GraalShowdownService
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.JsonArray
+import net.minecraft.resources.ResourceLocation
 import java.util.UUID
 
 /**
@@ -23,6 +25,7 @@ import java.util.UUID
  * @author landonjw
  */
 interface ShowdownService {
+    val id: ResourceLocation
     fun openConnection()
     fun closeConnection()
     fun startBattle(battle: PokemonBattle, messages: Array<String>)
@@ -34,8 +37,17 @@ interface ShowdownService {
     fun registerBagItems()
     fun indicateSpeciesInitialized() {}
 
-
     companion object {
-        val service: ShowdownService by lazy { GraalShowdownService() }
+        private val services = mutableMapOf<ResourceLocation, ShowdownService>(
+            cobblemonResource("embedded") to GraalShowdownService(cobblemonResource("embedded"))
+        )
+
+        fun get(path: ResourceLocation = cobblemonResource("embedded")): ShowdownService {
+            return services[path] ?: error("No showdown service found for path $path")
+        }
+
+        fun all(): List<ShowdownService> {
+            return services.values.toList()
+        }
     }
 }

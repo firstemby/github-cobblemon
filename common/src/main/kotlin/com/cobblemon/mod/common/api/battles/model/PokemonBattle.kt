@@ -225,7 +225,7 @@ open class PokemonBattle(
 
     fun writeShowdownAction(vararg messages: String) {
         log(messages.joinToString("\n"))
-        ShowdownService.service.send(battleId, messages.toList().toTypedArray())
+        ShowdownService.get().send(battleId, messages.toList().toTypedArray())
     }
 
     fun turn(newTurnNumber: Int) {

@@ -29,7 +29,9 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
 
         addRenderableWidget(
             Button.builder(Component.literal("Stop")) { button ->
-                println("Stopping connection to showdown")
+                for (i in 1..10) {
+                    outputWindow.addNewEntry("test".text())
+                }
             }.bounds(70, 10, 50, 20).build()
         )
 
@@ -47,10 +49,6 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         )
 
         addRenderableWidget(ShowdownInputWidget())
-
-        for (i in 0..1000) {
-            outputWindow.addNewEntry(Component.literal("test$i"))
-        }
     }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
@@ -77,7 +75,7 @@ class ShowdownOutputList : ObjectSelectionList<OutputEntry>(
     fun addNewEntry(text: Component) {
         val line = text.copy()
         val textRenderer = Minecraft.getInstance().font
-        val lines = Language.getInstance().getVisualOrder(textRenderer.splitter.splitLines(line, 200, line.style))
+        val lines = Language.getInstance().getVisualOrder(textRenderer.splitter.splitLines(line, rowWidth, line.style))
         val fullyScrolledDown = maxScroll - scrollAmount < 10
         lines.forEach { addEntry(OutputEntry(it)) }
         if (fullyScrolledDown) {
@@ -133,7 +131,7 @@ class ShowdownInputWidget : EditBox(
     Minecraft.getInstance().window.guiScaledHeight - 40,
     Minecraft.getInstance().window.guiScaledWidth - 280 - 10,
     30,
-    Component.literal("foobar")
+    Component.literal("Enter command")
 ) {
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         val result = super.keyPressed(keyCode, scanCode, modifiers)

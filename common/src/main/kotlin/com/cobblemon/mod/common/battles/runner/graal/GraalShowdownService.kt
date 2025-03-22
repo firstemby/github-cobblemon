@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import net.minecraft.resources.ResourceLocation
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -43,7 +44,7 @@ import org.graalvm.polyglot.io.FileSystem
  * @since February 27, 2023
  * @author Hiroku, landonjw
  */
-class GraalShowdownService : ShowdownService {
+class GraalShowdownService(override val id: ResourceLocation) : ShowdownService {
 
     @Transient
     lateinit var context: Context

@@ -176,7 +176,7 @@ object BattleRegistry {
         }
 
         // Compiles the request and sends it off
-        ShowdownService.service.startBattle(battle, messages.toTypedArray())
+        ShowdownService.get().startBattle(battle, messages.toTypedArray())
     }
 
     /**

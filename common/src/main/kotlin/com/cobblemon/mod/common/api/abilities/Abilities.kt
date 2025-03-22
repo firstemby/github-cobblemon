@@ -37,7 +37,7 @@ object Abilities : DataRegistry {
         PotentialAbility.types.add(CommonAbilityType)
         PotentialAbility.types.add(HiddenAbilityType)
         this.abilityMap.clear()
-        val abilitiesJson = ShowdownService.service.getAbilityIds()
+        val abilitiesJson = ShowdownService.get().getAbilityIds()
         for (i in 0 until abilitiesJson.size()) {
             val id = abilitiesJson[i].asString
             val ability = AbilityTemplate(id)

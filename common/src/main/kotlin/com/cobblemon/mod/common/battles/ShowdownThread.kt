@@ -23,13 +23,13 @@ class ShowdownThread : Thread("Cobblemon Showdown") {
         this.start()
         this.latch.await()
         for (action in whenReady) {
-            action(ShowdownService.service)
+            action(ShowdownService.get())
         }
     }
 
     fun queue(action: (ShowdownService) -> Unit) {
         if (this.latch.count == 0L) {
-            action(ShowdownService.service)
+            action(ShowdownService.get())
         } else {
             this.whenReady.add(action)
         }
@@ -37,7 +37,7 @@ class ShowdownThread : Thread("Cobblemon Showdown") {
 
     override fun run() {
         LOGGER.info("Starting showdown service...")
-        ShowdownService.service.openConnection()
+        ShowdownService.get().openConnection()
         LOGGER.info("Showdown has been started!")
         this.latch.countDown()
     }
