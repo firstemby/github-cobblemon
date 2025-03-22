@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import net.minecraft.resources.ResourceLocation
@@ -34,6 +35,8 @@ import org.graalvm.polyglot.HostAccess.Export
 import org.graalvm.polyglot.PolyglotAccess
 import org.graalvm.polyglot.Value
 import org.graalvm.polyglot.io.FileSystem
+import java.text.SimpleDateFormat
+import java.util.Date
 
 /**
  * Mediator service for communicating between the Cobblemon Minecraft mod and Cobblemon showdown service via
@@ -55,10 +58,23 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
     @Transient
     val gson = Gson()
 
+    private val _log = mutableListOf<String>()
+    override val log: List<String>?
+        get() {
+            if (!Cobblemon.config.enableDebugKeys) return null
+            return _log
+        }
+
+    override var status: ShowdownStatus = ShowdownStatus.DISCONNECTED
+        private set
+
     override fun openConnection() {
+        this._log.clear()
+        addToShowdownLog(source = "Minecraft", message = "Opening showdown connection")
         unbundler.attemptUnbundle()
         createContext()
         boot()
+        status = ShowdownStatus.CONNECTED
     }
 
     private fun createContext() {
@@ -118,16 +134,23 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
     }
 
     override fun closeConnection() {
+        addToShowdownLog(source = "Minecraft", message = "Closing showdown connection")
         context.close()
+        this.status = ShowdownStatus.DISCONNECTED
     }
 
     private fun boot() {
+        addToShowdownLog(source = "Minecraft", message = "Booting showdown")
         context.eval("js", File("showdown/index.js").readText())
         sendBattleMessageFunction = context.getBindings("js").getMember("sendBattleMessage")
     }
 
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
         val startBattleFunction = context.getBindings("js").getMember("startBattle")
+        addToShowdownLog(source = "Minecraft", message = "Starting battle ${battle.battleId}")
+        messages.forEach { message ->
+            addToShowdownLog(source = "Minecraft", message = "(${battle.battleId}) $message")
+        }
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
     }
 
@@ -138,17 +161,20 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
     override fun getAbilityIds(): JsonArray {
         val getCobbledAbilityIdsFn = context.getBindings("js").getMember("getCobbledAbilityIds")
         val arrayResult = getCobbledAbilityIdsFn.execute().asString()
+        addToShowdownLog(source = "Minecraft", message = "Getting ability ids")
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
 
     override fun getMoves(): JsonArray {
         val getCobbledMovesFn = context.getBindings("js").getMember("getCobbledMoves")
+        addToShowdownLog(source = "Minecraft", message = "Getting moves")
         val arrayResult = getCobbledMovesFn.execute().asString()
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
 
     override fun getItemIds(): JsonArray {
         val getCobbledItemIdsFn = context.getBindings("js").getMember("getCobbledItemIds")
+        addToShowdownLog(source = "Minecraft", message = "Getting item ids")
         val arrayResult = getCobbledItemIdsFn.execute().asString()
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
@@ -165,28 +191,44 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
                 }
             }
         }
+        addToShowdownLog(source = "Minecraft", message = "Registering species")
         receiveSpeciesDataFn.execute(jsArray)
     }
 
     override fun indicateSpeciesInitialized() {
         val afterCobbledSpeciesInitFn = this.context.getBindings("js").getMember("afterCobbledSpeciesInit")
+        addToShowdownLog(source = "Minecraft", message = "Indicating species initialized")
         afterCobbledSpeciesInitFn.execute()
     }
 
     override fun registerBagItems() {
         val receiveBagItemDataFn = this.context.getBindings("js").getMember("receiveBagItemData")
         for ((itemId, js) in BagItems.bagItemsScripts) {
+            addToShowdownLog(source = "Minecraft", message = "Registering bag item $itemId")
             receiveBagItemDataFn.execute(itemId, js.replace("\n", " "))
         }
     }
 
     private fun sendToShowdown(battleId: UUID, messages: Array<String>) {
+        messages.forEach { message ->
+            addToShowdownLog(source = "Minecraft", message = "($battleId) $message")
+        }
         sendBattleMessageFunction.execute(battleId.toString(), messages)
     }
 
     @Export
     fun sendFromShowdown(battleId: String, message: String) {
+        addToShowdownLog(source = "Showdown", message = "($battleId) $message")
         ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), message)
+    }
+
+    private fun addToShowdownLog(source: String, message: String) {
+        if (!Cobblemon.config.enableDebugKeys) return
+        val timestamp = SimpleDateFormat("HH:mm:ss").format(Date())
+        if (_log.size >= 150) {
+            _log.removeFirst()
+        }
+        _log.add("[$source][${timestamp}]> $message")
     }
 
     @Export

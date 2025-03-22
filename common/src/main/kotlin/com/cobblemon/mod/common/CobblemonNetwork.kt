@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.net.callback.party.OpenPartyCallbackHandl
 import com.cobblemon.mod.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.UnlockReloadPacketHandler
+import com.cobblemon.mod.common.client.net.debug.showdown.ShowdownRefreshInfoHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
 import com.cobblemon.mod.common.client.net.effect.RunPosableMoLangHandler
@@ -66,6 +67,7 @@ import com.cobblemon.mod.common.net.messages.client.callback.OpenMoveCallbackPac
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallbackPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
+import com.cobblemon.mod.common.net.messages.client.debug.showdown.ShowdownRefreshInfoPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
 import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
@@ -139,6 +141,7 @@ import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonS
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartySelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyMoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket
+import com.cobblemon.mod.common.net.messages.server.debug.showdown.RequestShowdownInfoPacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
@@ -180,6 +183,7 @@ import com.cobblemon.mod.common.net.serverhandling.callback.party.PartyPokemonSe
 import com.cobblemon.mod.common.net.serverhandling.callback.party.PartySelectCancelledHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.partymove.PartyMoveSelectCancelledHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.partymove.PartyPokemonMoveSelectedHandler
+import com.cobblemon.mod.common.net.serverhandling.debug.showdown.RequestShowdownInfoHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.EscapeDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.dialogue.InputToDialogueHandler
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
@@ -412,6 +416,7 @@ object CobblemonNetwork {
 
         // Debug / cheats
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
+        list.add(PacketRegisterInfo(ShowdownRefreshInfoPacket.ID, ShowdownRefreshInfoPacket::decode, ShowdownRefreshInfoHandler))
 
         return list
     }
@@ -510,6 +515,9 @@ object CobblemonNetwork {
 
         // Orientation packet(s)
         list.add(PacketRegisterInfo(C2SUpdateOrientationPacket.ID, C2SUpdateOrientationPacket::decode, OrientationPacketHandler))
+
+        // Debug / cheats
+        list.add(PacketRegisterInfo(RequestShowdownInfoPacket.ID, RequestShowdownInfoPacket::decode, RequestShowdownInfoHandler))
 
         return list
     }
