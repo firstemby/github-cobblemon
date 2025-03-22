@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.RequestShowdownInfoPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.mojang.blaze3d.platform.ClipboardManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -20,9 +21,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
 import java.awt.Color
-import java.util.Locale
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 /**
  * GUI screen for debugging the Showdown service in the Cobblemon mod.
@@ -36,16 +35,25 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         private var activeShowdownService = cobblemonResource("embedded")
     }
 
-    var outputWindow = addRenderableWidget(ShowdownOutputList())
     private var showdownStatus: ShowdownStatus? = null
-    val timer: Timer
-    val currentShowdownLog = mutableListOf<String>()
+    val showdownLogs = mutableMapOf<ResourceLocation, MutableList<String>>()
+    var availableServices = listOf(cobblemonResource("embedded"))
+
+    val outputWindow = addRenderableWidget(ShowdownOutputList())
+    val serviceButton = addRenderableWidget(
+        Button.builder(Component.literal("Service: $activeShowdownService")) {
+            cycleActiveService()
+        }.bounds(10, 10, 200, 20).build()
+    )
+
+    val clipboardManager = ClipboardManager()
+    var timer = Timer()
 
     init {
         addRenderableWidget(
             Button.builder(Component.literal("Start")) { button ->
                 println("Starting connection to showdown")
-            }.bounds(10, 10, 50, 20).build()
+            }.bounds(10, 40, 50, 20).build()
         )
 
         addRenderableWidget(
@@ -53,24 +61,46 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
                 for (i in 1..10) {
                     outputWindow.addNewEntry("test".text())
                 }
-            }.bounds(70, 10, 50, 20).build()
+            }.bounds(70, 40, 50, 20).build()
         )
 
         addRenderableWidget(
             Button.builder(Component.literal("Restart")) { button ->
                 println("Restarting connection to showdown")
-            }.bounds(130, 10, 50, 20).build()
+            }.bounds(130, 40, 50, 20).build()
         )
 
         addRenderableWidget(
             Button.builder(Component.literal("Start Queue")) { button ->
                 println("Queue button pressed")
                 button.message = Component.literal("Cancel Queue")
-            }.bounds(10, 40, 100, 20).build()
+            }.bounds(10, 70, 100, 20).build()
+        )
+
+        addRenderableWidget(
+            Button.builder(Component.literal("Copy to Clipboard")) Clipboard@{
+                val log = showdownLogs[activeShowdownService] ?: return@Clipboard
+                clipboardManager.setClipboard(Minecraft.getInstance().window.window, log.joinToString("\n"))
+            }.bounds(170, Minecraft.getInstance().window.guiScaledHeight - 40, 100, 30).build()
         )
 
         addRenderableWidget(ShowdownInputWidget())
+        startTimer()
+    }
 
+    fun cycleActiveService() {
+        println("Cycling service")
+        if (availableServices.size == 1) return
+        val currentIndex = availableServices.indexOf(activeShowdownService)
+        activeShowdownService = availableServices[(currentIndex + 1) % availableServices.size]
+        serviceButton.message = Component.literal("Service: $activeShowdownService")
+        outputWindow.reset()
+        showdownLogs[activeShowdownService]?.forEach { outputWindow.addNewEntry(it.text()) }
+        startTimer()
+    }
+
+    fun startTimer() {
+        timer.cancel()
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -90,9 +120,9 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         if (showdownStatus != null) {
             guiGraphics.fill(
                 190,
-                15,
+                45,
                 200,
-                25,
+                55,
                 when (showdownStatus!!) {
                     ShowdownStatus.DISCONNECTED -> Color(255, 0, 0, 255).rgb
                     ShowdownStatus.RESTARTING -> Color(255, 255, 0, 255).rgb
@@ -107,7 +137,7 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
                     ) else it.toString()
                 }),
                 x = 205,
-                y = 17
+                y = 47
             )
         }
     }
@@ -120,23 +150,28 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
      * @param availableServices The list of available showdown services.
      */
     fun refreshShowdownInfo(status: ShowdownStatus, messages: List<String>, availableServices: List<ResourceLocation>) {
-        if (currentShowdownLog.isNotEmpty()) {
-            val lastMessage = currentShowdownLog.last()
+        if (showdownLogs[activeShowdownService] == null) {
+            showdownLogs[activeShowdownService] = mutableListOf()
+        }
+        val log = showdownLogs[activeShowdownService]!!
+        if (log.isNotEmpty()) {
+            val lastMessage = log.last()
             val lastMessageIndex = messages.indexOf(lastMessage)
             if (lastMessageIndex != -1 && lastMessageIndex != messages.size - 1) {
                 val messagesToAdd = messages.subList(lastMessageIndex + 1, messages.size)
                 messagesToAdd.forEach {
                     outputWindow.addNewEntry(it.text())
-                    currentShowdownLog.add(it)
+                    log.add(it)
                 }
             }
         }
         else {
             outputWindow.reset()
             messages.forEach { outputWindow.addNewEntry(it.text()) }
-            currentShowdownLog.addAll(messages)
+            log.addAll(messages)
         }
         showdownStatus = status
+        this.availableServices = availableServices
     }
 
 }
