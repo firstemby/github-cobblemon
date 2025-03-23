@@ -15,13 +15,14 @@ import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -38,26 +39,26 @@ class BirdAirController : RideController {
 
     override val condition: (PokemonEntity) -> Boolean = { true }
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression()
-        private set
-    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
-        private set
-    var glideTopSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.0, 1.0)".asExpression()
-        private set
-    // Max accel is a whole 1.0 in 3 seconds. The conversion in the function below is to convert seconds to ticks
-    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
-        private set
-    //Seconds self propelled flight (glide is not self propelled in this case)
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression()
-        private set
-    //max y level for the ride
-    var altitudeExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
-        private set
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression(),
+        // Max accel is a whole 1.0 in 3 seconds. The conversion in the function below is to convert seconds to ticks
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression(),
+        //Seconds self propelled flight (glide is not self propelled in this case)
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression(),
+        //max y level for the ride
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
+    )
 
     var infiniteStamina: Expression = "false".asExpression()
         private set
     var infiniteAltitude: Expression = "false".asExpression()
         private set
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
+    }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
@@ -99,7 +100,7 @@ class BirdAirController : RideController {
             upForce -= 0.3
         }
 
-        val altitudeLimit = getRuntime(entity).resolveDouble(altitudeExpr)
+        val altitudeLimit = this.getStat(entity, RidingStat.JUMP)
 
         //Only limit altitude if altitude is not infinite
         if (!getRuntime(entity).resolveBoolean(infiniteAltitude)) {
@@ -117,8 +118,8 @@ class BirdAirController : RideController {
         val state = getState(entity, ::BirdAirState)
 
         //TODO: Tie in handling
-        val handling = getRuntime(entity).resolveDouble(handlingExpr)
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val handling = this.getStat(entity, RidingStat.SKILL)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
         val rotationChangeRate = 10.0
 
         if (rollable != null) {
@@ -150,8 +151,8 @@ class BirdAirController : RideController {
         val rollable = driver as Rollable
 
         val state = getState(entity, ::BirdAirState)
-        val handling = getRuntime(entity).resolveDouble(handlingExpr)
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val handling = this.getStat(entity, RidingStat.SKILL)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
 
         //Smooth out mouse input.
         val smoothingSpeed = 4
@@ -214,8 +215,8 @@ class BirdAirController : RideController {
     override fun shouldRoll(entity: PokemonEntity) = true
 
     override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val glideTopSpeed = getRuntime(entity).resolveDouble(glideTopSpeedExpr)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
+        val glideTopSpeed = topSpeed * 1.5 //TODO: Should this be refined?
         val state = getState(entity, ::BirdAirState)
 
         //Must I ensure that topspeed is greater than minimum?
@@ -228,30 +229,19 @@ class BirdAirController : RideController {
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
-    override fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
+    override fun getActiveRidingAltPose(entity: PokemonEntity, driver: Player): RidingAltPose {
         val state = getState(entity, ::BirdAirState)
-        return state.gliding
+        val pose = if (state.gliding) RidingAltPose.GLIDING else RidingAltPose.NONE
+        return pose
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         super.encode(buffer)
-        buffer.writeString(topSpeedExpr.toString())
-        buffer.writeString(glideTopSpeedExpr.toString())
-        buffer.writeString(accelExpr.toString())
-        buffer.writeString(accelExpr.toString())
-        buffer.writeString(handlingExpr.toString())
-        buffer.writeString(altitudeExpr.toString())
         buffer.writeString(infiniteStamina.toString())
         buffer.writeString(infiniteAltitude.toString())
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        topSpeedExpr = buffer.readString().asExpression()
-        glideTopSpeedExpr = buffer.readString().asExpression()
-        accelExpr = buffer.readString().asExpression()
-        accelExpr = buffer.readString().asExpression()
-        handlingExpr = buffer.readString().asExpression()
-        altitudeExpr = buffer.readString().asExpression()
         infiniteStamina = buffer.readString().asExpression()
         infiniteAltitude = buffer.readString().asExpression()
     }
@@ -278,10 +268,10 @@ class BirdAirController : RideController {
 
 
         //retrieve stats
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val glideTopSpeed = getRuntime(entity).resolveDouble(glideTopSpeedExpr)
-        val accel = getRuntime(entity).resolveDouble(accelExpr)
-        val staminaStat = getRuntime(entity).resolveDouble(staminaExpr)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
+        val glideTopSpeed = topSpeed * 1.5
+        val accel = this.getStat(entity, RidingStat.ACCELERATION)
+        val staminaStat = this.getStat(entity, RidingStat.STAMINA)
 
         var glideSpeedChange = 0.00
 

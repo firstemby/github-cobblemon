@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.riding.controller.RideController
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.toProperties
@@ -32,8 +33,10 @@ import kotlin.math.sin
 data class RidingManager(val entity: PokemonEntity) {
     var lastSpeed = 0F
     var states: MutableMap<ResourceLocation, RidingState> = mutableMapOf()
+    var prevDeltaMovement = entity.deltaMovement
     var deltaRotation = Vec2.ZERO
-    var deltaRotationPerSec = Vec3.ZERO
+    var prevDeltaRotationPerSec = Vec2.ZERO
+    var deltaRotationPerSec = Vec2.ZERO
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -100,7 +103,8 @@ data class RidingManager(val entity: PokemonEntity) {
         this.deltaRotation = Vec2(rotation.x - previousRotation.x, rotation.y - previousRotation.y)
 
         //Record the current change in rotation per second
-        this.deltaRotationPerSec = Vec3(rotation.x - previousRotation.x.toDouble(), rotation.y - previousRotation.y.toDouble(), 0.0)
+        this.prevDeltaRotationPerSec = this.deltaRotationPerSec
+        this.deltaRotationPerSec = deltaRotation.scale(20.0f)
         return rotation
     }
 
@@ -116,6 +120,8 @@ data class RidingManager(val entity: PokemonEntity) {
 
     fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
         val controller = getController(entity) ?: return Vec3.ZERO
+
+        this.prevDeltaMovement = entity.deltaMovement
         return controller.velocity(entity, driver, input)
     }
 
@@ -139,9 +145,9 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 
-    fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
-        val controller = getController(entity) ?: return false
-        return controller.useRidingAltPose(entity, driver)
+    fun getActiveRidingAltPose(entity: PokemonEntity, driver: Player): RidingAltPose {
+        val controller = getController(entity) ?: return RidingAltPose.NONE
+        return controller.getActiveRidingAltPose(entity, driver)
     }
 
     /**

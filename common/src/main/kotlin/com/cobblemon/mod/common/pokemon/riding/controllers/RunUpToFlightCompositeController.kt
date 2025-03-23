@@ -12,6 +12,8 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -67,6 +69,10 @@ class RunUpToFlightCompositeController : RideController {
         }
     }
 
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        return getActiveController(entity).getStat(entity, stat)
+    }
+
     override fun speed(
         entity: PokemonEntity,
         driver: Player
@@ -110,6 +116,14 @@ class RunUpToFlightCompositeController : RideController {
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
         return getActiveController(entity).rotation(entity, driver)
+    }
+
+    override fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        return getActiveController(entity).updatePassengerRotation(entity, driver)
+    }
+
+    override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        return getActiveController(entity).clampPassengerRotation(entity, driver)
     }
 
     override fun velocity(
@@ -160,8 +174,8 @@ class RunUpToFlightCompositeController : RideController {
 
     override fun useAngVelSmoothing(entity: PokemonEntity): Boolean = getActiveController(entity).useAngVelSmoothing(entity)
 
-    override fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
-        return getActiveController(entity).useRidingAltPose(entity, driver)
+    override fun getActiveRidingAltPose(entity: PokemonEntity, driver: Player): RidingAltPose {
+        return getActiveController(entity).getActiveRidingAltPose(entity, driver)
     }
 
     override fun rotationOnMouseXY

@@ -12,6 +12,7 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -65,6 +66,10 @@ class RunUpToJetFlightCompositeController : RideController {
             state.timeTransitioned = entity.level().gameTime
             controller
         }
+    }
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        return getActiveController(entity).getStat(entity, stat)
     }
 
     //TODO: This composite controller needs to have the jet lift off at a certain speed.
@@ -124,6 +129,15 @@ class RunUpToJetFlightCompositeController : RideController {
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
         return getActiveController(entity).rotation(entity, driver)
     }
+
+    override fun clampPassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        return getActiveController(entity).clampPassengerRotation(entity, driver)
+    }
+
+    override fun updatePassengerRotation(entity: PokemonEntity, driver: LivingEntity) {
+        return getActiveController(entity).updatePassengerRotation(entity, driver)
+    }
+
 
     override fun velocity(
         entity: PokemonEntity,

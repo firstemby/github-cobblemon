@@ -8,20 +8,15 @@
 
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.blockPositionsAsListRounded
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.getString
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.*
 import kotlin.math.max
 import kotlin.math.min
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -37,6 +32,20 @@ class GenericLiquidController : RideController {
         val KEY: ResourceLocation = cobblemonResource("swim/generic")
     }
 
+    override val key: ResourceLocation = KEY
+    override val poseProvider: PoseProvider = PoseProvider(PoseType.FLOAT)
+        .with(PoseOption(PoseType.SWIM) { it.isSwimming && it.entityData.get(PokemonEntity.MOVING) })
+    override val condition: (PokemonEntity) -> Boolean = { entity ->
+        //This could be kinda weird... what if the top of the mon is in a fluid but the bottom isnt?
+        Shapes.create(entity.boundingBox).blockPositionsAsListRounded().any {
+            if (entity.isInWater || entity.isUnderWater) {
+                return@any true
+            }
+            val blockState = entity.level().getBlockState(it)
+            return@any !blockState.fluidState.isEmpty
+        }
+    }
+
     var canJump = "true".asExpression()
         private set
     var jumpVector = listOf("0".asExpression(), "0.3".asExpression(), "0".asExpression())
@@ -50,18 +59,19 @@ class GenericLiquidController : RideController {
     var strafeFactor = "0.2".asExpression()
         private set
 
-    override val key: ResourceLocation = KEY
-    override val poseProvider: PoseProvider = PoseProvider(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { it.isSwimming && it.entityData.get(PokemonEntity.MOVING) })
-    override val condition: (PokemonEntity) -> Boolean = { entity ->
-        //This could be kinda weird... what if the top of the mon is in a fluid but the bottom isnt?
-        Shapes.create(entity.boundingBox).blockPositionsAsListRounded().any {
-            if (entity.isInWater || entity.isUnderWater) {
-                return@any true
-            }
-            val blockState = entity.level().getBlockState(it)
-            return@any !blockState.fluidState.isEmpty
-        }
+    //TODO: These are temp and need to be updated to real values
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'LIQUID', 135.0, 45.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'LIQUID', 0.6, 0.2)".asExpression(),
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'LIQUID', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression(),
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'LIQUID', 120.0, 20.0)".asExpression(),
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'LIQUID', 200.0, 128.0)".asExpression()
+    )
+
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
     }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {

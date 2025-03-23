@@ -41,6 +41,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -788,7 +789,17 @@ object MoLangFunctions {
             map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) }
             map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
             map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
-            map.put("is_gliding") { DoubleValue(pokemonEntity.useRidingAltPose()) }
+            map.put("riding_alt_pose") { params ->
+                val poseName = params.getString(0).uppercase()
+                val targetPose = RidingAltPose.fromString(poseName)
+                if (targetPose == null) {
+                    //Invalid pose name
+                    DoubleValue(0.0)
+                } else {
+                    val currentPose = pokemonEntity.getActiveRidingAltPose()
+                    DoubleValue(if (currentPose == targetPose) 1.0 else 0.0)
+                }
+            }
             map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
             map.put("is_pokemon") { DoubleValue.ONE }
             map

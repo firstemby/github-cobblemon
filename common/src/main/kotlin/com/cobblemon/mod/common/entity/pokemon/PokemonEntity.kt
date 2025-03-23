@@ -10,8 +10,6 @@ package com.cobblemon.mod.common.entity.pokemon
 
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -38,6 +36,7 @@ import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.*
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -86,11 +85,6 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
-import java.util.EnumSet
-import java.util.Optional
-import java.util.UUID
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -143,6 +137,9 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
+import java.util.*
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -245,7 +242,6 @@ open class PokemonEntity(
 
     var enablePoseTypeRecalculation = true
 
-    var prevDeltaMovement = this.deltaMovement
 
 
     //Ignore this not being anywhere near the right spot for this code
@@ -1428,11 +1424,22 @@ open class PokemonEntity(
         if (riders.isEmpty()) {
             super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
         } else {
+            //val scale =
             //Handle ridden pokemon differently to allow vector lerp instead of simple addition.
-            val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), 1.0f, this.getYRot());
+            //val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), 1.0f, this.getYRot());
+            val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), 1.0f, this.getYRot()).scale(this.speed.toDouble())
             //changing this will give the ride more or less inertia/handling/drift
-            this.deltaMovement = this.deltaMovement.lerp(v, riding.inertia(this));
-            this.move(MoverType.SELF, this.deltaMovement.scale(this.speed.toDouble()))
+
+            //val smoothingFactor = 0.5
+            //val t = 1.0 - exp(-smoothingFactor)
+
+            val diff = v.subtract(this.deltaMovement)
+
+            this.deltaMovement = this.deltaMovement.add( diff.scale(0.1) )
+
+            //this.deltaMovement = this.deltaMovement.lerp(v, riding.inertia(this))
+            //this.deltaMovement = this.deltaMovement.scale(this.speed.toDouble()).lerp(v, riding.inertia(this));
+            this.move(MoverType.SELF, this.deltaMovement)
         }
 
         return this.deltaMovement
@@ -1454,17 +1461,36 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
 
             //Prevent current travel logic when riding a pokemon.
-            /*
             val riders = this.passengers.filterIsInstance<LivingEntity>()
             if ( riders.isEmpty() ) {
                 super.travel(movementInput)
             }
-             */
+            else {
+                //val v = Entity.getInputVector(riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO), this.speed.toFloat(), this.getYRot())
+                val inp = riding.velocity(this, this.controllingPassenger as Player, Vec3.ZERO)
 
-            //update previous deltamovement before the current one goes and gets itself changed
-            this.prevDeltaMovement = this.deltaMovement
+                val f = Mth.sin(this.getYRot() * 0.017453292f)
+                val g = Mth.cos(this.getYRot() * 0.017453292f)
+                val v = Vec3(
+                    inp.x * g.toDouble() - inp.z * f.toDouble(),
+                    inp.y,
+                    inp.z * g.toDouble() + inp.x * f.toDouble()
+                )
 
-            super.travel(movementInput)
+                //val smoothingFactor = 0.5
+                //val t = 1.0 - exp(-smoothingFactor)
+
+                val diff = v.subtract(this.deltaMovement)
+
+                this.deltaMovement = this.deltaMovement.add( diff.scale(riding.inertia(this)) )
+
+                //this.deltaMovement = this.deltaMovement.lerp(v, riding.inertia(this))
+                //this.deltaMovement = this.deltaMovement.scale(this.speed.toDouble()).lerp(v, riding.inertia(this));
+                this.move(MoverType.SELF, this.deltaMovement)
+            }
+
+
+
 
             this.updateBlocksTraveled(prevBlockPos)
         }
@@ -1834,9 +1860,9 @@ open class PokemonEntity(
         return this.riding.speed(this, controller)
     }
 
-    fun useRidingAltPose(): Boolean {
-        val driver = this.controllingPassenger as? Player ?: return false
-        return this.riding.useRidingAltPose(this, driver)
+    fun getActiveRidingAltPose(): RidingAltPose {
+        val driver = this.controllingPassenger as? Player ?: return RidingAltPose.NONE
+        return this.riding.getActiveRidingAltPose(this, driver)
     }
 
     var jumpInputStrength: Int = 0 // move this

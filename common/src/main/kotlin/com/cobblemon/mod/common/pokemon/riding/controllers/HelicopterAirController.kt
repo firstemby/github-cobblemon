@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -63,6 +64,20 @@ class HelicopterAirController : RideController {
     var speed: Expression = "1.0".asExpression()
         private set
 
+    //TODO: These are temp and need to be updated to real values
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression(),
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression(),
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression(),
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
+    )
+
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
+    }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         //Increased max speed to exaggerate movement.

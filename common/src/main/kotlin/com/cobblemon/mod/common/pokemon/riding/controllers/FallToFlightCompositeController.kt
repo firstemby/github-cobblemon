@@ -12,17 +12,13 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.CompositeState
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.adapters.RideControllerAdapter
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.getString
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -75,6 +71,10 @@ class FallToFlightCompositeController : RideController {
         } else {
             entity.deltaMovement.y <= -minFallingSpeed && entity.deltaMovement.horizontalDistance() >= minForwardSpeed
         }
+    }
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        return getActiveController(entity).getStat(entity, stat)
     }
 
     override fun speed(

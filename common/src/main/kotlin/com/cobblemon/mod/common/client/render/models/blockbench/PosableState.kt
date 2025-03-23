@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
@@ -131,11 +132,35 @@ abstract class PosableState : Schedulable {
             reusableAnimTime.value = animationSeconds.toDouble()
             reusableAnimTime
         }
+        .addFunction("angular_velocity_yaw") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val currAngVelY = pokemon.riding.deltaRotationPerSec.y
+            val preAngVelY = pokemon.riding.prevDeltaRotationPerSec.y
+
+            val partialTickAngVel = (currAngVelY - preAngVelY) * currentPartialTicks + preAngVelY
+            val maxRotRate = pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
+                ?: return@addFunction DoubleValue(0.0)
+
+
+            return@addFunction DoubleValue(partialTickAngVel / maxRotRate)
+        }
+        .addFunction("smooth_speed") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val currSpeed = pokemon.deltaMovement.length()
+            val prevSpeed = pokemon.riding.prevDeltaMovement.length()
+            val partialTickSpeed = (currSpeed - prevSpeed) * currentPartialTicks + prevSpeed
+            val topSpeed = pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
+                ?: return@addFunction DoubleValue(0.0)
+
+            return@addFunction DoubleValue(partialTickSpeed / topSpeed)
+        }
         .addFunction("smooth_delta_x") {
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 
             val currMoveX = pokemon.deltaMovement.x
-            val prevMoveX = pokemon.prevDeltaMovement.x
+            val prevMoveX = pokemon.riding.prevDeltaMovement.x
             val ret = (currMoveX - prevMoveX) * currentPartialTicks + prevMoveX
             return@addFunction DoubleValue(ret)
         }
@@ -143,7 +168,7 @@ abstract class PosableState : Schedulable {
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 
             val currMoveY = pokemon.deltaMovement.y
-            val prevMoveY = pokemon.prevDeltaMovement.y
+            val prevMoveY = pokemon.riding.prevDeltaMovement.y
             val ret = (currMoveY - prevMoveY) * currentPartialTicks + prevMoveY
             return@addFunction DoubleValue(ret)
         }

@@ -8,13 +8,17 @@
 
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.blockPositionsAsListRounded
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.resolveDouble
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
@@ -44,9 +48,23 @@ class SwimDashController : RideController {
         }
     }
 
+    //TODO: These are temp and need to be updated to real values
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'LIQUID', 135.0, 45.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'LIQUID', 0.6, 0.2)".asExpression(),
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'LIQUID', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression(),
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'LIQUID', 120.0, 20.0)".asExpression(),
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'LIQUID', 200.0, 128.0)".asExpression()
+    )
+
     /** Indicates that we are currently enacting a dash, and that further movement inputs should be ignored */
     private var dashing = false
     private var ticks = 0
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
+    }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
         if(this.dashing) {

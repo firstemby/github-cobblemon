@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
@@ -17,17 +18,13 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.controllers.BirdAirController.Companion
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.blockPositionsAsListRounded
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.getString
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.pokemon.riding.states.VehicleLandState
+import com.cobblemon.mod.common.util.*
+import net.minecraft.client.Minecraft
 import kotlin.math.absoluteValue
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -36,48 +33,12 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sign
 
 class VehicleLandController : RideController {
     companion object {
         val KEY: ResourceLocation = cobblemonResource("land/vehicle")
-
-        val MAXTOPSPEED = 1.0 // 20 bl/s
-        val MINTOPSPEED = 0.35 // 7 bl/s
-        //val MINSPEED = 0.25 // 5 bl/s
-
-        //Accel will lie between 1.0 second and 5.0 seconds
-        val MAXACCEL = (MAXTOPSPEED ) / (20*3) //3.0 second to max speed
-        val MINACCEL = (MAXTOPSPEED ) / (20*8) // 8 seconds to max speed
-
-        //Can rotate 90 degrees
-        val MAXHANDLING = 90.0
-        val MINHANDLING = 30.0
-
-
-        val MAXYAWHANDLING = 16.0
-        val MINYAWHANDLING = 8.0
     }
-
-    var canJump = "true".asExpression()
-        private set
-    var jumpVector = listOf("0".asExpression(), "0.3".asExpression(), "0".asExpression())
-        private set
-    var speed = "0.3".asExpression()
-        private set
-    var driveFactor = "1.0".asExpression()
-        private set
-    var reverseDriveFactor = "0.25".asExpression()
-        private set
-
-    var minimumSpeedToTurn = "0.1".asExpression()
-        private set
-    var rotationSpeed = "45/20".asExpression()
-        private set
-    var lookYawLimit = "101".asExpression()
-        private set
-
-    var currSpeed = 0.0
-        private set
 
     @Transient
     override val key: ResourceLocation = KEY
@@ -102,17 +63,57 @@ class VehicleLandController : RideController {
         }
     }
 
+    var canJump = "true".asExpression()
+        private set
+    var jumpVector = listOf("0".asExpression(), "0.3".asExpression(), "0".asExpression())
+        private set
+    var speed = "0.3".asExpression()
+        private set
+    var driveFactor = "1.0".asExpression()
+        private set
+    var reverseDriveFactor = "0.25".asExpression()
+        private set
+
+    var minimumSpeedToTurn = "0.1".asExpression()
+        private set
+    var rotationSpeed = "45/20".asExpression()
+        private set
+    var lookYawLimit = "101".asExpression()
+        private set
+
+    var currSpeed = 0.0
+        private set
+
+    //TODO: Replace these temp values
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'LAND', 140.0, 20.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.3)".asExpression(),
+        // In seconds to max speed
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'LAND', (1.0 / (20.0 * 0.5)), (1.0 / (20.0 * 5.0)))".asExpression(),
+        // In Seconds
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression(),
+        // Block Jump Height
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'LAND', 10.0, 1.0)".asExpression()
+    )
+
+
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
+    }
+
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
-        val topSpeed = entity.getRideStat(RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED)
-        val accel = entity.getRideStat(RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
+        val accel = this.getStat(entity, RidingStat.ACCELERATION)
 
         //speed up and slow down based on input
         if (driver.zza > 0.0 && currSpeed < topSpeed) {
             currSpeed = min(currSpeed + accel , topSpeed)
         } else if (driver.zza < 0.0 && currSpeed > 0.0) {
             //Decelerate is now always a constant half of max acceleration.
-            currSpeed = max(currSpeed - (MAXACCEL / 2), 0.0)
+            currSpeed = max(currSpeed - (accel / 2), 0.0)
         }
 
         return currSpeed.toFloat()
@@ -120,6 +121,7 @@ class VehicleLandController : RideController {
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
         val rotationDegrees = driver.xxa * getRuntime(entity).resolveFloat(this.rotationSpeed)
+        val state = getState(entity, ::VehicleLandState)
 
         if( Minecraft.getInstance().options.keyJump.isDown() ){
             //If the current drift has not been set and the car is rotating then set drift

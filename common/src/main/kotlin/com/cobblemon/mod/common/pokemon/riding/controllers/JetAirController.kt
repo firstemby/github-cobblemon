@@ -9,12 +9,12 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.JetAirState
@@ -36,35 +36,36 @@ class JetAirController : RideController {
 
     var gravity: Expression = "0".asExpression()
         private set
-
     var minSpeed: Expression = "1.2".asExpression()
         private set
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
-        private set
+    //TODO: Think about converting this to fully rely on the skillExpr evaluation
     var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 25.0, 8.0)".asExpression()
         private set
-    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression()
-        private set
-    // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
-        private set
-    // Between 60 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
-        private set
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
-        private set
-
     // Make configurable by json
     var infiniteStamina: Expression = "false".asExpression()
         private set
     var infiniteAltitude: Expression = "false".asExpression()
         private set
 
+    private val statExpressions: Map<RidingStat, Expression> = mapOf(
+        RidingStat.SKILL to "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression(),
+        RidingStat.SPEED to "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression(),
+        RidingStat.ACCELERATION to "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression(),
+        RidingStat.STAMINA to "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression(),
+        RidingStat.JUMP to "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
+    )
+    
+
+    override fun getStat(entity: PokemonEntity, stat: RidingStat): Double {
+        val expr = statExpressions[stat] ?: return 0.0
+        return getRuntime(entity).resolveDouble(expr)
+    }
+
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
         //retrieve stats
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val staminaStat = getRuntime(entity).resolveDouble(staminaExpr)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
+        val staminaStat = this.getStat(entity, RidingStat.STAMINA)
 
         //retrieve state
         val state = getState(entity, ::JetAirState)
@@ -122,7 +123,7 @@ class JetAirController : RideController {
         //If stamina has run out then initiate forced glide down.
         upForce = if(state.stamina > 0.0) upForce else -0.7
 
-        val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
+        val altitudeLimit = this.getStat(entity, RidingStat.JUMP)
 
         //Only limit altitude if altitude is not infinite
         if (!getRuntime(entity).resolveBoolean(infiniteAltitude)) {
@@ -185,7 +186,7 @@ class JetAirController : RideController {
         state.currMouseYForce = (state.currMouseYForce + (0.0015 * yMouse * invertPitch)).coerceIn(-1.0, 1.0)
 
         //Get handling in degrees per second
-        var handling = getRuntime(entity).resolveDouble(handlingExpr)
+        var handling = this.getStat(entity, RidingStat.SKILL)
 
         //convert it to delta time
         handling *= (cappedDeltaTime)
@@ -239,7 +240,7 @@ class JetAirController : RideController {
     override fun shouldRoll(entity: PokemonEntity) = true
 
     override fun rideFovMult(entity: PokemonEntity, driver: Player): Float {
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
         val minSpeed = getRuntime(entity).resolveDouble(minSpeed)
         val state = getState(entity, ::JetAirState)
 
@@ -256,12 +257,7 @@ class JetAirController : RideController {
         super.encode(buffer)
         buffer.writeString(gravity.toString())
         buffer.writeString(minSpeed.toString())
-        buffer.writeString(handlingExpr.toString())
         buffer.writeString(handlingYawExpr.toString())
-        buffer.writeString(topSpeedExpr.toString())
-        buffer.writeString(accelExpr.toString())
-        buffer.writeString(jumpExpr.toString())
-        buffer.writeString(staminaExpr.toString())
         buffer.writeString(infiniteStamina.toString())
         buffer.writeString(infiniteAltitude.toString())
     }
@@ -269,12 +265,7 @@ class JetAirController : RideController {
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         gravity = buffer.readString().asExpression()
         minSpeed = buffer.readString().asExpression()
-        handlingExpr = buffer.readString().asExpression()
         handlingYawExpr = buffer.readString().asExpression()
-        topSpeedExpr = buffer.readString().asExpression()
-        accelExpr = buffer.readString().asExpression()
-        jumpExpr = buffer.readString().asExpression()
-        staminaExpr = buffer.readString().asExpression()
         infiniteStamina = buffer.readString().asExpression()
         infiniteAltitude = buffer.readString().asExpression()
     }
@@ -288,9 +279,9 @@ class JetAirController : RideController {
     */
     fun calculateRideSpaceVel( entity: PokemonEntity, driver: Player, state: JetAirState){
 
-        val topSpeed = getRuntime(entity).resolveDouble(topSpeedExpr)
-        val accel = getRuntime(entity).resolveDouble(accelExpr)
-        val altitudeLimit = getRuntime(entity).resolveDouble(jumpExpr)
+        val topSpeed = this.getStat(entity, RidingStat.SPEED)
+        val accel = this.getStat(entity, RidingStat.ACCELERATION)
+        val altitudeLimit = this.getStat(entity, RidingStat.JUMP)
         val minSpeed = getRuntime(entity).resolveDouble(minSpeed)
         val speed = state.rideVel.length()
 

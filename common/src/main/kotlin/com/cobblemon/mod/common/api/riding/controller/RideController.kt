@@ -8,14 +8,18 @@
 
 package com.cobblemon.mod.common.api.riding.controller
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.riding.RidingState
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -53,6 +57,14 @@ interface RideController : Encodable, Decodable {
      * to evaluate things such as current velocity or block state of the entity.
      */
     val condition: (PokemonEntity) -> Boolean
+
+
+    /**
+     * Returns the evaluation of the current stat when mapped to the given molang expression
+     * that the controller implements. For composite controllers the active controller will
+     * be determined rather than it evaluating its own expression.
+     */
+    fun getStat(entity: PokemonEntity, stat: RidingStat): Double
 
     /**
      * Specifies the pose the ridden mount should be positioned in. This queries the pose provider using
@@ -111,7 +123,7 @@ interface RideController : Encodable, Decodable {
 
     fun useAngVelSmoothing(entity: PokemonEntity): Boolean = false
 
-    fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean = false
+    fun getActiveRidingAltPose(entity: PokemonEntity, driver: Player): RidingAltPose = RidingAltPose.NONE
 
     //If function is not overwritten by controllers then just perform the defualt
     //rolling function which is roll on mousex and pitch on mousey
