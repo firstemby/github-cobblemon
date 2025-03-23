@@ -497,7 +497,6 @@ object VaryingModelRepository {
         inbuilt("taillow", ::TaillowModel)
         inbuilt("swellow", ::SwellowModel)
         inbuilt("mudbray", ::MudbrayModel)
-        inbuilt("mudsdale", ::MudsdaleModel)
         inbuilt("comfey", ::ComfeyModel)
         inbuilt("tandemaus", ::TandemausModel)
         inbuilt("maushold", ::MausholdModel)

@@ -59,6 +59,64 @@
       }
     }
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "100-101",
+          "LIQUID": "5-20"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "100-101",
+          "LIQUID": "50-80"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "100-101",
+          "LIQUID": "20-40"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "100-101",
+          "LIQUID": "5-10"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "100-101",
+          "LIQUID": "25-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "WALK"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ],
+    "controller": {
+      "key": "cobblemon:land/generic"
+    }
+  },
   "drops": {
     "amount": 6,
     "entries": [

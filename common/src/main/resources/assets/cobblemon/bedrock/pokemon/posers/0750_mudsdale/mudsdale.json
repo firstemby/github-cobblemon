@@ -1,0 +1,60 @@
+{
+  "portraitScale": 1.5,
+  "portraitTranslation": [-1.0, 1.76, 0.0],
+  "profileScale": 0.5,
+  "profileTranslation": [0.0, 1.0, 0.0],
+  "rootBone": "mudsdale",
+  "animations": {
+    "cry": "q.bedrock_stateful('mudsdale', 'cry')"
+  },
+  "poses": {
+    "portrait": {
+      "poseTypes": ["PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mudsdale', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('mudsdale', 'blink')"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE"],
+      "isBattle": false,
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mudsdale', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('mudsdale', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": false,
+      "condition": "!q.riding_alt_pose('SPRINTING')",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mudsdale', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('mudsdale', 'blink')"]
+    },
+    "running": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": false,
+      "condition": "q.riding_alt_pose('SPRINTING')",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('mudsdale', 'ground_run')"
+      ],
+      "quirks": ["q.bedrock_quirk('mudsdale', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('mudsdale', 'sleep')"],
+      "quirks": ["q.bedrock_quirk('mudsdale', 'blink')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    }
+  }
+}
