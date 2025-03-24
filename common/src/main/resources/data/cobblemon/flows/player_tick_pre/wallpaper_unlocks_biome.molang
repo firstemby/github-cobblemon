@@ -11,4 +11,8 @@ t.pc.has_unlocked_wallpaper('cobblemon:dark_mode') == 0 ? {
     };
 };
 
-
+t.pc.has_unlocked_wallpaper('cobblemon:cave') == 0 ? {
+    q.player.biome.is_in('#c:is_cave') ? {
+        t.pc.unlock_wallpaper('cobblemon:cave', 1);
+    };
+};
