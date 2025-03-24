@@ -134,6 +134,11 @@ data class RidingManager(val entity: PokemonEntity) {
         return controller.jumpForce(entity, driver, jumpStrength)
     }
 
+    fun useRidingAltPose(entity: PokemonEntity, driver: Player): Boolean {
+        val controller = getController(entity) ?: return false
+        return controller.useRidingAltPose(entity, driver)
+    }
+
     /**
      * Used to supply the delta for the lerp() between velocity
      * vectors. Called inertia for now as the way it feels when

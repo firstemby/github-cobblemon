@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.npc
 
 import com.cobblemon.mod.common.client.entity.NPCClientDelegate
+import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.npc.PosableNPCModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
@@ -19,12 +20,15 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.phys.Vec3
 import kotlin.math.min
 
 class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEntityModel<NPCEntity>>(context, PosableNPCModel(), 0.5f) {
     override fun getTextureLocation(entity: NPCEntity): ResourceLocation {
         return VaryingModelRepository.getTexture(entity.npc.resourceIdentifier, (entity.delegate as NPCClientDelegate))
     }
+
+    private val heldItemRenderer = HeldItemRenderer()
 
     override fun render(
         entity: NPCEntity,
@@ -55,6 +59,20 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
         model.green = 1F
         model.blue = 1F
         model.resetLayerContext()
+
+        if (entity.deathTime < 1){
+            //Render Held Item
+            heldItemRenderer.renderOnEntity(
+                entity,
+                entity.mainHandItem,
+                model,
+                clientDelegate,
+                poseMatrix,
+                buffer,
+                packedLight,
+                Vec3(-90.0,0.0,0.0)
+            )
+        }
 
 //        if (this.shouldRenderLabel(entity)) {
 //            this.renderLabelIfPresent(entity, entity.displayName, poseMatrix, buffer, packedLight)

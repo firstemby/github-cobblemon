@@ -101,7 +101,7 @@ class PokemonRenderer(
         packedLight: Int
     ) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
-        shadowRadius = min((entity.boundingBox.maxX - entity.boundingBox.minX), (entity.boundingBox.maxZ) - (entity.boundingBox.minZ)).toFloat() / 1.5F * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+        shadowRadius = (min((entity.boundingBox.maxX - entity.boundingBox.minX), (entity.boundingBox.maxZ) - (entity.boundingBox.minZ)).toFloat() / 1.5F * (entity.delegate as PokemonClientDelegate).entityScaleModifier)/entity.scale
         model.posableModel = VaryingModelRepository.getPoser(entity.pokemon.species.resourceIdentifier, clientDelegate)
         model.posableModel.context = model.context
         model.setupEntityTypeContext(entity)
@@ -160,11 +160,13 @@ class PokemonRenderer(
         //Render Held Item
         heldItemRenderer.renderOnEntity(
             entity,
-            clientDelegate,
+            entity.shownItem,
             model.posableModel,
+            clientDelegate,
             poseMatrix,
             buffer,
-            packedLight
+            packedLight,
+            Vec3(0.0,-90.0,90.0)
         )
     }
 
@@ -222,8 +224,14 @@ class PokemonRenderer(
 
         val phaseTarget = clientDelegate.phaseTarget ?: return
         poseMatrix.pushPose()
-        var beamSourcePosition = if (phaseTarget is PosableEntity) {
-            (phaseTarget.delegate as PosableState).locatorStates["beam"]?.getOrigin() ?: phaseTarget.position()
+        var beamSourcePosition = if (phaseTarget is NPCEntity) {
+                val npcDelegate = phaseTarget.delegate as NPCClientDelegate
+                val baseScale = phaseTarget.baseScale?.toDouble() ?: 1.0
+
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                    ?: phaseTarget.position().add(0.0, (phaseTarget.bbHeight / 2.0) * baseScale, 0.0)
+                } else if (phaseTarget is PosableEntity) {
+                    (phaseTarget.delegate as PosableState).locatorStates["beam"]?.getOrigin() ?: phaseTarget.position()
         } else {
             if (phaseTarget.uuid == Minecraft.getInstance().player?.uuid) {
                 val lookVec = phaseTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
@@ -303,7 +311,11 @@ class PokemonRenderer(
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
             } else if (beamTarget is NPCEntity) {
-                (beamTarget.delegate as NPCClientDelegate).locatorStates["beam"]?.getOrigin() ?: beamTarget.position()
+                val npcDelegate = beamTarget.delegate as NPCClientDelegate
+                val baseScale = beamTarget.baseScale?.toDouble() ?: 1.0
+
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                    ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
             } else {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.7, 0.0).subtract(lookVec.scale(0.4))
