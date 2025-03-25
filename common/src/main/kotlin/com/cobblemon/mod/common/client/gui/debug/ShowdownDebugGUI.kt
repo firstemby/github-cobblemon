@@ -4,8 +4,11 @@ import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.debug.ShowdownDebugGUI.Companion.activeShowdownService
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.RequestShowdownInfoPacket
+import com.cobblemon.mod.common.net.messages.server.debug.showdown.ShowdownActionPacket
+import com.cobblemon.mod.common.net.messages.server.debug.showdown.ShowdownInputPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.mojang.blaze3d.platform.ClipboardManager
@@ -32,7 +35,8 @@ import java.util.*
 class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable {
 
     companion object {
-        private var activeShowdownService = cobblemonResource("embedded")
+        var activeShowdownService = cobblemonResource("embedded")
+            private set
     }
 
     private var showdownStatus: ShowdownStatus? = null
@@ -46,30 +50,38 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         }.bounds(10, 10, 200, 20).build()
     )
 
+    val startButton = addRenderableWidget(
+        Button.builder(Component.literal("Start")) { button ->
+            CobblemonNetwork.sendToServer(ShowdownActionPacket(
+                service = activeShowdownService,
+                action = ShowdownActionPacket.Action.START
+            ))
+        }.bounds(10, 40, 50, 20).build()
+    )
+
+    val stopButton = addRenderableWidget(
+        Button.builder(Component.literal("Stop")) { button ->
+            CobblemonNetwork.sendToServer(ShowdownActionPacket(
+                service = activeShowdownService,
+                action = ShowdownActionPacket.Action.STOP
+            ))
+        }.bounds(70, 40, 50, 20).build()
+    )
+
+    val restartButton = addRenderableWidget(
+        Button.builder(Component.literal("Restart")) { button ->
+            this.showdownStatus = ShowdownStatus.RESTARTING
+            CobblemonNetwork.sendToServer(ShowdownActionPacket(
+                service = activeShowdownService,
+                action = ShowdownActionPacket.Action.RESTART
+            ))
+        }.bounds(130, 40, 50, 20).build()
+    )
+
     val clipboardManager = ClipboardManager()
     var timer = Timer()
 
     init {
-        addRenderableWidget(
-            Button.builder(Component.literal("Start")) { button ->
-                println("Starting connection to showdown")
-            }.bounds(10, 40, 50, 20).build()
-        )
-
-        addRenderableWidget(
-            Button.builder(Component.literal("Stop")) { button ->
-                for (i in 1..10) {
-                    outputWindow.addNewEntry("test".text())
-                }
-            }.bounds(70, 40, 50, 20).build()
-        )
-
-        addRenderableWidget(
-            Button.builder(Component.literal("Restart")) { button ->
-                println("Restarting connection to showdown")
-            }.bounds(130, 40, 50, 20).build()
-        )
-
         addRenderableWidget(
             Button.builder(Component.literal("Start Queue")) { button ->
                 println("Queue button pressed")
@@ -89,7 +101,6 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
     }
 
     fun cycleActiveService() {
-        println("Cycling service")
         if (availableServices.size == 1) return
         val currentIndex = availableServices.indexOf(activeShowdownService)
         activeShowdownService = availableServices[(currentIndex + 1) % availableServices.size]
@@ -171,6 +182,23 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
             log.addAll(messages)
         }
         showdownStatus = status
+        when (status) {
+            ShowdownStatus.CONNECTED -> {
+                startButton.active = false
+                stopButton.active = true
+                restartButton.active = true
+            }
+            ShowdownStatus.DISCONNECTED -> {
+                startButton.active = true
+                stopButton.active = false
+                restartButton.active = false
+            }
+            ShowdownStatus.RESTARTING -> {
+                startButton.active = false
+                stopButton.active = false
+                restartButton.active = false
+            }
+        }
         this.availableServices = availableServices
     }
 
@@ -274,9 +302,13 @@ class ShowdownInputWidget : EditBox(
 ) {
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
         val result = super.keyPressed(keyCode, scanCode, modifiers)
-        if (keyCode == 257) {
-            println(this.value)
+        if (keyCode == 257 && this.value.isNotEmpty()) {
+            CobblemonNetwork.sendToServer(ShowdownInputPacket(
+                service = activeShowdownService,
+                input = this.value
+            ))
             deleteCharsToPos(0)
+            CobblemonNetwork.sendToServer(RequestShowdownInfoPacket(activeShowdownService))
         }
         return result
     }

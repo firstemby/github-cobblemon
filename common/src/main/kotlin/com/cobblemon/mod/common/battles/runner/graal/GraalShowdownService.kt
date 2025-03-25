@@ -68,13 +68,19 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
     override var status: ShowdownStatus = ShowdownStatus.DISCONNECTED
         private set
 
-    override fun openConnection() {
-        this._log.clear()
-        addToShowdownLog(source = "Minecraft", message = "Opening showdown connection")
+    override fun openConnection() = openConnection(false)
+
+    private fun openConnection(silent: Boolean) {
+        if (!silent) {
+            this._log.clear()
+            addToShowdownLog(source = "Minecraft", message = "Opening showdown connection")
+        }
         unbundler.attemptUnbundle()
         createContext()
         boot()
-        status = ShowdownStatus.CONNECTED
+        if (!silent) {
+            status = ShowdownStatus.CONNECTED
+        }
     }
 
     private fun createContext() {
@@ -133,10 +139,28 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
         """.trimIndent())
     }
 
-    override fun closeConnection() {
-        addToShowdownLog(source = "Minecraft", message = "Closing showdown connection")
+    override fun closeConnection() = closeConnection(false)
+
+    private fun closeConnection(silent: Boolean) {
+        if (!silent) {
+            addToShowdownLog(source = "Minecraft", message = "Closing showdown connection")
+        }
         context.close()
-        this.status = ShowdownStatus.DISCONNECTED
+        if (!silent) {
+            this.status = ShowdownStatus.DISCONNECTED
+        }
+    }
+
+    override fun restartConnection() {
+        this.status = ShowdownStatus.RESTARTING
+        try {
+            closeConnection(true)
+            openConnection(true)
+            this.status = ShowdownStatus.CONNECTED
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("Failed to restart showdown connection", e)
+            this.status = ShowdownStatus.DISCONNECTED
+        }
     }
 
     private fun boot() {
@@ -156,6 +180,15 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
 
     override fun send(battleId: UUID, messages: Array<String>) {
         sendToShowdown(battleId, messages)
+    }
+
+    override fun send(message: String) {
+        addToShowdownLog("Minecraft", message)
+        val regex = Regex("^\\(([^()]*)\\)")
+        val match = regex.find(message)
+        val battleId = match?.groups?.get(1)?.value ?: return
+        val endIndex = match.groups[1]!!.range.last + 1
+        sendToShowdown(UUID.fromString(battleId), arrayOf(message.substring(endIndex)))
     }
 
     override fun getAbilityIds(): JsonArray {

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.battles.runner
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.runner.graal.GraalShowdownService
+import com.cobblemon.mod.common.battles.runner.remote.UnionShowdownService
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.JsonArray
 import net.minecraft.resources.ResourceLocation
@@ -22,6 +23,7 @@ import java.util.UUID
  * To get an instance of the service, use the singleton provided via `ShowdownService.get()`.
  *
  * @since February 27th, 2023
+ * @author landonjw
  */
 interface ShowdownService {
     /**
@@ -51,6 +53,11 @@ interface ShowdownService {
     fun closeConnection()
 
     /**
+     * Restarts the connection to the showdown service.
+     */
+    fun restartConnection()
+
+    /**
      * Starts a battle in the showdown service.
      *
      * @param battle The battle to start.
@@ -65,6 +72,13 @@ interface ShowdownService {
      * @param messages The messages to send.
      */
     fun send(battleId: UUID, messages: Array<String>)
+
+    /**
+     * Sends a message to the showdown service.
+     *
+     * @param message The message to send.
+     */
+    fun send(message: String)
 
     /**
      * Retrieves the ability IDs from the showdown service.
@@ -104,7 +118,8 @@ interface ShowdownService {
 
     companion object {
         private val services = mutableMapOf<ResourceLocation, ShowdownService>(
-            cobblemonResource("embedded") to GraalShowdownService(cobblemonResource("embedded"))
+            cobblemonResource("embedded") to GraalShowdownService(cobblemonResource("embedded")),
+            cobblemonResource("union") to UnionShowdownService(cobblemonResource("union"))
         )
 
         /**
