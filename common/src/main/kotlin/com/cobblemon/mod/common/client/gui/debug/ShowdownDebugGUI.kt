@@ -167,7 +167,7 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         val log = showdownLogs[activeShowdownService]!!
         if (log.isNotEmpty()) {
             val lastMessage = log.last()
-            val lastMessageIndex = messages.indexOf(lastMessage)
+            val lastMessageIndex = messages.lastIndexOf(lastMessage)
             if (lastMessageIndex != -1 && lastMessageIndex != messages.size - 1) {
                 val messagesToAdd = messages.subList(lastMessageIndex + 1, messages.size)
                 messagesToAdd.forEach {
