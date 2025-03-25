@@ -138,19 +138,6 @@
       "variant": "level_up",
       "result": "goodra",
       "consumeHeldItem": false,
-      "learnableMoves": [],
-      "requirements": [
-        {
-          "variant": "level",
-          "minLevel": 50
-        }
-      ]
-    },
-    {
-      "id": "sliggoo_goodra",
-      "variant": "level_up",
-      "result": "goodra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aquatail"
       ],

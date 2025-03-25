@@ -1069,14 +1069,14 @@ open class Pokemon : ShowdownIdentifiable {
         this.experience = other.experience
         this.setFriendship(other.friendship)
         // Applied before current health for calcs to take place
-        other.ivs.doWithoutEmitting {
-            this.ivs.forEach {
-                other.ivs[it.key] = it.value
+        this.ivs.doWithoutEmitting {
+            other.ivs.forEach {
+                this.ivs[it.key] = it.value
             }
         }
-        other.evs.doWithoutEmitting {
-            this.evs.forEach {
-                other.evs[it.key] = it.value
+        this.evs.doWithoutEmitting {
+            other.evs.forEach {
+                this.evs[it.key] = it.value
             }
         }
         this.currentHealth = other.currentHealth
@@ -1105,7 +1105,9 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
+        this.features = other.features
         this.cosmeticItem = other.cosmeticItem
+        this.updateAspects()
         this.refreshOriginalTrainer()
         this.initialize()
         return this

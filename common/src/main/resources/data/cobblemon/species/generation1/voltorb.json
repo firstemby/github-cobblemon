@@ -291,7 +291,7 @@
           "id": "voltorb_electrodehisui",
           "variant": "item_interact",
           "result": "electrode hisuian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "chloroblast"
           ],

@@ -199,7 +199,7 @@
       "id": "nosepass_probopass",
       "variant": "item_interact",
       "result": "probopass",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "triattack"
       ],

@@ -232,7 +232,7 @@
       "id": "togetic_togekiss",
       "variant": "item_interact",
       "result": "togekiss",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "airslash"
       ],

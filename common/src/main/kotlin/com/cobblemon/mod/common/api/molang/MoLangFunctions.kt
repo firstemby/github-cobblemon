@@ -802,6 +802,7 @@ object MoLangFunctions {
             }
             map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
             map.put("is_pokemon") { DoubleValue.ONE }
+            map.put("is_holding_item") { DoubleValue(!pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).isEmpty) }
             map
         }
     )

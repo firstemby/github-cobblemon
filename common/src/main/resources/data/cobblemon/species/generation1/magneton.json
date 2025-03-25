@@ -188,7 +188,7 @@
       "id": "magneton_magnezone",
       "variant": "item_interact",
       "result": "magnezone",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"

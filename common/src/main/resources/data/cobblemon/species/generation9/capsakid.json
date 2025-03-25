@@ -123,7 +123,7 @@
       "id": "capsakid_scovillain",
       "variant": "item_interact",
       "result": "scovillain",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "spicyextract",
         "flamethrower"

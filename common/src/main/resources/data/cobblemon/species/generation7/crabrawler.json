@@ -169,7 +169,7 @@
       "id": "crabrawler_crabominable",
       "variant": "item_interact",
       "result": "crabominable",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "icepunch"
       ],

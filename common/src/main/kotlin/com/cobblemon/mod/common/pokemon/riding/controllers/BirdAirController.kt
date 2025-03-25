@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.riding.controller.RideController
@@ -22,7 +23,9 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
 import com.cobblemon.mod.common.util.*
 import net.minecraft.client.Minecraft
+import net.minecraft.client.Minecraft
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -35,6 +38,7 @@ class BirdAirController : RideController {
     override val poseProvider = PoseProvider(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) {
             val player = it.passengers.firstOrNull() as? Player ?: return@PoseOption false
+            it.deltaMovement.length() > 0.5 })
             it.deltaMovement.length() > 0.5 })
 
     override val condition: (PokemonEntity) -> Boolean = { true }
@@ -63,8 +67,10 @@ class BirdAirController : RideController {
     override fun speed(entity: PokemonEntity, driver: Player): Float {
 
         //Retrieve the current bird controller state and stats
+        //Retrieve the current bird controller state and stats
         val state = getState(entity, ::BirdAirState)
 
+        return state.rideVel.length().toFloat()
         return state.rideVel.length().toFloat()
     }
 
@@ -83,9 +89,18 @@ class BirdAirController : RideController {
         calculateRideSpaceVel(entity, driver, state)
 
         //Translate ride space velocity to world space velocity.
+        val state = getState(entity, ::BirdAirState)
+
+        //Perform ride velocity update
+        calculateRideSpaceVel(entity, driver, state)
+
+        //Translate ride space velocity to world space velocity.
         val rollable = driver as? Rollable
         if (rollable != null) {
             //Need to deadzone this when straight up or down
+
+            upForce += -1.0 * sin(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
+            forwardForce += cos(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
 
             upForce += -1.0 * sin(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
             forwardForce += cos(Math.toRadians(rollable.pitch.toDouble())) * state.rideVel.z
@@ -115,6 +130,7 @@ class BirdAirController : RideController {
     override fun angRollVel(entity: PokemonEntity, driver: Player, deltaTime: Double): Vec3 {
 
         val rollable = driver as? Rollable
+        val state = getState(entity, ::BirdAirState)
         val state = getState(entity, ::BirdAirState)
 
         //TODO: Tie in handling
@@ -160,7 +176,14 @@ class BirdAirController : RideController {
         val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
         val xInput = xMouseSmoother.getNewDeltaValue(xMouse * 0.1 * invertRoll, deltaTime * smoothingSpeed);
         val yInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1 * invertPitch, deltaTime * smoothingSpeed);
+        val xInput = xMouseSmoother.getNewDeltaValue(xMouse * 0.1 * invertRoll, deltaTime * smoothingSpeed);
+        val yInput = yMouseSmoother.getNewDeltaValue(yMouse * 0.1 * invertPitch, deltaTime * smoothingSpeed);
 
+        //limit rolling based on handling and current speed.
+        //modulated by speed so that when flapping idle in air you are ont wobbling around to look around
+        val rotMin = 15.0
+        var rollForce = xInput
+        val rotLimit = max(handling * normalizeVal(state.rideVel.length(), 0.0, topSpeed).pow(3), rotMin)
         //limit rolling based on handling and current speed.
         //modulated by speed so that when flapping idle in air you are ont wobbling around to look around
         val rotMin = 15.0
@@ -172,9 +195,14 @@ class BirdAirController : RideController {
         // that rotation limit
         if (abs(rollable.roll + rollForce) < rotLimit) {
             if (sign(rollForce) == sign(rollable.roll).toDouble()) {
+        if (abs(rollable.roll + rollForce) < rotLimit) {
+            if (sign(rollForce) == sign(rollable.roll).toDouble()) {
                 val d = abs(abs(rollable.roll) - rotLimit)
                 rollForce *= (d.pow(2)) / (rotLimit.pow(2))
+                rollForce *= (d.pow(2)) / (rotLimit.pow(2))
             }
+        } else if (sign(rollForce) == sign(rollable.roll).toDouble()) {
+            rollForce = 0.0
         } else if (sign(rollForce) == sign(rollable.roll).toDouble()) {
             rollForce = 0.0
         }
@@ -182,7 +210,11 @@ class BirdAirController : RideController {
         //Give the ability to yaw with x mouse input when at low speeds.
         val yawForce = xInput * ( 1.0 - normalizeVal(state.rideVel.length(), 0.0, topSpeed).pow(3))
 
+        //Give the ability to yaw with x mouse input when at low speeds.
+        val yawForce = xInput * ( 1.0 - normalizeVal(state.rideVel.length(), 0.0, topSpeed).pow(3))
+
         //yaw, pitch, roll
+        return Vec3(yawForce, yInput, rollForce)
         return Vec3(yawForce, yInput, rollForce)
     }
 
@@ -190,6 +222,14 @@ class BirdAirController : RideController {
         entity: PokemonEntity,
         driver: Player
     ): Boolean {
+        return false
+    }
+
+    override fun setRideBar(entity: PokemonEntity, driver: Player): Float {
+        //Retrieve stamina from state
+        val state = getState(entity, ::BirdAirState)
+
+        return (state.stamina / 1.0f)
         return false
     }
 

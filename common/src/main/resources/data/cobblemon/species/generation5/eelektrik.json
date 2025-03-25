@@ -155,7 +155,7 @@
       "id": "eelektrik_eelektross",
       "variant": "item_interact",
       "result": "eelektross",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"

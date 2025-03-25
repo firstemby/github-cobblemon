@@ -974,6 +974,7 @@ open class PokemonEntity(
         val scale = effects.mockEffect?.scale ?: (form.baseScale * pokemon.scaleModifier)
         var result = this.exposedForm.hitbox.scale(scale)
         result = result.withEyeHeight(this.exposedForm.eyeHeight(this) * result.height)
+        result = result.scale(this.scale)
         return result
     }
 
@@ -1325,7 +1326,7 @@ open class PokemonEntity(
                 }
             } else if (form.behaviour.moving.swim.canBreatheUnderwater && !form.behaviour.moving.swim.canWalkOnWater) {
                 // Use half hitbox height for swimmers
-                val halfHeight = form.hitbox.height * form.baseScale / 2.0
+                val halfHeight = getDimensions(this.pose).height / 2.0
                 for (i in 1..halfHeight.toInt()) {
                     blockPos = blockPos.below()
                     if (!this.level().isWaterAt(blockPos) || !this.level().getBlockState(blockPos).getCollisionShape(this.level(), blockPos).isEmpty) {

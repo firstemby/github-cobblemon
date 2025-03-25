@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -115,9 +116,10 @@ class ModelWidget(
         heldItemRenderer.renderOnModel(
             state.currentModel!!,
             heldItem?: ItemStack.EMPTY,
-            state.locatorStates,
+            state,
             matrices,
-            context.bufferSource()
+            context.bufferSource(),
+            Vec3(0.0,-90.0,-90.0)
         )
 
         matrices.popPose()

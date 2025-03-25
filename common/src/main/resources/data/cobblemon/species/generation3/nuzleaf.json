@@ -205,7 +205,7 @@
       "id": "nuzleaf_shiftry",
       "variant": "item_interact",
       "result": "shiftry",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "leaftornado",
         "leafblade"

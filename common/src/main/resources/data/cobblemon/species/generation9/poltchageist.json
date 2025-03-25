@@ -117,7 +117,7 @@
       "id": "poltchageist_sinistcha",
       "variant": "item_interact",
       "result": "sinistcha matcha_authenticity=unremarkable",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "matchagotcha"
       ],
@@ -147,7 +147,7 @@
           "id": "poltchageist_sinistchamasterpiece",
           "variant": "item_interact",
           "result": "sinistcha matcha_authenticity=masterpiece",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "matchagotcha"
           ],
