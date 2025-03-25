@@ -74,7 +74,8 @@ import net.minecraft.world.item.ItemStack
 open class PokemonBattle(
     val format: BattleFormat,
     val side1: BattleSide,
-    val side2: BattleSide
+    val side2: BattleSide,
+    val service: ShowdownService
 ) {
     /** Whether logging will be silenced for this battle. */
     var mute = true
@@ -225,7 +226,7 @@ open class PokemonBattle(
 
     fun writeShowdownAction(vararg messages: String) {
         log(messages.joinToString("\n"))
-        ShowdownService.get().send(battleId, messages.toList().toTypedArray())
+        service.send(battleId, messages.toList().toTypedArray())
     }
 
     fun turn(newTurnNumber: Int) {
@@ -378,7 +379,6 @@ open class PokemonBattle(
 
     fun dispatch(dispatcher: () -> DispatchResult) {
         dispatches.add(BattleDispatch { dispatcher() })
-
     }
 
     fun dispatchToFront(dispatcher: () -> DispatchResult) {

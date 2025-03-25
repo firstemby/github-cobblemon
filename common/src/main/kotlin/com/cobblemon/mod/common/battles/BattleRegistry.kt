@@ -176,7 +176,7 @@ object BattleRegistry {
         }
 
         // Compiles the request and sends it off
-        ShowdownService.get().startBattle(battle, messages.toTypedArray())
+        battle.service.startBattle(battle, messages.toTypedArray())
     }
 
     /**
@@ -186,6 +186,7 @@ object BattleRegistry {
      * @param side1 The first side for the battle.
      * @param side2 The second side for the battle.
      * @param canPreempt Whether the battle can be blocked by subscribers to [CobblemonEvents.BATTLE_STARTED_PRE].
+     * @param service The showdown service to use for the battle.
      *
      * NOTE: this does NOT validate the [battleFormat] or sides before launching Showdown.
      * This creates the battle and hands it off to Showdown - YOU WILL GET ISSUES IF THE BATTLE IS INVALID!
@@ -195,9 +196,10 @@ object BattleRegistry {
         battleFormat: BattleFormat,
         side1: BattleSide,
         side2: BattleSide,
-        canPreempt: Boolean = true
+        canPreempt: Boolean = true,
+        service: ShowdownService = ShowdownService.get()
     ): BattleStartResult {
-        val battle = PokemonBattle(battleFormat, side1, side2)
+        val battle = PokemonBattle(battleFormat, side1, side2, service)
         val start: () -> Unit = {
             battleMap[battle.battleId] = battle
             startShowdown(battle)

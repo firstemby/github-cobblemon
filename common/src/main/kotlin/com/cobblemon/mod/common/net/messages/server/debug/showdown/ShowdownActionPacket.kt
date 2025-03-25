@@ -44,6 +44,6 @@ class ShowdownActionPacket(val service: ResourceLocation, val action: Action) : 
      * Enum representing possible actions for the Showdown service.
      */
     enum class Action {
-        START, STOP, RESTART
+        START, STOP, RESTART, START_NPC_BATTLE
     }
 }

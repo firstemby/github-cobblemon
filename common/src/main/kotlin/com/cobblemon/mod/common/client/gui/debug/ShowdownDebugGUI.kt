@@ -78,17 +78,19 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
         }.bounds(130, 40, 50, 20).build()
     )
 
+    val startNPCBattleButton = addRenderableWidget(
+        Button.builder(Component.literal("Create NPC Battle")) { button ->
+            CobblemonNetwork.sendToServer(ShowdownActionPacket(
+                service = activeShowdownService,
+                action = ShowdownActionPacket.Action.START_NPC_BATTLE
+            ))
+        }.bounds(10, 70, 100, 20).build()
+    )
+
     val clipboardManager = ClipboardManager()
     var timer = Timer()
 
     init {
-        addRenderableWidget(
-            Button.builder(Component.literal("Start Queue")) { button ->
-                println("Queue button pressed")
-                button.message = Component.literal("Cancel Queue")
-            }.bounds(10, 70, 100, 20).build()
-        )
-
         addRenderableWidget(
             Button.builder(Component.literal("Copy to Clipboard")) Clipboard@{
                 val log = showdownLogs[activeShowdownService] ?: return@Clipboard
@@ -187,16 +189,19 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
                 startButton.active = false
                 stopButton.active = true
                 restartButton.active = true
+                startNPCBattleButton.active = true
             }
             ShowdownStatus.DISCONNECTED -> {
                 startButton.active = true
                 stopButton.active = false
                 restartButton.active = false
+                startNPCBattleButton.active = false
             }
             ShowdownStatus.RESTARTING -> {
                 startButton.active = false
                 stopButton.active = false
                 restartButton.active = false
+                startNPCBattleButton.active = false
             }
         }
         this.availableServices = availableServices

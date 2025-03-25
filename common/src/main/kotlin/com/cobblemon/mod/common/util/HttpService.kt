@@ -58,6 +58,7 @@ object HttpService {
                 connection.inputStream.use {
                     val bodyStr = readFromStream(it)
                     return when {
+                        T::class == Unit::class -> HttpResponse(error = null, body = null)
                         T::class == String::class -> HttpResponse(error = null, body = bodyStr as T)
                         else -> HttpResponse(error = null, body = gson.fromJson(bodyStr, T::class.java))
                     }

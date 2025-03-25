@@ -2,8 +2,17 @@ package com.cobblemon.mod.common.battles.runner.remote
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.npc.NPCClasses
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.battles.BattleBuilder
+import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.battles.runner.ShowdownStatus
+import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.util.HttpService
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.server
 import com.google.gson.JsonArray
 import net.minecraft.resources.ResourceLocation
 import java.net.URI
@@ -26,7 +35,8 @@ import java.util.concurrent.CompletionStage
 class UnionShowdownService(
     override val id: ResourceLocation,
     val host: String = "localhost",
-    val socketPort: Int = 8001
+    val httpPort: Int = 8003,
+    val socketPort: Int = 8002
 ) : ShowdownService {
 
     override var status: ShowdownStatus = ShowdownStatus.DISCONNECTED
@@ -60,6 +70,10 @@ class UnionShowdownService(
             .newWebSocketBuilder()
             .buildAsync(URI.create("ws://$host:$socketPort"), WebSocketListener(this))
             .join()
+        // TODO: See if this is needed
+        registerSpecies()
+        indicateSpeciesInitialized()
+        registerBagItems()
         if (!silent) {
             this.status = ShowdownStatus.CONNECTED
         }
@@ -107,7 +121,7 @@ class UnionShowdownService(
      * @param messages The initial messages for the battle.
      */
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
-        send(">start-battle ${battle.battleId}")
+        send("[${battle.battleId}]>start-battle")
         send(battle.battleId, messages)
     }
 
@@ -161,14 +175,24 @@ class UnionShowdownService(
      * Registers species in the showdown service.
      */
     override fun registerSpecies() {
-        TODO("Not yet implemented")
+        HttpService.post<Unit>(
+            url = "http://$host:$httpPort/Species",
+            body = PokemonSpecies.species.map { PokemonSpecies.ShowdownSpecies(it, null) }
+        )
     }
 
     /**
      * Registers bag items in the showdown service.
      */
     override fun registerBagItems() {
-        TODO("Not yet implemented")
+        HttpService.post<Unit>(
+            url = "http://$host:$httpPort/BagItems",
+            body = BagItems.bagItemsScripts.map { BagItem(it.key, it.value) }.toList()
+        )
+    }
+
+    override fun indicateSpeciesInitialized() {
+        HttpService.post<Unit>(url = "http://$host:$httpPort/InitializeDex")
     }
 
     /**
@@ -192,13 +216,29 @@ class UnionShowdownService(
      * @property service The UnionShowdownService instance.
      */
     class WebSocketListener(val service: UnionShowdownService) : WebSocket.Listener {
+        val builder = StringBuilder()
+
         override fun onOpen(webSocket: WebSocket) {
             service.addToShowdownLog(source = "Showdown", message = "Connected to server at ${service.host}:${service.socketPort}")
             super.onOpen(webSocket)
         }
 
         override fun onText(webSocket: WebSocket, data: CharSequence, last: Boolean): CompletionStage<*>? {
-            service.addToShowdownLog(source = "Showdown", message = "$data")
+            if (last) {
+                builder.append(data)
+                val message = builder.toString()
+                service.addToShowdownLog(source = "Showdown", message = message)
+                val battleIdRegex = Regex("^\\[([^]]+)]")
+                val match = battleIdRegex.find(message) ?: return null
+
+                val battleId = match.groupValues[1]
+                val instruction = message.replace("[$battleId]", "")
+                ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), instruction)
+                builder.clear()
+            }
+            else {
+                builder.append(data)
+            }
             return super.onText(webSocket, data, last)
         }
 
@@ -213,5 +253,7 @@ class UnionShowdownService(
             return super.onClose(webSocket, statusCode, reason)
         }
     }
+
+    private data class BagItem(val id: String, val script: String)
 
 }
