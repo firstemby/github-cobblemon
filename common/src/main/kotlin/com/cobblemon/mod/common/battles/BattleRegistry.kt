@@ -125,7 +125,7 @@ object BattleRegistry {
         return team.joinToString("]")
     }
 
-    private fun startShowdown(battle: PokemonBattle) {
+    private fun startShowdown(battle: PokemonBattle, sendMessages: Boolean = true) {
 
         // Build request message
         val messages = mutableListOf<String>()
@@ -176,7 +176,9 @@ object BattleRegistry {
         }
 
         // Compiles the request and sends it off
-        battle.service.startBattle(battle, messages.toTypedArray())
+        if (sendMessages) {
+            battle.service.startBattle(battle, messages.toTypedArray())
+        }
     }
 
     /**
@@ -197,12 +199,14 @@ object BattleRegistry {
         side1: BattleSide,
         side2: BattleSide,
         canPreempt: Boolean = true,
-        service: ShowdownService = ShowdownService.get()
+        service: ShowdownService = ShowdownService.get(),
+        battleId: UUID = UUID.randomUUID(),
+        sendMessages: Boolean = true
     ): BattleStartResult {
-        val battle = PokemonBattle(battleFormat, side1, side2, service)
+        val battle = PokemonBattle(battleFormat, side1, side2, service, battleId)
         val start: () -> Unit = {
             battleMap[battle.battleId] = battle
-            startShowdown(battle)
+            startShowdown(battle, sendMessages)
         }
 
         if (!canPreempt) start().also { return SuccessfulBattleStart(battle) }

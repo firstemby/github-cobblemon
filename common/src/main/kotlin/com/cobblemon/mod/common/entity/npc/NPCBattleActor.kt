@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.update
 import java.util.concurrent.CompletableFuture
 
-class NPCBattleActor(
+open class NPCBattleActor(
     val npc: NPCEntity,
     pokemonList: List<BattlePokemon>,
     val skill: Int

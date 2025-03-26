@@ -73,7 +73,7 @@ abstract class BattleActor(
     open fun isForPlayer(serverPlayerEntity: ServerPlayer) = serverPlayerEntity.uuid in getPlayerUUIDs()
     open fun isForPokemon(pokemonEntity: PokemonEntity) = activePokemon.any { it.battlePokemon?.effectedPokemon?.entity == pokemonEntity }
 
-  fun turn() {
+    open fun turn() {
         val request = request ?: return
         responses.clear()
         if(activePokemon.any { it.isAlive() }) {
@@ -90,7 +90,7 @@ abstract class BattleActor(
         }
     }
 
-    fun upkeep() {
+    open fun upkeep() {
         val request = request ?: return
         val forceSwitchPokemon = request.forceSwitch.mapIndexedNotNull { index, b -> if (b) activePokemon[index] else null }
         if (forceSwitchPokemon.isEmpty()) {
@@ -125,7 +125,7 @@ abstract class BattleActor(
         battle.checkForInputDispatch()
     }
 
-    fun writeShowdownResponse() {
+    open fun writeShowdownResponse() {
         val showdownMessages = mutableListOf<String>()
         var index = 0
         request!!.iterate(activePokemon) { activeBattlePokemon, showdownMoveSet, forceSwitch ->

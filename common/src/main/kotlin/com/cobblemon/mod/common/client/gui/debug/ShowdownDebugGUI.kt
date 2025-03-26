@@ -79,10 +79,10 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
     )
 
     val startNPCBattleButton = addRenderableWidget(
-        Button.builder(Component.literal("Create NPC Battle")) { button ->
+        Button.builder(Component.literal("Queue")) { button ->
             CobblemonNetwork.sendToServer(ShowdownActionPacket(
                 service = activeShowdownService,
-                action = ShowdownActionPacket.Action.START_NPC_BATTLE
+                action = ShowdownActionPacket.Action.QUEUE
             ))
         }.bounds(10, 70, 100, 20).build()
     )

@@ -15,10 +15,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
-import com.cobblemon.mod.common.api.battles.model.actor.ActorType
-import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
+import com.cobblemon.mod.common.api.battles.model.actor.*
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
@@ -75,7 +72,8 @@ open class PokemonBattle(
     val format: BattleFormat,
     val side1: BattleSide,
     val side2: BattleSide,
-    val service: ShowdownService
+    val service: ShowdownService = ShowdownService.get(),
+    val battleId: UUID = UUID.randomUUID()
 ) {
     /** Whether logging will be silenced for this battle. */
     var mute = true
@@ -109,8 +107,6 @@ open class PokemonBattle(
         get() = actors.flatMap { it.getPlayerUUIDs() }
     val players = playerUUIDs.mapNotNull { it.getPlayer() }
     val spectators = mutableSetOf<UUID>()
-
-    val battleId = UUID.randomUUID()
 
     val showdownMessages = mutableListOf<String>()
     val battleLog = mutableListOf<String>()
@@ -502,6 +498,7 @@ open class PokemonBattle(
     }
 
     fun checkForInputDispatch() {
+        actors.filter { it is UnionBattleActor }.forEach { it.mustChoose = false }
         if (checkForfeit()) return  // ignore actors that are still choosing, their choices don't matter anymore
         val readyToInput = (actors.any { !it.mustChoose && it.responses.isNotEmpty() } && actors.none { it.mustChoose })
         if (readyToInput && captureActions.isEmpty()) {

@@ -61,7 +61,8 @@ object BattleBuilder {
         cloneParties: Boolean = false,
         healFirst: Boolean = false,
         partyAccessor: (ServerPlayer) -> PartyStore = { it.party() },
-        service: ShowdownService = ShowdownService.get()
+        service: ShowdownService = ShowdownService.get(),
+        battleId: UUID = UUID.randomUUID()
     ): BattleStartResult {
 
         val adjustLevel = battleFormat.adjustLevel
@@ -119,7 +120,8 @@ object BattleBuilder {
                 battleFormat = battleFormat,
                 side1 = BattleSide(player1Actor),
                 side2 = BattleSide(player2Actor),
-                service = service
+                service = service,
+                battleId = battleId
             ).ifSuccessful {
                 it.battlePartyStores.addAll(battlePartyStores)
             }
@@ -136,7 +138,8 @@ object BattleBuilder {
         cloneParties: Boolean = false,
         healFirst: Boolean = false,
         partyAccessor: (ServerPlayer) -> PartyStore = { it.party() },
-        service: ShowdownService = ShowdownService.get()
+        service: ShowdownService = ShowdownService.get(),
+        battleId: UUID = UUID.randomUUID()
     ): BattleStartResult {
         val adjustLevel = battleFormat.adjustLevel
         val teams = players.mapIndexed { index, it ->
@@ -218,7 +221,8 @@ object BattleBuilder {
                 battleFormat = battleFormat,
                 side1 = BattleSide(playerActors[0], playerActors[1]),
                 side2 = BattleSide(playerActors[2], playerActors[3]),
-                service = service
+                service = service,
+                battleId = battleId
             ).ifSuccessful {
                 it.battlePartyStores.addAll(battlePartyStores)
             }
@@ -251,7 +255,8 @@ object BattleBuilder {
         healFirst: Boolean = false,
         fleeDistance: Float = Cobblemon.config.defaultFleeDistance,
         party: PartyStore = player.party(),
-        service: ShowdownService = ShowdownService.get()
+        service: ShowdownService = ShowdownService.get(),
+        battleId: UUID = UUID.randomUUID()
     ): BattleStartResult {
         val playerTeam = party.toBattleTeam(clone = cloneParties, healPokemon = healFirst, leadingPokemon = leadingPokemon).sortedBy { it.health <= 0 }
         val playerActor = PlayerBattleActor(player.uuid, playerTeam)
@@ -293,7 +298,8 @@ object BattleBuilder {
                 battleFormat = battleFormat,
                 side1 = BattleSide(playerActor),
                 side2 = BattleSide(wildActor),
-                service = service
+                service = service,
+                battleId = battleId
             ).ifSuccessful {
                 if (!cloneParties) {
                     pokemonEntity.battleId = it.battleId
@@ -324,7 +330,8 @@ object BattleBuilder {
         cloneParties: Boolean = false,
         healFirst: Boolean = false,
         party: PartyStore = player.party(),
-        service: ShowdownService = ShowdownService.get()
+        service: ShowdownService = ShowdownService.get(),
+        battleId: UUID = UUID.randomUUID()
     ): BattleStartResult {
         val playerTeam = party.toBattleTeam(clone = cloneParties, healPokemon = healFirst, leadingPokemon = leadingPokemon)
         val playerActor = PlayerBattleActor(player.uuid, playerTeam)
@@ -372,7 +379,8 @@ object BattleBuilder {
                 battleFormat = battleFormat,
                 side1 = BattleSide(playerActor),
                 side2 = BattleSide(npcActor),
-                service = service
+                service = service,
+                battleId = battleId
             ).ifSuccessful { battle ->
                 npcEntity.entityData.update(NPCEntity.BATTLE_IDS) { it + battle.battleId }
             }

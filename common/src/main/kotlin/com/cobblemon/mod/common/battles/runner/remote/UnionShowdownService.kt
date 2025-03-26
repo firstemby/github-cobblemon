@@ -2,18 +2,22 @@ package com.cobblemon.mod.common.battles.runner.remote
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.battles.model.actor.UnionBattleActor
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.battles.BagItems
-import com.cobblemon.mod.common.battles.BattleBuilder
-import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.api.storage.party.PartyStore
+import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.HttpService
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import net.minecraft.resources.ResourceLocation
 import java.net.URI
 import java.net.http.HttpClient
@@ -223,17 +227,114 @@ class UnionShowdownService(
             super.onOpen(webSocket)
         }
 
+        fun startBattle(instruction: String) {
+            val arguments = instruction.replace("|start-battle|", "").split("|")
+            if (arguments.size != 5) return
+            val battleId = UUID.fromString(arguments[0])
+            val playerIdA = UUID.fromString(arguments[1])
+            val playerIdB = UUID.fromString(arguments[2])
+            val teamA = JsonParser.parseString(arguments[3]).asJsonObject
+            val teamB = JsonParser.parseString(arguments[4]).asJsonObject
+
+            val playerA = server()?.playerList?.getPlayer(playerIdA)
+            val playerB = server()?.playerList?.getPlayer(playerIdB)
+
+            if (playerA == null && playerB == null) {
+                Cobblemon.LOGGER.warn("Tried to start battle with no players present on server")
+                return
+            }
+
+            val registryAccess = server()?.registryAccess() ?: return
+
+            val playerAParty = PartyStore(UUID.randomUUID()).loadFromJSON(teamA, registryAccess)
+            val playerBParty = PartyStore(UUID.randomUUID()).loadFromJSON(teamB, registryAccess)
+            val playerATeam = toShowdownBattleTeam(playerAParty.toList()).onEach {
+                it.effectedPokemon.level = 100
+                it.effectedPokemon.heal()
+            }
+            val playerBTeam = toShowdownBattleTeam(playerBParty.toList()).onEach {
+                it.effectedPokemon.level = 100
+                it.effectedPokemon.heal()
+            }
+
+            if (playerA != null && playerB != null) {
+                val playerActorA = PlayerBattleActor(playerIdA, playerATeam)
+                val playerActorB = PlayerBattleActor(playerIdB, playerBTeam)
+                BattleRegistry.startBattle(
+                    battleId = battleId,
+                    battleFormat = BattleFormat.GEN_9_SINGLES,
+                    side1 = BattleSide(playerActorA),
+                    side2 = BattleSide(playerActorB),
+                    sendMessages = false,
+                    service = service
+                )
+            }
+            else if (playerA != null && playerB == null) {
+                val playerActorA = PlayerBattleActor(playerIdA, playerATeam)
+                val npc = NPCEntity(playerA.level())
+                npc.moveTo(playerA.x + 5, playerA.y, playerA.z, playerA.yRot, playerA.xRot)
+                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("ai_test"))!!
+                npc.initialize(1)
+                npc.uuid = playerIdB
+                playerA.level().addFreshEntity(npc)
+                val playerActorB = UnionBattleActor(npc, playerBTeam)
+                BattleRegistry.startBattle(
+                    battleId = battleId,
+                    battleFormat = BattleFormat.GEN_9_SINGLES,
+                    side1 = BattleSide(playerActorA),
+                    side2 = BattleSide(playerActorB),
+                    sendMessages = false,
+                    service = service
+                )
+            }
+            else {
+                val npc = NPCEntity(playerB!!.level())
+                npc.moveTo(playerB.x + 5, playerB.y, playerB.z, playerB.yRot, playerB.xRot)
+                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("ai_test"))!!
+                npc.initialize(1)
+                npc.uuid = playerIdA
+                playerB.level().addFreshEntity(npc)
+                val playerActorA = UnionBattleActor(npc, playerATeam)
+                val playerActorB = PlayerBattleActor(playerIdB, playerBTeam)
+                BattleRegistry.startBattle(
+                    battleId = battleId,
+                    battleFormat = BattleFormat.GEN_9_SINGLES,
+                    side1 = BattleSide(playerActorA),
+                    side2 = BattleSide(playerActorB),
+                    sendMessages = false,
+                    service = service
+                )
+            }
+        }
+
+        fun toShowdownBattleTeam(team: List<Pokemon>): List<BattlePokemon> {
+            return team.map { pokemon ->
+                BattlePokemon(
+                    originalPokemon = pokemon,
+                    effectedPokemon = pokemon.clone(newUUID = false),
+                    postBattleEntityOperation = { entity -> entity.discard() }
+                )
+            }
+        }
+
         override fun onText(webSocket: WebSocket, data: CharSequence, last: Boolean): CompletionStage<*>? {
             if (last) {
                 builder.append(data)
                 val message = builder.toString()
                 service.addToShowdownLog(source = "Showdown", message = message)
-                val battleIdRegex = Regex("^\\[([^]]+)]")
-                val match = battleIdRegex.find(message) ?: return null
 
-                val battleId = match.groupValues[1]
-                val instruction = message.replace("[$battleId]", "")
-                ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), instruction)
+                if (data.startsWith("|start-battle|")) {
+                    startBattle(data.toString())
+                }
+                else {
+                    val battleIdRegex = Regex("^\\[([^]]+)]")
+                    val match = battleIdRegex.find(message) ?: return null
+
+                    val battleId = match.groupValues[1]
+                    val instruction = message.replace("[$battleId]", "")
+                    ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), instruction)
+                }
+
                 builder.clear()
             }
             else {

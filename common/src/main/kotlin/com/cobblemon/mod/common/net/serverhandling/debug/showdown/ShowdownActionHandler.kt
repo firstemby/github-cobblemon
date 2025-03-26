@@ -2,12 +2,12 @@ package com.cobblemon.mod.common.net.serverhandling.debug.showdown
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
-import com.cobblemon.mod.common.api.npc.NPCClasses
-import com.cobblemon.mod.common.battles.BattleBuilder
+import com.cobblemon.mod.common.battles.BattleRegistry.packTeam
+import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
-import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.ShowdownActionPacket
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.party
+import com.google.gson.JsonObject
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
@@ -37,17 +37,15 @@ object ShowdownActionHandler : ServerNetworkPacketHandler<ShowdownActionPacket> 
             ShowdownActionPacket.Action.START -> service.openConnection()
             ShowdownActionPacket.Action.STOP -> service.closeConnection()
             ShowdownActionPacket.Action.RESTART -> service.restartConnection()
-            ShowdownActionPacket.Action.START_NPC_BATTLE -> {
-                val npc = NPCEntity(player.level())
-                npc.moveTo(player.x + 5, player.y, player.z, player.yRot, player.xRot)
-                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("ai_test"))!!
-                npc.initialize(1)
-                player.level().addFreshEntity(npc)
-                BattleBuilder.pvn(
-                    player = player,
-                    npcEntity = npc,
-                    service = service
-                )
+            ShowdownActionPacket.Action.QUEUE -> {
+                val cobblemonTeam = player.party().saveToJSON(JsonObject(), player.registryAccess())
+                val showdownTeam = player.party().map { BattlePokemon(it, it.clone(false)) { entity -> entity.discard() } }
+                showdownTeam.forEach {
+                    it.effectedPokemon.level = 100
+                    it.effectedPokemon.heal()
+                }
+                val showdownTeamStr = showdownTeam.packTeam()
+                service.send(">queue-battle ${player.uuid} $cobblemonTeam@|@$showdownTeamStr")
             }
         }
     }
