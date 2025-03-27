@@ -168,7 +168,7 @@
       "id": "nidorino_nidoking",
       "variant": "item_interact",
       "result": "nidoking",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "megahorn"
       ],

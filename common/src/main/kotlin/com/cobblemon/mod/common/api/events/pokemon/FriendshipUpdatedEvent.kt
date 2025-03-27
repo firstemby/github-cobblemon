@@ -20,8 +20,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 data class FriendshipUpdatedEvent(
     val pokemon: Pokemon,
     val newFriendshipInitial: Int
-)
-{
+) {
     var newFriendship: Int = newFriendshipInitial
         set(value) {
             field = value.coerceIn(0, Cobblemon.config.maxPokemonFriendship)

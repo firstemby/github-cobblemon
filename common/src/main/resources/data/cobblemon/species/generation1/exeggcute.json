@@ -177,15 +177,9 @@
       "id": "exeggcute_exeggutor",
       "variant": "item_interact",
       "result": "exeggutor",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "stomp"
-      ],
-      "requirements": [
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
-        }
       ],
       "requiredContext": "cobblemon:leaf_stone"
     },
@@ -193,7 +187,7 @@
       "id": "exeggcute_exeggutoralola",
       "variant": "item_interact",
       "result": "exeggutor alolan",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "dragonhammer"
       ],
@@ -201,10 +195,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_kantobiome"
         }
       ],
       "requiredContext": "cobblemon:leaf_stone"
@@ -235,15 +225,11 @@
           "id": "exeggcute_exeggutor",
           "variant": "item_interact",
           "result": "exeggutor",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "stomp"
           ],
           "requirements": [
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
-            },
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/exeggcute_kantobiome"
@@ -255,15 +241,9 @@
           "id": "exeggcute_exeggutoralola",
           "variant": "item_interact",
           "result": "exeggutor alolan",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "dragonhammer"
-          ],
-          "requirements": [
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_kantobiome"
-            }
           ],
           "requiredContext": "cobblemon:leaf_stone"
         }

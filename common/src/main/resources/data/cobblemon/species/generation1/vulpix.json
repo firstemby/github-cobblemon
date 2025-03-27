@@ -185,7 +185,7 @@
       "id": "vulpix_ninetales",
       "variant": "item_interact",
       "result": "ninetales",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:fire_stone"
@@ -339,7 +339,7 @@
           "id": "vulpix_ninetalesalola",
           "variant": "item_interact",
           "result": "ninetales alolan",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "dazzlinggleam"
           ],

@@ -8,13 +8,11 @@
 
 package com.cobblemon.mod.common.api.storage.player.adapter
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.storage.player.InstancedPlayerData
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.FileReader
-import java.io.PrintWriter
 import java.util.UUID
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
@@ -30,10 +28,11 @@ abstract class JsonBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     override fun save(playerData: T) {
         val fileTmp = filePath(playerData.uuid, TEMPORARY_FILE_EXTENSION)
         fileTmp.parentFile.mkdirs()
-        fileTmp.printWriter().use { pw ->
-            pw.write(gson.toJson(playerData))
+        val json = gson.toJson(playerData)
+        Cobblemon.playerDataManager.saveExecutor.execute {
+            fileTmp.printWriter().use { pw -> pw.write(json) }
+            postSaveFileMoving(playerData.uuid)
         }
-        postSaveFileMoving(playerData)
     }
 
     override fun load(uuid: UUID): T {

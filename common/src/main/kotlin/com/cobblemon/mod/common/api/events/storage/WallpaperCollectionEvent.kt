@@ -22,5 +22,5 @@ import net.minecraft.server.level.ServerPlayer
  */
 data class WallpaperCollectionEvent(
     val player: ServerPlayer,
-    val wallpapers: MutableList<ResourceLocation>
+    val wallpapers: MutableSet<ResourceLocation>
 )

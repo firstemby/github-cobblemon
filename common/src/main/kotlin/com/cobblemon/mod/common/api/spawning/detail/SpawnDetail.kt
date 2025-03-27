@@ -23,6 +23,9 @@ import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 
 /**
  * A spawnable unit in the Best Spawner API. This is extended for any kind of entity
@@ -56,6 +59,14 @@ abstract class SpawnDetail : ModDependant {
 
     var labels = mutableListOf<String>()
 
+    /**
+     * This is calculated when the server starts. It is a set of all biome identifiers in which this spawn
+     * is possible. It is used as part of the [com.cobblemon.mod.common.api.spawning.condition.BiomePrecalculation].
+     */
+    @Transient
+    val validBiomes = mutableSetOf<ResourceLocation>()
+
+    @Transient
     val struct: QueryStruct = queryStructOf(
         "weight" to { DoubleValue(weight) },
         "percentage" to { DoubleValue(percentage) },
@@ -73,6 +84,23 @@ abstract class SpawnDetail : ModDependant {
     open fun autoLabel() {}
 
     open fun getName() = displayName?.asTranslated() ?: id.text()
+
+    open fun onServerLoad(server: MinecraftServer) {
+        val biomeRegistry = server.registryAccess().registryOrThrow(Registries.BIOME)
+        validBiomes.clear()
+
+        // Calculate in advance what biomes of this world the spawn detail is valid for.
+        biomeRegistry.holders().forEach { holder ->
+            val key = holder.unwrapKey().orElse(null) ?: return@forEach
+            if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
+                if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
+                    if (compositeCondition?.isBiomeValid(holder) != false) {
+                        validBiomes.add(key.location())
+                    }
+                }
+            }
+        }
+    }
 
     open fun isSatisfiedBy(ctx: SpawningContext): Boolean {
         if (!ctx.preFilter(this)) {

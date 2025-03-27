@@ -117,3 +117,49 @@ Example brain preset (`uses_healing_machine.json`):
   }
 ]
 ```
+
+### add_variables
+The `add_variables` type adds some number of MoLang variables to the entity that can be configured in-game or left with defaults.
+- `variables`: A list of objects, each representing a variable that can be configured.
+
+Each variable has the following properties:
+- `variableName`: The name of the variable. This is the name that will be accessible from MoLang scripts.
+- `defaultValue`: The default value of the variable. This is a MoLang expression that will be used if the variable is not set.
+- `displayName`: The display name of the variable. This is used in the UI to label the variable. This can be a translation key.
+- `description`: A description of the variable. This is used in the UI to describe what the variable does. This can be a translation key.
+- `type`: The type of the variable. This can be `TEXT`, `NUMBER`, or `BOOLEAN`.
+
+Example:
+```json
+{
+  "type": "add_variables",
+  "variables": [
+    {
+      "variableName": "can_heal_using_machine",
+      "defaultValue": "false",
+      "displayName": "Can Use Healing Machine",
+      "description": "Whether or not the entity can use a healing machine.",
+      "type": "BOOLEAN"
+    }
+  ]
+}
+```
+
+### set_variables
+The `set_variables` type sets some values for pre-established variables. This is useful in cases where a preset has defined a variable
+but it's locked in by a specific entity using that preset. This strongly forces the variable to a specific value. In future this
+probably should deregister the variable so that the client cannot edit them once they've been forced, as currently that will
+be possible yet the value will get repeatedly overwritten.
+
+The values inside the variables map can be MoLang expressions (with `q.entity` as the entity) or simple JSON primitives.
+
+Example:
+```json
+{
+  "type": "set_variables",
+  "variables": {
+    "aggressive": true,
+    "attack_range": "10"
+  }
+}
+```

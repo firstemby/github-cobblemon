@@ -166,7 +166,7 @@ open class MoveTemplate(
         // TODO: Handle Liquid Voice: need to know what moves have the sound flag
         // TODO: Handle weatherball, naturalgift, judgement, technoblast, terrainpulse, and terrablast
         if (this.elementalType == ElementalTypes.NORMAL) {
-            if( this.damageCategory != DamageCategories.STATUS) {
+            if (this.damageCategory != DamageCategories.STATUS) {
                 return when (pokemon.ability.name) {
                     "pixilate" -> ElementalTypes.FAIRY
                     "aerilate" -> ElementalTypes.FLYING

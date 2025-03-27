@@ -16,14 +16,32 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
+import java.util.UUID
+import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.LivingEntity
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
+
+    /*
+     * When a memory doesn't have a codec provided, it's because it doesn't
+     * get serialized during relogs. This makes sense for things like battles which
+     * do not survive a relog therefore any memory of it should be temporary.
+     */
 
     val BATTLING_POKEMON = register("battling_pokemon", ListCodec(UUIDUtil.CODEC, 0, 31))
     val NPC_BATTLING = register("npc_battling", PrimitiveCodec.BOOL)
     val DIALOGUES = register<List<ActiveDialogue>>("npc_dialogues")
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
+    val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
+    val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
+    val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)
+    val POKEMON_BATTLE = register<UUID>("pokemon_battle")
+    val PATH_COOLDOWN = register<Boolean>("path_cooldown")
+    val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
+    val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
+    val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
+    val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

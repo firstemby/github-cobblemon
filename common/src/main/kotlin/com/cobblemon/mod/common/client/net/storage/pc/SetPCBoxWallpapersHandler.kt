@@ -15,6 +15,6 @@ import net.minecraft.client.Minecraft
 
 object SetPCBoxWallpapersHandler : ClientNetworkPacketHandler<SetPCBoxWallpapersPacket> {
     override fun handle(packet: SetPCBoxWallpapersPacket, client: Minecraft) {
-        PCBoxWallpaperRepository.wallpapers = packet.wallpapers
+        PCBoxWallpaperRepository.availableWallpapers = packet.wallpapers.toMutableSet()
     }
 }

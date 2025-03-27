@@ -57,7 +57,8 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "canSeeSky": false
     }
   },
   "drops": {

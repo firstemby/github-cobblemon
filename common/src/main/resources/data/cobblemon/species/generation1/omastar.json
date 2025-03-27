@@ -186,5 +186,26 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "omanyte",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "30-60"
+      },
+      "ACCELERATION": {
+        "ranges": "50-100"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "50-90"
+      }
+    },
+    "seats": [],
+    "controller": null
+  }
 }

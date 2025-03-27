@@ -409,7 +409,7 @@
           "id": "slowpoke_slowbrogalar",
           "variant": "item_interact",
           "result": "slowbro galarian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "shellsidearm"
           ],
@@ -420,7 +420,7 @@
           "id": "slowpoke_slowkinggalar",
           "variant": "item_interact",
           "result": "slowking galarian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "eeriespell"
           ],

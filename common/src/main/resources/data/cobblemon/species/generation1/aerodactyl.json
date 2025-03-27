@@ -58,12 +58,14 @@
       "landController": {
         "key": "cobblemon:land/generic",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
       },
       "flightController": {
-        "key": "cobblemon:air/helicopter",
-        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
-        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)"
+        "key": "cobblemon:air/bird"
       }
     },
     "seats": [
@@ -125,7 +127,39 @@
           }
         ]
       }
-    ]
+    ],
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "5-10",
+          "AIR": "40-80"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "80-100",
+          "AIR": "35-70"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "35-70",
+          "AIR": "50-100"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "35-70"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-85",
+          "AIR": "40-85"
+        }
+      }
+    }
   },
   "behaviour": {
     "moving": {
@@ -315,7 +349,51 @@
       "baseExperienceYield": 215,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "5-10",
+              "AIR": "45-90"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "80-100",
+              "AIR": "40-80"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "35-70",
+              "AIR": "50-100"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "25-50",
+              "AIR": "40-80"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "40-85",
+              "AIR": "45-90"
+            }
+          }
+        },
+        "seats": [],
+        "controller": {
+          "key": "cobblemon:composite/run_up_to_flight",
+          "flightController": {
+            "key": "cobblemon:air/bird"
+          },
+          "landController": {
+            "key": "cobblemon:land/generic"
+          }
+        }
+      }
     }
   ]
 }

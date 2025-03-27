@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.api.riding
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinitions
-import com.cobblemon.mod.common.util.adapters.riding.RideControllerAdapter
+import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
+import com.cobblemon.mod.common.util.adapters.RideControllerAdapter
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.readIdentifier
@@ -21,16 +21,16 @@ import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RidingProperties(
-    val stats: Map<RidingStat, RidingStatDefinitions> = mapOf(),
+    val stats: Map<RidingStat, RidingStatDefinition> = mapOf(),
     val seats: List<Seat> = listOf(),
     val conditions: List<Expression> = listOf(),
     val controller: RideController? = null
 ) {
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {
-            val stats: Map<RidingStat, RidingStatDefinitions> = buffer.readMap(
+            val stats: Map<RidingStat, RidingStatDefinition> = buffer.readMap(
                 { buffer.readEnum<RidingStat>(RidingStat::class.java) },
-                { RidingStatDefinitions.decode(buffer) }
+                { RidingStatDefinition.decode(buffer) }
             )
             val seats: List<Seat> = buffer.readList { _ -> Seat.decode(buffer) }
             val conditions = buffer.readList { buffer.readString().asExpression() }

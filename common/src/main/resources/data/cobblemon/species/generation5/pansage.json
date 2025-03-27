@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 511,
   "name": "Pansage",
   "primaryType": "grass",
@@ -40,12 +41,13 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.4,
     "fixed": false
   },
+  "standingEyeHeight": 0.6,
   "drops": {
     "amount": 3,
     "entries": [
@@ -176,7 +178,7 @@
       "id": "pansage_simisage",
       "variant": "item_interact",
       "result": "simisage",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:leaf_stone"

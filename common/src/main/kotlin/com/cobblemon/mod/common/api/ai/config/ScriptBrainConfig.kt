@@ -15,8 +15,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.ai.ActivityConfigurationContext
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.util.activityRegistry
@@ -33,10 +35,11 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 class ScriptBrainConfig : BrainConfig {
     val condition = "true".asExpressionLike()
     val script = cobblemonResource("dummy")
+    override fun getVariables(entity: LivingEntity) = mutableListOf<MoLangConfigVariable>()
 
     override fun configure(entity: LivingEntity, context: BrainConfigurationContext) {
         val runtime = MoLangRuntime().setup()
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!runtime.resolveBoolean(condition)) return
 
         val struct = createBrainStruct(entity, context)
@@ -50,7 +53,7 @@ class ScriptBrainConfig : BrainConfig {
 
     fun createBrainStruct(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): QueryStruct {
         return QueryStruct(hashMapOf()).addStandardFunctions()
-            .addFunction("entity") { (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()) }
+            .addFunction("entity") { entity.asMostSpecificMoLangValue() }
             .addFunction("create_activity") { params ->
                 val name = params.getString(0).asIdentifierDefaultingNamespace()
                 val activity = entity.level().activityRegistry.get(name) ?: return@addFunction run {

@@ -10,34 +10,20 @@ package com.cobblemon.mod.common.net.messages.server.storage.pc
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.net.UnsplittablePacket
-import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readSizedInt
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeSizedInt
-import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-open class PCBoxWallpapersPacket internal constructor(val wallpapers: List<ResourceLocation>) : NetworkPacket<PCBoxWallpapersPacket>, UnsplittablePacket {
+open class PCBoxWallpapersPacket internal constructor(val wallpapers: Set<ResourceLocation>) : NetworkPacket<PCBoxWallpapersPacket>, UnsplittablePacket {
     override val id = ID
-
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeSizedInt(IntSize.INT, wallpapers.size)
-        for (wallpaper in wallpapers) {
-            buffer.writeString(wallpaper.toString())
-        }
-    }
 
     companion object {
         val ID = cobblemonResource("pc_box_wallpapers")
-        fun decode(buffer: RegistryFriendlyByteBuf): PCBoxWallpapersPacket {
-            val wallpapers = mutableListOf<ResourceLocation>()
-            val size = buffer.readSizedInt(IntSize.INT)
-            repeat(size) {
-                wallpapers.add(ResourceLocation.parse(buffer.readString()))
-            }
-            return PCBoxWallpapersPacket(wallpapers)
-        }
+        fun decode(buffer: RegistryFriendlyByteBuf): PCBoxWallpapersPacket =
+            PCBoxWallpapersPacket(buffer.readList { reader -> reader.readResourceLocation() }.toSet())
+    }
+
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeCollection(wallpapers) { writer, value -> writer.writeResourceLocation(value) }
     }
 }

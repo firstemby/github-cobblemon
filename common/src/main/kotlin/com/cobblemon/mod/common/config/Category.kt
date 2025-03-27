@@ -20,5 +20,6 @@ enum class Category(val lang: String) {
     Starter("starter"),
     Interface("interface"),
     Breeding("breeding"),
+    Riding("riding"),
     Debug("debug"),
 }

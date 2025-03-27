@@ -188,7 +188,83 @@
       "baseExperienceYield": 290,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "30-80"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "10-100",
+              "AIR": "25-60"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "30-60"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "25-50"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "20-40",
+              "AIR": "25-60"
+            }
+          }
+        },
+        "seats": [],
+        "controller": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "30-75"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "5-100",
+          "AIR": "25-60"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "30-60"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "25-50"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "25-60"
+        }
+      }
+    },
+    "seats": [],
+    "controller": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

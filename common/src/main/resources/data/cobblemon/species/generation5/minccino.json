@@ -166,7 +166,7 @@
       "id": "minccino_cinccino",
       "variant": "item_interact",
       "result": "cinccino",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "tailslap"
       ],

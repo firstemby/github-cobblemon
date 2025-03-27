@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.entity.ai
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig.Companion.runtime
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.resolveFloat
@@ -33,7 +34,7 @@ object MoveToAttackTargetTask {
             it.registered(MemoryModuleType.WALK_TARGET)
         ).apply(it) { attackTarget, walkTarget ->
             Trigger { world, entity, _ ->
-                runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
+                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 val speedMultiplier = runtime.resolveFloat(speedMultiplier)
                 val closeEnoughDistance = runtime.resolveInt(closeEnoughDistance)
 

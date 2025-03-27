@@ -13,7 +13,6 @@ import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.entity.PokemonSender
-import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -24,6 +23,7 @@ import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.npc.NPCClasses
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCBehaviourConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -82,7 +83,7 @@ import net.minecraft.world.entity.npc.Npc
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 
-class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, PosableEntity, PokemonSender, Schedulable {
+class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity {
     override val schedulingTracker = SchedulingTracker()
 
     override val struct = this.asMoLangValue()
@@ -99,7 +100,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
             if (valueChanged) {
                 customName = value.names.randomOrNull() ?: "NPC".text()
                 if (!level().isClientSide) {
-                    brain = makeBrain(brainDynamic ?: makeEmptyBrainDynamic())
+                    remakeBrain()
                 }
             }
 
@@ -158,8 +159,11 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     var interaction: NPCInteractConfiguration? = null
 
-    var data = VariableStruct()
-    var config = VariableStruct()
+    override var behavioursAreCustom = false
+    override val behaviours = mutableListOf<ResourceLocation>()
+    override val registeredVariables: MutableList<MoLangConfigVariable> = mutableListOf()
+    override var data = VariableStruct()
+    override var config = VariableStruct()
 
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
@@ -194,7 +198,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         refreshDimensions()
         navigation.setCanFloat(true)
         if (!world.isClientSide) {
-            brain = makeBrain(brainDynamic ?: makeEmptyBrainDynamic())
+            remakeBrain()
         }
     }
 
@@ -271,7 +275,11 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         )
     ) as Packet<ClientGamePacketListener>
 
-    override fun makeBrain(dynamic: Dynamic<*>): Brain<NPCEntity> {
+    override fun remakeBrain() {
+        makeBrain(this.brainDynamic ?: makeEmptyBrainDynamic())
+    }
+
+    override fun makeBrain(dynamic: Dynamic<*>): Brain<out NPCEntity> {
         this.brainDynamic = dynamic
         val brain = brainProvider().makeBrain(dynamic)
         this.brain = brain
@@ -279,6 +287,13 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
             NPCBrain.configure(this, npc, brain)
         }
         return brain
+    }
+
+    override fun updateBehaviours(brainPresets: Collection<ResourceLocation>) {
+        behaviours.clear()
+        behaviours.addAll(brainPresets)
+        behavioursAreCustom = true
+        remakeBrain()
     }
 
     override fun doHurtTarget(target: Entity): Boolean {
@@ -322,8 +337,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     override fun saveWithoutId(nbt: CompoundTag): CompoundTag {
         super.saveWithoutId(nbt)
-        nbt.put(DataKeys.NPC_DATA, MoLangFunctions.writeMoValueToNBT(data))
-        nbt.put(DataKeys.NPC_CONFIG, MoLangFunctions.writeMoValueToNBT(config))
+        saveScriptingToNBT(nbt)
         nbt.put(DataKeys.NPC_LEVEL, IntTag.valueOf(level))
         nbt.putBoolean(DataKeys.NPC_HIDE_NAME_TAG, hideNameTag)
         nbt.putString(DataKeys.NPC_CLASS, npc.id.toString())
@@ -393,8 +407,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         entityData.set(LEVEL, nbt.getInt(DataKeys.NPC_LEVEL).takeIf { it != 0 } ?: 1)
         entityData.set(HIDE_NAME_TAG, nbt.getBoolean(DataKeys.NPC_HIDE_NAME_TAG))
         super.load(nbt)
-        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(DataKeys.NPC_DATA)) as VariableStruct
-        config = if (nbt.contains(DataKeys.NPC_CONFIG)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(DataKeys.NPC_CONFIG)) as VariableStruct else VariableStruct()
+        loadScriptingFromNBT(nbt)
         appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         nbt.getCompound(DataKeys.NPC_INTERACTION).takeIf { !it.isEmpty }?.let { nbt ->
@@ -501,7 +514,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         variationAspects.clear()
         entityData.set(HIDE_NAME_TAG, npc.hideNameTag)
         entityData.set(LEVEL, level)
-        npc.config.forEach { it.applyDefault(this) }
+        remakeBrain()
         npc.variations.values.forEach { this.variationAspects.addAll(it.provideAspects(this)) }
         if (party == null || npc.party != null) {
             party = npc.party?.takeIf { it.isStatic }?.provide(this, level)
@@ -536,15 +549,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         return InteractionResult.SUCCESS
     }
 
-    fun playAnimation(animation: String, expressions: List<String> = emptyList()) {
-        val packet = PlayPosableAnimationPacket(
-            entityId = id,
-            animation = setOf(animation),
-            expressions = expressions
-        )
-        packet.sendToPlayers(level().players().filterIsInstance<ServerPlayer>().filter { it.distanceTo(this) < 256 })
-    }
-
     override fun recalling(pokemonEntity: PokemonEntity): CompletableFuture<Unit> {
         playAnimation(RECALL_ANIMATION, pokemonExpressions(pokemonEntity.pokemon))
         return delayedFuture(seconds = 1.6F)
@@ -557,10 +561,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     private fun pokemonExpressions(pokemon: Pokemon): List<String> {
         return listOf(
-            "v.actioning_pokemon_name=\"${pokemon.species.name}\";",
+            "v.actioning_pokemon_name=\'${pokemon.species.name}\';",
             "v.actioning_pokemon_level=${pokemon.level};",
-            "v.actioning_pokemon_ball=\"${pokemon.caughtBall.name}\";",
-            "v.actioning_pokemon_shiny=\"${pokemon.shiny}\";",
+            "v.actioning_pokemon_ball=\'${pokemon.caughtBall.name}\';",
+            "v.actioning_pokemon_shiny=\'${pokemon.shiny}\';",
         )
     }
 

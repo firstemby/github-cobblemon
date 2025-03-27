@@ -49,6 +49,7 @@ object DataKeys {
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
     const val POKEMON_TRADEABLE = "Tradeable"
     const val POKEMON_FORCED_ASPECTS = "ForcedAspects"
+    const val POKEMON_COSMETIC_ITEM = "CosmeticItem"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -99,6 +100,8 @@ object DataKeys {
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
+    const val STORE_UNLOCKED_WALLPAPERS = "UnlockedWallpapers"
+    const val STORE_UNSEEN_WALLPAPERS = "UnseenWallpapers"
 
     // Pokédex Keys
     const val POKEDEX_TYPE = "PokedexType"
@@ -218,8 +221,6 @@ object DataKeys {
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
     const val NPC_VARIATION_ASPECTS = "VariationAspects"
-    const val NPC_DATA = "Data"
-    const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
@@ -240,6 +241,11 @@ object DataKeys {
     const val NPC_HITBOX_HEIGHT = "Height"
     const val NPC_HITBOX_FIXED = "Fixed"
     const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
+
+    const val SCRIPTED_BRAIN_IS_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BRAIN_PRESETS = "BrainPresets"
+    const val SCRIPTED_DATA = "Data"
+    const val SCRIPTED_CONFIG = "Config"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

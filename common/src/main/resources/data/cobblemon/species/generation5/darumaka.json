@@ -295,7 +295,7 @@
           "id": "darumaka_darmanitangalar",
           "variant": "item_interact",
           "result": "darmanitan blazing_mode=standard galarian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "iciclecrash"
           ],

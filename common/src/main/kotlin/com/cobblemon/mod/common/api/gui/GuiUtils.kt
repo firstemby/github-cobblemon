@@ -37,6 +37,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
 import org.joml.Matrix4f
 import org.joml.Vector3f
+import org.lwjgl.opengl.GL30
+import java.nio.ByteBuffer
 
 @JvmOverloads
 fun blitk(
@@ -364,4 +366,26 @@ fun renderSprite(matrixStack: PoseStack, sprite: ResourceLocation) {
     buffer.addVertex(matrix, 2f, 2f, 0.0f).setUv(1f, 1f)
 
     BufferUploader.drawWithShader(buffer.buildOrThrow())
+}
+
+fun getPixelRGB(x: Int, y: Int): Triple<Int, Int, Int> {
+    val window = Minecraft.getInstance().window
+    val scale = window.guiScale
+    val buffer = ByteBuffer.allocateDirect(4)
+
+    RenderSystem.readPixels(
+        (x * scale).toInt(),
+        (window.height - y * scale - scale).toInt(),
+        1,
+        1,
+        GL30.GL_RGBA,
+        GL30.GL_UNSIGNED_BYTE,
+        buffer
+    )
+
+    return Triple(
+        buffer[0].toInt() and 0xFF,
+        buffer[1].toInt() and 0xFF,
+        buffer[2].toInt() and 0xFF
+    )
 }

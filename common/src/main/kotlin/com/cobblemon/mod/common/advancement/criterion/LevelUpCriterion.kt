@@ -33,7 +33,7 @@ class LevelUpCriterion(
     }
 
     override fun matches(player: ServerPlayer, context: LevelUpContext): Boolean {
-        val preEvo = context.pokemon.preEvolution == null
+        val preEvo = context.pokemon.preEvolution != null
         val hasEvolution = !context.pokemon.evolutions.none()
         var evolutionCheck = true
         if (preEvo || hasEvolution) {
@@ -43,27 +43,3 @@ class LevelUpCriterion(
     }
 
 }
-
-/*class LevelUpCriterionCondition(id: Identifier, entity: LootContextPredicate) : SimpleCriterionCondition<LevelUpContext>(id, entity) {
-    var level = 0
-    var evolved = true
-    override fun toJson(json: JsonObject) {
-        json.addProperty("level", level)
-        json.addProperty("has_evolved", evolved)
-    }
-
-    override fun fromJson(json: JsonObject) {
-        level = json.get("level")?.asInt ?: 0
-        evolved = json.get("has_evolved")?.asBoolean ?: true
-    }
-
-    override fun matches(player: ServerPlayer, context: LevelUpContext): Boolean {
-        val preEvo = context.pokemon.preEvolution == null
-        val hasEvolution = !context.pokemon.evolutions.none()
-        var evolutionCheck = true
-        if (preEvo || hasEvolution) {
-            evolutionCheck = !(preEvo == hasEvolution)
-        }
-        return level == context.level && evolutionCheck == evolved
-    }
-}*/

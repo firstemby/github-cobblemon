@@ -251,5 +251,36 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      }
+    },
+    "seats": [],
+    "controller": null
+  }
 }

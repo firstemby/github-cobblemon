@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -52,7 +53,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
     override fun changePokemon(pokemon: Pokemon) {
         updatePathfindingPenalties(pokemon)
-        entity.registerGoals()
+//        entity.registerGoals()
         updateMaxHealth()
     }
 
@@ -100,6 +101,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         with(entity) {
             speed = 0.1F
             entity.despawner.beginTracking(this)
+
+            initializeScripting()
         }
         updateTrackedValues()
     }
@@ -220,7 +223,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             return
         }
 
-        val isSleeping = entity.pokemon.status?.status == Statuses.SLEEP && entity.behaviour.resting.canSleep
+        val isSleeping = (entity.brain.getMemory(CobblemonMemories.POKEMON_SLEEPING).orElse(false) || entity.pokemon.status?.status == Statuses.SLEEP) && entity.behaviour.resting.canSleep
         val isMoving = entity.entityData.get(PokemonEntity.MOVING)
         val isPassenger = entity.isPassenger()
         val isUnderwater = entity.getIsSubmerged()

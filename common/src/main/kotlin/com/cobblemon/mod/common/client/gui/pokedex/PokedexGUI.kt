@@ -205,7 +205,7 @@ class PokedexGUI private constructor(
             clickAction = {
                 val searchTypes = SearchByType.entries.toList()
                 val selectedIndex = searchTypes.indexOf(selectedSearchByType)
-                selectedSearchByType = searchTypes.get(if (selectedIndex == searchTypes.lastIndex) 0 else (selectedIndex + 1))
+                selectedSearchByType = searchTypes[if (selectedIndex == searchTypes.lastIndex) 0 else (selectedIndex + 1)]
                 (it as ScaledButton).resource = cobblemonResource("textures/gui/pokedex/tab_${selectedSearchByType.name.lowercase()}.png")
                 updateFilters()
             }
@@ -491,16 +491,16 @@ class PokedexGUI private constructor(
 
         when (tabIndex) {
             TAB_DESCRIPTION -> {
-                tabInfoElement = DescriptionWidget( x + 180, y + 135)
+                tabInfoElement = DescriptionWidget(x + 180, y + 135)
             }
             TAB_ABILITIES -> {
-                tabInfoElement = AbilitiesWidget( x + 180, y + 135)
+                tabInfoElement = AbilitiesWidget(x + 180, y + 135)
             }
             TAB_SIZE -> {
-                tabInfoElement = SizeWidget( x + 180, y + 135)
+                tabInfoElement = SizeWidget(x + 180, y + 135)
             }
             TAB_STATS -> {
-                tabInfoElement = StatsWidget( x + 180, y + 135)
+                tabInfoElement = StatsWidget(x + 180, y + 135)
             }
             TAB_DROPS -> {
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)

@@ -1,0 +1,14 @@
+'Only run checks once per second, no need to be super accurate';
+math.mod(q.player.world.game_time, 20) != 0 ? {
+    return 0;
+};
+
+t.pc = q.player.pc;
+
+t.pc.has_unlocked_wallpaper('cobblemon:dark_mode') == 0 ? {
+    q.player.biome.is_in('#minecraft:is_nether') ? {
+        t.pc.unlock_wallpaper('cobblemon:dark_mode', 1);
+    };
+};
+
+

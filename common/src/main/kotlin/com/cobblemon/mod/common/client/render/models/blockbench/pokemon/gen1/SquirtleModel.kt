@@ -182,5 +182,7 @@ class SquirtleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
                 )
         )
 
+        properties["item_display_context"] = "THIRD_PERSON_RIGHT_HAND"
+
     }
 }

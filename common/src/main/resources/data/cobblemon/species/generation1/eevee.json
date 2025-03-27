@@ -153,7 +153,7 @@
       "id": "eevee_jolteon",
       "variant": "item_interact",
       "result": "jolteon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "thundershock"
       ],
@@ -164,7 +164,7 @@
       "id": "eevee_vaporeon",
       "variant": "item_interact",
       "result": "vaporeon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "watergun"
       ],
@@ -175,7 +175,7 @@
       "id": "eevee_flareon",
       "variant": "item_interact",
       "result": "flareon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "ember"
       ],
@@ -186,7 +186,7 @@
       "id": "eevee_espeon",
       "variant": "level_up",
       "result": "espeon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "confusion"
       ],
@@ -205,7 +205,7 @@
       "id": "eevee_umbreon",
       "variant": "level_up",
       "result": "umbreon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "pursuit",
         "snarl"
@@ -245,7 +245,7 @@
       "id": "eevee_leafeon",
       "variant": "item_interact",
       "result": "leafeon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "razorleaf"
       ],
@@ -256,7 +256,7 @@
       "id": "eevee_glaceon",
       "variant": "item_interact",
       "result": "glaceon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "icywind"
       ],

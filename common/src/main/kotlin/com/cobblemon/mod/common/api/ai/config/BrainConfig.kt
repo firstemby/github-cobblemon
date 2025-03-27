@@ -8,7 +8,15 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 
 /**
@@ -30,12 +38,21 @@ interface BrainConfig {
             "add_tasks_to_activity" to AddTasksToActivity::class.java,
             "apply_presets" to ApplyPresets::class.java,
             "set_default_activity" to SetDefaultActivity::class.java,
-            "set_core_activities" to SetCoreActivities::class.java
+            "set_core_activities" to SetCoreActivities::class.java,
+            "add_variables" to AddVariablesConfig::class.java,
+            "set_variables" to SetVariablesConfig::class.java,
         )
 
     }
 
+    fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+        val runtime = MoLangRuntime().setup()
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        return runtime.resolveBoolean(expressionOrEntityVariable.map({ it }, { "q.entity.config.${it.variableName}".asExpression() }))
+    }
+
 //    fun encode(buffer: RegistryFriendlyByteBuf)
 //    fun decode(buffer: RegistryFriendlyByteBuf)
+    fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
     fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext)
 }

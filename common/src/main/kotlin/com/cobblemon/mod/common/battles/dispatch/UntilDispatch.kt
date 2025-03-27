@@ -15,5 +15,21 @@ package com.cobblemon.mod.common.battles.dispatch
  * @since July 31st, 2022
  */
 class UntilDispatch(val condition: () -> Boolean) : DispatchResult {
-    override fun canProceed() = condition()
+    var afterAction: (() -> Unit) = {}
+    override fun canProceed(): Boolean {
+        val shouldContinue = condition()
+        if (shouldContinue) {
+            afterAction()
+        }
+        return shouldContinue
+    }
+
+    fun andThen(action: () -> Unit): UntilDispatch {
+        val old = afterAction
+        afterAction = {
+            old()
+            action()
+        }
+        return this
+    }
 }
