@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.block.HealingMachineBlock.Companion.CHARGE_LEVEL
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
-import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
 import com.cobblemon.mod.common.item.PokemonEggItem
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.mojang.serialization.Dynamic
