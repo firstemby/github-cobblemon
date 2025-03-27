@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
@@ -73,7 +72,6 @@ import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonLookAtEntityGoal
-import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonPointAtSpawnGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonWanderAroundGoal
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
@@ -838,7 +836,6 @@ open class PokemonEntity(
         (moveControl as PokemonMoveControl).stop()
         goalSelector.addGoal(6, PokemonWanderAroundGoal(this))
         goalSelector.addGoal(7, PokemonLookAtEntityGoal(this, ServerPlayer::class.java, 5F))
-        goalSelector.addGoal(8, PokemonPointAtSpawnGoal(this))
     }
 
 //

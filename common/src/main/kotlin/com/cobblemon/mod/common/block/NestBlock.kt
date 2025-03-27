@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
-import com.cobblemon.mod.common.client.gui.PartyOverlay.Companion.state
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
