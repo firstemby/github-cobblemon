@@ -130,6 +130,7 @@ object CobblemonClient {
 
         this.registerBlockEntityRenderers()
         registerBlockRenderTypes()
+        registerBlockColors()
         registerColors()
         registerFlywheelRenderers()
         this.registerEntityRenderers()
@@ -285,6 +286,10 @@ object CobblemonClient {
 
 
         this.createBoatModelLayers()
+    }
+
+    fun registerBlockColors() {
+        this.implementation.registerBlockColors(NestLeafBlockColorProvider, CobblemonBlocks.NEST_LEAF)
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
