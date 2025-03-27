@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import java.util.*
 
 /**
  * Packet sent to request showdown information for a specific server.
@@ -11,7 +12,7 @@ import net.minecraft.resources.ResourceLocation
  * @property service The id of the showdown service to get showdown information for.
  * @author landonjw
  */
-class RequestShowdownInfoPacket(val service: ResourceLocation) : NetworkPacket<RequestShowdownInfoPacket> {
+class RequestShowdownInfoPacket(val service: ResourceLocation, val lastRequest: Date?) : NetworkPacket<RequestShowdownInfoPacket> {
     override val id = ID
 
     /**
@@ -21,6 +22,7 @@ class RequestShowdownInfoPacket(val service: ResourceLocation) : NetworkPacket<R
      */
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(service)
+        buffer.writeNullable(lastRequest) { pb, value -> pb.writeDate(value) }
     }
 
     companion object {
@@ -33,7 +35,8 @@ class RequestShowdownInfoPacket(val service: ResourceLocation) : NetworkPacket<R
          * @return The decoded [RequestShowdownInfoPacket].
          */
         fun decode(buffer: RegistryFriendlyByteBuf) = RequestShowdownInfoPacket(
-            service = buffer.readResourceLocation()
+            service = buffer.readResourceLocation(),
+            lastRequest = buffer.readNullable { pb -> pb.readDate() }
         )
     }
 }

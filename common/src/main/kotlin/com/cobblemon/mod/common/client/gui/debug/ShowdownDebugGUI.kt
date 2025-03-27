@@ -6,6 +6,7 @@ import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.debug.ShowdownDebugGUI.Companion.activeShowdownService
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.net.messages.client.debug.showdown.ShowdownRefreshInfoPacket
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.RequestShowdownInfoPacket
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.ShowdownActionPacket
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.ShowdownInputPacket
@@ -21,7 +22,6 @@ import net.minecraft.client.gui.components.ObjectSelectionList.Entry
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
 import java.awt.Color
 import java.util.*
@@ -29,6 +29,13 @@ import java.util.*
 /**
  * GUI screen for debugging the Showdown service in the Cobblemon mod.
  * This screen allows users to view and interact with the Showdown service logs and status.
+ *
+ * @property status The current status of the showdown service.
+ * @property service The resource location of the showdown service.
+ * @property messages A list of messages from the active showdown service currently being refreshed.
+ * @property availableServices A list of available showdown services. This allows the client to switch which server they are viewing.
+ * @property requestProcessedAt The date and time when the request was processed.
+ * @property includesStartOfLog Indicates if the messages include the start of the log.
  *
  * @author landonjw
  */
@@ -40,8 +47,9 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
     }
 
     private var showdownStatus: ShowdownStatus? = null
-    val showdownLogs = mutableMapOf<ResourceLocation, MutableList<String>>()
+    val log = mutableListOf<String>()
     var availableServices = listOf(cobblemonResource("embedded"))
+    var lastProcessedLogTime: Date? = null
 
     val outputWindow = addRenderableWidget(ShowdownOutputList())
     val serviceButton = addRenderableWidget(
@@ -93,33 +101,40 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
     init {
         addRenderableWidget(
             Button.builder(Component.literal("Copy to Clipboard")) Clipboard@{
-                val log = showdownLogs[activeShowdownService] ?: return@Clipboard
+                if (log.isEmpty()) return@Clipboard
                 clipboardManager.setClipboard(Minecraft.getInstance().window.window, log.joinToString("\n"))
             }.bounds(170, Minecraft.getInstance().window.guiScaledHeight - 40, 100, 30).build()
         )
 
-        addRenderableWidget(ShowdownInputWidget())
+        addRenderableWidget(ShowdownInputWidget(this))
         startTimer()
     }
 
+    /**
+     * Cycles through the available showdown services.
+     */
     fun cycleActiveService() {
         if (availableServices.size == 1) return
         val currentIndex = availableServices.indexOf(activeShowdownService)
         activeShowdownService = availableServices[(currentIndex + 1) % availableServices.size]
         serviceButton.message = Component.literal("Service: $activeShowdownService")
         outputWindow.reset()
-        showdownLogs[activeShowdownService]?.forEach { outputWindow.addNewEntry(it.text()) }
+        log.clear()
+        lastProcessedLogTime = null
         startTimer()
     }
 
+    /**
+     * Starts the timer for periodically refreshing the showdown info.
+     */
     fun startTimer() {
         timer.cancel()
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                CobblemonNetwork.sendToServer(RequestShowdownInfoPacket(activeShowdownService))
+                CobblemonNetwork.sendToServer(RequestShowdownInfoPacket(activeShowdownService, lastProcessedLogTime))
             }
-        }, 0, 1000)
+        }, 0, 500)
     }
 
     override fun onClose() {
@@ -156,35 +171,24 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
     }
 
     /**
-     * Refreshes the showdown information displayed in the GUI.
+     * Refreshes the showdown info with the data from the given packet.
      *
-     * @param status The current status of the showdown service.
-     * @param messages The log messages from the showdown service.
-     * @param availableServices The list of available showdown services.
+     * @param packet The packet containing the refreshed showdown info.
      */
-    fun refreshShowdownInfo(status: ShowdownStatus, messages: List<String>, availableServices: List<ResourceLocation>) {
-        if (showdownLogs[activeShowdownService] == null) {
-            showdownLogs[activeShowdownService] = mutableListOf()
-        }
-        val log = showdownLogs[activeShowdownService]!!
-        if (log.isNotEmpty()) {
-            val lastMessage = log.last()
-            val lastMessageIndex = messages.lastIndexOf(lastMessage)
-            if (lastMessageIndex != -1 && lastMessageIndex != messages.size - 1) {
-                val messagesToAdd = messages.subList(lastMessageIndex + 1, messages.size)
-                messagesToAdd.forEach {
-                    outputWindow.addNewEntry(it.text())
-                    log.add(it)
-                }
-            }
-        }
-        else {
+    fun refreshShowdownInfo(packet: ShowdownRefreshInfoPacket) {
+        // Prevent false positives from old packets
+        if (activeShowdownService != packet.service) return
+        if (packet.includesStartOfLog) {
+            log.clear()
             outputWindow.reset()
-            messages.forEach { outputWindow.addNewEntry(it.text()) }
-            log.addAll(messages)
         }
-        showdownStatus = status
-        when (status) {
+        packet.messages.forEach {
+            log.add(it)
+            outputWindow.addNewEntry(it.text())
+        }
+        lastProcessedLogTime = packet.requestProcessedAt
+        showdownStatus = packet.status
+        when (showdownStatus) {
             ShowdownStatus.CONNECTED -> {
                 startButton.active = false
                 stopButton.active = true
@@ -203,8 +207,14 @@ class ShowdownDebugGUI : Screen(lang("ui.debug.showdown")), CobblemonRenderable 
                 restartButton.active = false
                 startNPCBattleButton.active = false
             }
+            else -> {
+                startButton.active = false
+                stopButton.active = false
+                restartButton.active = false
+                startNPCBattleButton.active = false
+            }
         }
-        this.availableServices = availableServices
+        this.availableServices = packet.availableServices
     }
 
 }
@@ -297,7 +307,7 @@ class OutputEntry(val line: FormattedCharSequence) : Entry<OutputEntry>() {
 /**
  * Input widget for entering commands to the Showdown service.
  */
-class ShowdownInputWidget : EditBox(
+class ShowdownInputWidget(val gui: ShowdownDebugGUI) : EditBox(
     Minecraft.getInstance().font,
     280,
     Minecraft.getInstance().window.guiScaledHeight - 40,
@@ -313,7 +323,7 @@ class ShowdownInputWidget : EditBox(
                 input = this.value
             ))
             deleteCharsToPos(0)
-            CobblemonNetwork.sendToServer(RequestShowdownInfoPacket(activeShowdownService))
+            CobblemonNetwork.sendToServer(RequestShowdownInfoPacket(activeShowdownService, gui.lastProcessedLogTime))
         }
         return result
     }

@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.runner.ShowdownDebugLog
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.google.gson.Gson
@@ -35,12 +36,18 @@ import org.graalvm.polyglot.HostAccess.Export
 import org.graalvm.polyglot.PolyglotAccess
 import org.graalvm.polyglot.Value
 import org.graalvm.polyglot.io.FileSystem
-import java.text.SimpleDateFormat
-import java.util.Date
 
 /**
  * Mediator service for communicating between the Cobblemon Minecraft mod and Cobblemon showdown service via
  * GraalVM. This directly invokes JavaScript functions provided within the showdown service.
+ *
+ * @property id The unique identifier for this showdown service.
+ * @property context The GraalVM context for executing JavaScript.
+ * @property sendBattleMessageFunction The JavaScript function for sending battle messages.
+ * @property unbundler The unbundler for extracting necessary showdown files.
+ * @property gson The Gson instance for JSON operations.
+ * @property log The debug log for the showdown service.
+ * @property status The current status of the showdown service.
  *
  * @see {@code cobbled-exports/cobbled-index.js} within cobbledmon-showdown repository
  * @see <a href="https://www.graalvm.org/">
@@ -58,23 +65,24 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
     @Transient
     val gson = Gson()
 
-    private val _log = mutableListOf<String>()
-    override val log: List<String>?
-        get() {
-            if (!Cobblemon.config.enableDebugKeys) return null
-            return _log
-        }
+    override val log = ShowdownDebugLog()
 
     override var status: ShowdownStatus = ShowdownStatus.DISCONNECTED
         private set
 
+    /**
+     * Opens a connection to the showdown service.
+     */
     override fun openConnection() = openConnection(false)
 
+    /**
+     * Opens a connection to the showdown service.
+     *
+     * @param silent If true, suppresses changing the status of the connection process.
+     */
     private fun openConnection(silent: Boolean) {
-        if (!silent) {
-            this._log.clear()
-            addToShowdownLog(source = "Minecraft", message = "Opening showdown connection")
-        }
+        log.clear()
+        log.add(source = "Minecraft", message = "Opening showdown connection")
         unbundler.attemptUnbundle()
         createContext()
         boot()
@@ -83,6 +91,9 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
         }
     }
 
+    /**
+     * Creates the GraalVM context for executing JavaScript.
+     */
     private fun createContext() {
         val wd = Paths.get("./showdown")
         val access = HostAccess.newBuilder(HostAccess.EXPLICIT)
@@ -139,18 +150,27 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
         """.trimIndent())
     }
 
+    /**
+     * Closes the connection to the showdown service.
+     */
     override fun closeConnection() = closeConnection(false)
 
+    /**
+     * Closes the connection to the showdown service.
+     *
+     * @param silent If true, suppresses changing the status of the connection process.
+     */
     private fun closeConnection(silent: Boolean) {
-        if (!silent) {
-            addToShowdownLog(source = "Minecraft", message = "Closing showdown connection")
-        }
+        log.add(source = "Minecraft", message = "Closing showdown connection")
         context.close()
         if (!silent) {
             this.status = ShowdownStatus.DISCONNECTED
         }
     }
 
+    /**
+     * Restarts the connection to the showdown service.
+     */
     override fun restartConnection() {
         this.status = ShowdownStatus.RESTARTING
         try {
@@ -163,27 +183,47 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
         }
     }
 
+    /**
+     * Boots the showdown service by evaluating the JavaScript entry point.
+     */
     private fun boot() {
-        addToShowdownLog(source = "Minecraft", message = "Booting showdown")
+        log.add(source = "Minecraft", message = "Booting showdown")
         context.eval("js", File("showdown/index.js").readText())
         sendBattleMessageFunction = context.getBindings("js").getMember("sendBattleMessage")
     }
 
+    /**
+     * Starts a battle in the showdown service.
+     *
+     * @param battle The battle to start.
+     * @param messages The initial messages for the battle.
+     */
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
         val startBattleFunction = context.getBindings("js").getMember("startBattle")
-        addToShowdownLog(source = "Minecraft", message = "Starting battle ${battle.battleId}")
+        log.add(source = "Minecraft", message = "Starting battle ${battle.battleId}")
         messages.forEach { message ->
-            addToShowdownLog(source = "Minecraft", message = "(${battle.battleId}) $message")
+            log.add(source = "Minecraft", message = "(${battle.battleId}) $message")
         }
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
     }
 
+    /**
+     * Sends messages to a specific battle in the showdown service.
+     *
+     * @param battleId The unique identifier of the battle.
+     * @param messages The messages to send.
+     */
     override fun send(battleId: UUID, messages: Array<String>) {
         sendToShowdown(battleId, messages)
     }
 
+    /**
+     * Sends a message to the showdown service.
+     *
+     * @param message The message to send.
+     */
     override fun send(message: String) {
-        addToShowdownLog("Minecraft", message)
+        log.add("Minecraft", message)
         val regex = Regex("^\\(([^()]*)\\)")
         val match = regex.find(message)
         val battleId = match?.groups?.get(1)?.value ?: return
@@ -191,27 +231,45 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
         sendToShowdown(UUID.fromString(battleId), arrayOf(message.substring(endIndex)))
     }
 
+    /**
+     * Retrieves the ability IDs from the showdown service.
+     *
+     * @return A `JsonArray` of ability IDs.
+     */
     override fun getAbilityIds(): JsonArray {
         val getCobbledAbilityIdsFn = context.getBindings("js").getMember("getCobbledAbilityIds")
         val arrayResult = getCobbledAbilityIdsFn.execute().asString()
-        addToShowdownLog(source = "Minecraft", message = "Getting ability ids")
+        log.add(source = "Minecraft", message = "Getting ability ids")
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
 
+    /**
+     * Retrieves the moves from the showdown service.
+     *
+     * @return A `JsonArray` of moves.
+     */
     override fun getMoves(): JsonArray {
         val getCobbledMovesFn = context.getBindings("js").getMember("getCobbledMoves")
-        addToShowdownLog(source = "Minecraft", message = "Getting moves")
+        log.add(source = "Minecraft", message = "Getting moves")
         val arrayResult = getCobbledMovesFn.execute().asString()
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
 
+    /**
+     * Retrieves the item IDs from the showdown service.
+     *
+     * @return A `JsonArray` of item IDs.
+     */
     override fun getItemIds(): JsonArray {
         val getCobbledItemIdsFn = context.getBindings("js").getMember("getCobbledItemIds")
-        addToShowdownLog(source = "Minecraft", message = "Getting item ids")
+        log.add(source = "Minecraft", message = "Getting item ids")
         val arrayResult = getCobbledItemIdsFn.execute().asString()
         return gson.fromJson(arrayResult, JsonArray::class.java)
     }
 
+    /**
+     * Registers species in the showdown service.
+     */
     override fun registerSpecies() {
         val receiveSpeciesDataFn = this.context.getBindings("js").getMember("receiveSpeciesData")
         val jsArray = this.context.eval("js", "new Array();")
@@ -224,46 +282,60 @@ class GraalShowdownService(override val id: ResourceLocation) : ShowdownService 
                 }
             }
         }
-        addToShowdownLog(source = "Minecraft", message = "Registering species")
+        log.add(source = "Minecraft", message = "Registering species")
         receiveSpeciesDataFn.execute(jsArray)
     }
 
+    /**
+     * Indicates that species have been initialized to the showdown service.
+     */
     override fun indicateSpeciesInitialized() {
         val afterCobbledSpeciesInitFn = this.context.getBindings("js").getMember("afterCobbledSpeciesInit")
-        addToShowdownLog(source = "Minecraft", message = "Indicating species initialized")
+        log.add(source = "Minecraft", message = "Indicating species initialized")
         afterCobbledSpeciesInitFn.execute()
     }
 
+    /**
+     * Registers bag items in the showdown service.
+     */
     override fun registerBagItems() {
         val receiveBagItemDataFn = this.context.getBindings("js").getMember("receiveBagItemData")
         for ((itemId, js) in BagItems.bagItemsScripts) {
-            addToShowdownLog(source = "Minecraft", message = "Registering bag item $itemId")
+            log.add(source = "Minecraft", message = "Registering bag item $itemId")
             receiveBagItemDataFn.execute(itemId, js.replace("\n", " "))
         }
     }
 
+    /**
+     * Sends messages to the showdown service.
+     *
+     * @param battleId The unique identifier of the battle.
+     * @param messages The messages to send.
+     */
     private fun sendToShowdown(battleId: UUID, messages: Array<String>) {
         messages.forEach { message ->
-            addToShowdownLog(source = "Minecraft", message = "($battleId) $message")
+            log.add(source = "Minecraft", message = "($battleId) $message")
         }
         sendBattleMessageFunction.execute(battleId.toString(), messages)
     }
 
+    /**
+     * Receives messages from the showdown service.
+     *
+     * @param battleId The unique identifier of the battle.
+     * @param message The message received.
+     */
     @Export
     fun sendFromShowdown(battleId: String, message: String) {
-        addToShowdownLog(source = "Showdown", message = "($battleId) $message")
+        log.add(source = "Showdown", message = "($battleId) $message")
         ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), message)
     }
 
-    private fun addToShowdownLog(source: String, message: String) {
-        if (!Cobblemon.config.enableDebugKeys) return
-        val timestamp = SimpleDateFormat("HH:mm:ss").format(Date())
-        if (_log.size >= 150) {
-            _log.removeFirst()
-        }
-        _log.add("[$source][${timestamp}]> $message")
-    }
-
+    /**
+     * Logs messages from the showdown service.
+     *
+     * @param message The message to log.
+     */
     @Export
     fun log(message: String) {
         Cobblemon.LOGGER.info(message)

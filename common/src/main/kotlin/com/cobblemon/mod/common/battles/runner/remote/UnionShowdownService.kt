@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.battles.runner.ShowdownDebugLog
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.battles.runner.ShowdownStatus
 import com.cobblemon.mod.common.entity.npc.NPCEntity
@@ -22,7 +23,6 @@ import net.minecraft.resources.ResourceLocation
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.WebSocket
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.CompletionStage
 
@@ -33,7 +33,9 @@ import java.util.concurrent.CompletionStage
  *
  * @property id The unique identifier for this showdown service.
  * @property host The host address of the showdown service.
- * @property socketPort The port for socket communication with the showdown service.
+ * @property httpPort The port for HTTP communication with the showdown service.
+ * @property socketPort The port for WebSocket communication with the showdown service.
+ *
  * @author landonjw
  */
 class UnionShowdownService(
@@ -46,12 +48,7 @@ class UnionShowdownService(
     override var status: ShowdownStatus = ShowdownStatus.DISCONNECTED
         private set
 
-    private val _log = mutableListOf<String>()
-    override val log: List<String>?
-        get() {
-            if (!Cobblemon.config.enableDebugKeys) return null
-            return _log
-        }
+    override val log = ShowdownDebugLog()
 
     private lateinit var webSocket: WebSocket
 
@@ -61,15 +58,13 @@ class UnionShowdownService(
     override fun openConnection() = openConnection(false)
 
     /**
-     * Opens a connection to the showdown service, with an option to suppress logging.
+     * Opens a connection to the showdown service.
      *
-     * @param silent If true, suppresses logging of the connection process.
+     * @param silent If true, suppresses changing the status of the connection process.
      */
     private fun openConnection(silent: Boolean) {
-        if (!silent) {
-            this._log.clear()
-            addToShowdownLog(source = "Minecraft", message = "Opening showdown connection")
-        }
+        log.clear()
+        log.add(source = "Minecraft", message = "Opening showdown connection")
         webSocket = HttpClient.newHttpClient()
             .newWebSocketBuilder()
             .buildAsync(URI.create("ws://$host:$socketPort"), WebSocketListener(this))
@@ -89,14 +84,12 @@ class UnionShowdownService(
     override fun closeConnection() = closeConnection(false)
 
     /**
-     * Closes the connection to the showdown service, with an option to suppress logging.
+     * Closes the connection to the showdown service.
      *
-     * @param silent If true, suppresses logging of the disconnection process.
+     * @param silent If true, suppresses changing the status of the disconnection process.
      */
     private fun closeConnection(silent: Boolean) {
-        if (!silent) {
-            addToShowdownLog(source = "Minecraft", message = "Closing showdown connection")
-        }
+        log.add(source = "Minecraft", message = "Closing showdown connection")
         webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "Goodbye!").join()
         if (!silent) {
             this.status = ShowdownStatus.DISCONNECTED
@@ -200,21 +193,6 @@ class UnionShowdownService(
     }
 
     /**
-     * Adds a message to the showdown log.
-     *
-     * @param source The source of the message.
-     * @param message The message to add.
-     */
-    internal fun addToShowdownLog(source: String, message: String) {
-        if (!Cobblemon.config.enableDebugKeys) return
-        val timestamp = SimpleDateFormat("HH:mm:ss").format(Date())
-        if (_log.size >= 150) {
-            _log.removeFirst()
-        }
-        _log.add("[$source][${timestamp}]> $message")
-    }
-
-    /**
      * WebSocket listener for handling events from the showdown service.
      *
      * @property service The UnionShowdownService instance.
@@ -223,10 +201,15 @@ class UnionShowdownService(
         val builder = StringBuilder()
 
         override fun onOpen(webSocket: WebSocket) {
-            service.addToShowdownLog(source = "Showdown", message = "Connected to server at ${service.host}:${service.socketPort}")
+            service.log.add(source = "Showdown", message = "Connected to server at ${service.host}:${service.socketPort}")
             super.onOpen(webSocket)
         }
 
+        /**
+         * Starts a battle based on the received instruction.
+         *
+         * @param instruction The instruction to start the battle.
+         */
         fun startBattle(instruction: String) {
             val arguments = instruction.replace("|start-battle|", "").split("|")
             if (arguments.size != 5) return
@@ -307,6 +290,12 @@ class UnionShowdownService(
             }
         }
 
+        /**
+         * Converts a list of Pokemon to a list of BattlePokemon for the showdown service.
+         *
+         * @param team The list of Pokemon to convert.
+         * @return A list of BattlePokemon.
+         */
         fun toShowdownBattleTeam(team: List<Pokemon>): List<BattlePokemon> {
             return team.map { pokemon ->
                 BattlePokemon(
@@ -321,7 +310,7 @@ class UnionShowdownService(
             if (last) {
                 builder.append(data)
                 val message = builder.toString()
-                service.addToShowdownLog(source = "Showdown", message = message)
+                service.log.add(source = "Showdown", message = message)
 
                 if (data.startsWith("|start-battle|")) {
                     startBattle(data.toString())
@@ -344,17 +333,23 @@ class UnionShowdownService(
         }
 
         override fun onError(webSocket: WebSocket, error: Throwable) {
-            service.addToShowdownLog(source = "Showdown", message = "Error: ${error.message}")
+            service.log.add(source = "Showdown", message = "Error: ${error.message}")
             Cobblemon.LOGGER.error("Error in showdown service ${service.id} websocket", error)
             super.onError(webSocket, error)
         }
 
         override fun onClose(webSocket: WebSocket, statusCode: Int, reason: String): CompletionStage<*>? {
-            service.addToShowdownLog(source = "Showdown", message = "Closed connection with status $statusCode and reason $reason")
+            service.log.add(source = "Showdown", message = "Closed connection with status $statusCode and reason $reason")
             return super.onClose(webSocket, statusCode, reason)
         }
     }
 
+    /**
+     * Data class representing a bag item. We use this for serialization to the showdown service.
+     *
+     * @property id The unique identifier of the bag item.
+     * @property script The script associated with the bag item.
+     */
     private data class BagItem(val id: String, val script: String)
 
 }

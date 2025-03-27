@@ -8,6 +8,7 @@ import com.cobblemon.mod.common.net.messages.client.debug.showdown.ShowdownRefre
 import com.cobblemon.mod.common.net.messages.server.debug.showdown.RequestShowdownInfoPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import java.util.Date
 
 /**
  * Handles the reception of a [RequestShowdownInfoPacket] on the server side.
@@ -31,8 +32,9 @@ object RequestShowdownInfoHandler : ServerNetworkPacketHandler<RequestShowdownIn
         if (!ShowdownService.contains(packet.service)) return
 
         val service = ShowdownService.get(packet.service)
-        val messages = service.log ?: emptyList()
+        val messages = service.log.get(after = packet.lastRequest)
         val availableServices = ShowdownService.all().map { it.id }
-        player.sendPacket(ShowdownRefreshInfoPacket(service.status, messages, availableServices))
+        val includesStartOfLog = if (packet.lastRequest == null) true else service.log.isStartOfLog(messages)
+        player.sendPacket(ShowdownRefreshInfoPacket(service.status, packet.service, messages, availableServices, Date(), includesStartOfLog))
     }
 }

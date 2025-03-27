@@ -38,9 +38,10 @@ interface ShowdownService {
 
     /**
      * The log of messages from the showdown service.
-     * This is typically used for debugging purposes and may be null if not in a debug environment.
+     * This is accessed for use in [ShowdownDebugGUI]. It is not intended for general use
+     * and will be empty in production environments.
      */
-    val log: List<String>?
+    val log: ShowdownDebugLog
 
     /**
      * Opens a connection to the showdown service.

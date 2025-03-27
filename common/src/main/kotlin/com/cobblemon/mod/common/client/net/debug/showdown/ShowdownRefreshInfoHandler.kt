@@ -20,7 +20,7 @@ object ShowdownRefreshInfoHandler : ClientNetworkPacketHandler<ShowdownRefreshIn
      */
     override fun handle(packet: ShowdownRefreshInfoPacket, client: Minecraft) {
         if (client.screen is ShowdownDebugGUI) {
-            (client.screen as ShowdownDebugGUI).refreshShowdownInfo(packet.status, packet.messages, packet.availableServices)
+            (client.screen as ShowdownDebugGUI).refreshShowdownInfo(packet)
         }
     }
 }
