@@ -65,16 +65,24 @@ class UnionShowdownService(
     private fun openConnection(silent: Boolean) {
         log.clear()
         log.add(source = "Minecraft", message = "Opening showdown connection")
-        webSocket = HttpClient.newHttpClient()
-            .newWebSocketBuilder()
-            .buildAsync(URI.create("ws://$host:$socketPort"), WebSocketListener(this))
-            .join()
-        // TODO: See if this is needed
-        registerSpecies()
-        indicateSpeciesInitialized()
-        registerBagItems()
-        if (!silent) {
-            this.status = ShowdownStatus.CONNECTED
+        try {
+            webSocket = HttpClient.newHttpClient()
+                .newWebSocketBuilder()
+                .buildAsync(URI.create("ws://$host:$socketPort"), WebSocketListener(this))
+                .join()
+            // TODO: See if this is needed
+            registerSpecies()
+            indicateSpeciesInitialized()
+            registerBagItems()
+            if (!silent) {
+                this.status = ShowdownStatus.CONNECTED
+            }
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.warn("Failed to open showdown connection to $host:$socketPort", e)
+            log.add(source = "Minecraft", message = "Failed to open showdown connection with error: ${e.message}")
+            if (!silent) {
+                this.status = ShowdownStatus.DISCONNECTED
+            }
         }
     }
 
@@ -90,9 +98,16 @@ class UnionShowdownService(
      */
     private fun closeConnection(silent: Boolean) {
         log.add(source = "Minecraft", message = "Closing showdown connection")
-        webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "Goodbye!").join()
-        if (!silent) {
-            this.status = ShowdownStatus.DISCONNECTED
+        try {
+            webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "Goodbye!").join()
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.warn("Failed to close showdown connection to $host:$socketPort", e)
+            log.add(source = "Minecraft", message = "Failed to close showdown connection to $host:$socketPort with error: ${e.message}")
+        }
+        finally {
+            if (!silent) {
+                this.status = ShowdownStatus.DISCONNECTED
+            }
         }
     }
 
@@ -101,14 +116,8 @@ class UnionShowdownService(
      */
     override fun restartConnection() {
         this.status = ShowdownStatus.RESTARTING
-        try {
-            closeConnection(true)
-            openConnection(true)
-            this.status = ShowdownStatus.CONNECTED
-        } catch (e: Exception) {
-            Cobblemon.LOGGER.error("Failed to restart showdown connection", e)
-            this.status = ShowdownStatus.DISCONNECTED
-        }
+        closeConnection(true)
+        openConnection(true)
     }
 
     /**
@@ -334,7 +343,7 @@ class UnionShowdownService(
 
         override fun onError(webSocket: WebSocket, error: Throwable) {
             service.log.add(source = "Showdown", message = "Error: ${error.message}")
-            Cobblemon.LOGGER.error("Error in showdown service ${service.id} websocket", error)
+            Cobblemon.LOGGER.warn("Error in showdown service ${service.id} websocket", error)
             super.onError(webSocket, error)
         }
 
