@@ -49,6 +49,7 @@ object DataKeys {
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
     const val POKEMON_TRADEABLE = "Tradeable"
     const val POKEMON_FORCED_ASPECTS = "ForcedAspects"
+    const val POKEMON_COSMETIC_ITEM = "CosmeticItem"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -99,6 +100,8 @@ object DataKeys {
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
+    const val STORE_UNLOCKED_WALLPAPERS = "UnlockedWallpapers"
+    const val STORE_UNSEEN_WALLPAPERS = "UnseenWallpapers"
 
     // Pokédex Keys
     const val POKEDEX_TYPE = "PokedexType"

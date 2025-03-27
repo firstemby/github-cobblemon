@@ -164,7 +164,7 @@
       "id": "nidorina_nidoqueen",
       "variant": "item_interact",
       "result": "nidoqueen",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "superpower"
       ],

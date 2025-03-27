@@ -37,6 +37,7 @@ import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.phys.Vec3
 
 class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
@@ -161,10 +162,12 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             }
 
             heldItemRenderer.renderOnModel(
+                model,
                 shoulderData.shownItem,
-                state.locatorStates,
+                state,
                 matrixStack,
-                buffer
+                buffer,
+                Vec3(0.0,-90.0,-90.0)
             )
 
             model.setDefault()

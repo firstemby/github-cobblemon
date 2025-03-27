@@ -187,7 +187,7 @@
       "id": "scyther_kleavor",
       "variant": "item_interact",
       "result": "kleavor",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "stoneaxe"
       ],

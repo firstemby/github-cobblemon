@@ -1,6 +1,6 @@
 {
-  "name": "cobblemon.brain_preset.wanders.name",
-  "description": "cobblemon.brain_preset.wanders.desc",
+  "name": "cobblemon.brain_preset.wanders_water.name",
+  "description": "cobblemon.brain_preset.wanders_water.desc",
   "configurations": [
     {
       "type": "add_tasks_to_activity",

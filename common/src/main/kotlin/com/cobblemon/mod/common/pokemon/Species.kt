@@ -125,8 +125,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             )
         },
         ApplyPresets().apply {
-            condition = Either.left("q.entity.is_in_party".asExpression())
-//            presets.add(cobblemonResource("follow_owner"))
+            presets.addAll(listOf(cobblemonResource("floats"), cobblemonResource("avoids_water")))
+            condition = Either.left("!q.entity.behaviour.moving.swim.can_breathe_underwater".asExpression())
         },
         ApplyPresets().apply {
             condition = Either.left("!q.entity.is_in_party".asExpression())
@@ -136,15 +136,15 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             presets.add(cobblemonResource("retaliates"))
         },
         ApplyPresets().apply {
-            condition = Either.left("q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land".asExpression())
+            condition = Either.left("!q.entity.is_in_party && q.entity.behaviour.moving.walk.can_walk".asExpression())
             presets.add(cobblemonResource("wanders"))
         },
+//        ApplyPresets().apply {
+//            condition = Either.left("!q.entity.is_in_party && q.entity.behaviour.moving.fly.can_fly && q.entity.behaviour.moving.walk.avoids_land".asExpression())
+//            presets.add(cobblemonResource("wanders_air"))
+//        },
         ApplyPresets().apply {
-            condition = Either.left("q.entity.behaviour.moving.fly.can_fly && q.entity.behaviour.moving.walk.avoids_land".asExpression())
-            presets.add(cobblemonResource("wanders_air"))
-        },
-        ApplyPresets().apply {
-            condition = Either.left("q.entity.behaviour.moving.walk.avoids_land && q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
+            condition = Either.left("!q.entity.is_in_party && q.entity.behaviour.moving.walk.avoids_land && q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
             presets.add(cobblemonResource("wanders_water"))
         },
         ApplyPresets().apply {
@@ -154,6 +154,10 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         ApplyPresets().apply {
             condition = Either.left("!q.entity.is_wild".asExpression())
             presets.add(cobblemonResource("pokemon_follows_owner"))
+        },
+        ApplyPresets().apply {
+            condition = Either.left("!q.entity.is_wild && q.entity.behaviour.resting.will_sleep_on_bed".asExpression())
+            presets.add(cobblemonResource("pokemon_sleeps_on_trainer_bed"))
         }
     )
     var ai = mutableListOf<BrainConfig>()

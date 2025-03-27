@@ -114,8 +114,8 @@ class RevivalHerbBlock(settings: Properties) : CropBlock(settings), Mulchable {
         var growthSpeed = 1.0F
         var ground = pos.below()
 
-        for(x in -1..1) {
-            for(z in -1..1) {
+        for (x in -1..1) {
+            for (z in -1..1) {
                 var nearbyFarmLandBoost = 0.0F
                 var blockState = level.getBlockState(ground.offset(x, 0, z))
                 if (blockState.`is`(Blocks.FARMLAND)) {

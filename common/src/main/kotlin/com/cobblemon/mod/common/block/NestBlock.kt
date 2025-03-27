@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionResult
@@ -38,6 +39,7 @@ import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.StateDefinition
@@ -72,7 +74,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         HAY("nest_hay"),
         SAND("nest_sand"),
         RED_SAND("nest_red_sand"),
-        CHORUS("mest_chorus"),
+        CHORUS("nest_chorus"),
 
         CAVE("cave_nest"),
         //NETHER("nether_nest"),
@@ -151,25 +153,65 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
                     Shapes.box(0.625, 0.0, 0.625, 0.875, 0.5, 0.875)
             )
             NestVariant.NETHER -> Shapes.or(
-                    Shapes.box(0.2, 0.0, 0.2, 0.8, 0.65, 0.8),
-                    Shapes.box(0.4, 0.0, 0.4, 0.6, 0.9, 0.6)
+                    Shapes.box(2.0 / 16.0, 0.0, 2.0 / 16.0, 14.0 / 16.0, 2.0 / 16.0, 14.0 / 16.0), // Main nest base
+                    Shapes.box(0.0 / 16.0, 0.0, 6.0 / 16.0, 4.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0), // Left extension
+                    Shapes.box(7.0 / 16.0, 0.0, 0.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0), // Front extension
+                    Shapes.box(11.0 / 16.0, 0.0, 11.0 / 16.0, 16.0 / 16.0, 4.0 / 16.0, 16.0 / 16.0) // Back right extension
             )
             NestVariant.WATER -> Shapes.box(0.2, 0.0, 0.2, 0.8, 0.3, 0.8)
             NestVariant.BASIC -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.SOUL_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.WARM_OCEAN -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.SEAGRASS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.LUSH -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.HAY -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.RED_SAND -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
-            NestVariant.CHORUS -> Shapes.box(0.1, 0.0, 0.1, 0.9, 0.45, 0.9)
+            NestVariant.SOUL_SAND -> Shapes.or(
+                    Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 2.0 / 16.0, 15.0 / 16.0), // Base layer
+                    Shapes.box(2.0 / 16.0, 2.0 / 16.0, 2.0 / 16.0, 13.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0), // Inner rim
+                    Shapes.box(12.0 / 16.0, 0.0 / 16.0, 10.0 / 16.0, 16.0 / 16.0, 8.0 / 16.0, 14.0 / 16.0), // Side bump 1
+                    Shapes.box(3.0 / 16.0, 0.0 / 16.0, 13.0 / 16.0, 6.0 / 16.0, 7.0 / 16.0, 16.0 / 16.0), // Side bump 2
+                    Shapes.box(1.0 / 16.0, 2.0 / 16.0, 3.0 / 16.0, 4.0 / 16.0, 6.0 / 16.0, 6.0 / 16.0) // Side bump 3
+            )
+            NestVariant.WARM_OCEAN -> Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0)
+            NestVariant.SEAGRASS -> Shapes.or(
+                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 14.0 / 16.0), // Main base
+                    Shapes.box(1.0 / 16.0, 0.0, 7.0 / 16.0, 5.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0), // Side protrusion 1
+                    Shapes.box(5.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 2.0 / 16.0, 9.0 / 16.0), // Side protrusion 2
+                    Shapes.box(6.0 / 16.0, 0.0, 13.0 / 16.0, 16.0 / 16.0, 6.0 / 16.0, 14.0 / 16.0) // Backside bump
+            )
+            NestVariant.LUSH -> Shapes.or(
+                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 12.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Main base
+                    Shapes.box(0.0 / 16.0, 0.0, 0.0 / 16.0, 4.0 / 16.0, 4.0 / 16.0, 12.0 / 16.0), // Side extension 1
+                    Shapes.box(0.0 / 16.0, 0.0, 12.0 / 16.0, 12.0 / 16.0, 6.0 / 16.0, 16.0 / 16.0), // Side extension 2
+                    Shapes.box(12.0 / 16.0, 0.0, 8.0 / 16.0, 16.0 / 16.0, 4.0 / 16.0, 16.0 / 16.0), // Side extension 3
+                    Shapes.box(12.0 / 16.0, 0.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 8.0 / 16.0) // Side extension 4
+            )
+            NestVariant.HAY -> Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 13.0 / 16.0, 4.0 / 16.0, 13.0 / 16.0)
+            NestVariant.SAND -> Shapes.or(
+                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0), // Main nest base
+                    Shapes.box(13.0 / 16.0, 0.0, 12.0 / 16.0, 16.0 / 16.0, 5.0 / 16.0, 16.0 / 16.0), // Large rock back right
+                    Shapes.box(10.0 / 16.0, 0.0, 12.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 16.0 / 16.0), // Medium rock back center
+                    Shapes.box(14.0 / 16.0, 0.0, 9.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Small rock right side
+                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 7.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0)  // Small rock front left
+            )
+            NestVariant.RED_SAND -> Shapes.or(
+                    Shapes.box(3.0 / 16.0, 0.0, 3.0 / 16.0, 14.0 / 16.0, 4.0 / 16.0, 14.0 / 16.0), // Main nest base
+                    Shapes.box(13.0 / 16.0, 0.0, 12.0 / 16.0, 16.0 / 16.0, 5.0 / 16.0, 16.0 / 16.0), // Large rock back right
+                    Shapes.box(10.0 / 16.0, 0.0, 12.0 / 16.0, 13.0 / 16.0, 3.0 / 16.0, 16.0 / 16.0), // Medium rock back center
+                    Shapes.box(14.0 / 16.0, 0.0, 9.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 12.0 / 16.0), // Small rock right side
+                    Shapes.box(4.0 / 16.0, 0.0, 0.0 / 16.0, 7.0 / 16.0, 3.0 / 16.0, 3.0 / 16.0)  // Small rock front left
+            )
+            NestVariant.CHORUS -> Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 4.0 / 16.0, 15.0 / 16.0)
         }
     }
 
+    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+        super.onPlace(state, level, pos, oldState, isMoving)
+        checkAndBreakIfSubmerged(state, level, pos)
+    }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(BlockStateProperties.WATERLOGGED)
+    }
+
+    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
+        checkAndBreakIfSubmerged(state, level, pos)
+        return super.updateShape(state, direction, neighborState, level, pos, neighborPos)
     }
 
     override fun neighborChanged(
@@ -185,9 +227,24 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         // Check if the block below is air
         val blockBelowPos = pos.below()
         if (fromPos == blockBelowPos && level.getBlockState(blockBelowPos).isAir) {
-            // Remove the block without dropping items (loot table handles drops)
             level.destroyBlock(pos, false)
         }
+
+        checkAndBreakIfSubmerged(state, level, pos)
+    }
+
+    private fun checkAndBreakIfSubmerged(state: BlockState, levelAccessor: LevelAccessor, pos: BlockPos) {
+        val fluidState = levelAccessor.getFluidState(pos)
+
+        if ((fluidState.type == Fluids.WATER || fluidState.isSource) && !canBeWaterlogged()) {
+            if (levelAccessor is Level) {
+                levelAccessor.destroyBlock(pos, true)
+            }
+        }
+    }
+
+    private fun canBeWaterlogged(): Boolean {
+        return variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN
     }
 
     override fun useWithoutItem(
@@ -199,10 +256,10 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     ): InteractionResult {
         // Ensure this logic only runs on the server
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS // Client-side only needs to show the hand animation
+            return InteractionResult.SUCCESS
         }
 
-        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL // Cast safely to ServerPlayer
+        val serverPlayer = player as? ServerPlayer ?: return InteractionResult.FAIL
 
         val entity = level.getBlockEntity(blockPos) as? NestBlockEntity ?: return InteractionResult.FAIL
 
@@ -237,10 +294,9 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         val hasEgg = !blockEntity.getItem(0).isEmpty
 
         return if (!isOwner && hasEgg) {
-            // Reduce destroy speed by 80%, making it 5 times harder to break
+            // Reduce destroy speed making it 5 times harder to break
             super.getDestroyProgress(state, player, level, pos) * 0.2f
         } else {
-            // Use the default destroy speed
             super.getDestroyProgress(state, player, level, pos)
         }
     }
@@ -277,7 +333,7 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
         state: BlockState,
         fluid: Fluid
     ): Boolean {
-        return variant == NestVariant.WATER && super.canPlaceLiquid(player, level, pos, state, fluid)
+        return (variant == NestVariant.WATER || variant == NestVariant.SEAGRASS || variant == NestVariant.WARM_OCEAN) && super.canPlaceLiquid(player, level, pos, state, fluid)
     }
 
     override fun getFluidState(state: BlockState): FluidState {
@@ -301,10 +357,19 @@ class NestBlock(val variant: NestVariant, properties: Properties) : BaseEntityBl
     }
 
 
-    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState {
-        if (variant == NestVariant.WATER) {
-            return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, ctx.level.getFluidState(ctx.clickedPos).type == Fluids.WATER)
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
+        val fluidState = ctx.level.getFluidState(ctx.clickedPos)
+
+        // If the nest variant can be waterlogged, set it accordingly
+        if (canBeWaterlogged()) {
+            return defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.type == Fluids.WATER)
         }
+
+        // Prevent placement if the block is submerged in water
+        if (!canBeWaterlogged() && fluidState.type == Fluids.WATER) {
+            return null
+        }
+
         return defaultBlockState()
     }
 

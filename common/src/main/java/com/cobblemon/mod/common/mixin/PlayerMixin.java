@@ -38,6 +38,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,6 +48,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.objectweb.asm.Opcodes;
@@ -55,6 +57,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -271,6 +274,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
     @Override
     public Rollable updateOrientation(Function<Matrix3f, Matrix3f> update) {
+        //Disabled to allow non mouse inputs to modify roll
         if (!shouldRoll()) return this;
 
         if (this.orientation == null) {
@@ -295,6 +299,60 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
         return pokemonEntity.getRiding().shouldRoll(pokemonEntity);
     }
+
+    @Override
+    public Vec3 rotationOnMouseXY(
+        double yMouse,
+        double xMouse,
+        SmoothDouble yMouseSmoother,
+        SmoothDouble xMouseSmoother,
+        double sensitivity,
+        double deltaTime
+    ) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return Vec3.ZERO;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return Vec3.ZERO;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
+
+        return pokemonEntity.getRiding().rotationOnMouseXY(
+            pokemonEntity,
+            player,
+            yMouse,
+            xMouse,
+            yMouseSmoother,
+            xMouseSmoother,
+            sensitivity,
+            deltaTime
+        );
+    }
+
+    @Override
+    public boolean useAngVelSmoothing() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return true;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return true;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return true;
+
+        return pokemonEntity.getRiding().useAngVelSmoothing(pokemonEntity);
+    }
+
+    @Override
+    public Vec3 angRollVel( double deltaTime ) {
+        var ret = new Vec3(0.0, 0.0, 0.0);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (!this.equals(player)) return ret;
+
+        var playerVehicle = player.getVehicle();
+        if (playerVehicle == null) return ret;
+        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return ret;
+
+        return pokemonEntity.getRiding().angRollVel( pokemonEntity, player, deltaTime );
+    }
+
 
     @Override
     public void clearRotation() {

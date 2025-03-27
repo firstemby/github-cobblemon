@@ -9,11 +9,14 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WANDER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -22,7 +25,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
-import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos
+import net.minecraft.world.entity.ai.util.HoverRandomPos
 
 class AirWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "air_wanders", true).asExpressible()
@@ -30,10 +33,11 @@ class AirWanderTaskConfig : SingleTaskConfig {
     val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 20).asExpressible()
     val verticalRange = numberVariable(WANDER, "vertical_wander_range", 5).asExpressible()
     val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
-
+    val minUpwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
+    val minDownwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
 
     override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
-        return listOf(condition, wanderChance, horizontalRange, verticalRange, speedMultiplier).asVariables()
+        return listOf(condition, wanderChance, horizontalRange, verticalRange, speedMultiplier, minUpwardsMovement, minDownwardsMovement).asVariables()
     }
 
     override fun createTask(
@@ -57,13 +61,12 @@ class AirWanderTaskConfig : SingleTaskConfig {
                     val wanderChance = wanderChance.resolveFloat()
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
-                    val target = AirAndWaterRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt(), 2, entity.lookAngle.x, entity.lookAngle.z, 2 * Math.PI)
-                    if (target != null) {
-                        walkTarget.set(WalkTarget(target, speedMultiplier.resolveFloat(), 3))
-                        lookTarget.set(BlockPosTracker(target))
-                        return@Trigger true
-                    }
-                    return@Trigger false
+                    val rotVec = entity.getViewVector(0F)
+                    val target = HoverRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt(), rotVec.x, rotVec.y, 1.5707964f, minUpwardsMovement.resolveInt(), minDownwardsMovement.resolveInt())
+                        ?: return@Trigger false
+                    walkTarget.set(WalkTarget(target, speedMultiplier.resolveFloat(), 3))
+                    lookTarget.set(BlockPosTracker(target))
+                    return@Trigger true
                 }
             }
         }

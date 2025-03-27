@@ -491,7 +491,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 }
             } else {
                 // Attempt to spawn a random egg in the nest with a small chance
-                if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0) {
+                if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and probably remove this entirely later too
 
                     val test = 1
 

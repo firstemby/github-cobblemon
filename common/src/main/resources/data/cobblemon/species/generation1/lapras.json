@@ -51,11 +51,7 @@
     "fixed": false
   },
   "riding": {
-    "controller": {
-      "key": "cobblemon:swim/generic",
-      "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.07, 0, 0.08)",
-      "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
-    },
+    "controller": null,
     "seats": [
       {
         "offset": {
@@ -81,7 +77,24 @@
           "z": -1.0
         }
       }
-    ]
+    ],
+    "stats": {
+      "SPEED": {
+        "ranges": "35-60"
+      },
+      "ACCELERATION": {
+        "ranges": "25-50"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "45-100"
+      }
+    }
   },
   "behaviour": {
     "moving": {

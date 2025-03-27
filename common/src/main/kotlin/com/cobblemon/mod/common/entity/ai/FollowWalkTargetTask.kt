@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.level.pathfinder.Path
+import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 
 class FollowWalkTargetTask(
@@ -102,9 +104,22 @@ class FollowWalkTargetTask(
         }
     }
 
+    private fun withNodeFilter(entity: PathfinderMob, nodeFilter: (PathType) -> Boolean, block: () -> Unit) {
+        val nodeEvaluator = entity.navigation.nodeEvaluator
+        if (nodeEvaluator is OmniPathNodeMaker) {
+            nodeEvaluator.nodeFilter = nodeFilter
+            block()
+            nodeEvaluator.nodeFilter = { true }
+        } else {
+            block()
+        }
+    }
+
     private fun hasFinishedPath(entity: PathfinderMob, walkTarget: WalkTarget, time: Long): Boolean {
         val blockPos = walkTarget.target.currentBlockPosition()
-        this.path = entity.navigation.createPath(blockPos, 0)
+        withNodeFilter(entity, (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true }) {
+            this.path = entity.navigation.createPath(blockPos, 0)
+        }
         this.speed = walkTarget.speedModifier
         val brain = entity.brain
         if (hasReached(entity, walkTarget)) {
@@ -126,10 +141,12 @@ class FollowWalkTargetTask(
                 10,
                 7,
                 Vec3.atBottomCenterOf(blockPos),
-                1.5707963705062866
+                Math.PI / 2F
             )
             if (vec3d != null) {
-                this.path = entity.navigation.createPath(vec3d.x, vec3d.y, vec3d.z, 0)
+                withNodeFilter(entity, (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true }) {
+                    this.path = entity.navigation.createPath(vec3d.x, vec3d.y, vec3d.z, 0)
+                }
                 return this.path != null
             }
         }

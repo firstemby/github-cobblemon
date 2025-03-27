@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.riding.states.CompositeState
-import com.cobblemon.mod.common.util.adapters.riding.RideControllerAdapter
+import com.cobblemon.mod.common.util.adapters.RideControllerAdapter
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.getString
@@ -35,7 +35,7 @@ class FallToFlightCompositeController : RideController {
         .with(PoseOption(PoseType.WALK) { it.entityData.get(PokemonEntity.MOVING) })
     override val condition: (PokemonEntity) -> Boolean = { true }
 
-    var minimumForwardSpeed: Expression = "0.5".asExpression()
+    var minimumForwardSpeed: Expression = "0.0".asExpression()
         private set
     var minimumFallSpeed: Expression = "0.5".asExpression()
         private set

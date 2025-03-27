@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.moves
 
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.readSizedInt
@@ -24,7 +23,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class BenchedMoves : Iterable<BenchedMove> {
-    val observable = SimpleObservable<BenchedMoves>()
+    var changeFunction: ((BenchedMoves) -> Unit) = {}
     private var emit = true
     private val benchedMoves = mutableListOf<BenchedMove>()
 
@@ -50,7 +49,7 @@ class BenchedMoves : Iterable<BenchedMove> {
 
     fun update() {
         if (emit) {
-            observable.emit(this)
+            changeFunction(this)
         }
     }
 

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
+import net.minecraft.resources.ResourceLocation
 
 /**
  * A type of precalculation that can occur on a list of [SpawnDetail] to accelerate
@@ -31,7 +32,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.Spawner
  */
 interface SpawningPrecalculation<T : Any> {
     /** Retrieves the precalculation keys for the given spawn detail. */
-    fun select(detail: SpawnDetail): List<T>
+    fun select(detail: SpawnDetail): Collection<T>
     /** Retrieves the precalculation key for the given context, if that key exists for this context. */
     fun select(ctx: SpawningContext): T?
 
@@ -71,7 +72,8 @@ interface SpawningPrecalculation<T : Any> {
  * @since January 31st, 2022
  */
 object RootPrecalculation : SpawningPrecalculation<Any> {
-    override fun select(detail: SpawnDetail): List<Any> = listOf(Unit)
+    val list = listOf(Unit)
+    override fun select(detail: SpawnDetail): List<Any> = list
     override fun select(ctx: SpawningContext): Any = Unit
 }
 
@@ -89,7 +91,15 @@ object ContextPrecalculation : SpawningPrecalculation<Class<out SpawningContext>
 object BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
     override fun select(detail: SpawnDetail) = listOf(detail.bucket)
     override fun select(ctx: SpawningContext) = ctx.cause.bucket
+}
 
+/**
+ * This isn't so much of a precalculation as it is a yoinking of another precalculation.
+ * Uses pre-established [SpawnDetail.validBiomes] to shortcut knowing which spawns are valid for a biome.
+ */
+object BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
+    override fun select(detail: SpawnDetail) = detail.validBiomes
+    override fun select(ctx: SpawningContext) = ctx.biomeHolder.unwrapKey().map { it.location() }.orElse(null)
 }
 
 /**

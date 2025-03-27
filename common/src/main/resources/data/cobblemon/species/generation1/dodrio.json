@@ -181,5 +181,28 @@
     "tutor:uproar"
   ],
   "preEvolution": "doduo",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "45-75"
+      },
+      "ACCELERATION": {
+        "ranges": "50-70"
+      },
+      "SKILL": {
+        "ranges": "25-55"
+      },
+      "JUMP": {
+        "ranges": "45-100"
+      },
+      "STAMINA": {
+        "ranges": "30-60"
+      }
+    },
+    "seats": [],
+    "controller": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

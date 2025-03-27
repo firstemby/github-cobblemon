@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.brain_preset.pokemon_eats_grass.name",
+  "description": "cobblemon.brain_preset.pokemon_eats_grass.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "2": [
+          "eat_grass"
+        ]
+      }
+    }
+  ]
+}

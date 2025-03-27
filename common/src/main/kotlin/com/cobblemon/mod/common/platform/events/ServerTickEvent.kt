@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.platform.events
 
+import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import net.minecraft.server.MinecraftServer
 
 /**
@@ -22,6 +24,9 @@ interface ServerTickEvent {
      * The [MinecraftServer] instance.
      */
     val server: MinecraftServer
+
+    val context: MutableMap<String, MoValue>
+        get() = mutableMapOf("server" to server.asMoLangValue())
 
     /**
      * Fired during the Pre tick phase.

@@ -549,15 +549,6 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         return InteractionResult.SUCCESS
     }
 
-    fun playAnimation(animation: String, expressions: List<String> = emptyList()) {
-        val packet = PlayPosableAnimationPacket(
-            entityId = id,
-            animation = setOf(animation),
-            expressions = expressions
-        )
-        packet.sendToPlayers(level().players().filterIsInstance<ServerPlayer>().filter { it.distanceTo(this) < 256 })
-    }
-
     override fun recalling(pokemonEntity: PokemonEntity): CompletableFuture<Unit> {
         playAnimation(RECALL_ANIMATION, pokemonExpressions(pokemonEntity.pokemon))
         return delayedFuture(seconds = 1.6F)
@@ -570,10 +561,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     private fun pokemonExpressions(pokemon: Pokemon): List<String> {
         return listOf(
-            "v.actioning_pokemon_name=\"${pokemon.species.name}\";",
+            "v.actioning_pokemon_name=\'${pokemon.species.name}\';",
             "v.actioning_pokemon_level=${pokemon.level};",
-            "v.actioning_pokemon_ball=\"${pokemon.caughtBall.name}\";",
-            "v.actioning_pokemon_shiny=\"${pokemon.shiny}\";",
+            "v.actioning_pokemon_ball=\'${pokemon.caughtBall.name}\';",
+            "v.actioning_pokemon_shiny=\'${pokemon.shiny}\';",
         )
     }
 

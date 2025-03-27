@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.events
 
 import com.cobblemon.mod.common.CobblemonFlows
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.util.cobblemonResource
 
 /**
@@ -38,6 +40,18 @@ object FlowHandler {
         CobblemonEvents.EVOLUTION_TESTED.subscribe { CobblemonFlows.run(cobblemonResource("evolution_tested"), it.context, it.functions) }
         CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { CobblemonFlows.run(cobblemonResource("evolution_accepted"), it.context, it.functions) }
         CobblemonEvents.EVOLUTION_COMPLETE.subscribe { CobblemonFlows.run(cobblemonResource("evolution_completed"), it.context) }
+        CobblemonEvents.WALLPAPER_UNLOCKED_EVENT.subscribe { CobblemonFlows.run(cobblemonResource("wallpaper_unlocked"), it.context, it.functions) }
+
+        PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(priority = Priority.LOW) { CobblemonFlows.run(cobblemonResource("player_logged_in"), it.context) }
+        PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe(priority = Priority.HIGH) { CobblemonFlows.run(cobblemonResource("player_logged_out"), it.context) }
+
+        PlatformEvents.SERVER_PLAYER_TICK_PRE.subscribe { CobblemonFlows.run(cobblemonResource("player_tick_pre"), it.context) }
+        PlatformEvents.SERVER_PLAYER_TICK_POST.subscribe { CobblemonFlows.run(cobblemonResource("player_tick_post"), it.context) }
+
+        PlatformEvents.SERVER_PLAYER_ADVANCEMENT_EARNED.subscribe { CobblemonFlows.run(cobblemonResource("advancement_earned"), it.context) }
+        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe { CobblemonFlows.run(cobblemonResource("right_clicked_block"), it.context, it.functions) }
+        PlatformEvents.RIGHT_CLICK_ENTITY.subscribe { CobblemonFlows.run(cobblemonResource("right_clicked_entity"), it.context, it.functions) }
+        PlatformEvents.PLAYER_DEATH.subscribe { CobblemonFlows.run(cobblemonResource("player_died"), it.context) }
     }
 }
 

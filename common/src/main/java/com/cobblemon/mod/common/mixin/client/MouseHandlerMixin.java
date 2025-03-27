@@ -14,11 +14,13 @@ import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.SmoothDouble;
+import net.minecraft.world.phys.Vec3;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,8 +35,11 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedScrollY;
     @Shadow @Final private Minecraft minecraft;
 
+    @Unique SmoothDouble xMouseSmoother = new SmoothDouble();
+    @Unique SmoothDouble yMouseSmoother = new SmoothDouble();
     @Unique SmoothDouble pitchSmoother = new SmoothDouble();
     @Unique SmoothDouble rollSmoother = new SmoothDouble();
+    @Unique SmoothDouble yawSmoother = new SmoothDouble();
 
     @Shadow @Final private SmoothDouble smoothTurnY;
 
@@ -43,6 +48,8 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedDX;
 
     @Shadow private double accumulatedDY;
+
+    @Shadow private double accumulatedScrollX;
 
     @Inject(
             method = "onScroll",
@@ -95,7 +102,13 @@ public class MouseHandlerMixin {
                     target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"
             )
     )
-    public boolean cobblemon$modifyRotation(LocalPlayer player, double cursorDeltaX, double cursorDeltaY, @Local(argsOnly = true) double d) {
+    public boolean cobblemon$modifyRotation(
+        LocalPlayer player,
+        double cursorDeltaX,
+        double cursorDeltaY,
+        @Local(argsOnly = true) double d,
+        @Local(argsOnly = true) double movementTime
+        ) {
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
@@ -109,16 +122,66 @@ public class MouseHandlerMixin {
         }
 
         if (!(player instanceof Rollable rollable)) return true;
+
         if (!rollable.shouldRoll()) {
+            xMouseSmoother.reset();
+            yMouseSmoother.reset();
             pitchSmoother.reset();
             rollSmoother.reset();
+            yawSmoother.reset();
             return true;
         }
 
-        var pitch = pitchSmoother.getNewDeltaValue(cursorDeltaY * 0.15f, d);
-        var roll = rollSmoother.getNewDeltaValue(cursorDeltaX * 0.15f, d);
-        rollable.rotate(0.0F, (float)pitch, (float)roll);
+        var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6000000238418579 + 0.20000000298023224;
+        var ridingSensitivity = Math.pow(defaultSensitivity, 3);
+
+        //Send mouse input to be interpreted into rotation
+        //deltas by the ride controller
+        Vec3 angVecMouse = rollable.rotationOnMouseXY(
+            cursorDeltaY,
+            cursorDeltaX ,
+            yMouseSmoother,
+            xMouseSmoother,
+            ridingSensitivity,
+            movementTime
+        );
+
+        //Perform Rotation using mouse influenced rotation deltas.
+        rollable.rotate(
+            (float) angVecMouse.x,
+            (float) angVecMouse.y,
+            (float) angVecMouse.z
+        );
+
+
+        //Gather and apply the current rotation deltas
+        var angRot = rollable.angRollVel(movementTime);
+
+        //Apply smoothing if requested by the controller.
+        //This Might be best if done by the controller itself?
+        if( rollable.useAngVelSmoothing() )
+        {
+            if( angRot != null ) {
+                var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
+                var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
+                var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
+                rollable.rotate((float) yaw, (float) pitch, (float) roll);
+            }
+        }
+        //Otherwise simply apply the smoothing
+        else
+        {
+            if( angRot != null ) {
+                rollable.rotate((float) (
+                    angRot.x * 10 * d),
+                    (float) (angRot.y * 10 * d),
+                    (float) (angRot.z * 10 * d)
+                );
+            }
+        }
         return false;
+
+
     }
 
     @Inject(method = "handleAccumulatedMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;isMouseGrabbed()Z", ordinal = 0))

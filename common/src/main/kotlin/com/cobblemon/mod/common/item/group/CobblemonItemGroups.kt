@@ -32,7 +32,7 @@ object CobblemonItemGroups {
     private val INJECTORS = hashMapOf<ResourceKey<CreativeModeTab>, (injector: Injector) -> Unit>()
 
     @JvmStatic val BLOCKS_KEY = this.create("blocks", this::blockEntries) {
-        ItemStack( CobblemonItems.PC)
+        ItemStack(CobblemonItems.PC)
     }
     @JvmStatic val UTILITY_ITEMS_KEY = this.create("utility_item", this::utilityItemEntries) {
         ItemStack(CobblemonItems.POKE_BALL)
@@ -336,19 +336,29 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
+        entries.accept(CobblemonItems.NEST_HAY)
         entries.accept(CobblemonItems.NEST_STICK)
         entries.accept(CobblemonItems.NEST_LEAF)
         entries.accept(CobblemonItems.NEST_STONE)
         entries.accept(CobblemonItems.NEST_DEEPSLATE)
-        entries.accept(CobblemonItems.NEST_BASALT)
+        entries.accept(CobblemonItems.NEST_LUSH)
         entries.accept(CobblemonItems.NEST_SNOW)
+        entries.accept(CobblemonItems.NEST_SEAGRASS)
+        entries.accept(CobblemonItems.NEST_WARM_OCEAN)
+        entries.accept(CobblemonItems.NEST_SAND)
+        entries.accept(CobblemonItems.NEST_RED_SAND)
+        entries.accept(CobblemonItems.NEST_NETHER)
+        entries.accept(CobblemonItems.NEST_BASALT)
+        entries.accept(CobblemonItems.NEST_SOUL_SAND)
+        entries.accept(CobblemonItems.NEST_CHORUS)
+
+        entries.accept(CobblemonItems.INCUBATOR)
 
         entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
         //entries.accept(CobblemonItems.NETHER_NEST)
         entries.accept(CobblemonItems.WATER_NEST)
-        entries.accept(CobblemonItems.INCUBATOR)
-
+        
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)
@@ -606,6 +616,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MEDICINAL_LEEK)
         entries.accept(Items.BONE)
         entries.accept(Items.SNOWBALL)
+        entries.accept(Items.GOLD_BLOCK)
 
         entries.accept(CobblemonItems.NORMAL_GEM)
         entries.accept(CobblemonItems.FIRE_GEM)
@@ -638,7 +649,7 @@ object CobblemonItemGroups {
     }
 
     private fun blocksInjections(injector: Injector) {
-        if(Cobblemon.implementation.isModInstalled("adorn")) { //adorn modifies vanilla block tab and if we dont follow suit we crash the game
+        if(Cobblemon.implementation.isModInstalled("adorn")) { //adorn modifies vanilla block tab and if we don't follow suit we crash the game
             injector.putLast(CobblemonItems.APRICORN_LOG)
             injector.putLast(CobblemonItems.APRICORN_WOOD)
             injector.putLast(CobblemonItems.STRIPPED_APRICORN_LOG)

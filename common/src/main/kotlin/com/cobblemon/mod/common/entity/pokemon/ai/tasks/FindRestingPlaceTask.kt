@@ -29,12 +29,12 @@ object FindRestingPlaceTask {
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.absent(CobblemonMemories.POKEMON_BATTLE),
                 it.present(CobblemonMemories.POKEMON_DROWSY),
-                it.absent(CobblemonMemories.REST_PATH_COOLDOWN),
+                it.absent(CobblemonMemories.PATH_COOLDOWN),
                 it.absent(CobblemonMemories.POKEMON_SLEEPING),
             ).apply(it) { _, _, walkTarget, _, pokemonDrowsy, restPathCooldown, _ ->
                 Trigger { world, entity, _ ->
                     return@Trigger if (it.get(pokemonDrowsy) && entity.pokemon.status?.status != Statuses.SLEEP && entity.pokemon.storeCoordinates.get()?.store !is PartyStore) {
-                        entity.brain.setMemoryWithExpiry(CobblemonMemories.REST_PATH_COOLDOWN, true, 80)
+                        entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 80)
                         val position = entity.level()
                             .getBlockPositions(AABB.ofSize(entity.position(), horizontalSearchDistance.toDouble(), verticalSearchDistance.toDouble(), horizontalSearchDistance.toDouble()))
                             .filter(entity::canSleepAt)

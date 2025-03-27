@@ -67,7 +67,7 @@ class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : Gr
     }
 
     override fun canMoveDirectly(origin: Vec3, target: Vec3): Boolean {
-        return if(pokemonEntity.behaviour.moving.swim.canSwimInWater) {
+        return if (pokemonEntity.behaviour.moving.swim.canSwimInWater) {
             isClearForMovementBetween(this.mob, origin, target, false)
         } else {
             super.canMoveDirectly(origin, target)

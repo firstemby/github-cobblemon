@@ -111,7 +111,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
     }
 
     fun trackPokemon(pokemon: Pokemon) {
-        pokemon.getChangeObservable()
+        pokemon.changeObservable
             .pipe(
                 stopAfter {
                     val coordinates = it.storeCoordinates.get() ?: return@stopAfter true

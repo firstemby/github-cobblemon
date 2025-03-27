@@ -28,19 +28,20 @@ import net.minecraft.world.level.block.state.predicate.BlockStatePredicate
  * @author Hiroku
  * @since April 6th, 2024
  */
-class EatGrassTask : Behavior<PokemonEntity>(
+class EatGrassTask(
+    val eatingChance: Float,
+    val cooldownTicks: Long
+) : Behavior<PokemonEntity>(
     ImmutableMap.of(
-        MemoryModuleType.ANGRY_AT, MemoryStatus.VALUE_ABSENT,
-        MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT,
         MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-        CobblemonMemories.POKEMON_BATTLE, MemoryStatus.VALUE_ABSENT
+        CobblemonMemories.RECENTLY_ATE_GRASS, MemoryStatus.VALUE_ABSENT
     )
 ) {
     val grassPredicate = BlockStatePredicate.forBlock(Blocks.GRASS_BLOCK)
     var timer = -1
 
     override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
-        if (entity.random.nextInt(500) != 0) {
+        if (world.random.nextFloat() > eatingChance) {
             return false
         } else {
             entity.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled?.takeIf { it } ?: run {
@@ -58,6 +59,8 @@ class EatGrassTask : Behavior<PokemonEntity>(
 
     override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
         timer = 40
+        entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 40L)
+        entity.playAnimation("eat")
         world.broadcastEntityEvent(entity, 10.toByte())
     }
 
@@ -70,14 +73,16 @@ class EatGrassTask : Behavior<PokemonEntity>(
                     world.destroyBlock(blockPos, false)
                 }
                 entity.ate()
+                entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
             } else if (world.getBlockState(blockPos.below()).`is`(Blocks.GRASS_BLOCK)) {
                 val blockPos2 = blockPos.below()
                 if (world.getBlockState(blockPos2).`is`(Blocks.GRASS_BLOCK)) {
                     if (world.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) {
-                        world.globalLevelEvent(2001, blockPos2, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()))
+                        world.levelEvent(2001, blockPos2, Block.getId(Blocks.GRASS_BLOCK.defaultBlockState()))
                         world.setBlock(blockPos2, Blocks.DIRT.defaultBlockState(), 2)
                     }
 
+                    entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
                     entity.ate()
                 }
             }

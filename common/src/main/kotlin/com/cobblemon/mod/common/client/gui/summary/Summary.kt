@@ -13,9 +13,6 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
-import com.cobblemon.mod.common.api.moves.MoveSet
-import com.cobblemon.mod.common.api.reactive.Observable.Companion.emitWhile
-import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
@@ -97,6 +94,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private val tabIconMoves = cobblemonResource("textures/gui/summary/summary_tab_icon_moves.png")
         private val tabIconStats = cobblemonResource("textures/gui/summary/summary_tab_icon_stats.png")
         val iconShinyResource = cobblemonResource("textures/gui/summary/icon_shiny.png")
+        val iconHeldItemResource = cobblemonResource("textures/gui/summary/icon_item_held.png")
+        val iconCosmeticItemResource = cobblemonResource("textures/gui/summary/icon_item_cosmetic.png")
 
         /**
          * Attempts to open this screen for a client.
@@ -124,6 +123,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private lateinit var modelWidget: ModelWidget
     private lateinit var nicknameEntryWidget: NicknameEntryWidget
     private val summaryTabs = mutableListOf<SummaryTab>()
+    private var showCosmeticItem = false
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
     private val party = ArrayList(party)
@@ -173,38 +173,43 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         )
 
         //Item Visibility Button
-        val hideHeldItemBtn = SummaryButton(
-            buttonX = x + 22f,
-            buttonY = y + 101f,
-            buttonWidth = 13,
-            buttonHeight = 9,
+        val HeldItemVisibilityButton = SummaryButton(
+            buttonX = x + 3F,
+            buttonY = y + 104F,
+            buttonWidth = 32,
+            buttonHeight = 32,
+            scale = 0.5F,
+            resource = itemVisibleResource,
+            activeResource = itemHiddenResource,
             clickAction = {
-                selectedPokemon.heldItemVisible=!selectedPokemon.heldItemVisible
+                selectedPokemon.heldItemVisible = !selectedPokemon.heldItemVisible
+                (it as SummaryButton).buttonActive = !selectedPokemon.heldItemVisible
                 modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
                 // Send item visibility update to server
-                sendToServer(
-                    SetItemHiddenPacket(
-                        selectedPokemon.uuid,
-                        selectedPokemon.heldItemVisible
-                    )
-                )
+                sendToServer(SetItemHiddenPacket(selectedPokemon.uuid, selectedPokemon.heldItemVisible))
             },
-            resource = itemVisibleResource,
-            renderRequirement = { selectedPokemon.heldItemVisible },
-            clickRequirement = { true },
+            renderRequirement = { !selectedPokemon.heldItemNoCopy().isEmpty && !showCosmeticItem },
+            clickRequirement = { !selectedPokemon.heldItemNoCopy().isEmpty && !showCosmeticItem }
         )
-        val showHeldItemBtn = SummaryButton(
-            buttonX = x + 22f,
-            buttonY = y + 101f,
-            buttonWidth = 13,
-            buttonHeight = 9,
-            clickAction = { },
-            resource = itemHiddenResource,
-            renderRequirement = { !selectedPokemon.heldItemVisible },
-            clickRequirement = { false },
+
+        addRenderableWidget(HeldItemVisibilityButton)
+
+        // Held/Cosmetic Item Button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 67F,
+                buttonY = y + 113F,
+                buttonWidth = 12,
+                buttonHeight = 12,
+                scale = 0.5F,
+                resource = iconCosmeticItemResource,
+                activeResource = iconHeldItemResource,
+                clickAction = {
+                    showCosmeticItem = !showCosmeticItem
+                    (it as SummaryButton).buttonActive = showCosmeticItem
+                }
+            )
         )
-        addRenderableWidget(showHeldItemBtn)
-        addRenderableWidget(hideHeldItemBtn)
 
         // Init Tabs
         summaryTabs.clear()
@@ -309,8 +314,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
      * Switches the selected PKM
      */
     fun switchSelection(newSelection: Int) {
+        this.selectedPokemon.moveSet.changeFunction = {}
         this.party.getOrNull(newSelection)?.let { this.selectedPokemon = it }
-        moveSetSubscription?.unsubscribe()
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
         children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
@@ -325,18 +330,15 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
     }
 
-    private var moveSetSubscription: ObservableSubscription<MoveSet>? = null
-
     /**
      * Start observing the MoveSet of the current PKM for changes
      */
     private fun listenToMoveSet() {
-        moveSetSubscription = selectedPokemon.moveSet.observable
-                .pipe(emitWhile { isOpen() })
-                .subscribe {
-                    if (mainScreen is MovesWidget)
-                        displayMainScreen(MOVES)
-                }
+        selectedPokemon.moveSet.changeFunction = {
+            if (mainScreen is MovesWidget) {
+                displayMainScreen(MOVES)
+            }
+        }
     }
 
     /**
@@ -581,19 +583,19 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
-        // Held Item
-        val heldItem = selectedPokemon.heldItemNoCopy()
+        // Held/Cosmetic Item
+        val displayedItem = if (showCosmeticItem) selectedPokemon.cosmeticItem else selectedPokemon.heldItemNoCopy()
         val itemX = x + 3
         val itemY = y + 104
-        if (!heldItem.isEmpty) {
-            context.renderItem(heldItem, itemX, itemY)
-            context.renderItemDecorations(Minecraft.getInstance().font, heldItem, itemX, itemY)
+        if (!displayedItem.isEmpty) {
+            context.renderItem(displayedItem, itemX, itemY)
+            context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
         }
 
         drawScaledText(
             context = context,
-            text = lang("held_item"),
-            x = x + 27,
+            text = lang("${if (showCosmeticItem) "cosmetic" else "held"}_item"),
+            x = x + 24,
             y = y + 114.5,
             scale = SCALE
         )
@@ -616,14 +618,19 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             scale = SCALE
         )
 
+        matrices.pushPose()
+        // Prevent widgets from being overlapped by other components
+        matrices.translate(0.0, 0.0, 1000.0)
+
         // Render all added Widgets
         super.render(context, mouseX, mouseY, delta)
 
         // Render Item Tooltip
-        if (!heldItem.isEmpty) {
+        if (!displayedItem.isEmpty) {
             val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, heldItem, mouseX, mouseY)
+            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
         }
+        matrices.popPose()
     }
 
     /**

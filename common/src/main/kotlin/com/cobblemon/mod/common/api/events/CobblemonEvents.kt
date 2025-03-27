@@ -48,6 +48,7 @@ import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
 import com.cobblemon.mod.common.api.events.storage.RenamePCBoxEvent
 import com.cobblemon.mod.common.api.events.storage.WallpaperCollectionEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperUnlockedEvent
 import com.cobblemon.mod.common.api.events.world.BigRootPropagatedEvent
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
@@ -181,6 +182,8 @@ object CobblemonEvents {
 
     @JvmField
     val WALLPAPER_COLLECTION_EVENT = EventObservable<WallpaperCollectionEvent>()
+    @JvmField
+    val WALLPAPER_UNLOCKED_EVENT = CancelableObservable<WallpaperUnlockedEvent>()
 
     @JvmField
     val CHANGE_PC_BOX_WALLPAPER_EVENT_PRE = CancelableObservable<ChangePCBoxWallpaperEvent.Pre>()
@@ -214,6 +217,10 @@ object CobblemonEvents {
     val HELD_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
     @JvmField
     val HELD_ITEM_POST = EventObservable<HeldItemEvent.Post>()
+    @JvmField
+    val COSMETIC_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
+    @JvmField
+    val COSMETIC_ITEM_POST = EventObservable<HeldItemEvent.Post>()
 
     @JvmField
     val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()

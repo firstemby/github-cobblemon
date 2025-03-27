@@ -213,7 +213,7 @@
       "id": "pikachu_raichu",
       "variant": "item_interact",
       "result": "raichu",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "thunderpunch"
       ],
@@ -229,7 +229,7 @@
       "id": "pikachu_raichualola",
       "variant": "item_interact",
       "result": "raichu alolan",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "psychic"
       ],
@@ -312,7 +312,7 @@
           "id": "pikachu_raichu",
           "variant": "item_interact",
           "result": "raichu",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "thunderpunch"
           ],
@@ -332,7 +332,7 @@
           "id": "pikachu_raichualola",
           "variant": "item_interact",
           "result": "raichu alolan",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "psychic"
           ],

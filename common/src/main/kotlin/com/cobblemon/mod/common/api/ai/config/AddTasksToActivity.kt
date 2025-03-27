@@ -18,7 +18,9 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
 class AddTasksToActivity : BrainConfig {
-    val activity = Activity.IDLE
+    val activity: Activity? = null
+    // Can be useful to add to multiple activities at once
+    val activities = mutableListOf<Activity>()
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasksByPriority = mutableMapOf<Int, List<TaskConfig>>()
     override fun getVariables(entity: LivingEntity) = tasksByPriority.values.flatten().flatMap { it.getVariables(entity) } + listOf(condition).asVariables()
@@ -26,10 +28,14 @@ class AddTasksToActivity : BrainConfig {
     override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
         if (!checkCondition(entity, condition)) return
 
-        val activity = brainConfigurationContext.getOrCreateActivity(activity)
+        val activities = if (activity != null) (activities + activity) else activities
+
         tasksByPriority.forEach { (priority, taskConfigs) ->
             val tasks = taskConfigs.flatMap { it.createTasks(entity, brainConfigurationContext) }
-            activity.addTasks(priority, *tasks.toTypedArray())
+            for (activity in activities) {
+                val activityContext = brainConfigurationContext.getOrCreateActivity(activity)
+                activityContext.addTasks(priority, *tasks.toTypedArray())
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ object CobblemonMemories {
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
     val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)
     val POKEMON_BATTLE = register<UUID>("pokemon_battle")
-    val REST_PATH_COOLDOWN = register("rest_path_cooldown", PrimitiveCodec.BOOL)
+    val PATH_COOLDOWN = register<Boolean>("path_cooldown")
     val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
     val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
@@ -59,6 +59,7 @@ object CobblemonMemories {
     val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
+    val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

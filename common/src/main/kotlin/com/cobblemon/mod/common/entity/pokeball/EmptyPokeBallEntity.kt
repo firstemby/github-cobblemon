@@ -104,7 +104,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     var capturingPokemon: PokemonEntity? = null
     val captureFuture = CompletableFuture<Boolean>()
     var captureState: CaptureState
-        get() = CaptureState.values()[entityData.get(CAPTURE_STATE).toInt()]
+        get() = CaptureState.entries[entityData.get(CAPTURE_STATE).toInt()]
         set(value) { entityData.set(CAPTURE_STATE, value.ordinal.toByte()) }
     var aspects: Set<String>
         get() = entityData.get(ASPECTS)

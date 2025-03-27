@@ -43,6 +43,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     var canPathThroughFire: Boolean = false
 
+    var nodeFilter: (PathType) -> Boolean = { true }
+
     override fun prepare(cachedWorld: PathNavigationRegion, entity: Mob) {
         super.prepare(cachedWorld, entity)
         nodePosToType.clear()
@@ -188,6 +190,10 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun isValidPathType(type: PathType): Boolean {
+        if (!nodeFilter(type)) {
+            return false
+        }
+
         return when {
             (type == PathType.BREACH || type == PathType.WATER || type == PathType.WATER_BORDER) && canSwimInWater() -> true
             type == PathType.OPEN && canFly() -> true

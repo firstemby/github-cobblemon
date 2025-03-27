@@ -99,6 +99,9 @@ object CobblemonFlows : DataRegistry {
             runtime.environment.query.addFunction("cancel") { cancelable }
         }
 
+        // Most places in the mod use query structs so it's probably nicer to present the things as query values.
+        context.forEach { (key, value) -> runtime.environment.query.addFunction(key) { return@addFunction value } }
+
         functions.forEach { (name, function) -> runtime.environment.query.addFunction(name, function) }
 
         flows[eventResourceLocation]?.forEach {

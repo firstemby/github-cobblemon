@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.spawning.detail
 
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.SpawnSet
 import com.cobblemon.mod.common.api.spawning.condition.PrecalculationResult
@@ -18,6 +19,7 @@ import com.cobblemon.mod.common.api.spawning.condition.SpawningPrecalculation
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
@@ -47,6 +49,10 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
         details.clear()
         for (set in data.values) {
             details.addAll(set.filter { it.isValid() })
+        }
+        val server = server()
+        if (server != null && server.isRunning) {
+            CobblemonSpawnPools.onServerLoad(server)
         }
         precalculate()
     }

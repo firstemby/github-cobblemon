@@ -26,6 +26,7 @@ enum class PoseType {
     FLY,
     FLOAT,
     SWIM,
+    GLIDE,
     /** A pose for rendering on the left shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
     SHOULDER_LEFT,
     /** A pose for rendering on the right shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
@@ -34,7 +35,7 @@ enum class PoseType {
     PROFILE,
     /** A pose for rendering in the party overlay and in minor spaces like the battle tiles. */
     PORTRAIT,
-    /** For guilded chest */
+    /** For gilded chest */
     OPEN,
     /** A simple type for non-living entities or errant cases. */
     NONE;

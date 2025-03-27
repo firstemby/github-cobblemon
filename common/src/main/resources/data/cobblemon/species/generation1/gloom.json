@@ -157,7 +157,7 @@
       "id": "gloom_vileplume",
       "variant": "item_interact",
       "result": "vileplume",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "petalblizzard"
       ],
@@ -168,7 +168,7 @@
       "id": "gloom_bellossom",
       "variant": "item_interact",
       "result": "bellossom",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "magicalleaf",
         "petalblizzard"

@@ -9,11 +9,14 @@
 package com.cobblemon.mod.common.pokemon.riding.controllers
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.controller.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.riding.controllers.BirdAirController.Companion
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.blockPositionsAsListRounded
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -31,10 +34,28 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
+import kotlin.math.max
+import kotlin.math.min
 
 class VehicleLandController : RideController {
     companion object {
         val KEY: ResourceLocation = cobblemonResource("land/vehicle")
+
+        val MAXTOPSPEED = 1.0 // 20 bl/s
+        val MINTOPSPEED = 0.35 // 7 bl/s
+        //val MINSPEED = 0.25 // 5 bl/s
+
+        //Accel will lie between 1.0 second and 5.0 seconds
+        val MAXACCEL = (MAXTOPSPEED ) / (20*3) //3.0 second to max speed
+        val MINACCEL = (MAXTOPSPEED ) / (20*8) // 8 seconds to max speed
+
+        //Can rotate 90 degrees
+        val MAXHANDLING = 90.0
+        val MINHANDLING = 30.0
+
+
+        val MAXYAWHANDLING = 16.0
+        val MINYAWHANDLING = 8.0
     }
 
     var canJump = "true".asExpression()
@@ -55,6 +76,9 @@ class VehicleLandController : RideController {
     var lookYawLimit = "101".asExpression()
         private set
 
+    var currSpeed = 0.0
+        private set
+
     @Transient
     override val key: ResourceLocation = KEY
     @Transient
@@ -72,14 +96,26 @@ class VehicleLandController : RideController {
             //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (entity.position().y)) {
                 val blockState = entity.level().getBlockState(it.below())
-                return@any !blockState.isAir && blockState.fluidState.isEmpty
+                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
             }
             true
         }
     }
 
     override fun speed(entity: PokemonEntity, driver: Player): Float {
-        return getRuntime(entity).resolveFloat(speed)
+
+        val topSpeed = entity.getRideStat(RidingStat.SPEED, RidingStyle.AIR, MINTOPSPEED, MAXTOPSPEED)
+        val accel = entity.getRideStat(RidingStat.ACCELERATION, RidingStyle.AIR, MINACCEL, MAXACCEL)
+
+        //speed up and slow down based on input
+        if (driver.zza > 0.0 && currSpeed < topSpeed) {
+            currSpeed = min(currSpeed + accel , topSpeed)
+        } else if (driver.zza < 0.0 && currSpeed > 0.0) {
+            //Decelerate is now always a constant half of max acceleration.
+            currSpeed = max(currSpeed - (MAXACCEL / 2), 0.0)
+        }
+
+        return currSpeed.toFloat()
     }
 
     override fun rotation(entity: PokemonEntity, driver: LivingEntity): Vec2 {
@@ -97,7 +133,7 @@ class VehicleLandController : RideController {
         if (driver.xxa != 0F && g.absoluteValue < runtime.resolveFloat(this.minimumSpeedToTurn)) {
             driver.xxa = 0F
         }
-        val velocity = Vec3(0.0 /* Maybe do drifting here later */, 0.0, g.toDouble())
+        val velocity = Vec3(0.0 /* Maybe do drifting here later */, 0.0, g.toDouble() * currSpeed)
 
         return velocity
     }

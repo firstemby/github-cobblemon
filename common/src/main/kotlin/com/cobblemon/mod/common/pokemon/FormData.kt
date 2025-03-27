@@ -98,12 +98,12 @@ class FormData(
     private var _height: Float? = null,
     @SerializedName("weight")
     private var _weight: Float? = null,
+    @SerializedName("riding")
+    private var _riding: RidingProperties? = null,
     @SerializedName("baseAI")
     private var _baseAI: MutableList<BrainConfig>? = null,
     @SerializedName("ai")
     private var _ai: MutableList<BrainConfig>? = null,
-    @SerializedName("riding")
-    private var _riding: RidingProperties? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */

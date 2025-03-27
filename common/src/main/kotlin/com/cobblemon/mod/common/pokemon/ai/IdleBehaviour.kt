@@ -8,13 +8,9 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 
 class IdleBehaviour {
-    val pointsAtSpawn = false
-    
     @Transient
     val struct = ObjectValue(this)
-        .addFunction("points_at_spawn") { DoubleValue(pointsAtSpawn) }
 }

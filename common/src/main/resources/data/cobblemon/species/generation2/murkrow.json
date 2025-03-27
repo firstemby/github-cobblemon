@@ -204,7 +204,7 @@
       "id": "murkrow_honchkrow",
       "variant": "item_interact",
       "result": "honchkrow",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"

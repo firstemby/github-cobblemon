@@ -26,48 +26,65 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import org.joml.Vector3f
 
-fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canRide: Boolean): InteractWheelGUI {
+fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGiveHeld: Boolean, canGiveCosmetic: Boolean, canRide: Boolean): InteractWheelGUI {
     val mountShoulder = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/icon_shoulder.png"),
         tooltipText = "cobblemon.ui.interact.mount.shoulder",
+        enabled = canMountShoulder,
         onPress = {
             if (canMountShoulder) {
-                InteractPokemonPacket(pokemonID, true, false).sendToServer()
+                InteractPokemonPacket(pokemonID, InteractTypePokemon.SHOULDER).sendToServer()
                 closeGUI()
             }
         }
     )
-    val giveItem = InteractWheelOption(
+    val giveHeldItem = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/icon_held_item.png"),
         tooltipText = "cobblemon.ui.interact.give.item",
+        enabled = canGiveHeld,
         onPress = {
-            InteractPokemonPacket(pokemonID, false, false).sendToServer()
-            closeGUI()
+            if (canGiveHeld) {
+                InteractPokemonPacket(pokemonID, InteractTypePokemon.HELD_ITEM).sendToServer()
+                closeGUI()
+            }
+        }
+    )
+    val giveCosmeticItem = InteractWheelOption(
+        iconResource = cobblemonResource("textures/gui/interact/icon_cosmetic_item.png"),
+        tooltipText = "cobblemon.ui.interact.give.cosmetic_item",
+        enabled = canGiveCosmetic,
+        onPress = {
+            if (canGiveCosmetic) {
+                InteractPokemonPacket(pokemonID, InteractTypePokemon.COSMETIC_ITEM).sendToServer()
+                closeGUI()
+            }
         }
     )
 
     val ride = InteractWheelOption(
-        iconResource = cobblemonResource("textures/gui/interact/icon_held_item.png"),
+        iconResource = cobblemonResource("textures/gui/interact/icon_ride.png"),
         tooltipText = "cobblemon.ui.interact.ride",
         onPress = {
             if (canRide) {
-                InteractPokemonPacket(pokemonID, false, true).sendToServer()
+                InteractPokemonPacket(pokemonID, InteractTypePokemon.RIDE).sendToServer()
                 closeGUI()
             }
         }
     )
 
     val options: Multimap<Orientation, InteractWheelOption> = ArrayListMultimap.create()
-    options.put(Orientation.TOP_RIGHT, giveItem)
-    if(canRide) {
-        options.put(Orientation.BOTTOM_LEFT, ride)
-    }
-
-    if (canMountShoulder) {
-        options.put(Orientation.TOP_LEFT, mountShoulder)
-    }
-
-    CobblemonEvents.POKEMON_INTERACTION_GUI_CREATION.post(PokemonInteractionGUICreationEvent(pokemonID, canMountShoulder, options))
+    options.put(Orientation.TOP_RIGHT, giveHeldItem)
+    options.put(Orientation.BOTTOM_RIGHT, giveCosmeticItem)
+    options.put(Orientation.BOTTOM_LEFT, ride)
+    options.put(Orientation.TOP_LEFT, mountShoulder)
+    CobblemonEvents.POKEMON_INTERACTION_GUI_CREATION.post(PokemonInteractionGUICreationEvent(
+        pokemonID = pokemonID,
+        mountShoulder = canMountShoulder,
+        giveHeld = canGiveHeld,
+        giveCosmetic = canGiveCosmetic,
+        canRide = canRide,
+        options = options
+    ))
     return InteractWheelGUI(options, Component.translatable("cobblemon.ui.interact.pokemon"))
 }
 

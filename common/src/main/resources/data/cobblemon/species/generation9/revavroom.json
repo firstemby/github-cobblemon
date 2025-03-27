@@ -42,20 +42,6 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "riding": {
-    "controller": {
-      "key": "cobblemon:land/vehicle"
-    },
-    "seats": [
-      {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        }
-      }
-    ]
-  },
   "behaviour": {
     "resting": {
       "canSleep": true,

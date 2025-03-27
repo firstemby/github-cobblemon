@@ -224,7 +224,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         // Iris Shader Compatibility: Keeps Iris from connecting the fishing lines of multiple players' Pokerods.
         // Iris performs a mixin into FishingHookRenderer to achieve the same result.
         // So we mimic their fix here.
-        vertexConsumer2.addVertex( 0f, 0f, 0f).setColor(0, 0, 0, 255).setNormal( 0f, 0f, 0f);
+        vertexConsumer2.addVertex(0f, 0f, 0f).setColor(0, 0, 0, 255).setNormal(0f, 0f, 0f);
 
         super.render(fishingBobberEntity, elapsedPartialTicks, tickDelta, matrixStack, vertexConsumerProvider, light)
     }

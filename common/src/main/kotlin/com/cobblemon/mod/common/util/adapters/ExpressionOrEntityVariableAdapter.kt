@@ -9,7 +9,10 @@
 package com.cobblemon.mod.common.util.adapters
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.ast.NameExpression
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.getString
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -31,7 +34,15 @@ object ExpressionOrEntityVariableAdapter : JsonDeserializer<Either<Expression, M
         return if (json.isJsonObject) {
             Either.right(context.deserialize(json, MoLangConfigVariable::class.java))
         } else {
-            Either.left(context.deserialize(json, Expression::class.java))
+            val expression = context.deserialize<Expression>(json, Expression::class.java)
+            if (expression is NameExpression) {
+                // In this case, it was PROBABLY an attempt at doing a string and it all went horribly wrong.
+                // Interpret it as a string of the original expression.
+                if (expression.names.size == 1 || expression.names.first() !in listOf("q", "query", "c", "context", "v", "variable", "m", "math")) {
+                    return Either.left(("'" + expression.getString() + "'").asExpression())
+                }
+            }
+            Either.left(expression)
         }
     }
 }

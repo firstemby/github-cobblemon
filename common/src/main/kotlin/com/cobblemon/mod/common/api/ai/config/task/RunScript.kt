@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.withQueryValue
@@ -36,8 +37,9 @@ class RunScript : SingleTaskConfig {
     }
 
     val script = stringVariable(SCRIPT_CATEGORY, "script", "cobblemon:dummy_script").asExpressible()
+    val variables = mutableListOf<MoLangConfigVariable>()
 
-    override fun getVariables(entity: LivingEntity) = listOf(script).asVariables()
+    override fun getVariables(entity: LivingEntity) = listOf(script).asVariables() + variables
 
     override fun createTask(
         entity: LivingEntity,
