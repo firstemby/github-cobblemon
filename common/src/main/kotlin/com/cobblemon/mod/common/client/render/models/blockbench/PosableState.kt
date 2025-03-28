@@ -142,16 +142,24 @@ abstract class PosableState : Schedulable {
         }
         .addFunction("angular_velocity_yaw") {
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val currAngVelY = pokemon.riding.deltaRotationPerSec.y
-            val preAngVelY = pokemon.riding.prevDeltaRotationPerSec.y
-
-            val partialTickAngVel = (currAngVelY - preAngVelY) * currentPartialTicks + preAngVelY
+            val partialTickYawDelt = pokemon.riding.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble()).y
             val maxRotRate = pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
                 ?: return@addFunction DoubleValue(0.0)
-
-
-            return@addFunction DoubleValue(partialTickAngVel / maxRotRate)
+            return@addFunction DoubleValue((partialTickYawDelt / maxRotRate).coerceIn(-1.0,1.0))
+        }
+        .addFunction("angular_velocity_pitch") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickPitchDelt = pokemon.riding.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble()).x
+            val maxRotRate = pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
+                ?: return@addFunction DoubleValue(0.0)
+            return@addFunction DoubleValue((partialTickPitchDelt / maxRotRate).coerceIn(-1.0,1.0))
+        }
+        .addFunction("angular_velocity_roll") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickRollDelt = pokemon.riding.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble()).z
+            val maxRotRate = pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
+                ?: return@addFunction DoubleValue(0.0)
+            return@addFunction DoubleValue((partialTickRollDelt / maxRotRate).coerceIn(-1.0,1.0))
         }
         .addFunction("smooth_speed") {
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)

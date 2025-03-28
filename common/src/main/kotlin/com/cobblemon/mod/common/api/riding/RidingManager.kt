@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.api.riding.controller.posing.RidingAltPose
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.util.Vec3Spring
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.toProperties
 import com.cobblemon.mod.common.util.withQueryValue
@@ -22,6 +23,7 @@ import com.mojang.authlib.minecraft.client.MinecraftClient
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -35,8 +37,14 @@ data class RidingManager(val entity: PokemonEntity) {
     var states: MutableMap<ResourceLocation, RidingState> = mutableMapOf()
     var prevDeltaMovement = entity.deltaMovement
     var deltaRotation = Vec2.ZERO
-    var prevDeltaRotationPerSec = Vec2.ZERO
     var deltaRotationPerSec = Vec2.ZERO
+
+    //Riding animation data
+    var prevRotation = Vec3.ZERO
+    var angDelta = Vec3.ZERO
+    var prevAngDelta = Vec3.ZERO
+    var rotDeltaSpring = Vec3Spring()
+
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -82,12 +90,32 @@ data class RidingManager(val entity: PokemonEntity) {
 
         val pose = controller.pose(entity)
         entity.entityData.set(PokemonEntity.POSE_TYPE, pose)
-        //val speedPlayer = driver.deltaMovement.horizontalDistance()
-        //driver.displayClientMessage(Component.literal("Speed player: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("$speedPlayer b/t")), true)
-        //val speedEntity = entity.deltaMovement.length()  //* 20 * 60 * 60) / ( 1000 )
-        //println(speedEntity)
-        //driver.displayClientMessage(Component.literal("Speed: ").withStyle { it.withColor(ChatFormatting.GREEN) }.append(Component.literal("${String.format("%.2f", speedEntity)} km/h")), true)
-        
+
+        // maybe here I do the required updates for riding animation stuff.
+        val rollable = driver as? Rollable ?: return
+
+        val r = this.shouldRoll(entity)
+        val currYaw = if(r) rollable.yaw else entity.yRot
+        val currPitch = if(r) rollable.pitch else entity.xRot
+        val currRoll = rollable.roll
+
+        prevAngDelta = angDelta
+
+        angDelta = Vec3(
+            Mth.degreesDifference(currPitch.toFloat(), prevRotation.x.toFloat()).toDouble(),
+            Mth.degreesDifference(currYaw.toFloat(), prevRotation.y.toFloat()).toDouble(),
+            Mth.degreesDifference(currRoll.toFloat(), prevRotation.z.toFloat()).toDouble()
+        )
+
+        //val stiffness = 16.0
+        //val damping = 8.0
+
+        val stiffness = 90.0
+        val damping = 19.0
+        rotDeltaSpring.update( angDelta, stiffness, damping)
+
+        prevRotation = Vec3(currPitch.toDouble(), currYaw .toDouble(), currRoll.toDouble())
+
     }
 
     fun speed(entity: PokemonEntity, driver: Player): Float {
@@ -102,8 +130,6 @@ data class RidingManager(val entity: PokemonEntity) {
         val rotation = controller.rotation(entity, driver)
         this.deltaRotation = Vec2(rotation.x - previousRotation.x, rotation.y - previousRotation.y)
 
-        //Record the current change in rotation per second
-        this.prevDeltaRotationPerSec = this.deltaRotationPerSec
         this.deltaRotationPerSec = deltaRotation.scale(20.0f)
         return rotation
     }
