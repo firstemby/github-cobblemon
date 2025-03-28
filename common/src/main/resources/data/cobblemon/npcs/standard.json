@@ -1,7 +1,7 @@
 {
   "hitbox": "player",
   "presets": [
-
+    "cobblemon:looks_in_one_direction"
   ],
   "variation": {
     "dirt": [

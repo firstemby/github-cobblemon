@@ -1,11 +1,13 @@
 package com.cobblemon.mod.common.battles.runner.remote
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.UnionBattleActor
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.party.PartyStore
+import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -20,6 +22,7 @@ import com.cobblemon.mod.common.util.server
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.schedule.Activity
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.WebSocket
@@ -221,15 +224,19 @@ class UnionShowdownService(
          */
         fun startBattle(instruction: String) {
             val arguments = instruction.replace("|start-battle|", "").split("|")
-            if (arguments.size != 5) return
+            if (arguments.size != 7) return
             val battleId = UUID.fromString(arguments[0])
             val playerIdA = UUID.fromString(arguments[1])
-            val playerIdB = UUID.fromString(arguments[2])
-            val teamA = JsonParser.parseString(arguments[3]).asJsonObject
-            val teamB = JsonParser.parseString(arguments[4]).asJsonObject
-
+            val playerNameA = arguments[2]
+            val playerIdB = UUID.fromString(arguments[3])
+            val playerNameB = arguments[4]
+            val teamA = JsonParser.parseString(arguments[5]).asJsonObject
+            val teamB = JsonParser.parseString(arguments[6]).asJsonObject
             val playerA = server()?.playerList?.getPlayer(playerIdA)
             val playerB = server()?.playerList?.getPlayer(playerIdB)
+
+            println(arguments[5])
+            println(arguments[6])
 
             if (playerA == null && playerB == null) {
                 Cobblemon.LOGGER.warn("Tried to start battle with no players present on server")
@@ -264,10 +271,15 @@ class UnionShowdownService(
             else if (playerA != null && playerB == null) {
                 val playerActorA = PlayerBattleActor(playerIdA, playerATeam)
                 val npc = NPCEntity(playerA.level())
-                npc.moveTo(playerA.x + 5, playerA.y, playerA.z, playerA.yRot, playerA.xRot)
-                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("ai_test"))!!
+                npc.moveTo(playerA.x + 5, playerA.y, playerA.z, playerA.yRot, (playerA.xRot + 180f) % 360f)
+                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("standard"))!!
+                npc.loadTextureFromGameProfileName(playerNameB)
                 npc.initialize(1)
+                npc.config.setDirectly("yaw", DoubleValue((playerA.xRot + 90f) % 360f))
                 npc.uuid = playerIdB
+                npc.customName = playerNameB.text()
+                npc.isInvulnerable = true
+                npc.isMovable = false
                 playerA.level().addFreshEntity(npc)
                 val playerActorB = UnionBattleActor(npc, playerBTeam)
                 BattleRegistry.startBattle(
@@ -281,10 +293,15 @@ class UnionShowdownService(
             }
             else {
                 val npc = NPCEntity(playerB!!.level())
-                npc.moveTo(playerB.x + 5, playerB.y, playerB.z, playerB.yRot, playerB.xRot)
-                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("ai_test"))!!
+                npc.moveTo(playerB.x + 5, playerB.y, playerB.z, playerB.yRot, (playerB.xRot + 180f) % 360f)
+                npc.npc = NPCClasses.getByIdentifier(cobblemonResource("standard"))!!
+                npc.loadTextureFromGameProfileName(playerNameA)
                 npc.initialize(1)
                 npc.uuid = playerIdA
+                npc.customName = playerNameA.text()
+                npc.isInvulnerable = true
+                npc.isMovable = false
+                npc.config.setDirectly("yaw", DoubleValue((playerB.xRot + 90f) % 360f))
                 playerB.level().addFreshEntity(npc)
                 val playerActorA = UnionBattleActor(npc, playerATeam)
                 val playerActorB = PlayerBattleActor(playerIdB, playerBTeam)

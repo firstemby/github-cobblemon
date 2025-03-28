@@ -45,7 +45,7 @@ object ShowdownActionHandler : ServerNetworkPacketHandler<ShowdownActionPacket> 
                     it.effectedPokemon.heal()
                 }
                 val showdownTeamStr = showdownTeam.packTeam()
-                service.send(">queue-battle ${player.uuid} $cobblemonTeam@|@$showdownTeamStr")
+                service.send(">queue-battle ${player.uuid} ${player.name.string} $cobblemonTeam@|@$showdownTeamStr")
             }
         }
     }

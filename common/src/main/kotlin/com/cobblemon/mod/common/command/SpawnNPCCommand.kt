@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.command.argument.NPCClassArgumentType
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.alias
-import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.toBlockPos
 import com.mojang.brigadier.Command
