@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.api.riding.util
 
 import net.minecraft.world.phys.Vec3
+import kotlin.math.min
 
 /**
- * A general medium for riding. Mainly used for categorizing which stats to pull from and for
- * presenting a simplified view of riding to users.
+ * A spring-based smoother for Vec3 values, designed for applying damped spring motion to riding data.
+ * Stores the previous and current values, along with a history buffer for lookback-based interpolation.
  *
  * @author Jackowes
  * @since March 27th, 2025
@@ -23,10 +24,11 @@ class Vec3Spring(
     var value: Vec3 = Vec3.ZERO,
     var velocity: Vec3 = Vec3.ZERO
 ) {
-    var previous: Vec3 = Vec3.ZERO
+    val history = ArrayDeque<Vec3>()
+    //Hold up to a seconds worth of values
+    val lookBackSize = 20
 
     fun update(target: Vec3, stiffness: Double, damping: Double) {
-        previous = value
 
         //Hooke's Law f = kx where:
         //f is force
@@ -40,11 +42,22 @@ class Vec3Spring(
 
         velocity = velocity.add(accel.scale(1.0/20.0))
         value = value.add(velocity.scale(1.0/20.0))
+
+        history.addFirst(value)
+        //Adding one since if we want to check max look back point it needs something to interp with.
+        if( history.size > lookBackSize + 1) {
+            history.removeLast()
+        }
     }
 
-    fun getInterpolated(partialTick: Double): Vec3 {
-        val sprev = previous.scale(20.0)
-        val svalue = value.scale(20.0)
+    fun getInterpolated(partialTick: Double, lookBackTick: Int): Vec3 {
+        if (history.size < 2) {
+            return value.scale(20.0) // or Vec3.ZERO if you prefer
+        }
+
+        val tick = min(lookBackTick, history.size - 2)
+        val sprev = history.get(tick + 1).scale(20.0)
+        val svalue = history.get(tick).scale(20.0)
         return sprev.add(svalue.subtract(sprev).scale(partialTick))
     }
 }

@@ -242,24 +242,6 @@ open class PokemonEntity(
 
     var enablePoseTypeRecalculation = true
 
-
-
-    //Ignore this not being anywhere near the right spot for this code
-
-    //Right before deltaMovement is changed through the travel function we set prevDeltaMovement equal to the
-    //current deltaMovement. That way they are never more than one update out of sync.
-    //this.prevDeltaMovement = this.deltaMovement
-
-    //And then within a function that( possibly something like the delta_momement_x function or something more general)
-    //is updated every partialtick the prevDeltaMovement value is moved towards this.deltaMovment an amount proportional
-    //to the partial tick
-    //<insert that logic>
-
-    //and then finally prevDeltaMovement.length() or its x y and z values are all exposed to the animation molang context
-    // like you showed.
-
-    //q.give_me_speed_not_choppy_and_profit
-
     override val riding: RidingManager = RidingManager(this)
 
     /**

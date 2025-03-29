@@ -35,15 +35,13 @@ import kotlin.math.sin
 data class RidingManager(val entity: PokemonEntity) {
     var lastSpeed = 0F
     var states: MutableMap<ResourceLocation, RidingState> = mutableMapOf()
-    var prevDeltaMovement = entity.deltaMovement
     var deltaRotation = Vec2.ZERO
     var deltaRotationPerSec = Vec2.ZERO
 
     //Riding animation data
     var prevRotation = Vec3.ZERO
-    var angDelta = Vec3.ZERO
-    var prevAngDelta = Vec3.ZERO
     var rotDeltaSpring = Vec3Spring()
+    var velSpring = Vec3Spring()
 
 
     val runtime: MoLangRuntime by lazy {
@@ -99,9 +97,8 @@ data class RidingManager(val entity: PokemonEntity) {
         val currPitch = if(r) rollable.pitch else entity.xRot
         val currRoll = rollable.roll
 
-        prevAngDelta = angDelta
 
-        angDelta = Vec3(
+        val angDelta = Vec3(
             Mth.degreesDifference(currPitch.toFloat(), prevRotation.x.toFloat()).toDouble(),
             Mth.degreesDifference(currYaw.toFloat(), prevRotation.y.toFloat()).toDouble(),
             Mth.degreesDifference(currRoll.toFloat(), prevRotation.z.toFloat()).toDouble()
@@ -147,7 +144,10 @@ data class RidingManager(val entity: PokemonEntity) {
     fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
         val controller = getController(entity) ?: return Vec3.ZERO
 
-        this.prevDeltaMovement = entity.deltaMovement
+        val stiffness = 90.0
+        val damping = 19.0
+        this.velSpring.update(entity.deltaMovement, stiffness, damping)
+        //this.velSpring = entity.deltaMovement
         return controller.velocity(entity, driver, input)
     }
 

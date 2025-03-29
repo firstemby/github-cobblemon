@@ -509,6 +509,7 @@ object MoLangFunctions {
             map.put("world") { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() }
             map.put("biome") { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() }
             map.put("is_passenger") { DoubleValue(entity.isPassenger) }
+            map.put("has_passenger") { DoubleValue(entity.passengers.size > 0) }
             map.put("find_nearby_block") { params ->
                 val type = params.getString(0).asIdentifierDefaultingNamespace(namespace = "minecraft")
                 val isTag = type.path.startsWith("#")

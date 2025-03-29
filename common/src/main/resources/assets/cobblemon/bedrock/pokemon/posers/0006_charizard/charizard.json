@@ -87,7 +87,14 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "!q.riding_alt_pose('GLIDING')",
-      "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'air_fly')"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('charizard', 'air_fly')",
+        {
+          "condition": "q.has_passenger",
+          "animation": "q.bedrock('charizard', 'riding_look')"
+        }
+      ],
       "quirks": [
         "q.bedrock_quirk('charizard', 'blink')",
         "q.bedrock_quirk('charizard', 'air_fly_quirk')"
@@ -97,7 +104,14 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "q.riding_alt_pose('GLIDING')",
-      "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'air_glide_TEST')"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('charizard', 'air_glide_TEST')",
+        {
+          "condition": "q.has_passenger",
+          "animation": "q.bedrock('charizard', 'riding_look')"
+        }
+      ],
       "quirks": [
         "q.bedrock_quirk('charizard', 'blink')"
       ]
