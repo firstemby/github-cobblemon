@@ -416,6 +416,9 @@ object CobblemonNetwork {
         // Debug / cheats
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
 
+        // Stadium packets
+        list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
+
         return list
     }
 
@@ -513,9 +516,6 @@ object CobblemonNetwork {
 
         // Orientation packet(s)
         list.add(PacketRegisterInfo(C2SUpdateOrientationPacket.ID, C2SUpdateOrientationPacket::decode, OrientationPacketHandler))
-
-        // Stadium packets
-        list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
 
         return list
     }

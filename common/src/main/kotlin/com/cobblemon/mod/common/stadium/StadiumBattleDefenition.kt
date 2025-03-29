@@ -9,6 +9,8 @@ abstract class StadiumBattleDefenition {
     var participants: MutableList<UUID> = mutableListOf<UUID>()
     var spectators: MutableList<UUID> = mutableListOf<UUID>()
 
+    var cameras: MutableList<StadiumCameraEntry> = mutableListOf<StadiumCameraEntry>()
+
     abstract fun readyForBattle(): Boolean
 
     abstract fun canAddPlayer(player: ServerPlayer): Boolean
@@ -19,5 +21,5 @@ abstract class StadiumBattleDefenition {
 
     abstract fun initializeBattle()
 
-    abstract fun getCurrentCamera(): StadiumCameraDefenition
+    abstract fun getCurrentCamera(): StadiumCameraEntry
 }
