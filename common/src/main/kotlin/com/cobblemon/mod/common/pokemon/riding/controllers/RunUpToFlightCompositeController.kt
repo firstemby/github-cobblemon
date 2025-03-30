@@ -84,7 +84,6 @@ class RunUpToFlightCompositeController : RideController {
             //Pass the speed to the next state
             val flightState = flightController.getState( entity, ::BirdAirState )
             val groundState = landController.getState( entity, ::GenericLandState )
-            groundState.currSpeed = flightState.currSpeed
             groundState.rideVel = flightState.rideVel
             groundState.stamina = flightState.stamina
 
@@ -100,7 +99,6 @@ class RunUpToFlightCompositeController : RideController {
             //Pass the speed to the next state
             val flightState = flightController.getState( entity, ::BirdAirState )
             val groundState = landController.getState( entity, ::GenericLandState )
-            flightState.currSpeed = groundState.currSpeed
             flightState.rideVel = groundState.rideVel
             flightState.stamina = groundState.stamina
 

@@ -40,8 +40,11 @@ data class RidingManager(val entity: PokemonEntity) {
 
     //Riding animation data
     var prevRotation = Vec3.ZERO
+    var rotSpring = Vec3Spring()
     var rotDeltaSpring = Vec3Spring()
     var velSpring = Vec3Spring()
+    val stiffness = 90.0
+    val damping = 19.0
 
 
     val runtime: MoLangRuntime by lazy {
@@ -104,11 +107,8 @@ data class RidingManager(val entity: PokemonEntity) {
             Mth.degreesDifference(currRoll.toFloat(), prevRotation.z.toFloat()).toDouble()
         )
 
-        //val stiffness = 16.0
-        //val damping = 8.0
+        rotSpring.update(Vec3(currPitch.toDouble(), currYaw.toDouble(), currRoll.toDouble()), stiffness, damping)
 
-        val stiffness = 90.0
-        val damping = 19.0
         rotDeltaSpring.update( angDelta, stiffness, damping)
 
         prevRotation = Vec3(currPitch.toDouble(), currYaw .toDouble(), currRoll.toDouble())
@@ -144,10 +144,7 @@ data class RidingManager(val entity: PokemonEntity) {
     fun velocity(entity: PokemonEntity, driver: Player, input: Vec3): Vec3 {
         val controller = getController(entity) ?: return Vec3.ZERO
 
-        val stiffness = 90.0
-        val damping = 19.0
         this.velSpring.update(entity.deltaMovement, stiffness, damping)
-        //this.velSpring = entity.deltaMovement
         return controller.velocity(entity, driver, input)
     }
 

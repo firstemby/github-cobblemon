@@ -14,8 +14,8 @@ import net.minecraft.util.SmoothDouble
 import net.minecraft.world.phys.Vec3
 
 data class VehicleLandState(val entity: PokemonEntity) : RidingState {
-    var rideVel: Vec3 = Vec3.ZERO
-    var stamina: Float = 1.0f
+    override var rideVel: Vec3 = Vec3.ZERO
+    override var stamina: Float = 1.0f
     var currDrift: Double = 0.0
     var driftBoost: Double = 0.0
     var turnSmoother: SmoothDouble = SmoothDouble()

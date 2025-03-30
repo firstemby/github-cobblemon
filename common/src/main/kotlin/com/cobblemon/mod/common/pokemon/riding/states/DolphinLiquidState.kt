@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.phys.Vec3
 
 data class DolphinLiquidState(val entity: PokemonEntity) : RidingState {
+    override var rideVel: Vec3 = Vec3.ZERO
+    override var stamina: Float = 1.0f
     var currSpeed: Double = 0.0
-    var stamina: Float = 1.0f
-    var rideVel: Vec3 = Vec3.ZERO
     var gliding: Boolean = false
 }

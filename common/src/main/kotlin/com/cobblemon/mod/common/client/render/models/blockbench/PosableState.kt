@@ -140,7 +140,31 @@ abstract class PosableState : Schedulable {
             reusableAnimTime.value = animationSeconds.toDouble()
             reusableAnimTime
         }
-        .addFunction("angular_velocity_yaw") { params ->
+        .addFunction("r_pitch") { params ->
+            val lookBackTick = params.getInt(0)
+
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickPitch = pokemon.riding.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
+            val maxPitch = 90.0
+            return@addFunction DoubleValue((partialTickPitch / maxPitch).coerceIn(-1.0,1.0))
+        }
+        .addFunction("r_yaw") { params ->
+            val lookBackTick = params.getInt(0)
+
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickYaw = pokemon.riding.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
+            val maxYaw = 180.0
+            return@addFunction DoubleValue((partialTickYaw / maxYaw).coerceIn(-1.0,1.0))
+        }
+        .addFunction("r_roll") { params ->
+            val lookBackTick = params.getInt(0)
+
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickRoll = pokemon.riding.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
+            val maxRoll = 180.0
+            return@addFunction DoubleValue((partialTickRoll / maxRoll).coerceIn(-1.0,1.0))
+        }
+        .addFunction("r_yaw_change") { params ->
             val lookBackTick = params.getInt(0)
 
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
@@ -149,7 +173,7 @@ abstract class PosableState : Schedulable {
                 ?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickYawDelt / maxRotRate).coerceIn(-1.0,1.0))
         }
-        .addFunction("angular_velocity_pitch") { params ->
+        .addFunction("r_pitch_change") { params ->
             val lookBackTick = params.getInt(0)
 
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
@@ -158,7 +182,7 @@ abstract class PosableState : Schedulable {
                 ?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickPitchDelt / maxRotRate).coerceIn(-1.0,1.0))
         }
-        .addFunction("angular_velocity_roll") { params ->
+        .addFunction(" r_roll_change") { params ->
             val lookBackTick = params.getInt(0)
 
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
@@ -167,7 +191,7 @@ abstract class PosableState : Schedulable {
                 ?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickRollDelt / maxRotRate).coerceIn(-1.0,1.0))
         }
-        .addFunction("smooth_speed") { params ->
+        .addFunction("r_speed") { params ->
             val lookBackTick = params.getInt(0)
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 
@@ -177,7 +201,7 @@ abstract class PosableState : Schedulable {
 
             return@addFunction DoubleValue((partialTickSpeed / topSpeed).coerceIn(-1.0,1.0))
         }
-        .addFunction("smooth_delta_x") { params ->
+        .addFunction("r_speed_x") { params ->
             val lookBackTick = params.getInt(0)
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 
@@ -187,7 +211,7 @@ abstract class PosableState : Schedulable {
                 ?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickXVel / topSpeed).coerceIn(-1.0,1.0))
         }
-        .addFunction("smooth_delta_y") { params ->
+        .addFunction("r_speed_y") { params ->
             val lookBackTick = params.getInt(0)
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 
@@ -197,7 +221,7 @@ abstract class PosableState : Schedulable {
                 ?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickYVel / topSpeed).coerceIn(-1.0,1.0))
         }
-        .addFunction("smooth_delta_z") { params ->
+        .addFunction("r_speed_z") { params ->
             val lookBackTick = params.getInt(0)
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
 

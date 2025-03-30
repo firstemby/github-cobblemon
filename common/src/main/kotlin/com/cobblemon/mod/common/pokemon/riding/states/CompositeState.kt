@@ -11,8 +11,11 @@ package com.cobblemon.mod.common.pokemon.riding.states
 import com.cobblemon.mod.common.api.riding.RidingState
 import com.cobblemon.mod.common.api.riding.controller.RideController
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.world.phys.Vec3
 
 open class CompositeState(pokemonEntity: PokemonEntity) : RidingState {
+    override var rideVel: Vec3 = Vec3.ZERO
+    override var stamina: Float = 1.0f
     var activeController: RideController? = null
     var timeTransitioned = -100L
 }

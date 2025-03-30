@@ -9,7 +9,10 @@
 package com.cobblemon.mod.common.pokemon.riding.states
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.world.phys.Vec3
 
 class RunUpToFlightCompositeState(pokemonEntity: PokemonEntity) : CompositeState(pokemonEntity) {
+    override var rideVel: Vec3 = Vec3.ZERO
+    override var stamina: Float = 1.0f
     var currSpeed: Double = 0.0
 }

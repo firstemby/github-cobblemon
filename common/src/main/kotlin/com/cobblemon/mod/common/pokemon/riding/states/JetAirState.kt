@@ -13,9 +13,9 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.phys.Vec3
 
 data class JetAirState(val entity: PokemonEntity) : RidingState {
+    override var rideVel: Vec3 = Vec3.ZERO
+    override var stamina: Float = 1.0f
     var currSpeed: Double = 0.0
-    var stamina: Float = 1.0f
-    var rideVel: Vec3 = Vec3.ZERO
     var currMouseXForce: Double = 0.0
     var currMouseYForce: Double = 0.0
 }

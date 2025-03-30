@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.riding
 
+import net.minecraft.world.phys.Vec3
+
 /**
  * Honestly having a base interface is probably unnecessary I'm just considering whether there's going to be some
  * kind of shared state later.
@@ -15,4 +17,7 @@ package com.cobblemon.mod.common.api.riding
  * @author Hiroku
  * @since October 6th, 2024
  */
-interface RidingState
+interface RidingState {
+    var rideVel: Vec3
+    var stamina: Float
+}
