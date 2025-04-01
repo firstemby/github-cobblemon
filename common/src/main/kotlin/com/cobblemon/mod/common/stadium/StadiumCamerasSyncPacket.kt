@@ -18,8 +18,10 @@ class StadiumCamerasSyncPacket(cameras: Collection<StadiumCameraEntry>) :
         StadiumCameras.reload(entries.associateBy { it.id })
     }
 
+    override val id = ID
+
     companion object {
-        val ID = cobblemonResource("dex_entry_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = DexEntrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        val ID = cobblemonResource("stadium_cameras_sync")
+        fun decode(buffer: RegistryFriendlyByteBuf) = StadiumCamerasSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

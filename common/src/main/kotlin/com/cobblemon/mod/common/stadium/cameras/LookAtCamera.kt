@@ -6,6 +6,7 @@ import org.joml.Vector3f
 import kotlin.math.atan
 import kotlin.math.atan2
 
+/*
 class LookAtCamera(val position: Vec3, val target: Vec3): StadiumCameraEntry() {
     override fun resolvePosition(): Vec3 {
         return position
@@ -18,3 +19,4 @@ class LookAtCamera(val position: Vec3, val target: Vec3): StadiumCameraEntry() {
         return Vector3f(xRot, yRot, 0.0F)
     }
 }
+*/

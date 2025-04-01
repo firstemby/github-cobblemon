@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
 import com.cobblemon.mod.common.stadium.StadiumClientManager;
-import com.cobblemon.mod.common.stadium.cameras.LookAtCamera;
 import com.cobblemon.mod.common.util.CameraExtensionsKt;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
@@ -81,10 +80,10 @@ public class GameRendererMixin {
             stadiumCamera.setup(this.minecraft.level, entity, true, false, 1.0F);
 
             //This is a partial copy of players camera, adjust proper parameters
-            LookAtCamera camera = new LookAtCamera(new Vec3(0.0,0.0,0.0), new Vec3(Mth.lerp(f, entity.xo, entity.getX()),Mth.lerp(f, entity.yo, entity.getY()) + 1.5,Mth.lerp(f, entity.zo, entity.getZ())));
-            stadiumCamera.setPosition(camera.resolvePosition());
-            Vector3f rotations = camera.resolveRotation();
-            CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
+            //LookAtCamera camera = new LookAtCamera(new Vec3(0.0,0.0,0.0), new Vec3(Mth.lerp(f, entity.xo, entity.getX()),Mth.lerp(f, entity.yo, entity.getY()) + 1.5,Mth.lerp(f, entity.zo, entity.getZ())));
+            //stadiumCamera.setPosition(camera.resolvePosition());
+            //Vector3f rotations = camera.resolveRotation();
+            //CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
 
             //stadiumCamera.setRotation(camera.getYRot(), camera.getXRot());
 

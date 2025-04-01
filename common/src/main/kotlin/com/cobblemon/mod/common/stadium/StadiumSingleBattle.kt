@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
-import com.cobblemon.mod.common.stadium.cameras.LookAtCamera
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.level.ServerPlayer
@@ -59,6 +58,6 @@ class StadiumSingleBattle: StadiumBattleDefenition() {
     }
 
     override fun getCurrentCamera(): StadiumCameraEntry {
-        return LookAtCamera(Vec3(0.0, 0.0, 0.0), Vec3(0.0, 0.0, 0.0))
+        TODO("Not yet implemented")
     }
 }

@@ -1,35 +1,36 @@
 package com.cobblemon.mod.common.stadium
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 class StadiumCameraManagerEntry(
-    val id: ResourceLocation,
-    val mapOfStates: MutableMap<String, StadiumCameraState>,
-    val startingState: String
+    var id: ResourceLocation,
+    val states: MutableMap<String, StadiumCameraState> = mutableMapOf(),
+    val startingState: String = ""
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeIdentifier(id)
-        buf.writeMap(mapOfStates, {_, key -> buf.writeString(key)}, {_, value -> value.encode(buf)})
+        buf.writeMap(states, {_, key -> buf.writeString(key)}, {_, value -> value.encode(buf)})
         buf.writeString(startingState)
     }
 
     companion object {
         fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraManagerEntry {
             val id = buf.readIdentifier()
-            val mapOfStates = buf.readMap({buf.readString()}, {StadiumCameraState.decode(buf)}).toMutableMap()
+            val states = buf.readMap({buf.readString()}, {StadiumCameraState.decode(buf)}).toMutableMap()
             val startState = buf.readString()
-            return StadiumCameraManagerEntry(id, mapOfStates, startState)
+            return StadiumCameraManagerEntry(id, states, startState)
         }
     }
 }
 
 class StadiumCameraState(
     val camera: ResourceLocation?,
-    val target: StadiumCameraTarget,
-    val listOfTransitions: MutableList<StadiumCameraTransition>,
-    val loop: Boolean
+    val target: StadiumCameraTarget = StadiumCameraTarget.CENTRE,
+    val listOfTransitions: MutableList<StadiumCameraTransition> = mutableListOf(),
+    val loop: Boolean = false
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
@@ -51,9 +52,10 @@ class StadiumCameraState(
 
 class StadiumCameraTransition(
     val camera: ResourceLocation?,
-    val target: StadiumCameraTarget,
-    val targetState: String,
-    val checkOnEnd: Boolean
+    val target: StadiumCameraTarget = StadiumCameraTarget.CENTRE,
+    val targetState: String = "",
+    val checkOnEnd: Boolean = false,
+    val condition: Expression = "1.0".asExpression()
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
