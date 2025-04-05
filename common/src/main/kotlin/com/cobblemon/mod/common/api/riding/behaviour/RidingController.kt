@@ -45,7 +45,7 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
     }
 
     override fun rotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity): Vec2 {
-        if (!isActive(settings, state, vehicle)) return vehicle.rotationVector
+        if (!isActive(settings, state, vehicle)) return driver.rotationVector
         return behaviour.rotation(settings, state, vehicle, driver)
     }
 

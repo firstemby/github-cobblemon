@@ -35,7 +35,7 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
 
     val poseProvider = PoseProvider<GenericLandSettings, GenericLandState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->
-            return@PoseOption state.rideVel.get().z > 0.2
+            return@PoseOption abs(state.rideVel.get().z) > 0.2
         })
 
     override fun isActive(
@@ -153,11 +153,14 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
         //This influences the speed of the turn based on how far in one direction you're looking
         val rotDiffMod = (sqrt(abs(rotDiffNorm)) * rotDiffNorm.sign)
 
-        //Take the inverse so that you turn more at higher speeds
+        //Take the inverse so that you turn less at higher speeds
         val normSpeed = 1.0f // = 1.0f - 0.5f*normalizeVal(state.rideVel.length(), 0.0, topSpeed).toFloat()
 
+        // Based off handling and an arbitrary scale
+        val turnRate = handling.toFloat() / 20.0f
+
         //Ensure you only ever rotate as much difference as there is between the angles.
-        val turnSpeed = handling.toFloat() / 20.0f  * rotDiffMod * normSpeed
+        val turnSpeed = turnRate  * rotDiffMod * normSpeed
         val rotAmount = turnSpeed.coerceIn(-abs(rotDiff), abs(rotDiff))
 
         return rotAmount
@@ -180,11 +183,6 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
         }
 
         state.rideVel.set(calculateRideSpaceVel(settings, state, vehicle, driver))
-
-        //Jump the thang!
-        if (driver.jumping && vehicle.onGround()) {
-            state.rideVel.set(state.rideVel.get().add(0.0, 1.0, 0.0))
-        }
 
         //This is cheap.
         //Also make it stop quicker the slower it is.
@@ -217,33 +215,69 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
 
         var newVelocity = Vec3(state.rideVel.get().x, state.rideVel.get().y, state.rideVel.get().z)
 
-        //speed up and slow down based on input
-        if (driver.zza > 0.0 && speed <= topSpeed && state.stamina.get() > 0.0f) {
-            //modify acceleration to be slower when at closer speeds to top speed
-            val accelMod = max((normalizeVal(speed, minSpeed, topSpeed) - 1).pow(2), 0.1)
-            newVelocity = Vec3(newVelocity.x, newVelocity.y, min(newVelocity.z + (accel * accelMod), topSpeed))
-            activeInput = true
-        } else if (driver.zza >= 0.0 && state.stamina.get() == 0.0f || speed > topSpeed) {
-            newVelocity = Vec3(newVelocity.x, newVelocity.y, max(newVelocity.z - ((accel) / 4), minSpeed))
-        } else if (driver.zza < 0.0 && speed > minSpeed) {
-            //modify deccel to be slower when at closer speeds to minimum speed
-            val deccelMod = max(-(normalizeVal(speed, minSpeed, topSpeed)) + 1, 0.0)
+        var jumpVec = Vec3.ZERO
 
-            //Decelerate currently always a constant half of max acceleration.
-            newVelocity =
-                Vec3(newVelocity.x, newVelocity.y, max(newVelocity.z - ((accel * deccelMod) / 2), minSpeed))
+        //speed up and slow down based on input
+//        if (driver.zza > 0.0 && speed <= topSpeed && state.stamina.get() > 0.0f) {
+//            //modify acceleration to be slower when at closer speeds to top speed
+//            val accelMod = max((normalizeVal(speed, minSpeed, topSpeed) - 1).pow(2), 0.1)
+//            newVelocity = Vec3(newVelocity.x, newVelocity.y, min(newVelocity.z + (accel * accelMod), topSpeed))
+//            activeInput = true
+//            jumpVec.add(0.0, 0.0, 1.0)
+//        } else if (driver.zza >= 0.0 && state.stamina.get() == 0.0f || speed > topSpeed) {
+//            newVelocity = Vec3(newVelocity.x, newVelocity.y, max(newVelocity.z - ((accel) / 4), minSpeed))
+//        } else if (driver.zza < 0.0 && speed > minSpeed) {
+//            //modify deccel to be slower when at closer speeds to minimum speed
+//            val deccelMod = max(-(normalizeVal(speed, minSpeed, topSpeed)) + 1, 0.0)
+//
+//            //Decelerate currently always a constant half of max acceleration.
+//            newVelocity =
+//                Vec3(newVelocity.x, newVelocity.y, max(newVelocity.z - ((accel * deccelMod) / 2), minSpeed))
+//            activeInput = true
+//        }
+
+
+        //speed up and slow down based on input
+        if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
+            //make sure it can't exceed top speed
+            val forwardInput = when {
+                driver.zza > 0 && newVelocity.z > topSpeed -> 0.0
+                driver.zza < 0 && newVelocity.z < (-topSpeed / 3.0) -> 0.0
+                else -> driver.zza.sign
+            }
+
+            newVelocity = Vec3(
+                newVelocity.x,
+                newVelocity.y,
+                (newVelocity.z + (accel * forwardInput.toDouble())))
+
             activeInput = true
+            jumpVec = jumpVec.add(0.0, 0.0, forwardInput.toDouble())
         }
 
+        //Gravity logic
         if (vehicle.onGround()) {
             newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
         } else {
-            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - 0.2, -1.0), newVelocity.z)
+            val gravity = (9.8 / ( 20.0)) * 0.2
+            val terminalVel = 2.0
+
+            val fallingForce = gravity -  ( newVelocity.z.sign *gravity *(abs(newVelocity.z) / 2.0))
+            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - fallingForce, -terminalVel), newVelocity.z)
         }
 
         //ground Friction
         if( abs(newVelocity.z) > 0 && vehicle.onGround() && !activeInput) {
             newVelocity = newVelocity.subtract(0.0, 0.0, min(0.01 * newVelocity.z.sign, newVelocity.z))
+        }
+
+        //Jump the thang!
+        if (driver.jumping && vehicle.onGround()) {
+            val jumpVel = 1.0
+            //Scale current movement direction influence
+            jumpVec = jumpVec.scale(0.2)
+            jumpVec = jumpVec.add(0.0, jumpVel, 0.0)
+            newVelocity = newVelocity.add(0.0, 1.0, 0.0)
         }
 
         return newVelocity
