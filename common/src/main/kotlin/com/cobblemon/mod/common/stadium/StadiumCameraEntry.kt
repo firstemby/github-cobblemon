@@ -20,11 +20,11 @@ class StadiumCameraEntry(
     val targetPositionTimeline: MutableMap<String, VectorExpression> = mutableMapOf()
 ) {
 
-    fun resolvePosition(): Vec3 {
+    fun resolvePosition(time: Double): Vec3 {
         return Vec3(0.0,0.0,0.0)
     }
 
-    fun resolveRotation(): Vector3f {
+    fun resolveRotation(time: Double): Vector3f {
         return Vector3f(0.0F, 0.0F, 0.0F)
     }
 

@@ -2,13 +2,18 @@ package com.cobblemon.mod.common.stadium
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.util.*
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import java.lang.reflect.Type
 
 class StadiumCameraManagerEntry(
     var id: ResourceLocation,
-    val states: MutableMap<String, StadiumCameraState> = mutableMapOf(),
-    val startingState: String = ""
+    val states: MutableMap<String, StadiumCameraState>,
+    val startingState: String
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeIdentifier(id)
@@ -28,9 +33,9 @@ class StadiumCameraManagerEntry(
 
 class StadiumCameraState(
     val camera: ResourceLocation?,
-    val target: StadiumCameraTarget = StadiumCameraTarget.CENTRE,
-    val listOfTransitions: MutableList<StadiumCameraTransition> = mutableListOf(),
-    val loop: Boolean = false
+    val target: StadiumCameraTarget,
+    val listOfTransitions: MutableList<StadiumCameraTransition>,
+    val loop: Boolean
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
@@ -53,15 +58,16 @@ class StadiumCameraState(
 class StadiumCameraTransition(
     val camera: ResourceLocation?,
     val target: StadiumCameraTarget = StadiumCameraTarget.CENTRE,
-    val targetState: String = "",
-    val checkOnEnd: Boolean = false,
-    val condition: Expression = "1.0".asExpression()
+    val targetState: String,
+    val checkOnEnd: Boolean,
+    val condition: Expression
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
         buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
         buf.writeEnum(target)
         buf.writeString(targetState)
         buf.writeBoolean(checkOnEnd)
+        buf.writeString(condition.originalString)
     }
 
     companion object {
@@ -70,7 +76,8 @@ class StadiumCameraTransition(
             val target = buf.readEnum(StadiumCameraTarget::class.java)
             val targetState = buf.readString()
             val checkOnEnd = buf.readBoolean()
-            return StadiumCameraTransition(camera, target, targetState, checkOnEnd)
+            val condition = buf.readString().asExpression()
+            return StadiumCameraTransition(camera, target, targetState, checkOnEnd, condition)
         }
     }
 }
@@ -80,3 +87,44 @@ enum class StadiumCameraTarget {
     POKEMON,
     TRAINER
 }
+
+object StadiumCameraManagerAdapter: JsonDeserializer<StadiumCameraManagerEntry> {
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): StadiumCameraManagerEntry {
+        if (json is JsonObject) {
+            val states = mutableMapOf<String, StadiumCameraState>()
+            json["states"]?.asJsonObject?.entrySet()?.forEach { (name, state) ->
+                val camera = state.asJsonObject["camera"]?.asString?.asResource()
+                val target = when (state.asJsonObject["target"]?.asString) {
+                    "centre" -> StadiumCameraTarget.CENTRE
+                    "pokemon" -> StadiumCameraTarget.POKEMON
+                    "trainer" -> StadiumCameraTarget.TRAINER
+                    else -> StadiumCameraTarget.CENTRE
+                }
+                val listOfTransitions = mutableListOf<StadiumCameraTransition>()
+                state.asJsonObject["transitions"]?.asJsonArray?.forEach {
+                    val transitionCamera = it.asJsonObject["camera"]?.asString?.asResource()
+                    val transitionTarget = when (it.asJsonObject["target"]?.asString) {
+                        "centre" -> StadiumCameraTarget.CENTRE
+                        "pokemon" -> StadiumCameraTarget.POKEMON
+                        "trainer" -> StadiumCameraTarget.TRAINER
+                        else -> StadiumCameraTarget.CENTRE
+                    }
+                    val targetState = it.asJsonObject["targetState"]?.asString ?: ""
+                    val checkOnEnd = it.asJsonObject["checkOnEnd"]?.asBoolean ?: false
+                    val condition = it.asJsonObject["condition"]?.asString?.asExpression() ?: "0.0".asExpression()
+                    listOfTransitions.add(StadiumCameraTransition(transitionCamera, transitionTarget, targetState, checkOnEnd, condition))
+                }
+                val loop = state.asJsonObject["loop"]?.asBoolean ?: false
+                states[name] = StadiumCameraState(camera, target, listOfTransitions, loop)
+            }
+            val startingState = json["startingState"].asString ?: ""
+            return StadiumCameraManagerEntry(cobblemonResource(""), states, startingState)
+        }
+        throw IllegalStateException("StadiumCameraManager could not be parsed")
+    }
+}
+

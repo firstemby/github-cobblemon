@@ -75,17 +75,15 @@ public class GameRendererMixin {
             }
 
             this.minecraft.getProfiler().push("camera");
-            Camera stadiumCamera = StadiumClientManager.INSTANCE.getCamera();
+            Camera stadiumCamera = new Camera();
             Entity entity = (Entity) this.minecraft.player;
             stadiumCamera.setup(this.minecraft.level, entity, true, false, 1.0F);
 
-            //This is a partial copy of players camera, adjust proper parameters
-            //LookAtCamera camera = new LookAtCamera(new Vec3(0.0,0.0,0.0), new Vec3(Mth.lerp(f, entity.xo, entity.getX()),Mth.lerp(f, entity.yo, entity.getY()) + 1.5,Mth.lerp(f, entity.zo, entity.getZ())));
-            //stadiumCamera.setPosition(camera.resolvePosition());
-            //Vector3f rotations = camera.resolveRotation();
-            //CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
-
-            //stadiumCamera.setRotation(camera.getYRot(), camera.getXRot());
+            //adjust camera
+            StadiumClientManager.INSTANCE.updateCameraData(f);
+            stadiumCamera.setPosition(StadiumClientManager.INSTANCE.getCameraPosition());
+            Vector3f rotations = StadiumClientManager.INSTANCE.getCameraRotation();
+            CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
 
             this.renderDistance = (float)(this.minecraft.options.getEffectiveRenderDistance() * 16);
             double d = this.getFov(stadiumCamera, f, true);
@@ -101,5 +99,10 @@ public class GameRendererMixin {
 
             ci.cancel();
         }
+    }
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    public void tick(CallbackInfo ci) {
+        StadiumClientManager.INSTANCE.tickCameraManager();
     }
 }

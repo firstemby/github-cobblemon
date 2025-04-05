@@ -33,7 +33,7 @@ class StadiumSingleBattle: StadiumBattleDefenition() {
     override fun addPlayer(player: ServerPlayer) {
         if (canAddPlayer(player)) {
             participants.add(player.uuid)
-            player.sendPacket(StadiumJoinPacket(player.uuid))
+            player.sendPacket(StadiumJoinPacket(player.uuid, StadiumCameraManagers.managers.keys.first()))
         }
     }
 

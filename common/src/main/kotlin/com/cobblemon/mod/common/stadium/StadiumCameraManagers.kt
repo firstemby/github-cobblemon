@@ -22,6 +22,7 @@ object StadiumCameraManagers: JsonDataRegistry<StadiumCameraManagerEntry> {
         .setPrettyPrinting()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(StadiumCameraManagerEntry::class.java, StadiumCameraManagerAdapter)
         .create()
 
     override val typeToken: TypeToken<StadiumCameraManagerEntry> = TypeToken.get(StadiumCameraManagerEntry::class.java)

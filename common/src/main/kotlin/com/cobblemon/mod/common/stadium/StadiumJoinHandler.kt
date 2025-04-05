@@ -8,6 +8,6 @@ import net.minecraft.server.level.ServerPlayer
 
 object StadiumJoinHandler: ClientNetworkPacketHandler<StadiumJoinPacket> {
     override fun handle(packet: StadiumJoinPacket, client: Minecraft) {
-        StadiumClientManager.handleJoin(packet.joiningBattle)
+        StadiumClientManager.handleJoin(packet.joiningBattle, packet.cameraManager)
     }
 }
