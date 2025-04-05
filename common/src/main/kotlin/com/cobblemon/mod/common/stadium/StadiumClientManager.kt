@@ -1,5 +1,9 @@
 package com.cobblemon.mod.common.stadium
 
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.client.Camera
 import net.minecraft.resources.ResourceLocation
@@ -8,6 +12,10 @@ import org.joml.Vector3f
 import java.util.UUID
 
 object StadiumClientManager {
+    val struct = ObjectValue(this).also {
+    }
+    val runtime = MoLangRuntime().setup().setupClient()
+
     var currentStadiumBattleUUID: UUID? = null
     var stadiumBattleDefenition: StadiumBattleDefenition? = null
 
@@ -45,8 +53,15 @@ object StadiumClientManager {
         val currentCamera = StadiumCameras.cameras[currentState.camera]
 
         if (currentCamera != null) {
-            cameraTimer += 1/20
-            if (cameraTimer > currentCamera.length) cameraTimer = currentCamera.length
+            cameraTimer += 1.0/20.0
+            if (cameraTimer > currentCamera.length) {
+                if (currentState.loop) {
+                    cameraTimer -= currentCamera.length
+                }
+                else {
+                    cameraTimer = currentCamera.length
+                }
+            }
         }
 
         if (!calculateNextState) {
@@ -56,7 +71,7 @@ object StadiumClientManager {
             cameraTimer = if (currentCamera != null && currentCamera.length != 0.0) cameraTimer - currentCamera.length else 0.0
         }
         else {
-            val endOfAnim = if (currentCamera != null) cameraTimer + 1/20 > currentCamera.length else true
+            val endOfAnim = if (currentCamera != null) cameraTimer + 1/20 >= currentCamera.length else true
 
             val nextState = evaluateTransitions(currentState, endOfAnim)
             if (nextState != null) {

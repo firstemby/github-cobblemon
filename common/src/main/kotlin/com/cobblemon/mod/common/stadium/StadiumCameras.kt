@@ -1,9 +1,7 @@
 package com.cobblemon.mod.common.stadium
 
-import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
@@ -21,7 +19,7 @@ object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(StadiumCameraEntry.VectorExpression::class.java, StadiumCameraEntry.VectorExpressionAdapter)
+        .registerTypeAdapter(StadiumCameraEntry.CameraKeyFrame::class.java, StadiumCameraEntry.CameraKeyFrameAdapter)
         .create()
 
     override val typeToken: TypeToken<StadiumCameraEntry> = TypeToken.get(StadiumCameraEntry::class.java)
