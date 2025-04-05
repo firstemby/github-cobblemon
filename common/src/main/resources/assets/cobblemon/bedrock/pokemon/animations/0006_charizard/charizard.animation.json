@@ -18775,10 +18775,10 @@
 			},
 			"sound_effects": {
 				"1.0833": {
-					"effect": "leather_wing_flap_medium"
+					"effect": "ride.leather.wing_flap.medium"
 				},
 				"3.0833": {
-					"effect": "leather_wing_flap_medium"
+					"effect": "ride.leather.wing_flap.medium"
 				}
 			}
 		},
