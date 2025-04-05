@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.*
+import net.minecraft.client.multiplayer.ClientLevel
 import java.util.UUID
 import net.minecraft.world.entity.Entity
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -46,7 +47,8 @@ class SpawnPokemonPacket(
     var spawnYaw: Float,
     var friendship: Int,
     var freezeFrame: Float,
-    vanillaSpawnPacket: ClientboundAddEntityPacket
+    var passengers: IntArray,
+    vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
     override val id: ResourceLocation = ID
@@ -73,6 +75,7 @@ class SpawnPokemonPacket(
         entity.entityData.get(PokemonEntity.SPAWN_DIRECTION),
         entity.entityData.get(PokemonEntity.FRIENDSHIP),
         entity.entityData.get(PokemonEntity.FREEZE_FRAME),
+        entity.passengers.map { it.id }.toIntArray(),
         vanillaSpawnPacket
     )
 
@@ -98,9 +101,10 @@ class SpawnPokemonPacket(
         buffer.writeFloat(this.spawnYaw)
         buffer.writeInt(this.friendship)
         buffer.writeFloat(this.freezeFrame)
+        buffer.writeVarIntArray(this.passengers)
     }
 
-    override fun applyData(entity: PokemonEntity) {
+    override fun applyData(entity: PokemonEntity, level: ClientLevel) {
         entity.ownerUUID = ownerId
         entity.pokemon.apply {
             scaleModifier = this@SpawnPokemonPacket.scaleModifier
@@ -126,6 +130,12 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.SPAWN_DIRECTION, spawnYaw)
         entity.entityData.set(PokemonEntity.FRIENDSHIP, friendship)
         entity.entityData.set(PokemonEntity.FREEZE_FRAME, freezeFrame)
+
+        entity.ejectPassengers()
+        passengers.forEach {
+            val passenger = level.getEntity(it) ?: return@forEach
+            passenger.startRiding(entity)
+        }
     }
 
     override fun checkType(entity: Entity): Boolean = entity is PokemonEntity
@@ -154,9 +164,10 @@ class SpawnPokemonPacket(
             val spawnAngle = buffer.readFloat()
             val friendship = buffer.readInt()
             val freezeFrame = buffer.readFloat()
+            val passengers = buffer.readVarIntArray()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnPokemonPacket(ownerId, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, vanillaPacket)
+            return SpawnPokemonPacket(ownerId, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, passengers, vanillaPacket)
         }
     }
 

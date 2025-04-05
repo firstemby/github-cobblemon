@@ -10,9 +10,10 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.CobblemonItems;
-import com.cobblemon.mod.common.Rollable;
+import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
@@ -31,45 +32,37 @@ import com.cobblemon.mod.common.util.DataKeys;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.SmoothDouble;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
 import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements Rollable, ScannableEntity {
+public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable {
 
     @Shadow public abstract CompoundTag getShoulderEntityLeft();
 
@@ -87,7 +80,9 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
     @Shadow public abstract void displayClientMessage(Component message, boolean overlay);
 
-    @Unique private Matrix3f orientation = null;
+    @Shadow @Final private static Map<Pose, EntityDimensions> POSES;
+    @Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
+    @Unique private OrientationController cobblemon$orientationController = new OrientationController(this);
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
@@ -113,6 +108,19 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
             }
             ci.cancel();
         }
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void cobblemon$updateRenderOrientation(CallbackInfo ci) {
+        this.cobblemon$orientationController.tick();
+    }
+
+    @Override
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        if (this.getVehicle() instanceof PokemonEntity) {
+            return STANDING_DIMENSIONS;
+        }
+        return (EntityDimensions)POSES.getOrDefault(pose, STANDING_DIMENSIONS);
     }
 
     @Inject(
@@ -241,7 +249,7 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
 
     @Override
     public void absMoveTo(double x, double y, double z, float yaw, float pitch) {
-        if (shouldRoll()) {
+        if (cobblemon$orientationController.getActive()) {
             this.absMoveTo(x, y, z);
             this.setYRot(yaw % 360.0f);
             this.setXRot(pitch % 360.0f);
@@ -254,120 +262,21 @@ public abstract class PlayerMixin extends LivingEntity implements Rollable, Scan
         }
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tick(CallbackInfo ci) {
-        if (this.shouldRoll()) {
-            // Proof of concept for yaw movement
-            if (this.getMainHandItem().is(Items.STICK)) {
-                this.rotateYaw(2);
-            }
-            else if (this.getMainHandItem().is(Items.BLAZE_ROD)) {
-                this.rotateYaw(-2);
-            }
-        }
-    }
-
-    @Override
-    public Matrix3f getOrientation() {
-        return orientation;
-    }
-
-    @Override
-    public Rollable updateOrientation(Function<Matrix3f, Matrix3f> update) {
-        //Disabled to allow non mouse inputs to modify roll
-        if (!shouldRoll()) return this;
-
-        if (this.orientation == null) {
-            this.orientation = new Matrix3f();
-            this.rotate(getYRot() - 180, getXRot(), 0);
-        }
-        this.orientation = update.apply(this.orientation);
-        setYRot(this.getYaw());
-        setXRot(this.getPitch());
-        return this;
-    }
-
-    @Override
-    public boolean shouldRoll() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (!this.equals(player)) return false;
-        if (player.isHolding(Items.DIAMOND)) return true;
-
-        var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return false;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return false;
-
-        return pokemonEntity.getRiding().shouldRoll(pokemonEntity);
-    }
-
-    @Override
-    public Vec3 rotationOnMouseXY(
-        double yMouse,
-        double xMouse,
-        SmoothDouble yMouseSmoother,
-        SmoothDouble xMouseSmoother,
-        double sensitivity,
-        double deltaTime
-    ) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (!this.equals(player)) return Vec3.ZERO;
-
-        var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return Vec3.ZERO;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
-
-        return pokemonEntity.getRiding().rotationOnMouseXY(
-            pokemonEntity,
-            player,
-            yMouse,
-            xMouse,
-            yMouseSmoother,
-            xMouseSmoother,
-            sensitivity,
-            deltaTime
-        );
-    }
-
-    @Override
-    public boolean useAngVelSmoothing() {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (!this.equals(player)) return true;
-
-        var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return true;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return true;
-
-        return pokemonEntity.getRiding().useAngVelSmoothing(pokemonEntity);
-    }
-
-    @Override
-    public Vec3 angRollVel( double deltaTime ) {
-        var ret = new Vec3(0.0, 0.0, 0.0);
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (!this.equals(player)) return ret;
-
-        var playerVehicle = player.getVehicle();
-        if (playerVehicle == null) return ret;
-        if (!(playerVehicle instanceof PokemonEntity pokemonEntity)) return ret;
-
-        return pokemonEntity.getRiding().angRollVel( pokemonEntity, player, deltaTime );
-    }
-
-
-    @Override
-    public void clearRotation() {
-        this.orientation = null;
-    }
-
     @WrapOperation(
             method = "rideTick()V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;wantsToStopRiding()Z")
     )
     public boolean delegateDismountToController(Player instance, Operation<Boolean> original) {
-        if (this.getVehicle() instanceof Rideable vehicle) {
-            return vehicle.getRiding().dismountOnShift() && original.call(instance);
+        if (this.getVehicle() instanceof PokemonEntity pokemonEntity) {
+            return pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
+                return behaviour.dismountOnShift(settings, state, pokemonEntity) && original.call(instance);
+            });
         }
         return original.call(instance);
     }
 
+    @Override
+    public OrientationController getOrientationController() {
+        return cobblemon$orientationController;
+    }
 }

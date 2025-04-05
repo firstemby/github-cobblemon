@@ -12,8 +12,8 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.Primar
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.ease
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
 import com.mojang.blaze3d.vertex.PoseStack
@@ -42,11 +43,8 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import org.joml.Matrix3f
-import org.joml.Vector3f
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     companion object {
@@ -103,6 +101,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
+                currentEntity.refreshRiding()
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
                 currentEntity.pokemon.shiny = currentAspects.contains("shiny")
@@ -376,6 +375,18 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     override fun tick(entity: PokemonEntity) {
         incrementAge(entity)
         playWildShinySounds()
+        sendRidingChanges(entity)
+    }
+
+    private fun sendRidingChanges(entity: PokemonEntity) {
+        val player = Minecraft.getInstance().player ?: return
+        if (entity.controllingPassenger != player) return
+        entity.ifRidingAvailable { behaviour, _, state ->
+            if (entity.previousRidingState != null && !state.shouldSync(entity.previousRidingState!!)) {
+                return@ifRidingAvailable
+            }
+            CobblemonNetwork.sendToServer(ServerboundUpdateRidingStatePacket(entity.id, behaviour.key, state))
+        }
     }
 
     fun playWildShinySounds() {

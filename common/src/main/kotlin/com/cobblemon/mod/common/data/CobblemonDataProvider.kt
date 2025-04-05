@@ -61,7 +61,6 @@ import java.util.*
 
 object CobblemonDataProvider : DataProvider {
 
-    // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     internal var canReload = true
     // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     private val registries = linkedSetOf<DataRegistry>()
