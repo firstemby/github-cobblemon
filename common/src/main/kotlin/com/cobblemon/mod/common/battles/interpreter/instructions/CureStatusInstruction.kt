@@ -38,7 +38,7 @@ class CureStatusInstruction(val message: BattleMessage): InterpreterInstruction 
 
         battle.dispatchWaiting {
             val pokemonName = pokemon.getName()
-            pokemon.effectedPokemon.status = null
+            // pokemon.effectedPokemon.status = null
             pokemon.sendUpdate()
 
             if (maybeActivePokemon != null) {

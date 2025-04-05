@@ -18,7 +18,11 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.getBattleState
+import com.cobblemon.mod.common.util.isHeld
+import com.cobblemon.mod.common.util.isLookingAt
+import com.cobblemon.mod.common.util.party
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResultHolder
@@ -46,7 +50,7 @@ interface PokemonSelectingItem {
 
         player.getBattleState()?.let { (_, actor) ->
             if (bagItem == null) return InteractionResultHolder.fail(stack)
-            val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
+            // val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
 
             if (!actor.canFitForcedAction()) {
                 player.sendSystemMessage(battleLang("bagitem.cannot").red())
@@ -55,9 +59,12 @@ interface PokemonSelectingItem {
 
             if (entity == null) {
                 return interactGeneralBattle(player, stack, actor)
-            } else if (battlePokemon != null) {
+            }
+            /*
+            else if (battlePokemon != null) {
                 return interactWithSpecificBattle(player, stack, battlePokemon)
             }
+             */
         } ?: run {
             if (!player.isShiftKeyDown) {
                 return if (entity != null) {
@@ -140,12 +147,15 @@ interface PokemonSelectingItem {
     }
 
     fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack> {
+        /*
         PartySelectCallbacks.createBattleSelect(
             player = player,
             pokemon = actor.battlePokemonProvider.getKnownPokemon(),
             canSelect = { pk -> canUseOnBattlePokemon(actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk.effectedPokemon }!!) },
             handler = { pk -> applyToBattlePokemon(player, stack, actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
+
+         */
 
         return InteractionResultHolder.success(stack)
     }

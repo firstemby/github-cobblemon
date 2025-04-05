@@ -39,7 +39,7 @@ class StatusInstruction( val message: BattleMessage): InterpreterInstruction {
 
         battle.dispatchWaiting {
             if (status is PersistentStatus) {
-                pokemon.effectedPokemon.applyStatus(status)
+                //pokemon.effectedPokemon.applyStatus(status)
                 battle.sendUpdate(BattlePersistentStatusPacket(pnx, status))
                 pokemon.sendUpdate()
             }

@@ -33,7 +33,7 @@ class ItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
         battle.dispatchWaiting(1.5F) {
             val battlePokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
-            battlePokemon.heldItemManager.handleStartInstruction(battlePokemon, battle, message)
+            //battlePokemon.heldItemManager.handleStartInstruction(battlePokemon, battle, message)
             battle.minorBattleActions[battlePokemon.uuid] = message
             battlePokemon.contextManager.add(ShowdownInterpreter.getContextFromAction(message, BattleContext.Type.ITEM, battle))
         }

@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
-import com.cobblemon.mod.common.battles.dispatch.BattleDispatch
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.util.battleLang
@@ -39,7 +38,7 @@ class DragInstruction(val instructionSet: InstructionSet, val battleActor: Battl
 
             val newHealth = privateMessage.argumentAt(2)!!.split(" ")[0]
             val remainingHealth = newHealth.split("/")[0].toInt()
-            pokemon.effectedPokemon.currentHealth = remainingHealth
+            // pokemon.effectedPokemon.currentHealth = remainingHealth
 
             battle.broadcastChatMessage(battleLang("dragged_out", pokemon.getName()))
             activePokemon.battlePokemon?.let { oldPokemon ->
@@ -50,6 +49,7 @@ class DragInstruction(val instructionSet: InstructionSet, val battleActor: Battl
 
             val entity = if (battleActor is EntityBackedBattleActor<*>) battleActor.entity else null
             setOf(
+                /*
                 BattleDispatch {
                     if (entity != null) {
                         SwitchInstruction.createEntitySwitch(battle, battleActor, entity, pnx, activePokemon, pokemon, illusion, imposter)
@@ -57,6 +57,7 @@ class DragInstruction(val instructionSet: InstructionSet, val battleActor: Battl
                         SwitchInstruction.createNonEntitySwitch(battle, battleActor, pnx, activePokemon, pokemon, illusion)
                     }
                 }
+                 */
             )
         }
     }

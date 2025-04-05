@@ -10,7 +10,13 @@ package com.cobblemon.mod.common.events
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
-import com.cobblemon.mod.common.advancement.criterion.*
+import com.cobblemon.mod.common.advancement.criterion.BattleCountableContext
+import com.cobblemon.mod.common.advancement.criterion.CountableContext
+import com.cobblemon.mod.common.advancement.criterion.CountablePokemonTypeContext
+import com.cobblemon.mod.common.advancement.criterion.EvolvePokemonContext
+import com.cobblemon.mod.common.advancement.criterion.LevelUpContext
+import com.cobblemon.mod.common.advancement.criterion.PlantTumblestoneContext
+import com.cobblemon.mod.common.advancement.criterion.TradePokemonContext
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.events.CobblemonEvents.BATTLE_VICTORY
@@ -19,16 +25,20 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents.LEVEL_UP_EVENT
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_CAPTURED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.TRADE_COMPLETED
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
-import com.cobblemon.mod.common.api.events.pokemon.*
+import com.cobblemon.mod.common.api.events.pokemon.CollectEggEvent
+import com.cobblemon.mod.common.api.events.pokemon.HatchEggEvent
+import com.cobblemon.mod.common.api.events.pokemon.LevelUpEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
+import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.block.TumblestoneBlock
 import com.cobblemon.mod.common.item.TumblestoneItem
-import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
-import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getPlayer
-import java.util.*
+import java.util.UUID
 
 object AdvancementHandler : EventHandler {
     override fun registerListeners() {
@@ -111,7 +121,7 @@ object AdvancementHandler : EventHandler {
                         event.battle.actors.forEach { battleActor ->
                             if (!event.winners.contains(battleActor) && battleActor.type == ActorType.WILD) {
                                 battleActor.battlePokemonProvider.getKnownPokemon().forEach { battlePokemon ->
-                                    advancementData.updateTotalDefeatedCount(battlePokemon.originalPokemon)
+                                    //advancementData.updateTotalDefeatedCount(battlePokemon.originalPokemon)
                                 }
                             }
                         }

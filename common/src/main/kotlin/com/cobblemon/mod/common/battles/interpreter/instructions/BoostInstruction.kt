@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.battles.interpreter.InvalidInstructionExcept
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
-import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
@@ -52,12 +51,11 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
         battle.dispatch {
             val actionEffect = if (isBoost) BOOST_EFFECT else UNBOOST_EFFECT
             val providers = mutableListOf<Any>(battle)
-            pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
+            // pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
                 runtime = runtime,
-                providers = providers,
-                level = battle.players.firstOrNull()?.level()
+                providers = providers
             )
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds

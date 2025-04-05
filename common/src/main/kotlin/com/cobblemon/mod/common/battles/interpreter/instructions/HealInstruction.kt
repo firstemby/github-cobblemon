@@ -17,9 +17,6 @@ import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
-import com.cobblemon.mod.common.net.messages.client.battle.BattlePersistentStatusPacket
-import com.cobblemon.mod.common.pokemon.status.PersistentStatus
-import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -53,9 +50,9 @@ class HealInstruction(val actor: BattleActor, val publicMessage: BattleMessage, 
                     privateMessage.hasOptionalArgument("wisher") -> {
                         val name = privateMessage.optionalArgument("wisher")!!
                         val showdownId = name.lowercase().replace(ShowdownIdentifiable.REGEX, "")
-                        val wisher = actor.battlePokemonProvider.getKnownPokemon().firstOrNull { it.effectedPokemon.showdownId() == showdownId }
+                        //val wisher = actor.battlePokemonProvider.getKnownPokemon().firstOrNull { it.effectedPokemon.showdownId() == showdownId }
                         // If no Pokémon is found this is a nickname
-                        battleLang("heal.wish", wisher?.getName() ?: actor.nameOwned(name))
+                        //battleLang("heal.wish", wisher?.getName() ?: actor.nameOwned(name))
                     }
                     privateMessage.hasOptionalArgument("from") -> {
                         when (effect!!.type) {
@@ -76,14 +73,15 @@ class HealInstruction(val actor: BattleActor, val publicMessage: BattleMessage, 
                         battleLang("heal.generic", battlePokemon.getName())
                     }
                 }
-                battle.broadcastChatMessage(lang)
+                //battle.broadcastChatMessage(lang)
             }
             battle.minorBattleActions[battlePokemon.uuid] = privateMessage
-            battlePokemon.effectedPokemon.currentHealth = newHealth[0].toInt()
+            //battlePokemon.effectedPokemon.currentHealth = newHealth[0].toInt()
 
             // This part is not always present
             val rawStatus = rawHpAndStatus.getOrNull(1) ?: return@dispatchWaiting
             val status = Statuses.getStatus(rawStatus) ?: return@dispatchWaiting
+            /*
             if (status is PersistentStatus && battlePokemon.effectedPokemon.status?.status != status) {
                 battlePokemon.effectedPokemon.applyStatus(status)
                 activePokemon?.let { battle.sendUpdate(BattlePersistentStatusPacket(it.getPNX(), status)) }
@@ -91,6 +89,8 @@ class HealInstruction(val actor: BattleActor, val publicMessage: BattleMessage, 
                     status.applyMessage.let { battle.broadcastChatMessage(it.asTranslated(battlePokemon.getName())) }
                 }
             }
+
+             */
         }
     }
 }

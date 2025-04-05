@@ -19,7 +19,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.battleLang
-import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.isHeld
 import com.cobblemon.mod.common.util.isLookingAt
 import com.cobblemon.mod.common.util.party
@@ -44,6 +43,7 @@ interface PokemonAndMoveSelectingItem {
             .filter { player.isLookingAt(it, stepDistance = 0.1F) }
             .minByOrNull { it.distanceTo(player) } as? PokemonEntity?
 
+        /*
         player.getBattleState()?.let { (_, actor) ->
             if (bagItem == null) {
                 return InteractionResultHolder.fail(stack)
@@ -52,13 +52,16 @@ interface PokemonAndMoveSelectingItem {
                 player.sendSystemMessage(battleLang("bagitem.cannot").red())
                 return InteractionResultHolder.fail(stack)
             }
-            val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
+            //val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == entity?.pokemon }
             if (entity == null) {
                 return interactGeneralBattle(player, stack, actor)
             } else if (battlePokemon != null) {
                 return interactWithSpecificBattle(player, stack, battlePokemon)
             }
-        } ?: run {
+
+        } ?:
+         */
+        run {
             if (entity != null) {
                 val pokemon = entity.pokemon
                 if (entity.ownerUUID == player.uuid) {
@@ -140,6 +143,7 @@ interface PokemonAndMoveSelectingItem {
     }
 
     fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack>? {
+        /*
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
             pokemon = actor.battlePokemonProvider.getKnownPokemon().map { it.effectedPokemon },
@@ -148,6 +152,7 @@ interface PokemonAndMoveSelectingItem {
             canSelectMove = ::canUseOnMove,
             handler = { pk, mv -> applyToBattlePokemon(player, stack, actor.battlePokemonProvider.getKnownPokemon().find { it.effectedPokemon == pk }!!, mv) }
         )
+         */
 
         return InteractionResultHolder.success(stack)
     }

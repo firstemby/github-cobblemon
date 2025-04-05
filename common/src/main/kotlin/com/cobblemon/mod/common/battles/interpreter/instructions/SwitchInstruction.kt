@@ -19,20 +19,22 @@ import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
-import com.cobblemon.mod.common.battles.dispatch.*
+import com.cobblemon.mod.common.battles.dispatch.DispatchResult
+import com.cobblemon.mod.common.battles.dispatch.GO
+import com.cobblemon.mod.common.battles.dispatch.InstructionSet
+import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
+import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
+import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.battle.BattleSwitchPokemonPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
-import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_STAGGER_BASE_DURATION
-import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_STAGGER_RANDOM_MAX_DURATION
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
-import java.util.concurrent.CompletableFuture
-import kotlin.random.Random
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
+import java.util.concurrent.CompletableFuture
 
 /**
  * Format: |switch|POKEMON|DETAILS|HP STATUS
@@ -62,11 +64,12 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                 val pokemonEntity = pokemon.entity
                 if (pokemonEntity != null && actor !is PokemonBattleActor) {    // pokemon entities starting on the field should already have battlePokemon init; see InitializeInstruction
 
-                    illusion?.let { IllusionEffect(it.effectedPokemon).start(pokemonEntity) }
-                    broadcastSwitch(battle, actor, pokemon, illusion)
+                    //illusion?.let { IllusionEffect(it.effectedPokemon).start(pokemonEntity) }
+                    //broadcastSwitch(battle, actor, pokemon, illusion)
                     WaitDispatch(0.5F)
                 }
                 else if (pokemonEntity == null && entity != null) {
+                    /*
                     activePokemon.battlePokemon = pokemon
                     activePokemon.illusion = illusion
                     val targetPos = ShowdownInterpreter.getSendoutPosition(battle, activePokemon, battleActor)
@@ -89,8 +92,11 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                             WaitDispatch(0.5F)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
                         }
                     }
+
+                */
                 }
                 GO
+
             }
 
             val futureSwitches = instructionSet.getSubsequentInstructions(this).filterIsInstance<SwitchInstruction>()
@@ -119,7 +125,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             battle.dispatchInsert {
                 val newHealth = privateMessage.argumentAt(2)!!.split(" ")[0]
                 val remainingHealth = newHealth.split("/")[0].toInt()
-                pokemon.effectedPokemon.currentHealth = remainingHealth
+                // pokemon.effectedPokemon.currentHealth = remainingHealth
                 pokemon.sendUpdate()
 
                 if (activePokemon.battlePokemon == pokemon) {
@@ -138,6 +144,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                 battle.majorBattleActions[pokemon.uuid] = publicMessage
 
                 setOf(
+                    /*
                     BattleDispatch {
                         if (entity != null) {
                             createEntitySwitch(battle, actor, entity, pnx, activePokemon, pokemon, illusion, imposter)
@@ -145,6 +152,8 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                             createNonEntitySwitch(battle, actor, pnx, activePokemon, pokemon, illusion)
                         }
                     }
+                     */
+
                 )
             }
         }

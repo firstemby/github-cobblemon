@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
 import com.cobblemon.mod.common.util.battleLang
-import kotlin.math.roundToInt
 
 /**
  * Format: |-sethp|POKEMON|HP
@@ -31,7 +30,7 @@ class SetHpInstruction(val actor: BattleActor, val publicMessage: BattleMessage,
             val flatHp = privateMessage.argumentAt(1)?.split("/")?.getOrNull(0)?.toFloatOrNull() ?: return@dispatchWaiting
             val ratioHp = publicMessage.argumentAt(1)?.split("/")?.getOrNull(0)?.toFloatOrNull()?.times(0.01F) ?: return@dispatchWaiting
             val battlePokemon = privateMessage.battlePokemon(0, battle) ?: return@dispatchWaiting
-            battlePokemon.effectedPokemon.currentHealth = flatHp.roundToInt()
+            // battlePokemon.effectedPokemon.currentHealth = flatHp.roundToInt()
             battle.sendSidedUpdate(actor, BattleHealthChangePacket(pnx, flatHp), BattleHealthChangePacket(pnx, ratioHp))
             // It doesn't matter which we check when silent both have it
             if (!publicMessage.hasOptionalArgument("silent")) {

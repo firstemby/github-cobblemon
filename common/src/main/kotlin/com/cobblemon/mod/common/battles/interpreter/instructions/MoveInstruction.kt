@@ -54,8 +54,8 @@ class MoveInstruction(
     var targetPokemon: BattlePokemon? = null
 
     override fun invoke(battle: PokemonBattle) {
-        userPokemon = message.battlePokemon(0, battle)!!
-        targetPokemon = message.battlePokemon(2, battle)
+        //userPokemon = message.battlePokemon(0, battle)!!
+        //targetPokemon = message.battlePokemon(2, battle)
         val targetPokemon = targetPokemon // So smart non-null casts can happen
 
         val optionalEffect = message.effect()

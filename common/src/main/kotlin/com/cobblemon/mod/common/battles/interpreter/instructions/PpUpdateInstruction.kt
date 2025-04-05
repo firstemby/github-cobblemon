@@ -29,8 +29,8 @@ class PpUpdateInstruction( val message: BattleMessage): InterpreterInstruction {
                 val moveIdAndPp = moveData.split(": ")
                 val moveId = moveIdAndPp[0]
                 val movePp = moveIdAndPp[1]
-                val move = pokemon.effectedPokemon.moveSet.firstOrNull { move -> move.name.equals(moveId, true) } ?: return@dispatch GO
-                move.currentPp = movePp.toInt()
+                // val move = pokemon.effectedPokemon.moveSet.firstOrNull { move -> move.name.equals(moveId, true) } ?: return@dispatch GO
+                // move.currentPp = movePp.toInt()
             }
             GO
         }

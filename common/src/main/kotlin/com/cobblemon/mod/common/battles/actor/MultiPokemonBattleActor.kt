@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.StaticBattlePokemonProvider
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import java.util.UUID
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import java.util.UUID
 
-class MultiPokemonBattleActor(
+open class MultiPokemonBattleActor(
     uuid: UUID = UUID.randomUUID(),
     pokemonList: List<BattlePokemon>
 ) : BattleActor(uuid, StaticBattlePokemonProvider(pokemonList)) {

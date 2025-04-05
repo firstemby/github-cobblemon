@@ -8,23 +8,24 @@
 
 package com.cobblemon.mod.common.battles.actor
 
-import com.cobblemon.mod.common.api.battles.model.actor.*
+import com.cobblemon.mod.common.api.battles.model.actor.ActorType
+import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
+import com.cobblemon.mod.common.api.battles.model.actor.FleeableBattleActor
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.battles.ai.RandomBattleAI
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
-import java.util.UUID
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.Vec3
+import java.util.UUID
 
 class PokemonBattleActor(
     uuid: UUID,
     val pokemon: BattlePokemon,
-    override val fleeDistance: Float
-) : BattleActor(uuid, StaticBattlePokemonProvider(listOf(pokemon)), RandomBattleAI()), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
+    override val fleeDistance: Float,
+) : MultiPokemonBattleActor(uuid, listOf(pokemon)), EntityBackedBattleActor<PokemonEntity>, FleeableBattleActor {
 
     override val initialPos: Vec3?
     init {

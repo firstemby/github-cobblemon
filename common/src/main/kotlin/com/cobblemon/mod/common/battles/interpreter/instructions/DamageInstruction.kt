@@ -25,15 +25,14 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
-import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
 import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
-import java.util.concurrent.CompletableFuture
 import net.minecraft.network.chat.Component
+import java.util.concurrent.CompletableFuture
 
 /**
  * Format: |-damage|POKEMON|HP STATUS
@@ -181,14 +180,17 @@ class DamageInstruction(
                 val difference = maxHealth - remainingHealth
                 newHealthRatio = remainingHealth.toFloat() / maxHealth
                 battle.dispatchToFront {
-                    battlePokemon.curr = remainingHealth
+                    //battlePokemon.curr = remainingHealth
                     if (difference > 0) {
+                        /*
                         battlePokemon.effectedPokemon.let { pokemon ->
                             if (DamageTakenEvolutionProgress.supports(pokemon)) {
                                 val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DamageTakenEvolutionProgress }) { DamageTakenEvolutionProgress() }
                                 progress.updateProgress(DamageTakenEvolutionProgress.Progress(progress.currentProgress().amount + difference))
                             }
                         }
+                         */
+
                     }
                     battlePokemon.sendUpdate()
                     GO

@@ -11,9 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
-import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
@@ -23,8 +21,8 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
-import java.util.concurrent.CompletableFuture
 import net.minecraft.network.chat.Component
+import java.util.concurrent.CompletableFuture
 
 /**
  * Format: |-activate|POKEMON|EFFECT
@@ -59,7 +57,7 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
             val actionEffect = status?.getActionEffect() ?: return@dispatch GO
             val providers = mutableListOf<Any>(battle)
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
-            pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
+            //pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
                 runtime = runtime,
@@ -81,6 +79,7 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
             val pokemonName = pokemon.getName()
             val sourceName = message.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
 
+            /*
             if (effect.id == "sketch" && pokemon.effectedPokemon.moveSet.any { it.name == "sketch" } && extraEffect is String) {
                 // Apply Sketch to the pokemon's current moveset if it was successfully used in battle
                 val moveTemplate = Moves.getByName(extraEffect.replace(" ", ""))
@@ -91,6 +90,8 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
                 }
 
             }
+
+             */
 
             val lang = when (effect.id) {
                 // Includes a 3rd argument being the magnitude level as a number

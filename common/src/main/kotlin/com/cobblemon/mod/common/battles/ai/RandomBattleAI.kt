@@ -8,21 +8,13 @@
 
 package com.cobblemon.mod.common.battles.ai
 
-import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
-import com.cobblemon.mod.common.battles.ActiveBattlePokemon
-import com.cobblemon.mod.common.battles.DefaultActionResponse
-import com.cobblemon.mod.common.battles.MoveActionResponse
-import com.cobblemon.mod.common.battles.PassActionResponse
-import com.cobblemon.mod.common.battles.ShowdownActionResponse
-import com.cobblemon.mod.common.battles.ShowdownMoveset
-import com.cobblemon.mod.common.battles.SwitchActionResponse
-
 /**
  * AI that randomly chooses a move from its moveset at a random target.
  *
  * @since January 16th, 2022
  * @author Deltric, Hiroku
  */
+/*
 class RandomBattleAI : BattleAI {
     override fun choose(
         activeBattlePokemon: ActiveBattlePokemon,
@@ -55,3 +47,5 @@ class RandomBattleAI : BattleAI {
         }
     }
 }
+
+ */

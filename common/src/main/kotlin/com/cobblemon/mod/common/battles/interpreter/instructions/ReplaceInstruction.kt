@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
-import com.cobblemon.mod.common.net.messages.client.battle.BattleReplacePokemonPacket
 
 /**
  * Format: |replace|POKEMON|DETAILS|HP STATUS
@@ -32,11 +31,14 @@ class ReplaceInstruction(val message: BattleMessage): InterpreterInstruction {
             val entity = pokemon.entity
             entity?.let { it.effects.mockEffect?.end(it) }
 
+            /*
             battle.sendSidedUpdate(
                 source = actor,
                 allyPacket = BattleReplacePokemonPacket(pnx, pokemon, true),
                 opponentPacket = BattleReplacePokemonPacket(pnx, pokemon, false)
             )
+
+             */
 
             activePokemon.illusion = null
             //lang done by EndInstruction

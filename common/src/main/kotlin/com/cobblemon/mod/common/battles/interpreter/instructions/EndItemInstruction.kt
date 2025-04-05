@@ -32,7 +32,7 @@ class EndItemInstruction(val message: BattleMessage): InterpreterInstruction {
             // All logic regarding broadcasting battle messages is handled in CobblemonHeldItemManager
             val battlePokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
             val itemEffect = message.effectAt(1) ?: return@dispatchWaiting
-            battlePokemon.heldItemManager.handleEndInstruction(battlePokemon, battle, message)
+            //battlePokemon.heldItemManager.handleEndInstruction(battlePokemon, battle, message)
             battle.minorBattleActions[battlePokemon.uuid] = message
             battlePokemon.contextManager.remove(itemEffect.id, BattleContext.Type.ITEM)
             if (message.hasOptionalArgument("eat")) {

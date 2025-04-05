@@ -24,29 +24,15 @@ import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getBattleTheme
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
-import java.util.UUID
+import com.cobblemon.mod.common.util.swap
 import com.cobblemon.mod.common.util.update
-import com.cobblemon.mod.common.util.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import kotlin.collections.HashMap
-import kotlin.collections.Iterable
-import kotlin.collections.MutableSet
-import kotlin.collections.all
-import kotlin.collections.filterIsInstance
-import kotlin.collections.first
-import kotlin.collections.flatMap
-import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
-import kotlin.collections.plus
-import kotlin.collections.plusAssign
+import java.util.UUID
 import kotlin.collections.set
-import kotlin.collections.sortedBy
 
 object BattleBuilder {
     @JvmOverloads
@@ -91,6 +77,7 @@ object BattleBuilder {
         val errors = ErroredBattleStart()
 
         for ((player, actor) in arrayOf(player1 to player1Actor, player2 to player2Actor)) {
+            /*
             if (actor.battlePokemonProvider.getKnownPokemon().filter { it.health > 0 }.size < battleFormat.battleType.slotsPerActor) {
                 errors.participantErrors[actor] += BattleStartError.insufficientPokemon(
                     actorEntity = player,
@@ -102,6 +89,8 @@ object BattleBuilder {
             if (actor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
                 errors.participantErrors[actor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
             }
+
+             */
 
             if (BattleRegistry.getBattleByParticipatingPlayer(player) != null) {
                 errors.participantErrors[actor] += BattleStartError.alreadyInBattle(player)
@@ -170,6 +159,7 @@ object BattleBuilder {
         }
 
         for ((player, actor) in players.zip(playerActors)) {
+            /*
             if (actor.battlePokemonProvider.getKnownPokemon().size < battleFormat.battleType.slotsPerActor) {
                 errors.participantErrors[actor] += BattleStartError.insufficientPokemon(
                     actorEntity = player,
@@ -181,6 +171,8 @@ object BattleBuilder {
             if (actor.battlePokemonProvider.getKnownPokemon().any { it.entity?.isBusy == true }) {
                 errors.participantErrors[actor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
             }
+
+             */
 
             if (BattleRegistry.getBattleByParticipatingPlayer(player) != null) {
                 errors.participantErrors[actor] += BattleStartError.alreadyInBattle(player)
@@ -251,6 +243,7 @@ object BattleBuilder {
         val wildActor = PokemonBattleActor(pokemonEntity.pokemon.uuid, BattlePokemon(pokemonEntity.pokemon), fleeDistance)
         val errors = ErroredBattleStart()
 
+        /*
         if (playerTeam.isNotEmpty() && playerTeam[0].health <= 0){
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                actorEntity = player,
@@ -271,6 +264,9 @@ object BattleBuilder {
             errors.participantErrors[playerActor] += BattleStartError.targetIsBusy(player.displayName ?: player.name)
         }
 
+         */
+
+        /*
         if (BattleRegistry.getBattleByParticipatingPlayer(player) != null) {
             errors.participantErrors[playerActor] += BattleStartError.alreadyInBattle(playerActor)
         }
@@ -278,6 +274,8 @@ object BattleBuilder {
         if (pokemonEntity.battleId != null) {
             errors.participantErrors[wildActor] += BattleStartError.alreadyInBattle(wildActor)
         }
+
+         */
 
         playerActor.battleTheme = pokemonEntity.getBattleTheme()
 
@@ -317,11 +315,11 @@ object BattleBuilder {
         healFirst: Boolean = false,
         party: PartyStore = player.party()
     ): BattleStartResult {
+        /*
         val playerTeam = party.toBattleTeam(clone = cloneParties, healPokemon = healFirst, leadingPokemon = leadingPokemon)
         val playerActor = PlayerBattleActor(player.uuid, playerTeam)
         val npcParty = npcEntity.getPartyForChallenge(listOf(player))
         val errors = ErroredBattleStart()
-
         if (playerActor.battlePokemonProvider.getKnownPokemon().size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
@@ -369,6 +367,8 @@ object BattleBuilder {
         } else {
             errors
         }
+         */
+        TODO("Not yet implemented")
     }
 }
 
@@ -397,7 +397,7 @@ interface BattleStartError {
     companion object {
         fun alreadyInBattle(player: ServerPlayer) = AlreadyInBattleError(player.uuid, player.effectiveName())
         fun alreadyInBattle(pokemonEntity: PokemonEntity) = AlreadyInBattleError(pokemonEntity.uuid, pokemonEntity.effectiveName())
-        fun alreadyInBattle(actor: BattleActor) = AlreadyInBattleError(actor.uuid, actor.getName())
+        //fun alreadyInBattle(actor: BattleActor) = AlreadyInBattleError(actor.uuid, actor.getName())
         fun noParty(npcEntity: NPCEntity) = NoPartyError(npcEntity)
         fun targetIsBusy(targetName: Component) = BusyError(targetName)
         fun insufficientPokemon(

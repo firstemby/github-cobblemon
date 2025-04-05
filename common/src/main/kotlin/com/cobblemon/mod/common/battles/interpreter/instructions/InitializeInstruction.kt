@@ -40,12 +40,12 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
                 // If a Pokémon entity is being recalled with an animation,
                 // wrap up the animation and recall the Pokémon immediately.
                 if (it.beamMode == 3 && battle.battlePartyStores.isEmpty()) {
-                    pokemon.effectedPokemon.recall()
+                    // pokemon.effectedPokemon.recall()
                 }
                 // If already on the field, initialize for the BattleInitializePacket
                 else {
-                    activePokemon.battlePokemon = pokemon
-                    activePokemon.illusion = illusion
+                    // activePokemon.battlePokemon = pokemon
+                    // activePokemon.illusion = illusion
                 }
             }
         }

@@ -10,8 +10,6 @@ package com.cobblemon.mod.common.net.serverhandling
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BattleBuilder
@@ -71,7 +69,7 @@ object ChallengeHandler : ServerNetworkPacketHandler<BattleChallengePacket> {
         val actor = battle.getActor(entity.pokemon.uuid) as? PokemonBattleActor ?: return
         val battlePokemon = actor.battlePokemonProvider.getKnownPokemon().firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
         battle.playerUUIDs.forEach { uuid ->
-            CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
+            //CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
         }
     }
 

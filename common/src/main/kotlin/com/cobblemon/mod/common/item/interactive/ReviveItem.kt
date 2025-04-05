@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.item.interactive
 
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -18,13 +17,15 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.battles.BagItemActionResponse
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.battleLang
+import com.cobblemon.mod.common.util.isHeld
+import com.cobblemon.mod.common.util.isInBattle
+import com.cobblemon.mod.common.util.party
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -71,6 +72,7 @@ class ReviveItem(
                     return InteractionResultHolder.consume(stack)
                 } else {
                     val turn = battle.turn
+                    /*
                     PartySelectCallbacks.createBattleSelect(
                         player = player,
                         pokemon = battlePokemon,
@@ -86,6 +88,8 @@ class ReviveItem(
                             CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.effectedPokemon.species.resourceIdentifier, stackName))
                         }
                     }
+
+                     */
                 }
             } else {
                 val pokemon = player.party().toList()

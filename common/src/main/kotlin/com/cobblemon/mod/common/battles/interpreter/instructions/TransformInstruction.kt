@@ -13,9 +13,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
-import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
-import com.cobblemon.mod.common.entity.pokemon.effects.TransformEffect
-import com.cobblemon.mod.common.net.messages.client.battle.BattleTransformPokemonPacket
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -40,9 +37,10 @@ class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage
         ShowdownInterpreter.broadcastOptionalAbility(battle, effect, pokemon)
 
         battle.dispatch {
-            val entity = pokemon.entity ?: return@dispatch GO
-            val future = TransformEffect(targetPokemon.effectedPokemon, battle.started).start(entity)
-            UntilDispatch { future?.isDone != false }
+            GO
+            //val entity = pokemon.entity ?: return@dispatch GO
+            //val future = TransformEffect(targetPokemon.effectedPokemon, battle.started).start(entity)
+            //UntilDispatch { future?.isDone != false }
         }
 
         battle.dispatchWaiting {
@@ -51,11 +49,14 @@ class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage
             val targetPokemonName = targetPokemon.getName()
 
             mock?.let {
+                /*
                 battle.sendSidedUpdate(
                     source = actor,
                     allyPacket = BattleTransformPokemonPacket(pnx, pokemon, it, true),
                     opponentPacket = BattleTransformPokemonPacket(pnx, pokemon, it, false)
                 )
+
+                 */
             }
 
             val lang = battleLang("transform", pokemonName, targetPokemonName)

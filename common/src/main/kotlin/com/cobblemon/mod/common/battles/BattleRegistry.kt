@@ -167,7 +167,7 @@ object BattleRegistry {
 
         // -> Add the players and team
         for (actor in battle.actors.sortedBy { it.showdownId }) {
-            messages.add(""">player ${actor.showdownId} {"name":"${actor.uuid}","team":"${actor.battlePokemonProvider.getKnownPokemon().packTeam()}"}""")
+            //messages.add(""">player ${actor.showdownId} {"name":"${actor.uuid}","team":"${actor.battlePokemonProvider.getKnownPokemon().packTeam()}"}""")
         }
 
         // -> Set team size

@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
-import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
@@ -47,13 +46,12 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
             val status = Statuses.getStatus(effectID)
             val actionEffect = status?.getActionEffect() ?: return@dispatch GO
             val providers = mutableListOf<Any>(battle)
-            pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
+            // pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
 
             val context = ActionEffectContext(
                 actionEffect = actionEffect,
                 runtime = runtime,
-                providers = providers,
-                level = battle.players.firstOrNull()?.level()
+                providers = providers
             )
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds

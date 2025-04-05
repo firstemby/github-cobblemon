@@ -21,7 +21,6 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
-import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.battleLang
 import java.util.UUID
 
@@ -47,11 +46,11 @@ class WinInstruction(val message: BattleMessage): InterpreterInstruction {
             // If the battle was a PvW battle, we need to set the killer of the wild Pokémon to the player
             if (battle.isPvW) {
                 val nonPlayerActor = battle.actors.first { it.type == ActorType.WILD }
-                val wildPokemon: BattlePokemon = nonPlayerActor.battlePokemonProvider.getKnownPokemon().first()
+                // val wildPokemon: BattlePokemon = nonPlayerActor.battlePokemonProvider.getKnownPokemon().first()
 
-                if (!wasCaught && losers.any { it.uuid == wildPokemon.uuid }) {
-                    wildPokemon.effectedPokemon.entity?.killer = (battle.actors.firstOrNull { it.type == ActorType.PLAYER } as? PlayerBattleActor)?.entity
-                }
+                // if (!wasCaught && losers.any { it.uuid == wildPokemon.uuid }) {
+                    // wildPokemon.effectedPokemon.entity?.killer = (battle.actors.firstOrNull { it.type == ActorType.PLAYER } as? PlayerBattleActor)?.entity
+                //}
             }
 
             // broadcast victory / defeat

@@ -89,7 +89,7 @@ class IllusionEffect(
         val battlePokemon = wildActor.battlePokemonProvider.getKnownPokemon().firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
         // Step 2 flag all players as seeing the Pokemon
         battle.playerUUIDs.forEach { uuid ->
-            CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
+            //CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
         }
     }
 
