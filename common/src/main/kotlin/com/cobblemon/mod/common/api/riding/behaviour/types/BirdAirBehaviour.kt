@@ -237,11 +237,9 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
         }
 
         //air resistance
-        newVelocity = Vec3(
-            newVelocity.x,
-            newVelocity.y,
-            lerp( newVelocity.z,0.0, topSpeed / ( 20.0 * 30.0))
-        )
+        if( abs(newVelocity.z) > 0) {
+            newVelocity = newVelocity.subtract(0.0, 0.0, min(0.003 * newVelocity.z.sign, newVelocity.z))
+        }
         state.rideVel.set(newVelocity)
     }
 

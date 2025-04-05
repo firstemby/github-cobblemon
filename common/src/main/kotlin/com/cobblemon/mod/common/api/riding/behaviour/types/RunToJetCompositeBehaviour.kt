@@ -45,7 +45,6 @@ class RunToJetCompositeBehaviour : RidingBehaviour<RunToJetCompositeSettings, Ru
         val flightState = state.flightState
         val groundState = state.landState
         if (shouldTransitionToGround(state, vehicle, driver)) {
-            groundState.currSpeed = flightState.currSpeed
             groundState.stamina = flightState.stamina
             groundState.rideVel = flightState.rideVel
 
@@ -53,7 +52,6 @@ class RunToJetCompositeBehaviour : RidingBehaviour<RunToJetCompositeSettings, Ru
             vehicle.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
             state.timeTransitioned.set(vehicle.level().gameTime)
         } else if (shouldTransitionToAir(state, vehicle, driver, input)) {
-            flightState.currSpeed = groundState.currSpeed
             flightState.stamina = groundState.stamina
             flightState.rideVel = groundState.rideVel
 
@@ -113,6 +111,31 @@ class RunToJetCompositeBehaviour : RidingBehaviour<RunToJetCompositeSettings, Ru
         return when (state.activeController.get()) {
             GenericLandBehaviour.KEY -> landBehaviour.speed(settings.land, state.landState, vehicle, driver)
             JetAirBehaviour.KEY -> jetBehaviour.speed(settings.jet, state.flightState, vehicle, driver)
+            else -> error("Invalid controller: ${state.activeController.get()}")
+        }
+    }
+
+    override fun clampPassengerRotation(
+        settings: RunToJetCompositeSettings,
+        state: RunToJetCompositeState,
+        vehicle: PokemonEntity,
+        driver: LivingEntity
+    ) {
+        when (state.activeController.get()) {
+            GenericLandBehaviour.KEY -> landBehaviour.clampPassengerRotation(
+                settings.land,
+                state.landState,
+                vehicle,
+                driver
+            )
+
+            JetAirBehaviour.KEY -> jetBehaviour.clampPassengerRotation(
+                settings.jet,
+                state.flightState,
+                vehicle,
+                driver
+            )
+
             else -> error("Invalid controller: ${state.activeController.get()}")
         }
     }

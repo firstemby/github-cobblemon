@@ -39,6 +39,11 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.speed(settings, state, vehicle, driver)
     }
 
+    override fun clampPassengerRotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity) {
+        if (!isActive(settings, state, vehicle)) return
+        return behaviour.clampPassengerRotation(settings, state, vehicle, driver)
+    }
+
     override fun rotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity): Vec2 {
         if (!isActive(settings, state, vehicle)) return vehicle.rotationVector
         return behaviour.rotation(settings, state, vehicle, driver)

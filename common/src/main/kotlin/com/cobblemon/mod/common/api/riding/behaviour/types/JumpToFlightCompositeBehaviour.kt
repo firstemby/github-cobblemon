@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.util.readExpression
 import com.cobblemon.mod.common.util.writeExpression
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -110,6 +111,31 @@ class JumpToFlightCompositeBehaviour : RidingBehaviour<JumpToFlightCompositeSett
         return when (state.activeController.get()) {
             GenericLandBehaviour.KEY -> landBehaviour.speed(settings.land, state.landState, vehicle, driver)
             BirdAirBehaviour.KEY -> birdBehaviour.speed(settings.bird, state.flightState, vehicle, driver)
+            else -> error("Invalid controller: ${state.activeController.get()}")
+        }
+    }
+
+    override fun clampPassengerRotation(
+        settings: JumpToFlightCompositeSettings,
+        state: JumpToFlightCompositeState,
+        vehicle: PokemonEntity,
+        driver: LivingEntity
+    ) {
+        when (state.activeController.get()) {
+            GenericLandBehaviour.KEY -> landBehaviour.clampPassengerRotation(
+                settings.land,
+                state.landState,
+                vehicle,
+                driver
+            )
+
+            BirdAirBehaviour.KEY -> birdBehaviour.clampPassengerRotation(
+                settings.bird,
+                state.flightState,
+                vehicle,
+                driver
+            )
+
             else -> error("Invalid controller: ${state.activeController.get()}")
         }
     }

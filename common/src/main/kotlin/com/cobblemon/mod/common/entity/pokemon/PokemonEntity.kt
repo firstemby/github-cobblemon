@@ -1919,7 +1919,7 @@ open class PokemonEntity(
 //    }
 
     override fun onPassengerTurned(entityToUpdate: Entity) {
-        if (entityToUpdate !is LivingEntity) return
+         if (entityToUpdate !is LivingEntity) return
         ifRidingAvailable { behaviour, settings, state ->
             behaviour.clampPassengerRotation(settings, state, this, entityToUpdate)
         }
