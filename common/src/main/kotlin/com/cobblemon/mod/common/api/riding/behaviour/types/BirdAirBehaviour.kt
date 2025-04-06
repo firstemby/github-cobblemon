@@ -35,7 +35,7 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
     override val key: ResourceLocation = KEY
 
     val poseProvider = PoseProvider<BirdAirSettings, BirdAirState>(PoseType.HOVER)
-        .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVel.get().z > 0.1 })
+        .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVel.get().z > 0.2 })
 
     override fun isActive(settings: BirdAirSettings, state: BirdAirState, vehicle: PokemonEntity): Boolean {
         return true
@@ -96,7 +96,7 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
             upForce -= 0.3
         }
 
-        val altitudeLimit = vehicle.runtime.resolveDouble(settings.altitudeExpr)
+        val altitudeLimit = vehicle.runtime.resolveDouble(settings.jumpExpr)
 
         //Only limit altitude if altitude is not infinite
         if (!vehicle.runtime.resolveBoolean(settings.infiniteAltitude)) {
@@ -113,9 +113,9 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
     */
     fun calculateRideSpaceVel(settings: BirdAirSettings, state: BirdAirState, vehicle: PokemonEntity, driver: Player) {
         //retrieve stats
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
-        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glideTopSpeedExpr)
-        val accel = vehicle.runtime.resolveDouble(settings.accelExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glidespeedExpr)
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
         val staminaStat = vehicle.runtime.resolveDouble(settings.staminaExpr)
 
         var glideSpeedChange = 0.0
@@ -255,8 +255,8 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
 
         //TODO: Tie into handling
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
-         val rotationChangeRate = 10.0
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val rotationChangeRate = 10.0
 
         var yawForce =  rotationChangeRate * sin(Math.toRadians(controller.roll.toDouble()))
         //for a bit of correction on the rolls limit it to a quarter the amount
@@ -285,14 +285,16 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
         val controller = (driver as OrientationControllable).orientationController
 
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
 
         //Smooth out mouse input.
-        val smoothingSpeed = 4
+        val smoothingSpeed = 4.0
         val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
         val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseX * 0.1 * invertRoll, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseY * 0.1 * invertPitch, deltaTime * smoothingSpeed);
+        val mouseXc = (mouseX).coerceIn(-60.0, 60.0)
+        val mouseYc = (mouseY).coerceIn(-60.0, 60.0)
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1 * invertRoll, deltaTime * smoothingSpeed);
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1 * invertPitch, deltaTime * smoothingSpeed);
 
         //limit rolling based on handling and current speed.
         //modulated by speed so that when flapping idle in air you are ont wobbling around to look around
@@ -372,8 +374,8 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
-        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glideTopSpeedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glidespeedExpr)
 
         //Must I ensure that topspeed is greater than minimum?
         val normalizedGlideSpeed = normalizeVal(state.rideVel.get().length(), topSpeed, glideTopSpeed)
@@ -438,52 +440,41 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
 class BirdAirSettings : RidingBehaviourSettings {
     override val key = BirdAirBehaviour.KEY
 
-    //max y level for the ride
-    var altitudeExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
-        private set
-
     var infiniteAltitude: Expression = "false".asExpression()
         private set
 
     var infiniteStamina: Expression = "false".asExpression()
         private set
 
+    //max y level for the ride
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression()
-        private set
-
-    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
-        private set
-
-    var glideTopSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.0, 1.0)".asExpression()
-        private set
-
-    // Max accel is a whole 1.0 in 3 seconds. The conversion in the function below is to convert seconds to ticks
-    var accelExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
-        private set
-
-    //Seconds self propelled flight (glide is not self propelled in this case)
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
+    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
     var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression()
+
+    var glidespeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.0, 1.0)".asExpression()
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeExpression(altitudeExpr)
         buffer.writeExpression(infiniteAltitude)
         buffer.writeExpression(infiniteStamina)
+        buffer.writeExpression(glidespeedExpr)
+        buffer.writeExpression(jumpExpr)
         buffer.writeExpression(handlingExpr)
-        buffer.writeExpression(topSpeedExpr)
-        buffer.writeExpression(glideTopSpeedExpr)
-        buffer.writeExpression(accelExpr)
+        buffer.writeExpression(speedExpr)
+        buffer.writeExpression(accelerationExpr)
         buffer.writeExpression(staminaExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
-        altitudeExpr = buffer.readExpression()
         infiniteAltitude = buffer.readExpression()
         infiniteStamina = buffer.readExpression()
+        glidespeedExpr = buffer.readExpression()
+        jumpExpr = buffer.readExpression()
         handlingExpr = buffer.readExpression()
-        topSpeedExpr = buffer.readExpression()
-        glideTopSpeedExpr = buffer.readExpression()
-        accelExpr = buffer.readExpression()
+        speedExpr = buffer.readExpression()
+        accelerationExpr = buffer.readExpression()
         staminaExpr = buffer.readExpression()
     }
 }

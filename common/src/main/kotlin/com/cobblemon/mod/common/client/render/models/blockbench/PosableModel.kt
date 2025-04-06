@@ -733,8 +733,14 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 transformationMatrix.rotate(controller.getRenderOrientation(state.getPartialTicks()))
                 transformationMatrix.translate(center.negate())
                 matrixStack.mulPose(transformationMatrix)
+            } else if( entity.passengers.isNotEmpty()) {
+                // rotate a ridden but non rollable pokemon correctly
+                val driver = entity.controllingPassenger ?: entity
+                var yRot = Mth.lerp(state.getPartialTicks(), driver.yRotO, driver.yRot)
+                yRot = Mth.wrapDegrees(yRot)
+                matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
             } else {
-                var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+                var yRot = Mth.lerp(state.getPartialTicks(), entity.yRotO, entity.yRot)
                 yRot = Mth.wrapDegrees(yRot)
                 matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
             }

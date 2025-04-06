@@ -146,7 +146,9 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.AxisAngle4f
 import org.joml.Matrix3f
+import org.joml.Quaternionf
 import org.joml.Vector3f
 
 @Suppress("unused")
@@ -252,7 +254,6 @@ open class PokemonEntity(
 
     var enablePoseTypeRecalculation = true
 
-//    override var ridingController: RideController? = null
 
     var previousRidingState: RidingBehaviourState? = null
     var ridingState: RidingBehaviourState? = null
@@ -1536,6 +1537,7 @@ open class PokemonEntity(
             }
 
             // TODO: jackowes look over this so I don't accidentally break anything
+            // TODO: Talk to landon about why this was needed
             this.deltaMovement = this.deltaMovement.lerp(v, inertia)
             var pos = this.deltaMovement.scale(this.speed.toDouble())
             if (super.onGround() && this.deltaMovement.y == 0.0) {
@@ -1563,14 +1565,35 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
 
             //Prevent current travel logic when riding a pokemon.
-            /*
             val riders = this.passengers.filterIsInstance<LivingEntity>()
-            if ( riders.isEmpty() ) {
+            if ( riders.isEmpty() || this.controllingPassenger == null) {
                 super.travel(movementInput)
             }
-             */
+            else {
+                val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
+                    behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
+                }
 
-            super.travel(movementInput)
+                // Rotate velocity vector to face the current y rotation
+                val f = Mth.sin(this.getYRot() * 0.017453292f)
+                val g = Mth.cos(this.getYRot() * 0.017453292f)
+                val v = Vec3(
+                    inp.x * g.toDouble() - inp.z * f.toDouble(),
+                    inp.y,
+                    inp.z * g.toDouble() + inp.x * f.toDouble()
+                )
+
+                val diff = v.subtract(this.deltaMovement)
+
+                val inertia = ifRidingAvailableSupply(fallback = 0.5) { behaviour, settings, state ->
+                    behaviour.inertia(settings, state,this)
+                }
+
+                this.deltaMovement = this.deltaMovement.add( diff.scale(inertia) )
+
+                this.move(MoverType.SELF, this.deltaMovement)
+            }
+
 
             this.updateBlocksTraveled(prevBlockPos)
         }

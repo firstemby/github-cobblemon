@@ -46,7 +46,7 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
 
     override fun speed(settings: JetAirSettings, state: JetAirState, vehicle: PokemonEntity, driver: Player): Float {
         //retrieve stats
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
         val staminaStat = vehicle.runtime.resolveDouble(settings.staminaExpr)
 
         //retrieve minSpeed
@@ -137,8 +137,8 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
         vehicle: PokemonEntity,
         driver: Player
     ) {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
-        val accel = vehicle.runtime.resolveDouble(settings.accelExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
         val altitudeLimit = vehicle.runtime.resolveDouble(settings.jumpExpr)
         val minSpeed = vehicle.runtime.resolveDouble(settings.minSpeed)
         val speed = state.rideVel.get().length()
@@ -281,7 +281,7 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
         val minSpeed = vehicle.runtime.resolveDouble(settings.minSpeed)
 
         //Must I ensure that topspeed is greater than minimum?
@@ -345,25 +345,7 @@ class JetAirSettings : RidingBehaviourSettings {
     var minSpeed: Expression = "1.2".asExpression()
         private set
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
-        private set
-
     var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 25.0, 8.0)".asExpression()
-        private set
-
-    var topSpeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression()
-        private set
-
-    // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
-    var accelExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
-        private set
-
-    // Between 60 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
-        private set
-
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
         private set
 
     // Make configurable by json
@@ -373,30 +355,41 @@ class JetAirSettings : RidingBehaviourSettings {
     var infiniteAltitude: Expression = "false".asExpression()
         private set
 
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
+        private set
+    var handlingExpr: Expression =  "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
+        private set
+    var speedExpr: Expression =  "q.get_ride_stats('SPEED', 'AIR', 2.5, 1.0)".asExpression()
+        private set
+    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
+        private set
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
+        private set
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeExpression(gravity)
         buffer.writeExpression(minSpeed)
-        buffer.writeExpression(handlingExpr)
         buffer.writeExpression(handlingYawExpr)
-        buffer.writeExpression(topSpeedExpr)
-        buffer.writeExpression(accelExpr)
-        buffer.writeExpression(staminaExpr)
-        buffer.writeExpression(jumpExpr)
         buffer.writeExpression(infiniteStamina)
         buffer.writeExpression(infiniteAltitude)
+        buffer.writeExpression(jumpExpr)
+        buffer.writeExpression(handlingExpr)
+        buffer.writeExpression(speedExpr)
+        buffer.writeExpression(accelerationExpr)
+        buffer.writeExpression(staminaExpr)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         gravity = buffer.readExpression()
         minSpeed = buffer.readExpression()
-        handlingExpr = buffer.readExpression()
         handlingYawExpr = buffer.readExpression()
-        topSpeedExpr = buffer.readExpression()
-        accelExpr = buffer.readExpression()
-        staminaExpr = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
         infiniteStamina = buffer.readExpression()
         infiniteAltitude = buffer.readExpression()
+        jumpExpr = buffer.readExpression()
+        handlingExpr = buffer.readExpression()
+        speedExpr = buffer.readExpression()
+        accelerationExpr = buffer.readExpression()
+        staminaExpr = buffer.readExpression()
     }
 }
 

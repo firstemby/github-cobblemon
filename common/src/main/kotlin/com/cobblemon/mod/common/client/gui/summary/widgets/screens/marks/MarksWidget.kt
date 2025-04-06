@@ -42,7 +42,7 @@ class MarksWidget(
     var hoveredMark: Mark? = null
 
     val marksScrollList = MarksScrollingWidget(
-        pX = pX + 10,
+        pX = pX + 9,
         pY = pY + 45,
         setSelectedMark = {
             if (hoveredMark != null) {
