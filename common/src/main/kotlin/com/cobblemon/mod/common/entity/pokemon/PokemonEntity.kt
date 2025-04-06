@@ -1878,10 +1878,10 @@ open class PokemonEntity(
             }
 
             val rotation = behaviour.rotation(settings, state, this, driver)
+            this.yRotO = this.yRot
             setRot(rotation.y, rotation.x)
             this.yHeadRot = this.yRot
             this.yBodyRot = this.yRot
-            this.yRotO = this.yRot
             val riders = this.passengers.filterIsInstance<LivingEntity>()
 
             if (behaviour.isActive(settings, state, this) && behaviour.canJump(settings, state, this, driver)) {

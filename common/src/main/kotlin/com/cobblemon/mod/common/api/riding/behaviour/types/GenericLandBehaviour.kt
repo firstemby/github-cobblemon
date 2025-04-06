@@ -156,8 +156,8 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
         //Take the inverse so that you turn less at higher speeds
         val normSpeed = 1.0f // = 1.0f - 0.5f*normalizeVal(state.rideVel.length(), 0.0, topSpeed).toFloat()
 
-        // Based off handling and an arbitrary scale
-        val turnRate = handling.toFloat() / 20.0f
+        // TODO: This needs to be tweaked with in game results and testing
+        val turnRate = (handling.toFloat() / 20.0f) * 2
 
         //Ensure you only ever rotate as much difference as there is between the angles.
         val turnSpeed = turnRate  * rotDiffMod * normSpeed
