@@ -43,6 +43,16 @@
 					]
 				},
 				{
+					"name": "sunglasses",
+					"parent": "head",
+					"pivot": [0, 8.1, -8],
+					"cubes": [
+						{"origin": [-4, 7.3, -8], "size": [8, 2, 0], "uv": [47, 29]},
+						{"origin": [-3.5, 7.8, -8.01], "size": [7, 1, 0], "uv": [49, 27]},
+						{"origin": [-3.5, 7.8, -7.99], "size": [7, 1, 0], "uv": [49, 27]}
+					]
+				},
+				{
 					"name": "eye_right",
 					"parent": "head",
 					"pivot": [-2.5, 9.1, -7.01],

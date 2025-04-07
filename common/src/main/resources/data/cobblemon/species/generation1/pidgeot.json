@@ -223,7 +223,7 @@
           }
         },
         "seats": [],
-        "controller": {
+        "behaviour": {
           "key": "cobblemon:land/generic"
         }
       }
@@ -262,9 +262,74 @@
         }
       }
     },
-    "seats": [],
-    "controller": {
-      "key": "cobblemon:land/generic"
-    }
+    "behaviour": {
+      "key": "cobblemon:composite/jump_to_flight",
+      "bird": {
+        "key": "cobblemon:air/bird"
+      },
+      "land": {
+        "key": "cobblemon:land/generic"
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
   }
 }

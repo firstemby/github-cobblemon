@@ -1,0 +1,101 @@
+{
+  "pokemon": ["electrode"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "minecraft:white_dye",
+      "displayName": "cobblemon.cosmetic.white_dye",
+      "displayItem": "minecraft:white_dye",
+      "aspects": ["color-white", "colour-white"]
+    },
+    {
+      "consumedItem": "minecraft:orange_dye",
+      "displayName": "cobblemon.cosmetic.orange_dye",
+      "displayItem": "minecraft:orange_dye",
+      "aspects": ["color-orange", "colour-orange"]
+    },
+    {
+      "consumedItem": "minecraft:magenta_dye",
+      "displayName": "cobblemon.cosmetic.magenta_dye",
+      "displayItem": "minecraft:magenta_dye",
+      "aspects": ["color-magenta", "colour-magenta"]
+    },
+    {
+      "consumedItem": "minecraft:light_blue_dye",
+      "displayName": "cobblemon.cosmetic.light_blue_dye",
+      "displayItem": "minecraft:light_blue_dye",
+      "aspects": ["color-light_blue", "colour-light_blue"]
+    },
+    {
+      "consumedItem": "minecraft:yellow_dye",
+      "displayName": "cobblemon.cosmetic.yellow_dye",
+      "displayItem": "minecraft:yellow_dye",
+      "aspects": ["color-yellow", "colour-yellow"]
+    },
+    {
+      "consumedItem": "minecraft:lime_dye",
+      "displayName": "cobblemon.cosmetic.lime_dye",
+      "displayItem": "minecraft:lime_dye",
+      "aspects": ["color-lime", "colour-lime"]
+    },
+    {
+      "consumedItem": "minecraft:pink_dye",
+      "displayName": "cobblemon.cosmetic.pink_dye",
+      "displayItem": "minecraft:pink_dye",
+      "aspects": ["color-pink", "colour-pink"]
+    },
+    {
+      "consumedItem": "minecraft:gray_dye",
+      "displayName": "cobblemon.cosmetic.gray_dye",
+      "displayItem": "minecraft:gray_dye",
+      "aspects": ["color-gray", "colour-gray"]
+    },
+    {
+      "consumedItem": "minecraft:light_gray_dye",
+      "displayName": "cobblemon.cosmetic.light_gray_dye",
+      "displayItem": "minecraft:light_gray_dye",
+      "aspects": ["color-light_gray", "colour-light_gray"]
+    },
+    {
+      "consumedItem": "minecraft:cyan_dye",
+      "displayName": "cobblemon.cosmetic.cyan_dye",
+      "displayItem": "minecraft:cyan_dye",
+      "aspects": ["color-cyan", "colour-cyan"]
+    },
+    {
+      "consumedItem": "minecraft:purple_dye",
+      "displayName": "cobblemon.cosmetic.purple_dye",
+      "displayItem": "minecraft:purple_dye",
+      "aspects": ["color-purple", "colour-purple"]
+    },
+    {
+      "consumedItem": "minecraft:blue_dye",
+      "displayName": "cobblemon.cosmetic.blue_dye",
+      "displayItem": "minecraft:blue_dye",
+      "aspects": ["color-blue", "colour-blue"]
+    },
+    {
+      "consumedItem": "minecraft:brown_dye",
+      "displayName": "cobblemon.cosmetic.brown_dye",
+      "displayItem": "minecraft:brown_dye",
+      "aspects": ["color-brown", "colour-brown"]
+    },
+    {
+      "consumedItem": "minecraft:green_dye",
+      "displayName": "cobblemon.cosmetic.green_dye",
+      "displayItem": "minecraft:green_dye",
+      "aspects": ["color-green", "colour-green"]
+    },
+    {
+      "consumedItem": "minecraft:red_dye",
+      "displayName": "cobblemon.cosmetic.red_dye",
+      "displayItem": "minecraft:red_dye",
+      "aspects": ["color-red", "colour-red"]
+    },
+    {
+      "consumedItem": "minecraft:black_dye",
+      "displayName": "cobblemon.cosmetic.black_dye",
+      "displayItem": "minecraft:black_dye",
+      "aspects": ["color-black", "colour-black"]
+    }
+  ]
+}

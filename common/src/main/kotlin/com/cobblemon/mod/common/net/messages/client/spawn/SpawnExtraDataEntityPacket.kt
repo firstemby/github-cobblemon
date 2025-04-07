@@ -26,7 +26,7 @@ abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var v
 
     abstract fun encodeEntityData(buffer: RegistryFriendlyByteBuf)
 
-    abstract fun applyData(entity: E)
+    abstract fun applyData(entity: E, level: ClientLevel)
 
     abstract fun checkType(entity: Entity): Boolean
 
@@ -48,7 +48,7 @@ abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var v
             )
             // Cobblemon start
             if (this.checkType(entity)) {
-                this.applyData(entity as E)
+                this.applyData(entity as E, world)
             }
             // Cobblemon end
             world.addEntity(entity)

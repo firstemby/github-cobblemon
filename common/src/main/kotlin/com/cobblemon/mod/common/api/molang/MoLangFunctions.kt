@@ -17,31 +17,20 @@ import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonActivities
-import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.PlayerDialogueFaceProvider
 import com.cobblemon.mod.common.api.dialogue.ReferenceDialogueFaceProvider
+import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
-import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
-import com.cobblemon.mod.common.api.pokedex.CaughtCount
-import com.cobblemon.mod.common.api.pokedex.CaughtPercent
-import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokedex.PokedexManager
-import com.cobblemon.mod.common.api.pokedex.SeenCount
-import com.cobblemon.mod.common.api.pokedex.SeenPercent
+import com.cobblemon.mod.common.api.pokedex.*
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.storage.PokemonStore
@@ -52,6 +41,7 @@ import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunctions
@@ -71,12 +61,8 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
-import com.cobblemon.mod.common.pokemon.riding.controllers.BirdAirController
-import com.cobblemon.mod.common.pokemon.riding.states.BirdAirState
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
-import java.util.UUID
-import kotlin.math.sqrt
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.core.BlockPos
@@ -85,11 +71,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.DoubleTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -104,6 +86,7 @@ import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.TamableAnimal
+import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
@@ -116,8 +99,12 @@ import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
+import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import kotlin.math.sqrt
+import kotlin.random.Random
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
@@ -237,6 +224,22 @@ object MoLangFunctions {
                 val y = params.getInt(1)
                 val z = params.getInt(2)
                 return@put DoubleValue(world.isRainingAt(BlockPos(x, y, z)))
+            }
+            map.put("is_snowing_at") { params ->
+                val x = params.getInt(0)
+                val y = params.getInt(1)
+                val z = params.getInt(2)
+                val blockPos = BlockPos(x, y, z)
+                if (!world.isRaining()) {
+                    return@put DoubleValue.ZERO
+                } else if (!world.canSeeSky(blockPos)) {
+                    return@put DoubleValue.ZERO
+                } else if (world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos).getY() > blockPos.getY()) {
+                    return@put DoubleValue.ZERO
+                } else {
+                    val biome = world.getBiome(blockPos).value() as Biome
+                    return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW)
+                }
             }
             map.put("is_chunk_loaded_at") { params ->
                 val x = params.getInt(0)
@@ -507,6 +510,7 @@ object MoLangFunctions {
             map.put("is_sneaking") { _ -> DoubleValue(entity.isShiftKeyDown) }
             map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) }
             map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) }
+            map.put("is_in_rain") { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) }
             map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInWaterRainOrBubble) }
             map.put("is_touching_water") { _ -> DoubleValue(entity.isInWater) }
             map.put("is_underwater") { DoubleValue(entity.getIsSubmerged()) }
@@ -795,6 +799,8 @@ object MoLangFunctions {
                 map.put("npc") { battleActor.entity.struct }
             } else if (battleActor is PlayerBattleActor) {
                 map.put("player") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+            } else if (battleActor is PokemonBattleActor) {
+                map.put("pokemon") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             }
             return@mutableListOf map
         }
@@ -836,6 +842,34 @@ object MoLangFunctions {
                 DoubleValue.ONE
             }
             map.put("owner") { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
+            map.put("add_marks") { params ->
+                for (param in params.params) {
+                    val identifier = param.asString().asIdentifierDefaultingNamespace()
+                    val mark = Marks.getByIdentifier(identifier)
+                    if (mark != null) pokemon.exchangeMark(mark, true)
+                }
+            }
+            map.put("add_marks_with_chance") { params ->
+                for (param in params.params) {
+                    val identifier = param.asString().asIdentifierDefaultingNamespace()
+                    val mark = Marks.getByIdentifier(identifier)
+                    mark?.let {
+                        val probability = it.chance.coerceIn(0F, 1F) * 100
+                        val randomValue = Random.nextDouble(0.0, 100.0)
+                        if (randomValue < probability) pokemon.exchangeMark(it, true)
+                    }
+                }
+            }
+            map.put("add_potential_marks") { params ->
+                for (param in params.params) {
+                    val identifier = param.asString().asIdentifierDefaultingNamespace()
+                    val mark = Marks.getByIdentifier(identifier)
+                    if (mark != null) pokemon.addPotentialMark(mark)
+                }
+            }
+            map.put("apply_potential_marks") {
+                return@put DoubleValue(pokemon.applyPotentialMarks())
+            }
             map
         }
     )

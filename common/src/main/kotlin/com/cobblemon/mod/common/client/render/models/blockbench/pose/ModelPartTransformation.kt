@@ -46,7 +46,7 @@ class ModelPartTransformation(val modelPart: ModelPart) {
     var visibility: ExpressionLike? = null
 
     /** Applies the transformation to the model part. */
-    fun apply(state: PosableState, intensity: Float) {
+    fun apply(state: PosableState? = null, intensity: Float = 1f) {
         modelPart.x += position[0] * intensity
         modelPart.y += position[1] * intensity
         modelPart.z += position[2] * intensity
@@ -56,7 +56,7 @@ class ModelPartTransformation(val modelPart: ModelPart) {
         modelPart.xScale *= ((1 - scale[0]).absoluteValue * intensity) * (scale[0] - 1).sign + 1
         modelPart.yScale *= ((1 - scale[1]).absoluteValue * intensity) * (scale[1] - 1).sign + 1
         modelPart.zScale *= ((1 - scale[2]).absoluteValue * intensity) * (scale[2] - 1).sign + 1
-        visibility?.let { modelPart.visible = state.runtime.resolveBoolean(it) }
+        visibility?.let { modelPart.visible = state?.runtime?.resolveBoolean(it)?: defaultRuntime.resolveBoolean(it) }
     }
 
     fun set() {
