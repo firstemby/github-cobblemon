@@ -321,7 +321,11 @@ class StorageWidget(
                 slot.render(context, mouseX, mouseY, delta)
                 val pokemon = slot.getPokemon()
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
-                    && pokemon != null && pokemon != pcGui.previewPokemon) pcGui.setPreviewPokemon(pokemon)
+                    && pokemon != null && pokemon != pcGui.previewPokemon
+                ) {
+                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: false)
+                    pcGui.isPreviewInParty = false
+                }
             }
         } else {
             if (pcGui.ticksElapsed >= 10)  screenLoaded = true
@@ -334,7 +338,10 @@ class StorageWidget(
                 val pokemon = slot.getPokemon()
                 if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
                     && pokemon != null && pokemon != pcGui.previewPokemon
-                ) pcGui.setPreviewPokemon(pokemon)
+                ) {
+                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: true)
+                    pcGui.isPreviewInParty = true
+                } // TODO: Hovering from party to party or pc not saving marks
             }
         }
 
@@ -427,7 +434,7 @@ class StorageWidget(
                 }
 
                 this.selectedPosition = clickedPosition
-                this.pcGui.setPreviewPokemon(clickedPokemon)
+                this.pcGui.setPreviewPokemon(clickedPokemon, pcGui.isPreviewInParty ?: false)
                 grabbedSlot = GrabbedStorageSlot(
                     x = button.x,
                     y = button.y,

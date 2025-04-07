@@ -41,12 +41,12 @@ class SwapInstruction(val message: BattleMessage, val instructionSet: Instructio
                 // Swap references of the 2 pokemon
                 actor.activePokemon.swap((pnxA[2] - 'a'), (pnxB[2] - 'a'))
 
-                val posA = ShowdownInterpreter.getSendoutPosition(battle, activePokemonA, battlePokemonA.actor) ?: activePokemonA.position?.second
+                val posA = activePokemonA.getSendOutPosition() ?: activePokemonA.position?.second
                 if (posA != null && battlePokemonA.entity != null) {
                     battlePokemonA.entity?.setPositionSafely(battlePokemonA.entity!!.getAdjustedSendoutPosition(posA))
                 }
 
-                val posB = ShowdownInterpreter.getSendoutPosition(battle, activePokemonB, battlePokemonA.actor) ?: activePokemonB.position?.second
+                val posB = activePokemonB.getSendOutPosition() ?: activePokemonB.position?.second
                 val battlePokemonB = activePokemonB.battlePokemon
                 if (posB != null && battlePokemonB?.entity != null) {
                     activePokemonB.battlePokemon?.entity?.setPositionSafely(battlePokemonB.entity!!.getAdjustedSendoutPosition(posB))

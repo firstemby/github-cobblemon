@@ -2741,14 +2741,6 @@
 					}
 				}
 			}
-		},
-		"animation.pidgeot.cry": {
-			"animation_length": 1.33333,
-			"sound_effects": {
-				"0.04": {
-					"effect": "pokemon.pidgeot.cry"
-				}
-			}
 		}
 	}
 }

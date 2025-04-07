@@ -1238,6 +1238,623 @@
   "cobblemon.cosmetic.held_logs.mangrove": "Mangrove Log",
   "cobblemon.cosmetic.held_logs.cherry": "Cherry Log",
 
+  "cobblemon.mark.ribbon_ability": "Ability Ribbon",
+  "cobblemon.mark.ribbon_ability.desc": "A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.",
+
+  "cobblemon.mark.ribbon_ability_double": "Double Ability Ribbon",
+  "cobblemon.mark.ribbon_ability_double.desc": "A Ribbon awarded for completing the Battle Tower Double challenge.",
+
+  "cobblemon.mark.ribbon_ability_great": "Great Ability Ribbon",
+  "cobblemon.mark.ribbon_ability_great.desc": "A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.",
+
+  "cobblemon.mark.ribbon_ability_multi": "Multi Ability Ribbon",
+  "cobblemon.mark.ribbon_ability_multi.desc": "A Ribbon awarded for completing the Battle Tower Multi challenge.",
+
+  "cobblemon.mark.ribbon_ability_pair": "Pair Ability Ribbon",
+  "cobblemon.mark.ribbon_ability_pair.desc": "A Ribbon awarded for completing the Battle Tower Link Multi challenge.",
+
+  "cobblemon.mark.ribbon_ability_world": "World Ability Ribbon",
+  "cobblemon.mark.ribbon_ability_world.desc": "A Ribbon awarded for completing the Wi-Fi Battle Tower challenge.",
+
+  "cobblemon.mark.ribbon_artist": "Artist Ribbon",
+  "cobblemon.mark.ribbon_artist.title": "%1$s the Model for Paintings",
+  "cobblemon.mark.ribbon_artist.desc": "A Ribbon awarded for being chosen as a super sketch model.",
+
+  "cobblemon.mark.ribbon_battle_royal_master": "Battle Royal Master Ribbon",
+  "cobblemon.mark.ribbon_battle_royal_master.title": "%1$s the Royal Master",
+  "cobblemon.mark.ribbon_battle_royal_master.desc": "A Ribbon that can be given to a Pokémon that has achieved victory in the Battle Royal.",
+
+  "cobblemon.mark.ribbon_battle_tree_great": "Battle Tree Great Ribbon",
+  "cobblemon.mark.ribbon_battle_tree_great.title": "%1$s the Tree Victor",
+  "cobblemon.mark.ribbon_battle_tree_great.desc": "A Ribbon awarded for winning against a Battle Legend in the Battle Tree.",
+
+  "cobblemon.mark.ribbon_battle_tree_master": "Battle Tree Master Ribbon",
+  "cobblemon.mark.ribbon_battle_tree_master.title": "%1$s the Tree Master",
+  "cobblemon.mark.ribbon_battle_tree_master.desc": "A Ribbon awarded for winning against a Battle Legend in super battles in the Battle Tree.",
+
+  "cobblemon.mark.ribbon_battle_tower_master": "Tower Master Ribbon",
+  "cobblemon.mark.ribbon_battle_tower_master.title": "%1$s the Tower Master",
+  "cobblemon.mark.ribbon_battle_tower_master.desc": "A Ribbon awarded for winning against a champion in the Battle Tower.",
+
+  "cobblemon.mark.ribbon_battle_victory": "Victory Ribbon",
+  "cobblemon.mark.ribbon_battle_victory.desc": "Ribbon awarded for clearing the Battle Tower's Lv. 100 challenge.",
+
+  "cobblemon.mark.ribbon_battle_winning": "Winning Ribbon",
+  "cobblemon.mark.ribbon_battle_winning.desc": "Ribbon awarded for clearing the Battle Tower's Lv. 50 challenge.",
+
+  "cobblemon.mark.ribbon_battler_expert": "Expert Battler Ribbon",
+  "cobblemon.mark.ribbon_battler_expert.title": "%1$s the Master",
+  "cobblemon.mark.ribbon_battler_expert.desc": "A Ribbon that can be given to a brave Pokémon that has honed its battle skills to an art.",
+
+  "cobblemon.mark.ribbon_battler_skillful": "Skillful Battler Ribbon",
+  "cobblemon.mark.ribbon_battler_skillful.title": "%1$s the Veteran",
+  "cobblemon.mark.ribbon_battler_skillful.desc": "A Ribbon that can be given to a Pokémon that has achieved victory in difficult battles.",
+
+  "cobblemon.mark.ribbon_best_friends": "Best Friends Ribbon",
+  "cobblemon.mark.ribbon_best_friends.title": "%1$s the Great Friend",
+  "cobblemon.mark.ribbon_best_friends.desc": "A Ribbon that can be given to a Pokémon with which you share a close and meaningful bond.",
+
+  "cobblemon.mark.ribbon_champion": "Champion Ribbon",
+  "cobblemon.mark.ribbon_champion.title": "%1$s the Champion",
+  "cobblemon.mark.ribbon_champion.desc": "A Ribbon awarded for clearing the Pokémon League.",
+
+  "cobblemon.mark.ribbon_champion_alola": "Alola Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_alola.title": "%1$s the Alola Champion",
+  "cobblemon.mark.ribbon_champion_alola.desc": "A Ribbon awarded for becoming the Alola Champion.",
+
+  "cobblemon.mark.ribbon_champion_galar": "Galar Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_galar.title": "%1$s the Galar Champion",
+  "cobblemon.mark.ribbon_champion_galar.desc": "A Ribbon awarded for becoming the Galar Champion.",
+
+  "cobblemon.mark.ribbon_champion_hoenn": "Hoenn Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_hoenn.title": "%1$s the Hoenn Champion",
+  "cobblemon.mark.ribbon_champion_hoenn.desc": "A Ribbon awarded for beating the Hoenn Champion.",
+
+  "cobblemon.mark.ribbon_champion_kalos": "Kalos Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_kalos.title": "%1$s the Kalos Champion",
+  "cobblemon.mark.ribbon_champion_kalos.desc": "A Ribbon awarded for beating the Kalos Champion.",
+
+  "cobblemon.mark.ribbon_champion_paldea": "Paldea Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_paldea.title": "%1$s the Paldea Champion",
+  "cobblemon.mark.ribbon_champion_paldea.desc": "A Ribbon awarded for becoming a Paldea Champion.",
+
+  "cobblemon.mark.ribbon_champion_sinnoh": "Sinnoh Champion Ribbon",
+  "cobblemon.mark.ribbon_champion_sinnoh.title": "%1$s the Sinnoh Champion",
+  "cobblemon.mark.ribbon_champion_sinnoh.desc": "A Ribbon awarded for beating the Sinnoh Champion.",
+
+"cobblemon.mark.ribbon_contest_hoenn_beauty_1": "Beauty Ribbon",
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_1.desc": "Beauty Contest Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_2": "Beauty Ribbon Super",
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_2.desc": "Beauty Contest Super Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_3": "Beauty Ribbon Hyper",
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_3.desc": "Beauty Contest Hyper Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_4": "Beauty Ribbon Master",
+  "cobblemon.mark.ribbon_contest_hoenn_beauty_4.desc": "Beauty Contest Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cool_1": "Cool Ribbon",
+  "cobblemon.mark.ribbon_contest_hoenn_cool_1.desc": "Cool Contest Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cool_2": "Cool Ribbon Super",
+  "cobblemon.mark.ribbon_contest_hoenn_cool_2.desc": "Cool Contest Super Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cool_3": "Cool Ribbon Hyper",
+  "cobblemon.mark.ribbon_contest_hoenn_cool_3.desc": "Cool Contest Hyper Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cool_4": "Cool Ribbon Master",
+  "cobblemon.mark.ribbon_contest_hoenn_cool_4.desc": "Cool Contest Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cute_1": "Cute Ribbon",
+  "cobblemon.mark.ribbon_contest_hoenn_cute_1.desc": "Cute Contest Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cute_2": "Cute Ribbon Super",
+  "cobblemon.mark.ribbon_contest_hoenn_cute_2.desc": "Cute Contest Super Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cute_3": "Cute Ribbon Hyper",
+  "cobblemon.mark.ribbon_contest_hoenn_cute_3.desc": "Cute Contest Hyper Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_cute_4": "Cute Ribbon Master",
+  "cobblemon.mark.ribbon_contest_hoenn_cute_4.desc": "Cute Contest Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_smart_1": "Smart Ribbon",
+  "cobblemon.mark.ribbon_contest_hoenn_smart_1.desc": "Smart Contest Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_smart_2": "Smart Ribbon Super",
+  "cobblemon.mark.ribbon_contest_hoenn_smart_2.desc": "Smart Contest Super Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_smart_3": "Smart Ribbon Hyper",
+  "cobblemon.mark.ribbon_contest_hoenn_smart_3.desc": "Smart Contest Hyper Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_smart_4": "Smart Ribbon Master",
+  "cobblemon.mark.ribbon_contest_hoenn_smart_4.desc": "Smart Contest Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_tough_1": "Tough Ribbon",
+  "cobblemon.mark.ribbon_contest_hoenn_tough_1.desc": "Tough Contest Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_tough_2": "Tough Ribbon Super",
+  "cobblemon.mark.ribbon_contest_hoenn_tough_2.desc": "Tough Contest Super Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_tough_3": "Tough Ribbon Hyper",
+  "cobblemon.mark.ribbon_contest_hoenn_tough_3.desc": "Tough Contest Hyper Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_hoenn_tough_4": "Tough Ribbon Master",
+  "cobblemon.mark.ribbon_contest_hoenn_tough_4.desc": "Tough Contest Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_1": "Beauty Ribbon",
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_1.desc": "Super Contest Beauty Category Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_2": "Beauty Ribbon Great",
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_2.desc": "Super Contest Beauty Category Great Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_3": "Beauty Ribbon Ultra",
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_3.desc": "Super Contest Beauty Category Ultra Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_4": "Beauty Ribbon Master",
+  "cobblemon.mark.ribbon_contest_sinnoh_beauty_4.desc": "Super Contest Beauty Category Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_1": "Cool Ribbon",
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_1.desc": "Super Contest Cool Category Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_2": "Cool Ribbon Great",
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_2.desc": "Super Contest Cool Category Great Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_3": "Cool Ribbon Ultra",
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_3.desc": "Super Contest Cool Category Ultra Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_4": "Cool Ribbon Master",
+  "cobblemon.mark.ribbon_contest_sinnoh_cool_4.desc": "Super Contest Cool Category Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_1": "Cute Ribbon",
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_1.desc": "Super Contest Cute Category Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_2": "Cute Ribbon Great",
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_2.desc": "Super Contest Cute Category Great Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_3": "Cute Ribbon Ultra",
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_3.desc": "Super Contest Cute Category Ultra Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_4": "Cute Ribbon Master",
+  "cobblemon.mark.ribbon_contest_sinnoh_cute_4.desc": "Super Contest Cute Category Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_1": "Smart Ribbon",
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_1.desc": "Super Contest Smart Category Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_2": "Smart Ribbon Great",
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_2.desc": "Super Contest Smart Category Great Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_3": "Smart Ribbon Ultra",
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_3.desc": "Super Contest Smart Category Ultra Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_4": "Smart Ribbon Master",
+  "cobblemon.mark.ribbon_contest_sinnoh_smart_4.desc": "Super Contest Smart Category Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_1": "Tough Ribbon",
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_1.desc": "Super Contest Tough Category Normal Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_2": "Tough Ribbon Great",
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_2.desc": "Super Contest Tough Category Great Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_3": "Tough Ribbon Ultra",
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_3.desc": "Super Contest Tough Category Ultra Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_4": "Tough Ribbon Master",
+  "cobblemon.mark.ribbon_contest_sinnoh_tough_4.desc": "Super Contest Tough Category Master Rank winner!",
+
+  "cobblemon.mark.ribbon_contest_super_master_beauty": "Beauty Master Ribbon",
+  "cobblemon.mark.ribbon_contest_super_master_beauty.title": "%1$s the Vintage Beauty",
+  "cobblemon.mark.ribbon_contest_super_master_beauty.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied Beauty in Pokémon Contests.",
+
+  "cobblemon.mark.ribbon_contest_super_master_cleverness": "Cleverness Master Ribbon",
+  "cobblemon.mark.ribbon_contest_super_master_cleverness.title": "%1$s the Historic Genius",
+  "cobblemon.mark.ribbon_contest_super_master_cleverness.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied Cleverness in Pokémon Contests.",
+
+  "cobblemon.mark.ribbon_contest_super_master_coolness": "Coolness Master Ribbon",
+  "cobblemon.mark.ribbon_contest_super_master_coolness.title": "%1$s the Former Star",
+  "cobblemon.mark.ribbon_contest_super_master_coolness.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied Coolness in Pokémon Contests.",
+
+  "cobblemon.mark.ribbon_contest_super_master_cuteness": "Cuteness Master Ribbon",
+  "cobblemon.mark.ribbon_contest_super_master_cuteness.title": "%1$s the Former Idol",
+  "cobblemon.mark.ribbon_contest_super_master_cuteness.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied Cuteness in Pokémon Contests.",
+
+  "cobblemon.mark.ribbon_contest_super_master_toughness": "Toughness Master Ribbon",
+  "cobblemon.mark.ribbon_contest_super_master_toughness.title": "%1$s the Formerly Buff",
+  "cobblemon.mark.ribbon_contest_super_master_toughness.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied Toughness in Pokémon Contests.",
+
+  "cobblemon.mark.ribbon_contest_super_star": "Contest Star Ribbon",
+  "cobblemon.mark.ribbon_contest_super_star.title": "%1$s the Shining Star",
+  "cobblemon.mark.ribbon_contest_super_star.desc": "A Ribbon awarded to a Pokémon that has performed superbly in every kind of contest.",
+
+  "cobblemon.mark.ribbon_contest_super_star_twinkling": "Twinkling Star Ribbon",
+  "cobblemon.mark.ribbon_contest_super_star_twinkling.title": "%1$s the Twinkling Star",
+  "cobblemon.mark.ribbon_contest_super_star_twinkling.desc": "A Ribbon awarded to a Pokémon that has perfectly embodied shining brilliance in Super Contest Shows.",
+
+  "cobblemon.mark.ribbon_day_alert": "Alert Ribbon",
+  "cobblemon.mark.ribbon_day_alert.title": "%1$s the Once Vigilant",
+  "cobblemon.mark.ribbon_day_alert.desc": "A Ribbon for recalling an invigorating event that created life energy.",
+
+  "cobblemon.mark.ribbon_day_careless": "Careless Ribbon",
+  "cobblemon.mark.ribbon_day_careless.title": "%1$s the Once Imperfect",
+  "cobblemon.mark.ribbon_day_careless.desc": "A Ribbon for recalling a careless error that helped steer life decisions.",
+
+  "cobblemon.mark.ribbon_day_downcast": "Downcast Ribbon",
+  "cobblemon.mark.ribbon_day_downcast.title": "%1$s the Once Shaken",
+  "cobblemon.mark.ribbon_day_downcast.desc": "A Ribbon for recalling feelings of sadness that added spice to life.",
+
+  "cobblemon.mark.ribbon_day_relax": "Relax Ribbon",
+  "cobblemon.mark.ribbon_day_relax.title": "%1$s the Once Well-Rested",
+  "cobblemon.mark.ribbon_day_relax.desc": "A Ribbon for recalling a refreshing event that added sparkle to life.",
+
+  "cobblemon.mark.ribbon_day_shock": "Shock Ribbon",
+  "cobblemon.mark.ribbon_day_shock.title": "%1$s the Once Cowardly",
+  "cobblemon.mark.ribbon_day_shock.desc": "A Ribbon for recalling a thrilling event that made life more exciting.",
+
+  "cobblemon.mark.ribbon_day_smile": "Smile Ribbon",
+  "cobblemon.mark.ribbon_day_smile.title": "%1$s the Once Cheery",
+  "cobblemon.mark.ribbon_day_smile.desc": "A Ribbon for recalling that smiles enrich the quality of life.",
+
+  "cobblemon.mark.ribbon_day_snooze": "Snooze Ribbon",
+  "cobblemon.mark.ribbon_day_snooze.title": "%1$s the Once Sleepy",
+  "cobblemon.mark.ribbon_day_snooze.desc": "A Ribbon for recalling a deep slumber that made life soothing.",
+
+  "cobblemon.mark.ribbon_effort": "Effort Ribbon",
+  "cobblemon.mark.ribbon_effort.title": "%1$s the Once Well-Trained",
+  "cobblemon.mark.ribbon_effort.desc": "A Ribbon awarded for being an exceptionally hard worker.",
+
+  "cobblemon.mark.ribbon_event": "Event Ribbon",
+  "cobblemon.mark.ribbon_event.title": "%1$s the Festive",
+  "cobblemon.mark.ribbon_event.desc": "A Ribbon awarded for participating in a special event.",
+
+  "cobblemon.mark.ribbon_event_birthday": "Birthday Ribbon",
+  "cobblemon.mark.ribbon_event_birthday.title": "%1$s the Best Buddy",
+  "cobblemon.mark.ribbon_event_birthday.desc": "A Ribbon that commemorates a birthday.",
+
+  "cobblemon.mark.ribbon_event_champion_battle": "Battle Champion Ribbon",
+  "cobblemon.mark.ribbon_event_champion_battle.title": "%1$s the Battle Champion",
+  "cobblemon.mark.ribbon_event_champion_battle.desc": "A Ribbon awarded to a Battle Competition Champion.",
+
+  "cobblemon.mark.ribbon_event_champion_regional": "Regional Champion Ribbon",
+  "cobblemon.mark.ribbon_event_champion_regional.title": "%1$s the Regional Champion",
+  "cobblemon.mark.ribbon_event_champion_regional.desc": "A Ribbon awarded to a Regional Champion.",
+
+  "cobblemon.mark.ribbon_event_champion_national": "National Champion Ribbon",
+  "cobblemon.mark.ribbon_event_champion_national.title": "%1$s the National Champion",
+  "cobblemon.mark.ribbon_event_champion_national.desc": "A Ribbon awarded to a National Champion.",
+
+  "cobblemon.mark.ribbon_event_champion_world": "World Champion Ribbon",
+  "cobblemon.mark.ribbon_event_champion_world.title": "%1$s the World Champion",
+  "cobblemon.mark.ribbon_event_champion_world.desc": "A Ribbon awarded to a World Champion.",
+
+  "cobblemon.mark.ribbon_event_classic": "Classic Ribbon",
+  "cobblemon.mark.ribbon_event_classic.title": "%1$s the Pokémon Fan",
+  "cobblemon.mark.ribbon_event_classic.desc": "A Ribbon that proclaims love for Pokémon.",
+
+  "cobblemon.mark.ribbon_event_country": "Country Ribbon",
+  "cobblemon.mark.ribbon_event_country.title": "%1$s the Victor",
+  "cobblemon.mark.ribbon_event_country.desc": "A Ribbon awarded to a Pokémon League Champion.",
+
+  "cobblemon.mark.ribbon_event_earth": "Earth Ribbon",
+  "cobblemon.mark.ribbon_event_earth.title": "%1$s the 100× Victorious",
+  "cobblemon.mark.ribbon_event_earth.desc": "A Ribbon awarded for winning one hundred battles in a row.",
+
+  "cobblemon.mark.ribbon_event_national": "National Ribbon",
+  "cobblemon.mark.ribbon_event_national.title": "%1$s the Triumphant",
+  "cobblemon.mark.ribbon_event_national.desc": "A Ribbon awarded for overcoming all difficult challenges.",
+
+  "cobblemon.mark.ribbon_event_premier": "Premier Ribbon",
+  "cobblemon.mark.ribbon_event_premier.title": "%1$s the Celebratory",
+  "cobblemon.mark.ribbon_event_premier.desc": "A Ribbon awarded for a special holiday.",
+
+  "cobblemon.mark.ribbon_event_souvenir": "Souvenir Ribbon",
+  "cobblemon.mark.ribbon_event_souvenir.title": "%1$s the Cherished",
+  "cobblemon.mark.ribbon_event_souvenir.desc": "A Ribbon for cherishing a special memory.",
+
+  "cobblemon.mark.ribbon_event_special": "Special Ribbon",
+  "cobblemon.mark.ribbon_event_special.title": "%1$s the Premium",
+  "cobblemon.mark.ribbon_event_special.desc": "A special Ribbon for a special day.",
+
+  "cobblemon.mark.ribbon_event_wishing": "Wishing Ribbon",
+  "cobblemon.mark.ribbon_event_wishing.title": "%1$s the Wish Granter",
+  "cobblemon.mark.ribbon_event_wishing.desc": "A Ribbon said to make your wish come true.",
+
+  "cobblemon.mark.ribbon_event_world": "World Ribbon",
+  "cobblemon.mark.ribbon_event_world.title": "%1$s the World Conqueror",
+  "cobblemon.mark.ribbon_event_world.desc": "A Ribbon awarded to a Pokémon League Champion.",
+
+  "cobblemon.mark.ribbon_event_mystery_zone_land": "Land Ribbon",
+  "cobblemon.mark.ribbon_event_mystery_zone_land.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_event_mystery_zone_sky": "Sky Ribbon",
+  "cobblemon.mark.ribbon_event_mystery_zone_sky.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_event_mystery_zone_marine": "Marine Ribbon",
+  "cobblemon.mark.ribbon_event_mystery_zone_marine.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_event_color_red": "Red Ribbon",
+  "cobblemon.mark.ribbon_event_color_red.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_event_color_blue": "Blue Ribbon",
+  "cobblemon.mark.ribbon_event_color_blue.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_event_color_green": "Green Ribbon",
+  "cobblemon.mark.ribbon_event_color_green.desc": "A commemorative Ribbon.",
+
+  "cobblemon.mark.ribbon_footprint": "Footprint Ribbon",
+  "cobblemon.mark.ribbon_footprint.title": "%1$s the Strutter",
+  "cobblemon.mark.ribbon_footprint.desc": "A Ribbon awarded to a Pokémon deemed to have a top-quality footprint.",
+
+  "cobblemon.mark.ribbon_hisui": "Hisui Ribbon",
+  "cobblemon.mark.ribbon_hisui.title": "%1$s of the Distant Past",
+  "cobblemon.mark.ribbon_hisui.desc": "A Ribbon awarded to a Pokémon connected to the distant past.",
+
+  "cobblemon.mark.ribbon_legend": "Legend Ribbon",
+  "cobblemon.mark.ribbon_legend.title": "%1$s the Living Legend",
+  "cobblemon.mark.ribbon_legend.desc": "A Ribbon awarded for setting a legendary record.",
+
+  "cobblemon.mark.ribbon_master_rank": "Master Rank Ribbon",
+  "cobblemon.mark.ribbon_master_rank.title": "%1$s the Rank Master",
+  "cobblemon.mark.ribbon_master_rank.desc": "A Ribbon awarded for winning against a Trainer in the Master Ball Tier of Ranked Battles.",
+
+  "cobblemon.mark.ribbon_memory_battle": "Battle Memory Ribbon",
+  "cobblemon.mark.ribbon_memory_battle.title": "%1$s the Exciting Memory",
+  "cobblemon.mark.ribbon_memory_battle.desc": "A commemorative Ribbon representing all of the Ribbons you collected for battling.",
+
+  "cobblemon.mark.ribbon_memory_battle_gold": "Battle Memory Ribbon",
+  "cobblemon.mark.ribbon_memory_battle_gold.title": "%1$s the Exciting Memory",
+  "cobblemon.mark.ribbon_memory_battle_gold.desc": "A commemorative Ribbon representing all of the Ribbons you collected for battling.",
+
+  "cobblemon.mark.ribbon_memory_contest": "Contest Memory Ribbon",
+  "cobblemon.mark.ribbon_memory_contest.title": "%1$s the Treasured Memory",
+  "cobblemon.mark.ribbon_memory_contest.desc": "A commemorative Ribbon representing all of the Ribbons you collected for contests.",
+
+  "cobblemon.mark.ribbon_memory_contest_gold": "Contest Memory Ribbon",
+  "cobblemon.mark.ribbon_memory_contest_gold.title": "%1$s the Treasured Memory",
+  "cobblemon.mark.ribbon_memory_contest_gold.desc": "A commemorative Ribbon representing all of the Ribbons you collected for contests.",
+
+  "cobblemon.mark.ribbon_once-in-a-lifetime": "Once-in-a-Lifetime Ribbon",
+  "cobblemon.mark.ribbon_once-in-a-lifetime.title": "%1$s the One-in-a-Million",
+  "cobblemon.mark.ribbon_once-in-a-lifetime.desc": "A rare Ribbon found extremely infrequently on Pokémon.",
+
+  "cobblemon.mark.ribbon_partner": "Partner Ribbon",
+  "cobblemon.mark.ribbon_partner.desc": "A special Ribbon awarded to a Pokémon that was once partnered with another great Trainer.",
+
+  "cobblemon.mark.ribbon_record": "Record Ribbon",
+  "cobblemon.mark.ribbon_record.title": "%1$s the Record Holder",
+  "cobblemon.mark.ribbon_record.desc": "A Ribbon awarded for setting an incredible record.",
+
+  "cobblemon.mark.ribbon_syndicate_royal": "Royal Ribbon",
+  "cobblemon.mark.ribbon_syndicate_royal.title": "%1$s the Royal",
+  "cobblemon.mark.ribbon_syndicate_royal.desc": "An incredibly regal Ribbon with an air of nobility.",
+
+  "cobblemon.mark.ribbon_syndicate_gorgeous": "Gorgeous Ribbon",
+  "cobblemon.mark.ribbon_syndicate_gorgeous.title": "%1$s the Gorgeous",
+  "cobblemon.mark.ribbon_syndicate_gorgeous.desc": "An extraordinarily gorgeous and extravagant Ribbon.",
+
+  "cobblemon.mark.ribbon_syndicate_gorgeous_royal": "Gorgeous Royal Ribbon",
+  "cobblemon.mark.ribbon_syndicate_gorgeous_royal.title": "%1$s the Gorgeous Royal",
+  "cobblemon.mark.ribbon_syndicate_gorgeous_royal.desc": "A gorgeous and regal Ribbon that is the peak of fabulous.",
+
+  "cobblemon.mark.ribbon_training": "Training Ribbon",
+  "cobblemon.mark.ribbon_training.title": "%1$s the Tried and True",
+  "cobblemon.mark.ribbon_training.desc": "A Ribbon that can be given to a Pokémon that has overcome rigorous trials and training.",
+
+  "cobblemon.mark.mark_alpha": "Alpha Mark",
+  "cobblemon.mark.mark_alpha.title": "%1$s the Former Alpha",
+  "cobblemon.mark.mark_alpha.desc": "A mark for a Pokémon that was an alpha.",
+
+  "cobblemon.mark.mark_curry": "Curry Mark",
+  "cobblemon.mark.mark_curry.title": "%1$s the Curry Connoisseur",
+  "cobblemon.mark.mark_curry.desc": "A mark for a curry-connoisseur Pokémon.",
+
+  "cobblemon.mark.mark_destiny": "Destiny Mark",
+  "cobblemon.mark.mark_destiny.title": "%1$s the Chosen One",
+  "cobblemon.mark.mark_destiny.desc": "A mark of a chosen Pokémon.",
+
+  "cobblemon.mark.mark_fishing": "Fishing Mark",
+  "cobblemon.mark.mark_fishing.title": "%1$s the Catch of the Day",
+  "cobblemon.mark.mark_fishing.desc": "A mark for a catch-of-the-day Pokémon.",
+
+  "cobblemon.mark.mark_gourmand": "Gourmand Mark",
+  "cobblemon.mark.mark_gourmand.title": "%1$s the Gourmet",
+  "cobblemon.mark.mark_gourmand.desc": "A mark for a Pokémon gourmet.",
+
+  "cobblemon.mark.mark_itemfinder": "Itemfinder Mark",
+  "cobblemon.mark.mark_itemfinder.title": "%1$s the Treasure Hunter",
+  "cobblemon.mark.mark_itemfinder.desc": "A mark for a Pokémon that likes to pick things up.",
+
+  "cobblemon.mark.mark_jumbo": "Jumbo Mark",
+  "cobblemon.mark.mark_jumbo.title": "%1$s the Great",
+  "cobblemon.mark.mark_jumbo.desc": "A mark for a Pokémon that's the largest it can be.",
+
+  "cobblemon.mark.mark_mightiest": "Mightiest Mark",
+  "cobblemon.mark.mark_mightiest.title": "%1$s the Unrivaled",
+  "cobblemon.mark.mark_mightiest.desc": "A mark for an especially mighty Pokémon.",
+
+  "cobblemon.mark.mark_mini": "Mini Mark",
+  "cobblemon.mark.mark_mini.title": "%1$s the Teeny",
+  "cobblemon.mark.mark_mini.desc": "A mark for a Pokémon that's the smallest it can be.",
+
+  "cobblemon.mark.mark_partner": "Partner Mark",
+  "cobblemon.mark.mark_partner.title": "%1$s the Reliable Partner",
+  "cobblemon.mark.mark_partner.desc": "A mark for a friendly Pokémon.",
+
+  "cobblemon.mark.mark_rare": "Rare Mark",
+  "cobblemon.mark.mark_rare.title": "%1$s the Recluse",
+  "cobblemon.mark.mark_rare.desc": "A mark for a reclusive Pokémon.",
+
+  "cobblemon.mark.mark_revival": "Revival Mark",
+  "cobblemon.mark.mark_revival.title": "%1$s the Resurrected",
+  "cobblemon.mark.mark_revival.desc": "A mark for a resurrected Pokémon.",
+
+  "cobblemon.mark.mark_titan": "Titan Mark",
+  "cobblemon.mark.mark_titan.title": "%1$s the Former Titan",
+  "cobblemon.mark.mark_titan.desc": "A mark for a Pokémon that was a Titan.",
+
+  "cobblemon.mark.mark_uncommon": "Uncommon Mark",
+  "cobblemon.mark.mark_uncommon.title": "%1$s the Sociable",
+  "cobblemon.mark.mark_uncommon.desc": "A mark for a sociable Pokémon.",
+
+  "cobblemon.mark.mark_personality_absent-minded": "Absent-Minded Mark",
+  "cobblemon.mark.mark_personality_absent-minded.title": "%1$s the Spacey",
+  "cobblemon.mark.mark_personality_absent-minded.desc": "A mark for a spacey Pokémon.",
+
+  "cobblemon.mark.mark_personality_angry": "Angery Mark",
+  "cobblemon.mark.mark_personality_angry.title": "%1$s the Furious",
+  "cobblemon.mark.mark_personality_angry.desc": "A mark for a furious Pokémon.",
+
+  "cobblemon.mark.mark_personality_calmness": "Calmness Mark",
+  "cobblemon.mark.mark_personality_calmness.title": "%1$s the Serene",
+  "cobblemon.mark.mark_personality_calmness.desc": "A mark for a serene Pokémon.",
+
+  "cobblemon.mark.mark_personality_charismatic": "Charismatic Mark",
+  "cobblemon.mark.mark_personality_charismatic.title": "%1$s the Radiant",
+  "cobblemon.mark.mark_personality_charismatic.desc": "A mark for a radiant Pokémon.",
+
+  "cobblemon.mark.mark_personality_crafty": "Crafty Mark",
+  "cobblemon.mark.mark_personality_crafty.title": "%1$s the Opportunist",
+  "cobblemon.mark.mark_personality_crafty.desc": "A mark for an opportunistic Pokémon.",
+
+  "cobblemon.mark.mark_personality_excited": "Excited Mark",
+  "cobblemon.mark.mark_personality_excited.title": "%1$s the Giddy",
+  "cobblemon.mark.mark_personality_excited.desc": "A mark for a giddy Pokémon.",
+
+  "cobblemon.mark.mark_personality_ferocious": "Ferocious Mark",
+  "cobblemon.mark.mark_personality_ferocious.title": "%1$s the Rampaging",
+  "cobblemon.mark.mark_personality_ferocious.desc": "A mark for a rampaging Pokémon.",
+
+  "cobblemon.mark.mark_personality_flustered": "Flustered Mark",
+  "cobblemon.mark.mark_personality_flustered.title": "%1$s the Easily Flustered",
+  "cobblemon.mark.mark_personality_flustered.desc": "A mark for an easily flustered Pokémon.",
+
+  "cobblemon.mark.mark_personality_humble": "Humble Mark",
+  "cobblemon.mark.mark_personality_humble.title": "%1$s the Humble",
+  "cobblemon.mark.mark_personality_humble.desc": "A mark for a humble Pokémon.",
+
+  "cobblemon.mark.mark_personality_intellectual": "Intellectual Mark",
+  "cobblemon.mark.mark_personality_intellectual.title": "%1$s the Scholar",
+  "cobblemon.mark.mark_personality_intellectual.desc": "A mark for a scholarly Pokémon.",
+
+  "cobblemon.mark.mark_personality_intense": "Intense Mark",
+  "cobblemon.mark.mark_personality_intense.title": "%1$s the Feisty",
+  "cobblemon.mark.mark_personality_intense.desc": "A mark for a feisty Pokémon.",
+
+  "cobblemon.mark.mark_personality_jittery": "Jittery Mark",
+  "cobblemon.mark.mark_personality_jittery.title": "%1$s the Anxious",
+  "cobblemon.mark.mark_personality_jittery.desc": "A mark for an anxious Pokémon.",
+
+  "cobblemon.mark.mark_personality_joyful": "Joyful Mark",
+  "cobblemon.mark.mark_personality_joyful.title": "%1$s the Joyful",
+  "cobblemon.mark.mark_personality_joyful.desc": "A mark for a joyful Pokémon.",
+
+  "cobblemon.mark.mark_personality_kindly": "Kindly Mark",
+  "cobblemon.mark.mark_personality_kindly.title": "%1$s the Kindhearted",
+  "cobblemon.mark.mark_personality_kindly.desc": "A mark for a kindhearted Pokémon.",
+
+  "cobblemon.mark.mark_personality_peeved": "Peeved Mark",
+  "cobblemon.mark.mark_personality_peeved.title": "%1$s the Grumpy",
+  "cobblemon.mark.mark_personality_peeved.desc": "A mark for a grumpy Pokémon.",
+
+  "cobblemon.mark.mark_personality_prideful": "Prideful Mark",
+  "cobblemon.mark.mark_personality_prideful.title": "%1$s the Arrogant",
+  "cobblemon.mark.mark_personality_prideful.desc": "A mark for an arrogant Pokémon.",
+
+  "cobblemon.mark.mark_personality_pumped-up": "Pumped-Up Mark",
+  "cobblemon.mark.mark_personality_pumped-up.title": "%1$s the Driven",
+  "cobblemon.mark.mark_personality_pumped-up.desc": "A mark for a driven Pokémon.",
+
+  "cobblemon.mark.mark_personality_rowdy": "Rowdy Mark",
+  "cobblemon.mark.mark_personality_rowdy.title": "%1$s the Rowdy",
+  "cobblemon.mark.mark_personality_rowdy.desc": "A mark for a rowdy Pokémon.",
+
+  "cobblemon.mark.mark_personality_scowling": "Scowling Mark",
+  "cobblemon.mark.mark_personality_scowling.title": "%1$s the Stern",
+  "cobblemon.mark.mark_personality_scowling.desc": "A mark for a stern Pokémon.",
+
+  "cobblemon.mark.mark_personality_slump": "Slump Mark",
+  "cobblemon.mark.mark_personality_slump.title": "%1$s the Worn-Out",
+  "cobblemon.mark.mark_personality_slump.desc": "A mark for a worn-out Pokémon.",
+
+  "cobblemon.mark.mark_personality_smiley": "Smiley Mark",
+  "cobblemon.mark.mark_personality_smiley.title": "%1$s the Beaming",
+  "cobblemon.mark.mark_personality_smiley.desc": "A mark for a beaming Pokémon.",
+
+  "cobblemon.mark.mark_personality_teary": "Teary Mark",
+  "cobblemon.mark.mark_personality_teary.title": "%1$s the Teary-Eyed",
+  "cobblemon.mark.mark_personality_teary.desc": "A mark for a teary-eyed Pokémon.",
+
+  "cobblemon.mark.mark_personality_thorny": "Thorny Mark",
+  "cobblemon.mark.mark_personality_thorny.title": "%1$s the Pompous",
+  "cobblemon.mark.mark_personality_thorny.desc": "A mark for a pompous Pokémon.",
+
+  "cobblemon.mark.mark_personality_unsure": "Unsure Mark",
+  "cobblemon.mark.mark_personality_unsure.title": "%1$s the Reluctant",
+  "cobblemon.mark.mark_personality_unsure.desc": "A mark for an unsure Pokémon.",
+
+  "cobblemon.mark.mark_personality_upbeat": "Upbeat Mark",
+  "cobblemon.mark.mark_personality_upbeat.title": "%1$s the Chipper",
+  "cobblemon.mark.mark_personality_upbeat.desc": "A mark for a chipper Pokémon.",
+
+  "cobblemon.mark.mark_personality_vigor": "Vigor Mark",
+  "cobblemon.mark.mark_personality_vigor.title": "%1$s the Lively",
+  "cobblemon.mark.mark_personality_vigor.desc": "A mark for a lively Pokémon.",
+
+  "cobblemon.mark.mark_personality_zero_energy": "Zero Energy Mark",
+  "cobblemon.mark.mark_personality_zero_energy.title": "%1$s the Apathetic",
+  "cobblemon.mark.mark_personality_zero_energy.desc": "A mark for an apathetic Pokémon.",
+
+  "cobblemon.mark.mark_personality_zoned-out": "Zoned-Out Mark",
+  "cobblemon.mark.mark_personality_zoned-out.title": "%1$s the Daydreamer",
+  "cobblemon.mark.mark_personality_zoned-out.desc": "A mark for a daydreaming Pokémon.",
+
+  "cobblemon.mark.mark_time_dawn": "Dawn Mark",
+  "cobblemon.mark.mark_time_dawn.title": "%1$s the Early Riser",
+  "cobblemon.mark.mark_time_dawn.desc": "A mark for an early-riser Pokémon.",
+
+  "cobblemon.mark.mark_time_dusk": "Dusk Mark",
+  "cobblemon.mark.mark_time_dusk.title": "%1$s the Dozy",
+  "cobblemon.mark.mark_time_dusk.desc": "A mark for a dozy Pokémon.",
+
+  "cobblemon.mark.mark_time_lunchtime": "Lunchtime Mark",
+  "cobblemon.mark.mark_time_lunchtime.title": "%1$s the Peckish",
+  "cobblemon.mark.mark_time_lunchtime.desc": "A mark for a peckish Pokémon.",
+
+  "cobblemon.mark.mark_time_sleepy-time": "Sleepy-Time Mark",
+  "cobblemon.mark.mark_time_sleepy-time.title": "%1$s the Sleepy",
+  "cobblemon.mark.mark_time_sleepy-time.desc": "A mark for a sleepy Pokémon.",
+
+  "cobblemon.mark.mark_weather_blizzard": "Blizzard Mark",
+  "cobblemon.mark.mark_weather_blizzard.title": "%1$s the Shivering",
+  "cobblemon.mark.mark_weather_blizzard.desc": "A mark for a shivering Pokémon.",
+
+  "cobblemon.mark.mark_weather_cloudy": "Cloudy Mark",
+  "cobblemon.mark.mark_weather_cloudy.title": "%1$s the Cloud Watcher",
+  "cobblemon.mark.mark_weather_cloudy.desc": "A mark for a cloud-watching Pokémon.",
+
+  "cobblemon.mark.mark_weather_dry": "Dry Mark",
+  "cobblemon.mark.mark_weather_dry.title": "%1$s the Parched",
+  "cobblemon.mark.mark_weather_dry.desc": "A mark for a parched Pokémon.",
+
+  "cobblemon.mark.mark_weather_misty": "Misty Mark",
+  "cobblemon.mark.mark_weather_misty.title": "%1$s the Mist Drifter",
+  "cobblemon.mark.mark_weather_misty.desc": "A mark for a mist-drifter Pokémon.",
+
+  "cobblemon.mark.mark_weather_rainy": "Rainy Mark",
+  "cobblemon.mark.mark_weather_rainy.title": "%1$s the Sodden",
+  "cobblemon.mark.mark_weather_rainy.desc": "A mark for a sodden Pokémon.",
+
+  "cobblemon.mark.mark_weather_sandstorm": "Sandstorm Mark",
+  "cobblemon.mark.mark_weather_sandstorm.title": "%1$s the Sandswept",
+  "cobblemon.mark.mark_weather_sandstorm.desc": "A mark for a sandswept Pokémon.",
+
+  "cobblemon.mark.mark_weather_snowy": "Snowy Mark",
+  "cobblemon.mark.mark_weather_snowy.title": "%1$s the Snow Frolicker",
+  "cobblemon.mark.mark_weather_snowy.desc": "A mark for a snow-frolicking Pokémon.",
+
+  "cobblemon.mark.mark_weather_stormy": "Stormy Mark",
+  "cobblemon.mark.mark_weather_stormy.title": "%1$s the Thunderstruck",
+  "cobblemon.mark.mark_weather_stormy.desc": "A mark for a thunderstruck Pokémon.",
+
   "key.cobblemon.upshiftparty": "Party Shift Up",
   "key.cobblemon.downshiftparty": "Party Shift Down",
   "key.cobblemon.hideparty": "Hide Party Overlay",
@@ -1555,6 +2172,12 @@
   "cobblemon.command.givepokemonegg.nospecies": "Error: You need to include a Pokémon name or 'random'",
   "cobblemon.command.error.nonpc": "Error: You need to include a valid NPC identifier.",
   "cobblemon.command.held_item": "%1$s's %2$s was given the %3$s to hold.",
+  "cobblemon.command.giveallmarks": "%1$s's %2$s was given all available marks.",
+  "cobblemon.command.givemark": "%1$s's %2$s was given a %3$s.",
+  "cobblemon.command.givemark.already_has": "%1$s's %2$s already has a %3$s!",
+  "cobblemon.command.takemark": "%1$s was taken from %2$s's %3$s.",
+  "cobblemon.command.takemark.does_not_have": "%1$s's %2$s does not have a %3$s!",
+  "cobblemon.command.mark.invalid": "Invalid mark name.",
   "cobblemon.command.pokeheal.in_battle": "You cannot heal your party while in a battle!",
   "cobblemon.command.spawnpokemonfrompool": "A %1$s has spawned in the area.",
   "cobblemon.command.spawnpokemonfrompool.unable_to_spawn": "Unable to spawn a Pokémon.",
@@ -1741,6 +2364,8 @@
   "cobblemon.config.ui.party_portrait_animations.animate_selected.tooltip": "Selected Pokémon animates unless fainted",
   "cobblemon.config.ui.party_portrait_animations.always_animate": "Always animate",
   "cobblemon.config.ui.party_portrait_animations.always_animate.tooltip": "Entire party animates unless fainted",
+  "cobblemon.config.ui.third_person_view_bobbing": "Third Person View Bobbing",
+  "cobblemon.config.ui.third_person_view_bobbing.tooltip": "If true then use default Minecraft behavior to follow directly behind the player's head. If false then follow a fixed offset from the pokemon.",
   "cobblemon.config.ui.invert_pitch": "Invert Pitch",
   "cobblemon.config.ui.invert_pitch.tooltip": "Invert the direction for pitch (left and right).",
   "cobblemon.config.ui.invert_yaw": "Invert Yaw",

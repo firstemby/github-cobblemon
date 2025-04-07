@@ -84,7 +84,6 @@ object BestSpawner {
     val spawnerManagers = mutableListOf<SpawnerManager>(CobblemonWorldSpawnerManager)
     var defaultPokemonDespawner: Despawner<PokemonEntity> = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
     lateinit var fishingSpawner: FishingSpawner
-    lateinit var nestSpawner: NestSpawner
 
     fun init() {
         LOGGER.info("Starting the Best Spawner...")
@@ -137,6 +136,5 @@ object BestSpawner {
         CobblemonSpawnPools.onServerLoad(server)
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
-        nestSpawner = NestSpawner()
     }
 }

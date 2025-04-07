@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0254_sceptile/sceptile_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-stick"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0254_sceptile/sceptile_stick.png"
+        }
+      ]
     }
   ]
 }

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.riding
 
 import com.cobblemon.mod.common.api.net.Encodable
-import com.cobblemon.mod.common.api.riding.controller.RidingAnimation
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString

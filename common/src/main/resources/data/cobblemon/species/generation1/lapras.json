@@ -51,7 +51,7 @@
     "fixed": false
   },
   "riding": {
-    "controller": null,
+    "behaviour": null,
     "seats": [
       {
         "offset": {

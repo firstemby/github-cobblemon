@@ -4,6 +4,18 @@
   "profileScale": 0.51,
   "profileTranslation": [0.05, 0.99, -10],
   "rootBone": "charizard",
+  "seatToCameraOffset": {
+    "seat_1": [
+      0,
+      3,
+      6
+    ],
+    "seat_1_reverse": [
+      0,
+      1,
+      2
+    ]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('charizard', 'cry')",
     "recoil": "q.bedrock_stateful('charizard', 'recoil')",

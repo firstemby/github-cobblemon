@@ -258,7 +258,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
      * @param species The species of the Pokémon to spawn.
      * @param isMale Whether the Pokémon should be male or female.
      * @return The spawned Pokémon entity, or null if spawning failed.
-     */
+     *//*
     fun spawnPokemon(
         world: Level,
         pos: BlockPos//,
@@ -383,7 +383,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         return buckets.first()  // Fallback
-    }
+    }*/
 
     // Hopper interaction methods
     override fun getContainerSize(): Int = 1
@@ -493,6 +493,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 // Attempt to spawn a random egg in the nest with a small chance
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and probably remove this entirely later too
 
+                    /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
                     val test = 1
 
                     // todo remove this as we are not having nests spawn pokemon anymore
@@ -510,7 +511,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                                     form = childResult.pokemon.formData.name.lowercase(),
                                     timeToHatch = 200F // 10 seconds hatch time
                             )
-                        }
+                        }*/ // TODO KILL ALL OF THIS CODE ONCE WE HAVE A HABITAT SPAWNER
                         if (egg != null) {
                             blockEntity.setItem(egg.createEggItemStack())
                         }

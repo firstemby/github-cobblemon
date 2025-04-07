@@ -54,6 +54,9 @@
       "light": "0-4"
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.12
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false

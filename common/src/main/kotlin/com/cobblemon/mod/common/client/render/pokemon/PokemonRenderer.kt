@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.Rollable
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBallDisplay
@@ -45,6 +45,7 @@ import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
+import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
@@ -178,18 +179,19 @@ class PokemonRenderer(
         packedLight: Int
     ) {
         val driver = entity.firstPassenger ?: return
-        val rollable = driver as? Rollable ?: return
-
+        val rollable = driver as? OrientationControllable ?: return
+        val controller = rollable.orientationController
         poseMatrix.pushPose()
 
-        if(!DISABLE_ROLLING_DEBUG && rollable.shouldRoll()){
+        if(!DISABLE_ROLLING_DEBUG && controller.active){
             val matrix = poseMatrix.last().pose()
             val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
             val center = Vector3f(0f, entity.bbHeight/2, 0f)
             val transformationMatrix = Matrix4f()
             //Move origin to center of Pokemon
             transformationMatrix.translate(center)
-            transformationMatrix.mul(Matrix4f(rollable.orientation))
+
+            transformationMatrix.rotate(controller.getRenderOrientation(partialTicks))
             //Move origin to base of the entity
             transformationMatrix.translate(center.negate(Vector3f()))
 
@@ -451,7 +453,7 @@ class PokemonRenderer(
     private fun resolveBaseLabel(entity: PokemonEntity): MutableComponent {
         return when {
             !ServerSettings.displayEntityNameLabel -> Component.empty()
-            Cobblemon.config.displayNameForUnknownPokemon || CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) != PokedexEntryProgress.NONE -> entity.name.copy()
+            Cobblemon.config.displayNameForUnknownPokemon || CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) != PokedexEntryProgress.NONE -> entity.getTitledName()
             else -> Component.literal(HIDDEN_NAME)
         }
     }

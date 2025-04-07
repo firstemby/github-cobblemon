@@ -1,0 +1,39 @@
+{
+  "portraitScale": 1.69,
+  "portraitTranslation": [-0.69, 1.76, 0],
+  "profileScale": 0.59,
+  "profileTranslation": [0.11, 1.09, 0],
+  "rootBone": "orthworm",
+  "poses": {
+    "portrait": {
+      "poseTypes": ["PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.bedrock('orthworm', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('orthworm', 'blink')"]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "condition": "q.in_battle() == true",
+      "animations": [
+        "q.bedrock('orthworm', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('orthworm', 'blink')"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE"],
+      "condition": "q.in_battle() == false",
+      "animations": [
+        "q.bedrock('orthworm', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('orthworm', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('orthworm', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('orthworm', 'blink')"]
+    }
+  }
+}

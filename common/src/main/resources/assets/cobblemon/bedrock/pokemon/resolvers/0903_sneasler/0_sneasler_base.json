@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0903_sneasler/sneasler_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-composter"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0903_sneasler/sneasler_basket.png"
+        }
+      ]
     }
   ]
 }

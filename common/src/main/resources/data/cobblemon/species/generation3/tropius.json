@@ -50,6 +50,21 @@
     "height": 5,
     "fixed": false
   },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.147
+      },
+      "fly": {
+        "canFly": true,
+        "flySpeedHorizontal": 0.6
+      }
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [
