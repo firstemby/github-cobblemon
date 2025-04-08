@@ -91,6 +91,7 @@ object EggRenderHelper {
             state.renderingBlockPos?.let {
                 CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))
             }
+            eggState.resetHatchingState()
         }
 
         matrices.pushPose()

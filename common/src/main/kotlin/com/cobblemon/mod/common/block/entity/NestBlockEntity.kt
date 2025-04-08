@@ -153,6 +153,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
         tag.putBoolean("IsHatching", eggState.isHatching)
+        tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
         eggState.renderingBlockPos?.let {
             tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
         }
@@ -168,6 +169,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         eggState.isHatching = tag.getBoolean("IsHatching")
+        eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
         if (tag.contains("RenderingBlockPos")) {
             val posArray = tag.getIntArray("RenderingBlockPos")
             if (posArray.size == 3) {
