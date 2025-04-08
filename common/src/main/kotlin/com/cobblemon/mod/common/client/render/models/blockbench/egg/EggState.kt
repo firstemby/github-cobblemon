@@ -34,6 +34,14 @@ class EggState() : PosableState() {
         return this.age
     }
 
+    fun resetHatchingState() {
+        isHatching = false
+        hatchingTriggered = false
+        renderingBlockPos = null
+        primaryAnimation = null
+        setPose("stage0")
+    }
+
     fun isHatchAnimationFinished(): Boolean {
         val animation = primaryAnimation ?: return false
         val animationName = (animation.animation as? BedrockActiveAnimation)?.animation?.name ?: return false
