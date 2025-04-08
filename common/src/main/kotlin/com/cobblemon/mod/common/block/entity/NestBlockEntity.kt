@@ -117,6 +117,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
             if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
+                eggState.isHatching = true // Trigger hatch animation
+                level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                 hatchPokemon(state, world, pos, player)
                 return InteractionResult.SUCCESS
             }
@@ -147,6 +149,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             tag.put("EggItem", eggItem.saveOptional(registryLookup))
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
+        tag.putBoolean("IsHatching", eggState.isHatching)
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -157,6 +160,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
         }
+
+        eggState.isHatching = tag.getBoolean("IsHatching")
 
     }
 
@@ -206,42 +211,46 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             return
         }
 
-        // Spawn the Pokémon entity at the egg's position
-        val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
-            setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
-            world.addFreshEntity(this)
-        }
+        // Trigger hatching animation
+        afterOnServer(seconds = 3.5f) {
 
-        // Trigger cry animation
-        afterOnServer(seconds = 1.0f) {
-            spawnedEntity.cry()
-        }
-
-        // If party has space, add Pokémon to the party
-        if (playerParty.getFirstAvailablePosition() != null){
-            playerParty.add(hatchedPokemon)
-            player.displayClientMessage("The Pokémon was added to your party!".green(), true)
-        }
-
-        // If party is full but PC has space, add to PC and recall Pokémon
-        else if (playerPC.add(hatchedPokemon)) {
-            player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
-
-            // Schedule recall animation
-            spawnedEntity.after(seconds = 3.0f) {
-                spawnedEntity.recallWithAnimation()
+            // Spawn the Pokémon entity at the egg's position
+            val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
+                setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+                world.addFreshEntity(this)
             }
 
-            /*// Remove the Pokémon entity after recall
-            spawnedEntity.after(seconds = 4.0f) {
-                spawnedEntity.remove(Entity.RemovalReason.DISCARDED)
-            }*/
-        }
+            // Trigger cry animation
+            afterOnServer(seconds = 1.0f) {
+                spawnedEntity.cry()
+            }
 
-        // Clear the egg from the nest and update the block entity
-        setItem(Items.AIR.defaultInstance)
-        setChanged()
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            // If party has space, add Pokémon to the party
+            if (playerParty.getFirstAvailablePosition() != null) {
+                playerParty.add(hatchedPokemon)
+                player.displayClientMessage("The Pokémon was added to your party!".green(), true)
+            }
+
+            // If party is full but PC has space, add to PC and recall Pokémon
+            else if (playerPC.add(hatchedPokemon)) {
+                player.displayClientMessage("The Pokémon was added to your PC storage.".green(), true)
+
+                // Schedule recall animation
+                spawnedEntity.after(seconds = 3.0f) {
+                    spawnedEntity.recallWithAnimation()
+                }
+
+                /*// Remove the Pokémon entity after recall
+                spawnedEntity.after(seconds = 4.0f) {
+                    spawnedEntity.remove(Entity.RemovalReason.DISCARDED)
+                }*/
+            }
+
+            // Clear the egg from the nest and update the block entity
+            setItem(Items.AIR.defaultInstance)
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+        }
     }
 
 
