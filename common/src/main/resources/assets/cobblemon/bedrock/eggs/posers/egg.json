@@ -61,7 +61,7 @@
         "q.bedrock_stateful('egg','idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('egg', q.array('hatch'), 0, 0, 1)"
+        "q.bedrock_quirk('egg', q.array('hatch'), 0, 0, 2)"
       ]
     }
   }

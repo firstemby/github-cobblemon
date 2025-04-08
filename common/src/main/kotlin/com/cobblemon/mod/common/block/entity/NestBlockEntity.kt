@@ -212,7 +212,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         // Trigger hatching animation
-        afterOnServer(seconds = 3.5f) {
+        afterOnServer(seconds = 4.55f) {
 
             // Spawn the Pokémon entity at the egg's position
             val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
@@ -248,6 +248,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
             // Clear the egg from the nest and update the block entity
             setItem(Items.AIR.defaultInstance)
+            eggState.isHatching = false
             setChanged()
             world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
