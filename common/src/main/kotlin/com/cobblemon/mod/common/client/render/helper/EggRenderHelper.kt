@@ -70,6 +70,7 @@ object EggRenderHelper {
             egg.timeToHatch > 2400 -> "stage1" // 8 minutes left
             egg.timeToHatch > 1200 -> "stage2"  // 2 minutes left
             egg.timeToHatch > 20 -> "stage3"    // 1 minute left
+            (egg.timeToHatch == 0F && eggState.isHatching) -> "hatch" // currently trying to hatch
             else -> "stage4"                    // Ready to hatch!
         }
         eggState.setPose(poseName)

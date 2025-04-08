@@ -19,6 +19,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
  */
 class EggState() : PosableState() {
     var totalPartialTicks = 0F
+    var isHatching = false
+    var hatchingTriggered = false
 
     init {
         age = (200F * Math.random()).toInt()

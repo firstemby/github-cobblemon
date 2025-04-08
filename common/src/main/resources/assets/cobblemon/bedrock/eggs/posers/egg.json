@@ -32,6 +32,11 @@
       "quirks": [
         "q.bedrock_quirk('egg', q.array('nestjigglelarge', 'nestjigglelarge2', 'nestjigglelarge3', 'nestjigglelarge4', 'nestjigglelarge (no hop)'), 3, 8, 1)"
       ]
+    },
+    "hatch": {
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock_stateful('egg','hatch')"],
+      "quirks": []
     }
   }
 }
