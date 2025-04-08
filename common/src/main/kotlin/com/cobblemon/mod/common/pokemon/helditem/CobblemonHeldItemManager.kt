@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.util.battleLang
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Items
 import java.util.function.Function
 
 /**
@@ -130,7 +131,14 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         }
         // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
         if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
-            this.give(pokemon, itemID)
+            // extra check for item swapping abuse
+            // checks if the pokemon whose item is being taken away (wild pokemon) has its held item tampered with in any way
+            // this assumes its always moves causing the swaps
+            // I still think this is a bit brittle and can cause false positives, but for now this should do the trick I hope
+            var fromBattlePokemon = battle.majorBattleActions[pokemon.uuid]?.battlePokemon(2, battle)
+            if(showdownIdOf(fromBattlePokemon?.originalPokemon?.heldItem?.item ?: Items.AIR) == itemID) {
+                this.give(pokemon, itemID)
+            }
         }
         // allow players to steal wild held items
         if (this.takeItemEffect.contains(effectId) && (pokemon.actor !is PlayerBattleActor || consumeHeldItems)) {
