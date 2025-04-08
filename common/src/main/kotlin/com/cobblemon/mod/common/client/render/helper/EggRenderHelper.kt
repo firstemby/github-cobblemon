@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.client.render.helper
 
 import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
@@ -9,13 +10,18 @@ import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilMod
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 
 object EggRenderHelper {
     val context = RenderContext().also {
@@ -82,6 +88,25 @@ object EggRenderHelper {
             if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
                 eggState.addPrimaryAnimation(animation)
             }
+
+            // try to play our sound here maybe since it is the start of the animation?
+            /*eggState.renderingBlockPos?.let { pos ->
+                UnvalidatedPlaySoundS2CPacket(
+                        cobblemonResource("breeding.egg_hatch"),
+                        SoundSource.BLOCKS,
+                        pos.x + 0.5,
+                        pos.y + 0.5,
+                        pos.z + 0.5,
+                        1.0f,
+                        1.0f
+                ).sendToPlayersAround(
+                        pos.x + 0.5,
+                        pos.y + 0.5,
+                        pos.z + 0.5,
+                        16.0,
+                        net.minecraft.client.Minecraft.getInstance().level!!.dimension()
+                )
+            }*/
         }
 
         // Trigger hatch packet after animation finishes
@@ -124,5 +149,9 @@ object EggRenderHelper {
         eggModel.setDefault()
         matrices.popPose()
         matrices.popPose()
+    }
+
+    fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

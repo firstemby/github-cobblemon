@@ -660,6 +660,11 @@
 		},
 		"animation.egg.hatch": {
 			"animation_length": 3.5,
+			"sound_effects": {
+				"0.04": {
+					"effect": "breeding.egg_hatch"
+				}
+			},
 			"bones": {
 				"body": {
 					"rotation": {

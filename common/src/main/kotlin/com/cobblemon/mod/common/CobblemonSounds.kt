@@ -85,6 +85,9 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val POKEDEX_SCAN_ZOOM_INCREMENT = this.create("item.pokedex.scan_zoom_increment")
 
     @JvmField
+    val BREEDING_EGG_HATCH = this.create("breeding.egg_hatch")
+
+    @JvmField
     val ITEM_USE = this.create("item.use")
     @JvmField
     val EVOLUTION_NOTIFICATION = this.create("evolution.notification")

@@ -8,10 +8,7 @@
 
 package com.cobblemon.mod.common.block.entity
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -36,6 +33,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.toBlockPos
+import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -56,6 +55,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.Container
 import net.minecraft.world.WorldlyContainer
@@ -118,6 +118,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             // Hatch the Pokémon if the time to hatch is 0 or below
             if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation on the renderer
+                //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
                 setChanged()
                 level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
@@ -189,6 +190,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //println("getUpdateTag called for NestBlockEntity at $blockPos with tag: $tag")
         return tag
     }
+
+    /*fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }*/
 
     fun hatchPokemon(
             state: BlockState,
