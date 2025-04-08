@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.client.render.helper
 
+import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
@@ -8,6 +9,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilMod
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.renderer.MultiBufferSource
@@ -74,6 +76,14 @@ object EggRenderHelper {
                 else -> "stage4"                // Ready to hatch!
         }
         eggState.setPose(poseName)
+
+        // Trigger hatch packet after animation finishes
+        if (state.isHatching && !state.hatchingTriggered && state.isHatchAnimationFinished()) {
+            state.hatchingTriggered = true
+            state.renderingBlockPos?.let {
+                CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))
+            }
+        }
 
         matrices.pushPose()
         matrices.translate(translation.first, translation.second, translation.third)

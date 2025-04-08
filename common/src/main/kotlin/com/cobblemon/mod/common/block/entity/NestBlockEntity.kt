@@ -117,7 +117,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
             if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
-                eggState.isHatching = true // Trigger hatch animation
+                eggState.isHatching = true // Trigger hatch animation on the renderer
+                eggState.renderingBlockPos = this.blockPos // set our block pos for the renderer to use
                 level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                 hatchPokemon(state, world, pos, player)
                 return InteractionResult.SUCCESS
@@ -150,6 +151,9 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
         tag.putBoolean("IsHatching", eggState.isHatching)
+        eggState.renderingBlockPos?.let {
+            tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
+        }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -162,6 +166,12 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         eggState.isHatching = tag.getBoolean("IsHatching")
+        if (tag.contains("RenderingBlockPos")) {
+            val posArray = tag.getIntArray("RenderingBlockPos")
+            if (posArray.size == 3) {
+                eggState.renderingBlockPos = BlockPos(posArray[0], posArray[1], posArray[2])
+            }
+        }
 
     }
 
