@@ -1,4 +1,7 @@
 {
+  "animations": {
+    "hatch": "q.bedrock_primary('egg', 'hatch', q.curve('one'))"
+  },
   "poses": {
     "stage0": {
       "poseTypes": [

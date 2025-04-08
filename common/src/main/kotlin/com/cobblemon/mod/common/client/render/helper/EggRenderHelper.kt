@@ -77,8 +77,16 @@ object EggRenderHelper {
         }
         eggState.setPose(poseName)
 
+        if (poseName == "hatching" && eggState.primaryAnimation == null) {
+            val animation = eggModel.getAnimation(eggState, "hatch", eggModel.runtime)
+            if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
+                eggState.addPrimaryAnimation(animation)
+            }
+        }
+
         // Trigger hatch packet after animation finishes
         if (state.isHatching && !state.hatchingTriggered && state.isHatchAnimationFinished()) {
+            println("Sending hatch packet for block at ${state.renderingBlockPos}")
             state.hatchingTriggered = true
             state.renderingBlockPos?.let {
                 CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))

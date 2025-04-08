@@ -222,7 +222,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         // Trigger hatching animation
-        afterOnServer(seconds = 4.55f) {
+        afterOnServer(seconds = 4f) {
 
             // Spawn the Pokémon entity at the egg's position
             val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
