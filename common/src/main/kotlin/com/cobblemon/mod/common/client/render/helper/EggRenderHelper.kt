@@ -56,14 +56,10 @@ object EggRenderHelper {
             rotation: Triple<Float, Float, Float> = Triple(0f, 0f, 0f),
             tickDelta: Float
     ) {
-        // Retrieve the egg model
-        //val model = EggModelRepo. ?: return
-
         // Determine the texture
         val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
         val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
-        // render state
         val eggState = state
         eggState.updatePartialTicks(tickDelta)
 
@@ -78,7 +74,7 @@ object EggRenderHelper {
             egg.timeToHatch > 2400 -> "stage1" // 8 minutes left
             egg.timeToHatch > 1200 -> "stage2"  // 2 minutes left
             egg.timeToHatch > 20 -> "stage3"    // 1 minute left
-            (egg.timeToHatch == 0F && eggState.isHatching) -> "hatching" // currently trying to hatch
+            (egg.timeToHatch == 0F && eggState.isHatching) -> "hatching" // currently trying to hatch....
                 else -> "stage4"                // Ready to hatch!
         }
         eggState.setPose(poseName)
@@ -88,25 +84,6 @@ object EggRenderHelper {
             if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
                 eggState.addPrimaryAnimation(animation)
             }
-
-            // try to play our sound here maybe since it is the start of the animation?
-            /*eggState.renderingBlockPos?.let { pos ->
-                UnvalidatedPlaySoundS2CPacket(
-                        cobblemonResource("breeding.egg_hatch"),
-                        SoundSource.BLOCKS,
-                        pos.x + 0.5,
-                        pos.y + 0.5,
-                        pos.z + 0.5,
-                        1.0f,
-                        1.0f
-                ).sendToPlayersAround(
-                        pos.x + 0.5,
-                        pos.y + 0.5,
-                        pos.z + 0.5,
-                        16.0,
-                        net.minecraft.client.Minecraft.getInstance().level!!.dimension()
-                )
-            }*/
         }
 
         // Trigger hatch packet after animation finishes
@@ -130,7 +107,7 @@ object EggRenderHelper {
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
         context.put(RenderContext.POSABLE_STATE, eggState)
 
-        matrices.pushPose() // todo may not need to push
+        matrices.pushPose()
         eggModel.applyAnimations(
             entity = null,
             state = eggState,
