@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
+import com.cobblemon.mod.common.client.Test
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
@@ -48,6 +49,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
@@ -589,6 +591,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         headYaw: Float,
         headPitch: Float
     ) {
+        if (entity is PokemonEntity && entity.passengers.contains(Minecraft.getInstance().player) && Test.locked) {
+            return
+        }
         context.put(RenderContext.ENTITY, entity)
         setupEntityTypeContext(entity)
         state.currentModel = this

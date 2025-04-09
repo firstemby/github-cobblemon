@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.api.riding.Seat;
+import com.cobblemon.mod.common.client.Test;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
@@ -26,6 +27,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
@@ -60,6 +62,10 @@ public abstract class CameraMixin {
 
     @Shadow
     private BlockGetter level;
+
+    @Shadow public abstract float getPartialTickTime();
+
+    @Shadow private float partialTickTime;
     @Unique private float returnTimer = 0;
     @Unique private float rollAngleStart = 0;
     @Unique Minecraft minecraft = Minecraft.getInstance();
@@ -115,20 +121,48 @@ public abstract class CameraMixin {
                 return;
             }
 
-            int seatIndex = pokemon.getPassengers().indexOf(entity);
-            Seat seat = pokemon.getSeats().get(seatIndex);
-
+            PokemonClientDelegate delegate = (PokemonClientDelegate) pokemon.getDelegate();
             Vec3 entityPos = new Vec3(
                     Mth.lerp(instance.getPartialTickTime(), pokemon.xOld, pokemon.getX()),
                     Mth.lerp(instance.getPartialTickTime(), pokemon.yOld, pokemon.getY()),
                     Mth.lerp(instance.getPartialTickTime(), pokemon.zOld, pokemon.getZ())
             );
+            if (delegate.getCurrentModel() != null) {
+
+                float f = Mth.rotLerp(partialTickTime, pokemon.yBodyRotO, pokemon.yBodyRot);
+                float g = Mth.rotLerp(partialTickTime, pokemon.yHeadRotO, pokemon.yHeadRot);
+                float h = g - f;
+                float j = Mth.lerp(partialTickTime, entity.xRotO, entity.getXRot());
+                h = Mth.wrapDegrees(h);
+
+                float l = 0.0F;
+                float m = 0.0F;
+                if (!pokemon.isPassenger() && pokemon.isAlive()) {
+                    l = pokemon.walkAnimation.speed(partialTickTime);
+                    m = pokemon.walkAnimation.position(partialTickTime);
+                    if (pokemon.isBaby()) {
+                        m *= 3.0F;
+                    }
+
+                    if (l > 1.0F) {
+                        l = 1.0F;
+                    }
+                }
+
+                Test.INSTANCE.setLocked(false);
+                delegate.updatePartialTicks(partialTickTime);
+                delegate.updateLocatorPosition(entityPos);
+                delegate.getCurrentModel().applyAnimations(pokemon, delegate, l, m, partialTickTime, j, h);
+                Test.INSTANCE.setLocked(true);
+            }
+
+            int seatIndex = pokemon.getPassengers().indexOf(entity);
+            Seat seat = pokemon.getSeats().get(seatIndex);
 
             OrientationControllable rollable = (OrientationControllable) entity;
             OrientationController controller = rollable.getOrientationController();
 
             if (!instance.isDetached() || Cobblemon.config.getThirdPartyViewBobbing()) {
-                PokemonClientDelegate delegate = (PokemonClientDelegate) pokemon.getDelegate();
                 MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
 
                 if (locator == null) {
@@ -139,10 +173,12 @@ public abstract class CameraMixin {
                 Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
 
                 float currEyeHeight = Mth.lerp(instance.getPartialTickTime(), eyeHeightOld, eyeHeight);
-                Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
-                Vec3 rotatedEyeHeight = new Vec3(orientation.transform(new Vector3f(0f, currEyeHeight - (entity.getBbHeight() / 2), 0f)));
+                var rotatedEyeHeight = new Vector3f(0f, currEyeHeight - (entity.getBbHeight() / 2), 0f);
+                if (controller.isActive()) {
+                    rotatedEyeHeight = controller.getRenderOrientation(partialTickTime).transform(rotatedEyeHeight);
+                }
 
-                Vec3 position = locatorOffset.add(entityPos).add(rotatedEyeHeight);
+                Vec3 position = locatorOffset.add(entityPos).add(new Vec3(rotatedEyeHeight));
                 setPosition(position);
             } else {
                 Vector3f pos = entityPos.add(new Vec3(0, pokemon.getBbHeight() / 2, 0)).toVector3f();
