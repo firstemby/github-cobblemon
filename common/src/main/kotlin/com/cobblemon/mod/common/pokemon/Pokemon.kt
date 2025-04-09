@@ -222,7 +222,7 @@ open class Pokemon : ShowdownIdentifiable {
             // if old is interchangeable with new, toggleable, and still valid - re-add it to the controller
             else if (!isClient && old is TemporaryForm && old.toggleable && old.reevaluate(this))
             {
-                this.formProxy.server().silentAdd(old)
+                this.formProxy.server().add(old)
             }
 
             updateAspects()
@@ -637,12 +637,7 @@ open class Pokemon : ShowdownIdentifiable {
      *
      * @return The literal Showdown ID of this Pokémon.
      */
-    override fun showdownId(): String {
-        if (this.form == this.species.standardForm) {
-            return this.species.showdownId()
-        }
-        return this.form.showdownId()
-    }
+    override fun showdownId(): String = this.form.showdownId()
 
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
         CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentPreEvent(this, level, position)) {

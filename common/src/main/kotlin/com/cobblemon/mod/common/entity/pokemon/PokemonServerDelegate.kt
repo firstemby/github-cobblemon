@@ -8,14 +8,12 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PlatformType
@@ -181,11 +179,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
                     activeBattlePokemon.position = entity.level() as ServerLevel to entity.position()
                 }
             }
-            //TODO check form if not owned
+            // reevaluate forms of wild pokemon
             else if (entity.owner == null) {
-                entity.pokemon.triggerTransformations(PassiveTrigger::class.java).forEach {
-                    Cobblemon.LOGGER.error("TRIGGERED WILD: " + it.id + " for " + entity.pokemon.species.name)
-                }
                 entity.pokemon.formProxy.server().reevaluate()
             }
         }

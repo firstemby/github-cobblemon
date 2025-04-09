@@ -131,7 +131,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         get() = this.speciesByIdentifier.values
     val implemented = mutableListOf<Species>()
 
-    // TODO store forms in here for reference by pokemonproperties argument (cache all species-unique ids)
+    val forms: Collection<FormData>
+        get() = this.species.flatMap { it.allForms }
 
     init {
         SpeciesAdditions.observable.subscribe {

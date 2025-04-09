@@ -39,6 +39,7 @@ import com.cobblemon.mod.common.pokemon.aspects.FORM_ASPECTS
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.*
 import com.google.gson.annotations.SerializedName
@@ -361,32 +362,37 @@ abstract class FormData(
     }
 
     /**
-     * The literal Showdown ID of this form's [name].
-     * This will be a lowercase version of the [name] with all the non-alphanumeric characters removed.
-     * For example Vulpix-Alola becomes 'alola'
+     * The literal Showdown ID of this form. This will be a lowercase version of the [name] with all the non-alphanumeric characters removed.
+     * If this is a nested form, this will be prepended by the formOnlyShowdownId of the [parentForm].
+     * For example Toxtricity-Low-Key-Gmax becomes 'lowkeygmax' and Vulpix-Alola becomes 'alola'.
      *
      * NOTE: this identifier is used for serializing/deserializing the form property of [PokemonProperties],
-     * and should be used for uniquely identifying forms of the SAME species.
+     * and should only be used for uniquely identifying forms of the SAME species.
      *
-     * @return The literal Showdown ID of this form only.
+     * @return The literal Showdown ID of this form only. If this is the [Species.standardForm], this will be an empty
+     * string.
      */
-    fun formOnlyShowdownId(): String = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+    fun formOnlyShowdownId(): String = this.parentForm?.let { parent -> parent.formOnlyShowdownId() + ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "") } ?: ""
+
+    // TODO - will including 'standard' cause breakage?
 
     /**
-     * The literal Showdown ID of this [formOnlyShowdownId] appended to [Species.showdownId].
-     * For example Vulpix-Alola becomes 'vulpixalola'
+     * The complete Showdown ID of this form. This is a concatenation of [Species.showdownId] with [formOnlyShowdownId].
+     * For example Toxtricity-Low-Key-Gmax becomes 'toxtricitylowkeygmax'
      *
      * NOTE: this identifier should be used for uniquely identifying forms of DIFFERENT species.
      *
-     * @return The literal Showdown ID of this species and form.
+     * @return The complete Showdown ID of this species and form.
      */
-    override fun showdownId(): String = this.parentForm?.let { parent -> parent.showdownId() + this.formOnlyShowdownId() } ?: this.species.showdownId()
+    override fun showdownId(): String = this.species.showdownId() + this.formOnlyShowdownId()
+
+    // pokemon.showdownID expects: this.species.showdownID
 
     /**
-     * The Showdown name of this form appended to [Species.showdownName].
+     * The complete Showdown name of this form. This is a concatenation of the  appended to [Species.showdownName].
      * For example form 'Gmax' of parent form 'Low-Key' of species 'Toxtricity' becomes 'Toxtricity-Low-Key-Gmax'.
      *
-     * NOTE: [StandardForm]s do not have a valid form name in Showdown and instead default to the species name.
+     * NOTE: [StandardForm]s do not exist in Showdown and will instead default to [Species.showdownName].
      *
      * @return The Showdown name of this species and form.
      */

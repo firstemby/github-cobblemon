@@ -366,7 +366,7 @@ open class PokemonEntity(
 
         // common SynchedEntityData handling
         when (data) {
-            SPECIES -> refreshDimensions()
+            SPECIES, FORM -> refreshDimensions()
             POSE_TYPE -> {
                 val value = entityData.get(data) as PoseType
                 if ((value == PoseType.FLY || value == PoseType.HOVER) && passengers.isEmpty()) {

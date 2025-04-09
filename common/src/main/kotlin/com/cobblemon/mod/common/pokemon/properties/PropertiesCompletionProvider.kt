@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
@@ -148,7 +149,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
         this.inject(setOf("originaltrainertype", "ottype"), setOf("None", "Player", "NPC"))
         this.inject(setOf("nickname", "nick"), setOf(""))
         this.inject(setOf("helditem", "held_item"), setOf("cobblemon:exp_share"))
-        // TODO add form
+        this.inject(setOf("form"), PokemonSpecies.forms.map { it.formOnlyShowdownId() })
 
         Stats.PERMANENT.forEach{ stat ->
             val statName = stat.toString().lowercase()

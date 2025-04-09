@@ -43,9 +43,9 @@ val FORM_ASPECTS = object : AspectProvider {
     override fun provide(pokemon: Pokemon): Set<String> = pokemon.form.aspects.toSet()
 
     override fun provide(properties: PokemonProperties): Set<String> {
-        val formName = properties.form ?: return emptySet()
+        val formID = properties.form ?: return emptySet()
         val speciesId = properties.species ?: return emptySet()
-        val form = PokemonSpecies.getByIdentifier(speciesId.asIdentifierDefaultingNamespace())?.getFormByName(formName) // TODO check by ID
+        val form = PokemonSpecies.getByIdentifier(speciesId.asIdentifierDefaultingNamespace())?.getFormByShowdownId(formID) // TODO check by ID
         return form?.aspects?.toSet() ?: emptySet()
     }
 }

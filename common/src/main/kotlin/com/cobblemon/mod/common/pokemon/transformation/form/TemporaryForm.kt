@@ -80,6 +80,8 @@ open class TemporaryForm (
     // TODO FORM_COMPLETE event
     override fun forceStart(pokemon: Pokemon) {
 
+        pokemon.formProxy.server().remove(this)
+
         // TODO: execute this after form change effect
         pokemon.form = this
 
@@ -90,7 +92,7 @@ open class TemporaryForm (
 
     // TODO FORM_DISPLAY event
     override fun convertToDisplay(pokemon: Pokemon): FormDisplay {
-        val result = pokemon.clone().also { it.form = this }
+        val result = pokemon.clone(newUUID = false).also { it.form = this } // TODO is this copy necessary?
         val expectedDisplay = FormDisplay(this.id, result)
         return expectedDisplay
     }

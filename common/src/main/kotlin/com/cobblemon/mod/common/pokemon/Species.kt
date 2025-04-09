@@ -157,6 +157,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
      */
     var forms: MutableList<FormData> = mutableListOf()
         private set
+    // TODO serialize under a different name and have 'allForms' be 'forms'
 
     var riding: RidingProperties = RidingProperties()
         private set
@@ -231,9 +232,29 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.name}\" level=${level}").create()
 
-    fun getForm(aspects: Set<String>) = forms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
-    fun getFormByName(name: String) = forms.firstOrNull { it.name == name } ?: standardForm
-    fun getFormByShowdownId(formOnlyShowdownId: String) = forms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
+    /**
+     * Retrieves a form by its aspects.
+     *
+     * @param aspects A set of aspects that's provided by a form belonging to this species.
+     * @return The form that has a matching [FormData.aspects], or the [standardForm].
+     */
+    fun getForm(aspects: Set<String>) = allForms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
+
+    /**
+     * Retrieves a form by its name.
+     *
+     * @param name The name of a form belonging to this species.
+     * @return A form that has a matching [FormData.name], or the [standardForm].
+     */
+    fun getFormByName(name: String) = allForms.firstOrNull { it.name.lowercase() == name.lowercase() } ?: standardForm
+
+    /**
+     * Retrieves a form by its unique Showdown ID.
+     *
+     * @param formOnlyShowdownId The unique identifier (in Showdown format) of a form belonging to this species.
+     * @return The form that has a matching [FormData.formOnlyShowdownId], or the [standardForm].
+     */
+    fun getFormByShowdownId(formOnlyShowdownId: String) = allForms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: VANILLA_DEFAULT_EYE_HEIGHT

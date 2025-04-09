@@ -13,7 +13,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.Rollable
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -42,11 +41,8 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import org.joml.Matrix3f
-import org.joml.Vector3f
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     companion object {
@@ -104,7 +100,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
             }
-            // TODO form for client (MAKE SURE TO CHECK ILLUSION BECAUSE THAT SHIT WILL PROBABLY BREAK!)
             else if (data == PokemonEntity.FORM) {
                 val formId = currentEntity.entityData.get(PokemonEntity.FORM)
                 currentEntity.pokemon.form = currentEntity.pokemon.species.getFormByShowdownId(formId)

@@ -204,7 +204,11 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 buttonWidth = 10,
                 buttonHeight = 10,
                 clickAction = {
-                    momentarily { CobblemonNetwork.sendToServer(RevertFormPacket(selectedPokemon.uuid)) }
+                    momentarily {
+                        Minecraft.getInstance().player?.clientSideCloseContainer()
+                        playSound(CobblemonSounds.GUI_CLICK)
+                        sendToServer(RevertFormPacket(selectedPokemon.uuid))
+                    }
                 },
                 resource = revertButtonResource,
                 renderRequirement = { selectedPokemon.formProxy.client().canRevert() },
