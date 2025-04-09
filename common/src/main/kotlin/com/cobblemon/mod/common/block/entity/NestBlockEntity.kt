@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -235,7 +236,20 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
             world.addFreshEntity(this)
         }
-
+        afterOnServer(seconds = 0.05f) {
+            val playPoseableAnimationPacket = PlayPosableAnimationPacket(
+                spawnedEntity.id,
+                setOf("q.bedrock_stateful('hatch', 'hatch', 'endures_primary_animations');"),
+                listOf()
+            )
+            playPoseableAnimationPacket.sendToPlayersAround(
+                spawnedEntity.x,
+                spawnedEntity.y,
+                spawnedEntity.z,
+                128.0,
+                spawnedEntity.level().dimension()
+            )
+        }
         // Trigger cry animation
         afterOnServer(seconds = 1.0f) {
             spawnedEntity.cry()
