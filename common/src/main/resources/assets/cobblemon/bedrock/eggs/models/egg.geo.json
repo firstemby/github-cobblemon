@@ -16,6 +16,14 @@
 					"pivot": [0, 4.5625, 0]
 				},
 				{
+					"name": "locator_root",
+					"parent": "egg",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
 					"name": "body",
 					"parent": "egg",
 					"pivot": [0, 0.5625, 0],
@@ -25,6 +33,14 @@
 						{"origin": [-2, 7.25, -2], "size": [4, 1, 4], "uv": [0, 11]},
 						{"origin": [-3, 0, -3], "size": [6, 2, 6], "uv": [40, 0]}
 					]
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"middle": [0, 0, 0]
+					}
 				}
 			]
 		}

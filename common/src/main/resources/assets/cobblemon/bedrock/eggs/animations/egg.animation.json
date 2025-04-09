@@ -665,6 +665,20 @@
 					"effect": "breeding.egg_hatch"
 				}
 			},
+			"particle_effects": {
+				"0.5": {
+					"effect": "egg_crack1",
+					"locator": "middle"
+				},
+				"1.5": {
+					"effect": "egg_crack2",
+					"locator": "middle"
+				},
+				"2.5": {
+					"effect": "egg_crack3",
+					"locator": "middle"
+				}
+			},
 			"bones": {
 				"body": {
 					"rotation": {
