@@ -11,11 +11,13 @@ package com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animati
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.effectiveName
@@ -33,6 +35,7 @@ import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
@@ -110,9 +113,47 @@ class BedrockSoundKeyframe(
         if (soundEvent != null) {
             if (entity != null) {
                 entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+            } else if (state is EggState) {
+                val pos = state.renderingBlockPos
+
+                if (pos != null) {
+                    Minecraft.getInstance().level?.playLocalSound(
+                        pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
+                        soundEvent,
+                        SoundSource.BLOCKS,
+                        1.0f,
+                        1.0f,
+                        false
+                    )
             } else {
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
             }
+        }
+
+        /*Cobblemon.LOGGER.info("[EggSound] Attempting to play sound: $sound")
+
+        val level = entity?.level()
+            ?: (state as? EggState)?.renderingBlockPos?.let { pos ->
+                Minecraft.getInstance().level
+            }
+
+        if (soundEvent != null && level != null) {
+            // Get the position from the entity, or fallback to EggState's block pos
+            val pos = entity?.blockPosition() ?: (state as? EggState)?.renderingBlockPos
+
+            if (pos != null) {
+                level.playLocalSound(
+                    pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
+                    soundEvent,
+                    SoundSource.BLOCKS,
+                    1.0f,
+                    1.0f,
+                    false
+                )
+            } else {
+                // As a last resort, fallback to UI sound
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+            }*/
         }
     }
 }

@@ -24,6 +24,7 @@ class EggState() : PosableState() {
     var isHatching = false
     var hatchingTriggered = false
     var renderingBlockPos: BlockPos? = null
+    var previousAnimationSeconds: Float = 0f
 
     init {
         age = (200F * Math.random()).toInt()
@@ -52,6 +53,7 @@ class EggState() : PosableState() {
 
     override fun getEntity() = null
     override fun updatePartialTicks(partialTicks: Float) {
+        previousAnimationSeconds = animationSeconds
         currentPartialTicks += partialTicks / 2
         totalPartialTicks += partialTicks / 2
     }

@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.client.render.helper
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
@@ -84,6 +85,17 @@ object EggRenderHelper {
             if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
                 eggState.addPrimaryAnimation(animation)
             }
+        }
+
+        try {
+            eggState.primaryAnimation?.animation?.applyEffects(
+                entity = null,
+                state = eggState,
+                previousSeconds = eggState.previousAnimationSeconds,
+                newSeconds = eggState.animationSeconds
+            )
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("Failed to apply animation effects", e)
         }
 
         // Trigger hatch packet after animation finishes
