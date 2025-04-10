@@ -1536,6 +1536,22 @@ open class PokemonEntity(
                 && !player.isInPowderSnow
     }
 
+    fun hatch(){
+        val playPoseableAnimationPacket = PlayPosableAnimationPacket(
+            this.id,
+            setOf("q.bedrock_stateful('hatch', 'hatch', 'endures_primary_animations');"),
+            listOf()
+        )
+        playPoseableAnimationPacket.sendToPlayersAround(
+            this.x,
+            this.y,
+            this.z,
+            128.0,
+            this.level().dimension()
+        )
+    }
+
+
     fun cry() {
         if (this.isSilent) return
         val pkt = PlayPosableAnimationPacket(id, setOf("cry"), emptyList())

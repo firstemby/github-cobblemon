@@ -237,19 +237,9 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             world.addFreshEntity(this)
         }
         afterOnServer(seconds = 0.05f) {
-            val playPoseableAnimationPacket = PlayPosableAnimationPacket(
-                spawnedEntity.id,
-                setOf("q.bedrock_stateful('hatch', 'hatch', 'endures_primary_animations');"),
-                listOf()
-            )
-            playPoseableAnimationPacket.sendToPlayersAround(
-                spawnedEntity.x,
-                spawnedEntity.y,
-                spawnedEntity.z,
-                128.0,
-                spawnedEntity.level().dimension()
-            )
+            spawnedEntity.hatch()
         }
+
         // Trigger cry animation
         afterOnServer(seconds = 1.0f) {
             spawnedEntity.cry()
