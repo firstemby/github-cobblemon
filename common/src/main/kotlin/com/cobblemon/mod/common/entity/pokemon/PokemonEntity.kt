@@ -385,6 +385,8 @@ open class PokemonEntity(
     var isPokemonWalking = false
     var isPokemonFlying = false
 
+    var isNewlyHatched: Boolean = false
+
     init {
         delegate.initialize(this)
         delegate.changePokemon(pokemon)
@@ -1534,21 +1536,6 @@ open class PokemonEntity(
                 && player.onGround()
                 && !player.isInWater
                 && !player.isInPowderSnow
-    }
-
-    fun hatch(){
-        val playPoseableAnimationPacket = PlayPosableAnimationPacket(
-            this.id,
-            setOf("q.bedrock_stateful('hatch', 'hatch', 'endures_primary_animations');"),
-            listOf()
-        )
-        playPoseableAnimationPacket.sendToPlayersAround(
-            this.x,
-            this.y,
-            this.z,
-            128.0,
-            this.level().dimension()
-        )
     }
 
 

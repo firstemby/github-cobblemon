@@ -234,10 +234,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         // Spawn the Pokémon entity at the egg's position
         val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
             setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+            isNewlyHatched = true
             world.addFreshEntity(this)
-        }
-        afterOnServer(seconds = 0.05f) {
-            spawnedEntity.hatch()
         }
 
         // Trigger cry animation
