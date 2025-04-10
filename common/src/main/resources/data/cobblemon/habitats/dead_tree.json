@@ -1,0 +1,8 @@
+{
+  "structure": "cobblemon:dead_tree",
+  "spawnPool": [
+    "cobblemon:spinarak",
+    "cobblemon:pikachu",
+    "cobblemon:charmander"
+  ]
+}

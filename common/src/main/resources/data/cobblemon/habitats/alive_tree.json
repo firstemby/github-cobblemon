@@ -1,0 +1,8 @@
+{
+  "structure": "cobblemon:alive_tree",
+  "spawnPool": [
+    "cobblemon:bulbasaur",
+    "cobblemon:squirtle",
+    "cobblemon:pidgey"
+  ]
+}
