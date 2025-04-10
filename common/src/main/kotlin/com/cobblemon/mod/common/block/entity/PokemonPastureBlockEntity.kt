@@ -370,7 +370,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                                             parentOne = motherPoke, // Mother UUID
                                             parentTwo = fatherPoke, // Father UUID
                                             form = breedResult.pokemon.formData.name.lowercase(),
-                                            timeToHatch = breedResult.timeToHatch.toFloat() // 10 seconds hatch time
+                                            timeToHatch = 100F //breedResult.timeToHatch.toFloat() // 10 seconds hatch time
                                         )
 
                                         //Most params here need to be gotten from the form when implemented properly

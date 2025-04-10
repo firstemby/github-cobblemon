@@ -392,6 +392,8 @@ open class PokemonEntity(
     var isPokemonWalking = false
     var isPokemonFlying = false
 
+    var isNewlyHatched: Boolean = false
+
     init {
         delegate.initialize(this)
         delegate.changePokemon(pokemon)
@@ -1548,6 +1550,7 @@ open class PokemonEntity(
                 && !player.isInWater
                 && !player.isInPowderSnow
     }
+
 
     fun cry() {
         if (this.isSilent) return

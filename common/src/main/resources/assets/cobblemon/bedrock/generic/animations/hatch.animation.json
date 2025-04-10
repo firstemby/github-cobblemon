@@ -1,0 +1,22 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.hatch.hatch": {
+			"animation_length": 1,
+			"bones": {
+				"root_part": {
+					"scale": {
+						"0.0": [0, 0, 0],
+						"0.125": [1, 1, 1]
+					}
+				}
+			},
+			"particle_effects": {
+				"0.0": {
+					"effect": "hatch_particles",
+					"locator": "root"
+				}
+			}
+		}
+	}
+}

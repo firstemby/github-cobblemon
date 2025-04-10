@@ -1,5 +1,8 @@
 package com.cobblemon.mod.common.client.render.helper
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
@@ -8,12 +11,18 @@ import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilMod
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.EggModelRepo
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
+import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 
 object EggRenderHelper {
     val context = RenderContext().also {
@@ -48,14 +57,10 @@ object EggRenderHelper {
             rotation: Triple<Float, Float, Float> = Triple(0f, 0f, 0f),
             tickDelta: Float
     ) {
-        // Retrieve the egg model
-        //val model = EggModelRepo. ?: return
-
         // Determine the texture
         val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
         val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
-        // render state
         val eggState = state
         eggState.updatePartialTicks(tickDelta)
 
@@ -70,9 +75,38 @@ object EggRenderHelper {
             egg.timeToHatch > 2400 -> "stage1" // 8 minutes left
             egg.timeToHatch > 1200 -> "stage2"  // 2 minutes left
             egg.timeToHatch > 20 -> "stage3"    // 1 minute left
-            else -> "stage4"                    // Ready to hatch!
+            (egg.timeToHatch == 0F && eggState.isHatching) -> "hatching" // currently trying to hatch....
+                else -> "stage4"                // Ready to hatch!
         }
         eggState.setPose(poseName)
+
+        if (poseName == "hatching" && eggState.primaryAnimation == null) {
+            val animation = eggModel.getAnimation(eggState, "hatch", eggModel.runtime)
+            if (animation is com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation) {
+                eggState.addPrimaryAnimation(animation)
+            }
+        }
+
+        try {
+            eggState.primaryAnimation?.animation?.applyEffects(
+                entity = null,
+                state = eggState,
+                previousSeconds = eggState.previousAnimationSeconds,
+                newSeconds = eggState.animationSeconds
+            )
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("Failed to apply animation effects", e)
+        }
+
+        // Trigger hatch packet after animation finishes
+        if (state.isHatching && !state.hatchingTriggered && state.isHatchAnimationFinished()) {
+            println("Sending hatch packet for block at ${state.renderingBlockPos}")
+            state.hatchingTriggered = true
+            state.renderingBlockPos?.let {
+                CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))
+            }
+            eggState.resetHatchingState()
+        }
 
         matrices.pushPose()
         matrices.translate(translation.first, translation.second, translation.third)
@@ -85,7 +119,7 @@ object EggRenderHelper {
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
         context.put(RenderContext.POSABLE_STATE, eggState)
 
-        matrices.pushPose() // todo may not need to push
+        matrices.pushPose()
         eggModel.applyAnimations(
             entity = null,
             state = eggState,
@@ -104,5 +138,9 @@ object EggRenderHelper {
         eggModel.setDefault()
         matrices.popPose()
         matrices.popPose()
+    }
+
+    fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

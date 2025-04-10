@@ -8,10 +8,7 @@
 
 package com.cobblemon.mod.common.block.entity
 
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -30,12 +27,15 @@ import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.toBlockPos
+import net.minecraft.client.Minecraft
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -56,6 +56,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.Container
 import net.minecraft.world.WorldlyContainer
@@ -120,13 +121,18 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
             if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
-                hatchPokemon(state, world, pos, player)
+                eggState.isHatching = true // Trigger hatch animation on the renderer
+                //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
+                eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
+                setChanged()
+                level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                 return InteractionResult.SUCCESS
             }
 
 
             // Otherwise, drop the egg
             dropItem(world, pos, state)
+            eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -138,6 +144,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             } else {
                 setItem(heldItem.copy())
             }
+            eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -151,6 +158,11 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             tag.put("EggItem", eggItem.saveOptional(registryLookup))
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
+        tag.putBoolean("IsHatching", eggState.isHatching)
+        tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        eggState.renderingBlockPos?.let {
+            tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
+        }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -160,6 +172,15 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
+        }
+
+        eggState.isHatching = tag.getBoolean("IsHatching")
+        eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
+        if (tag.contains("RenderingBlockPos")) {
+            val posArray = tag.getIntArray("RenderingBlockPos")
+            if (posArray.size == 3) {
+                eggState.renderingBlockPos = BlockPos(posArray[0], posArray[1], posArray[2])
+            }
         }
 
     }
@@ -174,6 +195,10 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //println("getUpdateTag called for NestBlockEntity at $blockPos with tag: $tag")
         return tag
     }
+
+    /*fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }*/
 
     fun hatchPokemon(
             state: BlockState,
@@ -213,6 +238,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         // Spawn the Pokémon entity at the egg's position
         val spawnedEntity = PokemonEntity(world, hatchedPokemon).apply {
             setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+            isNewlyHatched = true
             world.addFreshEntity(this)
         }
 
@@ -222,7 +248,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         }
 
         // If party has space, add Pokémon to the party
-        if (playerParty.getFirstAvailablePosition() != null){
+        if (playerParty.getFirstAvailablePosition() != null) {
             playerParty.add(hatchedPokemon)
             player.displayClientMessage("The Pokémon was added to your party!".green(), true)
         }
@@ -244,6 +270,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         // Clear the egg from the nest and update the block entity
         setItem(Items.AIR.defaultInstance)
+        eggState.resetHatchingState()
         setChanged()
         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
     }

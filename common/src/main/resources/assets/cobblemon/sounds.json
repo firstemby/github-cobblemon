@@ -148,6 +148,9 @@
   "item.pokedex.scan_zoom_increment": {
     "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_zoom_increment", "volume": 0.7 } ]
   },
+  "breeding.egg_hatch": {
+    "sounds": [ { "name": "cobblemon:breeding/egg_hatch", "volume": 0.7 } ]
+  },
   "evolution.notification": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 0.7 } ]
   },
