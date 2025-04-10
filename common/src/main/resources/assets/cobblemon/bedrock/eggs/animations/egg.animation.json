@@ -36,6 +36,11 @@
 					},
 					"position": [0, 0, 0]
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
+				}
 			}
 		},
 		"animation.egg.nestjiggletiny2": {
@@ -59,6 +64,11 @@
 						}
 					},
 					"position": [0, 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
 				}
 			}
 		},
@@ -84,6 +94,11 @@
 					},
 					"position": [0, 0, 0]
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
+				}
 			}
 		},
 		"animation.egg.nestjiggletiny4": {
@@ -107,6 +122,11 @@
 						}
 					},
 					"position": [0, 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
 				}
 			}
 		},
@@ -132,6 +152,11 @@
 					},
 					"position": [0, 0, 0]
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
+				}
 			}
 		},
 		"animation.egg.nestjigglesmall2": {
@@ -155,6 +180,11 @@
 						}
 					},
 					"position": [0, 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
 				}
 			}
 		},
@@ -180,6 +210,11 @@
 					},
 					"position": [0, 0, 0]
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
+				}
 			}
 		},
 		"animation.egg.nestjigglesmall4": {
@@ -203,6 +238,11 @@
 						}
 					},
 					"position": [0, 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.small"
 				}
 			}
 		},
@@ -238,6 +278,11 @@
 						"0.1667": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.medium"
+				}
 			}
 		},
 		"animation.egg.nestjigglemid2": {
@@ -271,6 +316,11 @@
 						"0.125": [0, 0, 0],
 						"0.1667": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.medium"
 				}
 			}
 		},
@@ -306,6 +356,11 @@
 						"0.1667": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.medium"
+				}
 			}
 		},
 		"animation.egg.nestjigglemid4": {
@@ -339,6 +394,11 @@
 						"0.125": [0, 0, 0],
 						"0.1667": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.medium"
 				}
 			}
 		},
@@ -414,6 +474,11 @@
 						"0.5": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jump"
+				}
 			}
 		},
 		"animation.egg.nestjigglelarge2": {
@@ -488,6 +553,11 @@
 						"0.5": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jump"
+				}
 			}
 		},
 		"animation.egg.nestjigglelarge3": {
@@ -554,6 +624,11 @@
 						},
 						"0.5": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jump"
 				}
 			}
 		},
@@ -622,6 +697,11 @@
 						"0.5": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jump"
+				}
 			}
 		},
 		"animation.egg.nestjigglelarge (no hop)": {
@@ -656,29 +736,15 @@
 						"0.1667": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "egg.jiggle.medium"
+				}
 			}
 		},
 		"animation.egg.hatch": {
 			"animation_length": 3.5,
-			"sound_effects": {
-				"0.0": {
-					"effect": "breeding.egg_hatch"
-				}
-			},
-			"particle_effects": {
-				"0.5": {
-					"effect": "egg_crack1",
-					"locator": "middle"
-				},
-				"1.5": {
-					"effect": "egg_crack2",
-					"locator": "middle"
-				},
-				"2.5": {
-					"effect": "egg_crack3",
-					"locator": "middle"
-				}
-			},
 			"bones": {
 				"body": {
 					"rotation": {
@@ -799,6 +865,20 @@
 						"3.4583": [1, 1, 1],
 						"3.5": [1.1, 1.1, 1.1]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.4167": {
+					"effect": "egg.jump"
+				},
+				"1.5": {
+					"effect": "egg.crack"
+				},
+				"2.5417": {
+					"effect": "egg.hatching"
+				},
+				"3.4583": {
+					"effect": "egg.hatch"
 				}
 			}
 		}
