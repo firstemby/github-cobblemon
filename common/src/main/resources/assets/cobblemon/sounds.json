@@ -149,6 +149,7 @@
     "sounds": [ { "name": "cobblemon:item/pokedex/pokedex_scan_zoom_increment", "volume": 0.7 } ]
   },
   "egg.jiggle.small": {
+    "subtitle": "cobblemon.subtitle.egg.jiggle.small",
     "sounds": [ 
       { "name": "cobblemon:egg/egg_jiggle_small_1", "volume": 0.1 },
       { "name": "cobblemon:egg/egg_jiggle_small_2", "volume": 0.1 },
@@ -157,22 +158,25 @@
     ]
   },
   "egg.jiggle.medium": {
+    "subtitle": "cobblemon.subtitle.egg.jiggle.medium",
     "sounds": [ 
-      { "name": "cobblemon:egg/egg_jiggle_medium_1", "volume": 0.1 },
-      { "name": "cobblemon:egg/egg_jiggle_medium_2", "volume": 0.1 },
-      { "name": "cobblemon:egg/egg_jiggle_medium_3", "volume": 0.1 },
-      { "name": "cobblemon:egg/egg_jiggle_medium_4", "volume": 0.1 }
+      { "name": "cobblemon:egg/egg_jiggle_medium_1", "volume": 0.15 },
+      { "name": "cobblemon:egg/egg_jiggle_medium_2", "volume": 0.15 },
+      { "name": "cobblemon:egg/egg_jiggle_medium_3", "volume": 0.15 },
+      { "name": "cobblemon:egg/egg_jiggle_medium_4", "volume": 0.15 }
     ]
   },
   "egg.jump": {
+    "subtitle": "cobblemon.subtitle.egg.jump",
     "sounds": [ 
-      { "name": "cobblemon:egg/egg_jump_1", "volume": 0.5 },
-      { "name": "cobblemon:egg/egg_jump_2", "volume": 0.5 },
-      { "name": "cobblemon:egg/egg_jump_3", "volume": 0.5 },
-      { "name": "cobblemon:egg/egg_jump_4", "volume": 0.5 }
+      { "name": "cobblemon:egg/egg_jump_1", "volume": 0.6 },
+      { "name": "cobblemon:egg/egg_jump_2", "volume": 0.6 },
+      { "name": "cobblemon:egg/egg_jump_3", "volume": 0.6 },
+      { "name": "cobblemon:egg/egg_jump_4", "volume": 0.6 }
     ]
   },
   "egg.crack": {
+    "subtitle": "cobblemon.subtitle.egg.crack",
     "sounds": [ 
       { "name": "cobblemon:egg/egg_crack_1", "volume": 0.7 },
       { "name": "cobblemon:egg/egg_crack_2", "volume": 0.7 },
@@ -184,12 +188,12 @@
     "sounds": [ 
       { "name": "cobblemon:egg/egg_hatching_1", "volume": 0.8 },
       { "name": "cobblemon:egg/egg_hatching_2", "volume": 0.8 },
-      { "name": "cobblemon:egg/egg_hatching_3", "volume": 0.8 },
-      { "name": "cobblemon:egg/egg_hatching_4", "volume": 0.8 }
+      { "name": "cobblemon:egg/egg_hatching_3", "volume": 0.8 }
     ]
   },
   "egg.hatch": {
-    "sounds": [ { "name": "cobblemon:egg/egg_hatch", "volume": 0.8 } ]
+    "subtitle": "cobblemon.subtitle.egg.hatch",
+    "sounds": [ { "name": "cobblemon:egg/egg_hatch", "volume": 0.9 } ]
   },
   "evolution.notification": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_notification", "volume": 0.7 } ]
