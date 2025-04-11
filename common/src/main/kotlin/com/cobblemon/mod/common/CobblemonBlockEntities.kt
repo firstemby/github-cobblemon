@@ -50,6 +50,11 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val HANGING_SIGN: BlockEntityType<CobblemonHangingSignBlockEntity> = this.create("hanging_sign", BlockEntityType.Builder.of(::CobblemonHangingSignBlockEntity, CobblemonBlocks.APRICORN_HANGING_SIGN, CobblemonBlocks.APRICORN_WALL_HANGING_SIGN).build(null))
 
     @JvmField
+    val GROTTO_BLOCK: BlockEntityType<GrottoBlockEntity> = this.create("grotto_block",
+            BlockEntityType.Builder.of(::GrottoBlockEntity, CobblemonBlocks.GROTTO_BLOCK).build(null)
+    )
+
+    @JvmField
     val GILDED_CHEST: BlockEntityType<GildedChestBlockEntity> = this.create("chest", BlockEntityType.Builder.of(::GildedChestBlockEntity,
         CobblemonBlocks.GILDED_CHEST,
         CobblemonBlocks.BLUE_GILDED_CHEST,

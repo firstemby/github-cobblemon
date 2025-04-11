@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client
 
+import com.cobblemon.mod.client.render.blockentity.GrottoBlockRenderer
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
@@ -322,6 +323,7 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.FOSSIL_ANALYZER, ::FossilAnalyzerRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.RESTORATION_TANK, ::RestorationTankRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.NEST, ::NestBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GROTTO_BLOCK, ::GrottoBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.EGG, ::EggBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.INCUBATOR, ::IncubatorRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)

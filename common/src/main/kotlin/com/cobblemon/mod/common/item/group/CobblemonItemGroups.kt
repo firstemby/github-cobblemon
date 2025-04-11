@@ -354,6 +354,8 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.INCUBATOR)
 
+        entries.accept(CobblemonItems.GROTTO_BLOCK)
+
         entries.accept(CobblemonItems.BASIC_NEST)
         entries.accept(CobblemonItems.CAVE_NEST)
         //entries.accept(CobblemonItems.NETHER_NEST)
