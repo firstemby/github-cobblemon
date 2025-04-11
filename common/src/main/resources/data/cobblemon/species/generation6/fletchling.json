@@ -143,9 +143,7 @@
   "evolutions": [
     {
       "id": "fletchling_fletchinder",
-      "variant": "level_up",
       "result": "fletchinder",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "ember",
         "flamecharge"

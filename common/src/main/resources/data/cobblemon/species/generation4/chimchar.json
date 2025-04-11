@@ -197,9 +197,7 @@
   "evolutions": [
     {
       "id": "chimchar_monferno",
-      "variant": "level_up",
       "result": "monferno",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "machpunch"
       ],

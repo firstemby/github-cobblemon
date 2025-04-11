@@ -153,9 +153,7 @@
   "evolutions": [
     {
       "id": "glimmet_glimmora",
-      "variant": "level_up",
       "result": "glimmora",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "mortalspin"
       ],

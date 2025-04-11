@@ -182,9 +182,7 @@
   "evolutions": [
     {
       "id": "finneon_lumineon",
-      "variant": "level_up",
       "result": "lumineon",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -158,9 +158,7 @@
   "evolutions": [
     {
       "id": "staravia_staraptor",
-      "variant": "level_up",
       "result": "staraptor",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "closecombat"
       ],

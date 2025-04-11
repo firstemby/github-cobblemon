@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "raboot_cinderace",
-      "variant": "level_up",
       "result": "cinderace",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "pyroball"
       ],

@@ -179,9 +179,7 @@
   "evolutions": [
     {
       "id": "cubchoo_beartic",
-      "variant": "level_up",
       "result": "beartic",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "iciclecrash"
       ],

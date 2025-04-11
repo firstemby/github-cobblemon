@@ -129,9 +129,7 @@
   "evolutions": [
     {
       "id": "nickit_thievul",
-      "variant": "level_up",
       "result": "thievul",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thief"
       ],

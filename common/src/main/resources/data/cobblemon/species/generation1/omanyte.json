@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "omanyte_omastar",
-      "variant": "level_up",
       "result": "omastar",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spikecannon",
         "crunch"

@@ -183,9 +183,7 @@
   "evolutions": [
     {
       "id": "piloswine_mamoswine",
-      "variant": "level_up",
       "result": "mamoswine",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
       ],

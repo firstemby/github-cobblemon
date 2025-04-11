@@ -171,9 +171,7 @@
   "evolutions": [
     {
       "id": "bidoof_bibarel",
-      "variant": "level_up",
       "result": "bibarel",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "watergun"
       ],

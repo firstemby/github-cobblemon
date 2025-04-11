@@ -134,9 +134,7 @@
   "evolutions": [
     {
       "id": "hatenna_hattrem",
-      "variant": "level_up",
       "result": "hattrem",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "brutalswing"
       ],

@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "greavard_houndstone",
-      "variant": "level_up",
       "result": "houndstone",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "lastrespects"
       ],

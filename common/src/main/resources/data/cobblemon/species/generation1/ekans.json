@@ -181,9 +181,7 @@
   "evolutions": [
     {
       "id": "ekans_arbok",
-      "variant": "level_up",
       "result": "arbok",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "crunch"
       ],

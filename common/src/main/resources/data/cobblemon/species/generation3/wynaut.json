@@ -74,9 +74,7 @@
   "evolutions": [
     {
       "id": "wynaut_wobbuffet",
-      "variant": "level_up",
       "result": "wobbuffet",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "counter",
         "mirrorcoat",

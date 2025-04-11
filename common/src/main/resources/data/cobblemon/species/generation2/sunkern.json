@@ -149,12 +149,13 @@
   "evolutions": [
     {
       "id": "sunkern_sunflora",
-      "variant": "item_interact",
       "result": "sunflora",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:sun_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:sun_stone"
+      }
     }
   ]
 }

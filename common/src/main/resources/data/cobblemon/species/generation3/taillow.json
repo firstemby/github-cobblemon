@@ -154,9 +154,7 @@
   "evolutions": [
     {
       "id": "taillow_swellow",
-      "variant": "level_up",
       "result": "swellow",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

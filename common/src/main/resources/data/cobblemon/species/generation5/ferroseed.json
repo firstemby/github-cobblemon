@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "ferroseed_ferrothorn",
-      "variant": "level_up",
       "result": "ferrothorn",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "powerwhip"
       ],

@@ -142,9 +142,7 @@
   "evolutions": [
     {
       "id": "steenee_tsareena",
-      "variant": "level_up",
       "result": "tsareena",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "tropkick"
       ],

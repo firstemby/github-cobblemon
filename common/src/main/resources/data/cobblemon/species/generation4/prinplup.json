@@ -197,9 +197,7 @@
   "evolutions": [
     {
       "id": "prinplup_empoleon",
-      "variant": "level_up",
       "result": "empoleon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aquajet"
       ],

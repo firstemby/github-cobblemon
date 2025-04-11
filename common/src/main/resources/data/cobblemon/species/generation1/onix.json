@@ -199,16 +199,18 @@
   "evolutions": [
     {
       "id": "onix_steelix",
-      "variant": "trade",
       "result": "steelix",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:metal_coat"
+          "itemCondition": "cobblemon:metal_coat",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ],
   "riding": {

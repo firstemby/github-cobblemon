@@ -151,42 +151,43 @@
   "evolutions": [
     {
       "id": "eevee_jolteon",
-      "variant": "item_interact",
       "result": "jolteon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thundershock"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     },
     {
       "id": "eevee_vaporeon",
-      "variant": "item_interact",
       "result": "vaporeon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "watergun"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:water_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:water_stone"
+      }
     },
     {
       "id": "eevee_flareon",
-      "variant": "item_interact",
       "result": "flareon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "ember"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:fire_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:fire_stone"
+      }
     },
     {
       "id": "eevee_espeon",
-      "variant": "level_up",
       "result": "espeon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "confusion"
       ],
@@ -203,9 +204,7 @@
     },
     {
       "id": "eevee_umbreon",
-      "variant": "level_up",
       "result": "umbreon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "pursuit",
         "snarl"
@@ -223,9 +222,7 @@
     },
     {
       "id": "eevee_sylveon",
-      "variant": "level_up",
       "result": "sylveon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "fairywind",
         "disarmingvoice"
@@ -243,25 +240,27 @@
     },
     {
       "id": "eevee_leafeon",
-      "variant": "item_interact",
       "result": "leafeon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "razorleaf"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:leaf_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:leaf_stone"
+      }
     },
     {
       "id": "eevee_glaceon",
-      "variant": "item_interact",
       "result": "glaceon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "icywind"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:ice_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:ice_stone"
+      }
     }
   ],
   "forms": [

@@ -196,9 +196,7 @@
   "evolutions": [
     {
       "id": "drifloon_drifblim",
-      "variant": "level_up",
       "result": "drifblim",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "phantomforce"
       ],

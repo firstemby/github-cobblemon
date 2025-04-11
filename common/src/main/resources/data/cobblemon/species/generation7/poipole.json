@@ -117,9 +117,7 @@
   "evolutions": [
     {
       "id": "poipole_naganadel",
-      "variant": "level_up",
       "result": "naganadel",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aircutter"
       ],

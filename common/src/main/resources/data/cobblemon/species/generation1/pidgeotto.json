@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "pidgeotto_pidgeot",
-      "variant": "level_up",
       "result": "pidgeot",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -144,9 +144,7 @@
   "evolutions": [
     {
       "id": "vanillite_vanillish",
-      "variant": "level_up",
       "result": "vanillish",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

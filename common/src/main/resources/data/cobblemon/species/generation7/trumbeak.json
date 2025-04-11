@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "trumbeak_toucannon",
-      "variant": "level_up",
       "result": "toucannon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "beakblast"
       ],

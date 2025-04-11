@@ -147,9 +147,7 @@
   "evolutions": [
     {
       "id": "dwebble_crustle",
-      "variant": "level_up",
       "result": "crustle",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

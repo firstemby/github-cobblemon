@@ -163,9 +163,7 @@
   "evolutions": [
     {
       "id": "flabebe_floette",
-      "variant": "level_up",
       "result": "floette",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -194,9 +192,7 @@
       "evolutions": [
         {
           "id": "flabebe_floette",
-          "variant": "level_up",
           "result": "floette",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -226,9 +222,7 @@
       "evolutions": [
         {
           "id": "flabebe_floette",
-          "variant": "level_up",
           "result": "floette",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -258,9 +252,7 @@
       "evolutions": [
         {
           "id": "flabebe_floette",
-          "variant": "level_up",
           "result": "floette",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -290,9 +282,7 @@
       "evolutions": [
         {
           "id": "flabebe_floette",
-          "variant": "level_up",
           "result": "floette",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

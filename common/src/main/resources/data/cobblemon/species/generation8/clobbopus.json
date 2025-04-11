@@ -137,9 +137,7 @@
   "evolutions": [
     {
       "id": "clobbopus_grapploct",
-      "variant": "level_up",
       "result": "grapploct",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "octolock"
       ],

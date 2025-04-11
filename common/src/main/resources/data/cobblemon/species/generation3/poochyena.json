@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "poochyena_mightyena",
-      "variant": "level_up",
       "result": "mightyena",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "snarl"
       ],

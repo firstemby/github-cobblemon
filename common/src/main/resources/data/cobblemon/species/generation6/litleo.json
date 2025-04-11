@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "litleo_pyroar",
-      "variant": "level_up",
       "result": "pyroar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

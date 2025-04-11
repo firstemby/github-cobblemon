@@ -120,9 +120,7 @@
   "evolutions": [
     {
       "id": "dreepy_drakloak",
-      "variant": "level_up",
       "result": "drakloak",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dragonpulse"
       ],

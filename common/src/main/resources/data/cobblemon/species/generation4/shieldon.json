@@ -176,9 +176,7 @@
   "evolutions": [
     {
       "id": "shieldon_bastiodon",
-      "variant": "level_up",
       "result": "bastiodon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "block"
       ],

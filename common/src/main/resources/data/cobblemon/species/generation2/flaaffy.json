@@ -186,9 +186,7 @@
   "evolutions": [
     {
       "id": "flaaffy_ampharos",
-      "variant": "level_up",
       "result": "ampharos",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thunderpunch"
       ],

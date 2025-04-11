@@ -116,9 +116,7 @@
   "evolutions": [
     {
       "id": "wimpod_golisopod",
-      "variant": "level_up",
       "result": "golisopod",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "firstimpression"
       ],

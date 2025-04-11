@@ -197,14 +197,15 @@
   "evolutions": [
     {
       "id": "nosepass_probopass",
-      "variant": "item_interact",
       "result": "probopass",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "triattack"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     }
   ]
 }

@@ -121,9 +121,7 @@
   "evolutions": [
     {
       "id": "yamper_boltund",
-      "variant": "level_up",
       "result": "boltund",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

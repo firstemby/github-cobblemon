@@ -155,9 +155,7 @@
   "evolutions": [
     {
       "id": "snover_abomasnow",
-      "variant": "level_up",
       "result": "abomasnow",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "icepunch"
       ],

@@ -170,9 +170,7 @@
   "evolutions": [
     {
       "id": "litwick_lampent",
-      "variant": "level_up",
       "result": "lampent",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

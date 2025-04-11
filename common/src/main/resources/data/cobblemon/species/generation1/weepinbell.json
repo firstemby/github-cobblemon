@@ -168,15 +168,16 @@
   "evolutions": [
     {
       "id": "weepinbell_victreebel",
-      "variant": "item_interact",
       "result": "victreebel",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "leaftornado",
         "leafstorm"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:leaf_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:leaf_stone"
+      }
     }
   ]
 }

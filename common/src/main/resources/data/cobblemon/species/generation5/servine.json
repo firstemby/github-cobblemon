@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "servine_serperior",
-      "variant": "level_up",
       "result": "serperior",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

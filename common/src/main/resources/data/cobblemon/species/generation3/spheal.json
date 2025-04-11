@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "spheal_sealeo",
-      "variant": "level_up",
       "result": "sealeo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swagger"
       ],

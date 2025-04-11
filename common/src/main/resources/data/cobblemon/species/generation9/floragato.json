@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "floragato_meowscarada",
-      "variant": "level_up",
       "result": "meowscarada",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "flowertrick"
       ],

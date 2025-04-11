@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "venonat_venomoth",
-      "variant": "level_up",
       "result": "venomoth",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust",
         "airslash"

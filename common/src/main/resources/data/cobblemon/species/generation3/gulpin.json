@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "gulpin_swalot",
-      "variant": "level_up",
       "result": "swalot",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "bodyslam"
       ],

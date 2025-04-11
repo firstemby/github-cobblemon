@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "corphish_crawdaunt",
-      "variant": "level_up",
       "result": "crawdaunt",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swift"
       ],

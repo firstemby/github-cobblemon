@@ -217,9 +217,7 @@
   "evolutions": [
     {
       "id": "psyduck_golduck",
-      "variant": "level_up",
       "result": "golduck",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "carvanha_sharpedo",
-      "variant": "level_up",
       "result": "sharpedo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],

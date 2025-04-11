@@ -214,9 +214,7 @@
   "evolutions": [
     {
       "id": "munchlax_snorlax",
-      "variant": "level_up",
       "result": "snorlax",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

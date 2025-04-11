@@ -170,9 +170,7 @@
   "evolutions": [
     {
       "id": "grotle_torterra",
-      "variant": "level_up",
       "result": "torterra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "earthquake"
       ],
@@ -185,10 +183,7 @@
     },
     {
       "id": "grotle_torterraoak",
-      "variant": "level_up",
       "result": "torterra tree=oak",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -199,16 +194,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:oak_sapling"
+          "itemCondition": "minecraft:oak_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterraswamp",
-      "variant": "level_up",
       "result": "torterra tree=swamp",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -223,16 +217,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:oak_sapling"
+          "itemCondition": "minecraft:oak_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterrabirch",
-      "variant": "level_up",
       "result": "torterra tree=birch",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -243,16 +236,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:birch_sapling"
+          "itemCondition": "minecraft:birch_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterradarkoak",
-      "variant": "level_up",
       "result": "torterra tree=darkoak",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -263,16 +255,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:dark_oak_sapling"
+          "itemCondition": "minecraft:dark_oak_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterraacacia",
-      "variant": "level_up",
       "result": "torterra tree=acacia",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -283,16 +274,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:acacia_sapling"
+          "itemCondition": "minecraft:acacia_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterraazalea",
-      "variant": "level_up",
       "result": "torterra tree=azalea",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -303,16 +293,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "#cobblemon:azalea_tree"
+          "itemCondition": "#cobblemon:azalea_tree",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterrajungle",
-      "variant": "level_up",
       "result": "torterra tree=jungle",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -323,16 +312,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:jungle_sapling"
+          "itemCondition": "minecraft:jungle_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterraspruce",
-      "variant": "level_up",
       "result": "torterra tree=spruce",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -343,16 +331,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:spruce_sapling"
+          "itemCondition": "minecraft:spruce_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterramangrove",
-      "variant": "level_up",
       "result": "torterra tree=mangrove",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -363,16 +350,15 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:mangrove_propagule"
+          "itemCondition": "minecraft:mangrove_propagule",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     },
     {
       "id": "grotle_torterracherry",
-      "variant": "level_up",
       "result": "torterra tree=cherry",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "earthquake"
       ],
@@ -383,9 +369,11 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:cherry_sapling"
+          "itemCondition": "minecraft:cherry_sapling",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     }
   ]
 }

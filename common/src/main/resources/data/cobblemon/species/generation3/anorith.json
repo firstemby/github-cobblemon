@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "anorith_armaldo",
-      "variant": "level_up",
       "result": "armaldo",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

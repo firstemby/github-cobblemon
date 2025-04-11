@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "zigzagoon_linoone",
-      "variant": "level_up",
       "result": "linoone",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],
@@ -299,9 +297,7 @@
       "evolutions": [
         {
           "id": "zigzagoon_linoonegalar",
-          "variant": "level_up",
           "result": "linoone galarian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "nightslash"
           ],

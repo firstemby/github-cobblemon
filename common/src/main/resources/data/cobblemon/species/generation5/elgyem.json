@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "elgyem_beheeyem",
-      "variant": "level_up",
       "result": "beheeyem",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

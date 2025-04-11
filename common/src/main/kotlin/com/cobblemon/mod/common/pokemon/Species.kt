@@ -62,6 +62,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
 
+// UPDATE THE SPECIES SCHEMA IF YOU MODIFY THIS! THANKS
+
 class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var name: String = "Bulbasaur"
     val translatedName: MutableComponent

@@ -151,14 +151,15 @@
   "evolutions": [
     {
       "id": "shellder_cloyster",
-      "variant": "item_interact",
       "result": "cloyster",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "iciclespear"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:water_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:water_stone"
+      }
     }
   ]
 }

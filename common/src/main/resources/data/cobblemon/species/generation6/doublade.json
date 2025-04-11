@@ -154,14 +154,15 @@
   "evolutions": [
     {
       "id": "doublade_aegislash",
-      "variant": "item_interact",
       "result": "aegislash stance_forme=shield",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "kingsshield"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:dusk_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:dusk_stone"
+      }
     }
   ]
 }

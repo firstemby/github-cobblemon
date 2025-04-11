@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "lillipup_herdier",
-      "variant": "level_up",
       "result": "herdier",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

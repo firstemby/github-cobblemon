@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "palpitoad_seismitoad",
-      "variant": "level_up",
       "result": "seismitoad",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "acid",
         "drainpunch"

@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "pineco_forretress",
-      "variant": "level_up",
       "result": "forretress",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "mirrorshot",
         "autotomize",
@@ -190,10 +188,7 @@
     },
     {
       "id": "pineco_forretressshulker",
-      "variant": "level_up",
       "result": "forretress shulker",
-      "consumeHeldItem": true,
-      "permanent": true,
       "learnableMoves": [
         "mirrorshot",
         "autotomize",
@@ -206,9 +201,11 @@
         },
         {
           "variant": "held_item",
-          "itemCondition": "minecraft:shulker_shell"
+          "itemCondition": "minecraft:shulker_shell",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "reevaluate": false
     }
   ]
 }

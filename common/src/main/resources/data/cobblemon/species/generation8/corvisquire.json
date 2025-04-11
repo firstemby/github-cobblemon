@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "corvisquire_corviknight",
-      "variant": "level_up",
       "result": "corviknight",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "steelwing"
       ],

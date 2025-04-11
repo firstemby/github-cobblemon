@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "spearow_fearow",
-      "variant": "level_up",
       "result": "fearow",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

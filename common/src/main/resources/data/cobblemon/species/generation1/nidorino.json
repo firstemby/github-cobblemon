@@ -166,14 +166,15 @@
   "evolutions": [
     {
       "id": "nidorino_nidoking",
-      "variant": "item_interact",
       "result": "nidoking",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "megahorn"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:moon_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:moon_stone"
+      }
     }
   ]
 }

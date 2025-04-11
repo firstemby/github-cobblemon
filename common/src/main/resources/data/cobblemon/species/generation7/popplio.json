@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "popplio_brionne",
-      "variant": "level_up",
       "result": "brionne",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -170,9 +170,7 @@
   "evolutions": [
     {
       "id": "vullaby_mandibuzz",
-      "variant": "level_up",
       "result": "mandibuzz",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "bonerush"
       ],

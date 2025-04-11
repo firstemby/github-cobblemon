@@ -333,9 +333,7 @@
       "evolutions": [
         {
           "id": "qwilfish_overqwil",
-          "variant": "level_up",
           "result": "overqwil",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

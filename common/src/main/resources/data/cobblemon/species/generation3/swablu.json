@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "swablu_altaria",
-      "variant": "level_up",
       "result": "altaria",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dragonbreath",
         "dragonpulse"

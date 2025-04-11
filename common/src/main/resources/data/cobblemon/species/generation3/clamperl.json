@@ -119,29 +119,33 @@
   "evolutions": [
     {
       "id": "clamperl_huntail",
-      "variant": "trade",
       "result": "huntail",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:deep_sea_tooth"
+          "itemCondition": "cobblemon:deep_sea_tooth",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     },
     {
       "id": "clamperl_gorebyss",
-      "variant": "trade",
       "result": "gorebyss",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:deep_sea_scale"
+          "itemCondition": "cobblemon:deep_sea_scale",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

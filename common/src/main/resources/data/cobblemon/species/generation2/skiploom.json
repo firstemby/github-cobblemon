@@ -155,9 +155,7 @@
   "evolutions": [
     {
       "id": "skiploom_jumpluff",
-      "variant": "level_up",
       "result": "jumpluff",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

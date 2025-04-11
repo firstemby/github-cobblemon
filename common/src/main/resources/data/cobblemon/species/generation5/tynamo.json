@@ -86,9 +86,7 @@
   "evolutions": [
     {
       "id": "tynamo_eelektrik",
-      "variant": "level_up",
       "result": "eelektrik",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "crunch"
       ],

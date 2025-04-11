@@ -179,30 +179,33 @@
   "evolutions": [
     {
       "id": "poliwhirl_poliwrath",
-      "variant": "item_interact",
       "result": "poliwrath",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "submission",
         "dynamicpunch"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:water_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:water_stone"
+      }
     },
     {
       "id": "poliwhirl_politoed",
-      "variant": "trade",
       "result": "politoed",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "bounce"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:kings_rock"
+          "itemCondition": "cobblemon:kings_rock",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

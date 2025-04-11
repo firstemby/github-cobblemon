@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "cufant_copperajah",
-      "variant": "level_up",
       "result": "copperajah",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "heavyslam"
       ],

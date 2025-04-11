@@ -86,9 +86,7 @@
   "evolutions": [
     {
       "id": "toxelhardy_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -103,9 +101,7 @@
     },
     {
       "id": "toxelbrave_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -120,9 +116,7 @@
     },
     {
       "id": "toxeladamant_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -137,9 +131,7 @@
     },
     {
       "id": "toxelnaughty_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -154,9 +146,7 @@
     },
     {
       "id": "toxeldocile_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -171,9 +161,7 @@
     },
     {
       "id": "toxelimpish_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -188,9 +176,7 @@
     },
     {
       "id": "toxellax_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -205,9 +191,7 @@
     },
     {
       "id": "toxelhasty_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -222,9 +206,7 @@
     },
     {
       "id": "toxeljolly_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -239,9 +221,7 @@
     },
     {
       "id": "toxelnaive_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -256,9 +236,7 @@
     },
     {
       "id": "toxelrash_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -273,9 +251,7 @@
     },
     {
       "id": "toxelsassy_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -290,9 +266,7 @@
     },
     {
       "id": "toxelquirky_toxtricity",
-      "variant": "level_up",
       "result": "toxtricity punk_form=amped",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spark"
       ],
@@ -309,9 +283,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -326,9 +298,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -343,9 +313,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -360,9 +328,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -377,9 +343,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -394,9 +358,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -411,9 +373,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -428,9 +388,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -445,9 +403,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -462,9 +418,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -479,9 +433,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -496,9 +448,7 @@
     },
     {
       "id": "toxel_toxtricitylowkey",
-      "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spark"
       ],

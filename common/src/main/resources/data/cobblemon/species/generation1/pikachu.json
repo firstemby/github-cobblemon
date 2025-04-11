@@ -211,9 +211,7 @@
   "evolutions": [
     {
       "id": "pikachu_raichu",
-      "variant": "item_interact",
       "result": "raichu",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thunderpunch"
       ],
@@ -223,13 +221,14 @@
           "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
         }
       ],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     },
     {
       "id": "pikachu_raichualola",
-      "variant": "item_interact",
       "result": "raichu alolan",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "psychic"
       ],
@@ -243,7 +242,10 @@
           "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
         }
       ],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     }
   ],
   "forms": [
@@ -310,9 +312,7 @@
       "evolutions": [
         {
           "id": "pikachu_raichu",
-          "variant": "item_interact",
           "result": "raichu",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "thunderpunch"
           ],
@@ -326,13 +326,14 @@
               "biomeCondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
             }
           ],
-          "requiredContext": "cobblemon:thunder_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:thunder_stone"
+          }
         },
         {
           "id": "pikachu_raichualola",
-          "variant": "item_interact",
           "result": "raichu alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "psychic"
           ],
@@ -342,7 +343,10 @@
               "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
             }
           ],
-          "requiredContext": "cobblemon:thunder_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:thunder_stone"
+          }
         }
       ]
     }

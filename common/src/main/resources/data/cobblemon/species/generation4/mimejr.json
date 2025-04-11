@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "mimejr_mrmime",
-      "variant": "level_up",
       "result": "mrmime",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -206,9 +204,7 @@
     },
     {
       "id": "mimejr_mrmimegalar",
-      "variant": "level_up",
       "result": "mrmime",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -250,9 +246,7 @@
       "evolutions": [
         {
           "id": "mimejr_mrmime",
-          "variant": "level_up",
           "result": "mrmime",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -271,9 +265,7 @@
         },
         {
           "id": "mimejr_mrmimegalar",
-          "variant": "level_up",
           "result": "mrmime",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

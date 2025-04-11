@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "dewpider_araquanid",
-      "variant": "level_up",
       "result": "araquanid",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

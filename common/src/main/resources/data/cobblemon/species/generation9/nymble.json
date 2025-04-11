@@ -100,9 +100,7 @@
   "evolutions": [
     {
       "id": "nymble_lokix",
-      "variant": "level_up",
       "result": "lokix",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "lunge"
       ],

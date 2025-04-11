@@ -107,9 +107,7 @@
   "evolutions": [
     {
       "id": "combee_vespiquen",
-      "variant": "level_up",
       "result": "vespiquen",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],

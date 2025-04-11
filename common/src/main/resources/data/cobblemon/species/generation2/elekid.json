@@ -180,9 +180,7 @@
   "evolutions": [
     {
       "id": "elekid_electabuzz",
-      "variant": "level_up",
       "result": "electabuzz",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

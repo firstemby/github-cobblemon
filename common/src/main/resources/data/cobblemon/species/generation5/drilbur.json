@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "drilbur_excadrill",
-      "variant": "level_up",
       "result": "excadrill",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "horndrill"
       ],

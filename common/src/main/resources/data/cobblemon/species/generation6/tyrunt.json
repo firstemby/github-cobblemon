@@ -183,9 +183,7 @@
   "evolutions": [
     {
       "id": "tyrunt_tyrantrum",
-      "variant": "level_up",
       "result": "tyrantrum",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "rockslide"
       ],

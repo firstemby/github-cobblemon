@@ -188,9 +188,7 @@
   "evolutions": [
     {
       "id": "buizel_floatzel",
-      "variant": "level_up",
       "result": "floatzel",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

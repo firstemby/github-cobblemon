@@ -220,9 +220,7 @@
   "evolutions": [
     {
       "id": "ralts_kirlia",
-      "variant": "level_up",
       "result": "kirlia",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

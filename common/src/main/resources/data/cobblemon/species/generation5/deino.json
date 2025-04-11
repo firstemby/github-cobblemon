@@ -152,9 +152,7 @@
   "evolutions": [
     {
       "id": "deino_zweilous",
-      "variant": "level_up",
       "result": "zweilous",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

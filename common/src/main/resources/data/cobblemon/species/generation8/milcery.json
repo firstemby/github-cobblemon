@@ -106,1263 +106,1200 @@
   "evolutions": [
     {
       "id": "milcery_alcremiestrawberryvanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovevanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberryvanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieclovervanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowervanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarvanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonvanillacream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=vanilla",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberryrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieloverubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberryrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiecloverrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowerrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonrubycream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=ruby",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberrymatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovematchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberrymatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieclovermatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowermatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarmatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonmatchacream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=matcha",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberrymintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovemintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberrymintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieclovermintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowermintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarmintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonmintcream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=mint",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberrylemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovelemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberrylemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiecloverlemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowerlemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarlemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonlemoncream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=lemon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberrysaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovesaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberrysaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiecloversaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowersaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarsaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonsaltedcream",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=salted",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberryrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieloverubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberryrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiecloverrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowerrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonrubyswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=ruby_swirl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberrycaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremielovecaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberrycaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieclovercaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowercaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarcaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribboncaramelswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=caramel_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestrawberryrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=strawberry cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:strawberry_sweet"
+          "itemCondition": "cobblemon:strawberry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieloverainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=love cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:love_sweet"
+          "itemCondition": "cobblemon:love_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieberryrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=berry cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:berry_sweet"
+          "itemCondition": "cobblemon:berry_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiecloverrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=clover cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:clover_sweet"
+          "itemCondition": "cobblemon:clover_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieflowerrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=flower cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:flower_sweet"
+          "itemCondition": "cobblemon:flower_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremiestarrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=star cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:star_sweet"
+          "itemCondition": "cobblemon:star_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     },
     {
       "id": "milcery_alcremieribbonrainbowswirl",
-      "variant": "level_up",
       "result": "alcremie decoration=ribbon cream=rainbow_swirl",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "decorate"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:ribbon_sweet"
+          "itemCondition": "cobblemon:ribbon_sweet",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "dusk"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     }
   ]
 }

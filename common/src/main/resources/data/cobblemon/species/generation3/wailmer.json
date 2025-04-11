@@ -167,9 +167,7 @@
   "evolutions": [
     {
       "id": "wailmer_wailord",
-      "variant": "level_up",
       "result": "wailord",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

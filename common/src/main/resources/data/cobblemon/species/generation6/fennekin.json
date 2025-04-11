@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "fennekin_braixen",
-      "variant": "level_up",
       "result": "braixen",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "hippopotas_hippowdon",
-      "variant": "level_up",
       "result": "hippowdon",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

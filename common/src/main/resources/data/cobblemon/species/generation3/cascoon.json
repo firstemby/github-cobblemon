@@ -93,9 +93,7 @@
   "evolutions": [
     {
       "id": "cascoon_dustox",
-      "variant": "level_up",
       "result": "dustox",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],

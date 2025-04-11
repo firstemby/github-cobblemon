@@ -136,9 +136,7 @@
     {
       "id": "nincada_ninjask",
       "shedder": "shedinja",
-      "variant": "level_up",
       "result": "ninjask",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doubleteam",
         "screech",

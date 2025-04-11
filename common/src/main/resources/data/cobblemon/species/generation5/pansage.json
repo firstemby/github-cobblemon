@@ -176,12 +176,13 @@
   "evolutions": [
     {
       "id": "pansage_simisage",
-      "variant": "item_interact",
       "result": "simisage",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:leaf_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:leaf_stone"
+      }
     }
   ]
 }

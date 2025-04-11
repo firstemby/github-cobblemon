@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "turtwig_grotle",
-      "variant": "level_up",
       "result": "grotle",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

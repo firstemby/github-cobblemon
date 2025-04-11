@@ -114,9 +114,7 @@
   "evolutions": [
     {
       "id": "dolliv_arboliva",
-      "variant": "level_up",
       "result": "arboliva",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -164,14 +164,15 @@
   "evolutions": [
     {
       "id": "minccino_cinccino",
-      "variant": "item_interact",
       "result": "cinccino",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "tailslap"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:shiny_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:shiny_stone"
+      }
     }
   ]
 }

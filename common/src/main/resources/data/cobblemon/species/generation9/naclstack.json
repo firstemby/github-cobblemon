@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "naclstack_garganacl",
-      "variant": "level_up",
       "result": "garganacl",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hammerarm"
       ],

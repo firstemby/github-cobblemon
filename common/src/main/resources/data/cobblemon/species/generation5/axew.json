@@ -184,9 +184,7 @@
   "evolutions": [
     {
       "id": "axew_fraxure",
-      "variant": "level_up",
       "result": "fraxure",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

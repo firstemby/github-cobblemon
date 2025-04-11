@@ -138,9 +138,7 @@
   "evolutions": [
     {
       "id": "foongus_amoonguss",
-      "variant": "level_up",
       "result": "amoonguss",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

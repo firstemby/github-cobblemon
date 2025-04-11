@@ -157,9 +157,7 @@
   "evolutions": [
     {
       "id": "shinx_luxio",
-      "variant": "level_up",
       "result": "luxio",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

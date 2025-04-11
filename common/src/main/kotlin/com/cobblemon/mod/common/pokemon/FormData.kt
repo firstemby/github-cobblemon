@@ -112,6 +112,7 @@ abstract class FormData(
     private var _battleTheme: ResourceLocation? = null,
     @SerializedName("lightingData")
     private var _lightingData: LightingData? = null
+    // UPDATE THE SPECIES SCHEMA IF YOU MODIFY THIS! THANKS
 ) : Decodable, Encodable, ShowdownIdentifiable {
 
     /** The name of this form. This is unique among forms belonging to the same [parentForm]. */

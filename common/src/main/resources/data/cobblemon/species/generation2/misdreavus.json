@@ -202,12 +202,13 @@
   "evolutions": [
     {
       "id": "misdreavus_mismagius",
-      "variant": "item_interact",
       "result": "mismagius",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:dusk_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:dusk_stone"
+      }
     }
   ]
 }

@@ -154,9 +154,7 @@
   "evolutions": [
     {
       "id": "skiddo_gogoat",
-      "variant": "level_up",
       "result": "gogoat",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aerialace"
       ],

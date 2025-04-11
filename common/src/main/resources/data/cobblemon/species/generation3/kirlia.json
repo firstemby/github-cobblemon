@@ -223,9 +223,7 @@
   "evolutions": [
     {
       "id": "kirlia_gardevoir",
-      "variant": "level_up",
       "result": "gardevoir",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dazzlinggleam"
       ],
@@ -238,9 +236,7 @@
     },
     {
       "id": "kirlia_gallade",
-      "variant": "item_interact",
       "result": "gallade",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],
@@ -250,7 +246,10 @@
           "target": "gender=male"
         }
       ],
-      "requiredContext": "cobblemon:dawn_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:dawn_stone"
+      }
     }
   ]
 }

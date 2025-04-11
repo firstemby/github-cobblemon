@@ -179,12 +179,13 @@
   "evolutions": [
     {
       "id": "roselia_roserade",
-      "variant": "item_interact",
       "result": "roserade",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:shiny_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:shiny_stone"
+      }
     }
   ]
 }

@@ -179,9 +179,7 @@
   "evolutions": [
     {
       "id": "cutiefly_ribombee",
-      "variant": "level_up",
       "result": "ribombee",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "pollenpuff"
       ],

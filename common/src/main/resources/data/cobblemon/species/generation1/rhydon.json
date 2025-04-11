@@ -243,16 +243,18 @@
   "evolutions": [
     {
       "id": "rhydon_rhyperior",
-      "variant": "trade",
       "result": "rhyperior",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:protector"
+          "itemCondition": "cobblemon:protector",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ],
   "riding": {

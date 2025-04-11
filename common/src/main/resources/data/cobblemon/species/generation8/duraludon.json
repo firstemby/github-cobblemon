@@ -152,14 +152,15 @@
   "evolutions": [
     {
       "id": "duraludon_archaludon",
-      "variant": "item_interact",
       "result": "archaludon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "electroshot"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:metal_coat"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:metal_coat"
+      }
     }
   ],
   "forms": [

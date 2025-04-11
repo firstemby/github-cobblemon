@@ -128,14 +128,15 @@
   "evolutions": [
     {
       "id": "sinistea_polteageist",
-      "variant": "item_interact",
       "result": "polteageist tea_authenticity=phony",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "teatime"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:cracked_pot"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:cracked_pot"
+      }
     }
   ],
   "forms": [
@@ -157,14 +158,15 @@
       "evolutions": [
         {
           "id": "sinistea_polteageistantique",
-          "variant": "item_interact",
           "result": "polteageist tea_authenticity=antique",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "teatime"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:chipped_pot"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:chipped_pot"
+          }
         }
       ],
       "battleOnly": false

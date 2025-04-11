@@ -401,7 +401,7 @@
                     }
                 },
                 "trigger": {
-                    "type": ["object", "string"],
+                    "type": "object",
                     "variant": {
                         "description": "The ID of the event that attempts to start this evolution",
                         "type": "string",
@@ -410,7 +410,8 @@
                     "requiredContext": {
                         "description": "The context required to kick-start this evolution",
                         "type": "string"
-                    }
+                    },
+                    "default": "level_up"
                 },
                 "requirements": {
                     "description": "The requirements behind this evolution",
@@ -425,7 +426,13 @@
                         "data": {
                             "description": "The data that backs this requirement"
                         }
-                    }
+                    },
+                    "default": []
+                },
+                "optional": {
+                    "description": "If this evolution will allow the user to choose when to start it or not",
+                    "type": "boolean",
+                    "default": true
                 },
                 "optional": {
                     "description": "If this evolution will allow the user to choose when to start it or not",
@@ -434,18 +441,90 @@
                 }
             }
         },
-        "temporaryForms": {
-            "description": "The interchangeable forms of this Pokémon",
+        "forms": {
+            "description": "The Pokémon's forms",
             "type": "array",
             "items": {
-                "type": "object"
-            }
-        },
-        "permanentForms": {
-            "description": "The non-interchangeable forms of this Pokémon",
-            "type": "array",
-            "items": {
-                "type": "object"
+                "type": "object",
+                "name": {
+                    "description": "A name for this form (i.e. 'Mega', 'Gmax', 'Alola')",
+                    "type": "string"
+                },
+                "variant":  {
+                    "description": "The type of form to deserialize",
+                    "type": "string",
+                    "enum": ["temporary", "permanent"]
+                },
+                "trigger": {
+                    "type": "object",
+                    "variant": {
+                        "description": "The ID of the event that attempts to start this form",
+                        "type": "string",
+                        "enum": ["level_up", "trade", "item_interact", "block_click"]
+                    },
+                    "requiredContext": {
+                        "description": "The context required to kick-start this form",
+                        "type": "string"
+                    },
+                    "default": "level_up",
+                    "_temporaryOnly": "This field is applicable to temporary forms only"
+                },
+                "requirements": {
+                    "description": "The requirements behind this form",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "variant": {
+                            "description": "The ID of the requirement",
+                            "type": "string",
+                            "enum": ["friendship", "held_item", "world", "area", "biome", "time", "stat_balance", "has_move"]
+                        },
+                        "data": {
+                            "description": "The data that backs this requirement"
+                        }
+                    },
+                    "_temporaryOnly": "This field is applicable to temporary forms only"
+                },
+                "optional": {
+                    "description": "If this form will allow the user to choose when to start it or not",
+                    "type": "boolean",
+                    "default": true,
+                    "_temporaryOnly": "This field is applicable to temporary forms only"
+                },
+                "reevaluate": {
+                    "description": "If this form's requirements should be reevaluated, and if invalid, should this form be reverted",
+                    "type": "boolean",
+                    "default": true,
+                    "_temporaryOnly": "This field is applicable to temporary forms only"
+                },
+                "toggleable": {
+                    "description": "Whether this form can be freely toggled after requirements are initially met",
+                    "type": "boolean",
+                    "default": false,
+                    "_temporaryOnly": "This field is applicable to temporary forms only"
+                },
+                "evolutions": {
+                    "description": "The form's evolutions",
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    },
+                    "_permanentOnly": "This field is applicable to permanent forms only"
+                },
+                "preEvolution": {
+                    "description": "The form's pre-evolved form",
+                    "type": "string",
+                    "_permanentOnly": "This field is applicable to permanent forms only"
+                },
+                "forms": {
+                    "description": "The form's nested temporary forms",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                    },
+                    "_permanentOnly": "This field is applicable to permanent forms only"
+                },
+                "_speciesSchema": "all other fields of a species can be overriden by a respective field in a form"
             }
         }
     }

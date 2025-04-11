@@ -211,9 +211,7 @@
   "evolutions": [
     {
       "id": "buneary_lopunny",
-      "variant": "level_up",
       "result": "lopunny",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "return"
       ],

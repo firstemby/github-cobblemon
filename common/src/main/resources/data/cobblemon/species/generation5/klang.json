@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "klang_klinklang",
-      "variant": "level_up",
       "result": "klinklang",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "magneticflux"
       ],

@@ -182,9 +182,7 @@
   "evolutions": [
     {
       "id": "duosion_reuniclus",
-      "variant": "level_up",
       "result": "reuniclus",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dizzypunch",
         "hammerarm"

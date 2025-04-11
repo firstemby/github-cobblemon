@@ -143,9 +143,7 @@
   "evolutions": [
     {
       "id": "tandemaus_maushold",
-      "variant": "level_up",
       "result": "maushold",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

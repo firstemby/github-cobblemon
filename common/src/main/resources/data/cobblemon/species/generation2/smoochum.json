@@ -168,9 +168,7 @@
   "evolutions": [
     {
       "id": "smoochum_jynx",
-      "variant": "level_up",
       "result": "jynx",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

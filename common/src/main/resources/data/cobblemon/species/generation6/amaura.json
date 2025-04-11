@@ -185,9 +185,7 @@
   "evolutions": [
     {
       "id": "amaura_aurorus",
-      "variant": "level_up",
       "result": "aurorus",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "freezedry"
       ],

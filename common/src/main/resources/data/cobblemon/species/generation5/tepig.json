@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "tepig_pignite",
-      "variant": "level_up",
       "result": "pignite",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "armthrust"
       ],

@@ -202,9 +202,7 @@
   "evolutions": [
     {
       "id": "scraggy_scrafty",
-      "variant": "level_up",
       "result": "scrafty",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

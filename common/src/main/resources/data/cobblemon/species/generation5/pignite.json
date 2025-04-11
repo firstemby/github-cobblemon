@@ -204,9 +204,7 @@
   "evolutions": [
     {
       "id": "pignite_emboar",
-      "variant": "level_up",
       "result": "emboar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -153,9 +153,7 @@
   "evolutions": [
     {
       "id": "tangela_tangrowth",
-      "variant": "level_up",
       "result": "tangrowth",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

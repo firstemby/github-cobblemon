@@ -174,9 +174,7 @@
   "evolutions": [
     {
       "id": "kabuto_kabutops",
-      "variant": "level_up",
       "result": "kabutops",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],

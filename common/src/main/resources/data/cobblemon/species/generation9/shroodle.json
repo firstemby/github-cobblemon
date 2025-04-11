@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "shroodle_grafaiai",
-      "variant": "level_up",
       "result": "grafaiai",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doodle"
       ],

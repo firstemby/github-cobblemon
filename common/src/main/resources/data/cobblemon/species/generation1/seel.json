@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "seel_dewgong",
-      "variant": "level_up",
       "result": "dewgong",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "sheercold"
       ],

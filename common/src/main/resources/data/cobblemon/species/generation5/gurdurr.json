@@ -178,11 +178,12 @@
   "evolutions": [
     {
       "id": "gurdurr_conkeldurr",
-      "variant": "trade",
       "result": "conkeldurr",
-      "consumeHeldItem": false,
       "learnableMoves": [],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "piplup_prinplup",
-      "variant": "level_up",
       "result": "prinplup",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "metalclaw"
       ],

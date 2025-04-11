@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "hoppip_skiploom",
-      "variant": "level_up",
       "result": "skiploom",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

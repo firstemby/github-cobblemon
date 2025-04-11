@@ -179,16 +179,18 @@
   "evolutions": [
     {
       "id": "magmar_magmortar",
-      "variant": "trade",
       "result": "magmortar",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:magmarizer"
+          "itemCondition": "cobblemon:magmarizer",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

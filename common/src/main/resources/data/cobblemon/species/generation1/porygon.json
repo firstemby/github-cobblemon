@@ -160,16 +160,18 @@
   "evolutions": [
     {
       "id": "porygon_porygon2",
-      "variant": "trade",
       "result": "porygon2",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:upgrade"
+          "itemCondition": "cobblemon:upgrade",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

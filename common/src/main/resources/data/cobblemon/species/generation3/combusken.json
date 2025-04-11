@@ -195,9 +195,7 @@
   "evolutions": [
     {
       "id": "combusken_blaziken",
-      "variant": "level_up",
       "result": "blaziken",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "blazekick"
       ],

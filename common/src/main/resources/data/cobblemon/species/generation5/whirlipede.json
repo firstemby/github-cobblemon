@@ -151,9 +151,7 @@
   "evolutions": [
     {
       "id": "whirlipede_scolipede",
-      "variant": "level_up",
       "result": "scolipede",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "batonpass"
       ],

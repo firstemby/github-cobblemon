@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "sprigatito_floragato",
-      "variant": "level_up",
       "result": "floragato",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

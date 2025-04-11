@@ -325,9 +325,7 @@
       "evolutions": [
         {
           "id": "linoone_obstagoon",
-          "variant": "level_up",
           "result": "obstagoon",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "obstruct"
           ],

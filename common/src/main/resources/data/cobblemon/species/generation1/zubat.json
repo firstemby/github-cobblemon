@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "zubat_golbat",
-      "variant": "level_up",
       "result": "golbat",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

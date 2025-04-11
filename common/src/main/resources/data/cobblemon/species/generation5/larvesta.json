@@ -151,9 +151,7 @@
   "evolutions": [
     {
       "id": "larvesta_volcarona",
-      "variant": "level_up",
       "result": "volcarona",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "quiverdance"
       ],

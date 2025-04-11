@@ -146,9 +146,7 @@
   "evolutions": [
     {
       "id": "clauncher_clawitzer",
-      "variant": "level_up",
       "result": "clawitzer",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aurasphere"
       ],

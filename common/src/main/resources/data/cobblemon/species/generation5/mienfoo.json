@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "mienfoo_mienshao",
-      "variant": "level_up",
       "result": "mienshao",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

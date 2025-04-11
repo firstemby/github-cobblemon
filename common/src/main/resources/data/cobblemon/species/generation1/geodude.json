@@ -194,9 +194,7 @@
   "evolutions": [
     {
       "id": "geodude_graveler",
-      "variant": "level_up",
       "result": "graveler",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -362,9 +360,7 @@
       "evolutions": [
         {
           "id": "geodude_graveleralola",
-          "variant": "level_up",
           "result": "graveler alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

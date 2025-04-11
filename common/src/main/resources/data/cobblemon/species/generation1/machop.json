@@ -179,9 +179,7 @@
   "evolutions": [
     {
       "id": "machop_machoke",
-      "variant": "level_up",
       "result": "machoke",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

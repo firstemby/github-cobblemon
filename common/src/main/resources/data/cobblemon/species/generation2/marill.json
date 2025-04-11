@@ -198,9 +198,7 @@
   "evolutions": [
     {
       "id": "marill_azumarill",
-      "variant": "level_up",
       "result": "azumarill",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

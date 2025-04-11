@@ -208,9 +208,7 @@
   "evolutions": [
     {
       "id": "aipom_ambipom",
-      "variant": "level_up",
       "result": "ambipom",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

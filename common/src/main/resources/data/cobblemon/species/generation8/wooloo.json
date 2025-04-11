@@ -107,9 +107,7 @@
   "evolutions": [
     {
       "id": "wooloo_dubwool",
-      "variant": "level_up",
       "result": "dubwool",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

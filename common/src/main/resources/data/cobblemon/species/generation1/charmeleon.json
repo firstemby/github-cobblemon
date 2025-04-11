@@ -185,9 +185,7 @@
   "evolutions": [
     {
       "id": "charmeleon_charizard",
-      "variant": "level_up",
       "result": "charizard",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "wingattack",
         "airslash"

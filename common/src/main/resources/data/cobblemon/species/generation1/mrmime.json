@@ -428,9 +428,7 @@
       "evolutions": [
         {
           "id": "mrmime_mrrime",
-          "variant": "level_up",
           "result": "mrrime",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

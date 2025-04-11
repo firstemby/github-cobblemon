@@ -202,9 +202,7 @@
   "evolutions": [
     {
       "id": "stantler_wyrdeer",
-      "variant": "level_up",
       "result": "wyrdeer",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "psyshieldbash"
       ],

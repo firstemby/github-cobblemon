@@ -155,9 +155,7 @@
   "evolutions": [
     {
       "id": "bergmite_avalugg",
-      "variant": "level_up",
       "result": "avalugg",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "bodyslam"
       ],
@@ -174,9 +172,7 @@
     },
     {
       "id": "bergmite_avalugghisui",
-      "variant": "level_up",
       "result": "avalugg",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "rockslide"
       ],
@@ -218,9 +214,7 @@
       "evolutions": [
         {
           "id": "bergmite_avalugg",
-          "variant": "level_up",
           "result": "avalugg",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "bodyslam"
           ],
@@ -241,9 +235,7 @@
         },
         {
           "id": "bergmite_avalugghisui",
-          "variant": "level_up",
           "result": "avalugg",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "rockslide"
           ],

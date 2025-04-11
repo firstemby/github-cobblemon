@@ -171,9 +171,7 @@
   "evolutions": [
     {
       "id": "frillish_jellicent",
-      "variant": "level_up",
       "result": "jellicent",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

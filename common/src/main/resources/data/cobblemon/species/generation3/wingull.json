@@ -180,9 +180,7 @@
   "evolutions": [
     {
       "id": "wingull_pelipper",
-      "variant": "level_up",
       "result": "pelipper",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "protect"
       ],

@@ -113,9 +113,7 @@
   "evolutions": [
     {
       "id": "smoliv_dolliv",
-      "variant": "level_up",
       "result": "dolliv",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

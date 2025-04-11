@@ -168,9 +168,7 @@
   "evolutions": [
     {
       "id": "loudred_exploud",
-      "variant": "level_up",
       "result": "exploud",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "crunch"
       ],

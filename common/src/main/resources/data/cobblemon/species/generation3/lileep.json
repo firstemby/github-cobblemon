@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "lileep_cradily",
-      "variant": "level_up",
       "result": "cradily",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

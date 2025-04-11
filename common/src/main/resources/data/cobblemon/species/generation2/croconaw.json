@@ -201,9 +201,7 @@
   "evolutions": [
     {
       "id": "croconaw_feraligatr",
-      "variant": "level_up",
       "result": "feraligatr",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

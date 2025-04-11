@@ -200,9 +200,7 @@
   "evolutions": [
     {
       "id": "rhyhorn_rhydon",
-      "variant": "level_up",
       "result": "rhydon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hammerarm"
       ],

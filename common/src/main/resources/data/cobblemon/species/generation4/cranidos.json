@@ -181,9 +181,7 @@
   "evolutions": [
     {
       "id": "cranidos_rampardos",
-      "variant": "level_up",
       "result": "rampardos",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "endeavor"
       ],

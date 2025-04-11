@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "purrloin_liepard",
-      "variant": "level_up",
       "result": "liepard",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

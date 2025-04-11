@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "doduo_dodrio",
-      "variant": "level_up",
       "result": "dodrio",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "triattack"
       ],

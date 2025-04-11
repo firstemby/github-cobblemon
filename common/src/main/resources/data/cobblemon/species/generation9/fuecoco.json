@@ -138,9 +138,7 @@
   "evolutions": [
     {
       "id": "fuecoco_crocalor",
-      "variant": "level_up",
       "result": "crocalor",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

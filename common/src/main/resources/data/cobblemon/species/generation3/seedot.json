@@ -153,9 +153,7 @@
   "evolutions": [
     {
       "id": "seedot_nuzleaf",
-      "variant": "level_up",
       "result": "nuzleaf",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "razorleaf"
       ],

@@ -127,12 +127,13 @@
   "evolutions": [
     {
       "id": "tadbulb_bellibolt",
-      "variant": "item_interact",
       "result": "bellibolt",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     }
   ]
 }

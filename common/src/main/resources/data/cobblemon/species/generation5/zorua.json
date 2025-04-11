@@ -176,9 +176,7 @@
   "evolutions": [
     {
       "id": "zorua_zoroark",
-      "variant": "level_up",
       "result": "zoroark",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "nightslash"
       ],
@@ -307,9 +305,7 @@
       "evolutions": [
         {
           "id": "zorua_zoroarkhisui",
-          "variant": "level_up",
           "result": "zoroark hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "shadowclaw"
           ],

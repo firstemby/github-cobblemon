@@ -131,9 +131,7 @@
   "evolutions": [
     {
       "id": "bramblin_brambleghast",
-      "variant": "level_up",
       "result": "brambleghast",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

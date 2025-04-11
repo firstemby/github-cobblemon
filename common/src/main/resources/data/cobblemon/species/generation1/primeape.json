@@ -224,9 +224,7 @@
   "evolutions": [
     {
       "id": "primeape_annihilape",
-      "variant": "level_up",
       "result": "annihilape",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowpunch"
       ],

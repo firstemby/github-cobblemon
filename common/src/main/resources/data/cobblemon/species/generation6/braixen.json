@@ -190,9 +190,7 @@
   "evolutions": [
     {
       "id": "braixen_delphox",
-      "variant": "level_up",
       "result": "delphox",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "mysticalfire"
       ],

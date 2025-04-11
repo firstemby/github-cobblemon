@@ -208,9 +208,7 @@
   "evolutions": [
     {
       "id": "sandshrew_sandslash",
-      "variant": "level_up",
       "result": "sandslash",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "crushclaw"
       ],
@@ -396,14 +394,15 @@
       "evolutions": [
         {
           "id": "sandshrew_sandslashalola",
-          "variant": "item_interact",
           "result": "sandslash alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "iciclespear"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:ice_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:ice_stone"
+          }
         }
       ],
       "battleOnly": false

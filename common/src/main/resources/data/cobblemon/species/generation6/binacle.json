@@ -180,9 +180,7 @@
   "evolutions": [
     {
       "id": "binacle_barbaracle",
-      "variant": "level_up",
       "result": "barbaracle",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

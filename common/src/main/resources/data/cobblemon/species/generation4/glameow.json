@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "glameow_purugly",
-      "variant": "level_up",
       "result": "purugly",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swagger"
       ],

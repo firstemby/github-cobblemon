@@ -192,9 +192,7 @@
   "evolutions": [
     {
       "id": "spoink_grumpig",
-      "variant": "level_up",
       "result": "grumpig",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "teeterdance"
       ],

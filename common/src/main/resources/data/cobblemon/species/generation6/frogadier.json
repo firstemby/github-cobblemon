@@ -183,9 +183,7 @@
   "evolutions": [
     {
       "id": "frogadier_greninja",
-      "variant": "level_up",
       "result": "greninja",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "watershuriken"
       ],

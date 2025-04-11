@@ -174,9 +174,7 @@
   "evolutions": [
     {
       "id": "slugma_magcargo",
-      "variant": "level_up",
       "result": "magcargo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shellsmash"
       ],

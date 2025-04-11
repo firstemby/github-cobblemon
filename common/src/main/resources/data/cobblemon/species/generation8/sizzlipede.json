@@ -131,9 +131,7 @@
   "evolutions": [
     {
       "id": "sizzlipede_centiskorch",
-      "variant": "level_up",
       "result": "centiskorch",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

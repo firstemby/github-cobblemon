@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "cleffa_clefairy",
-      "variant": "level_up",
       "result": "clefairy",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

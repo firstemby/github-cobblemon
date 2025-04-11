@@ -224,14 +224,14 @@
         {
           "variant": "held_item",
           "itemCondition": "cobblemon:razor_fang",
-          "consumeHeldItem": true
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     }
   ]
 }

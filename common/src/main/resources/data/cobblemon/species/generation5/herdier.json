@@ -160,9 +160,7 @@
   "evolutions": [
     {
       "id": "herdier_stoutland",
-      "variant": "level_up",
       "result": "stoutland",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

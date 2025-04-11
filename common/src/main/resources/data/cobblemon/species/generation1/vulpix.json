@@ -183,12 +183,13 @@
   "evolutions": [
     {
       "id": "vulpix_ninetales",
-      "variant": "item_interact",
       "result": "ninetales",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:fire_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:fire_stone"
+      }
     }
   ],
   "forms": [
@@ -337,14 +338,15 @@
       "evolutions": [
         {
           "id": "vulpix_ninetalesalola",
-          "variant": "item_interact",
           "result": "ninetales alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "dazzlinggleam"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:ice_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:ice_stone"
+          }
         }
       ],
       "battleOnly": false

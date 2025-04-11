@@ -168,12 +168,13 @@
   "evolutions": [
     {
       "id": "floette_florges",
-      "variant": "item_interact",
       "result": "florges",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:shiny_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:shiny_stone"
+      }
     }
   ],
   "forms": [
@@ -196,12 +197,13 @@
       "evolutions": [
         {
           "id": "floette_florges",
-          "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
-          "requiredContext": "cobblemon:shiny_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:shiny_stone"
+          }
         }
       ],
       "battleOnly": false
@@ -225,12 +227,13 @@
       "evolutions": [
         {
           "id": "floette_florges",
-          "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
-          "requiredContext": "cobblemon:shiny_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:shiny_stone"
+          }
         }
       ],
       "battleOnly": false
@@ -254,12 +257,13 @@
       "evolutions": [
         {
           "id": "floette_florges",
-          "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
-          "requiredContext": "cobblemon:shiny_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:shiny_stone"
+          }
         }
       ],
       "battleOnly": false
@@ -283,12 +287,13 @@
       "evolutions": [
         {
           "id": "floette_florges",
-          "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
-          "requiredContext": "cobblemon:shiny_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:shiny_stone"
+          }
         }
       ],
       "battleOnly": false

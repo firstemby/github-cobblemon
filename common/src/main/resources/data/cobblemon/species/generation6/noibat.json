@@ -170,9 +170,7 @@
   "evolutions": [
     {
       "id": "noibat_noivern",
-      "variant": "level_up",
       "result": "noivern",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dragonpulse"
       ],

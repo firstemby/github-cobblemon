@@ -174,9 +174,7 @@
   "evolutions": [
     {
       "id": "joltik_galvantula",
-      "variant": "level_up",
       "result": "galvantula",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "stickyweb"
       ],

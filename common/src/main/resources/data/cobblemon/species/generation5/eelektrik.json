@@ -153,12 +153,13 @@
   "evolutions": [
     {
       "id": "eelektrik_eelektross",
-      "variant": "item_interact",
       "result": "eelektross",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      }
     }
   ]
 }

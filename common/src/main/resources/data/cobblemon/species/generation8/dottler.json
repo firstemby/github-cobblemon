@@ -125,9 +125,7 @@
   "evolutions": [
     {
       "id": "dottler_orbeetle",
-      "variant": "level_up",
       "result": "orbeetle",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

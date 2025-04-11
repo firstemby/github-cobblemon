@@ -186,9 +186,7 @@
   "evolutions": [
     {
       "id": "inkay_malamar",
-      "variant": "level_up",
       "result": "malamar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -203,9 +201,7 @@
     },
     {
       "id": "inkay_malamar_dinnerbone",
-      "variant": "level_up",
       "result": "malamar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -220,9 +216,7 @@
     },
     {
       "id": "inkay_malamar_grumm",
-      "variant": "level_up",
       "result": "malamar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

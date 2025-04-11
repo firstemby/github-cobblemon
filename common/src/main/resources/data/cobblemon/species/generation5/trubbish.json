@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "trubbish_garbodor",
-      "variant": "level_up",
       "result": "garbodor",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

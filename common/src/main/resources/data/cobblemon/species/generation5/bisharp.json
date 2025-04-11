@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "bisharp_kingambit",
-      "variant": "level_up",
       "result": "kingambit",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "kowtowcleave"
       ],

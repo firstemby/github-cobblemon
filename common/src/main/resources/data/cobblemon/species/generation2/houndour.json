@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "houndour_houndoom",
-      "variant": "level_up",
       "result": "houndoom",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

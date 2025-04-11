@@ -216,9 +216,7 @@
   "evolutions": [
     {
       "id": "girafarig_farigiraf",
-      "variant": "level_up",
       "result": "farigiraf",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -124,25 +124,27 @@
   "evolutions": [
     {
       "id": "charcadet_armarouge",
-      "variant": "item_interact",
       "result": "armarouge",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "psyshock"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:auspicious_armor"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:auspicious_armor"
+      }
     },
     {
       "id": "charcadet_ceruledge",
-      "variant": "item_interact",
       "result": "ceruledge",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowclaw"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:malicious_armor"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:malicious_armor"
+      }
     }
   ]
 }

@@ -185,9 +185,7 @@
   "evolutions": [
     {
       "id": "sandile_krokorok",
-      "variant": "level_up",
       "result": "krokorok",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

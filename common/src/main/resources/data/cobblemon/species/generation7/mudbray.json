@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "mudbray_mudsdale",
-      "variant": "level_up",
       "result": "mudsdale",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

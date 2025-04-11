@@ -196,9 +196,7 @@
   "evolutions": [
     {
       "id": "bronzor_bronzong",
-      "variant": "level_up",
       "result": "bronzong",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "block"
       ],

@@ -123,9 +123,7 @@
   "evolutions": [
     {
       "id": "wiglett_wugtrio",
-      "variant": "level_up",
       "result": "wugtrio",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

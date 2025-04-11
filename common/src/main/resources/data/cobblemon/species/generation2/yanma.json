@@ -163,9 +163,7 @@
   "evolutions": [
     {
       "id": "yanma_yanmega",
-      "variant": "level_up",
       "result": "yanmega",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

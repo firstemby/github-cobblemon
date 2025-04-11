@@ -173,12 +173,13 @@
   "evolutions": [
     {
       "id": "pansear_simisear",
-      "variant": "item_interact",
       "result": "simisear",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:fire_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:fire_stone"
+      }
     }
   ]
 }

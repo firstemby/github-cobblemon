@@ -209,9 +209,7 @@
   "evolutions": [
     {
       "id": "krokorok_krookodile",
-      "variant": "level_up",
       "result": "krookodile",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

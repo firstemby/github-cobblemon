@@ -156,9 +156,7 @@
   "evolutions": [
     {
       "id": "varoom_revavroom",
-      "variant": "level_up",
       "result": "revavroom",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shiftgear"
       ],

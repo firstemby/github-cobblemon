@@ -134,9 +134,7 @@
   "evolutions": [
     {
       "id": "morelull_shiinotic",
-      "variant": "level_up",
       "result": "shiinotic",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

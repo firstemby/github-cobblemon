@@ -138,9 +138,7 @@
   "evolutions": [
     {
       "id": "sobble_drizzile",
-      "variant": "level_up",
       "result": "drizzile",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -138,9 +138,7 @@
   "evolutions": [
     {
       "id": "tyrogue_hitmonchan",
-      "variant": "level_up",
       "result": "hitmonchan",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "cometpunch",
         "drainpunch"
@@ -159,9 +157,7 @@
     },
     {
       "id": "tyrogue_hitmonlee",
-      "variant": "level_up",
       "result": "hitmonlee",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublekick",
         "brickbreak"
@@ -180,9 +176,7 @@
     },
     {
       "id": "tyrogue_hitmontop",
-      "variant": "level_up",
       "result": "hitmontop",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "rollingkick",
         "triplekick"

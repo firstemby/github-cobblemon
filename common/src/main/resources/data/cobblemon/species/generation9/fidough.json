@@ -152,9 +152,7 @@
   "evolutions": [
     {
       "id": "fidough_dachsbun",
-      "variant": "level_up",
       "result": "dachsbun",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

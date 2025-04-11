@@ -139,18 +139,20 @@
   "evolutions": [
     {
       "id": "feebas_milotic",
-      "variant": "trade",
       "result": "milotic",
-      "consumeHeldItem": true,
       "learnableMoves": [
         "waterpulse"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:prism_scale"
+          "itemCondition": "cobblemon:prism_scale",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

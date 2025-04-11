@@ -90,9 +90,7 @@
   "evolutions": [
     {
       "id": "caterpie_metapod",
-      "variant": "level_up",
       "result": "metapod",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "harden"
       ],

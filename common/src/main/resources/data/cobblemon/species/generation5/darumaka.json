@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "darumaka_darmanitan",
-      "variant": "level_up",
       "result": "darmanitan blazing_mode=standard",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hammerarm"
       ],
@@ -293,14 +291,15 @@
       "evolutions": [
         {
           "id": "darumaka_darmanitangalar",
-          "variant": "item_interact",
           "result": "darmanitan blazing_mode=standard galarian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "iciclecrash"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:ice_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:ice_stone"
+          }
         }
       ],
       "battleOnly": false

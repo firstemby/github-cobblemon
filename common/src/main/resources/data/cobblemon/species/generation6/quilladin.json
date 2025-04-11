@@ -200,9 +200,7 @@
   "evolutions": [
     {
       "id": "quilladin_chesnaught",
-      "variant": "level_up",
       "result": "chesnaught",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spikyshield"
       ],

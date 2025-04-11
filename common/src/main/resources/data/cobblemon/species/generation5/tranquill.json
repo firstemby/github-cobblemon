@@ -147,9 +147,7 @@
   "evolutions": [
     {
       "id": "tranquill_unfezant",
-      "variant": "level_up",
       "result": "unfezant",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

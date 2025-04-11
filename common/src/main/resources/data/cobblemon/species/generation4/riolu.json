@@ -181,9 +181,7 @@
   "evolutions": [
     {
       "id": "riolu_lucario",
-      "variant": "level_up",
       "result": "lucario",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aurasphere"
       ],

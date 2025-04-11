@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "snivy_servine",
-      "variant": "level_up",
       "result": "servine",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

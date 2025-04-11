@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "thwackey_rillaboom",
-      "variant": "level_up",
       "result": "rillaboom",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "drumbeating"
       ],

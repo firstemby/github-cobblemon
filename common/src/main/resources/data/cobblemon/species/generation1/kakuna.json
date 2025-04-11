@@ -95,9 +95,7 @@
   "evolutions": [
     {
       "id": "kakuna_beedrill",
-      "variant": "level_up",
       "result": "beedrill",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "twineedle",
         "furyattack"

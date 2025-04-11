@@ -182,9 +182,7 @@
   "evolutions": [
     {
       "id": "phanpy_donphan",
-      "variant": "level_up",
       "result": "donphan",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "furyattack"
       ],

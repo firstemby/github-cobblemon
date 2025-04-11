@@ -178,9 +178,7 @@
   "evolutions": [
     {
       "id": "igglybuff_jigglypuff",
-      "variant": "level_up",
       "result": "jigglypuff",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

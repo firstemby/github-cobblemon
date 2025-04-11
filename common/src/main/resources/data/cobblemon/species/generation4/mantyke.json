@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "mantyke_mantine",
-      "variant": "level_up",
       "result": "mantine",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

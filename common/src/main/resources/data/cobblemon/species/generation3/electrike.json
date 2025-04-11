@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "electrike_manectric",
-      "variant": "level_up",
       "result": "manectric",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

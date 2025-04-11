@@ -146,9 +146,7 @@
   "evolutions": [
     {
       "id": "yungoos_gumshoos",
-      "variant": "level_up",
       "result": "gumshoos",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -200,9 +200,7 @@
   "evolutions": [
     {
       "id": "grovyle_sceptile",
-      "variant": "level_up",
       "result": "sceptile",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dualchop",
         "leafblade"

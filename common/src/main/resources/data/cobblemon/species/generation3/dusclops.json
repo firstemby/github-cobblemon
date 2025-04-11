@@ -212,16 +212,18 @@
   "evolutions": [
     {
       "id": "dusclops_dusknoir",
-      "variant": "trade",
       "result": "dusknoir",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:reaper_cloth"
+          "itemCondition": "cobblemon:reaper_cloth",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

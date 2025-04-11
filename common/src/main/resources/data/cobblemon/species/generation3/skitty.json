@@ -175,12 +175,13 @@
   "evolutions": [
     {
       "id": "skitty_delcatty",
-      "variant": "item_interact",
       "result": "delcatty",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:moon_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:moon_stone"
+      }
     }
   ]
 }

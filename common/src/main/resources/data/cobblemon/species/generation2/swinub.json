@@ -169,9 +169,7 @@
   "evolutions": [
     {
       "id": "swinub_piloswine",
-      "variant": "level_up",
       "result": "piloswine",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "furyattack",
         "icefang"

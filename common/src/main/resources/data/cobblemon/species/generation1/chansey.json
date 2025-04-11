@@ -247,9 +247,7 @@
   "evolutions": [
     {
       "id": "chansey_blissey",
-      "variant": "level_up",
       "result": "blissey",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

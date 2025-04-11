@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "paras_parasect",
-      "variant": "level_up",
       "result": "parasect",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -185,9 +185,7 @@
   "evolutions": [
     {
       "id": "dragonair_dragonite",
-      "variant": "level_up",
       "result": "dragonite",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "wingattack",
         "hurricane"

@@ -169,9 +169,7 @@
   "evolutions": [
     {
       "id": "ivysaur_venusaur",
-      "variant": "level_up",
       "result": "venusaur",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "petaldance",
         "petalblizzard"

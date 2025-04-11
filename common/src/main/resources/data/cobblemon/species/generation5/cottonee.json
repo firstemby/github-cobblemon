@@ -150,12 +150,13 @@
   "evolutions": [
     {
       "id": "cottonee_whimsicott",
-      "variant": "item_interact",
       "result": "whimsicott",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:sun_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:sun_stone"
+      }
     }
   ]
 }

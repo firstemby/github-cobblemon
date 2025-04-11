@@ -167,9 +167,7 @@
   "evolutions": [
     {
       "id": "shelgon_salamence",
-      "variant": "level_up",
       "result": "salamence",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "fly"
       ],

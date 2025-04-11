@@ -168,9 +168,7 @@
   "evolutions": [
     {
       "id": "gible_gabite",
-      "variant": "level_up",
       "result": "gabite",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dualchop"
       ],

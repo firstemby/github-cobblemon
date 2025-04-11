@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "scorbunny_raboot",
-      "variant": "level_up",
       "result": "raboot",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

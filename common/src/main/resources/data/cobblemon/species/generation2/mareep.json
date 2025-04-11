@@ -168,9 +168,7 @@
   "evolutions": [
     {
       "id": "mareep_flaaffy",
-      "variant": "level_up",
       "result": "flaaffy",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

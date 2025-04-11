@@ -195,9 +195,7 @@
   "evolutions": [
     {
       "id": "totodile_croconaw",
-      "variant": "level_up",
       "result": "croconaw",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -182,9 +182,7 @@
   "evolutions": [
     {
       "id": "oshawott_dewott",
-      "variant": "level_up",
       "result": "dewott",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -217,9 +215,7 @@
       "evolutions": [
         {
           "id": "oshawott_dewott",
-          "variant": "level_up",
           "result": "dewott",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

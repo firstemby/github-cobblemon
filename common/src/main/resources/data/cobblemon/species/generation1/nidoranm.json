@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "nidoranm_nidorino",
-      "variant": "level_up",
       "result": "nidorino",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -190,9 +190,7 @@
   "evolutions": [
     {
       "id": "baltoy_claydol",
-      "variant": "level_up",
       "result": "claydol",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hyperbeam"
       ],

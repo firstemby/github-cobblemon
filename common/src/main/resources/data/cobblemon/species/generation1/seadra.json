@@ -168,16 +168,18 @@
   "evolutions": [
     {
       "id": "seadra_kingdra",
-      "variant": "trade",
       "result": "kingdra",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:dragon_scale"
+          "itemCondition": "cobblemon:dragon_scale",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

@@ -206,9 +206,7 @@
   "evolutions": [
     {
       "id": "cacnea_cacturne",
-      "variant": "level_up",
       "result": "cacturne",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spikyshield"
       ],

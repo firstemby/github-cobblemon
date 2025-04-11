@@ -346,9 +346,7 @@
       "evolutions": [
         {
           "id": "corsola_cursola",
-          "variant": "level_up",
           "result": "cursola",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

@@ -190,9 +190,7 @@
   "evolutions": [
     {
       "id": "pupitar_tyranitar",
-      "variant": "level_up",
       "result": "tyranitar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

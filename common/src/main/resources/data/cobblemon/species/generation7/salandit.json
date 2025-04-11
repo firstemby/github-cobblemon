@@ -178,9 +178,7 @@
   "evolutions": [
     {
       "id": "salandit_salazzle",
-      "variant": "level_up",
       "result": "salazzle",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "captivate",
         "firelash"

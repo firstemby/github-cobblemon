@@ -193,9 +193,7 @@
   "evolutions": [
     {
       "id": "togepi_togetic",
-      "variant": "level_up",
       "result": "togetic",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "fairywind"
       ],

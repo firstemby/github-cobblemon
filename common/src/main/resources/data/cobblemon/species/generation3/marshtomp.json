@@ -203,9 +203,7 @@
   "evolutions": [
     {
       "id": "marshtomp_swampert",
-      "variant": "level_up",
       "result": "swampert",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

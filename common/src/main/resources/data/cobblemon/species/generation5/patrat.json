@@ -154,9 +154,7 @@
   "evolutions": [
     {
       "id": "patrat_watchog",
-      "variant": "level_up",
       "result": "watchog",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

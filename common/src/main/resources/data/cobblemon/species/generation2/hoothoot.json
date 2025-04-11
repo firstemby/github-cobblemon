@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "hoothoot_noctowl",
-      "variant": "level_up",
       "result": "noctowl",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

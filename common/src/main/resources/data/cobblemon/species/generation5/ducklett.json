@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "ducklett_swanna",
-      "variant": "level_up",
       "result": "swanna",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -186,9 +186,7 @@
   "evolutions": [
     {
       "id": "lairon_aggron",
-      "variant": "level_up",
       "result": "aggron",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -164,9 +164,7 @@
   "evolutions": [
     {
       "id": "luxio_luxray",
-      "variant": "level_up",
       "result": "luxray",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

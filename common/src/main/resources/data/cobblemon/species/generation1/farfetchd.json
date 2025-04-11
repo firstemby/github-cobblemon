@@ -336,9 +336,7 @@
       "evolutions": [
         {
           "id": "farfetchd_sirfetchd",
-          "variant": "level_up",
           "result": "sirfetchd",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "irondefense"
           ],

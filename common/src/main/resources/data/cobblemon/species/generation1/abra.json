@@ -186,9 +186,7 @@
   "evolutions": [
     {
       "id": "abra_kadabra",
-      "variant": "level_up",
       "result": "kadabra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "kinesis",
         "confusion"

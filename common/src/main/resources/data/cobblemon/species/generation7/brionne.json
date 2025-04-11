@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "brionne_primarina",
-      "variant": "level_up",
       "result": "primarina",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "sparklingaria"
       ],

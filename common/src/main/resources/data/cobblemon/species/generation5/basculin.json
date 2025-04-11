@@ -290,9 +290,7 @@
       "evolutions": [
         {
           "id": "basculin_basculegion",
-          "variant": "level_up",
           "result": "basculegion",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

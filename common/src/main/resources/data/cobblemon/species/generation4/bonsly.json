@@ -169,9 +169,7 @@
   "evolutions": [
     {
       "id": "bonsly_sudowoodo",
-      "variant": "level_up",
       "result": "sudowoodo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slam"
       ],

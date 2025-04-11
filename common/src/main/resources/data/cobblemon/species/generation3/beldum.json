@@ -94,9 +94,7 @@
   "evolutions": [
     {
       "id": "beldum_metang",
-      "variant": "level_up",
       "result": "metang",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "confusion",
         "metalclaw"

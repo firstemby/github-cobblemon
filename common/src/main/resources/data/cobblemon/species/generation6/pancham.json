@@ -192,9 +192,7 @@
   "evolutions": [
     {
       "id": "pancham_pangoro",
-      "variant": "level_up",
       "result": "pangoro",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "bulletpunch",
         "nightslash"

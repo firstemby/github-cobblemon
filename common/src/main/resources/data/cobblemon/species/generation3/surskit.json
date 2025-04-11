@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "surskit_masquerain",
-      "variant": "level_up",
       "result": "masquerain",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

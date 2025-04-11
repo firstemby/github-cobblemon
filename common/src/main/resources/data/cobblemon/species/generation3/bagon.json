@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "bagon_shelgon",
-      "variant": "level_up",
       "result": "shelgon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "protect"
       ],

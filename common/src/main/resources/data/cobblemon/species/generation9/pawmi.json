@@ -120,9 +120,7 @@
   "evolutions": [
     {
       "id": "pawmi_pawmo",
-      "variant": "level_up",
       "result": "pawmo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "armthrust"
       ],

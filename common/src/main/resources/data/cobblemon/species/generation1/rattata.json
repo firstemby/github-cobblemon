@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "rattata_raticate",
-      "variant": "level_up",
       "result": "raticate",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "scaryface"
       ],
@@ -322,9 +320,7 @@
       "evolutions": [
         {
           "id": "rattata_raticatealola",
-          "variant": "level_up",
           "result": "raticate alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "scaryface"
           ],

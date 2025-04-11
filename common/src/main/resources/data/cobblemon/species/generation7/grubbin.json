@@ -130,9 +130,7 @@
   "evolutions": [
     {
       "id": "grubbin_charjabug",
-      "variant": "level_up",
       "result": "charjabug",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "charge"
       ],

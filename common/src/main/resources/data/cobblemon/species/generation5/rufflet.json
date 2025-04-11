@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "rufflet_braviary",
-      "variant": "level_up",
       "result": "braviary",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "superpower"
       ],
@@ -180,9 +178,7 @@
     },
     {
       "id": "rufflet_braviaryhisui",
-      "variant": "level_up",
       "result": "braviary hisuian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "esperwing"
       ],
@@ -225,9 +221,7 @@
       "evolutions": [
         {
           "id": "rufflet_braviary",
-          "variant": "level_up",
           "result": "braviary",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "superpower"
           ],
@@ -248,9 +242,7 @@
         },
         {
           "id": "rufflet_braviaryhisui",
-          "variant": "level_up",
           "result": "braviary hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "esperwing"
           ],

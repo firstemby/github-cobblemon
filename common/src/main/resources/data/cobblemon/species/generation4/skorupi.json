@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "skorupi_drapion",
-      "variant": "level_up",
       "result": "drapion",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

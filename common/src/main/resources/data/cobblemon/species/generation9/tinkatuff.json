@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "tinkatuff_tinkaton",
-      "variant": "level_up",
       "result": "tinkaton",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gigatonhammer"
       ],

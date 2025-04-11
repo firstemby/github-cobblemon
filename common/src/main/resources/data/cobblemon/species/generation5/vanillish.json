@@ -146,9 +146,7 @@
   "evolutions": [
     {
       "id": "vanillish_vanilluxe",
-      "variant": "level_up",
       "result": "vanilluxe",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

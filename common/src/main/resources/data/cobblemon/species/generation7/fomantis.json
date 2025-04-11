@@ -147,9 +147,7 @@
   "evolutions": [
     {
       "id": "fomantis_lurantis",
-      "variant": "level_up",
       "result": "lurantis",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "petalblizzard"
       ],

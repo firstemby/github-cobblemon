@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "cyndaquil_quilava",
-      "variant": "level_up",
       "result": "quilava",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -196,9 +194,7 @@
       "evolutions": [
         {
           "id": "cyndaquil_quilava",
-          "variant": "level_up",
           "result": "quilava",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

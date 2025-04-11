@@ -177,9 +177,7 @@
   "evolutions": [
     {
       "id": "froakie_frogadier",
-      "variant": "level_up",
       "result": "frogadier",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

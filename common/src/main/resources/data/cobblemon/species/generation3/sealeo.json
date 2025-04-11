@@ -167,9 +167,7 @@
   "evolutions": [
     {
       "id": "sealeo_walrein",
-      "variant": "level_up",
       "result": "walrein",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "icefang"
       ],

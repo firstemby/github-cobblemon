@@ -183,9 +183,7 @@
   "evolutions": [
     {
       "id": "duskull_dusclops",
-      "variant": "level_up",
       "result": "dusclops",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowpunch"
       ],

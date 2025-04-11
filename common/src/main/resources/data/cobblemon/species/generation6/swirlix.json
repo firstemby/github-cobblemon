@@ -143,16 +143,18 @@
   "evolutions": [
     {
       "id": "swirlix_slurpuff",
-      "variant": "trade",
       "result": "slurpuff",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:whipped_dream"
+          "itemCondition": "cobblemon:whipped_dream",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

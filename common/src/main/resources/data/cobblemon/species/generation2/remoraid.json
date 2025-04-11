@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "remoraid_octillery",
-      "variant": "level_up",
       "result": "octillery",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "octazooka"
       ],

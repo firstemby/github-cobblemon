@@ -138,9 +138,7 @@
   "evolutions": [
     {
       "id": "hattrem_hatterene",
-      "variant": "level_up",
       "result": "hatterene",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "psychocut"
       ],

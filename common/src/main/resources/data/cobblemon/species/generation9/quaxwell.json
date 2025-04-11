@@ -152,9 +152,7 @@
   "evolutions": [
     {
       "id": "quaxwell_quaquaval",
-      "variant": "level_up",
       "result": "quaquaval",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aquastep"
       ],

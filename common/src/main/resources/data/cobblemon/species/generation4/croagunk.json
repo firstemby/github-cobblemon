@@ -217,9 +217,7 @@
   "evolutions": [
     {
       "id": "croagunk_toxicroak",
-      "variant": "level_up",
       "result": "toxicroak",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -139,9 +139,7 @@
   "evolutions": [
     {
       "id": "drizzile_inteleon",
-      "variant": "level_up",
       "result": "inteleon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "snipeshot"
       ],

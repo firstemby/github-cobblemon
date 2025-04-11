@@ -119,9 +119,7 @@
   "evolutions": [
     {
       "id": "dipplin_hydrapple",
-      "variant": "level_up",
       "result": "hydrapple",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "ficklebeam"
       ],

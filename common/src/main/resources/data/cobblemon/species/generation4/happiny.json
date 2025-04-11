@@ -151,21 +151,20 @@
   "evolutions": [
     {
       "id": "happiny_chansey",
-      "variant": "level_up",
       "result": "chansey",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:oval_stone"
+          "itemCondition": "cobblemon:oval_stone",
+          "consumeHeldItem": true
         },
         {
           "variant": "time_range",
           "range": "day"
         }
       ],
-      "permanent": true
+      "reevaluate": false
     }
   ]
 }

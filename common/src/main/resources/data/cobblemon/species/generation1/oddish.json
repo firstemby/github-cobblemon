@@ -150,9 +150,7 @@
   "evolutions": [
     {
       "id": "oddish_gloom",
-      "variant": "level_up",
       "result": "gloom",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

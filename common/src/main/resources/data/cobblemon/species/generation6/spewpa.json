@@ -100,9 +100,7 @@
   "evolutions": [
     {
       "id": "spewpa_vivillonarchipelago",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=archipelago",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -127,9 +125,7 @@
     },
     {
       "id": "spewpa_vivilloncontinental",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=continental",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -154,9 +150,7 @@
     },
     {
       "id": "spewpa_vivillonelegant",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=elegant",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -181,9 +175,7 @@
     },
     {
       "id": "spewpa_vivillonfancy",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=fancy",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -204,9 +196,7 @@
     },
     {
       "id": "spewpa_vivillongarden",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=garden",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -231,9 +221,7 @@
     },
     {
       "id": "spewpa_vivillonhighplains",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=high-plains",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -254,9 +242,7 @@
     },
     {
       "id": "spewpa_vivillonicysnow",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=icy-snow",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -281,9 +267,7 @@
     },
     {
       "id": "spewpa_vivillonjungle",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=jungle",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -308,9 +292,7 @@
     },
     {
       "id": "spewpa_vivillonmarine",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=marine",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -335,9 +317,7 @@
     },
     {
       "id": "spewpa_vivillonmeadow",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=meadow",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -362,9 +342,7 @@
     },
     {
       "id": "spewpa_vivillonmodern",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=modern",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -381,9 +359,7 @@
     },
     {
       "id": "spewpa_vivillonmonsoon",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=monsoon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -408,9 +384,7 @@
     },
     {
       "id": "spewpa_vivillonocean",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=ocean",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -435,9 +409,7 @@
     },
     {
       "id": "spewpa_vivillonpolar",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=polar",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -458,9 +430,7 @@
     },
     {
       "id": "spewpa_vivillonriver",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=river",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -485,9 +455,7 @@
     },
     {
       "id": "spewpa_vivillonsandstorm",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=sandstorm",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -512,9 +480,7 @@
     },
     {
       "id": "spewpa_vivillonsavanna",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=savanna",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -539,9 +505,7 @@
     },
     {
       "id": "spewpa_vivillonsun",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=sun",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -562,9 +526,7 @@
     },
     {
       "id": "spewpa_vivillontundra",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=tundra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -589,9 +551,7 @@
     },
     {
       "id": "spewpa_vivilloninferno",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=inferno",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -608,9 +568,7 @@
     },
     {
       "id": "spewpa_vivillonvoid",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=void",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -627,9 +585,7 @@
     },
     {
       "id": "spewpa_vivillonforsaken",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=forsaken",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],
@@ -646,9 +602,7 @@
     },
     {
       "id": "spewpa_vivillonpokeball",
-      "variant": "level_up",
       "result": "vivillon vivillon_wings=poke-ball",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],

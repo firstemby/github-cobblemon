@@ -132,9 +132,7 @@
   "evolutions": [
     {
       "id": "cherubi_cherrim",
-      "variant": "level_up",
       "result": "cherrim blossom_form=overcast",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "petaldance",
         "sunnyday"

@@ -184,9 +184,7 @@
   "evolutions": [
     {
       "id": "dewott_samurott",
-      "variant": "level_up",
       "result": "samurott",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],
@@ -203,9 +201,7 @@
     },
     {
       "id": "dewott_samurotthisui",
-      "variant": "level_up",
       "result": "samurott hisuian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "ceaselessedge"
       ],
@@ -248,9 +244,7 @@
       "evolutions": [
         {
           "id": "dewott_samurott",
-          "variant": "level_up",
           "result": "samurott",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "slash"
           ],
@@ -271,9 +265,7 @@
         },
         {
           "id": "dewott_samurotthisui",
-          "variant": "level_up",
           "result": "samurott hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "ceaselessedge"
           ],

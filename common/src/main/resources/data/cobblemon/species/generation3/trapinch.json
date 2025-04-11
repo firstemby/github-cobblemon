@@ -150,9 +150,7 @@
   "evolutions": [
     {
       "id": "trapinch_vibrava",
-      "variant": "level_up",
       "result": "vibrava",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dragonbreath"
       ],

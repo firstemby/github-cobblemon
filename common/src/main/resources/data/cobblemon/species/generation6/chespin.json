@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "chespin_quilladin",
-      "variant": "level_up",
       "result": "quilladin",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "needlearm"
       ],

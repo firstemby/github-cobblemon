@@ -161,9 +161,7 @@
   "evolutions": [
     {
       "id": "horsea_seadra",
-      "variant": "level_up",
       "result": "seadra",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

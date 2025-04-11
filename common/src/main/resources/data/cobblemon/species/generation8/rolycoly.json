@@ -140,9 +140,7 @@
   "evolutions": [
     {
       "id": "rolycoly_carkol",
-      "variant": "level_up",
       "result": "carkol",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "flamecharge"
       ],

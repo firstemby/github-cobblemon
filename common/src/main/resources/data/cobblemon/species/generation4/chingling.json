@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "chingling_chimecho",
-      "variant": "level_up",
       "result": "chimecho",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

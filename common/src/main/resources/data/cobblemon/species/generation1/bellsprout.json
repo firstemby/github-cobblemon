@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "bellsprout_weepinbell",
-      "variant": "level_up",
       "result": "weepinbell",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

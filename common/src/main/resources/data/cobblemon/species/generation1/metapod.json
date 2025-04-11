@@ -95,9 +95,7 @@
   "evolutions": [
     {
       "id": "metapod_butterfree",
-      "variant": "level_up",
       "result": "butterfree",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],

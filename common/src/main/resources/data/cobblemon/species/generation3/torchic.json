@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "torchic_combusken",
-      "variant": "level_up",
       "result": "combusken",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublekick"
       ],

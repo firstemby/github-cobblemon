@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "fraxure_haxorus",
-      "variant": "level_up",
       "result": "haxorus",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

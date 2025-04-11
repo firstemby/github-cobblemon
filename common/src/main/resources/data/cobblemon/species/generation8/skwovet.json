@@ -119,9 +119,7 @@
   "evolutions": [
     {
       "id": "skwovet_greedent",
-      "variant": "level_up",
       "result": "greedent",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "covet"
       ],

@@ -177,9 +177,7 @@
   "evolutions": [
     {
       "id": "hakamoo_kommoo",
-      "variant": "level_up",
       "result": "kommoo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "clangingscales"
       ],

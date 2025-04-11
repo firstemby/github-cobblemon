@@ -205,9 +205,7 @@
   "evolutions": [
     {
       "id": "golett_golurk",
-      "variant": "level_up",
       "result": "golurk",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "heavyslam"
       ],

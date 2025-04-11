@@ -129,9 +129,7 @@
   "evolutions": [
     {
       "id": "azurill_marill",
-      "variant": "level_up",
       "result": "marill",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

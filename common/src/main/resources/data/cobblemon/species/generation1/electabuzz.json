@@ -195,16 +195,18 @@
   "evolutions": [
     {
       "id": "electabuzz_electivire",
-      "variant": "trade",
       "result": "electivire",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:electirizer"
+          "itemCondition": "cobblemon:electirizer",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

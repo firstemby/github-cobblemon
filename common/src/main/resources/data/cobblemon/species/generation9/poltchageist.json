@@ -115,14 +115,15 @@
   "evolutions": [
     {
       "id": "poltchageist_sinistcha",
-      "variant": "item_interact",
       "result": "sinistcha matcha_authenticity=unremarkable",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "matchagotcha"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:unremarkable_teacup"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:unremarkable_teacup"
+      }
     }
   ],
   "forms": [
@@ -145,14 +146,15 @@
       "evolutions": [
         {
           "id": "poltchageist_sinistchamasterpiece",
-          "variant": "item_interact",
           "result": "sinistcha matcha_authenticity=masterpiece",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "matchagotcha"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:masterpiece_teacup"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:masterpiece_teacup"
+          }
         }
       ],
       "battleOnly": false

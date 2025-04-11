@@ -147,9 +147,7 @@
   "evolutions": [
     {
       "id": "tinkatink_tinkatuff",
-      "variant": "level_up",
       "result": "tinkatuff",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

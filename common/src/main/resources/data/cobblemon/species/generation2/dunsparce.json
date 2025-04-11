@@ -217,9 +217,7 @@
   "evolutions": [
     {
       "id": "dunsparce_dudunsparce",
-      "variant": "level_up",
       "result": "dudunsparce",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

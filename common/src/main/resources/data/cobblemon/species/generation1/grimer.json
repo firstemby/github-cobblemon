@@ -188,9 +188,7 @@
   "evolutions": [
     {
       "id": "grimer_muk",
-      "variant": "level_up",
       "result": "muk",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "venomdrench"
       ],
@@ -356,9 +354,7 @@
       "evolutions": [
         {
           "id": "grimer_mukalola",
-          "variant": "level_up",
           "result": "muk alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "venomdrench"
           ],

@@ -163,9 +163,7 @@
   "evolutions": [
     {
       "id": "chikorita_bayleef",
-      "variant": "level_up",
       "result": "bayleef",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

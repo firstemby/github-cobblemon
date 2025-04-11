@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "bunnelby_diggersby",
-      "variant": "level_up",
       "result": "diggersby",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

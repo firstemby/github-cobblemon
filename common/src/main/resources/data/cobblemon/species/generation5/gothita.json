@@ -183,9 +183,7 @@
   "evolutions": [
     {
       "id": "gothita_gothorita",
-      "variant": "level_up",
       "result": "gothorita",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

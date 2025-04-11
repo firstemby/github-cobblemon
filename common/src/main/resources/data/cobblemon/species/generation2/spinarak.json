@@ -170,9 +170,7 @@
   "evolutions": [
     {
       "id": "spinarak_ariados",
-      "variant": "level_up",
       "result": "ariados",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swordsdance"
       ],

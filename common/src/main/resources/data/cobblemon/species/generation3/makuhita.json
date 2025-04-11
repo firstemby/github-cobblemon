@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "makuhita_hariyama",
-      "variant": "level_up",
       "result": "hariyama",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

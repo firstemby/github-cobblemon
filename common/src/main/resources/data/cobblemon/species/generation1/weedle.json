@@ -90,9 +90,7 @@
   "evolutions": [
     {
       "id": "weedle_kakuna",
-      "variant": "level_up",
       "result": "kakuna",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "harden"
       ],

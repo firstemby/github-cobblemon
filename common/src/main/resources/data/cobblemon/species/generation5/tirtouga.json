@@ -179,9 +179,7 @@
   "evolutions": [
     {
       "id": "tirtouga_carracosta",
-      "variant": "level_up",
       "result": "carracosta",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

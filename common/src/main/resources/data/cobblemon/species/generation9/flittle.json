@@ -147,9 +147,7 @@
   "evolutions": [
     {
       "id": "flittle_espathra",
-      "variant": "level_up",
       "result": "espathra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "luminacrash"
       ],

@@ -164,14 +164,15 @@
   "evolutions": [
     {
       "id": "growlithe_arcanine",
-      "variant": "item_interact",
       "result": "arcanine",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "extremespeed"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:fire_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:fire_stone"
+      }
     }
   ],
   "forms": [
@@ -295,14 +296,15 @@
       "evolutions": [
         {
           "id": "growlithe_arcaninehisui",
-          "variant": "item_interact",
           "result": "arcanine hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "extremespeed"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:fire_stone"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:fire_stone"
+          }
         }
       ],
       "battleOnly": false

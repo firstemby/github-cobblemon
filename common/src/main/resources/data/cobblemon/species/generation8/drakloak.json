@@ -176,9 +176,7 @@
   "evolutions": [
     {
       "id": "drakloak_dragapult",
-      "variant": "level_up",
       "result": "dragapult",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "dragondarts"
       ],

@@ -221,9 +221,7 @@
   "evolutions": [
     {
       "id": "snubbull_granbull",
-      "variant": "level_up",
       "result": "granbull",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

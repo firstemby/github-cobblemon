@@ -153,9 +153,7 @@
   "evolutions": [
     {
       "id": "jangmoo_hakamoo",
-      "variant": "level_up",
       "result": "hakamoo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "skyuppercut"
       ],

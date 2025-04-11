@@ -188,13 +188,14 @@
   "evolutions": [
     {
       "id": "phantump_trevenant",
-      "variant": "trade",
       "result": "trevenant",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowclaw"
       ],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

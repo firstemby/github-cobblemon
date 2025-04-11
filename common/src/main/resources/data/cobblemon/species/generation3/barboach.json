@@ -169,9 +169,7 @@
   "evolutions": [
     {
       "id": "barboach_whiscash",
-      "variant": "level_up",
       "result": "whiscash",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thrash"
       ],

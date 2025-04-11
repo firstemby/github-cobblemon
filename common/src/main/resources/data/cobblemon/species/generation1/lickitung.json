@@ -201,9 +201,7 @@
   "evolutions": [
     {
       "id": "lickitung_lickilicky",
-      "variant": "level_up",
       "result": "lickilicky",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -152,9 +152,7 @@
   "evolutions": [
     {
       "id": "sewaddle_swadloon",
-      "variant": "level_up",
       "result": "swadloon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "protect"
       ],

@@ -140,9 +140,7 @@
   "evolutions": [
     {
       "id": "impidimp_morgrem",
-      "variant": "level_up",
       "result": "morgrem",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "falsesurrender"
       ],

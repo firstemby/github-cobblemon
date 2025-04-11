@@ -174,9 +174,7 @@
   "evolutions": [
     {
       "id": "timburr_gurdurr",
-      "variant": "level_up",
       "result": "gurdurr",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -164,12 +164,13 @@
   "evolutions": [
     {
       "id": "munna_musharna",
-      "variant": "item_interact",
       "result": "musharna",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:moon_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:moon_stone"
+      }
     }
   ]
 }

@@ -217,9 +217,7 @@
   "evolutions": [
     {
       "id": "slowpoke_slowbro",
-      "variant": "level_up",
       "result": "slowbro",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "withdraw"
       ],
@@ -232,16 +230,18 @@
     },
     {
       "id": "slowpoke_slowking",
-      "variant": "trade",
       "result": "slowking",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:kings_rock"
+          "itemCondition": "cobblemon:kings_rock",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ],
   "forms": [
@@ -407,25 +407,27 @@
       "evolutions": [
         {
           "id": "slowpoke_slowbrogalar",
-          "variant": "item_interact",
           "result": "slowbro galarian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "shellsidearm"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:galarica_cuff"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:galarica_cuff"
+          }
         },
         {
           "id": "slowpoke_slowkinggalar",
-          "variant": "item_interact",
           "result": "slowking galarian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "eeriespell"
           ],
           "requirements": [],
-          "requiredContext": "cobblemon:galarica_wreath"
+          "trigger": {
+            "variant": "item_interact",
+            "requiredContext": "cobblemon:galarica_wreath"
+          }
         }
       ],
       "battleOnly": false

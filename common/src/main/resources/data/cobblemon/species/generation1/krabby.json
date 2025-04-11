@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "krabby_kingler",
-      "variant": "level_up",
       "result": "kingler",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

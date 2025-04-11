@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "charmander_charmeleon",
-      "variant": "level_up",
       "result": "charmeleon",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "bayleef_meganium",
-      "variant": "level_up",
       "result": "meganium",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "petaldance"
       ],

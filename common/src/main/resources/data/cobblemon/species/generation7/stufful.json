@@ -153,9 +153,7 @@
   "evolutions": [
     {
       "id": "stufful_bewear",
-      "variant": "level_up",
       "result": "bewear",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "bind"
       ],

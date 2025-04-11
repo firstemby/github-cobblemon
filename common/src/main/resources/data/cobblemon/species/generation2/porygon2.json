@@ -176,16 +176,18 @@
   "evolutions": [
     {
       "id": "porygon2_porygonz",
-      "variant": "trade",
       "result": "porygonz",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:dubious_disc"
+          "itemCondition": "cobblemon:dubious_disc",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

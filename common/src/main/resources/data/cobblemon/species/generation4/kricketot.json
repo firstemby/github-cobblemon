@@ -86,9 +86,7 @@
   "evolutions": [
     {
       "id": "kricketot_kricketune",
-      "variant": "level_up",
       "result": "kricketune",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "furycutter"
       ],

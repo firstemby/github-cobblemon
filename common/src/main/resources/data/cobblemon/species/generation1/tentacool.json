@@ -186,9 +186,7 @@
   "evolutions": [
     {
       "id": "tentacool_tentacruel",
-      "variant": "level_up",
       "result": "tentacruel",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

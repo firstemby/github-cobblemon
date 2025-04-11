@@ -148,16 +148,18 @@
   "evolutions": [
     {
       "id": "spritzee_aromatisse",
-      "variant": "trade",
       "result": "aromatisse",
-      "consumeHeldItem": true,
       "learnableMoves": [],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:sachet"
+          "itemCondition": "cobblemon:sachet",
+          "consumeHeldItem": true
         }
-      ]
+      ],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

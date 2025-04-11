@@ -162,11 +162,12 @@
   "evolutions": [
     {
       "id": "boldore_gigalith",
-      "variant": "trade",
       "result": "gigalith",
-      "consumeHeldItem": false,
       "learnableMoves": [],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

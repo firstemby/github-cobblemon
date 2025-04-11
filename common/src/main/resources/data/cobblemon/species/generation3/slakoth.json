@@ -197,9 +197,7 @@
   "evolutions": [
     {
       "id": "slakoth_vigoroth",
-      "variant": "level_up",
       "result": "vigoroth",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

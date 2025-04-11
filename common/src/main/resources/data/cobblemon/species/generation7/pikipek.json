@@ -148,9 +148,7 @@
   "evolutions": [
     {
       "id": "pikipek_trumbeak",
-      "variant": "level_up",
       "result": "trumbeak",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

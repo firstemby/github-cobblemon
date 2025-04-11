@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "skrelp_dragalge",
-      "variant": "level_up",
       "result": "dragalge",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "twister"
       ],

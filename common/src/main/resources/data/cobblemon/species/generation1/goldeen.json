@@ -167,9 +167,7 @@
   "evolutions": [
     {
       "id": "goldeen_seaking",
-      "variant": "level_up",
       "result": "seaking",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -226,9 +226,7 @@
   "evolutions": [
     {
       "id": "vigoroth_slaking",
-      "variant": "level_up",
       "result": "slaking",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swagger"
       ],

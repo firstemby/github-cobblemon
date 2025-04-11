@@ -211,9 +211,7 @@
   "evolutions": [
     {
       "id": "drowzee_hypno",
-      "variant": "level_up",
       "result": "hypno",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

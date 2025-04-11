@@ -93,9 +93,7 @@
   "evolutions": [
     {
       "id": "silcoon_beautifly",
-      "variant": "level_up",
       "result": "beautifly",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "gust"
       ],

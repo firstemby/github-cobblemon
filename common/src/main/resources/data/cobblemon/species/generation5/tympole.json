@@ -144,9 +144,7 @@
   "evolutions": [
     {
       "id": "tympole_palpitoad",
-      "variant": "level_up",
       "result": "palpitoad",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -205,9 +205,7 @@
   "evolutions": [
     {
       "id": "metang_metagross",
-      "variant": "level_up",
       "result": "metagross",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hammerarm"
       ],
