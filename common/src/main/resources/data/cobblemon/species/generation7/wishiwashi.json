@@ -150,7 +150,6 @@
   "evolutions": [],
   "forms": [
     {
-      "type": "temporary",
       "name": "School",
       "primaryType": "water",
       "maleRatio": 0.5,
@@ -195,11 +194,7 @@
         }
       },
       "evolutions": [],
-      "battleOnly": true,
-      "toggleable": true,
-      "trigger": {
-        "variant": "level_up"
-      }
+      "battleOnly": true
     }
   ]
 }

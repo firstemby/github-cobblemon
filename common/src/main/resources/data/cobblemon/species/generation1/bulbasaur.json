@@ -164,38 +164,12 @@
     "tutor:synthesis",
     "tutor:worryseed"
   ],
-  "forms": [
-    {
-      "type": "temporary",
-      "name": "test",
-      "trigger": {
-        "variant": "level_up"
-      },
-      "requirements": [
-        {
-          "variant": "level",
-          "minLevel": 16
-        }
-      ]
-    },
-    {
-      "type": "temporary",
-      "name": "test2",
-      "trigger": {
-        "variant": "item_interact"
-      },
-      "requirements": []
-    }
-  ],
   "evolutions": [
     {
       "id": "bulbasaur_ivysaur",
       "result": "ivysaur",
       "consumeHeldItem": false,
       "learnableMoves": [],
-      "trigger": {
-        "variant": "level_up"
-      },
       "requirements": [
         {
           "variant": "level",
