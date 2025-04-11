@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
@@ -33,10 +34,11 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
     }
 
     override val key = KEY
+    override val style = RidingStyle.LAND
 
     val poseProvider = PoseProvider<GenericLandSettings, GenericLandState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->
-            return@PoseOption state.rideVel.get().z > 0.1
+            return@PoseOption state.rideVelocity.get().z > 0.1
         })
 
     override fun isActive(
@@ -72,7 +74,7 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        return state.rideVel.get().length().toFloat()
+        return state.rideVelocity.get().length().toFloat()
     }
 
     override fun rotation(
@@ -105,9 +107,9 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
 
         //Jump the thang!
         if (driver.jumping && vehicle.onGround()) {
-            state.rideVel.set(Vec3(newVelocity.x, 2.0, newVelocity.z))
+            state.rideVelocity.set(Vec3(newVelocity.x, 2.0, newVelocity.z))
         } else {
-            state.rideVel.set(newVelocity)
+            state.rideVelocity.set(newVelocity)
         }
 
         //This is cheap.
@@ -118,7 +120,7 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
 
         //entity.deltaMovement = entity.deltaMovement.lerp(velocity, 1.0)
         //state.currVel = state.currVel.add( f.toDouble() / 20.0, gravity / 20.0 , g.toDouble() / 20.0)
-        return state.rideVel.get()
+        return state.rideVelocity.get()
     }
 
     private fun calculateRideSpaceVel(
@@ -129,11 +131,11 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
     ): Vec3 {
         val topSpeed = vehicle.runtime.resolveDouble(settings.topSpeedExpr)
         val accel = vehicle.runtime.resolveDouble(settings.accelExpr)
-        val speed = state.rideVel.get().length()
+        val speed = state.rideVelocity.get().length()
 
         val minSpeed = 0.0
 
-        var newVelocity = Vec3(state.rideVel.get().x, state.rideVel.get().y, state.rideVel.get().z)
+        var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z)
 
         //speed up and slow down based on input
         if (driver.zza > 0.0 && speed <= topSpeed && state.stamina.get() > 0.0f) {
@@ -316,7 +318,7 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
         return false
     }
 
-    override fun createDefaultState() = GenericLandState()
+    override fun createDefaultState(settings: GenericLandSettings) = GenericLandState()
 }
 
 class GenericLandSettings : RidingBehaviourSettings {
@@ -354,6 +356,7 @@ class GenericLandSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeExpression(driveFactor)
         buffer.writeExpression(strafeFactor)
         buffer.writeExpression(reverseDriveFactor)
@@ -385,41 +388,17 @@ class GenericLandSettings : RidingBehaviourSettings {
 
 }
 
-class GenericLandState : RidingBehaviourState {
-    var rideVel = ridingState(Vec3.ZERO, Side.CLIENT)
-    var stamina = ridingState(1.0f, Side.CLIENT)
+class GenericLandState : RidingBehaviourState() {
     var currSpeed = ridingState(0.0, Side.BOTH)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeVec3(rideVel.get())
-        buffer.writeFloat(stamina.get())
-    }
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
-        rideVel.set(buffer.readVec3(), forced = true)
-        stamina.set(buffer.readFloat(), forced = true)
-    }
-
-    override fun reset() {
-        rideVel.set(Vec3.ZERO, forced = true)
-        stamina.set(1.0f, forced = true)
-        currSpeed.set(0.0, forced = true)
-    }
-
-    override fun toString(): String {
-        return "GenericLandState(rideVel=${rideVel.get()}, stamina=${stamina.get()}, currSpeed=${currSpeed.get()})"
-    }
-
     override fun copy() = GenericLandState().also {
-        it.rideVel.set(this.rideVel.get(), forced = true)
+        it.rideVelocity.set(this.rideVelocity.get(), forced = true)
         it.stamina.set(this.stamina.get(), forced = true)
         it.currSpeed.set(this.currSpeed.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
         if (previous !is GenericLandState) return false
-        if (rideVel != previous.rideVel) return true
-        if (stamina != previous.stamina) return true
-        return false
+        return super.shouldSync(previous)
     }
 }

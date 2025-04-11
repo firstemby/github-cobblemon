@@ -1,0 +1,143 @@
+{
+  "rootBone": "honchkrow",
+  "portraitScale": 2.34,
+  "portraitTranslation": [ -0.55, 0.61, 0],
+  "profileScale": 0.63,
+  "profileTranslation": [0, 0.83, 0],
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE",
+        "NONE"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('honchkrow', 'ground_idle')"
+      ],
+      "transformedParts": [
+         {
+           "part": "wing_open_left",
+           "isVisible": false
+         },
+         {
+           "part": "wing_open_right",
+           "isVisible": false
+         },
+         {
+           "part": "wing_closed_left",
+           "isVisible": true
+         },
+         {
+           "part": "wing_closed_right",
+           "isVisible": true
+         }
+        ],
+      "quirks": [
+        "q.bedrock_quirk('honchkrow', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseName": "walk",
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('honchkrow', 'ground_idle')",
+        "q.biped_walk(0.7, 0.8, 'leg_left', 'leg_right')"
+      ],
+      "transformedParts": [
+         {
+           "part": "wing_open_left",
+           "isVisible": false
+         },
+         {
+           "part": "wing_open_right",
+           "isVisible": false
+         },
+         {
+           "part": "wing_closed_left",
+           "isVisible": true
+         },
+         {
+           "part": "wing_closed_right",
+           "isVisible": true
+         }
+        ],
+      "quirks": [
+        "q.bedrock_quirk('honchkrow', 'blink')"
+      ]
+    },
+    "hover": {
+      "poseName": "hover",
+      "poseTypes": [
+        "HOVER"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('honchkrow', 'air_idle')",
+        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')"
+      ],
+      "transformTicks": 10,
+      "transformedParts": [
+         {
+           "part": "wing_open_left",
+           "isVisible": true
+         },
+         {
+           "part": "wing_open_right",
+           "isVisible": true
+         },
+         {
+           "part": "wing_closed_left",
+           "isVisible": false
+         },
+         {
+           "part": "wing_closed_right",
+           "isVisible": false
+         }
+        ],
+      "quirks": [
+        "q.bedrock_quirk('honchkrow', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseName": "fly",
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('honchkrow', 'air_fly')",
+        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')"
+      ],
+      "transformTicks": 10,
+      "transformedParts": [
+         {
+           "part": "wing_open_left",
+           "isVisible": true
+         },
+         {
+           "part": "wing_open_right",
+           "isVisible": true
+         },
+         {
+           "part": "wing_closed_left",
+           "isVisible": false
+         },
+         {
+           "part": "wing_closed_right",
+           "isVisible": false
+         }
+        ],
+      "quirks": [
+        "q.bedrock_quirk('honchkrow', 'blink')"
+      ]
+    }
+  }
+}

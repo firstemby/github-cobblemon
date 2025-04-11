@@ -9,32 +9,31 @@
 package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.riding.behaviour.types.*
+import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
 import net.minecraft.resources.ResourceLocation
 
 object RidingBehaviours {
-    val behaviours = mutableMapOf<ResourceLocation, RidingBehaviour<*, *>>()
+    val behaviours = mutableMapOf<ResourceLocation, RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>>()
 
     init {
         register(BirdAirBehaviour.KEY, BirdAirBehaviour())
         register(DolphinBehaviour.KEY, DolphinBehaviour())
-        register(FallToGlideCompositeBehaviour.KEY, FallToGlideCompositeBehaviour())
         register(GenericLandBehaviour.KEY, GenericLandBehaviour())
         register(GenericSwimBehaviour.KEY, GenericSwimBehaviour())
         register(GliderAirBehaviour.KEY, GliderAirBehaviour())
         register(HelicopterBehaviour.KEY, HelicopterBehaviour())
         register(JetAirBehaviour.KEY, JetAirBehaviour())
-        register(JumpToFlightCompositeBehaviour.KEY, JumpToFlightCompositeBehaviour())
-        register(RunToJetCompositeBehaviour.KEY, RunToJetCompositeBehaviour())
         register(SwimDashBehaviour.KEY, SwimDashBehaviour())
         register(VehicleLandBehaviour.KEY, VehicleLandBehaviour())
+        register(CompositeBehaviour.KEY, CompositeBehaviour())
     }
 
-    fun register(key: ResourceLocation, behaviour: RidingBehaviour<*, *>) {
+    fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
-        behaviours[key] = RidingController(behaviour)
+        behaviours[key] = RidingController(behaviour) as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
-    fun get(key: ResourceLocation): RidingBehaviour<*, *> {
+    fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {
         if (!behaviours.contains(key)) error("Behaviour not registered to key $key")
         return behaviours[key]!!
     }

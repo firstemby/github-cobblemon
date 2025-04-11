@@ -281,7 +281,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
     @JvmField val DRAGON_SCALE = noSettingsItem("dragon_scale")
-    @JvmField val KINGS_ROCK = noSettingsItem("kings_rock")
     @JvmField val METAL_COAT = noSettingsItem("metal_coat")
     @JvmField val UPGRADE = noSettingsItem("upgrade")
     @JvmField val DUBIOUS_DISC = noSettingsItem("dubious_disc")
@@ -660,6 +659,19 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val WATER_STONE = noSettingsItem("water_stone")
 
+    val wearables = mutableListOf<WearableItem>()
+    //Wearable items (these items should have a corresponding 3D model)
+    @JvmField val BLACK_GLASSES = wearableItem("black_glasses")
+    @JvmField val CHOICE_BAND = wearableItem("choice_band")
+    @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
+    @JvmField val EXP_SHARE = wearableItem("exp_share")
+    @JvmField val FOCUS_BAND = wearableItem("focus_band")
+    @JvmField val KINGS_ROCK = wearableItem("kings_rock")
+    @JvmField val MUSCLE_BAND = wearableItem("muscle_band")
+    @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
+    @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
+    @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+
     // Held Items
     @JvmField
     val ABILITY_SHIELD = heldItem("ability_shield")
@@ -676,8 +688,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BLACK_BELT = heldItem("black_belt")
     @JvmField
-    val BLACK_GLASSES = heldItem("black_glasses")
-    @JvmField
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
     val BLUNDER_POLICY = heldItem("blunder_policy")
@@ -686,11 +696,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val CHARCOAL = heldItem("charcoal_stick", remappedName = "charcoal")
     @JvmField
-    val CHOICE_BAND = heldItem("choice_band")
-    @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
-    @JvmField
-    val CHOICE_SPECS = heldItem("choice_specs")
     @JvmField
     val CLEANSE_TAG = heldItem("cleanse_tag")
    // @JvmField
@@ -712,8 +718,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val EVIOLITE = heldItem("eviolite")
     @JvmField
-    val EXP_SHARE = heldItem("exp_share")
-    @JvmField
     val EXPERT_BELT = heldItem("expert_belt")
     @JvmField
     val FAIRY_FEATHER = heldItem("fairy_feather")
@@ -721,8 +725,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val FLAME_ORB = heldItem("flame_orb")
     @JvmField
     val FLOAT_STONE = heldItem("float_stone")
-    @JvmField
-    val FOCUS_BAND = heldItem("focus_band")
     @JvmField
     val FOCUS_SASH = heldItem("focus_sash")
     @JvmField
@@ -758,8 +760,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
-    val MUSCLE_BAND = heldItem("muscle_band")
-    @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
     @JvmField
     val NEVER_MELT_ICE = heldItem("never_melt_ice")
@@ -790,11 +790,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val RING_TARGET = heldItem("ring_target")
     @JvmField
-    val ROCKY_HELMET = heldItem("rocky_helmet")
-    @JvmField
     val ROOM_SERVICE = heldItem("room_service")
-    @JvmField
-    val SAFETY_GOGGLES = heldItem("safety_goggles")
     @JvmField
     val SCOPE_LENS = heldItem("scope_lens")
     @JvmField
@@ -831,8 +827,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val WEAKNESS_POLICY = heldItem("weakness_policy")
     @JvmField
     val WIDE_LENS = heldItem("wide_lens")
-    @JvmField
-    val WISE_GLASSES = heldItem("wise_glasses")
     @JvmField
     val ZOOM_LENS = heldItem("zoom_lens")
     @JvmField
@@ -1262,6 +1256,16 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         pokedexes.add(item)
         return item
     }
+
+    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
+        name,
+        WearableItem(name).also {
+            wearables.add(it)
+            if (heldItemRemappedName != null) {
+                CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
+            }
+        }
+    )
 
     private fun heldItem(name: String, remappedName: String? = null): CobblemonItem = create(
         name,

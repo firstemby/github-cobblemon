@@ -159,15 +159,15 @@ class PokemonRenderer(
 //        Minecraft.getInstance().bufferBuilders.entityVertexConsumers.draw()
 
         //Render Held Item
-        heldItemRenderer.renderOnEntity(
-            entity,
+        heldItemRenderer.renderOnModel(
             entity.shownItem,
-            model.posableModel,
+            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,
             packedLight,
-            Vec3(0.0,-90.0,90.0)
+            false,
+            entity
         )
     }
 
@@ -178,7 +178,7 @@ class PokemonRenderer(
         buffer: MultiBufferSource,
         packedLight: Int
     ) {
-        val driver = entity.controllingPassenger ?: return
+        val driver = entity.firstPassenger ?: return
         val rollable = driver as? OrientationControllable ?: return
         val controller = rollable.orientationController
         poseMatrix.pushPose()
@@ -198,10 +198,6 @@ class PokemonRenderer(
             //Pre-undo yaw rotation
             transformationMatrix.rotate(Axis.YP.rotationDegrees(yaw+180f))
             matrix.mul(transformationMatrix)
-        } else {
-			//Align rotation for non rollable pokemon
-            entity.yBodyRot = driver.yRot
-            entity.yBodyRotO = driver.yRotO
         }
 
         super.render(entity, 0f, partialTicks, poseMatrix, buffer, packedLight)

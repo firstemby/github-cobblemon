@@ -41,9 +41,6 @@ class RidingProperties(
         }
     }
 
-    val canRide: Boolean
-        get() = seats.isNotEmpty() && behaviour != null
-
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeMap(
             stats,
@@ -53,7 +50,6 @@ class RidingProperties(
         buffer.writeCollection(seats) { _, seat -> seat.encode(buffer) }
         buffer.writeCollection(conditions) { _, condition -> buffer.writeString(condition.getString()) }
         buffer.writeNullable(behaviour) { _, behaviour ->
-            buffer.writeResourceLocation(behaviour.key)
             behaviour.encode(buffer)
         }
     }

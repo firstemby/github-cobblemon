@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.riding.behaviour
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.phys.Vec3
 
 /**
  * Represents static settings of a riding behaviour.

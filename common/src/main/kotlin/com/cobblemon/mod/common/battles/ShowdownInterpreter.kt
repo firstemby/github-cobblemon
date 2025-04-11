@@ -22,6 +22,8 @@ import com.cobblemon.mod.common.battles.interpreter.instructions.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.runOnServer
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
 import kotlin.collections.Iterator
@@ -34,6 +36,7 @@ import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 import kotlin.collections.toMutableList
 import kotlin.collections.toTypedArray
+import kotlin.time.measureTime
 
 @Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")
 object ShowdownInterpreter {
@@ -137,85 +140,6 @@ object ShowdownInterpreter {
 
         // Note '-cureteam' is a legacy thing that is only used in generation 2 and 4 mods for heal bell and aromatherapy respectively as such we can just ignore that
     }
-
-    /**
-     *
-     * Figures out the sendout position for a pokemon in a battle
-     * 
-     *
-     */
-     fun getSendoutPosition(battle: PokemonBattle, activePokemon: ActiveBattlePokemon, battleActor: BattleActor): Vec3? {
-        val pnx = activePokemon.getPNX()
-        val actorEntityPosList = battleActor.getSide().actors.mapNotNull { if (it is EntityBackedBattleActor<*>) it.initialPos else null }
-        val actorEntityPos = if (actorEntityPosList.size == 1)
-            actorEntityPosList[0]
-        else if (actorEntityPosList.size > 1)
-            actorEntityPosList.fold(Vec3(0.0, 0.0, 0.0)) { acc, vec3 -> acc.add(vec3.scale(1.0 / actorEntityPosList.size)) }
-        else
-            null
-        val opposingActorEntityList = battleActor.getSide().getOppositeSide().actors.mapNotNull { if (it is EntityBackedBattleActor<*>) it.initialPos else null }
-        val opposingEntityPos = if (opposingActorEntityList.size == 1)
-            opposingActorEntityList[0]
-        else if (opposingActorEntityList.size > 1) {
-            // If multiple actors per side, avg their position
-            opposingActorEntityList.fold(Vec3(0.0, 0.0, 0.0)) { acc, vec3 -> acc.add(vec3.scale(1.0 / opposingActorEntityList.size)) }
-        }
-        else null
-        
-        var actorOffset = actorEntityPos?.let { opposingEntityPos?.subtract(it) }
-        var result = actorEntityPos
-        if (actorOffset != null) {
-            var widthSum = 4.0 // Leave a constant to allow double/triples alignment to be consistent
-            if (battle.format.battleType.pokemonPerSide == 1) {
-                activePokemon.battlePokemon?.let { battlePokemon ->
-                    // sum of the hitbox widths of both pokemon
-                    val opposingActivePokemon = (activePokemon.getOppositeOpponent() as ActiveBattlePokemon)
-                    val pokemonWidth = battlePokemon.originalPokemon.form.hitbox.width * battlePokemon.originalPokemon.form.baseScale
-                    val opposingPokemonWidth = opposingActivePokemon.battlePokemon?.let {
-                        it.originalPokemon.form.hitbox.width * it.originalPokemon.form.baseScale
-                    } ?: pokemonWidth
-                    widthSum = (pokemonWidth + opposingPokemonWidth) / 2.0 // Only care about the front half of each hitbox
-                }
-            }
-
-            val minDistance = 4.0 + widthSum
-            val actorDistance = actorOffset.length()
-
-            if (actorDistance < minDistance) {
-                val temp = actorOffset.scale(minDistance / actorDistance) ?: actorOffset
-                result = actorEntityPos?.subtract(temp.subtract(actorOffset))
-                actorOffset = temp
-            }
-            var vector = Vec3(actorOffset.x, 0.0, actorOffset.z).normalize()
-            vector = vector.cross(Vec3(0.0, 1.0, 0.0))
-
-            if (battle.format.battleType.pokemonPerSide == 1) { // Singles
-                result = result?.add(actorOffset.scale(if (battle.isPvW) 0.4 else 0.3))
-                activePokemon.battlePokemon?.let { battlePokemon ->
-                    val hitbox = battlePokemon.originalPokemon.form.hitbox
-                    val scale = battlePokemon.originalPokemon.form.baseScale
-                    activePokemon.getAdjacentOpponents()
-                    result = result?.add(vector.scale(-0.3 - hitbox.width * scale ))
-                }
-            } else if (battle.format.battleType.pokemonPerSide == 2) { // Doubles/Multi
-                if (battle.actors.first() !== battle.actors.last()) {
-                    val offsetB = if (pnx[2] == 'a') vector.scale(-1.0) else vector
-                    result = result?.add(actorOffset.scale(0.33))?.add(offsetB.scale(2.5))
-                }
-            } else if (battle.format.battleType.pokemonPerSide == 3) { // Triples
-                if (battle.actors.first() !== battle.actors.last()) {
-                    result = when (pnx[2]) {
-                        'a' -> result?.add(actorOffset.scale(0.15))?.add(vector.scale(-3.5))
-                        'b' -> result?.add(actorOffset.scale(0.3))
-                        'c' -> result?.add(actorOffset.scale(0.15))?.add(vector.scale(3.5))
-                        else -> result
-                    }
-                }
-            }
-        }
-        return result
-    }
-
 
 
     fun interpretMessage(battleId: UUID, message: String) {

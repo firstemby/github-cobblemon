@@ -20,7 +20,7 @@ object CobblemonPermissions {
     @JvmStatic
     val CHANGE_WALK_SPEED = this.create("${COMMAND_PREFIX}changewalkspeed", PermissionLevel.ALL_COMMANDS)
     @JvmStatic
-    val CHANGE_JOINT_SCALE = this.create("${COMMAND_PREFIX}changejointscale", PermissionLevel.ALL_COMMANDS)
+    val TRANSFORM_MODEL_PART = this.create("${COMMAND_PREFIX}transformmodelpart", PermissionLevel.ALL_COMMANDS)
     @JvmStatic
     val CHECKSPAWNS = this.create("${COMMAND_PREFIX}checkspawns", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic

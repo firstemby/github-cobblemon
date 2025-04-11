@@ -470,6 +470,65 @@
 				}
 			}
 		},
+		"animation.magnezone.active": {
+			"loop": true,
+			"bones": {
+				"magnet_lights_left": {
+					"position": [0, 0, -0.1]
+				},
+				"magnet_lights_right": {
+					"position": [0, 0, -0.1]
+				},
+				"magnet_lights_back": {
+					"position": [0, 0, 0.1]
+				}
+			}
+		},
+		"animation.magnezone.shock": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"pupil_right": {
+					"scale": [0.7, 0.7, 1]
+				}
+			}
+		},
+		"animation.magnezone.happy": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"position": [0, 0, 0.1]
+				},
+				"pupil_right": {
+					"position": [0, 0, 0.1]
+				},
+				"pupil_happy_left": {
+					"position": [0, 0, -0.1]
+				},
+				"pupil_happy_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.magnezone.hurt": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"position": [0, 0, 0.1]
+				},
+				"pupil_right": {
+					"position": [0, 0, 0.1]
+				},
+				"pupil_recoil_left": {
+					"position": [0, 0, -0.1]
+				},
+				"pupil_recoil_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
 		"animation.magnezone.cry": {
 			"animation_length": 1.2,
 			"sound_effects": {

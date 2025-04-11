@@ -36,11 +36,13 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
     fun createEntries(marks: List<Mark?>) {
         marks.chunked(6).forEachIndexed { index, listChunk ->
-            addEntry(ScrollSlotRow(listChunk, setSelectedMark, setHoveredMark))
+            addEntry(ScrollSlotRow(this, listChunk, setSelectedMark, setHoveredMark))
         }
     }
 
-    override fun getScrollbarPosition(): Int = pX + width - 3
+    override fun getRowLeft(): Int = if (children().size > 5) (left + 1) else left
+
+    override fun getScrollbarPosition(): Int = rowLeft + width - 3
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         // Do not render scrollbar if all rows are already visible
@@ -57,8 +59,8 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
                 yTop = this.y
             }
 
-            context.fill(xLeft, this.y, xRight, this.bottom, FastColor.ARGB32.color(255, 47, 47, 47)) // background
-            context.fill(xLeft,yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 198, 198, 198)) // base
+            context.fill(xLeft, this.y, xRight, this.bottom, FastColor.ARGB32.color(255, 75, 75, 75)) // background
+            context.fill(xLeft,yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 141, 141, 141)) // base
         }
     }
 
@@ -72,7 +74,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
     override fun getEntry(index: Int): ScrollSlotRow = children()[index] as ScrollSlotRow
 
     override fun renderListItems(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-        val rowX = this.rowLeft
+        val rowX = rowLeft
 
         var anyHovered = false
         for (index in 0 until this.itemCount) {
@@ -96,6 +98,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
     }
 
     class ScrollSlotRow(
+        val parent: MarksScrollingWidget,
         val markList:  List<Mark?>,
         val setSelectedMark : () -> Unit,
         val setHoveredMark: (Mark?) -> Unit
@@ -109,10 +112,11 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
         fun renderRow(context: GuiGraphics, y: Int, x: Int, mouseX: Int, mouseY: Int): Boolean {
             var anyHovered = false
+            val horizontalSpacing = if (isScrollVisible()) SLOT_SPACING else (SLOT_SPACING + 1)
             markList.forEachIndexed { index, mark ->
                 val matrices = context.pose()
 
-                val startPosX = x + ((SLOT_SPACING + SLOT_SIZE) * index)
+                val startPosX = x + ((horizontalSpacing + SLOT_SIZE) * index)
                 val startPosY = y + SLOT_SPACING
 
                 val slotHovered = mark != null && getHoveredSlotIndex(mouseX, mouseY) == index
@@ -156,9 +160,12 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
             return true
         }
 
+        private fun isScrollVisible(): Boolean = parent.children().size > 5
+
         private fun getHoveredSlotIndex(mouseX: Int, mouseY: Int): Int {
+            val horizontalSpacing = if (isScrollVisible()) SLOT_SPACING else (SLOT_SPACING + 1)
             markList.forEachIndexed { index, _ ->
-                val startPosX = x + ((SLOT_SPACING + SLOT_SIZE) * index)
+                val startPosX = x + ((horizontalSpacing + SLOT_SIZE) * index)
                 val startPosY = y + SLOT_SPACING + 1
 
                 if (mouseX in startPosX..(startPosX + SLOT_SIZE)

@@ -2361,6 +2361,8 @@
   "cobblemon.config.ui.party_portrait_animations.animate_selected.tooltip": "Selected Pokémon animates unless fainted",
   "cobblemon.config.ui.party_portrait_animations.always_animate": "Always animate",
   "cobblemon.config.ui.party_portrait_animations.always_animate.tooltip": "Entire party animates unless fainted",
+  "cobblemon.config.ui.third_person_view_bobbing": "Third Person View Bobbing",
+  "cobblemon.config.ui.third_person_view_bobbing.tooltip": "If true then use default Minecraft behavior to follow directly behind the player's head. If false then follow a fixed offset from the pokemon.",
   "cobblemon.config.ui.invert_pitch": "Invert Pitch",
   "cobblemon.config.ui.invert_pitch.tooltip": "Invert the direction for pitch (left and right).",
   "cobblemon.config.ui.invert_yaw": "Invert Yaw",

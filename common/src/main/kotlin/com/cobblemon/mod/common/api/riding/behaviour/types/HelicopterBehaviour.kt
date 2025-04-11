@@ -11,7 +11,8 @@ package com.cobblemon.mod.common.api.riding.behaviour.types
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
-import com.cobblemon.mod.common.api.riding.behaviour.NoState
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -31,18 +32,19 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sin
 
-class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
+class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourState> {
     companion object {
         val KEY = cobblemonResource("air/helicopter")
         val ROTATION_LIMIT = 30.0f
     }
 
     override val key = KEY
+    override val style = RidingStyle.AIR
 
-    val poseProvider = PoseProvider<HelicopterSettings, NoState>(PoseType.HOVER)
+    val poseProvider = PoseProvider<HelicopterSettings, RidingBehaviourState>(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })
 
-    override fun isActive(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun isActive(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         //If there are only fluid blocks or air block below the ride
         //then activate the controller. If it is in water the ride will
         //dismount accordingly
@@ -56,11 +58,11 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
         }
     }
 
-    override fun pose(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): PoseType {
+    override fun pose(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): PoseType {
         return poseProvider.select(settings, state, vehicle)
     }
 
-    override fun speed(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity, driver: Player): Float {
+    override fun speed(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Float {
         //Increased max speed to exaggerate movement.
         //This likely just needs to be a static number if it really is just
         //the scalar for the velocity vector
@@ -69,7 +71,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun rotation(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: LivingEntity
     ): Vec2 {
@@ -78,7 +80,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun velocity(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         input: Vec3
@@ -107,7 +109,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun angRollVel(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         deltaTime: Double
@@ -162,7 +164,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun rotationOnMouseXY(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         mouseY: Double,
@@ -182,7 +184,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun canJump(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
@@ -191,7 +193,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun setRideBar(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
@@ -200,7 +202,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun jumpForce(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         jumpStrength: Int
@@ -210,7 +212,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun gravity(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         regularGravity: Double
     ): Double {
@@ -219,55 +221,55 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, NoState> {
 
     override fun rideFovMultiplier(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
         return 1.0f
     }
 
-    override fun useAngVelSmoothing(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun useAngVelSmoothing(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return true
     }
 
     override fun useRidingAltPose(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
         return false
     }
 
-    override fun inertia(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Double {
+    override fun inertia(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Double {
         return 0.1
     }
 
-    override fun shouldRoll(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRoll(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return true
     }
 
-    override fun turnOffOnGround(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun turnOffOnGround(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
-    override fun dismountOnShift(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun dismountOnShift(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
     override fun shouldRotatePokemonHead(
         settings: HelicopterSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity
     ): Boolean {
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: HelicopterSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotatePlayerHead(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
-    override fun createDefaultState() = NoState
+    override fun createDefaultState(settings: HelicopterSettings) = RidingBehaviourState()
 }
 
 
@@ -287,6 +289,7 @@ class HelicopterSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeExpression(gravity)
         buffer.writeExpression(horizontalAcceleration)
         buffer.writeExpression(verticalVelocity)

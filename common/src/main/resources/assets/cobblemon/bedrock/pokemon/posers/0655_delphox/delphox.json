@@ -32,7 +32,7 @@
       "quirks": ["q.bedrock_quirk('delphox', 'blink')"],
       "transformedParts": [
         {
-          "part": "stick_hand",
+          "part": "wand",
           "isVisible": false
         }
       ]

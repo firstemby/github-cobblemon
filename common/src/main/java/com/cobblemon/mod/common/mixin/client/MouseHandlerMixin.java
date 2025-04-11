@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MouseHandler.class)
-public class MouseHandlerMixin {
+public abstract class MouseHandlerMixin {
     @Shadow private double accumulatedScrollY;
     @Shadow @Final private Minecraft minecraft;
 
@@ -48,6 +49,12 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedDX;
 
     @Shadow private double accumulatedDY;
+
+    @Shadow private double lastHandleMovementTime;
+
+    @Shadow public abstract boolean isMouseGrabbed();
+
+    @Shadow protected abstract void turnPlayer(double movementTime);
 
     @Inject(
             method = "onScroll",
@@ -167,10 +174,11 @@ public class MouseHandlerMixin {
         if (!(minecraft.player instanceof OrientationControllable controllable)) return;
         if (!controllable.getOrientationController().isActive()) return;
         if (minecraft.isPaused()) return;
+        if (isMouseGrabbed()) return;
 
-        var pitch = pitchSmoother.getNewDeltaValue(0, e);
-        var roll = rollSmoother.getNewDeltaValue(0, e);
-        controllable.getOrientationController().rotate(0.0F, (float)pitch, (float)roll);
+        this.accumulatedDX = 0f;
+        this.accumulatedDY = 0f;
+        this.turnPlayer(e);
     }
 
     @Unique

@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
-import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -78,10 +78,17 @@ abstract class PosableEntityModel<T : Entity>(
         headPitch: Float
     ) {
         setupEntityTypeContext(entity)
-        if (entity is PosableEntity) {
+        if (entity is PosableEntity && !isPreAnimatedPokemon(entity)) {
             val state = entity.delegate as PosableState
             posableModel.applyAnimations(entity, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch)
         }
+    }
+
+    // TODO: This is a bit of a hack, but it works for now. We should find a better way to do this.
+    private fun isPreAnimatedPokemon(entity: T): Boolean {
+        if (entity !is PokemonEntity) return false
+        if (entity.passengers.isEmpty()) return false
+        return MountedPokemonAnimationRenderController.isPreAnimated(entity)
     }
 
     open fun setupEntityTypeContext(entity: Entity?) {

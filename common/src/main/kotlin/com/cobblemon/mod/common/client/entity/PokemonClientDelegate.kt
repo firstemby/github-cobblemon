@@ -43,8 +43,10 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 
 class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     companion object {
@@ -450,5 +452,31 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
             activeAnimations.add(animation)
         }
         cryAnimation = animation
+    }
+
+    override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
+        val index =
+            this.getEntity().passengers.indexOf(passenger).takeIf { it >= 0 && it < this.getEntity().seats.size }
+                ?: return
+        val seat = this.getEntity().seats[index]
+        val locator = this.locatorStates[seat.locator]
+
+        if (locator == null) return
+
+        val offset = locator.matrix.getTranslation(Vector3f())
+            .sub(
+                Vector3f(
+                    0f,
+                    passenger.eyeHeight - (passenger.bbHeight / 2),
+                    0f
+                )
+            ) // This is close but not exact
+
+        positionUpdater.accept(
+            passenger,
+            this.getEntity().x + offset.x,
+            this.getEntity().y + offset.y,
+            this.getEntity().z + offset.z
+        )
     }
 }
