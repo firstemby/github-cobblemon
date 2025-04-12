@@ -209,7 +209,7 @@ public abstract class CameraMixin {
             Seat seat = pokemon.getSeats().get(seatIndex);
             MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
             if (locator != null) {
-                var locatorRotation = locator.getMatrix().getNormalizedRotation(new Quaternionf());
+                var locatorRotation = locator.getMatrix().getUnnormalizedRotation(new Quaternionf());
                 newRotation.mul(locatorRotation);
             }
         }
