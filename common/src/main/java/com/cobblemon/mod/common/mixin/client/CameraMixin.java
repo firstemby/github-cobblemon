@@ -63,6 +63,10 @@ public abstract class CameraMixin {
     private BlockGetter level;
 
     @Shadow private float partialTickTime;
+
+    @Shadow public abstract void tick();
+
+    @Shadow private boolean detached;
     @Unique private float returnTimer = 0;
     @Unique private float rollAngleStart = 0;
     @Unique Minecraft minecraft = Minecraft.getInstance();
@@ -92,17 +96,31 @@ public abstract class CameraMixin {
                 this.returnTimer += .05F;
                 ci.cancel();
             } else {
+                cobblemon$applyRotation();
                 this.returnTimer = 1;
                 controller.reset();
             }
             return;
         }
-        if (controller.getOrientation() == null) return;
         cobblemon$applyRotation();
 
         this.returnTimer = 0;
-        this.rollAngleStart = controller.getRoll();
+        if (controller.getOrientation() != null) {
+            this.rollAngleStart = controller.getRoll();
+        }
+
+        if (!(entity.getVehicle() instanceof PokemonEntity)) return;
         ci.cancel();
+    }
+
+    @Inject(method = "setup", at = @At("HEAD"))
+    private void cobblemon$prepAnimation(BlockGetter level, Entity entity, boolean detached, boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
+        Entity vehicle = entity.getVehicle();
+        MountedPokemonAnimationRenderController.INSTANCE.reset();
+
+        if (vehicle instanceof PokemonEntity pokemon) {
+            MountedPokemonAnimationRenderController.INSTANCE.setup(pokemon, partialTick);
+        }
     }
 
     //If you want to move this to a delagate you need an AW for position
@@ -110,7 +128,6 @@ public abstract class CameraMixin {
     public void cobblemon$positionCamera(Camera instance, double x, double y, double z, Operation<Void> original, @Local(ordinal = 1, argsOnly = true) boolean thirdPersonReverse) {
         Entity entity = instance.getEntity();
         Entity vehicle = entity.getVehicle();
-        MountedPokemonAnimationRenderController.INSTANCE.reset();
 
         if(vehicle instanceof Rideable){
             //RidingCameraDelagate.INSTANCE.positionCamera(instance, x, y, z, original);
@@ -125,7 +142,6 @@ public abstract class CameraMixin {
                     Mth.lerp(instance.getPartialTickTime(), pokemon.yOld, pokemon.getY()),
                     Mth.lerp(instance.getPartialTickTime(), pokemon.zOld, pokemon.getZ())
             );
-            MountedPokemonAnimationRenderController.INSTANCE.setup(pokemon, partialTickTime);
             int seatIndex = pokemon.getPassengers().indexOf(entity);
             Seat seat = pokemon.getSeats().get(seatIndex);
 
@@ -186,18 +202,71 @@ public abstract class CameraMixin {
 
     @Unique
     private void cobblemon$applyRotation(){
-        if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
+        if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null || !controllable.getOrientationController().isActive()) {
+            Quaternionf newRotation = null;
+            var vehicle = entity.getVehicle();
+            if (vehicle instanceof PokemonEntity pokemon) {
+                var delegate = (PokemonClientDelegate) pokemon.getDelegate();
+                int seatIndex = pokemon.getPassengers().indexOf(entity);
+                Seat seat = pokemon.getSeats().get(seatIndex);
+                MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+                if (locator != null && !detached) {
+                    var scale = locator.getMatrix().getScale(new Vector3f());
+                    if (scale.length() > 0.1) {
+                        newRotation = locator.getMatrix().getUnnormalizedRotation(new Quaternionf()).normalize();
+                    }
+                }
+            }
+            if (newRotation != null) {
+                if (this.minecraft.options.getCameraType().isMirrored()) {
+                    newRotation.rotateY((float)Math.toRadians(180));
+                }
+
+                this.rotation.set(newRotation);
+
+                var forwardVector = newRotation.transform(OrientationController.Companion.getFORWARDS(), new Vector3f());
+                var upVector = newRotation.transform(OrientationController.Companion.getUP(), new Vector3f());
+                var leftVector = newRotation.transform(OrientationController.Companion.getLEFT(), new Vector3f());
+                this.xRot = (float)Mth.wrapDegrees(-Math.toDegrees(Math.asin(forwardVector.y)));
+                this.yRot = Mth.wrapDegrees((float)-Math.toDegrees(OrientationController.Companion.getFORWARDS().angleSigned(forwardVector, OrientationController.Companion.getUP())) + 180);
+                this.forwards.set(forwardVector);
+                this.up.set(upVector);
+                this.left.set(leftVector);
+            }
+            return;
+        }
+
         var controller = controllable.getOrientationController();
         var newRotation = controller.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
+
+        var vehicle = entity.getVehicle();
+        if (vehicle instanceof PokemonEntity pokemon) {
+            var delegate = (PokemonClientDelegate) pokemon.getDelegate();
+            int seatIndex = pokemon.getPassengers().indexOf(entity);
+            Seat seat = pokemon.getSeats().get(seatIndex);
+            MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+            if (locator != null && !detached) {
+                var scale = locator.getMatrix().getScale(new Vector3f());
+                if (scale.length() > 0.1) {
+                    newRotation = locator.getMatrix().getUnnormalizedRotation(new Quaternionf()).normalize();
+                }
+            }
+        }
+
         if (this.minecraft.options.getCameraType().isMirrored()) {
             newRotation.rotateY((float)Math.toRadians(180));
         }
+
         this.rotation.set(newRotation);
-        this.xRot = controller.getPitch();
-        this.yRot = controller.getYaw();
-        this.forwards.set(controller.getForwardVector());
-        this.up.set(controller.getUpVector());
-        this.left.set(controller.getLeftVector());
+
+        var forwardVector = newRotation.transform(OrientationController.Companion.getFORWARDS(), new Vector3f());
+        var upVector = newRotation.transform(OrientationController.Companion.getUP(), new Vector3f());
+        var leftVector = newRotation.transform(OrientationController.Companion.getLEFT(), new Vector3f());
+        this.xRot = (float)Mth.wrapDegrees(-Math.toDegrees(Math.asin(forwardVector.y)));
+        this.yRot = Mth.wrapDegrees((float)-Math.toDegrees(OrientationController.Companion.getFORWARDS().angleSigned(forwardVector, OrientationController.Companion.getUP())) + 180);
+        this.forwards.set(forwardVector);
+        this.up.set(upVector);
+        this.left.set(leftVector);
     }
 
     @WrapOperation(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;move(FFF)V", ordinal = 0))
