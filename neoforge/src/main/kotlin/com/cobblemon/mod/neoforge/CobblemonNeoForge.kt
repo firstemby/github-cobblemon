@@ -348,8 +348,8 @@ class CobblemonNeoForge : CobblemonImplementation {
 
     override fun registerVillagers() {
         MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(CobblemonVillagerPoiTypes.resourceKey) { helper ->
-                CobblemonVillagerPoiTypes.register { identifier, type -> helper.register(identifier, type) }
+            event.register(CobblemonPoiTypes.resourceKey) { helper ->
+                CobblemonPoiTypes.register { identifier, type -> helper.register(identifier, type) }
             }
         }
 
