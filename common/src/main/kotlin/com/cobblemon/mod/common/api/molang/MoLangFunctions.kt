@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.moves.animations.NPCProvider
 import com.cobblemon.mod.common.api.pokedex.*
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
+import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -1114,10 +1115,42 @@ object MoLangFunctions {
             map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
             map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
             map.put("catch_rate") { DoubleValue(species.catchRate) }
+            map.put("learnset") { species.moves.asMoLangValue() }
 
             map
         }
     )
+
+    val learnsetFunctions: MutableList<(Learnset) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
+        { learnset ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+
+            map.put("tutor_moves") { learnset.tutorMoves.map { it.struct }.asArrayValue() }
+            map.put("egg_moves") { learnset.eggMoves.map { it.struct }.asArrayValue() }
+            map.put("tm_moves") { learnset.tmMoves.map { it.struct }.asArrayValue() }
+            map.put("evolution_moves") { learnset.evolutionMoves.map { it.struct }.asArrayValue() }
+            map.put("form_change_moves") { learnset.formChangeMoves.map { it.struct }.asArrayValue() }
+
+            map.put("get_level_up_moves_to") { params ->
+                val level = params.getIntOrNull(0) ?: 0
+                learnset.getLevelUpMovesUpTo(level).map { it.struct }.asArrayValue()
+            }
+
+            map.put("level_up_moves") {
+                val struct = QueryStruct(hashMapOf())
+                for (level in learnset.levelUpMoves.keys) {
+                    struct.addFunction("$level") {
+                        learnset.levelUpMoves[level]?.map { it.struct }?.asArrayValue() ?: ArrayStruct()
+                    }
+                }
+                struct
+            }
+
+            map
+        }
+    )
+
+
 
     val pokemonPropertiesFunctions: MutableList<(PokemonProperties) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
         { props ->
@@ -1281,6 +1314,18 @@ object MoLangFunctions {
         value.addFunctions(livingEntityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(npcFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
+    }
+
+    fun Learnset.asMoLangValue(): ObjectValue<Learnset> {
+        val value = ObjectValue(
+            obj = this,
+            stringify = { it.toString() }
+        )
+
+        value.addFunctions(learnsetFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+
+        return value
+
     }
 
     fun PokemonEntity.asMoLangValue(): ObjectValue<PokemonEntity> {
