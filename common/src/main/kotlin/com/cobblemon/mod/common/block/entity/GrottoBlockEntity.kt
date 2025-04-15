@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.api.habitats.Habitats
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
@@ -30,6 +31,8 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
     var detectedStructure: ResourceLocation? = null
     var hasCheckedStructure: Boolean = false
+    var lastMoonPhaseChecked: Int = -1
+    var selectedPokemon: ResourceLocation? = null
 
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
     val mimickedState: BlockState
@@ -155,16 +158,43 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
     companion object {
         val TICKER = BlockEntityTicker<GrottoBlockEntity> { world, pos, state, blockEntity ->
-            if (world is ServerLevel && !blockEntity.hasCheckedStructure) {
-                blockEntity.hasCheckedStructure = true
+            if (world is ServerLevel) {
+                // Step 1: Check structure once
+                if (!blockEntity.hasCheckedStructure) {
+                    blockEntity.hasCheckedStructure = true
 
-                val structure = blockEntity.findNearbyStructure(world, pos, radius = 5)
-                if (structure != null) {
-                    blockEntity.detectedStructure = structure
-                    blockEntity.setChanged()
-                    world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+                    val structure = blockEntity.findNearbyStructure(world, pos, radius = 5)
+                    if (structure != null) {
+                        blockEntity.detectedStructure = structure
+                        blockEntity.setChanged()
+                        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
 
-                    println("[GrottoBlockEntity] Detected structure at $pos: $structure")
+                        println("[GrottoBlockEntity] Found structure at $pos: $structure")
+                    }
+                }
+
+                // Step 2: Full Moon-based spawn selection
+                val currentMoonPhase = world.moonPhase
+                if (currentMoonPhase != blockEntity.lastMoonPhaseChecked) {
+                    blockEntity.lastMoonPhaseChecked = currentMoonPhase
+
+                    if (currentMoonPhase == 7) { // Full moon
+                        val structure = blockEntity.detectedStructure
+                        if (structure != null) {
+                            val habitat = Habitats.getHabitat(structure)
+                            if (habitat != null && habitat.spawnPool.isNotEmpty()) {
+                                blockEntity.selectedPokemon = habitat.spawnPool.random()
+
+                                println("[GrottoBlockEntity] Structure: $structure")
+                                println("[GrottoBlockEntity] Spawn Pool:")
+                                habitat.spawnPool.forEach { println(" - $it") }
+
+                                println("[GrottoBlockEntity] Selected Spawn: ${blockEntity.selectedPokemon}")
+                                blockEntity.setChanged()
+                                world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+                            }
+                        }
+                    }
                 }
             }
         }
