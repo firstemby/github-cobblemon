@@ -24,6 +24,8 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.PlayerDialogueFaceProvider
 import com.cobblemon.mod.common.api.dialogue.ReferenceDialogueFaceProvider
 import com.cobblemon.mod.common.api.mark.Marks
+import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
@@ -31,6 +33,7 @@ import com.cobblemon.mod.common.api.pokedex.*
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
+import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -784,6 +787,25 @@ object MoLangFunctions {
                 struct
             }
             map.put("learnset") { pokemon.form.moves.asMoLangValue() }
+            map.put("can_learn") { params ->
+                val moveId = params.getString(0)
+                val move = Moves.getByName(moveId) ?: return@put DoubleValue.ZERO
+                val learnType = params.getStringOrNull(1) ?: return@put DoubleValue(
+                    LearnsetQuery.ANY.canLearn(move, pokemon.form.moves)
+                )
+
+                val query = when (learnType) {
+                    "tm" -> LearnsetQuery.TM_MOVE
+                    "egg" -> LearnsetQuery.EGG_MOVE
+                    "tutor" -> LearnsetQuery.TUTOR_MOVES
+                    "level" -> LearnsetQuery.ANY_LEVEL
+                    "form_change" -> LearnsetQuery.FORM_CHANGE
+                    "evolution" -> LearnsetQuery.EVOLUTION
+                    else -> LearnsetQuery.ANY
+                }
+
+                DoubleValue(query.canLearn(move, pokemon.form.moves))
+            }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("species") { pokemon.species.struct }
