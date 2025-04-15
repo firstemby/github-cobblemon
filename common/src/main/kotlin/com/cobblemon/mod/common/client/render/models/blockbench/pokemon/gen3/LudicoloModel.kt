@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
@@ -38,12 +39,14 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     lateinit var floating: Pose
     lateinit var swim: Pose
     lateinit var sleep: Pose
+    lateinit var dance: Pose
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("ludicolo", "blink") }
         standing = registerPose(
             poseName = "standing",
             poseTypes = PoseType.UI_POSES + PoseType.STAND,
+            condition = { !(it.getEntity() as PokemonEntity).dancing },
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
@@ -84,6 +87,18 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             transformTicks = 10,
             animations = arrayOf(
                 bedrock("ludicolo", "sleep"),
+            )
+        )
+
+        dance = registerPose(
+            poseName = "dance",
+            poseType = PoseType.STAND,
+            transformTicks = 10,
+            condition = { (it.getEntity() as PokemonEntity).dancing },
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("ludicolo", "dance"),
             )
         )
 

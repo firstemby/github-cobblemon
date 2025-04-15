@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvi
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
@@ -38,6 +39,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
     lateinit var walking: Pose
     lateinit var sleep: Pose
     lateinit var battleidle: Pose
+    lateinit var dancing: Pose
 
     override val cryAnimation = CryProvider { bedrockStateful("ambipom", "cry") }
 
@@ -51,7 +53,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
         standing = registerPose(
             poseName = "standing",
             poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
-            condition = { !it.isBattling },
+            condition = { !it.isBattling && !(it.getEntity() as PokemonEntity).dancing },
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
@@ -78,6 +80,17 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("ambipom", "ground_idle")
+            )
+        )
+
+        dancing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.STATIONARY_POSES,
+            condition = { !it.isBattling && (it.getEntity() as PokemonEntity).dancing },
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("ambipom", "dance")
             )
         )
     }

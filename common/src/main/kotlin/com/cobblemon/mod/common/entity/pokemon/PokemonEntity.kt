@@ -50,7 +50,6 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviours
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
-import com.cobblemon.mod.common.api.riding.util.Vec3Spring
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -141,6 +140,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
@@ -348,6 +348,9 @@ open class PokemonEntity(
             entityData.set(PLATFORM_TYPE, value)
         }
 
+    var jukebox: BlockPos? = null
+    var dancing: Boolean = false
+
     override val struct: ObjectValue<PokemonEntity> = ObjectValue(this).also {
         it.addStandardFunctions()
             .addEntityFunctions(this)
@@ -493,6 +496,10 @@ open class PokemonEntity(
 
         flyDistO = flyDist
 
+        if (this.level().isClientSide) {
+            println(this.dancing)
+        }
+
         if (isBattling) {
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
@@ -557,6 +564,20 @@ open class PokemonEntity(
 
         previousRidingState = ridingState?.copy()
         schedulingTracker.update(1 / 20F)
+    }
+
+    override fun aiStep() {
+        if (this.jukebox == null || !this.jukebox!!.closerToCenterThan(this.position(), 3.46) || !level().getBlockState(this.jukebox!!).`is`(Blocks.JUKEBOX)) {
+            this.dancing = false
+            this.jukebox = null
+        }
+        super.aiStep()
+    }
+
+    override fun setRecordPlayingNearby(jukebox: BlockPos, dancing: Boolean) {
+        this.dancing = dancing
+        this.jukebox = jukebox
+        super.setRecordPlayingNearby(jukebox, dancing)
     }
 
     fun setMoveControl(moveControl: MoveControl) {
