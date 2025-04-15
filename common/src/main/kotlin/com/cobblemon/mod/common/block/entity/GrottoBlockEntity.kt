@@ -47,8 +47,62 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
     }
 
+    // todo to test with checking how it looks as other blocks
     val mimicCycle: List<ResourceLocation> = listOf(
-            // [snipped for brevity - same list as before]
+            ResourceLocation.parse("minecraft:stone"),
+            ResourceLocation.parse("minecraft:cobblestone"),
+            ResourceLocation.parse("minecraft:granite"),
+            ResourceLocation.parse("minecraft:diorite"),
+            ResourceLocation.parse("minecraft:andesite"),
+            ResourceLocation.parse("minecraft:deepslate"),
+            ResourceLocation.parse("minecraft:polished_deepslate"),
+
+            ResourceLocation.parse("minecraft:oak_planks"),
+            ResourceLocation.parse("minecraft:spruce_planks"),
+            ResourceLocation.parse("minecraft:birch_planks"),
+            ResourceLocation.parse("minecraft:jungle_planks"),
+            ResourceLocation.parse("minecraft:acacia_planks"),
+            ResourceLocation.parse("minecraft:dark_oak_planks"),
+            ResourceLocation.parse("minecraft:mangrove_planks"),
+            ResourceLocation.parse("minecraft:cherry_planks"),
+            ResourceLocation.parse("minecraft:bamboo_planks"),
+
+            ResourceLocation.parse("minecraft:bricks"),
+            ResourceLocation.parse("minecraft:mossy_cobblestone"),
+            ResourceLocation.parse("minecraft:moss_block"),
+            ResourceLocation.parse("minecraft:bookshelf"),
+            ResourceLocation.parse("minecraft:loom"),
+            ResourceLocation.parse("minecraft:note_block"),
+
+            ResourceLocation.parse("minecraft:coal_block"),
+            ResourceLocation.parse("minecraft:iron_block"),
+            ResourceLocation.parse("minecraft:gold_block"),
+            ResourceLocation.parse("minecraft:diamond_block"),
+            ResourceLocation.parse("minecraft:emerald_block"),
+            ResourceLocation.parse("minecraft:lapis_block"),
+            ResourceLocation.parse("minecraft:redstone_block"),
+            ResourceLocation.parse("minecraft:netherite_block"),
+
+            ResourceLocation.parse("minecraft:obsidian"),
+            ResourceLocation.parse("minecraft:crying_obsidian"),
+            ResourceLocation.parse("minecraft:glowstone"),
+            ResourceLocation.parse("minecraft:blue_ice"),
+            ResourceLocation.parse("minecraft:packed_ice"),
+            ResourceLocation.parse("minecraft:ice"),
+
+            ResourceLocation.parse("minecraft:sandstone"),
+            ResourceLocation.parse("minecraft:red_sandstone"),
+            ResourceLocation.parse("minecraft:cut_sandstone"),
+            ResourceLocation.parse("minecraft:smooth_sandstone"),
+
+            ResourceLocation.parse("minecraft:black_concrete"),
+            ResourceLocation.parse("minecraft:white_concrete"),
+            ResourceLocation.parse("minecraft:lime_concrete"),
+            ResourceLocation.parse("minecraft:cyan_concrete"),
+            ResourceLocation.parse("minecraft:purple_concrete"),
+            ResourceLocation.parse("minecraft:light_blue_concrete"),
+            ResourceLocation.parse("minecraft:yellow_concrete"),
+            ResourceLocation.parse("minecraft:red_concrete")
     )
 
     var mimicIndex: Int = 0
