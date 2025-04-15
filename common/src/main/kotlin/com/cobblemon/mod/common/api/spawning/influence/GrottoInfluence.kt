@@ -17,12 +17,11 @@ class GrottoInfluence(val structureId: ResourceLocation) : SpawningInfluence {
         if (detail !is PokemonSpawnDetail) return weight
 
         val habitat = Habitats.getHabitat(structureId)
-        if (habitat != null) {
-            val detailId = ResourceLocation.tryParse(detail.pokemon.species!!) ?: return weight
-            if (habitat.spawnPool.contains(detailId)) {
-                LOGGER.info("[GrottoInfluence] Boosting spawn weight for ${detailId} (from structure: $structureId)")
-                return weight * 10f
-            }
+        val detailId = ResourceLocation.tryParse(detail.pokemon.species!!) ?: return weight
+
+        if (habitat?.spawnPool?.any { it.contains(detailId) } == true) {
+            LOGGER.info("[GrottoInfluence] Boosting spawn weight for $detailId (from structure: $structureId)")
+            return weight * 10f
         }
 
         return weight

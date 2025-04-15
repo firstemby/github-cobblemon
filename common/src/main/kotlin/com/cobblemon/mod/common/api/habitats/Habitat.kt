@@ -8,14 +8,14 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 
 data class Habitat(
-        val structure: ResourceLocation,
-        val spawnPool: List<ResourceLocation>
+    val structure: ResourceLocation,
+    val spawnPool: List<List<ResourceLocation>>
 ) {
     companion object {
         val CODEC: Codec<Habitat> = RecordCodecBuilder.create { instance ->
             instance.group(
-                    ResourceLocation.CODEC.fieldOf("structure").forGetter { it.structure },
-                    ResourceLocation.CODEC.listOf().fieldOf("spawnPool").forGetter { it.spawnPool }
+                ResourceLocation.CODEC.fieldOf("structure").forGetter { it.structure },
+                ResourceLocation.CODEC.listOf().listOf().fieldOf("spawnPool").forGetter { it.spawnPool }
             ).apply(instance, ::Habitat)
         }
 

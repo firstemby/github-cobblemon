@@ -1,8 +1,25 @@
 {
   "structure": "cobblemon:dead_tree",
   "spawnPool": [
-    "cobblemon:spinarak",
-    "cobblemon:pikachu",
-    "cobblemon:charmander"
+    ["cobblemon:spinarak", "cobblemon:ariados"],
+    ["cobblemon:pikachu", "cobblemon:pichu"],
+    ["cobblemon:charmander", "cobblemon:charmeleon", "cobblemon:charizard"],
+    ["cobblemon:gastly", "cobblemon:haunter", "cobblemon:gengar"],
+    ["cobblemon:shuppet", "cobblemon:banette"],
+    ["cobblemon:murkrow", "cobblemon:honchkrow"],
+    ["cobblemon:phantump", "cobblemon:trevenant"],
+    ["cobblemon:litwick", "cobblemon:lampent", "cobblemon:chandelure"],
+    ["cobblemon:zubat", "cobblemon:golbat", "cobblemon:crobat"],
+    ["cobblemon:stunky", "cobblemon:skuntank"],
+    ["cobblemon:mimikyu"],
+    ["cobblemon:yamask", "cobblemon:cofagrigus"],
+    ["cobblemon:drifloon", "cobblemon:drifblim"],
+    ["cobblemon:sableye"],
+    ["cobblemon:cubone", "cobblemon:marowak"],
+    ["cobblemon:duskull", "cobblemon:dusclops", "cobblemon:dusknoir"],
+    ["cobblemon:shroomish", "cobblemon:breloom"],
+    ["cobblemon:deino", "cobblemon:zweilous", "cobblemon:hydreigon"],
+    ["cobblemon:snorunt", "cobblemon:glalie", "cobblemon:froslass"],
+    ["cobblemon:misdreavus", "cobblemon:mismagius"]
   ]
 }

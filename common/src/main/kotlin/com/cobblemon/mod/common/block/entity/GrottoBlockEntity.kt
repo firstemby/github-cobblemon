@@ -32,7 +32,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     var detectedStructure: ResourceLocation? = null
     var hasCheckedStructure: Boolean = false
     var lastMoonPhaseChecked: Int = -1
-    var selectedPokemon: ResourceLocation? = null
+    var currentSpawnGroup: List<ResourceLocation> = emptyList()
 
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
     val mimickedState: BlockState
@@ -122,6 +122,12 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         tag.putString("MimicId", mimicId.toString())
         detectedStructure?.let { tag.putString("DetectedStructure", it.toString()) }
         tag.putBoolean("HasCheckedStructure", hasCheckedStructure)
+
+        val spawnGroupTag = CompoundTag()
+        currentSpawnGroup.forEachIndexed { index, rl ->
+            spawnGroupTag.putString(index.toString(), rl.toString())
+        }
+        tag.put("CurrentSpawnGroup", spawnGroupTag)
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -131,7 +137,13 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         }
         hasCheckedStructure = tag.getBoolean("HasCheckedStructure")
         detectedStructure = tag.getString("DetectedStructure").takeIf { it.isNotEmpty() }?.let(ResourceLocation::tryParse)
-    }
+
+        val groupTag = tag.getCompound("CurrentSpawnGroup")
+        val groupEntries = groupTag.allKeys
+            .sortedBy { it.toIntOrNull() }
+            .mapNotNull { ResourceLocation.tryParse(groupTag.getString(it)) }
+
+        currentSpawnGroup = groupEntries    }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
         return ClientboundBlockEntityDataPacket.create(this)
@@ -159,7 +171,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     companion object {
         val TICKER = BlockEntityTicker<GrottoBlockEntity> { world, pos, state, blockEntity ->
             if (world is ServerLevel) {
-                // Step 1: Check structure once
+                // Check structure to see if we need to save the habitat it's at
                 if (!blockEntity.hasCheckedStructure) {
                     blockEntity.hasCheckedStructure = true
 
@@ -173,7 +185,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
                     }
                 }
 
-                // Step 2: Full Moon-based spawn selection
+                // Full Moon-based spawn selection
                 val currentMoonPhase = world.moonPhase
                 if (currentMoonPhase != blockEntity.lastMoonPhaseChecked) {
                     blockEntity.lastMoonPhaseChecked = currentMoonPhase
@@ -181,17 +193,20 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
                     if (currentMoonPhase == 7) { // Full moon
                         val structure = blockEntity.detectedStructure
                         if (structure != null) {
+                            blockEntity.detectedStructure = structure
+                            blockEntity.setChanged()
+                            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+
+                            println("[GrottoBlockEntity] Detected structure at $pos: $structure")
+
                             val habitat = Habitats.getHabitat(structure)
                             if (habitat != null && habitat.spawnPool.isNotEmpty()) {
-                                blockEntity.selectedPokemon = habitat.spawnPool.random()
-
-                                println("[GrottoBlockEntity] Structure: $structure")
-                                println("[GrottoBlockEntity] Spawn Pool:")
-                                habitat.spawnPool.forEach { println(" - $it") }
-
-                                println("[GrottoBlockEntity] Selected Spawn: ${blockEntity.selectedPokemon}")
+                                val selectedGroup = habitat.spawnPool.random()
+                                blockEntity.currentSpawnGroup = selectedGroup
+                                blockEntity.lastMoonPhaseChecked = world.moonPhase
                                 blockEntity.setChanged()
-                                world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+
+                                println("[GrottoBlockEntity] Selected spawn group for $structure: $selectedGroup")
                             }
                         }
                     }
