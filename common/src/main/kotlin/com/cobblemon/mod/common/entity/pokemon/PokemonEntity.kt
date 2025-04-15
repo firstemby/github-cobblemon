@@ -496,10 +496,6 @@ open class PokemonEntity(
 
         flyDistO = flyDist
 
-        if (this.level().isClientSide) {
-            println(this.dancing)
-        }
-
         if (isBattling) {
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
