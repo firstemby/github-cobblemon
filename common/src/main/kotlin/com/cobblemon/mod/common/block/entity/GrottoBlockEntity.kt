@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -14,14 +15,21 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.levelgen.structure.StructureStart
 import net.minecraft.world.phys.BlockHitResult
 
 class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         BlockEntity(CobblemonBlockEntities.GROTTO_BLOCK, pos, state) {
+
+    var detectedStructure: ResourceLocation? = null
+    var hasCheckedStructure: Boolean = false
 
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
     val mimickedState: BlockState
@@ -109,6 +117,8 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.putString("MimicId", mimicId.toString())
+        detectedStructure?.let { tag.putString("DetectedStructure", it.toString()) }
+        tag.putBoolean("HasCheckedStructure", hasCheckedStructure)
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -116,6 +126,8 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         tag.getString("MimicId").let {
             mimicId = ResourceLocation.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
         }
+        hasCheckedStructure = tag.getBoolean("HasCheckedStructure")
+        detectedStructure = tag.getString("DetectedStructure").takeIf { it.isNotEmpty() }?.let(ResourceLocation::tryParse)
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
@@ -124,5 +136,37 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
         return saveWithoutMetadata(registryLookup)
+    }
+
+    fun findNearbyStructure(level: ServerLevel, pos: BlockPos, radius: Int): ResourceLocation? {
+        val structureManager = level.structureManager()
+        val registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE)
+
+        for (entry in registry.entrySet()) {
+            val structure = entry.value
+            val structureStart = structureManager.getStructureWithPieceAt(pos, structure)
+            if (structureStart != StructureStart.INVALID_START && structureStart.boundingBox.isInside(pos)) {
+                return entry.key.location()
+            }
+        }
+
+        return null
+    }
+
+    companion object {
+        val TICKER = BlockEntityTicker<GrottoBlockEntity> { world, pos, state, blockEntity ->
+            if (world is ServerLevel && !blockEntity.hasCheckedStructure) {
+                blockEntity.hasCheckedStructure = true
+
+                val structure = blockEntity.findNearbyStructure(world, pos, radius = 5)
+                if (structure != null) {
+                    blockEntity.detectedStructure = structure
+                    blockEntity.setChanged()
+                    world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+
+                    println("[GrottoBlockEntity] Detected structure at $pos: $structure")
+                }
+            }
+        }
     }
 }
