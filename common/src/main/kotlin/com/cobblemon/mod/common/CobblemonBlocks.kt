@@ -518,7 +518,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val GROTTO_BLOCK = this.create("grotto_block", GrottoBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.STONE)
             .strength(1.5F)
-            .noOcclusion()
             .pushReaction(PushReaction.BLOCK)
     ))
 

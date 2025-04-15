@@ -58,8 +58,16 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
             pos: BlockPos,
             context: CollisionContext
     ): VoxelShape {
-        val be = level.getBlockEntity(pos) as? GrottoBlockEntity ?: return Shapes.block()
-        return be.mimickedState.getCollisionShape(level, pos, context)
+        return box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+    }
+
+    override fun getVisualShape(
+        state: BlockState,
+        world: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape {
+        return box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     }
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean = true

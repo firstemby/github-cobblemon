@@ -3,6 +3,5 @@
   "textures": {
     "all": "minecraft:block/barrier"
   },
-  "ambientocclusion": false,
-  "elements": []
+  "ambientocclusion": true
 }
