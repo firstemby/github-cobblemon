@@ -39,7 +39,7 @@ object GrottoBlockProspector : SpawningInfluenceProspector {
         val searchRange = RANGE + ceil(sqrt(((area.length pow 2) + (area.width pow 2)).toDouble())).toInt()
         val grottoBlockPositions = world.poiManager.findAll({ holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.GROTTO_BLOCK_KEY) },{ true },area.getCenter().toBlockPos(),searchRange, PoiManager.Occupancy.ANY).toList()
 
-]        for (grottoBlockPos in grottoBlockPositions) {
+        for (grottoBlockPos in grottoBlockPositions) {
             val blockState = world.getBlockState(grottoBlockPos)
             if (blockState.block !is GrottoBlock) continue
 
