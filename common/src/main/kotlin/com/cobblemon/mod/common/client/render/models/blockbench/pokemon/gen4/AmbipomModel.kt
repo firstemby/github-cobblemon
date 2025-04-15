@@ -84,7 +84,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
         )
 
         dancing = registerPose(
-            poseName = "standing",
+            poseName = "dancing",
             poseTypes = PoseType.STATIONARY_POSES,
             condition = { !it.isBattling && (it.getEntity() as PokemonEntity).dancing },
             quirks = arrayOf(blink),
