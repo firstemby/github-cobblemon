@@ -26,7 +26,8 @@ interface SpawningInfluenceProspector {
     companion object {
         @JvmStatic
         val prospectors = mutableSetOf<SpawningInfluenceProspector>(
-            GrottoBlockProspector
+            // todo commenting out the GrottoBlockProspector since I don't know if we want to use it at all anyways
+            //GrottoBlockProspector
         )
     }
 

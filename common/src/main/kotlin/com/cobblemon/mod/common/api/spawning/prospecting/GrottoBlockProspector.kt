@@ -32,7 +32,13 @@ object GrottoBlockProspector : SpawningInfluenceProspector {
     @JvmField
     val RANGE: Int = 48
 
+    // todo going with this prospect method for now since the GrottoSpawner might be what I want instead of handling it here
     override fun prospect(spawner: Spawner, area: SpawningArea): MutableList<WorldSlicedSpawningInfluence> {
+        return mutableListOf() // GrottoSpawner handles spawning directly now
+    }
+
+    // todo this was some test code of a prospect function that would try to alter the already filtered spawn lists, but I doubt we want to go this direction
+    /*override fun prospect(spawner: Spawner, area: SpawningArea): MutableList<WorldSlicedSpawningInfluence> {
         val world = area.world
         val listOfInfluences = mutableListOf<WorldSlicedSpawningInfluence>()
 
@@ -68,11 +74,20 @@ object GrottoBlockProspector : SpawningInfluenceProspector {
                 }
             }
 
-            listOfInfluences.add(WorldSlicedSpatialSpawningInfluence(grottoBlockPos, RANGE.toFloat(), influence = GrottoInfluence(structureId)))
+            val allowedSpawns = blockEntity.currentSpawnGroup
+            if (allowedSpawns.isNotEmpty()) {
+                listOfInfluences.add(
+                        WorldSlicedSpatialSpawningInfluence(
+                                grottoBlockPos,
+                                RANGE.toFloat(),
+                                influence = GrottoInfluence(structureId, allowedSpawns)
+                        )
+                )
+            }
         }
 
         return listOfInfluences
-    }
+    }*/
 
     override fun prospectBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): WorldSlicedSpatialSpawningInfluence? { return null }
 }

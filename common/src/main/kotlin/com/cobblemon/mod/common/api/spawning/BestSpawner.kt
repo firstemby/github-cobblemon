@@ -25,10 +25,7 @@ import com.cobblemon.mod.common.api.spawning.context.calculators.SeafloorSpawnin
 import com.cobblemon.mod.common.api.spawning.context.calculators.SpawningContextCalculator
 import com.cobblemon.mod.common.api.spawning.context.calculators.SubmergedSpawningContextCalculator
 import com.cobblemon.mod.common.api.spawning.context.calculators.SurfaceSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.detail.NPCSpawnDetail
-import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
-import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.detail.*
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
 import com.cobblemon.mod.common.api.spawning.fishing.NestSpawner
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
@@ -37,12 +34,7 @@ import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
-import com.cobblemon.mod.common.api.spawning.spawner.AreaSpawner
-import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
-import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
-import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
-import com.cobblemon.mod.common.api.spawning.spawner.Spawner
-import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.*
 import com.cobblemon.mod.common.entity.pokemon.CobblemonAgingDespawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.MinecraftServer
@@ -136,5 +128,12 @@ object BestSpawner {
         CobblemonSpawnPools.onServerLoad(server)
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
+
+        val grottoSpawner = GrottoSpawner(
+                name = "grotto",
+                fallbackSpawns = SpawnPool("grotto_empty"),
+                manager = CobblemonWorldSpawnerManager
+        )
+        CobblemonWorldSpawnerManager.registerSpawner(grottoSpawner)
     }
 }
