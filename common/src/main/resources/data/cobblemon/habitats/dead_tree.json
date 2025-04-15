@@ -1,26 +1,125 @@
 {
   "structure": "cobblemon:dead_tree",
   "spawnPool": [
-    ["cobblemon:murkrow", "cobblemon:honchkrow"],
-    ["cobblemon:phantump", "cobblemon:trevenant"],
-    ["cobblemon:vullaby", "cobblemon:mandibuzz"],
-    ["cobblemon:tarountula", "cobblemon:spidops"],
-
-    ["cobblemon:shroomish", "cobblemon:breloom"],
-    ["cobblemon:paras", "cobblemon:parasect"],
-    ["cobblemon:foongus", "cobblemon:amoonguss"],
-    ["cobblemon:pinsir"],
-    ["cobblemon:venipede", "cobblemon:whirlipede", "cobblemon:scolipede"],
-
-    ["cobblemon:elekid", "cobblemon:electabuzz", "cobblemon:electivire"],
-    ["cobblemon:dedenne"],
-    ["cobblemon:voltorb_hisui", "cobblemon:electrode_hisui"],
-    ["cobblemon:joltik", "cobblemon:galvantula"],
-    ["cobblemon:charjabug", "cobblemon:vikavolt"],
-
-    ["cobblemon:sudowoodo"],
-
-    ["cobblemon:rowlet", "cobblemon:dartrix", "cobblemon:decidueye_hisui"],
-    ["cobblemon:turtwig", "cobblemon:grotle", "cobblemon:torterra"]
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:murkrow", "weight": 1 },
+        { "species": "cobblemon:honchkrow", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:phantump", "weight": 1 },
+        { "species": "cobblemon:trevenant", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:vullaby", "weight": 1 },
+        { "species": "cobblemon:mandibuzz", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:tarountula", "weight": 1 },
+        { "species": "cobblemon:spidops", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:shroomish", "weight": 1 },
+        { "species": "cobblemon:breloom", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:paras", "weight": 1 },
+        { "species": "cobblemon:parasect", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:foongus", "weight": 1 },
+        { "species": "cobblemon:amoonguss", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:pinsir", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:venipede", "weight": 1 },
+        { "species": "cobblemon:whirlipede", "weight": 1 },
+        { "species": "cobblemon:scolipede", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:elekid", "weight": 1 },
+        { "species": "cobblemon:electabuzz", "weight": 1 },
+        { "species": "cobblemon:electivire", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:dedenne", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:voltorb_hisui", "weight": 1 },
+        { "species": "cobblemon:electrode_hisui", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:joltik", "weight": 1 },
+        { "species": "cobblemon:galvantula", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:charjabug", "weight": 1 },
+        { "species": "cobblemon:vikavolt", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 1,
+      "spawns": [
+        { "species": "cobblemon:sudowoodo", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 10,
+      "spawns": [
+        { "species": "cobblemon:rowlet", "weight": 5 },
+        { "species": "cobblemon:dartrix", "weight": 2 },
+        { "species": "cobblemon:decidueye_hisui", "weight": 1 }
+      ]
+    },
+    {
+      "weight": 5,
+      "spawns": [
+        { "species": "cobblemon:turtwig", "weight": 5 },
+        { "species": "cobblemon:grotle", "weight": 2 },
+        { "species": "cobblemon:torterra", "weight": 1 }
+      ]
+    }
   ]
 }

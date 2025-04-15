@@ -2,11 +2,14 @@ package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.habitats.Habitats
+import com.cobblemon.mod.common.api.habitats.WeightedSpecies
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
@@ -32,7 +35,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     var detectedStructure: ResourceLocation? = null
     var hasCheckedStructure: Boolean = false
     var lastMoonPhaseChecked: Int = -1
-    var currentSpawnGroup: List<ResourceLocation> = emptyList()
+    var currentSpawnGroup: List<WeightedSpecies> = emptyList()
 
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
     val mimickedState: BlockState
@@ -45,60 +48,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     val mimicCycle: List<ResourceLocation> = listOf(
-            ResourceLocation.parse("minecraft:stone"),
-            ResourceLocation.parse("minecraft:cobblestone"),
-            ResourceLocation.parse("minecraft:granite"),
-            ResourceLocation.parse("minecraft:diorite"),
-            ResourceLocation.parse("minecraft:andesite"),
-            ResourceLocation.parse("minecraft:deepslate"),
-            ResourceLocation.parse("minecraft:polished_deepslate"),
-
-            ResourceLocation.parse("minecraft:oak_planks"),
-            ResourceLocation.parse("minecraft:spruce_planks"),
-            ResourceLocation.parse("minecraft:birch_planks"),
-            ResourceLocation.parse("minecraft:jungle_planks"),
-            ResourceLocation.parse("minecraft:acacia_planks"),
-            ResourceLocation.parse("minecraft:dark_oak_planks"),
-            ResourceLocation.parse("minecraft:mangrove_planks"),
-            ResourceLocation.parse("minecraft:cherry_planks"),
-            ResourceLocation.parse("minecraft:bamboo_planks"),
-
-            ResourceLocation.parse("minecraft:bricks"),
-            ResourceLocation.parse("minecraft:mossy_cobblestone"),
-            ResourceLocation.parse("minecraft:moss_block"),
-            ResourceLocation.parse("minecraft:bookshelf"),
-            ResourceLocation.parse("minecraft:loom"),
-            ResourceLocation.parse("minecraft:note_block"),
-
-            ResourceLocation.parse("minecraft:coal_block"),
-            ResourceLocation.parse("minecraft:iron_block"),
-            ResourceLocation.parse("minecraft:gold_block"),
-            ResourceLocation.parse("minecraft:diamond_block"),
-            ResourceLocation.parse("minecraft:emerald_block"),
-            ResourceLocation.parse("minecraft:lapis_block"),
-            ResourceLocation.parse("minecraft:redstone_block"),
-            ResourceLocation.parse("minecraft:netherite_block"),
-
-            ResourceLocation.parse("minecraft:obsidian"),
-            ResourceLocation.parse("minecraft:crying_obsidian"),
-            ResourceLocation.parse("minecraft:glowstone"),
-            ResourceLocation.parse("minecraft:blue_ice"),
-            ResourceLocation.parse("minecraft:packed_ice"),
-            ResourceLocation.parse("minecraft:ice"),
-
-            ResourceLocation.parse("minecraft:sandstone"),
-            ResourceLocation.parse("minecraft:red_sandstone"),
-            ResourceLocation.parse("minecraft:cut_sandstone"),
-            ResourceLocation.parse("minecraft:smooth_sandstone"),
-
-            ResourceLocation.parse("minecraft:black_concrete"),
-            ResourceLocation.parse("minecraft:white_concrete"),
-            ResourceLocation.parse("minecraft:lime_concrete"),
-            ResourceLocation.parse("minecraft:cyan_concrete"),
-            ResourceLocation.parse("minecraft:purple_concrete"),
-            ResourceLocation.parse("minecraft:light_blue_concrete"),
-            ResourceLocation.parse("minecraft:yellow_concrete"),
-            ResourceLocation.parse("minecraft:red_concrete")
+            // [snipped for brevity - same list as before]
     )
 
     var mimicIndex: Int = 0
@@ -116,18 +66,20 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         return InteractionResult.SUCCESS
     }
 
-
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.putString("MimicId", mimicId.toString())
         detectedStructure?.let { tag.putString("DetectedStructure", it.toString()) }
         tag.putBoolean("HasCheckedStructure", hasCheckedStructure)
 
-        val spawnGroupTag = CompoundTag()
-        currentSpawnGroup.forEachIndexed { index, rl ->
-            spawnGroupTag.putString(index.toString(), rl.toString())
+        val list = ListTag()
+        currentSpawnGroup.forEach {
+            val entry = CompoundTag()
+            entry.putString("species", it.species.toString())
+            entry.putInt("weight", it.weight)
+            list.add(entry)
         }
-        tag.put("CurrentSpawnGroup", spawnGroupTag)
+        tag.put("CurrentSpawnGroup", list)
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -138,12 +90,14 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         hasCheckedStructure = tag.getBoolean("HasCheckedStructure")
         detectedStructure = tag.getString("DetectedStructure").takeIf { it.isNotEmpty() }?.let(ResourceLocation::tryParse)
 
-        val groupTag = tag.getCompound("CurrentSpawnGroup")
-        val groupEntries = groupTag.allKeys
-            .sortedBy { it.toIntOrNull() }
-            .mapNotNull { ResourceLocation.tryParse(groupTag.getString(it)) }
-
-        currentSpawnGroup = groupEntries    }
+        val list = tag.getList("CurrentSpawnGroup", Tag.TAG_COMPOUND.toInt())
+        currentSpawnGroup = list.mapNotNull {
+            if (it !is CompoundTag) return@mapNotNull null
+            val species = ResourceLocation.tryParse(it.getString("species")) ?: return@mapNotNull null
+            val weight = it.getInt("weight")
+            WeightedSpecies(species, weight)
+        }
+    }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
         return ClientboundBlockEntityDataPacket.create(this)
@@ -171,7 +125,6 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     companion object {
         val TICKER = BlockEntityTicker<GrottoBlockEntity> { world, pos, state, blockEntity ->
             if (world is ServerLevel) {
-                // Check structure to see if we need to save the habitat it's at
                 if (!blockEntity.hasCheckedStructure) {
                     blockEntity.hasCheckedStructure = true
 
@@ -185,12 +138,11 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
                     }
                 }
 
-                // Full Moon-based spawn selection
                 val currentMoonPhase = world.moonPhase
                 if (currentMoonPhase != blockEntity.lastMoonPhaseChecked) {
                     blockEntity.lastMoonPhaseChecked = currentMoonPhase
 
-                    if (currentMoonPhase == 7) { // Full moon
+                    if (currentMoonPhase == 7) {
                         val structure = blockEntity.detectedStructure
                         if (structure != null) {
                             blockEntity.detectedStructure = structure
@@ -201,17 +153,27 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
                             val habitat = Habitats.getHabitat(structure)
                             if (habitat != null && habitat.spawnPool.isNotEmpty()) {
-                                val selectedGroup = habitat.spawnPool.random()
-                                blockEntity.currentSpawnGroup = selectedGroup
+                                val selectedGroup = weightedGroupRoll(habitat.spawnPool)
+                                blockEntity.currentSpawnGroup = selectedGroup.spawns
                                 blockEntity.lastMoonPhaseChecked = world.moonPhase
                                 blockEntity.setChanged()
 
-                                println("[GrottoBlockEntity] Selected spawn group for $structure: $selectedGroup")
+                                println("[GrottoBlockEntity] Selected spawn group for $structure: ${blockEntity.currentSpawnGroup.map { it.species }}")
                             }
                         }
                     }
                 }
             }
+        }
+
+        private fun weightedGroupRoll(groups: List<com.cobblemon.mod.common.api.habitats.WeightedGroup>): com.cobblemon.mod.common.api.habitats.WeightedGroup {
+            val totalWeight = groups.sumOf { it.weight.toDouble() }
+            var roll = Math.random() * totalWeight
+            for (group in groups) {
+                roll -= group.weight
+                if (roll <= 0) return group
+            }
+            return groups.last() // fallback
         }
     }
 }

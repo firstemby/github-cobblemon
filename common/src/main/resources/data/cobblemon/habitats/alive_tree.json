@@ -1,8 +1,0 @@
-{
-  "structure": "cobblemon:alive_tree",
-  "spawnPool": [
-    ["cobblemon:bulbasaur", "cobblemon:ivysaur", "cobblemon:venusaur"],
-    ["cobblemon:oddish", "cobblemon:gloom", "cobblemon:vileplume"],
-    ["cobblemon:bellossom"]
-  ]
-}

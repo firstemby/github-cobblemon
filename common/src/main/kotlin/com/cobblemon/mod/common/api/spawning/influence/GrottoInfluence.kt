@@ -12,7 +12,7 @@ class GrottoInfluence(
         private val allowedSpawns: List<ResourceLocation>? = null // null = allow all from habitat
 ) : SpawningInfluence {
 
-    companion object {
+    /*companion object {
         private val LOGGER = LoggerFactory.getLogger("GrottoInfluence")
     }
 
@@ -40,5 +40,5 @@ class GrottoInfluence(
         } else {
             weight
         }
-    }
+    }*/
 }
