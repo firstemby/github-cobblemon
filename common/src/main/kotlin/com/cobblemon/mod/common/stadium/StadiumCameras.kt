@@ -19,7 +19,7 @@ object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(StadiumCameraEntry.CameraKeyFrame::class.java, StadiumCameraEntry.CameraKeyFrameAdapter)
+        .registerTypeAdapter(StadiumCameraEntry::class.java, StadiumCameraEntry.CameraEntryAdapter)
         .create()
 
     override val typeToken: TypeToken<StadiumCameraEntry> = TypeToken.get(StadiumCameraEntry::class.java)
@@ -40,5 +40,9 @@ object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
 
     override fun sync(player: ServerPlayer) {
         StadiumCamerasSyncPacket(cameras.values).sendToPlayer(player)
+    }
+
+    fun getMoveCamera(move: String): StadiumCameraEntry? {
+        return cameras.values.firstOrNull { it.move == move }
     }
 }

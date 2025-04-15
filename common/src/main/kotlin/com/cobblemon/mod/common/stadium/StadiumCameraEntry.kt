@@ -1,11 +1,13 @@
 package com.cobblemon.mod.common.stadium
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.util.*
 import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -20,7 +22,8 @@ class StadiumCameraEntry(
     var id: ResourceLocation,
     val length: Double = 0.0,
     val positionTimeline: MutableMap<String, CameraKeyFrame> = mutableMapOf(),
-    val targetPositionTimeline: MutableMap<String, CameraKeyFrame> = mutableMapOf()
+    val targetPositionTimeline: MutableMap<String, CameraKeyFrame> = mutableMapOf(),
+    val move: String = ""
 ) {
     fun resolvePosition(time: Double): Vec3 {
         return resolvePosition(time, positionTimeline)
@@ -28,6 +31,7 @@ class StadiumCameraEntry(
 
     private fun resolvePosition(time: Double, map: MutableMap<String, CameraKeyFrame>): Vec3 {
         val runtime = StadiumClientManager.runtime
+        runtime.environment.setSimpleVariable("anim_time", DoubleValue(time))
         var frame1: CameraKeyFrame? = null
         var frame2: CameraKeyFrame? = null
         var time1 = -1.0
@@ -105,6 +109,7 @@ class StadiumCameraEntry(
             buf.writeString(value.z.getString())
             buf.writeEnum(value.interpolation)
         })
+        buf.writeString(move)
     }
 
     companion object {
@@ -117,8 +122,9 @@ class StadiumCameraEntry(
             val targetPositionTimeline = buf.readMap({_ -> buf.readString()}, {_ ->
                 CameraKeyFrame(buf.readString().asExpression(), buf.readString().asExpression(), buf.readString().asExpression(), buf.readEnum(CameraInterpolation::class.java))
             }).toMutableMap()
+            val move = buf.readString()
 
-            return StadiumCameraEntry(id, length, positionTimeline, targetPositionTimeline)
+            return StadiumCameraEntry(id, length, positionTimeline, targetPositionTimeline, move)
         }
     }
 
@@ -134,26 +140,53 @@ class StadiumCameraEntry(
         STEP
     }
 
-    object CameraKeyFrameAdapter: JsonDeserializer<CameraKeyFrame> {
+    object CameraEntryAdapter: JsonDeserializer<StadiumCameraEntry> {
         override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,
             context: JsonDeserializationContext?
-        ): CameraKeyFrame {
-            if (json is JsonArray) {
-                if (json.count() >= 3) {
-                    var interpolation = CameraInterpolation.LINEAR
-                    if (json.count() >= 4) {
-                        interpolation = when(json[4].asString) {
-                            "linear" -> CameraInterpolation.LINEAR
-                            "step" -> CameraInterpolation.STEP
-                            else -> CameraInterpolation.LINEAR
-                        }
+        ): StadiumCameraEntry {
+            if (json is JsonObject) {
+                val length = json["length"]?.asDouble ?: 0.0
+                val positionTimeline = mutableMapOf<String, CameraKeyFrame>()
+                json["positions"]?.asJsonObject?.entrySet()?.forEach { (name, position) ->
+                    val xyz = position.asJsonObject["xyz"]
+                    var x = "0.0".asExpression()
+                    var y = "0.0".asExpression()
+                    var z = "0.0".asExpression()
+                    if (xyz != null && xyz.isJsonArray && xyz.asJsonArray.size() == 3) {
+                        x = xyz.asJsonArray[0].asString.asExpression()
+                        y = xyz.asJsonArray[1].asString.asExpression()
+                        z = xyz.asJsonArray[2].asString.asExpression()
                     }
-                    return CameraKeyFrame(json[0].asString.asExpression(), json[1].asString.asExpression(), json[2].asString.asExpression(), interpolation)
+                    val interpolation = when (position.asJsonObject["interpolation"]?.asString) {
+                        "linear" -> CameraInterpolation.LINEAR
+                        "step" -> CameraInterpolation.STEP
+                        else -> CameraInterpolation.LINEAR
+                    }
+                    positionTimeline[name] = CameraKeyFrame(x, y, z, interpolation)
                 }
+                val targetPositionTimeline = mutableMapOf<String, CameraKeyFrame>()
+                json["targetPositions"]?.asJsonObject?.entrySet()?.forEach { (name, position) ->
+                    val xyz = position.asJsonObject["xyz"]
+                    var x = "0.0".asExpression()
+                    var y = "0.0".asExpression()
+                    var z = "0.0".asExpression()
+                    if (xyz != null && xyz.isJsonArray && xyz.asJsonArray.size() == 3) {
+                        x = xyz.asJsonArray[0].asString.asExpression()
+                        y = xyz.asJsonArray[1].asString.asExpression()
+                        z = xyz.asJsonArray[2].asString.asExpression()
+                    }
+                    val interpolation = when (position.asJsonObject["interpolation"]?.asString) {
+                        "linear" -> CameraInterpolation.LINEAR
+                        "step" -> CameraInterpolation.STEP
+                        else -> CameraInterpolation.LINEAR
+                    }
+                    targetPositionTimeline[name] = CameraKeyFrame(x, y, z, interpolation)
+                }
+                val move = json["move"]?.asString ?: ""
             }
-            throw IllegalStateException("Camera Timeline Node could not be parsed")
+            throw IllegalStateException("Stadium Camera could not be parsed")
         }
     }
 }

@@ -1,23 +1,56 @@
 package com.cobblemon.mod.common.stadium
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec
-import net.minecraft.client.Camera
+import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.util.asResource
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveString
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import java.util.UUID
+import java.util.function.Function
 
 object StadiumClientManager {
-    val struct = ObjectValue(this).also {
+    //Molang
+    fun MoLangRuntime.setupCameraFunctions(): MoLangRuntime {
+        environment.query.addFunctions(
+            hashMapOf(
+                "moveCamera" to Function { params ->
+                    if (params.get<MoValue>(0) !is StringValue) {
+                        return@Function Unit
+                    }
+                    val camera = StadiumCameras.getMoveCamera(params.get<MoValue>(0).asString())
+                    return@Function camera?.id?.toString() ?: ""
+                }
+            )
+        )
+        return this
     }
-    val runtime = MoLangRuntime().setup().setupClient()
+
+    val runtime = MoLangRuntime().setup().setupClient().setupCameraFunctions()
 
     var currentStadiumBattleUUID: UUID? = null
-    var stadiumBattleDefenition: StadiumBattleDefenition? = null
+
+    var Instruction = "DEFAULT"
+    var InstructionChangeTime = 0.0
+    var InstructionJustChanged = false
+
+    fun updateState(newState: String) {
+        Instruction = newState
+        InstructionChangeTime = 0.0
+        InstructionJustChanged = true
+    }
+
+    fun onLogout() {
+        currentStadiumBattleUUID = null
+    }
 
     fun handleJoin(battleUUID: UUID, cameraManager: ResourceLocation) {
         currentStadiumBattleUUID = battleUUID
@@ -38,6 +71,27 @@ object StadiumClientManager {
         return inStadiumBattle()
     }
 
+    //Molang Data
+    fun updateMolangVar() {
+        val environment = runtime.environment
+        environment.setSimpleVariable("instruction", StringValue(Instruction))
+        //environment.setSimpleVariable("instructionChangeTime", DoubleValue(InstructionChangeTime))
+        environment.setSimpleVariable("instructionJustChanged", DoubleValue(InstructionJustChanged))
+        val isSpectating = CobblemonClient.battle?.spectating ?: false
+        environment.setSimpleVariable("isBattling", DoubleValue(!isSpectating))
+        environment.setSimpleVariable("isSpectating", DoubleValue(isSpectating))
+    }
+
+    fun instructionUpdate(newState: String, additionalValues: MutableMap<String, MoValue>) {
+        val environment = runtime.environment
+        Instruction = newState
+        InstructionChangeTime = 0.0
+        InstructionJustChanged = true
+        for (value in additionalValues) {
+            environment.setSimpleVariable(value.key, value.value)
+        }
+    }
+
     //Camera Manager
     var activeCameraManager: ResourceLocation? = null
     var cameraTimer: Double = 0.0
@@ -48,12 +102,22 @@ object StadiumClientManager {
     fun tickCameraManager() {
         if (!shouldUseStadiumCamera()) return
 
+        //Molang Variables
+        val environment = runtime.environment
+        if (CobblemonClient.battle != null) {
+            environment.setSimpleVariable("selectingMove", DoubleValue(CobblemonClient.battle!!.mustChoose))
+        }
+        else {
+            environment.setSimpleVariable("selectingMove", DoubleValue(0.0))
+        }
+
         val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[currentState.camera]
+        val currentCamera = StadiumCameras.cameras[runtime.resolveString(currentState.camera).asResource()]
 
+        InstructionChangeTime += 0.05
         if (currentCamera != null) {
-            cameraTimer += 1.0/20.0
+            cameraTimer += 0.05
             if (cameraTimer > currentCamera.length) {
                 if (currentState.loop) {
                     cameraTimer -= currentCamera.length
@@ -71,6 +135,9 @@ object StadiumClientManager {
             cameraTimer = if (currentCamera != null && currentCamera.length != 0.0) cameraTimer - currentCamera.length else 0.0
         }
         else {
+            updateMolangVar()
+            environment.setSimpleVariable("instructionChangeTime", DoubleValue(InstructionChangeTime))
+
             val endOfAnim = if (currentCamera != null) cameraTimer + 1/20 >= currentCamera.length else true
 
             val nextState = evaluateTransitions(currentState, endOfAnim)
@@ -78,7 +145,7 @@ object StadiumClientManager {
                 nextCameraState = nextState.targetState
                 while (true) {
                     val newState = currentManager.states[nextCameraState]!!
-                    val newCamera = StadiumCameras.cameras[newState.camera]
+                    val newCamera = StadiumCameras.cameras[runtime.resolveString(newState.camera).asResource()]
                     val newEndOfAnim = if (newCamera != null) newCamera.length == 0.0 else true
 
                     val newNextState = evaluateTransitions(newState, newEndOfAnim)
@@ -92,12 +159,16 @@ object StadiumClientManager {
                 calculateNextState = false
             }
         }
+        if (InstructionJustChanged) {
+            InstructionJustChanged = false
+            Instruction = "NONE"
+        }
     }
 
     private fun evaluateTransitions(state: StadiumCameraState, checkEnd: Boolean) : StadiumCameraTransition? {
-        var nextState = state.listOfTransitions.firstOrNull { !it.checkOnEnd } //TODO Evaluate condition too
+        var nextState = state.listOfTransitions.firstOrNull { !it.checkOnEnd && runtime.resolveBoolean(it.condition) }
         if (nextState == null && checkEnd) {
-            nextState = state.listOfTransitions.firstOrNull { it.checkOnEnd } //TODO Evaluate condition too
+            nextState = state.listOfTransitions.firstOrNull { it.checkOnEnd && runtime.resolveBoolean(it.condition) }
         }
         return nextState
     }
@@ -108,20 +179,25 @@ object StadiumClientManager {
     fun updateCameraData(delta: Double) {
         if (!shouldUseStadiumCamera()) return
 
+        val environment = runtime.environment
+        updateMolangVar()
+        environment.setSimpleVariable("instructionChangeTime", DoubleValue(InstructionChangeTime + delta/20))
+
         val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[currentState.camera]
+        val currentCamera = StadiumCameras.cameras[runtime.resolveString(currentState.camera).asResource()]
 
         if (currentCamera != null) {
-            val renderTime = cameraTimer + delta/20
+            var renderTime = cameraTimer + delta/20
             if (renderTime > currentCamera.length && currentCamera.length != 0.0 && !calculateNextState) {
                 val newState = currentManager.states[nextCameraState]!!
-                val newCamera = StadiumCameras.cameras[newState.camera] ?: return
+                val newCamera = StadiumCameras.cameras[runtime.resolveString(newState.camera).asResource()] ?: return
 
                 cameraPosition = newCamera.resolvePosition(renderTime - currentCamera.length)
                 cameraRotation = newCamera.resolveRotation(renderTime - currentCamera.length)
             }
             else {
+                if (renderTime > currentCamera.length && currentCamera.length != 0.0) renderTime = currentCamera.length
                 cameraPosition = currentCamera.resolvePosition(renderTime)
                 cameraRotation = currentCamera.resolveRotation(renderTime)
             }

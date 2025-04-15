@@ -32,13 +32,13 @@ class StadiumCameraManagerEntry(
 }
 
 class StadiumCameraState(
-    val camera: ResourceLocation?,
+    val camera: Expression,
     val target: StadiumCameraTarget,
     val listOfTransitions: MutableList<StadiumCameraTransition>,
     val loop: Boolean
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
-        buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
+        buf.writeString(camera.originalString)
         buf.writeEnum(target)
         buf.writeCollection(listOfTransitions) {_, transition -> transition.encode(buf)}
         buf.writeBoolean(loop)
@@ -46,7 +46,7 @@ class StadiumCameraState(
 
     companion object {
         fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraState {
-            val camera = buf.readNullable { it.readIdentifier() }
+            val camera = buf.readString().asExpression()
             val target = buf.readEnum(StadiumCameraTarget::class.java)
             val listOfTransitions = buf.readList { StadiumCameraTransition.decode(buf) }.toMutableList()
             val loop = buf.readBoolean()
@@ -56,15 +56,11 @@ class StadiumCameraState(
 }
 
 class StadiumCameraTransition(
-    val camera: ResourceLocation?,
-    val target: StadiumCameraTarget = StadiumCameraTarget.CENTRE,
     val targetState: String,
     val checkOnEnd: Boolean,
     val condition: Expression
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
-        buf.writeNullable(camera) {_, v -> buf.writeIdentifier(v)}
-        buf.writeEnum(target)
         buf.writeString(targetState)
         buf.writeBoolean(checkOnEnd)
         buf.writeString(condition.originalString)
@@ -72,19 +68,18 @@ class StadiumCameraTransition(
 
     companion object {
         fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraTransition {
-            val camera = buf.readNullable { it.readIdentifier() }
-            val target = buf.readEnum(StadiumCameraTarget::class.java)
             val targetState = buf.readString()
             val checkOnEnd = buf.readBoolean()
             val condition = buf.readString().asExpression()
-            return StadiumCameraTransition(camera, target, targetState, checkOnEnd, condition)
+            return StadiumCameraTransition(targetState, checkOnEnd, condition)
         }
     }
 }
 
 enum class StadiumCameraTarget {
     CENTRE,
-    POKEMON,
+    ACTIVE_POKEMON,
+    ENEMY_POKEMON,
     TRAINER
 }
 
@@ -97,26 +92,20 @@ object StadiumCameraManagerAdapter: JsonDeserializer<StadiumCameraManagerEntry> 
         if (json is JsonObject) {
             val states = mutableMapOf<String, StadiumCameraState>()
             json["states"]?.asJsonObject?.entrySet()?.forEach { (name, state) ->
-                val camera = state.asJsonObject["camera"]?.asString?.asResource()
+                val camera = state.asJsonObject["camera"]?.asString?.asExpression() ?: "".asExpression()
                 val target = when (state.asJsonObject["target"]?.asString) {
-                    "centre" -> StadiumCameraTarget.CENTRE
-                    "pokemon" -> StadiumCameraTarget.POKEMON
-                    "trainer" -> StadiumCameraTarget.TRAINER
+                    "CENTRE" -> StadiumCameraTarget.CENTRE
+                    "ACTIVE_POKEMON" -> StadiumCameraTarget.ACTIVE_POKEMON
+                    "ENEMY_POKEMON" -> StadiumCameraTarget.ENEMY_POKEMON
+                    "TRAINER" -> StadiumCameraTarget.TRAINER
                     else -> StadiumCameraTarget.CENTRE
                 }
                 val listOfTransitions = mutableListOf<StadiumCameraTransition>()
                 state.asJsonObject["transitions"]?.asJsonArray?.forEach {
-                    val transitionCamera = it.asJsonObject["camera"]?.asString?.asResource()
-                    val transitionTarget = when (it.asJsonObject["target"]?.asString) {
-                        "centre" -> StadiumCameraTarget.CENTRE
-                        "pokemon" -> StadiumCameraTarget.POKEMON
-                        "trainer" -> StadiumCameraTarget.TRAINER
-                        else -> StadiumCameraTarget.CENTRE
-                    }
                     val targetState = it.asJsonObject["targetState"]?.asString ?: ""
                     val checkOnEnd = it.asJsonObject["checkOnEnd"]?.asBoolean ?: false
                     val condition = it.asJsonObject["condition"]?.asString?.asExpression() ?: "0.0".asExpression()
-                    listOfTransitions.add(StadiumCameraTransition(transitionCamera, transitionTarget, targetState, checkOnEnd, condition))
+                    listOfTransitions.add(StadiumCameraTransition(targetState, checkOnEnd, condition))
                 }
                 val loop = state.asJsonObject["loop"]?.asBoolean ?: false
                 states[name] = StadiumCameraState(camera, target, listOfTransitions, loop)

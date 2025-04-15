@@ -54,6 +54,7 @@ import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.stadium.StadiumClientManager
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -110,6 +111,7 @@ object CobblemonClient {
         CobblemonDataProvider.canReload = true
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
+        StadiumClientManager.onLogout()
     }
 
     fun initialize(implementation: CobblemonClientImplementation) {
