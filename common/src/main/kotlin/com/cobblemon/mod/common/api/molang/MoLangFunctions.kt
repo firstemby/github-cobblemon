@@ -783,6 +783,7 @@ object MoLangFunctions {
                 }
                 struct
             }
+            map.put("learnset") { pokemon.form.moves.asMoLangValue() }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("species") { pokemon.species.struct }
