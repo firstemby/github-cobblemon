@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.entity
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.core.BlockPos
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
@@ -23,4 +24,6 @@ interface PokemonSideDelegate : EntitySideDelegate<PokemonEntity> {
     fun spawnShinyParticle(player: Player) {}
     fun positionRider(passenger: Entity, positionUpdater: MoveFunction)
     fun updateAge(age: Int) {}
+    fun aiStep() {}
+    fun setRecordPlayingNearby(jukebox: BlockPos, dancing: Boolean) {}
 }

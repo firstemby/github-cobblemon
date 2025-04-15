@@ -348,9 +348,6 @@ open class PokemonEntity(
             entityData.set(PLATFORM_TYPE, value)
         }
 
-    var jukebox: BlockPos? = null
-    var dancing: Boolean = false
-
     override val struct: ObjectValue<PokemonEntity> = ObjectValue(this).also {
         it.addStandardFunctions()
             .addEntityFunctions(this)
@@ -563,16 +560,12 @@ open class PokemonEntity(
     }
 
     override fun aiStep() {
-        if (this.jukebox == null || !this.jukebox!!.closerToCenterThan(this.position(), 3.46) || !level().getBlockState(this.jukebox!!).`is`(Blocks.JUKEBOX)) {
-            this.dancing = false
-            this.jukebox = null
-        }
+        delegate.aiStep()
         super.aiStep()
     }
 
     override fun setRecordPlayingNearby(jukebox: BlockPos, dancing: Boolean) {
-        this.dancing = dancing
-        this.jukebox = jukebox
+        delegate.setRecordPlayingNearby(jukebox, dancing)
         super.setRecordPlayingNearby(jukebox, dancing)
     }
 
