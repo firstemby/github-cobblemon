@@ -515,6 +515,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     ))
 
     @JvmField
+    val GROTTO_BLOCK = this.create("grotto_block", GrottoBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.STONE)
+            .strength(1.5F)
+            .pushReaction(PushReaction.BLOCK)
+    ))
+
+    @JvmField
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
         .mapColor(MapColor.COLOR_LIGHT_GRAY)
         .sound(SoundType.METAL)

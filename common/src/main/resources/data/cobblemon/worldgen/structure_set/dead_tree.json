@@ -1,0 +1,18 @@
+{
+    "placement": {
+        "type": "minecraft:random_spread",
+        "separation": 3,
+        "spacing": 7,
+        "salt": 167333228,
+        "exclusion_zone": {
+            "chunk_count": 7,
+            "other_set": "minecraft:villages"
+        }
+    },
+    "structures": [
+        {
+            "structure": "cobblemon:dead_tree",
+            "weight": 1
+        }
+    ]
+}

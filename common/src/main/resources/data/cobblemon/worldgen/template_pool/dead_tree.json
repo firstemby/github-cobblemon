@@ -1,0 +1,15 @@
+{
+    "name": "habitat_test:dead_tree",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:dead_tree",
+                "element_type": "minecraft:single_pool_element",
+                "processors": "cobblemon:dead_tree",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

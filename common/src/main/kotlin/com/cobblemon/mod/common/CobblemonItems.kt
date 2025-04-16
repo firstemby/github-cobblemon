@@ -419,6 +419,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)
 
     @JvmField
+    val GROTTO_BLOCK = blockItem("grotto_block", CobblemonBlocks.GROTTO_BLOCK)
+
+    @JvmField
     val GALARICA_NUTS = create("galarica_nuts", GalaricaNutItem())
 
     // Medicine

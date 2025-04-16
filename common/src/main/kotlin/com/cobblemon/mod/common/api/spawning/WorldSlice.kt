@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.WorldSlicedSpawningInfluence
 import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -35,7 +37,8 @@ class WorldSlice(
     val baseZ: Int,
     val blocks: Array<Array<Array<BlockData>>>,
     val skyLevel: Array<Array<Int>>,
-    var nearbyEntityPositions: List<Vec3>
+    var nearbyEntityPositions: List<Vec3>,
+    val influences: List<WorldSlicedSpawningInfluence>
 ) {
     class BlockData(
         val state: BlockState,
@@ -129,7 +132,7 @@ class WorldSlice(
     }
 
     fun horizontalSpace(position: BlockPos, condition: (BlockState) -> Boolean, maximum: Int)
-        = horizontalSpace(position.x, position.y, position.z, condition, maximum)
+            = horizontalSpace(position.x, position.y, position.z, condition, maximum)
     fun horizontalSpace(centerX: Int, centerY: Int, centerZ: Int, condition: (BlockState) -> Boolean, maximum: Int): Int {
         var space = 1
         var radius = 1
