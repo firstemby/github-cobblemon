@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.grotto.GrottoSpawnCause
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
+import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.server
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -18,8 +19,11 @@ import com.google.gson.JsonObject
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.max
+import kotlin.math.min
 
 class GrottoSpawner(
         name: String,
@@ -82,7 +86,7 @@ class GrottoSpawner(
             return getSpawningSelector().select(this, contexts)
         }
 
-        //println("[GrottoSpawner] Area is null or invalid, skipping spawn")
+        println("[GrottoSpawner] Area is null or invalid, skipping spawn")
         return null
     }
 
@@ -113,14 +117,14 @@ class GrottoSpawner(
                 val cause = GrottoSpawnCause(this, chooseBucket(), player, structureCenter, grottoPos)
                 val result = run(cause)
 
-                //println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
+                println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
 
                 if (result != null) {
                     val (context, detail) = result
                     val action = detail.doSpawn(context)
-                    //println("[GrottoSpawner] doSpawn: $detail -> $action")
+                    println("[GrottoSpawner] doSpawn: $detail -> $action")
                     val completion = action.complete()
-                    //println("[GrottoSpawner] spawn complete: $completion")
+                    println("[GrottoSpawner] spawn complete: $completion")
                 }
             }
         }
@@ -166,11 +170,11 @@ class GrottoSpawner(
                     if (details.isEmpty()) continue
 
                     val chosen = weightedRandom(details) { it.weight.takeIf { w -> w > 0 } ?: 1.0f }
-                    //println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
+                    println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
                     return ctx to chosen
                 }
 
-                //println("[GrottoSpawner] No spawnable Pokémon found.")
+                println("[GrottoSpawner] No spawnable Pokémon found.")
                 return null
             }
 
@@ -212,43 +216,54 @@ class GrottoSpawner(
 
         val cached = cache[center]
         if (cached != null && now - cached.second <= CACHE_DURATION_MS) {
-            //println("[GrottoSpawner] Cache hit at $center — using group: $spawnGroup")
+            println("[GrottoSpawner] Cache hit at $center — using group: $spawnGroup")
             return cached.first
         }
 
         val habitat = Habitats.getHabitat(structure)
         if (habitat == null) {
-            //println("[GrottoSpawner] No habitat found for structure: $structure")
+            println("[GrottoSpawner] No habitat found for structure: $structure")
             return spawns
         }
 
         val selectedGroup = habitat.spawnPool.find { group ->
             group.spawns.toSet() == spawnGroup.toSet()
         } ?: return spawns.also {
-            /*println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
+            println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
             println("  ↳ Current spawnGroup: $spawnGroup")
             println("  ↳ Habitat groups:")
             habitat.spawnPool.forEachIndexed { i, g ->
                 println("    [$i]: ${g.spawns}")
-            }*/
+            }
         }
 
         val poolCacheName = "grotto_pool_${center.x}_${center.y}_${center.z}"
         val pool = SpawnPool(poolCacheName)
         for (entry in selectedGroup.spawns) {
+            val player = cause.entity as? ServerPlayer
+            val party = player?.party()?.filterNotNull()
+            val maxLevel = party?.maxOfOrNull { it.level } ?: 20
+            val variation = 5
+
+            val minLevel = max(1, maxLevel - variation)
+            val maxLevelFinal = min(100, maxLevel + variation)
+            val level = (minLevel..maxLevelFinal).random()
+
             val detail = PokemonSpawnDetail().apply {
                 pokemon.species = entry.species.toString()
                 weight = entry.weight.toFloat()
+                pokemon.level = level
             }
+
             pool.details.add(detail)
         }
 
-        /*println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
+        println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
         println("  ↳ Detected structure: $structure")
         println("  ↳ Spawn group: $spawnGroup")
         println("  ↳ Selected group: $selectedGroup")
         println("  ↳ Pool size: ${pool.details.size}")
-*/
+
         cache[center] = pool to now
         return pool
     }
