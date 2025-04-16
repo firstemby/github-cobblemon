@@ -56,23 +56,6 @@ class GrottoSpawner(
         return null
     }
 
-    // todo this older getArea method made it so it was getting the area around the player as spawnable instead of around the center of the grotto
-    /*override fun getArea(cause: SpawnCause): SpawningArea? {
-        val entity = cause.entity ?: server()?.playerList?.players?.firstOrNull() ?: return null
-        val pos = entity.blockPosition()
-
-        return SpawningArea(
-                cause = cause,
-                world = entity.level() as? ServerLevel ?: return null,
-                baseX = pos.x - 8,
-                baseY = pos.y - 4,
-                baseZ = pos.z - 8,
-                length = 16,
-                height = 8,
-                width = 16
-        )
-    }*/
-
     override fun run(cause: SpawnCause): Pair<SpawningContext, SpawnDetail>? {
         //println("[GrottoSpawner] run() starting for cause: $cause")
         val area = getArea(cause)
@@ -86,7 +69,7 @@ class GrottoSpawner(
             return getSpawningSelector().select(this, contexts)
         }
 
-        println("[GrottoSpawner] Area is null or invalid, skipping spawn")
+        //println("[GrottoSpawner] Area is null or invalid, skipping spawn")
         return null
     }
 
@@ -117,14 +100,14 @@ class GrottoSpawner(
                 val cause = GrottoSpawnCause(this, chooseBucket(), player, structureCenter, grottoPos)
                 val result = run(cause)
 
-                println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
+                //println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
 
                 if (result != null) {
                     val (context, detail) = result
                     val action = detail.doSpawn(context)
-                    println("[GrottoSpawner] doSpawn: $detail -> $action")
+                    //println("[GrottoSpawner] doSpawn: $detail -> $action")
                     val completion = action.complete()
-                    println("[GrottoSpawner] spawn complete: $completion")
+                    //println("[GrottoSpawner] spawn complete: $completion")
                 }
             }
         }
@@ -132,30 +115,7 @@ class GrottoSpawner(
         ticksUntilNextSpawn = ticksBetweenSpawns
     }
 
-
-
-
-    /*override fun tick() {
-        super.tick()
-        ticksUntilNextSpawn -= tickTimerMultiplier
-        if (ticksUntilNextSpawn <= 0) {
-            val cause = SpawnCause(this, chooseBucket(), server()?.playerList?.players?.firstOrNull())
-            val result = run(cause)
-
-            println("[GrottoSpawner] spawn result: $result")
-            ticksUntilNextSpawn = ticksBetweenSpawns
-            if (result != null) {
-                val (context, detail) = result
-                val action = detail.doSpawn(context)
-                println("[GrottoSpawner] doSpawn: $detail -> $action")
-                val completion = action.complete()
-                println("[GrottoSpawner] spawn complete: $completion")
-            } else {
-                println("[GrottoSpawner] No spawn selected.")
-            }
-        }
-    }
-*/
+    // todo we want to make it so that it ignores conditions of the area and just use the SpawnPool of the JSON registry that has been cycled during that moon cycle
     override fun getSpawningSelector(): SpawningSelector {
         return object : SpawningSelector {
             override fun select(spawner: Spawner, contexts: List<SpawningContext>): Pair<SpawningContext, SpawnDetail>? {
@@ -170,11 +130,11 @@ class GrottoSpawner(
                     if (details.isEmpty()) continue
 
                     val chosen = weightedRandom(details) { it.weight.takeIf { w -> w > 0 } ?: 1.0f }
-                    println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
+                    //println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
                     return ctx to chosen
                 }
 
-                println("[GrottoSpawner] No spawnable Pokémon found.")
+                //println("[GrottoSpawner] No spawnable Pokémon found.")
                 return null
             }
 
@@ -229,12 +189,12 @@ class GrottoSpawner(
         val selectedGroup = habitat.spawnPool.find { group ->
             group.spawns.toSet() == spawnGroup.toSet()
         } ?: return spawns.also {
-            println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
+            /*println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
             println("  ↳ Current spawnGroup: $spawnGroup")
             println("  ↳ Habitat groups:")
             habitat.spawnPool.forEachIndexed { i, g ->
                 println("    [$i]: ${g.spawns}")
-            }
+            }*/
         }
 
         val poolCacheName = "grotto_pool_${center.x}_${center.y}_${center.z}"
@@ -258,99 +218,13 @@ class GrottoSpawner(
             pool.details.add(detail)
         }
 
-        println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
+        /*println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
         println("  ↳ Detected structure: $structure")
         println("  ↳ Spawn group: $spawnGroup")
         println("  ↳ Selected group: $selectedGroup")
-        println("  ↳ Pool size: ${pool.details.size}")
+        println("  ↳ Pool size: ${pool.details.size}")*/
 
         cache[center] = pool to now
         return pool
     }
-
-
-
-
-
-    /*override fun getSpawnPool(): SpawnPool {
-        val server = server() ?: return spawns
-        val world = server.overworld() ?: return spawns
-        val now = System.currentTimeMillis()
-
-        val serverLevel = server.overworld() // Replace with your target level
-        for (chunk in serverLevel.chunkSource.chunkMap.visibleChunkMap.values) {
-            val levelChunk = chunk.getChunkToSend() ?: continue
-            for ((pos, blockEntity) in levelChunk.blockEntities) {
-                if (blockEntity is GrottoBlockEntity) {
-                    // Process your GrottoBlockEntity here
-                }
-            }
-        }
-
-
-        println("[GrottoSpawner] Tick — current moon phase: ${world.moonPhase}")
-
-        for (player in world.players()) {
-            val pos = player.blockPosition()
-            val radius = 48
-
-            val checkRegion = BlockPos.betweenClosed(
-                    pos.offset(-radius, -10, -radius),
-                    pos.offset(radius, 10, radius)
-            )
-
-            for (checkPos in checkRegion) {
-                val blockEntity = world.getBlockEntity(checkPos) as? GrottoBlockEntity ?: continue
-                val structure = blockEntity.detectedStructure ?: continue
-                val spawnGroup = blockEntity.currentSpawnGroup
-                if (spawnGroup.isEmpty()) continue
-
-                val cached = cache[checkPos]
-                if (cached != null && now - cached.second <= CACHE_DURATION_MS) {
-                    println("[GrottoSpawner] Cache hit at $checkPos — using group: $spawnGroup")
-                    return cached.first
-                }
-
-                val habitat = Habitats.getHabitat(structure)
-                if (habitat == null) {
-                    println("[GrottoSpawner] No habitat found for structure: $structure")
-                    continue
-                }
-
-                // Match currentSpawnGroup to a full weighted group (species + weight)
-                val selectedGroup = habitat.spawnPool.find { group ->
-                    group.spawns.toSet() == spawnGroup.toSet()
-                }
-
-                if (selectedGroup == null) {
-                    println("[GrottoSpawner] Could not match spawn group to any known group in habitat: $structure")
-                    println("  ↳ Current group: $spawnGroup")
-                    println("  ↳ Available groups:")
-                    habitat.spawnPool.forEachIndexed { i, g ->
-                        println("    [$i]: ${g.spawns}")
-                    }
-                    continue
-                }
-
-                val pool = SpawnPool("grotto_dynamic_pool")
-
-                for (entry in selectedGroup.spawns) {
-                    val detail = PokemonSpawnDetail()
-                    detail.pokemon.species = entry.species.toString()
-                    detail.weight = entry.weight.toFloat()
-                    pool.details.add(detail)
-                }
-
-                println("[GrottoSpawner] Generated new pool at $checkPos:")
-                println("  ↳ Structure: $structure")
-                println("  ↳ Group: ${selectedGroup.spawns.map { "${it.species} (weight=${it.weight})" }}")
-
-                cache[checkPos] = pool to now
-                return pool
-            }
-        }
-
-        println("[GrottoSpawner] No valid Grotto nearby — using fallback spawn pool (${spawns.details.size} entries)")
-        return spawns
-    }*/
 }
