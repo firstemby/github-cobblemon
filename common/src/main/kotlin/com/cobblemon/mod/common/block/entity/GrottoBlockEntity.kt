@@ -33,6 +33,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
         BlockEntity(CobblemonBlockEntities.GROTTO_BLOCK, pos, state) {
 
     var detectedStructure: ResourceLocation? = null
+    var structureCenter: BlockPos? = null
     var hasCheckedStructure: Boolean = false
     var lastMoonPhaseChecked: Int = -1
     var currentSpawnGroup: List<WeightedSpecies> = emptyList()
@@ -134,6 +135,14 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
             list.add(entry)
         }
         tag.put("CurrentSpawnGroup", list)
+
+        structureCenter?.let {
+            val centerTag = CompoundTag()
+            centerTag.putInt("X", it.x)
+            centerTag.putInt("Y", it.y)
+            centerTag.putInt("Z", it.z)
+            tag.put("StructureCenter", centerTag)
+        }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -150,6 +159,14 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
             val species = ResourceLocation.tryParse(it.getString("species")) ?: return@mapNotNull null
             val weight = it.getInt("weight")
             WeightedSpecies(species, weight)
+        }
+
+        if (tag.contains("StructureCenter", Tag.TAG_COMPOUND.toInt())) {
+            val centerTag = tag.getCompound("StructureCenter")
+            val x = centerTag.getInt("X")
+            val y = centerTag.getInt("Y")
+            val z = centerTag.getInt("Z")
+            structureCenter = BlockPos(x, y, z)
         }
     }
 
@@ -169,6 +186,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
             val structure = entry.value
             val structureStart = structureManager.getStructureWithPieceAt(pos, structure)
             if (structureStart != StructureStart.INVALID_START && structureStart.boundingBox.isInside(pos)) {
+                structureCenter = structureStart.boundingBox.center
                 return entry.key.location()
             }
         }
