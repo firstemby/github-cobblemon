@@ -1,0 +1,11 @@
+{
+  "pokemon": ["squirtle", "wartortle", "blastoise"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "cobblemon:wise_glasses",
+      "displayName": "cobblemon.cosmetic.wise_glasses",
+      "displayItem": "cobblemon:wise_glasses",
+      "aspects": ["cosmetic_item-wise_glasses"]
+    }
+  ]
+}

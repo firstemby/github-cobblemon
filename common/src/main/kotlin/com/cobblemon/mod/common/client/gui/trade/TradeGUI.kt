@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
+import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
@@ -98,6 +99,9 @@ class TradeGUI(
 
     private var offeredPokemonModel: ModelWidget? = null
     private var opposingOfferedPokemonModel: ModelWidget? = null
+
+    private lateinit var offeredPokemonMarkings: MarkingsWidget
+    private lateinit var opposingOfferedPokemonMarkings: MarkingsWidget
 
     var offeredPokemon: Pokemon? = null
     var opposingOfferedPokemon: Pokemon? = null
@@ -247,6 +251,11 @@ class TradeGUI(
 
         setOfferedPokemon(pokemon = offeredPokemon, isOpposing = false)
         setOfferedPokemon(pokemon = opposingOfferedPokemon, isOpposing = true)
+
+        offeredPokemonMarkings = MarkingsWidget(x + 74.5, y + 21, offeredPokemon, false)
+        opposingOfferedPokemonMarkings = MarkingsWidget(x + 177.5, y + 21, opposingOfferedPokemon, false)
+        addRenderableWidget(offeredPokemonMarkings)
+        addRenderableWidget(opposingOfferedPokemonMarkings)
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -522,6 +531,7 @@ class TradeGUI(
                 rotationY = 35F,
                 offsetY = PORTRAIT_MODEL_OFFSET_Y
             ) else null
+            if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.setActivePokemon(opposingOfferedPokemon)
             trade.acceptedOppositeOffer = false
         } else {
             offeredPokemon = pokemon
@@ -535,6 +545,7 @@ class TradeGUI(
                 rotationY = 325F,
                 offsetY = PORTRAIT_MODEL_OFFSET_Y
             ) else null
+            if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.setActivePokemon(offeredPokemon)
         }
     }
 

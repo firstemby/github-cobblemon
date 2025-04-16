@@ -1,0 +1,36 @@
+{
+  "portraitScale": 1.1,
+  "portraitTranslation": [-0.8, -0.18, 0],
+  "profileScale": 0.5,
+  "profileTranslation": [-0.18, 0.77, 0],
+  "rootBone": "dudunsparce",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT", "HOVER"],
+      "animations": [
+        "q.bedrock('dudunsparce_two_segment', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dudunsparce_two_segment', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseName": "walking",
+      "poseTypes": ["WALK", "SWIM", "FLY"],
+      "animations": [
+        "q.bedrock('dudunsparce_two_segment', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dudunsparce_two_segment', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": [
+        "q.bedrock('dudunsparce_two_segment', 'sleep')"
+      ]
+    }
+  }
+}

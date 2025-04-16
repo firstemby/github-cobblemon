@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.fishing.FishingBaits
 import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
+import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.npc.NPCClasses
@@ -62,7 +63,6 @@ import java.util.*
 
 object CobblemonDataProvider : DataProvider {
 
-    // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     internal var canReload = true
     // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     private val registries = linkedSetOf<DataRegistry>()
@@ -101,6 +101,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonUnlockableWallpapers)
         this.register(StadiumCameras)
         this.register(StadiumCameraManagers)
+        this.register(Marks)
 
         CobblemonSpawnPools.load()
         this.register(PokeRods)

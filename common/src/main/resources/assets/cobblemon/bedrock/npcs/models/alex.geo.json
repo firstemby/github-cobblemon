@@ -82,6 +82,14 @@
 					]
 				},
 				{
+					"name": "item_right",
+					"parent": "arm_right",
+					"pivot": [-5.5, 12, -2],
+					"locators": {
+						"item_right": [-5.5, 12, -2]
+					}
+				},
+				{
 					"name": "pokeball",
 					"parent": "arm_ball",
 					"pivot": [-6, 12, 0],
@@ -98,6 +106,14 @@
 						{"origin": [4, 12, -2], "size": [3, 12, 4], "uv": [32, 48]},
 						{"origin": [4, 12, -2], "size": [3, 12, 4], "inflate": 0.25, "uv": [48, 48]}
 					]
+				},
+				{
+					"name": "item_left",
+					"parent": "arm_left",
+					"pivot": [5.5, 12, -2],
+					"locators": {
+						"item_left": [5.5, 12, -2]
+					}
 				},
 				{
 					"name": "leg_right",

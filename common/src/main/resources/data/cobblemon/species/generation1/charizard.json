@@ -92,12 +92,12 @@
 	        }
 	      }
 	    },
-    "controller": {
-      "key": "cobblemon:composite/run_up_to_flight",
-      "minimumSpeed": "0.2",
-      "minimumJump": "80",
-      "landController": {
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
         "key": "cobblemon:land/generic",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [
           0,
@@ -105,7 +105,7 @@
           "-1 * 0.5*q.jump_strength/50"
         ]
       },
-      "flightController": {
+      "alternateBehaviour": {
         "key": "cobblemon:air/bird",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
@@ -425,13 +425,28 @@
           }
         },
         "seats": [],
-        "controller": {
-          "key": "cobblemon:composite/run_up_to_flight",
-          "flightController": {
-            "key": "cobblemon:air/bird"
+        "behaviour": {
+          "key": "cobblemon:composite",
+          "transitionStrategy": "cobblemon:strategy/jump",
+          "defaultBehaviour": {
+            "key": "cobblemon:land/generic",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              "-1 * 0.5*q.jump_strength/50"
+            ]
           },
-          "landController": {
-            "key": "cobblemon:land/generic"
+          "alternateBehaviour": {
+            "key": "cobblemon:air/bird",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              0
+            ]
           }
         }
       }
@@ -503,13 +518,28 @@
           }
         },
         "seats": [],
-        "controller": {
-          "key": "cobblemon:composite/run_up_to_flight",
-          "flightController": {
-            "key": "cobblemon:air/bird"
+        "behaviour": {
+          "key": "cobblemon:composite",
+          "transitionStrategy": "cobblemon:strategy/jump",
+          "defaultBehaviour": {
+            "key": "cobblemon:land/generic",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              "-1 * 0.5*q.jump_strength/50"
+            ]
           },
-          "landController": {
-            "key": "cobblemon:land/generic"
+          "alternateBehaviour": {
+            "key": "cobblemon:air/bird",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              0
+            ]
           }
         }
       }

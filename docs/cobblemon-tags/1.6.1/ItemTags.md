@@ -5,7 +5,7 @@ This file contains tags related to items in cobblemon.
 ## Tags:
 
 <details>
-<summary><b>Tag:</b> #item:ability_changers</summary>
+<summary><b>Tag:</b> #cobblemon:ability_changers</summary>
 
 - cobblemon:ability_capsule
 - cobblemon:ability_patch
@@ -13,7 +13,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:ancient_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:ancient_poke_balls</summary>
 
 - cobblemon:ancient_azure_ball
 - cobblemon:ancient_citrine_ball
@@ -35,7 +35,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:apples</summary>
+<summary><b>Tag:</b> #cobblemon:apples</summary>
 
 - cobblemon:sweet_apple
 - cobblemon:tart_apple
@@ -43,7 +43,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:apricorns</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns</summary>
 
 - cobblemon:black_apricorn
 - cobblemon:blue_apricorn
@@ -56,7 +56,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:apricorn_logs</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_logs</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:apricorn_wood
@@ -66,7 +66,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:apricorn_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_poke_balls</summary>
 
 - cobblemon:fast_ball
 - cobblemon:friend_ball
@@ -79,7 +79,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:apricorn_sprouts</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_sprouts</summary>
 
 - cobblemon:black_apricorn_seed
 - cobblemon:blue_apricorn_seed
@@ -92,7 +92,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:azalea_tree</summary>
+<summary><b>Tag:</b> #cobblemon:azalea_tree</summary>
 
 - minecraft:azalea
 - minecraft:flowering_azalea
@@ -100,7 +100,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:battle_items</summary>
+<summary><b>Tag:</b> #cobblemon:battle_items</summary>
 
 - cobblemon:dire_hit
 - cobblemon:guard_spec
@@ -114,7 +114,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:berries</summary>
+<summary><b>Tag:</b> #cobblemon:berries</summary>
 
 - cobblemon:aguav_berry
 - cobblemon:apicot_berry
@@ -189,7 +189,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:black_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:black_tumblestones</summary>
 
 - cobblemon:black_tumblestone
 - cobblemon:black_tumblestone_block
@@ -214,7 +214,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:black_tumblestone_bricks</summary>
+<summary><b>Tag:</b> #cobblemon:black_tumblestone_bricks</summary>
 
 - cobblemon:black_tumblestone_bricks
 - cobblemon:chiseled_black_tumblestone_bricks
@@ -222,7 +222,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:boats</summary>
+<summary><b>Tag:</b> #cobblemon:boats</summary>
 
 - cobblemon:apricorn_boat
 - cobblemon:apricorn_chest_boat
@@ -230,7 +230,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:cooked_meat</summary>
+<summary><b>Tag:</b> #cobblemon:cooked_meat</summary>
 
 - minecraft:cooked_beef
 - minecraft:cooked_chicken
@@ -243,7 +243,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:dawn_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:dawn_stone_ores</summary>
 
 - cobblemon:dawn_stone_ore
 - cobblemon:deepslate_dawn_stone_ore
@@ -251,7 +251,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:decorated_pot_sherds</summary>
+<summary><b>Tag:</b> #cobblemon:decorated_pot_sherds</summary>
 
 - cobblemon:bygone_sherd
 - cobblemon:capture_sherd
@@ -263,7 +263,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:deep_seas</summary>
+<summary><b>Tag:</b> #cobblemon:deep_seas</summary>
 
 - cobblemon:deep_sea_scale
 - cobblemon:deep_sea_tooth
@@ -271,7 +271,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:dusk_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:dusk_stone_ores</summary>
 
 - cobblemon:deepslate_dusk_stone_ore
 - cobblemon:dusk_stone_ore
@@ -279,7 +279,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:ethers</summary>
+<summary><b>Tag:</b> #cobblemon:ethers</summary>
 
 - cobblemon:elixir
 - cobblemon:ether
@@ -289,7 +289,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:evolution_items</summary>
+<summary><b>Tag:</b> #cobblemon:evolution_items</summary>
 
 - #cobblemon:evolution_stones
 - #cobblemon:teacups
@@ -332,7 +332,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:evolution_stones</summary>
+<summary><b>Tag:</b> #cobblemon:evolution_stones</summary>
 
 - cobblemon:dawn_stone
 - cobblemon:dusk_stone
@@ -348,7 +348,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:evolution_stone_blocks</summary>
+<summary><b>Tag:</b> #cobblemon:evolution_stone_blocks</summary>
 
 - cobblemon:dawn_stone_block
 - cobblemon:dusk_stone_block
@@ -364,7 +364,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:experience_candies</summary>
+<summary><b>Tag:</b> #cobblemon:experience_candies</summary>
 
 - cobblemon:exp_candy_l
 - cobblemon:exp_candy_m
@@ -376,7 +376,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:feathers</summary>
+<summary><b>Tag:</b> #cobblemon:feathers</summary>
 
 - cobblemon:clever_feather
 - cobblemon:genius_feather
@@ -388,7 +388,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:fire_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:fire_stone_ores</summary>
 
 - cobblemon:deepslate_fire_stone_ore
 - cobblemon:fire_stone_ore
@@ -397,7 +397,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:fossils</summary>
+<summary><b>Tag:</b> #cobblemon:fossils</summary>
 
 - cobblemon:armor_fossil
 - cobblemon:claw_fossil
@@ -418,7 +418,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:fossil_machine_parts</summary>
+<summary><b>Tag:</b> #cobblemon:fossil_machine_parts</summary>
 
 - cobblemon:fossil_analyzer
 - cobblemon:monitor
@@ -427,7 +427,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:gilded_chests</summary>
+<summary><b>Tag:</b> #cobblemon:gilded_chests</summary>
 
 - cobblemon:black_gilded_chest
 - cobblemon:blue_gilded_chest
@@ -440,14 +440,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:hanging_signs</summary>
 
 - cobblemon:apricorn_hanging_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:herbs</summary>
+<summary><b>Tag:</b> #cobblemon:herbs</summary>
 
 - cobblemon:mental_herb
 - cobblemon:mirror_herb
@@ -458,7 +458,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:ice_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:ice_stone_ores</summary>
 
 - cobblemon:deepslate_ice_stone_ore
 - cobblemon:ice_stone_ore
@@ -466,7 +466,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:leaf_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:leaf_stone_ores</summary>
 
 - cobblemon:deepslate_leaf_stone_ore
 - cobblemon:leaf_stone_ore
@@ -474,7 +474,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:machines</summary>
+<summary><b>Tag:</b> #cobblemon:machines</summary>
 
 - cobblemon:fossil_analyzer
 - cobblemon:healing_machine
@@ -486,7 +486,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:mints</summary>
+<summary><b>Tag:</b> #cobblemon:mints</summary>
 
 - cobblemon:adamant_mint
 - cobblemon:bold_mint
@@ -513,7 +513,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:mint_leaf</summary>
+<summary><b>Tag:</b> #cobblemon:mint_leaf</summary>
 
 - cobblemon:blue_mint_leaf
 - cobblemon:cyan_mint_leaf
@@ -525,7 +525,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:mint_seeds</summary>
+<summary><b>Tag:</b> #cobblemon:mint_seeds</summary>
 
 - cobblemon:blue_mint_seeds
 - cobblemon:cyan_mint_seeds
@@ -537,7 +537,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:moon_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:moon_stone_ores</summary>
 
 - cobblemon:deepslate_moon_stone_ore
 - cobblemon:dripstone_moon_stone_ore
@@ -546,7 +546,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:mutated_berries</summary>
+<summary><b>Tag:</b> #cobblemon:mutated_berries</summary>
 
 - cobblemon:aguav_berry
 - cobblemon:apicot_berry
@@ -591,7 +591,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:plants</summary>
+<summary><b>Tag:</b> #cobblemon:plants</summary>
 
 - #cobblemon:apricorn_sprouts
 - #cobblemon:apricorns
@@ -608,7 +608,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:pokedex</summary>
+<summary><b>Tag:</b> #cobblemon:pokedex</summary>
 
 - cobblemon:pokedex_black
 - cobblemon:pokedex_blue
@@ -621,7 +621,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:pokedex_screen</summary>
+<summary><b>Tag:</b> #cobblemon:pokedex_screen</summary>
 
 - cobblemon:bright_powder
 - minecraft:blaze_powder
@@ -632,7 +632,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:poke_balls</summary>
 
 - #cobblemon:ancient_poke_balls
 - cobblemon:azure_ball
@@ -671,7 +671,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:poke_rods</summary>
+<summary><b>Tag:</b> #cobblemon:poke_rods</summary>
 
 - cobblemon:ancient_azure_rod
 - cobblemon:ancient_citrine_rod
@@ -725,7 +725,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:potions</summary>
+<summary><b>Tag:</b> #cobblemon:potions</summary>
 
 - cobblemon:full_restore
 - cobblemon:hyper_potion
@@ -736,7 +736,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:protein_ingredients</summary>
+<summary><b>Tag:</b> #cobblemon:protein_ingredients</summary>
 
 - minecraft:beef
 - minecraft:chicken
@@ -747,7 +747,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:raw_meat</summary>
+<summary><b>Tag:</b> #cobblemon:raw_meat</summary>
 
 - minecraft:beef
 - minecraft:chicken
@@ -760,7 +760,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:red_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:red_tumblestones</summary>
 
 - cobblemon:chiseled_polished_tumblestone
 - cobblemon:chiseled_tumblestone_bricks
@@ -785,7 +785,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:red_tumblestone_bricks</summary>
+<summary><b>Tag:</b> #cobblemon:red_tumblestone_bricks</summary>
 
 - cobblemon:chiseled_tumblestone_bricks
 - cobblemon:tumblestone_bricks
@@ -793,7 +793,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:remedies</summary>
+<summary><b>Tag:</b> #cobblemon:remedies</summary>
 
 - cobblemon:fine_remedy
 - cobblemon:heal_powder
@@ -803,7 +803,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:restores</summary>
+<summary><b>Tag:</b> #cobblemon:restores</summary>
 
 - cobblemon:antidote
 - cobblemon:awakening
@@ -816,7 +816,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:revives</summary>
+<summary><b>Tag:</b> #cobblemon:revives</summary>
 
 - cobblemon:max_revive
 - cobblemon:revive
@@ -824,7 +824,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:seeds</summary>
+<summary><b>Tag:</b> #cobblemon:seeds</summary>
 
 - #cobblemon:held/terrain_seeds
 - #cobblemon:mint_seeds
@@ -833,7 +833,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:shiny_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:shiny_stone_ores</summary>
 
 - cobblemon:deepslate_shiny_stone_ore
 - cobblemon:shiny_stone_ore
@@ -841,14 +841,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - cobblemon:apricorn_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:sky_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:sky_tumblestones</summary>
 
 - cobblemon:chiseled_polished_sky_tumblestone
 - cobblemon:chiseled_sky_tumblestone_bricks
@@ -873,7 +873,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:sky_tumblestone_bricks</summary>
+<summary><b>Tag:</b> #cobblemon:sky_tumblestone_bricks</summary>
 
 - cobblemon:chiseled_sky_tumblestone_bricks
 - cobblemon:sky_tumblestone_bricks
@@ -881,7 +881,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:sun_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:sun_stone_ores</summary>
 
 - cobblemon:deepslate_sun_stone_ore
 - cobblemon:sun_stone_ore
@@ -890,7 +890,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:sweets</summary>
+<summary><b>Tag:</b> #cobblemon:sweets</summary>
 
 - cobblemon:berry_sweet
 - cobblemon:clover_sweet
@@ -903,7 +903,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:teacups</summary>
+<summary><b>Tag:</b> #cobblemon:teacups</summary>
 
 - cobblemon:masterpiece_teacup
 - cobblemon:unremarkable_teacup
@@ -911,7 +911,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:teapots</summary>
+<summary><b>Tag:</b> #cobblemon:teapots</summary>
 
 - cobblemon:chipped_pot
 - cobblemon:cracked_pot
@@ -919,7 +919,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:thunder_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:thunder_stone_ores</summary>
 
 - cobblemon:deepslate_thunder_stone_ore
 - cobblemon:thunder_stone_ore
@@ -927,7 +927,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_1_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:tier_1_poke_balls</summary>
 
 - cobblemon:ancient_azure_ball
 - cobblemon:ancient_citrine_ball
@@ -951,14 +951,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_1_poke_ball_materials</summary>
+<summary><b>Tag:</b> #cobblemon:tier_1_poke_ball_materials</summary>
 
 - #c:ingots/copper
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_2_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:tier_2_poke_balls</summary>
 
 - cobblemon:ancient_great_ball
 - cobblemon:ancient_leaden_ball
@@ -979,14 +979,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_2_poke_ball_materials</summary>
+<summary><b>Tag:</b> #cobblemon:tier_2_poke_ball_materials</summary>
 
 - #c:ingots/iron
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_3_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:tier_3_poke_balls</summary>
 
 - cobblemon:ancient_gigaton_ball
 - cobblemon:ancient_jet_ball
@@ -1002,14 +1002,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_3_poke_ball_materials</summary>
+<summary><b>Tag:</b> #cobblemon:tier_3_poke_ball_materials</summary>
 
 - #c:ingots/gold
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_4_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:tier_4_poke_balls</summary>
 
 - cobblemon:beast_ball
 - cobblemon:dream_ball
@@ -1017,14 +1017,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_4_poke_ball_materials</summary>
+<summary><b>Tag:</b> #cobblemon:tier_4_poke_ball_materials</summary>
 
 - #c:gems/diamond
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tier_5_poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:tier_5_poke_balls</summary>
 
 - cobblemon:ancient_origin_ball
 - cobblemon:master_ball
@@ -1032,7 +1032,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:tumblestones</summary>
 
 - cobblemon:black_tumblestone
 - cobblemon:sky_tumblestone
@@ -1041,7 +1041,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:tumblestone_bricks</summary>
+<summary><b>Tag:</b> #cobblemon:tumblestone_bricks</summary>
 
 - #cobblemon:black_tumblestone_bricks
 - #cobblemon:red_tumblestone_bricks
@@ -1050,7 +1050,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:type_gems</summary>
+<summary><b>Tag:</b> #cobblemon:type_gems</summary>
 
 - cobblemon:bug_gem
 - cobblemon:dark_gem
@@ -1074,7 +1074,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:vitamins</summary>
+<summary><b>Tag:</b> #cobblemon:vitamins</summary>
 
 - cobblemon:calcium
 - cobblemon:carbos
@@ -1088,7 +1088,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:water_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:water_stone_ores</summary>
 
 - cobblemon:deepslate_water_stone_ore
 - cobblemon:water_stone_ore
@@ -1096,7 +1096,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:zinc_ingredients</summary>
+<summary><b>Tag:</b> #cobblemon:zinc_ingredients</summary>
 
 - minecraft:cod
 - minecraft:salmon
@@ -1105,56 +1105,62 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:consumed_in_npc_battle</summary>
+<summary><b>Tag:</b> #cobblemon:blacklisted_items_to_hold</summary>
+
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #cobblemon:consumed_in_npc_battle</summary>
 
 - #cobblemon:berries
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:consumed_in_pvp_battle</summary>
+<summary><b>Tag:</b> #cobblemon:consumed_in_pvp_battle</summary>
 
 - #cobblemon:berries
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:consumed_in_wild_battle</summary>
+<summary><b>Tag:</b> #cobblemon:consumed_in_wild_battle</summary>
 
 - #cobblemon:berries
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:destiny_knot</summary>
+<summary><b>Tag:</b> #cobblemon:destiny_knot</summary>
 
 - cobblemon:destiny_knot
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:everstone</summary>
+<summary><b>Tag:</b> #cobblemon:everstone</summary>
 
 - cobblemon:everstone
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:experience_share</summary>
+<summary><b>Tag:</b> #cobblemon:experience_share</summary>
 
 - cobblemon:exp_share
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:is_friendship_booster</summary>
+<summary><b>Tag:</b> #cobblemon:is_friendship_booster</summary>
 
 - cobblemon:soothe_bell
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:is_held_item</summary>
+<summary><b>Tag:</b> #cobblemon:is_held_item</summary>
 
 - #cobblemon:held/terrain_seeds
 - #cobblemon:type_gems
@@ -1277,63 +1283,63 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:leaves_leftovers</summary>
+<summary><b>Tag:</b> #cobblemon:leaves_leftovers</summary>
 
 - minecraft:apple
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:lucky_egg</summary>
+<summary><b>Tag:</b> #cobblemon:lucky_egg</summary>
 
 - cobblemon:lucky_egg
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_anklet</summary>
+<summary><b>Tag:</b> #cobblemon:power_anklet</summary>
 
 - cobblemon:power_anklet
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_band</summary>
+<summary><b>Tag:</b> #cobblemon:power_band</summary>
 
 - cobblemon:power_band
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_belt</summary>
+<summary><b>Tag:</b> #cobblemon:power_belt</summary>
 
 - cobblemon:power_belt
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_bracer</summary>
+<summary><b>Tag:</b> #cobblemon:power_bracer</summary>
 
 - cobblemon:power_bracer
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_lens</summary>
+<summary><b>Tag:</b> #cobblemon:power_lens</summary>
 
 - cobblemon:power_lens
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:power_weight</summary>
+<summary><b>Tag:</b> #cobblemon:power_weight</summary>
 
 - cobblemon:power_weight
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #held:terrain_seeds</summary>
+<summary><b>Tag:</b> #cobblemon:terrain_seeds</summary>
 
 - cobblemon:electric_seed
 - cobblemon:grassy_seed
@@ -1343,91 +1349,127 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:boats</summary>
+<summary><b>Tag:</b> #cobblemon:whitelisted_items_to_hold</summary>
+
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #cobblemon:face</summary>
+
+- cobblemon:black_glasses
+- cobblemon:choice_specs
+- cobblemon:safety_goggles
+- cobblemon:wise_glasses
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #cobblemon:hat</summary>
+
+- #minecraft:banners
+- cobblemon:choice_band
+- cobblemon:exp_share
+- cobblemon:focus_band
+- cobblemon:kings_rock
+- cobblemon:muscle_band
+- cobblemon:rocky_helmet
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #cobblemon:hidden</summary>
+
+- minecraft:barrier
+
+</details>
+
+<details>
+<summary><b>Tag:</b> #cobblemon:boats</summary>
 
 - #cobblemon:boats
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:bookshelf_books</summary>
+<summary><b>Tag:</b> #cobblemon:bookshelf_books</summary>
 
 - #cobblemon:pokedex
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:chest_boats</summary>
+<summary><b>Tag:</b> #cobblemon:chest_boats</summary>
 
 - cobblemon:apricorn_chest_boat
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:decorated_pot_sherds</summary>
+<summary><b>Tag:</b> #cobblemon:decorated_pot_sherds</summary>
 
 - #cobblemon:decorated_pot_sherds
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:fences</summary>
+<summary><b>Tag:</b> #cobblemon:fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:fence_gates</summary>
+<summary><b>Tag:</b> #cobblemon:fence_gates</summary>
 
 - cobblemon:apricorn_fence_gate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:flowers</summary>
+<summary><b>Tag:</b> #cobblemon:flowers</summary>
 
 - cobblemon:pep_up_flower
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:hanging_signs</summary>
 
 - #cobblemon:hanging_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:leaves</summary>
+<summary><b>Tag:</b> #cobblemon:leaves</summary>
 
 - cobblemon:apricorn_leaves
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:logs</summary>
+<summary><b>Tag:</b> #cobblemon:logs</summary>
 
 - #cobblemon:apricorn_logs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:logs_that_burn</summary>
+<summary><b>Tag:</b> #cobblemon:logs_that_burn</summary>
 
 - #cobblemon:apricorn_logs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:parrot_food</summary>
+<summary><b>Tag:</b> #cobblemon:parrot_food</summary>
 
 - #cobblemon:seeds
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:piglin_loved</summary>
+<summary><b>Tag:</b> #cobblemon:piglin_loved</summary>
 
 - #cobblemon:gilded_chests
 - cobblemon:relic_coin
@@ -1437,21 +1479,21 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:planks</summary>
+<summary><b>Tag:</b> #cobblemon:planks</summary>
 
 - cobblemon:apricorn_planks
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - #cobblemon:signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:slabs</summary>
+<summary><b>Tag:</b> #cobblemon:slabs</summary>
 
 - cobblemon:black_tumblestone_brick_slab
 - cobblemon:polished_black_tumblestone_slab
@@ -1466,7 +1508,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:stairs</summary>
+<summary><b>Tag:</b> #cobblemon:stairs</summary>
 
 - cobblemon:black_tumblestone_brick_stairs
 - cobblemon:polished_black_tumblestone_stairs
@@ -1481,14 +1523,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:trim_templates</summary>
+<summary><b>Tag:</b> #cobblemon:trim_templates</summary>
 
 - cobblemon:automaton_armor_trim_smithing_template
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:villager_plantable_seeds</summary>
+<summary><b>Tag:</b> #cobblemon:villager_plantable_seeds</summary>
 
 - cobblemon:blue_mint_seeds
 - cobblemon:cyan_mint_seeds
@@ -1502,7 +1544,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:walls</summary>
+<summary><b>Tag:</b> #cobblemon:walls</summary>
 
 - cobblemon:black_tumblestone_brick_wall
 - cobblemon:polished_black_tumblestone_wall
@@ -1514,63 +1556,63 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_buttons</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_buttons</summary>
 
 - cobblemon:apricorn_button
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_doors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_doors</summary>
 
 - cobblemon:apricorn_door
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_fences</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_pressure_plates</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_pressure_plates</summary>
 
 - cobblemon:apricorn_pressure_plate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_slabs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_slabs</summary>
 
 - cobblemon:apricorn_slab
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_stairs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_stairs</summary>
 
 - cobblemon:apricorn_stairs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #item:wooden_trapdoors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_trapdoors</summary>
 
 - cobblemon:apricorn_trapdoor
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #enchantable:durability</summary>
+<summary><b>Tag:</b> #cobblemon:durability</summary>
 
 - #cobblemon:poke_rods
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #enchantable:fishing</summary>
+<summary><b>Tag:</b> #cobblemon:fishing</summary>
 
 - #cobblemon:poke_rods
 

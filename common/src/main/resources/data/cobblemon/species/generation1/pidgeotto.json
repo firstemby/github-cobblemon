@@ -180,7 +180,7 @@
       }
     },
     "seats": [],
-    "controller": {
+    "behaviour": {
       "key": "cobblemon:air/glider"
     }
   }

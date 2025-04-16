@@ -1,0 +1,36 @@
+{
+    "portraitScale": 1.5,
+    "portraitTranslation": [-1.0, 1.76, 0.0],
+    "profileScale": 0.5,
+    "profileTranslation": [0.0, 1.0, 0.0],
+    "rootBone": "mudsdale",
+    "animations": {
+      "cry": "q.bedrock_stateful('mudsdale', 'cry')"
+    },
+    "poses": {
+      "sleep": {
+        "poseName": "sleep",
+        "poseTypes": ["SLEEP"],
+        "animations": ["q.bedrock('mudsdale', 'sleep')"]
+      },
+      "standing": {
+        "poseName": "standing",
+        "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('mudsdale', 'ground_idle')",
+          "q.bedrock_stateful('mudsdale', 'blink')"
+        ]
+      },
+      "walk": {
+        "poseName": "walk",
+        "poseTypes": ["WALK", "SWIM"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('mudsdale', 'ground_walk')",
+          "q.bedrock_stateful('mudsdale', 'blink')"
+        ]
+      }
+    }
+  }
+  

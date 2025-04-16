@@ -29,11 +29,13 @@ import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
+import com.cobblemon.mod.common.client.net.orientation.S2CUpdateOrientationHandler
 import com.cobblemon.mod.common.client.net.pasture.ClosePastureHandler
 import com.cobblemon.mod.common.client.net.pasture.OpenPastureHandler
 import com.cobblemon.mod.common.client.net.pasture.PokemonPasturedHandler
 import com.cobblemon.mod.common.client.net.pasture.PokemonUnpasturedHandler
 import com.cobblemon.mod.common.client.net.pokedex.ServerConfirmedRegisterHandler
+import com.cobblemon.mod.common.client.net.pokemon.update.ClientboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.client.net.pokemon.update.PokemonUpdatePacketHandler
 import com.cobblemon.mod.common.client.net.settings.OpenCobblemonConfigEditorHandler
 import com.cobblemon.mod.common.client.net.settings.ServerSettingsPacketHandler
@@ -73,6 +75,7 @@ import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityP
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
 import com.cobblemon.mod.common.net.messages.client.npc.CloseNPCEditorPacket
 import com.cobblemon.mod.common.net.messages.client.npc.OpenNPCEditorPacket
+import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.client.pasture.ClosePasturePacket
 import com.cobblemon.mod.common.net.messages.client.pasture.OpenPasturePacket
 import com.cobblemon.mod.common.net.messages.client.pasture.PokemonPasturedPacket
@@ -142,7 +145,7 @@ import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyPoke
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
-import com.cobblemon.mod.common.net.messages.server.orientation.C2SUpdateOrientationPacket
+import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPacket
@@ -151,6 +154,9 @@ import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScannin
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetActiveMarkPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.net.messages.server.starter.RequestStarterScreenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket
@@ -193,6 +199,9 @@ import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanning
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetNicknameHandler
+import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
+import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHandler
+import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.RequestStarterScreenHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.SelectStarterPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.BenchMoveHandler
@@ -269,6 +278,13 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(DmaxLevelUpdatePacket.ID, DmaxLevelUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(GmaxFactorUpdatePacket.ID, GmaxFactorUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemUpdatePacket.ID, CosmeticItemUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(ActiveMarkUpdatePacket.ID, ActiveMarkUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarkAddUpdatePacket.ID, MarkAddUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarkRemoveUpdatePacket.ID, MarkRemoveUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarkPotentialAddUpdatePacket.ID, MarkPotentialAddUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarksUpdatePacket.ID, MarksUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarksPotentialUpdatePacket.ID, MarksPotentialUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(MarkingsUpdatePacket.ID, MarkingsUpdatePacket::decode, PokemonUpdatePacketHandler()))
 
         // Evolution start
         list.add(PacketRegisterInfo(AddEvolutionPacket.ID, AddEvolutionPacket::decode, PokemonUpdatePacketHandler()))
@@ -361,6 +377,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(FishingBaitRegistrySyncPacket.ID, FishingBaitRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(FlowRegistrySyncPacket.ID, FlowRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(PacketRegisterInfo(MarkRegistrySyncPacket.ID, MarkRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(StadiumCamerasSyncPacket.ID, StadiumCamerasSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(StadiumCameraManagersSyncPacket.ID, StadiumCameraManagersSyncPacket::decode, DataRegistrySyncPacketHandler()))
 
@@ -393,6 +410,9 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(PokemonPasturedPacket.ID, PokemonPasturedPacket::decode, PokemonPasturedHandler))
         list.add(PacketRegisterInfo(PokemonUnpasturedPacket.ID, PokemonUnpasturedPacket::decode, PokemonUnpasturedHandler))
 
+        // Orientation
+        list.add(PacketRegisterInfo(ClientboundUpdateOrientationPacket.ID, ClientboundUpdateOrientationPacket::decode, S2CUpdateOrientationHandler))
+
         // Behaviours
         list.add(PacketRegisterInfo(PlayPosableAnimationPacket.ID, PlayPosableAnimationPacket::decode, PlayPosableAnimationHandler))
 
@@ -419,6 +439,9 @@ object CobblemonNetwork {
         // Debug / cheats
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
 
+        // Riding
+        list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
+
         // Stadium packets
         list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
 
@@ -430,6 +453,8 @@ object CobblemonNetwork {
         // Pokemon Update Packets
         list.add(PacketRegisterInfo(SetNicknamePacket.ID, SetNicknamePacket::decode, SetNicknameHandler))
         list.add(PacketRegisterInfo(SetItemHiddenPacket.ID, SetItemHiddenPacket::decode, SetItemHiddenHandler))
+        list.add(PacketRegisterInfo(SetActiveMarkPacket.ID, SetActiveMarkPacket::decode, SetActiveMarkHandler))
+        list.add(PacketRegisterInfo(SetMarkingsPacket.ID, SetMarkingsPacket::decode, SetMarkingsHandler))
 
         // Evolution Packets
         list.add(PacketRegisterInfo(AcceptEvolutionPacket.ID, AcceptEvolutionPacket::decode, AcceptEvolutionHandler))
@@ -517,8 +542,9 @@ object CobblemonNetwork {
         // NPC packets
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
 
-        // Orientation packet(s)
-        list.add(PacketRegisterInfo(C2SUpdateOrientationPacket.ID, C2SUpdateOrientationPacket::decode, OrientationPacketHandler))
+        // Riding packet(s)
+        list.add(PacketRegisterInfo(ServerboundUpdateOrientationPacket.ID, ServerboundUpdateOrientationPacket::decode, OrientationPacketHandler))
+        list.add(PacketRegisterInfo(ServerboundUpdateRidingStatePacket.ID, ServerboundUpdateRidingStatePacket::decode, ServerboundUpdateRidingStateHandler))
 
         return list
     }

@@ -59,8 +59,21 @@ public class HumanoidModelMixin {
         }
 
         Entity vehicle = entity.getVehicle();
-        if (vehicle instanceof PokemonEntity && entity instanceof AbstractClientPlayer) {
-            MountedPlayerRenderer.INSTANCE.animate((PokemonEntity) vehicle, (AbstractClientPlayer) entity, relevantPartsByName, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
+        if (vehicle instanceof PokemonEntity pokemonEntity && entity instanceof AbstractClientPlayer) {
+            var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
+                return behaviour.shouldRotatePlayerHead(settings, state, pokemonEntity);
+            });
+
+            if (!shouldRotatePlayerHead) {
+                netHeadYaw = 0f;
+                headPitch = 0f;
+                if (this.head != null) {
+                    this.head.yRot = 0f;
+                    this.head.xRot = 0f;
+                }
+            }
+
+            MountedPlayerRenderer.INSTANCE.animate(pokemonEntity, (AbstractClientPlayer) entity, relevantPartsByName, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
         }
     }
 }

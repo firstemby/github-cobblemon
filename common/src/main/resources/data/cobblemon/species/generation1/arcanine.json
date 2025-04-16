@@ -343,7 +343,7 @@
           }
         },
         "seats": [],
-        "controller": {
+        "behaviour": {
           "key": "cobblemon:land/generic"
         }
       }
@@ -368,7 +368,7 @@
       }
     },
     "seats": [],
-    "controller": {
+    "behaviour": {
       "key": "cobblemon:land/generic"
     }
   }

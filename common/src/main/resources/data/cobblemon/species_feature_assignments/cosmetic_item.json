@@ -1,0 +1,18 @@
+{
+  "pokemon": [
+    "squirtle",
+    "wartortle",
+    "blastoise",
+    "sandile",
+    "krokorok",
+    "krookodile",
+    "sneasler",
+    "treecko",
+    "grovyle",
+    "sceptile",
+    "braixen",
+    "delphox",
+    "dragonite"
+  ],
+  "features": ["cosmetic_item"]
+}

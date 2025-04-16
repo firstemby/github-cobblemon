@@ -94,56 +94,122 @@
         "displayName": "Speed",
         "description": "Its top speed",
         "ranges": {
-          "LIQUID": "100-100"
+          "LAND": "2-10",
+          "AIR": "100-101"
         }
       },
       "ACCELERATION": {
         "displayName": "Acceleration",
         "description": "How fast it can speed up",
         "ranges": {
-          "LIQUID": "100-100"
+          "LAND": "2-10",
+          "AIR": "100-101"
         }
       },
       "SKILL": {
         "displayName": "Handling",
         "description": "How fast it can turn",
         "ranges": {
-          "LIQUID": "100-100"
+          "LAND": "2-10",
+          "AIR": "100-101"
         }
       },
       "JUMP": {
         "displayName": "Altitude",
         "description": "How high it can fly",
         "ranges": {
-          "LIQUID": "100-100"
+          "LAND": "2-10",
+          "AIR": "100-101"
         }
       },
       "STAMINA": {
         "displayName": "Fuel/Stamina",
         "description": "How long it can stay off the ground",
         "ranges": {
-          "LIQUID": "100-100"
+          "LAND": "2-10",
+          "AIR": "100-101"
         }
       }
     },
-    "controller": {
-      "key": "cobblemon:swim/dolphin"
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/generic",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/bird",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ]
+      }
     },
     "seats": [
       {
         "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
         },
-        "poseAnimations": [
+        "poseOffsets": [
           {
-            "animations": [
-              {
-                "fileName": "trainer_generic",
-                "animationName": "animation.trainer_generic.ride_test"
-              }
-            ]
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
           }
         ]
       }
@@ -317,26 +383,5 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "dragonair",
-  "evolutions": [],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "30-60"
-      },
-      "ACCELERATION": {
-        "ranges": "30-65"
-      },
-      "SKILL": {
-        "ranges": "30-60"
-      },
-      "JUMP": {
-        "ranges": "30-60"
-      },
-      "STAMINA": {
-        "ranges": "35-75"
-      }
-    },
-    "seats": [],
-    "controller": null
-  }
+  "evolutions": []
 }

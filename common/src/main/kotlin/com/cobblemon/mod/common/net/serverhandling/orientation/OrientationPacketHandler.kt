@@ -8,16 +8,17 @@
 
 package com.cobblemon.mod.common.net.serverhandling.orientation
 
-import com.cobblemon.mod.common.Rollable
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
-import com.cobblemon.mod.common.net.messages.server.orientation.C2SUpdateOrientationPacket
+import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import kotlin.math.atan2
 
-object OrientationPacketHandler : ServerNetworkPacketHandler<C2SUpdateOrientationPacket> {
-    override fun handle(packet: C2SUpdateOrientationPacket, server: MinecraftServer, player: ServerPlayer) {
-        if (player is Rollable) {
-            player.updateOrientation { _ -> packet.orientation }
+object OrientationPacketHandler : ServerNetworkPacketHandler<ServerboundUpdateOrientationPacket> {
+    override fun handle(packet: ServerboundUpdateOrientationPacket, server: MinecraftServer, player: ServerPlayer) {
+        if (player is OrientationControllable) {
+            player.orientationController.updateOrientation { _ -> packet.orientation }
         }
     }
 }
