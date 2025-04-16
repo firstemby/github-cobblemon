@@ -214,7 +214,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
                 if (currentMoonPhase != blockEntity.lastMoonPhaseChecked) {
                     blockEntity.lastMoonPhaseChecked = currentMoonPhase
 
-                    if (currentMoonPhase == 7) {
+                    if (currentMoonPhase == 7 || blockEntity.currentSpawnGroup.isEmpty()) {
                         val structure = blockEntity.detectedStructure
                         if (structure != null) {
                             blockEntity.detectedStructure = structure
