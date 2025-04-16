@@ -70,11 +70,11 @@ class GrottoSpawner(
     }*/
 
     override fun run(cause: SpawnCause): Pair<SpawningContext, SpawnDetail>? {
-        println("[GrottoSpawner] run() starting for cause: $cause")
+        //println("[GrottoSpawner] run() starting for cause: $cause")
         val area = getArea(cause)
-        println("[GrottoSpawner] getArea() result: $area")
+        //println("[GrottoSpawner] getArea() result: $area")
         val constrainedArea = if (area != null) constrainArea(area) else null
-        println("[GrottoSpawner] constrainArea() result: $constrainedArea")
+        //println("[GrottoSpawner] constrainArea() result: $constrainedArea")
 
         if (constrainedArea != null) {
             val slice = prospector.prospect(this, constrainedArea)
@@ -82,7 +82,7 @@ class GrottoSpawner(
             return getSpawningSelector().select(this, contexts)
         }
 
-        println("[GrottoSpawner] Area is null or invalid, skipping spawn")
+        //println("[GrottoSpawner] Area is null or invalid, skipping spawn")
         return null
     }
 
@@ -113,14 +113,14 @@ class GrottoSpawner(
                 val cause = GrottoSpawnCause(this, chooseBucket(), player, structureCenter, grottoPos)
                 val result = run(cause)
 
-                println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
+                //println("[GrottoSpawner] Grotto at $grottoPos spawn result: $result")
 
                 if (result != null) {
                     val (context, detail) = result
                     val action = detail.doSpawn(context)
-                    println("[GrottoSpawner] doSpawn: $detail -> $action")
+                    //println("[GrottoSpawner] doSpawn: $detail -> $action")
                     val completion = action.complete()
-                    println("[GrottoSpawner] spawn complete: $completion")
+                    //println("[GrottoSpawner] spawn complete: $completion")
                 }
             }
         }
@@ -166,11 +166,11 @@ class GrottoSpawner(
                     if (details.isEmpty()) continue
 
                     val chosen = weightedRandom(details) { it.weight.takeIf { w -> w > 0 } ?: 1.0f }
-                    println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
+                    //println("[GrottoSpawner] Selected ${chosen.pokemon.species} for spawn")
                     return ctx to chosen
                 }
 
-                println("[GrottoSpawner] No spawnable Pokémon found.")
+                //println("[GrottoSpawner] No spawnable Pokémon found.")
                 return null
             }
 
@@ -212,25 +212,25 @@ class GrottoSpawner(
 
         val cached = cache[center]
         if (cached != null && now - cached.second <= CACHE_DURATION_MS) {
-            println("[GrottoSpawner] Cache hit at $center — using group: $spawnGroup")
+            //println("[GrottoSpawner] Cache hit at $center — using group: $spawnGroup")
             return cached.first
         }
 
         val habitat = Habitats.getHabitat(structure)
         if (habitat == null) {
-            println("[GrottoSpawner] No habitat found for structure: $structure")
+            //println("[GrottoSpawner] No habitat found for structure: $structure")
             return spawns
         }
 
         val selectedGroup = habitat.spawnPool.find { group ->
             group.spawns.toSet() == spawnGroup.toSet()
         } ?: return spawns.also {
-            println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
+            /*println("[GrottoSpawner] Could not match spawn group at $center to any group in habitat: $structure")
             println("  ↳ Current spawnGroup: $spawnGroup")
             println("  ↳ Habitat groups:")
             habitat.spawnPool.forEachIndexed { i, g ->
                 println("    [$i]: ${g.spawns}")
-            }
+            }*/
         }
 
         val poolCacheName = "grotto_pool_${center.x}_${center.y}_${center.z}"
@@ -243,12 +243,12 @@ class GrottoSpawner(
             pool.details.add(detail)
         }
 
-        println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
+        /*println("[GrottoSpawner] Constructing pool for Grotto at ${cause.structureCenter}")
         println("  ↳ Detected structure: $structure")
         println("  ↳ Spawn group: $spawnGroup")
         println("  ↳ Selected group: $selectedGroup")
         println("  ↳ Pool size: ${pool.details.size}")
-
+*/
         cache[center] = pool to now
         return pool
     }
