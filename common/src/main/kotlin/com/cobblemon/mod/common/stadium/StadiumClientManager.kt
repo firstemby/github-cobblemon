@@ -202,20 +202,18 @@ object StadiumClientManager {
         val animation = animation ?: return
         val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
         delegate.updatePartialTicks(delta.toFloat())
-
-        // TODO: The rotation logic in this is a mess. It does not work for all animations and needs to be looked at further.
         if (startTime == 0.0) {
             startTime = delegate.animationSeconds.toDouble()
 
             val rotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot % 360) + 180f).toRadians()), 0f)
             startRotation = Vector3f(
                 animation.origin.rotation.x.toRadians(),
-                360f.toRadians() - (((pokemon.yBodyRot % 360) + 180f).toRadians() + animation.origin.rotation.y.toRadians()),
+                360f.toRadians() - (((pokemon.yBodyRot - 45 % 360) + 180f).toRadians() + animation.origin.rotation.y.toRadians()),
                  360f.toRadians() - (((animation.origin.rotation.z + 180 % 360) + 180f).toRadians()),
             )
             startRotation = startRotation
 
-            startPosition = animation.origin.position.scale(1.0 / 12.0)
+            startPosition = animation.origin.position.scale(1.0 / 20.0)
             startPosition = rotation.transform(startPosition!!.toVector3f()).toVec3d().add(pokemon.position())
         }
 
@@ -247,16 +245,16 @@ object StadiumClientManager {
             else -> animation.timeline.position.entries.sortedBy { it.key }[toPositionIndex - 1]
         }
 
-        val pokemonRotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot - 90 % 360) + 180f).toRadians()), 0f)
+        val pokemonRotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot + 90 % 360) + 180f).toRadians()), 0f)
         val position = if (fromPosition.value == toPosition.value) {
-            toPosition.value.scale(1.0 / 12.0)
+            toPosition.value.scale(1.0 / 20.0)
         }
         else {
             Vec3(
                 fromPosition.value.x + (toPosition.value.x - fromPosition.value.x) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.y + (toPosition.value.y - fromPosition.value.y) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.z + (toPosition.value.z - fromPosition.value.z) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-            ).scale(1.0 / 12.0)
+            ).scale(1.0 / 20.0)
         }
         cameraPosition = cameraOriginPosition.add(pokemonRotation.transform(position.toVector3f()).toVec3d())
 
