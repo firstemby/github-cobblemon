@@ -198,9 +198,11 @@ data class BedrockAnimation(
 
         boneTimelines.forEach { (boneName, timeline) ->
             val part = relevantPartsByName[boneName] ?: if (boneName == "root_part") (rootPart as? ModelPart) else null
+            val isCamera = boneName == "locator_camera"
+            val scalar = if (isCamera) 1.0 else intensity.toDouble()
             if (part !== null) {
                 if (!timeline.position.isEmpty()) {
-                    val position = timeline.position.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())
+                    val position = timeline.position.resolve(animationSeconds.toDouble(), runtime).scale(scalar)
                     part.apply {
                         x += position.x.toFloat()
                         y += position.y.toFloat()
@@ -210,7 +212,7 @@ data class BedrockAnimation(
 
                 if (!timeline.rotation.isEmpty()) {
                     try {
-                        val rotation = timeline.rotation.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())
+                        val rotation = timeline.rotation.resolve(animationSeconds.toDouble(), runtime).scale(scalar)
                         part.apply {
                             xRot += rotation.x.toFloat().toRadians()
                             yRot += rotation.y.toFloat().toRadians()

@@ -8,12 +8,15 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.linearLerpAlpha
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZ
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.math.toEulerXYZ
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveString
 import com.cobblemon.mod.common.util.toVec3d
@@ -25,6 +28,7 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.util.*
 import java.util.function.Function
+import com.cobblemon.mod.common.util.plus
 
 object StadiumClientManager {
     //Molang
@@ -68,7 +72,7 @@ object StadiumClientManager {
         cameraTimer = 0.0
         currentCameraState = StadiumCameraManagers.managers[cameraManager]!!.startingState
         cameraPosition = Vec3.ZERO
-        cameraRotation = Vector3f()
+        cameraRotation = Quaternionf()
         updateCameraData(0.0)
     }
 
@@ -183,147 +187,38 @@ object StadiumClientManager {
     }
 
     var cameraPosition: Vec3 = Vec3.ZERO
-    var cameraRotation: Vector3f = Vector3f()
+    var cameraRotation: Quaternionf = Quaternionf()
 
     var startTime = 0.0
     var startPosition: Vec3? = null
     var startRotation: Vector3f? = null
     var attackAnimationPokemon: PokemonEntity? = null
-    var animation: CameraAnimation? = null
+    var animation: PrimaryAnimation? = null
 
-    fun playAnimation(animation: CameraAnimation, pokemon: PokemonEntity) {
+    fun playAnimation(pokemon: PokemonEntity, animation: PrimaryAnimation) {
         if (startTime != 0.0) return
         attackAnimationPokemon = pokemon
         this.animation = animation
-    }
-
-    /* TODO: Here be dragons. The rotation logic in this is a mess. It does not work for all animations and needs to be looked at further.
-     * I really think this logic could be pushed all within our existing bedrock infrastructure if we embed the camera as a locator in the model/animation.
-     * Then we wouldn't need to screw around with all the interpolation & rotation logic.
-     *
-     * Other notable issues:
-     * - During the animation if the pokemon rotates, it will fuck up the animation (Likely easy fix, just base the rot off the start of animation)
-     * - Sometimes the pokemon AABB will go out of the camera frustum and this will cull the entity during animation
-    */
-    fun updateCameraData(delta: Double) {
-        val pokemon = attackAnimationPokemon ?: return
-        val animation = animation ?: return
-        val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
-        delegate.updatePartialTicks(delta.toFloat())
-
-        // These values are not exact and just 'close enough'.
-        // I assume these scalars are derived somewhere along the render pipeline but couldn't find anything in my (short) digging.
-        val scale = if (pokemon.pokemon.species.name == "Tandemaus") 1.0 / 20.0 else 1 / 12.0
-        if (startTime == 0.0) {
-            startTime = delegate.animationSeconds.toDouble()
-
-            // Not too sure at the moment where this offset comes from...
-            val rotationOffset = if (pokemon.pokemon.species.name == "Tandemaus") -45 else 0
-            val rotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot % 360) + 180f).toRadians()), 0f)
-            startRotation = Vector3f(
-                animation.origin.rotation.x.toRadians(),
-                360f.toRadians() - (((pokemon.yBodyRot + rotationOffset % 360) + 180f).toRadians() + animation.origin.rotation.y.toRadians()),
-                 360f.toRadians() - (((animation.origin.rotation.z + 180 % 360) + 180f).toRadians()),
-            )
-            startPosition = animation.origin.position.scale(scale)
-            startPosition = rotation.transform(startPosition!!.toVector3f()).toVec3d().add(pokemon.position())
-        }
-
-        if (delegate.animationSeconds > startTime + animation.length) {
-            startTime = 0.0
+        animation.afterAction += {
+            cameraPosition = Vec3.ZERO
+            cameraRotation = Quaternionf()
             attackAnimationPokemon = null
             this.animation = null
-            cameraPosition = Vec3.ZERO
-            cameraRotation = Vector3f()
-            startPosition = null
-            startRotation = null
-            return
         }
+    }
 
-        val cameraOriginPosition = startPosition ?: return
-        val cameraOriginRotation = startRotation ?: return
+    fun updateCameraData(delta: Double) {
+        val pokemon = attackAnimationPokemon ?: return
+        val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
+        if (delegate.poseIntensity > 10000000) return
+        val animation = animation ?: return
 
-        val animationDelta = delegate.animationSeconds - startTime
+        delegate.updatePartialTicks(delta.toFloat())
+        MountedPokemonAnimationRenderController.reset()
+        MountedPokemonAnimationRenderController.setup(pokemon, delta.toFloat())
 
-        val toPositionIndex = animation.timeline.position.entries.sortedBy { it.key }.indexOfFirst { it.key > animationDelta }
-        val toPosition = if (toPositionIndex != -1) {
-            animation.timeline.position.entries.sortedBy { it.key }[toPositionIndex]
-        } else {
-            animation.timeline.position.entries.sortedBy { it.key }.last()
-        }
-        val fromPosition = when (toPositionIndex) {
-            0 -> animation.timeline.position.entries.sortedBy { it.key }.first()
-            -1 -> toPosition
-            else -> animation.timeline.position.entries.sortedBy { it.key }[toPositionIndex - 1]
-        }
-
-        // Again, no idea where this rotation offset comes from. Something is quite wrong here
-        val rotationOffset = if (pokemon.pokemon.species.name == "Tandemaus") 90 else -90
-        val pokemonRotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot + rotationOffset % 360) + 180f).toRadians()), 0f)
-        val position = if (fromPosition.value == toPosition.value) {
-            toPosition.value.scale(scale)
-        }
-        else {
-            Vec3(
-                fromPosition.value.x + (toPosition.value.x - fromPosition.value.x) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-                fromPosition.value.y + (toPosition.value.y - fromPosition.value.y) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-                fromPosition.value.z + (toPosition.value.z - fromPosition.value.z) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-            ).scale(scale)
-        }
-        cameraPosition = cameraOriginPosition.add(pokemonRotation.transform(position.toVector3f()).toVec3d())
-
-        val toRotationIndex = animation.timeline.rotation.entries.sortedBy { it.key }.indexOfFirst { it.key > animationDelta }
-        val toRotation = if (toRotationIndex != -1) {
-            animation.timeline.rotation.entries.sortedBy { it.key }[toRotationIndex]
-        } else {
-            animation.timeline.rotation.entries.sortedBy { it.key }.last()
-        }
-        val fromRotation = when (toRotationIndex) {
-            0 -> animation.timeline.rotation.entries.sortedBy { it.key }.first()
-            -1 -> toRotation
-            else -> animation.timeline.rotation.entries.sortedBy { it.key }[toRotationIndex - 1]
-        }
-
-        val rotation = if (fromRotation.value == toRotation.value) {
-            Vector3f(
-                fromRotation.value.x.toRadians(),
-                fromRotation.value.y.toRadians(),
-                fromRotation.value.z.toRadians(),
-            )
-        }
-        else {
-            Vector3f(
-                (fromRotation.value.x.toRadians() + (toRotation.value.x.toRadians() - fromRotation.value.x.toRadians()) * linearLerpAlpha(fromRotation.key, toRotation.key, animationDelta)).toFloat(),
-                (fromRotation.value.y.toRadians() + (toRotation.value.y.toRadians() - fromRotation.value.y.toRadians()) * linearLerpAlpha(fromRotation.key, toRotation.key, animationDelta)).toFloat(),
-                (fromRotation.value.z.toRadians() + (toRotation.value.z.toRadians() - fromRotation.value.z.toRadians()) * linearLerpAlpha(fromRotation.key, toRotation.key, animationDelta)).toFloat(),
-            )
-        }
-        cameraRotation = Vector3f(cameraOriginRotation).add(rotation)
-
-//        if (!shouldUseStadiumCamera()) return
-//
-//        val environment = runtime.environment
-//        updateMolangVar()
-//        environment.setSimpleVariable("instructionChangeTime", DoubleValue(InstructionChangeTime + delta/20))
-//
-//        val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
-//        val currentState = currentManager.states[currentCameraState]!!
-//        val currentCamera = StadiumCameras.cameras[runtime.resolveString(currentState.camera).asResource()]
-//
-//        if (currentCamera != null) {
-//            var renderTime = cameraTimer + delta/20
-//            if (renderTime > currentCamera.length && currentCamera.length != 0.0 && !calculateNextState) {
-//                val newState = currentManager.states[nextCameraState]!!
-//                val newCamera = StadiumCameras.cameras[runtime.resolveString(newState.camera).asResource()] ?: return
-//
-//                cameraPosition = newCamera.resolvePosition(renderTime - currentCamera.length)
-//                cameraRotation = newCamera.resolveRotation(renderTime - currentCamera.length)
-//            }
-//            else {
-//                if (renderTime > currentCamera.length && currentCamera.length != 0.0) renderTime = currentCamera.length
-//                cameraPosition = currentCamera.resolvePosition(renderTime)
-//                cameraRotation = currentCamera.resolveRotation(renderTime)
-//            }
-//        }
+        val locator = delegate.locatorStates["camera"] ?: return
+        cameraPosition = locator.position.add(locator.matrix.getTranslation(Vector3f()).toVec3d())
+        cameraRotation = locator.matrix.getUnnormalizedRotation(Quaternionf()).normalize()
     }
 }

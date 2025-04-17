@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
 import com.cobblemon.mod.common.stadium.StadiumClientManager;
 import com.cobblemon.mod.common.util.CameraExtensionsKt;
@@ -83,8 +84,17 @@ public class GameRendererMixin {
             StadiumClientManager.INSTANCE.updateCameraData(f);
             var position = StadiumClientManager.INSTANCE.getCameraPosition();
             stadiumCamera.setPosition(position);
-            Vector3f rotations = StadiumClientManager.INSTANCE.getCameraRotation();
-            CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
+
+            Quaternionf rotation = StadiumClientManager.INSTANCE.getCameraRotation();
+            var forwardVector = rotation.transform(Camera.FORWARDS, new Vector3f());
+            var upVector = rotation.transform(Camera.UP, new Vector3f());
+            var leftVector = rotation.transform(Camera.LEFT, new Vector3f());
+            stadiumCamera.rotation.set(rotation);
+            stadiumCamera.xRot = (float)Mth.wrapDegrees(-Math.toDegrees(Math.asin(forwardVector.y)));
+            stadiumCamera.yRot = Mth.wrapDegrees((float)-Math.toDegrees(Camera.FORWARDS.angleSigned(forwardVector, Camera.UP)) + 180);
+            stadiumCamera.forwards.set(forwardVector);
+            stadiumCamera.up.set(upVector);
+            stadiumCamera.left.set(leftVector);
 
             this.renderDistance = (float)(this.minecraft.options.getEffectiveRenderDistance() * 16);
             double d = this.getFov(stadiumCamera, f, true);

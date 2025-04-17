@@ -237,6 +237,14 @@
 					"cubes": [
 						{"origin": [10, 2, -1], "size": [2, 2, 2], "inflate": -0.001, "uv": [8, 36]}
 					]
+				},
+				{
+					"name": "locator_camera",
+					"parent": "tandemaus",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"camera": [0, 0, 0]
+					}
 				}
 			]
 		}
