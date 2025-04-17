@@ -197,23 +197,35 @@ object StadiumClientManager {
         this.animation = animation
     }
 
+    /* TODO: Here be dragons. The rotation logic in this is a mess. It does not work for all animations and needs to be looked at further.
+     * I really think this logic could be pushed all within our existing bedrock infrastructure if we embed the camera as a locator in the model/animation.
+     * Then we wouldn't need to screw around with all the interpolation & rotation logic.
+     *
+     * Other notable issues:
+     * - During the animation if the pokemon rotates, it will fuck up the animation (Likely easy fix, just base the rot off the start of animation)
+     * - Sometimes the pokemon AABB will go out of the camera frustum and this will cull the entity during animation
+    */
     fun updateCameraData(delta: Double) {
         val pokemon = attackAnimationPokemon ?: return
         val animation = animation ?: return
         val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
         delegate.updatePartialTicks(delta.toFloat())
+
+        // These values are not exact and just 'close enough'.
+        // I assume these scalars are derived somewhere along the render pipeline but couldn't find anything in my (short) digging.
+        val scale = if (pokemon.pokemon.species.name == "Tandemaus") 1.0 / 20.0 else 1 / 12.0
         if (startTime == 0.0) {
             startTime = delegate.animationSeconds.toDouble()
 
+            // Not too sure at the moment where this offset comes from...
+            val rotationOffset = if (pokemon.pokemon.species.name == "Tandemaus") -45 else 0
             val rotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot % 360) + 180f).toRadians()), 0f)
             startRotation = Vector3f(
                 animation.origin.rotation.x.toRadians(),
-                360f.toRadians() - (((pokemon.yBodyRot - 45 % 360) + 180f).toRadians() + animation.origin.rotation.y.toRadians()),
+                360f.toRadians() - (((pokemon.yBodyRot + rotationOffset % 360) + 180f).toRadians() + animation.origin.rotation.y.toRadians()),
                  360f.toRadians() - (((animation.origin.rotation.z + 180 % 360) + 180f).toRadians()),
             )
-            startRotation = startRotation
-
-            startPosition = animation.origin.position.scale(1.0 / 20.0)
+            startPosition = animation.origin.position.scale(scale)
             startPosition = rotation.transform(startPosition!!.toVector3f()).toVec3d().add(pokemon.position())
         }
 
@@ -245,16 +257,18 @@ object StadiumClientManager {
             else -> animation.timeline.position.entries.sortedBy { it.key }[toPositionIndex - 1]
         }
 
-        val pokemonRotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot + 90 % 360) + 180f).toRadians()), 0f)
+        // Again, no idea where this rotation offset comes from. Something is quite wrong here
+        val rotationOffset = if (pokemon.pokemon.species.name == "Tandemaus") 90 else -90
+        val pokemonRotation = Quaternionf().fromEulerXYZ(0f, 360f.toRadians() - (((pokemon.yBodyRot + rotationOffset % 360) + 180f).toRadians()), 0f)
         val position = if (fromPosition.value == toPosition.value) {
-            toPosition.value.scale(1.0 / 20.0)
+            toPosition.value.scale(scale)
         }
         else {
             Vec3(
                 fromPosition.value.x + (toPosition.value.x - fromPosition.value.x) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.y + (toPosition.value.y - fromPosition.value.y) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.z + (toPosition.value.z - fromPosition.value.z) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-            ).scale(1.0 / 20.0)
+            ).scale(scale)
         }
         cameraPosition = cameraOriginPosition.add(pokemonRotation.transform(position.toVector3f()).toVec3d())
 
