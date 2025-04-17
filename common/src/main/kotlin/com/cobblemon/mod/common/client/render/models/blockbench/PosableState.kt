@@ -102,7 +102,8 @@ abstract class PosableState : Schedulable {
     val allActiveAnimations: List<ActiveAnimation> get() = activeAnimations + quirks.flatMap { it.value.animations }
 
     /** The tick-driven age of the state. Combines with [currentPartialTicks] to produce the animation seconds. */
-    protected var age = 0
+    var age = 0
+        protected set
     /**
      * The partial tick value of the state. Combines with [age] to produce the animation seconds. For entity-based state
      * this will be consistently reset to a new value, whereas non-entity-based state will increment this value.

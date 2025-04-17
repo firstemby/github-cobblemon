@@ -77,11 +77,12 @@ public class GameRendererMixin {
             this.minecraft.getProfiler().push("camera");
             Camera stadiumCamera = new Camera();
             Entity entity = (Entity) this.minecraft.player;
-            stadiumCamera.setup(this.minecraft.level, entity, true, false, 1.0F);
+            stadiumCamera.setup(this.minecraft.level, entity, false, false, 1.0F);
 
             //adjust camera
             StadiumClientManager.INSTANCE.updateCameraData(f);
-            stadiumCamera.setPosition(StadiumClientManager.INSTANCE.getCameraPosition());
+            var position = StadiumClientManager.INSTANCE.getCameraPosition();
+            stadiumCamera.setPosition(position);
             Vector3f rotations = StadiumClientManager.INSTANCE.getCameraRotation();
             CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
 
@@ -103,6 +104,6 @@ public class GameRendererMixin {
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void tick(CallbackInfo ci) {
-        StadiumClientManager.INSTANCE.tickCameraManager();
+//        StadiumClientManager.INSTANCE.tickCameraManager();
     }
 }
