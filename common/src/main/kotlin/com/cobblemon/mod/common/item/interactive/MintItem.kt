@@ -86,8 +86,8 @@ class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelecti
 }  
                 """.trimIndent()
         )
-        val bedrockAnimation = (delegate.runtime.resolve("q.bedrock_stateful('tinkaton', 'signature')".asExpression()).value() as ObjectValue<*>).obj as BedrockActiveAnimation
-        delegate.addActiveAnimation(bedrockAnimation)
+        val bedrockAnimation = (delegate.runtime.resolve("q.bedrock_primary('tinkaton', 'signature')".asExpression()).value() as ObjectValue<*>).obj as PrimaryAnimation
+        delegate.addPrimaryAnimation(bedrockAnimation)
         StadiumClientManager.playAnimation(animation, entity)
         return InteractionResultHolder.success(user.getItemInHand(hand))
     }

@@ -202,6 +202,8 @@ object StadiumClientManager {
         val animation = animation ?: return
         val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
         delegate.updatePartialTicks(delta.toFloat())
+
+        // TODO: The rotation logic in this is a mess. It does not work for all animations and needs to be looked at further.
         if (startTime == 0.0) {
             startTime = delegate.animationSeconds.toDouble()
 
@@ -254,7 +256,7 @@ object StadiumClientManager {
                 fromPosition.value.x + (toPosition.value.x - fromPosition.value.x) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.y + (toPosition.value.y - fromPosition.value.y) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
                 fromPosition.value.z + (toPosition.value.z - fromPosition.value.z) * linearLerpAlpha(fromPosition.key, toPosition.key, animationDelta),
-            ).scale(0.0825)
+            ).scale(1.0 / 12.0)
         }
         cameraPosition = cameraOriginPosition.add(pokemonRotation.transform(position.toVector3f()).toVec3d())
 
