@@ -10,7 +10,7 @@
             "tag": "c:ingots/iron"
         },
         "W": {
-            "item": "minecraft:white_wool"
+            "tag": "minecraft:wool"
         },
         "M": {
             "item": "minecraft:minecart"

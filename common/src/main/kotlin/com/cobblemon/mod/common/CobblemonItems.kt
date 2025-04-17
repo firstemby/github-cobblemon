@@ -295,20 +295,21 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val REAPER_CLOTH = noSettingsItem("reaper_cloth")
     @JvmField val PRISM_SCALE = noSettingsItem("prism_scale")
     @JvmField val SACHET = noSettingsItem("sachet")
-    @JvmField val WHIPPED_DREAM = noSettingsItem("whipped_dream")
-    @JvmField val STRAWBERRY_SWEET = noSettingsItem("strawberry_sweet")
-    @JvmField val LOVE_SWEET = noSettingsItem("love_sweet")
-    @JvmField val BERRY_SWEET = noSettingsItem("berry_sweet")
-    @JvmField val CLOVER_SWEET = noSettingsItem("clover_sweet")
-    @JvmField val FLOWER_SWEET = noSettingsItem("flower_sweet")
-    @JvmField val STAR_SWEET = noSettingsItem("star_sweet")
-    @JvmField val RIBBON_SWEET = noSettingsItem("ribbon_sweet")
+    @JvmField val WHIPPED_DREAM = create("whipped_dream", foodItem(8, 0.3f))
+    @JvmField val STRAWBERRY_SWEET = create("strawberry_sweet", foodItem(6, 0.125f))
+    @JvmField val LOVE_SWEET = create("love_sweet", foodItem(6, 0.125f))
+    @JvmField val BERRY_SWEET = create("berry_sweet", foodItem(6, 0.125f))
+    @JvmField val CLOVER_SWEET = create("clover_sweet", foodItem(6, 0.125f))
+    @JvmField val FLOWER_SWEET = create("flower_sweet", foodItem(6, 0.125f))
+    @JvmField val STAR_SWEET = create("star_sweet", foodItem(6, 0.125f))
+    @JvmField val RIBBON_SWEET = create("ribbon_sweet", foodItem(6, 0.125f))
     @JvmField val CHIPPED_POT = noSettingsItem("chipped_pot")
     @JvmField val CRACKED_POT = noSettingsItem("cracked_pot")
     @JvmField val MASTERPIECE_TEACUP = noSettingsItem("masterpiece_teacup")
     @JvmField val UNREMARKABLE_TEACUP = noSettingsItem("unremarkable_teacup")
-    @JvmField val SWEET_APPLE = noSettingsItem("sweet_apple")
-    @JvmField val TART_APPLE = noSettingsItem("tart_apple")
+    @JvmField val SWEET_APPLE = create("sweet_apple", foodItem(4, 0.3f))
+    @JvmField val TART_APPLE = create("tart_apple", foodItem(4, 0.3f))
+    @JvmField val SYRUPY_APPLE = create("syrupy_apple", foodItem(4, 0.3f))
     @JvmField val GALARICA_CUFF = noSettingsItem("galarica_cuff")
     @JvmField val GALARICA_WREATH = noSettingsItem("galarica_wreath")
     @JvmField val BLACK_AUGURITE = noSettingsItem("black_augurite")
@@ -1360,4 +1361,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return createdItem
     }
 
+    private fun foodItem(nutrition: Int, saturationModifier: Float): Item {
+        return Item(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
+    }
 }

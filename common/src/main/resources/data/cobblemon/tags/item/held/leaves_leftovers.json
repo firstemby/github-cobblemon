@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "minecraft:apple"
+    "minecraft:apple",
+    "cobblemon:sweet_apple",
+    "cobblemon:tart_apple",
+	"cobblemon:syrupy_apple"
   ]
 }

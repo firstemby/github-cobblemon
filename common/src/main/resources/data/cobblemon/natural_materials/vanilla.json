@@ -282,7 +282,11 @@
 	},
 	{
 		"content": 4,
-		"tag": "#cobblemon:cooked_meat"
+		"tag": "#c:foods/cooked_meat"
+	},
+	{
+		"content": 4,
+		"tag": "#c:foods/cooked_fish"
 	},
 	{
 		"content": 2,
@@ -410,11 +414,11 @@
 	},
 	{
 		"content": 8,
-		"tag": "#cobblemon:raw_meat"
+		"tag": "#c:foods/raw_meat"
 	},
 	{
 		"content": 8,
-		"item": "minecraft:pufferfish"
+		"tag": "#c:foods/raw_fish"
 	},
 	{
 		"content": 8,

@@ -48,6 +48,18 @@
     "height": 3,
     "fixed": false
   },
+  "standingEyeHeight": 0.85,
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.29
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false
+    }
+  },
   "drops": {
     "amount": 6,
     "entries": [
