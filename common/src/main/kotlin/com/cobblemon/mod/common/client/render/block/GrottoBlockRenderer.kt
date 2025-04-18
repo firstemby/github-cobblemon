@@ -1,4 +1,4 @@
-package com.cobblemon.mod.client.render.blockentity
+package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import com.mojang.blaze3d.vertex.PoseStack

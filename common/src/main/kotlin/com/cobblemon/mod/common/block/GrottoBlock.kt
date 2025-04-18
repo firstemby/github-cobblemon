@@ -86,5 +86,11 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
         return box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     }
 
-    override fun useShapeForLightOcclusion(state: BlockState): Boolean = true
+    override fun getOcclusionShape(state: BlockState, level: BlockGetter, pos: BlockPos): VoxelShape? {
+        return Shapes.empty()
+    }
+
+    override fun useShapeForLightOcclusion(state: BlockState): Boolean {
+        return true
+    }
 }
