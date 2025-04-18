@@ -170,7 +170,11 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
         // Place a new egg if the player is holding one
         if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
-            setItem(0,heldItem.split(1))
+            if (!player.isCreative) {
+                setItem(0, heldItem.split(1))
+            } else {
+                setItem(0, heldItem.copy())
+            }
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
