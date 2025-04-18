@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
@@ -17,7 +17,7 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
-class AddTasksToActivity : BrainConfig {
+class AddTasksToActivity : BehaviourConfig {
     val activity: Activity? = null
     // Can be useful to add to multiple activities at once
     val activities = mutableListOf<Activity>()
@@ -25,15 +25,15 @@ class AddTasksToActivity : BrainConfig {
     val tasksByPriority = mutableMapOf<Int, List<TaskConfig>>()
     override fun getVariables(entity: LivingEntity) = tasksByPriority.values.flatten().flatMap { it.getVariables(entity) } + listOf(condition).asVariables()
 
-    override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(entity, condition)) return
 
         val activities = if (activity != null) (activities + activity) else activities
 
         tasksByPriority.forEach { (priority, taskConfigs) ->
-            val tasks = taskConfigs.flatMap { it.createTasks(entity, brainConfigurationContext) }
+            val tasks = taskConfigs.flatMap { it.createTasks(entity, behaviourConfigurationContext) }
             for (activity in activities) {
-                val activityContext = brainConfigurationContext.getOrCreateActivity(activity)
+                val activityContext = behaviourConfigurationContext.getOrCreateActivity(activity)
                 activityContext.addTasks(priority, *tasks.toTypedArray())
             }
         }

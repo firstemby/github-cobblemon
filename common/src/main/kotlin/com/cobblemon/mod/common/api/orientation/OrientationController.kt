@@ -107,4 +107,22 @@ open class OrientationController(val entity: LivingEntity) {
     val roll: Float
         get() = Mth.wrapDegrees(-upVector.angleSigned(UP, forwardVector).toDegrees())
 
+    fun applyGlobalYaw(deltaYawDegrees: Float) = updateOrientation { original ->
+        val euler = Vector3f()
+        original.getEulerAnglesXYZ(euler)
+        val pitch0 = euler.x
+        val roll0 = euler.z
+
+        val unroll = Matrix3f().rotateZ(-roll0)
+        val unpitch = Matrix3f().rotateX(-pitch0)
+        val flattened = Matrix3f(original).mul(unroll).mul(unpitch)
+
+        //Flip to reflect current acceptance of what direction is pos for yaw
+        val globalYaw = Matrix3f().rotationY(-1.0f * deltaYawDegrees.toRadians())
+        val rePitch = Matrix3f().rotateX(pitch0)
+        val reRoll = Matrix3f().rotateZ(roll0)
+
+        return@updateOrientation Matrix3f(globalYaw).mul(flattened).mul(rePitch).mul(reRoll)
+    }
+
 }

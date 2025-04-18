@@ -234,6 +234,7 @@ object DataKeys {
     const val NPC_PLAYER_TEXTURE_MODEL = "Model"
     const val NPC_PLAYER_TEXTURE_TEXTURE = "Texture"
     const val NPC_LEVEL = "Level"
+    const val NPC_FORCED_RESOURCE_IDENTIFIER = "ForcedResourceIdentifier"
     const val NPC_IS_MOVABLE = "IsMovable"
     const val NPC_SKILL = "Skill"
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
@@ -246,8 +247,8 @@ object DataKeys {
     const val NPC_HITBOX_FIXED = "Fixed"
     const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
 
-    const val SCRIPTED_BRAIN_IS_CUSTOM = "BehavioursAreCustom"
-    const val SCRIPTED_BRAIN_PRESETS = "BrainPresets"
+    const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BEHAVIOURS = "Behaviours"
     const val SCRIPTED_DATA = "Data"
     const val SCRIPTED_CONFIG = "Config"
 

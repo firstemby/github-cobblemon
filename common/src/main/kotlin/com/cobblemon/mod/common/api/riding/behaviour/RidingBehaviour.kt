@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.resources.ResourceLocation
@@ -27,6 +28,7 @@ import net.minecraft.world.phys.Vec3
  */
 interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBehaviourState> {
     val key: ResourceLocation
+    val style: RidingStyle
 
     fun isActive(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
@@ -85,6 +87,6 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun shouldRotatePlayerHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
-    fun createDefaultState(): State
+    fun createDefaultState(settings: Settings): State
 
 }

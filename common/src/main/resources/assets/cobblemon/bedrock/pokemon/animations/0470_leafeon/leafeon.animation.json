@@ -159,6 +159,14 @@
 					"rotation": [-9.99762, -0.10901, 10.00238]
 				}
 			}
+		},
+		"animation.leafeon.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.leafeon.cry"
+				}
+			}
 		}
 	}
 }

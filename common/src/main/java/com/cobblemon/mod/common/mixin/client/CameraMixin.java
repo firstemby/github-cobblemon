@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.api.riding.Seat;
+import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
@@ -60,6 +61,8 @@ public abstract class CameraMixin {
 
     @Shadow
     private BlockGetter level;
+
+    @Shadow private float partialTickTime;
     @Unique private float returnTimer = 0;
     @Unique private float rollAngleStart = 0;
     @Unique Minecraft minecraft = Minecraft.getInstance();
@@ -67,7 +70,7 @@ public abstract class CameraMixin {
     @Unique boolean disableRollableCameraDebug = false;
 
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
-    public void open_camera$setRotation(float f, float g, CallbackInfo ci) {
+    public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
         if (!(this.entity instanceof OrientationControllable controllable) || disableRollableCameraDebug) return;
         var controller = controllable.getOrientationController();
         if (!controller.isActive() && controller.getOrientation() != null) {
@@ -85,7 +88,7 @@ public abstract class CameraMixin {
                     return;
                 }
                 controller.getOrientation().rotateZ((float) Math.toRadians(-rollAngleStart*(1-returnTimer)));
-                applyRotation();
+                cobblemon$applyRotation();
                 this.returnTimer += .05F;
                 ci.cancel();
             } else {
@@ -95,7 +98,7 @@ public abstract class CameraMixin {
             return;
         }
         if (controller.getOrientation() == null) return;
-        applyRotation();
+        cobblemon$applyRotation();
 
         this.returnTimer = 0;
         this.rollAngleStart = controller.getRoll();
@@ -104,9 +107,10 @@ public abstract class CameraMixin {
 
     //If you want to move this to a delagate you need an AW for position
     @WrapOperation(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setPosition(DDD)V"))
-    public void positionCamera(Camera instance, double x, double y, double z, Operation<Void> original, @Local(ordinal = 1, argsOnly = true) boolean thirdPersonReverse) {
+    public void cobblemon$positionCamera(Camera instance, double x, double y, double z, Operation<Void> original, @Local(ordinal = 1, argsOnly = true) boolean thirdPersonReverse) {
         Entity entity = instance.getEntity();
         Entity vehicle = entity.getVehicle();
+        MountedPokemonAnimationRenderController.INSTANCE.reset();
 
         if(vehicle instanceof Rideable){
             //RidingCameraDelagate.INSTANCE.positionCamera(instance, x, y, z, original);
@@ -115,21 +119,22 @@ public abstract class CameraMixin {
                 return;
             }
 
-            int seatIndex = pokemon.getPassengers().indexOf(entity);
-            Seat seat = pokemon.getSeats().get(seatIndex);
             PokemonClientDelegate delegate = (PokemonClientDelegate) pokemon.getDelegate();
-            MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
-
             Vec3 entityPos = new Vec3(
                     Mth.lerp(instance.getPartialTickTime(), pokemon.xOld, pokemon.getX()),
                     Mth.lerp(instance.getPartialTickTime(), pokemon.yOld, pokemon.getY()),
                     Mth.lerp(instance.getPartialTickTime(), pokemon.zOld, pokemon.getZ())
             );
+            MountedPokemonAnimationRenderController.INSTANCE.setup(pokemon, partialTickTime);
+            int seatIndex = pokemon.getPassengers().indexOf(entity);
+            Seat seat = pokemon.getSeats().get(seatIndex);
 
             OrientationControllable rollable = (OrientationControllable) entity;
             OrientationController controller = rollable.getOrientationController();
 
             if (!instance.isDetached() || Cobblemon.config.getThirdPartyViewBobbing()) {
+                MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+
                 if (locator == null) {
                     original.call(instance, x, y, z);
                     return;
@@ -138,10 +143,12 @@ public abstract class CameraMixin {
                 Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
 
                 float currEyeHeight = Mth.lerp(instance.getPartialTickTime(), eyeHeightOld, eyeHeight);
-                Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
-                Vec3 rotatedEyeHeight = new Vec3(orientation.transform(new Vector3f(0f, currEyeHeight, 0f)));
+                var rotatedEyeHeight = new Vector3f(0f, currEyeHeight - (entity.getBbHeight() / 2), 0f);
+                if (controller.isActive()) {
+                    rotatedEyeHeight = controller.getRenderOrientation(partialTickTime).transform(rotatedEyeHeight);
+                }
 
-                Vec3 position = locatorOffset.add(entityPos).add(rotatedEyeHeight);
+                Vec3 position = locatorOffset.add(entityPos).add(new Vec3(rotatedEyeHeight));
                 setPosition(position);
             } else {
                 Vector3f pos = entityPos.add(new Vec3(0, pokemon.getBbHeight() / 2, 0)).toVector3f();
@@ -178,7 +185,7 @@ public abstract class CameraMixin {
     }
 
     @Unique
-    private void applyRotation(){
+    private void cobblemon$applyRotation(){
         if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
         var controller = controllable.getOrientationController();
         var newRotation = controller.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());

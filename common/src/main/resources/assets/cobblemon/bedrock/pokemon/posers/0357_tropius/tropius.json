@@ -4,6 +4,18 @@
   "profileScale": 0.28,
   "profileTranslation": [ 0, 1.26, 0 ],
   "rootBone": "tropius",
+  "seatToCameraOffset": {
+    "seat_1": [
+      0,
+      5,
+      10
+    ],
+    "seat_1_reverse": [
+      0,
+      2,
+      4
+    ]
+  },
    "animations": {
      "faint": "q.bedrock_primary('tropius', 'faint', q.curve('one'))",
      "cry": "q.bedrock_stateful('tropius', 'cry')",

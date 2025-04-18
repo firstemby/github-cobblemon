@@ -188,6 +188,14 @@
 					"rotation": [12.5, 0, 0]
 				}
 			}
+		},
+		"animation.espeon.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.espeon.cry"
+				}
+			}
 		}
 	}
 }

@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.LivingEntity
@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3
 
 class PointToSpawnTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
-    override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<in LivingEntity>? {
+    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
         return BehaviorBuilder.create {
             it.group(
                 it.registered(MemoryModuleType.LOOK_TARGET),

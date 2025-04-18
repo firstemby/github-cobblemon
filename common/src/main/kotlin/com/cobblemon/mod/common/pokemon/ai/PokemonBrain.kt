@@ -9,12 +9,16 @@
 package com.cobblemon.mod.common.pokemon.ai
 
 import com.cobblemon.mod.common.CobblemonActivities
+import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyPresets
 import com.cobblemon.mod.common.api.ai.config.BrainConfig
 import com.cobblemon.mod.common.api.ai.config.task.GuardNestTaskConfig
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.entity.ai.*
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
@@ -72,18 +76,25 @@ object PokemonBrain {
     )
 
     fun makeBrain(entity: PokemonEntity, pokemon: Pokemon, brain: Brain<out PokemonEntity>): Brain<*> {
-        var brainConfigurations: List<BrainConfig> = pokemon.form.baseAI + pokemon.form.ai
+        /*
+         * Something to note here is that if we changed the autoPokemonPresets to be a set of presets rather than
+         * the configurations inside the presets, the logic in ApplyPresets would actually result in the top
+         * level preset (the ones in the auto folder) being the only recorded 'applied' configurations. That would
+         * mean if you opened the Pokémon in the brain editor, it would not have any applied configurations as the
+         * auto configurations typically aren't visible on the client since the contained presets already are.
+         * I realize that this doesn't make a great deal of sense, but I am here in case of future Hiro amnesia.
+         */
+        var behaviourConfigurations: List<BehaviourConfig> = (pokemon.form.baseAI ?: CobblemonBehaviours.autoPokemonBehaviours.flatMap { it.configurations }) + pokemon.form.ai
         if (entity.behavioursAreCustom) {
-            brainConfigurations = listOf(ApplyPresets().apply { presets.addAll(entity.behaviours) })
+            behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(entity.behaviours) })
         }
-        // Use brain configs, apply from some kind of pokemon species AI data if it isn't custom blabla
 
-        val ctx = BrainConfigurationContext()
-        ctx.apply(entity, brainConfigurations)
+        val ctx = BehaviourConfigurationContext()
+        ctx.apply(entity, behaviourConfigurations)
         entity.behaviours.clear()
-        entity.behaviours.addAll(ctx.appliedBrainPresets)
+        entity.behaviours.addAll(ctx.appliedBehaviours)
 
-        if (brainConfigurations.isNotEmpty()) {
+        if (behaviourConfigurations.isNotEmpty()) {
             return brain
         }
 

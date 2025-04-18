@@ -8,22 +8,22 @@
 
 package com.cobblemon.mod.common.entity.npc
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.ai.config.ApplyPresets
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.NPCClass
 import net.minecraft.world.entity.ai.Brain
 
 object NPCBrain {
     fun configure(npcEntity: NPCEntity, npcClass: NPCClass, brain: Brain<out NPCEntity>) {
-        var brainConfigurations: List<BrainConfig> = npcClass.ai
+        var behaviourConfigurations: List<BehaviourConfig> = npcClass.behaviours
         if (npcEntity.behavioursAreCustom) {
-            brainConfigurations = listOf(ApplyPresets().apply { presets.addAll(npcEntity.behaviours) })
+            behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(npcEntity.behaviours) })
         }
 
-        val ctx = BrainConfigurationContext()
-        ctx.apply(npcEntity, brainConfigurations)
+        val ctx = BehaviourConfigurationContext()
+        ctx.apply(npcEntity, behaviourConfigurations)
         npcEntity.behaviours.clear()
-        npcEntity.behaviours.addAll(ctx.appliedBrainPresets)
+        npcEntity.behaviours.addAll(ctx.appliedBehaviours)
     }
 }

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
@@ -18,7 +19,6 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -35,6 +35,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 
     override val key = KEY
+    override val style = RidingStyle.LIQUID
 
     val poseProvider = PoseProvider<DolphinSettings, DolphinState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })
@@ -256,7 +257,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         return false
     }
 
-    override fun createDefaultState() = DolphinState()
+    override fun createDefaultState(settings: DolphinSettings) = DolphinState()
 
 }
 
@@ -282,6 +283,7 @@ class DolphinSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeExpression(canJump)
         buffer.writeExpression(jumpVector[0])
         buffer.writeExpression(jumpVector[1])
@@ -306,13 +308,11 @@ class DolphinSettings : RidingBehaviourSettings {
     }
 }
 
-class DolphinState : RidingBehaviourState {
+class DolphinState : RidingBehaviourState() {
     var lastVelocity = ridingState(Vec3.ZERO, Side.BOTH)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) = Unit
-    override fun decode(buffer: RegistryFriendlyByteBuf) = Unit
-
     override fun reset() {
+        super.reset()
         lastVelocity.set(Vec3.ZERO, forced = true)
     }
 
@@ -321,8 +321,8 @@ class DolphinState : RidingBehaviourState {
     }
 
     override fun copy() = DolphinState().also {
+        it.stamina.set(stamina.get(), forced = true)
+        it.rideVelocity.set(rideVelocity.get(), forced = true)
         it.lastVelocity.set(lastVelocity.get(), forced = true)
     }
-
-    override fun shouldSync(previous: RidingBehaviourState) = false
 }

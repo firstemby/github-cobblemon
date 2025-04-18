@@ -159,15 +159,15 @@ class PokemonRenderer(
 //        Minecraft.getInstance().bufferBuilders.entityVertexConsumers.draw()
 
         //Render Held Item
-        heldItemRenderer.renderOnEntity(
-            entity,
+        heldItemRenderer.renderOnModel(
             entity.shownItem,
-            model.posableModel,
+            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,
             packedLight,
-            Vec3(0.0,-90.0,90.0)
+            false,
+            entity
         )
     }
 

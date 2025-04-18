@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 621,
   "name": "Druddigon",
   "primaryType": "dragon",
@@ -42,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 30,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.2,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.75,
+    "height": 2.2,
     "fixed": false
   },
   "behaviour": {

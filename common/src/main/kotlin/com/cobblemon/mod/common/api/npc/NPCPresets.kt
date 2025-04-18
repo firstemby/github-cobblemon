@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.npc
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.ai.SleepDepth
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
@@ -69,7 +69,7 @@ object NPCPresets : JsonDataRegistry<NPCPreset> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(MoValue::class.java, MoValueAdapter)
         .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(BrainConfig::class.java, BrainConfigAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BrainConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.Blaze3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
@@ -29,9 +30,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(MouseHandler.class)
-public class MouseHandlerMixin {
+public abstract class MouseHandlerMixin {
     @Shadow private double accumulatedScrollY;
     @Shadow @Final private Minecraft minecraft;
 
@@ -48,6 +50,14 @@ public class MouseHandlerMixin {
     @Shadow private double accumulatedDX;
 
     @Shadow private double accumulatedDY;
+
+    @Shadow private double lastHandleMovementTime;
+
+    @Shadow public abstract boolean isMouseGrabbed();
+
+    @Shadow protected abstract void turnPlayer(double movementTime);
+
+    @Unique private double cobblemon$timeDelta;
 
     @Inject(
             method = "onScroll",
@@ -161,16 +171,21 @@ public class MouseHandlerMixin {
         return false;
     }
 
-    @Inject(method = "handleAccumulatedMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;isMouseGrabbed()Z", ordinal = 0))
-    private void cobblemon$maintainMovementWhenInScreens(CallbackInfo ci, @Local(ordinal = 1) double e) {
+    @Inject(method = "handleAccumulatedMovement", at = @At("HEAD"))
+    private void cobblemon$maintainMovementWhenInScreens2(CallbackInfo ci) {
+        double time = Blaze3D.getTime();
+        cobblemon$timeDelta = time - this.lastHandleMovementTime;
+    }
+
+    @Inject(method = "handleAccumulatedMovement", at = @At("TAIL"))
+    private void cobblemon$maintainMovementWhenInScreens(CallbackInfo ci) {
         if (minecraft.player == null) return;
         if (!(minecraft.player instanceof OrientationControllable controllable)) return;
         if (!controllable.getOrientationController().isActive()) return;
         if (minecraft.isPaused()) return;
+        if (isMouseGrabbed()) return;
 
-        var pitch = pitchSmoother.getNewDeltaValue(0, e);
-        var roll = rollSmoother.getNewDeltaValue(0, e);
-        controllable.getOrientationController().rotate(0.0F, (float)pitch, (float)roll);
+        this.turnPlayer(cobblemon$timeDelta);
     }
 
     @Unique

@@ -1,0 +1,19 @@
+{
+  "name": "cobblemon.behaviour.looks_around.name",
+  "description": "cobblemon.behaviour.looks_around.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": [
+          {
+            "type": "look_at_entities",
+            "condition": true
+          },
+          "look_at_speaker"
+        ]
+      }
+    }
+  ]
+}

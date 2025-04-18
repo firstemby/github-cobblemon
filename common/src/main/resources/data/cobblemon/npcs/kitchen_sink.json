@@ -8,7 +8,7 @@
   "canDespawn": false,
   "ai": [
     {
-      "type": "apply_presets",
+      "type": "apply_behaviours",
       "presets": [
         "cobblemon:kitchen_sink"
       ]

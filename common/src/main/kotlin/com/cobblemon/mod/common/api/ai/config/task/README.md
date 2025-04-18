@@ -184,3 +184,16 @@ the script to avoid lagging the game.
 The 'look_in_direction' type creates a task that will make the entity look in a specific direction at all times where they aren't being told to look elsewhere.
 - `yaw`: A MoLang expression that determines the yaw angle (degrees) of the entity. Defaults to `0`.
 - `pitch`: A MoLang expression that determines the pitch angle (degrees) of the entity. Defaults to `0`.
+
+### move_to_owner
+The 'move_to_owner' type creates a task that will make the entity move to its owner. This will only work for entities that
+can be owned, like Pokémon.
+- `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
+- `completionRange`: A MoLang expression that determines the distance from the owner that the entity needs to be for the path to be considered complete. Defaults to 4.
+- `speedMultiplier`: A MoLang expression that determines the speed multiplier for moving to the owner. Defaults to 0.4 which is slightly above the normal walk speed.
+- `teleportDistance`: A MoLang expression that determines the distance from the owner the entity must be before it resorts to teleporting. A value of -1 will cause it to never teleport. Defaults to 24.
+- `maxDistance`: A MoLang expression that determines the maximum distance from the owner that the entity can be to move to them. Defaults to 14.
+
+### point_to_spawn
+The 'point_to_spawn' type creates a task that will make the entity point to the spawn point of the world whenever they
+are not moving and are idling. This is basically only here for Nosepass.

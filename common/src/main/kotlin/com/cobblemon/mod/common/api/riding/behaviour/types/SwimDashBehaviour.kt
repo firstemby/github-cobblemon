@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
@@ -33,6 +34,7 @@ class SwimDashBehaviour : RidingBehaviour<SwimDashSettings, SwimDashState> {
     }
 
     override val key = KEY
+    override val style = RidingStyle.LIQUID
 
     val poseProvider = PoseProvider<SwimDashSettings, SwimDashState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.isSwimming && entity.entityData.get(PokemonEntity.MOVING) })
@@ -217,7 +219,7 @@ class SwimDashBehaviour : RidingBehaviour<SwimDashSettings, SwimDashState> {
         return false
     }
 
-    override fun createDefaultState() = SwimDashState()
+    override fun createDefaultState(settings: SwimDashSettings) = SwimDashState()
 }
 
 class SwimDashSettings : RidingBehaviourSettings {
@@ -227,6 +229,7 @@ class SwimDashSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeFloat(dashSpeed)
     }
 
@@ -235,14 +238,12 @@ class SwimDashSettings : RidingBehaviourSettings {
     }
 }
 
-class SwimDashState : RidingBehaviourState {
+class SwimDashState : RidingBehaviourState() {
     var dashing = ridingState(false, Side.BOTH)
     var ticks = ridingState(0, Side.BOTH)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) = Unit
-    override fun decode(buffer: RegistryFriendlyByteBuf) = Unit
-
     override fun reset() {
+        super.reset()
         dashing.set(false, forced = true)
         ticks.set(0, forced = true)
     }
@@ -252,9 +253,9 @@ class SwimDashState : RidingBehaviourState {
     }
 
     override fun copy() = SwimDashState().also {
+        it.rideVelocity.set(rideVelocity.get(), forced = true)
+        it.stamina.set(stamina.get(), forced = true)
         it.dashing.set(dashing.get(), forced = true)
         it.ticks.set(ticks. get(), forced = true)
     }
-
-    override fun shouldSync(previous: RidingBehaviourState) = false
 }

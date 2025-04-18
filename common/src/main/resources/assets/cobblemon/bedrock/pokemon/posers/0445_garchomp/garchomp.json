@@ -139,8 +139,7 @@
       "poseTypes": ["FLY"],
       "animations": ["q.look('head')", "q.bedrock('garchomp', 'air_fly')"],
       "quirks": [
-        "q.bedrock_quirk('garchomp', 'blink')",
-        "q.bedrock_quirk('garchomp', q.array('air_fly_quirk1', 'air_fly_quirk2'), 5, 10, 1)"
+        "q.bedrock_quirk('garchomp', 'blink')"
       ],
       "transformedParts": [
         {

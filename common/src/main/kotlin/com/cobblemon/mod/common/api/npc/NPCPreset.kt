@@ -8,10 +8,11 @@
 
 package com.cobblemon.mod.common.api.npc
 
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
+import com.google.gson.annotations.SerializedName
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
@@ -28,7 +29,8 @@ class NPCPreset {
     var names: MutableSet<Component>? = null
     var baseScale: Float? = null
     var hitbox: EntityDimensions? = null
-    var ai: List<BrainConfig>? = null
+    @SerializedName("behaviours", alternate = ["behaviors", "ai"])
+    var behaviours: List<BehaviourConfig>? = null
     var skill: Int? = null
     var autoHealParty: Boolean? = null
     var randomizePartyOrder: Boolean? = null
@@ -59,7 +61,7 @@ class NPCPreset {
         autoHealParty?.let { npcClass.autoHealParty = it }
         randomizePartyOrder?.let { npcClass.randomizePartyOrder = it }
         battleTheme?.let { npcClass.battleTheme = it }
-        ai?.let { npcClass.ai.addAll(it) }
+        behaviours?.let { npcClass.behaviours.addAll(it) }
         isMovable?.let { npcClass.isMovable = it }
         isInvulnerable?.let { npcClass.isInvulnerable = it }
         isLeashable?.let { npcClass.isLeashable = it }

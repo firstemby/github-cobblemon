@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.LOOKING_CATEGORY
 import com.cobblemon.mod.common.entity.ai.LookInDirectionTask
@@ -27,7 +27,7 @@ class LookInDirectionTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ) = LookInDirectionTask(
         shouldLock = condition.asExpression(),
         yaw = yaw.asExpression(),

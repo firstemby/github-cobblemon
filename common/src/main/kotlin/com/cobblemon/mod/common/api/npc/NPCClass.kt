@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.npc
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
 import com.cobblemon.mod.common.api.npc.variation.RandomNPCVariationProvider
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.*
+import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -52,7 +53,8 @@ class NPCClass {
     var autoHealParty: Boolean = true
     var randomizePartyOrder: Boolean = false
     var battleTheme: ResourceLocation? = null
-    var ai: MutableList<BrainConfig> = mutableListOf()
+    @SerializedName("behaviours", alternate = ["behaviors", "ai"])
+    var behaviours: MutableList<BehaviourConfig> = mutableListOf()
     var isMovable: Boolean = true
     var isInvulnerable = false
     var isLeashable = true

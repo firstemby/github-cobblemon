@@ -8,12 +8,11 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.ai.FollowWalkTargetTask
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.withQueryValue
@@ -29,7 +28,7 @@ class FollowWalkTargetTaskConfig : SingleTaskConfig {
 
     override fun getVariables(entity: LivingEntity) = listOf(minRunTicks, maxRunTicks).asVariables()
 
-    override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<LivingEntity>? {
+    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         return WrapperLivingEntityTask(
             FollowWalkTargetTask(minRunTicks.resolveInt(), maxRunTicks.resolveInt()),

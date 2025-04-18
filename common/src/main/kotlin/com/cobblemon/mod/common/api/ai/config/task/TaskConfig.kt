@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -141,5 +141,5 @@ interface TaskConfig {
     /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
     fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
-    fun createTasks(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): List<BehaviorControl<in LivingEntity>>
+    fun createTasks(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

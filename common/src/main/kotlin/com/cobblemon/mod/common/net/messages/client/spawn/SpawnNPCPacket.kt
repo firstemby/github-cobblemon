@@ -32,6 +32,7 @@ import net.minecraft.world.entity.Entity
 
 class SpawnNPCPacket(
     var npcClass: ResourceLocation,
+    var resourceIdentifier: ResourceLocation,
     var aspects: Set<String>,
     var level: Int,
     var battleIds: Set<UUID>,
@@ -46,6 +47,7 @@ class SpawnNPCPacket(
 
     constructor(entity: NPCEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
         entity.npc.id,
+        entity.resourceIdentifier,
         entity.aspects,
         entity.level,
         entity.battleIds,
@@ -58,6 +60,7 @@ class SpawnNPCPacket(
 
     override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
         buffer.writeIdentifier(this.npcClass)
+        buffer.writeIdentifier(this.resourceIdentifier)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
         buffer.writeInt(this.level)
         buffer.writeCollection(this.battleIds) { pb, value -> pb.writeUUID(value) }
@@ -72,6 +75,9 @@ class SpawnNPCPacket(
 
     override fun applyData(entity: NPCEntity, level: ClientLevel) {
         entity.npc = NPCClasses.getByIdentifier(this.npcClass) ?: error("received unknown NPCClass: $npcClass")
+        if (entity.resourceIdentifier != this.resourceIdentifier) {
+            entity.forcedResourceIdentifier = this.resourceIdentifier
+        }
         entity.customName = name
         entity.entityData.set(NPCEntity.LEVEL, this.level)
         entity.entityData.set(NPCEntity.BATTLE_IDS, this.battleIds.toMutableSet())
@@ -87,6 +93,7 @@ class SpawnNPCPacket(
         val ID = cobblemonResource("spawn_npc_entity")
         fun decode(buffer: RegistryFriendlyByteBuf): SpawnNPCPacket {
             val npc = buffer.readIdentifier()
+            val resourceIdentifier = buffer.readIdentifier()
             val aspects = buffer.readList { buffer.readString() }.toSet()
             val level = buffer.readInt()
             val battleIds = buffer.readList { buffer.readUUID() }.toSet()
@@ -101,7 +108,7 @@ class SpawnNPCPacket(
             val hideNameTag = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnNPCPacket(npc, aspects, level, battleIds, name, poseType, texture, hideNameTag, vanillaPacket)
+            return SpawnNPCPacket(npc, resourceIdentifier, aspects, level, battleIds, name, poseType, texture, hideNameTag, vanillaPacket)
         }
     }
 

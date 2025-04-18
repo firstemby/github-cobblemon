@@ -64,7 +64,7 @@
   },
   "ai": [
     {
-      "type": "apply_presets",
+      "type": "apply_behaviours",
       "preset": "cobblemon:eats_grass"
     }
   ],

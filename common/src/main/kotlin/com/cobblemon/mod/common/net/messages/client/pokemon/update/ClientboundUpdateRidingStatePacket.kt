@@ -10,10 +10,8 @@ package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
-import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.server
-import net.minecraft.client.Minecraft
+import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
@@ -21,7 +19,7 @@ class ClientboundUpdateRidingStatePacket(
     val entity: Int,
     val behaviour: ResourceLocation,
     val state: RidingBehaviourState? = null,
-    val data: RegistryFriendlyByteBuf? = null
+    val data: FriendlyByteBuf? = null
 ) : NetworkPacket<ClientboundUpdateRidingStatePacket> {
     override val id = ID
 
@@ -37,7 +35,7 @@ class ClientboundUpdateRidingStatePacket(
         fun decode(buffer: RegistryFriendlyByteBuf): ClientboundUpdateRidingStatePacket {
             val entity = buffer.readInt()
             val behaviour = buffer.readResourceLocation()
-            val state = RegistryFriendlyByteBuf(buffer.readBytes(buffer.readableBytes()), Minecraft.getInstance().player!!.registryAccess())
+            val state = FriendlyByteBuf(buffer.readBytes(buffer.readableBytes()))
             return ClientboundUpdateRidingStatePacket(
                 entity = entity,
                 behaviour = behaviour,

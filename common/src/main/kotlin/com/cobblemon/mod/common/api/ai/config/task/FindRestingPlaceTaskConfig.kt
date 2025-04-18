@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -26,7 +26,7 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = listOf(horizontalSearchDistance, verticalSearchDistance).asVariables()
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         return WrapperLivingEntityTask(
             FindRestingPlaceTask.create(horizontalSearchDistance.resolveInt(), verticalSearchDistance.resolveInt()),

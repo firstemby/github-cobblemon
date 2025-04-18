@@ -42,13 +42,25 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1.4,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1.2,
-    "height": 1.9,
+    "width": 2,
+    "height": 3.2,
     "fixed": false
   },
-  "drops": {
+  "standingEyeHeight": 0.85,
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.23
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false
+    }
+  },
+"drops": {
     "amount": 1,
     "entries": [
       {
