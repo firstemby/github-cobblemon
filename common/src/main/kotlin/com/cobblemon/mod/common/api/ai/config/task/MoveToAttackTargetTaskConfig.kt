@@ -8,10 +8,9 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.ai.MoveToAttackTargetTask
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
@@ -28,7 +27,7 @@ class MoveToAttackTargetTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ) = MoveToAttackTargetTask.create(
         speedMultiplier = speedMultiplier.asExpression(),
         closeEnoughDistance = closeEnoughDistance.asExpression()

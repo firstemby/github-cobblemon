@@ -67,8 +67,11 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.ticks.TickPriority
 import java.util.*
+import java.util.UUID
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
+    var renderState: BlockEntityRenderState? = null
+    var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null // player UUID that placed this nest
     val eggState = EggState()
@@ -125,6 +128,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                 return InteractionResult.SUCCESS
             }
+
 
             // Otherwise, drop the egg
             dropItem(world, pos, state)
@@ -475,7 +479,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     companion object {
-        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick
+        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick // todo remove this
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
 
         val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
@@ -514,8 +518,12 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                 }
             } else {
                 // Attempt to spawn a random egg in the nest with a small chance
-                if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and probably remove this entirely later too
+                if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and remove this entirely later too
 
+                    /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+                    val test = 1
+
+                    // todo remove this as we are not having nests spawn pokemon anymore
                     /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
 
                     if (parent1 != null && parent2 != null) {
@@ -535,7 +543,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                             blockEntity.setItem(egg.createEggItemStack())
                         }
                         world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
-
+                    }*/
                 }
             }
         }

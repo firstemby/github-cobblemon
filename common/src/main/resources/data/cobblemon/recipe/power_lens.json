@@ -10,7 +10,7 @@
             "item": "cobblemon:cyan_mint_leaf"
         },
         "C": {
-            "item": "minecraft:magenta_concrete"
+            "tag": "c:concrete"
         },
         "D": {
             "tag": "c:gems/diamond"

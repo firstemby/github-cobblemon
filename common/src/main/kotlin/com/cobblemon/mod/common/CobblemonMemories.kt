@@ -10,15 +10,18 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
+import net.minecraft.core.BlockPos
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.Optional
 import java.util.UUID
-import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
@@ -33,6 +36,11 @@ object CobblemonMemories {
     val NPC_BATTLING = register("npc_battling", PrimitiveCodec.BOOL)
     val DIALOGUES = register<List<ActiveDialogue>>("npc_dialogues")
     val ACTIVE_ACTION_EFFECT = register<ActionEffectContext>("active_action_effect")
+    val POTENTIAL_MATE = register<PokemonEntity>("potential_mate")
+    val MATE_SCAN_COOLDOWN = register("mate_scan_cooldown", PrimitiveCodec.BOOL)
+    val NEST_LOCATION = register<BlockPos>("nest_location")
+    val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
+    val IRRITATED_AT = register<UUID>("irritated_at")
     val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
     val POKEMON_SLEEPING = register("pokemon_sleeping", PrimitiveCodec.BOOL)
@@ -41,6 +49,16 @@ object CobblemonMemories {
     val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
     val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
+    val EGG_THIEF = register<Player>("egg_thief") // Stores the player stealing the egg
+    val EGG_LOCATION = register<BlockPos>("egg_location") // Stores the last known location of the egg
+    val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
+    val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
+    val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
+    val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)
+    val NESTING_MATERIAL_LOCATION = register<BlockPos>("nesting_material_location")
+    val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
+    val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
+    val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {

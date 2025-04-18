@@ -7,7 +7,7 @@
     ],
     "key": {
         "W": {
-            "item": "minecraft:blue_wool"
+            "tag": "minecraft:wool"
         },
         "I": {
             "tag": "c:ingots/iron"

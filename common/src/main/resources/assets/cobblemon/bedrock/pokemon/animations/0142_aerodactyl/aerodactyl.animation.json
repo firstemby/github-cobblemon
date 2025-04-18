@@ -467,6 +467,7 @@
 		},
 		"animation.aerodactyl.air_idle": {
 			"loop": true,
+			"animation_length": 1.33333,
 			"bones": {
 				"aerodactyl": {
 					"position": [0, 3, 0]
@@ -642,10 +643,16 @@
 				"right_wing_membrane": {
 					"rotation": [0, "0+math.sin(q.anim_time*90*3+90)*3", "0+math.sin(q.anim_time*90*3+90)*1.5"]
 				}
+			},
+			"sound_effects": {
+				"1.0833": {
+					"effect": "animation.leather.wing_flap.medium"
+				}
 			}
 		},
 		"animation.aerodactyl.air_fly": {
 			"loop": true,
+			"animation_length": 1.33333,
 			"bones": {
 				"aerodactyl": {
 					"position": [0, 3, 0]
@@ -826,6 +833,11 @@
 				},
 				"right_horn": {
 					"rotation": ["math.sin(q.anim_time*90*12-160)*2", 0, 0]
+				}
+			},
+			"sound_effects": {
+				"0.9583": {
+					"effect": "animation.leather.wing_flap.medium"
 				}
 			}
 		},

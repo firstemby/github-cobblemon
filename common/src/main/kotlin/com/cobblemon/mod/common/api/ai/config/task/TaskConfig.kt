@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -76,6 +76,19 @@ interface TaskConfig {
             "flee_nearest_hostile" to FleeNearestHostileTaskConfig::class.java,
             "run_script" to RunScript::class.java,
             "look_in_direction" to LookInDirectionTaskConfig::class.java,
+            "path_to_nest" to PathToNestTaskConfig::class.java,
+            "path_to_nest_material" to PathToNestMaterialTaskConfig::class.java,
+            "breed_at_nest" to BreedAtNestTaskConfig::class.java,
+            "guard_nest" to GuardNestTaskConfig::class.java,
+            "search_for_egg" to SearchForEggTaskConfig::class.java,
+            "attack_egg_thief" to AttackEggThiefTaskConfig::class.java,
+            "retrieve_egg" to RetrieveEggTaskConfig::class.java,
+            "pick_up_egg" to PickUpEggTaskConfig::class.java,
+            "pick_up_nest_material" to PickUpNestMaterialTaskConfig::class.java,
+            "path_to_ideal_nest_location" to PathToIdealNestLocationTaskConfig::class.java,
+            "place_egg_in_nest" to PlaceEggInNestTaskConfig::class.java,
+            "build_nest" to BuildNestTaskConfig::class.java,
+            "hunt_player" to HuntPlayerTaskConfig::class.java,
             "wake_up" to WakeUpTaskConfig::class.java,
             "go_to_sleep" to GoToSleepTaskConfig::class.java,
             "find_resting_place" to FindRestingPlaceTaskConfig::class.java,
@@ -128,5 +141,5 @@ interface TaskConfig {
     /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
     fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
-    fun createTasks(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): List<BehaviorControl<in LivingEntity>>
+    fun createTasks(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

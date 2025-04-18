@@ -92,7 +92,7 @@ class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide
             val limbSwing = entity.walkAnimation.position(partialTicks)
             val limbSwingAmount = entity.walkAnimation.speed(partialTicks)
             drawPosablePortrait(
-                identifier = state.npcEntity.npc.resourceIdentifier,
+                identifier = state.npcEntity.resourceIdentifier,
                 matrixStack = GuiGraphics.pose(),
                 state = state,
                 reversed = !isLeftSide,

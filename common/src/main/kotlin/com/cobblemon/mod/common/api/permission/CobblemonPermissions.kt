@@ -129,7 +129,7 @@ object CobblemonPermissions {
     @JvmStatic
     val APPLY_PLAYER_TEXTURE = this.create("${COMMAND_PREFIX}applyplayertexture", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
-    val BRAIN_EDIT = this.create("${COMMAND_PREFIX}brainedit", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    val BEHAVIOUR_EDIT = this.create("${COMMAND_PREFIX}behaviouredit", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val ABANDON_MULTITEAM = this.create("${COMMAND_PREFIX}abandonmultiteam", PermissionLevel.NONE)
     @JvmStatic

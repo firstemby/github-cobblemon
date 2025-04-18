@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -19,12 +19,12 @@ import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 
-class SetVariablesConfig : BrainConfig {
+class SetVariablesConfig : BehaviourConfig {
     var variableValues = mutableMapOf<String, ExpressionLike>()
 
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
 
-    override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (entity is MoLangScriptingEntity) {

@@ -177,6 +177,14 @@
 					"rotation": [0, 0, -7.5]
 				}
 			}
+		},
+		"animation.glaceon.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.glaceon.cry"
+				}
+			}
 		}
 	}
 }

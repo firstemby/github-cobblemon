@@ -266,6 +266,14 @@
 					"rotation": [37.5, 27.5, 0]
 				}
 			}
+		},
+		"animation.flareon.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.flareon.cry"
+				}
+			}
 		}
 	}
 }

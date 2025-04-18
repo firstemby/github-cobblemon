@@ -10,8 +10,8 @@
   "canDespawn": false,
   "ai": [
     {
-      "type": "apply_presets",
-      "presets": [
+      "type": "apply_behaviours",
+      "behaviours": [
         "cobblemon:core"
       ]
     }

@@ -11,7 +11,8 @@ package com.cobblemon.mod.common.api.riding.behaviour.types
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
-import com.cobblemon.mod.common.api.riding.behaviour.NoState
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -28,17 +29,18 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
+class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, RidingBehaviourState> {
     companion object {
         val KEY = cobblemonResource("swim/generic")
     }
 
     override val key = KEY
+    override val style = RidingStyle.LIQUID
 
-    val poseProvider = PoseProvider<GenericSwimSettings, NoState>(PoseType.FLOAT)
+    val poseProvider = PoseProvider<GenericSwimSettings, RidingBehaviourState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.isSwimming && entity.entityData.get(PokemonEntity.MOVING) })
 
-    override fun isActive(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun isActive(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
             if (vehicle.isInWater || vehicle.isUnderWater) {
                 return@any true
@@ -48,17 +50,17 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
         }
     }
 
-    override fun pose(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): PoseType {
+    override fun pose(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): PoseType {
         return poseProvider.select(settings, state, vehicle)
     }
 
-    override fun speed(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity, driver: Player): Float {
+    override fun speed(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Float {
         return vehicle.runtime.resolveFloat(settings.speed)
     }
 
     override fun rotation(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: LivingEntity
     ): Vec2 {
@@ -67,7 +69,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun velocity(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         input: Vec3
@@ -88,7 +90,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun angRollVel(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         deltaTime: Double
@@ -98,7 +100,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun rotationOnMouseXY(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         mouseY: Double,
@@ -118,7 +120,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun canJump(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
@@ -127,7 +129,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun setRideBar(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
@@ -136,7 +138,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun jumpForce(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player,
         jumpStrength: Int
@@ -149,7 +151,7 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun gravity(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         regularGravity: Double
     ): Double {
@@ -158,45 +160,45 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun rideFovMultiplier(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
         return 1.0f
     }
 
-    override fun useAngVelSmoothing(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun useAngVelSmoothing(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
     override fun useRidingAltPose(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
         return false
     }
 
-    override fun inertia(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Double {
+    override fun inertia(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Double {
         return 0.5
     }
 
-    override fun shouldRoll(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRoll(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
-    override fun turnOffOnGround(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun turnOffOnGround(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
-    override fun dismountOnShift(settings: GenericSwimSettings, state: NoState, vehicle: PokemonEntity): Boolean {
+    override fun dismountOnShift(settings: GenericSwimSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 
     override fun shouldRotatePokemonHead(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity
     ): Boolean {
         return false
@@ -204,13 +206,13 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, NoState> {
 
     override fun shouldRotatePlayerHead(
         settings: GenericSwimSettings,
-        state: NoState,
+        state: RidingBehaviourState,
         vehicle: PokemonEntity
     ): Boolean {
         return false
     }
 
-    override fun createDefaultState() = NoState
+    override fun createDefaultState(settings: GenericSwimSettings) = RidingBehaviourState()
 
 }
 
@@ -236,6 +238,7 @@ class GenericSwimSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeExpression(canJump)
         buffer.writeExpression(jumpVector[0])
         buffer.writeExpression(jumpVector[1])

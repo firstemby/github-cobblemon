@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
@@ -46,7 +46,7 @@ class WanderTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null

@@ -106,9 +106,9 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.ClosePCPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.InitializePCPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
+import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.RenamePCBoxPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCBoxPacket
-import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket
@@ -168,6 +168,12 @@ import com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPa
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket
 import com.cobblemon.mod.common.net.messages.server.storage.pc.*
 import com.cobblemon.mod.common.net.messages.server.trade.AcceptTradeRequestPacket
 import com.cobblemon.mod.common.net.messages.server.trade.CancelTradePacket
@@ -185,6 +191,7 @@ import com.cobblemon.mod.common.net.serverhandling.battle.TeamLeaveHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestResponseHandler
 import com.cobblemon.mod.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
+import com.cobblemon.mod.common.net.messages.server.storage.pc.*
 import com.cobblemon.mod.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler
 import com.cobblemon.mod.common.net.serverhandling.breeding.TriggerEggHatchHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectCancelledHandler
@@ -218,6 +225,12 @@ import com.cobblemon.mod.common.net.serverhandling.storage.SwapPCPartyPokemonHan
 import com.cobblemon.mod.common.net.serverhandling.storage.party.MovePartyPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.party.ReleasePCPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.party.SwapPartyPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.MovePCPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.MovePCPokemonToPartyHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.MovePartyPokemonToPCHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.ReleasePartyPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.SwapPCPokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.UnlinkPlayerFromPCHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.pc.*
 import com.cobblemon.mod.common.net.serverhandling.trade.AcceptTradeRequestHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.CancelTradeHandler
@@ -225,6 +238,7 @@ import com.cobblemon.mod.common.net.serverhandling.trade.ChangeTradeAcceptanceHa
 import com.cobblemon.mod.common.net.serverhandling.trade.OfferTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.PerformTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.UpdateTradeOfferHandler
+import com.cobblemon.mod.common.net.serverhandling.storage.pc.*
 import com.cobblemon.mod.common.util.server
 import net.minecraft.server.level.ServerPlayer
 
@@ -382,7 +396,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(HabitatSyncPacket.ID, HabitatSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(FlowRegistrySyncPacket.ID, FlowRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(BrainPresetSyncPacket.ID, BrainPresetSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(PacketRegisterInfo(BehaviourSyncPacket.ID, BehaviourSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(MarkRegistrySyncPacket.ID, MarkRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
 
         // Effects
@@ -550,11 +564,11 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ServerboundUpdateOrientationPacket.ID, ServerboundUpdateOrientationPacket::decode, OrientationPacketHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateRidingStatePacket.ID, ServerboundUpdateRidingStatePacket::decode, ServerboundUpdateRidingStateHandler))
 
-        // Behaviour Packets
-        list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
-
         // Breeding Packets
         list.add(PacketRegisterInfo(TriggerEggHatchPacket.ID, TriggerEggHatchPacket::decode, TriggerEggHatchHandler))
+
+        // Behaviour Packets
+        list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
 
         return list
     }

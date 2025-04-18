@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.Vec3
 class RidingController<Settings : RidingBehaviourSettings, State : RidingBehaviourState>(val behaviour: RidingBehaviour<Settings, State>) : RidingBehaviour<Settings, State> {
 
     override val key = behaviour.key
+    override val style = behaviour.style
 
     override fun isActive(settings: Settings, state: State, vehicle: PokemonEntity) =
         behaviour.isActive(settings, state, vehicle)
@@ -39,8 +41,13 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.speed(settings, state, vehicle, driver)
     }
 
+    override fun clampPassengerRotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity) {
+        if (!isActive(settings, state, vehicle)) return
+        return behaviour.clampPassengerRotation(settings, state, vehicle, driver)
+    }
+
     override fun rotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity): Vec2 {
-        if (!isActive(settings, state, vehicle)) return vehicle.rotationVector
+        if (!isActive(settings, state, vehicle)) return driver.rotationVector
         return behaviour.rotation(settings, state, vehicle, driver)
     }
 
@@ -164,8 +171,8 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.setRideBar(settings, state, vehicle, driver)
     }
 
-    override fun createDefaultState(): State {
-        return behaviour.createDefaultState()
+    override fun createDefaultState(settings: Settings): State {
+        return behaviour.createDefaultState(settings)
     }
 
 }

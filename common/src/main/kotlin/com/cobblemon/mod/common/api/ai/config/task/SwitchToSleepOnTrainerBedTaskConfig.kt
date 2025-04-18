@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.core.BlockPos
@@ -26,7 +26,7 @@ class SwitchToSleepOnTrainerBedTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
             return null

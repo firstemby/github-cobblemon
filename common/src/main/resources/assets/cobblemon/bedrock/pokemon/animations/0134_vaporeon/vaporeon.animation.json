@@ -225,6 +225,14 @@
 					"rotation": [-59.83045, -1.29256, -14.94548]
 				}
 			}
+		},
+		"animation.vaporeon.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.vaporeon.cry"
+				}
+			}
 		}
 	}
 }

@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -20,7 +20,7 @@ class SwitchFromPokemonBattleTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         return BehaviorBuilder.create {
             it.group(it.absent(CobblemonMemories.POKEMON_BATTLE)).apply(it) { _ ->

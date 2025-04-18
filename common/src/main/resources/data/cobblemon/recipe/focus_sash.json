@@ -2,12 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "D  ",
-        "WIW",
+        "LIL",
         "  D"
     ],
     "key": {
-        "W": {
-            "item": "minecraft:red_wool"
+        "L": {
+            "tag": "c:leathers"
         },
         "D": {
             "item": "minecraft:blaze_powder"

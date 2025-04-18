@@ -1,0 +1,26 @@
+{
+  "name": "cobblemon.brain_preset.pokemon.pokemon_breeding.name",
+  "description": "cobblemon.brain_preset.pokemon.pokemon_breeding.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": [
+          "path_to_nest",
+          "breed_at_nest",
+          "guard_nest",
+          "search_for_egg",
+          "retrieve_egg",
+          "pick_up_egg",
+          "place_egg_in_nest",
+          "attack_egg_thief",
+          "path_to_nest_material",
+          "pick_up_nest_material",
+          "path_to_ideal_nest_location",
+          "build_nest"
+        ]
+      }
+    }
+  ]
+}

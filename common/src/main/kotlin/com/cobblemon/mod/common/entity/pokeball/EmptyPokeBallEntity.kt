@@ -225,7 +225,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         return drop() // Weird, shouldn't be possible
                     }
 
-                    if (battle.format.battleType != BattleTypes.SINGLES || hitActor.pokemonList.count { it.health > 0 } > 1) {
+                    if ((battle.format.battleType != BattleTypes.SINGLES && battle.format.battleType != BattleTypes.DOUBLES) || hitActor.pokemonList.count { it.health > 0 } > 1) {
                         owner.sendSystemMessage(lang("capture.not_single").red())
                         return drop()
                     }

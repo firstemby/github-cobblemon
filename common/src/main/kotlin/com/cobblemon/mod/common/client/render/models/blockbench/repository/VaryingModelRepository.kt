@@ -53,6 +53,7 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.Optional
 import java.util.function.BiFunction
+import java.util.function.Function
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.Resource
@@ -291,7 +292,6 @@ object VaryingModelRepository {
         inbuilt("kabuto", ::KabutoModel)
         inbuilt("kabutops", ::KabutopsModel)
         inbuilt("kadabra", ::KadabraModel)
-        inbuilt("kangaskhan", ::KangaskhanModel)
         inbuilt("koffing", ::KoffingModel)
         inbuilt("krabby", ::KrabbyModel)
         inbuilt("lickitung", ::LickitungModel)
@@ -408,9 +408,6 @@ object VaryingModelRepository {
         inbuilt("klinklang", :: KlinklangModel)
         inbuilt("morelull", :: MorelullModel)
         inbuilt("shiinotic", :: ShiinoticModel)
-        inbuilt("treecko", :: TreeckoModel)
-        inbuilt("grovyle", :: GrovyleModel)
-        inbuilt("sceptile", :: SceptileModel)
         inbuilt("honedge", :: HonedgeModel)
         inbuilt("spiritomb", :: SpiritombModel)
         inbuilt("chespin", :: ChespinModel)
@@ -488,7 +485,6 @@ object VaryingModelRepository {
         inbuilt("taillow", ::TaillowModel)
         inbuilt("swellow", ::SwellowModel)
         inbuilt("mudbray", ::MudbrayModel)
-        inbuilt("mudsdale", ::MudsdaleModel)
         inbuilt("comfey", ::ComfeyModel)
         inbuilt("tandemaus", ::TandemausModel)
         inbuilt("maushold", ::MausholdModel)
@@ -646,7 +642,6 @@ object VaryingModelRepository {
         inbuilt("gallade", ::GalladeModel)
         inbuilt("beldum", ::BeldumModel)
         inbuilt("metang", ::MetangModel)
-        inbuilt("metagross", ::MetagrossModel)
         inbuilt("ursaluna", ::UrsalunaModel)
         inbuilt("lechonk", ::LechonkModel)
         inbuilt("oinkologne_male", ::OinkologneMaleModel)
@@ -706,7 +701,6 @@ object VaryingModelRepository {
         inbuilt("qwilfish_hisuian", ::QwilfishHisuianModel)
         inbuilt("overqwil", ::OverqwilModel)
         inbuilt("sneasel_hisuian", ::SneaselHisuianModel)
-        inbuilt("sneasler", ::SneaslerModel)
         inbuilt("petilil", ::PetililModel)
         inbuilt("lilligant", ::LilligantModel)
         inbuilt("petilil_hisui_bias", ::PetililHisuiBiasModel)

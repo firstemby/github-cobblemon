@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
+import java.util.function.Predicate
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 
 class FollowWalkTargetTask(
@@ -104,12 +106,12 @@ class FollowWalkTargetTask(
         }
     }
 
-    private fun withNodeFilter(entity: PathfinderMob, nodeFilter: (PathType) -> Boolean, block: () -> Unit) {
+    private fun withNodeFilter(entity: PathfinderMob, nodeFilter: Predicate<PathType>, block: () -> Unit) {
         val nodeEvaluator = entity.navigation.nodeEvaluator
         if (nodeEvaluator is OmniPathNodeMaker) {
             nodeEvaluator.nodeFilter = nodeFilter
             block()
-            nodeEvaluator.nodeFilter = { true }
+            nodeEvaluator.nodeFilter = Predicate { true }
         } else {
             block()
         }

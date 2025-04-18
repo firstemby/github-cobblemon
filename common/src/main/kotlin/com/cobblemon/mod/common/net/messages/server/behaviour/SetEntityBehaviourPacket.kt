@@ -17,19 +17,19 @@ import net.minecraft.resources.ResourceLocation
 
 class SetEntityBehaviourPacket(
     val entityId: Int,
-    val brainPresets: Set<ResourceLocation>
+    val behaviours: Set<ResourceLocation>
 ): NetworkPacket<SetEntityBehaviourPacket> {
     companion object {
         val ID = cobblemonResource("set_entity_behaviour")
         fun decode(buffer: RegistryFriendlyByteBuf): SetEntityBehaviourPacket = SetEntityBehaviourPacket(
             entityId = buffer.readInt(),
-            brainPresets = buffer.readList { buffer.readIdentifier() }.toSet()
+            behaviours = buffer.readList { buffer.readIdentifier() }.toSet()
         )
     }
 
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeInt(entityId)
-        buffer.writeCollection(brainPresets) { _, it -> buffer.writeIdentifier(it) }
+        buffer.writeCollection(behaviours) { _, it -> buffer.writeIdentifier(it) }
     }
 }

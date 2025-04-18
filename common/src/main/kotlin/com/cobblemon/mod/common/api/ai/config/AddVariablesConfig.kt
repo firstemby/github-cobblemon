@@ -8,13 +8,13 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 
-class AddVariablesConfig(val variables: List<MoLangConfigVariable> = emptyList()) : BrainConfig {
+class AddVariablesConfig(val variables: List<MoLangConfigVariable> = emptyList()) : BehaviourConfig {
     override fun getVariables(entity: LivingEntity) = variables
 
     // Configuration happens naturally through the override on variables
-    override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {}
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {}
 }

@@ -84,7 +84,7 @@ interface BreedingLogic {
         }
 
         // TODO get the ability to actually apply
-        val finalAbility: Ability = if (rule?.ability != null) {
+                val finalAbility: Ability = if (rule?.ability != null) {
             Abilities.get(rule.ability.lowercase())?.create(true, Priority.HIGHEST) ?: this.calculateAbility(mother, father, finalForm)
         } else {
             this.calculateAbility(mother, father, finalForm)
@@ -94,10 +94,10 @@ interface BreedingLogic {
         // then pass them as `eggMoves` to our `calculateMoveset`.
         val ruleMoveTemplates: List<MoveTemplate> = if (rule != null) {
             listOfNotNull(
-                    rule.moves.move1,
-                    rule.moves.move2,
-                    rule.moves.move3,
-                    rule.moves.move4
+                rule.moves.move1,
+                rule.moves.move2,
+                rule.moves.move3,
+                rule.moves.move4
             ).mapNotNull { moveString ->
                 Moves.getByName(moveString.lowercase())
             }
@@ -107,10 +107,10 @@ interface BreedingLogic {
 
         // Pass these move templates to `calculateMoveset` as the optional egg moves.
         val finalMoveSet = this.calculateMoveset(
-                mother,
-                father,
-                finalForm ?: fallbackForm,
-                eggMoves = ruleMoveTemplates
+            mother,
+            father,
+            finalForm ?: fallbackForm,
+            eggMoves = ruleMoveTemplates
         )
 
         // Determine shiny based on masuda
@@ -123,7 +123,7 @@ interface BreedingLogic {
         val finalGender: Gender = if (rule?.gender != null) {
 
             Gender.entries.find { it.name.equals(rule.gender, ignoreCase = true) }
-                    ?: this.calculateGender(mother, father, finalForm)
+                ?: this.calculateGender(mother, father, finalForm)
         } else {
             this.calculateGender(mother, father, finalForm)
         }
@@ -136,15 +136,15 @@ interface BreedingLogic {
 
         // create final egg from all this awful data
         val newPoke = EggPokemon(
-                ivs = finalIVs,
-                nature = finalNature,
-                species = getPreEvoSpecies(finalSpecies),
-                formData = finalForm,
-                ability = finalAbility,
-                moveSet = finalMoveSet,
-                isShiny = isShiny,
-                gender = finalGender,
-                pokeball = finalPokeball
+            ivs = finalIVs,
+            nature = finalNature,
+            species = getPreEvoSpecies(finalSpecies),
+            formData = finalForm,
+            ability = finalAbility,
+            moveSet = finalMoveSet,
+            isShiny = isShiny,
+            gender = finalGender,
+            pokeball = finalPokeball
         )
 
         return BreedingResult(newPoke, calcTimeToHatch(mother, father))
@@ -152,9 +152,9 @@ interface BreedingLogic {
 
 
     private fun mergeIvs(
-            rule: BreedingRule?,
-            mother: Pokemon,
-            father: Pokemon
+        rule: BreedingRule?,
+        mother: Pokemon,
+        father: Pokemon
     ): IVs {
         val fallbackIvs = this.calculateIVs(mother, father)
         if (rule == null) return fallbackIvs

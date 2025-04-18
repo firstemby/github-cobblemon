@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WANDER
@@ -42,7 +42,7 @@ class AirWanderTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null

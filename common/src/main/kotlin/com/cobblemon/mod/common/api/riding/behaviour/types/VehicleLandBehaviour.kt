@@ -53,6 +53,7 @@ class VehicleLandBehaviour : RidingBehaviour<VehicleLandSettings, VehicleLandSta
     }
 
     override val key = KEY
+    override val style = RidingStyle.LAND
 
     val poseProvider = PoseProvider<VehicleLandSettings, VehicleLandState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })
@@ -265,7 +266,7 @@ class VehicleLandBehaviour : RidingBehaviour<VehicleLandSettings, VehicleLandSta
         return false
     }
 
-    override fun createDefaultState() = VehicleLandState()
+    override fun createDefaultState(settings: VehicleLandSettings) = VehicleLandState()
 }
 
 class VehicleLandSettings : RidingBehaviourSettings {
@@ -296,6 +297,7 @@ class VehicleLandSettings : RidingBehaviourSettings {
         private set
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeResourceLocation(key)
         buffer.writeExpression(canJump)
         buffer.writeExpression(jumpVector[0])
         buffer.writeExpression(jumpVector[1])
@@ -324,14 +326,12 @@ class VehicleLandSettings : RidingBehaviourSettings {
     }
 }
 
-class VehicleLandState : RidingBehaviourState {
+class VehicleLandState : RidingBehaviourState() {
     var currSpeed = ridingState(0.0, Side.BOTH)
     var deltaRotation = ridingState(Vec2.ZERO, Side.BOTH)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) = Unit
-    override fun decode(buffer: RegistryFriendlyByteBuf) = Unit
-
     override fun reset() {
+        super.reset()
         currSpeed.set(0.0, forced = true)
         deltaRotation.set(Vec2.ZERO, forced = true)
     }
@@ -341,9 +341,9 @@ class VehicleLandState : RidingBehaviourState {
     }
 
     override fun copy() = VehicleLandState().also {
+        it.rideVelocity.set(rideVelocity.get(), forced = true)
+        it.stamina.set(stamina.get(), forced = true)
         it.currSpeed.set(currSpeed.get(), forced = true)
         it.deltaRotation.set(deltaRotation.get(), forced = true)
     }
-
-    override fun shouldSync(previous: RidingBehaviourState) = false
 }

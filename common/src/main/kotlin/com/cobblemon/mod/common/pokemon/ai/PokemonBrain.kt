@@ -9,13 +9,16 @@
 package com.cobblemon.mod.common.pokemon.ai
 
 import com.cobblemon.mod.common.CobblemonActivities
+import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSensors
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.ai.config.ApplyPresets
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.task.GuardNestTaskConfig
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.entity.ai.*
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.*
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.toDF
@@ -58,25 +61,37 @@ object PokemonBrain {
         CobblemonSensors.POKEMON_DROWSY,
         CobblemonSensors.POKEMON_ADULT,
         SensorType.IS_IN_WATER,
-        CobblemonSensors.NEARBY_GROWABLE_CROPS
+        CobblemonSensors.NEARBY_GROWABLE_CROPS,
+        CobblemonSensors.MATE_SENSOR,
+        CobblemonSensors.NEST_SENSOR,
+        CobblemonSensors.EGG_SENSOR,
+        CobblemonSensors.NEST_MATERIAL_SENSOR,
+        CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
     )
 
     fun makeBrain(entity: PokemonEntity, pokemon: Pokemon, brain: Brain<out PokemonEntity>): Brain<*> {
-        var brainConfigurations: List<BrainConfig> = pokemon.form.baseAI + pokemon.form.ai
+        /*
+         * Something to note here is that if we changed the autoPokemonPresets to be a set of presets rather than
+         * the configurations inside the presets, the logic in ApplyPresets would actually result in the top
+         * level preset (the ones in the auto folder) being the only recorded 'applied' configurations. That would
+         * mean if you opened the Pokémon in the brain editor, it would not have any applied configurations as the
+         * auto configurations typically aren't visible on the client since the contained presets already are.
+         * I realize that this doesn't make a great deal of sense, but I am here in case of future Hiro amnesia.
+         */
+        var behaviourConfigurations: List<BehaviourConfig> = (pokemon.form.baseAI ?: CobblemonBehaviours.autoPokemonBehaviours.flatMap { it.configurations }) + pokemon.form.ai
         if (entity.behavioursAreCustom) {
-            brainConfigurations = listOf(ApplyPresets().apply { presets.addAll(entity.behaviours) })
+            behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(entity.behaviours) })
         }
-        // Use brain configs, apply from some kind of pokemon species AI data if it isn't custom blabla
 
-        val ctx = BrainConfigurationContext()
-        ctx.apply(entity, brainConfigurations)
+        val ctx = BehaviourConfigurationContext()
+        ctx.apply(entity, behaviourConfigurations)
         entity.behaviours.clear()
-        entity.behaviours.addAll(ctx.appliedBrainPresets)
+        entity.behaviours.addAll(ctx.appliedBehaviours)
 
-        if (brainConfigurations.isNotEmpty()) {
+        if (behaviourConfigurations.isNotEmpty()) {
             return brain
         }
 
@@ -127,6 +142,13 @@ object PokemonBrain {
             ImmutableList.copyOf(growingPlantTasks(pokemon)),
             ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT))
         )
+        brain.addActivityWithConditions(
+            CobblemonActivities.GUARD_NEST,
+            ImmutableList.copyOf(growingPlantTasks(pokemon)), // todo change this with guard tasks
+            ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT),
+                            Pair.of(CobblemonMemories.PATERNAL_NEST_LOCATION, MemoryStatus.VALUE_PRESENT))
+        )
+
 
         brain.setCoreActivities(setOf(Activity.CORE))
         brain.setDefaultActivity(Activity.IDLE)
@@ -161,6 +183,22 @@ object PokemonBrain {
         MemoryModuleType.DISTURBANCE_LOCATION,
         CobblemonMemories.NEARBY_GROWABLE_CROPS,
         MemoryModuleType.AVOID_TARGET,
+        CobblemonMemories.POKEMON_SLEEPING,
+        CobblemonMemories.POTENTIAL_MATE,
+        CobblemonMemories.MATE_SCAN_COOLDOWN,
+        CobblemonMemories.NEST_LOCATION,
+        CobblemonMemories.PATERNAL_NEST_LOCATION,
+        CobblemonMemories.IRRITATED_AT,
+        CobblemonMemories.EGG_THIEF,
+        CobblemonMemories.HOLDING_EGG,
+        CobblemonMemories.READY_TO_GRAB_EGG,
+        CobblemonMemories.EGG_LOCATION,
+        CobblemonMemories.EGG_IN_NEST,
+        CobblemonMemories.EGG_SEARCH_COUNTDOWN,
+        CobblemonMemories.SENSED_NEST_MATERIAL,
+        CobblemonMemories.NESTING_MATERIAL_LOCATION,
+        CobblemonMemories.READY_TO_BUILD_NEST,
+        CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
         CobblemonMemories.RECENTLY_ATE_GRASS
     )
@@ -218,8 +256,8 @@ object PokemonBrain {
         }
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.ATTACK_TARGET, Activity.FIGHT))
         add(0 toDF SwapActivityTask.possessing(MemoryModuleType.AVOID_TARGET, Activity.AVOID))
-
-//        add(0 toDF HuntPlayerTask()) // commenting this out to test other things
+        //        add(0 toDF HuntPlayerTask()) // commenting this out to test other things
+        //add(0 toDF GuardNestTask.create())
         add(1 toDF FertilizerTask())
 
         if (pokemon.species.primaryType.name.equals("fire", true)) {

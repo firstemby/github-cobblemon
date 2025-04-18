@@ -2,15 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " R ",
-        "DIF",
-        " P "
+        "SPF",
+        " I "
     ],
     "key": {
         "R": {
             "item": "minecraft:rabbit_foot"
         },
-        "D": {
-            "tag": "c:dyes/yellow"
+        "S": {
+            "item": "minecraft:sugar"
         },
         "I": {
             "item": "minecraft:ink_sac"
