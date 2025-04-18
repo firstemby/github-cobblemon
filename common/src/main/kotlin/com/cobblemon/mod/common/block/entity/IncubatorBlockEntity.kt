@@ -83,6 +83,9 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         tag.put("EggItem", eggItem.saveOptional(registryLookup))
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        eggState.renderingBlockPos?.let {
+            tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
+        }
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
@@ -94,6 +97,12 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
+        }
+        if (tag.contains("RenderingBlockPos")) {
+            val posArray = tag.getIntArray("RenderingBlockPos")
+            if (posArray.size == 3) {
+                eggState.renderingBlockPos = BlockPos(posArray[0], posArray[1], posArray[2])
+            }
         }
     }
 
