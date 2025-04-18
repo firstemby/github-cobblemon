@@ -110,7 +110,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             blockEntity.ticksUntilCheck--
             if (blockEntity.ticksUntilCheck <= 0) {
                 blockEntity.checkPokemon()
-                blockEntity.tryBreed()
+                //blockEntity.tryBreed()
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }
@@ -124,7 +124,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     var ownerId: UUID? = null
     var ownerName: String = ""
     //Maps a male pokemon to all of the female pokemon it can breed with
-    val breedingSets: MutableMap<Tethering, MutableSet<Tethering>> = mutableMapOf()
+    //val breedingSets: MutableMap<Tethering, MutableSet<Tethering>> = mutableMapOf()
     //Basically here to decide whether to calc all breeding sets when updating the block entity
     //We add breeding sets when pokemon are tethered but we need to calc them on world load too,
     var initializedBreedingSets = false
@@ -196,7 +196,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                         pcId = pc.uuid,
                         entityId = entity.id
                     )
-                    calcBreedingSets(tethering)
+                    //calcBreedingSets(tethering)
                     pokemon.tetheringId = tethering.tetheringId
                     tetheredPokemon.add(tethering)
                     entity.tethering = tethering
@@ -306,7 +306,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         setChanged()
     }
 
-    //Dear god this method needs to be cleaned up
+    // todo the pasture block no longer tracks nests and is in control of breeding. it is all brains now
+    /*//Dear god this method needs to be cleaned up
     fun tryBreed() {
         val bredPokemon = mutableSetOf<Pokemon>()
         //We should probably find a way to minimize how often this gets called
@@ -485,7 +486,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             }
         }
         return res
-    }
+    }*/
 
     fun onBroken() {
         if (level is ServerLevel) {
@@ -500,8 +501,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         tetheredPokemon.remove(tethering)
 
         // Recalculate breeding sets after removal
-        breedingSets.clear()
-        tetheredPokemon.forEach { calcBreedingSets(it) }
+        //breedingSets.clear()
+        //tetheredPokemon.forEach { calcBreedingSets(it) }
 
         setChanged()
     }
@@ -515,8 +516,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         }
 
         // Recalculate breeding sets after all removals
-        breedingSets.clear()
-        tetheredPokemon.forEach { calcBreedingSets(it) }
+        //breedingSets.clear()
+        //tetheredPokemon.forEach { calcBreedingSets(it) }
 
         setChanged()
         return unpastured
@@ -570,9 +571,9 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         }
         this.minRoamPos = NbtUtils.readBlockPos(nbt, DataKeys.TETHER_MIN_ROAM_POS).get()
         this.maxRoamPos = NbtUtils.readBlockPos(nbt, DataKeys.TETHER_MAX_ROAM_POS).get()
-        if (!initializedBreedingSets) {
+        /*if (!initializedBreedingSets) {
             calcBreedingSets()
-        }
+        }*/
     }
 
     override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {

@@ -52,7 +52,7 @@ interface BreedingLogic {
             return BreedingResult()
         }
 
-        // Crab note: TODO Clean this shit up it is ugly af
+        // Crab note: TODO Clean this shit up it is ugly af and idk if we even want to do custom breeding rules this way.... HIRO HELP
 
         // find matching breeding rule
         val rule = BreedingRules.getBreedingRule(mother, father)
