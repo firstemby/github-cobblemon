@@ -1,7 +1,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
@@ -39,7 +39,7 @@ class PickUpEggTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         return WrapperLivingEntityTask(PickUpEggTask.create(), PokemonEntity::class.java)
     }

@@ -14,7 +14,7 @@ import java.util.EnumSet
  * @since January 12th, 2025
  */
 class PokemonBreedGoal(private val entity: PokemonEntity) : Goal() {
-    private var mate: PokemonEntity? = null
+/*    private var mate: PokemonEntity? = null
     private var nestLocation: BlockPos? = null
     private var breedingStep = BreedingStep.FIND_MATE
 
@@ -23,12 +23,13 @@ class PokemonBreedGoal(private val entity: PokemonEntity) : Goal() {
     }
 
     companion object {
-        /**
-         * Factory method to create a new instance of [PokemonBreedGoal].
-         *
-         * @param entity The Pokémon entity to assign the goal to.
-         * @return A new instance of [PokemonBreedGoal].
-         */
+        */
+    /**
+     * Factory method to create a new instance of [PokemonBreedGoal].
+     *
+     * @param entity The Pokémon entity to assign the goal to.
+     * @return A new instance of [PokemonBreedGoal].
+     *//*
         fun create(entity: PokemonEntity): PokemonBreedGoal {
             return PokemonBreedGoal(entity)
         }
@@ -125,5 +126,8 @@ class PokemonBreedGoal(private val entity: PokemonEntity) : Goal() {
         FIND_MATE,
         FIND_NEST,
         BREED
+    }*/
+    override fun canUse(): Boolean {
+        TODO("Not yet implemented")
     }
 }

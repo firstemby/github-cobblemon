@@ -105,13 +105,6 @@ import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.TamableAnimal
-import net.minecraft.world.entity.*
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LightningBolt
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus

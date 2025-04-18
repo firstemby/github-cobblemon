@@ -2,7 +2,7 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -39,7 +39,7 @@ class HuntPlayerTaskConfig : SingleTaskConfig {
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean() || entity !is PokemonEntity) return null

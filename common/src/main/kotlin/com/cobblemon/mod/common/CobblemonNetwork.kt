@@ -192,7 +192,6 @@ import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.TeamRequestResponseHandler
 import com.cobblemon.mod.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
 import com.cobblemon.mod.common.net.messages.server.storage.pc.*
-import com.cobblemon.mod.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
 import com.cobblemon.mod.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler
 import com.cobblemon.mod.common.net.serverhandling.breeding.TriggerEggHatchHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectCancelledHandler
@@ -397,7 +396,6 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(HabitatSyncPacket.ID, HabitatSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(FlowRegistrySyncPacket.ID, FlowRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(BrainPresetSyncPacket.ID, BrainPresetSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(BehaviourSyncPacket.ID, BehaviourSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(MarkRegistrySyncPacket.ID, MarkRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
 
@@ -565,9 +563,6 @@ object CobblemonNetwork {
         // Riding packet(s)
         list.add(PacketRegisterInfo(ServerboundUpdateOrientationPacket.ID, ServerboundUpdateOrientationPacket::decode, OrientationPacketHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateRidingStatePacket.ID, ServerboundUpdateRidingStatePacket::decode, ServerboundUpdateRidingStateHandler))
-
-        // Behaviour Packets
-        list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
 
         // Breeding Packets
         list.add(PacketRegisterInfo(TriggerEggHatchPacket.ID, TriggerEggHatchPacket::decode, TriggerEggHatchHandler))

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.util
 
-import com.cobblemon.mod.common.api.ai.PathfindingMedium
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.common.collect.ImmutableMap
@@ -28,7 +27,9 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.PathType.WALKABLE
+import net.minecraft.world.level.pathfinder.PathfindingContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
@@ -188,12 +189,12 @@ fun Entity.isStandingOnSand(): Boolean {
     return isStandingOn(setOf(Blocks.SAND))
 }
 
-fun PathfinderMob.getPathfindingMedium(): PathfindingMedium {
+fun PathfinderMob.getPathTypeSimplified(): PathType {
     return when {
-        this.isUnderWater -> PathfindingMedium.WATER
-        this.isInLava -> PathfindingMedium.LAVA
-        navigation.nodeEvaluator.getPathType(this, blockPosition()) == WALKABLE -> PathfindingMedium.LAND
-        else -> PathfindingMedium.AIR
+        this.isInWater -> PathType.WATER
+        this.isInLava -> PathType.LAVA
+        navigation.nodeEvaluator.getPathType(this, blockPosition()) == PathType.WALKABLE -> PathType.WALKABLE
+        else -> PathType.OPEN
     }
 }
 
