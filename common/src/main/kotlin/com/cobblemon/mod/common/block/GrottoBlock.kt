@@ -61,7 +61,7 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun getRenderShape(state: BlockState): RenderShape {
-        return RenderShape.MODEL
+        return RenderShape.INVISIBLE
     }
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
@@ -87,7 +87,7 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun getOcclusionShape(state: BlockState, level: BlockGetter, pos: BlockPos): VoxelShape? {
-        return Shapes.empty()
+        return Shapes.block()
     }
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean {

@@ -21,14 +21,17 @@ class GrottoBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         packedOverlay: Int
     ) {
         val stateToRender: BlockState = entity.mimickedState
+        val level = entity.level ?: return
 
         poseStack.pushPose()
-        Minecraft.getInstance().blockRenderer.renderSingleBlock(
+        Minecraft.getInstance().blockRenderer.renderBatched(
             stateToRender,
+            entity.blockPos,
+            level,
             poseStack,
-            bufferSource,
-            packedLight,
-            OverlayTexture.NO_OVERLAY
+            bufferSource.getBuffer(RenderType.solid()),
+            true,
+            level.random
         )
         poseStack.popPose()
 
