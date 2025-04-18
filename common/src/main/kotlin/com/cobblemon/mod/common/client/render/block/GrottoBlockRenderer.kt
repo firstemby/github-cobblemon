@@ -22,22 +22,15 @@ class GrottoBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
     ) {
         val stateToRender: BlockState = entity.mimickedState
 
-        val level = entity.level ?: return
-        val blockRenderer = Minecraft.getInstance().blockRenderer
-        val model = blockRenderer.getBlockModel(stateToRender)
-        val renderType = RenderType.solid()
-        val light = LevelRenderer.getLightColor(level, entity.blockPos)
-
         poseStack.pushPose()
-        blockRenderer.modelRenderer.renderModel(
-            poseStack.last(),                             // current PoseStack pose
-            bufferSource.getBuffer(renderType),           // proper buffer
+        Minecraft.getInstance().blockRenderer.renderSingleBlock(
             stateToRender,
-            model,
-            1.0f, 1.0f, 1.0f,                             // RGB color (full bright)
-            light,
+            poseStack,
+            bufferSource,
+            packedLight,
             OverlayTexture.NO_OVERLAY
         )
         poseStack.popPose()
+
     }
 }
