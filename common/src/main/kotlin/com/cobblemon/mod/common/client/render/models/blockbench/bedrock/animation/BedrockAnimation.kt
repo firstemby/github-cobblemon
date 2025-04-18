@@ -232,14 +232,14 @@ data class BedrockAnimation(
                 if (!timeline.scale.isEmpty()) {
                     var scale = timeline.scale.resolve(animationSeconds.toDouble(), runtime)
                     // If the goal is to make the invisible then kick that into gear after 0.5. Maybe could work better somehow else.
-                    if (scale == Vec3.ZERO && intensity > 0.5) {
+                    if (scale == Vec3.ZERO && scalar > 0.5) {
                         part.xScale *= scale.x.toFloat()
                         part.yScale *= scale.y.toFloat()
                         part.zScale *= scale.z.toFloat()
                     } else {
                         // The deviation from 1 is what we want to multiply by the intensity of the animation.
                         val deviation = scale.scale(-1.0).add(1.0, 1.0, 1.0)
-                        val weakenedDeviation = deviation.scale(intensity.toDouble())
+                        val weakenedDeviation = deviation.scale(scalar)
                         scale = weakenedDeviation.subtract(1.0, 1.0, 1.0).scale(-1.0)
                         part.xScale *= scale.x.toFloat()
                         part.yScale *= scale.y.toFloat()

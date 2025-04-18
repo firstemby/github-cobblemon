@@ -29,6 +29,7 @@ import org.joml.Vector3f
 import java.util.*
 import java.util.function.Function
 import com.cobblemon.mod.common.util.plus
+import net.minecraft.client.Minecraft
 
 object StadiumClientManager {
     //Molang
@@ -194,31 +195,38 @@ object StadiumClientManager {
     var startRotation: Vector3f? = null
     var attackAnimationPokemon: PokemonEntity? = null
     var animation: PrimaryAnimation? = null
+    var oldFov: Int = 0
 
     fun playAnimation(pokemon: PokemonEntity, animation: PrimaryAnimation) {
         if (startTime != 0.0) return
         attackAnimationPokemon = pokemon
         this.animation = animation
+        this.oldFov = Minecraft.getInstance().options.fov().get()
         animation.afterAction += {
             cameraPosition = Vec3.ZERO
             cameraRotation = Quaternionf()
             attackAnimationPokemon = null
             this.animation = null
+            Minecraft.getInstance().options.fov().set(oldFov)
         }
     }
 
     fun updateCameraData(delta: Double) {
         val pokemon = attackAnimationPokemon ?: return
         val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
-        if (delegate.poseIntensity > 10000000) return
-        val animation = animation ?: return
 
         delegate.updatePartialTicks(delta.toFloat())
         MountedPokemonAnimationRenderController.reset()
         MountedPokemonAnimationRenderController.setup(pokemon, delta.toFloat())
 
         val locator = delegate.locatorStates["camera"] ?: return
+
         cameraPosition = locator.position.add(locator.matrix.getTranslation(Vector3f()).toVec3d())
         cameraRotation = locator.matrix.getUnnormalizedRotation(Quaternionf()).normalize()
+        val cameraPart = delegate.currentModel?.getPart("locator_camera") ?: return
+        val fov = cameraPart.zScale.toInt()
+        if (Minecraft.getInstance().options.fov().get() != fov) {
+            Minecraft.getInstance().options.fov().set(fov)
+        }
     }
 }

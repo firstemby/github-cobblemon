@@ -63,7 +63,7 @@ class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelecti
         val bedrockAnimation = when (pokemon.species.name) {
             "Tinkaton" -> (delegate.runtime.resolve("q.bedrock_primary('tinkaton', 'signature')".asExpression()).value() as ObjectValue<*>).obj as PrimaryAnimation
             "Tandemaus" -> (delegate.runtime.resolve("q.bedrock_primary('tandemaus', 'faint')".asExpression()).value() as ObjectValue<*>).obj as PrimaryAnimation
-            else -> (delegate.runtime.resolve("q.bedrock_primary('ceruledge', 'battle_intro')".asExpression()).value() as ObjectValue<*>).obj as PrimaryAnimation
+            else -> (delegate.runtime.resolve("q.bedrock_primary('ceruledge', 'battle_cry')".asExpression()).value() as ObjectValue<*>).obj as PrimaryAnimation
         }
         delegate.addPrimaryAnimation(bedrockAnimation)
         StadiumClientManager.playAnimation(entity, bedrockAnimation)
