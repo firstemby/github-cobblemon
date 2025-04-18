@@ -82,7 +82,9 @@
       "weight": 1,
       "spawns": [
         { "species": "cobblemon:voltorb", "weight": 2 },
-        { "species": "cobblemon:electrode", "weight": 8 }
+        { "species": "cobblemon:voltorb_hisuibias", "weight": 2 },
+        { "species": "cobblemon:electrode", "weight": 8 },
+        { "species": "cobblemon:electrode_hisuibias", "weight": 8 }
       ]
     },
     {
@@ -109,8 +111,11 @@
       "weight": 1,
       "spawns": [
         { "species": "cobblemon:rowlet", "weight": 1 },
+        { "species": "cobblemon:rowlet_hisuibias", "weight": 1 },
         { "species": "cobblemon:dartrix", "weight": 4 },
-        { "species": "cobblemon:decidueye", "weight": 10 }
+        { "species": "cobblemon:dartrix_hisuibias", "weight": 4 },
+        { "species": "cobblemon:decidueye", "weight": 10 },
+        { "species": "cobblemon:decidueye_hisuibias", "weight": 10 }
       ]
     },
     {

@@ -81,6 +81,11 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.put("EggItem", eggItem.saveOptional(registryLookup))
+        tag.putBoolean("IsHatching", eggState.isHatching)
+        tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        eggState.renderingBlockPos?.let {
+            tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
+        }
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
     }
 
@@ -88,8 +93,16 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         super.loadAdditional(tag, registryLookup)
         eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
 
+        eggState.isHatching = tag.getBoolean("IsHatching")
+        eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
+        }
+        if (tag.contains("RenderingBlockPos")) {
+            val posArray = tag.getIntArray("RenderingBlockPos")
+            if (posArray.size == 3) {
+                eggState.renderingBlockPos = BlockPos(posArray[0], posArray[1], posArray[2])
+            }
         }
     }
 
@@ -142,7 +155,10 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         if (!eggItem.isEmpty && eggComponent != null) {
             // Hatch the Pokémon if the time to hatch is 0 or below
             if ((eggComponent.egg?.timeToHatch ?: 0F) <= 0F) {
-                hatchPokemon(state, world, pos, player)
+                eggState.isHatching = true // Trigger hatch animation
+                eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
+                setChanged()
+                world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
                 return InteractionResult.SUCCESS
             }
 
@@ -154,7 +170,11 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
         // Place a new egg if the player is holding one
         if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
-            setItem(0,heldItem.split(1))
+            if (!player.isCreative) {
+                setItem(0, heldItem.split(1))
+            } else {
+                setItem(0, heldItem.copy())
+            }
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }

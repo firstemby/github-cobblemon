@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.client.render.block
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
 import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
@@ -23,6 +24,10 @@ class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRe
         light: Int,
         overlay: Int
     ) {
+        // Ensure the renderer runs only on the client
+        val isClientSide = entity.level?.isClientSide ?: false
+        if (!isClientSide) return
+        
         entity.getEgg()?.let { egg ->
             matrices.pushPose() // Start transformation stack
             try {
