@@ -107,9 +107,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
     fun cycleMimic() {
         mimicIndex = (mimicIndex + 1) % mimicCycle.size
-        mimicId = mimicCycle[mimicIndex]
-        setChanged()
-        level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_CLIENTS)
+        setMimic(mimicCycle[mimicIndex])
     }
 
     fun onUse(player: Player, hit: BlockHitResult): InteractionResult {
