@@ -38,9 +38,9 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     var lastMoonPhaseChecked: Int = -1
     var currentSpawnGroup: List<WeightedSpecies> = emptyList()
 
-    var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
+    var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
     val mimickedState: BlockState
-        get() = BuiltInRegistries.BLOCK.get(mimicId).defaultBlockState() ?: Blocks.SPONGE.defaultBlockState()
+        get() = BuiltInRegistries.BLOCK.get(mimicId).defaultBlockState() ?: Blocks.STONE.defaultBlockState()
 
     fun setMimic(id: ResourceLocation) {
         mimicId = id
@@ -148,7 +148,7 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(tag, registryLookup)
         tag.getString("MimicId").let {
-            mimicId = ResourceLocation.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.SPONGE)
+            mimicId = ResourceLocation.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
         }
         hasCheckedStructure = tag.getBoolean("HasCheckedStructure")
         detectedStructure = tag.getString("DetectedStructure").takeIf { it.isNotEmpty() }?.let(ResourceLocation::tryParse)

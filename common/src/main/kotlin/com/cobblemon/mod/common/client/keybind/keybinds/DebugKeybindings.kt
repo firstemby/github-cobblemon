@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.gui.debug.GrottoDebugGUI
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -17,6 +19,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.HitResult
 
 object DebugKeybindings {
     val keybindings = listOf(
@@ -26,7 +30,8 @@ object DebugKeybindings {
         TranslateRightKeybinding(),
         TranslateUpKeybinding(),
         TranslateDownKeybinding(),
-        PrintModelSettingsKeybinding()
+        PrintModelSettingsKeybinding(),
+        ToggleGrottoDebugGUIKeybinding()
     )
     class ScaleUpKeybinding: CobblemonKeyBinding(
         "key.cobblemon.scaleportraitup",
@@ -142,6 +147,30 @@ object DebugKeybindings {
                 Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Scale: ${model.portraitScale}"))
                 Cobblemon.LOGGER.info("override var portraitTranslation = Vec3d(${model.portraitTranslation.x}, ${model.portraitTranslation.y}, ${model.portraitTranslation.z})")
                 Cobblemon.LOGGER.info("override var portraitScale = ${model.portraitScale}F")
+            }
+        }
+    }
+
+    class ToggleGrottoDebugGUIKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.togglegrottogui",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_APOSTROPHE,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val player = Minecraft.getInstance().player
+            val level = Minecraft.getInstance().level
+
+            if (player != null && level != null) {
+                val hitResult = Minecraft.getInstance().hitResult
+                if (hitResult != null && hitResult.type == HitResult.Type.BLOCK) {
+                    val blockPos = (hitResult as BlockHitResult).blockPos
+                    val blockEntity = level.getBlockEntity(blockPos)
+
+                    if (blockEntity is GrottoBlockEntity) {
+                        Minecraft.getInstance().setScreen(GrottoDebugGUI(blockEntity))
+                    }
+                }
             }
         }
     }
