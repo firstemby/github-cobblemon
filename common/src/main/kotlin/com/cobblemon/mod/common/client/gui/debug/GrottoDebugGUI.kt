@@ -8,12 +8,8 @@ import com.cobblemon.mod.common.net.messages.server.debug.UpdateGrottoBlockPacke
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.network.chat.CommonComponents
-import net.minecraft.network.chat.Component
-import net.minecraft.util.Mth
 import java.awt.Color
 
 class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debug.grotto")), CobblemonRenderable {
@@ -34,7 +30,7 @@ class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debu
         addRenderableWidget(
             Button.builder("Save".text()) { button ->
                 saveEverything()
-            }.bounds(10 , getScaledHeight() - 20, getScaledWidth() - 20, 20).build()
+            }.bounds(10, getScaledHeight() - 20, getScaledWidth() - 20, 20).build()
         )
         refresh()
     }
