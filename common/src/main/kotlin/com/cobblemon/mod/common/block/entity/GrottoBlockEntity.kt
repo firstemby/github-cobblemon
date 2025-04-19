@@ -3,6 +3,7 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.habitats.Habitats
 import com.cobblemon.mod.common.api.habitats.WeightedSpecies
+import com.cobblemon.mod.common.block.GrottoBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
@@ -18,6 +19,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -172,6 +174,14 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
         return saveWithoutMetadata(registryLookup)
+    }
+
+    fun updateLevelAndPos(level: Level, pos: BlockPos) {
+        val block = this.blockState.block
+        if (block is GrottoBlock) {
+            block.level = level
+            block.pos = pos
+        }
     }
 
     fun findNearbyStructure(level: ServerLevel, pos: BlockPos, radius: Int): ResourceLocation? {

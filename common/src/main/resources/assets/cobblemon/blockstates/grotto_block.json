@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "minecraft:block/barrier" }
+    "": { "model": "minecraft:block/air" }
   }
 }

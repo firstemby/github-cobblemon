@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
@@ -11,6 +12,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.RenderShape
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -25,6 +27,9 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import java.util.*
 
 class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
+    var level: Level? = null
+    var pos: BlockPos? = null
+    
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return GrottoBlockEntity(pos, state)
     }
@@ -92,5 +97,25 @@ class GrottoBlock(properties: Properties) : Block(properties), EntityBlock {
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean {
         return true
+    }
+
+    override fun spawnDestroyParticles(level: Level, player: Player, pos: BlockPos, state: BlockState) {
+        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        val mimicState = blockEntity?.mimickedState ?: return
+        mimicState.block.spawnDestroyParticles(level, player, pos, mimicState)
+    }
+
+    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
+        super.onPlace(state, level, pos, oldState, isMoving)
+        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        blockEntity?.updateLevelAndPos(level, pos)
+    }
+
+    override fun getSoundType(state: BlockState): SoundType {
+        val level = this.level ?: return super.getSoundType(state)
+        val pos = this.pos ?: return super.getSoundType(state)
+        val blockEntity = level.getBlockEntity(pos) as? GrottoBlockEntity
+        val mimicState = blockEntity?.mimickedState ?: return super.getSoundType(state)
+        return mimicState.soundType
     }
 }
