@@ -39,7 +39,7 @@ class NavigationButton(
             texture = if (forward) forwardButtonResource else backwardsButtonResource,
             width = SIZE,
             height = SIZE,
-            vOffset = if (isHovered()) SIZE else 0,
+            vOffset = if (isHoveredOrFocused) SIZE else 0,
             textureHeight = SIZE * 2,
             scale = SCALE
         )

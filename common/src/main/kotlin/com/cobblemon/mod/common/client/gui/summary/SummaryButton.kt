@@ -67,7 +67,7 @@ class SummaryButton(
             y = buttonY / scale,
             width = buttonWidth,
             height = buttonHeight,
-            vOffset = if (hoverTexture && isButtonHovered(pMouseX, pMouseY)) buttonHeight else 0,
+            vOffset = if (hoverTexture && (isFocused || isButtonHovered(pMouseX, pMouseY))) buttonHeight else 0,
             textureHeight = if (hoverTexture) (buttonHeight.toFloat() * 2) else buttonHeight,
             scale = scale
         )
