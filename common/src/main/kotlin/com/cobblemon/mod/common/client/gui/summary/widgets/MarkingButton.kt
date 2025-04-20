@@ -54,7 +54,7 @@ class MarkingButton(
         if (canEdit) soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
     }
 
-    override fun onClick(mouseX: Double, mouseY: Double) {
-        if (canEdit) super.onClick(mouseX, mouseY)
+    override fun onPress() {
+        if (canEdit) super.onPress()
     }
 }
