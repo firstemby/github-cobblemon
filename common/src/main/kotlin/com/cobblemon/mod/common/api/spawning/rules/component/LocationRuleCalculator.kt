@@ -15,8 +15,8 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asDimensionTypeMoLang
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asWorldMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.context.calculators.SpawningContextCalculator
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
 import net.minecraft.core.BlockPos
@@ -27,7 +27,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.dimension.DimensionType
 
 /**
- * An early rule that filters possible locations that would go into a [SpawningContext].
+ * An early rule that filters possible locations that would go into a [SpawnablePosition].
  *
  * @author Hiroku
  * @since October 2nd, 2023
@@ -42,7 +42,7 @@ class LocationRuleCalculator : SpawnRuleComponent {
     @Transient
     private val reusableZ = DoubleValue(0.0)
     @Transient
-    private val reusableContext = StringValue("")
+    private val reusableSpawnablePosition = StringValue("")
     @Transient
     private lateinit var reusableWorldValue: ObjectValue<Holder<Level>>
     @Transient
@@ -53,12 +53,12 @@ class LocationRuleCalculator : SpawnRuleComponent {
     override fun isAllowedPosition(
         world: ServerLevel,
         pos: BlockPos,
-        contextCalculator: SpawningContextCalculator<*, *>
+        spawnablePositionCalculator: SpawnablePositionCalculator<*, *>
     ): Boolean {
         reusableX.value = pos.x.toDouble()
         reusableY.value = pos.y.toDouble()
         reusableZ.value = pos.z.toDouble()
-        reusableContext.value = contextCalculator.name
+        reusableSpawnablePosition.value = spawnablePositionCalculator.name
 
         if (!this::reusableWorldValue.isInitialized) {
             reusableWorldValue = world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(world).asWorldMoLangValue()
@@ -75,7 +75,7 @@ class LocationRuleCalculator : SpawnRuleComponent {
         runtime.environment.setSimpleVariable("x", reusableX)
         runtime.environment.setSimpleVariable("y", reusableY)
         runtime.environment.setSimpleVariable("z", reusableZ)
-        runtime.environment.setSimpleVariable("context", reusableContext)
+        runtime.environment.setSimpleVariable("spawnable_position", reusableSpawnablePosition)
         runtime.environment.setSimpleVariable("world", reusableWorldValue)
         runtime.environment.setSimpleVariable("dimension_type", reusableDimensionTypeValue)
         return runtime.resolveBoolean(allow)

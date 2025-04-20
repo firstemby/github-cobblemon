@@ -17,12 +17,13 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.condition.CompositeSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
+import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -45,7 +46,8 @@ abstract class SpawnDetail : ModDependant {
     abstract val type: String
     var id = ""
     var displayName: String? =  null
-    lateinit var context: RegisteredSpawningContext<*>
+    @SerializedName("spawnablePositionType", alternate = ["context"])
+    lateinit var spawnablePositionType: SpawnablePositionType<*>
     var bucket = SpawnBucket("", 0F)
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
@@ -74,7 +76,7 @@ abstract class SpawnDetail : ModDependant {
         "bucket" to { StringValue(bucket.name) },
         "width" to { DoubleValue(width.toDouble()) },
         "height" to { DoubleValue(height.toDouble()) },
-        "context" to { StringValue(context.name) },
+        "spawnable_position_type" to { StringValue(spawnablePositionType.name) },
         "labels" to { labels.asArrayValue { StringValue(it) } }
     )
 
@@ -102,16 +104,16 @@ abstract class SpawnDetail : ModDependant {
         }
     }
 
-    open fun isSatisfiedBy(ctx: SpawningContext): Boolean {
-        if (!ctx.preFilter(this)) {
+    open fun isSatisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        if (!spawnablePosition.preFilter(this)) {
             return false
-        } else if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(ctx) }) {
+        } else if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(spawnablePosition) }) {
             return false
-        } else if (anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(ctx) }) {
+        } else if (anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(spawnablePosition) }) {
             return false
-        } else if (compositeCondition?.satisfiedBy(ctx) == false) {
+        } else if (compositeCondition?.satisfiedBy(spawnablePosition) == false) {
             return false
-        } else if (!ctx.postFilter(this)) {
+        } else if (!spawnablePosition.postFilter(this)) {
             return false
         }
 
@@ -131,5 +133,5 @@ abstract class SpawnDetail : ModDependant {
         return super.isModDependencySatisfied() && !containsNullValues
     }
 
-    abstract fun doSpawn(ctx: SpawningContext): SpawnAction<*>
+    abstract fun doSpawn(spawnablePosition: SpawnablePosition, bucket: SpawnBucket): SpawnAction<*>
 }

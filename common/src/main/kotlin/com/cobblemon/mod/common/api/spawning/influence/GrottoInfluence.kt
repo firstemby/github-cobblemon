@@ -1,22 +1,56 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.api.spawning.influence
 
-import com.cobblemon.mod.common.api.habitats.Habitats
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import net.minecraft.resources.ResourceLocation
-import org.slf4j.LoggerFactory
+import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 
+/**
+ * The grotto influence will force spawns to all be for the most common bucket.
+ */
 class GrottoInfluence(
-        private val structureId: ResourceLocation,
-        private val allowedSpawns: List<ResourceLocation>? = null // null = allow all from habitat
+    private val grottoBlockEntity: GrottoBlockEntity
 ) : SpawningInfluence {
+    companion object {
+        const val HABITAT_LABEL = "habitat"
+    }
+
+    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition) =  HABITAT_LABEL in detail.labels
+    override fun affectBucketWeight(bucket: SpawnBucket, weight: Float, allBuckets: List<SpawnBucket>): Float {
+        val rarestBuckets = allBuckets.sortedByDescending { it.weight }
+        val numberOfBuckets = rarestBuckets.size
+        var subtractedAmount = 0F
+        val index = rarestBuckets.indexOf(bucket)
+
+        for (i in 0 until (numberOfBuckets - 1)) {
+            val it = rarestBuckets[i]
+
+        }
+//        for (rareBucket in rarestBuckets) {
+//            subtractedAmount += rarestBuckets[i].weight
+//        }
+
+        if (bucket == allBuckets.maxByOrNull { it.weight }) {
+            // If this is the highest weight bucket, we want to boost it
+            return 1F
+        } else {
+            return 0F
+        }
+    }
 
     /*companion object {
         private val LOGGER = LoggerFactory.getLogger("GrottoInfluence")
     }
 
-    override fun affectSpawnable(detail: SpawnDetail, ctx: SpawningContext): Boolean {
+    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawningContext): Boolean {
         if (detail !is PokemonSpawnDetail) return true
         val detailId = ResourceLocation.tryParse(detail.pokemon.species!!) ?: return false
 
@@ -29,7 +63,7 @@ class GrottoInfluence(
         return true
     }
 
-    override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
+    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawningContext, weight: Float): Float {
         if (detail !is PokemonSpawnDetail) return weight
         val detailId = ResourceLocation.tryParse(detail.pokemon.species!!) ?: return weight
 

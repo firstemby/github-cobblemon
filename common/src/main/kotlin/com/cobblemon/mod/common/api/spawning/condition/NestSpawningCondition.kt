@@ -9,30 +9,25 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.NestSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.NestSpawnablePosition
 import com.cobblemon.mod.common.util.Merger
-import com.cobblemon.mod.common.util.itemRegistry
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
 
 /**
- * A spawning condition that applies to [NestSpawningContext]s.
+ * A spawning condition that applies to [NestSpawnablePosition]s.
  *
  * @author Hiroku
  * @since February 3rd, 2024
  */
-class NestSpawningCondition: SpawningCondition<NestSpawningContext>() {
-    override fun contextClass() = NestSpawningContext::class.java
+class NestSpawningCondition: SpawningCondition<NestSpawnablePosition>() {
+    override fun spawnablePositionClass() = NestSpawnablePosition::class.java
 
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
 
-    override fun fits(ctx: NestSpawningContext): Boolean {
-        if (!super.fits(ctx)) {
+    override fun fits(spawnablePosition: NestSpawnablePosition): Boolean {
+        if (!super.fits(spawnablePosition)) {
             return false
-        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> ctx.nearbyBlockTypes.any { cond.fits(it, ctx.blockRegistry) } }) {
+        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> spawnablePosition.nearbyBlockTypes.any { cond.fits(it, spawnablePosition.blockRegistry) } }) {
             return false
         }
         return true

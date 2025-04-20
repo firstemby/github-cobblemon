@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
@@ -28,8 +36,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.StructureStart
 import net.minecraft.world.phys.BlockHitResult
 
-class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
-    BlockEntity(CobblemonBlockEntities.GROTTO_BLOCK, pos, state) {
+class GrottoBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.GROTTO_BLOCK, pos, state) {
 
     var detectedStructure: ResourceLocation? = null
     var structureCenter: BlockPos? = null
@@ -40,64 +47,6 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
     val mimickedState: BlockState
         get() = BuiltInRegistries.BLOCK.get(mimicId).defaultBlockState() ?: Blocks.STONE.defaultBlockState()
-
-    // todo to test with checking how it looks as other blocks
-    val mimicCycle: List<ResourceLocation> = listOf(
-        ResourceLocation.parse("minecraft:stone"),
-        ResourceLocation.parse("minecraft:cobblestone"),
-        ResourceLocation.parse("minecraft:granite"),
-        ResourceLocation.parse("minecraft:diorite"),
-        ResourceLocation.parse("minecraft:andesite"),
-        ResourceLocation.parse("minecraft:deepslate"),
-        ResourceLocation.parse("minecraft:polished_deepslate"),
-
-        ResourceLocation.parse("minecraft:oak_planks"),
-        ResourceLocation.parse("minecraft:spruce_planks"),
-        ResourceLocation.parse("minecraft:birch_planks"),
-        ResourceLocation.parse("minecraft:jungle_planks"),
-        ResourceLocation.parse("minecraft:acacia_planks"),
-        ResourceLocation.parse("minecraft:dark_oak_planks"),
-        ResourceLocation.parse("minecraft:mangrove_planks"),
-        ResourceLocation.parse("minecraft:cherry_planks"),
-        ResourceLocation.parse("minecraft:bamboo_planks"),
-
-        ResourceLocation.parse("minecraft:bricks"),
-        ResourceLocation.parse("minecraft:mossy_cobblestone"),
-        ResourceLocation.parse("minecraft:moss_block"),
-        ResourceLocation.parse("minecraft:bookshelf"),
-        ResourceLocation.parse("minecraft:loom"),
-        ResourceLocation.parse("minecraft:note_block"),
-
-        ResourceLocation.parse("minecraft:coal_block"),
-        ResourceLocation.parse("minecraft:iron_block"),
-        ResourceLocation.parse("minecraft:gold_block"),
-        ResourceLocation.parse("minecraft:diamond_block"),
-        ResourceLocation.parse("minecraft:emerald_block"),
-        ResourceLocation.parse("minecraft:lapis_block"),
-        ResourceLocation.parse("minecraft:redstone_block"),
-        ResourceLocation.parse("minecraft:netherite_block"),
-
-        ResourceLocation.parse("minecraft:obsidian"),
-        ResourceLocation.parse("minecraft:crying_obsidian"),
-        ResourceLocation.parse("minecraft:glowstone"),
-        ResourceLocation.parse("minecraft:blue_ice"),
-        ResourceLocation.parse("minecraft:packed_ice"),
-        ResourceLocation.parse("minecraft:ice"),
-
-        ResourceLocation.parse("minecraft:sandstone"),
-        ResourceLocation.parse("minecraft:red_sandstone"),
-        ResourceLocation.parse("minecraft:cut_sandstone"),
-        ResourceLocation.parse("minecraft:smooth_sandstone"),
-
-        ResourceLocation.parse("minecraft:black_concrete"),
-        ResourceLocation.parse("minecraft:white_concrete"),
-        ResourceLocation.parse("minecraft:lime_concrete"),
-        ResourceLocation.parse("minecraft:cyan_concrete"),
-        ResourceLocation.parse("minecraft:purple_concrete"),
-        ResourceLocation.parse("minecraft:light_blue_concrete"),
-        ResourceLocation.parse("minecraft:yellow_concrete"),
-        ResourceLocation.parse("minecraft:red_concrete")
-    )
 
     var mimicIndex: Int = 0
 
@@ -243,6 +192,65 @@ class GrottoBlockEntity(pos: BlockPos, state: BlockState) :
                 }
             }
         }
+
+        // todo to test with checking how it looks as other blocks
+        val mimicCycle: List<ResourceLocation> = listOf(
+            ResourceLocation.parse("minecraft:stone"),
+            ResourceLocation.parse("minecraft:cobblestone"),
+            ResourceLocation.parse("minecraft:granite"),
+            ResourceLocation.parse("minecraft:diorite"),
+            ResourceLocation.parse("minecraft:andesite"),
+            ResourceLocation.parse("minecraft:deepslate"),
+            ResourceLocation.parse("minecraft:polished_deepslate"),
+
+            ResourceLocation.parse("minecraft:oak_planks"),
+            ResourceLocation.parse("minecraft:spruce_planks"),
+            ResourceLocation.parse("minecraft:birch_planks"),
+            ResourceLocation.parse("minecraft:jungle_planks"),
+            ResourceLocation.parse("minecraft:acacia_planks"),
+            ResourceLocation.parse("minecraft:dark_oak_planks"),
+            ResourceLocation.parse("minecraft:mangrove_planks"),
+            ResourceLocation.parse("minecraft:cherry_planks"),
+            ResourceLocation.parse("minecraft:bamboo_planks"),
+
+            ResourceLocation.parse("minecraft:bricks"),
+            ResourceLocation.parse("minecraft:mossy_cobblestone"),
+            ResourceLocation.parse("minecraft:moss_block"),
+            ResourceLocation.parse("minecraft:bookshelf"),
+            ResourceLocation.parse("minecraft:loom"),
+            ResourceLocation.parse("minecraft:note_block"),
+
+            ResourceLocation.parse("minecraft:coal_block"),
+            ResourceLocation.parse("minecraft:iron_block"),
+            ResourceLocation.parse("minecraft:gold_block"),
+            ResourceLocation.parse("minecraft:diamond_block"),
+            ResourceLocation.parse("minecraft:emerald_block"),
+            ResourceLocation.parse("minecraft:lapis_block"),
+            ResourceLocation.parse("minecraft:redstone_block"),
+            ResourceLocation.parse("minecraft:netherite_block"),
+
+            ResourceLocation.parse("minecraft:obsidian"),
+            ResourceLocation.parse("minecraft:crying_obsidian"),
+            ResourceLocation.parse("minecraft:glowstone"),
+            ResourceLocation.parse("minecraft:blue_ice"),
+            ResourceLocation.parse("minecraft:packed_ice"),
+            ResourceLocation.parse("minecraft:ice"),
+
+            ResourceLocation.parse("minecraft:sandstone"),
+            ResourceLocation.parse("minecraft:red_sandstone"),
+            ResourceLocation.parse("minecraft:cut_sandstone"),
+            ResourceLocation.parse("minecraft:smooth_sandstone"),
+
+            ResourceLocation.parse("minecraft:black_concrete"),
+            ResourceLocation.parse("minecraft:white_concrete"),
+            ResourceLocation.parse("minecraft:lime_concrete"),
+            ResourceLocation.parse("minecraft:cyan_concrete"),
+            ResourceLocation.parse("minecraft:purple_concrete"),
+            ResourceLocation.parse("minecraft:light_blue_concrete"),
+            ResourceLocation.parse("minecraft:yellow_concrete"),
+            ResourceLocation.parse("minecraft:red_concrete")
+        )
+
 
         private fun weightedGroupRoll(groups: List<com.cobblemon.mod.common.api.habitats.WeightedGroup>): com.cobblemon.mod.common.api.habitats.WeightedGroup {
             val totalWeight = groups.sumOf { it.weight.toDouble() }

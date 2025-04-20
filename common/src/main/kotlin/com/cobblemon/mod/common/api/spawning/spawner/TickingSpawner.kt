@@ -9,14 +9,13 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.spawning.SpawnDecision
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
-import com.cobblemon.mod.common.api.spawning.selection.FlatContextWeightedSelector
+import com.cobblemon.mod.common.api.spawning.selection.FlatSpawnablePositionWeightedSelector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import net.minecraft.world.entity.Entity
 
@@ -33,7 +32,7 @@ abstract class TickingSpawner(
     var spawns: SpawnPool,
     val manager: SpawnerManager
 ) : Spawner {
-    private var selector: SpawningSelector = FlatContextWeightedSelector()
+    private var selector: SpawningSelector = FlatSpawnablePositionWeightedSelector()
     override val influences = mutableListOf<SpawningInfluence>()
 
     override fun canSpawn() = active
@@ -42,7 +41,7 @@ abstract class TickingSpawner(
     override fun getSpawnPool() = spawns
     override fun setSpawnPool(spawnPool: SpawnPool) { spawns = spawnPool }
 
-    abstract fun run(cause: SpawnCause): Pair<SpawningContext, SpawnDetail>?
+    abstract fun run(cause: SpawnCause): List<SpawnDecision>
 
     var active = true
     val spawnedEntities = mutableListOf<Entity>()
@@ -68,12 +67,12 @@ abstract class TickingSpawner(
 
         ticksUntilNextSpawn -= tickTimerMultiplier
         if (ticksUntilNextSpawn <= 0) {
-            val spawn = run(SpawnCause(spawner = this, bucket = chooseBucket(), entity = getCauseEntity()))
+            val spawns = run(cause = SpawnCause(spawner = this, entity = getCauseEntity()))
             ticksUntilNextSpawn = ticksBetweenSpawns
-            if (spawn != null) {
-                val ctx = spawn.first
-                val detail = spawn.second
-                val spawnAction = detail.doSpawn(ctx = ctx)
+            for (spawn in spawns) {
+                val spawnablePosition = spawn.spawnablePosition
+                val detail = spawn.spawnDetail
+                val spawnAction = detail.doSpawn(spawnablePosition = spawnablePosition, bucket = spawn.bucket)
                 spawnAction.complete()
             }
         }

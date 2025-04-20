@@ -40,9 +40,9 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.scheduling.ServerRealTimeTaskTracker
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.CobblemonSpawningProspector
-import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
+import com.cobblemon.mod.common.api.spawning.CobblemonSpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
+import com.cobblemon.mod.common.api.spawning.prospecting.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.starter.StarterHandler
 import com.cobblemon.mod.common.api.storage.PokemonStoreManager
 import com.cobblemon.mod.common.api.storage.adapter.conversions.ReforgedConversion
@@ -159,8 +159,8 @@ object Cobblemon {
     var isDedicatedServer = false
     val showdownThread = ShowdownThread()
     lateinit var config: CobblemonConfig
-    var prospector: SpawningProspector = CobblemonSpawningProspector
-    var areaContextResolver: AreaContextResolver = object : AreaContextResolver {}
+    var spawningZoneGenerator: SpawningZoneGenerator = CobblemonSpawningZoneGenerator
+    var areaSpawnablePositionResolver: AreaSpawnablePositionResolver = object : AreaSpawnablePositionResolver {}
     val bestSpawner = BestSpawner
     val battleRegistry = BattleRegistry
     var storage = PokemonStoreManager()

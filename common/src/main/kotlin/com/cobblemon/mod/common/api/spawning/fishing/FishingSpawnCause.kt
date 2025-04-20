@@ -19,8 +19,9 @@ import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.types.ElementalTypes
@@ -42,10 +43,10 @@ import kotlin.random.Random.Default.nextInt
  */
 class FishingSpawnCause(
     spawner: Spawner,
-    bucket: SpawnBucket,
+    val bucket: SpawnBucket,
     entity: Entity?,
     val rodStack: ItemStack
-) : SpawnCause(spawner, bucket, entity) {
+) : SpawnCause(spawner, entity) {
     companion object {
         const val FISHED_ASPECT = "fished"
         fun shinyReroll(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
@@ -135,8 +136,8 @@ class FishingSpawnCause(
     val rodItem = rodStack.item as? PokerodItem
     val bait = PokerodItem.getBaitOnRod(rodStack)
 
-    override fun affectSpawn(entity: Entity) {
-        super.affectSpawn(entity)
+    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+        super.affectSpawn(action, entity)
         if (entity is PokemonEntity) {
             entity.pokemon.forcedAspects += FISHED_ASPECT
 
@@ -155,7 +156,7 @@ class FishingSpawnCause(
     }
 
     // EV related bait effects
-    override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
+    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {
         // if bait exists and any effects are related to EV yields
         if (bait != null && bait.effects.any{ it.type == FishingBait.Effects.EV }){
             if (detail is PokemonSpawnDetail) {
@@ -165,8 +166,8 @@ class FishingSpawnCause(
                if (detailSpecies != null && baitEVStat != null) {
                    val evYieldValue = detailSpecies.evYield[baitEVStat]?.toFloat() ?: 0f
                    return when {
-                       evYieldValue > 0 -> super.affectWeight(detail, ctx, weight) // use original weight if EV yield is greater than 0
-                       else -> super.affectWeight(detail, ctx, 0f) // use spawn weight of 0 if EV yield is 0
+                       evYieldValue > 0 -> super.affectWeight(detail, spawnablePosition, weight) // use original weight if EV yield is greater than 0
+                       else -> super.affectWeight(detail, spawnablePosition, 0f) // use spawn weight of 0 if EV yield is 0
                    }
                }
             }
@@ -181,8 +182,8 @@ class FishingSpawnCause(
                 if (detailSpecies != null && baitTypingEffect != null) {
                     val isMatchingType = detailSpecies.types.contains(baitTypingEffect)
                     return when {
-                        isMatchingType -> super.affectWeight(detail, ctx, weight * baitEffect.value.toFloat()) // multiply weight by multiplier of bait effect if typing is found
-                        else -> super.affectWeight(detail, ctx, weight) // use base spawn weight if typing is not same as bait
+                        isMatchingType -> super.affectWeight(detail, spawnablePosition, weight * baitEffect.value.toFloat()) // multiply weight by multiplier of bait effect if typing is found
+                        else -> super.affectWeight(detail, spawnablePosition, weight) // use base spawn weight if typing is not same as bait
                     }
                 }
             }
@@ -209,11 +210,11 @@ class FishingSpawnCause(
 
                     if (matchingEffect != null) {
                         val multiplier = matchingEffect.value
-                        return super.affectWeight(detail, ctx, (weight * multiplier).toFloat())
+                        return super.affectWeight(detail, spawnablePosition, (weight * multiplier).toFloat())
                     }
                 }
             }
         }
-        return super.affectWeight(detail, ctx, weight)
+        return super.affectWeight(detail, spawnablePosition, weight)
     }
 }

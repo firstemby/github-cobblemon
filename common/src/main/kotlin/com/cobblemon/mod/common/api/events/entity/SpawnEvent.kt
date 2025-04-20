@@ -10,15 +10,15 @@ package com.cobblemon.mod.common.api.events.entity
 
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import net.minecraft.world.entity.Entity
 
 /**
  * Event fired when an entity is spawned using the [BestSpawner]. The entity that was spawned
- * and the [SpawningContext] of the spawn are provided. Cancelling this event will prevent the
+ * and the [SpawnablePosition] of the spawn are provided. Cancelling this event will prevent the
  * entity from spawning.
  *
  * @author Hiroku
  * @since April 22nd, 2023
  */
-class SpawnEvent<T : Entity>(val entity: T, val ctx: SpawningContext) : Cancelable()
+class SpawnEvent<T : Entity>(val entity: T, val spawnablePosition: SpawnablePosition) : Cancelable()

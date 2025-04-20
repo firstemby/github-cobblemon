@@ -15,7 +15,8 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -111,7 +112,7 @@ class PokemonSpawnDetail : SpawnDetail() {
         return super.isValid() && isValidSpecies
     }
 
-    override fun doSpawn(ctx: SpawningContext): SingleEntitySpawnAction<PokemonEntity> {
-        return PokemonSpawnAction(ctx, this)
+    override fun doSpawn(spawnablePosition: SpawnablePosition, bucket: SpawnBucket): SingleEntitySpawnAction<PokemonEntity> {
+        return PokemonSpawnAction(spawnablePosition, bucket, this)
     }
 }

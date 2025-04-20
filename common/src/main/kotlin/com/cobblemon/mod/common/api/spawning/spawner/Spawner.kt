@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.spawning.spawner
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
@@ -38,17 +38,22 @@ interface Spawner {
     fun setSpawnPool(spawnPool: SpawnPool)
     fun <R> afterSpawn(action: SpawnAction<R>, result: R) {}
     fun canSpawn(): Boolean
-    fun getMatchingSpawns(ctx: SpawningContext) = getSpawnPool().retrieve(ctx).filter { it.isSatisfiedBy(ctx) }
+
+    fun getMatchingSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = getSpawnPool()
+        .retrieve(bucket, spawnablePosition)
+        .filter { it.isSatisfiedBy(spawnablePosition) }
+
     fun copyInfluences() = influences.filter { !it.isExpired() }.toMutableList()
-    fun chooseBucket(): SpawnBucket {
+
+    fun chooseBucket(influences: List<SpawningInfluence>): SpawnBucket {
         val buckets = Cobblemon.bestSpawner.config.buckets
-        val influences = this.copyInfluences()
         val weightMap = mutableMapOf<SpawnBucket, Float>()
 
+        val bucketsCopy = buckets.toList()
         for (bucket in buckets) {
             var weight = bucket.weight
             for (influence in influences) {
-                weight = influence.affectBucketWeight(bucket, weight)
+                weight = influence.affectBucketWeight(bucket = bucket, weight = weight, allBuckets = bucketsCopy)
             }
             weightMap[bucket] = weight
         }

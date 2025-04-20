@@ -45,7 +45,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.storage.PokemonStore
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PartyStore
@@ -1180,7 +1180,7 @@ object MoLangFunctions {
         }
     )
 
-    val spawningContextFunctions = mutableListOf<(SpawningContext) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+    val spawningContextFunctions = mutableListOf<(SpawnablePosition) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { spawningContext ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
             val worldValue = spawningContext.world.registryAccess().registryOrThrow(Registries.DIMENSION).wrapAsHolder(spawningContext.world).asWorldMoLangValue()
@@ -1194,7 +1194,6 @@ object MoLangFunctions {
             map.put("moon_phase") { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) }
             map.put("can_see_sky") { _ -> DoubleValue(spawningContext.canSeeSky) }
             map.put("sky_light") { _ -> DoubleValue(spawningContext.skyLight.toDouble()) }
-            map.put("bucket") { _ -> StringValue(spawningContext.cause.bucket.name) }
             map.put("player") { _ ->
                 val causeEntity = spawningContext.cause.entity ?: return@put DoubleValue.ZERO
                 if (causeEntity is ServerPlayer) {
@@ -1532,7 +1531,7 @@ object MoLangFunctions {
         return value
     }
 
-    fun SpawningContext.asMoLangValue(): ObjectValue<SpawningContext> {
+    fun SpawnablePosition.asMoLangValue(): ObjectValue<SpawnablePosition> {
         val value = ObjectValue(
             obj = this,
             stringify = { it.toString() }

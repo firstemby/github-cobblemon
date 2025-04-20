@@ -11,7 +11,8 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.util.toVec3d
 import net.minecraft.world.entity.Entity
 
@@ -22,18 +23,19 @@ import net.minecraft.world.entity.Entity
  * @since January 13th, 2024
  */
 abstract class SingleEntitySpawnAction<T : Entity>(
-    ctx: SpawningContext,
+    spawnablePosition: SpawnablePosition,
+    bucket: SpawnBucket,
     detail: SpawnDetail
-) : SpawnAction<EntitySpawnResult>(ctx, detail) {
+) : SpawnAction<EntitySpawnResult>(spawnablePosition, bucket, detail) {
     abstract fun createEntity(): T?
 
     override fun run(): EntitySpawnResult? {
         val e = createEntity() ?: return null
-        e.setPos(ctx.position.toVec3d().add(0.5, 1.0, 0.5))
+        e.setPos(spawnablePosition.position.toVec3d().add(0.5, 1.0, 0.5))
         var shouldSpawn = false
-        CobblemonEvents.ENTITY_SPAWN.postThen(SpawnEvent(e, ctx), ifSucceeded = {
+        CobblemonEvents.ENTITY_SPAWN.postThen(SpawnEvent(e, spawnablePosition), ifSucceeded = {
             this.entity.emit(e)
-            ctx.world.addFreshEntity(e)
+            spawnablePosition.world.addFreshEntity(e)
             shouldSpawn = true
         })
 
@@ -51,6 +53,6 @@ abstract class SingleEntitySpawnAction<T : Entity>(
      * where the entity spawn has been canceled, so that your action will not occur.
      */
     val entity: SimpleObservable<T> = SimpleObservable<T>().apply {
-        subscribe { entity -> ctx.afterSpawn(entity) }
+        subscribe { entity -> spawnablePosition.afterSpawn(action = this@SingleEntitySpawnAction, entity = entity) }
     }
 }

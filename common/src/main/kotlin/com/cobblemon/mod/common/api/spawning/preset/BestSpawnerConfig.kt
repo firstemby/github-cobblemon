@@ -12,9 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
-import com.cobblemon.mod.common.util.adapters.RegisteredSpawningContextAdapter
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
+import com.cobblemon.mod.common.util.adapters.RegisteredSpawnablePositionAdapter
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -29,9 +30,10 @@ import java.io.InputStreamReader
  */
 class BestSpawnerConfig {
     val version = 0
-    /** Whether or not an external config will be replaced by an internal one once [version] is higher on the internal. */
+    /** Whether an external config will be replaced by an internal one once [version] is higher on the internal. */
     val replaceWithNewVersion = true
-    val contextWeights = mutableMapOf(
+    @SerializedName("spawnablePositionTypeWeights", alternate = ["contextWeights"])
+    val spawnablePositionTypeWeights = mutableMapOf(
         "grounded" to 1F,
         "submerged" to 0.99F,
         "surface" to 0.01F,
@@ -47,7 +49,7 @@ class BestSpawnerConfig {
     companion object {
         val GSON = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(RegisteredSpawningContext::class.java, RegisteredSpawningContextAdapter)
+            .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
             .setLenient()
             .disableHtmlEscaping()
             .create()
