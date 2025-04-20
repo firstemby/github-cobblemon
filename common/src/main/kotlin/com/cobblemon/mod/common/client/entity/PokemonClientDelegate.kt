@@ -404,7 +404,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     }
 
     fun hatch() {
-        val animation = model?.getAnimation(this, "q.bedrock_stateful('hatch', 'hatch', 'endures_primary_animations');", runtime) ?: return
+        val animation = model?.getAnimation(this, "q.bedrock_primary('hatch', 'hatch');", runtime) ?: return
         if (animation is PrimaryAnimation) {
             addPrimaryAnimation(animation)
         }
