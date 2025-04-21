@@ -5,7 +5,7 @@ This file contains tags related to blocks in cobblemon.
 ## Tags:
 
 <details>
-<summary><b>Tag:</b> #blocks:all_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:all_hanging_signs</summary>
 
 - #cobblemon:ceiling_hanging_signs
 - #cobblemon:wall_hanging_signs
@@ -13,7 +13,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:all_signs</summary>
+<summary><b>Tag:</b> #cobblemon:all_signs</summary>
 
 - #cobblemon:signs
 - #cobblemon:all_hanging_signs
@@ -21,7 +21,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:apricorns</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns</summary>
 
 - cobblemon:black_apricorn
 - cobblemon:blue_apricorn
@@ -34,14 +34,14 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:apricorn_leaves</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_leaves</summary>
 
 - cobblemon:apricorn_leaves
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:apricorn_logs</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_logs</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:apricorn_wood
@@ -51,7 +51,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:apricorn_saplings</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_saplings</summary>
 
 - cobblemon:black_apricorn_sapling
 - cobblemon:blue_apricorn_sapling
@@ -64,7 +64,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:berries</summary>
+<summary><b>Tag:</b> #cobblemon:berries</summary>
 
 - cobblemon:cheri_berry
 - cobblemon:chesto_berry
@@ -139,7 +139,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:berry_replaceable</summary>
+<summary><b>Tag:</b> #cobblemon:berry_replaceable</summary>
 
 - minecraft:air
 - minecraft:grass
@@ -161,7 +161,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:berry_soil</summary>
+<summary><b>Tag:</b> #cobblemon:berry_soil</summary>
 
 - minecraft:farmland
 - #c:farmlands
@@ -170,7 +170,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:berry_wild_soil</summary>
+<summary><b>Tag:</b> #cobblemon:berry_wild_soil</summary>
 
 - #minecraft:dirt
 - #minecraft:sand
@@ -180,7 +180,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:black_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:black_tumblestones</summary>
 
 - cobblemon:small_budding_black_tumblestone
 - cobblemon:medium_budding_black_tumblestone
@@ -191,14 +191,14 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:ceiling_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:ceiling_hanging_signs</summary>
 
 - cobblemon:apricorn_hanging_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:crops</summary>
+<summary><b>Tag:</b> #cobblemon:crops</summary>
 
 - cobblemon:revival_herb
 - cobblemon:vivichoke_seeds
@@ -208,7 +208,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:dawn_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:dawn_stone_ores</summary>
 
 - cobblemon:dawn_stone_ore
 - cobblemon:deepslate_dawn_stone_ore
@@ -216,7 +216,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:dripstone_growable</summary>
+<summary><b>Tag:</b> #cobblemon:dripstone_growable</summary>
 
 - dripstone_block
 - cobblemon:dripstone_moon_stone_ore
@@ -224,14 +224,14 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:dripstone_replaceables</summary>
+<summary><b>Tag:</b> #cobblemon:dripstone_replaceables</summary>
 
 - dripstone_block
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:dusk_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:dusk_stone_ores</summary>
 
 - cobblemon:dusk_stone_ore
 - cobblemon:deepslate_dusk_stone_ore
@@ -239,7 +239,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:fire_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:fire_stone_ores</summary>
 
 - cobblemon:fire_stone_ore
 - cobblemon:deepslate_fire_stone_ore
@@ -248,14 +248,14 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:flowers</summary>
+<summary><b>Tag:</b> #cobblemon:flowers</summary>
 
 - #cobblemon:small_flowers
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:fossil_machine_parts</summary>
+<summary><b>Tag:</b> #cobblemon:fossil_machine_parts</summary>
 
 - cobblemon:restoration_tank
 - cobblemon:monitor
@@ -264,7 +264,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:ice_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:ice_stone_ores</summary>
 
 - cobblemon:ice_stone_ore
 - cobblemon:deepslate_ice_stone_ore
@@ -272,7 +272,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:leaf_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:leaf_stone_ores</summary>
 
 - cobblemon:leaf_stone_ore
 - cobblemon:deepslate_leaf_stone_ore
@@ -280,7 +280,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:machines</summary>
+<summary><b>Tag:</b> #cobblemon:machines</summary>
 
 - cobblemon:healing_machine
 - cobblemon:pc
@@ -292,7 +292,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:medicinal_leek_plantable</summary>
+<summary><b>Tag:</b> #cobblemon:medicinal_leek_plantable</summary>
 
 - minecraft:water
 - #minecraft:slabs
@@ -300,7 +300,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:mints</summary>
+<summary><b>Tag:</b> #cobblemon:mints</summary>
 
 - cobblemon:red_mint
 - cobblemon:blue_mint
@@ -312,7 +312,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:moon_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:moon_stone_ores</summary>
 
 - cobblemon:moon_stone_ore
 - cobblemon:deepslate_moon_stone_ore
@@ -321,7 +321,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:red_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:red_tumblestones</summary>
 
 - cobblemon:small_budding_tumblestone
 - cobblemon:medium_budding_tumblestone
@@ -332,7 +332,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:roots</summary>
+<summary><b>Tag:</b> #cobblemon:roots</summary>
 
 - cobblemon:big_root
 - cobblemon:energy_root
@@ -340,7 +340,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:roots_spreadable</summary>
+<summary><b>Tag:</b> #cobblemon:roots_spreadable</summary>
 
 - #minecraft:dirt
 - minecraft:stone
@@ -367,7 +367,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:sees_sky</summary>
+<summary><b>Tag:</b> #cobblemon:sees_sky</summary>
 
 - #minecraft:replaceable
 - #minecraft:leaves
@@ -378,7 +378,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:shiny_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:shiny_stone_ores</summary>
 
 - cobblemon:shiny_stone_ore
 - cobblemon:deepslate_shiny_stone_ore
@@ -386,7 +386,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - #cobblemon:standing_signs
 - #cobblemon:wall_signs
@@ -394,7 +394,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:sky_tumblestones</summary>
+<summary><b>Tag:</b> #cobblemon:sky_tumblestones</summary>
 
 - cobblemon:small_budding_sky_tumblestone
 - cobblemon:medium_budding_sky_tumblestone
@@ -405,28 +405,28 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:small_flowers</summary>
+<summary><b>Tag:</b> #cobblemon:small_flowers</summary>
 
 - cobblemon:pep_up_flower
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:snow_block</summary>
+<summary><b>Tag:</b> #cobblemon:snow_block</summary>
 
 - minecraft:snow_block
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:standing_signs</summary>
+<summary><b>Tag:</b> #cobblemon:standing_signs</summary>
 
 - cobblemon:apricorn_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:sun_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:sun_stone_ores</summary>
 
 - cobblemon:sun_stone_ore
 - cobblemon:deepslate_sun_stone_ore
@@ -435,7 +435,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:thunder_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:thunder_stone_ores</summary>
 
 - cobblemon:thunder_stone_ore
 - cobblemon:deepslate_thunder_stone_ore
@@ -443,7 +443,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:tumblestone_heat_source</summary>
+<summary><b>Tag:</b> #cobblemon:tumblestone_heat_source</summary>
 
 - minecraft:lava
 - minecraft:magma_block
@@ -451,21 +451,21 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wall_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:wall_hanging_signs</summary>
 
 - cobblemon:apricorn_wall_hanging_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wall_signs</summary>
+<summary><b>Tag:</b> #cobblemon:wall_signs</summary>
 
 - cobblemon:apricorn_wall_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:water_stone_ores</summary>
+<summary><b>Tag:</b> #cobblemon:water_stone_ores</summary>
 
 - cobblemon:water_stone_ore
 - cobblemon:deepslate_water_stone_ore
@@ -473,21 +473,21 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:all_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:all_hanging_signs</summary>
 
 - #cobblemon:all_hanging_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:all_signs</summary>
+<summary><b>Tag:</b> #cobblemon:all_signs</summary>
 
 - #cobblemon:all_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:bee_growables</summary>
+<summary><b>Tag:</b> #cobblemon:bee_growables</summary>
 
 - #cobblemon:crops
 - #cobblemon:apricorns
@@ -495,42 +495,42 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:ceiling_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:ceiling_hanging_signs</summary>
 
 - #cobblemon:ceiling_hanging_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:drip_stone_replaceables</summary>
+<summary><b>Tag:</b> #cobblemon:drip_stone_replaceables</summary>
 
 - dripstone_block
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:fences</summary>
+<summary><b>Tag:</b> #cobblemon:fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:fence_gates</summary>
+<summary><b>Tag:</b> #cobblemon:fence_gates</summary>
 
 - cobblemon:apricorn_fence_gate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:flowers</summary>
+<summary><b>Tag:</b> #cobblemon:flowers</summary>
 
 - #cobblemon:flowers
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:guarded_by_piglins</summary>
+<summary><b>Tag:</b> #cobblemon:guarded_by_piglins</summary>
 
 - cobblemon:gilded_chest
 - cobblemon:black_gilded_chest
@@ -545,21 +545,21 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:hoes</summary>
+<summary><b>Tag:</b> #cobblemon:hoes</summary>
 
 - cobblemon:apricorn_leaves
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:leaves</summary>
+<summary><b>Tag:</b> #cobblemon:leaves</summary>
 
 - cobblemon:apricorn_leaves
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:logs</summary>
+<summary><b>Tag:</b> #cobblemon:logs</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:stripped_apricorn_log
@@ -569,7 +569,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:logs_that_burn</summary>
+<summary><b>Tag:</b> #cobblemon:logs_that_burn</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:stripped_apricorn_log
@@ -579,7 +579,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:maintains_farmland</summary>
+<summary><b>Tag:</b> #cobblemon:maintains_farmland</summary>
 
 - #cobblemon:berries
 - #cobblemon:crops
@@ -587,7 +587,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:needs_iron_tool</summary>
+<summary><b>Tag:</b> #cobblemon:needs_iron_tool</summary>
 
 - cobblemon:deepslate_dawn_stone_ore
 - cobblemon:deepslate_dusk_stone_ore
@@ -603,7 +603,7 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:needs_stone_tool</summary>
+<summary><b>Tag:</b> #cobblemon:needs_stone_tool</summary>
 
 - cobblemon:dawn_stone_ore
 - cobblemon:dusk_stone_ore
@@ -620,14 +620,14 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:planks</summary>
+<summary><b>Tag:</b> #cobblemon:planks</summary>
 
 - cobblemon:apricorn_planks
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:saplings</summary>
+<summary><b>Tag:</b> #cobblemon:saplings</summary>
 
 - cobblemon:black_apricorn_sapling
 - cobblemon:blue_apricorn_sapling
@@ -640,84 +640,84 @@ This file contains tags related to blocks in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - #cobblemon:signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:small_flowers</summary>
+<summary><b>Tag:</b> #cobblemon:small_flowers</summary>
 
 - #cobblemon:small_flowers
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:standing_signs</summary>
+<summary><b>Tag:</b> #cobblemon:standing_signs</summary>
 
 - #cobblemon:standing_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wall_hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:wall_hanging_signs</summary>
 
 - #cobblemon:wall_hanging_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wall_signs</summary>
+<summary><b>Tag:</b> #cobblemon:wall_signs</summary>
 
 - #cobblemon:wall_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_buttons</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_buttons</summary>
 
 - cobblemon:apricorn_button
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_doors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_doors</summary>
 
 - cobblemon:apricorn_door
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_fences</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_pressure_plates</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_pressure_plates</summary>
 
 - cobblemon:apricorn_pressure_plate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_slabs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_slabs</summary>
 
 - cobblemon:apricorn_slab
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_stairs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_stairs</summary>
 
 - cobblemon:apricorn_stairs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #blocks:wooden_trapdoors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_trapdoors</summary>
 
 - cobblemon:apricorn_trapdoor
 

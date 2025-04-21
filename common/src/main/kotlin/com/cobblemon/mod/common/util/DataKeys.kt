@@ -50,6 +50,10 @@ object DataKeys {
     const val POKEMON_TRADEABLE = "Tradeable"
     const val POKEMON_FORCED_ASPECTS = "ForcedAspects"
     const val POKEMON_COSMETIC_ITEM = "CosmeticItem"
+    const val POKEMON_ACTIVE_MARK = "ActiveMark"
+    const val POKEMON_MARKS = "Marks"
+    const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
+    const val POKEMON_MARKINGS = "Markings"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"

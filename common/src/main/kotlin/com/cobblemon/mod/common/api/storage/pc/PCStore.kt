@@ -137,6 +137,12 @@ open class PCStore(
         pcChangeObservable.emit(Unit)
     }
 
+    fun removeListOfBoxes(boxList: List<PCBox>,lockNewSize: Boolean = false, overflowHandler: (Pokemon) -> Unit = ::relocateEvictedBoxPokemon){
+        this.lockedSize = lockNewSize
+        boxes.removeAll(boxList)
+        boxList.flatMap { it.asIterable() }.forEach(overflowHandler)
+        pcChangeObservable.emit(Unit)
+    }
 
     fun tryRestoreBackedUpPokemon() {
         var newPosition = getFirstAvailablePosition()

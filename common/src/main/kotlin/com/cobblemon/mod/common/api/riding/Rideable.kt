@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.riding
 
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import net.minecraft.world.entity.PlayerRideableJumping
 
 /**
@@ -20,6 +23,6 @@ interface Rideable : PlayerRideableJumping {
     /**
      * Denotes the manager responsible for handling any instance of riding taking place on an entity
      */
-    val riding: RidingManager
+    val riding: RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>?
 
 }

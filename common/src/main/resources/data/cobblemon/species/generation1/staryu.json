@@ -179,6 +179,6 @@
       }
     },
     "seats": [],
-    "controller": null
+    "behaviour": null
   }
 }

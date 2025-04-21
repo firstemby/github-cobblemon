@@ -42,11 +42,23 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "standingEyeHeight": 0.55,
+  "flyingEyeHeight": 0.55,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.7,
+    "height": 1.85,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    }
   },
   "drops": {
     "amount": 5,

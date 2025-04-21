@@ -77,18 +77,18 @@ object CatchRateModifiers {
 
     /**
      * Used by [PokeBalls.MOON_BALL].
-     * Boosts the catch rate 1.5× during Moon Phases 3 and 7 between the times of 12000 – 24000.
-     * 2.5× during Moon Phases 2 and 8 between the times of 12000 – 24000.
-     * 4× during Moon Phase 1 between the times of 12000 – 24000.
+     * Boosts the catch rate 1.5× during Moon Phases 2 and 6 between the times of 12000 – 24000.
+     * 2.5× during Moon Phases 1 and 7 between the times of 12000 – 24000.
+     * 4× during Moon Phase 0 between the times of 12000 – 24000.
      * 1× otherwise.
      */
     val MOON_PHASES: CatchRateModifier = WorldStateModifier { _, entity ->
         if (entity.level().gameTime in 12000..24000)
             return@WorldStateModifier 1F
         when (entity.level().moonPhase) {
-            3, 7 -> 1.5F
-            2, 8 -> 2.5F
-            1 -> 4F
+            2, 6 -> 1.5F
+            1, 7 -> 2.5F
+            0 -> 4F
             else -> 1F
         }
     }

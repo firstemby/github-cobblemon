@@ -8,10 +8,16 @@
 
 package com.cobblemon.mod.common.api.events.fishing
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.itemRegistry
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.ItemStack
 
 /**
@@ -55,5 +61,11 @@ interface BobberSpawnPokemonEvent {
         val chosenBucket: SpawnBucket,
         val bait: ItemStack,
         val pokemon: PokemonEntity
-    ) : BobberSpawnPokemonEvent
+    ) : BobberSpawnPokemonEvent {
+        val context = mutableMapOf<String, MoValue>(
+            "chosen_bucket" to ObjectValue(chosenBucket, { it.name }),
+            "bait" to pokemon.level().itemRegistry.wrapAsHolder(bait.item).asMoLangValue(Registries.ITEM),
+            "pokemon_entity" to pokemon.asMoLangValue()
+        )
+    }
 }

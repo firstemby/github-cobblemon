@@ -1026,6 +1026,50 @@
       { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 0.8, "attenuation_distance": 128.0 }
     ]
   },
+  "animation.plumage.wing_flap.small": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.25 }
+    ]
+  },
+  "animation.plumage.wing_flap.medium": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_1", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_2", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_3", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_4", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_5", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_6", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.3 }
+    ]
+  },
+  "animation.leather.wing_flap.small": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.25 }
+    ]
+  },
+  "animation.leather.wing_flap.medium": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_1", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_2", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_3", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_4", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_5", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_6", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.3 }
+    ]
+  },
   "pokemon.bulbasaur.ambient": {
     "sounds": [ "cobblemon:pokemon/bulbasaur/bulbasaur_ambient" ]
   },
