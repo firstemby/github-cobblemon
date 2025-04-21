@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
  * Represents a [TransformationTrigger] of a [Pokemon] that can only occur during specific actions and with added context.
  * For the default implementations see [ItemInteractionTrigger] & [TradeTrigger].
  *
- * @param TC The context that is serialized from JSON during species loading. This is what the [TriggerContext] provided
+ * @param TC The context that is serialized from JSON during species loading. This is what the [Context] provided
  * to [testTrigger] is expected to match against.
  *
  * @author Licious
@@ -25,23 +25,31 @@ import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
  */
 interface ContextTrigger<TC>: TransformationTrigger {
 
+    /**
+     * Represents context provided for [TransformationTrigger] evaluation.
+     *
+     * @author Segfault Guy
+     * @since October 15th, 2023
+     */
+    interface Context
+
     /** The target context required for this [Transformation] to be successfully triggered. */
     val requiredContext: TC
 
     /**
      * Checks if the given context is valid for the [requiredContext].
      *
-     * @param context The [TriggerContext] given at runtime when querying the [Transformation].
+     * @param context The [Context] given at runtime when querying the [Transformation].
      * @return If the context matched the [requiredContext].
      */
-     fun testContext(context: TriggerContext): Boolean = false
+     fun testContext(context: Context): Boolean = false
 
     /**
      * Evaluates the triggering condition of a [Transformation].
      *
-     * @param context The [TriggerContext] of the [Transformation].
+     * @param context The [Context] of the [Transformation].
      * @return Whether the triggering condition is satisfied. If [context] is null, bypasses the condition check.
      */
-    override fun testTrigger(context: TriggerContext?) = context?.let { testContext(it) } ?: true
+    override fun testTrigger(context: Context?) = context?.let { testContext(it) } ?: true
 
 }

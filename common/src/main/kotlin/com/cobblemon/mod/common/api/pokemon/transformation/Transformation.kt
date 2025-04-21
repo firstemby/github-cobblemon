@@ -10,8 +10,8 @@ package com.cobblemon.mod.common.api.pokemon.transformation
 
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -42,19 +42,19 @@ interface Transformation : TransformationLike {
      * Tests if the given [Pokemon] passes all the conditions and is ready to transform.
      *
      * @param pokemon The [Pokemon] being queried.
-     * @param context The optional [TriggerContext] needed to transform.
+     * @param context The optional [ContextTrigger.Context] needed to transform.
      * @return Whether the [Transformation] can start.
      */
-    fun test(pokemon: Pokemon, context: TriggerContext?) = this.trigger.testTrigger(context) && this.checkRequirements(pokemon)
+    fun test(pokemon: Pokemon, context: ContextTrigger.Context?) = this.trigger.testTrigger(context) && this.checkRequirements(pokemon)
 
     /**
      * Starts this transformation if conditions are met.
      *
      * @param pokemon The [Pokemon] being transformed.
-     * @param context The optional [TriggerContext] needed to transform.
+     * @param context The optional [ContextTrigger.Context] needed to transform.
      * @return Whether the [Transformation] was successful.
      */
-    fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
+    fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (test(pokemon, context)) {
             forceStart(pokemon)
             return true

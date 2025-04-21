@@ -46,7 +46,7 @@ class RecoilTransformationProgress : TransformationProgress<RecoilTransformation
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.RECOIL
 
-    data class Progress(val recoil: Int)
+    data class Progress(override val amount: Int) : TransformationProgress.Progress
 
     companion object {
 
@@ -56,7 +56,7 @@ class RecoilTransformationProgress : TransformationProgress<RecoilTransformation
         @JvmStatic
         val CODEC: MapCodec<RecoilTransformationProgress> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
-                Codec.intRange(0, Int.MAX_VALUE).fieldOf(RECOIL).forGetter { it.progress.recoil }
+                Codec.intRange(0, Int.MAX_VALUE).fieldOf(RECOIL).forGetter { it.progress.amount }
             ).apply(instance) { amount -> RecoilTransformationProgress().apply { updateProgress(Progress(amount)) } }
         }
 

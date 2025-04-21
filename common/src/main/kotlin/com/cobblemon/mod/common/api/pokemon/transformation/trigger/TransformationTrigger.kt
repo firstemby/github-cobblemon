@@ -21,17 +21,9 @@ interface TransformationTrigger {
     /**
      * Evaluates the triggering condition of a [Transformation].
      *
-     * @param context The optional [TriggerContext] needed to transform.
+     * @param context The optional [ContextTrigger.Context] for [ContextTrigger] evaluation.
      * @return Whether the triggering condition is satisfied.
      */
-    fun testTrigger(context: TriggerContext?): Boolean = true
+    fun testTrigger(context: ContextTrigger.Context?): Boolean = true
 
 }
-
-/**
- * Represents context that's needed for [TransformationTrigger] evaluation.
- *
- * @author Segfault Guy
- * @since October 15th, 2023
- */
-interface TriggerContext

@@ -252,6 +252,7 @@ open class PokemonBattle(
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
                         val pokemon = opponentPokemon.effectedPokemon
                         if (facedFainted) {
+                            // TODO refactor and apply to forms
                             pokemon.lockedEvolutions.forEach { evolution ->
                                 evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
                                     if (defeatRequirement.target.matches(faintedPokemon.effectedPokemon)) {

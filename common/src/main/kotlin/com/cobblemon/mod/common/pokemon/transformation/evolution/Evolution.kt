@@ -24,9 +24,9 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
@@ -50,9 +50,13 @@ import net.minecraft.world.item.ItemStack
  */
 class Evolution(
     override val id: String = "",
+    /** The [TransformationRequirement]s that need to be satisfied for this evolution to start. */
     override val requirements: Set<TransformationRequirement> = setOf(),
+    /** The [TransformationTrigger] to kickstart this evolution. */
     override val trigger: TransformationTrigger = ItemInteractionTrigger(),
+    /** If this evolution can be deferred and started whenever rather than immediately on trigger. */
     override val optional: Boolean = true,
+    /** If this evolution needs its requirements reevaluated to remain valid. */
     override val reevaluate: Boolean = true,
     /** The result of this evolution. */
     val result: PokemonProperties = PokemonProperties(),
@@ -64,7 +68,7 @@ class Evolution(
     val drops: DropTable = DropTable()
 ) : Transformation {
 
-    override fun test(pokemon: Pokemon, context: TriggerContext?): Boolean {
+    override fun test(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         val result = super.test(pokemon, context)
         val event = EvolutionTestedEvent(pokemon, this, result, result)
         CobblemonEvents.EVOLUTION_TESTED.post(event)
@@ -78,7 +82,7 @@ class Evolution(
      * @param context The optional [TriggerContext] needed to evolve.
      * @return Whether the [Evolution] was successful.
      */
-    override fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
+    override fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (this.test(pokemon, context)) {
             return if (this.optional)
                 pokemon.evolutionProxy.server().add(this)

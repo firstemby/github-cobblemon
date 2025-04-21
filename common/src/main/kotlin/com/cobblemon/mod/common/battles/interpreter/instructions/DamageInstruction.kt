@@ -83,9 +83,10 @@ class DamageInstruction(
                         ?: throw UnsupportedOperationException("Cant get recoil string")
                 val difference = pokemon.currentHealth - newHealth
                 if (difference > 0) {
+                    // TODO refactor and apply to forms
                     val progress = pokemon.evolutionProxy.current()
                         .progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
-                    progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().recoil + difference))
+                    progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().amount + difference))
                 }
             }
         }
@@ -180,6 +181,7 @@ class DamageInstruction(
                     if (difference > 0) {
                         battlePokemon.effectedPokemon.let { pokemon ->
                             if (DamageTakenTransformationProgress.supports(pokemon)) {
+                                // TODO refactor and apply to forms
                                 val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DamageTakenTransformationProgress }) { DamageTakenTransformationProgress() }
                                 progress.updateProgress(DamageTakenTransformationProgress.Progress(progress.currentProgress().amount + difference))
                             }

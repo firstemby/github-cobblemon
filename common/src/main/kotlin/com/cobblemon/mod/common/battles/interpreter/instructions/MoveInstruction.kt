@@ -70,6 +70,7 @@ class MoveInstruction(
             val spreadTargetPokemon = spreadTargets.map { battle.activePokemon.firstOrNull() { poke -> poke.getPNX() == it }?.battlePokemon }
 
             userPokemon.effectedPokemon.let { pokemon ->
+                // TODO refactor and apply to forms
                 if (UseMoveTransformationProgress.supports(pokemon, move)) {
                     val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is UseMoveTransformationProgress && it.currentProgress().move == move }) { UseMoveTransformationProgress() }
                     progress.updateProgress(UseMoveTransformationProgress.Progress(move, progress.currentProgress().amount + 1))

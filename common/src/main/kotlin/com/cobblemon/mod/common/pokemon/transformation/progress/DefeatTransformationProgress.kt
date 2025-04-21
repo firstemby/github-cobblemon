@@ -57,8 +57,8 @@ class DefeatTransformationProgress : TransformationProgress<DefeatTransformation
 
     data class Progress(
         val target: PokemonProperties,
-        val amount: Int
-    )
+        override val amount: Int
+    ) : TransformationProgress.Progress
 
     companion object {
         val ID = cobblemonResource("defeat")

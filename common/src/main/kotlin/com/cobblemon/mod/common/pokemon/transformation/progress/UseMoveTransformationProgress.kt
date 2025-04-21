@@ -49,8 +49,8 @@ class UseMoveTransformationProgress : TransformationProgress<UseMoveTransformati
 
     data class Progress(
         val move: MoveTemplate,
-        val amount: Int
-    )
+        override val amount: Int
+    ) : TransformationProgress.Progress
 
     companion object {
 

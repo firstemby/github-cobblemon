@@ -40,7 +40,7 @@ class LastBattleCriticalHitsTransformationProgress : TransformationProgress<Last
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.LAST_BATTLE_CRITICAL_HITS
 
-    data class Progress(val amount: Int)
+    data class Progress(override val amount: Int) : TransformationProgress.Progress
 
     companion object {
 

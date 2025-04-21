@@ -46,7 +46,7 @@ class DamageTakenTransformationProgress : TransformationProgress<DamageTakenTran
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.DAMAGE_TAKEN
 
-    data class Progress(val amount: Int)
+    data class Progress(override val amount: Int) : TransformationProgress.Progress
 
     companion object {
 

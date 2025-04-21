@@ -49,9 +49,12 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.abilities.SpecialAbility
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.transformation.adapters.*
+import com.cobblemon.mod.common.pokemon.transformation.form.GigantamaxForm
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.pokemon.transformation.requirements.HeldItemRequirement
+import com.cobblemon.mod.common.pokemon.transformation.requirements.MoveSetRequirement
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -74,6 +77,7 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.phys.AABB
+import java.util.NoSuchElementException
 
 object PokemonSpecies : JsonDataRegistry<Species> {
 
@@ -300,6 +304,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         val evos = form.evolutions.map { "" }
         // not fully evolved
         val nfe = this.evos.isNotEmpty()
+        // whether there is a gmax form to change to
+        val canGigantamax: String? = form.changeableForms.filterIsInstance<GigantamaxForm>().firstOrNull()?.name  // TODO id better
     }
 
     /**
@@ -312,6 +318,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         val otherFormes = form.flattenForms().map { it.showdownName() }
         // list of forms [by name or showdownid] in the order they appear in game [union of baseSpecies, otherFormes, and cosmeticFormes] with the exception of ending with 'Gmax' forms
         val formeOrder = if (this.otherFormes.isNotEmpty()) arrayListOf(this.name, *this.otherFormes.toTypedArray()) else null
+
+        // TODO we don't enforce any form order with our Species registration - right now this looks like only a problem with Mega Rayquaza, but investigate changes needed on Showdown's end to enable these lists to be more dynamic
     }
 
     /**
@@ -321,9 +329,22 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     internal class ShowdownTemporaryForm(form: TemporaryForm) : ShowdownSpecies(form) {
         // form change can occur during a battle
-        //val battleOnly = if (form.battleOnly) form.parentForm else null
-        // form change can occur outside of battle (mutually exclusive with above)
-        //val changesFrom = if (!form.battleOnly) form.parentForm else null
+        val battleOnly = if (form.battleOnly) form.parentForm else null
+        // form change can occur outside of battle (mutually exclusive with battleOnly)
+        val changesFrom = if (!form.battleOnly) form.parentForm else null
+        // pokemon must know this move to be in this form
+        val requiredMove = form.requirements.filterIsInstance<MoveSetRequirement>().firstOrNull()?.move?.showdownId() // TODO update showdown to support 'requiredMoves'
+        // pokemon must hold one of these item(s) to be in this form
+        val requiredItems = form.requirements.filterIsInstance<HeldItemRequirement>().firstOrNull()?.let { requirement ->
+            try {
+                requirement.itemCondition.items.get().map { BuiltInRegistries.ITEM.getKey(it.value()).path }  // TODO held items on showdown are ignorant of namespace
+            }
+            catch (e: NoSuchElementException)
+            {
+                Cobblemon.LOGGER.error("Failed to resolve required held item for ${form.showdownId()}}")  // TODO this needs to be done after tags are loaded...
+                null
+            }
+        }
     }
 
     /** Accommodate for Showdown bullshit. */

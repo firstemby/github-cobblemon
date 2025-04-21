@@ -3,8 +3,8 @@ package com.cobblemon.mod.common.pokemon.transformation.form
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
@@ -29,18 +29,20 @@ open class TemporaryForm (
     val battleOnly: Boolean = false,
     /** Whether this form can be freely toggled after requirements are initially met. */
     val toggleable: Boolean = false,
-    /** The [TransformationTrigger] to attempt this transformation OUTSIDE of battle. */
+    /** The [TransformationTrigger] to change to this form OUTSIDE of battle. */
     override val trigger: TransformationTrigger = ItemInteractionTrigger(),
-    /** The [TransformationRequirement]s that need to be satisfied for this transformation OUTSIDE of battle. */
+    /** The [TransformationRequirement]s that need to be satisfied for this form OUTSIDE of battle. */
     override val requirements: Set<TransformationRequirement> = mutableSetOf(),
+    /** If this form can be deferred and started whenever rather than immediately on trigger. */
     override val optional: Boolean = false,
+    /** If this form needs its requirements reevaluated to remain valid. */
     override val reevaluate: Boolean = true,
 ) : FormData(), Transformation {
 
     override val id: String get() = this.formOnlyShowdownId()
 
     /* Temporary forms DO NOT have their own preevo/evolutions/forms and have to fallback on the parent. Because parentForm
-        is not initialized until AFTER species registration, none of these  properties are safe to access until [PokemonSpecies.observable] */
+       is not initialized until AFTER species registration, none of these  properties are safe to access until [PokemonSpecies.observable] */
 
     // preevo is the same as the parent
     override val preEvolution: PreEvolution? get() = parentForm.preEvolution
@@ -48,15 +50,15 @@ open class TemporaryForm (
     // allows preevos to have their own form changes
     override val evolutions: MutableSet<Evolution> get() = parentForm.evolutions
 
-    // allows for adjacent form changes
+    // allows for form changes between adjacent temporary forms belonging to the same parent
     override val changeableForms: Collection<TemporaryForm> get() = parentForm.changeableForms  // technically this includes itself
 
     @delegate:Transient
     override val parentForm: PermanentForm by lazy { parentFormInitializer ?:
-        throw IllegalStateException("Unable to find parent form of ${this.name}") } // temp forms MUST have a parent
+        throw IllegalStateException("Unable to resolve parent of ${this.species.name}'s temporary form: ${this.name}") } // temp forms MUST have a parent
 
     // TODO FORM_TESTED event
-    override fun test(pokemon: Pokemon, context: TriggerContext?) = pokemon.form !== this && super.test(pokemon, context)
+    override fun test(pokemon: Pokemon, context: ContextTrigger.Context?) = pokemon.form !== this && super.test(pokemon, context)
 
     /**
      * Starts this form change or queues it if [toggleable] is true.
@@ -65,7 +67,7 @@ open class TemporaryForm (
      * @param context The optional [TriggerContext] needed to change form.
      * @return Whether the [TemporaryForm] was successful.
      */
-    override fun start(pokemon: Pokemon, context: TriggerContext?): Boolean {
+    override fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (this.test(pokemon, context)) {
             return if (this.optional)
                 pokemon.formProxy.server().add(this)

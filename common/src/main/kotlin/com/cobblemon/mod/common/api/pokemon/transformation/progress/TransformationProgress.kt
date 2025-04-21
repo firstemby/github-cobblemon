@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.pokemon.transformation.progress
 import com.cobblemon.mod.common.api.data.Identifiable
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -22,7 +23,19 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since January 27th, 2023
  */
-interface TransformationProgress<T> : Identifiable {
+interface TransformationProgress<T : TransformationProgress.Progress> : Identifiable {
+
+    /**
+     * Represents progression towards a [TransformationRequirement].
+     *
+     * @property amount The value required to be complete.
+     *
+     * @author Segfault Guy
+     * @since April 18th, 2025
+     */
+    interface Progress {
+        val amount: Int
+    }
 
     /**
      * Gets the current progress of type [T].

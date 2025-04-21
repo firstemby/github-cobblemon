@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.pokemon.transformation.triggers
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -28,11 +27,11 @@ open class TradeTrigger(
 ) : ContextTrigger<PokemonProperties> {
 
     // if requiredContext is not defined when deserialized (defaults to empty PokemonProperties) will match with any context
-    override fun testContext(context: TriggerContext) = context is Context && this.requiredContext.matches(context.traded)
+    override fun testContext(context: ContextTrigger.Context) = context is Context && this.requiredContext.matches(context.traded)
 
     data class Context(
         val traded: PokemonProperties
-    ): TriggerContext {
+    ): ContextTrigger.Context {
         constructor(pokemon: Pokemon) : this(pokemon.createPokemonProperties(PokemonPropertyExtractor.ALL))
     }
 

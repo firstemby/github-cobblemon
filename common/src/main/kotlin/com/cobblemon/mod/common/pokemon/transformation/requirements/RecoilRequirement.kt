@@ -26,7 +26,7 @@ class RecoilRequirement(val amount: Int = 0) : TransformationRequirement {
     override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()
         .filterIsInstance<RecoilTransformationProgress>()
-        .any { progress -> progress.currentProgress().recoil >= this.amount }
+        .any { progress -> progress.currentProgress().amount >= this.amount }
 
     companion object {
         const val ADAPTER_VARIANT = "recoil"

@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.pokemon.transformation.triggers
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.registry.BlockIdentifierCondition
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -30,13 +30,13 @@ open class BlockClickTrigger(
         BlockIdentifierCondition(ResourceLocation.fromNamespaceAndPath("minecraft", "dirt"))
 ) : ContextTrigger<RegistryLikeCondition<Block>> {
 
-    override fun testContext(context: TriggerContext) = context is Context &&
+    override fun testContext(context: ContextTrigger.Context) = context is Context &&
         this.requiredContext.fits(context.block, context.world.registryAccess().registryOrThrow(Registries.BLOCK))
 
     data class Context(
         val block: Block,
         val world: Level
-    ): TriggerContext
+    ): ContextTrigger.Context
 
     companion object {
         const val ADAPTER_VARIANT = "block_click"

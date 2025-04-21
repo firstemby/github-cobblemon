@@ -57,7 +57,6 @@ import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
-import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TriggerContext
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
@@ -1770,7 +1769,7 @@ open class Pokemon : ShowdownIdentifiable {
      * @param context The [TriggerContext] required for [ContextTrigger]s.
      * @return The [Transformation]s of this [Pokemon] that were triggered.
      */
-    fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: TriggerContext? = null) =
+    fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: ContextTrigger.Context? = null) =
         transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
 
     private fun isValidForm(form: FormData) = this.species.allForms.any { it === form }
