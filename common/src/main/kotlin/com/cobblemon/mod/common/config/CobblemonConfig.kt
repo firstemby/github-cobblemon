@@ -19,11 +19,10 @@ import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.cobblemon.mod.common.util.adapters.ZoneIdAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
-import com.google.gson.annotations.SerializedName
 import java.time.ZoneId
 import java.time.ZoneOffset
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 class CobblemonConfig {
     companion object {
