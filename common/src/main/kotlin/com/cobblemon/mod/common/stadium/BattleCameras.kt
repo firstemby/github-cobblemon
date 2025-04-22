@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
-object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
+object BattleCameras: JsonDataRegistry<BattleCameraEntry> {
     override val id = cobblemonResource("stadium_cameras")
     override val type = PackType.SERVER_DATA
 
@@ -19,15 +19,15 @@ object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(StadiumCameraEntry::class.java, StadiumCameraEntry.CameraEntryAdapter)
+        .registerTypeAdapter(BattleCameraEntry::class.java, BattleCameraEntry.CameraEntryAdapter)
         .create()
 
-    override val typeToken: TypeToken<StadiumCameraEntry> = TypeToken.get(StadiumCameraEntry::class.java)
+    override val typeToken: TypeToken<BattleCameraEntry> = TypeToken.get(BattleCameraEntry::class.java)
     override val resourcePath = "stadium_cameras"
 
-    val cameras = mutableMapOf<ResourceLocation, StadiumCameraEntry>()
+    val cameras = mutableMapOf<ResourceLocation, BattleCameraEntry>()
 
-    override fun reload(data: Map<ResourceLocation, StadiumCameraEntry>) {
+    override fun reload(data: Map<ResourceLocation, BattleCameraEntry>) {
         cameras.clear()
         data.forEach { location, camera ->
             camera.id = location
@@ -36,13 +36,13 @@ object StadiumCameras: JsonDataRegistry<StadiumCameraEntry> {
         observable.emit(this)
     }
 
-    override val observable = SimpleObservable<StadiumCameras>()
+    override val observable = SimpleObservable<BattleCameras>()
 
     override fun sync(player: ServerPlayer) {
-        StadiumCamerasSyncPacket(cameras.values).sendToPlayer(player)
+        BattleCamerasSyncPacket(cameras.values).sendToPlayer(player)
     }
 
-    fun getMoveCamera(move: String): StadiumCameraEntry? {
+    fun getMoveCamera(move: String): BattleCameraEntry? {
         return cameras.values.firstOrNull { it.move == move }
     }
 }

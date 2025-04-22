@@ -1,9 +1,7 @@
 package com.cobblemon.mod.common.stadium
 
-import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
@@ -13,7 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
-object StadiumCameraManagers: JsonDataRegistry<StadiumCameraManagerEntry> {
+object BattleCameraManagers: JsonDataRegistry<BattleCameraManagerEntry> {
     override val id = cobblemonResource("stadium_managers")
     override val type = PackType.SERVER_DATA
 
@@ -21,15 +19,15 @@ object StadiumCameraManagers: JsonDataRegistry<StadiumCameraManagerEntry> {
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(StadiumCameraManagerEntry::class.java, StadiumCameraManagerAdapter)
+        .registerTypeAdapter(BattleCameraManagerEntry::class.java, BattleCameraManagerAdapter)
         .create()
 
-    override val typeToken: TypeToken<StadiumCameraManagerEntry> = TypeToken.get(StadiumCameraManagerEntry::class.java)
+    override val typeToken: TypeToken<BattleCameraManagerEntry> = TypeToken.get(BattleCameraManagerEntry::class.java)
     override val resourcePath = "stadium_managers"
 
-    val managers = mutableMapOf<ResourceLocation, StadiumCameraManagerEntry>()
+    val managers = mutableMapOf<ResourceLocation, BattleCameraManagerEntry>()
 
-    override fun reload(data: Map<ResourceLocation, StadiumCameraManagerEntry>) {
+    override fun reload(data: Map<ResourceLocation, BattleCameraManagerEntry>) {
         managers.clear()
         data.forEach { location, manager ->
             manager.id = location
@@ -38,9 +36,9 @@ object StadiumCameraManagers: JsonDataRegistry<StadiumCameraManagerEntry> {
         observable.emit(this)
     }
 
-    override val observable = SimpleObservable<StadiumCameraManagers>()
+    override val observable = SimpleObservable<BattleCameraManagers>()
 
     override fun sync(player: ServerPlayer) {
-        StadiumCameraManagersSyncPacket(managers.values).sendToPlayer(player)
+        BattleCameraManagersSyncPacket(managers.values).sendToPlayer(player)
     }
 }

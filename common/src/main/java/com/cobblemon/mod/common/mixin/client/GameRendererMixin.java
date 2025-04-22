@@ -9,16 +9,14 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
-import com.cobblemon.mod.common.stadium.StadiumClientManager;
+import com.cobblemon.mod.common.stadium.BattleCameraManagerClient;
 import com.cobblemon.mod.common.util.CameraExtensionsKt;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -67,7 +65,7 @@ public class GameRendererMixin {
 
     @Inject(method = "renderLevel", at = @At(value = "HEAD"), cancellable = true)
     public void renderLevel(DeltaTracker deltaTracker, CallbackInfo ci) {
-        if (StadiumClientManager.INSTANCE.shouldUseStadiumCamera()) {
+        if (BattleCameraManagerClient.INSTANCE.shouldUseStadiumCamera()) {
             float f = deltaTracker.getGameTimeDeltaPartialTick(true);
             this.lightTexture.updateLightTexture(f);
             if (this.minecraft.getCameraEntity() == null) {
@@ -80,9 +78,9 @@ public class GameRendererMixin {
             stadiumCamera.setup(this.minecraft.level, entity, true, false, 1.0F);
 
             //adjust camera
-            StadiumClientManager.INSTANCE.updateCameraData(f);
-            stadiumCamera.setPosition(StadiumClientManager.INSTANCE.getCameraPosition());
-            Vector3f rotations = StadiumClientManager.INSTANCE.getCameraRotation();
+            BattleCameraManagerClient.INSTANCE.updateCameraData(f);
+            stadiumCamera.setPosition(BattleCameraManagerClient.INSTANCE.getCameraPosition());
+            Vector3f rotations = BattleCameraManagerClient.INSTANCE.getCameraRotation();
             CameraExtensionsKt.setRotation(stadiumCamera, rotations.x, rotations.y, rotations.z);
 
             this.renderDistance = (float)(this.minecraft.options.getEffectiveRenderDistance() * 16);
@@ -103,6 +101,6 @@ public class GameRendererMixin {
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void tick(CallbackInfo ci) {
-        StadiumClientManager.INSTANCE.tickCameraManager();
+        BattleCameraManagerClient.INSTANCE.tickCameraManager();
     }
 }

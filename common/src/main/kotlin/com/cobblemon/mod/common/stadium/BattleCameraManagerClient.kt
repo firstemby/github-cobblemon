@@ -15,7 +15,7 @@ import org.joml.Vector3f
 import java.util.UUID
 import java.util.function.Function
 
-object StadiumClientManager {
+object BattleCameraManagerClient {
     //Molang
     fun MoLangRuntime.setupCameraFunctions(): MoLangRuntime {
         environment.query.addFunctions(
@@ -24,7 +24,7 @@ object StadiumClientManager {
                     if (params.get<MoValue>(0) !is StringValue) {
                         return@Function Unit
                     }
-                    val camera = StadiumCameras.getMoveCamera(params.get<MoValue>(0).asString())
+                    val camera = BattleCameras.getMoveCamera(params.get<MoValue>(0).asString())
                     return@Function camera?.id?.toString() ?: ""
                 }
             )
@@ -58,7 +58,7 @@ object StadiumClientManager {
         battleYRot = yRot
 
         cameraTimer = 0.0
-        currentCameraState = StadiumCameraManagers.managers[cameraManager]!!.startingState
+        currentCameraState = BattleCameraManagers.managers[cameraManager]!!.startingState
         cameraPosition = Vec3.ZERO
         cameraRotation = Vector3f()
         updateCameraData(0.0)
@@ -115,9 +115,9 @@ object StadiumClientManager {
             environment.setSimpleVariable("selectingMove", DoubleValue(0.0))
         }
 
-        val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
+        val currentManager = BattleCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[currentState.camera]
+        val currentCamera = BattleCameras.cameras[currentState.camera]
 
         InstructionChangeTime += 0.05
         if (currentCamera != null) {
@@ -149,7 +149,7 @@ object StadiumClientManager {
                 nextCameraState = nextState.targetState
                 while (true) {
                     val newState = currentManager.states[nextCameraState]!!
-                    val newCamera = StadiumCameras.cameras[newState.camera]
+                    val newCamera = BattleCameras.cameras[newState.camera]
                     val newEndOfAnim = if (newCamera != null) newCamera.length == 0.0 else true
 
                     val newNextState = evaluateTransitions(newState, newEndOfAnim)
@@ -169,7 +169,7 @@ object StadiumClientManager {
         }
     }
 
-    private fun evaluateTransitions(state: StadiumCameraState, checkEnd: Boolean) : StadiumCameraTransition? {
+    private fun evaluateTransitions(state: BattleCameraState, checkEnd: Boolean) : BattleCameraTransition? {
         var nextState = state.listOfTransitions.firstOrNull { !it.checkOnEnd && runtime.resolveBoolean(it.condition) }
         if (nextState == null && checkEnd) {
             nextState = state.listOfTransitions.firstOrNull { it.checkOnEnd && runtime.resolveBoolean(it.condition) }
@@ -187,15 +187,15 @@ object StadiumClientManager {
         updateMolangVar()
         environment.setSimpleVariable("instructionChangeTime", DoubleValue(InstructionChangeTime + delta/20))
 
-        val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
+        val currentManager = BattleCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[currentState.camera]
+        val currentCamera = BattleCameras.cameras[currentState.camera]
 
         if (currentCamera != null) {
             var renderTime = cameraTimer + delta/20
             if (renderTime > currentCamera.length && currentCamera.length != 0.0 && !calculateNextState) {
                 val newState = currentManager.states[nextCameraState]!!
-                val newCamera = StadiumCameras.cameras[newState.camera] ?: return
+                val newCamera = BattleCameras.cameras[newState.camera] ?: return
 
                 environment.setSimpleVariable("anim_time", DoubleValue(renderTime - currentCamera.length))
                 cameraPosition = newCamera.resolvePosition(renderTime - currentCamera.length, battleYRot)

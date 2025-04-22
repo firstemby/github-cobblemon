@@ -9,12 +9,12 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import java.util.*
 
-class StadiumJoinPacket(
+class BattleCameraPacket(
     val joiningBattle: UUID,
     val cameraManager: ResourceLocation,
     val center: Vec3,
     val yRot: Float
-): NetworkPacket<StadiumJoinPacket> {
+): NetworkPacket<BattleCameraPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(this.joiningBattle)
@@ -24,6 +24,6 @@ class StadiumJoinPacket(
     }
     companion object {
         val ID = cobblemonResource("stadium_join")
-        fun decode(buffer: RegistryFriendlyByteBuf) = StadiumJoinPacket(buffer.readUUID(), buffer.readIdentifier(), buffer.readVec3(), buffer.readFloat())
+        fun decode(buffer: RegistryFriendlyByteBuf) = BattleCameraPacket(buffer.readUUID(), buffer.readIdentifier(), buffer.readVec3(), buffer.readFloat())
     }
 }

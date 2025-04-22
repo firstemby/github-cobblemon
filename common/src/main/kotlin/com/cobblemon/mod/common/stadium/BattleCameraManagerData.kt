@@ -10,9 +10,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import java.lang.reflect.Type
 
-class StadiumCameraManagerEntry(
+class BattleCameraManagerEntry(
     var id: ResourceLocation,
-    val states: MutableMap<String, StadiumCameraState>,
+    val states: MutableMap<String, BattleCameraState>,
     val startingState: String
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
@@ -22,19 +22,19 @@ class StadiumCameraManagerEntry(
     }
 
     companion object {
-        fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraManagerEntry {
+        fun decode(buf: RegistryFriendlyByteBuf): BattleCameraManagerEntry {
             val id = buf.readIdentifier()
-            val states = buf.readMap({buf.readString()}, {StadiumCameraState.decode(buf)}).toMutableMap()
+            val states = buf.readMap({buf.readString()}, {BattleCameraState.decode(buf)}).toMutableMap()
             val startState = buf.readString()
-            return StadiumCameraManagerEntry(id, states, startState)
+            return BattleCameraManagerEntry(id, states, startState)
         }
     }
 }
 
-class StadiumCameraState(
+class BattleCameraState(
     val camera: ResourceLocation,
     val target: StadiumCameraTarget,
-    val listOfTransitions: MutableList<StadiumCameraTransition>,
+    val listOfTransitions: MutableList<BattleCameraTransition>,
     val loop: Boolean
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
@@ -45,17 +45,17 @@ class StadiumCameraState(
     }
 
     companion object {
-        fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraState {
+        fun decode(buf: RegistryFriendlyByteBuf): BattleCameraState {
             val camera = buf.readIdentifier()
             val target = buf.readEnum(StadiumCameraTarget::class.java)
-            val listOfTransitions = buf.readList { StadiumCameraTransition.decode(buf) }.toMutableList()
+            val listOfTransitions = buf.readList { BattleCameraTransition.decode(buf) }.toMutableList()
             val loop = buf.readBoolean()
-            return StadiumCameraState(camera, target, listOfTransitions, loop)
+            return BattleCameraState(camera, target, listOfTransitions, loop)
         }
     }
 }
 
-class StadiumCameraTransition(
+class BattleCameraTransition(
     val targetState: String,
     val checkOnEnd: Boolean,
     val condition: Expression
@@ -67,11 +67,11 @@ class StadiumCameraTransition(
     }
 
     companion object {
-        fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraTransition {
+        fun decode(buf: RegistryFriendlyByteBuf): BattleCameraTransition {
             val targetState = buf.readString()
             val checkOnEnd = buf.readBoolean()
             val condition = buf.readString().asExpression()
-            return StadiumCameraTransition(targetState, checkOnEnd, condition)
+            return BattleCameraTransition(targetState, checkOnEnd, condition)
         }
     }
 }
@@ -83,14 +83,14 @@ enum class StadiumCameraTarget {
     TRAINER
 }
 
-object StadiumCameraManagerAdapter: JsonDeserializer<StadiumCameraManagerEntry> {
+object BattleCameraManagerAdapter: JsonDeserializer<BattleCameraManagerEntry> {
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): StadiumCameraManagerEntry {
+    ): BattleCameraManagerEntry {
         if (json is JsonObject) {
-            val states = mutableMapOf<String, StadiumCameraState>()
+            val states = mutableMapOf<String, BattleCameraState>()
             json["states"]?.asJsonObject?.entrySet()?.forEach { (name, state) ->
                 val camera = state.asJsonObject["camera"]?.asString?.asResource() ?: "".asResource()
                 val target = when (state.asJsonObject["target"]?.asString) {
@@ -100,18 +100,18 @@ object StadiumCameraManagerAdapter: JsonDeserializer<StadiumCameraManagerEntry> 
                     "TRAINER" -> StadiumCameraTarget.TRAINER
                     else -> StadiumCameraTarget.CENTRE
                 }
-                val listOfTransitions = mutableListOf<StadiumCameraTransition>()
+                val listOfTransitions = mutableListOf<BattleCameraTransition>()
                 state.asJsonObject["transitions"]?.asJsonArray?.forEach {
                     val targetState = it.asJsonObject["targetState"]?.asString ?: ""
                     val checkOnEnd = it.asJsonObject["checkOnEnd"]?.asBoolean ?: false
                     val condition = it.asJsonObject["condition"]?.asString?.asExpression() ?: "0.0".asExpression()
-                    listOfTransitions.add(StadiumCameraTransition(targetState, checkOnEnd, condition))
+                    listOfTransitions.add(BattleCameraTransition(targetState, checkOnEnd, condition))
                 }
                 val loop = state.asJsonObject["loop"]?.asBoolean ?: false
-                states[name] = StadiumCameraState(camera, target, listOfTransitions, loop)
+                states[name] = BattleCameraState(camera, target, listOfTransitions, loop)
             }
             val startingState = json["startingState"].asString ?: ""
-            return StadiumCameraManagerEntry(cobblemonResource(""), states, startingState)
+            return BattleCameraManagerEntry(cobblemonResource(""), states, startingState)
         }
         throw IllegalStateException("StadiumCameraManager could not be parsed")
     }

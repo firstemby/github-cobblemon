@@ -17,7 +17,7 @@ import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.atan2
 
-class StadiumCameraEntry(
+class BattleCameraEntry(
     var id: ResourceLocation,
     val length: Double = 0.0,
     val positionTimeline: MutableMap<String, CameraKeyFrame> = mutableMapOf(),
@@ -29,7 +29,7 @@ class StadiumCameraEntry(
     }
 
     private fun resolvePosition(time: Double, map: MutableMap<String, CameraKeyFrame>): Vec3 {
-        val runtime = StadiumClientManager.runtime
+        val runtime = BattleCameraManagerClient.runtime
         runtime.environment.setSimpleVariable("anim_time", DoubleValue(time))
         var frame1: CameraKeyFrame? = null
         var frame2: CameraKeyFrame? = null
@@ -112,7 +112,7 @@ class StadiumCameraEntry(
     }
 
     companion object {
-        fun decode(buf: RegistryFriendlyByteBuf) : StadiumCameraEntry {
+        fun decode(buf: RegistryFriendlyByteBuf) : BattleCameraEntry {
             val id = buf.readIdentifier()
             val length = buf.readDouble()
             val positionTimeline = buf.readMap({_ -> buf.readString()}, {_ ->
@@ -123,7 +123,7 @@ class StadiumCameraEntry(
             }).toMutableMap()
             val move = buf.readString()
 
-            return StadiumCameraEntry(id, length, positionTimeline, targetPositionTimeline, move)
+            return BattleCameraEntry(id, length, positionTimeline, targetPositionTimeline, move)
         }
     }
 
@@ -139,12 +139,12 @@ class StadiumCameraEntry(
         STEP
     }
 
-    object CameraEntryAdapter: JsonDeserializer<StadiumCameraEntry> {
+    object CameraEntryAdapter: JsonDeserializer<BattleCameraEntry> {
         override fun deserialize(
             json: JsonElement?,
             typeOfT: Type?,
             context: JsonDeserializationContext?
-        ): StadiumCameraEntry {
+        ): BattleCameraEntry {
             if (json is JsonObject) {
                 val length = json["length"]?.asDouble ?: 0.0
                 val positionTimeline = mutableMapOf<String, CameraKeyFrame>()
@@ -184,7 +184,7 @@ class StadiumCameraEntry(
                     targetPositionTimeline[name] = CameraKeyFrame(x, y, z, interpolation)
                 }
                 val move = json["move"]?.asString ?: ""
-                return StadiumCameraEntry(cobblemonResource(""), length, positionTimeline, targetPositionTimeline, move)
+                return BattleCameraEntry(cobblemonResource(""), length, positionTimeline, targetPositionTimeline, move)
             }
             throw IllegalStateException("Stadium Camera could not be parsed")
         }

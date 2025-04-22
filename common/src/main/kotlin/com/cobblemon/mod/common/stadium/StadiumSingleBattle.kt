@@ -33,7 +33,7 @@ class StadiumSingleBattle: StadiumBattleDefenition() {
     override fun addPlayer(player: ServerPlayer) {
         if (canAddPlayer(player)) {
             participants.add(player.uuid)
-            player.sendPacket(StadiumJoinPacket(player.uuid, StadiumCameraManagers.managers.keys.first(), Vec3.ZERO, 0F))
+            player.sendPacket(BattleCameraPacket(player.uuid, BattleCameraManagers.managers.keys.first(), Vec3.ZERO, 0F))
         }
     }
 
@@ -57,7 +57,7 @@ class StadiumSingleBattle: StadiumBattleDefenition() {
         val battle = (battleResult as SuccessfulBattleStart).battle
     }
 
-    override fun getCurrentCamera(): StadiumCameraEntry {
+    override fun getCurrentCamera(): BattleCameraEntry {
         TODO("Not yet implemented")
     }
 }

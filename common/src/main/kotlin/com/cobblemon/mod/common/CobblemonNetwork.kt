@@ -209,10 +209,10 @@ import com.cobblemon.mod.common.net.serverhandling.trade.ChangeTradeAcceptanceHa
 import com.cobblemon.mod.common.net.serverhandling.trade.OfferTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.PerformTradeHandler
 import com.cobblemon.mod.common.net.serverhandling.trade.UpdateTradeOfferHandler
-import com.cobblemon.mod.common.stadium.StadiumCamerasSyncPacket
-import com.cobblemon.mod.common.stadium.StadiumJoinHandler
-import com.cobblemon.mod.common.stadium.StadiumJoinPacket
-import com.cobblemon.mod.common.stadium.StadiumCameraManagersSyncPacket
+import com.cobblemon.mod.common.stadium.BattleCamerasSyncPacket
+import com.cobblemon.mod.common.stadium.BattleCameraSetupHandler
+import com.cobblemon.mod.common.stadium.BattleCameraPacket
+import com.cobblemon.mod.common.stadium.BattleCameraManagersSyncPacket
 import com.cobblemon.mod.common.util.server
 import net.minecraft.server.level.ServerPlayer
 
@@ -361,8 +361,8 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(FishingBaitRegistrySyncPacket.ID, FishingBaitRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(FlowRegistrySyncPacket.ID, FlowRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(CosmeticItemAssignmentSyncPacket.ID, CosmeticItemAssignmentSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(StadiumCamerasSyncPacket.ID, StadiumCamerasSyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(StadiumCameraManagersSyncPacket.ID, StadiumCameraManagersSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(PacketRegisterInfo(BattleCamerasSyncPacket.ID, BattleCamerasSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(PacketRegisterInfo(BattleCameraManagersSyncPacket.ID, BattleCameraManagersSyncPacket::decode, DataRegistrySyncPacketHandler()))
 
         // Effects
         list.add(PacketRegisterInfo(SpawnSnowstormParticlePacket.ID, SpawnSnowstormParticlePacket::decode, SpawnSnowstormParticleHandler))
@@ -420,7 +420,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
 
         // Stadium packets
-        list.add(PacketRegisterInfo(StadiumJoinPacket.ID, StadiumJoinPacket::decode, StadiumJoinHandler))
+        list.add(PacketRegisterInfo(BattleCameraPacket.ID, BattleCameraPacket::decode, BattleCameraSetupHandler))
 
         return list
     }

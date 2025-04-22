@@ -48,8 +48,8 @@ import com.cobblemon.mod.common.net.messages.client.data.UnlockReloadPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
-import com.cobblemon.mod.common.stadium.StadiumCameraManagers
-import com.cobblemon.mod.common.stadium.StadiumCameras
+import com.cobblemon.mod.common.stadium.BattleCameraManagers
+import com.cobblemon.mod.common.stadium.BattleCameras
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.ifClient
 import com.cobblemon.mod.common.util.server
@@ -99,8 +99,8 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonCosmeticItems)
         this.register(CobblemonFlows)
         this.register(CobblemonUnlockableWallpapers)
-        this.register(StadiumCameras)
-        this.register(StadiumCameraManagers)
+        this.register(BattleCameras)
+        this.register(BattleCameraManagers)
 
         CobblemonSpawnPools.load()
         this.register(PokeRods)
