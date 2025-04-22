@@ -193,6 +193,7 @@ object MoLangFunctions {
                     timezone = ZoneId.of(useTimeZone.value)
                 } catch (_: Exception) {
                     Cobblemon.LOGGER.error("Error parsing timezone: ${useTimeZone.value}")
+                    return@Function DoubleValue.ZERO
                 }
             }
 
@@ -211,6 +212,7 @@ object MoLangFunctions {
                     timezone = ZoneId.of(useTimeZone.value)
                 } catch (_: Exception) {
                     Cobblemon.LOGGER.error("Error parsing timezone: ${useTimeZone.value}")
+                    return@Function DoubleValue.ZERO
                 }
             }
 
