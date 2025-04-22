@@ -9,14 +9,14 @@
 package com.cobblemon.mod.common.api.spawning.detail
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
-import com.cobblemon.mod.common.util.weightedSelection
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 
 /**
  * A [SpawnAction] that will spawn a single [PokemonEntity].
@@ -27,37 +27,47 @@ import net.minecraft.server.level.ServerPlayer
 class PokemonSpawnAction(
     spawnablePosition: SpawnablePosition,
     bucket: SpawnBucket,
-    override val detail: PokemonSpawnDetail,
-    /** The [PokemonProperties] that are about to be used. */
-    var props: PokemonProperties = detail.pokemon.copy()
+    override val detail: SpawnDetail,
+    /**
+     * The [PokemonProperties] that are about to be used. When using it, a copy will be taken.
+     * Don't modify the contents of this, what you want to do is [updatePokemon] with a copy.
+     */
+    var props: PokemonProperties,
+    var heldItem: ItemStack?,
+    var drops: DropTable? = null,
+    var levelRange: IntRange
 ) : SingleEntitySpawnAction<PokemonEntity>(spawnablePosition, bucket, detail) {
     override fun createEntity(): PokemonEntity {
-        if (props.species == null) LOGGER.error("PokemonSpawnAction run with null species - Spawn detail: ${detail.id}")
-        if (props.level == null) {
-            props.level = detail.getDerivedLevelRange().random()
-        }
-        val heldItems = detail.heldItems?.takeIf { it.isNotEmpty() }?.toMutableList() ?: mutableListOf()
-        val heldItem = if (heldItems.isNotEmpty()) {
-            val until100 = 1 - heldItems.sumOf { it.percentage / 100 }
-            if (until100 > 0 && spawnablePosition.world.random.nextDouble() < until100) {
-                null
-            } else {
-                heldItems.weightedSelection { it.percentage }
-            }
-        } else {
-            null
-        }?.createStack(spawnablePosition)
+        val props = props.copy()
+        props.level = levelRange.random()
         val sourcePlayer = spawnablePosition.cause.entity as? ServerPlayer
         val entity = props.createEntity(spawnablePosition.world, sourcePlayer)
         entity.spawnCause = spawnablePosition.cause
         SeasonFeatureHandler.updateSeason(entity.pokemon, Cobblemon.seasonResolver(spawnablePosition.world, spawnablePosition.position))
-        if (heldItem != null) {
+        val heldItem = heldItem
+        if (heldItem != ItemStack.EMPTY && heldItem != null) {
             entity.pokemon.swapHeldItem(heldItem)
         }
-        entity.drops = detail.drops
+        entity.drops = drops
         // Useful debug code in situations where you want to find spawns
 //        val fireworkRocketEntity = FireworkRocketEntity(spawnablePosition.world, spawnablePosition.position.x.toDouble(), spawnablePosition.position.y.toDouble() + 2, spawnablePosition.position.z.toDouble(), ItemStack(Items.FIREWORK_ROCKET))
 //        spawnablePosition.world.spawnEntity(fireworkRocketEntity)
         return entity
+    }
+
+    fun updatePokemon(props: PokemonProperties) {
+        this.props = props
+    }
+
+    fun updateHeldItem(heldItem: ItemStack) {
+        this.heldItem = heldItem
+    }
+
+    fun updateDrops(drops: DropTable) {
+        this.drops = drops
+    }
+
+    fun updateLevelRange(levelRange: IntRange) {
+        this.levelRange = levelRange
     }
 }

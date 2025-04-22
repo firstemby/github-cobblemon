@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.api.spawning.influence
 
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
-import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
@@ -37,7 +37,13 @@ interface SpawningInfluence {
     /** Applies some influence over the entity that's been spawned. */
     fun affectSpawn(action: SpawnAction<*>, entity: Entity) {}
     /** Applies some influence over the weight of spawn buckets. */
-    fun affectBucketWeight(bucket: SpawnBucket, weight: Float, allBuckets: List<SpawnBucket>): Float = weight
+    fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {}
     /** Filters positions that could be usable for a spawnable position calculator */
     fun isAllowedPosition(world: ServerLevel, pos: BlockPos, spawnablePositionCalculator: SpawnablePositionCalculator<*, *>): Boolean = true
+    /**
+     * Injects additional spawn possibilities for the given bucket and spawnable position.
+     *
+     * You should make sure the spawn position satisfies any spawn details that you inject.
+     */
+    fun injectSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail>? = null
 }

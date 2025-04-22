@@ -31,7 +31,7 @@ import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.api.spawning.spawner.*
 import com.cobblemon.mod.common.entity.pokemon.CobblemonAgingDespawner
@@ -106,6 +106,7 @@ object BestSpawner {
 
         SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
         loadConfig()
@@ -127,12 +128,5 @@ object BestSpawner {
         CobblemonSpawnPools.onServerLoad(server)
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
-
-        val grottoSpawner = GrottoSpawner(
-                name = "grotto",
-                fallbackSpawns = SpawnPool("grotto_empty"),
-                manager = CobblemonWorldSpawnerManager
-        )
-        CobblemonWorldSpawnerManager.registerSpawner(grottoSpawner)
     }
 }

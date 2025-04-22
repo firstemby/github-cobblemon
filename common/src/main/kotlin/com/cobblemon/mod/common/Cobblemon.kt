@@ -42,7 +42,7 @@ import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.starter.StarterHandler
 import com.cobblemon.mod.common.api.storage.PokemonStoreManager
 import com.cobblemon.mod.common.api.storage.adapter.conversions.ReforgedConversion

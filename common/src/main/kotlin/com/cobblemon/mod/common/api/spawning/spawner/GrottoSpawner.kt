@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.api.spawning.spawner
 import com.cobblemon.mod.common.CobblemonPoiTypes
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.SpawnDecision
 import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import com.cobblemon.mod.common.util.server
 import net.minecraft.core.BlockPos
@@ -50,7 +50,7 @@ class GrottoSpawner(
         return null
     }
 
-    override fun run(cause: SpawnCause): List<SpawnDecision> {
+    override fun run(cause: SpawnCause): List<SpawnAction<*>> {
         //println("[GrottoSpawner] run() starting for cause: $cause")
         val area = getZoneInput(cause)
         //println("[GrottoSpawner] getArea() result: $area")
@@ -62,8 +62,8 @@ class GrottoSpawner(
             val spawnablePositions = spawnablePositionResolver.resolve(this, spawnablePositionCalculators, zone)
             val worldInfluences = zone.unconditionalInfluences
             val bucket = chooseBucket(this.influences + cause + worldInfluences)
-            val (spawnablePosition, spawnDetail) = getSpawningSelector().select(this, bucket, spawnablePositions) ?: return emptyList()
-            return listOf(SpawnDecision(spawnablePosition = spawnablePosition, bucket = bucket, spawnDetail = spawnDetail))
+            val spawnActions = getSpawningSelector().select(this, bucket, spawnablePositions, max = 1)
+            return spawnActions
         }
 
         //println("[GrottoSpawner] Area is null or invalid, skipping spawn")

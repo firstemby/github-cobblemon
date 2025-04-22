@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.ModDependant
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
@@ -20,6 +21,7 @@ import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
+import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
@@ -133,5 +135,51 @@ abstract class SpawnDetail : ModDependant {
         return super.isModDependencySatisfied() && !containsNullValues
     }
 
-    abstract fun doSpawn(spawnablePosition: SpawnablePosition, bucket: SpawnBucket): SpawnAction<*>
+    /**
+     * Runs when selected by a selection algorithm. This handles removing any nearby spawns in the selection
+     * data and whatever else.
+     *
+     * [existingSpawnActions] spawn actions that were chosen prior to the one right before this selection.
+     * [selectionData] the algorithm data that is being used to choose spawns.
+     * [spawnablePosition] where the spawn is taking place.
+     * [spawnAction] the spawn action that was chosen based off this [SpawnDetail] to spawn at this position.
+     */
+    protected open fun onSelection(
+        spawnablePosition: SpawnablePosition,
+        spawnAction: SpawnAction<*>,
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: SpawnSelectionData
+    ) {
+        selectionData.removeSpawnablePositions { _, pos ->
+            pos.distanceTo(spawnablePosition) < Cobblemon.config.minimumDistanceBetweenEntities
+        }
+    }
+
+    /**
+     * Chooses this spawn detail from selection data, returning a functional
+     * spawn action.
+     */
+    fun choose(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*> {
+        val action = createSpawnAction(spawnablePosition, bucket, existingSpawnActions, selectionData)
+        onSelection(
+            spawnablePosition = spawnablePosition,
+            spawnAction = action,
+            existingSpawnActions = existingSpawnActions,
+            selectionData = selectionData
+        )
+        return action
+    }
+
+    /** Instantiates an action at the given [SpawnablePosition] for the given [SpawnBucket]. */
+    protected abstract fun createSpawnAction(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*>
 }

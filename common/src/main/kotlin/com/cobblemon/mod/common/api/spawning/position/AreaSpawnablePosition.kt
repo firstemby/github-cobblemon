@@ -14,11 +14,11 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import kotlin.math.ceil
 import kotlin.math.floor
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
 
 /**
  * A [SpawnablePosition] that is for a particular area, and therefore has spatial properties.
@@ -74,7 +74,7 @@ open class AreaSpawnablePosition(
             for (x in minX until maxX) {
                 for (y in (position.y + 1)..maxY) {
                     for (z in minZ until maxZ) {
-                        val state = world.getBlockState(mutable.set(x, y, z))
+                        val state = zone.getBlockState(mutable.set(x, y, z))
                         if (!isSafeSpace(world, mutable, state)) {
                             return false
                         }

@@ -11,8 +11,7 @@ package com.cobblemon.mod.common.api.spawning
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningInfluenceDetector
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.influence.detector.SpawningInfluenceDetector
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags

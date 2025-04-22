@@ -110,6 +110,9 @@ class CobblemonConfig {
     @SerializedName("maximumSpawningZoneDistanceFromPlayer", alternate = ["maximumSliceDistanceFromPlayer"])
     var maximumSpawningZoneDistanceFromPlayer = 16 * 4F
 
+    @CobblemonConfigField(Category.Spawning, lang = "maximum_spawns_per_pass")
+    var maximumSpawnsPerPass = 8
+
     @CobblemonConfigField(Category.Spawning, lang = "export_spawn_config")
     var exportSpawnConfig = false
 

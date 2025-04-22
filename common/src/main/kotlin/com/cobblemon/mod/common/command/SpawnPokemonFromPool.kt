@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.command
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.util.alias
@@ -79,13 +79,11 @@ object SpawnPokemonFromPool {
 
             val bucket = spawner.chooseBucket(influences)
 
-            val result = spawner.getSpawningSelector().select(spawner, bucket, contexts)
-            if (result == null) {
+            val spawnAction = spawner.getSpawningSelector().select(spawner, bucket, contexts, max = 1).firstOrNull() // one at a time
+            if (spawnAction == null) {
                 player.sendSystemMessage(UNABLE_TO_SPAWN.red())
                 continue
             }
-
-            val spawnAction = result.second.doSpawn(spawnablePosition = result.first, bucket = bucket)
 
             spawnAction.future.thenApply {
                 if (it is EntitySpawnResult) {

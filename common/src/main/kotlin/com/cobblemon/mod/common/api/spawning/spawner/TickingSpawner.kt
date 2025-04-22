@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.SpawnDecision
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
@@ -32,16 +31,15 @@ abstract class TickingSpawner(
     var spawns: SpawnPool,
     val manager: SpawnerManager
 ) : Spawner {
-    private var selector: SpawningSelector = FlatSpawnablePositionWeightedSelector()
+    private var selector: SpawningSelector<*> = FlatSpawnablePositionWeightedSelector()
     override val influences = mutableListOf<SpawningInfluence>()
 
-    override fun canSpawn() = active
     override fun getSpawningSelector() = selector
-    override fun setSpawningSelector(selector: SpawningSelector) { this.selector = selector }
+    override fun setSpawningSelector(selector: SpawningSelector<*>) { this.selector = selector }
     override fun getSpawnPool() = spawns
     override fun setSpawnPool(spawnPool: SpawnPool) { spawns = spawnPool }
 
-    abstract fun run(cause: SpawnCause): List<SpawnDecision>
+    abstract fun run(cause: SpawnCause): List<SpawnAction<*>>
 
     var active = true
     val spawnedEntities = mutableListOf<Entity>()
@@ -67,12 +65,9 @@ abstract class TickingSpawner(
 
         ticksUntilNextSpawn -= tickTimerMultiplier
         if (ticksUntilNextSpawn <= 0) {
-            val spawns = run(cause = SpawnCause(spawner = this, entity = getCauseEntity()))
+            val spawnActions = run(cause = SpawnCause(spawner = this, entity = getCauseEntity()))
             ticksUntilNextSpawn = ticksBetweenSpawns
-            for (spawn in spawns) {
-                val spawnablePosition = spawn.spawnablePosition
-                val detail = spawn.spawnDetail
-                val spawnAction = detail.doSpawn(spawnablePosition = spawnablePosition, bucket = spawn.bucket)
+            for (spawnAction in spawnActions) {
                 spawnAction.complete()
             }
         }

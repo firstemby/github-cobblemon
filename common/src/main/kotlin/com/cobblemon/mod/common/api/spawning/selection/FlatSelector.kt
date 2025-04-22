@@ -10,39 +10,41 @@ package com.cobblemon.mod.common.api.spawning.selection
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
+import com.cobblemon.mod.common.util.removeIf
 import com.cobblemon.mod.common.util.weightedSelection
 import kotlin.random.Random
 
-open class FlatSelector : SpawningSelector {
-    /**
-     * A spawning selector that compiles a distinct list of all spawn details that
-     * are possible across any spawnable position type and performs a weighted selection of spawns.
-     *
-     * The goal of this algorithm is to be kinder to spawns that are only possible
-     * in very specific locational conditions or spawnable position types by not letting the scarcity
-     * of suitable locations hurt its chances of spawning. It differs from the
-     * [FlatSpawnablePositionWeightedSelector] because here a spawnable position type only appearing once
-     * will not make it any less likely to be selected.
-     *
-     * A spawn detail's weight when selecting between all possible spawn details will be the
-     * highest of its spawn position-adjusted weights. In other words, if a spawn is possible at both A and
-     * B spawnable positions but is weighed more highly at A due to a weight multiplier, it will use the
-     * weight of the spawn at A when choosing which spawn should be picked.
-     *
-     * When choosing which spawnable position a specific spawn detail will spawn at once that spawn detail
-     * has been chosen, it does a spawnable position-weighted random selection across those spawnable positions.
-     *
-     * At a glance:
-     * - Spawn detail selection is flat across spawnable position quantity
-     * - The popularity of specific spawnable position types has no bearing on the spawn chance.
-     *
-     * @author Hiroku
-     * @since July 10th, 2022
-     */
-    protected class SelectingSpawnInformation {
+/**
+ * A spawning selector that compiles a distinct list of all spawn details that
+ * are possible across any spawnable position type and performs a weighted selection of spawns.
+ *
+ * The goal of this algorithm is to be kinder to spawns that are only possible
+ * in very specific locational conditions or spawnable position types by not letting the scarcity
+ * of suitable locations hurt its chances of spawning. It differs from the
+ * [FlatSpawnablePositionWeightedSelector] because here a spawnable position type only appearing once
+ * will not make it any less likely to be selected.
+ *
+ * A spawn detail's weight when selecting between all possible spawn details will be the
+ * highest of its spawn position-adjusted weights. In other words, if a spawn is possible at both A and
+ * B spawnable positions but is weighed more highly at A due to a weight multiplier, it will use the
+ * weight of the spawn at A when choosing which spawn should be picked.
+ *
+ * When choosing which spawnable position a specific spawn detail will spawn at once that spawn detail
+ * has been chosen, it does a spawnable position-weighted random selection across those spawnable positions.
+ *
+ * At a glance:
+ * - Spawn detail selection is flat across spawnable position quantity
+ * - The popularity of specific spawnable position types has no bearing on the spawn chance.
+ *
+ * @author Hiroku
+ * @since July 10th, 2022
+ */
+open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelectionData> {
+    class SelectingSpawnInformation {
         val spawnablePositions = mutableMapOf<SpawnablePosition, Float>()
         var highestWeight = 0F
 
@@ -56,15 +58,35 @@ open class FlatSelector : SpawningSelector {
         fun chooseSpawnablePosition() = spawnablePositions.entries.weightedSelection { it.value }!!.key
     }
 
-    protected class SpawnablePositionSelectionData(
+    class SpawnablePositionSelectionData(
         val spawnToSpawnablePosition: MutableMap<SpawnDetail, SelectingSpawnInformation>,
         var percentSum: Float
-    ) {
+    ): SpawnSelectionData {
         val size: Int
             get() = spawnToSpawnablePosition.size
+
+        override val context = mutableMapOf<String, Any>()
+
+        override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
+            val toRemove = spawnToSpawnablePosition.entries.filter { shouldRemove(it.key) }
+            toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+        }
+
+        override fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {
+            val toRemove = spawnToSpawnablePosition.entries.filter { (spawnDetail, positionData) ->
+                positionData.spawnablePositions.removeIf { shouldRemove(spawnDetail, it.key) }
+                positionData.highestWeight = positionData.spawnablePositions.maxOfOrNull { it.value } ?: 0F
+                positionData.spawnablePositions.isEmpty()
+            }
+
+            toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
+
+            percentSum -= toRemove.sumOf { it.key.percentage.toDouble() }.toFloat()
+        }
     }
 
-    protected fun getSelectionData(
+    override fun getSelectionData(
         spawner: Spawner,
         bucket: SpawnBucket,
         spawnablePositions: List<SpawnablePosition>
@@ -92,17 +114,12 @@ open class FlatSelector : SpawningSelector {
         return SpawnablePositionSelectionData(spawnToSpawnablePosition, percentSum)
     }
 
-    override fun select(
+    override fun selectSpawnAction(
         spawner: Spawner,
         bucket: SpawnBucket,
-        spawnablePositions: List<SpawnablePosition>
-    ): Pair<SpawnablePosition, SpawnDetail>? {
-        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
-
-        if (selectionData.size == 0) {
-            return null
-        }
-
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: SpawnablePositionSelectionData,
+    ): SpawnAction<*>? {
         val spawnToSpawnablePosition = selectionData.spawnToSpawnablePosition
         var percentSum = selectionData.percentSum
 
@@ -129,14 +146,24 @@ open class FlatSelector : SpawningSelector {
                 if (spawnDetail.percentage > 0) {
                     percentSum += spawnDetail.percentage
                     if (percentSum >= selectedPercentage) {
-                        return info.chooseSpawnablePosition() to spawnDetail
+                        return spawnDetail.choose(
+                            spawnablePosition = info.chooseSpawnablePosition(),
+                            bucket = bucket,
+                            existingSpawnActions = existingSpawnActions,
+                            selectionData = selectionData
+                        )
                     }
                 }
             }
         }
 
         val selectedSpawn = spawnToSpawnablePosition.entries.toList().weightedSelection { it.value.highestWeight }!!
-        return selectedSpawn.value.chooseSpawnablePosition() to selectedSpawn.key
+        return selectedSpawn.key.choose(
+            spawnablePosition = selectedSpawn.value.chooseSpawnablePosition(),
+            existingSpawnActions = existingSpawnActions,
+            bucket = bucket,
+            selectionData = selectionData
+        )
     }
 
     override fun getTotalWeights(

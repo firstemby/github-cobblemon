@@ -9,20 +9,52 @@
 package com.cobblemon.mod.common.api.spawning.selection
 
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 
+
 /**
  * Interface responsible for taking all the potential spawns across many positions, and applying some kind of
- * selection process to choose one. It is also responsible for generating a name to percentage probability for the given
- * spawn information for checking spawns under specific conditions.
+ * selection process to make some [SpawnAction]s. It is also responsible for generating a name to percentage
+ * probability for the given spawn information for checking possible spawns under specific conditions.
  *
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface SpawningSelector {
-    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Pair<SpawnablePosition, SpawnDetail>?
+interface SpawningSelector<T : SpawnSelectionData> {
+    fun getSelectionData(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): T
+
+    fun selectSpawnAction(
+        spawner: Spawner,
+        bucket: SpawnBucket,
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: T
+    ): SpawnAction<*>?
+
+    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, max: Int): List<SpawnAction<*>> {
+        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
+
+        val spawnActions = mutableListOf<SpawnAction<*>>()
+
+        while (spawnActions.size < max) {
+            val spawnAction = selectSpawnAction(
+                spawner = spawner,
+                bucket = bucket,
+                existingSpawnActions = spawnActions,
+                selectionData = selectionData
+            )
+
+            if (spawnAction == null) {
+                break
+            }
+
+            spawnActions.add(spawnAction)
+        }
+
+        return spawnActions
+    }
 
     fun getProbabilities(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float> {
         val weights = getTotalWeights(spawner, bucket, spawnablePositions)

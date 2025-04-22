@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.spawning.prospecting
+package com.cobblemon.mod.common.api.spawning.influence.detector
 
 import com.cobblemon.mod.common.api.spawning.SpawningZone
 import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 
 /**
  * Prospects for [ZoneSpawningInfluence] in a world at a given position. Occurs as part of a
@@ -32,6 +33,6 @@ interface SpawningInfluenceDetector {
         )
     }
 
-    fun detectFromInput(spawner: Spawner, area: SpawningZoneInput) : List<ZoneSpawningInfluence>
+    fun detectFromInput(spawner: Spawner, input: SpawningZoneInput) : List<ZoneSpawningInfluence>
     fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): List<ZoneSpawningInfluence>
 }

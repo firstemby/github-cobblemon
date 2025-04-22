@@ -12,6 +12,7 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.google.gson.annotations.SerializedName
@@ -36,5 +37,10 @@ class NPCSpawnDetail : SpawnDetail() {
     val minLevel: Expression = "1".asExpression()
     val maxLevel: Expression = "100".asExpression()
 
-    override fun doSpawn(spawnablePosition: SpawnablePosition, bucket: SpawnBucket) = NPCSpawnAction(spawnablePosition, bucket, this)
+    override fun createSpawnAction(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        existingSpawnActions: List<SpawnAction<*>>,
+        selectionData: SpawnSelectionData
+    ) = NPCSpawnAction(spawnablePosition, bucket, this)
 }

@@ -6,9 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.spawning.prospecting
+package com.cobblemon.mod.common.api.spawning
 
-import com.cobblemon.mod.common.api.spawning.SpawningZone
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner

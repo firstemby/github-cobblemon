@@ -45,7 +45,6 @@ interface FlooredSpawnablePositionCalculator<T : FlooredSpawnablePosition> : Are
  * @since February 7th, 2022
  */
 object GroundedSpawnablePositionCalculator : FlooredSpawnablePositionCalculator<GroundedSpawnablePosition> {
-    // TODO expand base condition
     override val name = "grounded"
     override val baseCondition: (BlockState) -> Boolean = isSolidCondition
     override val surroundingCondition: (BlockState) -> Boolean = isAirCondition

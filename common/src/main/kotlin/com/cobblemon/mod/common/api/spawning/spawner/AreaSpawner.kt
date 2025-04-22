@@ -10,13 +10,13 @@ package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.SpawnDecision
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.calculators.AreaSpawnablePositionCalculator
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.prioritizedAreaCalculators
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBoxLoaded
 import com.cobblemon.mod.common.util.squeezeWithinBounds
@@ -58,8 +58,9 @@ abstract class AreaSpawner(
     var spawnablePositionResolver: AreaSpawnablePositionResolver = Cobblemon.areaSpawnablePositionResolver
     var spawnablePositionCalculators: List<AreaSpawnablePositionCalculator<*>> = prioritizedAreaCalculators
 
+    var spawnsPerPass: Int? = null
 
-    override fun run(cause: SpawnCause): List<SpawnDecision> {
+    override fun run(cause: SpawnCause): List<SpawnAction<*>> {
         val areaInput = getZoneInput(cause)
         val constrainedArea = if (areaInput != null) constrainArea(areaInput) else null
         if (constrainedArea != null) {
@@ -99,18 +100,7 @@ abstract class AreaSpawner(
             //val resolveDuration = resolveEnd - prospectEnd
             //println("Prospecting took: $prospectDuration ms. Resolution took: $resolveDuration ms")
             // Takes about 3ms on my laptop to prospect, similar to spawnable position resolve - not very good, needs some thought
-            val chosenSpawn = getSpawningSelector().select(spawner = this, bucket = bucket, spawnablePositions = spawnablePositions)
-            return if (chosenSpawn == null) {
-                emptyList()
-            } else {
-                listOf(
-                    SpawnDecision(
-                        spawnablePosition = chosenSpawn.first,
-                        spawnDetail = chosenSpawn.second,
-                        bucket = bucket,
-                    )
-                )
-            }
+            return getSpawningSelector().select(spawner = this, bucket = bucket, spawnablePositions = spawnablePositions, max = spawnsPerPass ?: Cobblemon.config.maximumSpawnsPerPass)
         }
 
         return emptyList()

@@ -9,14 +9,14 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.FlatSpawnablePositionWeightedSelector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import java.util.concurrent.CompletableFuture
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 
 /**
  * A type of spawner that occurs at a single point and provides its own means of generating a
@@ -27,7 +27,7 @@ import net.minecraft.core.BlockPos
  * @since February 3rd, 2024
  */
 abstract class TriggerSpawner<T : SpawnCause>(override val name: String, var spawns: SpawnPool) : Spawner {
-    private var selector: SpawningSelector = FlatSpawnablePositionWeightedSelector()
+    private var selector: SpawningSelector<*> = FlatSpawnablePositionWeightedSelector()
     override val influences = mutableListOf<SpawningInfluence>()
 
     open fun run(
@@ -39,10 +39,14 @@ abstract class TriggerSpawner<T : SpawnCause>(override val name: String, var spa
         val spawnablePosition = parseSpawnablePosition(cause, world, pos) ?: return null
         spawnablePosition.influences.addAll(influences)
         val bucket = chooseBucket(spawnablePosition.influences)
-        selector.select(this, bucket, listOf(spawnablePosition))?.let { (_, spawn) ->
-            val action = spawn.doSpawn(spawnablePosition, bucket)
-            action.complete()
-            return action.future
+        val spawnActions = selector.select(this, bucket, listOf(spawnablePosition), max = 1)
+        if (spawnActions.isNotEmpty()) {
+            return CompletableFuture.allOf(
+                *spawnActions.map {
+                    it.complete()
+                    it.future
+                }.toTypedArray()
+            )
         }
         return null
     }
@@ -50,9 +54,8 @@ abstract class TriggerSpawner<T : SpawnCause>(override val name: String, var spa
     /** Parses a spawnable position, if possible, from the given cause and position. */
     abstract fun parseSpawnablePosition(cause: T, world: ServerLevel, pos: BlockPos): SpawnablePosition?
 
-    override fun canSpawn() = true
     override fun getSpawningSelector() = selector
-    override fun setSpawningSelector(selector: SpawningSelector) { this.selector = selector }
+    override fun setSpawningSelector(selector: SpawningSelector<*>) { this.selector = selector }
     override fun getSpawnPool() = spawns
     override fun setSpawnPool(spawnPool: SpawnPool) { spawns = spawnPool }
 }

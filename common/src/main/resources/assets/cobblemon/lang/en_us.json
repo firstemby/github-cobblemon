@@ -2271,6 +2271,8 @@
   "cobblemon.config.ui.minimum_spawning_zone_distance_from_player.tooltip": "Minimum amount of blocks from the Player that Pokémon can spawn.",
   "cobblemon.config.ui.maximum_spawning_zone_distance_from_player": "Maximum Spawning Zone Distance From Player",
   "cobblemon.config.ui.maximum_spawning_zone_distance_from_player.tooltip": "Maximum amount of blocks from the Player that Pokémon can spawn.",
+  "cobblemon.config.ui.maximum_spawns_per_pass": "Maximum Spawns Per Pass",
+  "cobblemon.config.ui.maximum_spawns_per_pass.tooltip": "The maximum number of spawns that can occur in a single pass of the spawning system. If the spawning zone dimensions are small, this option does very little.",
   "cobblemon.config.ui.export_spawn_config": "Export Spawn Config",
   "cobblemon.config.ui.export_spawn_config.tooltip": "Whether to generate the spawn config for more specific spawning settings.",
   "cobblemon.config.ui.save_pokemon_to_world": "Save Pokémon to World",

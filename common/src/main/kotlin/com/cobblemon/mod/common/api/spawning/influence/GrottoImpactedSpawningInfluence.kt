@@ -8,43 +8,23 @@
 
 package com.cobblemon.mod.common.api.spawning.influence
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 
 /**
- * The grotto influence will force spawns to all be for the most common bucket.
+ * The grotto influence will normalize bucket weights and prevent non-habitat spawns from spawning.
+ *
+ * This influence exists once even if many grotto blocks are detected in the spawning zone.
+ *
+ * @author Hiroku
+ * @since April 20th, 2025
  */
-class GrottoInfluence(
-    private val grottoBlockEntity: GrottoBlockEntity
-) : SpawningInfluence {
+class GrottoImpactedSpawningInfluence : BucketNormalizingInfluence(normalizationFactor = 2.0) {
     companion object {
         const val HABITAT_LABEL = "habitat"
     }
 
     override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition) =  HABITAT_LABEL in detail.labels
-    override fun affectBucketWeight(bucket: SpawnBucket, weight: Float, allBuckets: List<SpawnBucket>): Float {
-        val rarestBuckets = allBuckets.sortedByDescending { it.weight }
-        val numberOfBuckets = rarestBuckets.size
-        var subtractedAmount = 0F
-        val index = rarestBuckets.indexOf(bucket)
-
-        for (i in 0 until (numberOfBuckets - 1)) {
-            val it = rarestBuckets[i]
-
-        }
-//        for (rareBucket in rarestBuckets) {
-//            subtractedAmount += rarestBuckets[i].weight
-//        }
-
-        if (bucket == allBuckets.maxByOrNull { it.weight }) {
-            // If this is the highest weight bucket, we want to boost it
-            return 1F
-        } else {
-            return 0F
-        }
-    }
 
     /*companion object {
         private val LOGGER = LoggerFactory.getLogger("GrottoInfluence")

@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
+import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
@@ -223,5 +224,9 @@ abstract class SpawnablePosition {
             return true
         }
         return false
+    }
+
+    fun distanceTo(other: SpawnablePosition): Float {
+        return sqrt(position.distSqr(other.position)).toFloat()
     }
 }
