@@ -32,13 +32,13 @@ class StadiumCameraManagerEntry(
 }
 
 class StadiumCameraState(
-    val camera: Expression,
+    val camera: ResourceLocation,
     val target: StadiumCameraTarget,
     val listOfTransitions: MutableList<StadiumCameraTransition>,
     val loop: Boolean
 ) {
     fun encode(buf: RegistryFriendlyByteBuf) {
-        buf.writeString(camera.originalString)
+        buf.writeIdentifier(camera)
         buf.writeEnum(target)
         buf.writeCollection(listOfTransitions) {_, transition -> transition.encode(buf)}
         buf.writeBoolean(loop)
@@ -46,7 +46,7 @@ class StadiumCameraState(
 
     companion object {
         fun decode(buf: RegistryFriendlyByteBuf): StadiumCameraState {
-            val camera = buf.readString().asExpression()
+            val camera = buf.readIdentifier()
             val target = buf.readEnum(StadiumCameraTarget::class.java)
             val listOfTransitions = buf.readList { StadiumCameraTransition.decode(buf) }.toMutableList()
             val loop = buf.readBoolean()
@@ -92,7 +92,7 @@ object StadiumCameraManagerAdapter: JsonDeserializer<StadiumCameraManagerEntry> 
         if (json is JsonObject) {
             val states = mutableMapOf<String, StadiumCameraState>()
             json["states"]?.asJsonObject?.entrySet()?.forEach { (name, state) ->
-                val camera = state.asJsonObject["camera"]?.asString?.asExpression() ?: "".asExpression()
+                val camera = state.asJsonObject["camera"]?.asString?.asResource() ?: "".asResource()
                 val target = when (state.asJsonObject["target"]?.asString) {
                     "CENTRE" -> StadiumCameraTarget.CENTRE
                     "ACTIVE_POKEMON" -> StadiumCameraTarget.ACTIVE_POKEMON

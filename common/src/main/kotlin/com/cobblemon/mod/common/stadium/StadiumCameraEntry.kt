@@ -3,14 +3,13 @@ package com.cobblemon.mod.common.stadium
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.util.*
-import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import java.lang.reflect.Type
@@ -25,8 +24,8 @@ class StadiumCameraEntry(
     val targetPositionTimeline: MutableMap<String, CameraKeyFrame> = mutableMapOf(),
     val move: String = ""
 ) {
-    fun resolvePosition(time: Double): Vec3 {
-        return resolvePosition(time, positionTimeline)
+    fun resolvePosition(time: Double, yRot: Float): Vec3 {
+        return resolvePosition(time, positionTimeline).yRot(yRot * (Mth.PI/180))
     }
 
     private fun resolvePosition(time: Double, map: MutableMap<String, CameraKeyFrame>): Vec3 {
@@ -85,9 +84,9 @@ class StadiumCameraEntry(
         }
     }
 
-    fun resolveRotation(time: Double): Vector3f {
-        val position = resolvePosition(time, positionTimeline)
-        val target = resolvePosition(time, targetPositionTimeline)
+    fun resolveRotation(time: Double, yRot: Float): Vector3f {
+        val position = resolvePosition(time, positionTimeline).yRot(yRot * (Mth.PI/180))
+        val target = resolvePosition(time, targetPositionTimeline).yRot(yRot * (Mth.PI/180))
         val offset = target.subtract(position)
         val xRot = -atan(offset.y.toFloat()/offset.horizontalDistance().toFloat()) * (180F / Math.PI.toFloat())
         val yRot = -atan2(offset.x.toFloat(),offset.z.toFloat()) * (180F / Math.PI.toFloat())
@@ -185,6 +184,7 @@ class StadiumCameraEntry(
                     targetPositionTimeline[name] = CameraKeyFrame(x, y, z, interpolation)
                 }
                 val move = json["move"]?.asString ?: ""
+                return StadiumCameraEntry(cobblemonResource(""), length, positionTimeline, targetPositionTimeline, move)
             }
             throw IllegalStateException("Stadium Camera could not be parsed")
         }

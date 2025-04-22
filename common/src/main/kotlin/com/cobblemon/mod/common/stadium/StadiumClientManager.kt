@@ -8,9 +8,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
-import com.cobblemon.mod.common.util.asResource
 import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveString
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
@@ -52,9 +50,12 @@ object StadiumClientManager {
         currentStadiumBattleUUID = null
     }
 
-    fun handleJoin(battleUUID: UUID, cameraManager: ResourceLocation) {
+    fun handleJoin(battleUUID: UUID, cameraManager: ResourceLocation, center: Vec3, yRot: Float) {
         currentStadiumBattleUUID = battleUUID
         activeCameraManager = cameraManager
+
+        battleCenter = center
+        battleYRot = yRot
 
         cameraTimer = 0.0
         currentCameraState = StadiumCameraManagers.managers[cameraManager]!!.startingState
@@ -93,6 +94,9 @@ object StadiumClientManager {
     }
 
     //Camera Manager
+    var battleYRot = 0.0F
+    var battleCenter = Vec3.ZERO
+
     var activeCameraManager: ResourceLocation? = null
     var cameraTimer: Double = 0.0
     var currentCameraState: String = ""
@@ -113,12 +117,12 @@ object StadiumClientManager {
 
         val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[runtime.resolveString(currentState.camera).asResource()]
+        val currentCamera = StadiumCameras.cameras[currentState.camera]
 
         InstructionChangeTime += 0.05
         if (currentCamera != null) {
             cameraTimer += 0.05
-            if (cameraTimer > currentCamera.length) {
+            if (cameraTimer > currentCamera.length && currentCamera.length != 0.0) {
                 if (currentState.loop) {
                     cameraTimer -= currentCamera.length
                 }
@@ -145,7 +149,7 @@ object StadiumClientManager {
                 nextCameraState = nextState.targetState
                 while (true) {
                     val newState = currentManager.states[nextCameraState]!!
-                    val newCamera = StadiumCameras.cameras[runtime.resolveString(newState.camera).asResource()]
+                    val newCamera = StadiumCameras.cameras[newState.camera]
                     val newEndOfAnim = if (newCamera != null) newCamera.length == 0.0 else true
 
                     val newNextState = evaluateTransitions(newState, newEndOfAnim)
@@ -185,22 +189,27 @@ object StadiumClientManager {
 
         val currentManager = StadiumCameraManagers.managers[activeCameraManager]!!
         val currentState = currentManager.states[currentCameraState]!!
-        val currentCamera = StadiumCameras.cameras[runtime.resolveString(currentState.camera).asResource()]
+        val currentCamera = StadiumCameras.cameras[currentState.camera]
 
         if (currentCamera != null) {
             var renderTime = cameraTimer + delta/20
             if (renderTime > currentCamera.length && currentCamera.length != 0.0 && !calculateNextState) {
                 val newState = currentManager.states[nextCameraState]!!
-                val newCamera = StadiumCameras.cameras[runtime.resolveString(newState.camera).asResource()] ?: return
+                val newCamera = StadiumCameras.cameras[newState.camera] ?: return
 
-                cameraPosition = newCamera.resolvePosition(renderTime - currentCamera.length)
-                cameraRotation = newCamera.resolveRotation(renderTime - currentCamera.length)
+                environment.setSimpleVariable("anim_time", DoubleValue(renderTime - currentCamera.length))
+                cameraPosition = newCamera.resolvePosition(renderTime - currentCamera.length, battleYRot)
+                cameraRotation = newCamera.resolveRotation(renderTime - currentCamera.length, battleYRot)
             }
             else {
                 if (renderTime > currentCamera.length && currentCamera.length != 0.0) renderTime = currentCamera.length
-                cameraPosition = currentCamera.resolvePosition(renderTime)
-                cameraRotation = currentCamera.resolveRotation(renderTime)
+
+                environment.setSimpleVariable("anim_time", DoubleValue(renderTime))
+                cameraPosition = currentCamera.resolvePosition(renderTime, battleYRot)
+                cameraRotation = currentCamera.resolveRotation(renderTime, battleYRot)
             }
+
+            cameraPosition = cameraPosition.add(battleCenter)
         }
     }
 }
