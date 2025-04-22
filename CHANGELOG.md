@@ -117,7 +117,7 @@
 - Added molang particle queries for getting distance to targeted entities
 - Added debug renderer for poseable entity locators
 - Added time zone as a config option
-- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
+- Added an optional MoValue to either use system timezone when set as true, or use the supplied string as a timezone for MoLang functions `date_local_time` and `date_of`. If the timezone supplied fails to parse this function now returns `0.0`.
 
 ### Additions
 - Added time zone as a config option
