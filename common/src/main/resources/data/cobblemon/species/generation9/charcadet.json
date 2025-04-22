@@ -126,7 +126,7 @@
       "id": "charcadet_armarouge",
       "variant": "item_interact",
       "result": "armarouge",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "psyshock"
       ],
@@ -137,7 +137,7 @@
       "id": "charcadet_ceruledge",
       "variant": "item_interact",
       "result": "ceruledge",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowclaw"
       ],

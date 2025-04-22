@@ -1,24 +1,16 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        " PG",
-        "PRP",
-        "WP "
-    ],
-    "key": {
-        "W": {
-            "tag": "c:dyes/white"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:ink_sac"
         },
-        "R": {
-            "tag": "c:dyes/red"
-        },
-        "P": {
+        {
             "item": "minecraft:paper"
         },
-        "G": {
-            "tag": "c:dyes/gray"
+        {
+            "item": "cobblemon:ghost_gem"
         }
-    },
+    ],
     "result": {
         "id": "cobblemon:spell_tag"
     }

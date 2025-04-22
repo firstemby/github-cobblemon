@@ -177,7 +177,7 @@
       "id": "lampent_chandelure",
       "variant": "item_interact",
       "result": "chandelure",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"

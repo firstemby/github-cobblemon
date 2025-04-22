@@ -29,8 +29,11 @@ abstract class NbtBackedPlayerData<T : InstancedPlayerData>(
         val fileTmp = filePath(playerData.uuid, TEMPORARY_FILE_EXTENSION)
         fileTmp.parentFile.mkdirs()
         val encodeResult = codec.encodeStart(NbtOps.INSTANCE, playerData)
-        NbtIo.write(encodeResult.result().get() as CompoundTag, fileTmp.toPath())
-        postSaveFileMoving(playerData)
+        val tag = encodeResult.result().get() as CompoundTag
+        Cobblemon.playerDataManager.saveExecutor.submit {
+            NbtIo.write(tag, fileTmp.toPath())
+            postSaveFileMoving(playerData.uuid)
+        }
     }
 
     override fun load(uuid: UUID): T {

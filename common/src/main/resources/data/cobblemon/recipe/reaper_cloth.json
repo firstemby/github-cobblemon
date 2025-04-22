@@ -10,7 +10,7 @@
             "item": "minecraft:phantom_membrane"
         },
         "W": {
-            "item": "minecraft:gray_wool"
+            "tag": "minecraft:wool"
         },
         "G": {
             "item": "minecraft:ghast_tear"

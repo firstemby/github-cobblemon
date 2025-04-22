@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
-import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
@@ -269,7 +268,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MONITOR = blockItem("monitor", CobblemonBlocks.MONITOR)
     @JvmField
-    val HEALING_MACHINE = blockItem("healing_machine", CobblemonBlocks.HEALING_MACHINE)
+    val HEALING_MACHINE = blockItem("healing_machine", CobblemonBlocks.HEALING_MACHINE, Rarity.UNCOMMON)
     @JvmField
     val PC = blockItem("pc", CobblemonBlocks.PC)
     @JvmField
@@ -282,7 +281,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
     @JvmField val DRAGON_SCALE = noSettingsItem("dragon_scale")
-    @JvmField val KINGS_ROCK = noSettingsItem("kings_rock")
     @JvmField val METAL_COAT = noSettingsItem("metal_coat")
     @JvmField val UPGRADE = noSettingsItem("upgrade")
     @JvmField val DUBIOUS_DISC = noSettingsItem("dubious_disc")
@@ -295,20 +293,21 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val REAPER_CLOTH = noSettingsItem("reaper_cloth")
     @JvmField val PRISM_SCALE = noSettingsItem("prism_scale")
     @JvmField val SACHET = noSettingsItem("sachet")
-    @JvmField val WHIPPED_DREAM = noSettingsItem("whipped_dream")
-    @JvmField val STRAWBERRY_SWEET = noSettingsItem("strawberry_sweet")
-    @JvmField val LOVE_SWEET = noSettingsItem("love_sweet")
-    @JvmField val BERRY_SWEET = noSettingsItem("berry_sweet")
-    @JvmField val CLOVER_SWEET = noSettingsItem("clover_sweet")
-    @JvmField val FLOWER_SWEET = noSettingsItem("flower_sweet")
-    @JvmField val STAR_SWEET = noSettingsItem("star_sweet")
-    @JvmField val RIBBON_SWEET = noSettingsItem("ribbon_sweet")
+    @JvmField val WHIPPED_DREAM = create("whipped_dream", foodItem(8, 0.3f))
+    @JvmField val STRAWBERRY_SWEET = create("strawberry_sweet", foodItem(6, 0.125f))
+    @JvmField val LOVE_SWEET = create("love_sweet", foodItem(6, 0.125f))
+    @JvmField val BERRY_SWEET = create("berry_sweet", foodItem(6, 0.125f))
+    @JvmField val CLOVER_SWEET = create("clover_sweet", foodItem(6, 0.125f))
+    @JvmField val FLOWER_SWEET = create("flower_sweet", foodItem(6, 0.125f))
+    @JvmField val STAR_SWEET = create("star_sweet", foodItem(6, 0.125f))
+    @JvmField val RIBBON_SWEET = create("ribbon_sweet", foodItem(6, 0.125f))
     @JvmField val CHIPPED_POT = noSettingsItem("chipped_pot")
     @JvmField val CRACKED_POT = noSettingsItem("cracked_pot")
     @JvmField val MASTERPIECE_TEACUP = noSettingsItem("masterpiece_teacup")
     @JvmField val UNREMARKABLE_TEACUP = noSettingsItem("unremarkable_teacup")
-    @JvmField val SWEET_APPLE = noSettingsItem("sweet_apple")
-    @JvmField val TART_APPLE = noSettingsItem("tart_apple")
+    @JvmField val SWEET_APPLE = create("sweet_apple", foodItem(4, 0.3f))
+    @JvmField val TART_APPLE = create("tart_apple", foodItem(4, 0.3f))
+    @JvmField val SYRUPY_APPLE = create("syrupy_apple", foodItem(4, 0.3f))
     @JvmField val GALARICA_CUFF = noSettingsItem("galarica_cuff")
     @JvmField val GALARICA_WREATH = noSettingsItem("galarica_wreath")
     @JvmField val BLACK_AUGURITE = noSettingsItem("black_augurite")
@@ -398,7 +397,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     // Medicine
     @JvmField
-    val RARE_CANDY = candyItem("rare_candy") { _, pokemon -> pokemon.getExperienceToNextLevel() }
+    val RARE_CANDY = candyItem("rare_candy", Rarity.RARE) { _, pokemon -> pokemon.getExperienceToNextLevel() }
     @JvmField
     val EXPERIENCE_CANDY_XS = candyItem("exp_candy_xs") { _, _ -> CandyItem.DEFAULT_XS_CANDY_YIELD }
     @JvmField
@@ -661,6 +660,19 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val WATER_STONE = noSettingsItem("water_stone")
 
+    val wearables = mutableListOf<WearableItem>()
+    //Wearable items (these items should have a corresponding 3D model)
+    @JvmField val BLACK_GLASSES = wearableItem("black_glasses")
+    @JvmField val CHOICE_BAND = wearableItem("choice_band")
+    @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
+    @JvmField val EXP_SHARE = wearableItem("exp_share")
+    @JvmField val FOCUS_BAND = wearableItem("focus_band")
+    @JvmField val KINGS_ROCK = wearableItem("kings_rock")
+    @JvmField val MUSCLE_BAND = wearableItem("muscle_band")
+    @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
+    @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
+    @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+
     // Held Items
     @JvmField
     val ABILITY_SHIELD = heldItem("ability_shield")
@@ -677,8 +689,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BLACK_BELT = heldItem("black_belt")
     @JvmField
-    val BLACK_GLASSES = heldItem("black_glasses")
-    @JvmField
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
     val BLUNDER_POLICY = heldItem("blunder_policy")
@@ -687,11 +697,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val CHARCOAL = heldItem("charcoal_stick", remappedName = "charcoal")
     @JvmField
-    val CHOICE_BAND = heldItem("choice_band")
-    @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
-    @JvmField
-    val CHOICE_SPECS = heldItem("choice_specs")
     @JvmField
     val CLEANSE_TAG = heldItem("cleanse_tag")
    // @JvmField
@@ -713,8 +719,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val EVIOLITE = heldItem("eviolite")
     @JvmField
-    val EXP_SHARE = heldItem("exp_share")
-    @JvmField
     val EXPERT_BELT = heldItem("expert_belt")
     @JvmField
     val FAIRY_FEATHER = heldItem("fairy_feather")
@@ -722,8 +726,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val FLAME_ORB = heldItem("flame_orb")
     @JvmField
     val FLOAT_STONE = heldItem("float_stone")
-    @JvmField
-    val FOCUS_BAND = heldItem("focus_band")
     @JvmField
     val FOCUS_SASH = heldItem("focus_sash")
     @JvmField
@@ -759,8 +761,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
-    val MUSCLE_BAND = heldItem("muscle_band")
-    @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
     @JvmField
     val NEVER_MELT_ICE = heldItem("never_melt_ice")
@@ -791,11 +791,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val RING_TARGET = heldItem("ring_target")
     @JvmField
-    val ROCKY_HELMET = heldItem("rocky_helmet")
-    @JvmField
     val ROOM_SERVICE = heldItem("room_service")
-    @JvmField
-    val SAFETY_GOGGLES = heldItem("safety_goggles")
     @JvmField
     val SCOPE_LENS = heldItem("scope_lens")
     @JvmField
@@ -832,8 +828,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val WEAKNESS_POLICY = heldItem("weakness_policy")
     @JvmField
     val WIDE_LENS = heldItem("wide_lens")
-    @JvmField
-    val WISE_GLASSES = heldItem("wise_glasses")
     @JvmField
     val ZOOM_LENS = heldItem("zoom_lens")
     @JvmField
@@ -883,48 +877,48 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     // Archaeology
     @JvmField
-    val ARMOR_FOSSIL = noSettingsItem("armor_fossil")
+    val ARMOR_FOSSIL = itemWithRarity("armor_fossil", Rarity.UNCOMMON)
     @JvmField
-    val FOSSILIZED_BIRD = noSettingsItem("fossilized_bird")
+    val FOSSILIZED_BIRD = itemWithRarity("fossilized_bird", Rarity.UNCOMMON)
     @JvmField
-    val CLAW_FOSSIL = noSettingsItem("claw_fossil")
+    val CLAW_FOSSIL = itemWithRarity("claw_fossil", Rarity.UNCOMMON)
     @JvmField
-    val COVER_FOSSIL = noSettingsItem("cover_fossil")
+    val COVER_FOSSIL = itemWithRarity("cover_fossil", Rarity.UNCOMMON)
     @JvmField
-    val FOSSILIZED_DINO = noSettingsItem("fossilized_dino")
+    val FOSSILIZED_DINO = itemWithRarity("fossilized_dino", Rarity.UNCOMMON)
     @JvmField
-    val DOME_FOSSIL = noSettingsItem("dome_fossil")
+    val DOME_FOSSIL = itemWithRarity("dome_fossil", Rarity.UNCOMMON)
     @JvmField
-    val FOSSILIZED_DRAKE = noSettingsItem("fossilized_drake")
+    val FOSSILIZED_DRAKE = itemWithRarity("fossilized_drake", Rarity.UNCOMMON)
     @JvmField
-    val FOSSILIZED_FISH = noSettingsItem("fossilized_fish")
+    val FOSSILIZED_FISH = itemWithRarity("fossilized_fish", Rarity.UNCOMMON)
     @JvmField
-    val HELIX_FOSSIL = noSettingsItem("helix_fossil")
+    val HELIX_FOSSIL = itemWithRarity("helix_fossil", Rarity.UNCOMMON)
     @JvmField
-    val JAW_FOSSIL = noSettingsItem("jaw_fossil")
+    val JAW_FOSSIL = itemWithRarity("jaw_fossil", Rarity.UNCOMMON)
     @JvmField
-    val OLD_AMBER_FOSSIL = noSettingsItem("old_amber_fossil")
+    val OLD_AMBER_FOSSIL = itemWithRarity("old_amber_fossil", Rarity.UNCOMMON)
     @JvmField
-    val PLUME_FOSSIL = noSettingsItem("plume_fossil")
+    val PLUME_FOSSIL = itemWithRarity("plume_fossil", Rarity.UNCOMMON)
     @JvmField
-    val ROOT_FOSSIL = noSettingsItem("root_fossil")
+    val ROOT_FOSSIL = itemWithRarity("root_fossil", Rarity.UNCOMMON)
     @JvmField
-    val SAIL_FOSSIL = noSettingsItem("sail_fossil")
+    val SAIL_FOSSIL = itemWithRarity("sail_fossil", Rarity.UNCOMMON)
     @JvmField
-    val SKULL_FOSSIL = noSettingsItem("skull_fossil")
+    val SKULL_FOSSIL = itemWithRarity("skull_fossil", Rarity.UNCOMMON)
 
     @JvmField
-    val BYGONE_SHERD = noSettingsItem("bygone_sherd")
+    val BYGONE_SHERD = itemWithRarity("bygone_sherd", Rarity.UNCOMMON)
     @JvmField
-    val CAPTURE_SHERD = noSettingsItem("capture_sherd")
+    val CAPTURE_SHERD = itemWithRarity("capture_sherd",Rarity.UNCOMMON)
     @JvmField
-    val DOME_SHERD = noSettingsItem("dome_sherd")
+    val DOME_SHERD = itemWithRarity("dome_sherd", Rarity.UNCOMMON)
     @JvmField
-    val HELIX_SHERD = noSettingsItem("helix_sherd")
+    val HELIX_SHERD = itemWithRarity("helix_sherd", Rarity.UNCOMMON)
     @JvmField
-    val NOSTALGIC_SHERD = noSettingsItem("nostalgic_sherd")
+    val NOSTALGIC_SHERD = itemWithRarity("nostalgic_sherd",Rarity.UNCOMMON)
     @JvmField
-    val SUSPICIOUS_SHERD = noSettingsItem("suspicious_sherd")
+    val SUSPICIOUS_SHERD = itemWithRarity("suspicious_sherd", Rarity.UNCOMMON)
 
     @JvmField
     val TUMBLESTONE = this.create("tumblestone", TumblestoneItem(Item.Properties(), CobblemonBlocks.SMALL_BUDDING_TUMBLESTONE))
@@ -1144,11 +1138,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val DREAM_ROD = pokerodItem(cobblemonResource("dream_rod"))
     @JvmField
-    val BEAST_ROD = pokerodItem(cobblemonResource("beast_rod"))
+    val BEAST_ROD = pokerodItem(cobblemonResource("beast_rod"), Rarity.RARE)
     @JvmField
-    val MASTER_ROD = pokerodItem(cobblemonResource("master_rod"))
+    val MASTER_ROD = pokerodItem(cobblemonResource("master_rod"), Rarity.EPIC)
     @JvmField
-    val CHERISH_ROD = pokerodItem(cobblemonResource("cherish_rod"))
+    val CHERISH_ROD = pokerodItem(cobblemonResource("cherish_rod"), Rarity.EPIC)
     @JvmField
     val ANCIENT_POKE_ROD = pokerodItem(cobblemonResource("ancient_poke_rod"))
     @JvmField
@@ -1180,7 +1174,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ANCIENT_GIGATON_ROD = pokerodItem(cobblemonResource("ancient_gigaton_rod"))
     @JvmField
-    val ANCIENT_ORIGIN_ROD = pokerodItem(cobblemonResource("ancient_origin_rod"))
+    val ANCIENT_ORIGIN_ROD = pokerodItem(cobblemonResource("ancient_origin_rod"), Rarity.EPIC)
 
     // Misc
     @JvmField
@@ -1232,10 +1226,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
 
-    private fun blockItem(name: String, block: Block): BlockItem = this.create(name, BlockItem(block, Item.Properties()))
+    private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
     private fun noSettingsItem(name: String): CobblemonItem = this.create(name, CobblemonItem(Item.Properties()))
 
+    private fun itemWithRarity(name: String, rarity: Rarity): CobblemonItem = this.create(name, CobblemonItem(Item.Properties().rarity(rarity)))
+    
     fun berries() = this.berries.toMap()
 
     private fun mulchItem(name: String, mulchVariant: MulchVariant): MulchItem = this.create(name, MulchItem(mulchVariant))
@@ -1247,10 +1243,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-    private fun candyItem(name: String, calculator: CandyItem.Calculator): CandyItem  = this.create(name, CandyItem(calculator))
+    private fun candyItem(name: String, rarity: Rarity = Rarity.COMMON, calculator: CandyItem.Calculator): CandyItem  = this.create(name, CandyItem(rarity, calculator))
 
-    private fun pokerodItem(pokeRodId: ResourceLocation): PokerodItem {
-        val settings = Item.Properties().stacksTo(1).durability(256)
+    private fun pokerodItem(pokeRodId: ResourceLocation, rarity: Rarity = Rarity.COMMON): PokerodItem {
+        val settings = Item.Properties().stacksTo(1).durability(256).rarity(rarity)
         val item = create(pokeRodId.path, PokerodItem(pokeRodId, settings))
         pokeRods.add(item)
         return item
@@ -1261,6 +1257,16 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         pokedexes.add(item)
         return item
     }
+
+    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
+        name,
+        WearableItem(name).also {
+            wearables.add(it)
+            if (heldItemRemappedName != null) {
+                CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
+            }
+        }
+    )
 
     private fun heldItem(name: String, remappedName: String? = null): CobblemonItem = create(
         name,
@@ -1277,6 +1283,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
                 CobblemonHeldItemManager.registerRemap(Items.BONE, "thickclub")
                 CobblemonHeldItemManager.registerRemap(Items.SNOWBALL, "snowball")
+                CobblemonHeldItemManager.registerRemap(Items.GOLD_BLOCK, "bignugget")
             }
         }
     )
@@ -1352,4 +1359,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return createdItem
     }
 
+    private fun foodItem(nutrition: Int, saturationModifier: Float): Item {
+        return Item(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
+    }
 }

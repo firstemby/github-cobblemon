@@ -167,10 +167,10 @@ open class PlayerPartyStore(
         }
 
         // Shoulder validation code
-        if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player.shoulderEntityLeft, true)) {
+        if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player, true)) {
             player.respawnEntityOnShoulder(player.shoulderEntityLeft)
         }
-        if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player.shoulderEntityRight, false)) {
+        if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player, false)) {
             player.respawnEntityOnShoulder(player.shoulderEntityRight)
         }
 
@@ -182,11 +182,14 @@ open class PlayerPartyStore(
         }
     }
 
-    fun validateShoulder(shoulderEntity: CompoundTag, isLeft: Boolean): Boolean {
+    private fun validateShoulder(player: ServerPlayer, isLeft: Boolean): Boolean {
+        val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
         val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
-        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft) {
+        // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
+        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
             return false
         }
+        player.updateShoulderNbt(pokemon)
         return true
     }
 

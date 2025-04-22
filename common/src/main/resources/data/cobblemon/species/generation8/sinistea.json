@@ -130,7 +130,7 @@
       "id": "sinistea_polteageist",
       "variant": "item_interact",
       "result": "polteageist tea_authenticity=phony",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "teatime"
       ],
@@ -159,7 +159,7 @@
           "id": "sinistea_polteageistantique",
           "variant": "item_interact",
           "result": "polteageist tea_authenticity=antique",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "teatime"
           ],

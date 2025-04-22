@@ -42,13 +42,18 @@ import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
+import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
+import com.cobblemon.mod.common.api.events.storage.RenamePCBoxEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperCollectionEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperUnlockedEvent
 import com.cobblemon.mod.common.api.events.world.BigRootPropagatedEvent
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.map
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.level.ServerPlayer
 
@@ -169,6 +174,21 @@ object CobblemonEvents {
     val POKEMON_RELEASED_EVENT_POST = EventObservable<ReleasePokemonEvent.Post>()
 
     @JvmField
+    val RENAME_PC_BOX_EVENT_PRE = CancelableObservable<RenamePCBoxEvent.Pre>()
+    @JvmField
+    val RENAME_PC_BOX_EVENT_POST = EventObservable<RenamePCBoxEvent.Post>()
+
+    @JvmField
+    val WALLPAPER_COLLECTION_EVENT = EventObservable<WallpaperCollectionEvent>()
+    @JvmField
+    val WALLPAPER_UNLOCKED_EVENT = CancelableObservable<WallpaperUnlockedEvent>()
+
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_PRE = CancelableObservable<ChangePCBoxWallpaperEvent.Pre>()
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_POST = EventObservable<ChangePCBoxWallpaperEvent.Post>()
+
+    @JvmField
     val LOOT_DROPPED = CancelableObservable<LootDroppedEvent>()
     @JvmField
     val STARTER_CHOSEN = CancelableObservable<StarterChosenEvent>()
@@ -195,6 +215,10 @@ object CobblemonEvents {
     val HELD_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
     @JvmField
     val HELD_ITEM_POST = EventObservable<HeldItemEvent.Post>()
+    @JvmField
+    val COSMETIC_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
+    @JvmField
+    val COSMETIC_ITEM_POST = EventObservable<HeldItemEvent.Post>()
 
     @JvmField
     val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()
@@ -237,4 +261,12 @@ object CobblemonEvents {
     val HATCH_EGG_PRE = CancelableObservable<HatchEggEvent.Pre>()
     @JvmField
     val HATCH_EGG_POST = EventObservable<HatchEggEvent.Post>()
+
+    // -------------------------------------------------------------------------------------
+    //
+    // Riding
+    //
+    // -------------------------------------------------------------------------------------
+    @JvmField
+    val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
 }

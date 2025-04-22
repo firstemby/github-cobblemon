@@ -82,7 +82,9 @@ abstract class SpawningContext {
     /** The current phase of the moon at this location. */
     val moonPhase: Int by lazy { world.moonPhase }
     /** The biome of this location. */
-    val biome: Biome by lazy { world.getBiome(position).value() }
+    val biome: Biome by lazy { biomeHolder.value() }
+    /** The registry holder for the biome this context is in. */
+    val biomeHolder: Holder<Biome> by lazy { world.getBiome(position) }
 
     val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().registryOrThrow(Registries.BIOME) }
     val blockRegistry: Registry<Block> by lazy { world.registryAccess().registryOrThrow(Registries.BLOCK) }

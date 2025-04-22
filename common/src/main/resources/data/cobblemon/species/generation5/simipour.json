@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 516,
   "name": "Simipour",
   "primaryType": "water",
@@ -40,12 +41,13 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.85,
+    "height": 2,
     "fixed": false
   },
+  "standingEyeHeight": 0.7,
   "drops": {
     "amount": 3,
     "entries": [

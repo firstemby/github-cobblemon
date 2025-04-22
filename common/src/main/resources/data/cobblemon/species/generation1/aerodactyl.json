@@ -50,6 +50,120 @@
     "height": 1,
     "fixed": false
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can fly",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can stay off the ground",
+        "ranges": {
+          "LAND": "2-10",
+          "AIR": "100-101"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/generic"
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/bird"
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "moving": {
       "fly": {

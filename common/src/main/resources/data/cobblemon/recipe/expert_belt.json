@@ -2,15 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "P  ",
-        "WBW",
+        " B ",
         "  P"
     ],
     "key": {
         "P": {
             "item": "minecraft:blaze_powder"
-        },
-        "W": {
-            "item": "minecraft:black_wool"
         },
         "B": {
             "item": "cobblemon:black_belt"

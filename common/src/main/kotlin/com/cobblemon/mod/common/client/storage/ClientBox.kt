@@ -9,8 +9,14 @@
 package com.cobblemon.mod.common.client.storage
 
 import com.cobblemon.mod.common.api.storage.pc.POKEMON_PER_BOX
+import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository
 import com.cobblemon.mod.common.pokemon.Pokemon
-class ClientBox : Iterable<Pokemon?> {
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+
+class ClientBox(var name : MutableComponent?, var wallpaper : ResourceLocation) : Iterable<Pokemon?> {
+    constructor() : this(null, PCBoxWallpaperRepository.defaultWallpaper)
+
     val slots = MutableList<Pokemon?>(POKEMON_PER_BOX) { null }
     override fun iterator() = slots.iterator()
 }

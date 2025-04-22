@@ -14,6 +14,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveBoolean
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 import net.minecraft.client.model.geom.ModelPart
 
 /**
@@ -44,17 +46,17 @@ class ModelPartTransformation(val modelPart: ModelPart) {
     var visibility: ExpressionLike? = null
 
     /** Applies the transformation to the model part. */
-    fun apply(state: PosableState, intensity: Float) {
+    fun apply(state: PosableState? = null, intensity: Float = 1f) {
         modelPart.x += position[0] * intensity
         modelPart.y += position[1] * intensity
         modelPart.z += position[2] * intensity
         modelPart.xRot += rotation[0] * intensity
         modelPart.yRot += rotation[1] * intensity
         modelPart.zRot += rotation[2] * intensity
-        modelPart.xScale *= (1 - scale[0]) * intensity + 1
-        modelPart.yScale *= (1 - scale[1]) * intensity + 1
-        modelPart.zScale *= (1 - scale[2]) * intensity + 1
-        visibility?.let { modelPart.visible = state.runtime.resolveBoolean(it) }
+        modelPart.xScale *= ((1 - scale[0]).absoluteValue * intensity) * (scale[0] - 1).sign + 1
+        modelPart.yScale *= ((1 - scale[1]).absoluteValue * intensity) * (scale[1] - 1).sign + 1
+        modelPart.zScale *= ((1 - scale[2]).absoluteValue * intensity) * (scale[2] - 1).sign + 1
+        visibility?.let { modelPart.visible = state?.runtime?.resolveBoolean(it)?: defaultRuntime.resolveBoolean(it) }
     }
 
     fun set() {

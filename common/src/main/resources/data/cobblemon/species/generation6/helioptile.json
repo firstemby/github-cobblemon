@@ -135,7 +135,7 @@
       "id": "helioptile_heliolisk",
       "variant": "item_interact",
       "result": "heliolisk",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:sun_stone"

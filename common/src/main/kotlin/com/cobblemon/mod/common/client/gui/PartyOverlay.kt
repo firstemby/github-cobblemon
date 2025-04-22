@@ -8,22 +8,25 @@
 
 package com.cobblemon.mod.common.client.gui
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.drawPosablePortrait
 import com.cobblemon.mod.common.api.text.darkGray
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.portrait.FullyAnimatedPortraitDrawer
+import com.cobblemon.mod.common.client.gui.portrait.SelectedAnimatedPortraitDrawer
+import com.cobblemon.mod.common.client.gui.portrait.InanimatePortraitDrawer
+import com.cobblemon.mod.common.client.gui.portrait.PortraitStyle
 import com.cobblemon.mod.common.client.gui.toast.CobblemonToast
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.HidePartyBinding
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.getDepletableRedGreen
-import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -55,7 +58,10 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         private val genderIconMale = cobblemonResource("textures/gui/party/party_gender_male.png")
         private val genderIconFemale = cobblemonResource("textures/gui/party/party_gender_female.png")
         private val portraitBackground = cobblemonResource("textures/gui/party/party_slot_portrait_background.png")
-        val state = FloatingState()
+
+        private val inanimatePortraitDrawer = InanimatePortraitDrawer()
+        private val selectedAnimatedPortraitDrawer = SelectedAnimatedPortraitDrawer()
+        private val fullyAnimatedPortraitDrawer = FullyAnimatedPortraitDrawer()
     }
 
     private val screenExemptions: List<Class<out Screen>> = listOf(
@@ -84,6 +90,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
 
     override fun render(context: GuiGraphics, tickCounter: DeltaTracker) {
         val partialDeltaTicks = tickCounter.realtimeDeltaTicks
+
         val minecraft = Minecraft.getInstance()
 
         // Hiding if a Screen is open and not exempt
@@ -153,15 +160,14 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
                     0.0
                 )
 
-                state.currentAspects = pokemon.aspects
+                val portraitDrawer = when (Cobblemon.config.partyPortraitAnimations) {
+                    PortraitStyle.NEVER_ANIMATE -> inanimatePortraitDrawer
+                    PortraitStyle.ANIMATE_SELECTED -> selectedAnimatedPortraitDrawer
+                    PortraitStyle.ALWAYS_ANIMATE -> fullyAnimatedPortraitDrawer
+                }
 
-                drawPosablePortrait(
-                    identifier = pokemon.species.resourceIdentifier,
-                    matrixStack = matrices,
-                    partialTicks = 0F, // partialDeltaTicks, //Before you get any funny ideas about party animated pokemon, make sure they each get their own state instead of sharing.
-                    contextScale = pokemon.form.baseScale,
-                    state = state
-                )
+                portraitDrawer.draw(pokemon, matrices, partialDeltaTicks, selectedSlot == index, index)
+
                 matrices.popPose()
                 context.disableScissor()
             }

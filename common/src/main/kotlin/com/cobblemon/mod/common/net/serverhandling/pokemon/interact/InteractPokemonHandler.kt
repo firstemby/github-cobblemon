@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.net.serverhandling.pokemon.interact
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import com.cobblemon.mod.common.client.gui.interact.wheel.InteractTypePokemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
 import com.cobblemon.mod.common.util.party
@@ -19,13 +20,16 @@ object InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket
     override fun handle(packet: InteractPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
         val pokemonEntity = player.serverLevel().getEntity(packet.pokemonID)
         if (pokemonEntity is PokemonEntity && !pokemonEntity.isBattleClone()) {
-            if (packet.mountShoulder) {
-                if (!pokemonEntity.canSitOnShoulder() || player.party().none { it == pokemonEntity.pokemon }) {
-                    return
+            when (packet.interactType) {
+                InteractTypePokemon.SHOULDER -> {
+                    if (!pokemonEntity.canSitOnShoulder() || player.party().none { it == pokemonEntity.pokemon }) {
+                        return
+                    }
+                    pokemonEntity.tryMountingShoulder(player)
                 }
-                pokemonEntity.tryMountingShoulder(player)
-            } else {
-                pokemonEntity.offerHeldItem(player, player.mainHandItem)
+                InteractTypePokemon.RIDE -> player.startRiding(pokemonEntity)
+                InteractTypePokemon.HELD_ITEM -> pokemonEntity.offerHeldItem(player, player.mainHandItem)
+                InteractTypePokemon.COSMETIC_ITEM -> pokemonEntity.offerCosmeticItem(player, player.mainHandItem)
             }
         }
     }

@@ -49,7 +49,11 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
+      "walk": {
+        "canWalk": false
+      },
       "fly": {
         "canFly": true
       },

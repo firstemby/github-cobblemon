@@ -5,7 +5,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 ## Tags:
 
 <details>
-<summary><b>Tag:</b> #biome:is_arid</summary>
+<summary><b>Tag:</b> #cobblemon:is_arid</summary>
 
 - #cobblemon:is_badlands
 - #cobblemon:is_desert
@@ -14,7 +14,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_badlands</summary>
+<summary><b>Tag:</b> #cobblemon:is_badlands</summary>
 
 - #c:is_badlands
 - #clifftree:dry_badlands
@@ -28,7 +28,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_bamboo</summary>
+<summary><b>Tag:</b> #cobblemon:is_bamboo</summary>
 
 - biomesoplenty:bamboo_grove
 - minecraft:bamboo_jungle
@@ -47,7 +47,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_beach</summary>
+<summary><b>Tag:</b> #cobblemon:is_beach</summary>
 
 - #minecraft:is_beach
 - biomesoplenty:dune_beach
@@ -57,7 +57,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_cave</summary>
+<summary><b>Tag:</b> #cobblemon:is_cave</summary>
 
 - #c:is_cave
 - #c:is_underground
@@ -92,7 +92,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_cherry_blossom</summary>
+<summary><b>Tag:</b> #cobblemon:is_cherry_blossom</summary>
 
 - biomesoplenty:bamboo_grove
 - biomesoplenty:cherry_blossom_grove
@@ -105,7 +105,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_coast</summary>
+<summary><b>Tag:</b> #cobblemon:is_coast</summary>
 
 - #c:is_beach
 - #c:is_stony_shores
@@ -132,7 +132,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_cold</summary>
+<summary><b>Tag:</b> #cobblemon:is_cold</summary>
 
 - #byg:is_cold
 - #c:is_cold
@@ -159,7 +159,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_cold_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_cold_ocean</summary>
 
 - minecraft:cold_ocean
 - minecraft:deep_cold_ocean
@@ -167,7 +167,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_deep_dark</summary>
+<summary><b>Tag:</b> #cobblemon:is_deep_dark</summary>
 
 - minecraft:deep_dark
 - terralith:cave/crystal_caves
@@ -181,7 +181,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_deep_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_deep_ocean</summary>
 
 - #c:is_deep_ocean
 - #minecraft:is_deep_ocean
@@ -190,7 +190,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_desert</summary>
+<summary><b>Tag:</b> #cobblemon:is_desert</summary>
 
 - #byg:is_desert
 - #c:is_desert
@@ -218,7 +218,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_dripstone</summary>
+<summary><b>Tag:</b> #cobblemon:is_dripstone</summary>
 
 - biomesoplenty:fungal_jungle
 - byg:dead_sea
@@ -234,7 +234,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_end</summary>
+<summary><b>Tag:</b> #cobblemon:is_end</summary>
 
 - #c:is_end
 - #minecraft:is_end
@@ -244,7 +244,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_floral</summary>
+<summary><b>Tag:</b> #cobblemon:is_floral</summary>
 
 - #byg:is_floral
 - #c:flower_forest
@@ -286,7 +286,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_forest</summary>
+<summary><b>Tag:</b> #cobblemon:is_forest</summary>
 
 - #c:is_flower_forest
 - #c:is_forest
@@ -327,7 +327,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_freezing</summary>
+<summary><b>Tag:</b> #cobblemon:is_freezing</summary>
 
 - #byg:is_snowy
 - #c:snowy
@@ -355,7 +355,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_freshwater</summary>
+<summary><b>Tag:</b> #cobblemon:is_freshwater</summary>
 
 - #cobblemon:is_river
 - #cobblemon:is_swamp
@@ -366,7 +366,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_frozen_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_frozen_ocean</summary>
 
 - minecraft:deep_frozen_ocean
 - minecraft:frozen_ocean
@@ -377,7 +377,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_glacial</summary>
+<summary><b>Tag:</b> #cobblemon:is_glacial</summary>
 
 - #byg:is_icy
 - #c:is_icy
@@ -396,7 +396,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_grassland</summary>
+<summary><b>Tag:</b> #cobblemon:is_grassland</summary>
 
 - #cobblemon:is_plains
 - #cobblemon:is_savanna
@@ -404,7 +404,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_highlands</summary>
+<summary><b>Tag:</b> #cobblemon:is_highlands</summary>
 
 - biomesoplenty:highland
 - biomesoplenty:highland_moor
@@ -425,7 +425,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_hills</summary>
+<summary><b>Tag:</b> #cobblemon:is_hills</summary>
 
 - #c:is_hill
 - #c:is_mountain/slope
@@ -455,7 +455,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_island</summary>
+<summary><b>Tag:</b> #cobblemon:is_island</summary>
 
 - #cobblemon:is_tropical_island
 - byg:lush_stacks
@@ -478,7 +478,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_jungle</summary>
+<summary><b>Tag:</b> #cobblemon:is_jungle</summary>
 
 - #c:is_jungle
 - #minecraft:is_jungle
@@ -503,7 +503,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_lukewarm_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_lukewarm_ocean</summary>
 
 - minecraft:deep_lukewarm_ocean
 - minecraft:lukewarm_ocean
@@ -514,7 +514,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_lush</summary>
+<summary><b>Tag:</b> #cobblemon:is_lush</summary>
 
 - #c:is_lush
 - byg:lush_stacks
@@ -531,7 +531,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_magical</summary>
+<summary><b>Tag:</b> #cobblemon:is_magical</summary>
 
 - #byg:is_magical
 - #c:is_magical
@@ -552,7 +552,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_mountain</summary>
+<summary><b>Tag:</b> #cobblemon:is_mountain</summary>
 
 - #c:is_mountain
 - #cobblemon:is_hills
@@ -570,7 +570,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_mushroom</summary>
+<summary><b>Tag:</b> #cobblemon:is_mushroom</summary>
 
 - #c:is_mushroom
 - #c:is_mushroom_island
@@ -595,7 +595,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_ocean</summary>
 
 - #c:is_ocean
 - #cobblemon:is_cold_ocean
@@ -610,13 +610,12 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_overworld</summary>
+<summary><b>Tag:</b> #cobblemon:is_overworld</summary>
 
 - #c:is_overworld
 - #cobblemon:is_arid
 - #cobblemon:is_cave
 - #cobblemon:is_coast
-- #cobblemon:is_cold
 - #cobblemon:is_deep_dark
 - #cobblemon:is_floral
 - #cobblemon:is_forest
@@ -639,7 +638,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_peak</summary>
+<summary><b>Tag:</b> #cobblemon:is_peak</summary>
 
 - #c:is_mountain/peak
 - minecraft:frozen_peaks
@@ -656,7 +655,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_plains</summary>
+<summary><b>Tag:</b> #cobblemon:is_plains</summary>
 
 - #byg:is_plains
 - #c:is_plains
@@ -689,7 +688,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_plateau</summary>
+<summary><b>Tag:</b> #cobblemon:is_plateau</summary>
 
 - #byg:is_plateau
 - #c:is_plateau
@@ -699,7 +698,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_river</summary>
+<summary><b>Tag:</b> #cobblemon:is_river</summary>
 
 - #c:is_river
 - #minecraft:is_river
@@ -710,7 +709,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_sandy</summary>
+<summary><b>Tag:</b> #cobblemon:is_sandy</summary>
 
 - #byg:is_sandy
 - #c:is_sandy
@@ -721,7 +720,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_savanna</summary>
+<summary><b>Tag:</b> #cobblemon:is_savanna</summary>
 
 - #c:is_savanna
 - #minecraft:is_savanna
@@ -746,7 +745,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_shrubland</summary>
+<summary><b>Tag:</b> #cobblemon:is_shrubland</summary>
 
 - biomesoplenty:bog
 - biomesoplenty:dryland
@@ -783,7 +782,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_sky</summary>
+<summary><b>Tag:</b> #cobblemon:is_sky</summary>
 
 - terralith:skylands_autumn
 - terralith:skylands_spring
@@ -793,7 +792,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_snowy</summary>
+<summary><b>Tag:</b> #cobblemon:is_snowy</summary>
 
 - #byg:is_snowy
 - #c:is_snowy
@@ -822,7 +821,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_snowy_forest</summary>
+<summary><b>Tag:</b> #cobblemon:is_snowy_forest</summary>
 
 - biomesoplenty:auroral_garden
 - biomesoplenty:muskeg
@@ -839,7 +838,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_snowy_taiga</summary>
+<summary><b>Tag:</b> #cobblemon:is_snowy_taiga</summary>
 
 - biomesoplenty:snowy_coniferous_forest
 - biomesoplenty:snowy_fir_clearing
@@ -861,7 +860,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_spooky</summary>
+<summary><b>Tag:</b> #cobblemon:is_spooky</summary>
 
 - #byg:is_spooky
 - #c:is_spooky
@@ -876,7 +875,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_swamp</summary>
+<summary><b>Tag:</b> #cobblemon:is_swamp</summary>
 
 - #byg:is_swamp
 - #c:is_swamp
@@ -896,7 +895,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_taiga</summary>
+<summary><b>Tag:</b> #cobblemon:is_taiga</summary>
 
 - #c:is_taiga
 - #c:tree/coniferous
@@ -943,7 +942,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_temperate</summary>
+<summary><b>Tag:</b> #cobblemon:is_temperate</summary>
 
 - #cobblemon:is_forest
 - #cobblemon:is_plains
@@ -951,7 +950,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_temperate_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_temperate_ocean</summary>
 
 - clifftree:stone_ocean
 - minecraft:deep_ocean
@@ -960,7 +959,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_thermal</summary>
+<summary><b>Tag:</b> #cobblemon:is_thermal</summary>
 
 - biomesoplenty:hot_springs
 - clifftree:inferno
@@ -978,7 +977,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_tropical_island</summary>
+<summary><b>Tag:</b> #cobblemon:is_tropical_island</summary>
 
 - biomesoplenty:tropics
 - wythers:tropical_beach
@@ -988,7 +987,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_tundra</summary>
+<summary><b>Tag:</b> #cobblemon:is_tundra</summary>
 
 - #c:is_snowy_plains
 - biomesoplenty:cold_desert
@@ -1015,7 +1014,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_volcanic</summary>
+<summary><b>Tag:</b> #cobblemon:is_volcanic</summary>
 
 - biomesoplenty:volcanic_plains
 - biomesoplenty:volcano
@@ -1032,7 +1031,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #biome:is_warm_ocean</summary>
+<summary><b>Tag:</b> #cobblemon:is_warm_ocean</summary>
 
 - byg:lush_stacks
 - minecraft:warm_ocean
@@ -1040,22 +1039,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:bergmite_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:bergmite_hisuibiome</summary>
 
-- #cobblemon:is_freezing
 - #cobblemon:is_hills
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:bergmite_kalosbiome</summary>
+<summary><b>Tag:</b> #cobblemon:bergmite_kalosbiome</summary>
 
 - #cobblemon:is_frozen_ocean
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:cubone_alolabiome</summary>
+<summary><b>Tag:</b> #cobblemon:cubone_alolabiome</summary>
 
 - #cobblemon:is_beach
 - #cobblemon:is_volcanic
@@ -1063,14 +1061,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:cubone_kantobiome</summary>
+<summary><b>Tag:</b> #cobblemon:cubone_kantobiome</summary>
 
 - #cobblemon:is_arid
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:dartrix_alolabiome</summary>
+<summary><b>Tag:</b> #cobblemon:dartrix_alolabiome</summary>
 
 - #cobblemon:is_beach
 - #cobblemon:is_ocean
@@ -1079,7 +1077,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:dartrix_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:dartrix_hisuibiome</summary>
 
 - #cobblemon:is_freezing
 - #cobblemon:is_hills
@@ -1087,7 +1085,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:dewott_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:dewott_hisuibiome</summary>
 
 - #cobblemon:is_coast
 - #cobblemon:is_cold_ocean
@@ -1096,7 +1094,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:dewott_unovabiome</summary>
+<summary><b>Tag:</b> #cobblemon:dewott_unovabiome</summary>
 
 - #cobblemon:is_beach
 - #cobblemon:is_ocean
@@ -1105,7 +1103,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:exeggcute_alolabiome</summary>
+<summary><b>Tag:</b> #cobblemon:exeggcute_alolabiome</summary>
 
 - #cobblemon:is_beach
 - #cobblemon:is_tropical_island
@@ -1113,7 +1111,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:exeggcute_kantobiome</summary>
+<summary><b>Tag:</b> #cobblemon:exeggcute_kantobiome</summary>
 
 - #cobblemon:is_jungle
 - #cobblemon:is_savanna
@@ -1121,7 +1119,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:goomy_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:goomy_hisuibiome</summary>
 
 - #cobblemon:is_dripstone
 - #cobblemon:is_lush
@@ -1129,43 +1127,42 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:goomy_kalosbiome</summary>
+<summary><b>Tag:</b> #cobblemon:goomy_kalosbiome</summary>
 
-- #cobblemon:is_overworld
 - #cobblemon:is_swamp
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:koffing_galarbiome</summary>
+<summary><b>Tag:</b> #cobblemon:koffing_galarbiome</summary>
 
 - #cobblemon:is_mushroom
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:koffing_kantobiome</summary>
+<summary><b>Tag:</b> #cobblemon:koffing_kantobiome</summary>
 
 - #cobblemon:nether/is_toxic
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:mimejr_galarbiome</summary>
+<summary><b>Tag:</b> #cobblemon:mimejr_galarbiome</summary>
 
 - #cobblemon:is_freezing
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:mimejr_sinnohbiome</summary>
+<summary><b>Tag:</b> #cobblemon:mimejr_sinnohbiome</summary>
 
 - #cobblemon:is_temperate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:petilil_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:petilil_hisuibiome</summary>
 
 - #cobblemon:is_freezing
 - #cobblemon:is_hills
@@ -1173,7 +1170,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:petilil_unovabiome</summary>
+<summary><b>Tag:</b> #cobblemon:petilil_unovabiome</summary>
 
 - #cobblemon:is_floral
 - #cobblemon:is_forest
@@ -1182,7 +1179,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:pikachu_alolabiome</summary>
+<summary><b>Tag:</b> #cobblemon:pikachu_alolabiome</summary>
 
 - #cobblemon:is_beach
 - #cobblemon:is_tropical_island
@@ -1190,14 +1187,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:pikachu_kantobiome</summary>
+<summary><b>Tag:</b> #cobblemon:pikachu_kantobiome</summary>
 
 - #cobblemon:is_forest
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:quilava_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:quilava_hisuibiome</summary>
 
 - #cobblemon:is_taiga
 - #cobblemon:nether/is_crimson
@@ -1207,14 +1204,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:quilava_johtobiome</summary>
+<summary><b>Tag:</b> #cobblemon:quilava_johtobiome</summary>
 
 - #cobblemon:is_temperate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:rufflet_hisuibiome</summary>
+<summary><b>Tag:</b> #cobblemon:rufflet_hisuibiome</summary>
 
 - #cobblemon:is_freezing
 - #cobblemon:is_hills
@@ -1222,21 +1219,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #regional:rufflet_unovabiome</summary>
+<summary><b>Tag:</b> #cobblemon:rufflet_unovabiome</summary>
 
 - #cobblemon:is_temperate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:archipelago</summary>
+<summary><b>Tag:</b> #cobblemon:archipelago</summary>
 
 - #cobblemon:is_mushroom
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:archipelago_anti</summary>
+<summary><b>Tag:</b> #cobblemon:archipelago_anti</summary>
 
 - #cobblemon:is_magical
 - #cobblemon:is_spooky
@@ -1245,14 +1242,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:continental</summary>
+<summary><b>Tag:</b> #cobblemon:continental</summary>
 
 - #cobblemon:is_plains
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:continental_anti</summary>
+<summary><b>Tag:</b> #cobblemon:continental_anti</summary>
 
 - #cobblemon:is_floral
 - #cobblemon:is_mushroom
@@ -1262,7 +1259,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:elegant</summary>
+<summary><b>Tag:</b> #cobblemon:elegant</summary>
 
 - #cobblemon:is_magical
 - #cobblemon:is_spooky
@@ -1270,35 +1267,35 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:elegant_anti</summary>
+<summary><b>Tag:</b> #cobblemon:elegant_anti</summary>
 
 - #cobblemon:is_mountain
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:fancy</summary>
+<summary><b>Tag:</b> #cobblemon:fancy</summary>
 
 - #cobblemon:is_cherry_blossom
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:forsaken</summary>
+<summary><b>Tag:</b> #cobblemon:forsaken</summary>
 
 - #cobblemon:is_deep_dark
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:garden</summary>
+<summary><b>Tag:</b> #cobblemon:garden</summary>
 
 - #cobblemon:is_forest
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:garden_anti</summary>
+<summary><b>Tag:</b> #cobblemon:garden_anti</summary>
 
 - #cobblemon:is_cherry_blossom
 - #cobblemon:is_floral
@@ -1313,56 +1310,56 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:high_plains</summary>
+<summary><b>Tag:</b> #cobblemon:high_plains</summary>
 
 - #cobblemon:is_badlands
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:icy_snow</summary>
+<summary><b>Tag:</b> #cobblemon:icy_snow</summary>
 
 - #cobblemon:is_taiga
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:icy_snow_anti</summary>
+<summary><b>Tag:</b> #cobblemon:icy_snow_anti</summary>
 
 - #cobblemon:is_mountain
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:inferno</summary>
+<summary><b>Tag:</b> #cobblemon:inferno</summary>
 
 - #minecraft:is_nether
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:jungle</summary>
+<summary><b>Tag:</b> #cobblemon:jungle</summary>
 
 - #cobblemon:is_jungle
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:jungle_anti</summary>
+<summary><b>Tag:</b> #cobblemon:jungle_anti</summary>
 
 - #cobblemon:is_mountain
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:marine</summary>
+<summary><b>Tag:</b> #cobblemon:marine</summary>
 
 - #cobblemon:is_ocean
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:marine_anti</summary>
+<summary><b>Tag:</b> #cobblemon:marine_anti</summary>
 
 - #cobblemon:is_frozen_ocean
 - #cobblemon:is_warm_ocean
@@ -1370,14 +1367,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:meadow</summary>
+<summary><b>Tag:</b> #cobblemon:meadow</summary>
 
 - #cobblemon:is_floral
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:meadow_anti</summary>
+<summary><b>Tag:</b> #cobblemon:meadow_anti</summary>
 
 - #cobblemon:is_cherry_blossom
 - #cobblemon:is_magical
@@ -1386,7 +1383,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:monsoon</summary>
+<summary><b>Tag:</b> #cobblemon:monsoon</summary>
 
 - #cobblemon:is_mountain
 - #cobblemon:is_peak
@@ -1394,7 +1391,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:monsoon_anti</summary>
+<summary><b>Tag:</b> #cobblemon:monsoon_anti</summary>
 
 - #cobblemon:is_badlands
 - #cobblemon:is_desert
@@ -1405,7 +1402,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:ocean</summary>
+<summary><b>Tag:</b> #cobblemon:ocean</summary>
 
 - #cobblemon:is_coast
 - #cobblemon:is_warm_ocean
@@ -1413,7 +1410,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:ocean_anti</summary>
+<summary><b>Tag:</b> #cobblemon:ocean_anti</summary>
 
 - #cobblemon:is_cold_ocean
 - #cobblemon:is_frozen_ocean
@@ -1423,14 +1420,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:polar</summary>
+<summary><b>Tag:</b> #cobblemon:polar</summary>
 
 - #cobblemon:is_frozen_ocean
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:river</summary>
+<summary><b>Tag:</b> #cobblemon:river</summary>
 
 - #cobblemon:is_river
 - #cobblemon:is_swamp
@@ -1438,7 +1435,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:river_anti</summary>
+<summary><b>Tag:</b> #cobblemon:river_anti</summary>
 
 - #cobblemon:is_forest
 - #cobblemon:is_jungle
@@ -1448,28 +1445,28 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:sandstorm</summary>
+<summary><b>Tag:</b> #cobblemon:sandstorm</summary>
 
 - #cobblemon:is_desert
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:sandstorm_anti</summary>
+<summary><b>Tag:</b> #cobblemon:sandstorm_anti</summary>
 
 - #cobblemon:is_badlands
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:savanna</summary>
+<summary><b>Tag:</b> #cobblemon:savanna</summary>
 
 - #cobblemon:is_savanna
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:savanna_anti</summary>
+<summary><b>Tag:</b> #cobblemon:savanna_anti</summary>
 
 - #cobblemon:is_badlands
 - #cobblemon:is_desert
@@ -1479,7 +1476,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:sun</summary>
+<summary><b>Tag:</b> #cobblemon:sun</summary>
 
 - #cobblemon:is_sky
 - #cobblemon:is_volcanic
@@ -1488,7 +1485,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:tundra</summary>
+<summary><b>Tag:</b> #cobblemon:tundra</summary>
 
 - #cobblemon:is_glacial
 - #cobblemon:is_snowy_forest
@@ -1497,21 +1494,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:tundra_anti</summary>
+<summary><b>Tag:</b> #cobblemon:tundra_anti</summary>
 
 - #cobblemon:is_mountain
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #vivillon:void</summary>
+<summary><b>Tag:</b> #cobblemon:void</summary>
 
 - #minecraft:is_end
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_density:dense</summary>
+<summary><b>Tag:</b> #cobblemon:dense</summary>
 
 - #c:is_dense_vegetation
 - #c:is_dense_vegetation/overworld
@@ -1524,7 +1521,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_density:sparse</summary>
+<summary><b>Tag:</b> #cobblemon:sparse</summary>
 
 - #c:is_sparse_vegetation
 - #c:is_sparse_vegetation/overworld
@@ -1537,7 +1534,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_feature:apricorns_dense</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns_dense</summary>
 
 - #cobblemon:is_badlands
 - #cobblemon:is_desert
@@ -1550,7 +1547,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_feature:apricorns_normal</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns_normal</summary>
 
 - #cobblemon:is_grassland
 - #cobblemon:is_hills
@@ -1560,21 +1557,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_feature:apricorns_sparse</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns_sparse</summary>
 
 - #cobblemon:is_tundra
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_feature:revival_herbs</summary>
+<summary><b>Tag:</b> #cobblemon:revival_herbs</summary>
 
 - #cobblemon:is_lush
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_dawn_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_dawn_stone_normal</summary>
 
 - #cobblemon:is_peak
 - #cobblemon:is_sky
@@ -1582,7 +1579,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_dawn_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_dawn_stone_rare</summary>
 
 - #cobblemon:is_floral
 - #cobblemon:is_glacial
@@ -1591,7 +1588,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_dusk_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_dusk_stone_normal</summary>
 
 - #cobblemon:is_spooky
 - #cobblemon:is_taiga
@@ -1599,21 +1596,21 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_dusk_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_dusk_stone_rare</summary>
 
 - #cobblemon:is_swamp
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_fire_stone_nether</summary>
+<summary><b>Tag:</b> #cobblemon:ore_fire_stone_nether</summary>
 
 - #minecraft:is_nether
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_fire_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_fire_stone_normal</summary>
 
 - #cobblemon:is_desert
 - #cobblemon:is_thermal
@@ -1622,14 +1619,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_fire_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_fire_stone_rare</summary>
 
 - #cobblemon:is_sandy
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_ice_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_ice_stone_normal</summary>
 
 - #cobblemon:is_glacial
 - #cobblemon:is_snowy_forest
@@ -1638,14 +1635,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_ice_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_ice_stone_rare</summary>
 
 - #cobblemon:is_freezing
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_leaf_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_leaf_stone_normal</summary>
 
 - #cobblemon:is_forest
 - #cobblemon:is_jungle
@@ -1654,7 +1651,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_leaf_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_leaf_stone_rare</summary>
 
 - #cobblemon:is_swamp
 - #cobblemon:is_tropical_island
@@ -1662,14 +1659,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_moon_stone_dripstone</summary>
+<summary><b>Tag:</b> #cobblemon:ore_moon_stone_dripstone</summary>
 
 - #cobblemon:is_dripstone
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_moon_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_moon_stone_normal</summary>
 
 - #cobblemon:is_dripstone
 - #cobblemon:is_taiga
@@ -1678,7 +1675,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_moon_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_moon_stone_rare</summary>
 
 - #cobblemon:is_magical
 - #cobblemon:is_spooky
@@ -1686,7 +1683,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_shiny_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_shiny_stone_normal</summary>
 
 - #cobblemon:is_floral
 - #cobblemon:is_magical
@@ -1695,7 +1692,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_shiny_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_shiny_stone_rare</summary>
 
 - #cobblemon:is_island
 - #cobblemon:is_peak
@@ -1703,7 +1700,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_sun_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_sun_stone_normal</summary>
 
 - #cobblemon:is_badlands
 - #cobblemon:is_dripstone
@@ -1712,7 +1709,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_sun_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_sun_stone_rare</summary>
 
 - #cobblemon:is_desert
 - #cobblemon:is_tropical_island
@@ -1720,7 +1717,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_thunder_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_thunder_stone_normal</summary>
 
 - #cobblemon:is_highlands
 - #cobblemon:is_hills
@@ -1728,7 +1725,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_thunder_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_thunder_stone_rare</summary>
 
 - #cobblemon:is_jungle
 - #cobblemon:is_plains
@@ -1736,7 +1733,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_water_stone_normal</summary>
+<summary><b>Tag:</b> #cobblemon:ore_water_stone_normal</summary>
 
 - #cobblemon:is_freshwater
 - #cobblemon:is_ocean
@@ -1744,7 +1741,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_ore:ore_water_stone_rare</summary>
+<summary><b>Tag:</b> #cobblemon:ore_water_stone_rare</summary>
 
 - #cobblemon:is_jungle
 - #cobblemon:is_thermal
@@ -1753,7 +1750,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_season:autumn</summary>
+<summary><b>Tag:</b> #cobblemon:autumn</summary>
 
 - #cobblemon:is_arid
 - #cobblemon:is_cold_ocean
@@ -1788,7 +1785,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_season:spring</summary>
+<summary><b>Tag:</b> #cobblemon:spring</summary>
 
 - #aether:is_aether
 - #cobblemon:is_floral
@@ -1803,7 +1800,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_season:summer</summary>
+<summary><b>Tag:</b> #cobblemon:summer</summary>
 
 - #cobblemon:is_forest
 - #cobblemon:is_jungle
@@ -1815,7 +1812,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_season:winter</summary>
+<summary><b>Tag:</b> #cobblemon:winter</summary>
 
 - #cobblemon:is_freezing
 - terralith:skylands_winter
@@ -1824,19 +1821,19 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_structure:village_plains_pokecenter</summary>
+<summary><b>Tag:</b> #cobblemon:village_plains_pokecenter</summary>
 
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #has_structure:village_plains_pokecenter_signtest</summary>
+<summary><b>Tag:</b> #cobblemon:village_plains_pokecenter_signtest</summary>
 
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_basalt</summary>
+<summary><b>Tag:</b> #cobblemon:is_basalt</summary>
 
 - betternether:flooded_deltas
 - cinderscapes:blackstone_shales
@@ -1848,7 +1845,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_crimson</summary>
+<summary><b>Tag:</b> #cobblemon:is_crimson</summary>
 
 - betternether:crimson_glowing_woods
 - betternether:crimson_pinewood
@@ -1861,7 +1858,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_desert</summary>
+<summary><b>Tag:</b> #cobblemon:is_desert</summary>
 
 - betternether:gravel_desert
 - betternether:soul_plain
@@ -1874,7 +1871,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_forest</summary>
+<summary><b>Tag:</b> #cobblemon:is_forest</summary>
 
 - betternether:nether_jungle
 - betternether:nether_swampland
@@ -1887,14 +1884,14 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_frozen</summary>
+<summary><b>Tag:</b> #cobblemon:is_frozen</summary>
 
 - byg:subzero_hypogeal
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_fungus</summary>
+<summary><b>Tag:</b> #cobblemon:is_fungus</summary>
 
 - betternether:crimson_glowing_woods
 - betternether:crimson_pinewood
@@ -1916,7 +1913,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_mountain</summary>
+<summary><b>Tag:</b> #cobblemon:is_mountain</summary>
 
 - incendium:volcanic_deltas
 - minecraft:basalt_deltas
@@ -1924,7 +1921,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_overgrowth</summary>
+<summary><b>Tag:</b> #cobblemon:is_overgrowth</summary>
 
 - betternether:bone_reef
 - betternether:nether_grasslands
@@ -1938,7 +1935,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_quartz</summary>
+<summary><b>Tag:</b> #cobblemon:is_quartz</summary>
 
 - byg:quartz_desert
 - cinderscapes:quartz_cavern
@@ -1947,7 +1944,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_soul_fire</summary>
+<summary><b>Tag:</b> #cobblemon:is_soul_fire</summary>
 
 - byg:subzero_hypogeal
 - byg:warped_desert
@@ -1958,7 +1955,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_soul_sand</summary>
+<summary><b>Tag:</b> #cobblemon:is_soul_sand</summary>
 
 - betternether:nether_grasslands
 - betternether:nether_swampland
@@ -1979,7 +1976,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_toxic</summary>
+<summary><b>Tag:</b> #cobblemon:is_toxic</summary>
 
 - biomesoplenty:erupting_inferno
 - byg:brimstone_caverns
@@ -1989,7 +1986,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_warped</summary>
+<summary><b>Tag:</b> #cobblemon:is_warped</summary>
 
 - betternether:nether_jungle
 - betternether:old_warped_woods
@@ -2000,7 +1997,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #nether:is_wasteland</summary>
+<summary><b>Tag:</b> #cobblemon:is_wasteland</summary>
 
 - betternether:magma_land
 - betternether:nether_grasslands
@@ -2018,7 +2015,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_fiery</summary>
+<summary><b>Tag:</b> #cobblemon:is_fiery</summary>
 
 - #stellaris:mercury_biomes
 - space:mercury_hotspot
@@ -2033,7 +2030,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_icy</summary>
+<summary><b>Tag:</b> #cobblemon:is_icy</summary>
 
 - #space:ice_craters
 - stellaris:mars_ice_spikes
@@ -2041,7 +2038,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_mars</summary>
+<summary><b>Tag:</b> #cobblemon:is_mars</summary>
 
 - #stellaris:mars_biomes
 - #stellaris:mars_biomes
@@ -2056,7 +2053,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_mercury</summary>
+<summary><b>Tag:</b> #cobblemon:is_mercury</summary>
 
 - #stellaris:mercury_biomes
 - space:mercury_hotspot
@@ -2066,7 +2063,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_moon</summary>
+<summary><b>Tag:</b> #cobblemon:is_moon</summary>
 
 - #stellaris:moon_biomes
 - space:moon_highlands
@@ -2079,7 +2076,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_space</summary>
+<summary><b>Tag:</b> #cobblemon:is_space</summary>
 
 - #stellaris:mars_biomes
 - #stellaris:mercury_biomes
@@ -2112,7 +2109,7 @@ This file contains tags related to different biomes in cobblemon, as well as som
 </details>
 
 <details>
-<summary><b>Tag:</b> #space:is_venus</summary>
+<summary><b>Tag:</b> #cobblemon:is_venus</summary>
 
 - #stellaris:venus_biomes
 - space:venus_highlands

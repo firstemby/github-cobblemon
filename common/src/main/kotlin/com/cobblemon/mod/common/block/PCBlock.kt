@@ -285,7 +285,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         val pc = Cobblemon.storage.getPCForPlayer(player, baseEntity) ?: return InteractionResult.SUCCESS
         // TODO add event to check if they can open this PC? (answer: the getPCForPlayer should be where we do that)
         PCLinkManager.addLink(ProximityPCLink(pc, player.uuid, baseEntity))
-        OpenPCPacket(pc.uuid).sendToPlayer(player)
+        OpenPCPacket(pc).sendToPlayer(player)
         world.playSoundServer(
             position = blockPos.toVec3d(),
             sound = CobblemonSounds.PC_ON,

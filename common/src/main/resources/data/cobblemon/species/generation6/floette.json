@@ -53,6 +53,9 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
@@ -170,7 +173,7 @@
       "id": "floette_florges",
       "variant": "item_interact",
       "result": "florges",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:shiny_stone"
@@ -198,7 +201,7 @@
           "id": "floette_florges",
           "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
           "requiredContext": "cobblemon:shiny_stone"
@@ -227,7 +230,7 @@
           "id": "floette_florges",
           "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
           "requiredContext": "cobblemon:shiny_stone"
@@ -256,7 +259,7 @@
           "id": "floette_florges",
           "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
           "requiredContext": "cobblemon:shiny_stone"
@@ -285,7 +288,7 @@
           "id": "floette_florges",
           "variant": "item_interact",
           "result": "florges",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [],
           "requiredContext": "cobblemon:shiny_stone"

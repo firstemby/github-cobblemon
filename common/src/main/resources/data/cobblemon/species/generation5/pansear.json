@@ -40,10 +40,10 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.4,
     "fixed": false
   },
   "drops": {
@@ -175,7 +175,7 @@
       "id": "pansear_simisear",
       "variant": "item_interact",
       "result": "simisear",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:fire_stone"

@@ -10,7 +10,14 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.entity.Despawner
-import com.cobblemon.mod.common.api.spawning.condition.*
+import com.cobblemon.mod.common.api.spawning.condition.AreaSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.BasicSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.FishingSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.GroundedSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
 import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
 import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
 import com.cobblemon.mod.common.api.spawning.context.GroundedSpawningContext
@@ -44,6 +51,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
 import com.cobblemon.mod.common.entity.pokemon.CobblemonAgingDespawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.server.MinecraftServer
 
 /**
  * A grouping of all the overarching behaviours of the Best Spawner system. This is a convenient accessor to
@@ -130,7 +138,8 @@ object BestSpawner {
         spawnerManagers.forEach(SpawnerManager::onConfigReload)
     }
 
-    fun onServerStarted() {
+    fun onServerStarted(server: MinecraftServer) {
+        CobblemonSpawnPools.onServerLoad(server)
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
     }

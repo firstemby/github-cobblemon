@@ -34,7 +34,7 @@ class BedrockPoseAnimation(val animation: BedrockAnimation) : PoseAnimation() {
     }
 
     override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
-        animation.run(context, model, state, state.animationSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity)
+        animation.run(model, state, state.animationSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity)
     }
 
     override fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {

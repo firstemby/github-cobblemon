@@ -323,7 +323,53 @@
       ],
       "preEvolution": "growlithe hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "35-65"
+          },
+          "ACCELERATION": {
+            "ranges": "30-60"
+          },
+          "SKILL": {
+            "ranges": "35-70"
+          },
+          "JUMP": {
+            "ranges": "25-50"
+          },
+          "STAMINA": {
+            "ranges": "40-80"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "35-70"
+      },
+      "ACCELERATION": {
+        "ranges": "30-60"
+      },
+      "SKILL": {
+        "ranges": "35-70"
+      },
+      "JUMP": {
+        "ranges": "25-50"
+      },
+      "STAMINA": {
+        "ranges": "40-80"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

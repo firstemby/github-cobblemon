@@ -66,9 +66,12 @@ abstract class AreaSpawner(
         if (constrainedArea != null) {
 
             val areaBox = AABB.ofSize(
-                Vec3(
-                    constrainedArea.getCenter().toVec3f()
-                ), CHUNK_REACH * 16.0 * 2, 1000.0, CHUNK_REACH * 16.0 * 2)
+                Vec3(constrainedArea.getCenter().toVec3f()),
+                CHUNK_REACH * 16.0 * 2,
+                1000.0,
+                CHUNK_REACH * 16.0 * 2
+            )
+
             if (!constrainedArea.world.isBoxLoaded(areaBox)) {
                 return null
             }
@@ -142,7 +145,7 @@ abstract class AreaSpawner(
                     break
                 } else if (isValidStartPoint(area.world, chunk, basePos.setY(originalY - offset))) {
                     valid = true
-                    basePos.y = originalY + offset
+                    basePos.y = originalY - offset
                     break
                 }
                 offset++

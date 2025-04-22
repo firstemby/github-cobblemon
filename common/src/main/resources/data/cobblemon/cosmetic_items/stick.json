@@ -1,0 +1,11 @@
+{
+  "pokemon": ["treecko", "grovyle", "sceptile"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "minecraft:stick",
+      "displayName": "cobblemon.cosmetic.stick",
+      "displayItem": "minecraft:stick",
+      "aspects": ["cosmetic_item-stick"]
+    }
+  ]
+}

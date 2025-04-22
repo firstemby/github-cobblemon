@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "nnn",
-    "n n",
-    "nnn"
+    "NNN",
+    "N N",
+    "NNN"
   ],
   "key": {
-    "n": {
+    "N": {
       "item": "cobblemon:galarica_nuts"
     }
   },

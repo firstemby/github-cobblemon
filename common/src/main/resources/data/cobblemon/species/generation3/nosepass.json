@@ -57,6 +57,9 @@
       "pointsAtSpawn": true
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.12
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
@@ -199,7 +202,7 @@
       "id": "nosepass_probopass",
       "variant": "item_interact",
       "result": "probopass",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "triattack"
       ],

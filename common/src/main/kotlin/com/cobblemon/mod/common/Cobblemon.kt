@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
 import com.cobblemon.mod.common.api.interaction.RequestManager
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculators
@@ -62,7 +63,11 @@ import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBacken
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.battles.BattleFormat
+import com.cobblemon.mod.common.battles.BattleRegistry
+import com.cobblemon.mod.common.battles.BattleSide
+import com.cobblemon.mod.common.battles.ShowdownThread
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.client.CobblemonPack
@@ -80,16 +85,29 @@ import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacke
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.properties.*
+import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
+import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
+import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
+import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
+import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
+import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
+import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.ifDedicatedServer
+import com.cobblemon.mod.common.util.isLaterVersion
+import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.requestWallpapers
+import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -97,26 +115,29 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
-import net.minecraft.client.Minecraft
-import net.minecraft.commands.synchronization.SingletonArgumentInfo
-import net.minecraft.resources.ResourceKey
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.packs.PackType
-import net.minecraft.world.item.NameTagItem
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.storage.LevelResource
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.PrintWriter
-import java.util.*
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
+import net.minecraft.client.Minecraft
+import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.NameTagItem
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.LevelResource
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 object Cobblemon {
     const val MODID = CobblemonBuildDetails.MOD_ID
@@ -150,6 +171,9 @@ object Cobblemon {
     var permissionValidator: PermissionValidator by Delegates.observable(LaxPermissionValidator().also { it.initialize() }) { _, _, newValue -> newValue.initialize() }
     var statProvider: StatProvider = CobblemonStatProvider
     var seasonResolver: SeasonResolver = TagSeasonResolver
+    var wallpapers = mutableMapOf<UUID, Set<ResourceLocation>>()
+
+    val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
 
     @JvmStatic
     val builtinPacks = listOf<CobblemonPack>(
@@ -206,6 +230,7 @@ object Cobblemon {
             storage.onPlayerDataSync(it)
             playerDataManager.syncAllToPlayer(it)
             starterHandler.handleJoin(it)
+            it.requestWallpapers()
             sendServerSettingsPacketToPlayer(it)
         }
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
@@ -214,6 +239,7 @@ object Cobblemon {
             storage.onPlayerDisconnect(it.player)
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
+            serverPlayerStructs.remove(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -275,6 +301,7 @@ object Cobblemon {
 
         SHINY_ASPECT.register()
         GENDER_ASPECT.register()
+        COSMETIC_SLOT_ASPECT.register()
 
         SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
@@ -382,9 +409,11 @@ object Cobblemon {
         PlatformEvents.SERVER_STOPPED.subscribe {
             storage.unregisterAll(it.server.registryAccess())
             playerDataManager.saveAllStores()
+            playerDataManager.saveExecutor.shutdown()
+            playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
         }
-        PlatformEvents.SERVER_STARTED.subscribe {
-            bestSpawner.onServerStarted()
+        PlatformEvents.SERVER_STARTED.subscribe { event ->
+            bestSpawner.onServerStarted(event.server)
             battleRegistry.onServerStarted()
         }
         PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
@@ -532,6 +561,10 @@ object Cobblemon {
         this.implementation.registerCommandArgument(cobblemonResource("form"), FormArgumentType::class, SingletonArgumentInfo.contextFree(FormArgumentType::form))
         this.implementation.registerCommandArgument(cobblemonResource("dex"), DexArgumentType::class, SingletonArgumentInfo.contextFree (DexArgumentType::dex))
         this.implementation.registerCommandArgument(cobblemonResource("npc_class"), NPCClassArgumentType::class, SingletonArgumentInfo.contextFree(NPCClassArgumentType::npcClass))
+        this.implementation.registerCommandArgument(cobblemonResource("wallpaper"), UnlockablePCBoxWallpaperArgumentType::class, SingletonArgumentInfo.contextFree(UnlockablePCBoxWallpaperArgumentType::wallpaper))
+        this.implementation.registerCommandArgument(cobblemonResource("mark"), MarkArgumentType::class, SingletonArgumentInfo.contextFree(MarkArgumentType::mark))
+        this.implementation.registerCommandArgument(cobblemonResource("transform_type"), TransformTypeArgumentType::class, SingletonArgumentInfo.contextFree(TransformTypeArgumentType::transformType))
+        this.implementation.registerCommandArgument(cobblemonResource("model_part"), ModelPartArgumentType::class, SingletonArgumentInfo.contextFree(ModelPartArgumentType::modelPart))
     }
 
 }

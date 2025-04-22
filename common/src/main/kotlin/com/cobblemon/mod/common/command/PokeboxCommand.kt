@@ -92,7 +92,7 @@ object PokeboxCommand {
                 throw SimpleCommandExceptionType(BOX_DOES_NOT_EXIST(box).red()).create()
             }
 
-            val pcBox = playerPc.boxes.get(box - 1)
+            val pcBox = playerPc.boxes[box - 1]
 
             if (pcBox.unoccupiedSlots < pokemons.size) {
                 throw SimpleCommandExceptionType(BOX_IS_FULL_EXCEPTION(box).red()).create()

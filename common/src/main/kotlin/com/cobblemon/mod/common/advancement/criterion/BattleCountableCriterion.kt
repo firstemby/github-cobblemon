@@ -28,7 +28,7 @@ class BattleCountableCriterion(
         val CODEC: Codec<BattleCountableCriterion> = RecordCodecBuilder.create { it.group(
             ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(BattleCountableCriterion::playerCtx),
             Codec.STRING.listOf().optionalFieldOf("battle_types", listOf("any")).forGetter(BattleCountableCriterion::battleTypes),
-            Codec.INT.optionalFieldOf( "count", 0).forGetter(BattleCountableCriterion::count)
+            Codec.INT.optionalFieldOf("count", 0).forGetter(BattleCountableCriterion::count)
         ).apply(it, ::BattleCountableCriterion) }
     }
 

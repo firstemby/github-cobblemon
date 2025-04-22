@@ -291,20 +291,7 @@
         {
           "id": "basculin_basculegion",
           "variant": "level_up",
-          "result": "basculegion male",
-          "consumeHeldItem": false,
-          "learnableMoves": [],
-          "requirements": [
-            {
-              "variant": "recoil",
-              "amount": 294
-            }
-          ]
-        },
-        {
-          "id": "basculin_basculegionf",
-          "variant": "level_up",
-          "result": "basculegion female",
+          "result": "basculegion",
           "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [

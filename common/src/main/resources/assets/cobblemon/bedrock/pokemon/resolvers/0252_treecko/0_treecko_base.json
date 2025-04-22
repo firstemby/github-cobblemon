@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0252_treecko/treecko_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-stick"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0252_treecko/treecko_stick.png"
+        }
+      ]
     }
   ]
 }

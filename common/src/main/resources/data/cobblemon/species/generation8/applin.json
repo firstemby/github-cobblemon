@@ -89,7 +89,7 @@
       "id": "applin_flapple",
       "variant": "item_interact",
       "result": "flapple",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "wingattack"
       ],
@@ -100,7 +100,7 @@
       "id": "applin_appletun",
       "variant": "item_interact",
       "result": "appletun",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "headbutt"
       ],
@@ -111,7 +111,7 @@
       "id": "applin_dipplin",
       "variant": "item_interact",
       "result": "dipplin",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
       ],

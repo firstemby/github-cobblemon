@@ -8,13 +8,11 @@
 
 package com.cobblemon.mod.common.pokemon
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.google.gson.JsonObject
@@ -36,8 +34,8 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
         }
     }
 
-    /** Emits any stat change. */
-    val observable = SimpleObservable<PokemonStats>()
+    /** Run whenever anything changes. */
+    var changeFunction: (PokemonStats) -> Unit = {}
 
     private val stats = mutableMapOf<Stat, Int>()
     private var emit = true
@@ -55,7 +53,7 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
 
     fun update() {
         if (emit) {
-            observable.emit(this)
+            changeFunction(this)
         }
     }
 

@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.battles.interpreter
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 
 /**
@@ -29,6 +32,13 @@ interface BattleContext {
 
     /** The [BattlePokemon] that directly or indirectly caused this [BattleContext]. */
     val origin: BattlePokemon?
+
+    fun getStruct() = queryStructOf(
+        "type" to { StringValue(type.name) },
+        "origin" to { origin?.struct ?: DoubleValue(0.0) },
+        "id" to { StringValue(id) },
+        "turn_created" to { DoubleValue(turn.toDouble()) }
+    )
 
     /**
      * The type of [BattleContext].

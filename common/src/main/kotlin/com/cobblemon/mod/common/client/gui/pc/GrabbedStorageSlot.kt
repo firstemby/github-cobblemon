@@ -30,4 +30,6 @@ class GrabbedStorageSlot(
     override fun getPokemon() = pokemon
 
     override fun isHoveredOrFocused() = true
+
+    override fun shouldRender() = true
 }

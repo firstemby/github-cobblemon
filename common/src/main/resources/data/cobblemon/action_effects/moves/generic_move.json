@@ -15,19 +15,19 @@
       "keyframes": [
         {
           "type": "entity_sound",
-          "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+          "entityCondition": "q.entity.is_user == false && q.hurt(q.entity.uuid) == true",
           "sound": "'cobblemon:impact.' + q.move.type"
         },
         {
           "type": "entity_particles",
-          "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+          "entityCondition": "q.entity.is_user == false && q.hurt(q.entity.uuid) == true",
           "effect": "'cobblemon:impact_' + q.move.type",
           "locators": ["target"]
         },
 		{
 		  "type": "entity_molang",
 		  "expressions": ["q.particle('cobblemon:hit', 'target')"],
-		  "entityCondition": "q.entity.is_user == false"
+		  "entityCondition": "q.entity.is_user == false && q.hurt(q.entity.uuid) == true"
 		}
       ]
     },

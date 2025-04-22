@@ -54,6 +54,9 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "canWalk": false
+      },
       "fly": {
         "canFly": true
       }
@@ -318,5 +321,26 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "5-10"
+      },
+      "ACCELERATION": {
+        "ranges": "50-100"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "10-20"
+      },
+      "STAMINA": {
+        "ranges": "20-40"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

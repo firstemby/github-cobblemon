@@ -142,7 +142,7 @@
       "id": "charjabug_vikavolt",
       "variant": "item_interact",
       "result": "vikavolt",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "thunderbolt"
       ],

@@ -25,6 +25,8 @@ class BoxStorageSlot(
     }
 
     override fun shouldRender(): Boolean {
+        if (!super.shouldRender()) return false
+
         val grabbedSlot = parent.grabbedSlot
         return if (grabbedSlot == null) {
             true

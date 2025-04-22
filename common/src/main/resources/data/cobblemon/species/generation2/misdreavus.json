@@ -47,6 +47,16 @@
     "height": 1.2,
     "fixed": false
   },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -204,7 +214,7 @@
       "id": "misdreavus_mismagius",
       "variant": "item_interact",
       "result": "mismagius",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"

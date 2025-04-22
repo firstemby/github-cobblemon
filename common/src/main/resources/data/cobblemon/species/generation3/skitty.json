@@ -177,7 +177,7 @@
       "id": "skitty_delcatty",
       "variant": "item_interact",
       "result": "delcatty",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:moon_stone"
