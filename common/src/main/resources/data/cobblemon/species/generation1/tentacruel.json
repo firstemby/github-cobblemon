@@ -198,5 +198,26 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "tentacool",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "35-70"
+      },
+      "ACCELERATION": {
+        "ranges": "20-40"
+      },
+      "SKILL": {
+        "ranges": "25-50"
+      },
+      "JUMP": {
+        "ranges": "25-50"
+      },
+      "STAMINA": {
+        "ranges": "35-75"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

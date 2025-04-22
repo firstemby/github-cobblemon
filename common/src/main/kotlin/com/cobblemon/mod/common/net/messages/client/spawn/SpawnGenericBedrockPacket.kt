@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.*
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
@@ -36,7 +37,7 @@ class SpawnGenericBedrockPacket(
 ) : SpawnExtraDataEntityPacket<SpawnGenericBedrockPacket, GenericBedrockEntity>(vanillaSpawnPacket) {
     override val id: ResourceLocation = ID
 
-    override fun applyData(entity: GenericBedrockEntity) {
+    override fun applyData(entity: GenericBedrockEntity, level: ClientLevel) {
         entity.category = this.category
         entity.aspects = this.aspects
         entity.entityData.set(GenericBedrockEntity.POSE_TYPE, this.poseType)

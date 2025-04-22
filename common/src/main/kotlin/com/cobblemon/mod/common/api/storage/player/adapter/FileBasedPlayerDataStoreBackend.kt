@@ -37,10 +37,10 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
         savePath = server.getWorldPath(LevelResource.PLAYER_DATA_DIR).parent
     }
 
-    protected fun postSaveFileMoving(playerData: T) {
-        val tempFile = filePath(playerData.uuid, TEMPORARY_FILE_EXTENSION)
-        val oldFile = filePath(playerData.uuid, OLD_FILE_EXTENSION)
-        val file = filePath(playerData.uuid)
+    protected fun postSaveFileMoving(uuid: UUID) {
+        val tempFile = filePath(uuid, TEMPORARY_FILE_EXTENSION)
+        val oldFile = filePath(uuid, OLD_FILE_EXTENSION)
+        val file = filePath(uuid)
         if (file.exists()) {
             file.copyTo(oldFile, overwrite = true)
         }

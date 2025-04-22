@@ -398,7 +398,7 @@
           "id": "sandshrew_sandslashalola",
           "variant": "item_interact",
           "result": "sandslash alolan",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "iciclespear"
           ],

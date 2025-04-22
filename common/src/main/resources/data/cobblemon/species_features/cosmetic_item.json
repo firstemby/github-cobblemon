@@ -1,0 +1,24 @@
+{
+  "type": "choice",
+  "keys": [
+    "cosmetic_item"
+  ],
+  "default": "none",
+  "choices": [
+    "wise_glasses",
+    "black_glasses",
+    "silk_scarf",
+    "choice_scarf",
+    "minecart",
+    "composer",
+    "shulker_shell",
+    "air_balloon",
+    "bundle",
+    "note_block",
+    "jukebox",
+    "enderpearl",
+    "stick"
+  ],
+  "isAspect": true,
+  "aspectFormat": "cosmetic_item-{{choice}}"
+}

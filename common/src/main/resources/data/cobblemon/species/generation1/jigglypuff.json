@@ -268,10 +268,33 @@
       "id": "jigglypuff_wigglytuff",
       "variant": "item_interact",
       "result": "wigglytuff",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:moon_stone"
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-20"
+      },
+      "ACCELERATION": {
+        "ranges": "40-80"
+      },
+      "SKILL": {
+        "ranges": "10-50"
+      },
+      "JUMP": {
+        "ranges": "10-20"
+      },
+      "STAMINA": {
+        "ranges": "10-30"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:air/glider"
+    }
+  }
 }

@@ -192,5 +192,28 @@
       ],
       "requirements": []
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-20"
+      },
+      "ACCELERATION": {
+        "ranges": "5-100"
+      },
+      "SKILL": {
+        "ranges": "40-80"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "15-30"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

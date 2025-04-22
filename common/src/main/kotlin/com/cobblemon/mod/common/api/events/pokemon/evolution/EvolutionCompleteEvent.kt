@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.events.pokemon.evolution
 
+import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.Pokemon
 
@@ -23,4 +25,9 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 data class EvolutionCompleteEvent(
     override val pokemon: Pokemon,
     override val evolution: Evolution
-) : EvolutionEvent
+) : EvolutionEvent {
+    val context = mutableMapOf<String, MoValue>(
+        "pokemon" to pokemon.struct,
+        "evolution" to evolution.asMoLangValue()
+    )
+}

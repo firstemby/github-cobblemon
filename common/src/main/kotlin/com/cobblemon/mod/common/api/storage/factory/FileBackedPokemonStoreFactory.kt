@@ -18,10 +18,10 @@ import com.cobblemon.mod.common.api.storage.adapter.flatfile.FileStoreAdapter
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.platform.events.PlatformEvents
-import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.cobblemon.mod.common.util.subscribeOnServer
 import java.util.UUID
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import net.minecraft.core.RegistryAccess
 import net.minecraft.server.level.ServerPlayer
 
@@ -97,7 +97,7 @@ open class FileBackedPokemonStoreFactory<S>(
     fun save(store: PokemonStore<*>, registryAccess: RegistryAccess) {
         val serialized = SerializedStore(store::class.java, store.uuid, adapter.serialize(store, registryAccess))
         dirtyStores.remove(store)
-        saveExecutor.submit { adapter.save(serialized.storeClass, serialized.uuid, serialized.serializedForm) }
+        saveExecutor.execute { adapter.save(serialized.storeClass, serialized.uuid, serialized.serializedForm) }
     }
 
     fun saveAll(registryAccess: RegistryAccess) {
@@ -105,7 +105,7 @@ open class FileBackedPokemonStoreFactory<S>(
         val serializedStores = dirtyStores.map { SerializedStore(it::class.java, it.uuid, adapter.serialize(it, registryAccess)) }
         dirtyStores.clear()
         LOGGER.debug("Queueing save.")
-        saveExecutor.submit {
+        saveExecutor.execute {
             serializedStores.forEach { adapter.save(it.storeClass, it.uuid, it.serializedForm) }
             LOGGER.debug("Saved ${serializedStores.size} Pokémon stores.")
         }
@@ -123,6 +123,7 @@ open class FileBackedPokemonStoreFactory<S>(
         saveSubscription.unsubscribe()
         saveAll(registryAccess)
         saveExecutor.shutdown()
+        saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
     }
 
     override fun onPlayerDisconnect(player: ServerPlayer) {

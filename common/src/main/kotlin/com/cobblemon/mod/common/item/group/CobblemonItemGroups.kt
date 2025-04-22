@@ -32,7 +32,7 @@ object CobblemonItemGroups {
     private val INJECTORS = hashMapOf<ResourceKey<CreativeModeTab>, (injector: Injector) -> Unit>()
 
     @JvmStatic val BLOCKS_KEY = this.create("blocks", this::blockEntries) {
-        ItemStack( CobblemonItems.PC)
+        ItemStack(CobblemonItems.PC)
     }
     @JvmStatic val UTILITY_ITEMS_KEY = this.create("utility_item", this::utilityItemEntries) {
         ItemStack(CobblemonItems.POKE_BALL)
@@ -353,6 +353,18 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.LEEK_AND_POTATO_STEW)
         entries.accept(CobblemonItems.BRAISED_VIVICHOKE)
         entries.accept(CobblemonItems.VIVICHOKE_DIP)
+        entries.accept(CobblemonItems.TART_APPLE)
+        entries.accept(CobblemonItems.SWEET_APPLE)
+        entries.accept(CobblemonItems.SYRUPY_APPLE)
+        entries.accept(CobblemonItems.WHIPPED_DREAM)
+        entries.accept(CobblemonItems.STRAWBERRY_SWEET)
+        entries.accept(CobblemonItems.LOVE_SWEET)
+        entries.accept(CobblemonItems.BERRY_SWEET)
+        entries.accept(CobblemonItems.CLOVER_SWEET)
+        entries.accept(CobblemonItems.FLOWER_SWEET)
+        entries.accept(CobblemonItems.STAR_SWEET)
+        entries.accept(CobblemonItems.RIBBON_SWEET)
+
         entries.accept(CobblemonItems.BERRY_JUICE)
         entries.accept(CobblemonItems.REMEDY)
         entries.accept(CobblemonItems.FINE_REMEDY)
@@ -475,6 +487,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WHIPPED_DREAM)
         entries.accept(CobblemonItems.TART_APPLE)
         entries.accept(CobblemonItems.SWEET_APPLE)
+        entries.accept(CobblemonItems.SYRUPY_APPLE)
         entries.accept(CobblemonItems.CRACKED_POT)
         entries.accept(CobblemonItems.CHIPPED_POT)
         entries.accept(CobblemonItems.MASTERPIECE_TEACUP)
@@ -593,6 +606,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MEDICINAL_LEEK)
         entries.accept(Items.BONE)
         entries.accept(Items.SNOWBALL)
+        entries.accept(Items.GOLD_BLOCK)
 
         entries.accept(CobblemonItems.NORMAL_GEM)
         entries.accept(CobblemonItems.FIRE_GEM)
@@ -625,7 +639,7 @@ object CobblemonItemGroups {
     }
 
     private fun blocksInjections(injector: Injector) {
-        if(Cobblemon.implementation.isModInstalled("adorn")) { //adorn modifies vanilla block tab and if we dont follow suit we crash the game
+        if(Cobblemon.implementation.isModInstalled("adorn")) { //adorn modifies vanilla block tab and if we don't follow suit we crash the game
             injector.putLast(CobblemonItems.APRICORN_LOG)
             injector.putLast(CobblemonItems.APRICORN_WOOD)
             injector.putLast(CobblemonItems.STRIPPED_APRICORN_LOG)
@@ -643,9 +657,23 @@ object CobblemonItemGroups {
     }
 
     private fun foodInjections(injector: Injector) {
+        injector.putAfter(CobblemonItems.TART_APPLE, Items.ENCHANTED_GOLDEN_APPLE)
+        injector.putAfter(CobblemonItems.SWEET_APPLE, CobblemonItems.TART_APPLE)
+        injector.putAfter(CobblemonItems.SYRUPY_APPLE, CobblemonItems.SWEET_APPLE)
+
         injector.putAfter(CobblemonItems.MEDICINAL_LEEK, Items.POISONOUS_POTATO)
         injector.putAfter(CobblemonItems.ROASTED_LEEK, CobblemonItems.MEDICINAL_LEEK)
         injector.putAfter(CobblemonItems.BRAISED_VIVICHOKE, CobblemonItems.ROASTED_LEEK)
+
+        injector.putAfter(CobblemonItems.WHIPPED_DREAM, Items.PUMPKIN_PIE)
+        injector.putAfter(CobblemonItems.STRAWBERRY_SWEET, CobblemonItems.WHIPPED_DREAM)
+        injector.putAfter(CobblemonItems.LOVE_SWEET, CobblemonItems.STRAWBERRY_SWEET)
+        injector.putAfter(CobblemonItems.BERRY_SWEET, CobblemonItems.LOVE_SWEET)
+        injector.putAfter(CobblemonItems.CLOVER_SWEET, CobblemonItems.BERRY_SWEET)
+        injector.putAfter(CobblemonItems.FLOWER_SWEET, CobblemonItems.CLOVER_SWEET)
+        injector.putAfter(CobblemonItems.STAR_SWEET, CobblemonItems.FLOWER_SWEET)
+        injector.putAfter(CobblemonItems.RIBBON_SWEET, CobblemonItems.STAR_SWEET)
+
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
     }

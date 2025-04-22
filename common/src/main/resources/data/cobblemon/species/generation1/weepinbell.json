@@ -170,7 +170,7 @@
       "id": "weepinbell_victreebel",
       "variant": "item_interact",
       "result": "victreebel",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "leaftornado",
         "leafstorm"

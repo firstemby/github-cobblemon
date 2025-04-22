@@ -188,5 +188,26 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "seel",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "15-30"
+      },
+      "ACCELERATION": {
+        "ranges": "25-50"
+      },
+      "SKILL": {
+        "ranges": "15-30"
+      },
+      "JUMP": {
+        "ranges": "20-40"
+      },
+      "STAMINA": {
+        "ranges": "30-60"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

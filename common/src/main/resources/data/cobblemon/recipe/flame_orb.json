@@ -6,9 +6,14 @@
         "STP"
     ],
     "key": {
-        "S": {
-            "item": "cobblemon:fire_stone"
-        },
+        "S": [
+            {
+                "item": "cobblemon:fire_stone"
+            },
+            {
+                "item": "cobblemon:fire_gem"
+            }
+        ],
         "T": {
             "item": "minecraft:tinted_glass"
         },

@@ -192,5 +192,26 @@
         }
       ]
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "20-40"
+      },
+      "ACCELERATION": {
+        "ranges": "50-100"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "25-50"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

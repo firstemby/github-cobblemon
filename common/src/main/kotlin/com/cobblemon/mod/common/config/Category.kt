@@ -19,5 +19,7 @@ enum class Category(val lang: String) {
     Storage("storage"),
     Starter("starter"),
     System("system"),
+    Interface("interface"),
+    Riding("riding"),
     Debug("debug"),
 }

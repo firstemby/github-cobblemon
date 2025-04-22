@@ -153,7 +153,7 @@
       "id": "shellder_cloyster",
       "variant": "item_interact",
       "result": "cloyster",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "iciclespear"
       ],

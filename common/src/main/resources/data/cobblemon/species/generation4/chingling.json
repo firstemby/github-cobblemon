@@ -189,7 +189,7 @@
       "id": "chingling_chimecho",
       "variant": "level_up",
       "result": "chimecho",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

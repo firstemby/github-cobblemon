@@ -75,11 +75,13 @@ tasks {
     processResources {
         inputs.property("version", rootProject.version)
         inputs.property("minecraft_version", rootProject.property("mc_version").toString())
+        inputs.property("java_version", rootProject.property("java_version").toString())
 
         filesMatching("META-INF/neoforge.mods.toml") {
             expand(
                 "version" to rootProject.version,
-                "minecraft_version" to rootProject.property("mc_version").toString()
+                "minecraft_version" to rootProject.property("mc_version").toString(),
+                "java_version" to rootProject.property("java_version").toString()
             )
         }
     }

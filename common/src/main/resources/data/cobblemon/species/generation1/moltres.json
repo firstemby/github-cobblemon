@@ -54,6 +54,7 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
       "fly": {
         "canFly": true
@@ -316,5 +317,43 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "35-75"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "70-90",
+          "AIR": "25-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "30-60",
+          "AIR": "50-80"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "25-60"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

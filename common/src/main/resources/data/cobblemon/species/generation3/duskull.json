@@ -52,6 +52,9 @@
       "fly": {
         "canFly": true
       },
+      "walk": {
+        "canWalk": false
+      },
       "swim": {
         "canBreatheUnderwater": true
       }

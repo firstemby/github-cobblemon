@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
@@ -72,10 +73,14 @@ import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
+import java.util.UUID
+import net.minecraft.client.player.AbstractClientPlayer
+import net.minecraft.server.level.ServerPlayer
 
 object CobblemonClient {
 
@@ -142,7 +147,7 @@ object CobblemonClient {
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
-            if (player !== null) {
+            if (player != null) {
                 var selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
@@ -154,13 +159,14 @@ object CobblemonClient {
                     // Stop using Pokédex in main hand if player switches to a different slot in hotbar
                     pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
                 }
-                if(event.client.isPaused) {
+                if (event.client.isPaused) {
                     return@subscribe
                 }
-                val nearbyShinies = player?.level()?.getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0)) { (it is PokemonEntity) && it.pokemon.shiny }
+                val nearbyShinies = player.level().getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0)) { it is PokemonEntity && it.pokemon.shiny && !it.isSilent }
                 nearbyShinies?.firstOrNull { player.isLookingAt(it) && !player.isSpectator }.let {
-                    if(it is PokemonEntity)
-                        it.delegate.spawnShinyParticle(player!!)
+                    if (it is PokemonEntity) {
+                        it.delegate.spawnShinyParticle(player)
+                    }
                 }
             }
             ClientPlayerIcon.onTick()

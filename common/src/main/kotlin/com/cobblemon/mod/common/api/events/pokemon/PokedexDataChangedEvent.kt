@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokedex.FormDexRecord
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
@@ -47,7 +48,9 @@ sealed interface PokedexDataChangedEvent {
         override val knowledge: PokedexEntryProgress,
         override val playerUUID: UUID,
         override val record: FormDexRecord
-    ) : PokedexDataChangedEvent, Cancelable()
+    ) : PokedexDataChangedEvent, Cancelable() {
+        val functions = moLangFunctionMap(cancelFunc)
+    }
 
     class Post(
         override val dataSource: PokedexEntityData,

@@ -83,12 +83,12 @@ class VibravaModel  (root: ModelPart) : PokemonPosableModel(root), QuadrupedFram
                         singleBoneLook(pitchMultiplier = 0.6F, yawMultiplier = 0.3F),
                         bedrock("vibrava", "ground_idle"),
                         wingFrame1.wingFlap(
-                                flapFunction = triangleFunction( period = 0.08F, amplitude = 0.6F),
+                                flapFunction = triangleFunction(period = 0.08F, amplitude = 0.6F),
                                 timeVariable = { state, _, _ -> state.animationSeconds },
                                 axis = ModelPartTransformation.Z_AXIS
                         ),
                         wingFrame2.wingFlap(
-                                flapFunction = triangleFunction( period = 0.1F, amplitude = 0.4F),
+                                flapFunction = triangleFunction(period = 0.1F, amplitude = 0.4F),
                                 timeVariable = { state, _, _ -> 0.01F + state.animationSeconds },
                                 axis = ModelPartTransformation.Z_AXIS
                         )

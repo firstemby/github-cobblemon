@@ -309,7 +309,53 @@
       ],
       "preEvolution": "ponyta galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "45-70"
+          },
+          "ACCELERATION": {
+            "ranges": "30-65"
+          },
+          "SKILL": {
+            "ranges": "30-60"
+          },
+          "JUMP": {
+            "ranges": "25-55"
+          },
+          "STAMINA": {
+            "ranges": "40-85"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "45-75"
+      },
+      "ACCELERATION": {
+        "ranges": "30-60"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "25-50"
+      },
+      "STAMINA": {
+        "ranges": "40-85"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

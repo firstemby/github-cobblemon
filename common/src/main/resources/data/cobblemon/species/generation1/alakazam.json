@@ -239,7 +239,53 @@
       "baseExperienceYield": 300,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "45-90"
+          },
+          "ACCELERATION": {
+            "ranges": "15-30"
+          },
+          "SKILL": {
+            "ranges": "5-10"
+          },
+          "JUMP": {
+            "ranges": "15-30"
+          },
+          "STAMINA": {
+            "ranges": "30-60"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "40-80"
+      },
+      "ACCELERATION": {
+        "ranges": "15-30"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "15-30"
+      },
+      "STAMINA": {
+        "ranges": "25-50"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

@@ -15,9 +15,8 @@ import net.minecraft.world.level.material.Fluid
 
 class SwimBehaviour {
     val avoidsWater = false
-    val hurtByLava = true
     val canSwimInWater = true
-    val canSwimInLava = true
+    val canSwimInLava = false
     val swimSpeed = "0.3".asExpressionLike()
     val canBreatheUnderwater = false
     val canBreatheUnderlava = false

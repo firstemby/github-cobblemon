@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.events.pokemon
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
@@ -22,5 +23,12 @@ class LevelUpEvent(val pokemon: Pokemon, val oldLevel: Int, var newLevel: Int) {
         "pokemon" to pokemon.struct,
         "old_level" to DoubleValue(oldLevel.toDouble()),
         "new_level" to DoubleValue(newLevel.toDouble())
+    )
+
+    val functions = moLangFunctionMap(
+        "set_new_level" to {
+            newLevel = it.getInt(0)
+            DoubleValue.ONE
+        }
     )
 }

@@ -227,7 +227,30 @@
       "baseExperienceYield": 313,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "20-50"
+          },
+          "ACCELERATION": {
+            "ranges": "10-65"
+          },
+          "SKILL": {
+            "ranges": "40-85"
+          },
+          "JUMP": {
+            "ranges": "20-40"
+          },
+          "STAMINA": {
+            "ranges": "40-85"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     },
     {
       "name": "Gmax",
@@ -250,5 +273,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "20-40"
+      },
+      "ACCELERATION": {
+        "ranges": "10-60"
+      },
+      "SKILL": {
+        "ranges": "40-80"
+      },
+      "JUMP": {
+        "ranges": "20-40"
+      },
+      "STAMINA": {
+        "ranges": "40-80"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

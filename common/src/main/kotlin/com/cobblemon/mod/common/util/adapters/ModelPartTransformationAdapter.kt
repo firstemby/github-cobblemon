@@ -43,7 +43,14 @@ object ModelPartTransformationAdapter : JsonDeserializer<ModelPartTransformation
                 it[2].asDouble
             )
         } ?: Vec3.ZERO
+        val scale = json.get("scale")?.asJsonArray?.let {
+            Vec3(
+                it[0].asDouble,
+                it[1].asDouble,
+                it[2].asDouble
+            )
+        } ?: Vec3(1.0,1.0,1.0)
         val isVisible = json.get("isVisible")?.asString?.asExpressionLike()
-        return part.withPosition(position.x, position.y, position.z).withRotationDegrees(rotation.x, rotation.y, rotation.z).also { if (isVisible != null) it.withVisibility(isVisible) }
+        return part.withPosition(position.x, position.y, position.z).withRotationDegrees(rotation.x, rotation.y, rotation.z).withScale(scale.x, scale.y, scale.z).also { if (isVisible != null) it.withVisibility(isVisible) }
     }
 }

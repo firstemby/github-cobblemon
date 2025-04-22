@@ -10,17 +10,17 @@ package com.cobblemon.mod.common.api.toast
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
-import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_FRAME
 import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_PROGRESS_COLOR
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import java.util.UUID
+import kotlin.properties.Delegates
+import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
-import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Represents a toast that can be shown to multiple clients.
@@ -40,7 +40,7 @@ class Toast(
     title: Component,
     description: Component,
     icon: ItemStack,
-    frameTexture: ResourceLocation = VANILLA_FRAME,
+    frameTexture: ResourceLocation = AdvancementToast.BACKGROUND_SPRITE,
     progress: Float = -1F,
     progressColor: Int = VANILLA_PROGRESS_COLOR
 ) {
@@ -195,12 +195,6 @@ class Toast(
     )
 
     companion object {
-
-        /**
-         * The default Minecraft toast frame texture.
-         */
-        val VANILLA_FRAME = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/toasts.png")
-
         const val VANILLA_PROGRESS_COLOR = -1675545
 
     }

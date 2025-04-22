@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readText
 import com.cobblemon.mod.common.util.writeText
-import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import java.util.UUID
@@ -20,7 +19,7 @@ import java.util.UUID
 /**
  * Packet sent when a player joins or leaves a team that the client is currently a member of.
  *
- * Handled by [com.cobblemon.mod.common.client.net.battle.TeamRequestNotificationHandler].
+ * Handled by [com.cobblemon.mod.common.client.net.battle.TeamMemberAddNotificationHandler].
  *
  * @author JazzMcNade
  * @since April 9th, 2024

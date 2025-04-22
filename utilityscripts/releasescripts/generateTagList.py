@@ -60,7 +60,7 @@ def process_json_file(json_path, file_handle):
         tag_details.sort()
 
         # Write the sorted tag details to the file
-        file_handle.write(f"\n<details>\n<summary><b>Tag:</b> #{tag_directory}:{json_file_base[:-5]}</summary>\n\n")
+        file_handle.write(f"\n<details>\n<summary><b>Tag:</b> #cobblemon:{json_file_base[:-5]}</summary>\n\n")
         for tag_detail in tag_details:
             file_handle.write(tag_detail)
         file_handle.write("\n</details>\n")

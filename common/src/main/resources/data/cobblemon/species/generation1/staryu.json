@@ -153,10 +153,31 @@
       "id": "staryu_starmie",
       "variant": "item_interact",
       "result": "starmie",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:water_stone"
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "30-60"
+      },
+      "ACCELERATION": {
+        "ranges": "50-100"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "50-90"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

@@ -177,5 +177,26 @@
     "tutor:wonderroom"
   ],
   "preEvolution": "staryu",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "40-80"
+      },
+      "ACCELERATION": {
+        "ranges": "50-100"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "50-100"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.data.DataRegistry
@@ -86,12 +87,22 @@ object CobblemonFlows : DataRegistry {
         observable.emit(this)
     }
 
-    fun run(eventResourceLocation: ResourceLocation, context: Map<String, MoValue>, cancelable: Cancelable? = null) {
+    fun run(
+        eventResourceLocation: ResourceLocation,
+        context: Map<String, MoValue>,
+        functions: Map<String, (MoParams) -> Any> = emptyMap(),
+        cancelable: Cancelable? = null
+    ) {
         if (cancelable == null) {
             runtime.environment.query.functions.remove("cancel")
         } else {
             runtime.environment.query.addFunction("cancel") { cancelable }
         }
+
+        // Most places in the mod use query structs so it's probably nicer to present the things as query values.
+        context.forEach { (key, value) -> runtime.environment.query.addFunction(key) { return@addFunction value } }
+
+        functions.forEach { (name, function) -> runtime.environment.query.addFunction(name, function) }
 
         flows[eventResourceLocation]?.forEach {
             if (cancelable != null && cancelable.isCanceled) {

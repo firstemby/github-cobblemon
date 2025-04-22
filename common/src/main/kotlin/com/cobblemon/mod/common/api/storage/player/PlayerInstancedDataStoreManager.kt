@@ -8,10 +8,14 @@
 
 package com.cobblemon.mod.common.api.storage.player
 
+import com.cobblemon.mod.common.Cobblemon.MODID
 import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
+import com.google.common.util.concurrent.ThreadFactoryBuilder
 import java.util.UUID
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
@@ -28,6 +32,13 @@ import net.minecraft.world.entity.player.Player
  */
 
 open class PlayerInstancedDataStoreManager {
+    val saveExecutor = Executors.newSingleThreadExecutor(
+        ThreadFactoryBuilder()
+            .setNameFormat("$MODID Player Data Save Executor")
+            .setDaemon(true)
+            .setPriority(1)
+            .build()
+    )
     val factories = mutableMapOf<PlayerInstancedDataStoreType, PlayerInstancedDataFactory<*>>()
     val saveTasks = mutableMapOf<PlayerInstancedDataStoreType, ScheduledTask>()
     open fun setFactory(factory: PlayerInstancedDataFactory<*>, dataType: PlayerInstancedDataStoreType) {

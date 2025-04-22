@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.api.events
 
+import com.bedrockk.molang.runtime.MoParams
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+
 /**
  * Something that can be canceled. This is a highly complex class and should only be read by professional engineers.
  *
@@ -20,5 +24,10 @@ abstract class Cancelable {
 
     fun cancel() {
         isCanceled = true
+    }
+
+    val cancelFunc: Pair<String, (MoParams) -> MoValue> = "cancel" to {
+        cancel()
+        DoubleValue.ONE
     }
 }

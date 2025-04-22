@@ -143,7 +143,7 @@
       "id": "karrablast_escavalier_item",
       "variant": "item_interact",
       "result": "escavalier",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:shell_helmet"

@@ -17,8 +17,12 @@ import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.toRGBA
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
+import com.mojang.blaze3d.platform.NativeImage
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
 import net.minecraft.resources.ResourceLocation
 import org.joml.Vector3f
@@ -196,14 +200,78 @@ class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSup
 class AnimatedModelTextureSupplier(
     val loop: Boolean,
     val fps: Float,
-    val frames: List<ResourceLocation>
+    val frames: List<ResourceLocation>,
+    val interpolation: Boolean
 ): ModelTextureSupplier {
     override fun invoke(state: PosableState): ResourceLocation {
         val frameIndex = floor(state.animationSeconds * fps).toInt()
-        if (frameIndex >= frames.size && !loop) {
-            return frames.last()
+        return if (frameIndex >= frames.size && !loop) {
+            frames.last()
+        } else {
+            frames[frameIndex % frames.size]
         }
-        return frames[frameIndex % frames.size]
+    }
+
+    fun interpolatedTexture(state: PosableState): DynamicTexture? {
+        val resourceManager = Minecraft.getInstance().resourceManager
+
+        val frameIndex = floor(state.animationSeconds * fps).toInt()
+        try {
+            if (frameIndex >= frames.size && !loop) {
+                return DynamicTexture(NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
+            }
+        } catch (e : Exception) {
+            return null
+        }
+        val o = frameIndex % frames.size
+        val i = state.animationSeconds * fps - frameIndex
+
+        val texture1 : NativeImage
+        val texture2 : NativeImage
+
+        try { //Try getting images of the frames so we can use them to make a new one
+            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
+            val s = if (o == frames.size - 1) 0 else o + 1
+            texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
+        } catch (e : Exception) {
+            return null
+        }
+
+        for (x in 0..<texture1.width) {
+            for (y in 0..<texture1.height) {
+                val color1 = texture1.getPixelRGBA(x,y).toRGBA()
+                val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+
+                var newRed : Int
+                var newGreen : Int
+                var newBlue : Int
+                var newAlpha : Int
+
+                //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
+                if (color1.w == 0F && color2.w == 1F) {
+                    newRed = floor(color2.x * 255).toInt()
+                    newGreen = floor(color2.y * 255).toInt()
+                    newBlue = floor(color2.z * 255).toInt()
+                } else if (color1.w == 1F && color2.w == 0F) {
+                    newRed = floor(color1.x * 255).toInt()
+                    newGreen = floor(color1.y * 255).toInt()
+                    newBlue = floor(color1.z * 255).toInt()
+                } else {
+                    newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
+                    newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
+                    newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
+                }
+
+                newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
+
+                val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
+
+                texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+            }
+        }
+        val newTexture = DynamicTexture(texture1)
+        newTexture.setFilter(false, false)
+        return newTexture
     }
 }
 
@@ -221,6 +289,7 @@ class ModelLayer {
     val texture: ModelTextureSupplier? = null
     val emissive: Boolean = false
     val translucent: Boolean = false
+    val translucent_cull: Boolean = false
 }
 
 enum class SpriteType {
