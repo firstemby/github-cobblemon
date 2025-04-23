@@ -18,9 +18,9 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.condition.CompositeSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
@@ -139,7 +139,6 @@ abstract class SpawnDetail : ModDependant {
      * Runs when selected by a selection algorithm. This handles removing any nearby spawns in the selection
      * data and whatever else.
      *
-     * [existingSpawnActions] spawn actions that were chosen prior to the one right before this selection.
      * [selectionData] the algorithm data that is being used to choose spawns.
      * [spawnablePosition] where the spawn is taking place.
      * [spawnAction] the spawn action that was chosen based off this [SpawnDetail] to spawn at this position.
@@ -147,7 +146,6 @@ abstract class SpawnDetail : ModDependant {
     protected open fun onSelection(
         spawnablePosition: SpawnablePosition,
         spawnAction: SpawnAction<*>,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ) {
         selectionData.removeSpawnablePositions { _, pos ->
@@ -162,14 +160,12 @@ abstract class SpawnDetail : ModDependant {
     fun choose(
         spawnablePosition: SpawnablePosition,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ): SpawnAction<*> {
-        val action = createSpawnAction(spawnablePosition, bucket, existingSpawnActions, selectionData)
+        val action = createSpawnAction(spawnablePosition, bucket, selectionData)
         onSelection(
             spawnablePosition = spawnablePosition,
             spawnAction = action,
-            existingSpawnActions = existingSpawnActions,
             selectionData = selectionData
         )
         return action
@@ -179,7 +175,6 @@ abstract class SpawnDetail : ModDependant {
     protected abstract fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ): SpawnAction<*>
 }

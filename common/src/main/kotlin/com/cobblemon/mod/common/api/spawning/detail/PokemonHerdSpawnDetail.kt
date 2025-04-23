@@ -32,13 +32,15 @@ import com.google.gson.annotations.SerializedName
 class PokemonHerdSpawnDetail : SpawnDetail() {
     companion object {
         val TYPE = "pokemon-herd"
+        const val HERD_LEADER = "leader"
     }
 
     override val type: String = TYPE
     var herdablePokemon = mutableListOf<Herdable>()
     @SerializedName("level", alternate = ["levelRange"])
     var levelRange: IntRange = 1..100
-    var minimumDistanceBetweenSpawns = 1F
+    var maxHerdSize = 10
+    var minDistanceBetweenSpawns = 1F
 
     val herdLevelKey: String
         get() = "${id}__LEVEL"
@@ -48,6 +50,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         val levelRange: IntRange? = null
         var levelRangeOffset: IntRange? = null
         var dropTable: DropTable? = null
+        var isLeader: Boolean? = null
         var weight: Float = 1F
         var maxTimes = 10
     }
@@ -56,17 +59,27 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
     override fun onSelection(
         spawnablePosition: SpawnablePosition,
         spawnAction: SpawnAction<*>,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ) {
         selectionData.removeSpawnDetails { it != this }
-        selectionData.removeSpawnablePositions { _, pos -> pos.distanceTo(spawnablePosition) < minimumDistanceBetweenSpawns }
+        selectionData.removeSpawnablePositions { _, pos -> pos.distanceTo(spawnablePosition) < minDistanceBetweenSpawns }
 
-        val validHerdMembers = getValidHerdMembers(existingSpawnActions, getOrSetHerdLevel(selectionData))
-        if (validHerdMembers.isEmpty()) {
+        val herdSpawnCount = selectionData.spawnActions.count { it.detail == this } + 1
+
+        if (herdSpawnCount >= maxHerdSize || getValidHerdMembers(selectionData).isEmpty()) {
             // We can't spawn any more in the herd so remove this spawn from the selection pool.
             selectionData.removeSpawnDetails { it == this }
         }
+    }
+
+    fun lacksPossibleLeader(selectionData: SpawnSelectionData): Boolean {
+        val level = getOrSetHerdLevel(selectionData)
+        val herdable = getValidHerdMembers(selectionData)
+        val herdCounts = getHerdMemberCounts(selectionData)
+
+        val leaderIsPossible = herdable.any { it.levelRange?.contains(level) != false && it.isLeader == true }
+        val leaderIsSelected = herdCounts.any { it.key?.isLeader == true && it.value > 0 }
+        return leaderIsPossible && !leaderIsSelected
     }
 
     private fun getOrSetHerdLevel(selectionData: SpawnSelectionData): Int {
@@ -80,13 +93,14 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ): PokemonSpawnAction {
-        val herdable = getValidHerdMembers(
-            existingSpawnActions = existingSpawnActions,
-            level = getOrSetHerdLevel(selectionData)
-        ).weightedSelection { it.weight } ?: herdablePokemon[0]
+        val validHerdMembers = getValidHerdMembers(selectionData)
+        val herdable = if (lacksPossibleLeader(selectionData)) {
+            validHerdMembers.filter { it.isLeader == true }
+        } else {
+            validHerdMembers
+        }.weightedSelection { it.weight } ?: herdablePokemon[0]
 
         val level = selectionData.context[herdLevelKey] as? Int ?: 1
         val levelRange = herdable.levelRangeOffset?.let { offset ->
@@ -103,11 +117,21 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             drops = herdable.dropTable,
             heldItem = null,
             levelRange = levelRange
-        )
+        ).also {
+            if (herdable.isLeader == true) {
+                it.labels += HERD_LEADER
+            }
+        }
     }
 
-    private fun getValidHerdMembers(existingSpawnActions: List<SpawnAction<*>>, level: Int): List<Herdable> {
-        val relevantActions = existingSpawnActions.filterIsInstance<PokemonSpawnAction>().filter { it.detail == this }
+    fun getHerdMemberCounts(selectionData: SpawnSelectionData): Map<Herdable?, Int> {
+        val relevantActions = selectionData.spawnActions.filterIsInstance<PokemonSpawnAction>().filter { it.detail == this }
+        return relevantActions.groupBy { action -> herdablePokemon.find { it.pokemon == action.props } }.mapValues { it.value.size }
+    }
+
+    private fun getValidHerdMembers(selectionData: SpawnSelectionData): List<Herdable> {
+        val level = getOrSetHerdLevel(selectionData)
+        val relevantActions = selectionData.spawnActions.filterIsInstance<PokemonSpawnAction>().filter { it.detail == this }
         val counts = relevantActions.groupBy { action -> herdablePokemon.find { it.pokemon == action.props } }.mapValues { it.value.size }
         return herdablePokemon.filter { herdable ->
             val count = counts[herdable] ?: 0

@@ -69,7 +69,7 @@ object SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
         val registeredSpawnDetail = SpawnDetail.spawnDetailTypes[spawnDetailTypeName]
             ?: throw IllegalStateException("Unrecognized spawn detail type name: $spawnDetailTypeName.")
         val ctxName = presets.firstNotNullOfOrNull { it.spawnablePositionType?.name }
-            ?: element.get("context").asString
+            ?: (element.get("spawnablePositionType") ?: element.get("context")).asString
         val ctxType = SpawnablePosition.getByName(ctxName)
             ?: throw IllegalStateException("Unrecognized context name: $ctxName")
         SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(ctxType.defaultCondition)

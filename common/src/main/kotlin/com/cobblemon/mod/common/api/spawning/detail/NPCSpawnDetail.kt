@@ -40,7 +40,6 @@ class NPCSpawnDetail : SpawnDetail() {
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnSelectionData
     ) = NPCSpawnAction(spawnablePosition, bucket, this)
 }

@@ -24,6 +24,7 @@ abstract class SpawnAction<R>(
     val bucket: SpawnBucket,
     open val detail: SpawnDetail
 ) {
+    val labels = mutableListOf<String>()
     val future = CompletableFuture<R>().also { it.thenApply { result -> spawnablePosition.spawner.afterSpawn(this, result) } }
 
     /**

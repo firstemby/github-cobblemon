@@ -29,20 +29,18 @@ interface SpawningSelector<T : SpawnSelectionData> {
     fun selectSpawnAction(
         spawner: Spawner,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: T
     ): SpawnAction<*>?
 
     fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, max: Int): List<SpawnAction<*>> {
         val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
 
-        val spawnActions = mutableListOf<SpawnAction<*>>()
+        val spawnActions = selectionData.spawnActions
 
         while (spawnActions.size < max) {
             val spawnAction = selectSpawnAction(
                 spawner = spawner,
                 bucket = bucket,
-                existingSpawnActions = spawnActions,
                 selectionData = selectionData
             )
 

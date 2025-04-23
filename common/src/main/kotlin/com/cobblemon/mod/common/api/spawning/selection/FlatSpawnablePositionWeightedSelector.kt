@@ -11,9 +11,9 @@ package com.cobblemon.mod.common.api.spawning.selection
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.util.removeIf
 import com.cobblemon.mod.common.util.weightedSelection
@@ -91,6 +91,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
     class SeparatedSelectionData(
         val spawnablePositionTypeToSpawns: MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData>
     ): SpawnSelectionData {
+        override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
@@ -140,7 +141,6 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
     override fun selectSpawnAction(
         spawner: Spawner,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SeparatedSelectionData
     ): SpawnAction<*>? {
         if (selectionData.spawnablePositionTypeToSpawns.isEmpty()) {
@@ -181,7 +181,6 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
                         return spawnDetail.choose(
                             spawnablePosition = info.chooseSpawnablePosition(),
                             bucket = bucket,
-                            existingSpawnActions = existingSpawnActions,
                             selectionData = selectionData
                         )
                     }
@@ -193,7 +192,6 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         return selectedSpawn.key.choose(
             spawnablePosition = selectedSpawn.value.chooseSpawnablePosition(),
             bucket = bucket,
-            existingSpawnActions = existingSpawnActions,
             selectionData = selectionData
         )
     }

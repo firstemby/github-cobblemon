@@ -105,8 +105,8 @@ class PokemonSpawnDetail : SpawnDetail() {
 
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition, bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
-        selectionData: SpawnSelectionData): SingleEntitySpawnAction<PokemonEntity> {
+        selectionData: SpawnSelectionData
+    ): SingleEntitySpawnAction<PokemonEntity> {
         val levelRange = pokemon.deriveLevelRange(levelRange)
         val heldItems = heldItems?.takeIf { it.isNotEmpty() }?.toMutableList() ?: mutableListOf()
         val heldItem = if (heldItems.isNotEmpty()) {

@@ -65,6 +65,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         val size: Int
             get() = spawnToSpawnablePosition.size
 
+        override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
@@ -117,7 +118,6 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
     override fun selectSpawnAction(
         spawner: Spawner,
         bucket: SpawnBucket,
-        existingSpawnActions: List<SpawnAction<*>>,
         selectionData: SpawnablePositionSelectionData,
     ): SpawnAction<*>? {
         val spawnToSpawnablePosition = selectionData.spawnToSpawnablePosition
@@ -149,7 +149,6 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
                         return spawnDetail.choose(
                             spawnablePosition = info.chooseSpawnablePosition(),
                             bucket = bucket,
-                            existingSpawnActions = existingSpawnActions,
                             selectionData = selectionData
                         )
                     }
@@ -160,7 +159,6 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         val selectedSpawn = spawnToSpawnablePosition.entries.toList().weightedSelection { it.value.highestWeight }!!
         return selectedSpawn.key.choose(
             spawnablePosition = selectedSpawn.value.chooseSpawnablePosition(),
-            existingSpawnActions = existingSpawnActions,
             bucket = bucket,
             selectionData = selectionData
         )

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.spawning.selection
 
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 
@@ -21,12 +22,14 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
  */
 interface SpawnSelectionData {
     val context: MutableMap<String, Any>
+    val spawnActions: MutableList<SpawnAction<*>>
     fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean)
     fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean)
 
     companion object {
         val EMPTY = object : SpawnSelectionData {
             override val context: MutableMap<String, Any> = mutableMapOf()
+            override val spawnActions: MutableList<SpawnAction<*>> = mutableListOf()
             override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {}
             override fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {}
         }
