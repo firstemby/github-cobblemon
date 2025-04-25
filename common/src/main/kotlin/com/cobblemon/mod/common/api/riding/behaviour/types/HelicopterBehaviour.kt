@@ -39,7 +39,10 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
     }
 
     override val key = KEY
-    override val style = RidingStyle.AIR
+
+    override fun getRidingStyle(settings: HelicopterSettings, state: RidingBehaviourState): RidingStyle {
+        return RidingStyle.AIR
+    }
 
     val poseProvider = PoseProvider<HelicopterSettings, RidingBehaviourState>(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })

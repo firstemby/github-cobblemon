@@ -19,9 +19,8 @@ import net.minecraft.world.level.material.Fluid
 
 class SwimBehaviour {
     val avoidsWater = false
-    val hurtByLava = true
     val canSwimInWater = true
-    val canSwimInLava = true
+    val canSwimInLava = false
     val swimSpeed = "0.3".asExpression()
     val canBreatheUnderwater = false
     val canBreatheUnderlava = false
@@ -35,7 +34,6 @@ class SwimBehaviour {
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("avoids_water") { DoubleValue(avoidsWater) }
-        it.addFunction("hurt_by_lava") { DoubleValue(hurtByLava) }
         it.addFunction("can_swim_in_water") { DoubleValue(canSwimInWater) }
         it.addFunction("can_swim_in_lava") { DoubleValue(canSwimInLava) }
         it.addFunction("swim_speed") { it.environment.createDuplicateRuntime().resolveFloat(swimSpeed) }

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
 import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
@@ -36,46 +38,57 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
  */
 interface TaskConfig {
     companion object {
-        val types = mutableMapOf<String, Class<out TaskConfig>>(
-            "one_of" to OneOfTaskConfig::class.java,
-            "wander" to WanderTaskConfig::class.java,
-            "water_wander" to WaterWanderTaskConfig::class.java,
-            "air_wander" to AirWanderTaskConfig::class.java,
-            "look_at_target" to LookAtTargetTaskConfig::class.java,
-            "follow_walk_target" to FollowWalkTargetTaskConfig::class.java,
-            "random" to RandomTaskConfig::class.java,
-            "stay_afloat" to StayAfloatTaskConfig::class.java,
-            "look_at_entities" to LookAtEntitiesTaskConfig::class.java,
-            "do_nothing" to DoNothingTaskConfig::class.java,
-            "get_angry_at_attacker" to GetAngryAtAttackerTaskConfig::class.java,
-            "stop_being_angry_if_attacker_dead" to StopBeingAngryIfAttackerDeadTaskConfig::class.java,
-            "switch_npc_to_battle" to SwitchToNPCBattleTaskConfig::class.java,
-            "look_at_battling_pokemon" to LookAtBattlingPokemonTaskConfig::class.java,
-            "switch_npc_from_battle" to SwitchFromNPCBattleTaskConfig::class.java,
-            "switch_pokemon_to_battle" to SwitchToPokemonBattleTaskConfig::class.java,
-            "look_at_targeted_battle_pokemon" to LookAtTargetedBattlePokemonTaskConfig::class.java,
-            "switch_pokemon_from_battle" to SwitchFromPokemonBattleTaskConfig::class.java,
-            "go_to_healing_machine" to GoToHealingMachineTaskConfig::class.java,
-            "heal_using_healing_machine" to HealUsingHealingMachineTaskConfig::class.java,
-            "all_of" to AllOfTaskConfig::class.java,
-            "attack_angry_at" to AttackAngryAtTaskConfig::class.java,
-            "move_to_attack_target" to MoveToAttackTargetTaskConfig::class.java,
-            "melee_attack" to MeleeAttackTaskConfig::class.java,
-            "switch_from_fight" to SwitchFromFightTaskConfig::class.java,
-            "switch_to_fight" to SwitchToFightTaskConfig::class.java,
-            "switch_to_chatting" to SwitchToChattingTaskConfig::class.java,
-            "switch_from_chatting" to SwitchFromChattingTaskConfig::class.java,
-            "look_at_speaker" to LookAtSpeakerTaskConfig::class.java,
-            "switch_to_action_effect" to SwitchToActionEffectTaskConfig::class.java,
-            "switch_from_action_effect" to SwitchFromActionEffectTaskConfig::class.java,
-            "exit_battle_when_hurt" to ExitBattleWhenHurtTaskConfig::class.java,
-            "switch_to_panic_when_hurt" to SwitchToPanicWhenHurtTaskConfig::class.java,
-            "switch_to_panic_when_hostiles_nearby" to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
-            "calm_down" to CalmDownTaskConfig::class.java,
-            "flee_attacker" to FleeAttackerTaskConfig::class.java,
-            "flee_nearest_hostile" to FleeNearestHostileTaskConfig::class.java,
-            "run_script" to RunScript::class.java,
-            "look_in_direction" to LookInDirectionTaskConfig::class.java,
+        val types = mutableMapOf<ResourceLocation, Class<out TaskConfig>>(
+            cobblemonResource("one_of") to OneOfTaskConfig::class.java,
+            cobblemonResource("wander") to WanderTaskConfig::class.java,
+            cobblemonResource("water_wander") to WaterWanderTaskConfig::class.java,
+            cobblemonResource("air_wander") to AirWanderTaskConfig::class.java,
+            cobblemonResource("look_at_target") to LookAtTargetTaskConfig::class.java,
+            cobblemonResource("follow_walk_target") to FollowWalkTargetTaskConfig::class.java,
+            cobblemonResource("random") to RandomTaskConfig::class.java,
+            cobblemonResource("stay_afloat") to StayAfloatTaskConfig::class.java,
+            cobblemonResource("look_at_entities") to LookAtEntitiesTaskConfig::class.java,
+            cobblemonResource("do_nothing") to DoNothingTaskConfig::class.java,
+            cobblemonResource("get_angry_at_attacker") to GetAngryAtAttackerTaskConfig::class.java,
+            cobblemonResource("stop_being_angry_if_attacker_dead") to StopBeingAngryIfAttackerDeadTaskConfig::class.java,
+            cobblemonResource("switch_npc_to_battle") to SwitchToNPCBattleTaskConfig::class.java,
+            cobblemonResource("look_at_battling_pokemon") to LookAtBattlingPokemonTaskConfig::class.java,
+            cobblemonResource("switch_npc_from_battle") to SwitchFromNPCBattleTaskConfig::class.java,
+            cobblemonResource("switch_pokemon_to_battle") to SwitchToPokemonBattleTaskConfig::class.java,
+            cobblemonResource("look_at_targeted_battle_pokemon") to LookAtTargetedBattlePokemonTaskConfig::class.java,
+            cobblemonResource("switch_pokemon_from_battle") to SwitchFromPokemonBattleTaskConfig::class.java,
+            cobblemonResource("go_to_healing_machine") to GoToHealingMachineTaskConfig::class.java,
+            cobblemonResource("heal_using_healing_machine") to HealUsingHealingMachineTaskConfig::class.java,
+            cobblemonResource("all_of") to AllOfTaskConfig::class.java,
+            cobblemonResource("attack_angry_at") to AttackAngryAtTaskConfig::class.java,
+            cobblemonResource("move_to_attack_target") to MoveToAttackTargetTaskConfig::class.java,
+            cobblemonResource("melee_attack") to MeleeAttackTaskConfig::class.java,
+            cobblemonResource("switch_from_fight") to SwitchFromFightTaskConfig::class.java,
+            cobblemonResource("switch_to_fight") to SwitchToFightTaskConfig::class.java,
+            cobblemonResource("switch_to_chatting") to SwitchToChattingTaskConfig::class.java,
+            cobblemonResource("switch_from_chatting") to SwitchFromChattingTaskConfig::class.java,
+            cobblemonResource("look_at_speaker") to LookAtSpeakerTaskConfig::class.java,
+            cobblemonResource("switch_to_action_effect") to SwitchToActionEffectTaskConfig::class.java,
+            cobblemonResource("switch_from_action_effect") to SwitchFromActionEffectTaskConfig::class.java,
+            cobblemonResource("exit_battle_when_hurt") to ExitBattleWhenHurtTaskConfig::class.java,
+            cobblemonResource("switch_to_panic_when_hurt") to SwitchToPanicWhenHurtTaskConfig::class.java,
+            cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
+            cobblemonResource("calm_down") to CalmDownTaskConfig::class.java,
+            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
+            cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig::class.java,
+            cobblemonResource("run_script") to RunScript::class.java,
+            cobblemonResource("look_in_direction") to LookInDirectionTaskConfig::class.java,
+            cobblemonResource("wake_up") to WakeUpTaskConfig::class.java,
+            cobblemonResource("go_to_sleep") to GoToSleepTaskConfig::class.java,
+            cobblemonResource("find_resting_place") to FindRestingPlaceTaskConfig::class.java,
+            cobblemonResource("move_to_owner") to MoveToOwnerTaskConfig::class.java,
+            cobblemonResource("switch_to_sleep_on_trainer_bed") to SwitchToSleepOnTrainerBedTaskConfig::class.java,
+            cobblemonResource("switch_from_sleep_on_trainer_bed") to SwitchFromSleepOnTrainerBedTaskConfig::class.java,
+            cobblemonResource("sleep_if_on_trainer_bed") to SleepIfOnTrainerBedTaskConfig::class.java,
+            cobblemonResource("point_to_spawn") to PointToSpawnTaskConfig::class.java,
+            cobblemonResource("eat_grass") to EatGrassTaskConfig::class.java,
+            cobblemonResource("find_air") to FindAirTaskConfig::class.java,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
             "path_to_nest" to PathToNestTaskConfig::class.java,
             "path_to_nest_material" to PathToNestMaterialTaskConfig::class.java,
             "breed_at_nest" to BreedAtNestTaskConfig::class.java,
@@ -89,17 +102,6 @@ interface TaskConfig {
             "place_egg_in_nest" to PlaceEggInNestTaskConfig::class.java,
             "build_nest" to BuildNestTaskConfig::class.java,
             "hunt_player" to HuntPlayerTaskConfig::class.java,
-            "wake_up" to WakeUpTaskConfig::class.java,
-            "go_to_sleep" to GoToSleepTaskConfig::class.java,
-            "find_resting_place" to FindRestingPlaceTaskConfig::class.java,
-            "move_to_owner" to MoveToOwnerTaskConfig::class.java,
-            "switch_to_sleep_on_trainer_bed" to SwitchToSleepOnTrainerBedTaskConfig::class.java,
-            "switch_from_sleep_on_trainer_bed" to SwitchFromSleepOnTrainerBedTaskConfig::class.java,
-            "sleep_if_on_trainer_bed" to SleepIfOnTrainerBedTaskConfig::class.java,
-            "point_to_spawn" to PointToSpawnTaskConfig::class.java,
-            "eat_grass" to EatGrassTaskConfig::class.java,
-            "find_air" to FindAirTaskConfig::class.java,
-            "go_to_land" to GoToLandTaskConfig::class.java
         )
 
         val runtime = MoLangRuntime().setup()

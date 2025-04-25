@@ -15,8 +15,10 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
 /**
@@ -33,17 +35,16 @@ import net.minecraft.world.entity.LivingEntity
  */
 interface BehaviourConfig {
     companion object {
-        val types = mutableMapOf<String, Class<out BehaviourConfig>>(
-            "script" to ScriptBehaviourConfig::class.java,
-            "custom_script" to CustomScriptBehaviourConfig::class.java,
-            "add_tasks_to_activity" to AddTasksToActivity::class.java,
-            "apply_behaviours" to ApplyBehaviours::class.java,
-            "set_default_activity" to SetDefaultActivity::class.java,
-            "set_core_activities" to SetCoreActivities::class.java,
-            "add_variables" to AddVariablesConfig::class.java,
-            "set_variables" to SetVariablesConfig::class.java,
+        val types = mutableMapOf<ResourceLocation, Class<out BehaviourConfig>>(
+            cobblemonResource("script") to ScriptBehaviourConfig::class.java,
+            cobblemonResource("custom_script") to CustomScriptBehaviourConfig::class.java,
+            cobblemonResource("add_tasks_to_activity") to AddTasksToActivity::class.java,
+            cobblemonResource("apply_behaviours") to ApplyBehaviours::class.java,
+            cobblemonResource("set_default_activity") to SetDefaultActivity::class.java,
+            cobblemonResource("set_core_activities") to SetCoreActivities::class.java,
+            cobblemonResource("add_variables") to AddVariablesConfig::class.java,
+            cobblemonResource("set_variables") to SetVariablesConfig::class.java,
         )
-
     }
 
     fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {

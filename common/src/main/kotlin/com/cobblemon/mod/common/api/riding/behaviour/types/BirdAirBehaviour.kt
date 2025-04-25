@@ -38,7 +38,10 @@ class BirdAirBehaviour : RidingBehaviour<BirdAirSettings, BirdAirState> {
     }
 
     override val key: ResourceLocation = KEY
-    override val style = RidingStyle.AIR
+
+    override fun getRidingStyle(settings: BirdAirSettings, state: BirdAirState): RidingStyle {
+        return RidingStyle.AIR
+    }
 
     val poseProvider = PoseProvider<BirdAirSettings, BirdAirState>(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVelocity.get().z > 0.2 })

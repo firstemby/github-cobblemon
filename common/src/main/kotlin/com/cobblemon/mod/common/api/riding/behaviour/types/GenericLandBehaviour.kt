@@ -33,7 +33,10 @@ class GenericLandBehaviour : RidingBehaviour<GenericLandSettings, GenericLandSta
     }
 
     override val key = KEY
-    override val style = RidingStyle.LAND
+
+    override fun getRidingStyle(settings: GenericLandSettings, state: GenericLandState): RidingStyle {
+        return RidingStyle.LAND
+    }
 
     val poseProvider = PoseProvider<GenericLandSettings, GenericLandState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->

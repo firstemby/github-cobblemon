@@ -128,6 +128,7 @@ import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -196,6 +197,8 @@ object Cobblemon {
 
         this.loadConfig()
 
+        implementation.registerRecipeSerializers()
+        implementation.registerRecipeTypes()
         implementation.registerPermissionValidator()
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
@@ -204,9 +207,11 @@ object Cobblemon {
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
+        implementation.registerPoiTypes()
         implementation.registerVillagers()
         implementation.registerWorldGenFeatures()
         implementation.registerParticles()
+        implementation.registerMenu()
         implementation.registerEntityDataSerializers()
         implementation.registerCriteria()
         implementation.registerEntitySubPredicates()

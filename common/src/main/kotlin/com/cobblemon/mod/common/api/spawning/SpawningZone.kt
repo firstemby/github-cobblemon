@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.spawning
 import com.cobblemon.mod.common.api.spawning.influence.ConditionalZoneSpawningInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.influence.UnconditionalZoneSpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.WorldSlicedSpawningInfluence
 import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import kotlin.math.max

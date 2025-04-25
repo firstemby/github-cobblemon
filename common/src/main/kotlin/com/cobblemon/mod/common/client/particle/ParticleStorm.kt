@@ -25,14 +25,15 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.particle.SnowstormParticleOptions
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.mojang.blaze3d.vertex.PoseStack
+import kotlin.random.Random
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.NoRenderParticle
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import kotlin.random.Random
-import net.minecraft.world.entity.LivingEntity
+import org.joml.Vector4f
 
 /**
  * An instance of a bedrock particle effect.
@@ -54,6 +55,7 @@ class ParticleStorm(
     val sourceVisible: () -> Boolean = { true },
     val targetPos: (() -> Vec3)? = null,
     val onDespawn: () -> Unit = {},
+    val getParticleColor: () -> Vector4f? = { null },
     val runtime: MoLangRuntime = MoLangRuntime(),
     val entity: Entity? = null,
 ): NoRenderParticle(world, emitterSpaceMatrix.getOrigin().x, emitterSpaceMatrix.getOrigin().y, emitterSpaceMatrix.getOrigin().z) {
@@ -236,7 +238,12 @@ class ParticleStorm(
             remove()
         }
 
-        if (stopped || !sourceVisible()) {
+        if (!sourceVisible()) {
+            this.setInvisible()
+            return
+        }
+
+        if (stopped) {
             return
         }
 
@@ -313,5 +320,9 @@ class ParticleStorm(
     //Gets distance between emitter pos and destination pos in emitter space
     fun distanceTo(destinationPos: Vec3): Vec3 {
         return emitterSpaceMatrix.transformWorldToParticle(Vec3(x, y, z)).subtract(emitterSpaceMatrix.transformWorldToParticle(destinationPos))
+    }
+
+    fun setInvisible() {
+        particles.forEach { particle -> particle.invisible = true }
     }
 }

@@ -50,6 +50,7 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
       "fly": {
         "canFly": true

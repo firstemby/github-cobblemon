@@ -1,0 +1,31 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "cobblemon:medicinal_brew"
+        },
+        {
+            "item": "cobblemon:cyan_mint_leaf"
+        },
+        {
+            "item": "cobblemon:cyan_mint_leaf"
+        },
+        {
+            "item": "cobblemon:hondew_berry"
+        },
+        {
+            "item": "cobblemon:hondew_berry"
+        },
+        {
+            "item": "minecraft:bone_meal"
+        },
+        {
+            "item": "minecraft:bone_meal"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:calcium"
+    },
+    "seasoningProcessors": []
+}

@@ -6,6 +6,7 @@
 - Added filter functionality in PC UI, which supports `PokemonProperties` (e.g. `shiny=yes` shows all shiny Pokémon).
 - Added `/changewallpaper <player> <boxNumber> <wallpaper>` command to change a box wallpaper through commands.
 - Added `/renamebox <player> <boxNumber> <name>` command to rename a PC box through commands.
+- Added IVs and EVs stat displays in PC.
 
 ### Developer
 - Added `RenamePCBoxEvent.Pre` and `RenamePCBoxEvent.Post` events to prevent players from renaming a box or changing their input.

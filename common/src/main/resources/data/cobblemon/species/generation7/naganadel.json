@@ -49,6 +49,16 @@
     "height": 4,
     "fixed": false
   },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

@@ -82,7 +82,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(Stat::class.java, Cobblemon.statProvider.typeAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BrainConfigAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,

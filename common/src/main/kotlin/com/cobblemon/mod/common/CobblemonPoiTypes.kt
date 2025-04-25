@@ -28,6 +28,18 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
     @JvmField
     val NURSE = create(NURSE_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.HEALING_MACHINE), 1, 1))
     @JvmField
+    val LURE_CAKE_KEY: ResourceKey<PoiType> = createKey("lure_cake")
+    @JvmField
+    val LURE_CAKE = create(LURE_CAKE_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.LURE_CAKE), 0, 1))
+    @JvmField
+    val SACCHARINE_HONEY_LOG_KEY: ResourceKey<PoiType> = createKey("saccharine_honey_log")
+    @JvmField
+    val SACCHARINE_HONEY_LOG = create(SACCHARINE_HONEY_LOG_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.SACCHARINE_HONEY_LOG), 0, 1))
+    @JvmField
+    val INCENSE_SWEET_KEY: ResourceKey<PoiType> = createKey("saccharine_honey_log")
+    @JvmField
+    val INCENSE_SWEET = create(INCENSE_SWEET_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.INCENSE_SWEET), 0, 1))
+    @JvmField
     val GROTTO_BLOCK_KEY: ResourceKey<PoiType> = createKey("grotto_block")
     @JvmField
     val GROTTO_BLOCK = create(GROTTO_BLOCK_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.GROTTO_BLOCK), 0, 1))

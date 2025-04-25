@@ -35,7 +35,10 @@ class GenericSwimBehaviour : RidingBehaviour<GenericSwimSettings, RidingBehaviou
     }
 
     override val key = KEY
-    override val style = RidingStyle.LIQUID
+
+    override fun getRidingStyle(settings: GenericSwimSettings, state: RidingBehaviourState): RidingStyle {
+        return RidingStyle.LIQUID
+    }
 
     val poseProvider = PoseProvider<GenericSwimSettings, RidingBehaviourState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.isSwimming && entity.entityData.get(PokemonEntity.MOVING) })

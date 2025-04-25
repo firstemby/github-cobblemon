@@ -75,6 +75,7 @@ fun drawProfilePokemon(
     scale: Float = 20F,
     applyProfileTransform: Boolean = true,
     applyBaseScale: Boolean = false,
+    doQuirks: Boolean = false,
     r: Float = 1F,
     g: Float = 1F,
     b: Float = 1F,
@@ -101,7 +102,7 @@ fun drawProfilePokemon(
         context.put(RenderContext.ASPECTS, state.currentAspects)
         context.put(RenderContext.RENDER_STATE, RenderContext.RenderState.PROFILE)
         context.put(RenderContext.POSABLE_STATE, state)
-        context.put(RenderContext.DO_QUIRKS, false)
+        context.put(RenderContext.DO_QUIRKS, doQuirks)
 
         state.currentModel = model
 

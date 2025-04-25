@@ -56,6 +56,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
             CobblemonSpawnPools.onServerLoad(server)
         }
         precalculate()
+        this.observable.emit(this)
     }
 
     val details = mutableListOf<SpawnDetail>()

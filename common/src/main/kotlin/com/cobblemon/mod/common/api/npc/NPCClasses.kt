@@ -74,7 +74,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(WeightedAspect::class.java, WeightedAspectAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BrainConfigAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,

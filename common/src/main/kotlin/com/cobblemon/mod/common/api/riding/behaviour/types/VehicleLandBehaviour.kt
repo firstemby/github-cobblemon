@@ -53,7 +53,10 @@ class VehicleLandBehaviour : RidingBehaviour<VehicleLandSettings, VehicleLandSta
     }
 
     override val key = KEY
-    override val style = RidingStyle.LAND
+
+    override fun getRidingStyle(settings: VehicleLandSettings, state: VehicleLandState): RidingStyle {
+        return RidingStyle.LAND
+    }
 
     val poseProvider = PoseProvider<VehicleLandSettings, VehicleLandState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })

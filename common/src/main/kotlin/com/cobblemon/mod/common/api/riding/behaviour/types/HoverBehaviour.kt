@@ -33,7 +33,10 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.AIR
+
+    override fun getRidingStyle(settings: HoverSettings, state: HoverState): RidingStyle {
+        return RidingStyle.AIR
+    }
 
     val poseProvider = PoseProvider<HoverSettings, HoverState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->

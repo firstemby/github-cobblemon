@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -166,6 +167,12 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
 
+        val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
+        val newRideBoosts = entity.pokemon.getRideBoosts()
+        if (currentRideBoosts.size != newRideBoosts.size || currentRideBoosts.any { (key, value) -> newRideBoosts[key] != value }) {
+            entity.entityData.set(PokemonEntity.RIDE_BOOSTS, newRideBoosts)
+        }
+
         updateShownItem()
         updatePoseType()
     }
@@ -290,6 +297,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
     }
 
+    fun doDeathDrops() {
+        if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+            val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
+            if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
+            (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
+        }
+    }
+
     override fun updatePostDeath() {
         // clear active effects before proceeding
         val owner = entity.owner
@@ -302,6 +317,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.deathTime == 0) {
             entity.effects.wipe()
             entity.deathTime = 1
+            if (!Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             return
         } else if (entity.effects.progress?.isDone == false) {
             return
@@ -319,15 +335,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         if (entity.deathTime == 60) {
-            if (entity.ownerUUID == null && entity.owner == null) {
-                entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
-                if(entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
-                    val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
-                    if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
-                    (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
-                }
-            }
-
+            entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
+            if (Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             entity.remove(Entity.RemovalReason.KILLED)
         }
     }

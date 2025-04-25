@@ -20,6 +20,7 @@ open class PokemonBehaviour {
     val resting = RestBehaviour()
     var moving = MoveBehaviour()
     val idle = IdleBehaviour()
+    val fireImmune = false
     val entityInteract = EntityBehaviour()
     val combat = CombatBehaviour()
 

@@ -26,6 +26,11 @@ object RequestRenamePCBoxHandler : ServerNetworkPacketHandler<RequestRenamePCBox
         }
 
         val box = pc.boxes[packet.boxNumber]
+        if (packet.name != null && packet.name.length > 19) {
+            RenamePCBoxPacket(pc.uuid, packet.boxNumber, box.name).sendToPlayer(player)
+            return
+        }
+
         CobblemonEvents.RENAME_PC_BOX_EVENT_PRE.postThenFinally(
             event = RenamePCBoxEvent.Pre(player, box, packet.name?: ""),
             ifSucceeded = { preEvent ->

@@ -121,9 +121,10 @@
   },
   "sproutShape": "stand-sprout",
   "matureShape": "stand-mature",
-  "flavors": {
+  "flavours": {
     "BITTER": 15
   },
+  "colour": "LIME",
   "weight": 1.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

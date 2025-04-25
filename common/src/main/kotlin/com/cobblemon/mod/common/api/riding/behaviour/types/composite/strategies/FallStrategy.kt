@@ -9,13 +9,11 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviours
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeState
-import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -47,7 +45,7 @@ object FallStrategy : CompositeRidingStrategy<FallCompositeSettings> {
         defaultSettings: RidingBehaviourSettings,
         vehicle: PokemonEntity
     ): Boolean {
-        if (state.activeController.get() == defaultSettings.key) return false
+        if (state.activeBehaviour.get() == defaultSettings.key) return false
         if (state.lastTransition.get() + 20 >= vehicle.level().gameTime) return false
         if (!vehicle.onGround()) return false
         val defaultBehaviour = RidingBehaviours.get(defaultSettings.key)
@@ -61,7 +59,7 @@ object FallStrategy : CompositeRidingStrategy<FallCompositeSettings> {
         vehicle: PokemonEntity,
         driver: Player
     ): Boolean {
-        if (state.activeController.get() == alternateSettings.key) return false
+        if (state.activeBehaviour.get() == alternateSettings.key) return false
         if (!driver.jumping) return false
         if (state.lastTransition.get() + 20 >= vehicle.level().gameTime) return false
 

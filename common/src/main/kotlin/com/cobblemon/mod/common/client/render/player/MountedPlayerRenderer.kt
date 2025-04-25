@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.client.render.player
 
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.Rideable
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
@@ -22,15 +21,12 @@ import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 import org.joml.AxisAngle4f
-import org.joml.Matrix4f
 import org.joml.Vector3f
 
 /**
  * @author landonjw
  */
 object MountedPlayerRenderer {
-    const val disableRollableRenderDebug: Boolean = false
-
     fun render(player: AbstractClientPlayer, entity: PokemonEntity, stack: PoseStack, bob: Float, yBodyRot: Float, partialTicks: Float, i: Float) {
         if(player.vehicle !is Rideable) return
         val matrix = stack.last().pose()

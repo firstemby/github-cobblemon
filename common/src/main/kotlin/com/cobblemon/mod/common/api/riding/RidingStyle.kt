@@ -18,6 +18,5 @@ package com.cobblemon.mod.common.api.riding
 enum class RidingStyle {
     LAND,
     LIQUID,
-    AIR,
-    COMPOSITE
+    AIR
 }

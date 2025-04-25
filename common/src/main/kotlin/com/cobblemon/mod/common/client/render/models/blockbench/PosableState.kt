@@ -39,6 +39,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
+import java.util.concurrent.ConcurrentLinkedQueue
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -48,8 +49,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Represents some kind of animation state for an entity or GUI element or other renderable component in the game.

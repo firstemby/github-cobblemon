@@ -8,15 +8,28 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.SpawnBucketUtils
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
+import com.cobblemon.mod.common.api.spawning.context.AreaSpawningContext
+import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.context.SubmergedSpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
+import com.cobblemon.mod.common.api.spawning.influence.SaccharineHoneyLogInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.selection.FlatSpawnablePositionWeightedSelector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
+import com.cobblemon.mod.common.block.entity.CakeBlockEntity
+import com.cobblemon.mod.common.block.entity.LureCakeBlockEntity
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.block.RotatedPillarBlock
 
 /**
  * A spawner that regularly attempts spawning entities. It has timing utilities,
@@ -69,7 +82,12 @@ abstract class TickingSpawner(
             ticksUntilNextSpawn = ticksBetweenSpawns
             for (spawnAction in spawnActions) {
                 spawnAction.complete()
-            }
+
+                // TODO reset the Influence (Not sure if we need to do this, but in case it persists by next time I am adding this)
+                ctx.influences.filterIsInstance<SpawnBaitInfluence>().forEach {
+                    it.used = false
+                }
+            }*/
         }
     }
 

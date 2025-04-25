@@ -100,6 +100,7 @@ class HeldItemRenderer {
                     else if (state is PokemonClientDelegate || state is FloatingState) {
                         poseStack.mulPose(Axis.YP.rotationDegrees(-90.0f * if (isLeft) -1f else 1f))
                         poseStack.mulPose(Axis.ZP.rotationDegrees(90.0f * if (isLeft) -1f else 1f))
+                        poseStack.translate(0.0f,0.0f,-0.0625f) // offset item by -1/16 to recenter item onto the locator
                     }
                 }
                 ItemDisplayContext.HEAD -> {

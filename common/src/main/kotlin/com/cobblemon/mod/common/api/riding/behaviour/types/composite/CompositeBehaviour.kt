@@ -30,8 +30,14 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.COMPOSITE
 
+    override fun getRidingStyle(settings: CompositeSettings, state: CompositeState): RidingStyle {
+        return chooseBehaviour(settings, state) {
+            behaviour, behaviourSettings, behaviourState ->
+            behaviour.getRidingStyle(behaviourSettings, behaviourState)
+        }
+    }
+    
     override fun createDefaultState(settings: CompositeSettings): CompositeState {
         val defaultBehaviour = RidingBehaviours.get(settings.defaultBehaviour.key)
         val defaultState = defaultBehaviour.createDefaultState(settings.defaultBehaviour)
@@ -51,7 +57,7 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
     ): T {
         val defaultBehaviour = RidingBehaviours.get(settings.defaultBehaviour.key)
         val alternativeBehaviour = RidingBehaviours.get(settings.alternateBehaviour.key)
-        return when (state.activeController.get()) {
+        return when (state.activeBehaviour.get()) {
             settings.defaultBehaviour.key -> action(
                 defaultBehaviour,
                 settings.defaultBehaviour,
@@ -63,7 +69,7 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
                 state.alternateBehaviourState
             )
 
-            else -> error("Invalid controller: ${state.activeController.get()}")
+            else -> error("Invalid controller: ${state.activeBehaviour.get()}")
         }
     }
 
@@ -364,28 +370,28 @@ open class CompositeSettings : RidingBehaviourSettings {
 }
 
 class CompositeState(
-    private val defaultBehaviour: ResourceLocation,
+    val defaultBehaviour: ResourceLocation,
     val defaultBehaviourState: RidingBehaviourState,
     val alternateBehaviourState: RidingBehaviourState
 ) : RidingBehaviourState() {
-    var activeController = ridingState(defaultBehaviour, Side.CLIENT)
+    var activeBehaviour = ridingState(defaultBehaviour, Side.CLIENT)
     var lastTransition = ridingState(-100L, Side.BOTH)
 
     override val rideVelocity: SidedRidingState<Vec3>
-        get() = when (activeController.get()) {
+        get() = when (activeBehaviour.get()) {
             defaultBehaviour -> defaultBehaviourState.rideVelocity
             else -> alternateBehaviourState.rideVelocity
         }
 
     override val stamina: SidedRidingState<Float>
-        get() = when (activeController.get()) {
+        get() = when (activeBehaviour.get()) {
             defaultBehaviour -> defaultBehaviourState.stamina
             else -> alternateBehaviourState.stamina
         }
 
     override fun reset() {
         super.reset()
-        activeController.set(defaultBehaviour, forced = true)
+        activeBehaviour.set(defaultBehaviour, forced = true)
         lastTransition.set(-100L, forced = true)
         defaultBehaviourState.reset()
         alternateBehaviourState.reset()
@@ -394,7 +400,7 @@ class CompositeState(
     override fun copy(): CompositeState {
         val state =
             CompositeState(defaultBehaviour, defaultBehaviourState.copy(), alternateBehaviourState.copy())
-        state.activeController.set(activeController.get(), forced = true)
+        state.activeBehaviour.set(activeBehaviour.get(), forced = true)
         state.lastTransition.set(lastTransition.get(), forced = true)
         state.rideVelocity.set(rideVelocity.get(), forced = true)
         state.stamina.set(stamina.get(), forced = true)
@@ -403,7 +409,7 @@ class CompositeState(
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
         if (previous !is CompositeState) return false
-        if (previous.activeController.get() != activeController.get()) return true
+        if (previous.activeBehaviour.get() != activeBehaviour.get()) return true
         if (defaultBehaviourState.shouldSync(previous.defaultBehaviourState)) return true
         if (alternateBehaviourState.shouldSync(previous.alternateBehaviourState)) return true
         return super.shouldSync(previous)
@@ -411,14 +417,14 @@ class CompositeState(
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
-        buffer.writeResourceLocation(activeController.get())
+        buffer.writeResourceLocation(activeBehaviour.get())
         defaultBehaviourState.encode(buffer)
         alternateBehaviourState.encode(buffer)
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
-        activeController.set(buffer.readResourceLocation(), forced = true)
+        activeBehaviour.set(buffer.readResourceLocation(), forced = true)
         defaultBehaviourState.decode(buffer)
         alternateBehaviourState.decode(buffer)
     }

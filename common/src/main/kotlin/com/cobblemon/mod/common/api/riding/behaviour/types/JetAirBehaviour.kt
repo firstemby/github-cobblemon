@@ -35,7 +35,10 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.AIR
+
+    override fun getRidingStyle(settings: JetAirSettings, state: JetAirState): RidingStyle {
+        return RidingStyle.AIR
+    }
 
     val poseProvider = PoseProvider<JetAirSettings, JetAirState>(PoseType.HOVER)
         .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVelocity.get().z > 0.1 })

@@ -107,6 +107,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.VIVICHOKE)
         entries.accept(CobblemonItems.VIVICHOKE_SEEDS)
         entries.accept(CobblemonItems.GALARICA_NUTS)
+        entries.accept(CobblemonItems.Hearty_Grains)
+        entries.accept(CobblemonItems.BUGWORT)
 
         entries.accept(CobblemonItems.RED_APRICORN)
         entries.accept(CobblemonItems.YELLOW_APRICORN)
@@ -122,6 +124,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.PINK_APRICORN_SEED)
         entries.accept(CobblemonItems.BLACK_APRICORN_SEED)
         entries.accept(CobblemonItems.WHITE_APRICORN_SEED)
+
+        entries.accept(CobblemonItems.SACCHARINE_SAPLING)
 
         entries.accept(CobblemonItems.RED_MINT_SEEDS)
         entries.accept(CobblemonItems.RED_MINT_LEAF)
@@ -250,6 +254,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.RELIC_COIN_POUCH)
         entries.accept(CobblemonItems.RELIC_COIN_SACK)
 
+        entries.accept(CobblemonItems.INCENSE_SWEET)
         entries.accept(CobblemonItems.DISPLAY_CASE)
         entries.accept(CobblemonItems.APRICORN_LOG)
         entries.accept(CobblemonItems.APRICORN_WOOD)
@@ -267,6 +272,25 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.APRICORN_SIGN)
         entries.accept(CobblemonItems.APRICORN_HANGING_SIGN)
         entries.accept(CobblemonItems.APRICORN_LEAVES)
+
+        entries.accept(CobblemonItems.SACCHARINE_LOG)
+        entries.accept(CobblemonItems.SACCHARINE_WOOD)
+        entries.accept(CobblemonItems.STRIPPED_SACCHARINE_LOG)
+        entries.accept(CobblemonItems.STRIPPED_SACCHARINE_WOOD)
+        entries.accept(CobblemonItems.SACCHARINE_PLANKS)
+        entries.accept(CobblemonItems.SACCHARINE_STAIRS)
+        entries.accept(CobblemonItems.SACCHARINE_SLAB)
+        entries.accept(CobblemonItems.SACCHARINE_FENCE)
+        entries.accept(CobblemonItems.SACCHARINE_FENCE_GATE)
+        entries.accept(CobblemonItems.SACCHARINE_DOOR)
+        entries.accept(CobblemonItems.SACCHARINE_TRAPDOOR)
+        entries.accept(CobblemonItems.SACCHARINE_BUTTON)
+        entries.accept(CobblemonItems.SACCHARINE_PRESSURE_PLATE)
+        entries.accept(CobblemonItems.SACCHARINE_SIGN)
+        entries.accept(CobblemonItems.SACCHARINE_HANGING_SIGN)
+        entries.accept(CobblemonItems.SACCHARINE_LEAVES)
+        //entries.accept(CobblemonItems.SACCHARINE_SAPLING)
+
 
         entries.accept(CobblemonItems.TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.BLACK_TUMBLESTONE_BLOCK)
@@ -371,6 +395,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.SUN_STONE_BLOCK)
         entries.accept(CobblemonItems.THUNDER_STONE_BLOCK)
         entries.accept(CobblemonItems.WATER_STONE_BLOCK)
+
+        CobblemonItems.campfire_pots.forEach(entries::accept)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {
@@ -442,6 +468,15 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.CALCIUM)
         entries.accept(CobblemonItems.ZINC)
         entries.accept(CobblemonItems.CARBOS)
+
+        entries.accept(CobblemonItems.HEALTH_MOCHI)
+        entries.accept(CobblemonItems.MUSCLE_MOCHI)
+        entries.accept(CobblemonItems.RESIST_MOCHI)
+        entries.accept(CobblemonItems.GENIUS_MOCHI)
+        entries.accept(CobblemonItems.CLEVER_MOCHI)
+        entries.accept(CobblemonItems.SWIFT_MOCHI)
+        entries.accept(CobblemonItems.FRESH_START_MOCHI)
+
         entries.accept(CobblemonItems.PP_UP)
         entries.accept(CobblemonItems.PP_MAX)
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_XS)
@@ -701,6 +736,9 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
+        injector.putLast(CobblemonItems.POTATO_MOCHI)
+        injector.putLast(CobblemonItems.FRIED_RICE)
+        injector.putLast(CobblemonItems.CANDIED_APPLE)
     }
 
     private fun toolsAndUtilitiesInjections(injector: Injector) {

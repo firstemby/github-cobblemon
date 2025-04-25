@@ -19,6 +19,8 @@
   - The player executing the command must be facing the target pokemon entity. Transformations are not persistent and will revert when resources are reloaded.
 - Added lang keys for all moves and abilities up to Generation 9.
 - Fixed Moon Ball moon phase logic to actually work correctly
+- Added `translucent_cull` boolean option into resolver's layer to allow for translucent textures with culling
+- Added [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights) support for items held by Pokémon.
 
 ### Pokémon Added
 
@@ -127,6 +129,11 @@
 - Shulker shell Forretress is now a cosmetic rather than a special evo and thus all shulker Forretress will revert back to normal until a shulker shell is put in their cosmetic slot.
 - Updated `doPokemonSpawning` gamerule to support per-dimension configurations.
 - The Pokedex now displays a form name of a "normal" Pokémon for when the base form is still a named form.
+- Improved the zoom functionality of the Pokédex Scanner by giving the levels logarithmic scaling.
+- Added a subtle rotation effect to the Pokédex Scanner's wheel when zooming.
+- Improved parity with vanilla mobs' drop behavior; loot and XP drop on death instead of after the entire death sequence finishes.
+- Quirk animations no longer play in the battle GUI since they were pretty distracting.
+- A number of Pokemon that float above the ground visually (Gastly, Klingklang, etc.)  are no longer considered to be touching the ground
 
 ### Fixes
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
@@ -156,6 +163,7 @@
 - Fixed an issue with newer versions of Fabric API where underground Pokémon were spawning in The End.
 - Fixed spawning not working well when you're at high points surrounded by lower altitude spawning areas, such as flying.
 - Fixed certain Pokémon with forms not having appropriate stock Pokédex entries.
+- Fixed issue with Pokédex Scanner that caused the open/close overlay to have the wrong opacity values
 - Fixed dragon's breath not being usable on the restoration tank when it should be
 - Fixed Moon Stones not interacting properly with dripstone blocks.
 
@@ -176,7 +184,15 @@
 - Updated NPCEntity pokeball throw positioning to properly account for the baseScale property.
 - Fixed `[Pokemon].copyFrom` error causing forms, IVs, and EVs to not be applied properly when using `[Pokemon].loadFromJSON` or `[Pokemon].loadFromNBT`
 - Added new item class, `WearableItem`. Instances of this class should have a corresponding 3D model. These models render when the items display context is `HEAD`.
-
+- Pokemon now have a fireImmune attribute in their behaviour that can be set to true to ignore all fire damage (lava, magma blocks, etc.)
+  `JSON
+  {
+    "behaviour": {
+      "fireImmune": true
+    }
+  }
+  `
+  
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
   - The `requiredContext` for an item interaction evolution

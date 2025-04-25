@@ -57,6 +57,9 @@
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {

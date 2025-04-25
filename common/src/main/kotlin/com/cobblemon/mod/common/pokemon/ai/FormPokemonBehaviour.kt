@@ -31,6 +31,9 @@ class FormPokemonBehaviour {
     @SerializedName("idle")
     private val _idle: IdleBehaviour? = null
 
+    @SerializedName("fireImmune")
+    private val _fireImmune: Boolean? = null
+
     @SerializedName("entityInteract")
     private val _entityInteract: EntityBehaviour? = null
 
@@ -45,6 +48,9 @@ class FormPokemonBehaviour {
 
     val idle: IdleBehaviour
         get() = _idle ?: parent.idle
+
+    val fireImmune: Boolean
+        get() = _fireImmune ?: parent.fireImmune
 
     val entityInteract: EntityBehaviour
         get() = _entityInteract ?: parent.entityInteract

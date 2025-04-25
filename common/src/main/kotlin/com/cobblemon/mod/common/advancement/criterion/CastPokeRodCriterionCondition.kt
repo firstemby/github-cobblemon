@@ -20,8 +20,8 @@ import net.minecraft.resources.ResourceLocation
 class CastPokeRodContext(val baitId: ResourceLocation)
 
 class CastPokeRodCriterionCondition(
-        playerCtx: Optional<ContextAwarePredicate>,
-        val baitId: String
+    playerCtx: Optional<ContextAwarePredicate>,
+    val baitId: String
 ): SimpleCriterionCondition<CastPokeRodContext>(playerCtx) {
 
     companion object {

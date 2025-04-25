@@ -48,7 +48,6 @@ class PokemonAdultSensor : Sensor<PokemonEntity>(100) {
 
         while (preEvolution != null) {
             if (childSpecies == preEvolution.species.resourceIdentifier) {
-                LOGGER.info("found parent {} for child {}", entity.pokemon.species.name, child.pokemon.species.name)
                 return true
             }
 

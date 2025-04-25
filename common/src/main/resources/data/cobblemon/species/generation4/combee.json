@@ -55,6 +55,9 @@
       "light": "0-4"
     },
     "moving": {
+      "walk": {
+        "canWalk": false
+      },
       "fly": {
         "canFly": true,
         "flySpeedHorizontal": 0.6

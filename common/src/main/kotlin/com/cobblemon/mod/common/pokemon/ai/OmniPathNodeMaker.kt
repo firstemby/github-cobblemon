@@ -364,7 +364,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             return PathType.DANGER_OTHER
         }
 
-        if (isBurningBlock(blockState) && !this.canPathThroughFire) {
+        if (isBurningBlock(blockState) && !this.canPathThroughFire && !(blockState.`is`(Blocks.MAGMA_BLOCK) && !isOnGround())) {
             return PathType.DANGER_FIRE
         }
 
@@ -414,6 +414,14 @@ class OmniPathNodeMaker : NodeEvaluator() {
     fun canFly(): Boolean {
         return if (this.mob is OmniPathingEntity) {
             (this.mob as OmniPathingEntity).canFly()
+        } else {
+            false
+        }
+    }
+
+    fun isOnGround(): Boolean {
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).isOnGround()
         } else {
             false
         }

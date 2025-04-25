@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.BehaviourSyncPacket
 import com.cobblemon.mod.common.util.adapters.ActivityAdapter
-import com.cobblemon.mod.common.util.adapters.BrainConfigAdapter
+import com.cobblemon.mod.common.util.adapters.BehaviourConfigAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionOrEntityVariableAdapter
@@ -47,7 +47,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BrainConfigAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,

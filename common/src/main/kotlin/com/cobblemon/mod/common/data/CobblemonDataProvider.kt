@@ -18,13 +18,14 @@ import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.breeding.BreedingRules
+import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.dialogue.Dialogues
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.fishing.FishingBait
-import com.cobblemon.mod.common.api.fishing.FishingBaits
+import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
@@ -108,8 +109,9 @@ object CobblemonDataProvider : DataProvider {
         this.register(Berries)
         this.register(BreedingRules)
         this.register(Habitats)
-        this.register(FishingBaits)
-        FishingBait.Effects.setupEffects()
+        this.register(Seasonings)
+        this.register(SpawnBaitEffects)
+        SpawnBait.Effects.setupEffects()
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             synchronizedPlayerIds.remove(it.player.uuid)

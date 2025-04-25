@@ -35,7 +35,10 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.LIQUID
+
+    override fun getRidingStyle(settings: DolphinSettings, state: DolphinState): RidingStyle {
+        return RidingStyle.LIQUID
+    }
 
     val poseProvider = PoseProvider<DolphinSettings, DolphinState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })

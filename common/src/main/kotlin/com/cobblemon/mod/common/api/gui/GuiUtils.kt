@@ -215,6 +215,7 @@ fun drawPosablePortrait(
     ageInTicks: Float = 0F,
     headYaw: Float = 0F,
     headPitch: Float = 0F,
+    doQuirks: Boolean = true,
     r: Float = 1F,
     g: Float = 1F,
     b: Float = 1F,
@@ -240,6 +241,7 @@ fun drawPosablePortrait(
         context.put(RenderContext.SPECIES, identifier)
         context.put(RenderContext.ASPECTS, state.currentAspects)
         context.put(RenderContext.POSABLE_STATE, state)
+        context.put(RenderContext.DO_QUIRKS, doQuirks)
 
         val renderType = RenderType.entityCutout(texture)
 

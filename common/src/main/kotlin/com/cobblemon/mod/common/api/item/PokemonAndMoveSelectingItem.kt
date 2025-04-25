@@ -82,7 +82,7 @@ interface PokemonAndMoveSelectingItem {
         val bagItem = bagItem
         if (!battlePokemon.actor.canFitForcedAction()) {
             player.sendSystemMessage(battleLang("bagitem.cannot").red())
-        } else if (!bagItem!!.canUse(battle, battlePokemon)) {
+        } else if (!bagItem!!.canUse(stack, battle, battlePokemon)) {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
         } else {
             battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon, move.template.name))
@@ -92,10 +92,10 @@ interface PokemonAndMoveSelectingItem {
         }
     }
 
-    fun canUseOnPokemon(pokemon: Pokemon): Boolean
-    fun canUseOnBattlePokemon(battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(battlePokemon.actor.battle, battlePokemon)
-    fun canUseOnMove(pokemon: Pokemon, move: Move): Boolean = canUseOnMove(move)
-    fun canUseOnMove(move: Move): Boolean
+    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean
+    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnMove(stack: ItemStack, pokemon: Pokemon, move: Move): Boolean = canUseOnMove(stack, move)
+    fun canUseOnMove(stack: ItemStack, move: Move): Boolean
 
     fun interactWithSpecific(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>? {
 
@@ -106,18 +106,18 @@ interface PokemonAndMoveSelectingItem {
         MoveSelectCallbacks.create(
             player = player,
             moves = pokemon.moveSet.toList(),
-            canSelect = ::canUseOnMove,
+            canSelect = { canUseOnMove(stack, it)},
             handler = { move -> if (stack.isHeld(player)) applyToPokemon(player, stack, pokemon, move) }
         )
         return InteractionResultHolder.success(stack)
     }
 
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack>? {
-        return if (canUseOnBattlePokemon(battlePokemon)) {
+        return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             MoveSelectCallbacks.create(
                 player = player,
                 moves = battlePokemon.moveSet.getMoves(),
-                canSelect = ::canUseOnMove,
+                canSelect = { canUseOnMove(stack, it) },
                 handler = { applyToBattlePokemon(player, stack, battlePokemon, it) }
             )
             InteractionResultHolder.success(stack)
@@ -131,8 +131,8 @@ interface PokemonAndMoveSelectingItem {
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
             pokemon = player.party().toList(),
-            canSelectPokemon = ::canUseOnPokemon,
-            canSelectMove = ::canUseOnMove,
+            canSelectPokemon = { canUseOnPokemon(stack, it) },
+            canSelectMove = { pokemon, move -> canUseOnMove(stack, pokemon, move) },
             handler = { pk, mv -> if (stack.isHeld(player)) applyToPokemon(player, stack, pk, mv) }
         )
 
@@ -144,8 +144,8 @@ interface PokemonAndMoveSelectingItem {
             player = player,
             pokemon = actor.pokemonList.map { it.effectedPokemon },
             moves = { pk -> actor.pokemonList.find { it.effectedPokemon == pk }!!.moveSet.getMoves() },
-            canSelectPokemon = { pk -> canUseOnBattlePokemon(actor.pokemonList.find { it.effectedPokemon == pk }!!) },
-            canSelectMove = ::canUseOnMove,
+            canSelectPokemon = { pk -> canUseOnBattlePokemon(stack, actor.pokemonList.find { it.effectedPokemon == pk }!!) },
+            canSelectMove = { pokemon, move -> canUseOnMove(stack, pokemon, move) },
             handler = { pk, mv -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk }!!, mv) }
         )
 
