@@ -82,12 +82,7 @@ abstract class TickingSpawner(
             ticksUntilNextSpawn = ticksBetweenSpawns
             for (spawnAction in spawnActions) {
                 spawnAction.complete()
-
-                // TODO reset the Influence (Not sure if we need to do this, but in case it persists by next time I am adding this)
-                ctx.influences.filterIsInstance<SpawnBaitInfluence>().forEach {
-                    it.used = false
-                }
-            }*/
+            }
         }
     }
 
