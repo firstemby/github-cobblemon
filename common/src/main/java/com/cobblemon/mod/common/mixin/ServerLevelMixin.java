@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.entity.pokemon.PokemonServerDelegate;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ public abstract class ServerLevelMixin {
 
     @Unique
     private void cobblemon$notifyNearbyEntities(ServerLevel level, BlockPos pos, boolean playing) {
-        for (PokemonEntity pokemonEntity : level.getEntitiesOfClass(PokemonEntity.class, new AABB(pos).inflate(3.0))) {
+        for (PokemonEntity pokemonEntity : level.getEntitiesOfClass(PokemonEntity.class, new AABB(pos).inflate(Cobblemon.config.getPokemonDanceDistance()))) {
             PokemonServerDelegate delegate = (PokemonServerDelegate) pokemonEntity.getDelegate();
             delegate.setDancing(playing);
             delegate.setJukeboxPos(pos);

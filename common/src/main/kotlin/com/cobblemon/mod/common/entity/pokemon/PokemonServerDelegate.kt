@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.entity.pokemon
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -41,6 +42,7 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import net.minecraft.world.level.pathfinder.PathType
 import org.joml.Matrix3f
 import org.joml.Vector3f
@@ -270,7 +272,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val isPassenger = entity.isPassenger
         val isUnderwater = entity.getIsSubmerged()
         val isFlying = entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
-        val isDancing = dancing && (jukeboxPos?.toVec3d()?.distanceTo(entity.position()) ?: 100.0) < 3.0
+        var isDancing = false
+
+        if (jukeboxPos != null) {
+            val level = entity.level()
+            val jukeboxBlockEntity =  if (level.isLoaded(jukeboxPos!!)) level.getBlockEntity(jukeboxPos) as? JukeboxBlockEntity
+                                      else null
+            val distanceToJukebox = jukeboxPos?.toVec3d()?.distanceTo(entity.position())
+            isDancing = jukeboxBlockEntity?.songPlayer?.isPlaying == true && (distanceToJukebox ?: 100.0) < Cobblemon.config.pokemonDanceDistance
+        }
 
         val poseType = when {
             isPassenger -> PoseType.STAND
