@@ -24,12 +24,16 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.PlayerDialogueFaceProvider
 import com.cobblemon.mod.common.api.dialogue.ReferenceDialogueFaceProvider
 import com.cobblemon.mod.common.api.mark.Marks
+import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
 import com.cobblemon.mod.common.api.pokedex.*
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
+import com.cobblemon.mod.common.api.pokemon.moves.Learnset
+import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -782,6 +786,26 @@ object MoLangFunctions {
                 }
                 struct
             }
+            map.put("learnset") { pokemon.form.moves.asMoLangValue() }
+            map.put("can_learn") { params ->
+                val moveId = params.getString(0)
+                val move = Moves.getByName(moveId) ?: return@put DoubleValue.ZERO
+                val learnType = params.getStringOrNull(1) ?: return@put DoubleValue(
+                    LearnsetQuery.ANY.canLearn(move, pokemon.form.moves)
+                )
+
+                val query = when (learnType) {
+                    "tm" -> LearnsetQuery.TM_MOVE
+                    "egg" -> LearnsetQuery.EGG_MOVE
+                    "tutor" -> LearnsetQuery.TUTOR_MOVES
+                    "level" -> LearnsetQuery.ANY_LEVEL
+                    "form_change" -> LearnsetQuery.FORM_CHANGE
+                    "evolution" -> LearnsetQuery.EVOLUTION
+                    else -> LearnsetQuery.ANY
+                }
+
+                DoubleValue(query.canLearn(move, pokemon.form.moves))
+            }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
             map.put("species") { pokemon.species.struct }
@@ -1118,10 +1142,42 @@ object MoLangFunctions {
             map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
             map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
             map.put("catch_rate") { DoubleValue(species.catchRate) }
+            map.put("learnset") { species.moves.asMoLangValue() }
 
             map
         }
     )
+
+    val learnsetFunctions: MutableList<(Learnset) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
+        { learnset ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+
+            map.put("tutor_moves") { learnset.tutorMoves.map { it.struct }.asArrayValue() }
+            map.put("egg_moves") { learnset.eggMoves.map { it.struct }.asArrayValue() }
+            map.put("tm_moves") { learnset.tmMoves.map { it.struct }.asArrayValue() }
+            map.put("evolution_moves") { learnset.evolutionMoves.map { it.struct }.asArrayValue() }
+            map.put("form_change_moves") { learnset.formChangeMoves.map { it.struct }.asArrayValue() }
+
+            map.put("get_level_up_moves_to") { params ->
+                val level = params.getIntOrNull(0) ?: 0
+                learnset.getLevelUpMovesUpTo(level).map { it.struct }.asArrayValue()
+            }
+
+            map.put("level_up_moves") {
+                val struct = QueryStruct(hashMapOf())
+                for (level in learnset.levelUpMoves.keys) {
+                    struct.addFunction("$level") {
+                        learnset.levelUpMoves[level]?.map { it.struct }?.asArrayValue() ?: ArrayStruct()
+                    }
+                }
+                struct
+            }
+
+            map
+        }
+    )
+
+
 
     val pokemonPropertiesFunctions: MutableList<(PokemonProperties) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
         { props ->
@@ -1285,6 +1341,18 @@ object MoLangFunctions {
         value.addFunctions(livingEntityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(npcFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
+    }
+
+    fun Learnset.asMoLangValue(): ObjectValue<Learnset> {
+        val value = ObjectValue(
+            obj = this,
+            stringify = { it.toString() }
+        )
+
+        value.addFunctions(learnsetFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+
+        return value
+
     }
 
     fun PokemonEntity.asMoLangValue(): ObjectValue<PokemonEntity> {
