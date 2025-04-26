@@ -19,15 +19,18 @@ import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.takeFirst
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.TeamManager
+import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -36,6 +39,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -46,7 +50,10 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.HitResult
 import java.util.*
+import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.min
+import kotlin.math.sin
 
 // Stuff like getting their party
 fun ServerPlayer.party() = Cobblemon.storage.getParty(this)
@@ -68,6 +75,10 @@ fun ServerPlayer.openDialogue(activeDialogue: ActiveDialogue) {
 fun ServerPlayer.extraData(key: String) = Cobblemon.playerDataManager.getGenericData(this).extraData[key]
 fun ServerPlayer.hasKeyItem(key: ResourceLocation) = Cobblemon.playerDataManager.getGenericData(this).keyItems.contains(key)
 fun UUID.getPlayer() = server()?.playerList?.getPlayer(this)
+
+fun ServerPlayer.requestWallpapers() {
+    RequestPCBoxWallpapersPacket().sendToPlayer(this)
+}
 
 fun ServerPlayer.onLogout(handler: () -> Unit) {
     PlatformEvents.SERVER_PLAYER_LOGOUT.pipe(filter { it.player.uuid == uuid }, takeFirst()).subscribe { handler() }
@@ -396,18 +407,42 @@ fun Player.giveOrDropItemStack(stack: ItemStack, playSound: Boolean = true) {
     val inserted = this.inventory.add(stack)
     if (inserted && stack.isEmpty) {
         stack.count = 1
-        this.drop(stack, false)?.makeFakeItem()
+        this.dropFakeItem(stack)
         if (playSound) {
             this.level().playSound(null, this.x, this.y, this.z, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2f, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7f + 1.0f) * 2.0f)
         }
         this.containerMenu.broadcastChanges()
-    }
-    else {
+    } else {
         this.drop(stack, false)?.let { itemEntity ->
             itemEntity.setNoPickUpDelay()
             itemEntity.setTarget(this.uuid)
         }
     }
+}
+
+/**
+ * Utility function to mimic the [Player.drop] method but as a fake item entity.
+ * Avoids cases where other mods listen to that drop method and expect a real item to be dropped.
+ */
+fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
+    val d = this.eyeY - 0.3
+    val itemEntity = ItemEntity(this.level(), this.x, d, this.z, stack)
+
+    val f = 0.3F
+    val g = sin(this.xRot * (PI / 180.0)).toFloat()
+    val h = cos(this.xRot * (PI / 180.0)).toFloat()
+    val i = sin(this.yRot * (PI / 180.0)).toFloat()
+    val j = cos(this.yRot * (PI / 180.0)).toFloat()
+    val k = this.random.nextFloat() * (PI * 2)
+    val l = 0.02F * this.random.nextFloat()
+    itemEntity.deltaMovement = Vec3(
+        (-i * h * f).toDouble() + cos(k) * l.toDouble(),
+        (-g * f + 0.1f + (this.random.nextFloat() - this.random.nextFloat()) * 0.1f).toDouble(),
+        (j * h * f).toDouble() + sin(k) * l.toDouble()
+    )
+
+    itemEntity.makeFakeItem()
+    return itemEntity
 }
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
@@ -424,3 +459,14 @@ fun Player.isPartyBusy() =
 fun Player.isUsingPokedex() = isUsingItem &&
     ((mainHandItem.item is PokedexItem && usedItemHand == InteractionHand.MAIN_HAND) ||
     (offhandItem.item is PokedexItem && usedItemHand == InteractionHand.OFF_HAND))
+
+fun ServerPlayer.updateShoulderNbt(pokemon: Pokemon) {
+    // Use copies because player doesn't expose a forceful update of shoulder data
+    val nbt = if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft.copy() else shoulderEntityRight.copy()
+    nbt.putUUID(DataKeys.SHOULDER_UUID, uuid)
+    nbt.putString(DataKeys.SHOULDER_SPECIES, pokemon.species.resourceIdentifier.toString())
+    nbt.putString(DataKeys.SHOULDER_FORM, pokemon.form.name)
+    nbt.put(DataKeys.SHOULDER_ASPECTS, pokemon.aspects.map(StringTag::valueOf).toNbtList())
+    nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.scaleModifier)
+    if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft = nbt else shoulderEntityRight = nbt
+}

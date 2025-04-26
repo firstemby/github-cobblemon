@@ -14,7 +14,9 @@ import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.CobblemonMenuType.COOKING_POT
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
@@ -22,31 +24,22 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
+import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
+import com.cobblemon.mod.common.client.render.block.CandlePokeCakeBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
-import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
-import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
-import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
-import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
-import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
+import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
+import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
+import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.BlockEntityModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.FossilModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.GenericBedrockEntityModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokeBallModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.*
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
@@ -54,10 +47,7 @@ import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequests
 import com.cobblemon.mod.common.client.sound.BattleMusicController
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
 import com.cobblemon.mod.common.client.storage.ClientStorageManager
-import com.cobblemon.mod.common.client.tooltips.CobblemonTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.FishingBaitTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.FishingRodTooltipGenerator
-import com.cobblemon.mod.common.client.tooltips.TooltipManager
+import com.cobblemon.mod.common.client.tooltips.*
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
@@ -67,6 +57,7 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.model.BoatModel
 import net.minecraft.client.model.ChestBoatModel
@@ -77,10 +68,14 @@ import net.minecraft.client.renderer.blockentity.SignRenderer
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
+import java.util.UUID
+import net.minecraft.client.player.AbstractClientPlayer
+import net.minecraft.server.level.ServerPlayer
 
 object CobblemonClient {
 
@@ -94,15 +89,6 @@ object CobblemonClient {
     var checkedStarterScreen = false
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
-    var posableModelRepositories = listOf(
-        PokemonModelRepository,
-        PokeBallModelRepository,
-        NPCModelRepository,
-        FossilModelRepository,
-        BlockEntityModelRepository,
-        GenericBedrockEntityModelRepository
-    )
-
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
@@ -139,10 +125,12 @@ object CobblemonClient {
         //registerColors()
         registerFlywheelRenderers()
         this.registerEntityRenderers()
+        this.registerItemColors()
         Berries.observable.subscribe {
             BerryModelRepository.patchModels()
         }
         this.registerTooltipManagers()
+        this.registerMenuScreens()
 
         LOGGER.info("Registering custom BuiltinItemRenderers")
         CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
@@ -156,7 +144,7 @@ object CobblemonClient {
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
-            if (player !== null) {
+            if (player != null) {
                 var selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
@@ -168,13 +156,14 @@ object CobblemonClient {
                     // Stop using Pokédex in main hand if player switches to a different slot in hotbar
                     pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
                 }
-                if(event.client.isPaused) {
+                if (event.client.isPaused) {
                     return@subscribe
                 }
-                val nearbyShinies = player?.level()?.getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0)) { (it is PokemonEntity) && it.pokemon.shiny }
+                val nearbyShinies = player.level().getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0)) { it is PokemonEntity && it.pokemon.shiny && !it.isSilent }
                 nearbyShinies?.firstOrNull { player.isLookingAt(it) && !player.isSpectator }.let {
-                    if(it is PokemonEntity)
-                        it.delegate.spawnShinyParticle(player!!)
+                    if (it is PokemonEntity) {
+                        it.delegate.spawnShinyParticle(player)
+                    }
                 }
             }
             ClientPlayerIcon.onTick()
@@ -185,6 +174,8 @@ object CobblemonClient {
         TooltipManager.registerTooltipGenerator(CobblemonTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingBaitTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingRodTooltipGenerator)
+        TooltipManager.registerTooltipGenerator(SeasoningTooltipGenerator)
+        TooltipManager.registerTooltipGenerator(AprijuiceTooltipGenerator)
     }
 
     fun registerFlywheelRenderers() {
@@ -248,6 +239,7 @@ object CobblemonClient {
             CobblemonBlocks.BIG_ROOT,
             CobblemonBlocks.REVIVAL_HERB,
             CobblemonBlocks.VIVICHOKE_SEEDS,
+            CobblemonBlocks.HEARTY_GRAINS,
             CobblemonBlocks.PEP_UP_FLOWER,
             CobblemonBlocks.POTTED_PEP_UP_FLOWER,
             CobblemonBlocks.REVIVAL_HERB,
@@ -268,7 +260,25 @@ object CobblemonClient {
             CobblemonBlocks.SKY_TUMBLESTONE_CLUSTER,
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
-            CobblemonBlocks.LECTERN
+            CobblemonBlocks.SACCHARINE_DOOR,
+            CobblemonBlocks.SACCHARINE_TRAPDOOR,
+            CobblemonBlocks.SACCHARINE_SIGN,
+            CobblemonBlocks.SACCHARINE_WALL_SIGN,
+            CobblemonBlocks.SACCHARINE_HANGING_SIGN,
+            CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN,
+            CobblemonBlocks.SACCHARINE_SAPLING,
+            CobblemonBlocks.LURE_CAKE,
+            CobblemonBlocks.POKE_CAKE,
+            CobblemonBlocks.LECTERN,
+            CobblemonBlocks.CAMPFIRE,
+            CobblemonBlocks.BLACK_CAMPFIRE_POT,
+            CobblemonBlocks.BLUE_CAMPFIRE_POT,
+            CobblemonBlocks.GREEN_CAMPFIRE_POT,
+            CobblemonBlocks.PINK_CAMPFIRE_POT,
+            CobblemonBlocks.RED_CAMPFIRE_POT,
+            CobblemonBlocks.WHITE_CAMPFIRE_POT,
+            CobblemonBlocks.YELLOW_CAMPFIRE_POT
+
         )
 
         this.createBoatModelLayers()
@@ -292,6 +302,10 @@ object CobblemonClient {
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
     }
 
+    private fun registerMenuScreens() {
+        MenuScreens.register(COOKING_POT, ::CookingPotScreen)
+    }
+
     private fun registerBlockEntityRenderers() {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HEALING_MACHINE, ::HealingMachineRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.BERRY, ::BerryBlockRenderer)
@@ -302,6 +316,10 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LURE_CAKE, ::CakeBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_CAKE, ::CakeBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CANDLE_POKE_CAKE, ::CandlePokeCakeBlockEntityRenderer)
     }
 
     private fun registerEntityRenderers() {
@@ -323,6 +341,11 @@ object CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.NPC, ::NPCRenderer)
     }
 
+    private fun registerItemColors() {
+        implementation.registerItemColors(AprijuiceItemColorProvider, *CobblemonItems.aprijuices.toTypedArray())
+        implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
+    }
+
     fun reloadCodedAssets(resourceManager: ResourceManager) {
         LOGGER.info("Loading assets...")
         // Particles come first because animations need them.
@@ -330,9 +353,9 @@ object CobblemonClient {
         // Animations come next because models need them.
         BedrockAnimationRepository.loadAnimations(
             resourceManager = resourceManager,
-            directories = posableModelRepositories.flatMap { it.animationDirectories }
+            directories = VaryingModelRepository.animationDirectories
         )
-        posableModelRepositories.forEach { it.reload(resourceManager) }
+        VaryingModelRepository.reload(resourceManager)
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)

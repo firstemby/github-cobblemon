@@ -108,27 +108,21 @@
     "tm:facade",
     "tm:featherdance",
     "tm:fly",
-    "tm:freezedry",
     "tm:frostbreath",
     "tm:gigaimpact",
-    "tm:gust",
     "tm:hail",
     "tm:haze",
     "tm:helpinghand",
     "tm:hurricane",
     "tm:hyperbeam",
     "tm:icebeam",
-    "tm:iceshard",
     "tm:icespinner",
     "tm:iciclespear",
     "tm:icywind",
     "tm:laserfocus",
     "tm:lightscreen",
-    "tm:mindreader",
-    "tm:mist",
     "tm:ominouswind",
     "tm:pluck",
-    "tm:powdersnow",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
@@ -137,7 +131,6 @@
     "tm:rocksmash",
     "tm:roost",
     "tm:sandstorm",
-    "tm:sheercold",
     "tm:signalbeam",
     "tm:skyattack",
     "tm:skydrop",
@@ -154,7 +147,30 @@
     "tm:twister",
     "tm:uturn",
     "tm:waterpulse",
-    "tm:weatherball"
+    "tm:weatherball",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:ancientpower",
+    "tutor:defog",
+    "tutor:dualwingbeat",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:laserfocus",
+    "tutor:ominouswind",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:signalbeam",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:tripleaxel",
+    "tutor:twister",
+    "tutor:waterpulse"
   ],
   "evolutions": [],
   "forms": [
@@ -237,7 +253,6 @@
         "tm:ancientpower",
         "tm:bravebird",
         "tm:calmmind",
-        "tm:confusion",
         "tm:doubleteam",
         "tm:dreameater",
         "tm:dualwingbeat",
@@ -245,29 +260,23 @@
         "tm:expandingforce",
         "tm:facade",
         "tm:fly",
-        "tm:freezingglare",
         "tm:futuresight",
         "tm:gigaimpact",
         "tm:guardswap",
-        "tm:gust",
         "tm:helpinghand",
         "tm:hurricane",
         "tm:hyperbeam",
         "tm:hypervoice",
-        "tm:hypnosis",
         "tm:imprison",
         "tm:lightscreen",
-        "tm:mindreader",
         "tm:powerswap",
         "tm:protect",
         "tm:psybeam",
         "tm:psychic",
         "tm:psychicnoise",
         "tm:psychocut",
-        "tm:psychoshift",
         "tm:psyshock",
         "tm:raindance",
-        "tm:recover",
         "tm:reflect",
         "tm:rest",
         "tm:scaryface",
@@ -285,10 +294,90 @@
         "tm:terablast",
         "tm:trick",
         "tm:trickroom",
-        "tm:uturn"
+        "tm:uturn",
+        "tutor:aircutter",
+        "tutor:allyswitch",
+        "tutor:ancientpower",
+        "tutor:calmmind",
+        "tutor:dualwingbeat",
+        "tutor:expandingforce",
+        "tutor:gigaimpact",
+        "tutor:helpinghand",
+        "tutor:hyperbeam",
+        "tutor:hypervoice",
+        "tutor:psychic",
+        "tutor:psychocut",
+        "tutor:rest",
+        "tutor:shadowball",
+        "tutor:skillswap",
+        "tutor:sleeptalk",
+        "tutor:swift",
+        "tutor:tailwind",
+        "tutor:trick"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "35-75"
+          },
+          "ACCELERATION": {
+            "ranges": "25-50"
+          },
+          "SKILL": {
+            "ranges": "50-80"
+          },
+          "JUMP": {
+            "ranges": "25-60"
+          },
+          "STAMINA": {
+            "ranges": "35-75"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:air/bird"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "35-70"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "70-90",
+          "AIR": "25-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "30-60",
+          "AIR": "50-80"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "25-60"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

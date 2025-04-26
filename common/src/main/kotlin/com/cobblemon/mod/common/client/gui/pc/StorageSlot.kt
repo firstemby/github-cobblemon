@@ -46,7 +46,7 @@ open class StorageSlot(
         private val slotOverlayMoveIconResource = cobblemonResource("textures/gui/pasture/pc_slot_icon_move.png")
     }
 
-    protected var isSelected = false;
+    protected var isSlotSelected = false;
 
     override fun playDownSound(soundManager: SoundManager) {
     }
@@ -84,7 +84,7 @@ open class StorageSlot(
 
         context.disableScissor()
 
-        if (!isSelected) {
+        if (!isSlotSelected) {
             // Ensure elements are not hidden behind Pokémon render
             matrices.pushPose()
             matrices.translate(0.0, 0.0, 100.0)
@@ -129,7 +129,7 @@ open class StorageSlot(
         matrices.translate(0.0, 0.0, 500.0)
 
         val config = parent.pcGui.configuration
-        if (pokemon.tetheringId != null && !isSelected) {
+        if (pokemon.tetheringId != null && !isSlotSelected) {
             if (isStationary()) {
                 blitk(
                     matrixStack = matrices,
@@ -212,7 +212,15 @@ open class StorageSlot(
     }
 
     open fun shouldRender(): Boolean {
-        return true
+        return parent.pcGui.search.passes(getPokemon())
+    }
+
+    open fun clickable(): Boolean {
+        return getPokemon() == null || parent.pcGui.search.passes(getPokemon())
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        return if (clickable()) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))

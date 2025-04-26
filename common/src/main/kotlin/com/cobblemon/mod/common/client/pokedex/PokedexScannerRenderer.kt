@@ -183,10 +183,11 @@ class PokedexScannerRenderer {
                             val typeWidth = Minecraft.getInstance().font.width(typeText.font(CobblemonResources.DEFAULT_LARGE))
                             // Split into 2 lines if text width is too long
                             if (typeWidth > (OUTER_INFO_FRAME_WIDTH - 8) && pokedexEntityData.getApparentForm().secondaryType !== null) {
+                                val splitLines = typeText.string.split("/")
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = lang("type.suffix", pokedexEntityData.getApparentForm().primaryType.displayName).bold(),
+                                    text = text(splitLines[0], "/").bold(),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText - 4,
                                     shadow = true,
@@ -196,7 +197,7 @@ class PokedexScannerRenderer {
                                 drawScaledText(
                                     context = graphics,
                                     font = CobblemonResources.DEFAULT_LARGE,
-                                    text = lang("type.suffix", pokedexEntityData.getApparentForm().secondaryType!!.displayName).bold(),
+                                    text = text(splitLines[1]).bold(),
                                     x = centerX + xOffset + xOffsetText,
                                     y = centerY + yOffset + yOffsetText + 3,
                                     shadow = true,
@@ -281,12 +282,12 @@ class PokedexScannerRenderer {
         val effectiveIntervals = clamp(usageContext.transitionIntervals + (if (usageContext.scanningGuiOpen) 1 else -1) * tickDelta, 0F, 12F)
 
         if (effectiveIntervals <= PokedexUsageContext.TRANSITION_INTERVALS) {
-            val scale = 1 + (if (effectiveIntervals <= 2) 0F else ((effectiveIntervals - 2) * 0.075F))
+            val scale = 1F + (if (effectiveIntervals <= 2) 0F else ((effectiveIntervals - 2) * 0.075F))
 
             val centerX = (screenWidth - (BASE_WIDTH * scale)) / 2
             val centerY = (screenHeight - (BASE_HEIGHT * scale)) / 2
 
-            val opacity = if (effectiveIntervals <= 2) 1F else (10F - (effectiveIntervals - 2F)) / 10F
+            val opacity = if (effectiveIntervals > 11) 0F else effectiveIntervals / PokedexUsageContext.TRANSITION_INTERVALS
             blitk(matrixStack = matrices, texture = CobblemonClient.pokedexUsageContext.type.getTexturePath(), x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
             blitk(matrixStack = matrices, texture = SCAN_SCREEN, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
         }

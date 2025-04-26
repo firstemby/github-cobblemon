@@ -67,24 +67,21 @@
     "1:acid",
     "egg:endeavor",
     "egg:metalsound",
-    "tm:acid",
-    "tm:belch",
     "tm:charm",
     "tm:encore",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:flail",
-    "tm:growl",
     "tm:metalsound",
-    "tm:nuzzle",
     "tm:poweruppunch",
     "tm:protect",
     "tm:rest",
     "tm:sleeptalk",
     "tm:substitute",
-    "tm:tearfullook",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:endeavor",
+    "tutor:rest",
+    "tutor:sleeptalk"
   ],
   "evolutions": [
     {

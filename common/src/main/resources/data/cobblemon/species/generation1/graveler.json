@@ -115,7 +115,6 @@
     "egg:megapunch",
     "egg:wideguard",
     "tm:ancientpower",
-    "tm:autotomize",
     "tm:block",
     "tm:bodypress",
     "tm:bodyslam",
@@ -123,10 +122,8 @@
     "tm:brutalswing",
     "tm:bulldoze",
     "tm:curse",
-    "tm:defensecurl",
     "tm:dig",
     "tm:doubleedge",
-    "tm:dynamicpunch",
     "tm:earthpower",
     "tm:earthquake",
     "tm:endure",
@@ -134,13 +131,11 @@
     "tm:facade",
     "tm:fireblast",
     "tm:firepunch",
-    "tm:flail",
     "tm:flamethrower",
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
     "tm:gyroball",
-    "tm:hammerarm",
     "tm:harden",
     "tm:hardpress",
     "tm:headbutt",
@@ -149,12 +144,10 @@
     "tm:incinerate",
     "tm:irondefense",
     "tm:ironhead",
-    "tm:magnitude",
     "tm:megapunch",
     "tm:metronome",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:mudsport",
     "tm:naturepower",
     "tm:poweruppunch",
     "tm:protect",
@@ -164,7 +157,6 @@
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
-    "tm:rockthrow",
     "tm:rocktomb",
     "tm:rollout",
     "tm:sandstorm",
@@ -181,11 +173,32 @@
     "tm:suckerpunch",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunderpunch",
-    "tm:wideguard"
+    "tutor:ancientpower",
+    "tutor:block",
+    "tutor:bulldoze",
+    "tutor:earthpower",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:highhorsepower",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:mudslap",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:rollout",
+    "tutor:sleeptalk",
+    "tutor:stealthrock",
+    "tutor:steelroller",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:suckerpunch",
+    "tutor:superpower",
+    "tutor:thunderpunch"
   ],
   "preEvolution": "geodude",
   "evolutions": [
@@ -269,7 +282,6 @@
         "egg:wideguard",
         "egg:zapcannon",
         "tm:allyswitch",
-        "tm:autotomize",
         "tm:block",
         "tm:bodyslam",
         "tm:brickbreak",
@@ -277,11 +289,8 @@
         "tm:bulldoze",
         "tm:charge",
         "tm:chargebeam",
-        "tm:counter",
         "tm:curse",
-        "tm:defensecurl",
         "tm:dig",
-        "tm:discharge",
         "tm:doubleedge",
         "tm:earthpower",
         "tm:earthquake",
@@ -292,7 +301,6 @@
         "tm:facade",
         "tm:fireblast",
         "tm:firepunch",
-        "tm:flail",
         "tm:flamethrower",
         "tm:fling",
         "tm:focusblast",
@@ -313,7 +321,6 @@
         "tm:rockblast",
         "tm:rockpolish",
         "tm:rockslide",
-        "tm:rockthrow",
         "tm:rocktomb",
         "tm:rollout",
         "tm:sandstorm",
@@ -323,7 +330,6 @@
         "tm:shockwave",
         "tm:sleeptalk",
         "tm:smackdown",
-        "tm:spark",
         "tm:stealthrock",
         "tm:steelroller",
         "tm:stompingtantrum",
@@ -332,7 +338,6 @@
         "tm:sunnyday",
         "tm:supercellslam",
         "tm:superpower",
-        "tm:tackle",
         "tm:takedown",
         "tm:terablast",
         "tm:thunder",
@@ -340,9 +345,34 @@
         "tm:thunderpunch",
         "tm:thunderwave",
         "tm:voltswitch",
-        "tm:wideguard",
         "tm:wildcharge",
-        "tm:zapcannon"
+        "tutor:allyswitch",
+        "tutor:block",
+        "tutor:bulldoze",
+        "tutor:chargebeam",
+        "tutor:earthpower",
+        "tutor:electroweb",
+        "tutor:firepunch",
+        "tutor:flamethrower",
+        "tutor:focuspunch",
+        "tutor:highhorsepower",
+        "tutor:irondefense",
+        "tutor:magnetrise",
+        "tutor:mudslap",
+        "tutor:rest",
+        "tutor:risingvoltage",
+        "tutor:rockslide",
+        "tutor:rollout",
+        "tutor:shockwave",
+        "tutor:sleeptalk",
+        "tutor:stealthrock",
+        "tutor:steelroller",
+        "tutor:stompingtantrum",
+        "tutor:stoneedge",
+        "tutor:superpower",
+        "tutor:thunderbolt",
+        "tutor:thunderpunch",
+        "tutor:wildcharge"
       ],
       "preEvolution": "geodude alolan",
       "evolutions": [
@@ -357,5 +387,28 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "5-15"
+      },
+      "ACCELERATION": {
+        "ranges": "5-100"
+      },
+      "SKILL": {
+        "ranges": "20-40"
+      },
+      "JUMP": {
+        "ranges": "5-15"
+      },
+      "STAMINA": {
+        "ranges": "15-30"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

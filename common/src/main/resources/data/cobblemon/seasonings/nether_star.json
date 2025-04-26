@@ -1,0 +1,14 @@
+{
+  "ingredient": "minecraft:nether_star",
+  "flavours": {
+    "SPICY": 10
+  },
+  "colour": "purple",
+  "baitEffects": [
+    {
+      "type": "cobblemon:shiny_reroll",
+      "chance": 1.0,
+      "value": 9.0
+    }
+  ]
+}

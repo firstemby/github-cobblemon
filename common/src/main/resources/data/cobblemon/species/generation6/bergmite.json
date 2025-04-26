@@ -104,8 +104,6 @@
     "tm:afteryou",
     "tm:auroraveil",
     "tm:avalanche",
-    "tm:barrier",
-    "tm:bite",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:bulldoze",
@@ -119,7 +117,6 @@
     "tm:frostbreath",
     "tm:gyroball",
     "tm:hail",
-    "tm:harden",
     "tm:iceball",
     "tm:icebeam",
     "tm:icefang",
@@ -127,28 +124,33 @@
     "tm:iciclespear",
     "tm:icywind",
     "tm:irondefense",
-    "tm:mirrorcoat",
-    "tm:mist",
-    "tm:powdersnow",
     "tm:protect",
     "tm:raindance",
-    "tm:rapidspin",
-    "tm:recover",
     "tm:rest",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:safeguard",
-    "tm:sharpen",
     "tm:sleeptalk",
     "tm:snowscape",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
-    "tm:tackle",
     "tm:takedown",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:afteryou",
+    "tutor:bulldoze",
+    "tutor:iceball",
+    "tutor:icebeam",
+    "tutor:icefang",
+    "tutor:icywind",
+    "tutor:irondefense",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:sleeptalk",
+    "tutor:stoneedge"
   ],
   "evolutions": [
     {
@@ -173,7 +175,7 @@
     {
       "id": "bergmite_avalugghisui",
       "variant": "level_up",
-      "result": "avalugg hisuian",
+      "result": "avalugg",
       "consumeHeldItem": false,
       "learnableMoves": [
         "rockslide"
@@ -240,7 +242,7 @@
         {
           "id": "bergmite_avalugghisui",
           "variant": "level_up",
-          "result": "avalugg hisuian",
+          "result": "avalugg",
           "consumeHeldItem": false,
           "learnableMoves": [
             "rockslide"

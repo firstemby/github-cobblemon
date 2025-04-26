@@ -29,7 +29,27 @@
             }
         },
         {
-            "id": "linoone-galarian-2",
+            "id": "linoone-2",
+            "pokemon": "linoone",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "20-42",
+            "weight": 1.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "aether:skyroot_forest",
+                    "aether:skyroot_woodland"
+                ]
+            }
+        },
+        {
+            "id": "linoone-galarian-3",
             "pokemon": "linoone galarian",
             "presets": [
                 "natural",

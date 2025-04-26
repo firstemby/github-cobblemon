@@ -42,6 +42,7 @@ abstract class SpawningCondition<T : SpawningContext> {
     }
 
     var dimensions: MutableList<ResourceLocation>? = null
+    /** This gets checked in a precalculation but still needs to be checked for things like rarity multipliers. */
     var biomes: MutableSet<RegistryLikeCondition<Biome>>? = null
     var moonPhase: MoonPhaseRange? = null
     var canSeeSky: Boolean? = null
@@ -98,7 +99,7 @@ abstract class SpawningCondition<T : SpawningContext> {
             return false
         } else if (dimensions != null && dimensions!!.isNotEmpty() && ctx.world.dimensionType().effectsLocation !in dimensions!!) {
             return false
-        } else if (biomes != null && biomes!!.isNotEmpty() && biomes!!.none { condition -> condition.fits(ctx.biome, ctx.biomeRegistry) }) {
+        } else if (biomes != null && biomes!!.isNotEmpty() && biomes!!.none { condition -> condition.fits(ctx.biomeHolder) }) {
             return false
         } else if (appendages.any { !it.fits(ctx) }) {
             return false
@@ -153,11 +154,11 @@ abstract class SpawningCondition<T : SpawningContext> {
     }
 
     open fun isValid(): Boolean {
-        if(biomes != null && biomes!!.any {it == null})
+        if (biomes != null && biomes!!.any { it == null })
             return false
-        if(dimensions != null && dimensions!!.any {it == null})
+        if (dimensions != null && dimensions!!.any { it == null })
             return false
-        if(structures != null && structures!!.any {it == null})
+        if (structures != null && structures!!.any { it == null })
             return false
         return true
     }

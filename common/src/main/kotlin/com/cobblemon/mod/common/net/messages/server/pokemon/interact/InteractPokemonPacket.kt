@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.net.messages.server.pokemon.interact
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.client.gui.interact.wheel.InteractTypePokemon
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readUUID
-import com.cobblemon.mod.common.util.writeUUID
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.writeEnumConstant
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
@@ -24,14 +25,14 @@ import java.util.UUID
  * @author Village
  * @since January 7th, 2023
  */
-class InteractPokemonPacket(val pokemonID: UUID, val mountShoulder: Boolean) : NetworkPacket<InteractPokemonPacket> {
+class InteractPokemonPacket(val pokemonID: UUID, val interactType: InteractTypePokemon) : NetworkPacket<InteractPokemonPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(pokemonID)
-        buffer.writeBoolean(mountShoulder)
+        buffer.writeEnumConstant(interactType)
     }
     companion object {
         val ID = cobblemonResource("interact_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonPacket(buffer.readUUID(), buffer.readBoolean())
+        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonPacket(buffer.readUUID(), buffer.readEnumConstant(InteractTypePokemon::class.java))
     }
 }

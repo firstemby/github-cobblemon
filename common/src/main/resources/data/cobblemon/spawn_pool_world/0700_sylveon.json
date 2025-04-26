@@ -19,7 +19,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_floral",
-                    "#cobblemon:is_magical"
+                    "#cobblemon:is_magical",
+                    "aether:skyroot_grove",
+                    "aether:skyroot_meadow"
                 ]
             },
             "anticondition": {

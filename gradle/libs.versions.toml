@@ -20,11 +20,12 @@ jei-api = "19.8.2.99"
 
 # Fabric
 fabric-loader = "0.16.5"
-fabric-api = "0.104.0+1.21.1"
+fabric-api = "0.115.1+1.21.1"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"
 fabric-permissions-api = "0.2-SNAPSHOT"
 lambDynamicLights = "3.0.1+1.21.1"
 debugutils-fabric = "1.21-1.0.6-fabric"
+mod-menu = "11.0.3"
 
 # NeoForge
 neoforge = "21.1.66"
@@ -70,6 +71,7 @@ lambDynamicLights = { group = "maven.modrinth", name = "lambdynamiclights", vers
 jei-api-fabric = { group = "mezz.jei", name = "jei-1.21-fabric-api", version.ref = "jei-api" }
 jei-fabric = { group = "mezz.jei", name = "jei-1.21-fabric", version.ref = "jei-api"}
 fabric-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-fabric"}
+mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-menu" }
 
 # NeoForge
 neoforge = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
@@ -90,7 +92,8 @@ classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref 
 [bundles]
 kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
 fabric = [ "fabric-kotlin", "fabric-permissions" ]
-fabric-integrations-compileOnly = [ "adorn-fabric", "lambDynamicLights", "jei-api-fabric" ]
+common-integrations-compileOnly = [ "adorn-fabric", "lambDynamicLights", "jei-api-fabric" ]
+fabric-integrations-implementation = [ "mod-menu" ]
 fabric-integrations-runtimeOnly = [ "jei-fabric" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
 unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]

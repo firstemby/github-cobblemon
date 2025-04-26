@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.cobblemon.mod.common.util.writeString
 import com.cobblemon.mod.common.util.writeText
+import net.minecraft.client.multiplayer.ClientLevel
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -30,13 +31,14 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 
 class SpawnNPCPacket(
-    private val npcClass: ResourceLocation,
-    private val aspects: Set<String>,
-    private val level: Int,
-    private val battleIds: Set<UUID>,
-    private val name: Component,
-    private val poseType: PoseType,
-    private val texture: NPCPlayerTexture,
+    var npcClass: ResourceLocation,
+    var aspects: Set<String>,
+    var level: Int,
+    var battleIds: Set<UUID>,
+    var name: Component,
+    var poseType: PoseType,
+    var texture: NPCPlayerTexture,
+    var hideNameTag: Boolean,
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnNPCPacket, NPCEntity>(vanillaSpawnPacket) {
 
@@ -50,6 +52,7 @@ class SpawnNPCPacket(
         entity.name,
         entity.entityData.get(NPCEntity.POSE_TYPE),
         entity.entityData.get(NPCEntity.NPC_PLAYER_TEXTURE),
+        entity.hideNameTag,
         vanillaSpawnPacket
     )
 
@@ -64,9 +67,10 @@ class SpawnNPCPacket(
         if (this.texture.model != NPCPlayerModelType.NONE) {
             buffer.writeByteArray(this.texture.texture)
         }
+        buffer.writeBoolean(this.hideNameTag)
     }
 
-    override fun applyData(entity: NPCEntity) {
+    override fun applyData(entity: NPCEntity, level: ClientLevel) {
         entity.npc = NPCClasses.getByIdentifier(this.npcClass) ?: error("received unknown NPCClass: $npcClass")
         entity.customName = name
         entity.entityData.set(NPCEntity.LEVEL, this.level)
@@ -74,6 +78,7 @@ class SpawnNPCPacket(
         entity.entityData.set(NPCEntity.ASPECTS, aspects)
         entity.entityData.set(NPCEntity.POSE_TYPE, poseType)
         entity.entityData.set(NPCEntity.NPC_PLAYER_TEXTURE, texture)
+        entity.entityData.set(NPCEntity.HIDE_NAME_TAG, this.hideNameTag)
     }
 
     override fun checkType(entity: Entity): Boolean = entity is NPCEntity
@@ -93,9 +98,10 @@ class SpawnNPCPacket(
             } else {
                 NPCPlayerTexture(byteArrayOf(), model)
             }
+            val hideNameTag = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnNPCPacket(npc, aspects, level, battleIds, name, poseType, texture, vanillaPacket)
+            return SpawnNPCPacket(npc, aspects, level, battleIds, name, poseType, texture, hideNameTag, vanillaPacket)
         }
     }
 

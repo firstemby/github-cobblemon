@@ -785,7 +785,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
             /*availableSwitches.forEach {
                 estimateMatchup(request, battle, it.effectedPokemon)
             }*/
-            val bestEstimation = if ( 1 == 1 /* todo if player is in bad matchup and switches out a lot and has a better matchup in revealed party */) {
+            val bestEstimation = if (1 == 1 /* todo if player is in bad matchup and switches out a lot and has a better matchup in revealed party */) {
                 // todo make it so that bestEstimation is actually in comparison to that potential pokemon instead and be sure to switch to that instead
 
                 availableSwitches.maxOfOrNull { estimateMatchup(activeBattlePokemon, request, battle, it.effectedPokemon) }

@@ -89,14 +89,12 @@
     "egg:ragepowder",
     "egg:stunspore",
     "tm:bugbite",
-    "tm:poisonpowder",
     "tm:pounce",
-    "tm:ragepowder",
     "tm:stringshot",
     "tm:strugglebug",
-    "tm:stunspore",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:stringshot"
   ],
   "evolutions": [
     {

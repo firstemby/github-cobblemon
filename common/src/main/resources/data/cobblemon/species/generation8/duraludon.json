@@ -99,13 +99,9 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:laserfocus",
-    "tm:leer",
     "tm:lightscreen",
-    "tm:metalburst",
     "tm:metalclaw",
     "tm:metalsound",
-    "tm:mirrorcoat",
-    "tm:nightslash",
     "tm:outrage",
     "tm:protect",
     "tm:reflect",
@@ -116,7 +112,6 @@
     "tm:rocktomb",
     "tm:scaryface",
     "tm:screech",
-    "tm:slash",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:solarbeam",
@@ -130,19 +125,41 @@
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:thunderwave"
+    "tm:thunderwave",
+    "tutor:darkpulse",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:flashcannon",
+    "tutor:focusenergy",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:laserfocus",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:sleeptalk",
+    "tutor:snarl",
+    "tutor:stealthrock",
+    "tutor:steelbeam",
+    "tutor:steelroller",
+    "tutor:stoneedge",
+    "tutor:thunderbolt"
   ],
   "evolutions": [
     {
       "id": "duraludon_archaludon",
       "variant": "item_interact",
       "result": "archaludon",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "electroshot"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:metal_alloy"
+      "requiredContext": "cobblemon:metal_coat"
     }
   ],
   "forms": [

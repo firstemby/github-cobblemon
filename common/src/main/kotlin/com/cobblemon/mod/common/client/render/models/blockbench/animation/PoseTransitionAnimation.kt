@@ -77,6 +77,6 @@ class PoseTransitionAnimation(
             it.apply(context, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, newIntensity)
         }
 
-        return ratio < 1F
+        return ratio <= 1F
     }
 }

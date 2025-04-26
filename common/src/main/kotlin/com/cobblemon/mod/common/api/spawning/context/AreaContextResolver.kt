@@ -54,6 +54,12 @@ interface AreaContextResolver {
                         if (fittedContextCalculator != null) {
                             val context = fittedContextCalculator.calculate(input)
                             if (context != null) {
+                                slice.influences.forEach {
+                                    if (it.appliesTo(context)) {
+                                        context.influences.add(it.influence)
+                                    }
+                                }
+
                                 contexts.add(context)
                                 // The position BlockPos has been used in a context, editing the same one
                                 // will cause entities to spawn at the wrong location (buried in walls, usually).

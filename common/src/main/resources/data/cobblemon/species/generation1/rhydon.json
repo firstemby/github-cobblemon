@@ -110,16 +110,12 @@
     "tm:brickbreak",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:chipaway",
-    "tm:counter",
     "tm:crunch",
-    "tm:crushclaw",
     "tm:curse",
     "tm:cut",
     "tm:dig",
     "tm:doubleedge",
     "tm:dragonpulse",
-    "tm:dragonrush",
     "tm:drillrun",
     "tm:earthpower",
     "tm:earthquake",
@@ -133,18 +129,13 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:furyattack",
     "tm:furycutter",
     "tm:gigaimpact",
-    "tm:guardsplit",
-    "tm:hammerarm",
     "tm:headbutt",
     "tm:heatcrash",
     "tm:heavyslam",
     "tm:helpinghand",
     "tm:highhorsepower",
-    "tm:hornattack",
-    "tm:horndrill",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:icebeam",
@@ -154,11 +145,9 @@
     "tm:incinerate",
     "tm:irondefense",
     "tm:irontail",
-    "tm:magnitude",
     "tm:megahorn",
     "tm:megakick",
     "tm:megapunch",
-    "tm:metalburst",
     "tm:meteorbeam",
     "tm:mudshot",
     "tm:mudslap",
@@ -179,18 +168,15 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:rollout",
-    "tm:rototiller",
     "tm:sandstorm",
     "tm:scaryface",
     "tm:scorchingsands",
     "tm:shadowclaw",
     "tm:shockwave",
-    "tm:skullbash",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:smartstrike",
     "tm:stealthrock",
-    "tm:stomp",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:strength",
@@ -200,8 +186,6 @@
     "tm:superpower",
     "tm:surf",
     "tm:swordsdance",
-    "tm:tackle",
-    "tm:tailwhip",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
@@ -209,7 +193,51 @@
     "tm:thunderbolt",
     "tm:thunderfang",
     "tm:thunderpunch",
-    "tm:uproar"
+    "tm:uproar",
+    "tutor:ancientpower",
+    "tutor:aquatail",
+    "tutor:block",
+    "tutor:bulldoze",
+    "tutor:dragonpulse",
+    "tutor:drillrun",
+    "tutor:earthpower",
+    "tutor:endeavor",
+    "tutor:firefang",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icefang",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:irondefense",
+    "tutor:irontail",
+    "tutor:megahorn",
+    "tutor:meteorbeam",
+    "tutor:mudslap",
+    "tutor:outrage",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:rollout",
+    "tutor:scorchingsands",
+    "tutor:shadowclaw",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:stealthrock",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:superpower",
+    "tutor:thunderbolt",
+    "tutor:thunderfang",
+    "tutor:thunderpunch",
+    "tutor:uproar"
   ],
   "preEvolution": "rhyhorn",
   "evolutions": [
@@ -226,5 +254,43 @@
         }
       ]
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "5-20",
+          "LIQUID": "5-20"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "50-80",
+          "LIQUID": "50-80"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "20-40",
+          "LIQUID": "20-40"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "5-10",
+          "LIQUID": "5-10"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "25-65",
+          "LIQUID": "25-65"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

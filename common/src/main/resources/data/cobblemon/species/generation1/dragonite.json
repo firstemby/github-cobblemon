@@ -88,6 +88,133 @@
       }
     ]
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "30-60"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "90-100",
+          "AIR": "30-65"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "30-60"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can fly",
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "30-60"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can stay off the ground",
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/generic",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/bird",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ]
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
   "moves": [
     "1:firepunch",
     "1:thunderpunch",
@@ -120,7 +247,6 @@
     "tm:agility",
     "tm:aircutter",
     "tm:airslash",
-    "tm:aquajet",
     "tm:aquatail",
     "tm:bind",
     "tm:blizzard",
@@ -135,18 +261,14 @@
     "tm:defog",
     "tm:dive",
     "tm:dracometeor",
-    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
-    "tm:dragonrage",
-    "tm:dragonrush",
     "tm:dragontail",
     "tm:earthquake",
     "tm:encore",
     "tm:endure",
-    "tm:extremespeed",
     "tm:facade",
     "tm:fireblast",
     "tm:firepunch",
@@ -174,13 +296,11 @@
     "tm:incinerate",
     "tm:ironhead",
     "tm:irontail",
-    "tm:leer",
     "tm:lightscreen",
     "tm:lowkick",
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
-    "tm:mist",
     "tm:ominouswind",
     "tm:outrage",
     "tm:poweruppunch",
@@ -198,7 +318,6 @@
     "tm:scaryface",
     "tm:shockwave",
     "tm:skydrop",
-    "tm:slam",
     "tm:sleeptalk",
     "tm:snowscape",
     "tm:steelwing",
@@ -208,7 +327,6 @@
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
-    "tm:supersonic",
     "tm:surf",
     "tm:swift",
     "tm:tailwind",
@@ -222,8 +340,47 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:weatherball",
-    "tm:wingattack",
-    "tm:wrap"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:aquatail",
+    "tutor:bind",
+    "tutor:bulldoze",
+    "tutor:defog",
+    "tutor:dive",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:lowkick",
+    "tutor:ominouswind",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:scaleshot",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:superpower",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:thunderbolt",
+    "tutor:thunderpunch",
+    "tutor:twister",
+    "tutor:waterpulse"
   ],
   "preEvolution": "dragonair",
   "evolutions": []

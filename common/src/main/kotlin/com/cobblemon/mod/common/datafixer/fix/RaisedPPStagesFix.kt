@@ -26,7 +26,7 @@ class RaisedPPStagesFix(output: Schema) : PokemonFix(output) {
         }
 
         var moves = moveSetJson.get()
-        for(i in 0..moves.size) {
+        for (i in 0..moves.size) {
             var move = moves.getOrNull(i)
             if(move != null && move.get("RaisedPPStages").asNumber(0).toInt() > 3) {
                 moves[i] = move.set("RaisedPPStages", dynamic.createInt(3))

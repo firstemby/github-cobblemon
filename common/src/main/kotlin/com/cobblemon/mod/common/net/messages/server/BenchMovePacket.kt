@@ -41,7 +41,7 @@ class BenchMovePacket(val isParty: Boolean, val uuid: UUID, val oldMove: MoveTem
         if (oldMove != null) {
             buffer.writeString(oldMove.name)
         }
-        buffer.writeBoolean( newMove != null)
+        buffer.writeBoolean(newMove != null)
         if (newMove != null) {
             buffer.writeString(newMove.name)
         }

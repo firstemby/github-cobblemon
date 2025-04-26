@@ -172,7 +172,29 @@
             }
         },
         {
-            "id": "florges-red-7",
+            "id": "florges-white-7",
+            "pokemon": "florges flower=white",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "32-55",
+            "weight": 0.05,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
+                ]
+            }
+        },
+        {
+            "id": "florges-red-8",
             "pokemon": "florges flower=red",
             "type": "pokemon",
             "context": "grounded",
@@ -197,7 +219,7 @@
             }
         },
         {
-            "id": "florges-yellow-7",
+            "id": "florges-yellow-8",
             "pokemon": "florges flower=yellow",
             "type": "pokemon",
             "context": "grounded",
@@ -222,7 +244,7 @@
             }
         },
         {
-            "id": "florges-orange-7",
+            "id": "florges-orange-8",
             "pokemon": "florges flower=orange",
             "type": "pokemon",
             "context": "grounded",
@@ -247,7 +269,7 @@
             }
         },
         {
-            "id": "florges-blue-7",
+            "id": "florges-blue-8",
             "pokemon": "florges flower=blue",
             "type": "pokemon",
             "context": "grounded",
@@ -272,7 +294,7 @@
             }
         },
         {
-            "id": "florges-white-7",
+            "id": "florges-white-8",
             "pokemon": "florges flower=white",
             "type": "pokemon",
             "context": "grounded",
@@ -297,7 +319,7 @@
             }
         },
         {
-            "id": "florges-pink-7",
+            "id": "florges-pink-8",
             "pokemon": "florges flower=pink",
             "type": "pokemon",
             "context": "grounded",

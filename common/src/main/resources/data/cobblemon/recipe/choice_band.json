@@ -1,14 +1,11 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "WQW",
-        "LMQ",
-        "RLW"
+        "QLQ",
+        "RML",
+        "QRQ"
     ],
     "key": {
-        "W": {
-            "item": "minecraft:white_wool"
-        },
         "L": {
             "tag": "c:gems/lapis"
         },

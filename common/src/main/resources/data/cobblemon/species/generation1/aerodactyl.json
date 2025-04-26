@@ -50,6 +50,120 @@
     "height": 1,
     "fixed": false
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "25-50"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "90-100",
+          "AIR": "20-40"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "50-100"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can fly",
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "25-50"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can stay off the ground",
+        "ranges": {
+          "LAND": "15-30",
+          "AIR": "35-70"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/generic"
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/bird"
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "moving": {
       "fly": {
@@ -106,13 +220,11 @@
     "tm:ancientpower",
     "tm:aquatail",
     "tm:assurance",
-    "tm:bite",
     "tm:brutalswing",
     "tm:bulldoze",
     "tm:crunch",
     "tm:curse",
     "tm:defog",
-    "tm:dragonbreath",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
@@ -125,7 +237,6 @@
     "tm:firefang",
     "tm:flamethrower",
     "tm:fly",
-    "tm:foresight",
     "tm:gigaimpact",
     "tm:headbutt",
     "tm:heatwave",
@@ -142,7 +253,6 @@
     "tm:payback",
     "tm:protect",
     "tm:psychicfangs",
-    "tm:pursuit",
     "tm:raindance",
     "tm:rest",
     "tm:roar",
@@ -164,7 +274,6 @@
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:supersonic",
     "tm:swift",
     "tm:tailwind",
     "tm:takedown",
@@ -174,9 +283,39 @@
     "tm:thunderfang",
     "tm:torment",
     "tm:twister",
-    "tm:whirlwind",
-    "tm:wideguard",
-    "tm:wingattack"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:ancientpower",
+    "tutor:aquatail",
+    "tutor:bulldoze",
+    "tutor:defog",
+    "tutor:dragonpulse",
+    "tutor:dualwingbeat",
+    "tutor:earthpower",
+    "tutor:firefang",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:hyperbeam",
+    "tutor:icefang",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:laserfocus",
+    "tutor:meteorbeam",
+    "tutor:ominouswind",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:stealthrock",
+    "tutor:stoneedge",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:thunderfang",
+    "tutor:twister"
   ],
   "evolutions": [],
   "forms": [

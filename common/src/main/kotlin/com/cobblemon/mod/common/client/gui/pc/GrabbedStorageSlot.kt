@@ -18,7 +18,7 @@ class GrabbedStorageSlot(
 ) : StorageSlot(x, y, parent, {}) {
 
     init {
-        isSelected = true
+        isSlotSelected = true
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -30,4 +30,6 @@ class GrabbedStorageSlot(
     override fun getPokemon() = pokemon
 
     override fun isHoveredOrFocused() = true
+
+    override fun shouldRender() = true
 }

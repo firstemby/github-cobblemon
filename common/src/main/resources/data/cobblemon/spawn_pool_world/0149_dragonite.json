@@ -77,6 +77,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "maxY": 32
@@ -93,6 +94,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_magical",
                     "#cobblemon:is_ocean"
                 ]
@@ -137,6 +139,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_magical",
                     "#cobblemon:is_ocean"
                 ]

@@ -68,8 +68,10 @@
     "tm:bugbite",
     "tm:electroweb",
     "tm:stringshot",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:electroweb",
+    "tutor:stringshot"
   ],
   "evolutions": [
     {

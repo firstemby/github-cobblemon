@@ -6,6 +6,7 @@
   "maleRatio": 0.5,
   "height": 14,
   "weight": 890,
+  "baseScale": 0.85,
   "pokedex": [
     "cobblemon.species.eiscue.desc"
   ],
@@ -44,6 +45,11 @@
   "catchRate": 60,
   "eggCycles": 25,
   "baseFriendship": 50,
+  "hitbox": {
+    "width": 1.1,
+    "height": 1.7,
+    "fixed": false
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -105,10 +111,8 @@
     "egg:soak",
     "tm:agility",
     "tm:amnesia",
-    "tm:aquaring",
     "tm:auroraveil",
     "tm:avalanche",
-    "tm:bellydrum",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brine",
@@ -119,24 +123,19 @@
     "tm:facade",
     "tm:featherdance",
     "tm:flipturn",
-    "tm:freezedry",
     "tm:gigaimpact",
     "tm:hail",
     "tm:headbutt",
-    "tm:headsmash",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icepunch",
     "tm:icespinner",
-    "tm:iciclecrash",
     "tm:iciclespear",
     "tm:icywind",
     "tm:irondefense",
     "tm:ironhead",
     "tm:liquidation",
-    "tm:mist",
-    "tm:powdersnow",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
@@ -144,17 +143,29 @@
     "tm:reversal",
     "tm:sleeptalk",
     "tm:snowscape",
-    "tm:soak",
     "tm:substitute",
     "tm:surf",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:waterfall",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:dive",
+    "tutor:flipturn",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:liquidation",
+    "tutor:rest",
+    "tutor:sleeptalk",
+    "tutor:waterpulse",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [],
   "forms": [
@@ -173,6 +184,11 @@
       "aspects": [
         "noice_face"
       ],
+      "hitbox": {
+        "width": 0.65,
+        "height": 1.35,
+        "fixed": false
+      },
       "baseStats": {
         "hp": 75,
         "attack": 80,

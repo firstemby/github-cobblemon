@@ -48,6 +48,9 @@
     "height": 2.75,
     "fixed": false
   },
+  "behaviour": {
+    "fireImmune": true
+  },
   "moves": [
     "1:twister",
     "1:visegrip",
@@ -64,16 +67,13 @@
     "72:hyperbeam",
     "78:explosion",
     "tm:ancientpower",
-    "tm:bite",
     "tm:bodyslam",
     "tm:breakingswipe",
     "tm:crunch",
     "tm:dracometeor",
-    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
-    "tm:dragonenergy",
     "tm:dragonpulse",
     "tm:earthpower",
     "tm:earthquake",
@@ -83,7 +83,6 @@
     "tm:firefang",
     "tm:focusenergy",
     "tm:gigaimpact",
-    "tm:hammerarm",
     "tm:hyperbeam",
     "tm:icefang",
     "tm:laserfocus",
@@ -100,10 +99,25 @@
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
-    "tm:thrash",
     "tm:thunderfang",
     "tm:twister",
-    "tm:visegrip"
+    "tutor:ancientpower",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:earthpower",
+    "tutor:firefang",
+    "tutor:focusenergy",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:icefang",
+    "tutor:laserfocus",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:scaleshot",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:thunderfang",
+    "tutor:twister"
   ],
   "evolutions": []
 }

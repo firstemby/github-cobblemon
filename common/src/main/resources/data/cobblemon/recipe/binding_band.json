@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        " SW",
+        " S ",
         "SsS",
-        "WS "
+        " S "
     ],
     "key": {
         "S": {
@@ -11,9 +11,6 @@
         },
         "s": {
             "tag": "c:slime_balls"
-        },
-        "W": {
-            "item": "minecraft:brown_wool"
         }
     },
     "result": {

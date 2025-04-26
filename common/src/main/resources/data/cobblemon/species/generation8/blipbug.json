@@ -63,10 +63,7 @@
     "egg:stickyweb",
     "egg:supersonic",
     "tm:infestation",
-    "tm:recover",
-    "tm:stickyweb",
     "tm:strugglebug",
-    "tm:supersonic",
     "tm:terablast"
   ],
   "evolutions": [

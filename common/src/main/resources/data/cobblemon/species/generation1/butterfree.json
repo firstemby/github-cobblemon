@@ -64,7 +64,8 @@
         "canFly": true
       },
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       }
     }
   },
@@ -109,7 +110,6 @@
     "tm:bugbite",
     "tm:bugbuzz",
     "tm:captivate",
-    "tm:confusion",
     "tm:defog",
     "tm:drainingkiss",
     "tm:dreameater",
@@ -121,21 +121,16 @@
     "tm:flash",
     "tm:gigadrain",
     "tm:gigaimpact",
-    "tm:gust",
-    "tm:harden",
     "tm:hurricane",
     "tm:hyperbeam",
     "tm:infestation",
     "tm:irondefense",
     "tm:ominouswind",
-    "tm:poisonpowder",
     "tm:pollenpuff",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
     "tm:psychup",
-    "tm:quiverdance",
-    "tm:ragepowder",
     "tm:raindance",
     "tm:rest",
     "tm:roost",
@@ -144,24 +139,42 @@
     "tm:signalbeam",
     "tm:silverwind",
     "tm:skillswap",
-    "tm:sleeppowder",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:stringshot",
     "tm:strugglebug",
-    "tm:stunspore",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:supersonic",
     "tm:swift",
-    "tm:tackle",
     "tm:tailwind",
     "tm:terablast",
     "tm:thief",
     "tm:twister",
     "tm:uturn",
     "tm:venoshock",
-    "tm:whirlwind"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:bugbite",
+    "tutor:defog",
+    "tutor:dualwingbeat",
+    "tutor:electroweb",
+    "tutor:energyball",
+    "tutor:gigadrain",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ominouswind",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:roost",
+    "tutor:shadowball",
+    "tutor:signalbeam",
+    "tutor:skillswap",
+    "tutor:sleeptalk",
+    "tutor:stringshot",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:twister"
   ],
   "preEvolution": "metapod",
   "evolutions": [],
@@ -187,5 +200,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-20"
+      },
+      "ACCELERATION": {
+        "ranges": "75-100"
+      },
+      "SKILL": {
+        "ranges": "10-50"
+      },
+      "JUMP": {
+        "ranges": "10-20"
+      },
+      "STAMINA": {
+        "ranges": "10-20"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:air/glider"
+    }
+  }
 }

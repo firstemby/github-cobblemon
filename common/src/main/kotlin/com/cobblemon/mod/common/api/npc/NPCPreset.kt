@@ -37,6 +37,7 @@ class NPCPreset {
     var isInvulnerable: Boolean? = null
     var isLeashable: Boolean? = null
     var allowProjectileHits: Boolean? = null
+    var hideNameTag: Boolean? = null
 
     fun applyTo(npcClass: NPCClass) {
         resourceIdentifier?.let { npcClass.resourceIdentifier = it }
@@ -63,5 +64,6 @@ class NPCPreset {
         isInvulnerable?.let { npcClass.isInvulnerable = it }
         isLeashable?.let { npcClass.isLeashable = it }
         allowProjectileHits?.let { npcClass.allowProjectileHits = it }
+        hideNameTag?.let { npcClass.hideNameTag = it }
     }
 }

@@ -49,6 +49,134 @@
     "height": 2.65,
     "fixed": false
   },
+  "riding": {
+	"stats": {
+	      "SPEED": {
+	        "displayName": "Speed",
+	        "description": "Its top speed",
+	        "ranges": {
+	          "LAND": "10-20",
+	          "AIR": "25-50"
+	        }
+	      },
+	      "ACCELERATION": {
+	        "displayName": "Acceleration",
+	        "description": "How fast it can speed up",
+	        "ranges": {
+	          "LAND": "90-100",
+	          "AIR": "20-40"
+	        }
+	      },
+	      "SKILL": {
+	        "displayName": "Handling",
+	        "description": "How fast it can turn",
+	        "ranges": {
+	          "LAND": "15-30",
+	          "AIR": "50-100"
+	        }
+	      },
+	      "JUMP": {
+	        "displayName": "Altitude",
+	        "description": "How high it can fly",
+	        "ranges": {
+	          "LAND": "10-20",
+	          "AIR": "25-50"
+	        }
+	      },
+	      "STAMINA": {
+	        "displayName": "Fuel/Stamina",
+	        "description": "How long it can stay off the ground",
+	        "ranges": {
+	          "LAND": "15-30",
+	          "AIR": "35-70"
+	        }
+	      }
+	    },
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/jump",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/generic",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/bird",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ]
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -0.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.7,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -1
+            }
+          }
+        ]
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 1.5,
+          "z": -1.5
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "HOVER"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.4,
+              "z": -1
+            }
+          },
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.2,
+              "z": -0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -117,8 +245,6 @@
     "tm:airslash",
     "tm:ancientpower",
     "tm:beatup",
-    "tm:bellydrum",
-    "tm:bite",
     "tm:blastburn",
     "tm:blazekick",
     "tm:bodyslam",
@@ -126,22 +252,17 @@
     "tm:brickbreak",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:counter",
     "tm:crunch",
     "tm:cut",
     "tm:dig",
     "tm:doubleedge",
-    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
-    "tm:dragonrage",
-    "tm:dragonrush",
     "tm:dragontail",
     "tm:earthquake",
     "tm:echoedvoice",
-    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
@@ -149,7 +270,6 @@
     "tm:firepledge",
     "tm:firepunch",
     "tm:firespin",
-    "tm:flameburst",
     "tm:flamecharge",
     "tm:flamethrower",
     "tm:flareblitz",
@@ -159,7 +279,6 @@
     "tm:focuspunch",
     "tm:furycutter",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:headbutt",
     "tm:heatcrash",
     "tm:heatwave",
@@ -168,7 +287,6 @@
     "tm:hurricane",
     "tm:hyperbeam",
     "tm:incinerate",
-    "tm:inferno",
     "tm:irontail",
     "tm:megakick",
     "tm:megapunch",
@@ -188,12 +306,9 @@
     "tm:sandstorm",
     "tm:scaryface",
     "tm:scorchingsands",
-    "tm:scratch",
     "tm:shadowclaw",
     "tm:skydrop",
-    "tm:slash",
     "tm:sleeptalk",
-    "tm:smokescreen",
     "tm:solarbeam",
     "tm:steelwing",
     "tm:strength",
@@ -208,8 +323,37 @@
     "tm:twister",
     "tm:weatherball",
     "tm:willowisp",
-    "tm:wingattack",
-    "tm:workup"
+    "tm:workup",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:ancientpower",
+    "tutor:blastburn",
+    "tutor:bulldoze",
+    "tutor:dragonpulse",
+    "tutor:firefang",
+    "tutor:firepledge",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:irontail",
+    "tutor:mysticalfire",
+    "tutor:ominouswind",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:scorchingsands",
+    "tutor:shadowclaw",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:thunderpunch",
+    "tutor:twister"
   ],
   "preEvolution": "charmeleon",
   "evolutions": [],
@@ -246,7 +390,66 @@
       "baseExperienceYield": 317,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-60"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "90-100",
+              "AIR": "20-50"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "50-100"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-50"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "35-70"
+            }
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:composite",
+          "transitionStrategy": "cobblemon:strategy/jump",
+          "defaultBehaviour": {
+            "key": "cobblemon:land/generic",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              "-1 * 0.5*q.jump_strength/50"
+            ]
+          },
+          "alternateBehaviour": {
+            "key": "cobblemon:air/bird",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              0
+            ]
+          }
+        }
+      }
     },
     {
       "name": "Mega-Y",
@@ -280,7 +483,66 @@
       "baseExperienceYield": 317,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-60"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "90-100",
+              "AIR": "20-50"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "50-100"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "10-20",
+              "AIR": "25-50"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "15-30",
+              "AIR": "35-70"
+            }
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:composite",
+          "transitionStrategy": "cobblemon:strategy/jump",
+          "defaultBehaviour": {
+            "key": "cobblemon:land/generic",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              "-1 * 0.5*q.jump_strength/50"
+            ]
+          },
+          "alternateBehaviour": {
+            "key": "cobblemon:air/bird",
+            "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+            "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+            "jumpVector": [
+              0,
+              "0.3*q.jump_strength/50",
+              0
+            ]
+          }
+        }
+      }
     },
     {
       "name": "Gmax",

@@ -10,7 +10,7 @@
             "tag": "c:ingots/gold"
         },
         "L": {
-            "tag": "c:dyes/lime"
+            "item": "minecraft:turtle_scute"
         },
         "S": {
             "item": "cobblemon:hard_stone"

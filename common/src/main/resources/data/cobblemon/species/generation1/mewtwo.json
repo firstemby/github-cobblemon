@@ -93,7 +93,6 @@
     "tm:aquatail",
     "tm:aurasphere",
     "tm:avalanche",
-    "tm:barrier",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brickbreak",
@@ -103,10 +102,8 @@
     "tm:calmmind",
     "tm:chillingwater",
     "tm:confuseray",
-    "tm:confusion",
     "tm:curse",
     "tm:darkpulse",
-    "tm:disable",
     "tm:dive",
     "tm:doubleedge",
     "tm:drainpunch",
@@ -147,18 +144,14 @@
     "tm:knockoff",
     "tm:laserfocus",
     "tm:lashout",
-    "tm:lifedew",
     "tm:lightscreen",
     "tm:lowkick",
     "tm:lowsweep",
     "tm:magiccoat",
     "tm:magicroom",
-    "tm:mefirst",
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
-    "tm:miracleeye",
-    "tm:mist",
     "tm:nastyplot",
     "tm:nightshade",
     "tm:payday",
@@ -174,10 +167,7 @@
     "tm:psychocut",
     "tm:psychup",
     "tm:psyshock",
-    "tm:psystrike",
-    "tm:psywave",
     "tm:raindance",
-    "tm:recover",
     "tm:recycle",
     "tm:reflect",
     "tm:rest",
@@ -223,7 +213,61 @@
     "tm:weatherball",
     "tm:willowisp",
     "tm:wonderroom",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:allyswitch",
+    "tutor:ancientpower",
+    "tutor:aquatail",
+    "tutor:bulkup",
+    "tutor:bulldoze",
+    "tutor:calmmind",
+    "tutor:darkpulse",
+    "tutor:dive",
+    "tutor:drainpunch",
+    "tutor:earthpower",
+    "tutor:energyball",
+    "tutor:expandingforce",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:gravity",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:irontail",
+    "tutor:knockoff",
+    "tutor:laserfocus",
+    "tutor:lashout",
+    "tutor:lowkick",
+    "tutor:magiccoat",
+    "tutor:magicroom",
+    "tutor:poisonjab",
+    "tutor:psychic",
+    "tutor:psychocut",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roleplay",
+    "tutor:shadowball",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:skillswap",
+    "tutor:sleeptalk",
+    "tutor:snatch",
+    "tutor:spite",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:swift",
+    "tutor:telekinesis",
+    "tutor:thunderbolt",
+    "tutor:thunderpunch",
+    "tutor:trick",
+    "tutor:wonderroom",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [],
   "forms": [
@@ -298,5 +342,26 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "40-80"
+      },
+      "ACCELERATION": {
+        "ranges": "45-90"
+      },
+      "SKILL": {
+        "ranges": "40-80"
+      },
+      "JUMP": {
+        "ranges": "50-100"
+      },
+      "STAMINA": {
+        "ranges": "45-90"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

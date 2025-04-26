@@ -102,7 +102,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         mulchDuration = if (newDuration <= 0) {
             mulchVariant = MulchVariant.NONE
             this.setChanged()
-            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            world.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
             0
         } else {
             newDuration
@@ -313,6 +313,10 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         val berryPoints = arrayListOf<Pair<Berry, GrowthPoint>>()
         val sequenceIndices = growthPointSequence.toCharArray().filter { it.digitToInt(16) < baseBerry.growthPoints.size }
         for ((index, identifier) in this.growthPoints.withIndex()) {
+            // Don't brick old broken worlds that had too many
+            if (index >= sequenceIndices.size) {
+                break
+            }
             val berry = Berries.getByIdentifier(identifier) ?: continue
             val sequenceIndexHex = sequenceIndices[index].digitToInt(16)
             berryPoints.add(berry to baseBerry.growthPoints[sequenceIndexHex])

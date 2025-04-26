@@ -39,7 +39,7 @@ class HiddenAbilityProperty (var value: Boolean) : CustomPokemonProperty {
         val possible = pokemon.form.abilities.mapping.flatMap { it.value }
             .filter { it.type == getAbilityType() }
         val picked = possible.randomOrNull() ?: return
-        pokemon.updateAbility(picked.template.create(false))
+        pokemon.updateAbility(picked.template.create(false, picked.priority))
     }
 
     override fun matches(pokemon: Pokemon) = pokemon.form.abilities.mapping

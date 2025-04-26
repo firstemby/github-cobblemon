@@ -67,6 +67,69 @@
       "light": "0-4"
     }
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can jump",
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can sprint",
+        "ranges": {
+          "AIR": "50-100"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:air/hover"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
   "drops": {
     "amount": 6,
     "entries": [
@@ -117,13 +180,11 @@
     "egg:mirrorshot",
     "egg:sonicboom",
     "tm:allyswitch",
-    "tm:barrier",
     "tm:bodypress",
     "tm:bodyslam",
     "tm:charge",
     "tm:chargebeam",
     "tm:confuseray",
-    "tm:discharge",
     "tm:doubleedge",
     "tm:eerieimpulse",
     "tm:electricterrain",
@@ -144,14 +205,9 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:lightscreen",
-    "tm:lockon",
     "tm:magiccoat",
-    "tm:magnetbomb",
-    "tm:magneticflux",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:mirrorcoat",
-    "tm:mirrorshot",
     "tm:protect",
     "tm:raindance",
     "tm:recycle",
@@ -165,26 +221,44 @@
     "tm:shockwave",
     "tm:signalbeam",
     "tm:sleeptalk",
-    "tm:sonicboom",
-    "tm:spark",
     "tm:steelbeam",
     "tm:steelroller",
     "tm:substitute",
     "tm:sunnyday",
     "tm:supercellslam",
-    "tm:supersonic",
     "tm:swift",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:thundershock",
     "tm:thunderwave",
     "tm:triattack",
     "tm:voltswitch",
     "tm:wildcharge",
-    "tm:zapcannon"
+    "tutor:allyswitch",
+    "tutor:chargebeam",
+    "tutor:electroweb",
+    "tutor:flashcannon",
+    "tutor:gigaimpact",
+    "tutor:gravity",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:ironhead",
+    "tutor:magiccoat",
+    "tutor:magnetrise",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:rollout",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:steelbeam",
+    "tutor:steelroller",
+    "tutor:swift",
+    "tutor:thunderbolt",
+    "tutor:wildcharge"
   ],
   "preEvolution": "magneton",
   "evolutions": []

@@ -107,11 +107,8 @@
     "egg:naturalgift",
     "egg:sweetscent",
     "egg:worryseed",
-    "tm:absorb",
     "tm:afteryou",
-    "tm:aromatherapy",
     "tm:babydolleyes",
-    "tm:bide",
     "tm:bulletseed",
     "tm:charm",
     "tm:covet",
@@ -120,23 +117,16 @@
     "tm:encore",
     "tm:endure",
     "tm:energyball",
-    "tm:entrainment",
     "tm:facade",
     "tm:flash",
     "tm:gigadrain",
     "tm:grassknot",
-    "tm:grasswhistle",
     "tm:grassyglide",
-    "tm:growth",
     "tm:healbell",
-    "tm:healingwish",
     "tm:helpinghand",
-    "tm:ingrain",
     "tm:laserfocus",
     "tm:leafstorm",
-    "tm:leechseed",
     "tm:magicalleaf",
-    "tm:megadrain",
     "tm:naturalgift",
     "tm:naturepower",
     "tm:pollenpuff",
@@ -144,40 +134,36 @@
     "tm:rest",
     "tm:safeguard",
     "tm:seedbomb",
-    "tm:sleeppowder",
     "tm:sleeptalk",
     "tm:solarbeam",
-    "tm:stunspore",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:sweetscent",
     "tm:synthesis",
     "tm:terablast",
     "tm:trailblaze",
-    "tm:worryseed"
+    "tm:worryseed",
+    "tutor:afteryou",
+    "tutor:babydolleyes",
+    "tutor:covet",
+    "tutor:energyball",
+    "tutor:gigadrain",
+    "tutor:grassyglide",
+    "tutor:healbell",
+    "tutor:helpinghand",
+    "tutor:laserfocus",
+    "tutor:magicalleaf",
+    "tutor:rest",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:synthesis",
+    "tutor:worryseed"
   ],
   "evolutions": [
-    {
-      "id": "petilil_lilligant",
-      "variant": "item_interact",
-      "result": "lilligant",
-      "consumeHeldItem": true,
-      "learnableMoves": [
-        "petaldance"
-      ],
-      "requirements": [
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/petilil_hisuibiome"
-        }
-      ],
-      "requiredContext": "cobblemon:sun_stone"
-    },
     {
       "id": "petilil_lilliganthisui",
       "variant": "item_interact",
       "result": "lilligant hisuian",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [
         "victorydance"
       ],
@@ -185,11 +171,17 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/petilil_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/petilil_unovabiome"
         }
+      ],
+      "requiredContext": "cobblemon:sun_stone"
+    },
+    {
+      "id": "petilil_lilligant",
+      "variant": "item_interact",
+      "result": "lilligant",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "petaldance"
       ],
       "requiredContext": "cobblemon:sun_stone"
     }
@@ -218,15 +210,11 @@
           "id": "petilil_lilligant",
           "variant": "item_interact",
           "result": "lilligant",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "petaldance"
           ],
           "requirements": [
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/petilil_hisuibiome"
-            },
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/petilil_unovabiome"
@@ -238,15 +226,9 @@
           "id": "petilil_lilliganthisui",
           "variant": "item_interact",
           "result": "lilligant hisuian",
-          "consumeHeldItem": true,
+          "consumeHeldItem": false,
           "learnableMoves": [
             "victorydance"
-          ],
-          "requirements": [
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/petilil_unovabiome"
-            }
           ],
           "requiredContext": "cobblemon:sun_stone"
         }

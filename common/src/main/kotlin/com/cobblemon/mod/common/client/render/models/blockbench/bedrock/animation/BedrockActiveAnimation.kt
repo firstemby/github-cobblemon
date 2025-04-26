@@ -51,7 +51,7 @@ open class BedrockActiveAnimation(
         headPitch: Float,
         intensity: Float
     ): Boolean {
-        return animation.run(context, model, state, state.animationSeconds - startedSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity).also {
+        return animation.run(model, state, state.animationSeconds - startedSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity).also {
             if (!it) {
                 afterAction(context, state)
             }

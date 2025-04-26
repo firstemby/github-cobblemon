@@ -161,7 +161,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pX = x + 119, pY = height / 2 + 84,
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentPokemon,
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         starterRoundaboutLeft = StarterRoundabout(
@@ -169,7 +169,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentCategory.pokemon[leftOfCurrentSelection()],
             clickAction = { _, _ -> this.left()  },
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         starterRoundaboutRight = StarterRoundabout(
@@ -177,7 +177,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             pWidth = StarterRoundabout.MODEL_WIDTH, pHeight = StarterRoundabout.MODEL_HEIGHT,
             pokemon = currentCategory.pokemon[rightOfCurrentSelection()],
             clickAction = { _, _ -> this.right()  },
-            rotationVector = this.modelWidget.rotVec
+            rotationVector = this.modelWidget.rotationVector
         )
 
         addRenderableWidget(starterRoundaboutLeft)

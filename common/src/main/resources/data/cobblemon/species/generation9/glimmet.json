@@ -57,6 +57,9 @@
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
@@ -100,7 +103,6 @@
     "egg:explosion",
     "egg:memento",
     "egg:toxic",
-    "tm:acidarmor",
     "tm:acidspray",
     "tm:ancientpower",
     "tm:confuseray",
@@ -109,10 +111,8 @@
     "tm:explosion",
     "tm:facade",
     "tm:gunkshot",
-    "tm:harden",
     "tm:irondefense",
     "tm:lightscreen",
-    "tm:memento",
     "tm:meteorbeam",
     "tm:mudshot",
     "tm:powergem",
@@ -123,7 +123,6 @@
     "tm:rockblast",
     "tm:rockpolish",
     "tm:rockslide",
-    "tm:rockthrow",
     "tm:rocktomb",
     "tm:sandstorm",
     "tm:sandtomb",
@@ -140,7 +139,19 @@
     "tm:terablast",
     "tm:toxic",
     "tm:toxicspikes",
-    "tm:venoshock"
+    "tm:venoshock",
+    "tutor:ancientpower",
+    "tutor:dazzlinggleam",
+    "tutor:gunkshot",
+    "tutor:irondefense",
+    "tutor:meteorbeam",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:spikes",
+    "tutor:stealthrock",
+    "tutor:stoneedge"
   ],
   "evolutions": [
     {

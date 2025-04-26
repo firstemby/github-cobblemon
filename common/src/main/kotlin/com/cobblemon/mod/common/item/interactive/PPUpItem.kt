@@ -18,12 +18,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
-class PPUpItem(val amount: Int) : CobblemonItem(Properties()), PokemonAndMoveSelectingItem {
+class PPUpItem(
+    val amount: Int
+) : CobblemonItem(Properties().apply {
+    if (amount>1) rarity(Rarity.UNCOMMON)
+}), PokemonAndMoveSelectingItem {
+
     override val bagItem = null
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any(::canUseOnMove)
-    override fun canUseOnMove(move: Move) = move.raisedPpStages < 3
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+    override fun canUseOnMove(stack: ItemStack, move: Move) = move.raisedPpStages < 3
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

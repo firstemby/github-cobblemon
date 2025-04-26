@@ -63,6 +63,74 @@
       }
     }
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "35-70",
+          "AIR": "10-70"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "35-75",
+          "AIR": "10-75"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "10-80"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can jump",
+        "ranges": {
+          "LAND": "50-100",
+          "AIR": "10-60"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can sprint",
+        "ranges": {
+          "LAND": "40-85",
+          "AIR": "10-85"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:air/bird"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ]
+},
   "drops": {
     "amount": 3,
     "entries": [
@@ -102,7 +170,6 @@
     "52:hyperbeam",
     "tm:aquatail",
     "tm:avalanche",
-    "tm:bite",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:bounce",
@@ -117,14 +184,12 @@
     "tm:dragoncheer",
     "tm:dragondance",
     "tm:dragonpulse",
-    "tm:dragonrage",
     "tm:dragontail",
     "tm:earthquake",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
-    "tm:flail",
     "tm:flamethrower",
     "tm:gigaimpact",
     "tm:hail",
@@ -140,7 +205,6 @@
     "tm:ironhead",
     "tm:irontail",
     "tm:lashout",
-    "tm:leer",
     "tm:muddywater",
     "tm:outrage",
     "tm:payback",
@@ -156,18 +220,15 @@
     "tm:scaryface",
     "tm:sleeptalk",
     "tm:spite",
-    "tm:splash",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:surf",
-    "tm:tackle",
     "tm:takedown",
     "tm:taunt",
     "tm:temperflare",
     "tm:terablast",
-    "tm:thrash",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderwave",
@@ -175,7 +236,34 @@
     "tm:twister",
     "tm:waterfall",
     "tm:waterpulse",
-    "tm:whirlpool"
+    "tm:whirlpool",
+    "tutor:aquatail",
+    "tutor:bounce",
+    "tutor:bulldoze",
+    "tutor:darkpulse",
+    "tutor:dive",
+    "tutor:dragonpulse",
+    "tutor:endeavor",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icefang",
+    "tutor:icywind",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:lashout",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:scaleshot",
+    "tutor:sleeptalk",
+    "tutor:spite",
+    "tutor:stoneedge",
+    "tutor:thunderbolt",
+    "tutor:twister",
+    "tutor:waterpulse"
   ],
   "preEvolution": "magikarp",
   "evolutions": [],

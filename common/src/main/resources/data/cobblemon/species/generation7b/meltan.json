@@ -55,12 +55,10 @@
     "24:thunderwave",
     "32:acidarmor",
     "40:flashcannon",
-    "tm:acidarmor",
     "tm:endure",
     "tm:facade",
     "tm:flashcannon",
     "tm:gyroball",
-    "tm:harden",
     "tm:headbutt",
     "tm:irondefense",
     "tm:protect",
@@ -68,11 +66,15 @@
     "tm:sleeptalk",
     "tm:steelbeam",
     "tm:substitute",
-    "tm:tailwhip",
     "tm:terablast",
     "tm:thunderbolt",
-    "tm:thundershock",
-    "tm:thunderwave"
+    "tm:thunderwave",
+    "tutor:flashcannon",
+    "tutor:irondefense",
+    "tutor:rest",
+    "tutor:sleeptalk",
+    "tutor:steelbeam",
+    "tutor:thunderbolt"
   ],
   "evolutions": []
 }

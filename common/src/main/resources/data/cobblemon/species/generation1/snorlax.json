@@ -124,9 +124,6 @@
     "egg:whirlwind",
     "tm:afteryou",
     "tm:amnesia",
-    "tm:belch",
-    "tm:bellydrum",
-    "tm:bite",
     "tm:blizzard",
     "tm:block",
     "tm:bodypress",
@@ -135,13 +132,10 @@
     "tm:bulldoze",
     "tm:charm",
     "tm:chillingwater",
-    "tm:chipaway",
-    "tm:counter",
     "tm:covet",
     "tm:crunch",
     "tm:curse",
     "tm:darkestlariat",
-    "tm:defensecurl",
     "tm:dig",
     "tm:doubleedge",
     "tm:earthquake",
@@ -150,8 +144,6 @@
     "tm:facade",
     "tm:fireblast",
     "tm:firepunch",
-    "tm:fissure",
-    "tm:flail",
     "tm:flamethrower",
     "tm:fling",
     "tm:focusblast",
@@ -159,7 +151,6 @@
     "tm:gastroacid",
     "tm:gigaimpact",
     "tm:gunkshot",
-    "tm:hammerarm",
     "tm:hardpress",
     "tm:headbutt",
     "tm:heatcrash",
@@ -175,18 +166,15 @@
     "tm:incinerate",
     "tm:ironhead",
     "tm:lastresort",
-    "tm:lick",
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
     "tm:mudslap",
     "tm:naturalgift",
-    "tm:odorsleuth",
     "tm:outrage",
     "tm:payday",
     "tm:poweruppunch",
     "tm:protect",
-    "tm:pursuit",
     "tm:raindance",
     "tm:recycle",
     "tm:rest",
@@ -208,7 +196,6 @@
     "tm:snore",
     "tm:solarbeam",
     "tm:steelroller",
-    "tm:stockpile",
     "tm:stompingtantrum",
     "tm:strength",
     "tm:substitute",
@@ -216,8 +203,6 @@
     "tm:supercellslam",
     "tm:superpower",
     "tm:surf",
-    "tm:swallow",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:terrainpulse",
@@ -226,11 +211,51 @@
     "tm:thunderpunch",
     "tm:trailblaze",
     "tm:uproar",
-    "tm:whirlwind",
     "tm:wildcharge",
     "tm:workup",
-    "tm:yawn",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:afteryou",
+    "tutor:block",
+    "tutor:bulldoze",
+    "tutor:covet",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focuspunch",
+    "tutor:gastroacid",
+    "tutor:gigaimpact",
+    "tutor:gunkshot",
+    "tutor:helpinghand",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:hypervoice",
+    "tutor:iceball",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:ironhead",
+    "tutor:lastresort",
+    "tutor:mudslap",
+    "tutor:outrage",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:rollout",
+    "tutor:seedbomb",
+    "tutor:shadowball",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:snatch",
+    "tutor:snore",
+    "tutor:steelroller",
+    "tutor:stompingtantrum",
+    "tutor:superpower",
+    "tutor:terrainpulse",
+    "tutor:thunderbolt",
+    "tutor:thunderpunch",
+    "tutor:uproar",
+    "tutor:wildcharge",
+    "tutor:zenheadbutt"
   ],
   "preEvolution": "munchlax",
   "evolutions": [],
@@ -255,5 +280,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "5-10"
+      },
+      "ACCELERATION": {
+        "ranges": "80-100"
+      },
+      "SKILL": {
+        "ranges": "10-20"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "10-20"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

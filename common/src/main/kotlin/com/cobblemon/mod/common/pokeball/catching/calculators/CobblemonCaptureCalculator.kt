@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokeball.catching.CaptureContext
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CriticalCaptureProvider
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.PokedexProgressCaptureMultiplierProvider
+import com.cobblemon.mod.common.api.pokeball.catching.calculators.PokedexStatusCaptureInfluencer
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
@@ -32,7 +33,7 @@ import kotlin.random.Random
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer
 
-object CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider {
+object CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider, PokedexStatusCaptureInfluencer {
 
     override fun id(): String = "cobblemon"
 
@@ -54,9 +55,9 @@ object CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, P
         val pokeBall = pokeBallEntity.pokeBall
         val pokemon = target.pokemon
         if (pokeBall.catchRateModifier.isGuaranteed()) {
-            return CaptureContext.successful()
+            return this.influence(thrower, target, CaptureContext.successful())
         }
-        // We don't have dark grass so we're just gonna pretend everything is that. Scratch that, without the pokedex it has issues.
+        // We don't have dark grass so we're just going to pretend everything is that. Scratch that, without the Pokédex it has issues.
         val darkGrass = 1F //if (thrower is ServerPlayer) this.caughtMultiplierFor(thrower).roundToInt() else 1
         val inBattleModifier = if (target.battleId != null) 1F else 0.5F
         val catchRate = getCatchRate(thrower, pokeBallEntity, target, pokemon.form.catchRate.toFloat())
@@ -94,8 +95,8 @@ object CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, P
                 return CaptureContext(numberOfShakes = 1, isSuccessfulCapture = shakes == 1, isCriticalCapture = true)
             }
         }
-        // ToDo once pokedex is implemented if the target is registered and it's a success shorten to 1 shake and become critical capture
-        return CaptureContext(numberOfShakes = shakes, isSuccessfulCapture = shakes == 4, isCriticalCapture = false)
+        return this.influence(thrower, target, CaptureContext(numberOfShakes = shakes, isSuccessfulCapture = shakes == 4, isCriticalCapture = false))
+
     }
 
     private fun findHighestThrowerLevel(player: ServerPlayer, pokemon: Pokemon): Int? {
@@ -109,4 +110,5 @@ object CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, P
         } ?: return null
         return actor.getSide().getOppositeSide().activePokemon.maxOfOrNull { it.battlePokemon?.effectedPokemon?.level ?: 1 }
     }
+
 }

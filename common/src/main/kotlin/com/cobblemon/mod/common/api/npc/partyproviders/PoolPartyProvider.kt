@@ -7,27 +7,31 @@
  */
 
 package com.cobblemon.mod.common.api.npc.partyproviders
-
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.NPCPartyProvider
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.entity.npc.NPCEntity
-import com.cobblemon.mod.common.util.asArrayValue
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.resolveInt
-import com.cobblemon.mod.common.util.weightedSelection
-import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.util.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import kotlin.random.Random
 import net.minecraft.server.level.ServerPlayer
+import kotlin.collections.List
+import kotlin.collections.any
+import kotlin.collections.filter
+import kotlin.collections.first
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.randomOrNull
+import kotlin.collections.set
+import kotlin.collections.toMutableList
+import kotlin.random.Random
 
 /**
  * A provider of a party for battling the NPC. It generates a party using a more complex process
@@ -60,9 +64,9 @@ class PoolPartyProvider : NPCPartyProvider {
         json as JsonObject
         this.minPokemon = json.getAsJsonPrimitive("minPokemon").asString?.asExpression() ?: "1".asExpression()
         this.maxPokemon = json.getAsJsonPrimitive("maxPokemon").asString?.asExpression() ?: "6".asExpression()
-        this.pool = json.getAsJsonArray("pool").map {
+        this.pool = json.getAsJsonArray("pool").mapNotNull {
             if (it is JsonPrimitive) {
-                return@map DynamicPokemon(
+                return@mapNotNull DynamicPokemon(
                     PokemonProperties.parse(it.asString),
                     "0".asExpression(),
                     null,
@@ -73,17 +77,26 @@ class PoolPartyProvider : NPCPartyProvider {
             }
 
             it as JsonObject
-            DynamicPokemon(
-                PokemonProperties.parse(it.get("pokemon").asString),
-                it.get("levelVariation")?.asString?.asExpression() ?: "0".asExpression(),
-                it.get("level")?.asString?.asExpression(),
-                it.get("npcLevels")?.asString?.split("-")?.let { it[0].toInt()..it[1].toInt() } ?: 1..100,
-                it.get("selectableTimes")?.asString?.asExpression() ?: "1".asExpression(),
-                it.get("weight")?.asString?.asExpression() ?: "1".asExpression()
-            )
+            val properties = PokemonProperties.parse(it.get("pokemon").asString)
+                // Checks for errors on Pokémon name, if not a valid species ignores it to avoid random Pokémon in the Pool.
+            if (properties.species == null) {
+                LOGGER.warn("Error making NPC pokemon pool. ${it.get("pokemon").asString.substringBefore(" ")} is not a valid species, ignoring")
+                    null
+            }
+            else {
+                DynamicPokemon(
+                    properties,
+                    it.get("levelVariation")?.asString?.asExpression() ?: "0".asExpression(),
+                    it.get("level")?.asString?.asExpression(),
+                    it.get("npcLevels")?.asString?.split("-")?.let { it[0].toInt()..it[1].toInt() } ?: 1..100,
+                    it.get("selectableTimes")?.asString?.asExpression() ?: "1".asExpression(),
+                    it.get("weight")?.asString?.asExpression() ?: "1".asExpression()
+                )
+            }
         }.toMutableList()
         isStatic = json.get("isStatic").asBoolean
         json.get("useFixedRandom")?.asBoolean?.let { useFixedRandom = it }
+
     }
 
     class DynamicPokemon(
@@ -137,6 +150,10 @@ class PoolPartyProvider : NPCPartyProvider {
             val instance = selected.pokemon.copy().also { it.level = it.level ?: dictatedLevel ?: randomLevel }.create()
             party.add(instance)
         }
+        if (party.none()) {
+            LOGGER.error("${npc} has no Pokemon on Party")
+        }
+
     }
 
     override fun provide(npc: NPCEntity, level: Int, players: List<ServerPlayer>): NPCPartyStore {

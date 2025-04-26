@@ -101,9 +101,6 @@
     "tm:bravebird",
     "tm:charge",
     "tm:defog",
-    "tm:detect",
-    "tm:discharge",
-    "tm:drillpeck",
     "tm:dualwingbeat",
     "tm:eerieimpulse",
     "tm:electricterrain",
@@ -120,10 +117,8 @@
     "tm:hyperbeam",
     "tm:laserfocus",
     "tm:lightscreen",
-    "tm:magneticflux",
     "tm:metalsound",
     "tm:ominouswind",
-    "tm:peck",
     "tm:pluck",
     "tm:protect",
     "tm:raindance",
@@ -147,14 +142,36 @@
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:thundershock",
     "tm:thunderwave",
     "tm:twister",
     "tm:uturn",
     "tm:voltswitch",
     "tm:weatherball",
     "tm:wildcharge",
-    "tm:zapcannon"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:ancientpower",
+    "tutor:defog",
+    "tutor:dualwingbeat",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:laserfocus",
+    "tutor:ominouswind",
+    "tutor:rest",
+    "tutor:risingvoltage",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:thunderbolt",
+    "tutor:twister",
+    "tutor:wildcharge"
   ],
   "evolutions": [],
   "forms": [
@@ -241,10 +258,7 @@
         "tm:bulkup",
         "tm:closecombat",
         "tm:coaching",
-        "tm:counter",
-        "tm:detect",
         "tm:doubleedge",
-        "tm:drillpeck",
         "tm:dualwingbeat",
         "tm:endeavor",
         "tm:endure",
@@ -261,10 +275,8 @@
         "tm:lowsweep",
         "tm:megakick",
         "tm:payback",
-        "tm:peck",
         "tm:pluck",
         "tm:protect",
-        "tm:quickguard",
         "tm:raindance",
         "tm:rest",
         "tm:retaliate",
@@ -286,12 +298,93 @@
         "tm:taunt",
         "tm:terablast",
         "tm:throatchop",
-        "tm:thunderouskick",
         "tm:trailblaze",
-        "tm:uturn"
+        "tm:uturn",
+        "tutor:aerialace",
+        "tutor:ancientpower",
+        "tutor:bounce",
+        "tutor:bulkup",
+        "tutor:coaching",
+        "tutor:dualwingbeat",
+        "tutor:endeavor",
+        "tutor:focusenergy",
+        "tutor:gigaimpact",
+        "tutor:helpinghand",
+        "tutor:hyperbeam",
+        "tutor:knockoff",
+        "tutor:lowkick",
+        "tutor:rest",
+        "tutor:rocksmash",
+        "tutor:sleeptalk",
+        "tutor:stompingtantrum",
+        "tutor:superpower",
+        "tutor:swift",
+        "tutor:tailwind",
+        "tutor:throatchop"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "45-95"
+          },
+          "ACCELERATION": {
+            "ranges": "70-90"
+          },
+          "SKILL": {
+            "ranges": "35-75"
+          },
+          "JUMP": {
+            "ranges": "55-100"
+          },
+          "STAMINA": {
+            "ranges": "55-85"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "35-80"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "70-90",
+          "AIR": "25-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "30-60",
+          "AIR": "50-80"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "25-60"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

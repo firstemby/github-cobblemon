@@ -27,7 +27,7 @@ class PlayerInteractOptionsPacket(
     val targetId: UUID,
     val numericTargetId: Int,
     val selectedPokemonId: UUID,
-    ) : NetworkPacket<PlayerInteractOptionsPacket> {
+) : NetworkPacket<PlayerInteractOptionsPacket> {
     companion object {
         val ID = cobblemonResource("player_interactions")
         fun decode(buffer: RegistryFriendlyByteBuf) = PlayerInteractOptionsPacket(

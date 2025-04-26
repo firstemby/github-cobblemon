@@ -42,13 +42,25 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1.4,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1.2,
-    "height": 1.9,
+    "width": 2,
+    "height": 3.2,
     "fixed": false
   },
-  "drops": {
+  "standingEyeHeight": 0.85,
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.23
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false
+    }
+  },
+"drops": {
     "amount": 1,
     "entries": [
       {
@@ -93,30 +105,20 @@
     "tm:assurance",
     "tm:avalanche",
     "tm:beatup",
-    "tm:bite",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
-    "tm:chipaway",
-    "tm:circlethrow",
-    "tm:cometpunch",
-    "tm:counter",
     "tm:covet",
     "tm:crunch",
-    "tm:crushclaw",
     "tm:cut",
     "tm:dig",
-    "tm:disable",
-    "tm:dizzypunch",
     "tm:doubleedge",
-    "tm:doublehit",
     "tm:drainpunch",
     "tm:earthquake",
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:fakeout",
     "tm:fireblast",
     "tm:firepunch",
     "tm:flamethrower",
@@ -124,12 +126,9 @@
     "tm:focusblast",
     "tm:focusenergy",
     "tm:focuspunch",
-    "tm:foresight",
     "tm:furycutter",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:hail",
-    "tm:hammerarm",
     "tm:headbutt",
     "tm:helpinghand",
     "tm:hydropump",
@@ -140,16 +139,13 @@
     "tm:incinerate",
     "tm:irontail",
     "tm:lastresort",
-    "tm:leer",
     "tm:lowkick",
     "tm:megakick",
     "tm:megapunch",
     "tm:mudslap",
     "tm:outrage",
-    "tm:pound",
     "tm:poweruppunch",
     "tm:protect",
-    "tm:rage",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
@@ -167,24 +163,57 @@
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:spite",
-    "tm:stomp",
     "tm:strength",
     "tm:substitute",
     "tm:suckerpunch",
     "tm:sunnyday",
     "tm:surf",
-    "tm:tailwhip",
     "tm:terablast",
     "tm:terrainpulse",
     "tm:thief",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:thunderpunch",
-    "tm:trumpcard",
     "tm:uproar",
     "tm:waterpulse",
     "tm:whirlpool",
-    "tm:workup"
+    "tm:workup",
+    "tutor:aerialace",
+    "tutor:aquatail",
+    "tutor:bulldoze",
+    "tutor:covet",
+    "tutor:drainpunch",
+    "tutor:endeavor",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focusenergy",
+    "tutor:focuspunch",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icepunch",
+    "tutor:icywind",
+    "tutor:irontail",
+    "tutor:lastresort",
+    "tutor:lowkick",
+    "tutor:mudslap",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:shadowball",
+    "tutor:shadowclaw",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:spite",
+    "tutor:suckerpunch",
+    "tutor:terrainpulse",
+    "tutor:thunderbolt",
+    "tutor:thunderpunch",
+    "tutor:uproar",
+    "tutor:waterpulse"
   ],
   "evolutions": [],
   "forms": [
@@ -219,7 +248,83 @@
       "baseExperienceYield": 207,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": {
+              "LAND": "20-50",
+              "LIQUID": "10-20"
+            }
+          },
+          "ACCELERATION": {
+            "ranges": {
+              "LAND": "50-50",
+              "LIQUID": "50-50"
+            }
+          },
+          "SKILL": {
+            "ranges": {
+              "LAND": "20-40",
+              "LIQUID": "20-40"
+            }
+          },
+          "JUMP": {
+            "ranges": {
+              "LAND": "5-10",
+              "LIQUID": "5-10"
+            }
+          },
+          "STAMINA": {
+            "ranges": {
+              "LAND": "30-65",
+              "LIQUID": "30-65"
+            }
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "20-45",
+          "LIQUID": "10-20"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "50-50",
+          "LIQUID": "50-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "20-40",
+          "LIQUID": "20-40"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "5-10",
+          "LIQUID": "5-10"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "30-65",
+          "LIQUID": "30-65"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

@@ -101,17 +101,13 @@
     "tm:brickbreak",
     "tm:bulkup",
     "tm:bulldoze",
-    "tm:bulletpunch",
     "tm:closecombat",
     "tm:coaching",
-    "tm:counter",
-    "tm:crosschop",
     "tm:crosspoison",
     "tm:darkestlariat",
     "tm:dig",
     "tm:doubleedge",
     "tm:dualchop",
-    "tm:dynamicpunch",
     "tm:earthquake",
     "tm:encore",
     "tm:endure",
@@ -123,7 +119,6 @@
     "tm:focusblast",
     "tm:focusenergy",
     "tm:focuspunch",
-    "tm:foresight",
     "tm:gigaimpact",
     "tm:headbutt",
     "tm:heavyslam",
@@ -132,23 +127,18 @@
     "tm:hyperbeam",
     "tm:icepunch",
     "tm:incinerate",
-    "tm:karatechop",
     "tm:knockoff",
-    "tm:leer",
     "tm:lightscreen",
     "tm:lowkick",
     "tm:lowsweep",
-    "tm:meditate",
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
     "tm:mudslap",
     "tm:payback",
     "tm:poisonjab",
-    "tm:powertrick",
     "tm:poweruppunch",
     "tm:protect",
-    "tm:quickguard",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
@@ -160,16 +150,12 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:roleplay",
-    "tm:rollingkick",
     "tm:scaryface",
-    "tm:seismictoss",
     "tm:sleeptalk",
     "tm:smackdown",
-    "tm:smellingsalts",
     "tm:stompingtantrum",
     "tm:stoneedge",
     "tm:strength",
-    "tm:submission",
     "tm:substitute",
     "tm:sunnyday",
     "tm:superpower",
@@ -177,12 +163,37 @@
     "tm:thief",
     "tm:throatchop",
     "tm:thunderpunch",
-    "tm:tickle",
     "tm:vacuumwave",
-    "tm:vitalthrow",
-    "tm:wakeupslap",
-    "tm:wideguard",
-    "tm:workup"
+    "tm:workup",
+    "tutor:bulkup",
+    "tutor:bulldoze",
+    "tutor:coaching",
+    "tutor:dualchop",
+    "tutor:firepunch",
+    "tutor:flamethrower",
+    "tutor:focusenergy",
+    "tutor:focuspunch",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:icepunch",
+    "tutor:knockoff",
+    "tutor:lowkick",
+    "tutor:mudslap",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roleplay",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:superpower",
+    "tutor:throatchop",
+    "tutor:thunderpunch",
+    "tutor:trick",
+    "tutor:vacuumwave"
   ],
   "preEvolution": "machoke",
   "evolutions": [],
@@ -207,5 +218,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-25"
+      },
+      "ACCELERATION": {
+        "ranges": "5-100"
+      },
+      "SKILL": {
+        "ranges": "45-90"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "20-40"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

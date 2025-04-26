@@ -23,6 +23,8 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents.FRIENDSHIP_UPDATED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
 import com.cobblemon.mod.common.api.events.pokemon.*
 import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
+import com.cobblemon.mod.common.api.mark.Mark
+import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.BenchedMove
@@ -57,6 +59,8 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -97,7 +101,6 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
-import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -119,7 +122,9 @@ import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
 import kotlin.math.absoluteValue
+import kotlin.math.atan2
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -128,7 +133,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.StringTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
@@ -137,6 +141,7 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.FluidTags
+import net.minecraft.util.Mth
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
 import net.minecraft.util.StringRepresentable
@@ -152,8 +157,6 @@ import net.minecraft.world.level.block.MagmaBlock
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
-import kotlin.math.*
-import net.minecraft.util.Mth
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -173,69 +176,82 @@ open class Pokemon : ShowdownIdentifiable {
                 throw IllegalArgumentException("Cannot set a species that isn't registered")
             }
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            val oldValue = field
             field = value
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
-                evolutionProxy.current().clear()
+                if (oldValue != value) {
+                    evolutionProxy.current().clear()
+                }
             }
             updateAspects()
             updateForm()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
-            _species.emit(value)
+            onChange(SpeciesUpdatePacket({ this }, value))
         }
 
     var form = species.standardForm
         set(value) {
-            val old = field
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
-            this.sanitizeFormChangeMoves(old)
+            this.updateMovesOnFormChange(value)
             // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
             this.evolutionProxy.current().clear()
-            findAndLearnFormChangeMoves()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
-            _form.emit(value)
+            onChange(FormUpdatePacket({ this }, value))
         }
 
     // Need to happen before currentHealth init due to the calc
-    var ivs = IVs.createRandomIVs()
-        internal set
-    var evs = EVs.createEmpty()
-        internal set
+    var ivs = IVs.createRandomIVs().also { it.changeFunction = { onChange(IVsUpdatePacket({ this }, it as IVs)) } }
+        internal set(value) {
+            val oldChangeFunction = field.changeFunction
+            field.changeFunction = {}
+            field = value
+            value.changeFunction = oldChangeFunction
+        }
+    var evs = EVs.createEmpty().also { it.changeFunction = { onChange(EVsUpdatePacket({ this }, it as EVs)) } }
+        internal set(value) {
+            val oldChangeFunction = field.changeFunction
+            field.changeFunction = {}
+            field = value
+            value.changeFunction = oldChangeFunction
+        }
 
     fun setIV(stat : Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
         ivs[stat] = value
-        if(stat == Stats.HP) {
+        if (stat == Stats.HP) {
             updateHP(quotient)
         }
-        _ivs.emit(ivs)
     }
 
     fun setEV(stat: Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
         evs[stat] = value
-        if(stat == Stats.HP) {
+        if (stat == Stats.HP) {
             updateHP(quotient)
         }
-        _evs.emit(evs)
     }
 
     var nickname: MutableComponent? = null
         set(value) {
             field = value
-            _nickname.emit(value)
+            onChange(NicknameUpdatePacket({ this }, value))
         }
 
-    fun getDisplayName(): MutableComponent = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+    fun getDisplayName(showTitle: Boolean = false): MutableComponent {
+        var name = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+        if (showTitle) activeMark?.let { name = it.getTitle(name) }
+        return name
+    }
 
     var level = 1
         set(value) {
@@ -265,7 +281,7 @@ open class Pokemon : ShowdownIdentifiable {
                 status = null
             }
             field = max(min(maxHealth, value), 0)
-            _currentHealth.emit(field)
+            onChange(HealthUpdatePacket({ this }, field))
 
             // If the Pokémon is fainted, give it a timer for it to wake back up
             if (this.isFainted()) {
@@ -289,13 +305,13 @@ open class Pokemon : ShowdownIdentifiable {
             }
             field = value
             updateAspects()
-            _gender.emit(value)
+            onChange(GenderUpdatePacket({ this }, value))
         }
 
     var status: PersistentStatusContainer? = null
         set(value) {
             field = value
-            this._status.emit(value?.status)
+            onChange(StatusUpdatePacket({ this }, value?.status))
         }
 
     var experience = 0
@@ -304,7 +320,7 @@ open class Pokemon : ShowdownIdentifiable {
             if (this.level == Cobblemon.config.maxPokemonLevel) {
                 field = this.experienceGroup.getExperience(this.level)
             }
-            _experience.emit(field)
+            onChange(ExperienceUpdatePacket({ this }, field))
         }
 
     /**
@@ -314,13 +330,12 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var friendship = this.form.baseFriendship
         private set(value) {
-            // Don't check on client, that way we don't need to actually sync the config value it doesn't affect anything
             if (!this.isPossibleFriendship(value)) {
                 return
             }
             FRIENDSHIP_UPDATED.post(FriendshipUpdatedEvent(this, value)) {
                 field = it.newFriendship
-                _friendship.emit(it.newFriendship)
+                onChange(FriendshipUpdatePacket({ this }, it.newFriendship))
             }
         }
 
@@ -328,7 +343,7 @@ open class Pokemon : ShowdownIdentifiable {
         set(value) {
             if (field != value) {
                 field = value
-                _state.emit(value)
+                onChange(PokemonStateUpdatePacket({ this }, value))
             }
         }
 
@@ -347,13 +362,13 @@ open class Pokemon : ShowdownIdentifiable {
     var teraType: TeraType = TeraTypes.forElementalType(this.primaryType)
         set(value) {
             field = value
-            _teraType.emit(value)
+            onChange(TeraTypeUpdatePacket({ this }, value))
         }
 
     var dmaxLevel = 0
         set(value) {
             field = value.coerceIn(0, Cobblemon.config.maxDynamaxLevel)
-            _dmaxLevel.emit(value)
+            onChange(DmaxLevelUpdatePacket({ this }, value))
         }
 
     /**
@@ -365,7 +380,7 @@ open class Pokemon : ShowdownIdentifiable {
             val evolutions = species.standardForm.evolutions.mapNotNull { it.result.species }.mapNotNull { PokemonSpecies.getByName(it) }
             if (species.canGmax() || evolutions.find { it.canGmax() } != null) {
                 field = value
-                _gmaxFactor.emit(value)
+                onChange(GmaxFactorUpdatePacket({ this }, value))
             }
         }
 
@@ -373,23 +388,31 @@ open class Pokemon : ShowdownIdentifiable {
         set(value) {
             field = value
             updateAspects()
-            _shiny.emit(value)
+            onChange(ShinyUpdatePacket({ this }, value))
         }
 
     var tradeable = true
         set(value) {
             field = value
-            _tradeable.emit(value)
+            onChange(TradeableUpdatePacket({ this }, value))
         }
 
     var nature = Natures.getRandomNature()
-        set(value) { field = value ; _nature.emit(value) }
+        set(value) {
+            field = value
+            onChange(NatureUpdatePacket({ this }, value, minted = false))
+        }
     var mintedNature: Nature? = null
-        set(value) { field = value ; _mintedNature.emit(value) }
+        set(value) {
+            field = value
+            onChange(NatureUpdatePacket({ this }, value, minted = true))
+        }
     val effectiveNature: Nature
         get() = mintedNature ?: nature
 
-    val moveSet = MoveSet()
+    val moveSet = MoveSet().also {
+        it.changeFunction = { onChange(MoveSetUpdatePacket({ this }, it)) }
+    }
 
     val experienceGroup: ExperienceGroup
         get() = form.experienceGroup
@@ -397,19 +420,19 @@ open class Pokemon : ShowdownIdentifiable {
     var faintedTimer: Int = -1
         set(value) {
             field = value
-            anyChangeObservable.emit(this)
+            onChange()
         }
 
     var healTimer: Int = -1
         set(value) {
             field = value
-            anyChangeObservable.emit(this)
+            onChange()
         }
 
     var tetheringId: UUID? = null
         set(value) {
             field = value
-            _tetheringId.emit(value)
+            onChange(TetheringUpdatePacket({ this }, value))
         }
 
     var originalTrainerType: OriginalTrainerType = OriginalTrainerType.NONE
@@ -430,23 +453,27 @@ open class Pokemon : ShowdownIdentifiable {
     var originalTrainerName: String? = null
         set(value) {
             field = value
-            _originalTrainerName.emit(value)
+            onChange(OriginalTrainerUpdatePacket({ this }, value))
         }
-
 
     /**
      * All moves that the Pokémon has, at some point, known. This is to allow players to
      * swap in moves they've used before at any time, while holding onto the remaining PP
      * that they had last.
      */
-    var benchedMoves = BenchedMoves()
-        internal set
+    var benchedMoves = BenchedMoves().also { it.changeFunction = { onChange(BenchedMovesUpdatePacket({ this }, it)) }}
+        internal set(value) {
+            val oldChangeFunction = field.changeFunction
+            field.changeFunction = {}
+            field = value
+            value.changeFunction = oldChangeFunction
+        }
 
     var ability: Ability = Abilities.DUMMY.create(false)
         // Keep internal for DTO & sync packet
         internal set(value) {
             if (field != value) {
-                _ability.emit(value)
+                onChange(AbilityUpdatePacket({ this }, value.template))
             }
             field = value
         }
@@ -470,8 +497,43 @@ open class Pokemon : ShowdownIdentifiable {
     var scaleModifier = 1F
 
     var caughtBall: PokeBall = PokeBalls.POKE_BALL
-        set(value) { field = value ; _caughtBall.emit(caughtBall) }
+        set(value) {
+            field = value
+            onChange(CaughtBallUpdatePacket({ this }, field))
+        }
+
     var features = mutableListOf<SpeciesFeature>()
+
+    var cosmeticItem = ItemStack.EMPTY
+        set(value) {
+            field = value
+            updateAspects()
+            onChange(CosmeticItemUpdatePacket({ this }, value))
+        }
+
+    var activeMark: Mark? = null
+        set(value) {
+            field = value
+            onChange(ActiveMarkUpdatePacket({ this }, value))
+        }
+
+    var marks: MutableSet<Mark> = mutableSetOf()
+        set(value) {
+            field = value
+            onChange(MarksUpdatePacket({ this }, value))
+        }
+
+    var potentialMarks: MutableSet<Mark> = mutableSetOf()
+        set(value) {
+            field = value
+            onChange(MarksPotentialUpdatePacket({ this }, value))
+        }
+
+    var markings: List<Int> = listOf(0, 0, 0, 0, 0, 0)
+        set(value) {
+            field = value
+            onChange(MarkingsUpdatePacket({ this }, value))
+        }
 
     fun asRenderablePokemon() = RenderablePokemon(species, aspects)
 
@@ -503,7 +565,7 @@ open class Pokemon : ShowdownIdentifiable {
                 if (!isClient) {
                     updateForm()
                 }
-                _aspects.emit(value)
+                onChange(AspectsUpdatePacket({ this }, value))
             }
         }
 
@@ -518,6 +580,8 @@ open class Pokemon : ShowdownIdentifiable {
 
     val preEvolution: PreEvolution? get() = this.form.preEvolution
 
+    private val rideBoosts: MutableMap<RidingStat, Float> = mutableMapOf()
+
     /**
      * Provides the sided [EvolutionController]s, these operations can be done safely with a simple side check.
      * This can be done beforehand or using [EvolutionProxy.isClient].
@@ -529,7 +593,7 @@ open class Pokemon : ShowdownIdentifiable {
 
     /**
      * Arbitrary data compound. Be aware that updating this is not enough for a Pokémon to be recognized as dirty
-     * and in need of saving. Emit to [anyChangeObservable] if you are making a change otherwise you'll see reversions.
+     * and in need of saving. Emit to [changeObservable] if you are making a change otherwise you'll see reversions.
      */
     var persistentData: CompoundTag =
         CompoundTag()
@@ -539,6 +603,14 @@ open class Pokemon : ShowdownIdentifiable {
      * The [ItemStack] this Pokémon is holding.
      */
     internal var heldItem: ItemStack = ItemStack.EMPTY
+
+    /**
+     * Whether this Pokémon's held item is visible or not
+     */
+    var heldItemVisible: Boolean = true
+
+    val riding: RidingProperties
+        get() = this.form.riding
 
     init {
         storeCoordinates.subscribe { if (it != null && it.store !is PCStore && this.tetheringId != null) afterOnServer(seconds = 0.05F) { this.tetheringId = null } }
@@ -570,11 +642,7 @@ open class Pokemon : ShowdownIdentifiable {
             val entity = PokemonEntity(level, this)
             illusion?.start(entity)
             val adjustedPosition = entity.getAjustedSendoutPosition(position)
-            val sentOut = entity.setPositionSafely(adjustedPosition)
-            //If sendout failed, fall back
-            if (!sentOut) {
-                entity.setPos(adjustedPosition.x, adjustedPosition.y, adjustedPosition.z)
-            }
+            entity.setPositionSafely(adjustedPosition)
             mutation(entity)
             level.addFreshEntity(entity)
             state = SentOutState(entity)
@@ -592,7 +660,6 @@ open class Pokemon : ShowdownIdentifiable {
         illusion: IllusionEffect? = null,
         mutation: (PokemonEntity) -> Unit = {},
     ): CompletableFuture<PokemonEntity> {
-
 
         // Handle special case of shouldered Cobblemon
         if (this.state is ShoulderedState) {
@@ -626,7 +693,7 @@ open class Pokemon : ShowdownIdentifiable {
                                 battleActor is EntityBackedBattleActor<*> && battleActor.entity != null && battleActor.entity?.uuid !== owner.uuid
                             } as EntityBackedBattleActor<*>
                             if (activeBattlePokemon != null) {
-                                opposingEntityPos = ShowdownInterpreter.getSendoutPosition(battle, activeBattlePokemon, opposingEntityBattleActor as BattleActor)
+                                opposingEntityPos = activeBattlePokemon.getSendOutPosition()
                             }
                             if (opposingEntityPos == null) {
                                 // Sendout calculation failed, fallback to using the opposing actor's position
@@ -802,12 +869,12 @@ open class Pokemon : ShowdownIdentifiable {
     fun applyStatus(status: PersistentStatus) {
         this.status = PersistentStatusContainer(status, status.statusPeriod().random())
         if (this.status != null) {
-            this._status.emit(this.status!!.status)
+            onChange(StatusUpdatePacket({ this }, status))
         }
     }
 
     fun isFireImmune(): Boolean {
-        return ElementalTypes.FIRE in types || !form.behaviour.moving.swim.hurtByLava
+        return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
 
     fun isPositionSafe(world: Level, pos: Vec3): Boolean {
@@ -937,10 +1004,24 @@ open class Pokemon : ShowdownIdentifiable {
                 event.receiving.shrink(1)
             }
             this.heldItem = giving
-            this._heldItem.emit(giving)
+            onChange(HeldItemUpdatePacket({ this }, giving))
             CobblemonEvents.HELD_ITEM_POST.post(HeldItemEvent.Post(this, this.heldItem(), event.returning.copy(), event.decrement)) {
                 StashHandler.giveHeldItem(it)
             }
+            return event.returning
+        })
+        return stack
+    }
+
+    fun swapCosmeticItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
+        val existing = this.cosmeticItem.copy()
+        CobblemonEvents.COSMETIC_ITEM_PRE.postThen(HeldItemEvent.Pre(this, stack, existing, decrement), ifSucceeded = { event ->
+            val giving = event.receiving.copy().apply { count = 1 }
+            if (event.decrement) {
+                event.receiving.shrink(1)
+            }
+            this.cosmeticItem = giving
+            CobblemonEvents.COSMETIC_ITEM_POST.post(HeldItemEvent.Post(this, this.cosmeticItem.copy(), event.returning.copy(), event.decrement))
             return event.returning
         })
         return stack
@@ -952,6 +1033,57 @@ open class Pokemon : ShowdownIdentifiable {
      * @return The existing [ItemStack] being held.
      */
     fun removeHeldItem(): ItemStack = this.swapHeldItem(ItemStack.EMPTY)
+
+    fun addPotentialMark(mark: Mark) {
+        potentialMarks.add(mark)
+        if (!isClient) onChange(MarkPotentialAddUpdatePacket({ this }, mark))
+    }
+
+    fun exchangeMark(mark: Mark, give: Boolean) {
+        if (give) {
+            mark.replace?.takeIf { it.isNotEmpty() }?.let { replacements ->
+                for (mark in replacements) Marks.getByIdentifier(mark)?.let { exchangeMark(it, false) }
+            }
+
+            marks.add(mark)
+            if (!isClient) onChange(MarkAddUpdatePacket({ this }, mark))
+        }
+        else {
+            marks.remove(mark)
+            if (activeMark == mark) activeMark = null
+            if (!isClient) onChange(MarkRemoveUpdatePacket({ this }, mark))
+        }
+    }
+
+    /**
+     * Calculate mark to give from list of potential marks.
+     * @return True if a mark has been applied, false otherwise
+     */
+    fun applyPotentialMarks(): Boolean {
+        // Remove any marks that are already owned
+        val potentials = potentialMarks.filterNot { mark -> marks.contains(mark) }.toMutableSet()
+
+        if (!potentials.isEmpty()) {
+            var selectedMark: Mark? = null
+            val sortedMarkGroups = potentials.groupBy { it.getChanceGroup() }.toSortedMap(compareBy { it.second })
+
+            for ((chanceGroup, group) in sortedMarkGroups) {
+                val probability = chanceGroup.second.coerceIn(0F, 1F) * 100
+                val randomValue = Random.nextDouble(0.0, 100.0)
+
+                if (randomValue < probability) {
+                    selectedMark = group.random()
+                    break
+                }
+            }
+            potentialMarks = mutableSetOf()
+            selectedMark?.let {
+                exchangeMark(it, true)
+                return true
+            }
+        }
+        return false
+    }
 
     fun saveToNBT(registryAccess: RegistryAccess, nbt: CompoundTag = CompoundTag()): CompoundTag {
         return this.saveTo(registryAccess.createSerializationContext(NbtOps.INSTANCE), nbt).orThrow as CompoundTag
@@ -1015,14 +1147,14 @@ open class Pokemon : ShowdownIdentifiable {
         this.experience = other.experience
         this.setFriendship(other.friendship)
         // Applied before current health for calcs to take place
-        other.ivs.doWithoutEmitting {
-            this.ivs.forEach {
-                other.ivs[it.key] = it.value
+        this.ivs.doWithoutEmitting {
+            other.ivs.forEach {
+                this.ivs[it.key] = it.value
             }
         }
-        other.evs.doWithoutEmitting {
-            this.evs.forEach {
-                other.evs[it.key] = it.value
+        this.evs.doWithoutEmitting {
+            other.evs.forEach {
+                this.evs[it.key] = it.value
             }
         }
         this.currentHealth = other.currentHealth
@@ -1051,6 +1183,15 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
+        this.features = other.features
+        this.cosmeticItem = other.cosmeticItem
+        this.activeMark = other.activeMark
+        this.marks.clear()
+        this.marks += other.marks
+        this.potentialMarks.clear()
+        this.potentialMarks += other.marks
+        this.markings = other.markings
+        this.updateAspects()
         this.refreshOriginalTrainer()
         this.initialize()
         return this
@@ -1399,6 +1540,46 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    fun getMaxRideBoost(stat: RidingStat): Int {
+        return form.riding.stats[stat]?.ranges?.maxOf { it.value.endInclusive } ?: 0
+    }
+
+    fun getRideBoost(stat: RidingStat): Float {
+        return rideBoosts[stat] ?: 0F
+    }
+
+    fun getRideBoosts(): Map<RidingStat, Float> {
+        return rideBoosts.toMap()
+    }
+
+    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
+        val max = getMaxRideBoost(stat)
+        val current = rideBoosts[stat] ?: 0F
+        return current + boost <= max
+    }
+
+    fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
+        if (!canAddRideBoost(stat, boost)) {
+            return false
+        }
+        val max = getMaxRideBoost(stat)
+        rideBoosts[stat] = (getRideBoost(stat) + boost).coerceIn(0F, max.toFloat())
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        return true
+    }
+
+    fun setRideBoost(stat: RidingStat, boost: Float) {
+        val max = getMaxRideBoost(stat)
+        rideBoosts[stat] = boost.coerceIn(0F, max.toFloat())
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+    }
+
+    fun setRideBoosts(boosts: Map<RidingStat, Float>) {
+        rideBoosts.clear()
+        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key).toFloat()) })
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+    }
+
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)
     fun getExperienceToLevel(level: Int) = if (level <= this.level) 0 else experienceGroup.getExperience(level) - experience
 
@@ -1558,33 +1739,33 @@ open class Pokemon : ShowdownIdentifiable {
         storeCoordinates.get()?.run { sendPacketToPlayers(store.getObservingPlayers(), packet) }
     }
 
-    fun <T> registerObservable(observable: SimpleObservable<T>, notifyPacket: ((T) -> PokemonUpdatePacket<*>?)? = null): SimpleObservable<T> {
-        observables.add(observable)
-        observable.subscribe {
-            if (notifyPacket != null && storeCoordinates.get() != null) {
-                val packet = notifyPacket(it)
-                if (packet != null) {
-                    notify(packet)
-                }
-            }
-            anyChangeObservable.emit(this)
-        }
-        return observable
-    }
-
-    private val observables = mutableListOf<Observable<*>>()
-    val anyChangeObservable = SimpleObservable<Pokemon>()
-
     val struct = ObjectValue<Pokemon>(this)
         .addPokemonFunctions(this)
 
     fun markFeatureDirty(feature: SpeciesFeature) {
-        _features.emit(feature)
+        val featureProvider = SpeciesFeatures.getFeature(feature.name)
+        val packet = if (feature is SynchronizedSpeciesFeature && featureProvider is SynchronizedSpeciesFeatureProvider && featureProvider.visible) {
+            SpeciesFeatureUpdatePacket({ this }, species.resourceIdentifier, feature)
+        } else {
+            null
+        }
+        onChange(packet)
     }
 
-    fun getAllObservables() = observables.asIterable()
-    /** Returns an [Observable] that emits Unit whenever any change is made to this Pokémon. The change itself is not included. */
-    fun getChangeObservable(): Observable<Pokemon> = anyChangeObservable
+    /** An [Observable] that emits the Pokémon whenever any change is made to it. The change itself is not included. */
+    val changeObservable = SimpleObservable<Pokemon>()
+
+    /**
+     * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
+     * players just for convenience, but the main thing is that this will push an update to [changeObservable] which
+     * is primarily (for our purposes, at least) so that we can detect when storage needs to be queued for saving.
+     */
+    fun onChange(packet: PokemonUpdatePacket<*>? = null) {
+        if (packet != null && storeCoordinates.get() != null) {
+            notify(packet)
+        }
+        changeObservable.emit(this)
+    }
 
     /**
      * Used for when 'this' would be called in leaking context.
@@ -1593,70 +1774,35 @@ open class Pokemon : ShowdownIdentifiable {
      */
     open fun self(): Pokemon = this
 
-    private fun findAndLearnFormChangeMoves() {
-        this.form.moves.formChangeMoves.forEach { move ->
-            if (this.benchedMoves.none { it.moveTemplate == move }) {
-                this.benchedMoves.add(BenchedMove(move, 0))
-            }
+    private fun updateMovesOnFormChange(newForm: FormData) {
+        if (this.isClient) {
+            return
         }
-    }
-
-    private fun sanitizeFormChangeMoves(old: FormData) {
         for (i in 0 until MoveSet.MOVE_COUNT) {
             val move = this.moveSet[i]
-            if (move != null && LearnsetQuery.FORM_CHANGE.canLearn(move.template, old.moves) && !LearnsetQuery.ANY.canLearn(move.template, this.form.moves)) {
+            if (move != null && !LearnsetQuery.ANY.canLearn(move.template, newForm.moves)) {
                 this.moveSet.setMove(i, null)
             }
         }
         val benchedIterator = this.benchedMoves.iterator()
         while (benchedIterator.hasNext()) {
             val benchedMove = benchedIterator.next()
-            if (LearnsetQuery.FORM_CHANGE.canLearn(benchedMove.moveTemplate, old.moves) && !LearnsetQuery.ANY.canLearn(benchedMove.moveTemplate, this.form.moves)) {
+            if (!LearnsetQuery.ANY.canLearn(benchedMove.moveTemplate, newForm.moves)) {
                 benchedIterator.remove()
             }
         }
+        // Add form change moves
+        newForm.moves.formChangeMoves.forEach { move ->
+            // Under the hood these check if the moves already exist
+            this.benchedMoves.add(BenchedMove(move, 0))
+        }
+        // If moveset is empty try to find one valid move to fill it
         if (this.moveSet.filterNotNull().isEmpty()) {
             val benchedMove = this.benchedMoves.firstOrNull()
+            // This shouldn't ever be null, but you never know with data driven
             if (benchedMove != null) {
                 this.moveSet.setMove(0, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
-                return
             }
-        }
-    }
-
-    private val _form = registerObservable(SimpleObservable<FormData>()) { FormUpdatePacket({ this }, it) }
-    private val _species = registerObservable(SimpleObservable<Species>()) { SpeciesUpdatePacket({ this }, it) }
-    private val _nickname = registerObservable(SimpleObservable<MutableComponent?>()) { NicknameUpdatePacket({ this }, it) }
-    private val _experience = registerObservable(SimpleObservable<Int>()) { ExperienceUpdatePacket({ this }, it) }
-    private val _friendship = registerObservable(SimpleObservable<Int>()) { FriendshipUpdatePacket({ this }, it) }
-    private val _currentHealth = registerObservable(SimpleObservable<Int>()) { HealthUpdatePacket({ this }, it) }
-    private val _shiny = registerObservable(SimpleObservable<Boolean>()) { ShinyUpdatePacket({ this }, it) }
-    private val _tradeable = registerObservable(SimpleObservable<Boolean>()) { TradeableUpdatePacket({ this }, it) }
-    private val _nature = registerObservable(SimpleObservable<Nature>()) { NatureUpdatePacket({ this }, it, false) }
-    private val _mintedNature = registerObservable(SimpleObservable<Nature?>()) { NatureUpdatePacket({ this }, it, true) }
-    private val _moveSet = registerObservable(moveSet.observable) { MoveSetUpdatePacket({ this }, it) }
-    private val _state = registerObservable(SimpleObservable<PokemonState>()) { PokemonStateUpdatePacket({ this }, it) }
-    private val _status = registerObservable(SimpleObservable<PersistentStatus?>()) { StatusUpdatePacket({ this }, it) }
-    private val _caughtBall = registerObservable(SimpleObservable<PokeBall>()) { CaughtBallUpdatePacket({ this }, it) }
-    private val _benchedMoves = registerObservable(benchedMoves.observable) { BenchedMovesUpdatePacket({ this }, BenchedMoves().also {copy -> copy.copyFrom(it)}) }
-    private val _ivs = registerObservable(ivs.observable) { IVsUpdatePacket({ this }, it as IVs) }
-    private val _evs = registerObservable(evs.observable) { EVsUpdatePacket({ this }, it as EVs) }
-    private val _aspects = registerObservable(SimpleObservable<Set<String>>()) { AspectsUpdatePacket({ this }, it) }
-    private val _gender = registerObservable(SimpleObservable<Gender>()) { GenderUpdatePacket({ this }, it) }
-    private val _ability = registerObservable(SimpleObservable<Ability>()) { AbilityUpdatePacket({ this }, it.template) }
-    private val _heldItem = registerObservable(SimpleObservable<ItemStack>()) { HeldItemUpdatePacket({ this }, it) }
-    private val _tetheringId = registerObservable(SimpleObservable<UUID?>()) { TetheringUpdatePacket({ this }, it) }
-    private val _teraType = registerObservable(SimpleObservable<TeraType>()) { TeraTypeUpdatePacket({ this }, it) }
-    private val _dmaxLevel = registerObservable(SimpleObservable<Int>()) { DmaxLevelUpdatePacket({ this }, it) }
-    private val _gmaxFactor = registerObservable(SimpleObservable<Boolean>()) { GmaxFactorUpdatePacket({ this }, it) }
-    private val _originalTrainerName = registerObservable(SimpleObservable<String?>()) { OriginalTrainerUpdatePacket({ this }, it) }
-
-    private val _features = registerObservable(SimpleObservable<SpeciesFeature>()) {
-        val featureProvider = SpeciesFeatures.getFeature(it.name)
-        if (it is SynchronizedSpeciesFeature && featureProvider is SynchronizedSpeciesFeatureProvider && featureProvider.visible) {
-            SpeciesFeatureUpdatePacket({ this }, species.resourceIdentifier, it)
-        } else {
-            null
         }
     }
 
@@ -1724,6 +1870,5 @@ open class Pokemon : ShowdownIdentifiable {
          */
         @JvmStatic
         val S2C_CODEC: StreamCodec<RegistryFriendlyByteBuf, Pokemon> = ByteBufCodecs.fromCodecWithRegistries(CLIENT_CODEC)
-
     }
 }

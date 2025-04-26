@@ -70,17 +70,18 @@
     "1:tackle",
     "6:strugglebug",
     "16:bugbite",
-    "tm:bide",
     "tm:bugbite",
     "tm:endeavor",
-    "tm:growl",
     "tm:lunge",
     "tm:pound",
     "tm:skittersmack",
     "tm:stringshot",
     "tm:strugglebug",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:endeavor",
+    "tutor:skittersmack",
+    "tutor:stringshot"
   ],
   "evolutions": [
     {

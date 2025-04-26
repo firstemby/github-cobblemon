@@ -19,6 +19,8 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.displayEntityLevelLabel = packet.displayEntityLevelLabel
         ServerSettings.displayEntityNameLabel = packet.displayEntityNameLabel
         ServerSettings.maxPokemonLevel = packet.maxPokemonLevel
+        ServerSettings.maxPokemonFriendship = packet.maxPokemonFriendship
+        ServerSettings.maxDynamaxLevel = packet.maxDynamaxLevel
     }
 
 }

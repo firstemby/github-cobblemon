@@ -10,21 +10,25 @@ package com.cobblemon.mod.common.data
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonFlows
 import com.cobblemon.mod.common.CobblemonBrainConfigs
 import com.cobblemon.mod.common.CobblemonMechanics
+import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.dialogue.Dialogues
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.fishing.FishingBait
-import com.cobblemon.mod.common.api.fishing.FishingBaits
+import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
+import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.npc.NPCClasses
@@ -58,7 +62,6 @@ import java.util.*
 
 object CobblemonDataProvider : DataProvider {
 
-    // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     internal var canReload = true
     // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     private val registries = linkedSetOf<DataRegistry>()
@@ -92,13 +95,17 @@ object CobblemonDataProvider : DataProvider {
         this.register(DexEntryAdditions)
         this.register(Dexes)
         this.register(DexAdditions)
+        this.register(CobblemonCosmeticItems)
         this.register(CobblemonFlows)
+        this.register(CobblemonUnlockableWallpapers)
+        this.register(Marks)
 
         CobblemonSpawnPools.load()
         this.register(PokeRods)
         this.register(Berries)
-        this.register(FishingBaits)
-        FishingBait.Effects.setupEffects()
+        this.register(Seasonings)
+        this.register(SpawnBaitEffects)
+        SpawnBait.Effects.setupEffects()
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             synchronizedPlayerIds.remove(it.player.uuid)

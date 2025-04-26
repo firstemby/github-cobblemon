@@ -49,6 +49,16 @@
     "height": 4,
     "fixed": false
   },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "fly": {
+        "canFly": true
+      }
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -76,7 +86,6 @@
     "56:gastroacid",
     "63:toxic",
     "70:dragonrush",
-    "tm:acid",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:aircutter",
@@ -91,20 +100,16 @@
     "tm:dragonclaw",
     "tm:dragondance",
     "tm:dragonpulse",
-    "tm:dragonrush",
     "tm:dragontail",
     "tm:dualwingbeat",
     "tm:echoedvoice",
     "tm:endure",
     "tm:facade",
-    "tm:fellstinger",
     "tm:fireblast",
     "tm:flamethrower",
     "tm:fly",
-    "tm:furyattack",
     "tm:gastroacid",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:gunkshot",
     "tm:heatwave",
     "tm:helpinghand",
@@ -115,7 +120,6 @@
     "tm:leechlife",
     "tm:nastyplot",
     "tm:outrage",
-    "tm:peck",
     "tm:pinmissile",
     "tm:poisonjab",
     "tm:protect",
@@ -146,7 +150,43 @@
     "tm:uturn",
     "tm:venomdrench",
     "tm:venoshock",
-    "tm:xscissor"
+    "tm:xscissor",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:allyswitch",
+    "tutor:darkpulse",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:dualwingbeat",
+    "tutor:flamethrower",
+    "tutor:gastroacid",
+    "tutor:gigaimpact",
+    "tutor:gunkshot",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:irontail",
+    "tutor:laserfocus",
+    "tutor:leechlife",
+    "tutor:outrage",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:scaleshot",
+    "tutor:shadowclaw",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:snarl",
+    "tutor:snatch",
+    "tutor:spikes",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:throatchop",
+    "tutor:thunderbolt",
+    "tutor:uproar",
+    "tutor:xscissor"
   ],
   "preEvolution": "poipole",
   "evolutions": []

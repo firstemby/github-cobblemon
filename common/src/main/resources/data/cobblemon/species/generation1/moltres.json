@@ -54,6 +54,7 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
       "fly": {
         "canFly": true
@@ -100,11 +101,9 @@
     "tm:ancientpower",
     "tm:bravebird",
     "tm:burningjealousy",
-    "tm:burnup",
     "tm:defog",
     "tm:doubleedge",
     "tm:dualwingbeat",
-    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
@@ -114,14 +113,12 @@
     "tm:flareblitz",
     "tm:fly",
     "tm:gigaimpact",
-    "tm:gust",
     "tm:heatwave",
     "tm:helpinghand",
     "tm:hurricane",
     "tm:hyperbeam",
     "tm:incinerate",
     "tm:laserfocus",
-    "tm:leer",
     "tm:mysticalfire",
     "tm:ominouswind",
     "tm:overheat",
@@ -151,7 +148,29 @@
     "tm:uturn",
     "tm:weatherball",
     "tm:willowisp",
-    "tm:wingattack"
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:ancientpower",
+    "tutor:burningjealousy",
+    "tutor:defog",
+    "tutor:dualwingbeat",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:laserfocus",
+    "tutor:mysticalfire",
+    "tutor:ominouswind",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:scorchingsands",
+    "tutor:skyattack",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:twister"
   ],
   "evolutions": [],
   "forms": [
@@ -238,11 +257,9 @@
         "tm:dualwingbeat",
         "tm:endure",
         "tm:facade",
-        "tm:fierywrath",
         "tm:fly",
         "tm:foulplay",
         "tm:gigaimpact",
-        "tm:gust",
         "tm:helpinghand",
         "tm:hex",
         "tm:hurricane",
@@ -250,8 +267,6 @@
         "tm:hypervoice",
         "tm:imprison",
         "tm:lashout",
-        "tm:leer",
-        "tm:memento",
         "tm:nastyplot",
         "tm:painsplit",
         "tm:payback",
@@ -277,10 +292,68 @@
         "tm:terablast",
         "tm:thief",
         "tm:uturn",
-        "tm:wingattack"
+        "tutor:aerialace",
+        "tutor:afteryou",
+        "tutor:ancientpower",
+        "tutor:darkpulse",
+        "tutor:dualwingbeat",
+        "tutor:foulplay",
+        "tutor:gigaimpact",
+        "tutor:helpinghand",
+        "tutor:hyperbeam",
+        "tutor:hypervoice",
+        "tutor:lashout",
+        "tutor:painsplit",
+        "tutor:rest",
+        "tutor:shadowball",
+        "tutor:skyattack",
+        "tutor:sleeptalk",
+        "tutor:snarl",
+        "tutor:spite",
+        "tutor:suckerpunch",
+        "tutor:swift",
+        "tutor:tailwind"
       ],
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "10-20",
+          "AIR": "35-75"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "70-90",
+          "AIR": "25-50"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "30-60",
+          "AIR": "50-80"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "25-50",
+          "AIR": "25-60"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "35-75"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

@@ -8,16 +8,24 @@
 
 package com.cobblemon.mod.common.client.tooltips
 
-import com.cobblemon.mod.common.api.fishing.FishingBaits
+import com.cobblemon.mod.common.api.cooking.Seasonings
+import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
+import com.cobblemon.mod.common.api.fishing.SpawnBaitUtils
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
-import com.cobblemon.mod.common.api.text.*
+import com.cobblemon.mod.common.api.text.blue
+import com.cobblemon.mod.common.api.text.gold
+import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.api.text.obfuscate
+import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.util.lang
+import java.text.DecimalFormat
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-import java.text.DecimalFormat
 
 object FishingBaitTooltipGenerator : TooltipGenerator() {
     private val fishingBaitHeader by lazy { lang("fishing_bait_effect_header").blue() }
@@ -30,20 +38,47 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
     )
 
     override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (!FishingBaits.isFishingBait(stack)) return null
+        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
+            return null
+        }
+        if (!SpawnBaitEffects.isFishingBait(stack)) {
+            return null
+        }
         return mutableListOf(fishingBaitItemClass)
     }
 
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
+            return null
+        }
         val resultLines = mutableListOf<Component>()
-        val bait =
-            (if (stack.item is PokerodItem) PokerodItem.getBaitOnRod(stack) else FishingBaits.getFromBaitItemStack(stack))
-                ?: return null
-        resultLines.addLast(this.fishingBaitHeader)
+
+        // Determine the FishingBait or combined effects from poke_bait
+        val rawEffects = mutableListOf<SpawnBait.Effect>().apply {
+            if (stack.item is PokerodItem) {
+                addAll(SpawnBaitEffects.getEffectsFromRodItemStack(stack))
+            } else {
+                addAll(SpawnBaitEffects.getEffectsFromItemStack(stack))
+            }
+
+            // Check for Seasoning-based Bait effects
+            if (Seasonings.isSeasoning(stack)) {
+                val seasoningEffects = Seasonings.getBaitEffectsFromItemStack(stack)
+                if (seasoningEffects.isNotEmpty()) {
+                    addAll(seasoningEffects)
+                }
+            }
+        }
+
+        val baitEffects = SpawnBaitUtils.mergeEffects(rawEffects)
+
+        if (baitEffects.isEmpty()) return null
+
+        resultLines.add(this.fishingBaitHeader)
 
         val formatter = DecimalFormat("0.##")
 
-        bait.effects.forEach { effect ->
+        baitEffects.forEach { effect ->
             val effectType = effect.type.path.toString()
             val effectSubcategory = effect.subcategory?.path
             val effectChance = effect.chance * 100
@@ -51,6 +86,7 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
                 "bite_time" -> (effect.value * 100).toInt()
                 else -> effect.value.toInt()
             }
+
             val subcategoryString: Component = if (effectSubcategory != null) {
                 when (effectType) {
                     "nature", "ev", "iv" -> com.cobblemon.mod.common.api.pokemon.stats.Stats.getStat(
@@ -62,7 +98,7 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
                     "typing" -> ElementalTypes.get(effectSubcategory)?.displayName
 
                     "egg_group" -> {
-                        val effectSubcategory = effect.subcategory?.path
+                        val effectSubcategory = effect.subcategory.path
                         val eggGroup = effectSubcategory?.let { EggGroup.fromIdentifier(it) }
                         eggGroup?.let {
                             val langKey = "egg_group.${it.name.lowercase()}"
@@ -74,12 +110,12 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
                 } ?: Component.literal("cursed").obfuscate()
             } else Component.literal("cursed").obfuscate()
 
-            // handle reformatting of shiny chance effectChance
+            // Adjust shiny chance effectValue
             if (effectType == "shiny_reroll") {
                 effectValue++
             }
 
-            resultLines.addLast(
+            resultLines.add(
                 lang(
                     "fishing_bait_effects.$effectType.tooltip",
                     Component.literal(formatter.format(effectChance)).yellow(),
@@ -91,4 +127,5 @@ object FishingBaitTooltipGenerator : TooltipGenerator() {
 
         return resultLines
     }
+
 }

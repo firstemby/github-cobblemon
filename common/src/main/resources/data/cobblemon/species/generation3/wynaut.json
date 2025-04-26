@@ -68,12 +68,8 @@
     "1:amnesia",
     "tm:amnesia",
     "tm:charm",
-    "tm:counter",
-    "tm:destinybond",
     "tm:encore",
-    "tm:mirrorcoat",
-    "tm:safeguard",
-    "tm:splash"
+    "tm:safeguard"
   ],
   "evolutions": [
     {

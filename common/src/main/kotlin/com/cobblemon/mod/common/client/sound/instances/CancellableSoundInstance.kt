@@ -59,7 +59,7 @@ class CancellableSoundInstance(sound: SoundEvent, pos: BlockPos = BlockPos.ZERO,
                     // listener is very far away, kill it
                     this.done = true
                     BlockEntitySoundTracker.stop(this.pos, this)
-                } else if( listenerPos > ATTENUATION_DISTANCE_MAX_SQUARED) {
+                } else if (listenerPos > ATTENUATION_DISTANCE_MAX_SQUARED) {
                     ++unheardTicks
                     // Purpose of this is if a client is pushing in and out of the attenuation range, they won't notice the sound abruptly stopping
                     if(unheardTicks > UNHEARD_TICKS_MAX) {

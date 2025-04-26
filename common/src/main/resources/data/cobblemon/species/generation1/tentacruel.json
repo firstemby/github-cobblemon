@@ -115,22 +115,13 @@
     "egg:rapidspin",
     "egg:tickle",
     "egg:wringout",
-    "tm:acid",
-    "tm:acidarmor",
     "tm:acidspray",
-    "tm:acupressure",
-    "tm:aquaring",
-    "tm:aurorabeam",
-    "tm:barrier",
     "tm:bind",
     "tm:blizzard",
     "tm:brine",
     "tm:brutalswing",
-    "tm:bubble",
-    "tm:bubblebeam",
     "tm:chillingwater",
     "tm:confuseray",
-    "tm:constrict",
     "tm:corrosivegas",
     "tm:crosspoison",
     "tm:cut",
@@ -153,17 +144,13 @@
     "tm:knockoff",
     "tm:liquidation",
     "tm:magiccoat",
-    "tm:mirrorcoat",
     "tm:muddywater",
     "tm:mudshot",
     "tm:payback",
     "tm:poisonjab",
-    "tm:poisonsting",
     "tm:pounce",
     "tm:protect",
     "tm:raindance",
-    "tm:rapidspin",
-    "tm:reflecttype",
     "tm:rest",
     "tm:safeguard",
     "tm:scaryface",
@@ -173,25 +160,64 @@
     "tm:sludgebomb",
     "tm:sludgewave",
     "tm:substitute",
-    "tm:supersonic",
     "tm:surf",
     "tm:swift",
     "tm:swordsdance",
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
-    "tm:tickle",
     "tm:toxic",
     "tm:toxicspikes",
     "tm:venomdrench",
     "tm:venoshock",
-    "tm:watergun",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
-    "tm:wrap",
-    "tm:wringout"
+    "tutor:bind",
+    "tutor:corrosivegas",
+    "tutor:dazzlinggleam",
+    "tutor:dive",
+    "tutor:flipturn",
+    "tutor:gigadrain",
+    "tutor:gigaimpact",
+    "tutor:gunkshot",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:knockoff",
+    "tutor:liquidation",
+    "tutor:magiccoat",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:skittersmack",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:spikes",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:waterpulse"
   ],
   "preEvolution": "tentacool",
-  "evolutions": []
+  "evolutions": [],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "35-70"
+      },
+      "ACCELERATION": {
+        "ranges": "20-40"
+      },
+      "SKILL": {
+        "ranges": "25-50"
+      },
+      "JUMP": {
+        "ranges": "25-50"
+      },
+      "STAMINA": {
+        "ranges": "35-75"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

@@ -93,7 +93,6 @@
     "tm:chargebeam",
     "tm:charm",
     "tm:chillingwater",
-    "tm:confusion",
     "tm:covet",
     "tm:cut",
     "tm:defog",
@@ -101,7 +100,6 @@
     "tm:dive",
     "tm:doubleedge",
     "tm:dracometeor",
-    "tm:dragonbreath",
     "tm:dragoncheer",
     "tm:dragonclaw",
     "tm:dragondance",
@@ -119,9 +117,6 @@
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:grassknot",
-    "tm:guardsplit",
-    "tm:healingwish",
-    "tm:healpulse",
     "tm:helpinghand",
     "tm:honeclaws",
     "tm:hyperbeam",
@@ -133,21 +128,15 @@
     "tm:liquidation",
     "tm:magiccoat",
     "tm:magicroom",
-    "tm:mistball",
     "tm:mysticalfire",
     "tm:outrage",
     "tm:protect",
     "tm:psychic",
     "tm:psychocut",
-    "tm:psychoshift",
     "tm:psychup",
     "tm:psyshock",
-    "tm:psywave",
     "tm:raindance",
-    "tm:recover",
     "tm:reflect",
-    "tm:reflecttype",
-    "tm:refresh",
     "tm:rest",
     "tm:retaliate",
     "tm:roar",
@@ -180,11 +169,54 @@
     "tm:twister",
     "tm:waterfall",
     "tm:waterpulse",
-    "tm:watersport",
     "tm:weatherball",
     "tm:whirlpool",
-    "tm:wish",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:allyswitch",
+    "tutor:bulldoze",
+    "tutor:calmmind",
+    "tutor:chargebeam",
+    "tutor:covet",
+    "tutor:defog",
+    "tutor:dive",
+    "tutor:dracometeor",
+    "tutor:dragonpulse",
+    "tutor:dualwingbeat",
+    "tutor:energyball",
+    "tutor:furycutter",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:laserfocus",
+    "tutor:lastresort",
+    "tutor:liquidation",
+    "tutor:magiccoat",
+    "tutor:magicroom",
+    "tutor:mysticalfire",
+    "tutor:outrage",
+    "tutor:psychic",
+    "tutor:psychocut",
+    "tutor:rest",
+    "tutor:roleplay",
+    "tutor:roost",
+    "tutor:scaleshot",
+    "tutor:shadowball",
+    "tutor:shadowclaw",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:telekinesis",
+    "tutor:thunderbolt",
+    "tutor:trick",
+    "tutor:twister",
+    "tutor:waterpulse",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [],
   "forms": [
@@ -219,5 +251,36 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "AIR": "50-100"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

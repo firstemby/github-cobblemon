@@ -68,6 +68,8 @@ class WinInstruction(val message: BattleMessage): InterpreterInstruction {
             }
         }
         battle.dispatchGo {
+            battle.winners = winners
+            battle.losers = losers
             battle.end()
             CobblemonEvents.BATTLE_VICTORY.post(BattleVictoryEvent(battle, winners, losers, wasCaught))
             ShowdownInterpreter.lastCauser.remove(battle.battleId)

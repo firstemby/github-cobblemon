@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.config.constraint
 
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class IntConstraint(
     val min : Int,
     val max : Int

@@ -38,10 +38,10 @@ class BestSpawnerConfig {
         "seafloor" to 1F
     )
     val buckets = mutableListOf(
-        SpawnBucket("common", 93.8F),
-        SpawnBucket("uncommon", 5F),
+        SpawnBucket("common", 91.6F),
+        SpawnBucket("uncommon", 7F),
         SpawnBucket("rare", 1.0F),
-        SpawnBucket("ultra-rare", 0.2F)
+        SpawnBucket("ultra-rare", 0.4F)
     )
 
     companion object {

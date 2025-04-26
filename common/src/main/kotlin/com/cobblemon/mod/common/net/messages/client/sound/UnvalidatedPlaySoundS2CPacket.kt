@@ -25,14 +25,14 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since December 29th, 2022
  */
-internal class UnvalidatedPlaySoundS2CPacket(
-    val sound: ResourceLocation,
-    val category: SoundSource,
-    val x: Double,
-    val y: Double,
-    val z: Double,
-    val volume: Float,
-    val pitch: Float
+class UnvalidatedPlaySoundS2CPacket(
+    var sound: ResourceLocation,
+    var category: SoundSource,
+    var x: Double,
+    var y: Double,
+    var z: Double,
+    var volume: Float,
+    var pitch: Float
 ) : NetworkPacket<UnvalidatedPlaySoundS2CPacket> {
 
     override val id = ID

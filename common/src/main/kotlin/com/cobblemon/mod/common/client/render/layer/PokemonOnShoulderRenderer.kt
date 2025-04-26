@@ -9,10 +9,11 @@
 package com.cobblemon.mod.common.client.render.layer
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -35,12 +36,15 @@ import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 
 class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
+
+    private val heldItemRenderer = HeldItemRenderer()
 
     var leftState = FloatingState()
     var lastRenderedLeft: ShoulderData? = null
@@ -87,27 +91,20 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
     ) {
         val compoundTag = if (pLeftShoulder) livingEntity.shoulderEntityLeft else livingEntity.shoulderEntityRight
         if (compoundTag.isPokemonEntity()) {
-            matrixStack.pushPose()
-            val uuid = this.extractUuid(compoundTag)
+            livingEntity.level().profiler.push("shoulder_render_".plus(if(pLeftShoulder) "left" else "right"))
             val cache = playerCache.getOrPut(livingEntity.uuid) { ShoulderCache() }
-            var shoulderData: ShoulderData? = null
-            if (pLeftShoulder && cache.lastKnownLeft?.uuid != uuid) {
-                shoulderData = this.extractData(compoundTag, uuid)
-                cache.lastKnownLeft = shoulderData
-            }
-            else if (!pLeftShoulder && cache.lastKnownRight?.uuid != uuid) {
-                shoulderData = this.extractData(compoundTag, uuid)
-                cache.lastKnownRight = shoulderData
-            }
+            val shoulderData = shoulderDataFrom(compoundTag)
+            if (pLeftShoulder) cache.lastKnownLeft = shoulderData else cache.lastKnownRight = shoulderData
 
             if (shoulderData == null){
-                // Could be null
-                shoulderData = (if (pLeftShoulder) cache.lastKnownLeft else cache.lastKnownRight) ?: return
+                // Nothing to do
+                return
             }
 
+            matrixStack.pushPose()
             var state = FloatingState()
             state.currentAspects = shoulderData.aspects
-            val model = PokemonModelRepository.getPoser(shoulderData.species.resourceIdentifier, state)
+            val model = VaryingModelRepository.getPoser(shoulderData.species.resourceIdentifier, state)
             model.context = context
             context.put(RenderContext.SPECIES, shoulderData.species.resourceIdentifier)
             context.put(RenderContext.ASPECTS, shoulderData.aspects)
@@ -129,6 +126,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             )
 
             matrixStack.scale(scale, scale, scale)
+            matrixStack.translate(0f, 1.5f, 0f)
 
             state = if (pLeftShoulder && shoulderData != lastRenderedLeft) {
                 leftState = configureState(state, model, true)
@@ -144,7 +142,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             state.updatePartialTicks(partialTicks)
             context.put(RenderContext.POSABLE_STATE, state)
             state.currentModel = model
-            val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(PokemonModelRepository.getTexture(shoulderData.species.resourceIdentifier, state)))
+            val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(VaryingModelRepository.getTexture(shoulderData.species.resourceIdentifier, state)))
             val i = LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0f)
 
             model.applyAnimations(
@@ -157,35 +155,27 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                 ageInTicks = livingEntity.tickCount.toFloat()
             )
             model.render(context, matrixStack, vertexConsumer, packedLight, i, -0x1)
-            model.withLayerContext(buffer, state, PokemonModelRepository.getLayers(shoulderData.species.resourceIdentifier, state)) {
+            model.withLayerContext(buffer, state, VaryingModelRepository.getLayers(shoulderData.species.resourceIdentifier, state)) {
                 model.render(context, matrixStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
             }
+
+            heldItemRenderer.renderOnModel(
+                shoulderData.shownItem,
+                model,
+                state,
+                matrixStack,
+                buffer,
+                packedLight
+            )
+
             model.setDefault()
             matrixStack.popPose()
+            livingEntity.level().profiler.pop()
         }
-    }
-
-    private fun extractUuid(shoulderNbt: CompoundTag): UUID {
-        if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {
-            return shoulderNbt.getCompound(DataKeys.POKEMON).getUUID(DataKeys.POKEMON_UUID)
+        else {
+            val entry = playerCache.getOrPut(livingEntity.uuid) { ShoulderCache() }
+            if (pLeftShoulder) entry.lastKnownLeft = null else entry.lastKnownRight = null
         }
-        return shoulderNbt.getUUID(DataKeys.SHOULDER_UUID)
-    }
-
-    private fun extractData(shoulderNbt: CompoundTag, pokemonUUID: UUID): ShoulderData? {
-        // To not crash with existing ones, this will still have the aspect issue
-        if (!shoulderNbt.contains(DataKeys.SHOULDER_SPECIES)) {
-            return Pokemon.CLIENT_CODEC.decode(NbtOps.INSTANCE, shoulderNbt.getCompound(DataKeys.POKEMON))
-                .map { it.first }
-                .mapOrElse({ ShoulderData(pokemonUUID, it.species, it.form, it.aspects, it.scaleModifier) }, { null })
-        }
-        val species = PokemonSpecies.getByIdentifier(ResourceLocation.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES)))
-            ?: return null
-        val formName = shoulderNbt.getString(DataKeys.SHOULDER_FORM)
-        val form = species.forms.firstOrNull { it.name == formName } ?: species.standardForm
-        val aspects = shoulderNbt.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString }.toSet()
-        val scaleModifier = shoulderNbt.getFloat(DataKeys.SHOULDER_SCALE_MODIFIER)
-        return ShoulderData(pokemonUUID, species, form, aspects, scaleModifier)
     }
 
     private data class ShoulderCache(
@@ -198,12 +188,50 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         val species: Species,
         val form: FormData,
         val aspects: Set<String>,
-        val scaleModifier: Float
+        val scaleModifier: Float,
+        val shownItem: ItemStack
     )
 
     companion object {
 
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
+
+        private fun extractUuid(shoulderNbt: CompoundTag): UUID {
+            if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {
+                return shoulderNbt.getCompound(DataKeys.POKEMON).getUUID(DataKeys.POKEMON_UUID)
+            }
+            return shoulderNbt.getUUID(DataKeys.SHOULDER_UUID)
+        }
+
+        private fun extractData(shoulderNbt: CompoundTag, pokemonUUID: UUID): ShoulderData? {
+            // To not crash with existing ones, this will still have the aspect issue
+            if (!shoulderNbt.contains(DataKeys.SHOULDER_SPECIES)) {
+                return Pokemon.CLIENT_CODEC.decode(NbtOps.INSTANCE, shoulderNbt.getCompound(DataKeys.POKEMON))
+                    .map { it.first }
+                    .mapOrElse({
+                        ShoulderData(
+                            pokemonUUID,
+                            it.species,
+                            it.form,
+                            it.aspects,
+                            it.scaleModifier,
+                            it.heldItem
+                        )
+                    }, { null })
+            }
+            val species =
+                PokemonSpecies.getByIdentifier(ResourceLocation.parse(shoulderNbt.getString(DataKeys.SHOULDER_SPECIES)))
+                    ?: return null
+            val formName = shoulderNbt.getString(DataKeys.SHOULDER_FORM)
+            val form = species.forms.firstOrNull { it.name == formName } ?: species.standardForm
+            val aspects =
+                shoulderNbt.getList(DataKeys.SHOULDER_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString }.toSet()
+            val scaleModifier = shoulderNbt.getFloat(DataKeys.SHOULDER_SCALE_MODIFIER)
+            val shownItem = Minecraft.getInstance().level?.registryAccess()
+                ?.let { ItemStack.parseOptional(it, shoulderNbt.getCompound(DataKeys.SHOULDER_ITEM)) }
+                ?: ItemStack.EMPTY
+            return ShoulderData(pokemonUUID, species, form, aspects, scaleModifier, shownItem)
+        }
 
         /**
          * Checks if a player has shoulder data cached.
@@ -218,15 +246,18 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         }
 
         /**
-         * Clears the cache for the respective player.
-         * This is required to be done whenever a Pokémon changes in any way (form, evolution, etc.)
+         * extracts shoulder data from compound tag.
          *
-         * @param player The player whose cache to clear
+         * @param compoundTag The tag being checked
+         * @return [ShoulderData] or null
          */
         @JvmStatic
-        fun clearCache(player: Player) {
-            playerCache.remove(player.uuid)
+        fun shoulderDataFrom(compoundTag: CompoundTag): ShoulderData? {
+            if (compoundTag.isPokemonEntity()) {
+                val uuid = this.extractUuid(compoundTag)
+                return this.extractData(compoundTag, uuid)
+            }
+            return null
         }
-
     }
 }

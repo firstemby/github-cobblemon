@@ -24,11 +24,13 @@ object ReleasePartyPokemonHandler : ServerNetworkPacketHandler<ReleasePartyPokem
         if (pokemon.uuid != packet.pokemonID) {
             return // Desync
         }
-CobblemonEvents.POKEMON_RELEASED_EVENT_PRE.postThen(
+
+        CobblemonEvents.POKEMON_RELEASED_EVENT_PRE.postThen(
                 event = ReleasePokemonEvent.Pre(player, pokemon, party),
-                ifSucceeded = { preEvent ->        if (ServerSettings.preventCompletePartyDeposit && party.filterNotNull().size <= 1) {
-            return // Don't allow empty party
-        }
+                ifSucceeded = { preEvent ->
+                    if (ServerSettings.preventCompletePartyDeposit && party.filterNotNull().size <= 1) {
+                        return // Don't allow empty party
+                    }
                     party.remove(pokemon)
                     CobblemonEvents.POKEMON_RELEASED_EVENT_POST.post(ReleasePokemonEvent.Post(player, pokemon, party))
                 },

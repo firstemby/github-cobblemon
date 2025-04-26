@@ -50,9 +50,7 @@
   },
   "moves": [
     "1:splash",
-    "1:teleport",
-    "tm:splash",
-    "tm:teleport"
+    "1:teleport"
   ],
   "evolutions": [
     {

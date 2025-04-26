@@ -114,60 +114,66 @@
     "tm:captivate",
     "tm:charm",
     "tm:doubleedge",
-    "tm:doublekick",
     "tm:drillrun",
     "tm:echoedvoice",
-    "tm:ember",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
     "tm:firespin",
     "tm:flamecharge",
     "tm:flamethrower",
-    "tm:flamewheel",
     "tm:flareblitz",
-    "tm:furyattack",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:headbutt",
     "tm:heatwave",
     "tm:highhorsepower",
-    "tm:horndrill",
     "tm:hyperbeam",
-    "tm:hypnosis",
     "tm:incinerate",
-    "tm:inferno",
     "tm:irontail",
     "tm:lowkick",
     "tm:megahorn",
-    "tm:morningsun",
     "tm:mysticalfire",
     "tm:overheat",
     "tm:payday",
     "tm:playrough",
     "tm:poisonjab",
     "tm:protect",
-    "tm:quickattack",
     "tm:rest",
     "tm:scorchingsands",
     "tm:sleeptalk",
     "tm:smartstrike",
     "tm:solarbeam",
     "tm:solarblade",
-    "tm:stomp",
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:swift",
     "tm:swordsdance",
-    "tm:tackle",
-    "tm:tailwhip",
     "tm:takedown",
     "tm:terablast",
-    "tm:thrash",
     "tm:throatchop",
     "tm:wildcharge",
-    "tm:willowisp"
+    "tm:willowisp",
+    "tutor:allyswitch",
+    "tutor:bounce",
+    "tutor:drillrun",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:heatwave",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:irontail",
+    "tutor:lowkick",
+    "tutor:megahorn",
+    "tutor:mysticalfire",
+    "tutor:playrough",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:scorchingsands",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:wildcharge"
   ],
   "preEvolution": "ponyta",
   "evolutions": [],
@@ -237,31 +243,22 @@
         "tm:bounce",
         "tm:calmmind",
         "tm:charm",
-        "tm:confusion",
         "tm:dazzlinggleam",
         "tm:doubleedge",
-        "tm:doublekick",
         "tm:drillrun",
         "tm:endure",
         "tm:expandingforce",
         "tm:facade",
-        "tm:fairywind",
         "tm:futuresight",
         "tm:gigaimpact",
-        "tm:growl",
-        "tm:healingwish",
-        "tm:healpulse",
         "tm:highhorsepower",
-        "tm:horndrill",
         "tm:hyperbeam",
-        "tm:hypnosis",
         "tm:imprison",
         "tm:irontail",
         "tm:lowkick",
         "tm:magicroom",
         "tm:megahorn",
         "tm:mistyterrain",
-        "tm:morningsun",
         "tm:mysticalfire",
         "tm:payday",
         "tm:playrough",
@@ -270,29 +267,95 @@
         "tm:psychic",
         "tm:psychicterrain",
         "tm:psychocut",
-        "tm:quickattack",
         "tm:rest",
         "tm:sleeptalk",
         "tm:smartstrike",
-        "tm:stomp",
         "tm:storedpower",
         "tm:substitute",
         "tm:swift",
         "tm:swordsdance",
-        "tm:tackle",
-        "tm:tailwhip",
         "tm:takedown",
         "tm:terablast",
-        "tm:thrash",
         "tm:throatchop",
         "tm:trickroom",
         "tm:wildcharge",
         "tm:wonderroom",
-        "tm:zenheadbutt"
+        "tm:zenheadbutt",
+        "tutor:allyswitch",
+        "tutor:bounce",
+        "tutor:calmmind",
+        "tutor:dazzlinggleam",
+        "tutor:drillrun",
+        "tutor:expandingforce",
+        "tutor:gigaimpact",
+        "tutor:highhorsepower",
+        "tutor:hyperbeam",
+        "tutor:irontail",
+        "tutor:lowkick",
+        "tutor:magicroom",
+        "tutor:megahorn",
+        "tutor:mysticalfire",
+        "tutor:playrough",
+        "tutor:psychic",
+        "tutor:psychocut",
+        "tutor:rest",
+        "tutor:sleeptalk",
+        "tutor:swift",
+        "tutor:throatchop",
+        "tutor:trick",
+        "tutor:wildcharge",
+        "tutor:wonderroom",
+        "tutor:zenheadbutt"
       ],
       "preEvolution": "ponyta galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "45-70"
+          },
+          "ACCELERATION": {
+            "ranges": "30-65"
+          },
+          "SKILL": {
+            "ranges": "30-60"
+          },
+          "JUMP": {
+            "ranges": "25-55"
+          },
+          "STAMINA": {
+            "ranges": "40-85"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "45-75"
+      },
+      "ACCELERATION": {
+        "ranges": "30-60"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "25-50"
+      },
+      "STAMINA": {
+        "ranges": "40-85"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

@@ -46,6 +46,7 @@ def ui_init_filters(pokemon_nrs_min, pokemon_nrs_max, included_grps, known_cntxt
 excluded_forms = []
 # Biome mapping, used to convert the Biome column to the format used in the spawn json
 biome_mapping = {
+    'aether': '#aether:is_aether',
     'arid': '#cobblemon:is_arid',
     'badlands': '#cobblemon:is_badlands',
     'bamboo': '#cobblemon:is_bamboo',
@@ -82,6 +83,9 @@ biome_mapping = {
     'lush': '#cobblemon:is_lush',
     'magical': '#cobblemon:is_magical',
     'mangrove swamp': 'minecraft:mangrove_swamp',
+    'mars': '#cobblemon:space/is_mars',
+    'mercury': '#cobblemon:space/is_mercury',
+    'moon': '#cobblemon:space/is_moon',
     'mountain': '#cobblemon:is_mountain',
     'muddy': '#cobblemon:has_block/mud',
     'mushroom': '#cobblemon:is_mushroom',
@@ -116,10 +120,17 @@ biome_mapping = {
     'skylands spring': 'terralith:skylands_spring',
     'skylands summer': 'terralith:skylands_summer',
     'skylands winter': 'terralith:skylands_winter',
+    'skyroot forest': 'aether:skyroot_forest',
+    'skyroot grove': 'aether:skyroot_grove',
+    'skyroot meadow': 'aether:skyroot_meadow',
+    'skyroot woodland': 'aether:skyroot_woodland',
     'snowy': '#cobblemon:is_snowy',
     'snowy beach': 'minecraft:snowy_beach',
     'snowy forest': '#cobblemon:is_snowy_forest',
     'snowy taiga': '#cobblemon:is_snowy_taiga',
+    'space': '#cobblemon:space/is_space',
+    'space fiery': '#cobblemon:space/is_fiery',
+    'space icy': '#cobblemon:space/is_icy',
     'spooky': '#cobblemon:is_spooky',
     'sunflower plains': 'minecraft:sunflower_plains',
     'swamp': '#cobblemon:is_swamp',
@@ -129,6 +140,7 @@ biome_mapping = {
     'thermal': '#cobblemon:is_thermal',
     'tropical island': '#cobblemon:is_tropical_island',
     'tundra': '#cobblemon:is_tundra',
+    'venus': '#cobblemon:space/is_venus',
     'volcanic': '#cobblemon:is_volcanic',
     'warm ocean': '#cobblemon:is_warm_ocean',
     'warped desert': 'byg:warped_desert'
@@ -402,26 +414,30 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             multiplier_condition["timeRange"] = "dawn"
                         case "Beehive":
                             multiplier_condition["neededNearbyBlocks"] = ["#minecraft:beehives"]
+                        case "Water":
+                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:water"]
+                        case "Lava":
+                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:lava"]
                         case "Full Moon":
-                            multiplier_condition["moonPhase"] = "0"
+                            multiplier_condition["moonPhase"] = 0
                         case "New Moon":
-                            multiplier_condition["moonPhase"] = "4"
+                            multiplier_condition["moonPhase"] = 4
                         case "Wreck":
                             multiplier_condition["structures"] = ["#minecraft:shipwreck"]
                         case "Lure0":
-                            multiplier_condition["minLureLevel"] = "0"
-                            multiplier_condition["maxLureLevel"] = "0"
+                            multiplier_condition["minLureLevel"] = 0
+                            multiplier_condition["maxLureLevel"] = 0
                         case "Lure0/1":
-                            multiplier_condition["minLureLevel"] = "0"
-                            multiplier_condition["maxLureLevel"] = "1"
+                            multiplier_condition["minLureLevel"] = 0
+                            multiplier_condition["maxLureLevel"] = 1
                         case "Lure1/2":
-                            multiplier_condition["minLureLevel"] = "1"
-                            multiplier_condition["maxLureLevel"] = "2"
+                            multiplier_condition["minLureLevel"] = 1
+                            multiplier_condition["maxLureLevel"] = 2
                         case "Lure2":
-                            multiplier_condition["minLureLevel"] = "2"
-                            multiplier_condition["maxLureLevel"] = "2"
+                            multiplier_condition["minLureLevel"] = 2
+                            multiplier_condition["maxLureLevel"] = 2
                         case "Lure3":
-                            multiplier_condition["minLureLevel"] = "3"
+                            multiplier_condition["minLureLevel"] = 3
                         case "MJ-Skel":
                             multiplier_condition["biomes"] = ["#cobblemon:is_spooky"]
                         case "MJ-Cal1":
@@ -693,14 +709,14 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
             # if the string contains "maxLureLevel = " then split it and add it to the condition dictionary
             elif "maxLureLevel" in string:
                 condition['maxLureLevel'] = int(string.split('=')[1].strip())
-            # if the string contains "bobber = master ball" then add it to the condition dictionary
-            elif "bobber = master ball" in string:
+            # if the string contains "bobber = master_ball" then add it to the condition dictionary
+            elif "bobber = master_ball" in string:
                 condition['bobber'] = "cobblemon:master_ball"
-            # if the string contains "bobber = love ball" then add it to the condition dictionary
-            elif "bobber = love ball" in string:
+            # if the string contains "bobber = love_ball" then add it to the condition dictionary
+            elif "bobber = love_ball" in string:
                 condition['bobber'] = "cobblemon:love_ball"
-            # if the string contains "bait = love sweet" then add it to the condition dictionary
-            elif "bait = love sweet" in string:
+            # if the string contains "bait = love_sweet" then add it to the condition dictionary
+            elif "bait = love_sweet" in string:
                 condition['bait'] = "cobblemon:love_sweet"
             # if the string is a digit, pass (was already hanlded by other conditions)
             elif string.strip().isdigit():

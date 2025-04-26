@@ -8,9 +8,11 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.drop.DropTable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
@@ -20,8 +22,8 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.lang
 import com.google.gson.annotations.SerializedName
-import net.minecraft.network.chat.MutableComponent
 import kotlin.math.ceil
+import net.minecraft.network.chat.MutableComponent
 
 /**
  * A [SpawnDetail] for spawning a [PokemonEntity].
@@ -69,7 +71,9 @@ class PokemonSpawnDetail : SpawnDetail() {
     }
 
     override fun autoLabel() {
-        val pokemonStruct = pokemon.asStruct()
+        struct.addFunction("pokemon") { pokemon.asMoLangValue() }
+        struct.addFunction("min_level") { DoubleValue(getDerivedLevelRange().start.toDouble()) }
+        struct.addFunction("max_level") { DoubleValue(getDerivedLevelRange().endInclusive.toDouble()) }
         if (pokemon.species != null) {
             val species = PokemonSpecies.getByIdentifier(pokemon.species!!.asIdentifierDefaultingNamespace())
             if (species != null) {
@@ -88,7 +92,6 @@ class PokemonSpawnDetail : SpawnDetail() {
             }
         }
 
-        struct.setDirectly("pokemon", pokemonStruct)
         super.autoLabel()
     }
 

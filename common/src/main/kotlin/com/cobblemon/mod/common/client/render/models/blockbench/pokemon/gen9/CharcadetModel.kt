@@ -51,7 +51,9 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
         val blink = quirk { bedrockStateful("charcadet", "blink") }
         sleep = registerPose(
             poseType = PoseType.SLEEP,
-            animations = arrayOf(bedrock("charcadet", "sleep"))
+            animations = arrayOf(bedrock("charcadet", "sleep"),
+                bedrock("charcadet", "eye_flame_overlay"),
+                bedrock("charcadet", "head_flame_overlay"))
         )
 
         standing = registerPose(
@@ -61,7 +63,9 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("charcadet", "ground_idle")
+                bedrock("charcadet", "ground_idle"),
+                bedrock("charcadet", "eye_flame_overlay"),
+                bedrock("charcadet", "head_flame_overlay")
             )
         )
 
@@ -72,7 +76,9 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("charcadet", "ground_walk")
+                bedrock("charcadet", "ground_walk"),
+                bedrock("charcadet", "eye_flame_overlay"),
+                bedrock("charcadet", "head_flame_overlay")
             )
         )
 
@@ -81,7 +87,9 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
                 quirks = arrayOf(blink),
                 animations = arrayOf(
                         singleBoneLook(),
-                        bedrock("charcadet", "shoulder_left")
+                        bedrock("charcadet", "shoulder_left"),
+                    bedrock("charcadet", "eye_flame_overlay"),
+                    bedrock("charcadet", "head_flame_overlay")
                 ),
                 transformedParts = arrayOf(
                         rootPart.createTransformation().addPosition(ModelPartTransformation.Y_AXIS, -0.1),
@@ -94,7 +102,9 @@ class CharcadetModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
                 quirks = arrayOf(blink),
                 animations = arrayOf(
                         singleBoneLook(),
-                        bedrock("charcadet", "shoulder_right")
+                        bedrock("charcadet", "shoulder_right"),
+                    bedrock("charcadet", "eye_flame_overlay"),
+                    bedrock("charcadet", "head_flame_overlay")
                 ),
                 transformedParts = arrayOf(
                         rootPart.createTransformation().addPosition(ModelPartTransformation.Y_AXIS, -0.1),

@@ -94,13 +94,10 @@
     "egg:powertrick",
     "egg:psychoshift",
     "tm:allyswitch",
-    "tm:barrier",
     "tm:bodyslam",
     "tm:calmmind",
     "tm:chargebeam",
-    "tm:confusion",
     "tm:dazzlinggleam",
-    "tm:disable",
     "tm:drainpunch",
     "tm:dreameater",
     "tm:embargo",
@@ -119,14 +116,12 @@
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:gravity",
-    "tm:guardsplit",
     "tm:guardswap",
     "tm:headbutt",
     "tm:hyperbeam",
     "tm:icepunch",
     "tm:imprison",
     "tm:irontail",
-    "tm:kinesis",
     "tm:knockoff",
     "tm:laserfocus",
     "tm:lightscreen",
@@ -135,20 +130,16 @@
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
-    "tm:miracleeye",
     "tm:nastyplot",
     "tm:powerswap",
-    "tm:powertrick",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
     "tm:psychicterrain",
     "tm:psychocut",
-    "tm:psychoshift",
     "tm:psychup",
     "tm:psyshock",
     "tm:raindance",
-    "tm:recover",
     "tm:recycle",
     "tm:reflect",
     "tm:rest",
@@ -167,7 +158,6 @@
     "tm:swift",
     "tm:taunt",
     "tm:telekinesis",
-    "tm:teleport",
     "tm:terablast",
     "tm:thief",
     "tm:thunderpunch",
@@ -177,7 +167,43 @@
     "tm:trick",
     "tm:trickroom",
     "tm:wonderroom",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:allyswitch",
+    "tutor:calmmind",
+    "tutor:chargebeam",
+    "tutor:dazzlinggleam",
+    "tutor:drainpunch",
+    "tutor:energyball",
+    "tutor:expandingforce",
+    "tutor:firepunch",
+    "tutor:focuspunch",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:gravity",
+    "tutor:hyperbeam",
+    "tutor:icepunch",
+    "tutor:irontail",
+    "tutor:knockoff",
+    "tutor:laserfocus",
+    "tutor:magiccoat",
+    "tutor:magicroom",
+    "tutor:psychic",
+    "tutor:psychocut",
+    "tutor:recycle",
+    "tutor:rest",
+    "tutor:roleplay",
+    "tutor:shadowball",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:skillswap",
+    "tutor:sleeptalk",
+    "tutor:snatch",
+    "tutor:swift",
+    "tutor:telekinesis",
+    "tutor:thunderpunch",
+    "tutor:trick",
+    "tutor:wonderroom",
+    "tutor:zenheadbutt"
   ],
   "preEvolution": "kadabra",
   "evolutions": [],
@@ -213,7 +239,53 @@
       "baseExperienceYield": 300,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "45-90"
+          },
+          "ACCELERATION": {
+            "ranges": "15-30"
+          },
+          "SKILL": {
+            "ranges": "5-10"
+          },
+          "JUMP": {
+            "ranges": "15-30"
+          },
+          "STAMINA": {
+            "ranges": "30-60"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "40-80"
+      },
+      "ACCELERATION": {
+        "ranges": "15-30"
+      },
+      "SKILL": {
+        "ranges": "5-10"
+      },
+      "JUMP": {
+        "ranges": "15-30"
+      },
+      "STAMINA": {
+        "ranges": "25-50"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

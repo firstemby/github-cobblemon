@@ -10,11 +10,15 @@ package com.cobblemon.mod.common.entity.boat
 
 import com.cobblemon.mod.common.CobblemonEntities
 import net.minecraft.core.NonNullList
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.HasCustomInventoryScreen
+import net.minecraft.world.entity.SlotAccess
 import net.minecraft.world.entity.monster.piglin.PiglinAi
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.Player
@@ -52,6 +56,31 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
         }
     }
 
+    override fun getMaxPassengers() = 1
+
+    override fun addAdditionalSaveData(compound: CompoundTag) {
+        super.addAdditionalSaveData(compound)
+        this.addChestVehicleSaveData(compound, this.registryAccess())
+    }
+
+    override fun readAdditionalSaveData(compound: CompoundTag) {
+        super.readAdditionalSaveData(compound)
+        this.readChestVehicleSaveData(compound, this.registryAccess())
+    }
+
+    public override fun destroy(source: DamageSource) {
+        this.destroy(this.getDropItem())
+        this.chestVehicleDestroyed(source, this.level(), this)
+    }
+
+    override fun remove(reason: RemovalReason) {
+        if (!this.level().isClientSide && reason.shouldDestroy()) {
+            Containers.dropContents(this.level(), this, this)
+        }
+
+        super.remove(reason)
+    }
+
     override fun interact(player: Player, hand: InteractionHand): InteractionResult {
         if (!player.isSecondaryUseActive) {
             val interactionResult = super.interact(player, hand)
@@ -86,6 +115,8 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
 
     override fun setItem(slot: Int, stack: ItemStack) = this.setChestVehicleItem(slot, stack)
 
+    override fun getSlot(slot: Int): SlotAccess? = this.getChestVehicleSlot(slot)
+
     override fun setChanged() {}
 
     override fun stillValid(player: Player): Boolean = this.isChestVehicleStillValid(player)
@@ -119,6 +150,10 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
     override fun getDropItem(): Item = this.boatType.chestBoatItem
 
     private fun emptyInventory(): NonNullList<ItemStack> = NonNullList.withSize(INVENTORY_SLOTS, ItemStack.EMPTY)
+
+    override fun stopOpen(player: Player) {
+        this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(player))
+    }
 
     companion object {
 

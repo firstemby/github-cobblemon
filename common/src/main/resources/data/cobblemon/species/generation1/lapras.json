@@ -50,6 +50,44 @@
     "height": 2.8,
     "fixed": false
   },
+  "riding": {
+    "behaviour": {
+      "key": "cobblemon:swim/generic"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.4,
+          "z": 0.0
+        }
+      },
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.7,
+          "z": -1.0
+        }
+      }
+    ],
+    "stats": {
+      "SPEED": {
+        "ranges": "35-60"
+      },
+      "ACCELERATION": {
+        "ranges": "25-50"
+      },
+      "SKILL": {
+        "ranges": "30-60"
+      },
+      "JUMP": {
+        "ranges": "5-10"
+      },
+      "STAMINA": {
+        "ranges": "45-100"
+      }
+    }
+  },
   "behaviour": {
     "moving": {
       "swim": {
@@ -140,51 +178,38 @@
     "tm:echoedvoice",
     "tm:endure",
     "tm:facade",
-    "tm:fissure",
-    "tm:foresight",
-    "tm:freezedry",
     "tm:frostbreath",
     "tm:gigaimpact",
-    "tm:growl",
     "tm:hail",
     "tm:haze",
     "tm:headbutt",
     "tm:healbell",
     "tm:helpinghand",
-    "tm:horndrill",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icebeam",
-    "tm:iceshard",
     "tm:iciclespear",
     "tm:icywind",
     "tm:ironhead",
     "tm:irontail",
-    "tm:lifedew",
     "tm:liquidation",
     "tm:megahorn",
-    "tm:mist",
     "tm:muddywater",
     "tm:outrage",
-    "tm:perishsong",
     "tm:protect",
     "tm:psychic",
     "tm:psychicnoise",
     "tm:raindance",
     "tm:reflect",
-    "tm:refresh",
     "tm:rest",
     "tm:rocksmash",
     "tm:safeguard",
-    "tm:sheercold",
     "tm:shockwave",
     "tm:signalbeam",
-    "tm:sing",
     "tm:sleeptalk",
     "tm:smartstrike",
     "tm:snowscape",
-    "tm:sparklingaria",
     "tm:strength",
     "tm:substitute",
     "tm:surf",
@@ -192,13 +217,39 @@
     "tm:terablast",
     "tm:thunder",
     "tm:thunderbolt",
-    "tm:tickle",
     "tm:waterfall",
-    "tm:watergun",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:ancientpower",
+    "tutor:aquatail",
+    "tutor:block",
+    "tutor:bulldoze",
+    "tutor:dive",
+    "tutor:dragonpulse",
+    "tutor:drillrun",
+    "tutor:gigaimpact",
+    "tutor:healbell",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:hypervoice",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:liquidation",
+    "tutor:megahorn",
+    "tutor:outrage",
+    "tutor:psychic",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:shockwave",
+    "tutor:signalbeam",
+    "tutor:sleeptalk",
+    "tutor:thunderbolt",
+    "tutor:waterpulse",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [],
   "forms": [

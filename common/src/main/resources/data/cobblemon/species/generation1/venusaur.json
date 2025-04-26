@@ -125,27 +125,19 @@
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:grasspledge",
-    "tm:grasswhistle",
     "tm:grassyglide",
     "tm:grassyterrain",
-    "tm:growl",
-    "tm:growth",
     "tm:headbutt",
     "tm:helpinghand",
     "tm:hyperbeam",
-    "tm:ingrain",
     "tm:knockoff",
     "tm:leafstorm",
-    "tm:leechseed",
     "tm:magicalleaf",
     "tm:naturepower",
     "tm:petalblizzard",
-    "tm:petaldance",
     "tm:poisonjab",
-    "tm:poisonpowder",
     "tm:powerwhip",
     "tm:protect",
-    "tm:razorleaf",
     "tm:rest",
     "tm:roar",
     "tm:rockclimb",
@@ -153,10 +145,7 @@
     "tm:safeguard",
     "tm:scaryface",
     "tm:seedbomb",
-    "tm:skullbash",
-    "tm:sleeppowder",
     "tm:sleeptalk",
-    "tm:sludge",
     "tm:sludgebomb",
     "tm:solarbeam",
     "tm:stompingtantrum",
@@ -164,20 +153,44 @@
     "tm:stringshot",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:sweetscent",
     "tm:swordsdance",
     "tm:synthesis",
-    "tm:tackle",
     "tm:takedown",
     "tm:terablast",
     "tm:terrainpulse",
     "tm:toxic",
     "tm:trailblaze",
     "tm:venoshock",
-    "tm:vinewhip",
     "tm:weatherball",
     "tm:workup",
-    "tm:worryseed"
+    "tm:worryseed",
+    "tutor:bind",
+    "tutor:block",
+    "tutor:bulldoze",
+    "tutor:earthpower",
+    "tutor:energyball",
+    "tutor:falseswipe",
+    "tutor:frenzyplant",
+    "tutor:furycutter",
+    "tutor:gigadrain",
+    "tutor:gigaimpact",
+    "tutor:grasspledge",
+    "tutor:grassyglide",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:knockoff",
+    "tutor:magicalleaf",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:seedbomb",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:stompingtantrum",
+    "tutor:stringshot",
+    "tutor:synthesis",
+    "tutor:terrainpulse",
+    "tutor:worryseed"
   ],
   "preEvolution": "ivysaur",
   "evolutions": [],
@@ -214,7 +227,30 @@
       "baseExperienceYield": 313,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "riding": {
+        "stats": {
+          "SPEED": {
+            "ranges": "20-50"
+          },
+          "ACCELERATION": {
+            "ranges": "10-65"
+          },
+          "SKILL": {
+            "ranges": "40-85"
+          },
+          "JUMP": {
+            "ranges": "20-40"
+          },
+          "STAMINA": {
+            "ranges": "40-85"
+          }
+        },
+        "seats": [],
+        "behaviour": {
+          "key": "cobblemon:land/generic"
+        }
+      }
     },
     {
       "name": "Gmax",
@@ -237,5 +273,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "20-40"
+      },
+      "ACCELERATION": {
+        "ranges": "10-60"
+      },
+      "SKILL": {
+        "ranges": "40-80"
+      },
+      "JUMP": {
+        "ranges": "20-40"
+      },
+      "STAMINA": {
+        "ranges": "40-80"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }

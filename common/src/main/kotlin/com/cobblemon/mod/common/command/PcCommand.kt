@@ -54,7 +54,7 @@ object PcCommand {
             throw SimpleCommandExceptionType(lang("command.pc.invalid-box", box, pc.boxes.size).red()).create()
         }
         PCLinkManager.addLink(PermissiblePcLink(pc, player, CobblemonPermissions.PC))
-        OpenPCPacket(pc.uuid, box - 1).sendToPlayer(player)
+        OpenPCPacket(pc, box = box - 1).sendToPlayer(player)
         context.source.level.playSoundServer(
             position = context.source.player!!.position(),
             sound = CobblemonSounds.PC_ON,

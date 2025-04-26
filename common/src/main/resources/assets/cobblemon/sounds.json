@@ -32,6 +32,9 @@
   "pc.click": {
     "sounds": [ "cobblemon:pc/pc_click" ]
   },
+  "pc.wallpaper.unlock": {
+    "sounds": [ { "name": "cobblemon:pc/pc_wallpaper_unlock", "volume": 0.1 } ]
+  },
   "poke_ball.capture_succeeded": {
     "subtitle": "cobblemon.subtitle.poke_ball.capture_succeeded",
     "sounds": [ { "name": "cobblemon:poke_ball/poke_ball_capture_succeeded", "volume":  0.7 } ]
@@ -176,7 +179,7 @@
   },
   "evolution.full": {
     "subtitle": "cobblemon:subtitle.evolution.full",
-    "sounds": [ "cobblemon:evolution/evolution_full" ]
+    "sounds": [ { "name": "cobblemon:evolution/evolution_full", "volume": 0.9 } ]
   },
   "evolution.ui": {
     "sounds": [ { "name": "cobblemon:evolution/evolution_ui", "volume": 0.2 } ]
@@ -666,6 +669,56 @@
       "cobblemon:block/gilded_chest/gilded_chest_step_4"
     ]
   },
+  "block.campfire_pot.place_campfire": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_place_campfire", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.retrieve": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_retrieve", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.open": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_open", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.close": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_close", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.use": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_use", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.cook": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_cook", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.craft": {
+    "sounds": [
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_1", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_2", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_3", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_4", "volume": 0.8 }
+    ]
+  },
+  "block.campfire_pot.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_break_1"
+    ]
+  },
+  "block.campfire_pot.hit": {
+    "subtitle": "subtitles.block.generic.hit",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_hit_1"
+    ]
+  },
+  "block.campfire_pot.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_place_1"
+    ]
+  },
+  "block.campfire_pot.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_step_1"
+    ]
+  },
   "move.bite.target": {
     "subtitle": "cobblemon.subtitle.move.bite",
     "sounds": [ { "name": "cobblemon:move/bite/bite_target", "volume": 0.8 } ]
@@ -1109,24 +1162,68 @@
   "particle.wild_shiny_chime": {
     "subtitle": "cobblemon.subtitle.pokemon.wild_shiny_shine",
     "sounds": [
-      { "name": "cobblemon:shiny/wild_shiny_appear_chime", "volume": 2.0 }
+      { "name": "cobblemon:shiny/wild_shiny_appear_chime", "volume": 1.0, "attenuation_distance": 128.0 }
     ]
   },
   "particle.shiny_ambient_chime": {
     "sounds": [
-      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.3 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.3 }
+      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.8 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.8 }
     ]
   },
   "particle.wild_shiny_ambient_chime": {
     "subtitle": "cobblemon.subtitle.pokemon.shiny_ambient",
     "sounds": [
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_1", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_2", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_3", "volume": 1.5 },
-      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 1.5 }
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_1", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_2", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_3", "volume": 0.8, "attenuation_distance": 128.0 },
+      { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 0.8, "attenuation_distance": 128.0 }
+    ]
+  },
+  "animation.plumage.wing_flap.small": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.25 }
+    ]
+  },
+  "animation.plumage.wing_flap.medium": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_1", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_2", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_3", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_4", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_5", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_6", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.3 }
+    ]
+  },
+  "animation.leather.wing_flap.small": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.25 }
+    ]
+  },
+  "animation.leather.wing_flap.medium": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_1", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_2", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_3", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_4", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_5", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_6", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.3 }
     ]
   },
   "pokemon.bulbasaur.ambient": {

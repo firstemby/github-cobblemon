@@ -88,16 +88,13 @@
     "egg:ragepowder",
     "egg:stunspore",
     "tm:bugbite",
-    "tm:harden",
     "tm:irondefense",
-    "tm:poisonpowder",
     "tm:pounce",
     "tm:protect",
-    "tm:ragepowder",
     "tm:strugglebug",
-    "tm:stunspore",
-    "tm:tackle",
-    "tm:terablast"
+    "tm:terablast",
+    "tutor:bugbite",
+    "tutor:irondefense"
   ],
   "preEvolution": "scatterbug",
   "evolutions": [
@@ -247,7 +244,7 @@
         },
         {
           "variant": "biome",
-          "biomeCondition": "#cobblemon:evolution/vivillon/high-plains"
+          "biomeCondition": "#cobblemon:evolution/vivillon/high_plains"
         },
         {
           "variant": "structure",
@@ -270,11 +267,11 @@
         },
         {
           "variant": "biome",
-          "biomeCondition": "#cobblemon:evolution/vivillon/icy-snow"
+          "biomeCondition": "#cobblemon:evolution/vivillon/icy_snow"
         },
         {
           "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/icy-snow_anti"
+          "biomeAnticondition": "#cobblemon:evolution/vivillon/icy_snow_anti"
         },
         {
           "variant": "structure",
@@ -662,7 +659,7 @@
         },
         {
           "variant": "advancement",
-          "advancement": "cobblemon:catch_all_vivillon"
+          "requiredAdvancement": "cobblemon:catch_all_vivillon"
         }
       ]
     }

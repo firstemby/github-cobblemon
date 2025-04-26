@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0253_grovyle/grovyle_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-stick"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0253_grovyle/grovyle_stick.png"
+        }
+      ]
     }
   ]
 }

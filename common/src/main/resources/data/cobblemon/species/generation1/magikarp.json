@@ -84,9 +84,7 @@
     "15:tackle",
     "25:flail",
     "tm:bounce",
-    "tm:flail",
-    "tm:splash",
-    "tm:tackle"
+    "tutor:bounce"
   ],
   "evolutions": [
     {

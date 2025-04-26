@@ -53,6 +53,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ]
             }
@@ -91,6 +92,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ]
             }
@@ -114,6 +116,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -131,6 +134,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -157,6 +161,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -192,6 +197,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -227,6 +233,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -262,6 +269,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -295,6 +303,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -332,6 +341,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -369,6 +379,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -406,6 +417,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -442,6 +454,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -478,6 +491,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -514,6 +528,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -550,6 +565,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -586,6 +602,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -622,6 +639,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -658,6 +676,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -694,6 +713,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -730,6 +750,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -766,6 +787,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -802,6 +824,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -838,6 +861,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -874,6 +898,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -910,6 +935,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -946,6 +972,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -973,6 +1000,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1000,6 +1028,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1017,6 +1046,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1034,6 +1064,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1063,6 +1094,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1092,6 +1124,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1127,6 +1160,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1162,6 +1196,7 @@
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1179,6 +1214,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1196,6 +1232,7 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1233,6 +1270,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1270,6 +1308,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1305,6 +1344,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1340,6 +1380,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1374,6 +1415,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
@@ -1408,6 +1450,7 @@
             ],
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1

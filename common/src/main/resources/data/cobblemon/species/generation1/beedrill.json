@@ -55,7 +55,8 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       },
       "swim": {
         "canWalkOnWater": true
@@ -116,14 +117,11 @@
     "tm:endure",
     "tm:facade",
     "tm:falseswipe",
-    "tm:fellstinger",
     "tm:flash",
     "tm:focusenergy",
-    "tm:furyattack",
     "tm:furycutter",
     "tm:gigadrain",
     "tm:gigaimpact",
-    "tm:harden",
     "tm:hyperbeam",
     "tm:infestation",
     "tm:irondefense",
@@ -133,10 +131,7 @@
     "tm:payback",
     "tm:pinmissile",
     "tm:poisonjab",
-    "tm:poisonsting",
     "tm:protect",
-    "tm:pursuit",
-    "tm:rage",
     "tm:rest",
     "tm:rocksmash",
     "tm:roost",
@@ -156,10 +151,39 @@
     "tm:thief",
     "tm:throatchop",
     "tm:toxicspikes",
-    "tm:twineedle",
     "tm:uturn",
     "tm:venoshock",
-    "tm:xscissor"
+    "tm:xscissor",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:bugbite",
+    "tutor:defog",
+    "tutor:drillrun",
+    "tutor:dualwingbeat",
+    "tutor:electroweb",
+    "tutor:endeavor",
+    "tutor:falseswipe",
+    "tutor:focusenergy",
+    "tutor:furycutter",
+    "tutor:gigadrain",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:irondefense",
+    "tutor:knockoff",
+    "tutor:laserfocus",
+    "tutor:ominouswind",
+    "tutor:poisonjab",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:roost",
+    "tutor:skittersmack",
+    "tutor:sleeptalk",
+    "tutor:sludgebomb",
+    "tutor:spikes",
+    "tutor:stringshot",
+    "tutor:tailwind",
+    "tutor:throatchop",
+    "tutor:xscissor"
   ],
   "preEvolution": "kakuna",
   "evolutions": [],
@@ -198,5 +222,28 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "10-20"
+      },
+      "ACCELERATION": {
+        "ranges": "75-100"
+      },
+      "SKILL": {
+        "ranges": "10-50"
+      },
+      "JUMP": {
+        "ranges": "10-20"
+      },
+      "STAMINA": {
+        "ranges": "10-20"
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:air/glider"
+    }
+  }
 }

@@ -10,17 +10,16 @@ package com.cobblemon.mod.common.api.toast
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
-import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_FRAME
 import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_PROGRESS_COLOR
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
+import java.util.UUID
+import kotlin.properties.Delegates
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
-import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Represents a toast that can be shown to multiple clients.
@@ -30,7 +29,7 @@ import kotlin.properties.Delegates
  * @param title The [Component] representing the toast title, this can be a [Component.empty].
  * @param description The [Component] representing the toast description, this can be a [Component.empty].
  * @param icon The [ItemStack] that is rendered as the toast icon, this can be a [ItemStack.EMPTY].
- * @param frameTexture The texture of the frame, default is the [VANILLA_FRAME].
+ * @param frameTexture The texture of the frame, default is the [VANILLA_BACKGROUND_SPRITE].
  * @param progress The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
  * @param progressColor The progress bar color in RGB, default is the [VANILLA_PROGRESS_COLOR].
  *
@@ -40,7 +39,7 @@ class Toast(
     title: Component,
     description: Component,
     icon: ItemStack,
-    frameTexture: ResourceLocation = VANILLA_FRAME,
+    frameTexture: ResourceLocation = VANILLA_BACKGROUND_SPRITE,
     progress: Float = -1F,
     progressColor: Int = VANILLA_PROGRESS_COLOR
 ) {
@@ -195,11 +194,7 @@ class Toast(
     )
 
     companion object {
-
-        /**
-         * The default Minecraft toast frame texture.
-         */
-        val VANILLA_FRAME = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/toasts.png")
+        val VANILLA_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement")
 
         const val VANILLA_PROGRESS_COLOR = -1675545
 

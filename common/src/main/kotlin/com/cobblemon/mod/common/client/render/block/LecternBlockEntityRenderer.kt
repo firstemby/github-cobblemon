@@ -36,7 +36,7 @@ class LecternBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Blo
         if (blockEntity !is LecternBlockEntity) return
         if (!blockEntity.isEmpty()) {
             val blockState = if (blockEntity.level != null) blockEntity.blockState
-            else (CobblemonBlocks.LECTERN.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
+            else (CobblemonBlocks.CAMPFIRE.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH) as BlockState)
             val yRot = blockState.getValue(HorizontalDirectionalBlock.FACING).toYRot()
 
             poseStack.pushPose()

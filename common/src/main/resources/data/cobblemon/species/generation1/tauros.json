@@ -103,7 +103,6 @@
     "tm:headbutt",
     "tm:helpinghand",
     "tm:highhorsepower",
-    "tm:hornattack",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icywind",
@@ -115,9 +114,6 @@
     "tm:outrage",
     "tm:payback",
     "tm:protect",
-    "tm:pursuit",
-    "tm:rage",
-    "tm:ragingbull",
     "tm:raindance",
     "tm:rest",
     "tm:retaliate",
@@ -142,19 +138,43 @@
     "tm:sunnyday",
     "tm:surf",
     "tm:swagger",
-    "tm:tackle",
-    "tm:tailwhip",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
-    "tm:thrash",
     "tm:throatchop",
     "tm:thunder",
     "tm:thunderbolt",
     "tm:trailblaze",
     "tm:wildcharge",
     "tm:workup",
-    "tm:zenheadbutt"
+    "tm:zenheadbutt",
+    "tutor:bulldoze",
+    "tutor:endeavor",
+    "tutor:flamethrower",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:highhorsepower",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:icywind",
+    "tutor:ironhead",
+    "tutor:irontail",
+    "tutor:lashout",
+    "tutor:megahorn",
+    "tutor:outrage",
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:roleplay",
+    "tutor:shadowball",
+    "tutor:shockwave",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:stoneedge",
+    "tutor:throatchop",
+    "tutor:thunderbolt",
+    "tutor:wildcharge",
+    "tutor:zenheadbutt"
   ],
   "evolutions": [],
   "forms": [
@@ -221,7 +241,6 @@
         "tm:curse",
         "tm:dig",
         "tm:doubleedge",
-        "tm:doublekick",
         "tm:drillrun",
         "tm:earthquake",
         "tm:endeavor",
@@ -235,7 +254,6 @@
         "tm:lashout",
         "tm:outrage",
         "tm:protect",
-        "tm:ragingbull",
         "tm:raindance",
         "tm:rest",
         "tm:reversal",
@@ -251,17 +269,32 @@
         "tm:sunnyday",
         "tm:surf",
         "tm:swagger",
-        "tm:tackle",
-        "tm:tailwhip",
         "tm:takedown",
         "tm:terablast",
         "tm:thief",
-        "tm:thrash",
         "tm:throatchop",
         "tm:trailblaze",
         "tm:wildcharge",
         "tm:workup",
-        "tm:zenheadbutt"
+        "tm:zenheadbutt",
+        "tutor:bulkup",
+        "tutor:bulldoze",
+        "tutor:drillrun",
+        "tutor:endeavor",
+        "tutor:gigaimpact",
+        "tutor:highhorsepower",
+        "tutor:hyperbeam",
+        "tutor:ironhead",
+        "tutor:lashout",
+        "tutor:outrage",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:sleeptalk",
+        "tutor:stompingtantrum",
+        "tutor:stoneedge",
+        "tutor:throatchop",
+        "tutor:wildcharge",
+        "tutor:zenheadbutt"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -330,7 +363,6 @@
         "tm:curse",
         "tm:dig",
         "tm:doubleedge",
-        "tm:doublekick",
         "tm:drillrun",
         "tm:earthquake",
         "tm:endeavor",
@@ -350,7 +382,6 @@
         "tm:outrage",
         "tm:overheat",
         "tm:protect",
-        "tm:ragingbull",
         "tm:raindance",
         "tm:rest",
         "tm:reversal",
@@ -365,18 +396,33 @@
         "tm:substitute",
         "tm:sunnyday",
         "tm:swagger",
-        "tm:tackle",
-        "tm:tailwhip",
         "tm:takedown",
         "tm:temperflare",
         "tm:terablast",
         "tm:thief",
-        "tm:thrash",
         "tm:trailblaze",
         "tm:wildcharge",
         "tm:willowisp",
         "tm:workup",
-        "tm:zenheadbutt"
+        "tm:zenheadbutt",
+        "tutor:bulkup",
+        "tutor:bulldoze",
+        "tutor:drillrun",
+        "tutor:endeavor",
+        "tutor:flamethrower",
+        "tutor:gigaimpact",
+        "tutor:highhorsepower",
+        "tutor:hyperbeam",
+        "tutor:ironhead",
+        "tutor:lashout",
+        "tutor:outrage",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:sleeptalk",
+        "tutor:stompingtantrum",
+        "tutor:stoneedge",
+        "tutor:wildcharge",
+        "tutor:zenheadbutt"
       ],
       "evolutions": [],
       "battleOnly": false
@@ -437,7 +483,6 @@
         "60:closecombat",
         "egg:curse",
         "egg:endeavor",
-        "tm:aquajet",
         "tm:bodypress",
         "tm:bodyslam",
         "tm:bulkup",
@@ -447,7 +492,6 @@
         "tm:curse",
         "tm:dig",
         "tm:doubleedge",
-        "tm:doublekick",
         "tm:drillrun",
         "tm:earthquake",
         "tm:endeavor",
@@ -463,7 +507,6 @@
         "tm:liquidation",
         "tm:outrage",
         "tm:protect",
-        "tm:ragingbull",
         "tm:raindance",
         "tm:rest",
         "tm:reversal",
@@ -478,22 +521,75 @@
         "tm:substitute",
         "tm:surf",
         "tm:swagger",
-        "tm:tackle",
-        "tm:tailwhip",
         "tm:takedown",
         "tm:terablast",
         "tm:thief",
-        "tm:thrash",
         "tm:trailblaze",
         "tm:waterpulse",
-        "tm:wavecrash",
         "tm:whirlpool",
         "tm:wildcharge",
         "tm:workup",
-        "tm:zenheadbutt"
+        "tm:zenheadbutt",
+        "tutor:bulkup",
+        "tutor:bulldoze",
+        "tutor:drillrun",
+        "tutor:endeavor",
+        "tutor:gigaimpact",
+        "tutor:highhorsepower",
+        "tutor:hyperbeam",
+        "tutor:ironhead",
+        "tutor:lashout",
+        "tutor:liquidation",
+        "tutor:outrage",
+        "tutor:rest",
+        "tutor:rockslide",
+        "tutor:sleeptalk",
+        "tutor:stompingtantrum",
+        "tutor:stoneedge",
+        "tutor:waterpulse",
+        "tutor:wildcharge",
+        "tutor:zenheadbutt"
       ],
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": {
+          "LAND": "30-60",
+          "LIQUID": "5-20"
+        }
+      },
+      "ACCELERATION": {
+        "ranges": {
+          "LAND": "20-70",
+          "LIQUID": "50-80"
+        }
+      },
+      "SKILL": {
+        "ranges": {
+          "LAND": "40-85",
+          "LIQUID": "20-40"
+        }
+      },
+      "JUMP": {
+        "ranges": {
+          "LAND": "10-15",
+          "LIQUID": "5-10"
+        }
+      },
+      "STAMINA": {
+        "ranges": {
+          "LAND": "40-85",
+          "LIQUID": "25-65"
+        }
+      }
+    },
+    "seats": [],
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    }
+  }
 }
