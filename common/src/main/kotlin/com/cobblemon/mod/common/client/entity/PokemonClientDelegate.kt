@@ -34,10 +34,13 @@ import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.MovingSoundInstance
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
-import net.minecraft.core.BlockPos
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
@@ -46,7 +49,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 
@@ -95,9 +97,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     private var scaleAnimTask: ScheduledTask? = null
     private var cryAnimation: ActiveAnimation? = null
-
-    var jukebox: BlockPos? = null
-    var dancing: Boolean = false
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(data)
@@ -337,21 +336,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 }
             }
         }
-    }
-
-    override fun aiStep() {
-        val jukebox = this.jukebox ?: return
-        if (!jukebox.closerToCenterThan(this.currentEntity.position(), 3.46)
-            || !this.currentEntity.level().getBlockState(jukebox).`is`(Blocks.JUKEBOX)) {
-            this.dancing = false
-            this.jukebox = null
-        }
-    }
-
-    override fun setRecordPlayingNearby(jukebox: BlockPos, dancing: Boolean) {
-        this.dancing = dancing
-        this.jukebox = jukebox
-        super.setRecordPlayingNearby(jukebox, dancing)
     }
 
     override fun changePokemon(pokemon: Pokemon) {

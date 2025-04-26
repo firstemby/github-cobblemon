@@ -9,8 +9,9 @@
 package com.cobblemon.mod.common.entity
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import java.util.*
 import net.minecraft.resources.ResourceLocation
+import java.util.EnumSet
+import java.util.Locale
 
 /**
  * The type of a pose. Used for normalizing pose swapping for all models.
@@ -27,6 +28,7 @@ enum class PoseType {
     FLOAT,
     SWIM,
     GLIDE,
+    DANCE,
     /** A pose for rendering on the left shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
     SHOULDER_LEFT,
     /** A pose for rendering on the right shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */

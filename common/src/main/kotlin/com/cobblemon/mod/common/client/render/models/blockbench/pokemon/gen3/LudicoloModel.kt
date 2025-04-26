@@ -8,14 +8,13 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen3
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
@@ -46,7 +45,6 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
         standing = registerPose(
             poseName = "standing",
             poseTypes = PoseType.UI_POSES + PoseType.STAND,
-            condition = { !(it.getEntity() as PokemonEntity).dancing },
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
@@ -92,9 +90,8 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
 
         dance = registerPose(
             poseName = "dance",
-            poseType = PoseType.STAND,
+            poseType = PoseType.DANCE,
             transformTicks = 10,
-            condition = { (it.getEntity() as PokemonEntity).dancing },
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),

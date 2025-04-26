@@ -125,8 +125,7 @@
     "dancing": {
       "poseName": "dancing",
       "isBattle": false,
-      "poseTypes": ["STAND"],
-      "condition": "q.is_dancing",
+      "poseTypes": ["DANCE"],
       "animations": ["q.bedrock('empoleon', 'dance')"],
       "quirks": ["q.bedrock_quirk('empoleon', 'blink')"]
     }

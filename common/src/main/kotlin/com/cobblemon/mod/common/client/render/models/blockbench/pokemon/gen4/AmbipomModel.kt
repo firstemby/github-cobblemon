@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvi
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
@@ -52,8 +51,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
 
         standing = registerPose(
             poseName = "standing",
-            poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
-            condition = { !it.isBattling && !(it.getEntity() as PokemonEntity).dancing },
+            poseTypes = PoseType.UI_POSES + PoseType.STAND,
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
@@ -85,8 +83,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
 
         dancing = registerPose(
             poseName = "dancing",
-            poseTypes = PoseType.STATIONARY_POSES,
-            condition = { !it.isBattling && (it.getEntity() as PokemonEntity).dancing },
+            poseType = PoseType.DANCE,
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),

@@ -40,7 +40,7 @@
     "LecternBlockMixin",
     "LivingEntityMixin",
     "LocalPlayerMixin",
-    "MinecraftDedicatedServerMixin",
+    "ServerLevelMixin",
     "NbtUtilsMixin",
     "PiglinBarterMixin",
     "PiglinEntityMixin",
