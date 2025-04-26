@@ -4,6 +4,13 @@
   "profileScale": 0.51,
   "profileTranslation": [0.05, 0.99, -10],
   "rootBone": "charizard",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 3, 6],
+    "seat_1_reverse": [0, 3, 6]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('charizard', 'cry')",
     "recoil": "q.bedrock_stateful('charizard', 'recoil')",
@@ -87,7 +94,14 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "!q.is_gliding",
-      "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'air_fly')"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('charizard', 'air_fly')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('charizard', 'ride_air_look')"
+        }
+      ],
       "quirks": [
         "q.bedrock_quirk('charizard', 'blink')",
         "q.bedrock_quirk('charizard', 'air_fly_quirk')"
@@ -97,7 +111,14 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "q.is_gliding",
-      "animations": ["q.look('head_ai')", "q.bedrock('charizard', 'air_glide_TEST')"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('charizard', 'air_glide_TEST')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('charizard', 'ride_air_look')"
+        }
+      ],
       "quirks": [
         "q.bedrock_quirk('charizard', 'blink')"
       ]

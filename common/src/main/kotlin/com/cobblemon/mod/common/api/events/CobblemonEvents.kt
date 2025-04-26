@@ -255,6 +255,11 @@ object CobblemonEvents {
     @JvmField
     val BAIT_EFFECT_REGISTRATION = EventObservable<BaitEffectFunctionRegistryEvent>()
 
+    // Baits and Lures
+    @JvmField
+    val BAIT_SPAWN_POKEMON_MODIFY = EventObservable<BaitSpawnPokemonEvent.Modify>()
+
+
     @JvmField
     val COLLECT_EGG = CancelableObservable<CollectEggEvent>()
     @JvmField

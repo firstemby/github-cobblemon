@@ -289,6 +289,7 @@ class ModelLayer {
     val texture: ModelTextureSupplier? = null
     val emissive: Boolean = false
     val translucent: Boolean = false
+    val translucent_cull: Boolean = false
 }
 
 enum class SpriteType {

@@ -9,54 +9,59 @@
 package com.cobblemon.mod.common.api.riding
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.api.riding.controller.RideController
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
-import com.cobblemon.mod.common.util.adapters.RideControllerAdapter
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.getString
-import com.cobblemon.mod.common.util.readIdentifier
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RidingProperties(
-    val stats: Map<RidingStat, RidingStatDefinition> = mapOf(),
-    val seats: List<Seat> = listOf(),
-    val conditions: List<Expression> = listOf(),
-    val controller: RideController? = null
+        val stats: MutableMap<RidingStat, RidingStatDefinition> = mutableMapOf(),
+        val seats: List<Seat> = listOf(),
+        val conditions: List<Expression> = listOf(),
+        val behaviour: RidingBehaviourSettings? = null
 ) {
+
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {
-            val stats: Map<RidingStat, RidingStatDefinition> = buffer.readMap(
-                { buffer.readEnum<RidingStat>(RidingStat::class.java) },
-                { RidingStatDefinition.decode(buffer) }
-            )
+            val stats: MutableMap<RidingStat, RidingStatDefinition> = buffer.readMap(
+                    { buffer.readEnum(RidingStat::class.java) },
+                    { RidingStatDefinition.decode(buffer) }
+            ).toMutableMap()
             val seats: List<Seat> = buffer.readList { _ -> Seat.decode(buffer) }
             val conditions = buffer.readList { buffer.readString().asExpression() }
-            val controller = buffer.readNullable { _ ->
-                val key = buffer.readIdentifier()
-                val controller = RideControllerAdapter.types[key]?.getConstructor()?.newInstance() ?: error("Unknown controller key: $key")
-                controller.decode(buffer)
-                return@readNullable controller
+            val behaviour = buffer.readNullable { _ ->
+                val key = buffer.readResourceLocation()
+                val settings = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance() ?: error("Unknown controller key: $key")
+                settings.decode(buffer)
+                return@readNullable settings
             }
 
-            return RidingProperties(stats = stats, seats = seats, conditions = conditions, controller = controller)
+            return RidingProperties(stats = stats, seats = seats, conditions = conditions, behaviour = behaviour)
         }
     }
 
-    val canRide: Boolean
-        get() = seats.isNotEmpty() && controller != null
+    internal fun updateStatRange(stat: RidingStat, style: RidingStyle, min: Int, max: Int) {
+        if (!Cobblemon.config.enableDebugKeys) return
+        if (stats[stat] == null) {
+            stats[stat] = RidingStatDefinition()
+        }
+        stats[stat]!!.ranges[style] = min..max
+    }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeMap(
-            stats,
-            { _, stat -> buffer.writeEnum(stat) },
-            { _, stat -> stat.encode(buffer) }
+                stats,
+                { _, stat -> buffer.writeEnum(stat) },
+                { _, stat -> stat.encode(buffer) }
         )
         buffer.writeCollection(seats) { _, seat -> seat.encode(buffer) }
         buffer.writeCollection(conditions) { _, condition -> buffer.writeString(condition.getString()) }
-        buffer.writeNullable(controller) { _, controller -> controller.encode(buffer) }
+        buffer.writeNullable(behaviour) { _, behaviour ->
+            behaviour.encode(buffer)
+        }
     }
 
     fun calculate(stat: RidingStat, style: RidingStyle, boosts: Int): Float {

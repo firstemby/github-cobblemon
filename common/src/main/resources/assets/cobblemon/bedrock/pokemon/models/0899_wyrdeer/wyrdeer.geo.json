@@ -216,6 +216,14 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "torso",
+					"pivot": [0, 17, 0],
+					"locators": {
+						"seat_1": [0, 17, 0]
+					}
+				},
+				{
 					"name": "leg_back_right",
 					"parent": "body",
 					"pivot": [-2.25, 13.5, 4.5],

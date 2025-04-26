@@ -7,10 +7,19 @@
       "poser": "cobblemon:cinderace",
       "model": "cobblemon:cinderace.geo",
       "texture": "cobblemon:textures/pokemon/0815_cinderace/cinderace.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0815_cinderace/cinderace_emissive.png",
+          "translucent": true
+        }
+      ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0815_cinderace/cinderace_shiny.png"
     }
   ]

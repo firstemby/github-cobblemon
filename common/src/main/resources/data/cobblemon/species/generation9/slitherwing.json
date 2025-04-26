@@ -42,6 +42,9 @@
   "catchRate": 30,
   "eggCycles": 50,
   "baseFriendship": 0,
+  "behaviour": {
+    "fireImmune": true
+  },
   "moves": [
     "1:gust",
     "1:ember",

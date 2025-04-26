@@ -23,6 +23,8 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents.FRIENDSHIP_UPDATED
 import com.cobblemon.mod.common.api.events.CobblemonEvents.POKEMON_FAINTED
 import com.cobblemon.mod.common.api.events.pokemon.*
 import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
+import com.cobblemon.mod.common.api.mark.Mark
+import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.BenchedMove
@@ -58,6 +60,7 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -244,7 +247,11 @@ open class Pokemon : ShowdownIdentifiable {
             onChange(NicknameUpdatePacket({ this }, value))
         }
 
-    fun getDisplayName(): MutableComponent = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+    fun getDisplayName(showTitle: Boolean = false): MutableComponent {
+        var name = nickname?.copy()?.takeIf { it.contents != PlainTextContents.EMPTY } ?: species.translatedName.copy()
+        if (showTitle) activeMark?.let { name = it.getTitle(name) }
+        return name
+    }
 
     var level = 1
         set(value) {
@@ -504,6 +511,30 @@ open class Pokemon : ShowdownIdentifiable {
             onChange(CosmeticItemUpdatePacket({ this }, value))
         }
 
+    var activeMark: Mark? = null
+        set(value) {
+            field = value
+            onChange(ActiveMarkUpdatePacket({ this }, value))
+        }
+
+    var marks: MutableSet<Mark> = mutableSetOf()
+        set(value) {
+            field = value
+            onChange(MarksUpdatePacket({ this }, value))
+        }
+
+    var potentialMarks: MutableSet<Mark> = mutableSetOf()
+        set(value) {
+            field = value
+            onChange(MarksPotentialUpdatePacket({ this }, value))
+        }
+
+    var markings: List<Int> = listOf(0, 0, 0, 0, 0, 0)
+        set(value) {
+            field = value
+            onChange(MarkingsUpdatePacket({ this }, value))
+        }
+
     fun asRenderablePokemon() = RenderablePokemon(species, aspects)
 
     /**
@@ -549,6 +580,8 @@ open class Pokemon : ShowdownIdentifiable {
 
     val preEvolution: PreEvolution? get() = this.form.preEvolution
 
+    private val rideBoosts: MutableMap<RidingStat, Float> = mutableMapOf()
+
     /**
      * Provides the sided [EvolutionController]s, these operations can be done safely with a simple side check.
      * This can be done beforehand or using [EvolutionProxy.isClient].
@@ -588,7 +621,6 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-
     open fun getStat(stat: Stat) = Cobblemon.statProvider.getStatForPokemon(this, stat)
 
     /**
@@ -610,11 +642,7 @@ open class Pokemon : ShowdownIdentifiable {
             val entity = PokemonEntity(level, this)
             illusion?.start(entity)
             val adjustedPosition = entity.getAjustedSendoutPosition(position)
-            val sentOut = entity.setPositionSafely(adjustedPosition)
-            //If sendout failed, fall back
-            if (!sentOut) {
-                entity.setPos(adjustedPosition.x, adjustedPosition.y, adjustedPosition.z)
-            }
+            entity.setPositionSafely(adjustedPosition)
             mutation(entity)
             level.addFreshEntity(entity)
             state = SentOutState(entity)
@@ -632,7 +660,6 @@ open class Pokemon : ShowdownIdentifiable {
         illusion: IllusionEffect? = null,
         mutation: (PokemonEntity) -> Unit = {},
     ): CompletableFuture<PokemonEntity> {
-
 
         // Handle special case of shouldered Cobblemon
         if (this.state is ShoulderedState) {
@@ -666,7 +693,7 @@ open class Pokemon : ShowdownIdentifiable {
                                 battleActor is EntityBackedBattleActor<*> && battleActor.entity != null && battleActor.entity?.uuid !== owner.uuid
                             } as EntityBackedBattleActor<*>
                             if (activeBattlePokemon != null) {
-                                opposingEntityPos = ShowdownInterpreter.getSendoutPosition(battle, activeBattlePokemon, opposingEntityBattleActor as BattleActor)
+                                opposingEntityPos = activeBattlePokemon.getSendOutPosition()
                             }
                             if (opposingEntityPos == null) {
                                 // Sendout calculation failed, fallback to using the opposing actor's position
@@ -847,7 +874,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun isFireImmune(): Boolean {
-        return ElementalTypes.FIRE in types || !form.behaviour.moving.swim.hurtByLava
+        return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
 
     fun isPositionSafe(world: Level, pos: Vec3): Boolean {
@@ -1007,6 +1034,57 @@ open class Pokemon : ShowdownIdentifiable {
      */
     fun removeHeldItem(): ItemStack = this.swapHeldItem(ItemStack.EMPTY)
 
+    fun addPotentialMark(mark: Mark) {
+        potentialMarks.add(mark)
+        if (!isClient) onChange(MarkPotentialAddUpdatePacket({ this }, mark))
+    }
+
+    fun exchangeMark(mark: Mark, give: Boolean) {
+        if (give) {
+            mark.replace?.takeIf { it.isNotEmpty() }?.let { replacements ->
+                for (mark in replacements) Marks.getByIdentifier(mark)?.let { exchangeMark(it, false) }
+            }
+
+            marks.add(mark)
+            if (!isClient) onChange(MarkAddUpdatePacket({ this }, mark))
+        }
+        else {
+            marks.remove(mark)
+            if (activeMark == mark) activeMark = null
+            if (!isClient) onChange(MarkRemoveUpdatePacket({ this }, mark))
+        }
+    }
+
+    /**
+     * Calculate mark to give from list of potential marks.
+     * @return True if a mark has been applied, false otherwise
+     */
+    fun applyPotentialMarks(): Boolean {
+        // Remove any marks that are already owned
+        val potentials = potentialMarks.filterNot { mark -> marks.contains(mark) }.toMutableSet()
+
+        if (!potentials.isEmpty()) {
+            var selectedMark: Mark? = null
+            val sortedMarkGroups = potentials.groupBy { it.getChanceGroup() }.toSortedMap(compareBy { it.second })
+
+            for ((chanceGroup, group) in sortedMarkGroups) {
+                val probability = chanceGroup.second.coerceIn(0F, 1F) * 100
+                val randomValue = Random.nextDouble(0.0, 100.0)
+
+                if (randomValue < probability) {
+                    selectedMark = group.random()
+                    break
+                }
+            }
+            potentialMarks = mutableSetOf()
+            selectedMark?.let {
+                exchangeMark(it, true)
+                return true
+            }
+        }
+        return false
+    }
+
     fun saveToNBT(registryAccess: RegistryAccess, nbt: CompoundTag = CompoundTag()): CompoundTag {
         return this.saveTo(registryAccess.createSerializationContext(NbtOps.INSTANCE), nbt).orThrow as CompoundTag
     }
@@ -1107,6 +1185,12 @@ open class Pokemon : ShowdownIdentifiable {
         this.forcedAspects = other.forcedAspects
         this.features = other.features
         this.cosmeticItem = other.cosmeticItem
+        this.activeMark = other.activeMark
+        this.marks.clear()
+        this.marks += other.marks
+        this.potentialMarks.clear()
+        this.potentialMarks += other.marks
+        this.markings = other.markings
         this.updateAspects()
         this.refreshOriginalTrainer()
         this.initialize()
@@ -1454,6 +1538,46 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
         moveSet.update()
+    }
+
+    fun getMaxRideBoost(stat: RidingStat): Int {
+        return form.riding.stats[stat]?.ranges?.maxOf { it.value.endInclusive } ?: 0
+    }
+
+    fun getRideBoost(stat: RidingStat): Float {
+        return rideBoosts[stat] ?: 0F
+    }
+
+    fun getRideBoosts(): Map<RidingStat, Float> {
+        return rideBoosts.toMap()
+    }
+
+    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
+        val max = getMaxRideBoost(stat)
+        val current = rideBoosts[stat] ?: 0F
+        return current + boost <= max
+    }
+
+    fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
+        if (!canAddRideBoost(stat, boost)) {
+            return false
+        }
+        val max = getMaxRideBoost(stat)
+        rideBoosts[stat] = (getRideBoost(stat) + boost).coerceIn(0F, max.toFloat())
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+        return true
+    }
+
+    fun setRideBoost(stat: RidingStat, boost: Float) {
+        val max = getMaxRideBoost(stat)
+        rideBoosts[stat] = boost.coerceIn(0F, max.toFloat())
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
+    }
+
+    fun setRideBoosts(boosts: Map<RidingStat, Float>) {
+        rideBoosts.clear()
+        rideBoosts.putAll(boosts.mapValues { it.value.coerceIn(0F, getMaxRideBoost(it.key).toFloat()) })
+        onChange(RideBoostsUpdatePacket({ this }, rideBoosts))
     }
 
     fun getExperienceToNextLevel() = getExperienceToLevel(level + 1)

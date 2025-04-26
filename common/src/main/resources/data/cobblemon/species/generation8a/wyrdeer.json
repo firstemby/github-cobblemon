@@ -55,6 +55,69 @@
       "light": "0-4"
     }
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "50-100"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "50-100"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "50-100"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can jump",
+        "ranges": {
+          "LAND": "50-100"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can sprint",
+        "ranges": {
+          "LAND": "50-100"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:land/generic"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
   "drops": {
     "amount": 3,
     "entries": [

@@ -70,7 +70,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                 else if (pokemonEntity == null && entity != null) {
                     activePokemon.battlePokemon = pokemon
                     activePokemon.illusion = illusion
-                    val targetPos = ShowdownInterpreter.getSendoutPosition(battle, activePokemon, battleActor)
+                    val targetPos = activePokemon.getSendOutPosition()
                     if (targetPos != null) {
                         val battleSendoutCount = activePokemon.getActorShowdownId()[1].digitToInt() - 1 + actor.stillSendingOutCount
                         actor.stillSendingOutCount++
@@ -180,7 +180,7 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                     }
                 } else {
                     // For Singles, we modify the sendout position based on the pokemon's hitbox size
-                    val pos = (if (battle.format.battleType.pokemonPerSide == 1) ShowdownInterpreter.getSendoutPosition(battle, activePokemon, actor)
+                    val pos = (if (battle.format.battleType.pokemonPerSide == 1) activePokemon.getSendOutPosition()
                         else  activePokemon.position?.second) ?: entity.position()
                     // Send out at previous Pokémon's location if it is known, otherwise actor location
                     val world = entity.level() as ServerLevel
@@ -213,8 +213,8 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             val publicPokemon = (illusion ?: newPokemon).effectedPokemon
             val publicLang = publicPokemon.nickname?.let { nickname ->
                 battleLang("switch.other.nickname", actor.getName(), nickname, publicPokemon.species.translatedName)
-            } ?: battleLang("switch.other", actor.getName(), publicPokemon.getDisplayName())
-            actor.sendMessage(battleLang("switch.self", publicPokemon.getDisplayName()))
+            } ?: battleLang("switch.other", actor.getName(), publicPokemon.getDisplayName(true))
+            actor.sendMessage(battleLang("switch.self", publicPokemon.getDisplayName(true)))
             battle.actors.filter { it != actor }.forEach {
                 it.sendMessage(publicLang)
             }

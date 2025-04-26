@@ -3,13 +3,13 @@
   "order": 0,
   "variations": [
     {
-      "aspects": ["shulker"],
+      "aspects": ["cosmetic_item-shulker_shell"],
       "model": "cobblemon:forretress_shulker.geo",
       "texture": "cobblemon:textures/pokemon/0205_forretress/forretress_shulker.png",
       "layers": []
     },
     {
-      "aspects": ["shulker", "shiny"],
+      "aspects": ["cosmetic_item-shulker_shell", "shiny"],
       "texture": "cobblemon:textures/pokemon/0205_forretress/forretress_shulker_shiny.png"
     }
   ]

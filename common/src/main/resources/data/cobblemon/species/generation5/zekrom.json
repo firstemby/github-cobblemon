@@ -49,6 +49,9 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "fireImmune": true
+  },
   "moves": [
     "1:thunderfang",
     "1:dragonrage",

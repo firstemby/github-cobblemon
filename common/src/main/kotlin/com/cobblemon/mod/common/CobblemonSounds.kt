@@ -112,6 +112,8 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MEDICINE_SPRAY_USE = this.create("item.medicine.spray.use")
     @JvmField
     val MEDICINE_FEATHER_USE = this.create("item.medicine.feather.use")
+    @JvmField
+    val MOCHI_USE = this.create("item.medicine.feather.use")
 
     @JvmField
     val MULCH_PLACE = this.create("block.mulch.place")
@@ -423,6 +425,38 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         DISPLAY_CASE_PLACE,
         DISPLAY_CASE_HIT,
         DISPLAY_CASE_STEP
+    )
+
+    @JvmField
+    val CAMPFIRE_POT_PLACE_CAMPFIRE = this.create("block.campfire_pot.place_campfire")
+    @JvmField
+    val CAMPFIRE_POT_RETRIEVE = this.create("block.campfire_pot.retrieve")
+    @JvmField
+    val CAMPFIRE_POT_OPEN = this.create("block.campfire_pot.open")
+    @JvmField
+    val CAMPFIRE_POT_CLOSE = this.create("block.campfire_pot.close")
+    @JvmField
+    val CAMPFIRE_POT_USE = this.create("block.campfire_pot.use")
+    @JvmField
+    val CAMPFIRE_POT_COOK = this.create("block.campfire_pot.cook")
+    @JvmField
+    val CAMPFIRE_POT_CRAFT = this.create("block.campfire_pot.craft")
+    @JvmField
+    val CAMPFIRE_POT_PLACE = this.create("block.campfire_pot.place")
+    @JvmField
+    val CAMPFIRE_POT_BREAK = this.create("block.campfire_pot.break")
+    @JvmField
+    val CAMPFIRE_POT_HIT = this.create("block.campfire_pot.hit")
+    @JvmField
+    val CAMPFIRE_POT_STEP = this.create("block.campfire_pot.step")
+
+    @JvmField
+    val CAMPFIRE_POT_SOUNDS = SoundType(1f, 1.1f,
+        CAMPFIRE_POT_BREAK,
+        CAMPFIRE_POT_STEP,
+        CAMPFIRE_POT_PLACE,
+        CAMPFIRE_POT_HIT,
+        CAMPFIRE_POT_STEP
     )
 
     private fun create(name: String): SoundEvent = this.create(name, SoundEvent.createVariableRangeEvent(cobblemonResource(name)))

@@ -52,7 +52,7 @@ class ReviveItem(
     val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_revive" else "revive" }"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "revive ${ if (max) "1" else "0.5" }"
     }
 
@@ -74,7 +74,7 @@ class ReviveItem(
                     PartySelectCallbacks.createBattleSelect(
                         player = player,
                         pokemon = battlePokemon,
-                        canSelect = { bagItem.canUse(battle, it) }
+                        canSelect = { bagItem.canUse(stack, battle, it) }
                     ) { bp ->
                         if (actor.canFitForcedAction() && bp.health <= 0 && battle.turn == turn && stack.isHeld(player)) {
                             player.playSound(CobblemonSounds.ITEM_USE, 1F, 1F)

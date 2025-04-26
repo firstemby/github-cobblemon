@@ -71,10 +71,15 @@ open class SpawnerManager {
 
     open fun onServerTick() {
         // Disables spawning
-        if (!Cobblemon.config.enableSpawning || server()?.gameRules?.getBoolean(DO_POKEMON_SPAWNING) == false) {
+        if (!Cobblemon.config.enableSpawning) {
             return
         }
         influences.removeIf { it.isExpired() }
-        getSpawnersOfType<TickingSpawner>().forEach(TickingSpawner::tick)
+        getSpawnersOfType<TickingSpawner>().forEach {
+            if (it.getCauseEntity()?.level()?.gameRules?.getBoolean(DO_POKEMON_SPAWNING) == false) {
+                return@forEach
+            }
+            it.tick()
+        }
     }
 }

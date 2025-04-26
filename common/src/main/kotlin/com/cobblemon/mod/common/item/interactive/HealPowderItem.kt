@@ -29,7 +29,7 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.heal_powder"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(target.effectedPokemon)
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status"
     }
 
@@ -37,7 +37,7 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
         Cobblemon.implementation.registerCompostable(this, .75F)
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.status != null && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status != null && pokemon.currentHealth > 0
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

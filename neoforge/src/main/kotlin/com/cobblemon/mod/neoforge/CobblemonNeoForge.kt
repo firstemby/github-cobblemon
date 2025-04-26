@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
@@ -42,6 +43,7 @@ import java.util.UUID
 import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
+import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -264,6 +266,7 @@ class CobblemonNeoForge : CobblemonImplementation {
                 helper.register(Vec3DataSerializer.ID, Vec3DataSerializer)
                 helper.register(StringSetDataSerializer.ID, StringSetDataSerializer)
                 helper.register(PoseTypeDataSerializer.ID, PoseTypeDataSerializer)
+                helper.register(RideBoostsDataSerializer.ID, RideBoostsDataSerializer)
                 helper.register(PlatformTypeDataSerializer.ID, PlatformTypeDataSerializer)
                 helper.register(IdentifierDataSerializer.ID, IdentifierDataSerializer)
                 helper.register(UUIDSetDataSerializer.ID, UUIDSetDataSerializer)
@@ -288,11 +291,31 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+    override fun registerMenu() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonMenuType.resourceKey) { helper ->
+                    CobblemonMenuType.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
+        }
+    }
+
     private fun handleBlockStripping(e: BlockEvent.BlockToolModificationEvent) {
         if (e.itemAbility == ItemAbilities.AXE_STRIP) {
             val start = e.state.block
             val result = CobblemonBlocks.strippedBlocks()[start] ?: return
             e.setFinalState(result.withPropertiesOf(e.state))
+        }
+    }
+
+    override fun registerRecipeTypes() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonRecipeTypes.resourceKey) { helper ->
+                    CobblemonRecipeTypes.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
         }
     }
 
@@ -346,16 +369,26 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    override fun registerVillagers() {
+    override fun registerPoiTypes() {
         MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(CobblemonVillagerPoiTypes.resourceKey) { helper ->
-                CobblemonVillagerPoiTypes.register { identifier, type -> helper.register(identifier, type) }
+            event.register(CobblemonPoiTypes.resourceKey) { helper ->
+                CobblemonPoiTypes.register { identifier, type -> helper.register(identifier, type) }
             }
         }
+    }
 
+    override fun registerVillagers() {
         MOD_BUS.addListener<RegisterEvent> { event ->
             event.register(CobblemonVillagerProfessions.resourceKey) { helper ->
                 CobblemonVillagerProfessions.register { identifier, profession -> helper.register(identifier, profession) }
+            }
+        }
+    }
+
+    override fun registerRecipeSerializers() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonRecipeSerializers.resourceKey) { helper ->
+                CobblemonRecipeSerializers.register { identifier, feature -> helper.register(identifier, feature) }
             }
         }
     }

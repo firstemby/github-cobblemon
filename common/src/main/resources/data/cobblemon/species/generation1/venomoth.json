@@ -51,6 +51,9 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "canWalk": false
+      },
       "swim": {
         "canWalkOnWater": true
       },
@@ -211,7 +214,7 @@
       }
     },
     "seats": [],
-    "controller": {
+    "behaviour": {
       "key": "cobblemon:air/glider"
     }
   }

@@ -44,10 +44,10 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
             val confuse = if (canCauseConfusion) berry()!!.dislikedBy(battlePokemon.nature) else false
             return "potion_by_portion ${genericRuntime.resolveFloat(portion(), battlePokemon)} $confuse"
         }
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = !pokemon.isFainted() && !pokemon.isFullHealth()
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFainted() && !pokemon.isFullHealth()
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

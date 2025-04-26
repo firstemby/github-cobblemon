@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0553_krookodile/krookodile_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-black_glasses"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0553_krookodile/krookodile_sunglasses.png"
+        }
+      ]
     }
   ]
 }

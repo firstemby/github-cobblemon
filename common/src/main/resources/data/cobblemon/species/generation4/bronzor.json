@@ -42,10 +42,12 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "standingEyeHeight": 0.65,
+  "flyingEyeHeight": 0.65,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 1.25,
     "fixed": false
   },
   "behaviour": {
@@ -53,6 +55,12 @@
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
     }
   },

@@ -57,6 +57,9 @@
       "pointsAtSpawn": true
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.12
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false

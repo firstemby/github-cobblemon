@@ -1,0 +1,15 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "cobblemon:green_apricorn"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:aprijuice_green"
+    },
+    "seasoningProcessors": [
+        "flavour"
+    ]
+}

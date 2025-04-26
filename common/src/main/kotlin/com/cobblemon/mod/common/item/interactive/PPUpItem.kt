@@ -28,8 +28,8 @@ class PPUpItem(
 }), PokemonAndMoveSelectingItem {
 
     override val bagItem = null
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any(::canUseOnMove)
-    override fun canUseOnMove(move: Move) = move.raisedPpStages < 3
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+    override fun canUseOnMove(stack: ItemStack, move: Move) = move.raisedPpStages < 3
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

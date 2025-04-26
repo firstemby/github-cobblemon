@@ -17,9 +17,9 @@ import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCa
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
-import com.google.gson.annotations.SerializedName
 
 class CobblemonConfig {
     companion object {
@@ -46,6 +46,9 @@ class CobblemonConfig {
     var announceDropItems = true
     @CobblemonConfigField(Category.Pokemon, lang = "default_drop_item_method")
     var defaultDropItemMethod = ItemDropMethod.ON_ENTITY
+    @CobblemonConfigField(Category.Pokemon, lang = "drops_after_death_animation")
+    var dropAfterDeathAnimation = false
+
     @CobblemonConfigField(Category.Pokemon, lang = "ambient_pokemon_cry_ticks")
     @LastChangedVersion("1.4.0")
     var ambientPokemonCryTicks = 1080
@@ -258,6 +261,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Interface, lang = "party_portrait_animations")
     var partyPortraitAnimations = PortraitStyle.NEVER_ANIMATE
+
+    @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing")
+    var thirdPersonViewBobbing = false
 
     @CobblemonConfigField(Category.Riding, lang = "invert_roll")
     var invertRoll = false

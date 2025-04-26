@@ -1,0 +1,20 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "foods",
+    "ingredients": [
+        {
+            "item": "cobblemon:hearty_grains"
+        },
+        {
+            "tag": "cobblemon:berries"
+        },
+        {
+            "item": "minecraft:dried_kelp"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:jelly_doughnut",
+        "count": 1
+    },
+    "seasoningProcessors": []
+}

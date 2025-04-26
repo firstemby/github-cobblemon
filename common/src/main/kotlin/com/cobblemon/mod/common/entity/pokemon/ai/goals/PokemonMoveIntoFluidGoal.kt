@@ -71,7 +71,7 @@ class PokemonMoveIntoFluidGoal(private val mob: PokemonEntity) : Goal() {
     override fun start() {
         val appropriateFluids = mutableListOf<TagKey<Fluid>>()
         val swim = mob.behaviour.moving.swim
-        if (swim.canSwimInLava && !swim.hurtByLava) {
+        if (swim.canSwimInLava) {
             appropriateFluids.add(FluidTags.LAVA)
         }
         if (swim.canSwimInWater) {

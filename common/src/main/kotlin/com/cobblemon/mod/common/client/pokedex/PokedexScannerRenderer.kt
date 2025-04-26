@@ -282,12 +282,12 @@ class PokedexScannerRenderer {
         val effectiveIntervals = clamp(usageContext.transitionIntervals + (if (usageContext.scanningGuiOpen) 1 else -1) * tickDelta, 0F, 12F)
 
         if (effectiveIntervals <= PokedexUsageContext.TRANSITION_INTERVALS) {
-            val scale = 1 + (if (effectiveIntervals <= 2) 0F else ((effectiveIntervals - 2) * 0.075F))
+            val scale = 1F + (if (effectiveIntervals <= 2) 0F else ((effectiveIntervals - 2) * 0.075F))
 
             val centerX = (screenWidth - (BASE_WIDTH * scale)) / 2
             val centerY = (screenHeight - (BASE_HEIGHT * scale)) / 2
 
-            val opacity = if (effectiveIntervals <= 2) 1F else (10F - (effectiveIntervals - 2F)) / 10F
+            val opacity = if (effectiveIntervals > 11) 0F else effectiveIntervals / PokedexUsageContext.TRANSITION_INTERVALS
             blitk(matrixStack = matrices, texture = CobblemonClient.pokedexUsageContext.type.getTexturePath(), x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
             blitk(matrixStack = matrices, texture = SCAN_SCREEN, x = centerX / scale, y = centerY / scale, width = BASE_WIDTH, height = BASE_HEIGHT, scale = scale, alpha = opacity)
         }

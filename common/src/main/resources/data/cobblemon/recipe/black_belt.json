@@ -1,13 +1,13 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "W  ",
-        "KKK",
-        "  W"
+        "K  ",
+        "KGK",
+        "  K"
     ],
     "key": {
-        "W": {
-            "item": "minecraft:black_wool"
+        "G": {
+            "item": "cobblemon:fighting_gem"
         },
         "K": {
             "item": "minecraft:dried_kelp"

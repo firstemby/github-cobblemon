@@ -42,11 +42,11 @@ class ElixirItem(
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_elixir" else "elixir" }"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "elixir".let { if (!max) "$it 10" else it }
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
         var changed = false
         pokemon.moveSet.doWithoutEmitting {

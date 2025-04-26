@@ -37,7 +37,6 @@ import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
-import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset

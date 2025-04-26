@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
-import com.cobblemon.mod.common.Rollable;
+import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -31,14 +31,14 @@ public class ItemInHandRendererMixin {
         if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItem().getItem() instanceof PokedexItem) {
             ci.cancel();
         }
-        else if (abstractClientPlayer instanceof Rollable rollable && rollable.shouldRoll()) {
+        else if (abstractClientPlayer instanceof OrientationControllable controllable && controllable.getOrientationController().isActive()) {
 
         }
     }
 
     @Redirect(method = "renderHandsWithItems", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V", ordinal = 1))
     private void cobblemon$renderHandswithItems(PoseStack instance, Quaternionf quaternion) {
-        if (!(Minecraft.getInstance().player instanceof Rollable rollable && rollable.shouldRoll())) {
+        if (!(Minecraft.getInstance().player instanceof OrientationControllable controllable && controllable.getOrientationController().isActive())) {
             instance.mulPose(quaternion);
         }
     }

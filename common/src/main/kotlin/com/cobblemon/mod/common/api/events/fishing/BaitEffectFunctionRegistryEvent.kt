@@ -8,19 +8,19 @@
 
 package com.cobblemon.mod.common.api.events.fishing
 
-import com.cobblemon.mod.common.api.fishing.FishingBait
+import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.resources.ResourceLocation
 
 /**
  * Event to register code-based functions for bait effects.
- * @see FishingBait.Effect
- * @see FishingBait.Effects
+ * @see SpawnBait.Effect
+ * @see SpawnBait.Effects
  */
 class BaitEffectFunctionRegistryEvent {
-    val functions = mutableMapOf<ResourceLocation, (PokemonEntity, FishingBait.Effect) -> Unit>()
+    val functions = mutableMapOf<ResourceLocation, (PokemonEntity, SpawnBait.Effect) -> Unit>()
 
-    fun registerFunction(id: ResourceLocation, function: (PokemonEntity, FishingBait.Effect) -> Unit) {
+    fun registerFunction(id: ResourceLocation, function: (PokemonEntity, SpawnBait.Effect) -> Unit) {
         functions[id] = function
     }
 }

@@ -321,6 +321,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 scale = 18F * (ballState?.scale ?: 1F) * if (isCompact) 0.65F else 1.0f,
                 contextScale = species.getForm(state.currentAspects).baseScale,
                 reversed = reversed,
+                doQuirks = false,
                 state = state,
                 partialTicks = partialTicks
             )

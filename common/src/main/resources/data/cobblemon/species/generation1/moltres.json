@@ -54,6 +54,7 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
       "fly": {
         "canFly": true
@@ -351,7 +352,7 @@
       }
     },
     "seats": [],
-    "controller": {
+    "behaviour": {
       "key": "cobblemon:land/generic"
     }
   }

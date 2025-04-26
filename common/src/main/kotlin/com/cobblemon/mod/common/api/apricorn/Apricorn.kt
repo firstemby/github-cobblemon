@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.apricorn
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.block.ApricornBlock
 import com.cobblemon.mod.common.block.ApricornSaplingBlock
 import com.cobblemon.mod.common.item.ApricornItem
@@ -27,15 +28,43 @@ import net.minecraft.world.level.material.MapColor
  * @author Licious
  * @since October 29th, 2022
  */
-enum class Apricorn : StringRepresentable {
+enum class Apricorn(
+    /** A value of true means it buffs that flavour, a value of false means it weakens that flavour. */
+    val flavourStrength: Map<Flavour, Boolean> = emptyMap()
+) : StringRepresentable {
 
     BLACK,
-    BLUE,
-    GREEN,
-    PINK,
-    RED,
+    BLUE(
+        mapOf(
+            Flavour.DRY to true,
+            Flavour.BITTER to false
+        )
+    ),
+    GREEN(
+        mapOf(
+            Flavour.BITTER to true,
+            Flavour.SWEET to false
+        )
+    ),
+    PINK(
+        mapOf(
+            Flavour.SWEET to true,
+            Flavour.SPICY to false
+        )
+    ),
+    RED(
+        mapOf(
+            Flavour.SPICY to true,
+            Flavour.SOUR to false
+        )
+    ),
     WHITE,
-    YELLOW;
+    YELLOW(
+        mapOf(
+            Flavour.SOUR to true,
+            Flavour.DRY to false
+        )
+    );
 
     fun item(): ApricornItem = when(this) {
         BLACK -> CobblemonItems.BLACK_APRICORN

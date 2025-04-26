@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import java.util.UUID
 import kotlin.properties.Delegates
-import net.minecraft.client.gui.components.toasts.AdvancementToast
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -30,7 +29,7 @@ import net.minecraft.world.item.ItemStack
  * @param title The [Component] representing the toast title, this can be a [Component.empty].
  * @param description The [Component] representing the toast description, this can be a [Component.empty].
  * @param icon The [ItemStack] that is rendered as the toast icon, this can be a [ItemStack.EMPTY].
- * @param frameTexture The texture of the frame, default is the [VANILLA_FRAME].
+ * @param frameTexture The texture of the frame, default is the [VANILLA_BACKGROUND_SPRITE].
  * @param progress The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
  * @param progressColor The progress bar color in RGB, default is the [VANILLA_PROGRESS_COLOR].
  *
@@ -40,7 +39,7 @@ class Toast(
     title: Component,
     description: Component,
     icon: ItemStack,
-    frameTexture: ResourceLocation = AdvancementToast.BACKGROUND_SPRITE,
+    frameTexture: ResourceLocation = VANILLA_BACKGROUND_SPRITE,
     progress: Float = -1F,
     progressColor: Int = VANILLA_PROGRESS_COLOR
 ) {
@@ -195,6 +194,8 @@ class Toast(
     )
 
     companion object {
+        val VANILLA_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement")
+
         const val VANILLA_PROGRESS_COLOR = -1675545
 
     }

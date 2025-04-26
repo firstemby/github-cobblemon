@@ -113,11 +113,7 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
         return super.playerWillDestroy(level, blockPos, blockState, player)
     }
 
-    override fun getDrops(blockState: BlockState, builder: LootParams.Builder): MutableList<ItemStack> {
-        return mutableListOf(ItemStack(Blocks.LECTERN))
-    }
-
-    override fun useWithoutItem(blockState: BlockState, level: Level, blockPos: BlockPos, player: Player, blockHitResult: BlockHitResult?): InteractionResult {
+    override fun useWithoutItem(blockState: BlockState, level: Level, blockPos: BlockPos, player: Player, blockHitResult: BlockHitResult): InteractionResult {
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is LecternBlockEntity) {
             val itemStack = blockEntity.getItemStack()

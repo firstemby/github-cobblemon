@@ -1,0 +1,67 @@
+{
+  "portraitScale": 2.3,
+  "portraitTranslation": [ -1.16, 2.04, 0],
+  "profileScale": 0.43,
+  "profileTranslation": [ -0.01, 0.97, 0],
+  "rootBone": "noivern",
+  "animations": {
+    "cry": "q.bedrock_stateful('noivern', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('noivern', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('noivern', 'ground_idle')",
+        "q.quadruped_walk(1, 1, 'arm_left', 'arm_right', 'leg_left', 'leg_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    },
+    "hover": {
+      "poseTypes": [
+        "HOVER"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('noivern', 'air_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('noivern', 'air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    }
+  }
+}

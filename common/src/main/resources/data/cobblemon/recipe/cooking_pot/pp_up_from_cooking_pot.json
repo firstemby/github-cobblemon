@@ -1,0 +1,28 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "cobblemon:medicinal_brew"
+        },
+        {
+            "item": "cobblemon:pep_up_flower"
+        },
+        {
+            "item": "cobblemon:pep_up_flower"
+        },
+        {
+            "item": "cobblemon:leppa_berry"
+        },
+        {
+            "item": "cobblemon:leppa_berry"
+        },
+        {
+            "item": "cobblemon:vivichoke"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:pp_up"
+    },
+    "seasoningProcessors": []
+}

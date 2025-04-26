@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.spawning.context
 
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.toVec3d
 import net.minecraft.world.level.block.Block
 import net.minecraft.server.level.ServerLevel
@@ -40,5 +41,5 @@ class FishingSpawningContext(
     val nearbyBlockTypes: List<Block> by lazy { nearbyBlocks.map { it.block }.distinct().toList() }
     val rodStack = cause.rodStack
     val rodItem = cause.rodItem
-    val rodBait = cause.bait
+    val baitStack = PokerodItem.getBaitStackOnRod(cause.rodStack)
 }
