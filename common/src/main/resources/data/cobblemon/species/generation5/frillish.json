@@ -52,11 +52,15 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "avoidsLand": true
+        "avoidsLand": true,
+        "canWalk": false
       },
       "swim": {
         "swimSpeed": 0.2,
         "canBreatheUnderwater": true
+      },
+      "fly": {
+        "canFly": true
       }
     }
   },

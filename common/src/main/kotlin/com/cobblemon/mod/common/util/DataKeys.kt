@@ -54,6 +54,7 @@ object DataKeys {
     const val POKEMON_MARKS = "Marks"
     const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
     const val POKEMON_MARKINGS = "Markings"
+    const val POKEMON_RIDE_BOOSTS = "RideBoosts"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -135,12 +136,18 @@ object DataKeys {
     const val POKEMON_PROPERTIES_ORIGINAL_TEXT = "OriginalText"
     const val POKEMON_SPECIES_TEXT = "SpeciesText"
 
-    // Healer  Block
+    // Healer Block
     const val HEALER_MACHINE_USER = "MachineUser"
     const val HEALER_MACHINE_POKEBALLS = "MachinePokeBalls"
     const val HEALER_MACHINE_TIME_LEFT = "MachineTimeLeft"
     const val HEALER_MACHINE_CHARGE = "MachineCharge"
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
+
+    // Cake Blocks
+    const val CAKE_BITES = "Bites"
+    const val CAKE_FLAVOUR = "Flavour"
+    const val CAKE_BAIT_EFFECTS = "BaitEffects"
+    const val CAKE_FOOD_COLOUR = "FoodColour"
 
     // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"

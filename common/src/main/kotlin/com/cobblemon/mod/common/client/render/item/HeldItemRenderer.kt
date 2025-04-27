@@ -90,16 +90,18 @@ class HeldItemRenderer {
                     poseStack.mulPose(Axis.XP.rotationDegrees(90.0f))
                 }
                 ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, ItemDisplayContext.THIRD_PERSON_LEFT_HAND -> {
+                    val isLeft = displayContext==ItemDisplayContext.THIRD_PERSON_LEFT_HAND
                     //For Minecraft player models
                     if (state is NPCClientDelegate) {
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F))
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-90.0f))
+                        poseStack.translate(0.025f * if (isLeft) 1 else -1 , 0.0f, 0.0f)
                     }
                     //for T-Posing Models
                     else if (state is PokemonClientDelegate || state is FloatingState) {
-                        poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F))
-                        poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F))
+                        poseStack.mulPose(Axis.YP.rotationDegrees(-90.0f * if (isLeft) -1f else 1f))
+                        poseStack.mulPose(Axis.ZP.rotationDegrees(90.0f * if (isLeft) -1f else 1f))
+                        poseStack.translate(0.0f,0.0f,-0.0625f) // offset item by -1/16 to recenter item onto the locator
                     }
-                    poseStack.translate(0.025f * if (displayContext==ItemDisplayContext.THIRD_PERSON_LEFT_HAND) 1 else -1 , 0.0f, 0.0f)
                 }
                 ItemDisplayContext.HEAD -> {
                     if (state is NPCClientDelegate) {

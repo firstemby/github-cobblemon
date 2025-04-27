@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.integration.jei
 
 import com.cobblemon.mod.common.integration.jei.berry.BerryMutationProvider
-import com.cobblemon.mod.common.integration.jei.berry.BerryRecipeCategory
+import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotJeiProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
@@ -19,13 +19,11 @@ import net.minecraft.resources.ResourceLocation
 
 @JeiPlugin
 class CobblemonJeiPlugin : IModPlugin {
-    private val jeiProviders: Set<CobblemonJeiProvider>
+    private val jeiProviders: Set<CobblemonJeiProvider> = setOf(
+        BerryMutationProvider(),
+        CampfirePotJeiProvider(),
+    )
 
-    init {
-        jeiProviders = setOf(
-            BerryMutationProvider()
-        )
-    }
     override fun getPluginUid(): ResourceLocation {
         return ID
     }

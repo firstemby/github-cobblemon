@@ -22,6 +22,7 @@ import net.minecraft.tags.TagKey
 object CobblemonBlockTags {
 
     @JvmField val ALL_HANGING_SIGNS = createTag("all_hanging_signs")
+    @JvmField val ALL_SAPLINGS = createTag("all_saplings")
     @JvmField val ALL_SIGNS = createTag("all_signs")
     @JvmField val ANCIENT_CITY_BLOCKS = createTag("ancient_city_blocks")
     @JvmField val APRICORN_LEAVES = createTag("apricorn_leaves")
@@ -56,6 +57,7 @@ object CobblemonBlockTags {
     @JvmField val MACHINES = createTag("machines")
     @JvmField val MANSION_BLOCKS = createTag("mansion_blocks")
     @JvmField val MEDICINAL_LEEK_PLANTABLE = createTag("medicinal_leek_plantable")
+    @JvmField val HEARTY_GRAINS_PLANTABLE = createTag("hearty_grains_plantable")
     @JvmField val MINTS = createTag("mints")
     @JvmField val MOON_STONE_ORES = createTag("moon_stone_ores")
     @JvmField val NATURAL = createTag("natural")
@@ -67,6 +69,9 @@ object CobblemonBlockTags {
     @JvmField val REDSTONE_BLOCKS = createTag("redstone_blocks")
     @JvmField val ROOTS = createTag("roots")
     @JvmField val ROOTS_SPREADABLE = createTag("roots_spreadable")
+    @JvmField val SACCHARINE_LEAVES = createTag("saccharine_leaves")
+    @JvmField val SACCHARINE_LOGS = createTag("saccharine_logs")
+    @JvmField val SACCHARINE_SAPLING = createTag("saccharine_sapling")
     @JvmField val RUINED_PORTAL_BLOCKS = createTag("ruined_portal_blocks")
     @JvmField val SEES_SKY = createTag("sees_sky")
     @JvmField val SHINY_STONE_ORES = createTag("shiny_stone_ores")

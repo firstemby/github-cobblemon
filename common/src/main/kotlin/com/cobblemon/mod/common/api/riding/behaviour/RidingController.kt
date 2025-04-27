@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -25,7 +26,10 @@ import net.minecraft.world.phys.Vec3
 class RidingController<Settings : RidingBehaviourSettings, State : RidingBehaviourState>(val behaviour: RidingBehaviour<Settings, State>) : RidingBehaviour<Settings, State> {
 
     override val key = behaviour.key
-    override val style = behaviour.style
+    
+    override fun getRidingStyle(settings: Settings, state: State): RidingStyle {
+        return behaviour.getRidingStyle(settings, state)
+    }
 
     override fun isActive(settings: Settings, state: State, vehicle: PokemonEntity) =
         behaviour.isActive(settings, state, vehicle)
@@ -135,8 +139,8 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.inertia(settings, state, vehicle)
     }
 
-    override fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
+    override fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): ResourceLocation {
+        if (!isActive(settings, state, vehicle)) return cobblemonResource("no_pose")
         return behaviour.useRidingAltPose(settings, state, vehicle, driver)
     }
 
@@ -174,5 +178,6 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
     override fun createDefaultState(settings: Settings): State {
         return behaviour.createDefaultState(settings)
     }
+
 
 }

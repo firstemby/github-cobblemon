@@ -46,6 +46,9 @@ class CobblemonConfig {
     var announceDropItems = true
     @CobblemonConfigField(Category.Pokemon, lang = "default_drop_item_method")
     var defaultDropItemMethod = ItemDropMethod.ON_ENTITY
+    @CobblemonConfigField(Category.Pokemon, lang = "drops_after_death_animation")
+    var dropAfterDeathAnimation = false
+
     @CobblemonConfigField(Category.Pokemon, lang = "ambient_pokemon_cry_ticks")
     @LastChangedVersion("1.4.0")
     var ambientPokemonCryTicks = 1080
@@ -260,7 +263,7 @@ class CobblemonConfig {
     var partyPortraitAnimations = PortraitStyle.NEVER_ANIMATE
 
     @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing")
-    var thirdPartyViewBobbing = false
+    var thirdPersonViewBobbing = false
 
     @CobblemonConfigField(Category.Riding, lang = "invert_roll")
     var invertRoll = false

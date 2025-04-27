@@ -58,8 +58,8 @@ class NPCClientDelegate : PosableState(), NPCSideDelegate {
 
     override fun addToStruct(struct: QueryStruct) {
         super.addToStruct(struct)
-        struct.addFunctions(functions.functions)
         struct.addFunctions(ClientMoLangFunctions.clientFunctions)
+        struct.addFunctions(functions.functions)
         runtime.environment.query.addFunctions(struct.functions)
     }
 }

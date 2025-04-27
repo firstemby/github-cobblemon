@@ -340,8 +340,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     override fun addToStruct(struct: QueryStruct) {
         super.addToStruct(struct)
-        struct.addFunctions(functions.functions)
         struct.addFunctions(ClientMoLangFunctions.clientFunctions)
+        struct.addFunctions(functions.functions)
         runtime.environment.query = struct
     }
 

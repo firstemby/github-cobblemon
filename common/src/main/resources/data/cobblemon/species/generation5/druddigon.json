@@ -50,10 +50,8 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
-      "swim": {
-        "canSwimInLava": true
-      }
     }
   },
   "drops": {

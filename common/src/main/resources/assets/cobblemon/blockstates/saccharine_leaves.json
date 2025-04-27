@@ -1,0 +1,16 @@
+{
+  "multipart": [
+    {
+      "when": { "age": 0 },
+      "apply": { "model": "cobblemon:block/saccharine_leaves" }
+    },
+    {
+      "when": { "age": 1 },
+      "apply": { "model": "cobblemon:block/saccharine_sticky_leaves" }
+    },
+    {
+      "when": { "age": 2 },
+      "apply": { "model": "cobblemon:block/saccharine_glistening_leaves" }
+    }
+  ]
+}

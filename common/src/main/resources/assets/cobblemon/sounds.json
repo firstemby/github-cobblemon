@@ -8,6 +8,18 @@
   "battle.pvw.default": {
     "sounds": []
   },
+  "entity.npc.gibber.generic": {
+    "sounds": [ { "name":  "cobblemon:entity/npc/gibber/gibber_generic", "volume":  0.1 } ]
+  },
+  "entity.npc.gibber.speech_type_1_1": {
+    "sounds": [ { "name":  "cobblemon:entity/npc/gibber/speech_type_1/speech_type_1_1", "volume":  0.1 } ]
+  },
+  "entity.npc.gibber.speech_type_1_2": {
+    "sounds": [ { "name":  "cobblemon:entity/npc/gibber/speech_type_1/speech_type_1_2", "volume":  0.1 } ]
+  },
+  "entity.npc.gibber.speech_type_1_3": {
+    "sounds": [ { "name":  "cobblemon:entity/npc/gibber/speech_type_1/speech_type_1_3", "volume":  0.1 } ]
+  },
   "entity.villager.work_nurse": {
     "sounds": [ { "name":  "cobblemon:entity/villager/work_nurse", "volume":  0.8 } ]
   },
@@ -615,6 +627,56 @@
       "cobblemon:block/gilded_chest/gilded_chest_step_2",
       "cobblemon:block/gilded_chest/gilded_chest_step_3",
       "cobblemon:block/gilded_chest/gilded_chest_step_4"
+    ]
+  },
+  "block.campfire_pot.place_campfire": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_place_campfire", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.retrieve": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_retrieve", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.open": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_open", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.close": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_close", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.use": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_use", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.cook": {
+    "sounds": [ { "name": "cobblemon:block/campfire_pot/campfire_pot_cook", "volume": 0.8 } ]
+  },
+  "block.campfire_pot.craft": {
+    "sounds": [
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_1", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_2", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_3", "volume": 0.8 },
+      { "name": "cobblemon:block/campfire_pot/campfire_pot_craft_4", "volume": 0.8 }
+    ]
+  },
+  "block.campfire_pot.break": {
+    "subtitle": "subtitles.block.generic.break",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_break_1"
+    ]
+  },
+  "block.campfire_pot.hit": {
+    "subtitle": "subtitles.block.generic.hit",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_hit_1"
+    ]
+  },
+  "block.campfire_pot.place": {
+    "subtitle": "subtitles.block.generic.place",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_place_1"
+    ]
+  },
+  "block.campfire_pot.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      "cobblemon:block/campfire_pot/campfire_pot_step_1"
     ]
   },
   "move.bite.target": {

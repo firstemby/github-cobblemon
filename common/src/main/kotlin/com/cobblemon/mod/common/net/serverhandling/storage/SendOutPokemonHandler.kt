@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.net.serverhandling.storage
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
+import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
@@ -41,22 +43,35 @@ object SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> 
             }
         } else {
             val entity = state.entity
-            if (entity != null) {
-                // Calculate time until ball throw animation would be finished nicely
-                val buffer = THROW_DURATION + 0.5F - entity.ticksLived.toFloat() / 20F
-                if (buffer > 0.75F) {
-                    // Do nothing if the recall button is spammed too fast
-                } else if (buffer > 0) {
-                    // If the recall button is pressed early,
-                    // buffer the recall instruction until after ball throw animation is complete
-                    entity.after(buffer) { entity.recallWithAnimation() }
-                } else {
-                    // Recall normally
-                    entity.recallWithAnimation()
-                }
-            } else {
-                pokemon.recall()
+            when {
+                entity == null -> pokemon.recall()
+                entity.canStopRiding(entity, player) -> stopRiding(entity, player)
+                else -> recallWithAnimation(entity)
             }
+        }
+    }
+
+    private fun stopRiding(pokemon: PokemonEntity, driver: ServerPlayer) {
+        val shouldStopRiding = pokemon.ifRidingAvailableSupply(false) { behaviour, settings, state ->
+            behaviour.getRidingStyle(settings, state) != RidingStyle.AIR
+        }
+        if (shouldStopRiding) {
+            driver.stopRiding()
+        }
+    }
+
+    private fun recallWithAnimation(pokemon: PokemonEntity) {
+        // Calculate time until ball throw animation would be finished nicely
+        val buffer = THROW_DURATION + 0.5F - pokemon.ticksLived.toFloat() / 20F
+        if (buffer > 0.75F) {
+            // Do nothing if the recall button is spammed too fast
+        } else if (buffer > 0) {
+            // If the recall button is pressed early,
+            // buffer the recall instruction until after ball throw animation is complete
+            pokemon.after(buffer) { pokemon.recallWithAnimation() }
+        } else {
+            // Recall normally
+            pokemon.recallWithAnimation()
         }
     }
 }

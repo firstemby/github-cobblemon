@@ -56,6 +56,14 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "canWalk": false
+      },
+      "fly": {
+        "canFly": true
+      }
     }
   },
   "drops": {

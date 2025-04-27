@@ -5,7 +5,7 @@
             "identifier": "cobblemon:shiny_ghostly_smoke",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/smoke"
+                "texture": "textures/particles/generic/smoke/smoke"
             }
         },
         "curves": {
@@ -53,8 +53,8 @@
             "minecraft:particle_motion_dynamic": {},
             "minecraft:particle_appearance_billboard": {
                 "size": [
-                    "variable.shrink * variable.entity_width",
-                    "variable.shrink * variable.entity_width"
+                    "variable.shrink",
+                    "variable.shrink"
                 ],
                 "facing_camera_mode": "rotate_xyz",
                 "uv": {

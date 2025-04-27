@@ -21,7 +21,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
+class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 

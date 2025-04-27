@@ -49,6 +49,9 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "canWalk": false
+      },
       "fly": {
         "canFly": true
       }

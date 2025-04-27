@@ -48,6 +48,9 @@
     "height": 2.75,
     "fixed": false
   },
+  "behaviour": {
+    "fireImmune": true
+  },
   "moves": [
     "1:twister",
     "1:visegrip",

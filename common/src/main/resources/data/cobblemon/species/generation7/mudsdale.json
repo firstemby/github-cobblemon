@@ -65,35 +65,35 @@
         "displayName": "Speed",
         "description": "Its top speed",
         "ranges": {
-          "LAND": "100-101"
+          "LAND": "50-100"
         }
       },
       "ACCELERATION": {
         "displayName": "Acceleration",
         "description": "How fast it can speed up",
         "ranges": {
-          "LAND": "100-101"
+          "LAND": "50-100"
         }
       },
       "SKILL": {
         "displayName": "Handling",
         "description": "How fast it can turn",
         "ranges": {
-          "LAND": "100-101"
+          "LAND": "50-100"
         }
       },
       "JUMP": {
         "displayName": "Altitude",
         "description": "How high it can jump",
         "ranges": {
-          "LAND": "100-101"
+          "LAND": "50-100"
         }
       },
       "STAMINA": {
         "displayName": "Fuel/Stamina",
         "description": "How long it can sprint",
         "ranges": {
-          "LAND": "100-101"
+          "LAND": "50-100"
         }
       }
     },

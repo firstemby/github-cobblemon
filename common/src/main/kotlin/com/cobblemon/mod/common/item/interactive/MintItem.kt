@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level
 class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelectingItem {
 
     override val bagItem = null
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.effectiveNature != nature
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.effectiveNature != nature
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

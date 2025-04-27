@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.storage.pc.search.Search
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
@@ -19,6 +20,9 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
+import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.iconCosmeticItemResource
+import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.iconHeldItemResource
+import com.cobblemon.mod.common.client.gui.summary.SummaryButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
@@ -55,20 +59,40 @@ class PCGUI(
     companion object {
         const val BASE_WIDTH = 349
         const val BASE_HEIGHT = 205
+        const val INFO_BOX_WIDTH = 63
+        const val INFO_BOX_HEIGHT = 69
         const val RIGHT_PANEL_WIDTH = 82
         const val RIGHT_PANEL_HEIGHT = 169
-        const val TYPE_SPACER_WIDTH = 128
+        const val TYPE_SPACER_WIDTH = 126
         const val TYPE_SPACER_HEIGHT = 12
         const val PC_SPACER_WIDTH = 342
         const val PC_SPACER_HEIGHT = 14
         const val PORTRAIT_SIZE = 66
         const val SCALE = 0.5F
 
+        const val STAT_INFO = 0
+        const val STAT_IV = 1
+        const val STAT_EV = 2
+
+        private val statLabels = arrayOf(
+            lang("ui.stats.hp"),
+            lang("ui.stats.atk"),
+            lang("ui.stats.def"),
+            lang("ui.stats.sp_atk"),
+            lang("ui.stats.sp_def"),
+            lang("ui.stats.speed")
+        )
+
+        private val stats = arrayOf(Stats.HP, Stats.ATTACK, Stats.DEFENCE, Stats.SPECIAL_ATTACK, Stats.SPECIAL_DEFENCE, Stats.SPEED)
+
         private val baseResource = cobblemonResource("textures/gui/pc/pc_base.png")
         private val portraitBackgroundResource = cobblemonResource("textures/gui/pc/portrait_background.png")
+        private val infoBoxResource = cobblemonResource("textures/gui/pc/info_box.png")
+        private val infoBoxStatResource = cobblemonResource("textures/gui/pc/info_box_stats.png")
 
         private val buttonOptionsResource = cobblemonResource("textures/gui/pc/pc_icon_options.png")
         private val buttonWallpaperResource = cobblemonResource("textures/gui/pc/pc_button_set_wallpaper.png")
+        private val buttonInfoArrow = cobblemonResource("textures/gui/pc/info_arrow.png")
 
         private val topSpacerResource = cobblemonResource("textures/gui/pc/pc_spacer_top.png")
         private val bottomSpacerResource = cobblemonResource("textures/gui/pc/pc_spacer_bottom.png")
@@ -86,6 +110,9 @@ class PCGUI(
     private var modelWidget: ModelWidget? = null
     internal var previewPokemon: Pokemon? = null
     var isPreviewInParty: Boolean? = null
+
+    private var showCosmeticItem = false
+    private var currentStatIndex = 0
 
     private val optionButtons: MutableList<IconButton> = mutableListOf()
 
@@ -244,6 +271,37 @@ class PCGUI(
 
         this.markingsWidget = MarkingsWidget(x + 29, y + 96.5, null, false)
         this.addRenderableWidget(markingsWidget)
+
+        // Held/Cosmetic Item Button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 67F,
+                buttonY = y + 107F,
+                buttonWidth = 12,
+                buttonHeight = 12,
+                scale = 0.5F,
+                resource = iconCosmeticItemResource,
+                activeResource = iconHeldItemResource,
+                clickAction = {
+                    showCosmeticItem = !showCosmeticItem
+                    (it as SummaryButton).buttonActive = showCosmeticItem
+                }
+            )
+        )
+
+        addRenderableWidget(
+            IconButton(
+                pX = x + 1,
+                pY = y + 157,
+                buttonWidth = 10,
+                buttonHeight = 16,
+                resource = buttonInfoArrow,
+                label = "switch"
+            ) {
+                currentStatIndex = (currentStatIndex + 1) % 3
+            }
+        )
+
         this.setPreviewPokemon(null)
 
         super.init()
@@ -280,33 +338,68 @@ class PCGUI(
             height = BASE_HEIGHT
         )
 
+        // Render Info Box
+        blitk(
+            matrixStack = matrices,
+            texture = if (currentStatIndex > 0) infoBoxStatResource else infoBoxResource,
+            x = x + 9,
+            y = y + 128,
+            width = INFO_BOX_WIDTH,
+            height = INFO_BOX_HEIGHT
+        )
+
+        val labelX = x + 9 + (INFO_BOX_WIDTH / 2)
         // Render Info Labels
-        drawScaledText(
-            context = context,
-            text = lang("ui.info.nature").bold(),
-            x = x + 39,
-            y = y + 129.5,
-            centered = true,
-            scale = SCALE
-        )
+        when (currentStatIndex) {
+            STAT_INFO -> {
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.info.nature").bold(),
+                    x = labelX,
+                    y = y + 129.5,
+                    centered = true,
+                    scale = SCALE
+                )
 
-        drawScaledText(
-            context = context,
-            text = lang("ui.info.ability").bold(),
-            x = x + 39,
-            y = y + 146.5,
-            centered = true,
-            scale = SCALE
-        )
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.info.ability").bold(),
+                    x = labelX,
+                    y = y + 146.5,
+                    centered = true,
+                    scale = SCALE
+                )
 
-        drawScaledText(
-            context = context,
-            text = lang("ui.moves").bold(),
-            x = x + 39,
-            y = y + 163.5,
-            centered = true,
-            scale = SCALE
-        )
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.moves").bold(),
+                    x = labelX,
+                    y = y + 163.5,
+                    centered = true,
+                    scale = SCALE
+                )
+            }
+            STAT_IV -> {
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.stats.ivs").bold(),
+                    x = labelX,
+                    y = y + 129.5,
+                    centered = true,
+                    scale = SCALE
+                )
+            }
+            STAT_EV -> {
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.stats.evs").bold(),
+                    x = labelX,
+                    y = y + 129.5,
+                    centered = true,
+                    scale = SCALE
+                )
+            }
+        }
 
         // Render Pokemon Info
         val pokemon = previewPokemon
@@ -398,19 +491,19 @@ class PCGUI(
                 )
             }
 
-            // Held Item
-            val heldItem = pokemon.heldItemNoCopy()
+            // Held/Cosmetic Item
+            val displayedItem = if (showCosmeticItem) pokemon.cosmeticItem else pokemon.heldItemNoCopy()
             val itemX = x + 3
             val itemY = y + 98
-            if (!heldItem.isEmpty) {
-                context.renderItem(heldItem, itemX, itemY)
-                context.renderItemDecorations(Minecraft.getInstance().font, heldItem, itemX, itemY)
+            if (!displayedItem.isEmpty) {
+                context.renderItem(displayedItem, itemX, itemY)
+                context.renderItemDecorations(Minecraft.getInstance().font, displayedItem, itemX, itemY)
             }
 
             drawScaledText(
                 context = context,
-                text = lang("held_item"),
-                x = x + 27,
+                text = lang("${if (showCosmeticItem) "cosmetic" else "held"}_item"),
+                x = x + 24,
                 y = y + 108.5,
                 scale = SCALE
             )
@@ -431,7 +524,7 @@ class PCGUI(
             blitk(
                 matrixStack = matrices,
                 texture = if (pokemon.secondaryType != null) typeSpacerDoubleResource else typeSpacerSingleResource,
-                x = (x + 7) / SCALE,
+                x = (x + 9) / SCALE,
                 y = (y + 118.5) / SCALE,
                 width = TYPE_SPACER_WIDTH,
                 height = TYPE_SPACER_HEIGHT,
@@ -439,7 +532,7 @@ class PCGUI(
             )
 
             TypeIcon(
-                x = x + 39,
+                x = x + 40.5,
                 y = y + 117,
                 type = pokemon.primaryType,
                 secondaryType = pokemon.secondaryType,
@@ -449,43 +542,91 @@ class PCGUI(
                 centeredX = true
             ).render(context)
 
-            // Nature
-            val natureText = reformatNatureTextIfMinted(pokemon)
-            drawScaledText(
-                context = context,
-                text = natureText,
-                x = x + 39,
-                y = y + 137,
-                centered = true,
-                shadow = true,
-                scale = SCALE,
-                pMouseX = mouseX,
-                pMouseY = mouseY
-            )
+            when (currentStatIndex) {
+                STAT_INFO -> {
+                    // Nature
+                    val natureText = reformatNatureTextIfMinted(pokemon)
+                    drawScaledText(
+                        context = context,
+                        text = natureText,
+                        x = labelX,
+                        y = y + 137,
+                        centered = true,
+                        shadow = true,
+                        scale = SCALE,
+                        pMouseX = mouseX,
+                        pMouseY = mouseY
+                    )
 
-            // Ability
-            drawScaledText(
-                context = context,
-                text = pokemon.ability.displayName.asTranslated(),
-                x = x + 39,
-                y = y + 154,
-                centered = true,
-                shadow = true,
-                scale = SCALE
-            )
+                    // Ability
+                    drawScaledText(
+                        context = context,
+                        text = pokemon.ability.displayName.asTranslated(),
+                        x = labelX,
+                        y = y + 154,
+                        centered = true,
+                        shadow = true,
+                        scale = SCALE
+                    )
 
-            // Moves
-            val moves = pokemon.moveSet.getMoves()
-            for (i in moves.indices) {
-                drawScaledText(
-                    context = context,
-                    text = moves[i].displayName,
-                    x = x + 39,
-                    y = y + 170.5 + (7 * i),
-                    centered = true,
-                    shadow = true,
-                    scale = SCALE
-                )
+                    // Moves
+                    val moves = pokemon.moveSet.getMoves()
+                    for (i in moves.indices) {
+                        drawScaledText(
+                            context = context,
+                            text = moves[i].displayName,
+                            x = labelX,
+                            y = y + 170.5 + (7 * i),
+                            centered = true,
+                            shadow = true,
+                            scale = SCALE
+                        )
+                    }
+                }
+                STAT_IV -> {
+                    for (i in statLabels.indices) {
+                        drawScaledText(
+                            context = context,
+                            text = statLabels[i],
+                            x = x + 13,
+                            y = y + 139 + (10 * i),
+                            shadow = true,
+                            scale = SCALE
+                        )
+
+                        drawScaledText(
+                            context = context,
+                            text = pokemon.ivs.get(stats[i]).toString().text(),
+                            x = x + 65,
+                            y = y + 139 + (10 * i),
+                            centered = true,
+                            shadow = true,
+                            scale = SCALE
+                        )
+                    }
+                }
+                STAT_EV -> {
+                    for (i in statLabels.indices) {
+                        drawScaledText(
+                            context = context,
+                            text = statLabels[i],
+                            x = x + 13,
+                            y = y + 139 + (10 * i),
+                            shadow = true,
+                            scale = SCALE
+                        )
+
+                        drawScaledText(
+                            context = context,
+                            text = pokemon.evs.get(stats[i]).toString().text(),
+                            x = x + 65,
+                            y = y + 139 + (10 * i),
+                            centered = true,
+                            shadow = true,
+                            scale = SCALE
+                        )
+                    }
+                }
             }
 
         } else {
@@ -537,17 +678,14 @@ class PCGUI(
         super.render(context, mouseX, mouseY, delta)
 
         // Item Tooltip
-        if (pokemon != null && !pokemon.heldItemNoCopy().isEmpty) {
+        if (pokemon != null) {
+            val displayedItem = if (showCosmeticItem) pokemon.cosmeticItem else pokemon.heldItemNoCopy()
             val itemX = x + 3
             val itemY = y + 98
-            val itemHovered =
-                mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(
-                Minecraft.getInstance().font,
-                pokemon.heldItemNoCopy(),
-                mouseX,
-                mouseY
-            )
+            if (!displayedItem.isEmpty) {
+                val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
+                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, displayedItem, mouseX, mouseY)
+            }
         }
     }
 

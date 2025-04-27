@@ -13,7 +13,9 @@
         "type": "expression",
         "expression": "q.npc.name"
       },
-      "face": "q.npc.face();"
+      "face": "q.npc.face();",
+      "gibber": {
+      }
     },
     "player": {
       "face": "q.player.face();",
@@ -27,6 +29,9 @@
     {
       "id": "greeting",
       "speaker": "npc",
+      "clientActions": [
+        "q.face.play_animation('win');"
+      ],
       "lines": ["Hello! You can call me Professor Sacchi, or just 'the professor' as many do!"],
       "input": "q.dialogue.set_page(v.landing_page);"
     },

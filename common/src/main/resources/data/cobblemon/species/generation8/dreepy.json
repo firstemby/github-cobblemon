@@ -60,6 +60,9 @@
       },
       "fly": {
         "canFly": true
+      },
+      "walk":  {
+        "canWalk": false
       }
     },
     "resting": {

@@ -50,6 +50,9 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "fireImmune": true
+  },
   "drops": {
     "amount": 1,
     "entries": [

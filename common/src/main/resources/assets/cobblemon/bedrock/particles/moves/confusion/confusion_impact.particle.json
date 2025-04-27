@@ -5,7 +5,7 @@
             "identifier": "cobblemon:confusion_impact",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/psyring2"
+                "texture": "textures/particles/generic/psychic/psyring2"
             }
         },
         "components": {

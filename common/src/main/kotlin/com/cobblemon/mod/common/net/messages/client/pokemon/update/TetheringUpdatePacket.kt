@@ -10,10 +10,6 @@ package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readNullable
-import com.cobblemon.mod.common.util.readUUID
-import com.cobblemon.mod.common.util.writeNullable
-import com.cobblemon.mod.common.util.writeUUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
@@ -23,7 +19,7 @@ import java.util.UUID
  * @author Hiroku
  * @since April 4th, 2023
  */
-class TetheringUpdatePacket(pokemon: () -> Pokemon, tetheringId: UUID?) : SingleUpdatePacket<UUID?, TetheringUpdatePacket>(pokemon, tetheringId) {
+class TetheringUpdatePacket(pokemon: () -> Pokemon?, tetheringId: UUID?) : SingleUpdatePacket<UUID?, TetheringUpdatePacket>(pokemon, tetheringId) {
 
     override val id = ID
 

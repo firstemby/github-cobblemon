@@ -353,7 +353,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             return PathType.DANGER_OTHER
         }
 
-        if (WalkNodeEvaluator.isBurningBlock(blockState) && !this.canPathThroughFire) {
+        if (WalkNodeEvaluator.isBurningBlock(blockState) && !this.canPathThroughFire && !(blockState.`is`(Blocks.MAGMA_BLOCK) && !isOnGround())) {
             return PathType.DANGER_FIRE
         }
 
@@ -417,6 +417,14 @@ class OmniPathNodeMaker : NodeEvaluator() {
     fun canFly(): Boolean {
         return if (this.mob is PokemonEntity) {
             (this.mob as PokemonEntity).behaviour.moving.fly.canFly
+        } else {
+            false
+        }
+    }
+
+    fun isOnGround(): Boolean {
+        return if (this.mob is PokemonEntity) {
+            (this.mob as PokemonEntity).onGround()
         } else {
             false
         }

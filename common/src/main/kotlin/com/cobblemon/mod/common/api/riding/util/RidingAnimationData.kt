@@ -39,10 +39,10 @@ class RidingAnimationData
         var currRot = Vec3.ZERO
         var angDelta = Vec3.ZERO
 
-//        val stiffness = 90.0
-//        val damping = 18.0
-        val stiffness = 16.0
-        val damping = 8.0
+        val stiffness = 90.0
+        val damping = 18.0
+//        val stiffness = 16.0
+//        val damping = 8.0
 
         // Update velocity first
         val currentVelocity = Vec3(

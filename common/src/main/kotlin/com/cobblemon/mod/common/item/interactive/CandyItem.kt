@@ -77,7 +77,7 @@ class CandyItem(
         return InteractionResultHolder.fail(stack)
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon): Boolean {
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
         return pokemon.isPlayerOwned()
     }
 

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -17,14 +16,20 @@ import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.math.geometry.toRadians
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
+import org.joml.Matrix3f
+import org.joml.Vector3f
 import kotlin.math.*
 
 class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
@@ -33,7 +38,10 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.AIR
+
+    override fun getRidingStyle(settings: HoverSettings, state: HoverState): RidingStyle {
+        return RidingStyle.AIR
+    }
 
     val poseProvider = PoseProvider<HoverSettings, HoverState>(PoseType.STAND)
         .with(PoseOption(PoseType.WALK) { _, state, _ ->
@@ -143,7 +151,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     ): Float {
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
         //In degrees per second
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
+        val handling = 220.0
         val maxYawDiff = 90.0f
 
         //Normalize the current rotation diff
@@ -158,8 +166,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         //Take the inverse so that you turn less at higher speeds
         val normSpeed = 1.0f // = 1.0f - 0.5f*normalizeVal(state.rideVelocityocity.length(), 0.0, topSpeed).toFloat()
 
-        // TODO: This needs to be tweaked with in game results and testing
-        val turnRate = (handling.toFloat() / 20.0f) * 2
+        val turnRate = (handling.toFloat() / 20.0f)
 
         //Ensure you only ever rotate as much difference as there is between the angles.
         val turnSpeed = turnRate  * rotDiffMod * normSpeed
@@ -167,7 +174,6 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
 
         return rotAmount
     }
-
 
     override fun velocity(
         settings: HoverSettings,
@@ -177,14 +183,35 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         input: Vec3
     ): Vec3 {
 
-        val strafeFactor = 0.2
-        val f = driver.xxa * strafeFactor
-        var g = driver.zza
-        if (g <= 0.0f) {
-            g *= -1.0f
-        }
+//        if (Minecraft.getInstance().options.keySprint.isDown) {
+//            val belowBox = vehicle.boundingBox.expandTowards(0.0,-1.5, 0.0).inflate(5.0, 10.0,5.0)
+//
+//            val level = vehicle.level()
+//            val toBeSucked = level.getEntities(vehicle, belowBox)
+//            for (suckee in toBeSucked) {
+//                if (suckee != null) {
+//                    abductify(suckee, vehicle.position().add(0.0,-2.0,0.0))
+//                    suckee.deltaMovement = suckee.deltaMovement.add(0.0, 0.5,0.0)
+//
+//                }
+//            }
+//        }
 
-        return calculateRideSpaceVel(settings, state, vehicle, driver).scale(10.0)
+//
+//        if (firstEntity != null) {
+//            // Example action: print the entity name
+//            println("Found nearby entity: ${firstEntity.name.string}")
+//
+//            firstEntity.deltaMovement = firstEntity.deltaMovement.add(0.0, 0.1,0.0)
+//        }
+        val retVel = calculateRideSpaceVel(settings, state, vehicle, driver)
+        //state.rideVelocity.set(retVel)
+        return retVel
+    }
+
+    private fun abductify(abductee: Entity, pos: Vec3) {
+        val diff = pos.subtract(abductee.position()).scale(1.0)
+        abductee.deltaMovement = abductee.deltaMovement.add(diff)
     }
 
     private fun calculateRideSpaceVel(
@@ -195,24 +222,27 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     ): Vec3 {
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
         val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
-        val speed = state.rideVelocity.get().length()
+        val speed = vehicle.deltaMovement.length()
 
         //Flag for determining if player is actively inputting
         var activeInput = false
 
         val minSpeed = 0.0
 
-        var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z)
+        var newVelocity = vehicle.deltaMovement
 
-        var jumpVec = Vec3.ZERO
+        val yawAligned = Matrix3f().rotateY(vehicle.yRot.toRadians())
+        newVelocity = (newVelocity.toVector3f().mul(yawAligned)).toVec3d()
+
+        //air Resistance
+        //newVelocity = newVelocity.lerp(Vec3.ZERO,(((topSpeed - speed) / topSpeed))*0.001)
 
 
         //speed up and slow down based on input
         if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
             //make sure it can't exceed top speed
             val forwardInput = when {
-                driver.zza > 0 && newVelocity.z > topSpeed -> 0.0
-                driver.zza < 0 && newVelocity.z < (-topSpeed / 3.0) -> 0.0
+                speed > topSpeed && (driver.zza.sign == newVelocity.z.sign.toFloat()) -> 0.0
                 else -> driver.zza.sign
             }
 
@@ -221,47 +251,59 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
                 newVelocity.y,
                 (newVelocity.z + (accel * forwardInput.toDouble())))
 
-            activeInput = true
-            jumpVec = jumpVec.add(0.0, 0.0, forwardInput.toDouble())
+        } else {
+//            newVelocity = Vec3(
+//                newVelocity.x,
+//                newVelocity.y,
+//                newVelocity.z - (((topSpeed - speed) / topSpeed)*0.001)
+//            )
         }
 
         //speed up and slow down based on input
         if (driver.xxa != 0.0f && state.stamina.get() > 0.0) {
             //make sure it can't exceed top speed
-            val forwardInput = when {
-                driver.xxa > 0 && newVelocity.x > topSpeed -> 0.0
-                driver.xxa < 0 && newVelocity.x < (-topSpeed / 3.0) -> 0.0
+            val lateralInput = when {
+                speed > topSpeed && (driver.xxa.sign == newVelocity.x.sign.toFloat()) -> 0.0
                 else -> driver.xxa.sign
             }
 
             newVelocity = Vec3(
-                newVelocity.x + (accel * forwardInput.toDouble()),
+                newVelocity.x + (accel * lateralInput.toDouble()),
                 newVelocity.y,
                 (newVelocity.z ))
 
-            activeInput = true
+            //air resistance
+//            if (lateralInput == 0.0) {
+//                newVelocity = Vec3(
+//                    newVelocity.x  - (((topSpeed - speed) / topSpeed)*0.001),
+//                    newVelocity.y,
+//                    newVelocity.z
+//                )
+//            }
         }
 
         //Vertical movement based on driver input.
-        val vertTopSpeed = topSpeed / 2.0
         val vertInput = when {
-            driver.jumping -> 1.0
-            driver.isShiftKeyDown -> -1.0
+            driver.jumping && !(speed > topSpeed && (newVelocity.y.sign.toFloat() > 0.0))-> 1.0
+            driver.isShiftKeyDown  && !(speed > topSpeed && (newVelocity.y.sign.toFloat() < 0.0))-> -1.0
             else -> 0.0
         }
 
-        if (vertInput != 0.0 && state.stamina.get() > 0.0) {
+        //air resistance
+//        if (vertInput == 0.0) {
+//            newVelocity = Vec3(
+//                newVelocity.x,
+//                newVelocity.y  - (((topSpeed - speed) / topSpeed)*0.001),
+//                newVelocity.z
+//            )
+//        }
+
+        if (state.stamina.get() > 0.0) {
             newVelocity = Vec3(
                 newVelocity.x,
-                (newVelocity.y + (accel * vertInput)).coerceIn(-vertTopSpeed, vertTopSpeed),
+                (newVelocity.y + (accel * vertInput)), //.coerceIn(-vertTopSpeed, vertTopSpeed),
                 newVelocity.z)
-            activeInput = true
         }
-
-
-        //air Friction
-
-
 
         return newVelocity
     }
@@ -366,8 +408,8 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         state: HoverState,
         vehicle: PokemonEntity,
         driver: Player
-    ): Boolean {
-        return false
+    ): ResourceLocation {
+        return cobblemonResource("no_pose")
     }
 
     override fun inertia(
@@ -375,7 +417,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         state: HoverState,
         vehicle: PokemonEntity
     ): Double {
-        return 0.05
+        return 1.0
     }
 
     override fun shouldRoll(
@@ -427,12 +469,12 @@ class HoverSettings : RidingBehaviourSettings {
     var canJump = "true".asExpression()
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.3)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 0.65, 0.3)".asExpression()
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
     var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 0.5)), (1.0 / (20.0 * 5.0)))".asExpression()
+        "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 3.0)))".asExpression()
         private set
 
     // Between 30 seconds and 10 seconds at the lowest when at full speed.

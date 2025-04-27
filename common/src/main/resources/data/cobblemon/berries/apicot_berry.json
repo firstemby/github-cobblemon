@@ -142,11 +142,12 @@
   "mutations": {},
   "sproutShape": "tall-sprout",
   "matureShape": "tall-mature",
-  "flavors": {
+  "flavours": {
     "SPICY": 10,
     "DRY": 30,
     "SOUR": 30
   },
+  "colour": "BLUE",
   "weight": 1.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

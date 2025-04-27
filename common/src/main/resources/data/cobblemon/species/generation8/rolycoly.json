@@ -48,6 +48,7 @@
     "fixed": false
   },
   "behaviour": {
+    "fireImmune": true,
     "moving": {
       "swim": {
         "avoidsWater": true,

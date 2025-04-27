@@ -5,7 +5,7 @@
             "identifier": "cobblemon:statup_actor",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/xs-boost"
+                "texture": "textures/particles/generic/orb/xsboost"
             }
         },
         "curves": {

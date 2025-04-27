@@ -5,7 +5,7 @@
             "identifier": "cobblemon:population_bomb_target_mice",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particle/maus"
+                "texture": "textures/particles/moves/populationbomb_maus"
             }
         },
         "components": {

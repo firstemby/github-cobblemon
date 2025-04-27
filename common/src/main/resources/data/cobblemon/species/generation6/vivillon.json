@@ -62,6 +62,7 @@
         "canFly": true
       },
       "walk": {
+        "canWalk": false,
         "walkSpeed": 0.4
       }
     }

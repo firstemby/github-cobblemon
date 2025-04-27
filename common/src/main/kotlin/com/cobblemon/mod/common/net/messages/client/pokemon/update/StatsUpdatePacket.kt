@@ -20,7 +20,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 23rd, 2022
  */
-class EVsUpdatePacket(pokemon: () -> Pokemon, eVs: EVs) : SingleUpdatePacket<EVs, EVsUpdatePacket>(pokemon, eVs) {
+class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EVs, EVsUpdatePacket>(pokemon, eVs) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         this.value.saveToBuffer(buffer)
@@ -42,7 +42,7 @@ class EVsUpdatePacket(pokemon: () -> Pokemon, eVs: EVs) : SingleUpdatePacket<EVs
  * @author Hiroku
  * @since November 23rd, 2022
  */
-class IVsUpdatePacket(pokemon: () -> Pokemon, iVs: IVs) : SingleUpdatePacket<IVs, IVsUpdatePacket>(pokemon, iVs) {
+class IVsUpdatePacket(pokemon: () -> Pokemon?, iVs: IVs) : SingleUpdatePacket<IVs, IVsUpdatePacket>(pokemon, iVs) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         this.value.saveToBuffer(buffer)

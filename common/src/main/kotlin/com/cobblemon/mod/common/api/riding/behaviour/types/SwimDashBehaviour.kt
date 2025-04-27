@@ -34,7 +34,10 @@ class SwimDashBehaviour : RidingBehaviour<SwimDashSettings, SwimDashState> {
     }
 
     override val key = KEY
-    override val style = RidingStyle.LIQUID
+
+    override fun getRidingStyle(settings: SwimDashSettings, state: SwimDashState): RidingStyle {
+        return RidingStyle.LIQUID
+    }
 
     val poseProvider = PoseProvider<SwimDashSettings, SwimDashState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.isSwimming && entity.entityData.get(PokemonEntity.MOVING) })
@@ -183,8 +186,8 @@ class SwimDashBehaviour : RidingBehaviour<SwimDashSettings, SwimDashState> {
         state: SwimDashState,
         vehicle: PokemonEntity,
         driver: Player
-    ): Boolean {
-        return false
+    ): ResourceLocation {
+        return cobblemonResource("no_pose")
     }
 
     override fun inertia(settings: SwimDashSettings, state: SwimDashState, vehicle: PokemonEntity): Double {

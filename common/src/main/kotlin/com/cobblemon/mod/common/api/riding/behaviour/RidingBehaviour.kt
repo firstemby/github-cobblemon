@@ -28,7 +28,8 @@ import net.minecraft.world.phys.Vec3
  */
 interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBehaviourState> {
     val key: ResourceLocation
-    val style: RidingStyle
+
+    fun getRidingStyle(settings: Settings, state: State): RidingStyle
 
     fun isActive(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
@@ -73,7 +74,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun useAngVelSmoothing(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
-    fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Boolean
+    fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): ResourceLocation
 
     fun inertia(settings: Settings, state: State, vehicle: PokemonEntity): Double
 

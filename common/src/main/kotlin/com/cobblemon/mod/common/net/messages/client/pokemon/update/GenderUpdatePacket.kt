@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.writeEnumConstant
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class GenderUpdatePacket(pokemon: () -> Pokemon, value: Gender): SingleUpdatePacket<Gender, GenderUpdatePacket>(pokemon, value) {
+class GenderUpdatePacket(pokemon: () -> Pokemon?, value: Gender): SingleUpdatePacket<Gender, GenderUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         buffer.writeEnumConstant(this.value)

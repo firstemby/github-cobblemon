@@ -45,7 +45,7 @@ object RunStrategy : CompositeRidingStrategy<CompositeSettings> {
         entity: PokemonEntity,
         driver: Player
     ): Boolean {
-        if (state.activeController.get() == defaultSettings.key) return false
+        if (state.activeBehaviour.get() == defaultSettings.key) return false
         if (!entity.onGround()) return false
         if (state.lastTransition.get() + 20 >= entity.level().gameTime) return false
         val defaultBehaviour = RidingBehaviours.get(defaultSettings.key)
@@ -60,7 +60,7 @@ object RunStrategy : CompositeRidingStrategy<CompositeSettings> {
         driver: Player,
         input: Vec3
     ): Boolean {
-        if (state.activeController.get() == alternativeSettings.key) return false
+        if (state.activeBehaviour.get() == alternativeSettings.key) return false
         if (state.lastTransition.get() + 20 >= entity.level().gameTime) return false
         val alternativeBehaviour = RidingBehaviours.get(alternativeSettings.key)
         return driver.isSprinting && input.z > 0.5 && alternativeBehaviour.isActive(alternativeSettings, state.alternateBehaviourState, entity)

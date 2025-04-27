@@ -1,0 +1,17 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "baits",
+    "ingredients": [
+        {
+            "item": "minecraft:honey_bottle"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:lure_cake"
+    },
+    "seasoningProcessors": [
+        "spawn_bait",
+        "flavour",
+        "food_colour"
+    ]
+}

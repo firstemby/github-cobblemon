@@ -29,7 +29,7 @@ interface BagItem {
         val EMPTY: BagItem = object : BagItem {
             override val itemName = "name"
             override val returnItem: Item = Items.AIR
-            override fun canUse(battle: PokemonBattle, target: BattlePokemon) = true
+            override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = true
             override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "none"
         }
     }
@@ -41,16 +41,7 @@ interface BagItem {
     val returnItem: Item
 
     /** Whether or not the item can probably be used right now, based on the mod-side version of battle state. */
-    fun canUse(battle: PokemonBattle, target: BattlePokemon): Boolean
+    fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon): Boolean
     /** Gets the itemId and data for inputting to Showdown. Hyper potion is `potion 200` for example. */
     fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String
-
-    /**
-     * Used for bag items that required prompts before selecting. It checks that the given stack is in the player's
-     * hands, is non-zero on size, that the battle is still tolerant of a forced action for bag use, and that this
-     * bag item can still be used.
-     */
-    fun canStillUse(player: ServerPlayer, battle: PokemonBattle, actor: BattleActor, target: BattlePokemon, stack: ItemStack): Boolean {
-        return stack in player.handSlots && stack.count > 0 && canUse(battle, target) && actor.canFitForcedAction()
-    }
 }

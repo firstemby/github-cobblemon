@@ -55,13 +55,12 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
             CobblemonSpawnPools.onServerLoad(server)
         }
         precalculate()
+        this.observable.emit(this)
     }
 
     val details = mutableListOf<SpawnDetail>()
     var precalculation: PrecalculationResult<*> = RootPrecalculation.generate(details, emptyList())
     val precalculators = mutableListOf<SpawningPrecalculation<*>>()
-//    /** A set of all [RegisteredSpawningContext]s that are mentioned in this pool. */
-//    val contexts = mutableSetOf<RegisteredSpawningContext<*>>()
 
     override fun iterator() = details.iterator()
 
