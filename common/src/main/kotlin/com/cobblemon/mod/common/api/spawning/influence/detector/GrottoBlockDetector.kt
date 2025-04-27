@@ -10,8 +10,8 @@ package com.cobblemon.mod.common.api.spawning.influence.detector
 
 import com.cobblemon.mod.common.CobblemonPoiTypes
 import com.cobblemon.mod.common.api.spawning.influence.GrottoImpactedSpawningInfluence
-import com.cobblemon.mod.common.api.spawning.influence.UnconditionalZoneSpawningInfluence
-import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
+import com.cobblemon.mod.common.api.spawning.influence.UnconditionalSpawningZoneInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import com.cobblemon.mod.common.util.toBlockPos
@@ -27,7 +27,7 @@ object GrottoBlockDetector : SpawningInfluenceDetector {
     val RANGE: Int = 48
 
     // todo this was some test code of a prospect function that would try to alter the already filtered spawn lists, but I doubt we want to go this direction
-    override fun detectFromInput(spawner: Spawner, input: SpawningZoneInput): List<ZoneSpawningInfluence> {
+    override fun detectFromInput(spawner: Spawner, input: SpawningZoneInput): List<SpawningZoneInfluence> {
         val world = input.world
         val searchRange = maxOf(RANGE, input.length * 2, input.height * 2)
         val grottoBlockPositions = world.poiManager.findAll(
@@ -41,9 +41,9 @@ object GrottoBlockDetector : SpawningInfluenceDetector {
         return if (grottoBlockPositions.isEmpty()) {
             emptyList()
         } else {
-            listOf(UnconditionalZoneSpawningInfluence(influence = GrottoImpactedSpawningInfluence()))
+            listOf(UnconditionalSpawningZoneInfluence(influence = GrottoImpactedSpawningInfluence()))
         }
     }
 
-    override fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState) = emptyList<ZoneSpawningInfluence>()
+    override fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState) = emptyList<SpawningZoneInfluence>()
 }

@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
  * @author Hiroku
  * @since April 20th, 2025
  */
-class GrottoImpactedSpawningInfluence : BucketNormalizingInfluence(normalizationFactor = 2.0) {
+class GrottoImpactedSpawningInfluence : BucketNormalizingInfluence(tier = 3) {
     companion object {
         const val HABITAT_LABEL = "habitat"
     }

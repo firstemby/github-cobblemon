@@ -61,7 +61,7 @@ class GrottoSpawner(
             val zone = spawningZoneGenerator.generate(this, constrainedArea)
             val spawnablePositions = spawnablePositionResolver.resolve(this, spawnablePositionCalculators, zone)
             val worldInfluences = zone.unconditionalInfluences
-            val bucket = chooseBucket(this.influences + cause + worldInfluences)
+            val bucket = chooseBucket(cause, this.influences + cause + worldInfluences)
             val spawnActions = getSpawningSelector().select(this, bucket, spawnablePositions, max = 1)
             return spawnActions
         }
