@@ -58,6 +58,7 @@ abstract class SpawningCondition<T : SpawnablePosition> {
     var timeRange: TimeRange? = null
     var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
     var isSlimeChunk: Boolean? = null
+    var markers: MutableList<String>? = null
 
     @Transient
     var appendages = mutableListOf<AppendageCondition>()
@@ -95,6 +96,8 @@ abstract class SpawningCondition<T : SpawnablePosition> {
         } else if (isThundering != null && spawnablePosition.world.isThundering != isThundering!!) {
             return false
         } else if (dimensions != null && dimensions!!.isNotEmpty() && spawnablePosition.world.dimensionType().effectsLocation !in dimensions!!) {
+            return false
+        } else if (markers != null && markers!!.isNotEmpty() && markers!!.none { marker -> marker in spawnablePosition.markers }) {
             return false
         } else if (biomes != null && biomes!!.isNotEmpty() && biomes!!.none { condition -> condition.fits(spawnablePosition.biomeHolder) }) {
             return false

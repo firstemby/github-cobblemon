@@ -10,9 +10,7 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
-import com.cobblemon.mod.common.api.spawning.influence.WorldSlicedSpawningInfluence
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningInfluenceProspector
-import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
 import com.cobblemon.mod.common.api.spawning.influence.detector.SpawningInfluenceDetector
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
@@ -82,7 +80,7 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
         val blocks = Array(input.length) { Array(height) { Array(input.width) { defaultBlockData } } }
         val skyLevel = Array(input.length) { Array(input.width) { world.maxBuildHeight } }
         val pos = BlockPos.MutableBlockPos()
-        val zoneSpawningInfluences = mutableListOf<ZoneSpawningInfluence>()
+        val spawningZoneInfluences = mutableListOf<SpawningZoneInfluence>()
 
         val chunks = mutableMapOf<Pair<Int, Int>, ChunkAccess?>()
         val yRange = (baseY until baseY + height).reversed()
@@ -102,7 +100,7 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
                         light = world.getMaxLocalRawBrightness(pos),
                         skyLight = skyLight
                     )
-                    zoneSpawningInfluences.addAll(SpawningInfluenceDetector.detectors.flatMap { it.detectFromBlock(world, pos, state) })
+                    spawningZoneInfluences.addAll(SpawningInfluenceDetector.detectors.flatMap { it.detectFromBlock(world, pos, state) })
                     if (canSeeSky) {
                         skyLevel[x - input.baseX][z - input.baseZ] = y
                     }
@@ -114,7 +112,7 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
         }
 
         for (spawningZoneGenerator in SpawningInfluenceDetector.detectors) {
-            zoneSpawningInfluences.addAll(spawningZoneGenerator.detectFromInput(spawner, input))
+            spawningZoneInfluences.addAll(spawningZoneGenerator.detectFromInput(spawner, input))
         }
 
         return SpawningZone(
@@ -126,7 +124,7 @@ object CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
             blocks = blocks,
             skyLevel = skyLevel,
             nearbyEntityPositions = nearbyEntityPositions,
-            influences = zoneSpawningInfluences
+            influences = spawningZoneInfluences
         )
     }
 }

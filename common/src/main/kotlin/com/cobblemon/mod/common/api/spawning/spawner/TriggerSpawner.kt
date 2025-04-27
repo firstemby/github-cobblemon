@@ -9,12 +9,12 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.FlatSpawnablePositionWeightedSelector
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
-import java.util.concurrent.CompletableFuture
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 
@@ -30,25 +30,16 @@ abstract class TriggerSpawner<T : SpawnCause>(override val name: String, var spa
     private var selector: SpawningSelector<*> = FlatSpawnablePositionWeightedSelector()
     override val influences = mutableListOf<SpawningInfluence>()
 
-    open fun run(
+    open fun getSpawnAction(
         cause: T,
         world: ServerLevel,
         pos: BlockPos,
         influences: List<SpawningInfluence> = emptyList()
-    ): CompletableFuture<*>? {
+    ): SpawnAction<*>? {
         val spawnablePosition = parseSpawnablePosition(cause, world, pos) ?: return null
         spawnablePosition.influences.addAll(influences)
-        val bucket = chooseBucket(spawnablePosition.influences)
-        val spawnActions = selector.select(this, bucket, listOf(spawnablePosition), max = 1)
-        if (spawnActions.isNotEmpty()) {
-            return CompletableFuture.allOf(
-                *spawnActions.map {
-                    it.complete()
-                    it.future
-                }.toTypedArray()
-            )
-        }
-        return null
+        val bucket = chooseBucket(cause, spawnablePosition.influences)
+        return selector.select(this, bucket, listOf(spawnablePosition), max = 1).firstOrNull()
     }
 
     /** Parses a spawnable position, if possible, from the given cause and position. */

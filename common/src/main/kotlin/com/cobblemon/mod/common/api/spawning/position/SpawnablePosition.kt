@@ -88,6 +88,9 @@ abstract class SpawnablePosition {
     /** The registry holder for the biome this position is in. */
     val biomeHolder: Holder<Biome> by lazy { world.getBiome(position) }
 
+    /** A list of markers that can be used to identify this spawnable position for arbitrary conditions. */
+    val markers = mutableSetOf<String>()
+
     val biomeRegistry: Registry<Biome> by lazy { world.registryAccess().registryOrThrow(Registries.BIOME) }
     val blockRegistry: Registry<Block> by lazy { world.registryAccess().registryOrThrow(Registries.BLOCK) }
     val fluidRegistry: Registry<Fluid> by lazy { world.registryAccess().registryOrThrow(Registries.FLUID) }

@@ -10,33 +10,32 @@ package com.cobblemon.mod.common.api.spawning.prospecting
 
 import com.cobblemon.mod.common.CobblemonPoiTypes
 import com.cobblemon.mod.common.api.spawning.influence.IncenseSweetInfluence
-import com.cobblemon.mod.common.api.spawning.influence.SaccharineHoneyLogInfluence
-import com.cobblemon.mod.common.api.spawning.influence.WorldSlicedSpatialSpawningInfluence
-import com.cobblemon.mod.common.api.spawning.influence.WorldSlicedSpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpatialSpawningZoneInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
+import com.cobblemon.mod.common.api.spawning.influence.detector.SpawningInfluenceDetector
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
-import com.cobblemon.mod.common.api.spawning.spawner.SpawningArea
+import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import com.cobblemon.mod.common.util.math.pow
 import com.cobblemon.mod.common.util.toBlockPos
+import kotlin.math.ceil
+import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.Vec3
-import kotlin.math.ceil
-import kotlin.math.sqrt
 
-object IncenseSweetProspector : SpawningInfluenceProspector {
+object IncenseSweetDetector : SpawningInfluenceDetector {
     @JvmField
     val RANGE: Int = 32
 
-    override fun prospect(spawner: Spawner, area: SpawningArea): MutableList<WorldSlicedSpawningInfluence> {
-        val world = area.world
-        val listOfInfluences = mutableListOf<WorldSlicedSpawningInfluence>()
+    override fun detectFromInput(spawner: Spawner, input: SpawningZoneInput): MutableList<SpawningZoneInfluence> {
+        val world = input.world
+        val listOfInfluences = mutableListOf<SpawningZoneInfluence>()
 
-        val searchRange = RANGE + ceil(sqrt(((area.length pow 2) + (area.width pow 2)).toDouble())).toInt()
-        val centerPos = area.getCenter().toBlockPos()
+        val searchRange = RANGE + ceil(sqrt(((input.length pow 2) + (input.width pow 2)).toDouble())).toInt()
+        val centerPos = input.getCenter().toBlockPos()
 
         val sweetIncensePositions = world.poiManager.findAll(
                 { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.INCENSE_SWEET_KEY) },
@@ -47,12 +46,16 @@ object IncenseSweetProspector : SpawningInfluenceProspector {
         ).toList()
 
         for (pos in sweetIncensePositions) {
-            val influence = WorldSlicedSpatialSpawningInfluence(pos, RANGE.toFloat(), IncenseSweetInfluence(pos))
+            val influence = SpatialSpawningZoneInfluence(pos, radius = RANGE.toFloat(), IncenseSweetInfluence(pos))
             listOfInfluences.add(influence)
         }
 
         return listOfInfluences
     }
 
-    override fun prospectBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): WorldSlicedSpatialSpawningInfluence? { return null }
+    override fun detectFromBlock(
+        world: ServerLevel,
+        pos: BlockPos,
+        blockState: BlockState
+    ): List<SpawningZoneInfluence> = emptyList()
 }

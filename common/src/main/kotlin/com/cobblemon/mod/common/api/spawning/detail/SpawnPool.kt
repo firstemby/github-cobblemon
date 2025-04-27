@@ -48,7 +48,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     override fun sync(player: ServerPlayer) {}
     override fun reload(data: Map<ResourceLocation, SpawnSet>) {
         details.clear()
-        for (set in data.values) {
+        for (set in data.values.filter { it.isEnabled() }) {
             details.addAll(set.filter { it.isValid() })
         }
         val server = server()

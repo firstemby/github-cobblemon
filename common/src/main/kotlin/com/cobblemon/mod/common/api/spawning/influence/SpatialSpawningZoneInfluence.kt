@@ -8,23 +8,23 @@
 
 package com.cobblemon.mod.common.api.spawning.influence
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
 
 /**
- * A type of [WorldSlicedSpawningInfluence] that is only applied to contexts within a particular radius
+ * A type of [SpawningZoneInfluence] that is only applied to spawnable positions within a particular radius
  * of a position.
  *
  * @author Hiroku
  * @since March 9th, 2025
  */
-class WorldSlicedSpatialSpawningInfluence(
+class SpatialSpawningZoneInfluence(
     val pos: BlockPos,
     val radius: Float,
-    influence: SpawningInfluence
-) : WorldSlicedSpawningInfluence(influence) {
-    override fun appliesTo(context: SpawningContext): Boolean {
-        return sqrt(context.position.distSqr(pos)) <= radius
+    override val influence: SpawningInfluence
+) : ConditionalSpawningZoneInfluence {
+    override fun appliesTo(spawnablePosition: SpawnablePosition): Boolean {
+        return sqrt(spawnablePosition.position.distSqr(pos)) <= radius
     }
 }

@@ -54,6 +54,14 @@ interface AreaSpawnablePositionResolver {
                         if (fittedSpawnablePositionCalculator != null) {
                             val spawnablePosition = fittedSpawnablePositionCalculator.calculate(input)
                             if (spawnablePosition != null) {
+                                val influences = zone.getInfluences(spawnablePosition)
+                                for (influence in influences) {
+                                    spawnablePosition.influences.add(influence)
+                                    influence.affectSpawnablePosition(spawnablePosition)
+                                }
+                                for (influence in spawner.influences) {
+                                    influence.affectSpawnablePosition(spawnablePosition)
+                                }
                                 spawnablePositions.add(spawnablePosition)
                                 // The position BlockPos has been used in a spawnable position, editing the same one
                                 // will cause entities to spawn at the wrong location (buried in walls, usually).

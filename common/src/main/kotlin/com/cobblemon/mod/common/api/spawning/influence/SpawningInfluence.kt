@@ -28,6 +28,8 @@ import net.minecraft.world.entity.Entity
 interface SpawningInfluence {
     /** Whether this influence has passed and should be removed. */
     fun isExpired(): Boolean = false
+    /** Runs for each influence when added to the spawnable position. */
+    fun affectSpawnablePosition(spawnablePosition: SpawnablePosition) {}
     /** Returns true if the given spawn detail is able to spawn under this influence. */
     fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean = true
     /** Returns the effective weight of spawning under this influence. This is after typical weight multipliers. */

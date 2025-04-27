@@ -77,7 +77,7 @@ object SpawnPokemonFromPool {
                 continue
             }
 
-            val bucket = spawner.chooseBucket(influences)
+            val bucket = spawner.chooseBucket(spawnCause, influences)
 
             val spawnAction = spawner.getSpawningSelector().select(spawner, bucket, contexts, max = 1).firstOrNull() // one at a time
             if (spawnAction == null) {

@@ -36,7 +36,7 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
     @JvmField
     val SACCHARINE_HONEY_LOG = create(SACCHARINE_HONEY_LOG_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.SACCHARINE_HONEY_LOG), 0, 1))
     @JvmField
-    val INCENSE_SWEET_KEY: ResourceKey<PoiType> = createKey("saccharine_honey_log")
+    val INCENSE_SWEET_KEY: ResourceKey<PoiType> = createKey("incense_sweet")
     @JvmField
     val INCENSE_SWEET = create(INCENSE_SWEET_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.INCENSE_SWEET), 0, 1))
     @JvmField

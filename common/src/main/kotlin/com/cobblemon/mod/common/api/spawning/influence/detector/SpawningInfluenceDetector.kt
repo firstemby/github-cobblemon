@@ -9,16 +9,19 @@
 package com.cobblemon.mod.common.api.spawning.influence.detector
 
 import com.cobblemon.mod.common.api.spawning.SpawningZone
-import com.cobblemon.mod.common.api.spawning.influence.ZoneSpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.prospecting.IncenseSweetDetector
+import com.cobblemon.mod.common.api.spawning.prospecting.LureCakeDetector
+import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineHoneyLogDetector
 
 /**
- * Prospects for [ZoneSpawningInfluence] in a world at a given position. Occurs as part of a
+ * Prospects for [SpawningZoneInfluence] in a world at a given position. Occurs as part of a
  * [SpawningZoneGenerator] scanning a part of the world while formulating a [SpawningZone].
  *
  * @author Hiroku
@@ -28,11 +31,12 @@ interface SpawningInfluenceDetector {
     companion object {
         @JvmStatic
         val detectors = mutableSetOf<SpawningInfluenceDetector>(
-            // todo commenting out the GrottoBlockProspector since I don't know if we want to use it at all anyways
-            //GrottoBlockProspector
+            LureCakeDetector,
+            SaccharineHoneyLogDetector,
+            IncenseSweetDetector
         )
     }
 
-    fun detectFromInput(spawner: Spawner, input: SpawningZoneInput) : List<ZoneSpawningInfluence>
-    fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): List<ZoneSpawningInfluence>
+    fun detectFromInput(spawner: Spawner, input: SpawningZoneInput) : List<SpawningZoneInfluence>
+    fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): List<SpawningZoneInfluence>
 }

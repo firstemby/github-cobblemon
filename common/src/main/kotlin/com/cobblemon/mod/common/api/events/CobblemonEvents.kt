@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
 import com.cobblemon.mod.common.api.events.fishing.*
@@ -247,8 +248,6 @@ object CobblemonEvents {
     @JvmField
     val POKEROD_REEL = CancelableObservable<PokerodReelEvent>()
     @JvmField
-    val BOBBER_BUCKET_CHOSEN = EventObservable<BobberBucketChosenEvent>()
-    @JvmField
     val BOBBER_SPAWN_POKEMON_PRE = CancelableObservable<BobberSpawnPokemonEvent.Pre>()
     @JvmField
     val BOBBER_SPAWN_POKEMON_MODIFY = EventObservable<BobberSpawnPokemonEvent.Modify>()
@@ -256,6 +255,9 @@ object CobblemonEvents {
     val BOBBER_SPAWN_POKEMON_POST = EventObservable<BobberSpawnPokemonEvent.Post>()
     @JvmField
     val BAIT_EFFECT_REGISTRATION = EventObservable<BaitEffectFunctionRegistryEvent>()
+
+    @JvmField
+    val SPAWN_BUCKET_CHOSEN = EventObservable<SpawnBucketChosenEvent>()
 
     // Baits and Lures
     @JvmField

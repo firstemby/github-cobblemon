@@ -8,12 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.fishing
 
-import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.itemRegistry
@@ -28,23 +28,23 @@ interface BobberSpawnPokemonEvent {
     /**
      * Event that is fired before a Pokemon is spawned by a bobber.
      * @param bobber The PokeRodFishingBobberEntity that is spawning the Pokemon.
-     * @param chosenBucket The bucket that is chosen.
+     * @param spawnAction The spawn that is planned.
      * @param rod The ItemStack of the rod that the bobber is attached to.
      */
     data class Pre(
         val bobber: PokeRodFishingBobberEntity,
-        val chosenBucket: SpawnBucket,
+        val spawnAction: SpawnAction<*>,
         val rod: ItemStack
     ) : Cancelable(), BobberSpawnPokemonEvent
 
     /**
      * Event that is fired when a Pokemon is modified before it is spawned by a bobber.
-     * @param chosenBucket The bucket that is chosen.
+     * @param spawnAction The [SpawnAction] that is motivating the spawn.
      * @param rod The ItemStack of the rod that the bobber is attached to.
      * @param pokemon The Pokemon that is modified.
      */
     data class Modify(
-        val chosenBucket: SpawnBucket,
+        val spawnAction: SpawnAction<*>,
         val rod: ItemStack,
         val pokemon: PokemonEntity
     ) : BobberSpawnPokemonEvent
@@ -58,12 +58,12 @@ interface BobberSpawnPokemonEvent {
      */
     data class Post(
         val bobber: PokeRodFishingBobberEntity,
-        val chosenBucket: SpawnBucket,
+        val spawnAction: SpawnAction<*>,
         val bait: ItemStack,
         val pokemon: PokemonEntity
     ) : BobberSpawnPokemonEvent {
         val context = mutableMapOf<String, MoValue>(
-            "chosen_bucket" to ObjectValue(chosenBucket, { it.name }),
+            "chosen_bucket" to ObjectValue(spawnAction.bucket, { it.name }),
             "bait" to pokemon.level().itemRegistry.wrapAsHolder(bait.item).asMoLangValue(Registries.ITEM),
             "pokemon_entity" to pokemon.asMoLangValue()
         )

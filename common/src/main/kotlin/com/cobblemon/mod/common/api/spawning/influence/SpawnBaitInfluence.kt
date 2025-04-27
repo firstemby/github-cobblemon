@@ -15,12 +15,12 @@ import com.cobblemon.mod.common.api.fishing.SpawnBaitUtils
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 
 /**
@@ -29,16 +29,16 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku, Plastered_Crab
  * @since March 18th, 2025
  */
-class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val baitPos: BlockPos? = null) : SpawningInfluence {
+class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (time: Int) -> Unit = {}) : SpawningInfluence {
 
-    var used: Boolean = false
+    var usedTimes = 0
 
     private fun markUsed() {
-        used = true
+        usedTimes++
+        onUsed(usedTimes)
     }
 
-    override fun affectSpawn(entity: Entity) {
-        super.affectSpawn(entity)
+    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
         if (entity is PokemonEntity) {
             val merged = SpawnBaitUtils.mergeEffects(effects)
             merged.forEach { effect ->
@@ -51,7 +51,7 @@ class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val baitPos: Block
     }
 
     // EV related bait effects
-    override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
+    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {
         val merged = SpawnBaitUtils.mergeEffects(effects)
 
         // if bait exists and any effects are related to EV yields
@@ -65,11 +65,11 @@ class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val baitPos: Block
                     return when {
                         evYieldValue > 0 -> {
                             markUsed()
-                            super.affectWeight(detail, ctx, weight)
+                            super.affectWeight(detail, spawnablePosition, weight)
                         }
                         else -> {
                             markUsed()
-                            super.affectWeight(detail, ctx, 0f)
+                            super.affectWeight(detail, spawnablePosition, 0f)
                         }
                     }
                 }
@@ -87,9 +87,9 @@ class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val baitPos: Block
                     return when {
                         isMatchingType -> {
                             markUsed()
-                            super.affectWeight(detail, ctx, weight * baitEffect.value.toFloat())
+                            super.affectWeight(detail, spawnablePosition, weight * baitEffect.value.toFloat())
                         }
-                        else -> super.affectWeight(detail, ctx, weight)
+                        else -> super.affectWeight(detail, spawnablePosition, weight)
                     }
                 }
             }
@@ -117,11 +117,11 @@ class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val baitPos: Block
                     if (matchingEffect != null) {
                         markUsed()
                         val multiplier = matchingEffect.value
-                        return super.affectWeight(detail, ctx, (weight * multiplier).toFloat())
+                        return super.affectWeight(detail, spawnablePosition, (weight * multiplier).toFloat())
                     }
                 }
             }
         }
-        return super.affectWeight(detail, ctx, weight)
+        return super.affectWeight(detail, spawnablePosition, weight)
     }
 }

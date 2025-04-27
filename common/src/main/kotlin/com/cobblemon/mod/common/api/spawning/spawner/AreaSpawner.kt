@@ -94,7 +94,7 @@ abstract class AreaSpawner(
 
             val influences = this.getAllInfluences() + zone.unconditionalInfluences
 
-            val bucket = chooseBucket(influences)
+            val bucket = chooseBucket(cause, influences)
             //val resolveEnd = System.currentTimeMillis()
             //val prospectDuration = prospectEnd - prospectStart
             //val resolveDuration = resolveEnd - prospectEnd

@@ -9,8 +9,11 @@
 package com.cobblemon.mod.common.api.spawning.spawner
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
@@ -49,10 +52,18 @@ interface Spawner {
 
     fun copyInfluences() = influences.filter { !it.isExpired() }.toMutableList()
 
-    fun chooseBucket(influences: List<SpawningInfluence>): SpawnBucket {
+    fun chooseBucket(cause: SpawnCause, influences: List<SpawningInfluence>): SpawnBucket {
         val buckets = Cobblemon.bestSpawner.config.buckets
         val bucketWeights = buckets.associateWith { it.weight }.toMutableMap()
         influences.forEach { it.affectBucketWeights(bucketWeights) }
-        return bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.first()
+        val bucket = bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.first()
+        val event = SpawnBucketChosenEvent(
+            spawner = this,
+            spawnCause = cause,
+            bucket = bucket,
+            bucketWeights = bucketWeights
+        )
+        CobblemonEvents.SPAWN_BUCKET_CHOSEN.post(event)
+        return event.bucket
     }
 }
