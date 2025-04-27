@@ -527,13 +527,14 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         }
     })*/
 
-    @JvmField
+    // todo we might need to wait on these for later?
+    /*@JvmField
     val CHOICE_DUMPLING = noSettingsItem("choice_dumpling") // todo make a ChoiceDumpingItem class for breeding purposes
     @JvmField
     val SWAP_SNACK = noSettingsItem("swap_snack") // todo make a SwapSnackItem class for breeding purposes
     @JvmField
     val TWICE_SPICED_BEETROOT = noSettingsItem("twice_spiced_beetroot") // todo make a TwiceSpiceBeetrootItem class for breeding purposes
-
+*/
     @JvmField
     val POTATO_MOCHI = create("potato_mochi", object : Item(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
@@ -599,6 +600,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
             return super.finishUsingItem(stack, world, user)
         }
     })
+
+
 
     // todo etc?
 

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:cottonguard",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/cotton"
+                "texture": "textures/particles/generic/cotton"
             }
         },
         "events": {

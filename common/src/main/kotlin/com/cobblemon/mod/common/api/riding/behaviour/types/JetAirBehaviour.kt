@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
+import com.bedrockk.molang.runtime.MoLangMath.lerp
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -177,7 +178,7 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
             state.rideVelocity.set(Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, max(state.rideVelocity.get().z - ((accel) / 4), minSpeed)))
         } else if (driver.zza < 0.0 && speed > minSpeed) {
             //modify deccel to be slower when at closer speeds to minimum speed
-            val deccelMod = max((normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2) * 8, 0.1)
+            val deccelMod = max((normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2) * 4, 0.1)
 
             //Decelerate currently always a constant half of max acceleration.
             state.rideVelocity.set(Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, max(state.rideVelocity.get().z - ((accel * deccelMod) / 2), minSpeed)))
@@ -229,13 +230,8 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
         val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
         val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
 
-        // Smooth out and accumulate roll input
-        val smoothingSpeed = 4.0
-        val mouseXc = (mouseX).coerceIn(-60.0, 60.0)
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1 * invertRoll, deltaTime * smoothingSpeed);
-
-        // Accumulate the y mouse input for pitch
-        //state.currMouseXForce.set((state.currMouseXForce.get() + (0.0015 * mouseX * invertRoll)).coerceIn(-1.0, 1.0))
+        // Accumulate the mouse input
+        state.currMouseXForce.set((state.currMouseXForce.get() + (0.0015 * mouseX * invertRoll)).coerceIn(-1.0, 1.0))
         state.currMouseYForce.set((state.currMouseYForce.get() + (0.0015 * mouseY * invertPitch)).coerceIn(-1.0, 1.0))
 
         //Get handling in degrees per second
@@ -256,12 +252,24 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
 
         val pitchRot = handling * state.currMouseYForce.get()
 
-        //Roll is 1.5 times as fast as pitch
+        // Roll
+        val rollRot = handling * 1.5 * state.currMouseXForce.get()
 
-        //val rollRot = handling * 1.5 * state.currMouseXForce.get()
-        val rollRot = handling * 1.5 * xInput.coerceIn(-1.0,1.0)
+        val mouseRotation = Vec3(0.0, pitchRot, rollRot)
+
+        // Have accumulated input begin decay when no input detected
+        if(abs(mouseX) == 0.0) {
+            // Have decay on roll be much stronger.
+            state.currMouseXForce.set(lerp( state.currMouseXForce.get(), 0.0, 0.02 ))
+        }
+        if(mouseY == 0.0) {
+            state.currMouseYForce.set(lerp(state.currMouseYForce.get(), 0.0, 0.005 ))
+        }
+
+
+
         //yaw, pitch, roll
-        return Vec3(0.0, pitchRot, rollRot)
+        return mouseRotation
     }
 
     override fun canJump(
@@ -327,12 +335,12 @@ class JetAirBehaviour : RidingBehaviour<JetAirSettings, JetAirState> {
         state: JetAirState,
         vehicle: PokemonEntity,
         driver: Player
-    ): Boolean {
-        return false
+    ): ResourceLocation {
+        return cobblemonResource("no_pose")
     }
 
     override fun inertia(settings: JetAirSettings, state: JetAirState, vehicle: PokemonEntity): Double {
-        return 0.5
+        return 1.0
     }
 
     override fun shouldRoll(settings: JetAirSettings, state: JetAirState, vehicle: PokemonEntity): Boolean {
@@ -368,7 +376,7 @@ class JetAirSettings : RidingBehaviourSettings {
     var gravity: Expression = "0".asExpression()
         private set
 
-    var minSpeed: Expression = "0.8".asExpression()
+    var minSpeed: Expression = "1.2".asExpression()
         private set
 
     var handlingYawExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 50.0, 25.0)".asExpression()

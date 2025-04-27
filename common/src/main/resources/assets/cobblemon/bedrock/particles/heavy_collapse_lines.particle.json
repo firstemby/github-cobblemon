@@ -5,7 +5,7 @@
             "identifier": "cobblemon:heavy_collapse_lines",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/speedlines"
+                "texture": "textures/particles/generic/speedlines"
             }
         },
         "curves": {

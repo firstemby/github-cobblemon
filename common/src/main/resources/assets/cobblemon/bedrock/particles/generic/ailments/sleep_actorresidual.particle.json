@@ -5,7 +5,7 @@
             "identifier": "cobblemon:sleep_actorresidual",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/sleep_bubble"
+                "texture": "textures/particles/generic/status/sleep_bubble"
             }
         },
         "components": {

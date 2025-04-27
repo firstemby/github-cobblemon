@@ -32,8 +32,9 @@ class SwitchToFightTaskConfig : SingleTaskConfig {
             it.present(MemoryModuleType.ATTACK_TARGET)
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                if (entity.commandSenderWorld.getCurrentDifficultyAt(entity.blockPosition()).difficulty == Difficulty.PEACEFUL) return@Trigger false
+                if (entity.commandSenderWorld.getCurrentDifficultyAt(entity.blockPosition()).difficulty == Difficulty.PEACEFUL) {
+                    return@Trigger false
+                }
 
                 entity.brain.setActiveActivityIfPossible(activity)
                 return@Trigger true

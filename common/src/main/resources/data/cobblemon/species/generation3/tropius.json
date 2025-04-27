@@ -72,7 +72,7 @@
         "description": "Its top speed",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "ACCELERATION": {
@@ -80,7 +80,7 @@
         "description": "How fast it can speed up",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "SKILL": {
@@ -88,7 +88,7 @@
         "description": "How fast it can turn",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "JUMP": {
@@ -96,7 +96,7 @@
         "description": "How high it can fly",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "STAMINA": {
@@ -104,7 +104,7 @@
         "description": "How long it can stay off the ground",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       }
     },

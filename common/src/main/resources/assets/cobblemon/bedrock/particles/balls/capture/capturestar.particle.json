@@ -5,7 +5,7 @@
             "identifier": "cobblemon:capturestar",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/capturestar"
+                "texture": "textures/particles/balls/capturestar"
             }
         },
         "components": {

@@ -142,6 +142,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     init {
         SpeciesAdditions.observable.subscribe {
+            implemented.clear()
             this.species.forEach(Species::initialize)
             this.species.forEach {
                 if (it.implemented) {

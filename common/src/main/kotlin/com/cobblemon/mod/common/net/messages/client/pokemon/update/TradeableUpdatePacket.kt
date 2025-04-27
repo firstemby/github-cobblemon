@@ -18,7 +18,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since October 7th, 2023
  */
-class TradeableUpdatePacket(pokemon: () -> Pokemon, value: Boolean) : SingleUpdatePacket<Boolean, TradeableUpdatePacket>(pokemon, value) {
+class TradeableUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : SingleUpdatePacket<Boolean, TradeableUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         buffer.writeBoolean(value)

@@ -9,14 +9,15 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.block.SaccharineStrippedLogBlock.Companion
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
-import net.minecraft.util.*
-import net.minecraft.world.*
+import net.minecraft.util.Mth
+import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -42,19 +43,17 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import javax.swing.text.html.BlockView
-import kotlin.random.Random
 
 @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), BonemealableBlock {
 
     init {
         this.registerDefaultState(
-                this.stateDefinition.any()
-                        .setValue(AGE, MIN_AGE)
-                        .setValue(DISTANCE, DISTANCE_MAX)
-                        .setValue(PERSISTENT, false)
-                        .setValue(WATERLOGGED, false)
+            this.stateDefinition.any()
+                .setValue(AGE, MIN_AGE)
+                .setValue(DISTANCE, DISTANCE_MAX)
+                .setValue(PERSISTENT, false)
+                .setValue(WATERLOGGED, false)
         )
     }
 
@@ -63,44 +62,29 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
         val pos = ctx.clickedPos
         val fluidState = level.getFluidState(pos)
         return this.defaultBlockState()
-                .setValue(PERSISTENT, true)
-                .setValue(WATERLOGGED, fluidState.`is`(Fluids.WATER))
+            .setValue(WATERLOGGED, fluidState.`is`(Fluids.WATER))
     }
 
-    override fun updateShape(state: BlockState, direction: Direction, neighborState: BlockState, level: LevelAccessor, pos: BlockPos, neighborPos: BlockPos): BlockState {
-        return if (!state.canSurvive(level, pos)) {
-            Blocks.AIR.defaultBlockState()
-        } else {
-            super.updateShape(state, direction, neighborState, level, pos, neighborPos)
-        }
+    override fun isRandomlyTicking(state: BlockState): Boolean {
+        return !state.getValue(PERSISTENT) && state.getValue(DISTANCE) > 6
     }
-
-    override fun isRandomlyTicking(state: BlockState) = state.getValue(AGE) != 0
 
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
+        val currentAge = state.getValue(AGE)
 
-        if (random.nextInt(2) == 0) {
-
-
+        if (currentAge > MIN_AGE && random.nextInt(2) == 0) {
             for (i in 1..10) {
-
                 val belowPos = pos.below(i)
                 val belowState = world.getBlockState(belowPos)
-                val currentAge = state.getValue(AGE)
 
                 if (belowState.isAir) {
                     continue
                 } else if (belowState.block is SaccharineLeafBlock) {
                     val belowAge = belowState.getValue(AGE)
                     if (belowAge < MAX_AGE) {
-                        // Decrease age from the top leaf block
-                        val newCurrentAge = (currentAge - 1).coerceAtLeast(MIN_AGE)
-                        world.setBlock(pos, state.setValue(AGE, newCurrentAge), 2)
-
-                        // Increase age from the bottom leaf block
-                        val newBelowAge = (belowAge + 1).coerceAtMost(MAX_AGE)
-                        world.setBlock(belowPos, belowState.setValue(AGE, newBelowAge), 2)
-                    }
+                        changeAge(state, -1)
+                        changeAge(belowState, 1)
+                        }
                     break
                 } else {
                     break
@@ -108,17 +92,21 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
             }
         }
 
-        super.randomTick(state,  world, pos, random)
+        super.randomTick(state, world, pos, random)
     }
-
 
     @Deprecated("Deprecated in Java")
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return SHAPE
     }
-    // todo make block
+
     @Deprecated("Deprecated in Java")
-    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape {
         if (context is EntityCollisionContext && (context.entity as? ItemEntity)?.item?.`is`(CobblemonItemTags.APRICORNS) == true) {
             return Shapes.empty()
         }
@@ -130,7 +118,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
     override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
 
     override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
-        level.setBlock(pos, state.setValue(AGE, state.getValue(AGE) + 1), 2)
+        changeAge(state, 1)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -141,15 +129,18 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
     @Deprecated("Deprecated in Java")
     override fun animateTick(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
 
+        val particleCount = random.nextInt(3)
+        
         if (state.getValue(AGE) == 2) {
-            for (i in 0 until random.nextInt(1) + 1) {
-                this.spawnHoneyParticles(level, pos, state, .75f)
+            repeat(particleCount) {
+                spawnHoneyParticles(level, pos, state, 0.75f)
             }
         } else if (state.getValue(AGE) == 1) {
-            for (i in 0 until random.nextInt(1) + 1) {
-                this.spawnHoneyParticles(level, pos, state, .9f)
+            repeat(particleCount) {
+                spawnHoneyParticles(level, pos, state, 0.9f)
             }
         }
+
 
         // this code was for them aging as time goes on
         /* if (world.random.nextInt(5) == 0) {
@@ -184,7 +175,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
 
     private fun addHoneyParticle(level: Level, pos: BlockPos, shape: VoxelShape, height: Double) {
         this.addHoneyParticle(
-                level, pos.x.toDouble() + shape.min(Direction.Axis.X), pos.x.toDouble() + shape.max(
+            level, pos.x.toDouble() + shape.min(Direction.Axis.X), pos.x.toDouble() + shape.max(
                 Direction.Axis.X
             ), pos.z.toDouble() + shape.min(Direction.Axis.Z), pos.z.toDouble() + shape.max(
                 Direction.Axis.Z
@@ -206,28 +197,32 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
 
     override fun isPathfindable(state: BlockState, type: PathComputationType): Boolean = false
 
-    override fun useItemOn(stack: ItemStack, state: BlockState, level: Level, pos: BlockPos, player: Player, hand: InteractionHand, hit: BlockHitResult): ItemInteractionResult {
-        // todo if item in players hand is glass bottle and AGE is more than 0
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): ItemInteractionResult {
         val itemStack = player.getItemInHand(hand)
-        if (itemStack.`is`(Items.GLASS_BOTTLE) && state.getValue(AGE) > 0)
-        {
+        val isGlassBottle = itemStack.`is`(Items.GLASS_BOTTLE)
+        val isHoneyBottle = itemStack.`is`(Items.HONEY_BOTTLE)
+
+        if (isGlassBottle && !isAtMinAge(state)) {
             // decrement stack if not in creative mode
             if (!player.isCreative)
                 itemStack.shrink(1)
 
             // give player honey bottle for now
             player.addItem(Items.HONEY_BOTTLE.defaultInstance)
-
-            // todo reset AGE
             level.setBlock(pos, state.setValue(AGE, 0), 2)
-
-            val currentAge = state.getValue(AGE)
-        } else if (itemStack.`is`(Items.HONEY_BOTTLE) && state.getValue(AGE) != 2) {
+        } else if (isHoneyBottle && !isAtMaxAge(state)) {
             // decrement stack if not in creative mode
             if (!player.isCreative)
                 itemStack.shrink(1)
-
-            // todo set age to 2
+            
             level.setBlock(pos, state.setValue(AGE, 2), 2)
         }
 
@@ -237,6 +232,14 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
 
         //doHarvest(world, state, pos, player)
         return ItemInteractionResult.SUCCESS
+    }
+
+    private fun isAtMaxAge(state: BlockState) = state.getValue(AGE) == MAX_AGE
+    private fun isAtMinAge(state: BlockState) = state.getValue(AGE) >= MIN_AGE
+
+    private fun changeAge(state: BlockState, value: Int): BlockState {
+        val newAge = (state.getValue(AGE) + value).coerceIn(MIN_AGE, MAX_AGE)
+        return state.setValue(AGE, newAge)
     }
 
     /*override fun onBlockBreakStart(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity) {
@@ -256,7 +259,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
         const val MIN_AGE = 0
         const val DISTANCE_MAX = 7
 
-        private val SHAPE: VoxelShape = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+        private val SHAPE: VoxelShape = box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
     }
 
 }

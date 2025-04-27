@@ -8,12 +8,18 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.bedrockk.molang.Expression
+import com.bedrockk.molang.ast.NumberExpression
+import com.bedrockk.molang.ast.StringExpression
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -113,6 +119,23 @@ interface TaskConfig {
     fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         return expressionOrEntityVariable.resolveBoolean()
+    }
+
+    fun ExpressionOrEntityVariable.asSimplifiedExpression(entity: LivingEntity): Expression {
+        return map(
+            { it },
+            {
+                if (entity is MoLangScriptingEntity) {
+                    val variable = entity.config.map[it.variableName]
+                    if (variable is DoubleValue) {
+                        return@map NumberExpression(variable.value)
+                    } else if (variable is StringValue) {
+                        return@map StringExpression(variable)
+                    }
+                }
+                return@map "q.entity.config.${it.variableName}".asExpression()
+            }
+        )
     }
 
     fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })

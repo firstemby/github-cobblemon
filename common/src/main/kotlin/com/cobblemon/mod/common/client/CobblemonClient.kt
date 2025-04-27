@@ -380,6 +380,8 @@ object CobblemonClient {
     private fun registerItemColors() {
         implementation.registerItemColors(AprijuiceItemColorProvider, *CobblemonItems.aprijuices.toTypedArray())
         implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
+        implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.LURE_CAKE)
+        implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_CAKE)
     }
 
     private fun registerBuiltinItemRenderers() {

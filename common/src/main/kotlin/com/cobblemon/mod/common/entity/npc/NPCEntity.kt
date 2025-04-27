@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.entity.npc
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities
@@ -33,6 +34,7 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCBehaviourConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
+import com.cobblemon.mod.common.api.permission.CobblemonPermissions.SEE_HIDDEN_NPCS
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -357,6 +359,25 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         DebugPackets.sendEntityBrain(this)
         DebugPackets.sendGoalSelector(level(), this, this.goalSelector)
         DebugPackets.sendPathFindingPacket(level(), this, this.navigation.path, this.navigation.path?.distToTarget ?: 0F)
+    }
+
+    override fun broadcastToPlayer(player: ServerPlayer): Boolean {
+        if (shouldHideFrom(player)) {
+            return false
+        }
+        return super.broadcastToPlayer(player)
+    }
+
+    fun shouldHideFrom(player: ServerPlayer): Boolean {
+        if (Cobblemon.permissionValidator.hasPermission(player, permission = SEE_HIDDEN_NPCS)) {
+            return false
+        }
+        val value = Cobblemon.molangData.load(player.uuid).map[stringUUID]
+        if (value is VariableStruct) {
+            val hide = value.map["hide"] as? DoubleValue
+            return hide?.asDouble() == 1.0
+        }
+        return false
     }
 
     override fun saveWithoutId(nbt: CompoundTag): CompoundTag {

@@ -171,7 +171,7 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         state: CompositeState,
         vehicle: PokemonEntity,
         driver: Player
-    ): Boolean {
+    ): ResourceLocation {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
             behaviour.useRidingAltPose(behaviourSettings, behaviourState, vehicle, driver)
         }

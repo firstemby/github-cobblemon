@@ -3,7 +3,7 @@
   "effects": [
     {
       "type": "cobblemon:ev",
-      "subcategory": "spe",
+      "subcategory": "def",
       "chance": 1.0,
       "value": 100.0
     }

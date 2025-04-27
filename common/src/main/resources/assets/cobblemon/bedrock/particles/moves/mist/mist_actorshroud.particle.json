@@ -5,7 +5,7 @@
             "identifier": "cobblemon:mist_actorshroud",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/poof"
+                "texture": "textures/particles/vanilla/generic"
             }
         },
         "curves": {

@@ -87,6 +87,7 @@ class PoseAdapter(
             poseTypes = pose.poseTypes.toSet(),
             condition = poseCondition,
             transformTicks = pose.transformTicks,
+            transformToTicks = pose.transformToTicks,
             animations = pose.idleAnimations,
             transformedParts = pose.transformedParts,
             quirks = pose.quirks.toTypedArray(),

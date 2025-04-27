@@ -76,6 +76,8 @@ interface NetworkPacket<T: NetworkPacket<T>> : CustomPacketPayload, Encodable {
         server.playerList.players.filter { player ->
             if (exclusionCondition.invoke(player))
                 return@filter false
+            if (player.level().dimension() != worldKey)
+                return@filter false
             val xDiff = x - player.x
             val yDiff = y - player.y
             val zDiff = z - player.z

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
-import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.AgeableMob

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WA
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
@@ -45,6 +46,8 @@ class WaterWanderTaskConfig : SingleTaskConfig {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
 
+        val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
+
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
@@ -56,7 +59,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     }
 
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                    val wanderChance = wanderChance.resolveFloat()
+                    val wanderChance = runtime.resolveFloat(wanderChanceExpression)
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) {
                         return@Trigger false
                     }

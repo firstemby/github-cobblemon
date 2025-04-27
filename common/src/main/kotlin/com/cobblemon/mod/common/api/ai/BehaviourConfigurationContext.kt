@@ -16,7 +16,7 @@ import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.entity.schedule.Schedule
 
 class BehaviourConfigurationContext {
-    var appliedBehaviours: MutableSet<ResourceLocation> = mutableSetOf()
+    var appliedBehaviours: Set<ResourceLocation> = setOf()
 
     var defaultActivity = Activity.IDLE
     var coreActivities = setOf(Activity.CORE)

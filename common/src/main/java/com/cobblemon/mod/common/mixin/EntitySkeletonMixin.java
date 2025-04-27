@@ -28,7 +28,7 @@ public class EntitySkeletonMixin extends Mob {
         super(entityType, world);
     }
 
-    @Inject(method = "registerGoals", at = @At(value = "TAIL"), cancellable = false)
+    @Inject(method = "registerGoals", at = @At(value = "TAIL"))
     private void cobblemon$initGoals(CallbackInfo callbackInfo) {
         final AbstractSkeleton skeleton = (AbstractSkeleton) (Object) this;
         // Pokemon Entities

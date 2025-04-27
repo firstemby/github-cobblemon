@@ -50,7 +50,10 @@ class RunScript : SingleTaskConfig {
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
                 runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                return@Trigger CobblemonScripts.run(script.resolveString().asIdentifierDefaultingNamespace(), runtime) == DoubleValue.ONE
+                return@Trigger CobblemonScripts.run(
+                    identifier = script.resolveString().asIdentifierDefaultingNamespace(),
+                    runtime = runtime
+                ) == DoubleValue.ONE
             }
         }
     }

@@ -7,9 +7,6 @@
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.25, 0]
   },
-  "thirdPersonPivotOffset": {
-    "seat_1": [0, 1, 2]
-  },
   "thirdPersonCameraOffset": {
     "seat_1": [0, 3, 6],
     "seat_1_reverse": [0, 3, 6]

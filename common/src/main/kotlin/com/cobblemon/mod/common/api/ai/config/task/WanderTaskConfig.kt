@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
+import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
@@ -51,6 +52,8 @@ class WanderTaskConfig : SingleTaskConfig {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
 
+        val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
+
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
@@ -63,7 +66,7 @@ class WanderTaskConfig : SingleTaskConfig {
                     }
 
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                    val wanderChance = wanderChance.resolveFloat()
+                    val wanderChance = runtime.resolveFloat(wanderChanceExpression)
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
                     pathCooldown.setWithExpiry(true, 40L)

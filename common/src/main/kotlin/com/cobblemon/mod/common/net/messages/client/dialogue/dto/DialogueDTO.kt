@@ -36,16 +36,24 @@ class DialogueDTO : Encodable, Decodable {
     constructor(activeDialogue: ActiveDialogue, includeFaces: Boolean) {
         this.dialogueId = activeDialogue.dialogueId
         this.speakers = if (includeFaces) activeDialogue.dialogueReference.speakers.mapNotNull { (key, value) ->
-            if (value.face is ExpressionLikeDialogueFaceProvider) {
+            val name = value.name?.invoke(activeDialogue)
+            val gibber = value.gibber?.let(::DialogueGibberDTO)
+            val face = if (value.face is ExpressionLikeDialogueFaceProvider) {
                 val resolved = activeDialogue.runtime.resolve(value.face.providerExpression)
                 if (resolved is ObjectValue<*> && resolved.obj is DialogueFaceProvider) {
-                    key to DialogueSpeakerDTO(value.name?.invoke(activeDialogue), resolved.obj as DialogueFaceProvider)
+                    resolved.obj as DialogueFaceProvider
                 } else {
-                    null
+                    return@mapNotNull null
                 }
             } else {
-                key to DialogueSpeakerDTO(value.name?.invoke(activeDialogue), value.face)
+                value.face
             }
+
+            key to DialogueSpeakerDTO(
+                name = name,
+                face = face,
+                gibber = gibber
+            )
         }.toMap() else null
         this.currentPageDTO = DialoguePageDTO(activeDialogue.currentPage, activeDialogue)
         val input = activeDialogue.activeInput.dialogueInput
@@ -88,6 +96,8 @@ class DialogueDTO : Encodable, Decodable {
                     buffer.writeUUID(value.face.playerId)
                     buffer.writeBoolean(value.face.isLeftSide)
                 }
+
+                buffer.writeNullable(value.gibber) { _, gibber -> gibber.encode(buffer) }
             }
         }
     }
@@ -105,16 +115,50 @@ class DialogueDTO : Encodable, Decodable {
                 val name = buffer.readNullable { buffer.readText().copy() }
                 val faceType = buffer.readNullable { buffer.readString() }
                 when (faceType) {
-                    "reference" -> key to DialogueSpeakerDTO(name, ReferenceDialogueFaceProvider(buffer.readInt(), buffer.readBoolean()))
+                    "reference" -> {
+                        val entityId = buffer.readInt()
+                        val isLeftSide = buffer.readBoolean()
+                        val gibber = buffer.readNullable { DialogueGibberDTO.decode(buffer) }
+                        key to DialogueSpeakerDTO(
+                            name = name,
+                            face = ReferenceDialogueFaceProvider(
+                                entityId = entityId,
+                                isLeftSide = isLeftSide
+                            ),
+                            gibber = gibber
+                        )
+                    }
                     "artificial" -> {
                         val modelType = buffer.readString()
                         val identifier = buffer.readIdentifier()
                         val aspects = buffer.readList { buffer.readString() }.toSet()
                         val isLeftSide = buffer.readBoolean()
-                        key to DialogueSpeakerDTO(name, ArtificialDialogueFaceProvider(modelType, identifier, aspects, isLeftSide))
+                        key to DialogueSpeakerDTO(
+                            name = name,
+                            face = ArtificialDialogueFaceProvider(modelType, identifier, aspects, isLeftSide),
+                            gibber = DialogueGibberDTO.decode(buffer)
+                        )
                     }
-                    "player" -> key to DialogueSpeakerDTO(name, PlayerDialogueFaceProvider(buffer.readUUID(), buffer.readBoolean()))
-                    else -> key to DialogueSpeakerDTO(name, null)
+                    "player" -> {
+                        val playerId = buffer.readUUID()
+                        val isLeftSide = buffer.readBoolean()
+                        val gibber = buffer.readNullable { DialogueGibberDTO.decode(buffer) }
+                        key to DialogueSpeakerDTO(
+                            name = name,
+                            face = PlayerDialogueFaceProvider(
+                                playerId = playerId,
+                                isLeftSide = isLeftSide
+                            ),
+                            gibber = gibber
+                        )
+                    }
+                    else -> {
+                        key to DialogueSpeakerDTO(
+                            name = name,
+                            face = null,
+                            gibber = DialogueGibberDTO.decode(buffer)
+                        )
+                    }
                 }
             }
         }

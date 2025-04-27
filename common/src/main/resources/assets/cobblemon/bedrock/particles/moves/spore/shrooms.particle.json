@@ -5,7 +5,7 @@
             "identifier": "cobblemon:shrooms",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/mushroomize"
+                "texture": "textures/particles/generic/grass/mushroomize"
             }
         },
         "events": {

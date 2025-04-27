@@ -5,7 +5,7 @@
             "identifier": "cobblemon:dragon_claw_target_scratch",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/scratch"
+                "texture": "textures/particles/generic/scratch"
             }
         },
         "components": {

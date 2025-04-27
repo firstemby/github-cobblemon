@@ -14,25 +14,27 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 
 class SwitchFromSleepOnTrainerBedTaskConfig : SingleTaskConfig {
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
-    ): BehaviorControl<in LivingEntity> {
+    ): BehaviorControl<in LivingEntity>? {
+        // Why'd you give them this task then, dipshit?
+        if (entity !is PokemonEntity) {
+            return null
+        }
+
         return BehaviorBuilder.create {
             it.group(
                 it.registered(CobblemonMemories.POKEMON_SLEEPING)
             ).apply(it) { pokemonSleeping ->
                 Trigger { world, entity, _ ->
-                    // Why'd you give them this task then, dipshit?
-                    if (entity !is TamableAnimal) {
-                        return@Trigger false
-                    }
+                    entity as PokemonEntity
 
                     // If they're owner is gone then we can consider that a reason to wake up, dogs do this too
                     val owner = entity.owner
@@ -41,7 +43,7 @@ class SwitchFromSleepOnTrainerBedTaskConfig : SingleTaskConfig {
                     // If we should move back to regular behaviours...
                     if (owner == null || !owner.isSleeping) {
                         // If it's willingly sleeping then it can lose the sleeping memory
-                        if (isCurrentlySleeping && (entity !is PokemonEntity || entity.pokemon.status?.status != Statuses.SLEEP)) {
+                        if (isCurrentlySleeping && entity.pokemon.status?.status != Statuses.SLEEP) {
                             pokemonSleeping.erase()
                             return@Trigger false
                         }
@@ -57,7 +59,4 @@ class SwitchFromSleepOnTrainerBedTaskConfig : SingleTaskConfig {
         }
     }
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
-        return emptyList()
-    }
 }
