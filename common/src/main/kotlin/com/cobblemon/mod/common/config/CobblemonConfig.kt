@@ -283,6 +283,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = false
 
+    @CobblemonConfigField(Category.Pokemon, lang="pokemon_dance_distance")
+    var pokemonDanceDistance = 3.0
+
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
         CobblemonConfig::class.memberProperties.forEach { property ->

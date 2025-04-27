@@ -30,8 +30,10 @@ import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.getIsSubmerged
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.toVec3d
 import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
@@ -40,15 +42,19 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import net.minecraft.world.level.pathfinder.PathType
 import org.joml.Matrix3f
 import org.joml.Vector3f
-import java.util.*
+import java.util.Optional
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
     var acknowledgedHPStat = -1
+
+    var dancing: Boolean = false
+    var jukeboxPos: BlockPos? = null
 
     /** Mocked properties exposed to the client [PokemonEntity]. */
     private val mock: PokemonProperties?
@@ -272,6 +278,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val isPassenger = entity.isPassenger
         val isUnderwater = entity.getIsSubmerged()
         val isFlying = entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
+        var isDancing = false
+
+        if (jukeboxPos != null) {
+            val level = entity.level()
+            val jukeboxBlockEntity =  if (level.isLoaded(jukeboxPos!!)) level.getBlockEntity(jukeboxPos) as? JukeboxBlockEntity
+                                      else null
+            val distanceToJukebox = jukeboxPos?.toVec3d()?.distanceTo(entity.position())
+            isDancing = jukeboxBlockEntity?.songPlayer?.isPlaying == true && (distanceToJukebox ?: 100.0) < Cobblemon.config.pokemonDanceDistance
+        }
 
         val poseType = when {
             isPassenger -> PoseType.STAND
@@ -281,6 +296,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             isMoving && isFlying -> PoseType.FLY
             isFlying -> PoseType.HOVER
             isMoving -> PoseType.WALK
+            isDancing -> PoseType.DANCE
             else -> PoseType.STAND
         }
 

@@ -38,6 +38,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
     lateinit var walking: Pose
     lateinit var sleep: Pose
     lateinit var battleidle: Pose
+    lateinit var dancing: Pose
 
     override val cryAnimation = CryProvider { bedrockStateful("ambipom", "cry") }
 
@@ -50,8 +51,7 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
 
         standing = registerPose(
             poseName = "standing",
-            poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
-            condition = { !it.isBattling },
+            poseTypes = PoseType.UI_POSES + PoseType.STAND,
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
@@ -78,6 +78,16 @@ class AmbipomModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
             animations = arrayOf(
                 singleBoneLook(),
                 bedrock("ambipom", "ground_idle")
+            )
+        )
+
+        dancing = registerPose(
+            poseName = "dancing",
+            poseType = PoseType.DANCE,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("ambipom", "dance")
             )
         )
     }

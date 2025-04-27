@@ -33,6 +33,7 @@
       "poseName": "standing",
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
+      "condition": "!q.is_dancing",
       "animations": [
         "q.look('head')",
         "q.bedrock('empoleon', 'ground_idle_old')"
@@ -120,6 +121,13 @@
           "rotation": [0, 12.5, -52.5]
         }
       ]
+    },
+    "dancing": {
+      "poseName": "dancing",
+      "isBattle": false,
+      "poseTypes": ["DANCE"],
+      "animations": ["q.bedrock('empoleon', 'dance')"],
+      "quirks": ["q.bedrock_quirk('empoleon', 'blink')"]
     }
   }
 }

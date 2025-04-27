@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen3
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BimanualFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.BipedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
 import net.minecraft.client.model.geom.ModelPart
@@ -38,6 +38,7 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     lateinit var floating: Pose
     lateinit var swim: Pose
     lateinit var sleep: Pose
+    lateinit var dance: Pose
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("ludicolo", "blink") }
@@ -84,6 +85,17 @@ class LudicoloModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
             transformTicks = 10,
             animations = arrayOf(
                 bedrock("ludicolo", "sleep"),
+            )
+        )
+
+        dance = registerPose(
+            poseName = "dance",
+            poseType = PoseType.DANCE,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("ludicolo", "dance"),
             )
         )
 
