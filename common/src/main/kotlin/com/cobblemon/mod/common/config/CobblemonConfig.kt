@@ -262,8 +262,11 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Interface, lang = "party_portrait_animations")
     var partyPortraitAnimations = PortraitStyle.NEVER_ANIMATE
 
-    @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing")
-    var thirdPersonViewBobbing = false
+    @CobblemonConfigField(Category.Riding, lang = "view_bob_translation")
+    var viewBobTranslation = false
+
+    @CobblemonConfigField(Category.Riding, lang = "view_bob_rotation")
+    var viewBobRotation = false
 
     @CobblemonConfigField(Category.Riding, lang = "invert_roll")
     var invertRoll = false

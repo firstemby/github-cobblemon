@@ -33,9 +33,6 @@ object MountedCameraRenderer
         instance: Camera,
         entity: Entity,
         vehicle: Entity,
-        x: Double,
-        y: Double,
-        z: Double,
         thirdPersonReverse: Boolean,
         eyeHeightOld: Double,
         eyeHeight: Double
@@ -59,7 +56,7 @@ object MountedCameraRenderer
 
 
         // First person and view bobbing are handled the same way.
-        if (!instance.isDetached || Cobblemon.config.thirdPersonViewBobbing) {
+        if (!instance.isDetached || Cobblemon.config.viewBobTranslation) {
             val delegate = vehicle.delegate as PokemonClientDelegate
             val locator = delegate.locatorStates[seat.locator]
 

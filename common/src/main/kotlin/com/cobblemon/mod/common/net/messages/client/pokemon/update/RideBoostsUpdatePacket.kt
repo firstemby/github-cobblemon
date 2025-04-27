@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.readEnumConstant
 import com.cobblemon.mod.common.util.writeEnumConstant
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RideBoostsUpdatePacket(pokemon: () -> Pokemon, rideBoosts: Map<RidingStat, Float>) : SingleUpdatePacket<Map<RidingStat, Float>, RideBoostsUpdatePacket>(pokemon, rideBoosts) {
+class RideBoostsUpdatePacket(pokemon: () -> Pokemon?, rideBoosts: Map<RidingStat, Float>) : SingleUpdatePacket<Map<RidingStat, Float>, RideBoostsUpdatePacket>(pokemon, rideBoosts) {
     companion object {
         val ID = cobblemonResource("ride_boosts_update")
         fun decode(buffer: RegistryFriendlyByteBuf): RideBoostsUpdatePacket {
