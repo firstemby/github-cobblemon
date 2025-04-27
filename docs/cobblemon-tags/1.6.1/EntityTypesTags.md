@@ -5,7 +5,7 @@ This file contains tags related to different types of entities in cobblemon.
 ## Tags:
 
 <details>
-<summary><b>Tag:</b> #entity_type:boats</summary>
+<summary><b>Tag:</b> #cobblemon:boats</summary>
 
 - cobblemon:boat
 - cobblemon:chest_boat
@@ -13,7 +13,7 @@ This file contains tags related to different types of entities in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #entity_type:cannot_have_name_tag</summary>
+<summary><b>Tag:</b> #cobblemon:cannot_have_name_tag</summary>
 
 - cobblemon:empty_pokeball
 - cobblemon:pokemon

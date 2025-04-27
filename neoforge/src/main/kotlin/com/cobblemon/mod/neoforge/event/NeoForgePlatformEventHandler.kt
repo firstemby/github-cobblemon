@@ -129,7 +129,8 @@ object NeoForgePlatformEventHandler {
     fun onChangeDimension(e: PlayerEvent.PlayerChangedDimensionEvent) {
         val player = e.entity
         if (player is ServerPlayer) {
-            PlatformEvents.CHANGE_DIMENSION.post(ChangeDimensionEvent(player))
+            val server = player.server
+            PlatformEvents.CHANGE_DIMENSION.post(ChangeDimensionEvent(player, server.getLevel(e.from), server.getLevel(e.to)))
         }
     }
 }

@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.summary.Summary
+import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -81,9 +82,10 @@ class PCGUI(
     private lateinit var boxNameWidget: BoxNameWidget
     private lateinit var filterWidget: FilterWidget
     private lateinit var wallpaperWidget: WallpapersScrollingWidget
-
+    private lateinit var markingsWidget: MarkingsWidget
     private var modelWidget: ModelWidget? = null
     internal var previewPokemon: Pokemon? = null
+    var isPreviewInParty: Boolean? = null
 
     private val optionButtons: MutableList<IconButton> = mutableListOf()
 
@@ -110,6 +112,7 @@ class PCGUI(
                     for (button in optionButtons) button.highlighted = false
                     playSound(CobblemonSounds.PC_CLICK)
                 } else {
+                    saveMarkings(isPreviewInParty ?: false)
                     configuration.exitFunction(this)
                 }
             }
@@ -239,6 +242,8 @@ class PCGUI(
             }
         }
 
+        this.markingsWidget = MarkingsWidget(x + 29, y + 96.5, null, false)
+        this.addRenderableWidget(markingsWidget)
         this.setPreviewPokemon(null)
 
         super.init()
@@ -575,11 +580,14 @@ class PCGUI(
         val filterFocused = this::filterWidget.isInitialized && filterWidget.isFocused
 
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !boxNameFocused && !filterFocused) {
+            saveMarkings(isPreviewInParty ?: false)
             playSound(CobblemonSounds.PC_OFF)
             UnlinkPlayerFromPCPacket().sendToServer()
             Minecraft.getInstance().setScreen(null)
             return true
         }
+
+        if (keyCode == InputConstants.KEY_ESCAPE) saveMarkings(isPreviewInParty ?: false)
 
         if (!filterFocused && !boxNameFocused) {
             when (keyCode) {
@@ -628,8 +636,13 @@ class PCGUI(
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 
-    fun setPreviewPokemon(pokemon: Pokemon?) {
+    private fun saveMarkings(isParty: Boolean = false) {
+        if (::markingsWidget.isInitialized) markingsWidget.saveMarkingsToPokemon(isParty)
+    }
+
+    fun setPreviewPokemon(pokemon: Pokemon?, isParty: Boolean = false) {
         if (pokemon != null) {
+            saveMarkings(isParty)
             previewPokemon = pokemon
 
             val x = (width - BASE_WIDTH) / 2
@@ -644,9 +657,11 @@ class PCGUI(
                 rotationY = 325F,
                 offsetY = -10.0
             )
+            markingsWidget.setActivePokemon(previewPokemon)
         } else {
             previewPokemon = null
             modelWidget = null
+            markingsWidget.setActivePokemon(null)
         }
     }
 }

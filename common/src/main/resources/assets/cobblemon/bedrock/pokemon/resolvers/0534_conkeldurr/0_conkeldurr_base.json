@@ -124,6 +124,14 @@
           "texture": "cobblemon:textures/pokemon/0534_conkeldurr/conkeldurr_black.png"
         }
       ]
+    },
+    {
+      "aspects": ["color-cyan"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0534_conkeldurr/conkeldurr_cyan.png"
+        }
+      ]
     }
   ]
 }

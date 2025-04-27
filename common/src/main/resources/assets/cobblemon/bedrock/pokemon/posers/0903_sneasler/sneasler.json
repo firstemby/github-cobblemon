@@ -1,0 +1,70 @@
+{
+  "portraitScale": 2.03,
+  "portraitTranslation": [-0.44, 2.41, 0],
+  "profileScale": 0.52,
+  "profileTranslation": [0, 0.94, 0],
+  "rootBone": "sneasler",
+  "animations": {
+    "cry": "q.bedrock_stateful('sneasler', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "isBattle": false,
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('head')",
+        {
+          "condition": "!q.has_aspect('cosmetic_item-composter')",
+          "animation": "q.bedrock('sneasler', 'ground_idle')"
+        },
+        {
+          "condition": "q.has_aspect('cosmetic_item-composter')",
+          "animation": "q.bedrock('sneasler', 'ground_idle_basket')"
+        }
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sneasler', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('sneasler', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sneasler', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseName": "walk",
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        {
+          "condition": "!q.has_aspect('cosmetic_item-composter')",
+          "animation": "q.bedrock('sneasler', 'ground_idle')"
+        },
+        {
+          "condition": "q.has_aspect('cosmetic_item-composter')",
+          "animation": "q.bedrock('sneasler', 'ground_idle_basket')"
+        },
+        "q.biped_walk(0.6, 0.9, 'leg_left', 'leg_right')",
+        "q.bimanual_swing(0.6, 0.9, 'arm_left', 'arm_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sneasler', 'blink')"
+      ]
+    }
+  }
+}

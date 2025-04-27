@@ -44,9 +44,9 @@ def main(print_missing_models=True, print_missing_animations=True):
     gen_numbers = df.iloc[3:, 0]  # Column A
     dex_numbers = df.iloc[3:, 1]  # Column B
     pokemon_names = df.iloc[3:, 2]  # Column C
-    pokemon_in_game = df.iloc[3:, 6]  # Column G
-    cries_on_repo = df.iloc[3:, 52]  # Column BA
-    cries_in_game = df.iloc[3:, 53]  # Column BB [Cry Audio | In-Game]
+    pokemon_in_game = df.iloc[3:, 9]  # Column I
+    cries_on_repo = df.iloc[3:, 54]  # Column BC
+    cries_in_game = df.iloc[3:, 55]  # Column BD [Cry Audio | In-Game]
 
     # Initialize lists for false positives and negatives
     false_positives = []
@@ -67,6 +67,7 @@ def main(print_missing_models=True, print_missing_animations=True):
         if this_pokemon_in_game == "❌":
             continue
         cry_in_game = str(cry_in_game).strip()  # remove whitespace
+        cry_on_repo = str(this_cry_on_repo).strip()  # remove whitespace
         # make the first letter of the Pokémon name uppercase and remove all spaces
         sanitized_pokemon_name_lower = sanitize_pokemon(pokemon_name)
         # if [ ] are present in the name, remove them and anything in between
@@ -81,16 +82,25 @@ def main(print_missing_models=True, print_missing_animations=True):
             audio_file_path = f"../common/src/main/resources/assets/cobblemon/sounds/pokemon/{sanitized_pokemon_name_lower}/{sanitized_pokemon_name_lower}_cry.ogg"
 
         checks = {
-            'in_repo': False,
+            'on_repo': False,
+            'uses_poser': False,
+            'poser_correct': False,
             'import_correct': False,
             'override_correct': False,
             'cry_in_game': False,
             'audio_file_exists': False,
             'sound_effects_and_keyframes': False,
         }
+
+        # Hardcoded odd cases that should be ignored
+        if pokemon_name == "Aegislash [Shield]" or pokemon_name == "Aegislash [Blade]" or pokemon_name == "Basculin [Red-Striped]" or pokemon_name == "Oinkologne":
+            continue
+
         # Construct the path to the model file
-        if pokemon_name == "Rattata [Alolan]":
-            print(pokemon_name)
+        ## Hello, commented this out because it probably doesn't do anything, but Wald can scold me if it was important  - Yours truly, Sterr
+        # if pokemon_name == "Rattata [Alolan]":
+        #     print(pokemon_name)
+
         # Try to convert gen_number to an integer and handle ValueError
         try:
             if pokemon_form:
@@ -139,6 +149,10 @@ def main(print_missing_models=True, print_missing_animations=True):
         if cry_in_game == "✔":
             checks["cry_in_game"] = True
 
+        # If the cry isn't supposed to exist whatsoever, it'll be skipped
+        if cry_on_repo == "🛇":
+            continue
+
         animations = None
 
         # Check if the Model.kt file exists and contains the required import and cryAnimation override
@@ -168,12 +182,12 @@ def main(print_missing_models=True, print_missing_animations=True):
                             pokemon_name,
                             all_warnings_combined))
         elif os.path.isfile(json_poser_path):
+            checks["uses_poser"] = True
             try:
                 with open(json_poser_path, 'r', encoding="utf-8-sig") as file:
                     data = json.load(file)
                     if "animations" in data and "cry" in data["animations"] and sanitized_pokemon_name_lower in data["animations"]["cry"]:
-                        checks["override_correct"] = True
-                        checks["import_correct"] = True
+                        checks["poser_correct"] = True
 
             except json.decoder.JSONDecodeError:
                 print_warning("Invalid JSON poser in " +  dex_number + "_" + sanitized_pokemon_name_lower + "/" +  sanitized_pokemon_name_lower + ".json")
@@ -217,7 +231,7 @@ def main(print_missing_models=True, print_missing_animations=True):
             checks["sound_effects_and_keyframes"] = True
 
         # Check the condition
-        if this_pokemon_in_game == "✔" and this_cry_on_repo == "✔" and cry_in_game != "✔":
+        if this_pokemon_in_game == "✔" and this_cry_on_repo == "✔":
             # check if all checks are true
             if not all(checks.values()):
                 pokemon_ready_to_be_added_list.append(pokemon_name)
@@ -228,32 +242,40 @@ def main(print_missing_models=True, print_missing_animations=True):
         elif checks["cry_in_game"] and not checks["audio_file_exists"]:
             false_positives.append(f"{pokemon_name}")
 
+        # Omit entries that are mega evolutions or g-max, they will be worked on at a later date
         if "Mega" in pokemon_name or "G-Max" in pokemon_name:
             continue
 
         # If any of the checks failed, add the Pokemon to the corresponding lists, but not if all checks are false
         if all(value is False for value in checks.values()) and checks["cry_in_game"] is False:
             continue
-        if not checks["cry_in_game"]:
+
+        # If both the Pokemon and audio file exist, add it to the list of implemented but unmarked Pokemon
+        if not checks["cry_in_game"] and checks["audio_file_exists"]:
             implemented_and_not_marked.append(f"{pokemon_name}")
             continue
+
         if all(value is True for value in checks.values()):
             continue
 
-        if not checks["override_correct"] and not checks["import_correct"]:
-            invalid_model_files.append((pokemon_name, " [Problems with both import and override]"))
-            all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt import and override not correct"))
-        elif not checks["override_correct"]:
-            invalid_model_files.append((pokemon_name, " [problem with override]"))
-            all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt override not correct"))
-        elif not checks["import_correct"]:
-            invalid_model_files.append((pokemon_name, " [problem  with  import]"))
-            all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt import not correct"))
+        if checks["uses_poser"] and checks["cry_in_game"] and checks["audio_file_exists"]:
+            if not checks["poser_correct"]:
+                invalid_model_files.append((pokemon_name, " [Poser file has no cry specified]"))
+        if checks["cry_in_game"] and checks["audio_file_exists"] and not checks["uses_poser"]:
+            if not checks["override_correct"] and not checks["import_correct"]:
+                invalid_model_files.append((pokemon_name, " [Model.kt import and override not correct]"))
+                all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt import and override not correct"))
+            elif not checks["override_correct"]:
+                invalid_model_files.append((pokemon_name, " [Model.kt override not correct]"))
+                all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt override not correct"))
+            elif not checks["import_correct"]:
+                invalid_model_files.append((pokemon_name, " [Model.kt import not correct]"))
+                all_warnings_combined.append((pokemon_name, "⚠️ Warning: Model.kt import not correct"))
 
         # If any of the remaining checks failed, add the Pokemon to the all_warnings_combined list
-        if not checks["sound_effects_and_keyframes"]:
-            invalid_animation_files.append((pokemon_name, " [problem with Sound Effects in Animation.json]"))
-            all_warnings_combined.append((pokemon_name, "⚠️ Warning: Sound effect in Animation.json not correct"))
+        if not checks["sound_effects_and_keyframes"] and this_cry_on_repo == "✔":
+            invalid_animation_files.append((pokemon_name, " [Sound effect keyframe missing or incorrect in animation.json]"))
+            all_warnings_combined.append((pokemon_name, "⚠️ Warning: Sound effect in animation.json not correct"))
 
     # Check if lists are empty
     if not all_warnings_combined and not false_positives and not false_negatives and not invalid_model_files and not invalid_animation_files and not pokemon_ready_to_be_added_list:
@@ -268,33 +290,33 @@ def main(print_missing_models=True, print_missing_animations=True):
         # Print out the lists of false positives and negatives
         if false_positives:
             print_separator()
-            print("\nFalse positives (cry marked as in-game but no audio file found):")
+            print("\nCry marked as in-game, but audio file is missing or incorrect:")
             print_list_filtered(false_positives)
 
         if false_negatives:
             print_separator()
             print(
-                "\nFalse negatives (audio file found but cry not marked as in-game):")
+                "\nAudio file found, but cry not marked as in-game:")
             # create a list of entries that do not contain G-Max or Mega
             false_negatives_filtered_no_gmax_mega = [x for x in false_negatives if "G-Max" not in x and "Mega" not in x]
             print_list_filtered(false_negatives_filtered_no_gmax_mega)
 
-            print("\nFalse negatives (G-Max and Mega are Not Implemented Yet):")
-            # Only print entries that contain G-Max or Mega
-            false_negatives_filtered = [x for x in false_negatives if "G-Max" in x or "Mega" in x]
-            print_list_filtered(false_negatives_filtered)
+            ## Hello, commented this out to make output cleaner as we're not doing G-Max or Mega cries just yet  - Yours truly, Sterr
+            # print("\nFalse negatives (G-Max and Mega are Not Implemented Yet):")
+            ## Only print entries that contain G-Max or Mega
+            # false_negatives_filtered = [x for x in false_negatives if "G-Max" in x or "Mega" in x]
+            # print_list_filtered(false_negatives_filtered)
 
         if implemented_and_not_marked:
             print_separator()
-            print("\nPokemon that are (at least partially) implemented in the game but not marked as cry "
-                  "in-game in the spreadsheet:")
+            print("\nPokemon that are implemented in the game with audio, but not marked as cry ""in-game in the spreadsheet:")
             print_list_filtered(implemented_and_not_marked)
 
         # Print out the lists of invalid Model.kt and animation.json files
         if invalid_model_files:
             print_separator()
             print(
-                "\nInvalid Model.kt files: [Located in common/src/main/kotlin/com/cobblemon/mod/common/client/render/models/blockbench/pokemon/]")
+                "\nIssues with poser or model.kt files:")
             if print_missing_models:
                 print_problems_and_paths(invalid_model_files)
             else:
@@ -304,7 +326,7 @@ def main(print_missing_models=True, print_missing_animations=True):
         if invalid_animation_files:
             print_separator()
             print(
-                "Invalid animation.json files: [Located in common/src/main/resources/assets/cobblemon/bedrock/pokemon/animations/]")
+                "Invalid animation.json files:")
             if print_missing_animations:
                 print_problems_and_paths(invalid_animation_files)
             else:
@@ -312,10 +334,11 @@ def main(print_missing_models=True, print_missing_animations=True):
                     "WARNING: [[ main(print_missing_animations=False) :: not showing missing animation.json files]]")
                 print_problems_and_paths(invalid_animation_files, "Missing animation.json")
 
-        if all_warnings_combined:
-            print_separator()
-            print("\nAll warnings combined in one list:")
-            print_problems_and_paths(all_warnings_combined)
+        ## Hello, commented this out to make output cleaner for now  - Yours truly, Sterr
+        # if all_warnings_combined:
+        #     print_separator()
+        #     print("\nAll warnings combined in one list:")
+        #     print_problems_and_paths(all_warnings_combined)
 
     print_cobblemon_script_footer("Thanks for using the Cobblemon cry checker, provided to you by Waldleufer!")
 

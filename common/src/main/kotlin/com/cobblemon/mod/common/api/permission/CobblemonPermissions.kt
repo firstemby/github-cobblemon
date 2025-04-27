@@ -20,7 +20,7 @@ object CobblemonPermissions {
     @JvmStatic
     val CHANGE_WALK_SPEED = this.create("${COMMAND_PREFIX}changewalkspeed", PermissionLevel.ALL_COMMANDS)
     @JvmStatic
-    val CHANGE_JOINT_SCALE = this.create("${COMMAND_PREFIX}changejointscale", PermissionLevel.ALL_COMMANDS)
+    val TRANSFORM_MODEL_PART = this.create("${COMMAND_PREFIX}transformmodelpart", PermissionLevel.ALL_COMMANDS)
     @JvmStatic
     val CHECKSPAWNS = this.create("${COMMAND_PREFIX}checkspawns", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
@@ -91,6 +91,9 @@ object CobblemonPermissions {
     val HELD_ITEM = this.create("${COMMAND_PREFIX}helditem", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic
+    val CHANGE_MARK = this.create("${COMMAND_PREFIX}changemark", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    @JvmStatic
     val PC = this.create("${COMMAND_PREFIX}pc", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val POKEBOX = this.create("${COMMAND_PREFIX}pokebox", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
@@ -128,8 +131,12 @@ object CobblemonPermissions {
     val RUN_MOLANG_SCRIPT = this.create("${COMMAND_PREFIX}runmolangscript", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val COBBLEMON_CONFIG_RELOAD = this.create("${COMMAND_PREFIX}cobblemonconfig.reload", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
-
+    @JvmStatic
     val CALCULATE_SEAT_POSITIONS = this.create("${COMMAND_PREFIX}calculateseatpositions", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val CHANGE_BOX_COUNT = this.create("${COMMAND_PREFIX}boxcount", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val SPECTATE_BATTLE = this.create("${COMMAND_PREFIX}spectatebattle", PermissionLevel.ALL_COMMANDS)
 
     fun all(): Iterable<Permission> = this.permissions
 

@@ -458,10 +458,11 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 formRightButton.render(context,mouseX, mouseY, delta)
 
                 val form = showableForms[selectedFormIndex]
+                val formName = if (form.displayForm.lowercase() == "normal") "" else "-${form.displayForm.lowercase().replace("-", "")}"
                 drawScaledTextJustifiedRight(
                     context = context,
                     font = CobblemonResources.DEFAULT_LARGE,
-                    text = lang("ui.pokedex.info.form.${form.displayForm.lowercase()}").bold(),
+                    text = lang("ui.pokedex.info.form.${species}${formName}").bold(),
                     x = pX + 136,
                     y = pY + 15,
                     shadow = true

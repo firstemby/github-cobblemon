@@ -17,9 +17,9 @@ import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCa
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
-import com.google.gson.annotations.SerializedName
 
 class CobblemonConfig {
     companion object {
@@ -258,6 +258,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Interface, lang = "party_portrait_animations")
     var partyPortraitAnimations = PortraitStyle.NEVER_ANIMATE
+
+    @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing")
+    var thirdPartyViewBobbing = false
 
     @CobblemonConfigField(Category.Riding, lang = "invert_roll")
     var invertRoll = false

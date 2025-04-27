@@ -98,13 +98,13 @@ class CobblemonConfigIntVariable(
     override fun getConfigValueAsString(): String = (config.getter.call(parent.parent.clonedConfig) as Int?).toString()
 
     init {
-        editBox.setFilter { value -> value.toIntOrNull() != null || value.isBlank() }
+        editBox.setFilter { value -> value.toIntOrNull() != null || value.isBlank() || value == "-" }
         editBox.setResponder { value ->
             if (value.isBlank()) {
                 return@setResponder
             }
 
-            val intValue = value.toInt()
+            val intValue = value.toIntOrNull() ?: return@setResponder
             setConfigValue(intValue, false)
 
             if (intConstraintAnnotation != null) {
@@ -129,7 +129,7 @@ class CobblemonConfigFloatVariable(
     override fun getConfigValueAsString(): String = (config.getter.call(parent.parent.clonedConfig) as Float?).toString()
 
     init {
-        editBox.setFilter { value -> value.toFloatOrNull() != null || value.isBlank() }
+        editBox.setFilter { value -> value.toFloatOrNull() != null || value.isBlank() || value == "." || value == "-" }
         editBox.setResponder { value ->
             if (value.toFloatOrNull() != null) {
                 setConfigValue(value.toFloat(), false)
@@ -145,7 +145,7 @@ class CobblemonConfigDoubleVariable(
     override fun getConfigValueAsString(): String = (config.getter.call(parent.parent.clonedConfig) as Double?).toString()
 
     init {
-        editBox.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() }
+        editBox.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() || value == "." || value == "-" }
         editBox.setResponder { value ->
             if (value.toDoubleOrNull() != null) {
                 setConfigValue(value.toDouble(), false)

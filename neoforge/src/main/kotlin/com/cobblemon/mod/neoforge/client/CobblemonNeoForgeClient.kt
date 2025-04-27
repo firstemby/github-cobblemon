@@ -10,6 +10,7 @@ package com.cobblemon.mod.neoforge.client
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
@@ -180,6 +181,9 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
             event.register(ModelResourceLocation(pokedex.getItemModelPath("flat"), "standalone"))
             event.register(ModelResourceLocation(pokedex.getItemModelPath("flat_off"), "standalone"))
             event.register(ModelResourceLocation(pokedex.getItemModelPath("off"), "standalone"))
+        }
+        CobblemonItems.wearables.forEach { wearable ->
+            event.register(ModelResourceLocation(wearable.getModel3d(),"standalone"))
         }
     }
 

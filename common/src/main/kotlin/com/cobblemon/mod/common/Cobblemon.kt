@@ -562,6 +562,9 @@ object Cobblemon {
         this.implementation.registerCommandArgument(cobblemonResource("dex"), DexArgumentType::class, SingletonArgumentInfo.contextFree (DexArgumentType::dex))
         this.implementation.registerCommandArgument(cobblemonResource("npc_class"), NPCClassArgumentType::class, SingletonArgumentInfo.contextFree(NPCClassArgumentType::npcClass))
         this.implementation.registerCommandArgument(cobblemonResource("wallpaper"), UnlockablePCBoxWallpaperArgumentType::class, SingletonArgumentInfo.contextFree(UnlockablePCBoxWallpaperArgumentType::wallpaper))
+        this.implementation.registerCommandArgument(cobblemonResource("mark"), MarkArgumentType::class, SingletonArgumentInfo.contextFree(MarkArgumentType::mark))
+        this.implementation.registerCommandArgument(cobblemonResource("transform_type"), TransformTypeArgumentType::class, SingletonArgumentInfo.contextFree(TransformTypeArgumentType::transformType))
+        this.implementation.registerCommandArgument(cobblemonResource("model_part"), ModelPartArgumentType::class, SingletonArgumentInfo.contextFree(ModelPartArgumentType::modelPart))
     }
 
 }

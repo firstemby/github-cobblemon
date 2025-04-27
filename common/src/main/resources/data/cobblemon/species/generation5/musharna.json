@@ -43,9 +43,19 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.8,
+    "height": 1.74,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    }
   },
   "drops": {
     "amount": 1,

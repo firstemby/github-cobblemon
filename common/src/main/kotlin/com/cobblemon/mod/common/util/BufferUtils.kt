@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.util
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.net.IntSize
@@ -93,6 +94,14 @@ fun <T> RegistryFriendlyByteBuf.readList(reader: (FriendlyByteBuf) -> T): List<T
 
 fun ByteBuf.readString(): String {
     return Utf8String.read(this, 32767)
+}
+
+fun ByteBuf.writeExpression(expression: Expression): ByteBuf {
+    return this.writeString(expression.getString())
+}
+
+fun ByteBuf.readExpression(): Expression {
+    return this.readString().asExpression()
 }
 
 fun <T> ByteBuf.readNullable(reader: (ByteBuf) -> T): T? {

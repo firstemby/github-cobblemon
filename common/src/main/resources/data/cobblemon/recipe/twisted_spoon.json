@@ -4,9 +4,14 @@
         {
             "item": "minecraft:iron_shovel"
         },
-        {
-            "item": "minecraft:ender_pearl"
-        }
+        [
+            {
+                "item": "cobblemon:psychic_gem"
+            },
+            {
+                "item": "minecraft:ender_pearl"
+            }
+        ]
     ],
     "result": {
         "id": "cobblemon:twisted_spoon"

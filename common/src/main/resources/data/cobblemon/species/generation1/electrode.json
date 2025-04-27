@@ -315,7 +315,7 @@
       }
     },
     "seats": [],
-    "controller": {
+    "behaviour": {
       "key": "cobblemon:land/vehicle"
     }
   }

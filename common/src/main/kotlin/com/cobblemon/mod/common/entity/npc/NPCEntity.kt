@@ -557,10 +557,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
 
     private fun pokemonExpressions(pokemon: Pokemon): List<String> {
         return listOf(
-            "v.actioning_pokemon_name=\"${pokemon.species.name}\";",
+            "v.actioning_pokemon_name=\'${pokemon.species.name}\';",
             "v.actioning_pokemon_level=${pokemon.level};",
-            "v.actioning_pokemon_ball=\"${pokemon.caughtBall.name}\";",
-            "v.actioning_pokemon_shiny=\"${pokemon.shiny}\";",
+            "v.actioning_pokemon_ball=\'${pokemon.caughtBall.name}\';",
+            "v.actioning_pokemon_shiny=\'${pokemon.shiny}\';",
         )
     }
 

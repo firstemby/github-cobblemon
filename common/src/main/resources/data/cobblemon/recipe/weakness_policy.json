@@ -2,12 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " S ",
-        "BIF",
-        " P "
+        "GPF",
+        " I "
     ],
     "key": {
-        "B": {
-            "tag": "c:dyes/blue"
+        "G": {
+            "item": "minecraft:gunpowder"
         },
         "S": {
             "item": "minecraft:fermented_spider_eye"

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.ModAPI;
 import com.cobblemon.mod.common.item.PokeBallItem;
 import com.cobblemon.mod.common.item.PokedexItem;
+import com.cobblemon.mod.common.item.WearableItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -54,17 +55,18 @@ public abstract class ItemRendererMixin {
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
         boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED;
+        ResourceLocation resourceLocation = null;
         if (shouldBe2d) {
-            ResourceLocation resourceLocation = null;
             if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel2d();
             else if (stack.getItem() instanceof PokedexItem pokedexItem) resourceLocation = pokedexItem.getType().getItemSpritePath();
+        }
+        if (renderMode != ItemDisplayContext.HEAD && stack.getItem() instanceof WearableItem wearableItem) resourceLocation = wearableItem.getModel2d();
 
-            if (resourceLocation != null) {
-                BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, "inventory"));
-                if (!cobblemon$isSameModel(model, replacementModel)) {
-                    ci.cancel();
-                    render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
-                }
+        if (resourceLocation != null) {
+            BakedModel replacementModel = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, "inventory"));
+            if (!cobblemon$isSameModel(model, replacementModel)) {
+                ci.cancel();
+                render(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, replacementModel);
             }
         }
     }
@@ -78,6 +80,7 @@ public abstract class ItemRendererMixin {
             boolean canOpenScreen = entity != null && ((entity.getOffhandItem() == stack && !(entity.getMainHandItem().getItem() instanceof PokedexItem)) || entity.getMainHandItem() == stack);
             resourceLocation = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
         }
+        else if (stack.getItem() instanceof WearableItem wearableItem) resourceLocation = wearableItem.getModel3d();
 
         if (resourceLocation != null) {
             BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, MODEL_PATH));

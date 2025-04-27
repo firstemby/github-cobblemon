@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0654_braixen/braixen_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-silk_scarf"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0654_braixen/braixen_ribbon.png"
+        }
+      ]
     }
   ]
 }
