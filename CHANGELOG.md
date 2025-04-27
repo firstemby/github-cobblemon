@@ -228,6 +228,7 @@
 - Added debug renderer for posable entity locators.
 - Added crossover paintings from Close Combat, Premonition, Altar, Slumber, and Nomad.
 - Added optional box argument to the /pc command
+- Added subtitles for every sound that needed to be subtitled, including cries for all Pokémon
 
 ### Changes
 - Pokémon will now be dynamically revealed to the Pokédex as they're seen instead of revealing entire parties at the end of battle regardless.
@@ -425,6 +426,7 @@
   - For Pokémon:
     - `pokemon.apply(PokemonProperties)`: Applies the given properties to the Pokémon.
     - `pokemon.owner`: Returns the owner of the Pokémon or 0.0 if there is no owner or they are not online.
+- Changed Eiscue's empty cries directory and split them into `eiscueice` and `eiscuenoice`
   - For all entities:
     - `entity.is_standing_on_blocks(depth, blocks...)`: Returns whether the specified entity is standing on a specific block or set of blocks. Example usage: `q.is_standing_on_blocks(2, minecraft:sand)`
 - Added NPC field:
