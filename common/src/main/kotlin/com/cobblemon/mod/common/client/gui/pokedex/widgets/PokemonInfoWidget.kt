@@ -38,7 +38,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
@@ -113,6 +113,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     var selectedFormIndex: Int = 0
 
     var type: Array<ElementalType?> = arrayOf(null, null)
+    var seenShinyStates: Set<String> = setOf()
     var shiny = false
     var maleRatio = -1F
     var gender: Gender = Gender.GENDERLESS
@@ -207,9 +208,6 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         20,
         buttonNone,
         clickAction = {
-            val currentEntry = currentEntry ?: return@ScaledButton
-            val currentForm = currentEntry.forms[selectedFormIndex]
-            val seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(currentEntry, currentForm)
             if (seenShinyStates.size > 1) {
                 shiny = !shiny
                 updateAspects()
@@ -461,10 +459,11 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 formRightButton.render(context,mouseX, mouseY, delta)
 
                 val form = showableForms[selectedFormIndex]
+                val formName = if (form.displayForm.lowercase() == "normal") "" else "-${form.displayForm.lowercase().replace("-", "")}"
                 drawScaledTextJustifiedRight(
                     context = context,
                     font = CobblemonResources.DEFAULT_LARGE,
-                    text = lang("ui.pokedex.info.form.${form.displayForm.lowercase()}").bold(),
+                    text = lang("ui.pokedex.info.form.${species}${formName}").bold(),
                     x = pX + 136,
                     y = pY + 15,
                     shadow = true
@@ -536,11 +535,11 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
             }
             selectedFormIndex = 0
 
-            setupButtons(pokedexEntry, forms[selectedFormIndex])
-
             if (visibleForms.isNotEmpty()) {
+                setupButtons(pokedexEntry, visibleForms[selectedFormIndex])
                 updateAspects()
             } else {
+                setupButtons(pokedexEntry, forms[selectedFormIndex])
                 type = arrayOf(null, null)
             }
         }
@@ -551,7 +550,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         variationButtons.forEach { removeWidget(it.getWidget()) }
         variationButtons.clear()
 
-        val seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, pokedexForm)
+        seenShinyStates = CobblemonClient.clientPokedexData.getSeenShinyStates(pokedexEntry, pokedexForm)
         shiny = seenShinyStates.count() == 1 && seenShinyStates.first() == "shiny"
         shinyButton.resource = if (shiny) buttonShiny else buttonNone
         shinyButton.visible = shiny || seenShinyStates.size > 1
@@ -595,6 +594,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     }
 
     private fun switchForm(nextIndex: Boolean) {
+        selectedPoseIndex = 0
+
         if (nextIndex) {
             if (selectedFormIndex < visibleForms.lastIndex) selectedFormIndex++
             else selectedFormIndex = 0
@@ -655,7 +656,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     fun recalculatePoses(renderablePokemon: RenderablePokemon) {
         val state = FloatingState()
         state.currentAspects = renderablePokemon.aspects
-        val poser = PokemonModelRepository.getPoser(renderablePokemon.species.resourceIdentifier, state)
+        val poser = VaryingModelRepository.getPoser(renderablePokemon.species.resourceIdentifier, state)
         state.currentModel = poser
         this.poseList = poser.poses
             .map { it.value.poseTypes.minBy { it.ordinal } }

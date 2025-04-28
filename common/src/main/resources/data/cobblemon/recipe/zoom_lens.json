@@ -1,19 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "AGC",
-        "GGC",
+        "AGG",
+        "GCC",
         "  C"
     ],
     "key": {
         "G": {
-            "item": "minecraft:gold_ingot"
+            "tag": "c:ingots/gold"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "A": {
-            "item": "minecraft:amethyst_shard"
+            "tag": "c:gems/amethyst"
         }
     },
     "result": {

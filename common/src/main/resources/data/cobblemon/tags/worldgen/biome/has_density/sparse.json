@@ -5,7 +5,11 @@
     "#cobblemon:is_grassland",
     "#cobblemon:is_tundra",
     {
-      "id": "#c:vegetation_sparse",
+      "id": "#c:is_sparse_vegetation",
+      "required": false 
+    },
+	{
+      "id": "#c:is_sparse_vegetation/overworld",
       "required": false 
     },
     {

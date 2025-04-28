@@ -4,11 +4,15 @@
 	"#minecraft:is_forest",
 	"minecraft:cherry_grove",
     {
-      "id": "#c:flower_forests",
+      "id": "#c:is_flower_forest",
       "required": false
     },
 	{
-      "id": "#c:tree_deciduous",
+      "id": "#c:is_forest",
+      "required": false
+    },
+	{
+      "id": "#c:tree/deciduous",
       "required": false
     },
 	{

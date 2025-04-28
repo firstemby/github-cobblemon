@@ -73,7 +73,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     }
 
     fun trackPokemon(pokemon: Pokemon) {
-        pokemon.getChangeObservable()
+        pokemon.changeObservable
             .pipe(stopAfter { pokemon.storeCoordinates.get()?.store != this })
             .subscribe { anyChangeObservable.emit(Unit) }
     }
@@ -269,7 +269,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
                 BattlePokemon.playerOwned(it)
             }.also { if (healPokemon) it.effectedPokemon.heal() }
         }.toMutableList()
-        if(leadingPokemon != null) {
+        if (leadingPokemon != null) {
             Collections.rotate(result, result.size - this.indexOfFirst { it.uuid == leadingPokemon })
         }
         return result

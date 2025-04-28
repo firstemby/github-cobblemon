@@ -18,7 +18,8 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
-                    "#cobblemon:is_sandy"
+                    "#cobblemon:is_badlands",
+                    "#cobblemon:is_desert"
                 ],
                 "minY": 0
             },
@@ -49,7 +50,7 @@
             }
         },
         {
-            "id": "baltoy-3",
+            "id": "baltoy-4",
             "pokemon": "baltoy",
             "type": "pokemon",
             "context": "grounded",

@@ -10,7 +10,7 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE"],
-      "animations": ["q.look('head')", "q.bedrock('seadra', 'water_idle')"],
+      "animations": ["q.look('head')", "q.bedrock('seadra', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('seadra', 'blink')"]
     },
     "walking": {

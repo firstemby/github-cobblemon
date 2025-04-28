@@ -20,6 +20,9 @@ import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveFloat
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
@@ -47,7 +50,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     private var waterLevel : Double = 0.0
 
     override fun tick() {
-        if (pokemonEntity.pokemon.status?.status == Statuses.SLEEP || pokemonEntity.isDeadOrDying) {
+        if (pokemonEntity.isDeadOrDying) {
             pokemonEntity.speed = 0F
             pokemonEntity.yya = 0F
             return
@@ -59,8 +62,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
             behaviour.moving.swim.swimSpeed
         } else {
-           behaviour.moving.walk.walkSpeed
-        })
+            behaviour.moving.walk.walkSpeed
+        }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
         val adjustedSpeed = baseSpeed * mediumSpeed
@@ -197,28 +200,37 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 pokemonEntity.yya = 0.2F
             }
 
-            // In battle water antics
-            // Borrowing hard from Minecraft's Boat logic
-            if (this.pokemonEntity.isBattling && mob.isInWater) {
-                var e = 0.0F
-                val exposedSpecies = this.pokemonEntity.exposedSpecies
-                if (isUnderwater()) {
-                    if (this.pokemonEntity.platform != PlatformType.NONE) {
-                        // Float up if on a platform
-                        e = 0.3F
-                    }
-                } else if (checkInWater()) {
-                    if (this.pokemonEntity.platform != PlatformType.NONE ) {
-                        // Hold Steady
-                        e = ((this.waterLevel - this.pokemonEntity.y) / this.pokemonEntity.bbHeight).toFloat()
-                    } else if (exposedSpecies.behaviour.moving.swim.canBreatheUnderwater) {
-                        // allow swimmers to sink a bit into the water
-                        e = -1.5F
-                    }
+            if (this.pokemonEntity.isBattling) {
+                if (this.pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
+                    // Flying Pokemon have extremely low vertical deceleration and can fly into the stratosphere if their movement is not dampened
+                    // This can happen when:
+                    // A Pokemon was jumping when the battle begins
+                    // A Pokemon receives knockback from sweeping edge striking a nearby target, wind charges, etc.
+                    mob.deltaMovement = Vec3(mob.deltaMovement.x, min(0.01, mob.deltaMovement.y), mob.deltaMovement.z)
                 }
-                if (Mth.abs(e) > VERY_CLOSE) {
-                    val vec32: Vec3 = this.pokemonEntity.deltaMovement
-                    this.pokemonEntity.setDeltaMovement(vec32.x, (vec32.y + e * (this.pokemonEntity.gravity / 0.65)) * 0.75, vec32.z)
+                if (mob.isInWater) {
+                    // In battle water antics
+                    // Borrowing hard from Minecraft's Boat logic
+                    var e = 0.0F
+                    val exposedForm = this.pokemonEntity.exposedForm
+                    if (isUnderwater()) {
+                        if (this.pokemonEntity.platform != PlatformType.NONE) {
+                            // Float up if on a platform
+                            e = 0.3F
+                        }
+                    } else if (checkInWater()) {
+                        if (this.pokemonEntity.platform != PlatformType.NONE ) {
+                            // Hold Steady
+                            e = ((this.waterLevel - this.pokemonEntity.y) / this.pokemonEntity.bbHeight).toFloat()
+                        } else if (exposedForm.behaviour.moving.swim.canBreatheUnderwater) {
+                            // allow swimmers to sink a bit into the water
+                            e = -1.5F
+                        }
+                    }
+                    if (Mth.abs(e) > VERY_CLOSE) {
+                        val vec32: Vec3 = this.pokemonEntity.deltaMovement
+                        this.pokemonEntity.setDeltaMovement(vec32.x, (vec32.y + e * (this.pokemonEntity.gravity / 0.65)) * 0.75, vec32.z)
+                    }
                 }
             }
         }
@@ -230,7 +242,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
      */
     private fun getStableBattleFloatHeight(): Double {
         val aABB: AABB = this.pokemonEntity.boundingBox
-        return if (this.pokemonEntity.exposedSpecies.behaviour.moving.swim.canBreatheUnderwater) ((aABB.maxY - aABB.minY) / 2.0) else 0.05
+        return if (this.pokemonEntity.exposedForm.behaviour.moving.swim.canBreatheUnderwater) ((aABB.maxY - aABB.minY) / 2.0) else 0.05
     }
 
     /*
@@ -304,5 +316,11 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 Mth.floor(mob.z + zMovement.toDouble())
             )
         ) == PathType.WALKABLE
+    }
+
+    fun stop() {
+        this.operation = Operation.WAIT
+        strafeForwards = 0.0f
+        strafeRight = 0.0f
     }
 }

@@ -35,6 +35,11 @@ open class BedrockActiveAnimation(
         it.afterAction = action
     }
 
+    override fun start(state: PosableState) {
+        super.start(state)
+        startedSeconds = state.animationSeconds
+    }
+
     override fun run(
         context: RenderContext,
         model: PosableModel,
@@ -46,11 +51,7 @@ open class BedrockActiveAnimation(
         headPitch: Float,
         intensity: Float
     ): Boolean {
-        if (startedSeconds == -1F) {
-            startedSeconds = state.animationSeconds
-        }
-
-        return animation.run(context, model, state, state.animationSeconds - startedSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity).also {
+        return animation.run(model, state, state.animationSeconds - startedSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity).also {
             if (!it) {
                 afterAction(context, state)
             }
@@ -58,9 +59,6 @@ open class BedrockActiveAnimation(
     }
 
     override fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
-        if (startedSeconds == -1F) {
-            startedSeconds = state.animationSeconds
-        }
         val previousSecondsOffset = previousSeconds - startedSeconds
         val currentSecondsOffset = newSeconds - startedSeconds
         animation.applyEffects(entity, state, previousSecondsOffset, currentSecondsOffset)

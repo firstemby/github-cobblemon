@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.interact.wheel.InteractWheelButton.Companion.BUTTON_SIZE
 import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.ArrowButton
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.Multimap
@@ -20,10 +22,9 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
-class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title) {
+class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title), CobblemonRenderable {
     companion object {
-        const val SIZE = 140
-        const val OPTION_SIZE = 71
+        const val SIZE = 138
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_base.png")
         private val buttonResources = mutableMapOf(
             Orientation.TOP_LEFT to cobblemonResource("textures/gui/interact/button_left_top.png"),
@@ -103,7 +104,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
             tooltipText = option?.tooltipText,
             x = x,
             y = y,
-            isEnabled = option != null,
+            isEnabled = option != null && option.enabled,
             colour = option?.colour ?: { null },
             onPress = { option?.onPress?.invoke() },
             canHover = { a: Double, b: Double -> !isMouseInCenter(a, b)}
@@ -141,9 +142,9 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         val (x, y) = getDimensions()
         return when (orientation) {
             Orientation.TOP_LEFT -> Pair(x, y)
-            Orientation.TOP_RIGHT -> Pair(x + OPTION_SIZE, y)
-            Orientation.BOTTOM_LEFT -> Pair(x, y + OPTION_SIZE)
-            Orientation.BOTTOM_RIGHT -> Pair(x + OPTION_SIZE, y + OPTION_SIZE)
+            Orientation.TOP_RIGHT -> Pair(x + BUTTON_SIZE, y)
+            Orientation.BOTTOM_LEFT -> Pair(x, y + BUTTON_SIZE)
+            Orientation.BOTTOM_RIGHT -> Pair(x + BUTTON_SIZE, y + BUTTON_SIZE)
         }
     }
 

@@ -155,7 +155,7 @@ class FossilMultiblockStructure (
 
         // Reclaim the last fossil from the machine if their hand is empty
         if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty) {
-            if(!this.isRunning() && this.hasCreatedPokemon) {
+            if(!this.isRunning() && !this.hasCreatedPokemon) {
                 if (fossilInventory.isEmpty()) {
                     return InteractionResult.CONSUME
                 }
@@ -361,7 +361,7 @@ class FossilMultiblockStructure (
             //world.createExplosion(this.createdPokemon?.entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), 5F, World.ExplosionSourceType.TNT)
 
             // instantiate the pokemon as a new entity and spawn it at the location of the machine
-            //var wildPokemon = this.createdPokemon?.sendOut(world as ServerWorld, pos.toVec3d())
+            //var wildPokemon = this.createdPokemon?.sendOut(world as ServerLevel, pos.toVec3d())
 
             //world.spawnEntity(wildPokemon)
             this.spawn(world, pos, direction, wildPokemon)

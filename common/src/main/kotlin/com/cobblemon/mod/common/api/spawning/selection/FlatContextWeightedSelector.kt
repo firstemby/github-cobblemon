@@ -145,9 +145,16 @@ open class FlatContextWeightedSelector : SpawningSelector {
             }
         }
 
-        val selectedSpawn = spawnsToContexts.entries.toList().weightedSelection { it.value.highestWeight }!!
+        val selectedSpawn = spawnsToContexts.entries.toList().weightedSelection { it.value.highestWeight }
+
+        // TODO clean this up later once we know the crash that happens is fixed
+        if (selectedSpawn == null) {
+            LOGGER.warn("FlatContextWeightedSelector failed: No spawn detail with positive weight was found for ${spawner.name}.")
+            return null
+        }
 
         return selectedSpawn.value.chooseContext() to selectedSpawn.key
+
     }
 
     protected fun getProbabilitiesFromContextType(spawner: Spawner, contextSelectionData: ContextSelectionData): Map<SpawnDetail, Float> {

@@ -8,6 +8,11 @@
 
 package com.cobblemon.mod.common.client.gui.dialogue
 
+import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueGibberDTO
 import net.minecraft.network.chat.MutableComponent
 
-class DialogueRenderableSpeaker(val name: MutableComponent?, val face: RenderableFace?)
+class DialogueRenderableSpeaker(
+    val name: MutableComponent?,
+    val face: RenderableFace?,
+    val gibber: DialogueGibberDTO? = null
+)

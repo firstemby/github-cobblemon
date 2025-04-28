@@ -16,6 +16,7 @@
       "displayName": "cobblemon.pokedex.variation.color",
       "icon": "cobblemon:textures/gui/pokedex/variation/color.png",
       "aspects": [
+        "color-none",
         "color-white",
         "color-light_gray",
         "color-gray",

@@ -62,12 +62,12 @@ class VolcaronaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame 
                 singleBoneLook(pitchMultiplier = 0.2F, yawMultiplier = 0.3F),
                 bedrock("volcarona", "ground_idle"),
                 wingFrame.wingFlap(
-                    flapFunction = sineFunction( period = 1F, amplitude = 0.25F),
+                    flapFunction = sineFunction(period = 1F, amplitude = 0.25F),
                     timeVariable = { state, _, _ -> state.animationSeconds },
                     axis = ModelPartTransformation.Y_AXIS
                 ),
                 fluffFrame.wingFlap(
-                    flapFunction = sineFunction( period = 1F, amplitude = 0.3F),
+                    flapFunction = sineFunction(period = 1F, amplitude = 0.3F),
                     timeVariable = { state, _, _ -> state.animationSeconds },
                     axis = ModelPartTransformation.Y_AXIS
                 )
@@ -88,12 +88,12 @@ class VolcaronaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame 
                 singleBoneLook(pitchMultiplier = 0.2F, yawMultiplier = 0.3F),
                 bedrock("volcarona", "ground_idle"),
                 wingFrame.wingFlap(
-                    flapFunction = sineFunction( period = 0.8F, amplitude = 0.25F),
+                    flapFunction = sineFunction(period = 0.8F, amplitude = 0.25F),
                     timeVariable = { state, _, _ -> state.animationSeconds },
                     axis = ModelPartTransformation.Y_AXIS
                 ),
                 fluffFrame.wingFlap(
-                    flapFunction = sineFunction( period = 0.8F, amplitude = 0.3F),
+                    flapFunction = sineFunction(period = 0.8F, amplitude = 0.3F),
                     timeVariable = { state, _, _ -> state.animationSeconds },
                     axis = ModelPartTransformation.Y_AXIS
                 )

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
+import java.util.function.Predicate
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.PathfinderMob
@@ -18,6 +20,8 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.DefaultRandomPos
 import net.minecraft.world.level.pathfinder.Path
+import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 
 class FollowWalkTargetTask(
@@ -60,9 +64,9 @@ class FollowWalkTargetTask(
     override fun canStillUse(arg: ServerLevel, arg2: PathfinderMob, l: Long): Boolean {
         if (this.path != null && this.lookTargetPos != null) {
             val optional = arg2.brain.getMemory(MemoryModuleType.WALK_TARGET)
-            val bl = optional.map(::isTargetSpectator).orElse(false)
+            val isTargetSpectator = optional.map(::isTargetSpectator).orElse(false)
             val entityNavigation = arg2.navigation
-            return !entityNavigation.isDone && optional.isPresent && !this.hasReached(arg2, optional.get()) && !bl
+            return !entityNavigation.isDone && optional.isPresent && !this.hasReached(arg2, optional.get()) && !isTargetSpectator
         } else {
             return false
         }
@@ -80,9 +84,9 @@ class FollowWalkTargetTask(
         this.path = null
     }
 
-    override fun start(arg: ServerLevel, arg2: PathfinderMob, l: Long) {
-        arg2.brain.setMemory(MemoryModuleType.PATH, this.path)
-        arg2.navigation.moveTo(this.path, speed.toDouble())
+    override fun start(arg: ServerLevel, entity: PathfinderMob, time: Long) {
+        entity.brain.setMemory(MemoryModuleType.PATH, this.path)
+        entity.navigation.moveTo(this.path, speed.toDouble())
     }
 
     override fun tick(world: ServerLevel, entity: PathfinderMob, l: Long) {
@@ -95,16 +99,29 @@ class FollowWalkTargetTask(
 
         if (path != null && lookTargetPos != null) {
             val walkTarget = brain.getMemory(MemoryModuleType.WALK_TARGET).get()
-            if (walkTarget.target.currentBlockPosition().distSqr(lookTargetPos) > 4.0 && hasFinishedPath(entity, walkTarget, world.gameTime)) {
+            if (walkTarget.target.currentBlockPosition().distSqr(lookTargetPos!!) > 4.0 && hasFinishedPath(entity, walkTarget, world.gameTime)) {
                 lookTargetPos = walkTarget.target.currentBlockPosition()
                 start(world, entity, l)
             }
         }
     }
 
+    private fun withNodeFilter(entity: PathfinderMob, nodeFilter: Predicate<PathType>, block: () -> Unit) {
+        val nodeEvaluator = entity.navigation.nodeEvaluator
+        if (nodeEvaluator is OmniPathNodeMaker) {
+            nodeEvaluator.nodeFilter = nodeFilter
+            block()
+            nodeEvaluator.nodeFilter = Predicate { true }
+        } else {
+            block()
+        }
+    }
+
     private fun hasFinishedPath(entity: PathfinderMob, walkTarget: WalkTarget, time: Long): Boolean {
         val blockPos = walkTarget.target.currentBlockPosition()
-        this.path = entity.navigation.createPath(blockPos, 0)
+        withNodeFilter(entity, (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true }) {
+            this.path = entity.navigation.createPath(blockPos, 0)
+        }
         this.speed = walkTarget.speedModifier
         val brain = entity.brain
         if (hasReached(entity, walkTarget)) {
@@ -126,10 +143,12 @@ class FollowWalkTargetTask(
                 10,
                 7,
                 Vec3.atBottomCenterOf(blockPos),
-                1.5707963705062866
+                Math.PI / 2F
             )
             if (vec3d != null) {
-                this.path = entity.navigation.createPath(vec3d.x, vec3d.y, vec3d.z, 0)
+                withNodeFilter(entity, (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true }) {
+                    this.path = entity.navigation.createPath(vec3d.x, vec3d.y, vec3d.z, 0)
+                }
                 return this.path != null
             }
         }
@@ -142,7 +161,6 @@ class FollowWalkTargetTask(
     }
 
     companion object {
-        private const val MAX_UPDATE_COUNTDOWN = 40
         private fun isTargetSpectator(target: WalkTarget): Boolean {
             val lookTarget = target.target
             return if (lookTarget is EntityTracker) {
@@ -153,3 +171,4 @@ class FollowWalkTargetTask(
         }
     }
 }
+

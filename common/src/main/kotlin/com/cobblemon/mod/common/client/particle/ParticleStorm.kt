@@ -9,23 +9,31 @@
 package com.cobblemon.mod.common.client.particle
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.api.snowstorm.ParticleEmitterAction
+import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.SnowstormParticle
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.particle.SnowstormParticleOptions
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
+import com.mojang.blaze3d.vertex.PoseStack
+import kotlin.random.Random
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.NoRenderParticle
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-import kotlin.random.Random
+import org.joml.Vector4f
 
 /**
  * An instance of a bedrock particle effect.
@@ -35,15 +43,22 @@ import kotlin.random.Random
  */
 class ParticleStorm(
     val effect: BedrockParticleOptions,
-    val matrixWrapper: MatrixWrapper,
+    val emitterSpaceMatrix: MatrixWrapper,
+    //This is a mildly inaccurate name. This matrix is basically the matrix we want to peg our movement to.
+    //Often times, this is the locator matrix, but sometimes, when we want the emitter to NOT track the locator, this value is the same obj as emitterSpaceMatrix.
+    //Currently only position is tracked. Ideally we would come up with a way to configure whether the emitter tracks any combination of position/rotation (or neither)
+    //on this matrix.
+    val locatorSpaceMatrix: MatrixWrapper,
     val world: ClientLevel,
     val sourceVelocity: () -> Vec3 = { Vec3.ZERO },
     val sourceAlive: () -> Boolean = { true },
     val sourceVisible: () -> Boolean = { true },
+    val targetPos: (() -> Vec3)? = null,
     val onDespawn: () -> Unit = {},
+    val getParticleColor: () -> Vector4f? = { null },
     val runtime: MoLangRuntime = MoLangRuntime(),
-    val entity: Entity? = null
-): NoRenderParticle(world, matrixWrapper.getOrigin().x, matrixWrapper.getOrigin().y, matrixWrapper.getOrigin().z) {
+    val entity: Entity? = null,
+): NoRenderParticle(world, emitterSpaceMatrix.getOrigin().x, emitterSpaceMatrix.getOrigin().y, emitterSpaceMatrix.getOrigin().z) {
     fun spawn() {
         if (entity != null) {
             runtime.environment.query
@@ -62,6 +77,9 @@ class ParticleStorm(
                 }
             if (entity is PosableEntity) {
                 runtime.environment.query.addFunction("entity") { entity.struct }
+                if (targetPos != null) {
+                    addAttackingFunctions(targetPos)
+                }
             } else if (entity is Player) {
                 runtime.environment.query.addFunction("entity") { entity.asMoLangValue() }
             }
@@ -74,6 +92,43 @@ class ParticleStorm(
             runtime.environment.setSimpleVariable("entity_scale", DoubleValue((entity as? PokemonEntity)?.scale ?: 1.0))
         }
         Minecraft.getInstance().particleEngine.add(this)
+    }
+
+    fun addAttackingFunctions(destinationPosSupplier: (() -> Vec3)) {
+        runtime.environment.query.addFunction("target_deltax") { params ->
+            DoubleValue(distanceTo(destinationPosSupplier.invoke()).x)
+        }
+        runtime.environment.query.addFunction("target_deltay") { params ->
+            DoubleValue(distanceTo(destinationPosSupplier.invoke()).y * -1)
+        }
+        runtime.environment.query.addFunction("target_deltaz") { params ->
+            DoubleValue(distanceTo(destinationPosSupplier.invoke()).z)
+        }
+        runtime.environment.query.addFunction("target_distance") { params ->
+            DoubleValue(distanceTo(destinationPosSupplier.invoke()).length())
+        }
+
+        runtime.environment.setSimpleVariable("target_deltax",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).x))
+        runtime.environment.setSimpleVariable("target_deltay",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).y * -1))
+        runtime.environment.setSimpleVariable("target_deltaz",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).z))
+        runtime.environment.setSimpleVariable("target_distance",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).length()))
+    }
+
+    //These are variables that need to be different per particle instance
+    fun lockParticleVars(struct: VariableStruct) {
+        val destinationPos = targetPos?.invoke() ?: return
+        struct.setDirectly(
+            "target_deltax", DoubleValue(distanceTo(destinationPos).x)
+        )
+        struct.setDirectly(
+            "target_deltay", DoubleValue(distanceTo(destinationPos).y * -1)
+        )
+        struct.setDirectly(
+            "target_deltaz", DoubleValue(distanceTo(destinationPos).z),
+        )
+        struct.setDirectly(
+            "target_distance", DoubleValue(distanceTo(destinationPos).length()),
+        )
     }
 
     fun getX() = x
@@ -95,6 +150,58 @@ class ParticleStorm(
 
     companion object {
         var contextStorm: ParticleStorm? = null
+
+        fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, position: Vec3): ParticleStorm {
+            val wrapper = MatrixWrapper()
+            val matrix = PoseStack()
+            matrix.translate(position.x, position.y, position.z)
+            wrapper.updateMatrix(matrix.last().pose())
+            return ParticleStorm(effect, wrapper, wrapper, world)
+        }
+
+        /**
+         * Creates multiple potentially, because in the case of posable entities if multiple locators match, it repeats the effect.
+         */
+        fun createAtEntity(world: ClientLevel, effect: BedrockParticleOptions, entity: LivingEntity, locator: Collection<String> = emptySet()): List<ParticleStorm> {
+            if (entity is PosableEntity) {
+                val state = entity.delegate as PosableState
+                val locators = locator.firstNotNullOfOrNull { state.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return emptyList()
+                val matrixWrappers = locators.mapNotNull { state.locatorStates[it] }
+                return matrixWrappers.map { matrixWrapper ->
+                    val particleRuntime = MoLangRuntime().setup().setupClient()
+                    particleRuntime.environment.query.addFunction("entity") { state.runtime.environment.query }
+                    ParticleStorm(
+                        effect = effect,
+                        emitterSpaceMatrix = matrixWrapper,
+                        locatorSpaceMatrix = matrixWrapper,
+                        world = world,
+                        runtime = particleRuntime,
+                        sourceVelocity = { entity.deltaMovement },
+                        sourceAlive = { !entity.isRemoved },
+                        sourceVisible = { !entity.isInvisible },
+                        entity = entity
+                    )
+                }
+            } else {
+                val matrixWrapper = MatrixWrapper()
+                matrixWrapper.updateFunction = { it.updatePosition(entity.position()) }
+                val particleRuntime = MoLangRuntime().setup().setupClient()
+                particleRuntime.environment.query.addFunction("entity") { params -> MoLangFunctions.livingEntityFunctions.flatMap { it(entity).map { it.key to it.value } } }
+                return listOf(
+                    ParticleStorm(
+                        effect = effect,
+                        emitterSpaceMatrix = matrixWrapper,
+                        locatorSpaceMatrix = matrixWrapper,
+                        world = world,
+                        runtime = particleRuntime,
+                        sourceVelocity = { entity.deltaMovement },
+                        sourceAlive = { !entity.isRemoved },
+                        sourceVisible = { !entity.isInvisible },
+                        entity = entity
+                    )
+                )
+            }
+        }
     }
 
     val particleEffect = SnowstormParticleOptions(effect)
@@ -131,11 +238,16 @@ class ParticleStorm(
             remove()
         }
 
-        if (stopped || !sourceVisible()) {
+        if (!sourceVisible()) {
+            this.setInvisible()
             return
         }
 
-        val pos = matrixWrapper.getOrigin()
+        if (stopped) {
+            return
+        }
+
+        val pos = locatorSpaceMatrix.getOrigin()
         xo = x
         yo = y
         zo = z
@@ -143,6 +255,9 @@ class ParticleStorm(
         x = pos.x
         y = pos.y
         z = pos.z
+
+        //Keeps emitter attached to locator
+        emitterSpaceMatrix.updatePosition(locatorSpaceMatrix.getOrigin())
 
         val oldDistanceTravelled = distanceTravelled
         distanceTravelled += Vec3(x - xo, y - yo, z - zo).length().toFloat()
@@ -198,7 +313,16 @@ class ParticleStorm(
         contextStorm = null
     }
 
-    fun transformPosition(position: Vec3): Vec3 = matrixWrapper.transformPosition(position)
+    fun transformPosition(position: Vec3): Vec3 = emitterSpaceMatrix.transformPosition(position)
 
-    fun transformDirection(direction: Vec3): Vec3 = matrixWrapper.matrix.transformDirection(direction)
+    fun transformDirection(direction: Vec3): Vec3 = emitterSpaceMatrix.matrix.transformDirection(direction)
+
+    //Gets distance between emitter pos and destination pos in emitter space
+    fun distanceTo(destinationPos: Vec3): Vec3 {
+        return emitterSpaceMatrix.transformWorldToParticle(Vec3(x, y, z)).subtract(emitterSpaceMatrix.transformWorldToParticle(destinationPos))
+    }
+
+    fun setInvisible() {
+        particles.forEach { particle -> particle.invisible = true }
+    }
 }

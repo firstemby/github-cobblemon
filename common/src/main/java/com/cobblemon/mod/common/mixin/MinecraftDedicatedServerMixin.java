@@ -22,7 +22,7 @@ public abstract class MinecraftDedicatedServerMixin implements ServerInterface {
 
     @Inject(method = "shouldDiscardEntity", at = @At(value = "HEAD"), cancellable = true)
     public void cobblemon$allowPokemonSpawns(Entity entity, CallbackInfoReturnable<Boolean> callback) {
-        if(entity instanceof PokemonEntity) {
+        if (entity instanceof PokemonEntity) {
             callback.setReturnValue(false);
         }
     }

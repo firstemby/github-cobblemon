@@ -7,10 +7,10 @@
     ],
     "key": {
         "W": {
-            "item": "minecraft:blue_wool"
+            "tag": "minecraft:wool"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "H": {
             "item": "minecraft:rabbit_hide"

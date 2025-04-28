@@ -1,0 +1,83 @@
+{
+  "portraitScale": 2.3,
+  "portraitTranslation": [-0.2, 0.6, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [0, 0.75, 0],
+  "rootBone": "raichu_alolan",
+  "animations": {
+    "cry": "q.bedrock_stateful('raichu_alolan', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('raichu_alolan', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('raichu_alolan', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('raichu_alolan', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('raichu_alolan', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": false,
+      "animations": ["q.bedrock('raichu_alolan', 'sleep')"]
+    },
+    "surface_sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('raichu_alolan', 'sleep')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    },
+    "surface_idle": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('raichu_alolan', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    },
+    "surface_swim": {
+      "poseTypes": ["WALK", "SWIM"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('raichu_alolan', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    }
+  }
+ }

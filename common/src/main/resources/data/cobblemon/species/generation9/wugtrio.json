@@ -1,12 +1,25 @@
 {
   "implemented": true,
-  "name": "Wugtrio",
   "nationalPokedexNumber": 961,
+  "name": "Wugtrio",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 12,
+  "weight": 54,
+  "pokedex": [
+    "cobblemon.species.wugtrio.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "gooey",
     "rattled",
     "h:sandveil"
+  ],
+  "eggGroups": [
+    "water_3"
   ],
   "baseStats": {
     "hp": 35,
@@ -16,10 +29,6 @@
     "special_defence": 70,
     "speed": 120
   },
-  "catchRate": 50,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 149,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -28,16 +37,32 @@
     "special_defence": 0,
     "speed": 2
   },
+  "baseExperienceYield": 149,
   "experienceGroup": "medium_fast",
+  "catchRate": 50,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_3"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.7,
+  "hitbox": {
+    "width": 1.5,
+    "height": 1.4,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "canSwimInWater": true,
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
+      }
+    }
+  },
   "moves": [
-    "1:mudslap",
     "1:sandattack",
-    "1:watergun",
     "1:wrap",
+    "1:watergun",
+    "1:mudslap",
     "12:aquajet",
     "16:slam",
     "20:waterpulse",
@@ -47,6 +72,8 @@
     "42:suckerpunch",
     "48:throatchop",
     "54:liquidation",
+    "egg:finalgambit",
+    "egg:memento",
     "tm:agility",
     "tm:blizzard",
     "tm:bulldoze",
@@ -57,6 +84,7 @@
     "tm:facade",
     "tm:foulplay",
     "tm:gigaimpact",
+    "tm:headbutt",
     "tm:helpinghand",
     "tm:hydropump",
     "tm:hyperbeam",
@@ -73,38 +101,33 @@
     "tm:sleeptalk",
     "tm:stompingtantrum",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:surf",
     "tm:swift",
     "tm:takedown",
     "tm:terablast",
     "tm:throatchop",
     "tm:waterpulse",
-    "tm:whirlpool"
+    "tm:whirlpool",
+    "tutor:bulldoze",
+    "tutor:dive",
+    "tutor:earthpower",
+    "tutor:foulplay",
+    "tutor:gigaimpact",
+    "tutor:helpinghand",
+    "tutor:hyperbeam",
+    "tutor:icebeam",
+    "tutor:liquidation",
+    "tutor:mudslap",
+    "tutor:painsplit",
+    "tutor:rest",
+    "tutor:sleeptalk",
+    "tutor:stompingtantrum",
+    "tutor:suckerpunch",
+    "tutor:swift",
+    "tutor:throatchop",
+    "tutor:waterpulse"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "canSwimInWater": false,
-        "canBreatheUnderwater": true
-      }
-    }
-  },
-  "aspects": [],
-  "baseScale": 0.7,
-  "hitbox": {
-    "width": 1.5,
-    "height": 1.4,
-    "fixed": false
-  },
-  "height": 12,
-  "weight": 54,
   "preEvolution": "wiglett",
-  "evolutions": [],
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.wugtrio.desc"
-  ]
+  "evolutions": []
 }

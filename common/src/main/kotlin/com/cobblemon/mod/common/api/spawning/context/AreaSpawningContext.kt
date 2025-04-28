@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 
 /**
  * A [SpawningContext] that is for a particular area, and therefore has spatial properties.
@@ -39,6 +40,7 @@ open class AreaSpawningContext(
     val slice: WorldSlice
 ) : SpawningContext() {
     val nearbyBlockTypes: List<Block> by lazy { nearbyBlocks.mapNotNull { it.block }.distinct() }
+    val nearbyBlockHolders: List<Holder<Block>> by lazy { nearbyBlockTypes.mapNotNull(blockRegistry::wrapAsHolder) }
 
     override fun getStructureCache(pos: BlockPos): StructureChunkCache {
         return slice.getStructureCache(pos)

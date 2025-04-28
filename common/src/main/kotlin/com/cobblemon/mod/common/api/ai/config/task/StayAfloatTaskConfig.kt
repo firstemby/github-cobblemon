@@ -8,31 +8,30 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.StayAfloatTask
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class StayAfloatTaskConfig : SingleTaskConfig {
-    val condition: ExpressionLike = "true".asExpressionLike()
-    val chance: Expression = "0.01".asExpression()
-    override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
-        val chance = runtime.resolveFloat(chance)
+    val condition = booleanVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "can_float", true).asExpressible()
+    val chance = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "float_chance", 0.8F).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        chance
+    ).asVariables()
+
+    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
         return WrapperLivingEntityTask(
-            StayAfloatTask(chance),
+            StayAfloatTask(chance.resolveFloat()),
             PathfinderMob::class.java
         )
     }

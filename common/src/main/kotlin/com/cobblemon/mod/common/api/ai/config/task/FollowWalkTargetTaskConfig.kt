@@ -8,32 +8,30 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.FollowWalkTargetTask
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class FollowWalkTargetTaskConfig : SingleTaskConfig {
-    val condition: ExpressionLike = "true".asExpressionLike()
-    val minRunTicks: Expression = "150".asExpression()
-    val maxRunTicks: Expression = "250".asExpression()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+    val minRunTicks: ExpressionOrEntityVariable = Either.left("150".asExpression())
+    val maxRunTicks: ExpressionOrEntityVariable = Either.left("250".asExpression())
 
-    override fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
+    override fun getVariables(entity: LivingEntity) = listOf(minRunTicks, maxRunTicks).asVariables()
+
+    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         return WrapperLivingEntityTask(
-            FollowWalkTargetTask(runtime.resolveInt(minRunTicks), runtime.resolveInt(maxRunTicks)),
+            FollowWalkTargetTask(minRunTicks.resolveInt(), maxRunTicks.resolveInt()),
             PathfinderMob::class.java
         )
     }

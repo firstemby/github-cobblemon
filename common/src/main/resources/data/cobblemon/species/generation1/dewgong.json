@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Dewgong",
   "nationalPokedexNumber": 87,
+  "name": "Dewgong",
   "primaryType": "water",
   "secondaryType": "ice",
+  "maleRatio": 0.5,
+  "height": 17,
+  "weight": 1200,
+  "pokedex": [
+    "cobblemon.species.dewgong.desc"
+  ],
+  "labels": [
+    "gen1"
+  ],
+  "aspects": [],
   "abilities": [
     "thickfat",
     "hydration",
     "h:icebody"
+  ],
+  "eggGroups": [
+    "water_1",
+    "field"
   ],
   "baseStats": {
     "hp": 90,
@@ -17,21 +31,32 @@
     "special_defence": 95,
     "speed": 70
   },
-  "catchRate": 75,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 2,
+    "speed": 0
+  },
   "baseExperienceYield": 166,
   "experienceGroup": "medium_fast",
+  "catchRate": 75,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "field"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 2,
+  "hitbox": {
+    "width": 0.9,
+    "height": 0.5,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "swim": {
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       }
     }
   },
@@ -53,11 +78,12 @@
     ]
   },
   "moves": [
-    "1:growl",
     "1:headbutt",
+    "1:growl",
+    "1:signalbeam",
     "1:icywind",
     "1:sheercold",
-    "1:signalbeam",
+    "1:watersport",
     "13:encore",
     "17:iceshard",
     "21:rest",
@@ -70,22 +96,30 @@
     "49:aquatail",
     "55:icebeam",
     "61:safeguard",
-    "65:hail",
     "65:snowscape",
+    "egg:belch",
+    "egg:disable",
+    "egg:entrainment",
+    "egg:fakeout",
+    "egg:horndrill",
+    "egg:lick",
+    "egg:perishsong",
+    "egg:slam",
+    "egg:spitup",
+    "egg:stockpile",
+    "egg:swallow",
     "tm:alluringvoice",
-    "tm:attract",
+    "tm:aquatail",
     "tm:avalanche",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brine",
-    "tm:captivate",
+    "tm:bubblebeam",
     "tm:charm",
     "tm:chillingwater",
-    "tm:confide",
     "tm:curse",
     "tm:dive",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:drillrun",
     "tm:echoedvoice",
     "tm:encore",
@@ -95,124 +129,85 @@
     "tm:fling",
     "tm:flipturn",
     "tm:frostbreath",
-    "tm:frustration",
     "tm:gigaimpact",
     "tm:hail",
     "tm:haze",
+    "tm:headbutt",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icespinner",
     "tm:iciclespear",
     "tm:icywind",
+    "tm:irontail",
     "tm:knockoff",
     "tm:liquidation",
     "tm:muddywater",
-    "tm:naturalgift",
+    "tm:payday",
     "tm:playrough",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
-    "tm:round",
     "tm:safeguard",
-    "tm:secretpower",
+    "tm:signalbeam",
     "tm:sleeptalk",
     "tm:smartstrike",
     "tm:snowscape",
     "tm:substitute",
     "tm:surf",
-    "tm:swagger",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
-    "tm:toxic",
     "tm:tripleaxel",
     "tm:uproar",
     "tm:waterfall",
+    "tm:watergun",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
-    "tutor:aquajet",
     "tutor:aquatail",
-    "tutor:attract",
-    "tutor:aurorabeam",
-    "tutor:bide",
-    "tutor:blizzard",
-    "tutor:bodyslam",
-    "tutor:bubblebeam",
-    "tutor:curse",
     "tutor:dive",
-    "tutor:doubleedge",
-    "tutor:doubleteam",
     "tutor:drillrun",
-    "tutor:encore",
-    "tutor:endure",
-    "tutor:facade",
-    "tutor:fakeout",
-    "tutor:frustration",
-    "tutor:growl",
-    "tutor:headbutt",
+    "tutor:endeavor",
+    "tutor:flipturn",
+    "tutor:gigaimpact",
     "tutor:helpinghand",
-    "tutor:hiddenpower",
-    "tutor:horndrill",
     "tutor:hyperbeam",
     "tutor:icebeam",
-    "tutor:iceshard",
     "tutor:icywind",
     "tutor:irontail",
+    "tutor:knockoff",
     "tutor:liquidation",
-    "tutor:megahorn",
-    "tutor:mimic",
-    "tutor:payday",
-    "tutor:protect",
-    "tutor:rage",
-    "tutor:raindance",
+    "tutor:playrough",
     "tutor:rest",
-    "tutor:return",
-    "tutor:safeguard",
     "tutor:signalbeam",
-    "tutor:skullbash",
     "tutor:sleeptalk",
-    "tutor:snore",
-    "tutor:strength",
-    "tutor:substitute",
-    "tutor:surf",
-    "tutor:swagger",
-    "tutor:takedown",
-    "tutor:toxic",
-    "tutor:waterfall",
-    "tutor:watergun",
-    "tutor:waterpulse",
-    "tutor:whirlpool"
-  ],
-  "labels": [
-    "gen1"
-  ],
-  "pokedex": [
-    "cobblemon.species.dewgong.desc"
+    "tutor:tripleaxel",
+    "tutor:uproar",
+    "tutor:waterpulse"
   ],
   "preEvolution": "seel",
   "evolutions": [],
-  "baseScale": 2,
-  "hitbox": {
-    "width": 0.9,
-    "height": 0.5,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 2,
-    "speed": 0
-  },
-  "height": 17,
-  "weight": 1200,
-  "aspects": [],
-  "cannotDynamax": false
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "ranges": "15-30"
+      },
+      "ACCELERATION": {
+        "ranges": "25-50"
+      },
+      "SKILL": {
+        "ranges": "15-30"
+      },
+      "JUMP": {
+        "ranges": "20-40"
+      },
+      "STAMINA": {
+        "ranges": "30-60"
+      }
+    },
+    "seats": [],
+    "behaviour": null
+  }
 }

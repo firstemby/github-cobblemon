@@ -1,0 +1,31 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "cobblemon:medicinal_brew"
+        },
+        {
+            "item": "cobblemon:green_mint_leaf"
+        },
+        {
+            "item": "cobblemon:green_mint_leaf"
+        },
+        {
+            "item": "cobblemon:tamato_berry"
+        },
+        {
+            "item": "cobblemon:tamato_berry"
+        },
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:wheat"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:carbos"
+    },
+    "seasoningProcessors": []
+}

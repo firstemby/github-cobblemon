@@ -43,7 +43,7 @@ object FinishScanningHandler : ServerNetworkPacketHandler<FinishScanningPacket> 
                 val scannableEntity = targetEntity as? ScannableEntity ?: return
                 val dex = Cobblemon.playerDataManager.getPokedexData(player)
                 val pokedexEntityData = scannableEntity.resolvePokemonScan()
-                if(pokedexEntityData != null){
+                if (pokedexEntityData != null){
                     val newInformation = dex.getNewInformation(pokedexEntityData)
                     if ((scannableEntity as? PokemonEntity)?.owner === player) {
                         dex.catch(scannableEntity.pokemon)
@@ -52,7 +52,7 @@ object FinishScanningHandler : ServerNetworkPacketHandler<FinishScanningPacket> 
                     }
 
                     POKEMON_SCANNED.post(PokemonScannedEvent(player, pokedexEntityData, scannableEntity))
-                    ServerConfirmedRegisterPacket(pokedexEntityData.species.resourceIdentifier, newInformation).sendToPlayer(player)
+                    ServerConfirmedRegisterPacket((pokedexEntityData.getApparentSpecies()).resourceIdentifier, newInformation).sendToPlayer(player)
                 }
             }
         }

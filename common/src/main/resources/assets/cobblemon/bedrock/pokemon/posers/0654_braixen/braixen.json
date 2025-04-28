@@ -27,12 +27,12 @@
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
-        "q.bedrock('braixen', 'ground_walk_old')"
+        "q.bedrock('braixen', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('braixen', 'blink')"],
       "transformedParts": [
         {
-          "part": "stick_hand",
+          "part": "wand",
           "isVisible": false
         }
       ]

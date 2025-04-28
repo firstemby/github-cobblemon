@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.platform.events.ChangeDimensionEvent
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
+import com.cobblemon.mod.common.platform.events.ServerPlayerTickEvent
 import com.cobblemon.mod.common.platform.events.ServerTickEvent
 import net.minecraft.server.level.ServerPlayer
 import net.neoforged.bus.api.SubscribeEvent
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.event.server.ServerAboutToStartEvent
 import net.neoforged.neoforge.event.server.ServerStartedEvent
 import net.neoforged.neoforge.event.server.ServerStoppedEvent
 import net.neoforged.neoforge.event.server.ServerStoppingEvent
+import net.neoforged.neoforge.event.tick.PlayerTickEvent
 
 object NeoForgePlatformEventHandler {
 
@@ -49,6 +51,20 @@ object NeoForgePlatformEventHandler {
     @SubscribeEvent
     fun serverStopped(e: ServerStoppedEvent) {
         PlatformEvents.SERVER_STOPPED.post(ServerEvent.Stopped(e.server))
+    }
+
+    @SubscribeEvent
+    fun prePlayerTick(e: PlayerTickEvent.Pre) {
+        if (e.entity is ServerPlayer) {
+            PlatformEvents.SERVER_PLAYER_TICK_PRE.post(ServerPlayerTickEvent.Pre(e.entity as ServerPlayer))
+        }
+    }
+
+    @SubscribeEvent
+    fun postPlayerTick(e: PlayerTickEvent.Post) {
+        if (e.entity is ServerPlayer) {
+            PlatformEvents.SERVER_PLAYER_TICK_POST.post(ServerPlayerTickEvent.Post(e.entity as ServerPlayer))
+        }
     }
 
     @SubscribeEvent
@@ -90,7 +106,7 @@ object NeoForgePlatformEventHandler {
         val pos = e.pos
         val face = e.face
         PlatformEvents.RIGHT_CLICK_BLOCK.postThen(
-            event = com.cobblemon.mod.common.platform.events.ServerPlayerEvent.RightClickBlock(player, pos, hand, face),
+            event = ServerPlayerEvent.RightClickBlock(player, pos, hand, face),
             ifSucceeded = {},
             ifCanceled = { e.isCanceled = true }
         )
@@ -113,7 +129,8 @@ object NeoForgePlatformEventHandler {
     fun onChangeDimension(e: PlayerEvent.PlayerChangedDimensionEvent) {
         val player = e.entity
         if (player is ServerPlayer) {
-            PlatformEvents.CHANGE_DIMENSION.post(ChangeDimensionEvent(player))
+            val server = player.server
+            PlatformEvents.CHANGE_DIMENSION.post(ChangeDimensionEvent(player, server.getLevel(e.from), server.getLevel(e.to)))
         }
     }
 }

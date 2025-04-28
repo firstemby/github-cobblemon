@@ -35,7 +35,7 @@ class DarumakaModel (root: ModelPart) : PokemonPosableModel(root) {
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("darumaka", "blink") }
         val quirk = quirk(secondsBetweenOccurrences = 15F to 100F) { bedrockStateful("darumaka", "quirk") }
-        val quirk2 = quirk(secondsBetweenOccurrences = 20F to 360F) { bedrockStateful( "darumaka","quirk2")}
+        val quirk2 = quirk(secondsBetweenOccurrences = 20F to 360F) { bedrockStateful("darumaka","quirk2")}
 
         sleep = registerPose(
                 poseType = PoseType.SLEEP,

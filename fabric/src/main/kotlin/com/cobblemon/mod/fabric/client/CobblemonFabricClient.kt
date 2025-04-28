@@ -9,6 +9,7 @@
 package com.cobblemon.mod.fabric.client
 
 import com.cobblemon.mod.common.CobblemonClientImplementation
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
@@ -20,10 +21,19 @@ import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegist
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
-import com.cobblemon.mod.common.platform.events.*
+import com.cobblemon.mod.common.platform.events.ClientEntityEvent
+import com.cobblemon.mod.common.platform.events.ClientPlayerEvent
+import com.cobblemon.mod.common.platform.events.ClientTickEvent
+import com.cobblemon.mod.common.platform.events.ItemTooltipEvent
+import com.cobblemon.mod.common.platform.events.PlatformEvents
+import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.fabric.CobblemonFabric
 import com.mojang.blaze3d.vertex.PoseStack
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
+import java.util.function.Supplier
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
@@ -33,7 +43,11 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
-import net.fabricmc.fabric.api.client.rendering.v1.*
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.client.Minecraft
@@ -53,16 +67,13 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.util.profiling.ProfilerFiller
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Executor
-import java.util.function.Supplier
-import net.minecraft.world.InteractionHand
 
 class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation {
     override fun onInitializeClient() {
@@ -79,6 +90,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     pokedex.getItemModelPath("off")
                 )
             }
+            CobblemonItems.wearables.forEach { wearable -> it.addModels(wearable.getModel3d()) }
         }
 
         CobblemonFabric.networkManager.registerClientHandlers()
@@ -111,13 +123,10 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
             val client = Minecraft.getInstance()
             val player = client.player
             if (player != null) {
-                val itemStack = player.mainHandItem
-                val offhandStack = player.offhandItem
-                if (((itemStack.item is PokedexItem && player.usedItemHand == InteractionHand.MAIN_HAND) ||
-                    (offhandStack.item is PokedexItem && player.usedItemHand == InteractionHand.OFF_HAND))
-                ) {
+                if (player.isUsingPokedex() || pokedexUsageContext.transitionIntervals > 0) {
+                    if (!player.isUsingItem) pokedexUsageContext.resetState(false)
                     pokedexUsageContext.renderUpdate(graphics, tickDelta)
-                } else if (pokedexUsageContext.transitionIntervals > 0) {
+                } else {
                     pokedexUsageContext.resetState()
                 }
             }

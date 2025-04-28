@@ -16,12 +16,15 @@ import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveDouble
+import java.util.SortedMap
+import java.util.TreeMap
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
 import net.minecraft.client.Minecraft
@@ -32,7 +35,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import java.util.*
 
 data class BedrockAnimationGroup(
     val formatVersion: String,
@@ -66,7 +68,10 @@ class BedrockParticleKeyframe(
     override fun run(entity: Entity?, state: PosableState) {
         entity ?: return
         val world = entity.level() as? ClientLevel ?: return
-        val matrixWrapper = state.locatorStates[locator] ?: state.locatorStates["root"]!!
+
+        val rootMatrix = state.locatorStates["root"]!!
+        val locatorMatrix = state.locatorStates[locator] ?: state.locatorStates["root"]!!
+        val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
 
         if (this in state.poseParticles) {
             return
@@ -79,7 +84,8 @@ class BedrockParticleKeyframe(
 
         val storm = ParticleStorm(
             effect = effect,
-            matrixWrapper = matrixWrapper,
+            emitterSpaceMatrix = particleMatrix,
+            locatorSpaceMatrix = locatorMatrix,
             world = world,
             runtime = particleRuntime,
             sourceVelocity = { entity.deltaMovement },
@@ -105,7 +111,7 @@ class BedrockSoundKeyframe(
             if (entity != null) {
                 entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
             } else {
-                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F))
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
             }
         }
     }
@@ -143,7 +149,40 @@ data class BedrockAnimation(
     /** Useful to have, gets set after loading the animation. */
     var name: String = ""
 
-    fun run(context: RenderContext, model: PosableModel, state: PosableState, animationSeconds: Float, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, intensity: Float): Boolean {
+
+    fun run(
+        model: PosableModel,
+        state: PosableState,
+        animationSeconds: Float,
+        limbSwing: Float,
+        limbSwingAmount: Float,
+        ageInTicks: Float,
+        intensity: Float
+    ): Boolean {
+        return run(
+            model.context,
+            model.relevantPartsByName,
+            model.rootPart,
+            state,
+            animationSeconds,
+            limbSwing,
+            limbSwingAmount,
+            ageInTicks,
+            intensity
+        )
+    }
+
+    fun run(
+        context: RenderContext?,
+        relevantPartsByName: Map<String, ModelPart>,
+        rootPart: Bone?,
+        state: PosableState,
+        animationSeconds: Float,
+        limbSwing: Float,
+        limbSwingAmount: Float,
+        ageInTicks: Float,
+        intensity: Float
+    ): Boolean {
         var animationSeconds = animationSeconds
         if (shouldLoop) {
             animationSeconds %= animationLength.toFloat()
@@ -158,7 +197,7 @@ data class BedrockAnimation(
         runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
 
         boneTimelines.forEach { (boneName, timeline) ->
-            val part = model.relevantPartsByName[boneName] ?: if (boneName == "root_part") (model.rootPart as ModelPart) else null
+            val part = relevantPartsByName[boneName] ?: if (boneName == "root_part") (rootPart as? ModelPart) else null
             if (part !== null) {
                 if (!timeline.position.isEmpty()) {
                     val position = timeline.position.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())
@@ -178,7 +217,7 @@ data class BedrockAnimation(
                             zRot += rotation.z.toFloat().toRadians()
                         }
                     } catch (e: Exception) {
-                        val exception = IllegalStateException("Bad animation for entity: ${(model.context.request(RenderContext.ENTITY))!!.effectiveName().string}", e)
+                        val exception = IllegalStateException("Bad animation for entity: ${(context?.request(RenderContext.ENTITY))?.effectiveName()?.string ?: "unknown entity (riding animation?)"}", e)
                         val crash = CrashReport("Cobblemon encountered an unexpected crash", exception)
                         val section = crash.addCategory("Animation Details")
                         section.setDetail("Pose", state.currentPose!!)

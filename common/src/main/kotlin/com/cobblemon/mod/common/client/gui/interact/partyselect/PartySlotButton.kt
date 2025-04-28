@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -42,7 +43,7 @@ class PartySlotButton(
     val enabled: Boolean = true,
     val parent: PartySelectGUI,
     onPress: OnPress
-) : Button(x, y, WIDTH, HEIGHT, Component.literal("Pokemon"), onPress, CreateNarration { "".text() }) {
+) : Button(x, y, WIDTH, HEIGHT, Component.literal("Pokemon"), onPress, CreateNarration { "".text() }), CobblemonRenderable {
 
     companion object {
         private val slotResource = cobblemonResource("textures/gui/interact/party_select_slot.png")

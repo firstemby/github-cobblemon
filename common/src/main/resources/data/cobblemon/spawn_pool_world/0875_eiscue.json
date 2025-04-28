@@ -26,7 +26,7 @@
             "id": "eiscue-2",
             "pokemon": "eiscue",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -53,14 +53,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "1",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],

@@ -8,12 +8,14 @@
 
 package com.cobblemon.mod.common.api.storage
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.storage.factory.FileBackedPokemonStoreFactory
 import com.cobblemon.mod.common.api.storage.factory.PokemonStoreFactory
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.DataKeys
 import com.google.gson.JsonObject
 import java.util.UUID
 import net.minecraft.core.RegistryAccess
@@ -147,10 +149,14 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
 
     operator fun get(uuid: UUID) = find { it.uuid == uuid }
 
-    open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {}
+    open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
+        Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")
+    }
     abstract fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag
     abstract fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<T>
-    open fun handleInvalidSpeciesJSON(json: JsonObject) {}
+    open fun handleInvalidSpeciesJSON(json: JsonObject) {
+        Cobblemon.LOGGER.error("Failed to read unknown species: ${json.get(DataKeys.POKEMON_SPECIES_IDENTIFIER).asString}")
+    }
     abstract fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject
     abstract fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PokemonStore<T>
     abstract fun savePositionToNBT(position: T, nbt: CompoundTag)

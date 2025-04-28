@@ -7,7 +7,7 @@
             "id": "veluza-1",
             "pokemon": "veluza",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -50,7 +50,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -65,7 +65,7 @@
             "id": "veluza-4",
             "pokemon": "veluza",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -112,7 +112,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -123,6 +123,79 @@
                     "#cobblemon:is_ocean"
                 ],
                 "minLureLevel": 1
+            }
+        },
+        {
+            "id": "veluza-7",
+            "pokemon": "veluza",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "uncommon",
+            "level": "23-48",
+            "weight": 10.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            }
+        },
+        {
+            "id": "veluza-8",
+            "pokemon": "veluza",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "uncommon",
+            "level": "23-48",
+            "weight": 10.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            },
+            "anticondition": {
+                "minLureLevel": 1
+            }
+        },
+        {
+            "id": "veluza-9",
+            "pokemon": "veluza",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "23-48",
+            "weight": 2.0,
+            "weightMultiplier": {
+                "multiplier": 3.0,
+                "condition": {
+                    "minLureLevel": 3
+                }
+            },
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "minLureLevel": 1,
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

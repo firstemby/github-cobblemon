@@ -1,13 +1,71 @@
 {
   "implemented": true,
-  "name": "Bergmite",
   "nationalPokedexNumber": 712,
+  "name": "Bergmite",
   "primaryType": "ice",
+  "maleRatio": 0.5,
+  "height": 10,
+  "weight": 995,
+  "pokedex": [
+    "cobblemon.species.bergmite.desc"
+  ],
+  "labels": [
+    "gen6",
+    "kalosian_form"
+  ],
+  "aspects": [],
   "abilities": [
     "owntempo",
     "icebody",
     "h:sturdy"
   ],
+  "eggGroups": [
+    "monster",
+    "mineral"
+  ],
+  "baseStats": {
+    "hp": 55,
+    "attack": 69,
+    "defence": 85,
+    "special_attack": 32,
+    "special_defence": 35,
+    "speed": 28
+  },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 1,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 61,
+  "experienceGroup": "medium_fast",
+  "catchRate": 190,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.95,
+  "hitbox": {
+    "width": 0.95,
+    "height": 0.8,
+    "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "swimSpeed": 0.1,
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -21,43 +79,6 @@
       }
     ]
   },
-  "baseStats": {
-    "hp": 55,
-    "attack": 69,
-    "defence": 85,
-    "special_attack": 32,
-    "special_defence": 35,
-    "speed": 28
-  },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 61,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "monster",
-    "mineral"
-  ],
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "swimSpeed": 0.1,
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true
-      },
-      "walk": {
-        "walkSpeed": 0.15
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": false,
-      "depth": "normal",
-      "light": "0-4"
-    }
-  },
   "moves": [
     "1:harden",
     "1:rapidspin",
@@ -67,11 +88,9 @@
     "12:icywind",
     "15:protect",
     "18:avalanche",
-    "20:sharpen",
     "21:bite",
     "24:icefang",
     "27:irondefense",
-    "30:iceball",
     "30:recover",
     "33:crunch",
     "36:takedown",
@@ -81,27 +100,24 @@
     "egg:barrier",
     "egg:mirrorcoat",
     "egg:mist",
-    "egg:recover",
-    "tm:attract",
+    "egg:sharpen",
+    "tm:afteryou",
+    "tm:auroraveil",
     "tm:avalanche",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:chillingwater",
-    "tm:confide",
     "tm:crunch",
     "tm:curse",
     "tm:doubleedge",
-    "tm:doubleteam",
     "tm:endure",
     "tm:facade",
     "tm:flash",
-    "tm:flashcannon",
     "tm:frostbreath",
-    "tm:frustration",
     "tm:gyroball",
     "tm:hail",
-    "tm:hiddenpower",
+    "tm:iceball",
     "tm:icebeam",
     "tm:icefang",
     "tm:icespinner",
@@ -111,36 +127,30 @@
     "tm:protect",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:round",
     "tm:safeguard",
-    "tm:secretpower",
     "tm:sleeptalk",
-    "tm:snore",
     "tm:snowscape",
     "tm:stoneedge",
     "tm:strength",
     "tm:substitute",
-    "tm:surf",
-    "tm:swagger",
     "tm:takedown",
     "tm:terablast",
-    "tm:toxic",
     "tutor:afteryou",
+    "tutor:bulldoze",
+    "tutor:iceball",
+    "tutor:icebeam",
+    "tutor:icefang",
     "tutor:icywind",
     "tutor:irondefense",
-    "tutor:snore",
-    "tutor:waterpulse"
-  ],
-  "labels": [
-    "gen6"
-  ],
-  "pokedex": [
-    "cobblemon.species.bergmite.desc"
+    "tutor:rest",
+    "tutor:rockslide",
+    "tutor:rocksmash",
+    "tutor:sleeptalk",
+    "tutor:stoneedge"
   ],
   "evolutions": [
     {
@@ -155,13 +165,17 @@
         {
           "variant": "level",
           "minLevel": 37
+        },
+        {
+          "variant": "biome",
+          "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_hisuibiome"
         }
       ]
     },
     {
-      "id": "bergmite_avalugg",
+      "id": "bergmite_avalugghisui",
       "variant": "level_up",
-      "result": "avalugg hisuian",
+      "result": "avalugg",
       "consumeHeldItem": false,
       "learnableMoves": [
         "rockslide"
@@ -170,27 +184,81 @@
         {
           "variant": "level",
           "minLevel": 37
+        },
+        {
+          "variant": "biome",
+          "biomeCondition": "#cobblemon:evolution/regional/bergmite_hisuibiome"
+        },
+        {
+          "variant": "biome",
+          "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
         }
       ]
     }
   ],
-  "baseScale": 0.95,
-  "hitbox": {
-    "width": 0.95,
-    "height": 0.8,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 1,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 10,
-  "weight": 995,
-  "aspects": [],
-  "cannotDynamax": false
+  "forms": [
+    {
+      "name": "Hisui-Bias",
+      "primaryType": "ice",
+      "maleRatio": 0.5,
+      "height": 10,
+      "weight": 995,
+      "pokedex": [
+        "cobblemon.species.bergmite-hisuibias.desc"
+      ],
+      "labels": [
+        "gen8a",
+        "customized_official",
+        "hisuian_form"
+      ],
+      "aspects": [
+        "region-bias-hisui"
+      ],
+      "dynamaxBlocked": false,
+      "evolutions": [
+        {
+          "id": "bergmite_avalugg",
+          "variant": "level_up",
+          "result": "avalugg",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "bodyslam"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 37
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_hisuibiome"
+            },
+            {
+              "variant": "biome",
+              "biomeCondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+            }
+          ]
+        },
+        {
+          "id": "bergmite_avalugghisui",
+          "variant": "level_up",
+          "result": "avalugg",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "rockslide"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 37
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

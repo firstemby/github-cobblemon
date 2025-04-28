@@ -11,7 +11,10 @@ package com.cobblemon.mod.common.api.spawning.condition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
 import com.cobblemon.mod.common.util.itemRegistry
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
 
 /**
@@ -25,6 +28,10 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawningContext>() {
 
     var rod: RegistryLikeCondition<Item>? = null
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
+    var minLureLevel: Int? = null
+    var maxLureLevel: Int? = null
+    var bait: ResourceLocation? = null
+    var rodType: ResourceLocation? = null
 
     override fun fits(ctx: FishingSpawningContext): Boolean {
         if (!super.fits(ctx)) {
@@ -33,9 +40,33 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawningContext>() {
             return false
         } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> ctx.nearbyBlockTypes.any { cond.fits(it, ctx.blockRegistry) } }) {
             return false
-        } else {
-            return true
         }
+
+        if (minLureLevel != null) { // check for the lureLevel of the rod
+            val pokerodStack = ctx.rodStack
+            val lureLevel = EnchantmentHelper.getItemEnchantmentLevel(
+                ctx.enchantmentRegistry.getHolder(Enchantments.LURE).get(),
+                pokerodStack
+            )
+            if (lureLevel < minLureLevel!!) {
+                return false
+            } else if (maxLureLevel != null && lureLevel > maxLureLevel!!) {
+                return false
+            }
+        }
+        if (bait != null) { // check for the bait on the bobber
+            val pokerodBait = ctx.baitStack.itemHolder.unwrapKey().orElse(null)?.location()
+            if (pokerodBait != bait) {
+                return false
+            }
+        }
+        if (rodType != null) { // check for the type of pokerod being used
+            val pokerodItem = ctx.rodItem
+            if (pokerodItem?.pokeRodId != rodType) {
+                return false
+            }
+        }
+        return true
     }
 
     companion object {

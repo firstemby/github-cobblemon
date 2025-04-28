@@ -102,7 +102,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         mulchDuration = if (newDuration <= 0) {
             mulchVariant = MulchVariant.NONE
             this.setChanged()
-            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            world.sendBlockUpdated(pos, state, state, UPDATE_CLIENTS)
             0
         } else {
             newDuration
@@ -225,7 +225,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
      * @param player The [Player] harvesting the tree.
      * @return The resulting [ItemStack]s to be dropped.
      */
-    fun harvest(world: Level, state: BlockState, pos: BlockPos, player: Player): Collection<ItemStack> {
+    fun harvest(world: Level, state: BlockState, pos: BlockPos, player: Player?): Collection<ItemStack> {
         val drops = arrayListOf<ItemStack>()
         val unique = this.growthPoints.groupingBy { it }.eachCount()
         unique.forEach { (identifier, amount) ->
@@ -246,6 +246,10 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         }
         refresh(world, pos, state, player)
         return drops
+    }
+
+    fun harvest(world: Level, state: BlockState, pos: BlockPos): Collection<ItemStack>{
+        return harvest(world, state, pos, null);
     }
 
     override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -309,6 +313,10 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         val berryPoints = arrayListOf<Pair<Berry, GrowthPoint>>()
         val sequenceIndices = growthPointSequence.toCharArray().filter { it.digitToInt(16) < baseBerry.growthPoints.size }
         for ((index, identifier) in this.growthPoints.withIndex()) {
+            // Don't brick old broken worlds that had too many
+            if (index >= sequenceIndices.size) {
+                break
+            }
             val berry = Berries.getByIdentifier(identifier) ?: continue
             val sequenceIndexHex = sequenceIndices[index].digitToInt(16)
             berryPoints.add(berry to baseBerry.growthPoints[sequenceIndexHex])
@@ -330,7 +338,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         this.setChanged()
     }
 
-    private fun refresh(world: Level, pos: BlockPos, state: BlockState, player: Player) {
+    private fun refresh(world: Level, pos: BlockPos, state: BlockState, player: Player?) {
         val newState = state.setValue(BerryBlock.AGE, 3)
         world.setBlock(pos, newState, UPDATE_CLIENTS)
         world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)

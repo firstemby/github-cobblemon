@@ -13,7 +13,7 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
-      "animations": ["q.look('head')", "q.bedrock('pignite', 'battle_idle')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('pignite', 'battle_idle')"],
       "quirks": [
         "q.bedrock_quirk('pignite', 'blink')",
         "q.bedrock_quirk('pignite', 'sniff_quirk')",
@@ -23,7 +23,7 @@
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('pignite', 'ground_idle')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('pignite', 'ground_idle')"],
       "quirks": [
         "q.bedrock_quirk('pignite', 'blink')",
         "q.bedrock_quirk('pignite', 'look_quirk')",
@@ -32,7 +32,7 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "animations": ["q.look('head')", "q.bedrock('pignite', 'ground_walk')"],
+      "animations": ["q.look('head', 1, 1, 10, -20)", "q.bedrock('pignite', 'ground_walk')"],
       "quirks": [
         "q.bedrock_quirk('pignite', 'blink')",
         "q.bedrock_quirk('pignite', 'look_quirk')",

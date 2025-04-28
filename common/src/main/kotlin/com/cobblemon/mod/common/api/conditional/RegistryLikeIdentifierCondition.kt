@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.conditional
 
 import com.google.gson.JsonElement
-import net.minecraft.core.Registry
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -24,5 +24,6 @@ open class RegistryLikeIdentifierCondition<T : Any>(val identifier: ResourceLoca
             constructor: (ResourceLocation) -> RegistryLikeIdentifierCondition<T>
         ): (JsonElement) -> RegistryLikeIdentifierCondition<T>? = { constructor(ResourceLocation.parse(it.asString)) }
     }
-    override fun fits(t: T, registry: Registry<T>) = registry.getKey(t) == identifier
+
+    override fun fits(t: Holder<T>) = t.`is`(identifier)
 }

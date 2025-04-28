@@ -27,7 +27,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since November 13th, 2023
  */
-class SpeciesFeatureUpdatePacket(pokemon: () -> Pokemon, val species: ResourceLocation, speciesFeature: SynchronizedSpeciesFeature) : SingleUpdatePacket<SynchronizedSpeciesFeature, SpeciesFeatureUpdatePacket>(pokemon, speciesFeature) {
+class SpeciesFeatureUpdatePacket(pokemon: () -> Pokemon?, val species: ResourceLocation, speciesFeature: SynchronizedSpeciesFeature) : SingleUpdatePacket<SynchronizedSpeciesFeature, SpeciesFeatureUpdatePacket>(pokemon, speciesFeature) {
     companion object {
         val ID = cobblemonResource("species_feature_update")
         fun decode(buffer: RegistryFriendlyByteBuf): SpeciesFeatureUpdatePacket {

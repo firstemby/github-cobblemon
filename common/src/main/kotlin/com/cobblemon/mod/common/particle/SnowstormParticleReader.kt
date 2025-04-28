@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.normalizeToArray
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import com.mojang.serialization.JsonOps
 import net.minecraft.resources.ResourceLocation
 import org.joml.Vector4f
 
@@ -55,6 +56,7 @@ object SnowstormParticleReader {
         val collisionJson = componentsJson.get("minecraft:particle_motion_collision")?.asJsonObject
         val spaceJson = componentsJson.get("minecraft:emitter_local_space")?.asJsonObject
         val particleLifetimeEventsJson = componentsJson.get("minecraft:particle_lifetime_events")?.asJsonObject
+        val emitterSpaceJson = componentsJson.get("cobblemon:emitter_space")?.asJsonObject ?: JsonObject()
 
         val id = ResourceLocation.parse(descJson.get("identifier").asString)
         val maxAge = particleLifetimeJson?.get("max_lifetime")?.asString?.asExpression() ?: 0.0.asExpression()
@@ -391,6 +393,8 @@ object SnowstormParticleReader {
             key.toDouble() to value.normalizeToArray().map { it.asString }.toMutableList()
         }?.toMap()?.toMutableMap() ?: mutableMapOf())
 
+        val emitterSpace = EmitterSpace.CODEC.decode(JsonOps.INSTANCE, emitterSpaceJson).result().get().first
+
         return BedrockParticleOptions(
             id = id,
             events = events,
@@ -400,6 +404,7 @@ object SnowstormParticleReader {
                 rate = rate,
                 shape = shape,
                 lifetime = lifetime,
+                space = emitterSpace,
                 eventTimeline = emitterEventTimeline,
                 creationEvents = emitterCreationEvents,
                 expirationEvents = emitterExpirationEvents,

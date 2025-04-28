@@ -4,11 +4,11 @@
     "#minecraft:is_taiga",
 	"#cobblemon:is_snowy_taiga",
 	{
-      "id": "#c:tree_coniferous",
+      "id": "#c:is_taiga",
       "required": false
     },
 	{
-      "id": "#forge:is_coniferous",
+      "id": "#c:tree/coniferous",
       "required": false
     },
 	{
@@ -42,6 +42,10 @@
 	{
       "id": "biomesoplenty:wetland",
       "required": false
+    },
+	{
+      "id": "clifftree:cold_river",
+      "required": false 
     },
 	{
       "id": "terralith:bryce_canyon",

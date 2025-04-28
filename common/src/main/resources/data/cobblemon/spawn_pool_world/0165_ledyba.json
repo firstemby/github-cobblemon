@@ -48,6 +48,26 @@
                     "#the_bumblezone:sempiternal_sanctums"
                 ]
             }
+        },
+        {
+            "id": "ledyba-3",
+            "pokemon": "ledyba",
+            "presets": [
+                "natural",
+                "treetop"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "2-27",
+            "weight": 7.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ]
+            }
         }
     ]
 }

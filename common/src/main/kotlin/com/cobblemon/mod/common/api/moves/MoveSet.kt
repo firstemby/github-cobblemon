@@ -8,7 +8,8 @@
 
 package com.cobblemon.mod.common.api.moves
 
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.readSizedInt
@@ -22,11 +23,27 @@ import com.mojang.serialization.Codec
 import kotlin.math.min
 
 class MoveSet : Iterable<Move> {
-    val observable = SimpleObservable<MoveSet>()
+    var changeFunction: (MoveSet) -> Unit = {}
     private var emit = true
 
     private val moves = arrayOfNulls<Move>(MOVE_COUNT)
 
+    fun toStruct(): QueryStruct {
+        val struct = QueryStruct(hashMapOf())
+        struct.addFunction("move") { params ->
+            val index = params.getInt(0) as? Int ?: return@addFunction null
+            return@addFunction get(index)?.struct
+        }
+        struct.addFunction("has_move") { params ->
+            val moveID = params.getString(0) ?: return@addFunction null
+            return@addFunction if(moves.any { it?.template?.name == moveID }) DoubleValue(1.0) else DoubleValue(0.0)
+        }
+        struct.addFunction("get_move") { params ->
+            val moveID = params.getString(0) ?: return@addFunction null
+            return@addFunction moves.firstOrNull { it?.template?.name == moveID }?.struct
+        }
+        return struct
+    }
 
     override fun iterator() = moves.filterNotNull().iterator()
 
@@ -116,23 +133,26 @@ class MoveSet : Iterable<Move> {
         return json
     }
 
-    fun add(move: Move) {
+    fun add(move: Move): Boolean {
         if (any { it.template == move.template }) {
-            return
+            return false
         }
+
         for (i in 0 until MOVE_COUNT) {
             if (moves[i] == null) {
                 moves[i] = move
                 move.observable.subscribe { this.update() }
                 update()
-                return
+                return true
             }
         }
+
+        return false
     }
 
     fun update() {
         if (emit) {
-            observable.emit(this)
+            changeFunction(this)
         }
     }
 

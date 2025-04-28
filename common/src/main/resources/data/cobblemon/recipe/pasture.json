@@ -13,7 +13,7 @@
             "item": "cobblemon:pc"
         },
         "W": {
-            "item": "minecraft:wheat"
+            "tag": "c:crops/wheat"
         },
         "H": {
             "item": "minecraft:hopper"

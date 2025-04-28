@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Attack",
-        "Defense",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Attack",
+      "unlockForms": [
+        "Attack"
+      ]
+    },
+    {
+      "displayForm": "Defense",
+      "unlockForms": [
+        "Defense"
+      ]
+    },
+    {
+      "displayForm": "Speed",
+      "unlockForms": [
         "Speed"
       ]
     }

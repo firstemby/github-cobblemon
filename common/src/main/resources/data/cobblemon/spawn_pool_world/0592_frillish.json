@@ -7,7 +7,7 @@
             "id": "frillish-1",
             "pokemon": "frillish",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -33,7 +33,7 @@
             "id": "frillish-2",
             "pokemon": "frillish",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -53,7 +53,7 @@
             "id": "frillish-3",
             "pokemon": "frillish",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -76,7 +76,7 @@
             "id": "frillish-4",
             "pokemon": "frillish",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -113,8 +113,8 @@
                 {
                     "multiplier": 0.6,
                     "condition": {
-                        "minLureLevel": "0",
-                        "maxLureLevel": "0"
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
                     }
                 }
             ],
@@ -129,7 +129,7 @@
             "id": "frillish-6",
             "pokemon": "frillish",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -173,8 +173,8 @@
                 {
                     "multiplier": 0.6,
                     "condition": {
-                        "minLureLevel": "0",
-                        "maxLureLevel": "0"
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
                     }
                 }
             ],
@@ -185,6 +185,49 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
+            }
+        },
+        {
+            "id": "frillish-8",
+            "pokemon": "frillish",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "context": "submerged",
+            "bucket": "common",
+            "level": "9-34",
+            "weight": 54.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
+            }
+        },
+        {
+            "id": "frillish-9",
+            "pokemon": "frillish",
+            "type": "pokemon",
+            "context": "fishing",
+            "bucket": "common",
+            "level": "9-34",
+            "weight": 54.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:bubblebeam_pop",
 			"basic_render_parameters": {
 				"material": "particles_blend",
-				"texture": "textures/particles/bubble_pop"
+				"texture": "textures/particles/vanilla/bubble_pop"
 			}
 		},
 		"components": {
@@ -42,10 +42,12 @@
 			},
 			"minecraft:particle_appearance_tinting": {
 				"color": {
-					"interpolant": "v.particle_age / v.particle_lifetime",
+					"interpolant": "v.particle_random_1",
 					"gradient": {
-						"0.0": "#FFB5FFF6",
-						"1.0": "#FF228CFF"
+						"0.0": "#FF61B4FF",
+						"0.17": "#FFFFFFFF",
+						"0.55": "#FFE5FFB8",
+						"1.0": "#FF85FFE3"
 					}
 				}
 			}

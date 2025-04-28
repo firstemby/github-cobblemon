@@ -9,6 +9,9 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.EvGainedEvent
+import com.cobblemon.mod.common.api.pokemon.stats.EvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -35,19 +38,50 @@ class EVs : PokemonStats() {
      * @param value The amount to attempt to add, this wil safely be coerced to the highest possible value.
      * @return The amount added or 0 if the addition was impossible.
      */
+    @Deprecated(
+        message = "Please update to modern API",
+        replaceWith = ReplaceWith("add(key, value, source)", "com.cobblemon.mod.common.api.pokemon.stats.Stat", "com.cobblemon.mod.common.api.pokemon.stats.EvSource"),
+        level = DeprecationLevel.ERROR
+    )
     fun add(key: Stat, value: Int): Int {
+        return this.performAdd(key, value)
+    }
+
+    /**
+     * Safely adds the given amount of EVs to this store.
+     *
+     * @param key The [Stat] being mutated.
+     * @param value The amount to attempt to add, this wil safely be coerced to the highest possible value.
+     * @param source The [EvSource] of this addition.
+     * @return The amount added or 0 if the addition was impossible.
+     */
+    fun add(key: Stat, value: Int, source: EvSource): Int {
+        CobblemonEvents.EV_GAINED_EVENT_PRE.postThen(
+            event = EvGainedEvent.Pre(key, value, source),
+            ifCanceled = { return 0 },
+            ifSucceeded = { event ->
+                val result = this.performAdd(event.stat, event.amount)
+                CobblemonEvents.EV_GAINED_EVENT_POST.post(EvGainedEvent.Post(key, result, source))
+                return result
+            }
+        )
+        // This never runs, just the impl of the observables doesn't allow us to infer the actual return
+        return 0
+    }
+
+    private fun performAdd(stat: Stat, value: Int): Int {
         val currentTotal = this.sumOf { it.value }
         if (currentTotal == MAX_TOTAL_VALUE && value > 0) {
             return 0
         }
-        val currentStat = this.getOrDefault(key)
+        val currentStat = this.getOrDefault(stat)
         val possibleForStat = MAX_STAT_VALUE - currentStat
         val possibleForTotal = MAX_TOTAL_VALUE - currentTotal
         val coercedValue = value.coerceIn(-currentStat, min(possibleForStat, possibleForTotal))
         val newValue = currentStat + coercedValue
         // avoid unnecessary updates
         if (newValue != currentStat) {
-            this[key] = newValue
+            this[stat] = newValue
             return coercedValue
         }
         return 0

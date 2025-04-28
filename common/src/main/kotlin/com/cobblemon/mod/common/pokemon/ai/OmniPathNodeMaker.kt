@@ -8,12 +8,14 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.util.canFit
 import com.google.common.collect.Maps
 import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
+import java.util.EnumSet
+import java.util.function.Predicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
@@ -25,10 +27,13 @@ import net.minecraft.world.level.block.BaseRailBlock
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FenceGateBlock
 import net.minecraft.world.level.material.FluidState
-import net.minecraft.world.level.pathfinder.*
+import net.minecraft.world.level.pathfinder.Node
+import net.minecraft.world.level.pathfinder.NodeEvaluator
+import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.PathfindingContext
 import net.minecraft.world.level.pathfinder.Target
 import net.minecraft.world.phys.Vec3
-import java.util.*
 
 /**
  * A path node maker that constructs paths knowing that the entity might be capable of
@@ -42,6 +47,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
     private val nodePosToType: Long2ObjectMap<PathType> = Long2ObjectOpenHashMap()
 
     var canPathThroughFire: Boolean = false
+
+    var nodeFilter: Predicate<PathType> = Predicate { true }
 
     override fun prepare(cachedWorld: PathNavigationRegion, entity: Mob) {
         super.prepare(cachedWorld, entity)
@@ -87,7 +94,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         val upIsOpen = mob.canFit(node.asBlockPos().above())
 
         // Non-diagonal surroundings in 3d space
-        for (direction in Direction.values()) {
+        for (direction in Direction.entries) {
             val pathNode = this.getNode(node.x + direction.stepX, node.y + direction.stepY, node.z + direction.stepZ) ?: continue
             map[direction] = pathNode
             if (!hasNotVisited(pathNode)) {
@@ -188,6 +195,10 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun isValidPathType(type: PathType): Boolean {
+        if (!nodeFilter.test(type)) {
+            return false
+        }
+
         return when {
             (type == PathType.BREACH || type == PathType.WATER || type == PathType.WATER_BORDER) && canSwimInWater() -> true
             type == PathType.OPEN && canFly() -> true
@@ -206,7 +217,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             super.getNode(x, y, z).also { pathNode = it } != null
         ) {
             pathNode!!.type = type
-            pathNode!!.costMalus = pathNode!!.costMalus.coerceAtLeast(nodePenalty)
+            pathNode.costMalus = pathNode.costMalus.coerceAtLeast(nodePenalty)
         }
         return pathNode
     }
@@ -241,7 +252,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             PathType.FENCE
         } else if (isWater && belowSolid && !canSwimInWater() && canBreatheUnderFluid) {
             PathType.WALKABLE
-        } else if (isWater || (isLava && canSwimUnderlava())) {
+        } else if (isWater || (isLava && canSwimUnderFluid(blockState.fluidState))) {
             PathType.WATER
             // This breaks lifting off from snow layers and carpets
 //        } else if (blockState.canPathfindThrough(world, pos, NavigationType.LAND) && !blockStateBelow.canPathfindThrough(world, below, NavigationType.AIR)) {
@@ -250,7 +261,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
 //            PathType.OPEN
         } else if (!solid && belowSolid) {
             PathType.WALKABLE
-        } else if (!solid && !belowSolid) {
+        } else if (!solid) {
             PathType.OPEN
             // This breaks walking up slabs
 //        } else if (blockState.canPathfindThrough(world, pos, NavigationType.LAND) && blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
@@ -353,7 +364,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
             return PathType.DANGER_OTHER
         }
 
-        if (WalkNodeEvaluator.isBurningBlock(blockState) && !this.canPathThroughFire) {
+        if (isBurningBlock(blockState) && !this.canPathThroughFire && !(blockState.`is`(Blocks.MAGMA_BLOCK) && !isOnGround())) {
             return PathType.DANGER_FIRE
         }
 
@@ -377,46 +388,40 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     fun canWalk(): Boolean {
-        return if (this.mob is PokemonEntity) {
-            (this.mob as PokemonEntity).behaviour.moving.walk.canWalk
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).canWalk()
         } else {
             true
         }
     }
 
      fun canSwimInWater(): Boolean {
-         return if (this.mob is PokemonEntity) {
-             (this.mob as PokemonEntity).behaviour.moving.swim.canSwimInWater
+         return if (this.mob is OmniPathingEntity) {
+                 (this.mob as OmniPathingEntity).canSwimInWater()
          } else {
              false
          }
      }
 
-    fun canSwimUnderlava(): Boolean {
-        return if (this.mob is PokemonEntity) {
-            (this.mob as PokemonEntity).behaviour.moving.swim.canBreatheUnderlava
-        } else {
-            false
-        }
-    }
-
     fun canSwimUnderFluid(fluidState: FluidState): Boolean {
-        return if (this.mob is PokemonEntity) {
-            if (fluidState.`is`(FluidTags.LAVA)) {
-                (this.mob as PokemonEntity).behaviour.moving.swim.canBreatheUnderlava
-            } else if (fluidState.`is`(FluidTags.WATER)) {
-                (this.mob as PokemonEntity).behaviour.moving.swim.canBreatheUnderwater
-            } else {
-                false
-            }
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).canSwimUnderFluid(fluidState)
         } else {
             false
         }
     }
 
     fun canFly(): Boolean {
-        return if (this.mob is PokemonEntity) {
-            (this.mob as PokemonEntity).behaviour.moving.fly.canFly
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).canFly()
+        } else {
+            false
+        }
+    }
+
+    fun isOnGround(): Boolean {
+        return if (this.mob is OmniPathingEntity) {
+            (this.mob as OmniPathingEntity).isOnGround()
         } else {
             false
         }

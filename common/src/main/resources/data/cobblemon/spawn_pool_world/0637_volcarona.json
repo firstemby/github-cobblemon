@@ -78,6 +78,25 @@
                     }
                 ]
             }
+        },
+        {
+            "id": "volcarona-4",
+            "pokemon": "volcarona",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "59-64",
+            "weight": 1.0,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
+                ]
+            }
         }
     ]
 }

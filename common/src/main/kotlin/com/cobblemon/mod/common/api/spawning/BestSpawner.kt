@@ -10,7 +10,14 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.entity.Despawner
-import com.cobblemon.mod.common.api.spawning.condition.*
+import com.cobblemon.mod.common.api.spawning.condition.AreaSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.BasicSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.FishingSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.GroundedSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
+import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
 import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
 import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
 import com.cobblemon.mod.common.api.spawning.context.GroundedSpawningContext
@@ -30,7 +37,6 @@ import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawner
-import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.preset.BasicSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
@@ -44,6 +50,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.TickingSpawner
 import com.cobblemon.mod.common.entity.pokemon.CobblemonAgingDespawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.server.MinecraftServer
 
 /**
  * A grouping of all the overarching behaviours of the Best Spawner system. This is a convenient accessor to
@@ -83,8 +90,9 @@ object BestSpawner {
     var defaultPokemonDespawner: Despawner<PokemonEntity> = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
     lateinit var fishingSpawner: FishingSpawner
 
-    fun loadConfig() {
+    fun init() {
         LOGGER.info("Starting the Best Spawner...")
+
         SpawningCondition.register(BasicSpawningCondition.NAME, BasicSpawningCondition::class.java)
         SpawningCondition.register(AreaSpawningCondition.NAME, AreaSpawningCondition::class.java)
         SpawningCondition.register(SubmergedSpawningCondition.NAME, SubmergedSpawningCondition::class.java)
@@ -94,6 +102,7 @@ object BestSpawner {
         SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition::class.java)
 
         LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
+
         SpawningContextCalculator.register(GroundedSpawningContextCalculator)
         SpawningContextCalculator.register(SeafloorSpawningContextCalculator)
         SpawningContextCalculator.register(LavafloorSpawningContextCalculator)
@@ -113,13 +122,23 @@ object BestSpawner {
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
-        config = BestSpawnerConfig.load()
+        loadConfig()
 
         SpawnDetailPresets.registerPresetType(BasicSpawnDetailPreset.NAME, BasicSpawnDetailPreset::class.java)
         SpawnDetailPresets.registerPresetType(PokemonSpawnDetailPreset.NAME, PokemonSpawnDetailPreset::class.java)
     }
 
-    fun onServerStarted() {
+    fun loadConfig() {
+        config = BestSpawnerConfig.load()
+    }
+
+    fun reloadConfig() {
+        loadConfig()
+        spawnerManagers.forEach(SpawnerManager::onConfigReload)
+    }
+
+    fun onServerStarted(server: MinecraftServer) {
+        CobblemonSpawnPools.onServerLoad(server)
         spawnerManagers.forEach(SpawnerManager::onServerStarted)
         fishingSpawner = FishingSpawner()
     }

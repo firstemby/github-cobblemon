@@ -7,13 +7,13 @@
     ],
     "key": {
         "B": {
-            "item": "minecraft:brick"
+            "tag": "c:bricks/normal"
         },
         "S": {
             "item": "minecraft:armadillo_scute"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         }
     },
     "result": {

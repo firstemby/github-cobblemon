@@ -11,11 +11,13 @@ package com.cobblemon.mod.common.api.drop
 import com.cobblemon.mod.common.api.events.CobblemonEvents.LOOT_DROPPED
 import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import kotlin.random.Random
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -45,9 +47,11 @@ class DropTable {
      * Gets a drop list from this table as a list of [DropEntry]. You can specify the range of drop quantity totals
      * that will be possible, or if you leave it blank it will use [DropTable.amount].
      */
-    fun getDrops(amount: IntRange = this.amount): List<DropEntry> {
+    fun getDrops(amount: IntRange = this.amount, pokemon: Pokemon? = null): List<DropEntry> {
         val chosenAmount = amount.random()
-        val possibleDrops = entries.filter { it.quantity <= chosenAmount }.toMutableList()
+        val possibleDrops = entries.filter {
+            it.quantity <= chosenAmount && it.canDrop(pokemon)
+        }.toMutableList()
 
         if (possibleDrops.isEmpty()) {
             return emptyList()
@@ -87,11 +91,10 @@ class DropTable {
         world: ServerLevel,
         pos: Vec3,
         player: ServerPlayer?,
-        amount: IntRange = this.amount
+        amount: IntRange = this.amount,
+        pokemon: Pokemon? = null,
     ) {
-        val drops = getDrops(amount).toMutableList()
-        val heldItem = (entity as PokemonEntity).pokemon.heldItemNoCopy()
-        if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
+        val drops = getDrops(amount, pokemon).toMutableList()
         LOOT_DROPPED.postThen(
             event = LootDroppedEvent(this, player, entity, drops),
             ifSucceeded = { it.drops.forEach { it.drop(entity, world, pos, player) } }

@@ -7,8 +7,18 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Terastal",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Terastal",
+      "unlockForms": [
+        "Terastal"
+      ]
+    },
+    {
+      "displayForm": "Stellar",
+      "unlockForms": [
         "Stellar"
       ]
     }

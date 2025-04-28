@@ -4,7 +4,7 @@
 	"#minecraft:is_mountain",
     "#cobblemon:is_hills",
 	{
-      "id": "#forge:is_mountain",
+      "id": "#c:is_mountain",
       "required": false
     },
 	{

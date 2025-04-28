@@ -4,9 +4,11 @@ import json
 import requests
 from openpyxl import load_workbook
 
+berry_data_wb = load_workbook(filename="Cobblemon Berry Data.xlsx", data_only=True)
+berry_placements_wb = load_workbook(filename="Berry Placements.xlsx", data_only=True)
+berry_mutations_wb = load_workbook(filename="Berry Mutations (v2).xlsx", data_only=True)
 
 def stuff():
-    berry_data_wb = load_workbook(filename="Cobblemon Berry Data.xlsx", data_only=True)
     berry_dict = {}
     berry_file_name = ""
     for row in berry_data_wb.active.iter_rows(2):
@@ -35,8 +37,18 @@ def stuff():
         }
         fav_mulches = [i.lower() for i in row[3].value.split(", ")]
         berry_dict["favoriteMulches"] = fav_mulches
-        berry_dict["growthFactors"] = []
-        berry_dict["randomizedGrowthPoints"] = True
+        betterYields = row[5].value.split("-")
+        berry_dict["growthFactors"] = [
+            {
+                "variant": "cobblemon:preferred_biome",
+                "bonusYield": {
+                    "min": int(betterYields[0]) - int(baseYields[0]),
+                    "max": int(betterYields[1]) - int(baseYields[1])
+                }
+            }
+        ]
+        place_row = berry_placements_wb.active[row[0].row + 1]
+        berry_dict["randomizedGrowthPoints"] = True if place_row[2].value == '❌' else False
         spawn_type = row[11].value
         if spawn_type == "PREFERRED_BIOME":
             berry_dict["spawnConditions"] = [
@@ -88,12 +100,11 @@ def stuff():
         berry_dict["fruitModel"] = f"cobblemon:{berry_prefix}_berry.geo"
         berry_dict["fruitTexture"] = f"cobblemon:{berry_prefix}"
         berry_dict["boneMealChance"] = int(row[21].value) / 100.0
-        with open(f"berries/{berry_file_name}", "w+") as file:
+        with open(f"../common/src/main/resources/data/cobblemon/berries/{berry_file_name}", "w+") as file:
             file.write(json.dumps(berry_dict, indent=2))
 
 
 def get_growth_points(rowNum):
-    berry_placements_wb = load_workbook(filename="Berry Placements.xlsx", data_only=True)
     row = berry_placements_wb.active[rowNum + 1]
     numSpots = 0
     for i in range(0, 10):
@@ -118,7 +129,6 @@ def get_growth_points(rowNum):
     return result
 
 def get_stage_one_y_pos(rowNum):
-    berry_placements_wb = load_workbook(filename="Berry Placements.xlsx", data_only=True)
     row = berry_placements_wb.active[rowNum + 1]
     return  {
             "position": {
@@ -134,7 +144,6 @@ def get_stage_one_y_pos(rowNum):
         }
 
 def get_mutations(berry_name):
-    berry_mutations_wb = load_workbook(filename="Berry Mutations (v2).xlsx", data_only=True)
     result = {}
     for row in berry_mutations_wb.active.iter_rows(2):
         add_mutation = False

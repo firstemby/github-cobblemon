@@ -10,15 +10,17 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "PORTRAIT", "PROFILE", "NONE"],
-      "animations": ["q.bedrock('corsola', 'ground_idle')"],
+      "animations": [
+        "q.look('head', 0.5)",
+        "q.bedrock('corsola', 'ground_idle')"
+      ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]
     },
     "walking": {
       "poseName": "walking",
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.bedrock('corsola', 'ground_idle')",
-        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+        "q.bedrock('corsola', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]
     }

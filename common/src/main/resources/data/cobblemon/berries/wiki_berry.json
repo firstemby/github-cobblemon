@@ -1,125 +1,134 @@
 {
-  "baseYield": {
-    "min": 2,
-    "max": 3
-  },
-  "preferredBiomeTags": [
-    "cobblemon:is_arid"
-  ],
-  "growthTime": {
-    "min": 41,
-    "max": 49
-  },
-  "refreshRate": {
-    "min": 20,
-    "max": 24
-  },
-  "favoriteMulches": [
-    "sandy"
-  ],
-  "growthFactors": [],
-  "randomizedGrowthPoints": true,
-  "spawnConditions": [],
-  "growthPoints": [
-    {
-      "position": {
-        "x": 7.5,
-        "y": 14.0,
-        "z": 8.5
-      },
-      "rotation": {
-        "x": -15.0,
-        "y": -25.0,
-        "z": -147.5
-      }
+    "baseYield": {
+        "min": 2,
+        "max": 3
     },
-    {
-      "position": {
-        "x": 8.5,
-        "y": 14.0,
-        "z": 8.5
-      },
-      "rotation": {
-        "x": -15.0,
-        "y": 25.0,
-        "z": 147.5
-      }
+    "preferredBiomeTags": [
+        "cobblemon:is_arid"
+    ],
+    "growthTime": {
+        "min": 41,
+        "max": 49
     },
-    {
-      "position": {
-        "x": 8.0,
-        "y": 14.0,
-        "z": 7.5
-      },
-      "rotation": {
-        "x": 152.5,
-        "y": 0.0,
-        "z": 0.0
-      }
+    "refreshRate": {
+        "min": 20,
+        "max": 24
     },
-    {
-      "position": {
-        "x": 8.0,
-        "y": 14.0,
-        "z": 9.5
-      },
-      "rotation": {
-        "x": -130.0,
-        "y": 0.0,
-        "z": 0.0
-      }
+    "favoriteMulches": [
+        "sandy"
+    ],
+    "growthFactors": [
+        {
+            "variant": "cobblemon:preferred_biome",
+            "bonusYield": {
+                "min": 0,
+                "max": 1
+            }
+        }
+    ],
+    "randomizedGrowthPoints": true,
+    "spawnConditions": [],
+    "growthPoints": [
+        {
+            "position": {
+                "x": 7.5,
+                "y": 14.0,
+                "z": 8.5
+            },
+            "rotation": {
+                "x": -15.0,
+                "y": -25.0,
+                "z": -147.5
+            }
+        },
+        {
+            "position": {
+                "x": 8.5,
+                "y": 14.0,
+                "z": 8.5
+            },
+            "rotation": {
+                "x": -15.0,
+                "y": 25.0,
+                "z": 147.5
+            }
+        },
+        {
+            "position": {
+                "x": 8.0,
+                "y": 14.0,
+                "z": 7.5
+            },
+            "rotation": {
+                "x": 152.5,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "position": {
+                "x": 8.0,
+                "y": 14.0,
+                "z": 9.5
+            },
+            "rotation": {
+                "x": -130.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "position": {
+                "x": 9.25,
+                "y": 14.0,
+                "z": 7.5
+            },
+            "rotation": {
+                "x": 25.0,
+                "y": -20.0,
+                "z": 125.0
+            }
+        },
+        {
+            "position": {
+                "x": 6.75,
+                "y": 14.0,
+                "z": 7.5
+            },
+            "rotation": {
+                "x": 25.0,
+                "y": 20.0,
+                "z": -127.5
+            }
+        }
+    ],
+    "stageOnePositioning": {
+        "position": {
+            "x": 8.15,
+            "y": 2.5,
+            "z": 8.1
+        },
+        "rotation": {
+            "x": 5.0,
+            "y": -10.0,
+            "z": -7.5
+        }
     },
-    {
-      "position": {
-        "x": 9.25,
-        "y": 14.0,
-        "z": 7.5
-      },
-      "rotation": {
-        "x": 25.0,
-        "y": -20.0,
-        "z": 125.0
-      }
+    "mutations": {
+        "cobblemon:lum_berry": "cobblemon:sitrus_berry",
+        "cobblemon:bluk_berry": "cobblemon:cornn_berry"
     },
-    {
-      "position": {
-        "x": 6.75,
-        "y": 14.0,
-        "z": 7.5
-      },
-      "rotation": {
-        "x": 25.0,
-        "y": 20.0,
-        "z": -127.5
-      }
+    "sproutShape": "short-sprout",
+    "matureShape": "short-mature",
+    "weight": 1.0,
+    "tintIndexes": [],
+    "flowerModel": "cobblemon:flower.geo",
+    "flowerTexture": "cobblemon:flower",
+    "fruitModel": "cobblemon:wiki_berry.geo",
+    "fruitTexture": "cobblemon:wiki",
+    "boneMealChance": 0.48,
+    "colour": "PURPLE",
+    "flavours": {
+        "DRY": 15
     }
-  ],
-  "stageOnePositioning": {
-    "position": {
-      "x": 8.15,
-      "y": 2.5,
-      "z": 8.1
-    },
-    "rotation": {
-      "x": 5.0,
-      "y": -10.0,
-      "z": -7.5
-    }
-  },
-  "mutations": {
-    "cobblemon:lum_berry": "cobblemon:sitrus_berry",
-    "cobblemon:bluk_berry": "cobblemon:cornn_berry"
-  },
-  "sproutShape": "short-sprout",
-  "matureShape": "short-mature",
-  "flavors": {
-    "DRY": 15
-  },
-  "weight": 1.0,
-  "tintIndexes": [],
-  "flowerModel": "cobblemon:flower.geo",
-  "flowerTexture": "cobblemon:flower",
-  "fruitModel": "cobblemon:wiki_berry.geo",
-  "fruitTexture": "cobblemon:wiki",
-  "boneMealChance": 0.48
 }

@@ -8,29 +8,41 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.npc.ai.LookAtBattlingPokemonTask
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
-    val minDurationTicks = "40".asExpression()
-    val maxDurationTicks = "80".asExpression()
+    companion object {
+        const val LOOK_AT_BATTLING_POKEMON = "look_at_battling_pokemon"
+    }
+
+    val condition = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, LOOK_AT_BATTLING_POKEMON, true).asExpressible()
+    val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
+    val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        minDurationTicks,
+        maxDurationTicks
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!resolveBooleanVariable(LOOK_AT_BATTLING_POKEMON)) return null
         return LookAtBattlingPokemonTask.create(
-            minDurationTicks = runtime.resolveInt(minDurationTicks),
-            maxDurationTicks = runtime.resolveInt(maxDurationTicks)
+            minDurationTicks = minDurationTicks.resolveInt(),
+            maxDurationTicks = maxDurationTicks.resolveInt()
         )
     }
-
 }

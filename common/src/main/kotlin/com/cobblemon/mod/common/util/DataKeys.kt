@@ -43,11 +43,18 @@ object DataKeys {
     const val POKEMON_NATURE = "Nature"
     const val POKEMON_MINTED_NATURE = "MintedNature"
     const val HELD_ITEM = "HeldItem"
+    const val HELD_ITEM_VISIBLE = "HeldItemVisible"
     const val POKEMON_TERA_TYPE = "TeraType"
     const val POKEMON_DMAX_LEVEL = "DmaxLevel"
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
     const val POKEMON_TRADEABLE = "Tradeable"
     const val POKEMON_FORCED_ASPECTS = "ForcedAspects"
+    const val POKEMON_COSMETIC_ITEM = "CosmeticItem"
+    const val POKEMON_ACTIVE_MARK = "ActiveMark"
+    const val POKEMON_MARKS = "Marks"
+    const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
+    const val POKEMON_MARKINGS = "Markings"
+    const val POKEMON_RIDE_BOOSTS = "RideBoosts"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -68,6 +75,7 @@ object DataKeys {
     const val POKEMON_PLATFORM_TYPE = "PlatformType"
 
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
+    const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
@@ -90,9 +98,13 @@ object DataKeys {
     const val STORE_SLOT = "Slot"
     const val STORE_SLOT_COUNT = "SlotCount"
     const val STORE_BOX = "Box"
+    const val STORE_BOX_NAME = "BoxName"
+    const val STORE_BOX_WALLPAPER = "BoxWallpaper"
     const val STORE_BOX_COUNT = "BoxCount"
     const val STORE_BOX_COUNT_LOCKED = "BoxCountLocked"
     const val STORE_BACKUP = "BackupStore"
+    const val STORE_UNLOCKED_WALLPAPERS = "UnlockedWallpapers"
+    const val STORE_UNSEEN_WALLPAPERS = "UnseenWallpapers"
 
     // Pokédex Keys
     const val POKEDEX_TYPE = "PokedexType"
@@ -124,12 +136,18 @@ object DataKeys {
     const val POKEMON_PROPERTIES_ORIGINAL_TEXT = "OriginalText"
     const val POKEMON_SPECIES_TEXT = "SpeciesText"
 
-    // Healer  Block
+    // Healer Block
     const val HEALER_MACHINE_USER = "MachineUser"
     const val HEALER_MACHINE_POKEBALLS = "MachinePokeBalls"
     const val HEALER_MACHINE_TIME_LEFT = "MachineTimeLeft"
     const val HEALER_MACHINE_CHARGE = "MachineCharge"
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
+
+    // Cake Blocks
+    const val CAKE_BITES = "Bites"
+    const val CAKE_FLAVOUR = "Flavour"
+    const val CAKE_BAIT_EFFECTS = "BaitEffects"
+    const val CAKE_FOOD_COLOUR = "FoodColour"
 
     // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"
@@ -159,6 +177,7 @@ object DataKeys {
     const val SHOULDER_FORM = "shoulder_form"
     const val SHOULDER_ASPECTS = "shoulder_aspects"
     const val SHOULDER_SCALE_MODIFIER = "shoulder_scale"
+    const val SHOULDER_ITEM = "shoulder_item"
 
     // Multi-Block
     const val MULTIBLOCK_STORAGE = "MultiblockStore"
@@ -202,8 +221,7 @@ object DataKeys {
     const val NPC_PARTY = "Party"
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
-    const val NPC_DATA = "Data"
-    const val NPC_CONFIG = "Config"
+    const val NPC_VARIATION_ASPECTS = "VariationAspects"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
@@ -213,11 +231,23 @@ object DataKeys {
     const val NPC_PLAYER_TEXTURE_MODEL = "Model"
     const val NPC_PLAYER_TEXTURE_TEXTURE = "Texture"
     const val NPC_LEVEL = "Level"
+    const val NPC_FORCED_RESOURCE_IDENTIFIER = "ForcedResourceIdentifier"
     const val NPC_IS_MOVABLE = "IsMovable"
     const val NPC_SKILL = "Skill"
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    const val NPC_BASE_SCALE = "BaseScale"
+    const val NPC_HITBOX = "Hitbox"
+    const val NPC_HITBOX_WIDTH = "Width"
+    const val NPC_HITBOX_HEIGHT = "Height"
+    const val NPC_HITBOX_FIXED = "Fixed"
+    const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
+
+    const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BEHAVIOURS = "Behaviours"
+    const val SCRIPTED_DATA = "Data"
+    const val SCRIPTED_CONFIG = "Config"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"

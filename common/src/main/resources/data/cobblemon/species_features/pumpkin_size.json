@@ -1,10 +1,12 @@
 {
   "type": "choice",
-  "keys": ["pumpkin_size"],
+  "keys": [
+    "pumpkin_size"
+  ],
   "default": "random",
   "choices": [
-    "small",
     "average",
+    "small",
     "large",
     "super"
   ],

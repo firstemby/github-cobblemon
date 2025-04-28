@@ -7,10 +7,10 @@
     ],
     "key": {
         "W": {
-            "item": "minecraft:white_wool"
+            "tag": "minecraft:wool"
         },
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         }
     },
     "result": {

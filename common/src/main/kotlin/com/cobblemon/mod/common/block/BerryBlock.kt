@@ -26,6 +26,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
@@ -54,7 +55,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Properties) : BaseEntityBlock(settings), BonemealableBlock, Mulchable {
+class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Properties) : BaseEntityBlock(settings), BonemealableBlock, Mulchable, ShearableBlock {
 
     private val lookupDirections = setOf(Direction.NORTH, Direction.EAST, Direction.WEST, Direction.SOUTH)
 
@@ -108,7 +109,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
             determineMutation(world, random, pos, newState)
         }
 
-        world.setBlock(pos, newState, Block.UPDATE_CLIENTS)
+        world.setBlock(pos, newState, UPDATE_CLIENTS)
         convertMulchToEntity(world, newState, pos)
         treeEntity.goToNextStageTimer(FRUIT_AGE - curAge)
         treeEntity.setChanged()
@@ -186,12 +187,11 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         if (player.getItemInHand(InteractionHand.MAIN_HAND).`is`(Items.BONE_MEAL) && !this.isMaxAge(state)) {
             return InteractionResult.PASS
         } else if (this.isMaxAge(state)) {
-            val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return InteractionResult.PASS
-            blockEntity.harvest(world, state, pos, player).forEach { drop ->
-                Block.popResource(world, pos, drop)
+            return if (harvestBerry(world, state, pos, player)) {
+                InteractionResult.sidedSuccess(world.isClientSide)
+            } else {
+                InteractionResult.PASS
             }
-            world.playSound(null, pos, CobblemonSounds.BERRY_HARVEST, SoundSource.BLOCKS, 0.4F, 1F)
-            return InteractionResult.sidedSuccess(world.isClientSide)
         }
         return super.useWithoutItem(state, world, pos, player, blockHitResult)
     }
@@ -333,5 +333,25 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
                 world.setBlockAndUpdate(pos, state.setValue(MULCH, MulchVariant.NONE))
             }
         }
+    }
+
+    override fun attemptShear(world: Level, state: BlockState, pos: BlockPos, successCallback: () -> Unit): Boolean {
+        return if (this.isMaxAge(state)) {
+            harvestBerry(world, state, pos)
+        } else {
+            false
+        }
+    }
+
+    private fun harvestBerry(world: Level, state: BlockState, pos: BlockPos, player: Player? = null): Boolean {
+        val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return false
+        blockEntity.harvest(world, state, pos, player).forEach { drop ->
+            Block.popResource(world, pos, drop)
+        }
+
+        val sound = if (player != null) CobblemonSounds.BERRY_HARVEST else SoundEvents.SHEEP_SHEAR
+        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1F, 1F)
+
+        return true
     }
 }

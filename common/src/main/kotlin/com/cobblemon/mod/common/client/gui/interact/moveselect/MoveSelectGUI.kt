@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.callback.MoveSelectDTO
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectedPacket
@@ -35,7 +36,7 @@ class MoveSelectConfiguration(
 
 class MoveSelectGUI(
     val config: MoveSelectConfiguration
-) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")) {
+) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
     companion object {
         const val WIDTH = 122
         const val HEIGHT = 133

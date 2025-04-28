@@ -86,7 +86,6 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 2,
                 "isSlimeChunk": true
             }
         },
@@ -104,79 +103,11 @@
                 "biomes": [
                     "#cobblemon:is_swamp"
                 ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
                 "isSlimeChunk": true
             }
         },
         {
             "id": "goodra-6",
-            "pokemon": "goodra",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "50-60",
-            "weight": 0.02,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 3
-            },
-            "anticondition": {
-                "isSlimeChunk": true
-            }
-        },
-        {
-            "id": "goodra-7",
-            "pokemon": "goodra",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "50-60",
-            "weight": 0.25,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "isSlimeChunk": true
-            },
-            "anticondition": {
-                "minLureLevel": 2
-            }
-        },
-        {
-            "id": "goodra-8",
-            "pokemon": "goodra",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "50-60",
-            "weight": 0.02,
-            "weightMultiplier": {
-                "multiplier": 3.0,
-                "condition": {
-                    "minLureLevel": "3"
-                }
-            },
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "minLureLevel": 2,
-                "isSlimeChunk": true
-            }
-        },
-        {
-            "id": "goodra-9",
             "pokemon": "goodra",
             "type": "pokemon",
             "context": "fishing",
@@ -192,7 +123,6 @@
                 "isSlimeChunk": true
             },
             "anticondition": {
-                "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_arid",
                     "#cobblemon:is_coast",
@@ -203,62 +133,7 @@
             }
         },
         {
-            "id": "goodra-10",
-            "pokemon": "goodra",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "50-60",
-            "weight": 0.25,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2,
-                "isSlimeChunk": true
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_arid",
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_freezing",
-                    "#cobblemon:is_swamp"
-                ]
-            }
-        },
-        {
-            "id": "goodra-11",
-            "pokemon": "goodra",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "50-60",
-            "weight": 0.02,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "minLureLevel": 3,
-                "isSlimeChunk": true
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_arid",
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_freezing",
-                    "#cobblemon:is_swamp"
-                ]
-            }
-        },
-        {
-            "id": "goodra-hisuian-12",
+            "id": "goodra-hisuian-7",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -278,7 +153,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-13",
+            "id": "goodra-hisuian-8",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -307,7 +182,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-14",
+            "id": "goodra-hisuian-9",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -333,7 +208,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-15",
+            "id": "goodra-hisuian-10",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -356,7 +231,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-16",
+            "id": "goodra-hisuian-11",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -369,7 +244,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -383,7 +258,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-17",
+            "id": "goodra-hisuian-12",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -410,7 +285,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-18",
+            "id": "goodra-hisuian-13",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -438,7 +313,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-19",
+            "id": "goodra-hisuian-14",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -465,7 +340,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-20",
+            "id": "goodra-hisuian-15",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -492,7 +367,7 @@
             }
         },
         {
-            "id": "goodra-hisuian-21",
+            "id": "goodra-hisuian-16",
             "pokemon": "goodra hisuian",
             "presets": [
                 "natural"
@@ -505,7 +380,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {

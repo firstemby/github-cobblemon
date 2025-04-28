@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "#minecraft:is_river",
+	{
+      "id": "#c:is_river",
+      "required": false
+    },
     {
       "id": "terralith:warm_river",
       "required": false

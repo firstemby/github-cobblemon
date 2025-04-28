@@ -40,9 +40,8 @@ class NPCServerDelegate : NPCSideDelegate {
 
     override fun addToStruct(struct: QueryStruct) {
         super.addToStruct(struct)
+        entity.registerFunctionsForScripting(struct)
         struct
-            .addFunction("data") { entity.data }
-            .addFunction("config") { entity.config }
             .addFunction("save_data") { entity.data } // Handled as part of NBT saving
             .addFunction("is_in_dialogue") { entity.brain.hasMemoryValue(CobblemonMemories.DIALOGUES) }
             .addFunction("is_in_battle") { params ->

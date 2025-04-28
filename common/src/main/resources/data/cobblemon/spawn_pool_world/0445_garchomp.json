@@ -72,6 +72,25 @@
                     "#cobblemon:is_mountain"
                 ]
             }
+        },
+        {
+            "id": "garchomp-4",
+            "pokemon": "garchomp",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "rare",
+            "level": "48-60",
+            "weight": 0.25,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ]
+            }
         }
     ]
 }

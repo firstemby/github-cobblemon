@@ -3,11 +3,11 @@
   "order": 1,
   "variations": [
     {
-      "aspects": ["no_ice"],
+      "aspects": ["noice_face"],
       "model": "cobblemon:eiscue_no_ice.geo"
     },
     {
-      "aspects": ["shiny", "no_ice"],
+      "aspects": ["shiny", "noice_face"],
       "model": "cobblemon:eiscue_no_ice.geo",
       "texture": "cobblemon:textures/pokemon/0875_eiscue/eiscue_no_ice_shiny.png"
     }

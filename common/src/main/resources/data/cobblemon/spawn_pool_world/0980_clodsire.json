@@ -26,7 +26,7 @@
             "id": "clodsire-2",
             "pokemon": "clodsire",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -44,7 +44,7 @@
             "id": "clodsire-3",
             "pokemon": "clodsire",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -124,8 +124,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {
@@ -140,7 +140,7 @@
             "id": "clodsire-8",
             "pokemon": "clodsire",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -160,7 +160,7 @@
             "id": "clodsire-9",
             "pokemon": "clodsire",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -224,8 +224,8 @@
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
-                    "minLureLevel": "1",
-                    "maxLureLevel": "2"
+                    "minLureLevel": 1,
+                    "maxLureLevel": 2
                 }
             },
             "condition": {

@@ -1,0 +1,12 @@
+{
+  "config": [
+    {
+      "variableName": "challenge_cooldown",
+      "category": "cobblemon.entity.variable.category.battling",
+      "displayName": "cobblemon.entity.variable.challenge_cooldown.name",
+      "description": "cobblemon.entity.variable.challenge_cooldown.desc",
+      "type": "NUMBER",
+      "defaultValue": "0"
+    }
+  ]
+}

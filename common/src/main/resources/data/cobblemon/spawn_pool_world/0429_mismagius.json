@@ -98,6 +98,26 @@
                     "#cobblemon:nether/is_warped"
                 ]
             }
+        },
+        {
+            "id": "mismagius-6",
+            "pokemon": "mismagius",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "39-50",
+            "weight": 0.3,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#cobblemon:shipwreck_cove"
+                ],
+                "minY": -41,
+                "maxY": 9
+            }
         }
     ]
 }

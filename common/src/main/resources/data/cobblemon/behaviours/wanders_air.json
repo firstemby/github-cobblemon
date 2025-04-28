@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.behaviour.wanders_air.name",
+  "description": "cobblemon.behaviour.wanders_air.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          "air_wander"
+        ]
+      }
+    }
+  ]
+}

@@ -7,10 +7,10 @@
     ],
     "key": {
         "G": {
-            "item": "minecraft:gold_ingot"
+            "tag": "c:ingots/gold"
         },
         "L": {
-            "item": "minecraft:lime_dye"
+            "item": "minecraft:turtle_scute"
         },
         "S": {
             "item": "cobblemon:hard_stone"

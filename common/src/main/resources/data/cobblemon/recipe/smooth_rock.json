@@ -1,5 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
+    "group": "weather_rock",
     "pattern": [
         "DS",
         "HD"
@@ -8,9 +9,17 @@
         "D": {
             "item": "minecraft:dripstone_block"
         },
-        "S": {
-            "item": "cobblemon:soft_sand"
-        },
+        "S": [
+            {
+                "item": "cobblemon:soft_sand"
+            },
+            {
+                "item": "cobblemon:rock_gem"
+            },
+            {
+                "item": "cobblemon:ground_gem"
+            }
+        ],
         "H": {
             "item": "cobblemon:hard_stone"
         }

@@ -7,7 +7,7 @@
             "id": "lapras-1",
             "pokemon": "lapras",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -26,7 +26,7 @@
             "id": "lapras-2",
             "pokemon": "lapras",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -75,7 +75,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -101,7 +101,6 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
                 ]
@@ -109,49 +108,6 @@
         },
         {
             "id": "lapras-6",
-            "pokemon": "lapras",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "29-54",
-            "weight": 10.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "lapras-7",
-            "pokemon": "lapras",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "29-54",
-            "weight": 2.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 3
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "lapras-8",
             "pokemon": "lapras",
             "type": "pokemon",
             "context": "fishing",
@@ -171,7 +127,7 @@
             }
         },
         {
-            "id": "lapras-9",
+            "id": "lapras-7",
             "pokemon": "lapras",
             "type": "pokemon",
             "context": "fishing",
@@ -181,7 +137,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -195,7 +151,7 @@
             }
         },
         {
-            "id": "lapras-10",
+            "id": "lapras-8",
             "pokemon": "lapras",
             "type": "pokemon",
             "context": "fishing",
@@ -209,54 +165,6 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "lapras-11",
-            "pokemon": "lapras",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "29-54",
-            "weight": 10.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "lapras-12",
-            "pokemon": "lapras",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "29-54",
-            "weight": 2.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

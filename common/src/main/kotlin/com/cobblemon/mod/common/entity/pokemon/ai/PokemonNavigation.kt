@@ -15,6 +15,9 @@ import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.acos
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
@@ -28,10 +31,8 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.level.pathfinder.PathFinder
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.acos
 
+@Deprecated("This should be deleted once Jazz no longer feels like it would ruin his life with conflicts")
 class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : GroundPathNavigation(pokemonEntity, world) {
     // Lazy init because navigation is instantiated during entity construction and pokemonEntity.form isn't set yet.
     // (pokemonEntity.behaviour is a shortcut to pokemonEntity.form.behaviour)
@@ -58,12 +59,32 @@ class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : Gr
         return PathFinder(nodeEvaluator, range)
     }
 
+    override fun isStableDestination(pos: BlockPos?): Boolean {
+        return if (pokemonEntity.behaviour.moving.swim.canSwimInWater) {
+            !super.isStableDestination(pos)
+        } else {
+            super.isStableDestination(pos)
+        }
+    }
+
+    override fun canMoveDirectly(origin: Vec3, target: Vec3): Boolean {
+        return if (pokemonEntity.behaviour.moving.swim.canSwimInWater) {
+            isClearForMovementBetween(this.mob, origin, target, false)
+        } else {
+            super.canMoveDirectly(origin, target)
+        }
+    }
+
     override fun canUpdatePath(): Boolean {
-        val (_, isTouchingLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
+        val (isInLiquid, isTouchingLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
         val isAtValidPosition = (!mob.isInLava && !mob.isEyeInFluid(FluidTags.LAVA)) ||
                 (isTouchingLava && moving.swim.canSwimInLava) ||
                 this.mob.isPassenger
-        return isAtValidPosition
+        if (pokemonEntity.behaviour.moving.swim.canSwimInWater) {
+            return isInLiquid || ((this.mob.onGround() || this.pokemonEntity.isFlying()) || this.mob.isInLiquid() || this.mob.isPassenger())
+        } else {
+            return isAtValidPosition
+        }
     }
 
     override fun canFloat(): Boolean {
@@ -165,7 +186,7 @@ class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : Gr
 //            }
 //        } else if (!isFlying && canFly && isAirborne(pokemonEntity.world, pokemonEntity.blockPos)) {
 //            pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-//        } else if (isFlying && canWalk && !pokemonEntity.world.getBlockState(pokemonEntity.blockPos).canPathfindThrough(pokemonEntity.world, pokemonEntity.blockPos.down(), NavigationType.LAND)) {
+//        } else if (isFlying && canWalk && !pokemonEntity.world.getBlockState(pokemonEntity.blockPos).canPathfindThrough(pokemonEntity.world, pokemonEntity.blockPos.below(), NavigationType.LAND)) {
 //            pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
 //        }
     }
@@ -211,7 +232,7 @@ class PokemonNavigation(val world: Level, val pokemonEntity: PokemonEntity) : Gr
 //                    } else {
 //                        Blocks.COAL_BLOCK.defaultState
 //                    }
-//                    entity.world.setBlockState(node.blockPos, blockState)
+//                    entity.level().setBlockState(node.blockPos, blockState)
 //                    i++
 //                }
 //            } catch(e: Exception) {

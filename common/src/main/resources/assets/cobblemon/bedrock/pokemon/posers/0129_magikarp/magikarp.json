@@ -11,6 +11,7 @@
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
+      "isTouchingWater": false,
       "isBattle": true,
       "animations": ["q.look('head')", "q.bedrock('magikarp', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('magikarp', 'blink')"]
@@ -54,7 +55,7 @@
       "poseTypes": ["STAND"],
       "isTouchingWater": true,
       "namedAnimations": {
-        "faint": "q.bedrock_primary('magikarp', 'ground_faint', q.curve('one'))"
+        "faint": "q.bedrock_primary('magikarp', 'water_faint', q.curve('one'))"
       },
       "animations": [
         "q.look('head')",
@@ -75,7 +76,7 @@
       "poseTypes": ["WALK"],
       "isTouchingWater": true,
       "namedAnimations": {
-        "faint": "q.bedrock_primary('magikarp', 'ground_faint', q.curve('one'))"
+        "faint": "q.bedrock_primary('magikarp', 'water_faint', q.curve('one'))"
       },
       "animations": [
         "q.look('head')",

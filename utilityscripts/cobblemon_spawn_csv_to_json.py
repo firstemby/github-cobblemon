@@ -20,9 +20,9 @@ def init_filters():
     # Define what kind of pokémon should be included, if nothing is specified (empty array), all will be included.
     # filter by number ranges (dex range)
     pokemon_numbers = range(1, 1100)
-    # filter by group
+    # filter by group ['basic', 'boss', 'fossil']
     included_groups = ['basic', 'boss', 'fossil']
-    # filter by context
+    # filter by context ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']
     known_contexts = ['grounded', 'submerged', 'seafloor', 'surface', 'fishing']
     # filter by bucket ['common', 'uncommon', 'rare', 'ultra-rare']
     bucket_mapping = ['common', 'uncommon', 'rare', 'ultra-rare']
@@ -46,6 +46,7 @@ def ui_init_filters(pokemon_nrs_min, pokemon_nrs_max, included_grps, known_cntxt
 excluded_forms = []
 # Biome mapping, used to convert the Biome column to the format used in the spawn json
 biome_mapping = {
+    'aether': '#aether:is_aether',
     'arid': '#cobblemon:is_arid',
     'badlands': '#cobblemon:is_badlands',
     'bamboo': '#cobblemon:is_bamboo',
@@ -61,7 +62,7 @@ biome_mapping = {
     'deep ocean': '#cobblemon:is_deep_ocean',
     'desert': '#cobblemon:is_desert',
     'dripstone': '#cobblemon:is_dripstone',
-    'end': '#minecraft:is_end',
+    'end': '#cobblemon:is_end',
     'end highlands': 'minecraft:end_highlands',
     'floral': '#cobblemon:is_floral',
     'floral meadow': 'the_bumblezone:floral_meadow',
@@ -72,6 +73,7 @@ biome_mapping = {
     'frozen river': '#minecraft:frozen_river',
     'glacial': '#cobblemon:is_glacial',
     'grassland': '#cobblemon:is_grassland',
+    'gravel': '#cobblemon:has_block/gravel',
     'highlands': '#cobblemon:is_highlands',
     'hills': '#cobblemon:is_hills',
     'howling constructs': 'the_bumblezone:howling_constructs',
@@ -81,6 +83,9 @@ biome_mapping = {
     'lush': '#cobblemon:is_lush',
     'magical': '#cobblemon:is_magical',
     'mangrove swamp': 'minecraft:mangrove_swamp',
+    'mars': '#cobblemon:space/is_mars',
+    'mercury': '#cobblemon:space/is_mercury',
+    'moon': '#cobblemon:space/is_moon',
     'mountain': '#cobblemon:is_mountain',
     'muddy': '#cobblemon:has_block/mud',
     'mushroom': '#cobblemon:is_mushroom',
@@ -115,10 +120,17 @@ biome_mapping = {
     'skylands spring': 'terralith:skylands_spring',
     'skylands summer': 'terralith:skylands_summer',
     'skylands winter': 'terralith:skylands_winter',
+    'skyroot forest': 'aether:skyroot_forest',
+    'skyroot grove': 'aether:skyroot_grove',
+    'skyroot meadow': 'aether:skyroot_meadow',
+    'skyroot woodland': 'aether:skyroot_woodland',
     'snowy': '#cobblemon:is_snowy',
     'snowy beach': 'minecraft:snowy_beach',
     'snowy forest': '#cobblemon:is_snowy_forest',
     'snowy taiga': '#cobblemon:is_snowy_taiga',
+    'space': '#cobblemon:space/is_space',
+    'space fiery': '#cobblemon:space/is_fiery',
+    'space icy': '#cobblemon:space/is_icy',
     'spooky': '#cobblemon:is_spooky',
     'sunflower plains': 'minecraft:sunflower_plains',
     'swamp': '#cobblemon:is_swamp',
@@ -128,6 +140,7 @@ biome_mapping = {
     'thermal': '#cobblemon:is_thermal',
     'tropical island': '#cobblemon:is_tropical_island',
     'tundra': '#cobblemon:is_tundra',
+    'venus': '#cobblemon:space/is_venus',
     'volcanic': '#cobblemon:is_volcanic',
     'warm ocean': '#cobblemon:is_warm_ocean',
     'warped desert': 'byg:warped_desert'
@@ -137,47 +150,30 @@ ignored_biomes = ['freshwater', 'preset', 'river']
 # List of all currently known presets
 preset_list = [
     'ancient_city',
-    'apricorns',
-    'blue_flowers',
     'derelict',
     'desert_pyramid',
     'end_city',
-    'flowers',
     'foliage',
-    'freshwater',
-    'gemstones',
     'illager_structures',
     'jungle_pyramid',
-    'lava_surface',
+    'lava',
     'mansion',
     'natural',
     'nether_fossil',
     'nether_structures',
     'ocean_monument',
     'ocean_ruins',
-    'orange_flowers',
     'pillager_outpost',
-    'pink_flowers',
-    'red_flowers',
     'redstone',
-    'river',
     'ruined_portal',
-    'ruins',
     'salt',
-    'shipwreck',
     'stronghold',
     'trail_ruins',
-    'trash',
     'treetop',
-    'underlava',
-    'underwater',
     'urban',
-    'village',
-    'water_surface',
+    'water',
     'webs',
-    'white_flowers',
-    'wild',
-    'yellow_flowers'
+    'wild'
 ]
 
 # Initialize lists for the report
@@ -414,29 +410,38 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             multiplier_condition["timeRange"] = "twilight"
                         case "Dusk":
                             multiplier_condition["timeRange"] = "dusk"
+                        case "Dawn":
+                            multiplier_condition["timeRange"] = "dawn"
                         case "Beehive":
                             multiplier_condition["neededNearbyBlocks"] = ["#minecraft:beehives"]
+                        case "Water":
+                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:water"]
+                        case "Lava":
+                            multiplier_condition["neededNearbyBlocks"] = ["#minecraft:lava"]
                         case "Full Moon":
-                            multiplier_condition["moonPhase"] = "0"
+                            multiplier_condition["moonPhase"] = 0
                         case "New Moon":
-                            multiplier_condition["moonPhase"] = "4"
-                        case "Shipwreck":
+                            multiplier_condition["moonPhase"] = 4
+                        case "Wreck":
                             multiplier_condition["structures"] = ["#minecraft:shipwreck"]
                         case "Lure0":
-                            multiplier_condition["minLureLevel"] = "0"
-                            multiplier_condition["maxLureLevel"] = "0"
+                            multiplier_condition["minLureLevel"] = 0
+                            multiplier_condition["maxLureLevel"] = 0
+                        case "Lure0/1":
+                            multiplier_condition["minLureLevel"] = 0
+                            multiplier_condition["maxLureLevel"] = 1
                         case "Lure1/2":
-                            multiplier_condition["minLureLevel"] = "1"
-                            multiplier_condition["maxLureLevel"] = "2"
+                            multiplier_condition["minLureLevel"] = 1
+                            multiplier_condition["maxLureLevel"] = 2
                         case "Lure2":
-                            multiplier_condition["minLureLevel"] = "2"
-                            multiplier_condition["maxLureLevel"] = "2"
+                            multiplier_condition["minLureLevel"] = 2
+                            multiplier_condition["maxLureLevel"] = 2
                         case "Lure3":
-                            multiplier_condition["minLureLevel"] = "3"
+                            multiplier_condition["minLureLevel"] = 3
                         case "MJ-Skel":
                             multiplier_condition["biomes"] = ["#cobblemon:is_spooky"]
                         case "MJ-Cal1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_mountain, #cobblemon:is_freshwater"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_mountain", "#cobblemon:is_freshwater"]
                         case "MJ-Cal2":
                             multiplier_condition["biomes"] = ["#cobblemon:is_temperate"]
                         case "MJ-Gld1":
@@ -444,41 +449,41 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                         case "MJ-Gld2":
                             multiplier_condition["biomes"] = ["#cobblemon:is_island"]
                         case "MJ-Orn1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_forest, #cobblemon:is_island, #cobblemon:is_savanna"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_forest", "#cobblemon:is_island", "#cobblemon:is_savanna"]
                         case "MJ-Orn2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_ocean, #cobblemon:is_river"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_ocean", "#cobblemon:is_river"]
                         case "MJ-Pnk1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_magical, #cobblemon:is_plains"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_magical", "#cobblemon:is_plains"]
                         case "MJ-Pnk2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_island"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_island"]
                         case "MJ-Gry1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_river, #cobblemon:is_snowy, #cobblemon:is_tundra"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_river", "#cobblemon:is_snowy", "#cobblemon:is_tundra"]
                         case "MJ-Gry2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain, #cobblemon:is_spooky"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain", "#cobblemon:is_spooky"]
                         case "MJ-Pur1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_floral, #cobblemon:is_forest, #cobblemon:is_magical, #cobblemon:is_taiga"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_floral", "#cobblemon:is_forest", "#cobblemon:is_magical", "#cobblemon:is_taiga"]
                         case "MJ-Pur2":
                             multiplier_condition["biomes"] = ["#cobblemon:is_swamp"]
                         case "MJ-Apc1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle, #cobblemon:is_ocean, #cobblemon:is_plains"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle", "#cobblemon:is_ocean", "#cobblemon:is_plains"]
                         case "MJ-Apc2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_savanna"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_savanna"]
                         case "MJ-Brw1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain, #cobblemon:is_swamp, #cobblemon:is_taiga"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_mountain", "#cobblemon:is_swamp", "#cobblemon:is_taiga"]
                         case "MJ-Brw2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_jungle"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_jungle"]
                         case "MJ-White":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_desert, #cobblemon:is_savanna, #cobblemon:is_snowy, #cobblemon:is_tundra"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_desert", "#cobblemon:is_savanna", "#cobblemon:is_snowy", "#cobblemon:is_tundra"]
                         case "MJ-Bla1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands, #cobblemon:is_spooky"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_badlands", "#cobblemon:is_spooky"]
                         case "MJ-Bla2":
                             multiplier_condition["biomes"] = ["#cobblemon:is_taiga"]
                         case "MJ-Blu1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_island, #cobblemon:is_ocean"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_island", "#cobblemon:is_ocean"]
                         case "MJ-Blu2":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_snowy, #cobblemon:is_tundra"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_snowy", "#cobblemon:is_tundra"]
                         case "MJ-Vio1":
-                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle, #cobblemon:is_spooky"]
+                            multiplier_condition["biomes"] = ["#cobblemon:is_jungle", "#cobblemon:is_spooky"]
                         case "MJ-Vio2":
                             multiplier_condition["biomes"] = ["#cobblemon:is_magical"]
                         case _:
@@ -607,11 +612,13 @@ def handle_common_conditions(column_name, currentID, invalid_biome_tags, row, sp
         if parsed_biomes:
             condition['biomes'] = parsed_biomes
 
-    # check if Time column is day, night, dusk, or any
+    # check if Time column is day, night, dawn, dusk, or any
     if pd.notna(row['Time']):
         if row['Time'].lower() == 'day':
             condition['timeRange'] = row['Time'].lower()
         elif row['Time'].lower() == 'night':
+            condition['timeRange'] = row['Time'].lower()
+        elif row['Time'].lower() == 'dawn':
             condition['timeRange'] = row['Time'].lower()
         elif row['Time'].lower() == 'dusk':
             condition['timeRange'] = row['Time'].lower()
@@ -702,14 +709,14 @@ def special_condtions_anticonditions(condition, column_name, currentID, invalid_
             # if the string contains "maxLureLevel = " then split it and add it to the condition dictionary
             elif "maxLureLevel" in string:
                 condition['maxLureLevel'] = int(string.split('=')[1].strip())
-            # if the string contains "bobber = master ball" then add it to the condition dictionary
-            elif "bobber = master ball" in string:
+            # if the string contains "bobber = master_ball" then add it to the condition dictionary
+            elif "bobber = master_ball" in string:
                 condition['bobber'] = "cobblemon:master_ball"
-            # if the string contains "bobber = love ball" then add it to the condition dictionary
-            elif "bobber = love ball" in string:
+            # if the string contains "bobber = love_ball" then add it to the condition dictionary
+            elif "bobber = love_ball" in string:
                 condition['bobber'] = "cobblemon:love_ball"
-            # if the string contains "bait = love sweet" then add it to the condition dictionary
-            elif "bait = love sweet" in string:
+            # if the string contains "bait = love_sweet" then add it to the condition dictionary
+            elif "bait = love_sweet" in string:
                 condition['bait'] = "cobblemon:love_sweet"
             # if the string is a digit, pass (was already hanlded by other conditions)
             elif string.strip().isdigit():

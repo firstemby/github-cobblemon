@@ -1,19 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "WIW",
+        "LIL",
         "D I",
-        "WDW"
+        "LDL"
     ],
     "key": {
-        "W": {
-            "item": "minecraft:red_wool"
+        "L": {
+            "tag": "c:leathers"
         },
         "D": {
             "item": "minecraft:blaze_powder"
         },
         "I": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         }
     },
     "result": {

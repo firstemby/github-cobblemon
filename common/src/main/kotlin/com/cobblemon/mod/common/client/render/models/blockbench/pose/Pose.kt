@@ -35,6 +35,7 @@ class Pose(
     val onTransitionedInto: (PosableState) -> Unit = {},
     /** If there are no dedicated transition animations, the interpolation animation will take this many ticks. */
     val transformTicks: Int,
+    val transformToTicks: Int?,
     val namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
     val animations: Array<PoseAnimation>,
     val transformedParts: Array<ModelPartTransformation>,

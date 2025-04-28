@@ -60,6 +60,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
             ?: throw IllegalArgumentException("Unknown pose type ${name.asString}")
     } ?: emptyList()) + if (json.get("allPoseTypes")?.asBoolean == true) PoseType.values().toList() else emptyList()
     val transformTicks = json.get("transformTicks")?.asInt ?: 10
+    val transformToTicks = json.get("transformToTicks")?.asInt
     val transformedParts = json.get("transformedParts")?.asJsonArray?.map {
         it as JsonObject
         val partName = it.get("part").asString
@@ -78,8 +79,15 @@ class JsonPose(model: PosableModel, json: JsonObject) {
                 it[2].asDouble
             )
         } ?: Vec3.ZERO
+        val scale = it.get("scale")?.asJsonArray?.let {
+            Vec3(
+                it[0].asDouble,
+                it[1].asDouble,
+                it[2].asDouble
+            )
+        } ?: Vec3(1.0,1.0,1.0)
         val isVisible = it.get("isVisible")?.asString?.asExpressionLike()
-        return@map part.withPosition(position.x, position.y, position.z).withRotationDegrees(rotation.x, rotation.y, rotation.z).also { if (isVisible != null) it.withVisibility(isVisible) }
+        return@map part.withPosition(position.x, position.y, position.z).withRotationDegrees(rotation.x, rotation.y, rotation.z).withScale(scale.x, scale.y, scale.z).also { if (isVisible != null) it.withVisibility(isVisible) }
     }?.toTypedArray() ?: arrayOf()
 
     val idleAnimations = (json.get("animations")?.asJsonArray ?: JsonArray()).asJsonArray.mapNotNull {

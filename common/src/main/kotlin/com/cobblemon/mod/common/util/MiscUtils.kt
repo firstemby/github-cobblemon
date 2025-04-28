@@ -18,6 +18,8 @@ import net.minecraft.client.gui.screens.Screen
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.client.resources.model.ModelResourceLocation
@@ -37,6 +39,7 @@ fun String.asTranslated() = Component.translatable(this)
 fun String.asResource() = ResourceLocation.parse(this)
 fun String.asTranslated(vararg data: Any) = Component.translatable(this, *data)
 fun String.isInt() = this.toIntOrNull() != null
+fun String.isDouble() = this.toDoubleOrNull() != null
 fun String.isHigherVersion(other: String): Boolean {
     val thisSplits = split(".")
     val thatSplits = other.split(".")
@@ -82,6 +85,21 @@ infix fun <A, B> A.toDF(b: B): com.mojang.datafixers.util.Pair<A, B> = com.mojan
 
 fun isUuid(string: String) : Boolean {
     return Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\$").matches(string)
+}
+
+fun VoxelShape.blockPositionsAsListRounded(): List<BlockPos> {
+    val result = mutableListOf<BlockPos>()
+    forAllBoxes { minX, minY, minZ, maxX, maxY, maxZ ->
+        for (x in floor(minX).toInt() until ceil(maxX).toInt()) {
+            for (y in floor(minY).toInt() until ceil(maxY).toInt()) {
+                for (z in floor(minZ).toInt() until ceil(maxZ).toInt()) {
+                    result.add(BlockPos(x, y, z))
+                }
+            }
+        }
+    }
+
+    return result
 }
 
 fun VoxelShape.blockPositionsAsList(): List<BlockPos> {

@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.pokeball
 
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
@@ -39,6 +42,12 @@ open class PokeBall(
     val throwPower: Float,
     val ancient: Boolean
 ) {
+    val struct = QueryStruct(hashMapOf())
+        .addFunction("name") { StringValue(name.toString()) }
+        .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
+        .addFunction("throw_power") { DoubleValue(throwPower) }
+        .addFunction("is_ancient") { DoubleValue(ancient) }
+//        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry
     internal lateinit var item: PokeBallItem

@@ -25,11 +25,17 @@ class PartyStorageSlot(
     }
 
     override fun shouldRender(): Boolean {
+        if (!super.shouldRender()) return false
+
         val grabbedSlot = parent.grabbedSlot
         return if (grabbedSlot == null) {
             true
         } else {
             grabbedSlot.getPokemon() != getPokemon()
         }
+    }
+
+    override fun clickable(): Boolean {
+        return parent.pcGui.configuration.showParty && super.clickable()
     }
 }

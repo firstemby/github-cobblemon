@@ -47,6 +47,15 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.corsola.ground_walk": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [0, 0, "math.clamp(15*math.sin(q.anim_time*90*4-50),-12,12)"],
+					"position": [0, "math.clamp(3*math.sin(q.anim_time*90*8),0,5)", 0]
+				}
+			}
 		}
 	}
 }

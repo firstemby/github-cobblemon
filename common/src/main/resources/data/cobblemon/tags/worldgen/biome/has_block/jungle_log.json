@@ -3,6 +3,10 @@
   "values": [
 	"#minecraft:is_jungle",
 	{
+      "id": "#c:tree/jungle",
+      "required": false
+    },
+	{
       "id": "biomesoplenty:fungal_jungle",
       "required": false
     },

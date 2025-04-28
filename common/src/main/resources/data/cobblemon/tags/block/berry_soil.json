@@ -1,12 +1,16 @@
 {
   "values": [
     "minecraft:farmland",
+	{
+      "id": "#c:farmland",
+      "required": false
+    },
     {
       "id": "#c:farmlands",
       "required": false
     },
     {
-      "id": "#forge:farmlands",
+      "id": "aether:aether_farmland",
       "required": false
     }
   ]

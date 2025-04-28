@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen8
 
-import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.createTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.QuadrupedFrame
@@ -63,8 +62,7 @@ class WoolooModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Qua
                 bedrock("wooloo", "ground_walk")
             )
         )
+
+        animations["eat"] = "q.bedrock_primary('wooloo', 'eat', q.curve('symmetrical_wide'))".asExpressionLike()
     }
-
-    override fun getEatAnimation(state: PosableState) = bedrockStateful("wooloo", "eat")
-
 }

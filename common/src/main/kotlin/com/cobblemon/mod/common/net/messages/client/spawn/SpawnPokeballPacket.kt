@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.*
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
@@ -30,7 +31,7 @@ class SpawnPokeballPacket(
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect)}
     }
 
-    override fun applyData(entity: EmptyPokeBallEntity) {
+    override fun applyData(entity: EmptyPokeBallEntity, level: ClientLevel) {
         entity.pokeBall = this.pokeBall
         entity.aspects = this.aspects
     }

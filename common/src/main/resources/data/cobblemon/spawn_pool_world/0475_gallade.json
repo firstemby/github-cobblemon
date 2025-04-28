@@ -20,6 +20,8 @@
                 "biomes": [
                     "#cobblemon:is_floral",
                     "#cobblemon:is_magical",
+                    "aether:skyroot_grove",
+                    "aether:skyroot_meadow",
                     "#cobblemon:is_snowy_forest"
                 ]
             }
@@ -48,8 +50,7 @@
             "id": "gallade-3",
             "pokemon": "gallade",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -61,6 +62,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         },

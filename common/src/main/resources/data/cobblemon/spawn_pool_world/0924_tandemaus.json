@@ -65,8 +65,7 @@
             "id": "tandemaus-3",
             "pokemon": "tandemaus",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -84,6 +83,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             },
             "anticondition": {
@@ -108,6 +110,25 @@
                 "canSeeSky": false,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ]
+            }
+        },
+        {
+            "id": "tandemaus-5",
+            "pokemon": "tandemaus",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "6-31",
+            "weight": 1.8,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
                 ]
             }
         }

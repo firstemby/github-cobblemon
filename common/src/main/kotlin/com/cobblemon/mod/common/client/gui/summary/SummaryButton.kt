@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -37,8 +38,9 @@ class SummaryButton(
     private val silent: Boolean = false,
     private val boldText: Boolean = true,
     private val largeText: Boolean = true,
-    private val textScale: Float = 1F
-): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), text, clickAction, DEFAULT_NARRATION) {
+    private val textScale: Float = 1F,
+    private val scale: Float = 1F
+): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), text, clickAction, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         const val TEXT_HEIGHT = 9
@@ -61,12 +63,13 @@ class SummaryButton(
         blitk(
             matrixStack = matrices,
             texture = if (buttonActive && activeResource != null) activeResource else resource,
-            x = buttonX,
-            y = buttonY,
+            x = buttonX / scale,
+            y = buttonY / scale,
             width = buttonWidth,
             height = buttonHeight,
-            vOffset = if (hoverTexture && isHovered) buttonHeight else 0,
+            vOffset = if (hoverTexture && isButtonHovered(pMouseX, pMouseY)) buttonHeight else 0,
             textureHeight = if (hoverTexture) (buttonHeight.toFloat() * 2) else buttonHeight,
+            scale = scale
         )
 
         // Render Text
@@ -83,7 +86,7 @@ class SummaryButton(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (this.clickRequirement.invoke(this)) {
+        if (this.clickRequirement.invoke(this) && isButtonHovered(mouseX, mouseY)) {
             super.mouseClicked(mouseX, mouseY, button)
         }
         return false
@@ -100,5 +103,10 @@ class SummaryButton(
         this.y = y.toInt()
         this.buttonX = x
         this.buttonY = y
+    }
+
+    fun isButtonHovered(mouseX: Number, mouseY: Number): Boolean {
+        return mouseX.toFloat() in (buttonX..(buttonX + (buttonWidth.toFloat() * scale)))
+                && mouseY.toFloat() in (buttonY..(buttonY + (buttonHeight.toFloat() * scale)))
     }
 }

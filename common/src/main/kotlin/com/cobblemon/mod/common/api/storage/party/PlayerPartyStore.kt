@@ -102,20 +102,32 @@ open class PlayerPartyStore(
             for (pokemon in this) {
                 // Awake from fainted
                 if (pokemon.isFainted()) {
-                    pokemon.faintedTimer -= 1
-                    if (pokemon.faintedTimer <= -1) {
-                        val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent)
-                        pokemon.currentHealth = php.toInt()
-                        player.sendSystemMessage(Component.translatable("cobblemon.party.faintRecover", pokemon.getDisplayName()))
+                    //Skip awaken logic check if config value is 0
+                    if (Cobblemon.config.faintAwakenHealthPercent > 0) {
+                        pokemon.faintedTimer -= 1
+                        if (pokemon.faintedTimer <= -1) {
+                            val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent)
+                            pokemon.currentHealth = php.toInt()
+                            player.sendSystemMessage(
+                                Component.translatable(
+                                    "cobblemon.party.faintRecover",
+                                    pokemon.getDisplayName()
+                                )
+                            )
+                        }
                     }
                 }
                 // Passive healing while less than full health
                 else if (pokemon.currentHealth < pokemon.maxHealth) {
-                    pokemon.healTimer--
-                    if (pokemon.healTimer <= -1) {
-                        pokemon.healTimer = Cobblemon.config.healTimer
-                        val healAmount = 1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
-                        pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt()
+                    //Skip passive healing logic check if config value is 0
+                    if (Cobblemon.config.healPercent > 0) {
+                        pokemon.healTimer--
+                        if (pokemon.healTimer <= -1) {
+                            pokemon.healTimer = Cobblemon.config.healTimer
+                            val healAmount =
+                                1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
+                            pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt()
+                        }
                     }
                 }
 
@@ -155,10 +167,10 @@ open class PlayerPartyStore(
         }
 
         // Shoulder validation code
-        if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player.shoulderEntityLeft, true)) {
+        if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player, true)) {
             player.respawnEntityOnShoulder(player.shoulderEntityLeft)
         }
-        if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player.shoulderEntityRight, false)) {
+        if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player, false)) {
             player.respawnEntityOnShoulder(player.shoulderEntityRight)
         }
 
@@ -170,11 +182,14 @@ open class PlayerPartyStore(
         }
     }
 
-    fun validateShoulder(shoulderEntity: CompoundTag, isLeft: Boolean): Boolean {
+    private fun validateShoulder(player: ServerPlayer, isLeft: Boolean): Boolean {
+        val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
         val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
-        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft) {
+        // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
+        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
             return false
         }
+        player.updateShoulderNbt(pokemon)
         return true
     }
 

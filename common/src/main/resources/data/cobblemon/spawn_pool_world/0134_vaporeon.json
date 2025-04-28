@@ -38,7 +38,7 @@
             "id": "vaporeon-2",
             "pokemon": "vaporeon",
             "presets": [
-                "underwater"
+                "water"
             ],
             "type": "pokemon",
             "context": "submerged",
@@ -86,8 +86,7 @@
             "id": "vaporeon-4",
             "pokemon": "vaporeon",
             "presets": [
-                "natural",
-                "village"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -99,6 +98,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "#minecraft:village"
                 ]
             }
         },
@@ -138,60 +140,6 @@
                     "#cobblemon:is_temperate",
                     "#cobblemon:is_tropical_island"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 2,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "vaporeon-7",
-            "pokemon": "vaporeon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "28-53",
-            "weight": 6.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_temperate",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "vaporeon-8",
-            "pokemon": "vaporeon",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "28-53",
-            "weight": 2.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_magical",
-                    "#cobblemon:is_temperate",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

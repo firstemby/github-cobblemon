@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Wattrel",
   "nationalPokedexNumber": 940,
+  "name": "Wattrel",
   "primaryType": "electric",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 4,
+  "weight": 36,
+  "pokedex": [
+    "cobblemon.species.wattrel.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "windpower",
     "voltabsorb",
     "h:competitive"
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
   ],
   "baseStats": {
     "hp": 40,
@@ -17,10 +31,6 @@
     "special_defence": 40,
     "speed": 70
   },
-  "catchRate": 180,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 56,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -29,18 +39,45 @@
     "special_defence": 0,
     "speed": 1
   },
+  "baseExperienceYield": 56,
   "experienceGroup": "medium_slow",
+  "catchRate": 180,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "flying"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 0.55,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.15,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
       }
     }
+  },
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:feather",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "minecraft:chicken"
+      },
+      {
+        "item": "cobblemon:razz_berry",
+        "percentage": 2.5
+      }
+    ]
   },
   "moves": [
     "1:growl",
@@ -80,8 +117,10 @@
     "tm:featherdance",
     "tm:fly",
     "tm:hurricane",
+    "tm:pluck",
     "tm:protect",
     "tm:rest",
+    "tm:roost",
     "tm:sleeptalk",
     "tm:substitute",
     "tm:swift",
@@ -95,14 +134,22 @@
     "tm:uturn",
     "tm:voltswitch",
     "tm:weatherball",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:chargebeam",
+    "tutor:dualwingbeat",
+    "tutor:electroweb",
+    "tutor:endeavor",
+    "tutor:rest",
+    "tutor:roost",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:thunderbolt",
+    "tutor:uproar",
+    "tutor:wildcharge"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 4,
-  "weight": 36,
   "evolutions": [
     {
       "id": "wattrel_kilowattrel",
@@ -119,31 +166,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.55,
-  "hitbox": {
-    "width": 0.75,
-    "height": 1.15,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.wattrel.desc"
-  ],
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:feather",
-        "quantityRange": "0-1"
-      },
-      {
-        "item": "minecraft:chicken"
-      },
-      {
-        "item": "cobblemon:razz_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

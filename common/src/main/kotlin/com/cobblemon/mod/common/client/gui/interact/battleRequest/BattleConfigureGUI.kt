@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ClientBattleChallenge
 import com.cobblemon.mod.common.client.battle.ClientTeamRequest
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.PlayerInteractOptionsPacket
 import com.cobblemon.mod.common.net.messages.server.*
@@ -35,7 +36,7 @@ class BattleConfigureGUI(
         private val packet: PlayerInteractOptionsPacket,
         private val activeRequest: ClientBattleChallenge? = null,
         private val activeTeamRequest: ClientTeamRequest? = null
-) : Screen(lang("ui.challenge.challenge_title")) {
+) : Screen(lang("ui.challenge.challenge_title")), CobblemonRenderable {
     companion object {
         const val SIZE = 113
         private val backgroundResource = cobblemonResource("textures/gui/interact/request/battle_request.png")

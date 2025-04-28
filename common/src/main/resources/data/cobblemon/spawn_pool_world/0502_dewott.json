@@ -31,7 +31,7 @@
             "id": "dewott-2",
             "pokemon": "dewott",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -69,58 +69,56 @@
                 ]
             },
             "anticondition": {
-                "minLureLevel": 1,
                 "biomes": [
                     "#cobblemon:is_cold"
                 ]
             }
         },
         {
-            "id": "dewott-4",
-            "pokemon": "dewott",
+            "id": "dewott-hisui-4",
+            "pokemon": "dewott region_bias=hisui",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
+            "context": "grounded",
+            "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 2.25,
+            "weight": 3.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_beach",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
+                    "#cobblemon:is_coast"
+                ]
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_cold"
+                    "#cobblemon:is_beach"
                 ]
             }
         },
         {
-            "id": "dewott-5",
-            "pokemon": "dewott",
+            "id": "dewott-hisui-5",
+            "pokemon": "dewott region_bias=hisui",
+            "presets": [
+                "water"
+            ],
             "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
+            "context": "surface",
+            "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 0.18,
+            "weight": 3.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_beach",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_tropical_island"
-                ],
-                "minLureLevel": 3
+                    "#cobblemon:is_coast"
+                ]
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_cold"
+                    "#cobblemon:is_beach"
                 ]
             }
         },
@@ -139,12 +137,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_beach"
+                    "minecraft:snowy_beach"
                 ]
             }
         },
@@ -152,7 +145,7 @@
             "id": "dewott-hisui-7",
             "pokemon": "dewott region_bias=hisui",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -163,56 +156,13 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_beach"
+                    "minecraft:snowy_beach"
                 ]
             }
         },
         {
             "id": "dewott-hisui-8",
             "pokemon": "dewott region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "context": "grounded",
-            "bucket": "ultra-rare",
-            "level": "17-41",
-            "weight": 3.6,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "minecraft:snowy_beach"
-                ]
-            }
-        },
-        {
-            "id": "dewott-hisui-9",
-            "pokemon": "dewott region_bias=hisui",
-            "presets": [
-                "water_surface"
-            ],
-            "type": "pokemon",
-            "context": "surface",
-            "bucket": "ultra-rare",
-            "level": "17-41",
-            "weight": 3.6,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "minecraft:snowy_beach"
-                ]
-            }
-        },
-        {
-            "id": "dewott-hisui-10",
-            "pokemon": "dewott region_bias=hisui",
             "type": "pokemon",
             "context": "fishing",
             "bucket": "ultra-rare",
@@ -225,54 +175,6 @@
                     "#cobblemon:is_coast",
                     "#cobblemon:is_cold_ocean"
                 ]
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_beach"
-                ]
-            }
-        },
-        {
-            "id": "dewott-hisui-11",
-            "pokemon": "dewott region_bias=hisui",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "rare",
-            "level": "17-41",
-            "weight": 2.25,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_cold_ocean"
-                ],
-                "minLureLevel": 2,
-                "maxLureLevel": 2
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_beach"
-                ]
-            }
-        },
-        {
-            "id": "dewott-hisui-12",
-            "pokemon": "dewott region_bias=hisui",
-            "type": "pokemon",
-            "context": "fishing",
-            "bucket": "common",
-            "level": "17-41",
-            "weight": 0.18,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_cold_ocean"
-                ],
-                "minLureLevel": 3
             },
             "anticondition": {
                 "biomes": [

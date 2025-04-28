@@ -8,33 +8,43 @@
 
 package com.cobblemon.mod.common.entity.pokemon
 
+import com.cobblemon.mod.common.CobblemonMemories
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
-import com.cobblemon.mod.common.api.pokeball.PokeBalls
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
-import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
-import java.util.Optional
-import net.minecraft.world.entity.Entity
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
+import org.joml.Matrix3f
+import org.joml.Vector3f
+import java.util.*
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
@@ -47,7 +57,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
     override fun changePokemon(pokemon: Pokemon) {
         updatePathfindingPenalties(pokemon)
-        entity.registerGoals()
+//        entity.registerGoals()
         updateMaxHealth()
     }
 
@@ -95,8 +105,36 @@ class PokemonServerDelegate : PokemonSideDelegate {
         with(entity) {
             speed = 0.1F
             entity.despawner.beginTracking(this)
+
+            initializeScripting()
         }
         updateTrackedValues()
+    }
+
+    override fun addToStruct(struct: QueryStruct) {
+        super.addToStruct(struct)
+        if (entity.pokemon.isWild()) {
+            struct
+                    .addFunction("attempt_wild_battle") { params ->
+                        val opponentValue = params.get<MoValue>(0)
+                        val opponent = if (opponentValue is ObjectValue<*>) {
+                            opponentValue.obj as ServerPlayer
+                        } else {
+                            val paramString = opponentValue.asString()
+                            val playerUUID = paramString.asUUID
+                            if (playerUUID != null) {
+                                entity.server!!.playerList.getPlayer(playerUUID) ?: return@addFunction DoubleValue.ZERO
+                            } else {
+                                entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
+                            }
+                        }
+
+                        // Need to wait to ensure any entity info gets grabbed properly before battle attempt.
+                        return@addFunction entity.after(0.01F) {
+                            DoubleValue(entity.forceBattle(opponent))
+                        }
+                    }
+        }
     }
 
     fun getBattle() = entity.battleId?.let(BattleRegistry::getBattle)
@@ -104,21 +142,38 @@ class PokemonServerDelegate : PokemonSideDelegate {
     fun updateTrackedValues() {
         val trackedSpecies = mock?.species ?: entity.pokemon.species.resourceIdentifier.toString()
         val trackedNickname =  mock?.nickname ?: entity.pokemon.nickname ?: Component.empty()
+        val trackedMark = entity.pokemon.activeMark?.identifier.toString()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
 
-        //used getOwnerPlayer().uuid instead of getOwnerUUID() to avoid a potential NPE
-        entity.ownerUUID = entity.pokemon.getOwnerPlayer()?.uuid
+        entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
         }
+        if (entity.entityData.get(PokemonEntity.MARK) !=trackedMark) {
+            entity.entityData.set(PokemonEntity.MARK, trackedMark)
+        }
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
-        entity.entityData.set(PokemonEntity.MOVING, entity.platform == PlatformType.NONE && entity.deltaMovement.multiply(1.0, if (entity.onGround()) 0.0 else 1.0, 1.0).length() > 0.005F)
+
+        if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
+            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
+        }
+        else {
+            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+        }
+
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
 
+        val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
+        val newRideBoosts = entity.pokemon.getRideBoosts()
+        if (currentRideBoosts.size != newRideBoosts.size || currentRideBoosts.any { (key, value) -> newRideBoosts[key] != value }) {
+            entity.entityData.set(PokemonEntity.RIDE_BOOSTS, newRideBoosts)
+        }
+
+        updateShownItem()
         updatePoseType()
     }
 
@@ -195,14 +250,29 @@ class PokemonServerDelegate : PokemonSideDelegate {
         updateTrackedValues()
     }
 
+    fun updateShownItem() {
+        val trackedShownItem = when {
+            // Show Hand Item if Held item is hidden
+            !entity.pokemon.heldItemVisible -> entity.mainHandItem
+            // Show Held Item unless it is empty
+            else -> (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy()?.takeUnless { it.isEmpty }
+            // Show Hand Item if Held item is empty
+            ?: entity.mainHandItem
+        }.copy()
+        /* Hide items tagged as hidden (If the item is in this list, it will not render) */
+        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS)) ItemStack.EMPTY else it}
+
+        entity.entityData.set(PokemonEntity.SHOWN_HELD_ITEM, trackedShownItem)
+    }
+
     fun updatePoseType() {
-        if (!entity.enablePoseTypeRecalculation) {
+        if (!entity.enablePoseTypeRecalculation || entity.passengers.isNotEmpty()) {
             return
         }
 
-        val isSleeping = entity.pokemon.status?.status == Statuses.SLEEP && entity.behaviour.resting.canSleep
+        val isSleeping = (entity.brain.getMemory(CobblemonMemories.POKEMON_SLEEPING).orElse(false) || entity.pokemon.status?.status == Statuses.SLEEP) && entity.behaviour.resting.canSleep
         val isMoving = entity.entityData.get(PokemonEntity.MOVING)
-        val isPassenger = entity.isPassenger()
+        val isPassenger = entity.isPassenger
         val isUnderwater = entity.getIsSubmerged()
         val isFlying = entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
 
@@ -227,6 +297,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
     }
 
+    fun doDeathDrops() {
+        if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+            val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
+            if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
+            (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
+        }
+    }
+
     override fun updatePostDeath() {
         // clear active effects before proceeding
         val owner = entity.owner
@@ -239,6 +317,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.deathTime == 0) {
             entity.effects.wipe()
             entity.deathTime = 1
+            if (!Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             return
         } else if (entity.effects.progress?.isDone == false) {
             return
@@ -256,14 +335,33 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         if (entity.deathTime == 60) {
-            if (entity.ownerUUID == null && entity.owner == null) {
-                entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
-                if(entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
-                    (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
-                }
-            }
-
+            entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
+            if (Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             entity.remove(Entity.RemovalReason.KILLED)
         }
+    }
+
+    override fun positionRider(
+        passenger: Entity,
+        positionUpdater: Entity.MoveFunction
+    ) {
+        val index =
+            this.entity.passengers.indexOf(passenger).takeIf { it >= 0 && it < this.entity.seats.size } ?: return
+        val seat = this.entity.seats[index]
+        val seatOffset = seat.getOffset(this.entity.getCurrentPoseType()).toVector3f()
+        val center = Vector3f(0f, this.entity.bbHeight / 2, 0f)
+
+        val seatToCenter = center.sub(seatOffset, Vector3f())
+        val matrix = (this.entity.passengers.first() as? OrientationControllable)?.orientationController?.orientation
+            ?: Matrix3f().rotate((180f - passenger.yRot).toRadians(), Vector3f(0f, 1f, 0f))
+        val offset =
+            matrix.transform(seatToCenter, Vector3f()).add(center).sub(Vector3f(0f, passenger.bbHeight / 2, 0f))
+
+        positionUpdater.accept(
+            passenger,
+            this.entity.x + offset.x,
+            this.entity.y + offset.y,
+            this.entity.z + offset.z
+        )
     }
 }

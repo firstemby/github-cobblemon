@@ -42,6 +42,10 @@
       "required": false
     },
 	{
+      "id": "clifftree:shrubland",
+      "required": false 
+    },
+	{
       "id": "terralith:alpine_highlands",
       "required": false
     },

@@ -24,6 +24,26 @@
                 ],
                 "timeRange": "night"
             }
+        },
+        {
+            "id": "pinsir-2",
+            "pokemon": "pinsir",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "rare",
+            "level": "25-50",
+            "weight": 10.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "aether:skyroot_forest",
+                    "aether:skyroot_woodland"
+                ]
+            }
         }
     ]
 }

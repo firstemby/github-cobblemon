@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.writeItemStack
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
 
-class HeldItemUpdatePacket(pokemon: () -> Pokemon, value: ItemStack): SingleUpdatePacket<ItemStack, HeldItemUpdatePacket>(pokemon, value) {
+class HeldItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack): SingleUpdatePacket<ItemStack, HeldItemUpdatePacket>(pokemon, value) {
 
     override val id = ID
 

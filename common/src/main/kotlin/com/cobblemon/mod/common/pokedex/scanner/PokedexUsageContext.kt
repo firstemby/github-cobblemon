@@ -18,6 +18,9 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.random.Random
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -25,14 +28,14 @@ import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.util.Mth.clamp
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.random.Random
+import kotlin.math.exp
+import kotlin.math.ln
 
 class PokedexUsageContext {
     companion object {
-        const val ZOOM_STAGES = 10
+        const val ZOOM_MAX_STEP = 9F
+        const val ZOOM_TARGET_FOV = 10F // the FOV we get at max zoom (probably somewhat inaccurate, but irrelevant)
+        const val ZOOM_BASE_FOV = 80F // getting FOV from MC is easy, but pin it for consistent step count/zoom dist
         const val BLOCK_LENGTH_PER_ZOOM_STAGE = 2
         const val OPEN_SCANNER_BUFFER_TICKS = 5 // Open scanner interface if usage ticks are above this threshold
         const val VIEW_INFO_BUFFER_TICKS = 10
@@ -59,6 +62,7 @@ class PokedexUsageContext {
     var focusIntervals: Float = 0F
     var innerRingRotation: Float = 0F
     var zoomLevel: Float = 0F
+    var zoomModifier: Float = 1F
     var newPokemonInfo: PokedexLearnedInformation = PokedexLearnedInformation.NONE
     var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
@@ -85,7 +89,7 @@ class PokedexUsageContext {
                 if (transitionIntervals == TRANSITION_INTERVALS) playSound(CobblemonSounds.POKEDEX_SCAN_CLOSE)
                 transitionIntervals = max(transitionIntervals - updateInterval, 0F)
                 if (transitionIntervals <= 0) {
-                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS) openPokedexGUI(type, scannableEntityInFocus!!.resolvePokemonScan()?.species?.resourceIdentifier)
+                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS) openPokedexGUI(type, scannableEntityInFocus!!.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier)
                     resetState()
                 }
             }
@@ -155,7 +159,7 @@ class PokedexUsageContext {
                 }
 
                 // Check if Pokémon in focus is owned
-                isPokemonInFocusOwned = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.species.resourceIdentifier) == PokedexEntryProgress.CAUGHT
+                isPokemonInFocusOwned = CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
 
                 // Randomize info frames for render
                 if (focusIntervals == 0F) {
@@ -170,7 +174,7 @@ class PokedexUsageContext {
                 // Check if Pokémon in focus is new or has new data
                 newPokemonInfo = CobblemonClient.clientPokedexData.getNewInformation(resolvedPokemon)
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
-                else scannedSpecies = resolvedPokemon.species.resourceIdentifier
+                else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
         } else {
             resetFocusedPokemonState()
@@ -204,6 +208,7 @@ class PokedexUsageContext {
     fun resetState(resetAnimationStates: Boolean = true) {
         scanningGuiOpen = false
         zoomLevel = 0F
+        zoomModifier = 1F
         focusIntervals = 0F
         resetFocusedPokemonState()
 
@@ -215,14 +220,22 @@ class PokedexUsageContext {
     }
 
     fun adjustZoom(verticalScrollAmount: Double) {
-        zoomLevel = clamp(zoomLevel + verticalScrollAmount.toFloat(), 0F, ZOOM_STAGES.toFloat())
-        if (zoomLevel > 0F && zoomLevel < ZOOM_STAGES.toFloat()) {
-            playSound(CobblemonSounds.POKEDEX_SCAN_ZOOM_INCREMENT)
-        }
+        if ((zoomLevel <= 0F && verticalScrollAmount < 0) || (zoomLevel >= ZOOM_MAX_STEP && verticalScrollAmount > 0))
+            return
+
+        playSound(CobblemonSounds.POKEDEX_SCAN_ZOOM_INCREMENT)
+        zoomLevel = (zoomLevel + verticalScrollAmount.toFloat()).coerceIn(0F, ZOOM_MAX_STEP)
+        innerRingRotation = (innerRingRotation + 15) % 360
+        val startLog = ln(ZOOM_BASE_FOV)
+        val targetLog = ln(ZOOM_TARGET_FOV)
+        val stepSize = (startLog - targetLog) / ZOOM_MAX_STEP
+        val currentZoomLog = startLog - (zoomLevel * stepSize)
+        val currentFov = exp(currentZoomLog)
+        zoomModifier = currentFov / ZOOM_BASE_FOV
     }
 
-    // Higher multiplier = more zoomed out
-    fun getFovMultiplier() = 1 - (zoomLevel / ZOOM_STAGES)
+    // 1 = normal FOV; 0 = max zoom; this runs on render update, best to keep logic out of here
+    fun getFovMultiplier() = zoomModifier
 
     fun playSound(soundEvent: SoundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))

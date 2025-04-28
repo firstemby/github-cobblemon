@@ -7,8 +7,7 @@
             "id": "sableye-1",
             "pokemon": "sableye",
             "presets": [
-                "natural",
-                "gemstones"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -19,7 +18,11 @@
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:gemstones"
                 ]
             }
         },

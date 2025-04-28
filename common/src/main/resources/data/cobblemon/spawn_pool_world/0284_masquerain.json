@@ -7,7 +7,7 @@
             "id": "masquerain-1",
             "pokemon": "masquerain",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",
@@ -32,7 +32,7 @@
             "id": "masquerain-2",
             "pokemon": "masquerain",
             "presets": [
-                "water_surface"
+                "water"
             ],
             "type": "pokemon",
             "context": "surface",

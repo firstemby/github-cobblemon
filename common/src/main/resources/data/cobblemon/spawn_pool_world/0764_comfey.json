@@ -28,8 +28,7 @@
             "id": "comfey-2",
             "pokemon": "comfey",
             "presets": [
-                "natural",
-                "flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -40,9 +39,13 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_overworld"
                 ],
-                "isRaining": false
+                "isRaining": false,
+                "neededNearbyBlocks": [
+                    "#cobblemon:flowers"
+                ]
             }
         },
         {

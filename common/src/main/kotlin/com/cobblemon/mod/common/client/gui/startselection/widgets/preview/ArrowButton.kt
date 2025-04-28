@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.startselection.widgets.preview
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -22,7 +23,7 @@ class ArrowButton(
     right: Boolean,
     private val texture: ResourceLocation = if (right) RIGHT_ARROW_BUTTON_RESOURCE else LEFT_ARROW_BUTTON_RESOURCE,
     onPress: OnPress
-) : Button(pX, pY, pWidth, pHeight, Component.empty(), onPress, DEFAULT_NARRATION) {
+) : Button(pX, pY, pWidth, pHeight, Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
     companion object {
         private val RIGHT_ARROW_BUTTON_RESOURCE = cobblemonResource("textures/gui/starterselection/starterselection_arrow_right.png")

@@ -1,0 +1,19 @@
+{
+  "visible": false,
+  "configurations": [
+    {
+      "type": "apply_behaviours",
+      "condition": "!q.entity.is_wild",
+      "behaviours": [
+        "cobblemon:pokemon_follows_owner"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "!q.entity.is_wild && q.entity.behaviour.resting.will_sleep_on_bed",
+      "behaviours": [
+        "cobblemon:pokemon_sleeps_on_trainer_bed"
+      ]
+    }
+  ]
+}

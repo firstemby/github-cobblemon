@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -22,7 +23,7 @@ class DialoguePortraitWidget(
     val y: Int,
     val width: Int,
     val height: Int
-) : Renderable, GuiEventListener {
+) : CobblemonRenderable, GuiEventListener {
     companion object {
         val DIALOGUE_ARROW_HEIGHT = 11
         val DIALOGUE_ARROW_WIDTH = 6

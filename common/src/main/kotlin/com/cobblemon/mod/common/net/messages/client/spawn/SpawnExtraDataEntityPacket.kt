@@ -18,7 +18,7 @@ import net.minecraft.network.protocol.PacketUtils
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.world.phys.Vec3
 
-abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(private val vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {
+abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         this.encodeEntityData(buffer)
         this.vanillaSpawnPacket.write(buffer)
@@ -26,7 +26,7 @@ abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(priva
 
     abstract fun encodeEntityData(buffer: RegistryFriendlyByteBuf)
 
-    abstract fun applyData(entity: E)
+    abstract fun applyData(entity: E, level: ClientLevel)
 
     abstract fun checkType(entity: Entity): Boolean
 
@@ -48,7 +48,7 @@ abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(priva
             )
             // Cobblemon start
             if (this.checkType(entity)) {
-                this.applyData(entity as E)
+                this.applyData(entity as E, world)
             }
             // Cobblemon end
             world.addEntity(entity)

@@ -8,32 +8,35 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.npc.ai.MeleeAttackTask
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class MeleeAttackTaskConfig : SingleTaskConfig {
-    val condition = "true".asExpressionLike()
-    val range = "1.5".asExpression()
-    val cooldownTicks = "30".asExpression()
+    val condition = booleanVariable(SharedEntityVariables.ATTACKING_CATEGORY, "attacks_melee", true).asExpressible()
+    val range = numberVariable(SharedEntityVariables.ATTACKING_CATEGORY, "melee_range", 1.5F).asExpressible()
+    val cooldownTicks = numberVariable(SharedEntityVariables.ATTACKING_CATEGORY, "melee_cooldown", 30).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        range,
+        cooldownTicks
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
 
         return MeleeAttackTask.create(
-            range = range,
-            cooldownTicks = cooldownTicks
+            range = range.asExpression(),
+            cooldownTicks = cooldownTicks.asExpression()
         )
     }
 }

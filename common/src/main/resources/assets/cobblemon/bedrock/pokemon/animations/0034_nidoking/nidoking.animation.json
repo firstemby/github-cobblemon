@@ -132,7 +132,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "nidoking_ambient"
+					"effect": "pokemon.nidoking.cry"
 				}
 			}
 		}

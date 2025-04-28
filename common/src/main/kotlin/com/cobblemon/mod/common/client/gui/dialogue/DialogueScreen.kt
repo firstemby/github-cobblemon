@@ -10,45 +10,71 @@ package com.cobblemon.mod.common.client.gui.dialogue
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.dialogue.ArtificialDialogueFaceProvider
 import com.cobblemon.mod.common.api.dialogue.PlayerDialogueFaceProvider
 import com.cobblemon.mod.common.api.dialogue.ReferenceDialogueFaceProvider
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueBox
-import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialoguePortraitWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueNameWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueOptionWidget
+import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialoguePortraitWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueTextInputWidget
 import com.cobblemon.mod.common.client.gui.dialogue.widgets.DialogueTimerWidget
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueDTO
+import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueGibberDTO
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacket
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.asExpressions
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isInventoryKeyPressed
+import com.cobblemon.mod.common.util.nextBetween
 import com.cobblemon.mod.common.util.resolve
+import kotlin.random.Random
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.sounds.SoundEvent
 
-class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()) {
+class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
     val speakers = dialogueDTO.speakers?.mapNotNull { (key, value) ->
         val name = value.name
         when (val face = value.face) {
-            is ArtificialDialogueFaceProvider -> key to DialogueRenderableSpeaker(name, ArtificialRenderableFace(face.modelType, face.identifier, face.aspects, face.isLeftSide))
-            is PlayerDialogueFaceProvider -> key to DialogueRenderableSpeaker(name, PlayerRenderableFace(face.playerId, face.isLeftSide))
+            is ArtificialDialogueFaceProvider -> key to DialogueRenderableSpeaker(
+                name = name,
+                face = ArtificialRenderableFace(face.modelType, face.identifier, face.aspects, face.isLeftSide),
+                gibber = value.gibber
+            )
+            is PlayerDialogueFaceProvider -> key to DialogueRenderableSpeaker(
+                name = name,
+                face = PlayerRenderableFace(
+                    playerId = face.playerId,
+                    isLeftSide = face.isLeftSide
+                ),
+                gibber = value.gibber
+            )
             is ReferenceDialogueFaceProvider -> {
                 key to DialogueRenderableSpeaker(
                     name = name,
-                    face = ReferenceRenderableFace(Minecraft.getInstance().level?.getEntity(face.entityId) as? PosableEntity ?: return@mapNotNull null, face.isLeftSide)
+                    face = ReferenceRenderableFace(
+                        entity = Minecraft.getInstance().level?.getEntity(face.entityId) as? PosableEntity ?: return@mapNotNull null,
+                        isLeftSide = face.isLeftSide
+                    ),
+                    gibber = value.gibber
                 )
             }
-            else -> key to DialogueRenderableSpeaker(name, null)
+            else -> key to DialogueRenderableSpeaker(name = name, face = null, gibber = value.gibber)
         }
     }?.toMap() ?: emptyMap()
     val runtime = MoLangRuntime().setup().setupClient()
@@ -65,10 +91,17 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
     lateinit var dialogueNameWidget: DialogueNameWidget
     lateinit var dialoguePortraitWidget: DialoguePortraitWidget
 
+    var dialogueStartTick = 0
+
     val scaledWidth
         get() = this.minecraft!!.window.guiScaledWidth
     val scaledHeight
         get() = this.minecraft!!.window.guiScaledHeight
+
+    var expressionsToRun = listOf<ExpressionLike>()
+    var gibberDone = false
+    var gibber: DialogueGibberDTO? = null
+    var gibberSounds = listOf<SoundEvent>()
 
     companion object {
         const val BOX_WIDTH = 196
@@ -96,13 +129,15 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         private val buttonResource = cobblemonResource("textures/gui/dialogue/dialogue_button.png")
         private val buttonFullWidthResource = cobblemonResource("textures/gui/dialogue/dialogue_button_full.png")
 
-        val dialogueMolangFunctions = mutableListOf<(DialogueScreen) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+        val dialogueMoLangFunctions = mutableListOf<(DialogueScreen) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
             { dialogueScreen ->
                 return@mutableListOf hashMapOf(
-                    "face" to java.util.function.Function { Unit },
+                    "face" to java.util.function.Function {
+                        val face = dialogueScreen.dialogueDTO.currentPageDTO.speaker?.let { dialogueScreen.speakers[it] }?.face ?: return@Function DoubleValue.ZERO
+                        return@Function face.struct
+                    },
                 )
             }
-        // idk something maybe, stuff for accessing the current 'face' to modify it?
         )
     }
 
@@ -113,14 +148,15 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
     override fun init() {
         super.init()
 
-        runtime.environment.query
-        .addFunctions(
-            dialogueMolangFunctions
-                .flatMap { it(this@DialogueScreen).entries }
-                .associate { it.key to it.value }
+        runtime.environment.query.addFunctions(
+            functions = dialogueMoLangFunctions.flatMap { it(this@DialogueScreen).entries }.associate { it.key to it.value }
         )
 
-        dialogueDTO.currentPageDTO.clientActions.forEach { runtime.resolve(it.asExpressionLike()) }
+        val currentSpeaker = dialogueDTO.currentPageDTO.speaker
+        gibber = dialogueDTO.currentPageDTO.gibber ?: currentSpeaker?.let { speakers[it]?.gibber }
+        gibberSounds = gibber?.sounds?.mapNotNull { BuiltInRegistries.SOUND_EVENT.get(it) } ?: emptyList()
+
+        expressionsToRun = dialogueDTO.currentPageDTO.clientActions.map { it.asExpressionLike() }
         val centerX = scaledWidth / 2F
         val boxMinY = (scaledHeight / 2F) - (BOX_HEIGHT / 2F) - 30
         val boxMaxY = boxMinY + BOX_HEIGHT
@@ -200,21 +236,37 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         addRenderableOnly(dialoguePortraitWidget)
 
         if (dialogueDTO.dialogueInput.inputType == DialogueInputDTO.InputType.TEXT) {
-            //focusOn(dialogueTextInputWidget)
+            setInitialFocus(dialogueTextInputWidget)
         }
 
+        this.dialogueStartTick = minecraft!!.player!!.tickCount
         dialogueDTO.currentPageDTO.clientActions.flatMap(String::asExpressions).resolve(runtime)
     }
 
+    var gibberIndex = 0
+    var timeElapsedSinceGibber = 0.0
+
     override fun render(GuiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        val gibber = gibber
+        if (gibber != null) {
+            playGibberSpeak(
+                delta = delta,
+                text = dialogueDTO.currentPageDTO.lines.joinToString { it.string },
+                gibber = gibber
+            )
+        }
         remainingSeconds -= delta / 20F
         dialogueTimerWidget.ratio = if (remainingSeconds <= 0) -1F else remainingSeconds / dialogueDTO.dialogueInput.deadline
         super.render(GuiGraphics, mouseX, mouseY, delta)
+        expressionsToRun.forEach { runtime.resolve(it) }
+        expressionsToRun = emptyList()
     }
 
     override fun isPauseScreen() = false
 
     fun update(dialogueDTO: DialogueDTO) {
+        gibberIndex = 0
+        gibberDone = false
         this.dialogueDTO = dialogueDTO
         this.remainingSeconds = dialogueDTO.dialogueInput.deadline
         waitingForServerUpdate = false
@@ -228,5 +280,41 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
     override fun onClose() {
         EscapeDialoguePacket().sendToServer()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+            onClose()
+            return true
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    fun playGibberSpeak(delta: Float, text: String, gibber: DialogueGibberDTO) {
+        timeElapsedSinceGibber += delta / 20
+
+        if (timeElapsedSinceGibber < gibber.interval) {
+            return
+        }
+
+        timeElapsedSinceGibber = 0.0
+
+        if (gibberIndex >= text.length) {
+            gibberDone = true
+            return
+        }
+
+        val gibberChar = text[gibberIndex]
+        gibberIndex += gibber.step
+
+        if (gibberSounds.isNotEmpty()) {
+            val pitchRange = gibber.maxPitch * 100 - gibber.minPitch * 100
+            val gibberPitch = (gibberChar.hashCode() % pitchRange + gibber.minPitch * 100) / 100
+
+            val volume = Random.nextBetween(gibber.minVolume, gibber.maxVolume)
+            val gibberSound = gibberSounds[gibberChar.hashCode() % gibberSounds.size]
+            minecraft?.soundManager?.play(SimpleSoundInstance.forUI(gibberSound, gibberPitch, volume))
+        }
     }
 }

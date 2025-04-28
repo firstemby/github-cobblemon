@@ -38,8 +38,9 @@ import net.minecraft.world.phys.AABB
  */
 interface PokemonSelectingItem {
     fun use(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack> {
+        val range = player.entityInteractionRange()
         val entity = player.level()
-            .getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0))
+            .getEntities(player, AABB.ofSize(player.position(), range, range, range))
             .filter { player.isLookingAt(it, stepDistance = 0.1F) }
             .minByOrNull { it.distanceTo(player) } as? PokemonEntity?
 
@@ -91,23 +92,24 @@ interface PokemonSelectingItem {
         val bagItem = bagItem
         if (!battlePokemon.actor.canFitForcedAction()) {
             player.sendSystemMessage(battleLang("bagitem.cannot").red())
-        } else if (!bagItem!!.canUse(battle, battlePokemon)) {
+        } else if (!bagItem!!.canUse(stack, battle, battlePokemon)) {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
         } else {
             battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon))
+            val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
             if (!player.isCreative) {
                 stack.shrink(1)
                 battlePokemon.actor.itemsUsed.add(bagItem)
             }
-            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(battlePokemon.effectedPokemon.species.resourceIdentifier, BuiltInRegistries.ITEM.getKey(stack.item)))
+            CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(battlePokemon.effectedPokemon.species.resourceIdentifier, stackName))
         }
     }
 
-    fun canUseOnPokemon(pokemon: Pokemon): Boolean
-    fun canUseOnBattlePokemon(battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean
+    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
 
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack> {
-        return if (canUseOnBattlePokemon(battlePokemon)) {
+        return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             applyToBattlePokemon(player, stack, battlePokemon)
             InteractionResultHolder.success(stack)
         } else {
@@ -125,7 +127,7 @@ interface PokemonSelectingItem {
         PartySelectCallbacks.createFromPokemon(
             player = player,
             pokemon = party,
-            canSelect = ::canUseOnPokemon,
+            canSelect = { pk -> canUseOnPokemon(stack, pk) },
             handler = { pk ->
                 if (stack.isHeld(player)) {
                     applyToPokemon(player, stack, pk)
@@ -141,7 +143,7 @@ interface PokemonSelectingItem {
         PartySelectCallbacks.createBattleSelect(
             player = player,
             pokemon = actor.pokemonList,
-            canSelect = { pk -> canUseOnBattlePokemon(actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) },
+            canSelect = { pk -> canUseOnBattlePokemon(stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) },
             handler = { pk -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
 

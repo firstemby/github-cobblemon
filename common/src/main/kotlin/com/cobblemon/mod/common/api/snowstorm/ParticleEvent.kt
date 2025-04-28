@@ -26,6 +26,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
+import org.joml.Matrix4f
 
 /**
  * An event that can be referenced from various particle event triggers. The events are not necessarily particles,
@@ -77,9 +78,11 @@ class ParticleEvent(
     fun run(storm: ParticleStorm, particle: SnowstormParticle?) {
         particleEffect?.let { effect ->
             val bedrockParticleOptions = BedrockParticleOptionsRepository.getEffect(effect.effect) ?: return@let
-            val rootMatrix = when (effect.type) {
-                EventParticleOptions.EventParticleType.EMITTER-> MatrixWrapper().updatePosition(storm.matrixWrapper.position).updateMatrix(storm.matrixWrapper.matrix)
-                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.matrixWrapper
+            val particleMatrix = when (effect.type) {
+                //It may seem incorrect to clone for both of these, but the locator matrix determines whether the
+                //emitter follows the locator. We don't want the child emitter to affect the parent emitter so we make a copy
+                EventParticleOptions.EventParticleType.EMITTER,
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.emitterSpaceMatrix.clone()
                 EventParticleOptions.EventParticleType.PARTICLE,
                 EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> (particle?.let {
                     Vec3(
@@ -87,7 +90,19 @@ class ParticleEvent(
                         it.getY(),
                         it.getZ()
                     )
-                } ?: Vec3(storm.getX(), storm.getY(), storm.getZ())).let { MatrixWrapper().updatePosition(it) }
+                } ?: Vec3(storm.getX(), storm.getY(), storm.getZ())).let {
+                    val matrixWrapper = MatrixWrapper()
+                    matrixWrapper.updatePosition(it)
+                    //We only want the orientation of the original matrix, not position/translation
+                    matrixWrapper.updateMatrix(Matrix4f(storm.emitterSpaceMatrix.matrix).setTranslation(0F, 0F, 0F))
+                }
+            }
+
+            val locatorMatrix = when (effect.type) {
+                EventParticleOptions.EventParticleType.EMITTER -> particleMatrix
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.locatorSpaceMatrix
+                EventParticleOptions.EventParticleType.PARTICLE,
+                EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> particleMatrix
             }
 
             val sourceVelocity = when (effect.type) {
@@ -105,17 +120,25 @@ class ParticleEvent(
 
             val newStorm = ParticleStorm(
                 effect = bedrockParticleOptions,
-                matrixWrapper = rootMatrix,
+                emitterSpaceMatrix = particleMatrix,
+                locatorSpaceMatrix = locatorMatrix,
                 world = storm.world,
                 sourceVelocity = sourceVelocity,
                 sourceAlive = storm.sourceAlive,
                 sourceVisible = storm.sourceVisible,
                 onDespawn = {},
-                runtime = MoLangRuntime().setup().also { it.environment.query = storm.runtime.environment.query },
+                getParticleColor = storm.getParticleColor,
+                targetPos = storm.targetPos,
+                runtime = MoLangRuntime().setup(),
                 entity = storm.entity
             )
-
-            effect.expression?.resolve(newStorm.runtime)
+            //The reason this doesn't use the newStorms runtime is that the parent storm can add queries AFTER
+            //the child storm spawns in. Say a parent storm has a creation event. The child spawns before the parent
+            //When the parent tries to add its queries, it overwrites the child's
+            val tempRuntime = MoLangRuntime().setup().also {
+                it.environment.query = storm.runtime.environment.query
+            }
+            effect.expression?.resolve(tempRuntime)
 
             newStorm.spawn()
         }

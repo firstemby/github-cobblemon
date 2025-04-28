@@ -20,7 +20,10 @@ import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionCont
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
+import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.UUIDUtil
@@ -82,7 +85,26 @@ internal data class PokemonP2(
                 PokemonProperties.CUSTOM_PROPERTIES_CODEC.optionalFieldOf(DataKeys.POKEMON_DATA, arrayListOf()).forGetter(PokemonP2::customProperties),
                 Nature.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_NATURE).forGetter(PokemonP2::nature),
                 Nature.BY_IDENTIFIER_CODEC.optionalFieldOf(DataKeys.POKEMON_MINTED_NATURE).forGetter(PokemonP2::mintedNature),
-                ItemStack.CODEC.optionalFieldOf(DataKeys.HELD_ITEM, ItemStack.EMPTY).forGetter(PokemonP2::heldItem),
+                ItemStack.CODEC.mapResult(object: Codec.ResultFunction<ItemStack> {
+                    override fun <T : Any> apply(
+                        ops: DynamicOps<T>,
+                        input: T,
+                        a: DataResult<Pair<ItemStack, T>>
+                    ): DataResult<Pair<ItemStack, T>> {
+                        a.error().ifPresent {
+                            Cobblemon.LOGGER.error("Failed to read held item due to following error: ${it.message()}")
+                        }
+                        return DataResult.success(a.result().orElse(Pair.of(ItemStack.EMPTY, input)))
+                    }
+
+                    override fun <T : Any> coApply(
+                        ops: DynamicOps<T>,
+                        input: ItemStack?,
+                        t: DataResult<T>
+                    ): DataResult<T> {
+                        return t
+                    }
+                }).optionalFieldOf(DataKeys.HELD_ITEM, ItemStack.EMPTY).forGetter(PokemonP2::heldItem),
                 CompoundTag.CODEC.fieldOf(DataKeys.POKEMON_PERSISTENT_DATA).forGetter(PokemonP2::persistentData),
                 UUIDUtil.LENIENT_CODEC.optionalFieldOf(DataKeys.TETHERING_ID).forGetter(PokemonP2::tetheringId),
                 TeraType.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_TERA_TYPE).forGetter(PokemonP2::teraType),

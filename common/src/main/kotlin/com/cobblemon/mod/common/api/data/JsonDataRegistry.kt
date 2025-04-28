@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.data
 
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.util.endsWith
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.BufferedReader
+import java.io.File
+import java.util.concurrent.ExecutionException
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 
@@ -42,7 +45,29 @@ interface JsonDataRegistry<T> : DataRegistry {
     val resourcePath: String
 
     override fun reload(manager: ResourceManager) {
-        this.reload(Cobblemon.implementation.reloadJsonRegistry(this, manager))
+        val data = hashMapOf<ResourceLocation, T>()
+        manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
+            if (identifier.namespace == "pixelmon") {
+                return@forEach
+            }
+
+            resource.open().use { stream ->
+                stream.bufferedReader().use { reader ->
+                    val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
+                    data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
+                }
+            }
+        }
+
+        reload(data)
+    }
+
+    fun parse(reader: BufferedReader, identifier: ResourceLocation): T {
+        return try {
+            gson.fromJson(reader, typeToken.type)
+        } catch (exception: Exception) {
+            throw ExecutionException("Error loading JSON for data: $identifier", exception)
+        }
     }
 
     /**

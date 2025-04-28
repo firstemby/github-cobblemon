@@ -29,10 +29,11 @@ fun evsOf(vararg entries: Pair<Stat, Int>): PokemonStats {
     return stats
 }
 
-fun <T> Iterable<T>.weightedSelection(weightFunction: (T) -> Number): T? {
+@JvmOverloads
+fun <T> Iterable<T>.weightedSelection(random: Random = Random.Default, weightFunction: (T) -> Number): T? {
     var weightSum = 0F
     forEach { weightSum += max(0F, weightFunction(it).toFloat()) }
-    val chosenSum = Random.Default.nextFloat() * weightSum
+    val chosenSum = random.nextFloat() * weightSum
     weightSum = 0F
     forEach {
         val weight = weightFunction(it).toFloat()

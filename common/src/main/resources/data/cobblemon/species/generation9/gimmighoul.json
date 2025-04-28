@@ -1,10 +1,24 @@
 {
   "implemented": true,
-  "name": "Gimmighoul",
   "nationalPokedexNumber": 999,
+  "name": "Gimmighoul",
   "primaryType": "ghost",
+  "maleRatio": -1,
+  "height": 3,
+  "weight": 50,
+  "pokedex": [
+    "cobblemon.species.gimmighoul.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
-    "rattled"
+    "rattled",
+    "h:rattled"
+  ],
+  "eggGroups": [
+    "undiscovered"
   ],
   "baseStats": {
     "hp": 45,
@@ -14,10 +28,6 @@
     "special_defence": 70,
     "speed": 10
   },
-  "catchRate": 45,
-  "maleRatio": -1,
-  "baseExperienceYield": 60,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -26,15 +36,23 @@
     "special_defence": 0,
     "speed": 0
   },
+  "baseExperienceYield": 60,
   "experienceGroup": "slow",
+  "catchRate": 45,
   "eggCycles": 50,
-  "eggGroups": [
-    "undiscovered"
+  "baseFriendship": 50,
+  "features": [
+    "minecraft"
   ],
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1,
+    "height": 1.15,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.15
       },
       "swim": {
@@ -47,13 +65,18 @@
     },
     "resting": {
       "canSleep": true,
-      "depth": "normal",
       "light": "0-4"
     }
   },
-  "features": [
-    "minecraft"
-  ],
+  "drops": {
+    "amount": 48,
+    "entries": [
+      {
+        "item": "cobblemon:relic_coin",
+        "quantityRange": "24-48"
+      }
+    ]
+  },
   "moves": [
     "1:astonish",
     "1:tackle",
@@ -72,14 +95,11 @@
     "tm:substitute",
     "tm:takedown",
     "tm:terablast",
-    "tm:thief"
+    "tm:thief",
+    "tutor:rest",
+    "tutor:shadowball",
+    "tutor:sleeptalk"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 3,
-  "weight": 50,
   "evolutions": [
     {
       "id": "gimmighoul_gholdengo",
@@ -95,7 +115,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_1",
+      "id": "gimmighoul_gholdengonetherite1",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage1",
       "consumeHeldItem": false,
@@ -113,7 +133,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_2",
+      "id": "gimmighoul_gholdengonetherite2",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage2",
       "consumeHeldItem": false,
@@ -131,7 +151,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_3",
+      "id": "gimmighoul_gholdengonetherite3",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage3",
       "consumeHeldItem": false,
@@ -149,7 +169,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_4",
+      "id": "gimmighoul_gholdengonetherite4",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage4",
       "consumeHeldItem": false,
@@ -167,7 +187,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_5",
+      "id": "gimmighoul_gholdengonetherite5",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage5",
       "consumeHeldItem": false,
@@ -185,7 +205,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_6",
+      "id": "gimmighoul_gholdengonetherite6",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage6",
       "consumeHeldItem": false,
@@ -203,7 +223,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_7",
+      "id": "gimmighoul_gholdengonetherite7",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=stage7",
       "consumeHeldItem": false,
@@ -221,7 +241,7 @@
       ]
     },
     {
-      "id": "gimmighoul_gholdengo_netherite_8",
+      "id": "gimmighoul_gholdengonetherite8",
       "variant": "level_up",
       "result": "gholdengo netherite_coating=full",
       "consumeHeldItem": false,
@@ -238,15 +258,26 @@
       ]
     }
   ],
-  "cannotDynamax": false,
   "forms": [
     {
       "name": "Roaming",
       "primaryType": "ghost",
-      "abilities": [
-        "runaway"
+      "maleRatio": -1,
+      "height": 1,
+      "weight": 1,
+      "pokedex": [
+        "cobblemon.species.gimmighoul-roaming.desc"
       ],
-      "shoulderMountable": true,
+      "labels": [
+        "gen9"
+      ],
+      "aspects": [
+        "roaming"
+      ],
+      "abilities": [
+        "runaway",
+        "h:runaway"
+      ],
       "baseStats": {
         "hp": 45,
         "attack": 30,
@@ -255,14 +286,16 @@
         "special_defence": 45,
         "speed": 80
       },
-      "catchRate": 45,
-      "maleRatio": -1,
-      "baseExperienceYield": 0,
-      "baseFriendship": 50,
+      "shoulderMountable": true,
+      "baseScale": 0.7,
+      "hitbox": {
+        "width": 0.6,
+        "height": 0.8,
+        "fixed": false
+      },
       "behaviour": {
         "moving": {
           "walk": {
-            "canWalk": true,
             "walkSpeed": 0.3
           },
           "swim": {
@@ -270,14 +303,21 @@
             "canSwimInWater": false,
             "canBreatheUnderwater": true
           },
-          "wanderChance": 120,
-          "canLook": true
+          "wanderChance": 500,
+          "canLook": false
         },
         "resting": {
           "canSleep": true,
-          "depth": "normal",
           "light": "0-4"
         }
+      },
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "item": "cobblemon:relic_coin"
+          }
+        ]
       },
       "evolutions": [
         {
@@ -294,7 +334,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_1",
+          "id": "gimmighoul_gholdengonetherite1",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage1",
           "consumeHeldItem": false,
@@ -312,7 +352,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_2",
+          "id": "gimmighoul_gholdengonetherite2",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage2",
           "consumeHeldItem": false,
@@ -330,7 +370,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_3",
+          "id": "gimmighoul_gholdengonetherite3",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage3",
           "consumeHeldItem": false,
@@ -348,7 +388,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_4",
+          "id": "gimmighoul_gholdengonetherite4",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage4",
           "consumeHeldItem": false,
@@ -366,7 +406,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_5",
+          "id": "gimmighoul_gholdengonetherite5",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage5",
           "consumeHeldItem": false,
@@ -384,7 +424,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_6",
+          "id": "gimmighoul_gholdengonetherite6",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage6",
           "consumeHeldItem": false,
@@ -402,7 +442,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_7",
+          "id": "gimmighoul_gholdengonetherite7",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=stage7",
           "consumeHeldItem": false,
@@ -420,7 +460,7 @@
           ]
         },
         {
-          "id": "gimmighoul_gholdengo_netherite_8",
+          "id": "gimmighoul_gholdengonetherite8",
           "variant": "level_up",
           "result": "gholdengo netherite_coating=full",
           "consumeHeldItem": false,
@@ -437,62 +477,7 @@
           ]
         }
       ],
-      "evYield": {
-        "hp": 0,
-        "attack": 0,
-        "defence": 0,
-        "special_attack": 1,
-        "special_defence": 0,
-        "speed": 0
-      },
-      "experienceGroup": "slow",
-      "eggCycles": 50,
-      "eggGroups": [
-        "undiscovered"
-      ],
-      "moves": [],
-      "labels": [
-        "gen9"
-      ],
-      "aspects": [
-        "roaming"
-      ],
-      "height": 1,
-      "weight": 1,
-      "baseScale": 0.7,
-      "hitbox": {
-        "width": 0.6,
-        "height": 0.8,
-        "fixed": false
-      },
-      "cannotDynamax": false,
-      "battleOnly": false,
-      "drops": {
-        "amount": 1,
-        "entries": [
-          {
-            "item": "cobblemon:relic_coin"
-          }
-        ]
-      }
+      "battleOnly": false
     }
-  ],
-  "pokedex": [
-    "cobblemon.species.gimmighoul.desc"
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 1,
-    "height": 1.15,
-    "fixed": false
-  },
-  "drops": {
-    "amount": 24,
-    "entries": [
-      {
-        "item": "cobblemon:relic_coin",
-        "quantityRange": "24-48"
-      }
-    ]
-  }
+  ]
 }

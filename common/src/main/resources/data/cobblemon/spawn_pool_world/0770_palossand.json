@@ -6,9 +6,6 @@
         {
             "id": "palossand-1",
             "pokemon": "palossand",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",
@@ -25,6 +22,10 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_beach"
+                ],
+                "neededBaseBlocks": [
+                    "#minecraft:sand",
+                    "#c:sand"
                 ]
             },
             "anticondition": {

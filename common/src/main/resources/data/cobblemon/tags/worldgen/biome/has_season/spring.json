@@ -6,6 +6,10 @@
 	"#cobblemon:is_magical",
 	"#cobblemon:is_plains",
 	{
+      "id": "#aether:is_aether",
+      "required": false
+    },
+	{
       "id": "terralith:skylands_spring",
       "required": false
     },

@@ -11,6 +11,9 @@ package com.cobblemon.mod.common.api.serialization
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
 /**
@@ -19,6 +22,13 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since July 18th, 2022
  */
-class StringIdentifiedObjectAdapter<T>(val fromString: (String) -> T) : JsonDeserializer<T> {
+class StringIdentifiedObjectAdapter<T>(
+    val fromString: (String) -> T,
+    val toString: ((T) -> String)? = null,
+) : JsonDeserializer<T>, JsonSerializer<T> {
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = fromString(json.asString)
+    override fun serialize(src: T, type: Type?, ctx: JsonSerializationContext?): JsonElement? {
+        val stringValue = toString?.invoke(src) ?: throw IllegalStateException("No toString function provided for serialization.")
+        return JsonPrimitive(stringValue)
+    }
 }

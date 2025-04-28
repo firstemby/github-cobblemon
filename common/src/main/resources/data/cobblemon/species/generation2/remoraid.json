@@ -1,12 +1,26 @@
 {
   "implemented": true,
-  "name": "Remoraid",
   "nationalPokedexNumber": 223,
+  "name": "Remoraid",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 6,
+  "weight": 120,
+  "pokedex": [
+    "cobblemon.species.remoraid.desc"
+  ],
+  "labels": [
+    "gen2"
+  ],
+  "aspects": [],
   "abilities": [
     "hustle",
     "sniper",
     "h:moody"
+  ],
+  "eggGroups": [
+    "water_1",
+    "water_2"
   ],
   "baseStats": {
     "hp": 35,
@@ -16,6 +30,25 @@
     "special_defence": 35,
     "speed": 65
   },
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 1,
+    "special_defence": 0,
+    "speed": 0
+  },
+  "baseExperienceYield": 60,
+  "experienceGroup": "medium_fast",
+  "catchRate": 190,
+  "eggCycles": 20,
+  "baseFriendship": 50,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 0.8,
+    "height": 0.6,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "walk": {
@@ -23,24 +56,32 @@
       },
       "swim": {
         "swimSpeed": 0.4,
+        "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canBreatheUnderwater": true
+        "canSwimInLava": false
       }
     }
   },
-  "catchRate": 190,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
-  "baseExperienceYield": 60,
-  "experienceGroup": "medium_fast",
-  "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "water_2"
-  ],
+  "drops": {
+    "amount": 3,
+    "entries": [
+      {
+        "item": "minecraft:cod"
+      },
+      {
+        "item": "minecraft:bone_meal",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:aspear_berry",
+        "percentage": 2.5
+      }
+    ]
+  },
   "moves": [
-    "1:helpinghand",
     "1:watergun",
+    "1:bubble",
+    "1:helpinghand",
     "4:waterpulse",
     "8:focusenergy",
     "12:psybeam",
@@ -48,130 +89,85 @@
     "20:bubblebeam",
     "24:lockon",
     "28:bulletseed",
-    "30:signalbeam",
     "32:icebeam",
     "36:hydropump",
     "40:soak",
     "44:hyperbeam",
     "egg:acidspray",
-    "egg:aurorabeam",
     "egg:entrainment",
     "egg:flail",
     "egg:haze",
-    "egg:mudshot",
     "egg:octazooka",
-    "egg:rockblast",
-    "egg:screech",
     "egg:snore",
     "egg:supersonic",
-    "egg:swift",
-    "egg:thunderwave",
-    "egg:waterpulse",
     "egg:waterspout",
+    "tm:acidspray",
     "tm:assurance",
-    "tm:attract",
     "tm:blizzard",
     "tm:bounce",
     "tm:brine",
     "tm:bulletseed",
-    "tm:captivate",
     "tm:chargebeam",
-    "tm:confide",
     "tm:dive",
-    "tm:doubleteam",
     "tm:endure",
     "tm:facade",
     "tm:fireblast",
     "tm:flamethrower",
     "tm:focusenergy",
-    "tm:frustration",
     "tm:gunkshot",
+    "tm:haze",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hydropump",
     "tm:hyperbeam",
     "tm:icebeam",
     "tm:icywind",
     "tm:incinerate",
     "tm:mudshot",
-    "tm:naturalgift",
+    "tm:mudslap",
     "tm:protect",
+    "tm:psybeam",
     "tm:psychic",
     "tm:raindance",
     "tm:rest",
-    "tm:return",
     "tm:rockblast",
-    "tm:round",
     "tm:scald",
     "tm:screech",
-    "tm:secretpower",
     "tm:seedbomb",
+    "tm:signalbeam",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:snore",
+    "tm:stringshot",
     "tm:substitute",
     "tm:sunnyday",
     "tm:surf",
-    "tm:swagger",
     "tm:swift",
+    "tm:terablast",
     "tm:thief",
     "tm:thunderwave",
-    "tm:toxic",
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
-    "tutor:attract",
-    "tutor:aurorabeam",
     "tutor:bounce",
-    "tutor:brine",
-    "tutor:bubblebeam",
-    "tutor:curse",
-    "tutor:defensecurl",
+    "tutor:chargebeam",
     "tutor:dive",
-    "tutor:doubleedge",
-    "tutor:doubleteam",
-    "tutor:endure",
+    "tutor:flamethrower",
     "tutor:focusenergy",
-    "tutor:frustration",
     "tutor:gunkshot",
-    "tutor:haze",
-    "tutor:hiddenpower",
+    "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:icebeam",
     "tutor:icywind",
-    "tutor:lockon",
-    "tutor:mimic",
     "tutor:mudslap",
-    "tutor:octazooka",
-    "tutor:protect",
-    "tutor:psybeam",
-    "tutor:raindance",
+    "tutor:psychic",
     "tutor:rest",
-    "tutor:return",
-    "tutor:rockblast",
-    "tutor:screech",
     "tutor:seedbomb",
     "tutor:signalbeam",
     "tutor:sleeptalk",
     "tutor:snore",
     "tutor:stringshot",
-    "tutor:substitute",
-    "tutor:supersonic",
-    "tutor:surf",
-    "tutor:swagger",
     "tutor:swift",
-    "tutor:thief",
-    "tutor:thunderwave",
-    "tutor:toxic",
-    "tutor:watergun",
-    "tutor:waterpulse",
-    "tutor:whirlpool"
-  ],
-  "labels": [
-    "gen2"
-  ],
-  "pokedex": [
-    "cobblemon.species.remoraid.desc"
+    "tutor:waterpulse"
   ],
   "evolutions": [
     {
@@ -189,40 +185,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 0.8,
-  "hitbox": {
-    "width": 0.8,
-    "height": 0.6,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 1,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 6,
-  "weight": 120,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:cod"
-      },
-      {
-        "item": "minecraft:bone_meal",
-        "percentage": 5.0
-      },
-      {
-        "item": "cobblemon:aspear_berry",
-        "percentage": 2.5
-      }
-    ]
-  }
+  ]
 }

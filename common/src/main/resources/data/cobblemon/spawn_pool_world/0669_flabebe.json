@@ -7,8 +7,7 @@
             "id": "flabebe-red-1",
             "pokemon": "flabebe flower=red",
             "presets": [
-                "natural",
-                "red_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -26,18 +25,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:poppy"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:red_flowers"
                 ]
             }
         },
@@ -45,8 +35,7 @@
             "id": "flabebe-yellow-2",
             "pokemon": "flabebe flower=yellow",
             "presets": [
-                "natural",
-                "yellow_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -64,18 +53,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:dandelion"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:yellow_flowers"
                 ]
             }
         },
@@ -83,8 +63,7 @@
             "id": "flabebe-orange-3",
             "pokemon": "flabebe flower=orange",
             "presets": [
-                "natural",
-                "orange_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -102,18 +81,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:orange_tulip"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:orange_flowers"
                 ]
             }
         },
@@ -121,8 +91,7 @@
             "id": "flabebe-blue-4",
             "pokemon": "flabebe flower=blue",
             "presets": [
-                "natural",
-                "blue_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -140,18 +109,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:cornflower"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:blue_flowers"
                 ]
             }
         },
@@ -159,8 +119,7 @@
             "id": "flabebe-white-5",
             "pokemon": "flabebe flower=white",
             "presets": [
-                "natural",
-                "white_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -178,18 +137,9 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:oxeye_daisy"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
                 ]
             }
         },
@@ -197,8 +147,7 @@
             "id": "flabebe-pink-6",
             "pokemon": "flabebe flower=pink",
             "presets": [
-                "natural",
-                "pink_flowers"
+                "natural"
             ],
             "type": "pokemon",
             "context": "grounded",
@@ -216,23 +165,36 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
-            },
-            "drops": {
-                "amount": 2,
-                "entries": [
-                    {
-                        "item": "minecraft:allium"
-                    },
-                    {
-                        "item": "cobblemon:kebia_berry",
-                        "percentage": 2.5
-                    }
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:pink_flowers"
                 ]
             }
         },
         {
-            "id": "flabebe-red-7",
+            "id": "flabebe-white-7",
+            "pokemon": "flabebe flower=white",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "5-30",
+            "weight": 9.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:white_flowers"
+                ]
+            }
+        },
+        {
+            "id": "flabebe-red-8",
             "pokemon": "flabebe flower=red",
             "type": "pokemon",
             "context": "grounded",
@@ -257,7 +219,7 @@
             }
         },
         {
-            "id": "flabebe-yellow-7",
+            "id": "flabebe-yellow-8",
             "pokemon": "flabebe flower=yellow",
             "type": "pokemon",
             "context": "grounded",
@@ -282,7 +244,7 @@
             }
         },
         {
-            "id": "flabebe-orange-7",
+            "id": "flabebe-orange-8",
             "pokemon": "flabebe flower=orange",
             "type": "pokemon",
             "context": "grounded",
@@ -307,7 +269,7 @@
             }
         },
         {
-            "id": "flabebe-blue-7",
+            "id": "flabebe-blue-8",
             "pokemon": "flabebe flower=blue",
             "type": "pokemon",
             "context": "grounded",
@@ -332,7 +294,7 @@
             }
         },
         {
-            "id": "flabebe-white-7",
+            "id": "flabebe-white-8",
             "pokemon": "flabebe flower=white",
             "type": "pokemon",
             "context": "grounded",
@@ -357,7 +319,7 @@
             }
         },
         {
-            "id": "flabebe-pink-7",
+            "id": "flabebe-pink-8",
             "pokemon": "flabebe flower=pink",
             "type": "pokemon",
             "context": "grounded",

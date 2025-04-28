@@ -8,15 +8,15 @@ BASE_PATHS = [
     "{root}/common/src/main/resources/data/minecraft/tags"
 ]
 OUTPUT_PATHS = {
-    'blocks': "{root}/docs/cobblemon-tags/BlocksTags.md",
-    'entity_types': "{root}/docs/cobblemon-tags/EntityTypesTags.md",
-    'items': "{root}/docs/cobblemon-tags/ItemTags.md",
+    'block': "{root}/docs/cobblemon-tags/BlocksTags.md",
+    'entity_type': "{root}/docs/cobblemon-tags/EntityTypesTags.md",
+    'item': "{root}/docs/cobblemon-tags/ItemTags.md",
     'biome': "{root}/docs/cobblemon-tags/BiomeTags.md",
 }
 DETAIL_TAGFILE_HEADERS = {
-    'blocks': "# Block Tags\n\nThis file contains tags related to blocks in cobblemon.\n\n## Tags:\n",
-    'entity_types': "# Entity Types Tags\n\nThis file contains tags related to different types of entities in cobblemon.\n\n## Tags:\n",
-    'items': "# Item Tags\n\nThis file contains tags related to items in cobblemon.\n\n## Tags:\n",
+    'block': "# Block Tags\n\nThis file contains tags related to block in cobblemon.\n\n## Tags:\n",
+    'entity_type': "# Entity Types Tags\n\nThis file contains tags related to different types of entities in cobblemon.\n\n## Tags:\n",
+    'item': "# Item Tags\n\nThis file contains tags related to items in cobblemon.\n\n## Tags:\n",
     'biome': "# Biome Tags\n\nThis file contains tags related to different biomes in cobblemon, as well as some worldgen and special evolution tags.\n\n## Tags:\n",
 }
 
@@ -33,12 +33,12 @@ def open_files_and_write_headers():
 
 
 def determine_category(root):
-    if 'blocks' in root:
-        return 'blocks'
-    elif 'entity_types' in root:
-        return 'entity_types'
-    elif 'items' in root:
-        return 'items'
+    if 'block' in root:
+        return 'block'
+    elif 'entity_type' in root:
+        return 'entity_type'
+    elif 'item' in root:
+        return 'item'
     elif 'biome' in root:
         return 'biome'
     return None
@@ -60,7 +60,7 @@ def process_json_file(json_path, file_handle):
         tag_details.sort()
 
         # Write the sorted tag details to the file
-        file_handle.write(f"\n<details>\n<summary><b>Tag:</b> #{tag_directory}:{json_file_base[:-5]}</summary>\n\n")
+        file_handle.write(f"\n<details>\n<summary><b>Tag:</b> #cobblemon:{json_file_base[:-5]}</summary>\n\n")
         for tag_detail in tag_details:
             file_handle.write(tag_detail)
         file_handle.write("\n</details>\n")

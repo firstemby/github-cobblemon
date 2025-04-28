@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
@@ -28,6 +29,7 @@ import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType
@@ -96,6 +98,12 @@ class FormData(
     private var _height: Float? = null,
     @SerializedName("weight")
     private var _weight: Float? = null,
+    @SerializedName("riding")
+    private var _riding: RidingProperties? = null,
+    @SerializedName("baseAI")
+    private var _baseAI: MutableList<BehaviourConfig>? = null,
+    @SerializedName("ai")
+    private var _ai: MutableList<BehaviourConfig>? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
@@ -172,6 +180,8 @@ class FormData(
 
     val eggGroups: Set<EggGroup>
         get() = _eggGroups ?: species.eggGroups
+    val riding: RidingProperties
+        get() = _riding ?: species.riding
 
     /**
      * The height in decimeters
@@ -207,6 +217,24 @@ class FormData(
             }
             return this._lightingData
         }
+
+    val possibleGenders: Set<Gender>
+        get() {
+            return if (maleRatio == -1F) {
+                setOf(Gender.GENDERLESS)
+            } else if (maleRatio == 0F) {
+                setOf(Gender.FEMALE)
+            } else if (maleRatio == 1F) {
+                setOf(Gender.MALE)
+            } else {
+                setOf(Gender.FEMALE, Gender.MALE)
+            }
+        }
+
+    val baseAI: List<BehaviourConfig>?
+        get() = _baseAI ?: species.baseAI
+    val ai: List<BehaviourConfig>
+        get() = _ai ?: species.ai
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)
@@ -280,6 +308,7 @@ class FormData(
                 pb.writeString(ability.template.name)
             }
         }
+        buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -316,6 +345,7 @@ class FormData(
                 }.forEach { add(Priority.NORMAL, it) }
             }
         }
+        this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
     }
 
     /**

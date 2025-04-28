@@ -13,7 +13,9 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.Behavior
 
-class StayAfloatTask(private val chance: Float = 0F) : Behavior<PathfinderMob>(emptyMap()) {
+class StayAfloatTask(private val chance: Float = 0F) : Behavior<PathfinderMob>(
+    mapOf()
+) {
     override fun checkExtraStartConditions(world: ServerLevel, entity: PathfinderMob): Boolean {
         return entity.isInWater && entity.getFluidHeight(FluidTags.WATER) > entity.fluidJumpThreshold || entity.isInLava
     }
