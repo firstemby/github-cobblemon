@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.spawning.influence
 
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import net.minecraft.resources.ResourceLocation
 
 /**
  * The grotto influence will normalize bucket weights and prevent non-habitat spawns from spawning.
@@ -19,12 +20,22 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
  * @author Hiroku
  * @since April 20th, 2025
  */
-class GrottoImpactedSpawningInfluence : BucketNormalizingInfluence(tier = 3) {
+class GrottoImpactedSpawningInfluence(
+    val structureIds: Set<ResourceLocation>
+): BucketNormalizingInfluence(tier = 3) {
     companion object {
         const val HABITAT_LABEL = "habitat"
     }
 
+    val markers = structureIds.map(ResourceLocation::toString)
+
+    override fun affectSpawnablePosition(spawnablePosition: SpawnablePosition) {
+        spawnablePosition.markers.addAll(markers)
+    }
+
     override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition) =  HABITAT_LABEL in detail.labels
+
+    // TODO potentially insert spawns? Grotto block could supply some spawns
 
     /*companion object {
         private val LOGGER = LoggerFactory.getLogger("GrottoInfluence")

@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.spawning.influence.SpawningZoneInfluence
 import com.cobblemon.mod.common.api.spawning.influence.UnconditionalSpawningZoneInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
+import com.cobblemon.mod.common.block.entity.GrottoBlockEntity
 import com.cobblemon.mod.common.util.toBlockPos
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -26,7 +27,6 @@ object GrottoBlockDetector : SpawningInfluenceDetector {
     @JvmField
     val RANGE: Int = 48
 
-    // todo this was some test code of a prospect function that would try to alter the already filtered spawn lists, but I doubt we want to go this direction
     override fun detectFromInput(spawner: Spawner, input: SpawningZoneInput): List<SpawningZoneInfluence> {
         val world = input.world
         val searchRange = maxOf(RANGE, input.length * 2, input.height * 2)
@@ -38,10 +38,26 @@ object GrottoBlockDetector : SpawningInfluenceDetector {
             PoiManager.Occupancy.ANY
         ).toList()
 
+        val structureIds = grottoBlockPositions.mapNotNull {
+            val isLoaded = world.isLoaded(it)
+            if (isLoaded) {
+                val blockEntity = world.getBlockEntity(it) as? GrottoBlockEntity ?: return@mapNotNull null
+                blockEntity.detectedStructure
+            } else {
+                null
+            }
+        }.toSet()
+
         return if (grottoBlockPositions.isEmpty()) {
             emptyList()
         } else {
-            listOf(UnconditionalSpawningZoneInfluence(influence = GrottoImpactedSpawningInfluence()))
+            listOf(
+                UnconditionalSpawningZoneInfluence(
+                    influence = GrottoImpactedSpawningInfluence(
+                        structureIds = structureIds
+                    )
+                )
+            )
         }
     }
 

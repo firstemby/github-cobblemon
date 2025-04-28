@@ -93,9 +93,3 @@ class NPCProvider(npc: NPCEntity): EntityProvider {
 interface EntityProvider {
     val entities: List<Entity>
 }
-
-//class MoveAnimationKeyframe(
-//    val sound: ResourceLocation? = null,
-//    val animation: List<AnimationWithMoments> = listOf(),
-//    val effects: List<ActionEffect> = listOf()
-//)

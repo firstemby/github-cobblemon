@@ -37,7 +37,7 @@ class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debu
 
         addRenderableWidget(
             Button.builder("Save".text()) { button ->
-                saveEverything()
+                save()
             }.bounds(10, getScaledHeight() - 20, getScaledWidth() - 20, 20).build()
         )
         refresh()
@@ -49,11 +49,10 @@ class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debu
     }
 
     fun refresh() {
-        mimicCycleButton.message =
-            "Block Mimicking: ${grottoEntity.mimicId.namespace}:${grottoEntity.mimicId.path}".text()
+        mimicCycleButton.message = "Block Mimicking: ${grottoEntity.mimicId.namespace}:${grottoEntity.mimicId.path}".text()
     }
 
-    fun saveEverything() {
+    fun save() {
         CobblemonNetwork.sendToServer(
             UpdateGrottoBlockPacket(
                 grottoEntity.blockPos
