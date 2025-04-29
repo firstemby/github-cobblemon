@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.ai.SleepDepth
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
+import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.drop.DropEntry
@@ -21,6 +23,7 @@ import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
@@ -56,6 +59,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.advancements.critereon.ItemPredicate
+import com.mojang.datafixers.util.Either
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
@@ -64,6 +68,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -77,6 +82,14 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(Stat::class.java, Cobblemon.statProvider.typeAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
+        .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(
+            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            ExpressionOrEntityVariableAdapter
+        )
+        .registerTypeAdapter(Activity::class.java, ActivityAdapter)
+        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
         .registerTypeAdapter(AbilityTemplate::class.java, AbilityTemplateAdapter)
         .registerTypeAdapter(ShoulderEffect::class.java, ShoulderEffectAdapter)
@@ -98,6 +111,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
         .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(Component::class.java, TextAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
@@ -128,6 +142,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     init {
         SpeciesAdditions.observable.subscribe {
+            implemented.clear()
             this.species.forEach(Species::initialize)
             this.species.forEach {
                 if (it.implemented) {

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonFlows
-import com.cobblemon.mod.common.CobblemonBrainConfigs
+import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
@@ -77,7 +77,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(ActionEffects)
         this.register(Moves)
         this.register(Abilities)
-        this.register(CobblemonBrainConfigs)
+        this.register(CobblemonBehaviours)
         this.register(PokemonSpecies)
         this.register(SpeciesAdditions)
         this.register(PokeBalls)

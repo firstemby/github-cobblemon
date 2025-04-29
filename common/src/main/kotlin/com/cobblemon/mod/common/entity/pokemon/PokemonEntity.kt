@@ -9,9 +9,16 @@
 package com.cobblemon.mod.common.entity.pokemon
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonCosmeticItems
+import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
 import com.cobblemon.mod.common.api.entity.PokemonSender
@@ -33,11 +40,11 @@ import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.Rideable
@@ -64,17 +71,20 @@ import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.entity.BehaviourEditingTracker
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
-import com.cobblemon.mod.common.entity.pokemon.ai.goals.*
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
+import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
@@ -90,12 +100,19 @@ import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
+import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
+import com.mojang.serialization.Dynamic
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
+import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -128,11 +145,10 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.*
+import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
-import net.minecraft.world.entity.ai.goal.EatBlockGoal
-import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.ShoulderRidingEntity
 import net.minecraft.world.entity.player.Player
@@ -141,21 +157,19 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
 
 @Suppress("unused")
 open class PokemonEntity(
     world: Level,
     pokemon: Pokemon = Pokemon().apply { isClient = world.isClientSide },
     type: EntityType<out PokemonEntity> = CobblemonEntities.POKEMON,
-) : ShoulderRidingEntity(type, world), PosableEntity, Shearable, Schedulable, Rideable, ScannableEntity {
+) : ShoulderRidingEntity(type, world), PosableEntity, Shearable, Schedulable, Rideable, ScannableEntity, MoLangScriptingEntity, OmniPathingEntity {
     companion object {
         @JvmStatic val SPECIES = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val NICKNAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.COMPONENT)
@@ -187,8 +201,9 @@ open class PokemonEntity(
         const val EVOLUTION_LOCK = "evolving"
 
         fun createAttributes(): AttributeSupplier.Builder = createLivingAttributes()
-            .add(Attributes.FOLLOW_RANGE)
+            .add(Attributes.FOLLOW_RANGE, 32.0)
             .add(Attributes.ATTACK_KNOCKBACK)
+            .add(Attributes.ATTACK_DAMAGE)
     }
 
     val removalObservable = SimpleObservable<RemovalReason?>()
@@ -203,6 +218,9 @@ open class PokemonEntity(
     val behaviour: FormPokemonBehaviour
         get() = form.behaviour
 
+    /** Essentially a cached form of what was serialized to make memory reloads still work despite dynamic brain activities. */
+    private var brainDynamic: Dynamic<*>? = null
+
     var pokemon: Pokemon = pokemon
         set(value) {
             value.isClient = this.level().isClientSide
@@ -213,6 +231,9 @@ open class PokemonEntity(
             //This used to be referring to this.updateEyeHeight, I think this is the best conversion
             // We need to update this value every time the Pokémon changes, other eye height related things will be dynamic.
             this.refreshDimensions()
+            if (!level().isClientSide) {
+                remakeBrain()
+            }
         }
 
     var despawner: Despawner<PokemonEntity> = Cobblemon.bestSpawner.defaultPokemonDespawner
@@ -233,6 +254,8 @@ open class PokemonEntity(
     var battleId: UUID?
         get() = entityData.get(BATTLE_ID).orElse(null)
         set(value) = entityData.set(BATTLE_ID, Optional.ofNullable(value))
+    val battle: PokemonBattle?
+        get() = battleId?.let { BattleRegistry.getBattle(it) }
     val isBattling: Boolean
         get() = entityData.get(BATTLE_ID).isPresent
     val friendship: Int
@@ -341,6 +364,12 @@ open class PokemonEntity(
     /** The pokeball exposed to the client. Used for sendout animation. */
     val exposedBall: PokeBall get() = this.effects.mockEffect?.exposedBall ?: this.pokemon.caughtBall
 
+    override var behavioursAreCustom = false
+    override val behaviours = mutableListOf<ResourceLocation>()
+    override val registeredVariables = mutableListOf<MoLangConfigVariable>()
+    override var config = VariableStruct()
+    override var data = VariableStruct()
+
     var platform: PlatformType
         get() = entityData.get(PLATFORM_TYPE)
         set(value) {
@@ -364,8 +393,10 @@ open class PokemonEntity(
     init {
         delegate.initialize(this)
         delegate.changePokemon(pokemon)
-        refreshDimensions()
         addPosableFunctions(struct)
+        moveControl = PokemonMoveControl(this)
+        remakeBrain()
+        refreshDimensions()
         refreshRiding()
     }
 
@@ -417,8 +448,10 @@ open class PokemonEntity(
                 if (battleId != null) {
                     busyLocks.remove(BATTLE_LOCK) // Remove in case it's hopped across to another battle, don't want extra battle locks
                     busyLocks.add(BATTLE_LOCK)
+                    brain.setMemory(CobblemonMemories.POKEMON_BATTLE, battleId)
                 } else {
                     busyLocks.remove(BATTLE_LOCK)
+                    brain.eraseMemory(CobblemonMemories.POKEMON_BATTLE)
                 }
             }
 
@@ -559,6 +592,12 @@ open class PokemonEntity(
         schedulingTracker.update(1 / 20F)
     }
 
+    override fun customServerAiStep() {
+        this.getBrain().tick(level() as ServerLevel, this)
+//        PokemonBrain.updateActivities(this)
+        super.customServerAiStep()
+    }
+
     fun setMoveControl(moveControl: MoveControl) {
         this.moveControl = moveControl
     }
@@ -689,6 +728,8 @@ open class PokemonEntity(
         nbt.putString(DataKeys.POKEMON_POSE_TYPE, entityData.get(POSE_TYPE).name)
         nbt.putByte(DataKeys.POKEMON_BEHAVIOUR_FLAGS, entityData.get(BEHAVIOUR_FLAGS))
 
+        saveScriptingToNBT(nbt)
+
         if (entityData.get(HIDE_LABEL)) {
             nbt.putBoolean(DataKeys.POKEMON_HIDE_LABEL, true)
         }
@@ -703,6 +744,10 @@ open class PokemonEntity(
         }
         if (!enablePoseTypeRecalculation) {
             nbt.putBoolean(DataKeys.POKEMON_RECALCULATE_POSE, enablePoseTypeRecalculation)
+        }
+        val dataResult = this.brain.serializeStart(NbtOps.INSTANCE)
+        dataResult.resultOrPartial(::error).ifPresent { brain ->
+            nbt.put("Brain", brain)
         }
 
         // save active effects
@@ -751,14 +796,15 @@ open class PokemonEntity(
             }
         }
 
-        val savedBattleId =
-            if (nbt.hasUUID(DataKeys.POKEMON_BATTLE_ID)) nbt.getUUID(DataKeys.POKEMON_BATTLE_ID) else null
+        val savedBattleId = if (nbt.hasUUID(DataKeys.POKEMON_BATTLE_ID)) nbt.getUUID(DataKeys.POKEMON_BATTLE_ID) else null
         if (savedBattleId != null) {
             val battle = BattleRegistry.getBattle(savedBattleId)
             if (battle != null) {
                 battleId = savedBattleId
             }
         }
+
+        loadScriptingFromNBT(nbt)
 
         // apply active effects
         if (nbt.contains(DataKeys.ENTITY_EFFECTS)) effects.loadFromNBT(
@@ -794,6 +840,12 @@ open class PokemonEntity(
             entityData.set(PLATFORM_TYPE, PlatformType.valueOf(nbt.getString(DataKeys.POKEMON_PLATFORM_TYPE)))
         }
 
+        if (nbt.contains("Brain", 10)) {
+            this.brain = this.makeBrain(Dynamic(NbtOps.INSTANCE, nbt.get("Brain")))
+        }
+
+        remakeBrain()
+
         CobblemonEvents.POKEMON_ENTITY_LOAD.postThen(
             event = PokemonEntityLoadEvent(this, nbt),
             ifSucceeded = {},
@@ -810,57 +862,59 @@ open class PokemonEntity(
         ) as Packet<ClientGamePacketListener>
 
     override fun getPathfindingMalus(nodeType: PathType): Float {
-        return if (nodeType == PathType.OPEN) 2F else super.getPathfindingMalus(nodeType)
+        /* This used to be 2 because I wanted to deprioritize flight for land-fly pokemon but it breaks new wandering */
+        /* LandRandomPos#movePosUpOutOfSolid tries to fix blocks by moving to where the malus is zero. */
+        return if (nodeType == PathType.OPEN) 0F else super.getPathfindingMalus(nodeType)
     }
 
-    override fun getNavigation() = navigation as PokemonNavigation
-    override fun createNavigation(world: Level) = PokemonNavigation(world, this)
+    override fun getNavigation() = navigation as OmniPathNavigation
+    override fun createNavigation(world: Level) = OmniPathNavigation(world, this)
 
-    @Suppress("SENSELESS_COMPARISON")
-    public override fun registerGoals() {
-        // DO NOT REMOVE
-        // LivingEntity#getActiveEyeHeight is called in the constructor of Entity
-        // Pokémon param is not available yet
-        if (this.pokemon == null) {
-            return
+    override fun makeBrain(dynamic: Dynamic<*>): Brain<out PokemonEntity> {
+        this.brainDynamic = dynamic
+        val brain = brainProvider().makeBrain(dynamic)
+        this.brain = brain
+        val target = pokemon
+        if (target != null) {
+            PokemonBrain.makeBrain(this, target, brain)
         }
-        moveControl = PokemonMoveControl(this)
-        goalSelector.removeAllGoals { true }
-        goalSelector.addGoal(0, PokemonInBattleMovementGoal(this, 10))
-        goalSelector.addGoal(0, object : Goal() {
-            override fun canUse() =
-                this@PokemonEntity.entityData.get(PHASING_TARGET_ID) != -1 ||
-                        pokemon.status?.status == Statuses.SLEEP ||
-                        entityData.get(DYING_EFFECTS_STARTED) ||
-                        evolutionEntity != null
-
-            override fun canContinueToUse(): Boolean {
-                if (pokemon.status?.status == Statuses.SLEEP && !canSleep() && !isBusy) {
-                    return false
-                } else if (pokemon.status?.status == Statuses.SLEEP || isBusy) {
-                    return true
-                }
-                return false
-            }
-
-            override fun getFlags() = EnumSet.allOf(Flag::class.java)
-        })
-
-        goalSelector.addGoal(1, PokemonBreatheAirGoal(this))
-        goalSelector.addGoal(2, PokemonFloatToSurfaceGoal(this))
-        goalSelector.addGoal(3, PokemonFollowOwnerGoal(this, 1.0, 8F, 2F))
-        goalSelector.addGoal(4, PokemonMoveIntoFluidGoal(this))
-        goalSelector.addGoal(5, SleepOnTrainerGoal(this))
-        goalSelector.addGoal(5, WildRestGoal(this))
-
-        if (pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED) != null) {
-            goalSelector.addGoal(5, EatBlockGoal(this))
-        }
-
-        goalSelector.addGoal(6, PokemonWanderAroundGoal(this))
-        goalSelector.addGoal(7, PokemonLookAtEntityGoal(this, ServerPlayer::class.java, 5F))
-        goalSelector.addGoal(8, PokemonPointAtSpawnGoal(this))
+        return brain
     }
+
+    override fun remakeBrain() {
+        brain = makeBrain(brainDynamic ?: makeEmptyBrainDynamic())
+    }
+
+    // cast is safe, mojang do the same thing.
+    override fun getBrain() = super.getBrain() as Brain<PokemonEntity>
+
+    override fun brainProvider(): Brain.Provider<PokemonEntity> = Brain.provider(PokemonBrain.MEMORY_MODULES, PokemonBrain.SENSORS)
+
+    override fun registerGoals() {
+        super.registerGoals()
+    }
+
+    override fun onPathfindingDone() {
+        super.onPathfindingDone()
+        (moveControl as PokemonMoveControl).stop()
+    }
+
+//
+//    @Suppress("SENSELESS_COMPARISON")
+//    public override fun initGoals() {
+//        // DO NOT REMOVE
+//        // LivingEntity#getActiveEyeHeight is called in the constructor of Entity
+//        // Pokémon param is not available yet
+//        if (this.pokemon == null) {
+//            return
+//        }
+//        goalSelector.add(1, PokemonBreatheAirGoal(this))
+//        goalSelector.add(2, PokemonFloatToSurfaceGoal(this))
+//        goalSelector.add(4, PokemonMoveIntoFluidGoal(this))
+//
+//        if (pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED) != null) {
+//            goalSelector.add(5, EatGrassGoal(this))
+//        }
 
     fun canSleep(): Boolean {
         val rest = behaviour.resting
@@ -885,6 +939,26 @@ open class PokemonEntity(
                         this.level().registryAccess().registryOrThrow(Registries.BIOME)
                     )
                 })
+    }
+
+    fun canSleepAt(pos: BlockPos): Boolean {
+        val rest = behaviour.resting
+        val world = level() as ServerLevel
+        val light = world.getLightEmission(pos)
+        val blockState = world.getBlockState(pos)
+        val block = blockState.block
+        val biome = world.getBiome(pos).value()
+        val seesSky = world.canSeeSky(pos.above())
+        val fits = true
+        val canStayAt = world.canEntityStayAt(pos, ceil(bbWidth).toInt(), ceil(bbHeight).toInt(), PositionType.LAND)
+
+        return light in rest.light &&
+                (rest.skyLight == null || world.lightEngine.getLayerListener(LightLayer.SKY).getLightValue(pos) in rest.skyLight) &&
+                (rest.blocks.isEmpty() || rest.blocks.any { it.fits(block, world.blockRegistry) }) &&
+                (rest.biomes.isEmpty() || rest.biomes.any { it.fits(biome, world.biomeRegistry) }) &&
+                (rest.canSeeSky == null || rest.canSeeSky == seesSky) &&
+                fits &&
+                canStayAt
     }
 
     override fun getBreedOffspring(serverLevel: ServerLevel, ageableMob: AgeableMob) = null
@@ -1010,6 +1084,9 @@ open class PokemonEntity(
                     }
                 }
                 return InteractionResult.sidedSuccess(level().isClientSide)
+            } else if (itemStack.`is`(CobblemonItems.NPC_EDITOR) && (player is ServerPlayer) && player.isCreative) {
+                BehaviourEditingTracker.startEditing(player, this)
+                player.sendPacket(OpenBehaviourEditorPacket(id, (this as MoLangScriptingEntity).behaviours.toSet()))
             }
         }
 
@@ -1340,7 +1417,7 @@ open class PokemonEntity(
      * Adjusts a given sent out position based on the local environment.
      * Returns the new position and a PlatformType if the pokemon should be placed on one.
      */
-    fun getAjustedSendoutPosition(pos: Vec3): Vec3 {
+    fun getAdjustedSendoutPosition(pos: Vec3): Vec3 {
         var platform = PlatformType.NONE
         var blockPos = BlockPos(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
         var blockLookCount = 5
@@ -1439,11 +1516,13 @@ open class PokemonEntity(
     override fun remove(reason: RemovalReason) {
         val stateEntity = (pokemon.state as? ActivePokemonState)?.entity
         super.remove(reason)
+
         if (stateEntity == this) {
             pokemon.state = InactivePokemonState()
         }
         subscriptions.forEach(ObservableSubscription<*>::unsubscribe)
         removalObservable.emit(reason)
+        this.brain.clearMemories()
 
         if (reason.shouldDestroy() && pokemon.tetheringId != null) {
             pokemon.tetheringId = null
@@ -1599,7 +1678,9 @@ open class PokemonEntity(
             return
         }
         val blocksTaken = this.blockPosition().distSqr(fromBp)
-        if (blocksTaken > 0) this.blocksTraveled += blocksTaken
+        if (blocksTaken > 0) {
+            this.blocksTraveled += blocksTaken
+        }
     }
 
     override fun pushEntities() {
@@ -1619,12 +1700,8 @@ open class PokemonEntity(
 
     */
 
-    fun isFlying() = this.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
-
     fun isFalling() =
         this.fallDistance > 0 && this.level().getBlockState(this.blockPosition().below()).isAir && !this.isFlying()
-
-    fun couldStopFlying() = isFlying() && !behaviour.moving.walk.avoidsLand && behaviour.moving.walk.canWalk
 
     override fun getCurrentPoseType(): PoseType = this.entityData.get(POSE_TYPE)
 
@@ -2163,5 +2240,27 @@ open class PokemonEntity(
         if (pokemon.passengers.isEmpty()) return false
         if (pokemon.controllingPassenger != player) return false
         return true
+    }
+
+    override fun canWalk() = behaviour.moving.walk.canWalk
+    override fun canSwimInWater() = behaviour.moving.swim.canSwimInWater
+    override fun canFly() = behaviour.moving.fly.canFly
+    override fun canSwimInLava() = behaviour.moving.swim.canSwimInLava
+    override fun isOnGround() = onGround()
+
+    override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
+        return if (fluidState.`is`(FluidTags.LAVA)) {
+            behaviour.moving.swim.canBreatheUnderlava
+        } else if (fluidState.`is`(FluidTags.WATER)) {
+            behaviour.moving.swim.canBreatheUnderwater
+        } else {
+            false
+        }
+    }
+
+    override fun isFlying() = this.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
+    override fun couldStopFlying() = isFlying() && !behaviour.moving.walk.avoidsLand && behaviour.moving.walk.canWalk
+    override fun setFlying(state: Boolean) {
+        setBehaviourFlag(PokemonBehaviourFlag.FLYING, state)
     }
 }

@@ -84,8 +84,9 @@ class DubwoolModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Qu
                 bedrock("dubwool", "ground_walk")
             )
         )
+
+        animations["eat"] = "q.bedrock_primary('dubwool', 'eat', q.curve('symmetrical_wide'))".asExpressionLike()
     }
 
     override fun getFaintAnimation(state: PosableState) = if (state.isPosedIn(standing, walk, sleep)) bedrockStateful("dubwool", "faint") else null
-    override fun getEatAnimation(state: PosableState) = if (state.isNotPosedIn(sleep)) bedrockStateful("dubwool", "eat") else null
 }

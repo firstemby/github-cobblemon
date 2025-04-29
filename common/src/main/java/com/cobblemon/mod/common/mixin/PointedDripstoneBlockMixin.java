@@ -21,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class PointedDripstoneBlockMixin {
 
     @Redirect(
-            method = "canTipGrow(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/Block;)Z", ordinal = 0),
-            slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Blocks;DRIPSTONE_BLOCK:Lnet/minecraft/world/level/Block;"))
+            method = "canGrow(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z", ordinal = 0),
+            slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Blocks;DRIPSTONE_BLOCK:Lnet/minecraft/world/level/block/Block;"))
     )
     private static boolean cobblemon$validateMoonStoneDripstone(BlockState instance, Block block) {
         return instance.is(CobblemonBlockTags.DRIPSTONE_GROWABLE);

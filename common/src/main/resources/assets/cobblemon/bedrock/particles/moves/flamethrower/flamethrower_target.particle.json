@@ -5,7 +5,7 @@
             "identifier": "cobblemon:flamethrower_target",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/hit"
+                "texture": "textures/particles/generic/hit"
             }
         },
         "events": {

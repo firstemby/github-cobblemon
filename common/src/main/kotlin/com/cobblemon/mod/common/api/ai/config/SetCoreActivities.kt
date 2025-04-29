@@ -8,13 +8,15 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
-class SetCoreActivities : BrainConfig {
+class SetCoreActivities : BehaviourConfig {
     val activities = mutableListOf<Activity>()
-    override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
-        brainConfigurationContext.coreActivities = activities.toSet()
+    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+        behaviourConfigurationContext.coreActivities = activities.toSet()
     }
 }

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ClientDataSynchronizer
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
@@ -108,6 +109,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
     var dynamaxBlocked = false
     var implemented = false
+    var baseAI: MutableList<BehaviourConfig>? = null
+    var ai = mutableListOf<BehaviourConfig>()
 
     /**
      * The height in decimeters

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:confetti",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particle/generic_0"
+                "texture": "textures/particles/generic/white"
             }
         },
         "curves": {

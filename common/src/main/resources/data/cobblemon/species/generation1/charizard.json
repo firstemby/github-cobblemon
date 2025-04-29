@@ -184,6 +184,7 @@
     },
     "moving": {
       "walk": {
+        "canWalk": true,
         "walkSpeed": 0.147
       },
       "fly": {

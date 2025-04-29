@@ -205,7 +205,7 @@ class PokedexGUI private constructor(
             clickAction = {
                 val searchTypes = SearchByType.entries.toList()
                 val selectedIndex = searchTypes.indexOf(selectedSearchByType)
-                selectedSearchByType = searchTypes.get(if (selectedIndex == searchTypes.lastIndex) 0 else (selectedIndex + 1))
+                selectedSearchByType = searchTypes[if (selectedIndex == searchTypes.lastIndex) 0 else (selectedIndex + 1)]
                 (it as ScaledButton).resource = cobblemonResource("textures/gui/pokedex/tab_${selectedSearchByType.name.lowercase()}.png")
                 updateFilters()
             }

@@ -63,6 +63,7 @@ object CobblemonCommands {
         SpectateBattleCommand.register(dispatcher)
         CobblemonConfigCommand.register(dispatcher)
         UnlockPCBoxWallpaperCommand.register(dispatcher)
+        BehaviourEditCommand.register(dispatcher)
         ChangePCBoxesCommand.register(dispatcher)
         MarkGiveCommand.register(dispatcher)
         MarkTakeCommand.register(dispatcher)

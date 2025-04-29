@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
+import com.cobblemon.mod.common.api.molang.ObjectValue
+
 class IdleBehaviour {
-    val pointsAtSpawn = false
+    @Transient
+    val struct = ObjectValue(this)
 }

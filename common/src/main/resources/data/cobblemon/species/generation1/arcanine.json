@@ -46,6 +46,11 @@
   "features": [
     "hisuian"
   ],
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "baseScale": 1.1,
   "hitbox": {
     "width": 1.2,

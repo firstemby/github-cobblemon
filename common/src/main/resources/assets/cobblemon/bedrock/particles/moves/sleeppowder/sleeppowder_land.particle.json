@@ -5,7 +5,7 @@
             "identifier": "cobblemon:sleeppowder_land",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/powder"
+                "texture": "textures/particles/generic/powder"
             }
         },
         "events": {

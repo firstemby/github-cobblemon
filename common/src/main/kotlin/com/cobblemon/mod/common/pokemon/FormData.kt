@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
@@ -99,6 +100,10 @@ class FormData(
     private var _weight: Float? = null,
     @SerializedName("riding")
     private var _riding: RidingProperties? = null,
+    @SerializedName("baseAI")
+    private var _baseAI: MutableList<BehaviourConfig>? = null,
+    @SerializedName("ai")
+    private var _ai: MutableList<BehaviourConfig>? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
@@ -225,6 +230,11 @@ class FormData(
                 setOf(Gender.FEMALE, Gender.MALE)
             }
         }
+
+    val baseAI: List<BehaviourConfig>?
+        get() = _baseAI ?: species.baseAI
+    val ai: List<BehaviourConfig>
+        get() = _ai ?: species.ai
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)

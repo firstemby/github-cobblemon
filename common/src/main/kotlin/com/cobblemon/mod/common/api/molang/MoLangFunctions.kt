@@ -17,7 +17,11 @@ import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonActivities
+import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -27,13 +31,23 @@ import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
-import com.cobblemon.mod.common.api.pokedex.*
+import com.cobblemon.mod.common.api.npc.NPCClasses
+import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
+import com.cobblemon.mod.common.api.npc.partyproviders.SimplePartyProvider
+import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
+import com.cobblemon.mod.common.api.pokedex.CaughtCount
+import com.cobblemon.mod.common.api.pokedex.CaughtPercent
+import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
+import com.cobblemon.mod.common.api.pokedex.PokedexManager
+import com.cobblemon.mod.common.api.pokedex.SeenCount
+import com.cobblemon.mod.common.api.pokedex.SeenPercent
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.storage.PokemonStore
+import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
@@ -62,6 +76,9 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.util.*
 import com.mojang.datafixers.util.Either
+import java.util.UUID
+import kotlin.math.sqrt
+import kotlin.random.Random
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -69,7 +86,11 @@ import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.nbt.*
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.DoubleTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -78,24 +99,28 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
-import net.minecraft.world.entity.*
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LightningBolt
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import kotlin.math.sqrt
-import kotlin.random.Random
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
@@ -197,6 +222,10 @@ object MoLangFunctions {
             val a = format.parse(dateA)
             val b = format.parse(dateB)
             DoubleValue(a.after(b))
+        },
+        "create_simple_party_provider" to java.util.function.Function { params ->
+            val partyProvider = SimplePartyProvider()
+            return@Function partyProvider.struct
         }
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
@@ -473,11 +502,78 @@ object MoLangFunctions {
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
             map.put("uuid") { _ -> StringValue(entity.uuid.toString()) }
+            map.put("set_name") { params ->
+                val name = params.getString(0)
+                entity.customName = name.text()
+                return@put DoubleValue.ONE
+            }
             map.put("damage") { params ->
                 val amount = params.getDouble(0)
                 val source = DamageSource(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolder(DamageTypes.GENERIC).get())
                 entity.hurt(source, amount.toFloat())
             }
+            map.put("distance_to_owner") {
+                if (entity !is TamableAnimal) {
+                    return@put DoubleValue.ZERO
+                }
+                val owner = entity.owner ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(entity.distanceTo(owner))
+            }
+            map.put("owner") {
+                if (entity !is TamableAnimal) {
+                    return@put DoubleValue.ZERO
+                }
+                val owner = entity.owner
+                return@put owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
+            }
+
+            if (entity is PathfinderMob) {
+                map.put("walk_to") { params ->
+                    val x = params.getDouble(0)
+                    val y = params.getDouble(1)
+                    val z = params.getDouble(2)
+                    val speedMultiplier = params.getDoubleOrNull(3) ?: 0.35
+                    if (entity.brain.checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
+                        entity.brain.setMemory(MemoryModuleType.WALK_TARGET, WalkTarget(Vec3(x, y, z), speedMultiplier.toFloat(), 1))
+                        entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, BlockPosTracker(Vec3(x, y + entity.eyeHeight, z)))
+                    } else {
+                        entity.navigation.moveTo(x, y, z, speedMultiplier)
+                        entity.lookControl.setLookAt(Vec3(x, y + entity.eyeHeight, z))
+                    }
+                }
+
+                map.put("has_walk_target") { _ ->
+                    DoubleValue(entity.brain.getMemory(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
+                }
+
+                map.put("set_can_float") { params ->
+                    val canFloat = params.getBooleanOrNull(0) != false
+                    entity.navigation.setCanFloat(canFloat)
+                    DoubleValue.ONE
+                }
+
+                map.put("get_pathfinding_malus") { params ->
+                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
+                    if (type != null) {
+                        return@put DoubleValue(entity.getPathfindingMalus(type))
+                    } else {
+                        Cobblemon.LOGGER.error("Unknown pathfinding type: ${params.getString(0)}")
+                        return@put DoubleValue.ZERO
+                    }
+                }
+                map.put("set_pathfinding_malus") { params ->
+                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
+                    val malus = params.getDouble(1).toFloat()
+                    if (type != null) {
+                        entity.setPathfindingMalus(type, malus)
+                        return@put DoubleValue.ONE
+                    } else {
+                        Cobblemon.LOGGER.error("Unknown pathfinding type: ${params.getString(0)}")
+                        return@put DoubleValue.ZERO
+                    }
+                }
+            }
+
             map.put("is_sneaking") { _ -> DoubleValue(entity.isShiftKeyDown) }
             map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) }
             map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) }
@@ -608,7 +704,24 @@ object MoLangFunctions {
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
-
+            map.put("can_see") { params ->
+                val target = params.get<MoValue>(0)
+                val range = params.getDoubleOrNull(1) ?: 32.0
+                if (target is ObjectValue<*>) {
+                    val targetEntity = target.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                    val vector = targetEntity.eyePosition.subtract(entity.eyePosition).normalize()
+                    val trace = entity.traceEntityCollision(
+                        maxDistance = range.toFloat(),
+                        stepDistance = 0.1F,
+                        direction = vector,
+                        entityClass = targetEntity.javaClass,
+                        collideBlock = ClipContext.Fluid.NONE
+                    )
+                    return@put DoubleValue(targetEntity in (trace?.entities ?: emptyList()))
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+            }
             if (entity is PathfinderMob) {
                 map.put("walk_to") { params ->
                     val x = params.getDouble(0)
@@ -672,6 +785,104 @@ object MoLangFunctions {
                 val runtime = MoLangRuntime()
                 runtime.environment.cloneFrom(params.environment)
                 CobblemonScripts.run(script, runtime) ?: DoubleValue(0)
+            }
+            map.put("set_movable") { params ->
+                val movable = params.getBooleanOrNull(0) != false
+                npc.isMovable = movable
+                return@put DoubleValue.ONE
+            }
+            map.put("set_invulnerable") { params ->
+                val invulnerable = params.getBooleanOrNull(0) != false
+                npc.isInvulnerable = invulnerable
+                return@put DoubleValue.ONE
+            }
+            map.put("set_leashable") { params ->
+                val leashable = params.getBooleanOrNull(0) != false
+                npc.isLeashable = leashable
+                return@put DoubleValue.ONE
+            }
+            map.put("set_allow_projectile_hits") { params ->
+                val allowProjectileHits = params.getBooleanOrNull(0) != false
+                npc.allowProjectileHits = allowProjectileHits
+                return@put DoubleValue.ONE
+            }
+            map.put("set_name_tag_visible") { params ->
+                val nameTagVisible = params.getBooleanOrNull(0) != false
+                npc.hideNameTag = !nameTagVisible
+                return@put DoubleValue.ONE
+            }
+            map.put("set_script_interaction") { params ->
+                val script = params.getString(0).asIdentifierDefaultingNamespace()
+                npc.interaction = ScriptNPCInteractionConfiguration().also {
+                    it.script = script
+                }
+                return@put DoubleValue.ONE
+            }
+            map.put("set_player_texture") { params ->
+                val username = params.getString(0)
+                // Re-applying it would be unnecessarily laggy.
+                if (username == npc.data.map["player_texture_username"]?.asString()) {
+                    return@put DoubleValue.ZERO
+                }
+                npc.loadTextureFromGameProfileName(username)
+                return@put DoubleValue.ONE
+            }
+            map.put("unset_player_texture") { params ->
+                npc.unloadTexture()
+                return@put DoubleValue.ONE
+            }
+            map.put("set_resource_identifier") { params ->
+                val identifier = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
+                npc.forcedResourceIdentifier = identifier
+                return@put DoubleValue.ONE
+            }
+            map.put("unset_resource_identifier") {
+                npc.forcedResourceIdentifier = null
+                return@put DoubleValue.ONE
+            }
+            map.put("set_class") { params ->
+                val identifier = params.getString(0).asIdentifierDefaultingNamespace()
+                val npcClass = NPCClasses.getByIdentifier(identifier)
+                if (npcClass != null) {
+                    npc.npc = npcClass
+                    return@put DoubleValue.ONE
+                } else {
+                    Cobblemon.LOGGER.error("Unknown NPC class: $identifier")
+                    return@put DoubleValue.ZERO
+                }
+            }
+            map.put("aspects") {
+                val aspects = npc.aspects
+                return@put aspects.asArrayValue { StringValue(it) }
+            }
+            map.put("add_aspect") { params ->
+                val aspects = params.params.map { it.asString() }
+                npc.appliedAspects.addAll(aspects)
+                npc.updateAspects()
+                return@put DoubleValue.ONE
+            }
+            map.put("remove_aspect") { params ->
+                val aspects = params.params.map { it.asString() }
+                npc.appliedAspects.removeAll(aspects)
+                npc.updateAspects()
+                return@put DoubleValue.ONE
+            }
+            map.put("party") { params ->
+                val party = npc.party ?: return@put DoubleValue.ZERO
+                return@put party.asMoLangValue()
+            }
+            map.put("create_npc_party") { params ->
+                val party = NPCPartyStore(npc)
+                return@put party.asMoLangValue()
+            }
+            map.put("set_npc_party") { params ->
+                val party = params.get<MoValue>(0)
+                if (party is ObjectValue<*>) {
+                    npc.party = party.obj as NPCPartyStore
+                } else {
+                    npc.party = null
+                }
+                DoubleValue.ONE
             }
             map.put("run_action_effect") { params ->
                 val runtime = MoLangRuntime().setup()
@@ -768,6 +979,8 @@ object MoLangFunctions {
             map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) }
             map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) }
             map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) }
+            map.put("behaviour") { pokemon.form.behaviour.struct }
+            map.put("behavior") { pokemon.form.behaviour.struct } // Inferior
             map.put("evs") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
@@ -784,6 +997,7 @@ object MoLangFunctions {
             }
             map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
             map.put("is_shiny") { DoubleValue(pokemon.shiny) }
+            map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("species") { pokemon.species.struct }
             map.put("form") { StringValue(pokemon.form.name) }
             map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) }
@@ -921,6 +1135,9 @@ object MoLangFunctions {
                 DoubleValue(totalPercent)
             }
             map.put("has_usable_pokemon") { _ -> DoubleValue(store.any { !it.isFainted() }) }
+            map.put("pokemon") {
+                return@put store.map { it.asStruct() }.asArrayValue()
+            }
             map
         }
     )
@@ -1118,7 +1335,6 @@ object MoLangFunctions {
             map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
             map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
             map.put("catch_rate") { DoubleValue(species.catchRate) }
-
             map
         }
     )
@@ -1173,7 +1389,10 @@ object MoLangFunctions {
                 val pokemon = props.create()
                 return@put pokemon.struct
             }
-
+            map.put("to_string") { params ->
+                val separator = params.getStringOrNull(0) ?: " "
+                return@put StringValue(props.asString(separator = separator))
+            }
             map
         }
     )
@@ -1327,7 +1546,7 @@ object MoLangFunctions {
     }
 
     /**
-     * Different functions exist depending on
+     * Different functions exist depending on the entity type, this tries to make the struct that's most specific to the type.
      */
     fun Entity.asMostSpecificMoLangValue(): ObjectValue<out Entity> {
         return when (this) {
@@ -1410,6 +1629,7 @@ object MoLangFunctions {
             .flatMap { it.invoke(pokemonEntity).entries }
             .associate { it.key to it.value }
         functions.putAll(addedFunctions)
+        pokemonEntity.registerFunctionsForScripting(this)
         return this
     }
 

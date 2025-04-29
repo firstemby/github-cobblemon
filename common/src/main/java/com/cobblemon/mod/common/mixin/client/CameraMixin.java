@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
@@ -51,11 +52,10 @@ public abstract class CameraMixin {
     @Unique private float rollAngleStart = 0;
     @Unique Minecraft minecraft = Minecraft.getInstance();
 
-    @Unique boolean disableRollableCameraDebug = false;
-
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
+
     public void cobblemon$setRotation(float f, float g, CallbackInfo ci) {
-        if (!(this.entity instanceof OrientationControllable controllable) || disableRollableCameraDebug) return;
+        if (!(this.entity instanceof OrientationControllable controllable) || Cobblemon.config.getDisableRoll()) return;
         var controller = controllable.getOrientationController();
         if (!controller.isActive() && controller.getOrientation() != null) {
             if(this.returnTimer < 1) {
@@ -128,9 +128,9 @@ public abstract class CameraMixin {
         this.rotation.set(newRotation);
         this.xRot = controller.getPitch();
         this.yRot = controller.getYaw();
-        this.forwards.set(controller.getForwardVector());
-        this.up.set(controller.getUpVector());
-        this.left.set(controller.getLeftVector());
+        OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
+        OrientationController.Companion.getUP().rotate(this.rotation, this.up);
+        OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
     }
 
     @WrapOperation(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;move(FFF)V", ordinal = 0))

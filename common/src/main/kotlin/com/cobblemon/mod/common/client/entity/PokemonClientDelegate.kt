@@ -34,7 +34,11 @@ import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.MovingSoundInstance
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -421,14 +425,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     fun setPhaseTarget(targetId: Int) {
         this.phaseTarget = currentEntity.level().getEntity(targetId)
-    }
-
-    override fun handleStatus(status: Byte) {
-        if (status == 10.toByte()) {
-            val model = (currentModel ?: return)
-            val animation = model.getEatAnimation(this) ?: return
-            activeAnimations.add(animation)
-        }
     }
 
     override fun updatePostDeath() {

@@ -53,9 +53,6 @@
       "canSleep": true,
       "light": "0-4"
     },
-    "idle": {
-      "pointsAtSpawn": true
-    },
     "moving": {
       "walk": {
         "walkSpeed": 0.12
@@ -66,6 +63,17 @@
       }
     }
   },
+  "ai": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "2": [
+          "point_to_spawn"
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 4,
     "entries": [

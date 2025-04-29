@@ -1004,6 +1004,7 @@
   "cobblemon.command.dialogue.invalid-dialogue": "Invalid dialogue identifier",
   "cobblemon.command.pc.invalid-box": "Box number %1$s exceeds max boxes of %2$s.",
   "cobblemon.command.unlockablepcboxwallpaper.invalid-wallpaper": "Invalid wallpaper identifier",
+  "cobblemon.command.behaviouredit.non_scriptable": "You are not looking at a MoLang scriptable entity.",
 
   "cobblemon.ui.generic.yes": "Yes",
   "cobblemon.ui.generic.no": "No",
@@ -3335,40 +3336,211 @@
   "tag.item.cobblemon.held.visibility.hidden": "Non-Displayed Held Items",
 
   "npc.sacchi.name": "Professor Sacchi",
-  "npc.variable.challenge_cooldown.name": "Challenge Cooldown",
-  "npc.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
 
-  "npc.variable.player_win_command.name": "Player Win Command",
-  "npc.variable.player_win_command.desc": "Command to run when a player wins against the NPC. Use {{player}} where the player name should be.",
+  "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
+  "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
 
-  "npc.variable.player_lose_command.name": "Player Lose Command",
-  "npc.variable.player_lose_command.desc": "Command to run when a player loses against the NPC. Use {{player}} where the player name should be.",
+  "cobblemon.entity.variable.player_win_command.name": "Player Win Command",
+  "cobblemon.entity.variable.player_win_command.desc": "Command to run when a player wins against the entity. Use {{player}} where the player name should be.",
 
-  "npc.variable.on_defeat.name": "On Defeat MoLang",
-  "npc.variable.on_defeat.desc": "MoLang expression to run when the NPC loses a battle. This has q.npc as the NPC entity.",
+  "cobblemon.entity.variable.on_victory.name": "On Victory MoLang",
+  "cobblemon.entity.variable.on_victory.desc":  "MoLang expression to run when the entity wins a battle. This has q.entity as the entity.",
 
-  "npc.variable.on_victory.name": "On Victory MoLang",
-  "npc.variable.on_victory.desc": "MoLang expression to run when the NPC wins a battle. This has q.npc as the NPC entity.",
+  "cobblemon.entity.variable.on_defeat.name": "On Defeat MoLang",
+  "cobblemon.entity.variable.on_defeat.desc": "MoLang expression to run when the entity loses a battle. This has q.entity as the entity.",
 
-  "npc.variable.on_player_wins.name": "On Player Wins MoLang",
-  "npc.variable.on_player_wins.desc": "MoLang expression to run when a player wins a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
+  "cobblemon.entity.variable.on_player_wins.name": "On Player Wins MoLang",
+  "cobblemon.entity.variable.on_player_wins.desc": "MoLang expression to run when a player wins a battle against the entity. This has q.player as the player and q.entity as the entity.",
 
-  "npc.variable.on_player_loses.name": "On Player Loses MoLang",
-  "npc.variable.on_player_loses.desc": "MoLang expression to run when a player loses a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
+  "cobblemon.entity.variable.on_player_loses.name": "On Player Loses MoLang",
+  "cobblemon.entity.variable.on_player_loses.desc": "MoLang expression to run when a player loses a battle against the entity. This has q.player as the player and q.entity as the entity.",
 
-  "npc.variable.home_x.name": "Home X",
-  "npc.variable.home_x.desc": "X coordinate of the NPC's home location.",
-  "npc.variable.home_y.name": "Home Y",
-  "npc.variable.home_y.desc": "Y coordinate of the NPC's home location.",
-  "npc.variable.home_z.name": "Home Z",
-  "npc.variable.home_z.desc": "Z coordinate of the NPC's home location.",
-  "npc.variable.home_radius.name": "Home Radius",
-  "npc.variable.home_radius.desc": "Maximum distance they can be from their home position before they path back to it.",
+  "cobblemon.entity.variable.home_x.name": "Home X",
+  "cobblemon.entity.variable.home_x.desc": "X coordinate of the entity's home location.",
+  "cobblemon.entity.variable.home_y.name": "Home Y",
+  "cobblemon.entity.variable.home_y.desc": "Y coordinate of the entity's home location.",
+  "cobblemon.entity.variable.home_z.name": "Home Z",
+  "cobblemon.entity.variable.home_z.desc": "Z coordinate of the entity's home location.",
+  "cobblemon.entity.variable.home_radius.name": "Home Radius",
+  "cobblemon.entity.variable.home_radius.desc": "Maximum distance the entity can be from their home position before they path back to it.",
 
-  "npc.variable.yaw.name": "Yaw",
-  "npc.variable.yaw.desc": "Yaw rotation (degrees) of the NPC.",
-  "npc.variable.pitch.name": "Pitch",
-  "npc.variable.pitch.desc": "Pitch rotation (degrees) of the NPC.",
+  "cobblemon.entity.variable.locked_rotation.name": "Locked Rotation",
+  "cobblemon.entity.variable.locked_rotation.desc": "Whether the entity's rotation is locked.",
+  "cobblemon.entity.variable.locked_yaw.name": "Locked Yaw",
+  "cobblemon.entity.variable.locked_yaw.desc": "Yaw rotation (degrees) of the entity. Only locks if Locked Rotation is ON",
+  "cobblemon.entity.variable.locked_pitch.name": "Locked Pitch",
+  "cobblemon.entity.variable.locked_pitch.desc": "Pitch rotation (degrees) of the entity. Only locks if Locked Rotation is ON",
+
+  "cobblemon.entity.variable.exit_battle_when_hurt.name": "Exit Battle When Hurt",
+  "cobblemon.entity.variable.exit_battle_when_hurt.desc": "Whether the entity will exit the battle when hurt.",
+
+  "cobblemon.entity.variable.exit_battle_from_passive_damage.name": "Exit Battle From Passive Damage",
+  "cobblemon.entity.variable.exit_battle_from_passive_damage.desc": "Whether the entity will exit the battle from passive damage like cactus or falling.",
+
+  "cobblemon.entity.variable.use_healing_machines.name": "Use Healing Machine",
+  "cobblemon.entity.variable.use_healing_machines.desc": "Whether the entity will use a healing machine to heal its team.",
+
+  "cobblemon.entity.variable.wanders.name": "Wandering",
+  "cobblemon.entity.variable.wanders.desc": "Whether the entity wanders around.",
+
+  "cobblemon.entity.variable.wander_chance.name": "Wander Chance",
+  "cobblemon.entity.variable.wander_chance.desc": "Chance of the entity choosing to wander each tick.",
+
+  "cobblemon.entity.variable.horizontal_wander_range.name": "Horizontal Wander Range",
+  "cobblemon.entity.variable.horizontal_wander_range.desc": "Maximum distance the entity will search for a wander target from its initial position on the X and Z axes.",
+
+  "cobblemon.entity.variable.vertical_wander_range.name": "Vertical Wander Range",
+  "cobblemon.entity.variable.vertical_wander_range.desc": "Maximum distance the entity will search for a wander target from its initial position on the Y axis.",
+
+  "cobblemon.entity.variable.walk_speed.name": "Walk Speed",
+  "cobblemon.entity.variable.walk_speed.desc": "The speed the entity walks at.",
+
+  "cobblemon.entity.variable.can_float.name": "Floating In Fluid",
+  "cobblemon.entity.variable.can_float.desc": "Whether the entity will swim to the surface in fluids.",
+
+  "cobblemon.entity.variable.float_chance.name": "Float Chance",
+  "cobblemon.entity.variable.float_chance.desc": "Chance of the entity choosing to jump towards the surface each tick. Higher values swim upwards faster.",
+
+  "cobblemon.entity.variable.look_at_entities.name": "Looks At Entities",
+  "cobblemon.entity.variable.look_at_entities.desc": "Whether the entity will look at nearby entities.",
+
+  "cobblemon.entity.variable.see_distance.name": "See Distance",
+  "cobblemon.entity.variable.see_distance.desc": "Maximum distance the entity can see other entities to look at them.",
+
+  "cobblemon.entity.variable.get_angry_at_attacker.name": "Get Angry At Attacker",
+  "cobblemon.entity.variable.get_angry_at_attacker.desc": "Whether the entity will get angry at its attacker.",
+
+  "cobblemon.entity.variable.stop_being_angry_if_attacker_dead.name": "Stops Being Angry If Attacker Dead",
+  "cobblemon.entity.variable.stop_being_angry_if_attacker_dead.desc": "Whether the entity will stop being angry if the attacker is dead.",
+
+  "cobblemon.entity.variable.look_at_battling_pokemon.name": "Look At Battling Pokémon",
+  "cobblemon.entity.variable.look_at_battling_pokemon.desc": "Whether the entity will look at battling Pokémon.",
+
+  "cobblemon.entity.variable.should_attack_angry_at.name": "Should Attack Angry At",
+  "cobblemon.entity.variable.should_attack_angry_at.desc": "Whether the entity should attack when angry.",
+
+  "cobblemon.entity.variable.attacking_movement_speed.name": "Attacking Movement Speed",
+  "cobblemon.entity.variable.attacking_movement_speed.desc": "The speed the entity moves at when attacking.",
+
+  "cobblemon.entity.variable.attacks_melee.name": "Attacks Melee",
+  "cobblemon.entity.variable.attacks_melee.desc": "Whether the entity attacks in melee.",
+
+  "cobblemon.entity.variable.melee_range.name": "Melee Range",
+  "cobblemon.entity.variable.melee_range.desc": "The range the entity can attack in melee.",
+
+  "cobblemon.entity.variable.melee_cooldown.name": "Melee Cooldown",
+  "cobblemon.entity.variable.melee_cooldown.desc": "The cooldown between melee attacks.",
+
+  "cobblemon.entity.variable.panic_when_hurt.name": "Panics When Hurt",
+  "cobblemon.entity.variable.panic_when_hurt.desc": "Whether the entity panics when hurt.",
+
+  "cobblemon.entity.variable.panic_on_passive_damage.name": "Panics On Passive Damage",
+  "cobblemon.entity.variable.panic_on_passive_damage.desc": "Whether the entity panics on passive damage like cacti or falling.",
+
+  "cobblemon.entity.variable.panic_when_hostiles_nearby.name": "Panics When Hostiles Nearby",
+  "cobblemon.entity.variable.panic_when_hostiles_nearby.desc": "Whether the entity panics when hostiles mobs are nearby.",
+
+  "cobblemon.entity.variable.flee_attacker.name": "Flees Attacker",
+  "cobblemon.entity.variable.flee_attacker.desc": "Whether the entity will flee from its attacker.",
+
+  "cobblemon.entity.variable.flee_speed_multiplier.name": "Flee Speed",
+  "cobblemon.entity.variable.flee_speed_multiplier.desc": "The speed the entity moves at when fleeing.",
+
+  "cobblemon.entity.variable.flee_desired_distance.name": "Flee Desired Distance",
+  "cobblemon.entity.variable.flee_desired_distance.desc": "The distance the entity wants to be from its attacker.",
+
+  "cobblemon.entity.variable.flee_nearest_hostile.name": "Flee Nearest Hostile",
+  "cobblemon.entity.variable.flee_nearest_hostile.desc": "Whether the entity will flee from the nearest hostile mob.",
+
+  "cobblemon.entity.variable.eat_grass_cooldown_ticks.name": "Eat Grass Cooldown Ticks",
+  "cobblemon.entity.variable.eat_grass_cooldown_ticks.desc": "How many ticks that must pass between eating grass.",
+
+  "cobblemon.entity.variable.eat_grass_chance.name": "Eat Grass Chance",
+  "cobblemon.entity.variable.eat_grass_chance.desc": "The chance, per tick, that the entity will eat grass.",
+
+  "cobblemon.entity.variable.script.name": "Script",
+  "cobblemon.entity.variable.script.desc": "The script to run every tick as part of AI logic.",
+
+  "cobblemon.entity.variable.player_texture.name": "Player Texture Username",
+  "cobblemon.entity.variable.player_texture.desc": "The username of the player to texture the entity as.",
+
+  "cobblemon.ui.entity.behaviour_editor": "Behaviors",
+  "cobblemon.ui.entity.behaviour_editor.label": "Behaviors - %1$s",
+  "cobblemon.ui.entity.behaviour_editor.label.active": "Active Behaviors",
+  "cobblemon.ui.entity.behaviour_editor.label.inactive": "Inactive Behaviors",
+
+  "cobblemon.behaviour.battle_scripts.name": "Battle Script Hooks",
+  "cobblemon.behaviour.battle_scripts.desc": "Runs MoLang scripts when battles end.",
+
+  "cobblemon.behaviour.battle_commands.name": "Battle Commands",
+  "cobblemon.behaviour.battle_commands.desc": "Runs commands when battles end.",
+
+  "cobblemon.behaviour.core.name": "Core Movement & Looking",
+  "cobblemon.behaviour.core.desc": "Necessary for movement and looking at targets.",
+
+  "cobblemon.behaviour.wanders.name": "Wanders",
+  "cobblemon.behaviour.wanders.desc": "Randomly wanders around.",
+
+  "cobblemon.behaviour.wanders_water.name": "Wanders Water",
+  "cobblemon.behaviour.wanders_water.desc": "Randomly swims around in water.",
+
+  "cobblemon.behaviour.wanders_air.name": "Wanders Air",
+  "cobblemon.behaviour.wanders_air.desc": "Randomly flies around in the air.",
+
+  "cobblemon.behaviour.chats.name": "Stops During Chat",
+  "cobblemon.behaviour.chats.desc": "Stops to look at the speaker during dialogue.",
+
+  "cobblemon.behaviour.fights_melee.name": "Fights Melee",
+  "cobblemon.behaviour.fights_melee.desc": "Can move to and attack a target with melee.",
+
+  "cobblemon.behaviour.floats.name": "Stays Afloat",
+  "cobblemon.behaviour.floats.desc": "Keeps itself above water when submerged.",
+
+  "cobblemon.behaviour.does_action_effects.name": "Action Effect Support",
+  "cobblemon.behaviour.does_action_effects.desc": "Pauses idle activity when running action effects.",
+
+  "cobblemon.behaviour.panics.name": "Panics",
+  "cobblemon.behaviour.panics.desc": "Panics when hurt or near hostiles.",
+
+  "cobblemon.behaviour.retaliates.name": "Retaliates",
+  "cobblemon.behaviour.retaliates.desc": "Attacks back when hurt. Still needs a way to attack.",
+
+  "cobblemon.behaviour.stationary.name": "Stays at Position",
+  "cobblemon.behaviour.stationary.desc": "Does not move from a specific position.",
+
+  "cobblemon.behaviour.uses_healing_machine.name": "Uses Healing Machines",
+  "cobblemon.behaviour.uses_healing_machine.desc": "Heals at a healing machine when hurt.",
+
+  "cobblemon.behaviour.battler.name": "Pokémon Battler",
+  "cobblemon.behaviour.battler.desc": "Stops and watches during battles.",
+
+  "cobblemon.behaviour.looks_in_one_direction.name": "Looks in One Direction",
+  "cobblemon.behaviour.looks_in_one_direction.desc": "Looks in a fixed direction at all times.",
+
+  "cobblemon.behaviour.looks_around.name": "Looks Around",
+  "cobblemon.behaviour.looks_around.desc": "Looks around at nearby entities.",
+
+  "cobblemon.behaviour.pokemon_battles.name": "Pokémon Battles",
+  "cobblemon.behaviour.pokemon_battles.desc": "Stops moving and looks at opponents during Pokémon battles.",
+
+  "cobblemon.behaviour.pokemon_follows_owner.name": "Pokémon Follows Owner",
+  "cobblemon.behaviour.pokemon_follows_owner.desc": "Follows the owner around, more rarely if in a pasture.",
+
+  "cobblemon.behaviour.pokemon_sleeps.name": "Pokémon Sleeps",
+  "cobblemon.behaviour.pokemon_sleeps.desc": "Pokémon can get drowsy and go to sleep if they aren't in battle or in a party.",
+
+  "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.name": "Pokémon Sleeps on Trainer Bed",
+  "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.desc": "Pokémon that can sleep will rest on the trainer if the trainer gets into bed.",
+
+  "cobblemon.behaviour.avoids_water.name": "Avoids Water",
+  "cobblemon.behaviour.avoids_water.desc": "Tries to find air and then gets away from water.",
+
+  "cobblemon.behaviour.pokemon_eats_grass.name": "Eats Grass",
+  "cobblemon.behaviour.pokemon_eats_grass.desc": "The Pokémon occasionally eats grass underfoot.",
+
+  "cobblemon.behaviour.player_textured.name": "Player Textured",
+  "cobblemon.behaviour.player_textured.desc": "The NPC will be textured based on a specific player username.",
+
   "cobblemon.move.pound": "Pound",
   "cobblemon.move.pound.desc": "The target is physically pounded with a long tail, a foreleg, or the like.",
   "cobblemon.move.karatechop": "Karate Chop",

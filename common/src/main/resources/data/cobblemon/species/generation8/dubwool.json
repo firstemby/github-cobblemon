@@ -57,6 +57,12 @@
       "light": "0-4"
     }
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "presets": ["cobblemon:eats_grass"]
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [

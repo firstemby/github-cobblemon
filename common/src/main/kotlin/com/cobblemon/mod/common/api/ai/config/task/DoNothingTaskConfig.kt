@@ -8,30 +8,29 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.DoNothing
 
 class DoNothingTaskConfig : SingleTaskConfig {
-    val condition: ExpressionLike = "true".asExpressionLike()
-    val minDurationTicks = "40".asExpression()
-    val maxDurationTicks = "80".asExpression()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
+    val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
+    val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
+    override fun getVariables(entity: LivingEntity) = listOf(condition, minDurationTicks, maxDurationTicks).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
-        return DoNothing(runtime.resolveInt(minDurationTicks), runtime.resolveInt(maxDurationTicks))
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
+        return DoNothing(minDurationTicks.resolveInt(), maxDurationTicks.resolveInt())
     }
 }

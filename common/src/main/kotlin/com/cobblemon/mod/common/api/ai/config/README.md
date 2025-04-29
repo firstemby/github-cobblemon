@@ -1,12 +1,13 @@
-# Brain Configuration
+# Behaviour Configuration
 
-A "Brain" is a Java Edition AI concept for more modern entities. It has tasks that are listed inside of 'activities',
+A "Brain" is a Java Edition AI concept for more modern entities. It has tasks that are listed inside 'activities',
 and in some cases a schedule which determines which activities will occur during different times of the day. There is
 also a set of core activities, and a default activity. In Minecraft, the most complex usage of the Brain AI system 
 is on villagers which have schedules that control their behaviour during the day and night as well as child villager play behaviours.
 
-Cobblemon's NPCs use the Brain AI system. As part of that, Cobblemon added the concept of a Brain Configuration
-that allows Java Edition brains to be configured in a more data-driven way. 
+Cobblemon's Pokémon and NPCs use the Brain AI system. As part of that, Cobblemon added the concept of a Behaviour Configuration
+that allows Java Edition brains to be configured in a more data-driven way, as well as to support the configuration of
+other logical properties of entities that are configured at the same initialization step.
 
 By default, without any brain configuration, the default activity will be `minecraft:idle` and the core activities will be `[minecraft:core]`.
 The activities would not have any tasks though.
@@ -48,18 +49,18 @@ The activities that were added by Cobblemon are:
 - `cobblemon:action_effect`: For when the entity is performing an action effect. Usually registered as an almost empty activity that simply prevents the entity from doing other things.
 - `cobblemon:npc_chatting`: Intended for NPC entities using dialogue so that they look at their chat partner and do nothing else.
 
-## Brain Configuration Format
-A brain is configured using a series of "Brain Configurations". Each configuration is a JSON object that contains
-a "type" field which determines the action to perform when configuring a brain. Many different types are available.
+## Behaviour Configuration Format
+A Behaviour is configured using a series of "Behaviour Configurations". Each configuration is a JSON object that contains
+a "type" field which determines the action to perform when configuring an entity. Many different types are available.
 
 ### script
-The `script` type executes a MoLang script which will apply some changes to the brain.
+The `script` type executes a MoLang script which will apply some changes to the entity or brain.
 - `script`: The MoLang script to execute. This will be a resource location for the `molang` datapack folder. Something like `cobblemon:some_script`.
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if the script should be executed. Defaults to `"true"`.
 
 ### add_tasks_to_activity
 The 'add_tasks_to_activity' type adds a list of tasks to an activity.
-- `activity`: The activity to add the tasks to. This must be a pre-existing activity - a brain configuration cannot
+- `activity`: The activity to add the tasks to. This must be a pre-existing activity - a behaviour configuration cannot
     create new activities. 
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if the tasks should be added. If this
     is not present, the tasks will always be added.
@@ -96,24 +97,107 @@ The `set_core_activities` type sets the core activities of the brain. It has onl
 ### set_default_activity
 The `set_default_activity` type sets the default activity of the brain. It has only one property, `activity`, which is the activity to set as the default.
 
-### apply_preset
-The `apply_preset` type applies a preset to the brain. Brain presets are JSON arrays under the `brain_presets` datapack folder. 
-This is a way to apply a set of configurations to the brain.
-- `preset`: The name of the preset to apply. This is the name of the file in the `brain_presets` folder without the `.json` extension.
-- `condition`: A MoLang expression (with `q.entity` as the entity) that determines if the preset should be applied. Defaults to `"true"`.
+### apply_behaviours
+The `apply_behaviours` type applies some number of other Behaviours to the entity. These behaviours are JSONs under the `behaviours` datapack folder. 
+This is a way to apply a set of configurations to the entity.
+- `behaviours`: A list of behaviour resource locations to apply. This is the name of the file in the `behaviours` folder without the `.json` extension.
+- `condition`: A MoLang expression (with `q.entity` as the entity) that determines if the behaviour should be applied. Defaults to `"true"`.
+- `visible`: Whether the behaviour should be visible in the UI. Defaults to `true`. If it is not visible, name and description can be left out.
+- `name`: The name of the behaviour. This is used in the UI to label the behaviour. This can be a translation key.
+- `description`: A description of the behaviour. This is used in the UI to describe what the behaviour does. This can be a translation key.
+- `entityType`: The entity type that the behaviour applies to. Defaults to null. This is used to determine if the behaviour should be applied to the entity type..
 
-Example brain preset (`uses_healing_machine.json`):
+Example behaviour (`uses_healing_machine.json`):
 ```json
-[
-  {
-    "type": "add_tasks_to_activity",
-    "activity": "idle",
-    "tasksByPriority": {
-      "1": [
-        "heal_using_healing_machine",
-        "go_to_healing_machine"
-      ]
+{
+  "name": "cobblemon.behaviour.uses_healing_machine.name",
+  "description": "cobblemon.behaviour.uses_healing_machine.desc",
+  "entityType": "cobblemon:npc",
+  "visible": true,
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "1": [
+          "heal_using_healing_machine",
+          "go_to_healing_machine"
+        ]
+      }
     }
+  ]
+}
+```
+
+### add_variables
+The `add_variables` type adds some number of MoLang variables to the entity that can be configured in-game or left with defaults.
+- `variables`: A list of objects, each representing a variable that can be configured.
+
+Each variable has the following properties:
+- `variableName`: The name of the variable. This is the name that will be accessible from MoLang scripts.
+- `defaultValue`: The default value of the variable. This is a MoLang expression that will be used if the variable is not set.
+- `displayName`: The display name of the variable. This is used in the UI to label the variable. This can be a translation key.
+- `description`: A description of the variable. This is used in the UI to describe what the variable does. This can be a translation key.
+- `type`: The type of the variable. This can be `TEXT`, `NUMBER`, or `BOOLEAN`.
+
+Example:
+```json
+{
+  "type": "add_variables",
+  "variables": [
+    {
+      "variableName": "can_heal_using_machine",
+      "defaultValue": "false",
+      "displayName": "Can Use Healing Machine",
+      "description": "Whether or not the entity can use a healing machine.",
+      "type": "BOOLEAN"
+    }
+  ]
+}
+```
+
+### set_variables
+The `set_variables` type sets some values for pre-established variables. This is useful in cases where a preset has defined a variable
+but it's locked in by a specific entity using that preset. This strongly forces the variable to a specific value. In future this
+probably should deregister the variable so that the client cannot edit them once they've been forced, as currently that will
+be possible yet the value will get repeatedly overwritten.
+
+The values inside the variables map can be MoLang expressions (with `q.entity` as the entity) or simple JSON primitives.
+
+Example:
+```json
+{
+  "type": "set_variables",
+  "variables": {
+    "aggressive": true,
+    "attack_range": "10"
   }
-]
+}
+```
+
+### script
+The `script` type executes a registered MoLang script which will apply some changes to the brain or entity. This can be 
+useful if the goal is to apply some kind of configuration to the entity that would otherwise be performed by an NPC preset
+or NPC class. `q.entity` will refer to the entity. This is powerful when combined with [add_variables](#add_variables)
+configs in the same behaviour preset.
+
+Example:
+```json
+{
+  "type": "script",
+  "script": "cobblemon:configure_npc_party"
+}
+```
+
+### custom_script
+The `custom_script` type executes a custom MoLang script from this config which will apply some changes to the brain or
+entity. This is useful for when you want to apply some kind of configuration to the entity that would otherwise be
+by an NPC preset or NPC class. `q.entity` will refer to the entity.
+
+Example:
+```json
+{
+  "type": "custom_script",
+  "script": "q.entity.set_pathfinding_malus('WATER', -1);"
+}
 ```

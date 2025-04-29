@@ -222,8 +222,6 @@ object DataKeys {
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
     const val NPC_VARIATION_ASPECTS = "VariationAspects"
-    const val NPC_DATA = "Data"
-    const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
@@ -233,6 +231,7 @@ object DataKeys {
     const val NPC_PLAYER_TEXTURE_MODEL = "Model"
     const val NPC_PLAYER_TEXTURE_TEXTURE = "Texture"
     const val NPC_LEVEL = "Level"
+    const val NPC_FORCED_RESOURCE_IDENTIFIER = "ForcedResourceIdentifier"
     const val NPC_IS_MOVABLE = "IsMovable"
     const val NPC_SKILL = "Skill"
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
@@ -244,6 +243,11 @@ object DataKeys {
     const val NPC_HITBOX_HEIGHT = "Height"
     const val NPC_HITBOX_FIXED = "Fixed"
     const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
+
+    const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BEHAVIOURS = "Behaviours"
+    const val SCRIPTED_DATA = "Data"
+    const val SCRIPTED_CONFIG = "Config"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"
