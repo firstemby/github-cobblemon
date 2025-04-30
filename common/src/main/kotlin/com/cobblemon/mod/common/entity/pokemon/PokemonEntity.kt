@@ -179,7 +179,7 @@ open class PokemonEntity(
         @JvmStatic val FRIENDSHIP = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
-        @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val TRANSFORMATION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val FORM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val BUSY_LOCKED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
@@ -222,8 +222,8 @@ open class PokemonEntity(
     /** The player that caused this Pokémon to faint. */
     var killer: ServerPlayer? = null
 
-    val isEvolving: Boolean
-        get() = entityData.get(EVOLUTION_STARTED)
+    val isTransforming: Boolean
+        get() = entityData.get(TRANSFORMATION_STARTED)
     var evolutionEntity: GenericBedrockEntity? = null
 
     var ticksLived = 0
@@ -242,7 +242,7 @@ open class PokemonEntity(
      * To track an action as blocking, add it to the [busyLocks].
      */
     val isBusy: Boolean
-        get() = entityData.get(BUSY_LOCKED) || isBattling || isEvolving
+        get() = entityData.get(BUSY_LOCKED) || isBattling || isTransforming
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
     var battleId: UUID?
@@ -410,7 +410,7 @@ open class PokemonEntity(
         builder.define(FRIENDSHIP, 0)
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
-        builder.define(EVOLUTION_STARTED, false)
+        builder.define(TRANSFORMATION_STARTED, false)
         builder.define(FORM, "")
         builder.define(BUSY_LOCKED, false)
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)

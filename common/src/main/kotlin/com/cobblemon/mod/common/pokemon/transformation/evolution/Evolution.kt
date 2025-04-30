@@ -34,6 +34,7 @@ import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimati
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
+import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -53,7 +54,7 @@ class Evolution(
     /** The [TransformationRequirement]s that need to be satisfied for this evolution to start. */
     override val requirements: Set<TransformationRequirement> = setOf(),
     /** The [TransformationTrigger] to kickstart this evolution. */
-    override val trigger: TransformationTrigger = ItemInteractionTrigger(),
+    override val trigger: TransformationTrigger = LevelUpTrigger(),
     /** If this evolution can be deferred and started whenever rather than immediately on trigger. */
     override val optional: Boolean = true,
     /** If this evolution needs its requirements reevaluated to remain valid. */
@@ -147,7 +148,7 @@ class Evolution(
             super.forceStart(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
+            pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
             pokemonEntity.navigation.stop()
             pokemonEntity.after(1F) {
                 evolutionAnimation(pokemonEntity)
@@ -158,7 +159,7 @@ class Evolution(
             }
             pokemonEntity.after(seconds = 12F) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
+                pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
         }

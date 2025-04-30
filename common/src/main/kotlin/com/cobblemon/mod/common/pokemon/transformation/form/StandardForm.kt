@@ -25,3 +25,5 @@ class StandardForm(
     /** Aggregates child forms and their nested forms. */
     fun flattenForms(): Collection<FormData> = this.forms + this.permanentForms.flatMap { it.forms }
 }
+
+// TODO remove completely and just have Species be a FormData?

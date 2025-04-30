@@ -151,6 +151,7 @@
   "forms": [
     {
       "name": "School",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.5,
       "height": 82,
@@ -193,7 +194,19 @@
           }
         }
       },
-      "evolutions": [],
+      "requirements": [
+        {
+          "variant": "level",
+          "minLevel": 20
+        },
+        {
+          "variant": "health",
+          "cutoff": 0.25
+        }
+      ],
+      "optional": true,
+      "reevaluate": true,
+      "toggleable": true,
       "battleOnly": true
     }
   ]

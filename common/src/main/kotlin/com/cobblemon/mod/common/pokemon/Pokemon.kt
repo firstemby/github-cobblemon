@@ -213,15 +213,16 @@ open class Pokemon : ShowdownIdentifiable {
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
 
-            // if old and new are not interchangeable, wipe unlocked evolutions and forms
-            if (!old.isInterchangeableWith(value)) {
-                this.evolutionProxy.current().clear()
-                this.formProxy.current().clear()
-            }
-            // if old is interchangeable with new, toggleable, and still valid - re-add it to the controller
-            else if (!isClient && old is TemporaryForm && old.toggleable && old.reevaluate(this))
-            {
-                this.formProxy.server().add(old)
+            if (!isClient) {
+                // if old and new are not interchangeable, wipe unlocked evolutions and forms
+                if (!old.isInterchangeableWith(value)) {
+                    this.evolutionProxy.current().clear()
+                    this.formProxy.current().clear()
+                }
+                // if old is interchangeable with new, toggleable, and still valid - keep it in the controller
+                else if (old is TemporaryForm && (!old.toggleable || !old.reevaluate(this))) {
+                    this.formProxy.server().remove(old)
+                }
             }
 
             updateAspects()
@@ -1763,10 +1764,10 @@ open class Pokemon : ShowdownIdentifiable {
     open fun self(): Pokemon = this
 
     /**
-     * Transforms the pokemon if requirements are met.
+     * Triggers [TemporaryForm]s and [Evolution]s if requirements are met.
      *
      * @param type The type of [TransformationTrigger] to trigger.
-     * @param context The [TriggerContext] required for [ContextTrigger]s.
+     * @param context The optional [ContextTrigger.Context] required for [ContextTrigger]s.
      * @return The [Transformation]s of this [Pokemon] that were triggered.
      */
     fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: ContextTrigger.Context? = null) =

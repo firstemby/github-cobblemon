@@ -29,7 +29,7 @@ class ClientFormController(
 
     override fun notification() {
         Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.forms.hint".asTranslated(this.pokemon.getDisplayName()).green())
-        Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
+        Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F) // TODO replace with unique notificaiton
     }
 
     override fun acceptPacket(pokemon: Pokemon, form: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, form)

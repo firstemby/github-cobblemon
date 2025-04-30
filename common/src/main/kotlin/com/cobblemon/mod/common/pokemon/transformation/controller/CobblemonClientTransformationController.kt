@@ -28,10 +28,6 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
     transformations: Set<T>,
 ) : TransformationController<T, I> {
 
-    init {
-        if (transformations.isNotEmpty()) this.notification()
-    }
-
     protected val transformations = transformations.toMutableSet()
 
     abstract fun acceptPacket(pokemon: Pokemon, transformation: T): NetworkPacket<*>

@@ -39,7 +39,6 @@ class ServerFormController(
 
     // TODO form events
 
-    // NOTE: TemporaryForm does not have a 'result' property like Evolution - TemporaryForm's transformation is only a single field toggle
     override fun isDuplicate(element: TemporaryForm) = this.find { it.name == element.name } != null
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)

@@ -329,9 +329,9 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     internal class ShowdownTemporaryForm(form: TemporaryForm) : ShowdownSpecies(form) {
         // form change can occur during a battle
-        val battleOnly = if (form.battleOnly) form.parentForm else null
+        val battleOnly = if (form.battleOnly) form.parentForm.showdownName() else null
         // form change can occur outside of battle (mutually exclusive with battleOnly)
-        val changesFrom = if (!form.battleOnly) form.parentForm else null
+        val changesFrom = if (!form.battleOnly) form.parentForm.showdownName() else null
         // pokemon must know this move to be in this form
         val requiredMove = form.requirements.filterIsInstance<MoveSetRequirement>().firstOrNull()?.move?.showdownId() // TODO update showdown to support 'requiredMoves'
         // pokemon must hold one of these item(s) to be in this form

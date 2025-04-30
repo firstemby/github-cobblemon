@@ -57,6 +57,7 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         this.registerType(AnyRequirement.ADAPTER_VARIANT, AnyRequirement::class)
         this.registerType(PropertyRangeRequirement.ADAPTER_VARIANT, PropertyRangeRequirement::class)
         this.registerType(PlayerHasAdvancementRequirement.ADAPTER_VARIANT, PlayerHasAdvancementRequirement::class)
+        this.registerType(HealthRequirement.ADAPTER_VARIANT, HealthRequirement::class)
     }
 
     override fun <T : TransformationRequirement> registerType(id: String, type: KClass<T>) {

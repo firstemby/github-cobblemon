@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  *
  * @property target The matcher for the party members.
  * @property contains If this requirement will need the [target] to be present or not.
- * @property fuse If this [Transformation] will fuse this Pokemon with the target
+ * @property fuse If this [Transformation] will fuse the [target] into this Pokemon.
  *
  * @author Licious
  * @since March 21st, 2022

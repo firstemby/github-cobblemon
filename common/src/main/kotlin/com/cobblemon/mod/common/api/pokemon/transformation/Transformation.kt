@@ -78,7 +78,7 @@ interface Transformation : TransformationLike {
     fun convertToDisplay(pokemon: Pokemon): TransformationDisplay
 
     /**
-     * Validates whether a transformation still meets the [TransformationRequirement]s to [start] for a pokemon.
+     * Validates whether a transformation still meets the [TransformationRequirement]s.
      * If [Transformation.reevaluate] is false, this check will be bypassed.
      *
      * @param pokemon the [Pokemon] to test against.

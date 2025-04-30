@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.battles.interpreter.*
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
@@ -22,9 +21,6 @@ import com.cobblemon.mod.common.battles.interpreter.instructions.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.runOnServer
-import net.minecraft.world.level.ClipContext
-import net.minecraft.world.phys.HitResult
-import net.minecraft.world.phys.Vec3
 import java.util.UUID
 import kotlin.collections.Iterator
 import kotlin.collections.filter
@@ -36,7 +32,6 @@ import kotlin.collections.mutableMapOf
 import kotlin.collections.set
 import kotlin.collections.toMutableList
 import kotlin.collections.toTypedArray
-import kotlin.time.measureTime
 
 @Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")
 object ShowdownInterpreter {
@@ -72,7 +67,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-copyboost"]            = { _, _, message, _ -> CopyBoostInstruction(message) }
         updateInstructionParser["-crit"]                 = { _, instructionSet, message, _ -> CritInstruction(message, instructionSet) }
         updateInstructionParser["-curestatus"]           = { _, _, message, _ -> CureStatusInstruction(message) }
-        updateInstructionParser["detailschange"]         = { _, _, message, _ -> FormeChangeInstruction(message) }
+        updateInstructionParser["detailschange"]         = { _, _, message, _ -> FormChangeInstruction(message) }
         updateInstructionParser["-endability"]           = { _, _, message, _ -> EndAbilityInstruction(message) }
         updateInstructionParser["-end"]                  = { _, _, message, _ -> EndInstruction(message) }
         updateInstructionParser["-enditem"]              = { _, _, message, _ -> EndItemInstruction(message) }
@@ -81,7 +76,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-fieldactivate"]        = { _, _, message, _ -> FieldActivateInstruction(message) }
         updateInstructionParser["-fieldend"]             = { _, _, message, _ -> FieldEndInstruction(message) }
         updateInstructionParser["-fieldstart"]           = { _, _, message, _ -> FieldStartInstruction(message) }
-        updateInstructionParser["-formechange"]          = { _, _, message, _ -> FormeChangeInstruction(message) }
+        updateInstructionParser["-formechange"]          = { _, _, message, _ -> FormChangeInstruction(message) }
         updateInstructionParser["-hitcount"]             = { _, _, message, _ -> HitCountInstruction(message) }
         updateInstructionParser["-immune"]               = { _, _, message, _ -> ImmuneInstruction(message) }
         updateInstructionParser["-invertboost"]          = { _, _, message, _ -> InvertBoostInstruction(message) }

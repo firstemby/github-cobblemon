@@ -36,7 +36,7 @@ object FormAdapter : JsonDeserializer<FormData> {
     override fun deserialize(jsonIn: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): FormData {
         val json = jsonIn.asJsonObject
         val variant = json.get(TYPE)?.asString?.lowercase()
-        val type = variant?.let { types[variant] } ?:  throw IllegalArgumentException("Cannot resolve type for form variant $variant")
+        val type = variant?.let { types[variant] } ?: PermanentForm::class
         return ctx.deserialize(json, type.java)
     }
 }
