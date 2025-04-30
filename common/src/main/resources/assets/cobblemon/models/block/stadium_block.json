@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:block/cube_all",
     "textures": {
-        "all": "cobblemon:block/stadium_terminal"
+        "all": "cobblemon:block/stadium_block"
     }
 }

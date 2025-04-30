@@ -10,6 +10,15 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 
 class StadiumSingleBattle: StadiumBattleDefenition() {
+
+    override fun playerPositions(): MutableList<Pair<Int, Vec3>> {
+        return mutableListOf()
+    }
+
+    override fun pokemonPositions(): MutableList<Pair<Int, Vec3>> {
+        return mutableListOf()
+    }
+    /*
     @JvmField
     val MAX_PLAYERS = 2
 
@@ -60,4 +69,5 @@ class StadiumSingleBattle: StadiumBattleDefenition() {
     override fun getCurrentCamera(): BattleCameraEntry {
         TODO("Not yet implemented")
     }
+    */
 }

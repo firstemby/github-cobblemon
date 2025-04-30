@@ -38,7 +38,7 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC).build(null))
 
     @JvmField
-    val STADIUM: BlockEntityType<StadiumBlockEntity> = this.create("stadium_terminal", BlockEntityType.Builder.of(::StadiumBlockEntity, CobblemonBlocks.STADIUM).build(null))
+    val STADIUM: BlockEntityType<StadiumBlockEntity> = this.create("stadium_block", BlockEntityType.Builder.of(::StadiumBlockEntity, CobblemonBlocks.STADIUM_BLOCK).build(null))
 
     @JvmField
     val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))

@@ -31,8 +31,8 @@ class StadiumBlockEntity(
     var battleDefenition = StadiumSingleBattle()
 
     fun addPlayer(player: ServerPlayer) {
-        battleDefenition.addPlayer(player)
-        if (battleDefenition.readyForBattle()) battleDefenition.initializeBattle()
+        //battleDefenition.addPlayer(player)
+        //if (battleDefenition.readyForBattle()) battleDefenition.initializeBattle()
     }
 
     /*

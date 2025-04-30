@@ -619,7 +619,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val PC = blockItem("pc", CobblemonBlocks.PC)
     @JvmField
-    val STADIUM = blockItem("stadium_terminal", CobblemonBlocks.STADIUM)
+    val STADIUM_BLOCK = blockItem("stadium_block", CobblemonBlocks.STADIUM_BLOCK)
     @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)
     @JvmField

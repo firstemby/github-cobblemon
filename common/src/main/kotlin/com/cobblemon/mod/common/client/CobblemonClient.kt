@@ -258,7 +258,7 @@ object CobblemonClient {
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
             CobblemonBlocks.LECTERN,
-            CobblemonBlocks.STADIUM,
+            CobblemonBlocks.STADIUM_BLOCK,
             CobblemonBlocks.SACCHARINE_DOOR,
             CobblemonBlocks.SACCHARINE_TRAPDOOR,
             CobblemonBlocks.SACCHARINE_SIGN,
