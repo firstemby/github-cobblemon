@@ -1146,7 +1146,8 @@ open class Pokemon : ShowdownIdentifiable {
     /** Revolves the [RegistryAccess] associated with this pokemon, if one exists. */
     val registryAccess: RegistryAccess
         @Throws(IllegalStateException::class)
-        get() = this.getOwnerEntity()?.registryAccess()
+        get() = this.entity?.registryAccess()
+            ?: this.getOwnerEntity()?.registryAccess()
             ?: server()?.registryAccess()
             ?: throw IllegalStateException("No registry access available")
 
