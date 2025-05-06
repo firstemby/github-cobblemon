@@ -74,7 +74,8 @@ class BattleMoveSelection(
         BattleGimmickButton.create(gimmick, this, backButton.x + xOff, backButton.y)
     }
 
-    val shiftButton = BattleShiftButton(x + 22.5F, Minecraft.getInstance().window.guiScaledHeight - 22F )
+    val shiftButton = if (request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c'))
+        BattleShiftButton(x + 22.5F, Minecraft.getInstance().window.guiScaledHeight - 22F ) else null
 
     open class MoveTile(
         val moveSelection: BattleMoveSelection,
@@ -192,9 +193,7 @@ class BattleMoveSelection(
         gimmickButtons.forEach {
             it.render(context.pose(), mouseX, mouseY, delta)
         }
-        if(this.request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c')) {
-            shiftButton.render(context, mouseX, mouseY, delta)
-        }
+        shiftButton?.render(context, mouseX, mouseY, delta)
     }
 
     override fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean {
@@ -214,7 +213,7 @@ class BattleMoveSelection(
         } else if (gimmick != null) {
             gimmickButtons.filter { it != gimmick }.forEach { it.toggled = false }
             moveTiles = if (gimmick.toggle()) gimmick.tiles else baseTiles
-        } else if(shiftButton.isHovered(mouseX,mouseY)) {
+        } else if (shiftButton?.isHovered(mouseX,mouseY) == true) {
             playDownSound(Minecraft.getInstance().soundManager)
             battleGUI.selectAction(request, ShiftActionResponse())
         }
