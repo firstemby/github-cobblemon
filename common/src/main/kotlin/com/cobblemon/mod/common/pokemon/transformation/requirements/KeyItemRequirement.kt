@@ -15,6 +15,15 @@ import com.cobblemon.mod.common.util.hasKeyItem
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 
+/**
+ * A [OwnerQueryRequirement] that checks if the player has a certain "key item". Key items are not real items,
+ * but can be awarded (and removed) at free will of cobblemon or 3rd party mods.
+ *
+ * @property requiredKeyItem The key item the player needs to have, for example `cobblemon:z_ring` or `cobblemon:key_stone` for Z-Moves and Mega evolutions respectively
+ *
+ * @author Polymeta
+ * @since May 6th, 2025
+ */
 class KeyItemRequirement(val requiredKeyItem: ResourceLocation) : OwnerQueryRequirement {
     override fun checkPlayer(pokemon: Pokemon, owner: ServerPlayer): Boolean {
         return owner.hasKeyItem(requiredKeyItem)
