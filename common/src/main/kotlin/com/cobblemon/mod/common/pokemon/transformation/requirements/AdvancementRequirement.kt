@@ -10,27 +10,32 @@ package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.requirements.template.EntityQueryRequirement
-import net.minecraft.world.entity.LivingEntity
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.OwnerQueryRequirement
+import com.cobblemon.mod.common.entity.npc.NPCEntity
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
+import kotlin.collections.iterator
 
 /**
- * A [TransformationRequirement] that checks if the player has a certain [Advancement]
+ * A [TransformationRequirement] that checks if the player has a certain [net.minecraft.advancements.Advancement]
  *
  * @param requiredAdvancement The [ResourceLocation] of the required advancement
  *
- * @author whatsy
+ * @author whatsy, Polymeta
  */
-class PlayerHasAdvancementRequirement(val requiredAdvancement: ResourceLocation) : EntityQueryRequirement {
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
-        val player = queriedEntity as? ServerPlayer ?: return false
-        for (entry in player.advancements.progress) {
+class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
+    override fun checkPlayer(pokemon: Pokemon, owner: ServerPlayer): Boolean {
+        for (entry in owner.advancements.progress) {
             if (entry.key.id == requiredAdvancement && entry.value.isDone) {
                 return true
             }
         }
         return false
+    }
+
+    override fun checkNPC(pokemon: Pokemon, owner: NPCEntity): Boolean {
+        //TODO some sort of config potentially on the NPC itself
+        return true
     }
 
     companion object {

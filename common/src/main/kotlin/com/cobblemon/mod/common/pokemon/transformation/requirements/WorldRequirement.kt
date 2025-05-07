@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.requirements.template.EntityQueryRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.EntityQueryRequirement
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
