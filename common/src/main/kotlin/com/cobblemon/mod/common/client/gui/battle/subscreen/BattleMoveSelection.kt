@@ -191,7 +191,7 @@ class BattleMoveSelection(
         }
         backButton.render(context, mouseX, mouseY, delta)
         gimmickButtons.forEach {
-            it.render(context.pose(), mouseX, mouseY, delta)
+            it.render(context, mouseX, mouseY, delta)
         }
         shiftButton?.render(context, mouseX, mouseY, delta)
     }
@@ -200,17 +200,18 @@ class BattleMoveSelection(
         val move = moveTiles.find { it.isHovered(mouseX, mouseY) }
         val gimmick = gimmickButtons.find { it.isHovered(mouseX, mouseY) }
         if (move != null) {
-            if(this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
+            if (this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
                 move.onClick()
-            } else {
-                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move))
+                return true
+            } else if (move.selectable) {
+                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID))
                 playDownSound(Minecraft.getInstance().soundManager)
+                return true
             }
-            return true
         } else if (backButton.isHovered(mouseX, mouseY)) {
             playDownSound(Minecraft.getInstance().soundManager)
             battleGUI.changeActionSelection(null)
-        } else if (gimmick != null) {
+        } else if (gimmick != null && gimmick.selectable) {
             gimmickButtons.filter { it != gimmick }.forEach { it.toggled = false }
             moveTiles = if (gimmick.toggle()) gimmick.tiles else baseTiles
         } else if (shiftButton?.isHovered(mouseX,mouseY) == true) {

@@ -22,7 +22,6 @@ import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection.Companion
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -41,9 +40,10 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 class BattleTargetSelection(
-        battleGUI: BattleGUI,
-        request: SingleActionRequest,
-        val move: InBattleMove
+    battleGUI: BattleGUI,
+    request: SingleActionRequest,
+    val move: InBattleMove,
+    val gimmickID: String?
 ) : BattleActionSelection(
     battleGUI = battleGUI,
     request = request,
@@ -123,7 +123,7 @@ class BattleTargetSelection(
         private val isMultiTarget = multiTargetList?.firstOrNull { it.getPNX() == target.getPNX() } != null
         private val isCurrentPokemon = request.activePokemon.battlePokemon?.uuid == target.battlePokemon!!.uuid
 
-        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget)
+        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget, targetSelection.gimmickID)
         val state = FloatingState()
 
         open val selectable: Boolean get() = isMultiTarget || (responseTarget != null)

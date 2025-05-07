@@ -14,7 +14,9 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.ForcePassActionResponse
+import com.cobblemon.mod.common.battles.MoveActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.battle.BattleSelectActionsPacket
 import java.util.UUID
@@ -78,6 +80,10 @@ class ClientBattle(
             )
             mustChoose = false
         }
+    }
+
+    fun pendingGimmick(gimmick: ShowdownMoveset.Gimmick): Boolean {
+        return pendingActionRequests.none { (it.response as? MoveActionResponse)?.gimmickID ==  gimmick.id }
     }
 
     fun getPokemonFromPNX(pnx: String): Pair<ClientBattleActor, ActiveClientBattlePokemon> {
