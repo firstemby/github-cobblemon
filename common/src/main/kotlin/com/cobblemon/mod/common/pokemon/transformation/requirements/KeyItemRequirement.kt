@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.OwnerQueryRequirement
@@ -6,7 +14,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.hasKeyItem
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import kotlin.collections.iterator
 
 class KeyItemRequirement(val requiredKeyItem: ResourceLocation) : OwnerQueryRequirement {
     override fun checkPlayer(pokemon: Pokemon, owner: ServerPlayer): Boolean {

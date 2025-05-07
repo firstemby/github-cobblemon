@@ -1,15 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.api.pokemon.transformation.requirement
 
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.LivingEntity
 
 /**
- * A [TransformationRequirement] that expects a [net.minecraft.world.entity.LivingEntity] to be attached to the [com.cobblemon.mod.common.pokemon.Pokemon].
- * It can be the [com.cobblemon.mod.common.entity.pokemon.PokemonEntity] if present or the [net.minecraft.world.entity.LivingEntity] that owns it.
+ * A [TransformationRequirement] that expects the [Pokemon] to have an owner.
+ * It can be the [ServerPlayer] or the [NPCEntity] that owns it.
  *
- * Whenever an entity can't be resolved [TransformationRequirement.check] will never succeed.
+ * Whenever an owner can't be resolved [TransformationRequirement.check] will never succeed.
  *
  * @author Polymeta
  * @since May 6th, 2025

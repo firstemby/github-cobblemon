@@ -1,11 +1,20 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.api.pokemon.transformation.requirement
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
 /**
- * A [TransformationRequirement] that expects a [net.minecraft.world.entity.LivingEntity] to be attached to the [com.cobblemon.mod.common.pokemon.Pokemon].
- * It can be the [com.cobblemon.mod.common.entity.pokemon.PokemonEntity] if present or the [net.minecraft.world.entity.LivingEntity] that owns it.
+ * A [TransformationRequirement] that expects a [LivingEntity] to be attached to the [Pokemon].
+ * It can be the [PokemonEntity] if present or the [LivingEntity] that owns it.
  *
  * Whenever an entity can't be resolved [TransformationRequirement.check] will never succeed.
  *
@@ -19,10 +28,10 @@ interface EntityQueryRequirement : TransformationRequirement {
     }
 
     /**
-     * Checks if the given [Pokemon] & [net.minecraft.world.entity.LivingEntity] satisfies the requirement.
+     * Checks if the given [Pokemon] & [LivingEntity] satisfies the requirement.
      *
      * @param pokemon The [Pokemon] being queried.
-     * @param queriedEntity The [net.minecraft.world.entity.LivingEntity] that can be compared in context of a [Level].
+     * @param queriedEntity The [LivingEntity] that can be compared in context of a [net.minecraft.world.level.Level].
      * @return If the requirement was satisfied.
      */
     fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean
