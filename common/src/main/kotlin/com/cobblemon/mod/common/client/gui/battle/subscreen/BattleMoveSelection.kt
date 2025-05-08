@@ -204,7 +204,7 @@ class BattleMoveSelection(
                 move.onClick()
                 return true
             } else if (move.selectable) {
-                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID))
+                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID, move.move.gimmickMove))
                 playDownSound(Minecraft.getInstance().soundManager)
                 return true
             }
