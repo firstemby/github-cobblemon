@@ -31,10 +31,11 @@ abstract class SingleEntitySpawnAction<T : Entity>(
         val e = createEntity() ?: return null
         e.setPos(ctx.position.toVec3d().add(0.5, 1.0, 0.5))
         var shouldSpawn = false
-        CobblemonEvents.ENTITY_SPAWN.postThen(SpawnEvent(e, ctx), ifSucceeded = {
+        CobblemonEvents.ENTITY_SPAWN_PRE.postThen(SpawnEvent(e, ctx), ifSucceeded = {
             this.entity.emit(e)
             ctx.world.addFreshEntity(e)
             shouldSpawn = true
+            CobblemonEvents.ENTITY_SPAWN_POST.post(SpawnEvent(e, ctx))
         })
 
         return if (shouldSpawn) {
