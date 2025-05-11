@@ -19,9 +19,11 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import java.awt.Color
+import net.minecraft.resources.ResourceLocation
 
 class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debug.grotto")), CobblemonRenderable {
     private lateinit var mimicCycleButton: Button
+    private var originalMimicId: ResourceLocation = grottoEntity.mimicId
 
     override fun init() {
         super.init()
@@ -52,10 +54,16 @@ class GrottoDebugGUI(val grottoEntity: GrottoBlockEntity) : Screen(lang("ui.debu
         mimicCycleButton.message = "Block Mimicking: ${grottoEntity.mimicId.namespace}:${grottoEntity.mimicId.path}".text()
     }
 
+    override fun onClose() {
+        super.onClose()
+        grottoEntity.mimicId = originalMimicId
+    }
+
     fun save() {
         CobblemonNetwork.sendToServer(
             UpdateGrottoBlockPacket(
-                grottoEntity.blockPos
+                grottoPos = grottoEntity.blockPos,
+                mimicId = grottoEntity.mimicId
             )
         )
         refresh()

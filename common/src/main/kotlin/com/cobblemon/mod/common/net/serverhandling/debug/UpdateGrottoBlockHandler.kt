@@ -17,10 +17,13 @@ import net.minecraft.server.level.ServerPlayer
 
 object UpdateGrottoBlockHandler : ServerNetworkPacketHandler<UpdateGrottoBlockPacket> {
     override fun handle(packet: UpdateGrottoBlockPacket, server: MinecraftServer, player: ServerPlayer) {
-        if (!Cobblemon.config.enableDebugKeys) return
+        if (!Cobblemon.config.enableDebugKeys) {
+            return
+        }
 
         val block = player.level().getBlockEntity(packet.grottoPos) ?: return
         if (block !is GrottoBlockEntity) return
-
+        block.mimicId = packet.mimicId
+        block.setChanged()
     }
 }
