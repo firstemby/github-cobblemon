@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,8 +40,10 @@ public class HumanoidModelMixin {
     public ModelPart rightLeg;
     @Shadow @Final
     public ModelPart leftLeg;
+    @Shadow @Final
+    public ModelPart body;
 
-    @Inject(method = "setupAnim*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE))
+    @Inject(method = "setupAnim*", at = @At("TAIL"))//@At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE))
     public void cobblemon$animateRiders(
         LivingEntity entity,
         float limbSwing,
@@ -56,6 +59,7 @@ public class HumanoidModelMixin {
             relevantPartsByName.put("leg_left", leftLeg);
             relevantPartsByName.put("leg_right", rightLeg);
             relevantPartsByName.put("head", head);
+            relevantPartsByName.put("torso", body);
         }
 
         Entity vehicle = entity.getVehicle();
@@ -63,6 +67,7 @@ public class HumanoidModelMixin {
             var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
                 return behaviour.shouldRotatePlayerHead(settings, state, pokemonEntity);
             });
+
 
             if (!shouldRotatePlayerHead) {
                 netHeadYaw = 0f;

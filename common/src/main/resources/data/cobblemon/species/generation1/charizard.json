@@ -123,6 +123,16 @@
           "y": 1.5,
           "z": -0.5
         },
+        "poseAnimations": [
+          {
+            "animations": [
+              {
+                "fileName": "ride_test",
+                "animationName": "animation.ride_test.laying"
+              }
+            ]
+          }
+        ],
         "poseOffsets": [
           {
             "poseTypes": [

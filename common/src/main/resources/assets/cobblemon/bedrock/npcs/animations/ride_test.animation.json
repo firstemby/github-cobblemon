@@ -1,26 +1,68 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
+		"animation.ride_test.arm_swing": {
+			"loop": true,
+			"bones": {
+				"torso": {
+					"rotation": ["q.anim_time * 90 * -0.5 ", 0, 0]
+				},
+				"arm_right": {
+					"rotation": ["q.anim_time * 90 ", 0, 0]
+				},
+				"arm_left": {
+					"rotation": ["q.anim_time * 90 ", 0, 0]
+				},
+				"body": {
+					"rotation": ["q.anim_time * 90 ", 0, 0]
+				}
+			}
+		},
 		"animation.ride_test.sitting": {
 			"loop": true,
 			"bones": {
 				"body": {
-					"position": [0, -9, 0]
-				},
-				"torso": {
-					"rotation": [25, 0, 0]
+					"rotation": [25, 0, 0],
+					"position": [0, -8, 7.4]
 				},
 				"arm_right": {
-					"rotation": [0, 0, 22.5]
+					"rotation": [-42.5, 0, 22.5]
 				},
 				"arm_left": {
-					"rotation": [0, 0, -27.5]
+					"rotation": [-40, 0, -27.5]
 				},
 				"leg_right": {
-					"rotation": [-90, 20, 0]
+					"rotation": [-117.23657, 16.69387, -7.09426]
 				},
 				"leg_left": {
-					"rotation": [-90, -20, 0]
+					"rotation": [-117.23657, -16.69387, 7.09426]
+				},
+				"head": {
+					"rotation": [-12.5, 0, 0]
+				}
+			}
+		},
+		"animation.ride_test.laying": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [80, 0, 0],
+					"position": [0, 0, 20]
+				},
+				"arm_right": {
+					"rotation": [-77.5, 60, 20]
+				},
+				"arm_left": {
+					"rotation": [-77.5, -60, -20]
+				},
+				"leg_right": {
+					"rotation": [9.92442, -0.86717, 9.96271]
+				},
+				"leg_left": {
+					"rotation": [9.92442, 0.86717, -9.96271]
+				},
+				"head": {
+					"rotation": [-60, 0, 0]
 				}
 			}
 		}
