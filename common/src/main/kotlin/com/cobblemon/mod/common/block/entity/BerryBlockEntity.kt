@@ -343,8 +343,15 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
         world.setBlock(pos, newState, UPDATE_CLIENTS)
         world.gameEvent(player, GameEvent.BLOCK_CHANGE, pos)
         resetGrowTimers(pos, newState)
-        return
+
+        // Notify top block too since we want observers to work there too
+        val abovePos = pos.above()
+        val aboveState = world.getBlockState(abovePos)
+        if (!aboveState.isAir) {
+            world.sendBlockUpdated(abovePos, aboveState, aboveState, Block.UPDATE_CLIENTS)
+        }
     }
+
 
     //Using a similar approach to ComputerCraft, implement this client side
     interface RenderState : AutoCloseable {
