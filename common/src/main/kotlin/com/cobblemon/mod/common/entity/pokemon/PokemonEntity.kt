@@ -996,14 +996,14 @@ open class PokemonEntity(
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
                 //Gogoat gives Milk Bucket if player uses Bucket on it
-                else if (pokemon.species.name == "Gogoat" && pokemon.gender.name == "Female") {
+                else if (pokemon.species.name == "Gogoat" && pokemon.gender.name == "FEMALE") {
                     player.playSound(SoundEvents.GOAT_MILK, 1.0f, 1.0f)
                     val milkBucket = ItemUtils.createFilledResult(itemStack, player, Items.MILK_BUCKET.defaultInstance)
                     player.setItemInHand(hand, milkBucket)
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
                 //Bouffalant  gives Milk Bucket if player uses Bucket on it
-                else if (pokemon.species.name == "Bouffalant" && pokemon.gender.name == "Female") {
+                else if (pokemon.species.name == "Bouffalant" && pokemon.gender.name == "FEMALE") {
                     player.playSound(SoundEvents.GOAT_MILK, 1.0f, 1.0f)
                     val milkBucket = ItemUtils.createFilledResult(itemStack, player, Items.MILK_BUCKET.defaultInstance)
                     player.setItemInHand(hand, milkBucket)
@@ -1046,7 +1046,7 @@ open class PokemonEntity(
                     }
                 }
                 //Shuckle uses it's fullness to dispense Berry Juice if a player uses Wooden Bowl on it
-                else if (pokemon.species.name == "Shuckle" && pokemon.currentFullness > 0) {
+                else if (pokemon.species.name == "Shuckle" && pokemon.currentFullness > 0 && pokemon.lastMilked >= 300) {
                     player.playSound(SoundEvents.MOOSHROOM_MILK, 1.0f, 1.0f)
                     val berryJuice = ItemUtils.createFilledResult(itemStack, player, CobblemonItems.BERRY_JUICE.defaultInstance)
                     player.setItemInHand(hand, berryJuice)
@@ -1054,7 +1054,7 @@ open class PokemonEntity(
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
             } else if (itemStack.`is`(Items.GLASS_BOTTLE)) {
-                if ((pokemon.species.name == "Vespiqueen") && pokemon.lastMilked >= 900) {
+                if ((pokemon.species.name == "Vespiquen") && pokemon.lastMilked >= 500) {
                     player.playSound(SoundEvents.GOAT_MILK, 1.0f, 1.0f)
                     val honeyBottle = ItemUtils.createFilledResult(itemStack, player, Items.HONEY_BOTTLE.defaultInstance)
                     player.setItemInHand(hand, honeyBottle)
@@ -1062,7 +1062,7 @@ open class PokemonEntity(
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
                 //Miltank gives MooMoo Milk if player uses Glass Bottle on it
-                else if (pokemon.species.name == "Miltank"  && pokemon.lastMilked >= 900) {
+                else if (pokemon.species.name == "Miltank"  && pokemon.lastMilked >= 500) {
                     player.playSound(SoundEvents.MOOSHROOM_MILK, 1.0f, 1.0f)
                     val moomooMilk = ItemUtils.createFilledResult(itemStack, player, CobblemonItems.MOOMOO_MILK.defaultInstance)
                     player.setItemInHand(hand, moomooMilk)

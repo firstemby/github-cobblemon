@@ -905,11 +905,11 @@ open class Pokemon : ShowdownIdentifiable {
         if (
             pokemon.species.name == "Miltank" ||
             pokemon.species.name == "Camerupt" ||
-            pokemon.species.name == "Vespiqueen" ||
+            pokemon.species.name == "Vespiquen" ||
             pokemon.species.name == "Combee" ||
             pokemon.species.name == "Shuckle" ||
-            (pokemon.species.name == "Gogoat" && pokemon.gender.name == "Female") ||
-            (pokemon.species.name == "Bouffalant" && pokemon.gender.name == "Female")
+            (pokemon.species.name == "Gogoat" && pokemon.gender.name == "FEMALE") ||
+            (pokemon.species.name == "Bouffalant" && pokemon.gender.name == "FEMALE")
         ) {
             return true
         }
@@ -1024,11 +1024,10 @@ open class Pokemon : ShowdownIdentifiable {
      * Called every second on the Pokémon for their fullness
      */
     open fun onSecondPassed(player: ServerPlayer, pokemon: Pokemon) {
-        // have metabolism cycle increase each second
         metabolismCycle += 1
 
         // set cap for lastMilked to save on resources potentially  [CURRENTLY SET TO 3 HOURS]
-        if (pokemon.lastMilked != 10800) {
+        if (pokemon.lastMilked != 1500) {
             pokemon.lastMilked += 1
         }
 
