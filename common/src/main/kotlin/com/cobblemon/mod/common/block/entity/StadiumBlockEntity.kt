@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 
 class StadiumBlockEntity(
     pos: BlockPos,
@@ -26,13 +27,18 @@ class StadiumBlockEntity(
     pos,
     blockState
 ) {
-    var storedPlayers = mutableListOf<ServerPlayer>()
+    /** Battle area center is bottom center */
+    var battleArea = Vector3f(10f,10f,10f) // Width, Height, Length
+    var battleCenter = Vec3.ZERO // Local
+    var battleRot = 70F
 
-    var battleDefenition = StadiumSingleBattle()
-
-    fun addPlayer(player: ServerPlayer) {
-        //battleDefenition.addPlayer(player)
-        //if (battleDefenition.readyForBattle()) battleDefenition.initializeBattle()
+    fun positionInBattleArea(targetPos: Vector3f) : Boolean {
+        val adjustedPos = targetPos.sub(blockPos.bottomCenter.toVector3f()).sub(battleCenter.toVector3f())
+        if (targetPos.y < 0f || targetPos.y >= battleArea.y) return false
+        adjustedPos.rotateY(-battleRot)
+        if (targetPos.x < -battleArea.x || targetPos.x > battleArea.x) return false
+        if (targetPos.z < -battleArea.z || targetPos.z > battleArea.z) return false
+        return true
     }
 
     /*

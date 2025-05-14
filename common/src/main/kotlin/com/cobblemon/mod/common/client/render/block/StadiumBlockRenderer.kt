@@ -8,24 +8,16 @@
 
 package com.cobblemon.mod.common.client.render.block
 
-import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.StadiumBlockEntity
-import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneModel
-import com.cobblemon.mod.common.client.render.models.blockbench.drone.DroneState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.block.HorizontalDirectionalBlock
-import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.util.Mth
+import org.joml.Vector3f
+import org.joml.Vector3i
 
 class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<StadiumBlockEntity> {
     val context = RenderContext().also {
@@ -45,7 +37,44 @@ class StadiumBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEnti
         packedLight: Int,
         packedOverlay: Int
     ) {
+        val vertexConsumer = bufferSource.getBuffer(RenderType.LINES)
+        val pose = poseStack.last()
 
+        val center = Vector3f(0.5f,0f,0.5f).add(blockEntity.battleCenter.toVector3f()) // 0,0,0 is corner of block, we make center be bottom center
+        val rotation = blockEntity.battleRot / (180f * Mth.PI)
+        val widthOffset = blockEntity.battleArea.x / 2f
+        val lengthOffset = blockEntity.battleArea.z / 2f
+        val height = blockEntity.battleArea.y
+
+        fun drawLine(point1: Vector3i, point2: Vector3i) {
+            val f = if (point1.x == 0) -widthOffset else widthOffset
+            val g = if (point1.y == 0) 0f else height
+            val h = if (point1.z == 0) -lengthOffset else lengthOffset
+            val i = if (point2.x == 0) -widthOffset else widthOffset
+            val j = if (point2.y == 0) 0f else height
+            val k = if (point2.z == 0) -lengthOffset else lengthOffset
+
+            val position1 = Vector3f(f, g, h).rotateY(rotation).add(center)
+            val position2 = Vector3f(i, j, k).rotateY(rotation).add(center)
+            val normal = Vector3f(position2).sub(position1).normalize()
+
+            vertexConsumer.addVertex(pose, position1).setColor(0.9f, 0.9f, 0.9f, 1f).setNormal(normal.x, normal.y, normal.z)
+            vertexConsumer.addVertex(pose, position2).setColor(0.9f, 0.9f, 0.9f, 1f).setNormal(normal.x, normal.y, normal.z)
+        }
+
+        drawLine(Vector3i(0,0,0), Vector3i(1,0,0))
+        drawLine(Vector3i(0,0,0), Vector3i(0,1,0))
+        drawLine(Vector3i(0,0,0), Vector3i(0,0,1))
+        drawLine(Vector3i(1,0,0), Vector3i(1,1,0))
+        drawLine(Vector3i(1,0,0), Vector3i(1,0,1))
+        drawLine(Vector3i(0,0,1), Vector3i(1,0,1))
+        drawLine(Vector3i(0,0,1), Vector3i(0,1,1))
+        drawLine(Vector3i(0,0,0), Vector3i(0,0,0))
+        drawLine(Vector3i(0,1,0), Vector3i(1,1,0))
+        drawLine(Vector3i(0,1,0), Vector3i(0,1,1))
+        drawLine(Vector3i(1,1,0), Vector3i(1,1,1))
+        drawLine(Vector3i(0,1,1), Vector3i(1,1,1))
+        drawLine(Vector3i(1,0,1), Vector3i(1,1,1))
     }
 
     /*

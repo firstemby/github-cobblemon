@@ -84,7 +84,6 @@ class StadiumBlock(properties: Properties): BaseEntityBlock(properties) {
         if (blockEntity !is StadiumBlockEntity) return InteractionResult.SUCCESS
 
         player.sendSystemMessage(text("Adding you to Battle").red())
-        blockEntity.addPlayer(player)
         return InteractionResult.SUCCESS
     }
 
