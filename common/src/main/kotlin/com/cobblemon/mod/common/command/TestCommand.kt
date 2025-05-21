@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -67,12 +68,12 @@ object TestCommand {
         try {
             //this.testCodecOutput(context)
             val player = context.source.entity as ServerPlayer
-            player.party().forEach { it.currentHealth = it.hp / 2 }
-            val npc = NPCEntity(player.level())
-            npc.setPos(player.x, player.y, player.z)
-            npc.npc = NPCClasses.getByName("standard")!!
-            npc.initialize(50)
-            player.level().addFreshEntity(npc)
+            //player.party().forEach { it.currentHealth = it.hp / 2 }
+            //val npc = NPCEntity(player.level())
+            //npc.setPos(player.x, player.y, player.z)
+            //npc.npc = NPCClasses.getByName("standard")!!
+            //npc.initialize(50)
+            //player.level().addFreshEntity(npc)
 //            val evolutionEntity = GenericBedrockEntity(world = player.level())
 //            evolutionEntity.apply {
 //                category = cobblemonResource("evolution")
@@ -126,6 +127,20 @@ object TestCommand {
 
 //            val player = context.source.entity as ServerPlayerEntity
 //            player.giveItemStack(PokemonItem.from(PokemonSpecies.random(), "alolan"))
+            val npcs = player.level().getEntities(player, player.boundingBox.inflate(20.0)) { it is NPCEntity }
+                .map { NPCBattleActor(it as NPCEntity, it.getPartyForChallenge(listOf(player))!!, 0) }
+                .sortedBy { player.distanceToSqr(it.entity) }
+
+            val playerTeam = player.party().toBattleTeam()
+            val playerActor = PlayerBattleActor(player.uuid, playerTeam)
+
+            BattleRegistry.startBattle(
+                battleFormat = BattleFormat.GEN_9_MULTI,
+                side1 = BattleSide(playerActor, npcs[0]),
+                side2 = BattleSide(npcs[1], npcs[2])
+            ).ifSuccessful {
+                it.battlePartyStores.add(player.party())
+            }
         } catch (e: Exception) {
             Cobblemon.LOGGER.error(e)
         }
