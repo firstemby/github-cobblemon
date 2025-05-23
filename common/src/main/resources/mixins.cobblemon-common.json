@@ -22,7 +22,6 @@
     "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
     "client.ClientRecipeBookMixin",
-    "client.SearchTreeMixin",
     "client.EntryListWidgetMixin",
     "client.GameRendererMixin",
     "client.HumanoidModelMixin",
@@ -33,11 +32,12 @@
     "client.ModelPartMixin",
     "client.MouseHandlerMixin",
     "client.PlayerRendererMixin",
-    "client.StringRenderOutputMixin",
     "client.RecipeBookCategoriesMixin",
     "client.RecipeBookComponentMixin",
     "client.RecipeBookTabButtonMixin",
     "client.RecipeCollectionMixin",
+    "client.SearchTreeMixin",
+    "client.StringRenderOutputMixin",
     "invoker.ClientPlayNetworkHandlerInvoker",
     "riding.JetMixin"
   ],
@@ -76,7 +76,9 @@
     "accessor.ChunkMapAccessor",
     "accessor.StatusEffectInstanceAccessor",
     "accessor.TrackedEntityAccessor",
+    "block.entity.SculkShriekerBlockEntityMixin",
     "entity.EntityMixin",
+    "entity.SpawnPlacementsMixin",
     "entity.TameableEntityMixin",
     "invoker.AdornRegisterInvoker",
     "invoker.BlocksInvoker",
@@ -86,6 +88,13 @@
     "invoker.PressurePlateBlockInvoker",
     "invoker.StairsBlockInvoker",
     "invoker.TrapdoorBlockInvoker",
-    "pokeball.ThrownEntityMixin"
+    "pokeball.ThrownEntityMixin",
+    "structure.StructureTemplateMixin",
+    "structure.structures.EndCityPieceMixin",
+    "structure.structures.OceanMonumentPieceMixin",
+    "structure.structures.OceanRuinPieceMixin",
+    "structure.structures.SwampHutPieceMixin",
+    "structure.structures.WoodlandMansionPieceMixin",
+    "worldgen.BeeHiveDecoratorMixin"
   ]
 }

@@ -73,6 +73,7 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
+import com.cobblemon.mod.common.config.CobblemonSpawnConfig
 import com.cobblemon.mod.common.config.LastChangedVersion
 import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.config.starter.StarterConfig
@@ -160,6 +161,7 @@ object Cobblemon {
     var isDedicatedServer = false
     val showdownThread = ShowdownThread()
     lateinit var config: CobblemonConfig
+    lateinit var spawnConfig: CobblemonSpawnConfig
     var spawningZoneGenerator: SpawningZoneGenerator = CobblemonSpawningZoneGenerator
     var areaSpawnablePositionResolver: AreaSpawnablePositionResolver = object : AreaSpawnablePositionResolver {}
     val bestSpawner = BestSpawner
@@ -466,11 +468,13 @@ object Cobblemon {
 
     fun loadConfig() {
         initializeConfig()
+        this.spawnConfig = CobblemonSpawnConfig("config/$MODID/blacklisted_mobs.json")
         bestSpawner.init()
     }
 
     fun reloadConfig() {
         initializeConfig()
+        spawnConfig.load()
         bestSpawner.reloadConfig()
     }
 

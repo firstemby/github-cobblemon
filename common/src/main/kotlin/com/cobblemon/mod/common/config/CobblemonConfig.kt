@@ -302,6 +302,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks")
     var despawnerMaxAgeTicks = 3600
 
+    @CobblemonConfigField(Category.World, lang = "blacklist_vanilla_mobs")
+    var blacklistVanillaMobs = false
+
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
         CobblemonConfig::class.memberProperties.forEach { property ->
