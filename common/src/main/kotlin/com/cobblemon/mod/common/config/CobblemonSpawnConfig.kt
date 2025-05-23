@@ -12,7 +12,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class CobblemonSpawnConfig(val configPath: String) {
+class CobblemonSpawnConfig(configPath: String) {
   private val file = File(configPath)
 
   private var blacklistedMobs: MutableList<String> = mutableListOf()
@@ -25,7 +25,10 @@ class CobblemonSpawnConfig(val configPath: String) {
   }
 
   fun load() {
-    if (!file.exists()) return
+    if (!file.exists()) {
+      blacklistedMobs = mutableListOf()
+      return
+    }
 
     val reader = FileReader(file)
     blacklistedMobs = GSON.fromJson(reader, blacklistedMobs::class.java)
