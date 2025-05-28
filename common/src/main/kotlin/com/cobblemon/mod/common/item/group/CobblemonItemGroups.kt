@@ -294,6 +294,9 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.HEARTY_GRAIN_BALE)
 
+        entries.accept(CobblemonItems.TATAMI_BLOCK)
+        entries.accept(CobblemonItems.TATAMI_MAT)
+
         entries.accept(CobblemonItems.TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.BLACK_TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.SKY_TUMBLESTONE_BLOCK)

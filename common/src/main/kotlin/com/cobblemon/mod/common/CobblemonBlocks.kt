@@ -534,6 +534,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     @JvmField
     val HEARTY_GRAIN_BALE = this.create("hearty_grain_bale", HeartyGrainBaleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instrument(NoteBlockInstrument.BANJO).strength(0.5F).sound(SoundType.GRASS)))
+    @JvmField
+    val TATAMI_BLOCK = this.create("tatami_block", TatamiBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).sound(SoundType.GRASS)))
+    @JvmField
+    val TATAMI_MAT = this.create("tatami_mat", TatamiMatBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).sound(SoundType.GRASS)))
 
     /**
      * Returns a map of all the blocks that can be stripped with an axe in the format of input - output.
