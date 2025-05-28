@@ -475,6 +475,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val INCENSE_SWEET = blockItem("incense_sweet", CobblemonBlocks.INCENSE_SWEET)
 
+    @JvmField
+    val MECHANICAL_FAN = blockItem("mechanical_fan", CobblemonBlocks.MECHANICAL_FAN)
+
 
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
