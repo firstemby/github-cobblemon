@@ -386,7 +386,13 @@ open class PokemonProperties {
         shiny?.let { pokemon.shiny = it }
         gender?.let { pokemon.gender = it }
         level?.let { pokemon.level = it }
-        friendship?.let { pokemon.setFriendship(it) }
+        friendship.also {
+            if (it != null) {
+                pokemon.setFriendship(it)
+            } else {
+                pokemon.setFriendship(pokemon.form.baseFriendship)
+            }
+        }
         pokeball?.let { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace())?.let { pokeball -> pokemon.caughtBall = pokeball } }
         nature?.let  { Natures.getNature(it.asIdentifierDefaultingNamespace())?.let { nature -> pokemon.nature = nature } }
         ability?.let { this.createAbility(it, pokemon.form)?.let(pokemon::updateAbility) }

@@ -176,9 +176,9 @@
     "colour": "RED",
     "flavours": {
         "SPICY": 30,
-        "DRY": 30,
+        "DRY": 10,
         "SWEET": 30,
-        "BITTER": 30,
+        "BITTER": 10,
         "SOUR": 30
     }
 }

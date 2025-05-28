@@ -278,6 +278,7 @@ object CobblemonNetwork {
 
         // Pokemon Update Packets
         list.add(PacketRegisterInfo(FriendshipUpdatePacket.ID, FriendshipUpdatePacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(FullnessUpdatePacket.ID, FullnessUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(MoveSetUpdatePacket.ID, MoveSetUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(NatureUpdatePacket.ID, NatureUpdatePacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(ShinyUpdatePacket.ID, ShinyUpdatePacket::decode, PokemonUpdatePacketHandler()))

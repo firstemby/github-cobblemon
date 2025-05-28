@@ -118,8 +118,7 @@
     "colour": "LIME",
     "flavours": {
         "SPICY": 10,
-        "SWEET": 10,
-        "BITTER": 25,
-        "SOUR": 15
+        "DRY": 10,
+        "BITTER": 10
     }
 }

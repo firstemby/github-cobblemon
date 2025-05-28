@@ -1,7 +1,7 @@
 # Task Configuration
 
 A task configuration is responsible for producing one or multiple tasks as part of a
-[BrainConfiguration](../README.md). Tasks are the smallest unit of behaviour in a brain and are executed
+[Behaviour Configuration](../README.md). Tasks are the smallest unit of behaviour in a brain and are executed
 as part of an activity.
 
 A task configuration can be a simple string that represents the type of task to create, or a JSON object

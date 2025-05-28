@@ -1,0 +1,8 @@
+{
+  "ingredient": "cobblemon:tasty_tail",
+  "colour": "brown",
+  "food": {
+    "hunger": 8,
+    "saturation": 12.8
+  }
+}

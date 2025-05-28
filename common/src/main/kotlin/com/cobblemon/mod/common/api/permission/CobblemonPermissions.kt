@@ -99,6 +99,8 @@ object CobblemonPermissions {
     @JvmStatic
     val PC = this.create("${COMMAND_PREFIX}pc", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
+    val PC_SEARCH = this.create("${COMMAND_PREFIX}pcsearch", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
     val POKEBOX = this.create("${COMMAND_PREFIX}pokebox", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic

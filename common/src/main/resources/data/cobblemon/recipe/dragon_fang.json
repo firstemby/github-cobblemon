@@ -4,14 +4,9 @@
         {
             "item": "cobblemon:razor_fang"
         },
-        [
-            {
-                "item": "cobblemon:dragon_gem"
-            },
-            {
-                "item": "minecraft:dragon_breath"
-            }
-        ]
+        {
+            "item": "cobblemon:dragon_gem"
+        }
     ],
     "result": {
         "id": "cobblemon:dragon_fang"

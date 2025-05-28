@@ -224,7 +224,7 @@
         },
         "seats": [],
         "behaviour": {
-          "key": "cobblemon:land/generic"
+          "key": "cobblemon:land/horse"
         }
       }
     }
@@ -266,7 +266,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
+        "key": "cobblemon:land/horse",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [

@@ -48,7 +48,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         override val returnItem = Items.AIR
         override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             return "revive 0.25"
         }
     }
@@ -77,7 +77,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
 
             pokemon.currentHealth = amount
-            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             if (!player.isCreative) {
                 stack.shrink(1)
             }

@@ -246,7 +246,9 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
     var gibberIndex = 0
     var timeElapsedSinceGibber = 0.0
 
-    override fun render(GuiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    fun renderInput() = gibber?.graduallyShowText != true || gibberDone
+
+    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val gibber = gibber
         if (gibber != null) {
             playGibberSpeak(
@@ -256,8 +258,10 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
             )
         }
         remainingSeconds -= delta / 20F
-        dialogueTimerWidget.ratio = if (remainingSeconds <= 0) -1F else remainingSeconds / dialogueDTO.dialogueInput.deadline
-        super.render(GuiGraphics, mouseX, mouseY, delta)
+        if (renderInput()) {
+            dialogueTimerWidget.ratio = if (remainingSeconds <= 0) -1F else remainingSeconds / dialogueDTO.dialogueInput.deadline
+        }
+        super.render(guiGraphics, mouseX, mouseY, delta)
         expressionsToRun.forEach { runtime.resolve(it) }
         expressionsToRun = emptyList()
     }

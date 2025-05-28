@@ -86,15 +86,14 @@ class CandlePokeCakeBlock(settings: Properties) : CakeBlock(settings) {
         )
     }
 
-    override fun codec(): MapCodec<out BaseEntityBlock?>? {
+    override fun codec(): MapCodec<out BaseEntityBlock?> {
         return simpleCodec(::CandlePokeCakeBlock)
     }
 
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {
+    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return CandlePokeCakeBlockEntity(pos, state)
     }
-
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(LIT, CANDLE_COLOR)
     }
@@ -107,7 +106,7 @@ class CandlePokeCakeBlock(settings: Properties) : CakeBlock(settings) {
         player: Player,
         hand: InteractionHand,
         hitResult: BlockHitResult
-    ): ItemInteractionResult? {
+    ): ItemInteractionResult {
         return if (!stack.`is`(Items.FLINT_AND_STEEL) && !stack.`is`(Items.FIRE_CHARGE)) {
             if (candleHit(hitResult) && stack.isEmpty && state.getValue(LIT) == true) {
                 extinguish(player, state, level, pos)
@@ -134,7 +133,7 @@ class CandlePokeCakeBlock(settings: Properties) : CakeBlock(settings) {
         pos: BlockPos,
         player: Player,
         hitResult: BlockHitResult
-    ): InteractionResult? {
+    ): InteractionResult {
         val oldCookingComponent = getFoodColourComponent(level, pos)
         val candle = getCandleByMapColorId(state.getValue(CANDLE_COLOR))
 
@@ -175,5 +174,5 @@ class CandlePokeCakeBlock(settings: Properties) : CakeBlock(settings) {
         level: BlockGetter,
         pos: BlockPos,
         context: CollisionContext
-    ): VoxelShape? = SHAPE
+    ): VoxelShape = SHAPE
 }

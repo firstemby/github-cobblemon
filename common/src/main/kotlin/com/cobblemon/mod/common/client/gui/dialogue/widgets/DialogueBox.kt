@@ -140,7 +140,7 @@ class DialogueBox(
             width = frameWidth,
             textureWidth = frameWidth + DialoguePortraitWidget.DIALOGUE_ARROW_WIDTH + SCROLL_BAR_WIDTH + SCROLL_TRACK_WIDTH
         )
-        TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true) dialogueScreen.gibberIndex else -1) {
+        TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true && !dialogueScreen.gibberDone) dialogueScreen.gibberIndex else -1) {
             super.renderWidget(context, mouseX, mouseY, partialTicks)
         }
     }

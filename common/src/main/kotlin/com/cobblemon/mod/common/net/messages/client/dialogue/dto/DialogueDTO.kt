@@ -136,7 +136,7 @@ class DialogueDTO : Encodable, Decodable {
                         key to DialogueSpeakerDTO(
                             name = name,
                             face = ArtificialDialogueFaceProvider(modelType, identifier, aspects, isLeftSide),
-                            gibber = DialogueGibberDTO.decode(buffer)
+                            gibber = buffer.readNullable { DialogueGibberDTO.decode(buffer) }
                         )
                     }
                     "player" -> {
@@ -156,7 +156,7 @@ class DialogueDTO : Encodable, Decodable {
                         key to DialogueSpeakerDTO(
                             name = name,
                             face = null,
-                            gibber = DialogueGibberDTO.decode(buffer)
+                            gibber = buffer.readNullable { DialogueGibberDTO.decode(buffer) }
                         )
                     }
                 }

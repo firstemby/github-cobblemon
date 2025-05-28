@@ -12,6 +12,7 @@ import com.mojang.serialization.Codec
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.util.FastColor
 import net.minecraft.world.item.DyeColor
 
 /**
@@ -32,6 +33,10 @@ class FoodColourComponent(
         return other is FoodColourComponent &&
                 colours.size == other.colours.size &&
                 colours.mapIndexed { index, value -> value == other.colours[index] }.all { it }
+    }
+
+    fun getColoursAsARGB(): List<Int> {
+        return colours.map { dye -> dye.textureDiffuseColor }
     }
 
     override fun hashCode() = colours.hashCode()

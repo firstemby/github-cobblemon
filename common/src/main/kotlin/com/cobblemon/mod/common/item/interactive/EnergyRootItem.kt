@@ -22,8 +22,6 @@ import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.block.EnergyRootBlock
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.genericRuntime
-import com.cobblemon.mod.common.util.resolveInt
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
@@ -42,7 +40,7 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
         override val returnItem = Items.AIR
         override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("root", runtime))
             return "potion ${getHealAmount()}"
         }
     }
@@ -58,7 +56,7 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
                 amount = event.amount
             }
             pokemon.currentHealth += amount
-            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("root", runtime))
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
             if (!player.isCreative)  {
                 stack.shrink(1)

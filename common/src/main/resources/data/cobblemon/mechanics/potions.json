@@ -1,5 +1,5 @@
 {
-  "potionRestoreAmount": "60",
-  "superPotionRestoreAmount": "100",
-  "hyperPotionRestoreAmount": "150"
+  "potionRestoreAmount": "20",
+  "superPotionRestoreAmount": "60",
+  "hyperPotionRestoreAmount": "120"
 }

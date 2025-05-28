@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BagItemActionResponse
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -105,7 +106,13 @@ interface PokemonSelectingItem {
         }
     }
 
-    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean
+    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+        if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
+            return !pokemon.isFull()
+        }
+        return true
+    }
+
     fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
 
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack> {
@@ -135,6 +142,7 @@ interface PokemonSelectingItem {
                 }
             }
         )
+
 
         return InteractionResultHolder.success(stack)
     }

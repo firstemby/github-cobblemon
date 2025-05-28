@@ -61,3 +61,22 @@ fun getColourMixFromFlavours(dominantFlavours: List<Flavour>, forBubbles: Boolea
         blueSum / colors.size
     )
 }
+
+fun getColourMixFromColors(colors: List<Int>): Int? {
+    if (colors.isEmpty()) return null
+
+    val (alphaSum, redSum, greenSum, blueSum) = colors.fold(IntArray(4)) { acc, color ->
+        acc[0] += FastColor.ARGB32.alpha(color)
+        acc[1] += FastColor.ARGB32.red(color)
+        acc[2] += FastColor.ARGB32.green(color)
+        acc[3] += FastColor.ARGB32.blue(color)
+        acc
+    }
+
+    return FastColor.ARGB32.color(
+        alphaSum / colors.size,
+        redSum / colors.size,
+        greenSum / colors.size,
+        blueSum / colors.size
+    )
+}

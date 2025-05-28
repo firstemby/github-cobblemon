@@ -27,7 +27,9 @@ abstract class EVIncreaseItem(
     val evIncreaseAmount: Int,
 ) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
+            super.canUseOnPokemon(stack, pokemon)
+
     abstract val sound: SoundEvent
 
     override fun applyToPokemon(

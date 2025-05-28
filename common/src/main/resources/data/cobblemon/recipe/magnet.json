@@ -1,7 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "III",
+        "IGI",
         "I I",
         "R B"
     ],
@@ -14,7 +14,10 @@
         },
         "R": {
             "tag": "c:dusts/redstone"
-        }
+        },
+		"G": {
+			"item": "cobblemon:electric_gem"
+		}
     },
     "result": {
         "id": "cobblemon:magnet"

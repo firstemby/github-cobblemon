@@ -129,7 +129,7 @@
     "boneMealChance": 0.4,
     "colour": "GREEN",
     "flavours": {
-        "BITTER": 30,
+        "BITTER": 20,
         "SOUR": 10
     }
 }

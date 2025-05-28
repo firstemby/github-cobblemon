@@ -1,16 +1,33 @@
 {
     "type": "cobblemon:cooking_pot_shapeless",
+    "group": "vitamins",
     "category": "misc",
     "ingredients": [
         {
             "item": "cobblemon:medicinal_brew"
         },
-        {
-            "tag": "cobblemon:zinc_ingredients"
-        },
-        {
-            "tag": "cobblemon:zinc_ingredients"
-        },
+        [
+            {
+                "item": "minecraft:cod"
+            },
+            {
+                "item": "minecraft:salmon"
+            },
+            {
+                "item": "minecraft:tropical_fish"
+            }
+        ],
+        [
+            {
+                "item": "minecraft:cod"
+            },
+            {
+                "item": "minecraft:salmon"
+            },
+            {
+                "item": "minecraft:tropical_fish"
+            }
+        ],
         {
             "item": "cobblemon:grepa_berry"
         },

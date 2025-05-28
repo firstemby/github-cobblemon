@@ -323,6 +323,18 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
     var enableDebugKeys = false
 
+    @CobblemonConfigField(Category.Spawning, lang = "despawner_near_distance")
+    var despawnerNearDistance = 32f
+    
+    @CobblemonConfigField(Category.Spawning, lang = "despawner_far_distance")
+    var despawnerFarDistance = 96f
+    
+    @CobblemonConfigField(Category.Spawning, lang = "despawner_min_age_ticks")
+    var despawnerMinAgeTicks = 600
+    
+    @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks")
+    var despawnerMaxAgeTicks = 3600
+
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
         CobblemonConfig::class.memberProperties.forEach { property ->

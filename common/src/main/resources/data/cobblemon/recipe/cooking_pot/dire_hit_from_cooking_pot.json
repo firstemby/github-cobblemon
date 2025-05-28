@@ -1,5 +1,6 @@
 {
     "type": "cobblemon:cooking_pot_shapeless",
+    "group": "x_items",
     "category": "misc",
     "ingredients": [
         {
@@ -9,14 +10,15 @@
             "item": "cobblemon:pep_up_flower"
         },
         {
-            "item": "cobblemon:tamato_berry"
+            "item": "minecraft:bone_meal"
         },
         {
             "item": "cobblemon:tamato_berry"
         }
     ],
     "result": {
-        "id": "cobblemon:dire_hit"
+        "id": "cobblemon:dire_hit",
+        "count": 4
     },
     "seasoningProcessors": []
 }

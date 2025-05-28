@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_allium": {
+    "has_petals": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:allium"
+              "minecraft:pink_petals"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_allium",
+      "has_petals",
       "has_the_recipe"
     ]
   ],

@@ -3,7 +3,7 @@
     "category": "foods",
     "ingredients": [
         {
-            "item": "cobblemon:roasted_leek"
+            "item": "cobblemon:medicinal_leek"
         },
         {
             "item": "minecraft:baked_potato"

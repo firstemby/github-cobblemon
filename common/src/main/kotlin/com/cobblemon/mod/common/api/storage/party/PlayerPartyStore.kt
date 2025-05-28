@@ -151,6 +151,11 @@ open class PlayerPartyStore(
                         removeList.add(it)
                 }
                 removeList.forEach { pokemon.evolutionProxy.server().remove(it) }
+
+                // Metabolism for Fullness
+                if (pokemon.currentFullness > 0) {
+                    pokemon.tickMetabolism()
+                }
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

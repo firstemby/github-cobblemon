@@ -25,19 +25,25 @@ import net.minecraft.world.item.Item
 data class Seasoning(
     val ingredient: RegistryLikeCondition<Item>,
     @SerializedName("flavours", alternate = ["flavors"])
-    val flavours: Map<Flavour, Int>,
+    val flavours: Map<Flavour, Int>? = null,
     @SerializedName("colour", alternate = ["color"])
     val colour: DyeColor,
     @SerializedName("baitEffects")
-    val baitEffects: List<SpawnBait.Effect> = emptyList()
+    val baitEffects: List<SpawnBait.Effect>? = null,
+    @SerializedName("food")
+    val food: Food? = null,
+    @SerializedName("mobEffects")
+    val mobEffects: List<SerializableMobEffectInstance>? = null
 ) {
     companion object {
         val CODEC: Codec<Seasoning> = RecordCodecBuilder.create { builder ->
             builder.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("ingredient").forGetter { it.ingredient },
-                Codec.unboundedMap(Flavour.CODEC, Codec.INT).fieldOf("flavours").forGetter { it.flavours }, // Use map codec
+                Codec.unboundedMap(Flavour.CODEC, Codec.INT).optionalFieldOf("flavours", null).forGetter { it.flavours },
                 DyeColor.CODEC.fieldOf("colour").forGetter { it.colour },
-                SpawnBait.Effect.CODEC.listOf().optionalFieldOf("baitEffects", emptyList()).forGetter { it.baitEffects }
+                SpawnBait.Effect.CODEC.listOf().optionalFieldOf("baitEffects", null).forGetter { it.baitEffects },
+                Food.CODEC.optionalFieldOf("food", null).forGetter { it.food },
+                SerializableMobEffectInstance.CODEC.listOf().optionalFieldOf("mobEffects", null).forGetter { it.mobEffects }
             ).apply(builder, ::Seasoning)
         }
 
@@ -45,9 +51,11 @@ data class Seasoning(
 
         val BLANK_SEASONING = Seasoning(
             ingredient = RegistryLikeIdentifierCondition<Item>(cobblemonResource("blank")),
-            flavours = Flavour.entries.associate { it to 0 },
+            flavours = Flavour.entries.associateWith { 0 },
             colour = DyeColor.WHITE,
-            baitEffects = emptyList()
+            baitEffects = emptyList(),
+            food = Food(),
+            mobEffects = emptyList()
         )
     }
 }

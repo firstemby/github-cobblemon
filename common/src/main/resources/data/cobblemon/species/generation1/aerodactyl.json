@@ -97,7 +97,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic"
+        "key": "cobblemon:land/horse"
       },
       "alternateBehaviour": {
         "key": "cobblemon:air/bird"

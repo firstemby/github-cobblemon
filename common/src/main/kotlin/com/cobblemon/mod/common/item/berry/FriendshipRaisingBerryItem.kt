@@ -35,12 +35,19 @@ import net.minecraft.world.level.Level
  */
 class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(block), PokemonSelectingItem {
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) > 0 || pokemon.friendship < Cobblemon.config.maxPokemonFriendship
+
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = (pokemon.evs.getOrDefault(stat) > 0 || pokemon.friendship < Cobblemon.config.maxPokemonFriendship)
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack> {
+        if (!canUseOnPokemon(stack, pokemon)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
         val friendshipRaiseAmount = genericRuntime.resolveInt(CobblemonMechanics.berries.friendshipRaiseAmount, pokemon)
 
         val increasedFriendship = pokemon.incrementFriendship(friendshipRaiseAmount)
@@ -49,7 +56,8 @@ class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(
         val decreasedEVs = pokemon.evs.add(stat, -evLowerAmount, ItemEvSource(player, stack, pokemon)) != 0
 
         return if (increasedFriendship || decreasedEVs) {
-            pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+            pokemon.feedPokemon(1)
+
             if (!player.isCreative) {
                 stack.shrink(1)
             }

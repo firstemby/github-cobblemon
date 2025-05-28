@@ -21,7 +21,7 @@ fun generateAdditionalFlavorTooltip(flavours: Map<Flavour, Int>): MutableList<Co
     resultLines.add(flavorSubHeader)
 
     val combinedFlavorsLine = Component.literal("")
-    flavours.forEach { (flavour, value) ->
+    flavours.filter { it.key != Flavour.MILD }.forEach { (flavour, value) ->
         var flavourText = lang("seasoning_flavor.${flavour.name.lowercase()}").withStyle(flavour.chatFormatting)
 
         if (combinedFlavorsLine.string.isNotEmpty()) {

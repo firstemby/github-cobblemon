@@ -38,6 +38,8 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
     }
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
@@ -50,9 +52,11 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack>? {
-        if (pokemon.isFullHealth()) {
+        if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
         }
+        pokemon.feedPokemon(1)
+
         var amount = Integer.min(pokemon.currentHealth + 20, pokemon.maxHealth)
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
             amount = event.amount
@@ -72,7 +76,7 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+        battlePokemon.originalPokemon.feedPokemon(1)
         if (!player.isCreative)  {
             val woodenBowlItemStack = ItemStack(Items.BOWL)
             if (!player.inventory.add(woodenBowlItemStack)) {

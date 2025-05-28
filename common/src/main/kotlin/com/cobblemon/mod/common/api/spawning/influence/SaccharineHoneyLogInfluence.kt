@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.spawning.influence
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
@@ -38,13 +37,11 @@ class SaccharineHoneyLogInfluence(val pos: BlockPos? = null) : SpawningInfluence
             if (Math.random() <= chanceForHA) {
                 FishingSpawnCause.alterHAAttempt(entity)
             }
-            PokemonProperties.parse("shiny").apply(entity)
 
             if (!used) {
                 val logPos = pos
                 val level = action.spawnablePosition.world.level
                 if (logPos != null) {
-                    Cobblemon.LOGGER.info("Converting honeyed log at $logPos to saccharine log")
                     val blockState = level.getBlockState(logPos)
                     if (blockState.block == CobblemonBlocks.SACCHARINE_HONEY_LOG) {
                         val axis = blockState.getValue(RotatedPillarBlock.AXIS)
@@ -55,9 +52,5 @@ class SaccharineHoneyLogInfluence(val pos: BlockPos? = null) : SpawningInfluence
                 used = true
             }
         }
-    }
-
-    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {
-        return super.affectWeight(detail, spawnablePosition, weight)
     }
 }

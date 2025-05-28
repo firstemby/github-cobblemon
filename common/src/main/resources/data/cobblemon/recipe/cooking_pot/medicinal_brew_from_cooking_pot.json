@@ -3,7 +3,7 @@
     "category": "medicines",
     "ingredients": [
         {
-            "tag": "minecraft:potion"
+            "item": "minecraft:glass_bottle"
         },
         {
             "item": "cobblemon:medicinal_leek"

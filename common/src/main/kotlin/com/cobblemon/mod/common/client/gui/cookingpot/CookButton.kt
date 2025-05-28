@@ -16,33 +16,41 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 
 class CookButton(
     pX: Int, pY: Int,
     var selected: Boolean = false,
     onPress: OnPress
-): Button(pX, pY, WIDTH.toInt(), HEIGHT.toInt(), Component.literal("Cook"), onPress, DEFAULT_NARRATION) {
+): Button(pX, pY, SIZE.toInt(), SIZE.toInt(), Component.literal("Cook"), onPress, DEFAULT_NARRATION) {
 
     companion object {
-        private const val WIDTH = 20F
-        private const val HEIGHT = 19F
+        private const val SIZE = 20F
 
-        private val buttonResource = cobblemonResource("textures/gui/campfirepot/button_cook.png")
-        private val buttonSelectedResource = cobblemonResource("textures/gui/campfirepot/button_cook_selected.png")
+        private val buttonResource = cobblemonResource("textures/gui/campfirepot/button.png")
+        private val buttonIconResource = cobblemonResource("textures/item/campfire_pots/campfire_pot_red.png")
+        private val buttonIconOpenResource = cobblemonResource("textures/item/campfire_pots/campfire_pot_red_open.png")
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         blitk(
             matrixStack = context.pose(),
-            texture = if (selected) buttonSelectedResource else buttonResource,
+            texture = buttonResource,
             x = x,
             y = y,
-            width = WIDTH,
-            height = HEIGHT,
-            vOffset = if (isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) HEIGHT else 0,
-            textureHeight = HEIGHT * 2
+            width = SIZE,
+            height = SIZE,
+            vOffset = if (isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) SIZE else 0,
+            textureHeight = SIZE * 2
+        )
+
+        blitk(
+            matrixStack = context.pose(),
+            texture = if (selected) buttonIconResource else buttonIconOpenResource,
+            x = x + 2,
+            y = y + 2,
+            width = 16,
+            height = 16
         )
     }
 

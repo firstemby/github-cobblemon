@@ -42,7 +42,7 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
         override val returnItem = Items.AIR
         override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
             return "potion ${CobblemonMechanics.remedies.getHealingAmount(remedyStrength, runtime, 20)}"
         }
     }
@@ -60,7 +60,7 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
             }
             pokemon.currentHealth += amount
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
-            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
             if (!player.isCreative) {
                 stack.shrink(1)
             }

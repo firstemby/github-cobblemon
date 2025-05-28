@@ -8,9 +8,7 @@
 
 package com.cobblemon.mod.common.api.snowstorm
 
-import com.cobblemon.mod.common.api.data.ArbitrarilyMappedSerializableCompanion
 import com.cobblemon.mod.common.client.render.MatrixWrapper
-import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -34,7 +32,11 @@ class EmitterSpace(
     }
 
     fun initializeEmitterMatrix(rootMatrix: MatrixWrapper, locatorMatrix: MatrixWrapper): MatrixWrapper {
-        val rootRotation = rootMatrix.matrix.getRotation(AxisAngle4f())
+        var rootRotation = rootMatrix.matrix.getRotation(AxisAngle4f())
+        //When the locator hasn't yet been initialized, we start getting NaNs, so default to no rotation instead
+        if (rootRotation.x.isNaN() || rootRotation.y.isNaN() || rootRotation.z.isNaN() || rootRotation.angle.isNaN()) {
+            rootRotation = AxisAngle4f()
+        }
         val scale = Vector3f()
 
         if (scaling == ScalingMode.ENTITY) {

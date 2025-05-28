@@ -515,6 +515,26 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val HEARTY_GRAINS = this.create("hearty_grains", HeartyGrainsBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.VIVICHOKE_SOUNDS)))
 
+    @JvmField
+    val POTTED_RED_APRICORN_SAPLING = this.create("potted_red_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(RED_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_YELLOW_APRICORN_SAPLING = this.create("potted_yellow_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(YELLOW_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_GREEN_APRICORN_SAPLING = this.create("potted_green_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(GREEN_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_BLUE_APRICORN_SAPLING = this.create("potted_blue_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(BLUE_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_PINK_APRICORN_SAPLING = this.create("potted_pink_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(PINK_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_BLACK_APRICORN_SAPLING = this.create("potted_black_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(BLACK_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_WHITE_APRICORN_SAPLING = this.create("potted_white_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(WHITE_APRICORN_SAPLING))
+    @JvmField
+    val POTTED_SACCHARINE_SAPLING = this.create("potted_saccharine_sapling", BlocksInvoker.createFlowerPotBlock(SACCHARINE_SAPLING))
+
+    @JvmField
+    val HEARTY_GRAIN_BALE = this.create("hearty_grain_bale", HeartyGrainBaleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instrument(NoteBlockInstrument.BANJO).strength(0.5F).sound(SoundType.GRASS)))
+
     /**
      * Returns a map of all the blocks that can be stripped with an axe in the format of input - output.
      *

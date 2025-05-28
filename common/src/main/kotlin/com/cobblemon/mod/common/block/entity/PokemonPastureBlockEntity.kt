@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.pokemon.breeding.EggPatterns
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.NestBlock
+import com.cobblemon.mod.common.api.text.textClickHandlers
 import com.cobblemon.mod.common.block.PastureBlock
 import com.cobblemon.mod.common.breeding.BreedingLogicManager
 import com.cobblemon.mod.common.breeding.SimpleBreedingLogic
@@ -111,6 +112,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             if (blockEntity.ticksUntilCheck <= 0) {
                 blockEntity.checkPokemon()
                 //blockEntity.tryBreed()
+            }
+
+            // for every tethered pokemon tick metabolism if fullness is above 0
+            val tetheredPokemonList = blockEntity.tetheredPokemon.filter { it.getPokemon() != null }
+            for (tetheredPokemon in tetheredPokemonList) {
+                val pokemon = tetheredPokemon.getPokemon()!!
+                if (pokemon.currentFullness > 0) {
+                    pokemon.tickMetabolism()
+                }
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }

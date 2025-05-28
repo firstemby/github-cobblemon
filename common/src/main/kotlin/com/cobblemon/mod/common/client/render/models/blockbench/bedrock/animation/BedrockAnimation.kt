@@ -139,7 +139,9 @@ class BedrockSoundKeyframe(
         val soundEvent = SoundEvent.createVariableRangeEvent(sound) // Means we don't need to setup a sound registry entry for every single thing
         if (soundEvent != null) {
             if (entity != null) {
-                entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                if (!entity.isSilent) {
+                    entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                }
             } else if (state is EggState) {
                 val pos = state.renderingBlockPos
 

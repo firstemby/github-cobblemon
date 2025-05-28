@@ -69,6 +69,20 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
 
 
 
+    val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()
+            .persistent(IngredientComponent.CODEC)
+            .networkSynchronized(IngredientComponent.PACKET_CODEC)
+            .build())
+
+    val FOOD: DataComponentType<FoodComponent> = create("food", DataComponentType.builder<FoodComponent>()
+            .persistent(FoodComponent.CODEC)
+            .networkSynchronized(FoodComponent.PACKET_CODEC)
+            .build())
+
+    val MOB_EFFECTS: DataComponentType<MobEffectsComponent> = create("mob_effects", DataComponentType.builder<MobEffectsComponent>()
+        .persistent(MobEffectsComponent.CODEC)
+        .networkSynchronized(MobEffectsComponent.PACKET_CODEC)
+        .build())
 
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
@@ -77,6 +91,9 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait_effects"), BAIT_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:flavour"), FLAVOUR)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food_colour"), FOOD_COLOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:egg_data"), EGG_DATA)
     }
 

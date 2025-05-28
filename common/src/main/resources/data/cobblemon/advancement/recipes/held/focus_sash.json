@@ -1,7 +1,7 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_powder": {
+    "has_blaze_powder": {
       "conditions": {
         "items": [
           {
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_powder",
+      "has_blaze_powder",
       "has_the_recipe"
     ]
   ],

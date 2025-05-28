@@ -48,20 +48,26 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
     }
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFainted() && !pokemon.isFullHealth()
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack>? {
-        if (pokemon.isFullHealth() || pokemon.isFainted()) {
+        if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
         }
+
+        // count these berries as multiple feedings due to the amount they heal
+        pokemon.feedPokemon(5)
+
         var amount = Integer.min(pokemon.currentHealth + (genericRuntime.resolveFloat(portion(), pokemon) * pokemon.maxHealth).toInt(), pokemon.maxHealth)
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
             amount = event.amount
         }
         pokemon.currentHealth = amount
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+
         if (!player.isCreative) {
             stack.shrink(1)
         }
@@ -70,7 +76,7 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+        battlePokemon.originalPokemon.feedPokemon(5)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

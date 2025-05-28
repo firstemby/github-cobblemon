@@ -1,10 +1,24 @@
 {
-    "type": "cobblemon:cooking_pot_shapeless",
-    "category": "baits",
-    "ingredients": [
-        {
+    "type": "cobblemon:cooking_pot",
+    "category": "complex_dishes",
+    "key": {
+        "M": {
+            "item": "minecraft:milk_bucket"
+        },
+        "H": {
             "item": "minecraft:honey_bottle"
+        },
+        "V": {
+            "item": "cobblemon:vivichoke"
+        },
+        "G": {
+            "item": "cobblemon:hearty_grains"
         }
+    },
+    "pattern": [
+        "MMM",
+        "HVH",
+        "GGG"
     ],
     "result": {
         "id": "cobblemon:lure_cake"

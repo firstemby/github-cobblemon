@@ -166,6 +166,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.entity.EntityTypeTest
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
@@ -523,12 +524,10 @@ open class PokemonEntity(
         yHeadRotO = Mth.wrapDegrees(yHeadRotO)
         /* I'm sure it's not even us but something altering the logic of the loops in LivingEntity */
 
+        super.tick()
+
         isPokemonFlying = flyDist - flyDistO > 0.005F
         isPokemonWalking = walkDist - walkDistO > 0.005F
-
-        entityData.get(MOVING)
-
-        super.tick()
 
         if (passengers.isNotEmpty()) {
             ridingAnimationData.update(this)
@@ -799,7 +798,10 @@ open class PokemonEntity(
                 pokemon = this.createSidedPokemon()
                 health = 0F
             }
-        } else {
+        } else if(pokemon.storeCoordinates.get() == null) {
+            // when the vanilla /data merge command is used, it will also run through this load method
+            // and if we are not careful here, the pokemon instance will get rebuilt from scratch
+            // this will fuck with storages, as they are tied to these very pokemon instances and their observables
             val ops = registryAccess().createSerializationContext(NbtOps.INSTANCE)
             pokemon = try {
                 this.sidedCodec().decode(ops, nbt.getCompound(DataKeys.POKEMON)).orThrow.first
@@ -2101,6 +2103,13 @@ open class PokemonEntity(
         return ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
             behaviour.velocity(settings, state, this, controller, movementInput)
         }
+    }
+
+    override fun maxUpStep(): Float {
+        val upStep = ifRidingAvailableSupply(fallback = null) { behaviour, settings, state ->
+            behaviour.maxUpStep(settings, state, this)
+        }
+        return upStep ?: super.maxUpStep()
     }
 
     override fun getRiddenSpeed(controller: Player): Float {

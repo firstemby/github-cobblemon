@@ -20,7 +20,7 @@
     "evolve_gholdengo_netherite": {
       "trigger": "cobblemon:aspects_collected",
       "conditions": {
-        "pokemon": "cobblemon:gholdengo",
+        "species": "cobblemon:gholdengo",
         "aspects": [
           "netherite-coating-full"
         ]

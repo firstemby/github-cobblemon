@@ -1,0 +1,27 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "complex_dishes",
+    "ingredients": [
+        {
+            "item": "minecraft:bowl"
+        },
+        {
+            "item": "minecraft:bowl"
+        },
+        {
+            "item": "minecraft:bowl"
+        },
+        {
+            "item": "minecraft:water_bucket"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:sinister_tea",
+        "count": 3
+    },
+    "seasoningProcessors": [
+        "ingredient",
+        "food_colour",
+        "mob_effects"
+    ]
+}

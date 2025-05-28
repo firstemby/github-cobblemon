@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " WS",
-        "SWW",
+        "SGW",
         "WS "
     ],
     "key": {
@@ -11,6 +11,9 @@
         },
         "S": {
             "tag": "c:strings"
+        },
+        "G": {
+            "item": "cobblemon:normal_gem"
         }
     },
     "result": {

@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:love_sweet"
+        "recipe": "cobblemon:cooking_pot/love_sweet_from_cooking_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:love_sweet"
+      "cobblemon:cooking_pot/love_sweet_from_cooking_pot"
     ]
   }
 }

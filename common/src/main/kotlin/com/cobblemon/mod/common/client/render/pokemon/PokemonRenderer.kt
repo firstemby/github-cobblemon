@@ -144,7 +144,7 @@ class PokemonRenderer(
 
 
         if (entity.passengers.isNotEmpty()) {
-            renderRiding(entity, partialTicks, poseMatrix, buffer, packedLight)
+            renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         }
         else {
             super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
@@ -173,6 +173,7 @@ class PokemonRenderer(
 
     fun renderRiding(
         entity: PokemonEntity,
+        entityYaw: Float,
         partialTicks: Float,
         poseMatrix: PoseStack,
         buffer: MultiBufferSource,
@@ -200,7 +201,7 @@ class PokemonRenderer(
             matrix.mul(transformationMatrix)
         }
 
-        super.render(entity, 0f, partialTicks, poseMatrix, buffer, packedLight)
+        super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         poseMatrix.popPose()
     }
 

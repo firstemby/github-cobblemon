@@ -52,7 +52,7 @@
   },
   "riding": {
     "behaviour": {
-      "key": "cobblemon:swim/generic"
+      "key": "cobblemon:liquid/boat"
     },
     "seats": [
       {

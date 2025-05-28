@@ -132,10 +132,8 @@
     "boneMealChance": 0.32,
     "colour": "RED",
     "flavours": {
-        "SPICY": 15,
-        "DRY": 15,
-        "SWEET": 15,
-        "BITTER": 15,
-        "SOUR": 15
+        "SPICY": 10,
+        "SWEET": 10,
+        "BITTER": 10
     }
 }

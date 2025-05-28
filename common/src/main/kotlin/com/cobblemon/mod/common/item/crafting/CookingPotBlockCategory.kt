@@ -23,7 +23,7 @@ enum class CookingPotBookCategory(
 ) : StringRepresentable {
     FOODS("foods", 0),
     MEDICINES("medicines", 1),
-    BAITS("baits", 2),
+    COMPLEX_DISHES("complex_dishes", 2),
     MISC("misc", 3);
 
     override fun getSerializedName() = categoryName

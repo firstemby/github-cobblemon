@@ -3,7 +3,7 @@
     "category": "medicines",
     "ingredients": [
         {
-            "item": "cobblemon:medicinal_brew"
+            "item": "minecraft:glass_bottle"
         },
         {
             "item": "cobblemon:cheri_berry"

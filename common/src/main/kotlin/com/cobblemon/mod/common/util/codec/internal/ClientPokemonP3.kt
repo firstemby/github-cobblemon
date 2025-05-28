@@ -32,7 +32,8 @@ internal data class ClientPokemonP3(
     val marks: Set<ResourceLocation>,
     val potentialMarks: Set<ResourceLocation>,
     val markings: List<Int>,
-    val rideBoosts: Map<String, Float>
+    val rideBoosts: Map<String, Float>,
+    val currentFullness: Int
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -49,6 +50,7 @@ internal data class ClientPokemonP3(
         other.potentialMarks += this.potentialMarks.map { Marks.getByIdentifier(it) }.filterNotNull().toMutableSet()
         other.markings = this.markings
         this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
+        other.currentFullness = this.currentFullness
         return other
     }
 
@@ -68,7 +70,8 @@ internal data class ClientPokemonP3(
                 Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::marks),
                 Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_POTENTIAL_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::potentialMarks),
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
-                Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts)
+                Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
+                Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness)
             ).apply(instance, ::ClientPokemonP3)
         }
 
@@ -83,7 +86,8 @@ internal data class ClientPokemonP3(
             pokemon.marks.map { it.identifier }.toSet(),
             pokemon.potentialMarks.map { it.identifier }.toSet(),
             pokemon.markings,
-            pokemon.getRideBoosts().mapKeys { it.key.name }
+            pokemon.getRideBoosts().mapKeys { it.key.name },
+            pokemon.currentFullness
         )
     }
 }

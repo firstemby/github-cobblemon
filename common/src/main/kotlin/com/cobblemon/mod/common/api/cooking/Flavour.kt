@@ -23,7 +23,8 @@ enum class Flavour(val colour: Int, val chatFormatting: ChatFormatting): StringR
     DRY(0xFF0000, ChatFormatting.DARK_AQUA),
     SWEET(0x0000FF, ChatFormatting.LIGHT_PURPLE),
     BITTER(0xFFFF00, ChatFormatting.GREEN),
-    SOUR(0xFF00FF, ChatFormatting.YELLOW);
+    SOUR(0xFF00FF, ChatFormatting.YELLOW),
+    MILD(0xFF00FF, ChatFormatting.DARK_PURPLE);
 
     override fun getSerializedName() = name
     companion object {

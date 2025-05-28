@@ -75,7 +75,7 @@ class LocatorAccess(
 
         if (isRoot && null!=entity) {
             matrixStack.pushPose()
-            matrixStack.scale(-1F, -1F, 1F)
+            matrixStack.scale(1F, -1F, 1F)
             state.getOrPut("root") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
             matrixStack.popPose()
 

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.callback.MoveSelectCallbacks
 import com.cobblemon.mod.common.api.callback.PartyMoveSelectCallbacks
 import com.cobblemon.mod.common.api.moves.Move
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BagItemActionResponse
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -92,7 +93,13 @@ interface PokemonAndMoveSelectingItem {
         }
     }
 
-    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean
+    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+        if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
+            return !pokemon.isFull()
+        }
+        return true
+    }
+
     fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
     fun canUseOnMove(stack: ItemStack, pokemon: Pokemon, move: Move): Boolean = canUseOnMove(stack, move)
     fun canUseOnMove(stack: ItemStack, move: Move): Boolean

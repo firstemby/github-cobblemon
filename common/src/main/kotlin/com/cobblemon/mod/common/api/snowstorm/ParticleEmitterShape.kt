@@ -14,11 +14,16 @@ import com.bedrockk.molang.ast.NumberExpression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.codec.CodecMapped
 import com.cobblemon.mod.common.api.data.ArbitrarilyMappedSerializableCompanion
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.codec.EXPRESSION_CODEC
+import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.math.convertSphericalToCartesian
 import com.cobblemon.mod.common.util.math.getRotationMatrix
 import com.cobblemon.mod.common.util.math.times
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveVec3d
+import com.cobblemon.mod.common.util.writeString
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.DynamicOps
@@ -27,10 +32,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
-import net.minecraft.world.phys.Vec3
 
 interface ParticleEmitterShape : CodecMapped {
     companion object : ArbitrarilyMappedSerializableCompanion<ParticleEmitterShape, ParticleEmitterShapeType>(
@@ -261,9 +266,9 @@ class BoxParticleEmitterShape(
             }
         } else {
             Vec3(
-                Random.nextDouble(sizes.x) - sizes.x / 2,
-                Random.nextDouble(sizes.y) - sizes.y / 2,
-                Random.nextDouble(sizes.z) - sizes.z / 2
+                Random.nextDouble(sizes.x) - sizes.x / 2.0,
+                Random.nextDouble(sizes.y) - sizes.y / 2.0,
+                Random.nextDouble(sizes.z) - sizes.z / 2.0
             )
         }
 

@@ -85,7 +85,7 @@ object SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
                         (it.ingredient as RegistryLikeIdentifierCondition<Item>).identifier.path == identifier.path
             }
 
-            if (seasoning != null && seasoning.baitEffects.isNotEmpty()) {
+            if (seasoning != null && !seasoning.baitEffects.isNullOrEmpty()) {
                 return SpawnBait(
                     item = seasoning.ingredient,
                     effects = seasoning.baitEffects

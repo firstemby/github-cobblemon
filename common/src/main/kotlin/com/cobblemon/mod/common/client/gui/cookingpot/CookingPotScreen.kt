@@ -108,7 +108,7 @@ class CookingPotScreen(
         this.titleLabelY = 6
 
         if (::cookButton.isInitialized) removeWidget(cookButton)
-        cookButton = CookButton(this.leftPos + 97, topPos + 57, menu.containerData.get(IS_LID_OPEN_INDEX) == 0) {
+        cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0) {
             val isLidClosed = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
             sendToServer(ToggleCookingPotLidPacket(isLidClosed))
         }
@@ -152,7 +152,7 @@ class CookingPotScreen(
         partialTicks: Float
     ) {
         cookButton.selected = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
-        cookButton.setPosition(this.leftPos + 97, topPos + 57)
+        cookButton.setPosition(this.leftPos + 97, topPos + 56)
 
         if (this.recipeBookComponent.isVisible && this.widthTooNarrow) {
             this.renderBackground(context, mouseX, mouseY, partialTicks)

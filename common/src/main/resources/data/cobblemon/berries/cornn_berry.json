@@ -153,7 +153,7 @@
     "boneMealChance": 0.4,
     "colour": "PURPLE",
     "flavours": {
-        "DRY": 30,
+        "DRY": 20,
         "SWEET": 10
     }
 }

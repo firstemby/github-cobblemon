@@ -1,5 +1,6 @@
 {
     "type": "cobblemon:cooking_pot_shapeless",
+    "group": "x_items",
     "category": "misc",
     "ingredients": [
         {
@@ -9,14 +10,15 @@
             "item": "cobblemon:pep_up_flower"
         },
         {
-            "item": "cobblemon:liechi_berry"
+            "item": "minecraft:bone_meal"
         },
         {
             "item": "cobblemon:liechi_berry"
         }
     ],
     "result": {
-        "id": "cobblemon:x_attack"
+        "id": "cobblemon:x_attack",
+        "count": 4
     },
     "seasoningProcessors": []
 }

@@ -56,7 +56,7 @@ public abstract class ClientRecipeBookMixin {
                 case MISC -> var7 = CobblemonRecipeCategories.COOKING_POT_MISC.toVanillaCategory();
                 case FOODS -> var7 = CobblemonRecipeCategories.COOKING_POT_FOODS.toVanillaCategory();
                 case MEDICINES -> var7 = CobblemonRecipeCategories.COOKING_POT_MEDICINES.toVanillaCategory();
-                case BAITS -> var7 = CobblemonRecipeCategories.COOKING_POT_BAITS.toVanillaCategory();
+                case COMPLEX_DISHES -> var7 = CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES.toVanillaCategory();
                 default -> throw new MatchException(null, null);
             }
             cir.setReturnValue(var7);

@@ -106,7 +106,7 @@
     "boneMealChance": 0.32,
     "colour": "PINK",
     "flavours": {
-        "SWEET": 40,
+        "SWEET": 30,
         "BITTER": 10
     }
 }

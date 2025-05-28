@@ -10,7 +10,8 @@
         }
     ],
     "result": {
-        "id": "cobblemon:revive"
+        "id": "cobblemon:revive",
+        "count": 2
     },
     "seasoningProcessors": []
 }

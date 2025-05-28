@@ -115,7 +115,7 @@ open class CakeBlockEntity(
         return ClientboundBlockEntityDataPacket.create(this)
     }
 
-    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag? {
+    override fun getUpdateTag(registries: HolderLookup.Provider): CompoundTag {
         val tag = CompoundTag()
         saveAdditional(tag, registries)
         return tag

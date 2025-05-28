@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:raw_mutton",
+  "colour": "brown",
+  "food": {
+    "hunger": 6,
+    "saturation": 9.6
+  }
+}

@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_wool": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:white_wool"
+              "cobblemon:normal_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_wool",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

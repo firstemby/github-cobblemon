@@ -280,7 +280,9 @@ abstract class PosableState : Schedulable {
                 val volume = if (params.contains(1)) params.getDouble(1).toFloat() else 1F
                 val pitch = if (params.contains(2)) params.getDouble(2).toFloat() else 1F
                 if (entity != null) {
-                    entity.level().playLocalSound(entity, soundEvent, entity.soundSource, volume, pitch)
+                    if (!entity.isSilent) {
+                        entity.level().playLocalSound(entity, soundEvent, entity.soundSource, volume, pitch)
+                    }
                 } else {
                     Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, volume, pitch))
                 }

@@ -1,10 +1,24 @@
 {
-    "type": "cobblemon:cooking_pot_shapeless",
-    "category": "foods",
-    "ingredients": [
-        {
-            "item": "minecraft:cake"
+    "type": "cobblemon:cooking_pot",
+    "category": "complex_dishes",
+    "key": {
+        "M": {
+            "item": "minecraft:milk_bucket"
+        },
+        "S": {
+            "item": "minecraft:sugar"
+        },
+        "V": {
+            "item": "cobblemon:vivichoke"
+        },
+        "G": {
+            "item": "cobblemon:hearty_grains"
         }
+    },
+    "pattern": [
+        "MMM",
+        "SVS",
+        "GGG"
     ],
     "result": {
         "id": "cobblemon:poke_cake"

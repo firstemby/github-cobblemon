@@ -151,9 +151,9 @@
     "colour": "PINK",
     "flavours": {
         "SPICY": 30,
-        "DRY": 10,
+        "DRY": 30,
         "SWEET": 10,
-        "BITTER": 30,
+        "BITTER": 10,
         "SOUR": 10
     }
 }

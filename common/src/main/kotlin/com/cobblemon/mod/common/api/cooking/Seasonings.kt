@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
+import com.cobblemon.mod.common.api.cooking.Seasoning.Companion.BLANK_SEASONING
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -43,12 +44,6 @@ object Seasonings : JsonDataRegistry<Seasoning> {
 
     val seasonings = mutableListOf<Seasoning>()
 
-    val BLANK_SEASONING = Seasoning(
-        ingredient = RegistryLikeIdentifierCondition<Item>(cobblemonResource("blank")),
-        flavours = emptyMap(),
-        colour = DyeColor.WHITE
-    )
-
     override fun sync(player: ServerPlayer) {
         SeasoningRegistrySyncPacket(seasonings.toList()).sendToPlayer(player)
     }
@@ -59,7 +54,10 @@ object Seasonings : JsonDataRegistry<Seasoning> {
             it.identifier to Seasoning(
                 ingredient = RegistryLikeIdentifierCondition(it.identifier),
                 flavours = it.flavours.toMap(),
-                colour = it.colour
+                colour = it.colour,
+                baitEffects = emptyList(),
+                food = Food(),
+                mobEffects = emptyList()
             )
         }.toMutableMap()
         finalData.putAll(data)
@@ -75,8 +73,28 @@ object Seasonings : JsonDataRegistry<Seasoning> {
         val holder = stack.itemHolder
         val seasoning = seasonings.find { it.ingredient.fits(holder) } ?: BLANK_SEASONING
         val inherentFlavours = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours ?: emptyMap()
+        val seasoningFlavours = seasoning.flavours ?: emptyMap()
 
-        return seasoning.flavours.mapValues { (flavour, value) -> inherentFlavours.getOrDefault(flavour, 0) + value }
+        return seasoningFlavours.mapValues { (flavour, value) ->
+            inherentFlavours.getOrDefault(flavour, 0) + value
+        }
+    }
+
+    fun getFoodFromItemStack(stack: ItemStack): Food? {
+        return getFromItemStack(stack)?.food
+    }
+
+    fun hasFood(stack: ItemStack): Boolean {
+        val effects = getFromItemStack(stack)?.food ?: return false
+        return effects.hunger > 0 || effects.saturation > 0f
+    }
+
+    fun getMobEffectsFromItemStack(stack: ItemStack): List<SerializableMobEffectInstance> {
+        return getFromItemStack(stack)?.mobEffects ?: emptyList()
+    }
+
+    fun hasMobEffect(stack: ItemStack): Boolean {
+        return !getFromItemStack(stack)?.mobEffects.isNullOrEmpty()
     }
 
     fun getBaitEffectsFromItemStack(stack: ItemStack): List<SpawnBait.Effect> {

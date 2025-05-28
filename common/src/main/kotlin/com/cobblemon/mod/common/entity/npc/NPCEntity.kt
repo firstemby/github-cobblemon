@@ -464,7 +464,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         appliedAspects.addAll(nbt.getList(DataKeys.NPC_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         variationAspects.addAll(nbt.getList(DataKeys.NPC_VARIATION_ASPECTS, Tag.TAG_STRING.toInt()).map { it.asString })
         nbt.getCompound(DataKeys.NPC_INTERACTION).takeIf { !it.isEmpty }?.let { nbt ->
-            val type = nbt.getString("type")
+            val type = nbt.getString(DataKeys.NPC_INTERACT_TYPE)
             val configType = NPCInteractConfiguration.types[type] ?: return@let
             interaction = configType.clazz.getConstructor().newInstance().also { it.readFromNBT(nbt) }
         }

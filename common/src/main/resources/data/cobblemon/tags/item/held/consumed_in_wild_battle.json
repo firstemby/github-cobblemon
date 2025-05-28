@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:berries"
+    "#cobblemon:berries",
+    "#cobblemon:herbs",
+    "minecraft:snowball"
   ]
 }

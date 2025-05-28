@@ -39,7 +39,8 @@ internal data class PokemonP3(
     val marks: Set<ResourceLocation>,
     val potentialMarks: Set<ResourceLocation>,
     val markings: List<Int>,
-    val rideBoosts: Map<String, Float>
+    val rideBoosts: Map<String, Float>,
+    val currentFullness: Int
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -73,6 +74,7 @@ internal data class PokemonP3(
         other.potentialMarks += this.potentialMarks.map { Marks.getByIdentifier(it) }.filterNotNull().toMutableSet()
         other.markings = this.markings
         this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
+        other.currentFullness = this.currentFullness
         return other
     }
 
@@ -90,7 +92,8 @@ internal data class PokemonP3(
                 Codec.list(ResourceLocation.CODEC).optionalFieldOf(DataKeys.POKEMON_POTENTIAL_MARKS, emptyList()).forGetter { it.potentialMarks.toMutableList() },
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(PokemonP3::markings),
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).optionalFieldOf(DataKeys.POKEMON_RIDE_BOOSTS, emptyMap<String, Float>()).forGetter(PokemonP3::rideBoosts),
-            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible, cosmeticItem, activeMark, marks, potentialMarks, markings, rideBoosts -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible, cosmeticItem.orElse(ItemStack.EMPTY), activeMark, marks.toMutableSet(), potentialMarks.toMutableSet(), markings, rideBoosts) }
+                Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness)
+            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible, cosmeticItem, activeMark, marks, potentialMarks, markings, rideBoosts, currentFullness -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible, cosmeticItem.orElse(ItemStack.EMPTY), activeMark, marks.toMutableSet(), potentialMarks.toMutableSet(), markings, rideBoosts, currentFullness) }
         }
 
         internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
@@ -108,7 +111,8 @@ internal data class PokemonP3(
             pokemon.marks.map { it.identifier }.toSet(),
             pokemon.potentialMarks.map { it.identifier }.toSet(),
             pokemon.markings,
-            pokemon.getRideBoosts().mapKeys { it.key.name }
+            pokemon.getRideBoosts().mapKeys { it.key.name },
+            pokemon.currentFullness
         )
     }
 }

@@ -1,5 +1,6 @@
 {
     "type": "cobblemon:cooking_pot_shapeless",
+    "group": "vitamins",
     "category": "misc",
     "ingredients": [
         {

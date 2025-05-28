@@ -86,13 +86,12 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
 
             if (effect.id == "sketch" && pokemon.effectedPokemon.moveSet.any { it.name == "sketch" } && extraEffect is String) {
                 // Apply Sketch to the pokemon's current moveset if it was successfully used in battle
-                val moveTemplate = Moves.getByName(extraEffect.replace(" ", ""))
+                val moveTemplate = Moves.getByName(extraEffect.replace(Regex("[^A-Za-z0-9]"), ""))
                 Moves.getByName("sketch")?.let {
                     moveTemplate?.let { template ->
                         pokemon.effectedPokemon.exchangeMove(oldMove = it, newMove = template)
                     }
                 }
-
             }
 
             val lang = when (effect.id) {

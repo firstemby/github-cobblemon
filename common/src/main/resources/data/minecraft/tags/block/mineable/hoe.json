@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cobblemon:apricorn_leaves"
+    "cobblemon:apricorn_leaves",
+    "cobblemon:hearty_grain_bale"
   ]
 }

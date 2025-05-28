@@ -284,7 +284,7 @@
         },
         "seats": [],
         "behaviour": {
-          "key": "cobblemon:land/generic"
+          "key": "cobblemon:land/horse"
         }
       }
     }
@@ -324,7 +324,7 @@
     },
     "seats": [],
     "behaviour": {
-      "key": "cobblemon:land/generic"
+      "key": "cobblemon:land/horse"
     }
   }
 }

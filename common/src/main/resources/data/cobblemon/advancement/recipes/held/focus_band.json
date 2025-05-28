@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_wool": {
+    "has_blaze_powder": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:red_wool"
+              "minecraft:blaze_powder"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_wool",
+      "has_blaze_powder",
       "has_the_recipe"
     ]
   ],

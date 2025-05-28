@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.item.interactive
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
@@ -30,8 +33,13 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
         override val itemName = "item.cobblemon.heal_powder"
         override val returnItem = Items.AIR
         override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status"
+        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("heal_powder", runtime))
+            return "cure_status"
+        }
     }
+
+    private val runtime = MoLangRuntime().setup()
 
     init {
         Cobblemon.implementation.registerCompostable(this, .75F)
@@ -47,6 +55,7 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
         return if (currentStatus != null) {
             pokemon.status = null
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("heal_powder", runtime))
             if (!player.isCreative)  {
                 stack.shrink(1)
             }

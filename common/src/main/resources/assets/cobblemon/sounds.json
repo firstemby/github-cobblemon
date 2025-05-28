@@ -243,6 +243,9 @@
   "item.berry.eat": {
     "sounds": [ "cobblemon:item/berry/berry_eat" ]
   },
+  "item.berry.eat.full": {
+    "sounds": [ "cobblemon:item/berry/berry_eat_full" ]
+  },
   "fishing.notification": {
     "sounds": [
       "cobblemon:fishing/fishing_notification_1",
@@ -781,7 +784,7 @@
     "sounds": [ { "name": "cobblemon:move/confusion/confusion_actor", "volume": 0.9 } ]
   },
   "move.confusion.target": {
-      "sounds": [ { "name": "cobblemon:move/confusion/confusion_target", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/confusion/confusion_target", "volume": 0.8 } ]
   },
   "move.swordsdance.actor": {
     "sounds": [ { "name": "cobblemon:move/swords_dance/swords_dance_actor", "volume": 0.8 } ]
@@ -790,7 +793,7 @@
     "sounds": [ { "name": "cobblemon:move/thunder_wave/thunder_wave_actor", "volume": 0.8 } ]
   },
   "move.thunderwave.target": {
-      "sounds": [ { "name": "cobblemon:move/thunder_wave/thunder_wave_target", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/thunder_wave/thunder_wave_target", "volume": 0.8 } ]
   },
   "move.protect.actor": {
     "sounds": [ { "name": "cobblemon:move/protect/protect_actor", "volume": 0.8 } ]
@@ -852,7 +855,7 @@
     "sounds": [ { "name": "cobblemon:move/quick_attack/quick_attack_actor", "volume": 0.8 } ]
   },
   "move.quickattack.target": {
-      "sounds": [ { "name": "cobblemon:move/quick_attack/quick_attack_target", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/quick_attack/quick_attack_target", "volume": 0.8 } ]
   },
   "move.seismictoss.actor": {
     "sounds": [ { "name": "cobblemon:move/seismic_toss/seismic_toss_actor", "volume": 0.8 } ]

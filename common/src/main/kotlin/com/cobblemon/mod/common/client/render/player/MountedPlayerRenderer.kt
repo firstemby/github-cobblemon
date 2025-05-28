@@ -58,8 +58,10 @@ object MountedPlayerRenderer {
 
             val offset = Vector3f(0f, player.bbHeight / 2, 0f).mul(-1f)
 
-            matrix.rotate(locator.matrix.getRotation(AxisAngle4f()))
-            matrix.rotate(Axis.YP.rotationDegrees(180 + yBodyRot))
+            if (entity.beamMode == 0) {
+                matrix.rotate(locator.matrix.getRotation(AxisAngle4f()))
+                matrix.rotate(Axis.YP.rotationDegrees(180 + yBodyRot))
+            }
             matrix.translate(offset)
 
             matrix.translate(Vector3f(0f, 0.35f, 0f))

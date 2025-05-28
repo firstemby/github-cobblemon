@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.mojang.serialization.MapCodec
@@ -16,9 +17,7 @@ import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
-import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -31,6 +30,7 @@ import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.FluidState
@@ -45,13 +45,13 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
 
     override fun getMaxAge(): Int = MATURE_AGE
 
-    private val ageAfterHarvest = 3
+    private val ageAfterHarvest = 4
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(AGE, PART, WATERLOGGED)
+        builder.add(AGE, HALF, WATERLOGGED)
     }
 
-    override fun getBaseSeedId(): ItemLike = CobblemonItems.Hearty_Grains
+    override fun getBaseSeedId(): ItemLike = CobblemonItems.HEARTY_GRAINS
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return AGE_TO_SHAPE[this.getAge(state)]
@@ -62,45 +62,39 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     }
 
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
-        if (state.getValue(PART) == Part.UPPER || this.isMaxAge(state) || !canGrow(world, pos)) return
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER || !canGrow(world, pos, state)) return
 
-        val lightLevel = world.getMaxLocalRawBrightness(pos)
-        if (lightLevel >= 9 && random.nextInt(7) == 0) {
-            val newAge = state.getValue(AGE) + 1
-            world.setBlock(pos, state.setValue(AGE, newAge), UPDATE_CLIENTS)
-
-            if (newAge == MATURE_AGE) {
-                val abovePos = pos.above()
-                if (world.getBlockState(abovePos).isAir) {
-                    world.setBlock(
-                        abovePos,
-                        this.defaultBlockState().setValue(AGE, newAge).setValue(PART, Part.UPPER),
-                        UPDATE_CLIENTS
-                    )
-                }
-            }
+        if (hasSufficientLight(world, pos) && random.nextInt(7) == 0) {
+            grow(world, pos, state, 1)
         }
     }
 
-    private fun canGrow(world: LevelReader, pos: BlockPos): Boolean {
-        return canSurvive(defaultBlockState().setValue(PART, Part.LOWER), world, pos)
+    private fun canGrow(world: LevelReader, pos: BlockPos, state: BlockState): Boolean {
+        return !this.isMaxAge(state) && canSurvive(state, world, pos) && (state.getValue(HALF) == DoubleBlockHalf.UPPER || canGrowInto(world, pos.above()))
+    }
+
+    private fun canGrowInto(world: LevelReader, pos: BlockPos): Boolean {
+        val blockState = world.getBlockState(pos)
+        return blockState.isAir || blockState.`is`(CobblemonBlocks.HEARTY_GRAINS)
     }
 
     override fun playerWillDestroy(world: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
-        if (state.getValue(PART) == Part.UPPER && state.block is HeartyGrainsBlock) {
-            val belowPos = pos.below()
-            val belowState = world.getBlockState(belowPos)
-            world.destroyBlock(pos, true) // Break the lower block without drops
-            world.setBlock(
-                belowPos,
-                belowState.setValue(AGE, ageAfterHarvest), // Reset age to simulate regrowth preparation
-                UPDATE_CLIENTS
-            )
-        } else if (state.getValue(PART) == Part.LOWER) {
-            val abovePos = pos.above()
-            val aboveState = world.getBlockState(abovePos)
-            if (aboveState.block is HeartyGrainsBlock && aboveState.getValue(PART) == Part.UPPER) {
-                world.destroyBlock(abovePos, true) // Break the upper block without drops
+        if (!world.isClientSide) {
+            if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                val belowPos = pos.below()
+                val belowState = world.getBlockState(belowPos)
+                world.destroyBlock(pos, true) // Break the lower block without drops
+                world.setBlock(
+                    belowPos,
+                    belowState.setValue(AGE, ageAfterHarvest), // Reset age to simulate regrowth preparation
+                    UPDATE_CLIENTS
+                )
+            } else if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
+                val abovePos = pos.above()
+                val aboveState = world.getBlockState(abovePos)
+                if (aboveState.block is HeartyGrainsBlock && aboveState.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                    world.destroyBlock(abovePos, true) // Break the upper block without drops
+                }
             }
         }
         return super.playerWillDestroy(world, pos, state, player)
@@ -127,22 +121,42 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         )
     }
 
-    override fun isValidBonemealTarget(world: LevelReader, pos: BlockPos, state: BlockState): Boolean {
-        return !this.isMaxAge(state) && state.getValue(PART) == Part.LOWER
+    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {
+        val posAndState = getLowerHalf(level, pos, state)
+        return if (posAndState == null) false else this.canGrow(
+            level,
+            posAndState.first,
+            posAndState.second
+        )
     }
 
-    override fun growCrops(world: Level, pos: BlockPos, state: BlockState) {
-        if (!canGrow(world, pos)) return
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+        val posAndState = getLowerHalf(level, pos, state)
+        if (posAndState != null) {
+            grow(level, posAndState.first, posAndState.second, getBonemealAgeIncrease(level))
+        }
+    }
 
-        val newAge = (this.getAge(state) + this.getBonemealAgeIncrease(world)).coerceAtMost(this.maxAge)
+    fun grow(world: Level, pos: BlockPos, state: BlockState, increment: Int) {
+        if (!canGrow(world, pos, state)) return
+
+        val newAge = (this.getAge(state) + increment).coerceAtMost(this.maxAge)
         world.setBlock(pos, state.setValue(this.ageProperty, newAge), UPDATE_CLIENTS)
 
-        if (newAge == MATURE_AGE && state.getValue(PART) == Part.LOWER) {
+        if (newAge >= 5) {
             val abovePos = pos.above()
-            if (world.getBlockState(abovePos).isAir) {
+            val stateAbove = world.getBlockState(abovePos)
+            if (stateAbove.isAir) {
                 world.setBlock(
                     abovePos,
-                    this.defaultBlockState().setValue(AGE, newAge).setValue(PART, Part.UPPER),
+                    this.defaultBlockState().setValue(AGE, newAge).setValue(HALF, DoubleBlockHalf.UPPER),
+                    UPDATE_CLIENTS
+                )
+            }
+            else if (stateAbove.getValue(HALF) == DoubleBlockHalf.UPPER) {
+                world.setBlock(
+                    abovePos,
+                    stateAbove.setValue(AGE, newAge),
                     UPDATE_CLIENTS
                 )
             }
@@ -152,8 +166,8 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     override fun getBonemealAgeIncrease(world: Level): Int = 1
 
     override fun canSurvive(state: BlockState, world: LevelReader, pos: BlockPos): Boolean {
-        return when (state.getValue(PART)) {
-            Part.LOWER -> {
+        return when (state.getValue(HALF)) {
+            DoubleBlockHalf.LOWER -> {
                 val floor = world.getBlockState(pos.below())
                 val fluidState = world.getFluidState(pos)
 
@@ -170,13 +184,28 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
                 // Check for valid soil or survival conditions
                 isSubmergedInWater || isWaterlogged || isNearWater || floor.`is`(CobblemonBlockTags.HEARTY_GRAINS_PLANTABLE) || floor.`is`(Blocks.MUD) || floor.`is`(Blocks.FARMLAND)
             }
-            Part.UPPER -> {
-                val below = world.getBlockState(pos.below())
-                below.block is HeartyGrainsBlock && below.getValue(PART) == Part.LOWER
+            DoubleBlockHalf.UPPER -> {
+                getLowerHalf(world, pos, state) != null
                 // Upper part survives only if the lower part is valid
             }
         }
     }
+
+    private fun getLowerHalf(level: LevelReader, pos: BlockPos, state: BlockState): Pair<BlockPos, BlockState>? {
+        if (isLower(state)) {
+            return Pair(pos, state)
+        } else {
+            val blockPos = pos.below()
+            val blockState = level.getBlockState(blockPos)
+            return if (isLower(blockState)) Pair(
+                blockPos,
+                blockState
+            ) else null
+        }
+    }
+
+    private fun isLower(state: BlockState): Boolean =
+        state.`is`(CobblemonBlocks.HEARTY_GRAINS) && state.getValue(HALF) == DoubleBlockHalf.LOWER
 
 
 
@@ -184,31 +213,28 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
 
     companion object {
         val CODEC = simpleCodec(::HeartyGrainsBlock)
-        const val MATURE_AGE = 4
+        const val MATURE_AGE = 7
         val WATERLOGGED = BlockStateProperties.WATERLOGGED
-        val AGE: IntegerProperty = BlockStateProperties.AGE_4
-        val PART: EnumProperty<Part> = EnumProperty.create("part", Part::class.java)
+        val AGE: IntegerProperty = BlockStateProperties.AGE_7
+        val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
 
         val AGE_TO_SHAPE = arrayOf(
-            box(2.0, 0.0, 0.0, 16.0, 17.0, 16.0), // Stage 1
-            box(2.0, 0.0, 0.0, 16.0, 17.0, 16.0), // Stage 2
-            box(2.0, 0.0, 0.0, 16.0, 17.0, 16.0), // Stage 3
-            box(2.0, 0.0, 0.0, 16.0, 17.0, 16.0), // Stage 4 (Bottom)
-            box(2.0, 0.0, 0.0, 16.0, 17.0, 16.0)  // Stage 5 (Bottom)
+            box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0), // Stage 0
+            box(0.0, 0.0, 0.0, 16.0, 5.0, 16.0), // Stage 1
+            box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0), // Stage 2
+            box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0), // Stage 3
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 4
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 5
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 6
+            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)  // Stage 7
         )
-    }
-
-    enum class Part : StringRepresentable {
-        LOWER, UPPER;
-
-        override fun getSerializedName(): String = name.lowercase()
     }
 
     init {
         this.registerDefaultState(
             this.stateDefinition.any()
                 .setValue(AGE, 0)
-                .setValue(PART, Part.LOWER)
+                .setValue(HALF, DoubleBlockHalf.LOWER)
                 .setValue(WATERLOGGED, false)
         )
     }

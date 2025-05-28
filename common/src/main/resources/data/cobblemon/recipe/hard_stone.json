@@ -1,10 +1,30 @@
 {
-    "type": "minecraft:stonecutting",
-    "count": 1,
-    "ingredient": {
-        "item": "minecraft:deepslate"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+	"SGS",
+    "SSS"
+  ],
+  "key": {
+    "G": {
+      "item": "cobblemon:rock_gem"
     },
-    "result": {
-        "id": "cobblemon:hard_stone"
-    }
+    "S": [
+      {
+        "item": "minecraft:stone"
+      },
+      {
+        "item": "minecraft:deepslate"
+      },
+      {
+        "item": "minecraft:blackstone"
+      },
+      {
+        "item": "minecraft:tuff"
+      }
+    ]
+  },
+  "result": {
+    "id": "cobblemon:hard_stone"
+  }
 }

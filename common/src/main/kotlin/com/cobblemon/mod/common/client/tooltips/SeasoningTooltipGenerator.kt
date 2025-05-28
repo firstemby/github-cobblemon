@@ -20,7 +20,7 @@ object SeasoningTooltipGenerator : TooltipGenerator() {
 
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
         val flavors = Seasonings.getFlavoursFromItemStack(stack)
-        if (flavors.isEmpty()) {
+        if (flavors.all { it.value == 0 }) {
             return null
         }
         return generateAdditionalFlavorTooltip(flavors)
