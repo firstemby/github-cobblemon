@@ -18,6 +18,9 @@ import com.cobblemon.mod.common.item.components.HeldItemCapableComponent
 import com.cobblemon.mod.common.item.components.PokemonItemComponent
 import com.cobblemon.mod.common.item.components.RodBaitComponent
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.item.components.FoodComponent
+import com.cobblemon.mod.common.item.components.IngredientComponent
+import com.cobblemon.mod.common.item.components.MobEffectsComponent
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType

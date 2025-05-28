@@ -57,7 +57,6 @@ import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
