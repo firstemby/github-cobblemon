@@ -29,9 +29,12 @@ private val bubbleColourMap = mapOf(
 
 fun getColourMixFromSeasonings(seasonings: List<ItemStack>, forBubbles: Boolean = false): Int? {
     val flavors = seasonings
-        .flatMap { Seasonings.getFlavoursFromItemStack(it).entries }
-        .groupingBy { it.key }
-        .fold(0) { acc, entry -> acc + entry.value }
+            .mapNotNull { Seasonings.getFlavoursFromItemStack(it) }
+            .flatMap { it.entries }
+            .groupingBy { it.key }
+            .fold(0) { acc, entry -> acc + entry.value }
+
+    if (flavors.isEmpty()) return null
 
     val maxFlavorValue = flavors.values.maxOrNull()
     val dominantFlavors = flavors.filter { it.value == maxFlavorValue }.map { it.key }

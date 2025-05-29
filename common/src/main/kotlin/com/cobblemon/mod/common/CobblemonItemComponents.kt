@@ -22,10 +22,12 @@ import com.cobblemon.mod.common.item.components.FoodComponent
 import com.cobblemon.mod.common.item.components.IngredientComponent
 import com.cobblemon.mod.common.item.components.MobEffectsComponent
 import com.cobblemon.mod.common.platform.PlatformRegistry
+import com.mojang.serialization.Codec
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 
@@ -86,6 +88,11 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .persistent(MobEffectsComponent.CODEC)
         .networkSynchronized(MobEffectsComponent.PACKET_CODEC)
         .build())
+
+    val CRAFTED: DataComponentType<Boolean> = create("crafted", DataComponentType.builder<Boolean>()
+            .persistent(Codec.BOOL)
+            .networkSynchronized(ByteBufCodecs.BOOL)
+            .build())
 
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)

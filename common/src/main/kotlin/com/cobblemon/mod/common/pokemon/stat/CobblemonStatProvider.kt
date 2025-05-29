@@ -86,7 +86,7 @@ object CobblemonStatProvider : StatProvider {
     }
 
     override fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int {
-        val iv = pokemon.ivs.getOrDefault(stat)
+        val iv = pokemon.ivs.getEffectiveBattleIV(stat)
         val base = pokemon.form.baseStats[stat]!!
         val ev = pokemon.evs.getOrDefault(stat)
         val level = pokemon.level

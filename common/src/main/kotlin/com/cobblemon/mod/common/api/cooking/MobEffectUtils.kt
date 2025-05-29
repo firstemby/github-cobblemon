@@ -52,21 +52,6 @@ object MobEffectUtils {
     }
 
     private fun mergeAmplifiers(amplifiers: List<Int>): Int {
-        if (amplifiers.isEmpty()) return 0
-
-        val sorted = amplifiers.sortedDescending()
-        var result = 0.0
-
-        for ((index, value) in sorted.withIndex()) {
-            val multiplier = when (index) {
-                0 -> 1.0
-                1 -> 0.75
-                2 -> 0.5
-                else -> 0.25
-            }
-            result += (value + 1) * multiplier
-        }
-
-        return ceil(result).toInt() - 1
+        return amplifiers.maxOrNull() ?: 0 // we do not want the power of the effects to combine, just take the highest one used of that type
     }
 }

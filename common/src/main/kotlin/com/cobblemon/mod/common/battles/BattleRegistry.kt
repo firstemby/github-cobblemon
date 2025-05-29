@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
+import com.cobblemon.mod.common.api.moves.HiddenPowerUtil
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
@@ -96,7 +97,7 @@ object BattleRegistry {
             // Gender
             packedTeamBuilder.append("${pk.gender.showdownName}|")
             // IVs
-            val ivsInOrder = Stats.PERMANENT.map { pk.ivs.getOrDefault(it) }.joinToString(separator = ",")
+            val ivsInOrder = Stats.PERMANENT.map { pk.ivs.getEffectiveBattleIV(it) }.joinToString(separator = ",")
             packedTeamBuilder.append("$ivsInOrder|")
             // Shiny
             packedTeamBuilder.append("${if (pk.shiny) "S" else ""}|")
@@ -111,7 +112,9 @@ object BattleRegistry {
             val pokeball = pokemon.effectedPokemon.caughtBall.name.path.replace("_", "")
             packedTeamBuilder.append("$pokeball,")
             // Hidden Power Type
-            packedTeamBuilder.append(",")
+            // This is empty if the pokemon is not Hyper Trained, and the provided type corresponds to base IVs and not battle IVs.
+            val hiddenPowerType = if (pk.ivs.hyperTrainedIVs.any()) HiddenPowerUtil.getHiddenPowerType(pk).name.replaceFirstChar { it.uppercase() } else ""
+            packedTeamBuilder.append("$hiddenPowerType,")
             // Gigantamax
             packedTeamBuilder.append("${if (pk.gmaxFactor) "G" else ""},")
             // DynamaxLevel

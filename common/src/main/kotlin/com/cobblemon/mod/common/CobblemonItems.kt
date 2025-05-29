@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.text.blue
@@ -41,6 +42,7 @@ import com.cobblemon.mod.common.item.interactive.*
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.pokeball.PokeBall
+import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
@@ -628,6 +630,33 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField
     val GALARICA_NUTS = create("galarica_nuts", GalaricaNutItem())
+
+    // Hyper Training Items
+    val hyperTrainingItems = mutableListOf<HyperTrainingItem>()
+    @JvmField
+    val HEALTH_CANDY = hyperTrainingItem("health_candy", 1, setOf(Stats.HP), 0..IVs.MAX_VALUE)
+    @JvmField
+    val MIGHTY_CANDY = hyperTrainingItem("mighty_candy", 1, setOf(Stats.ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val TOUGH_CANDY = hyperTrainingItem("tough_candy", 1, setOf(Stats.DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SMART_CANDY = hyperTrainingItem("smart_candy", 1, setOf(Stats.SPECIAL_ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val COURAGE_CANDY = hyperTrainingItem("courage_candy", 1, setOf(Stats.SPECIAL_DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val QUICK_CANDY = hyperTrainingItem("quick_candy", 1, setOf(Stats.SPEED), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SICKLY_CANDY = hyperTrainingItem("sickly_candy", -1, setOf(Stats.HP), 0..IVs.MAX_VALUE)
+    @JvmField
+    val WEAK_CANDY = hyperTrainingItem("weak_candy", -1, setOf(Stats.ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val BRITTLE_CANDY = hyperTrainingItem("brittle_candy", -1, setOf(Stats.DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val NUMB_CANDY = hyperTrainingItem("numb_candy", -1, setOf(Stats.SPECIAL_ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val COWARD_CANDY = hyperTrainingItem("coward_candy", -1, setOf(Stats.SPECIAL_DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SLOW_CANDY = hyperTrainingItem("slow_candy", -1, setOf(Stats.SPEED), 0..IVs.MAX_VALUE)
 
     // Medicine
     @JvmField
@@ -1614,6 +1643,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         val item = this.create(name, mintItem)
         mints[item.nature.displayName] = item
         compostable(item, .65f)
+        return item
+    }
+
+    private fun hyperTrainingItem(name: String, increaseAmount: Int, targetStats: Set<Stat>, validRange: IntRange): HyperTrainingItem {
+        val item = this.create(name, HyperTrainingItem(increaseAmount, targetStats, validRange))
+        hyperTrainingItems.add(item)
         return item
     }
 
