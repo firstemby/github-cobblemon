@@ -398,7 +398,6 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.CANDIED_APPLE)
         entries.accept(CobblemonItems.CANDIED_BERRY)
-        entries.accept(CobblemonItems.FRIED_RICE)
         entries.accept(CobblemonItems.POTATO_MOCHI)
 
         entries.accept(CobblemonItems.PEWTER_CRUNCHIES)
@@ -741,8 +740,7 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.CANDIED_APPLE, CobblemonItems.RIBBON_SWEET)
         injector.putAfter(CobblemonItems.CANDIED_BERRY, CobblemonItems.CANDIED_APPLE)
-        injector.putAfter(CobblemonItems.FRIED_RICE, CobblemonItems.CANDIED_BERRY)
-        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.FRIED_RICE)
+        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.CANDIED_BERRY)
 
         injector.putAfter(CobblemonItems.PEWTER_CRUNCHIES, CobblemonItems.POTATO_MOCHI)
         injector.putAfter(CobblemonItems.RAGE_CANDY_BAR, CobblemonItems.PEWTER_CRUNCHIES)
