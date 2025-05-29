@@ -484,6 +484,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val MECHANICAL_FAN = blockItem("mechanical_fan", CobblemonBlocks.MECHANICAL_FAN)
     @JvmField
     val MECHANICAL_MOWER = blockItem("mechanical_mower", CobblemonBlocks.MECHANICAL_MOWER)
+    @JvmField
+    val MECHANICAL_OVEN = blockItem("mechanical_oven", CobblemonBlocks.MECHANICAL_OVEN)
+    @JvmField
+    val MECHANICAL_WASHER = blockItem("mechanical_washer", CobblemonBlocks.MECHANICAL_WASHER)
+    @JvmField
+    val MECHANICAL_FRIDGE = blockItem("mechanical_fridge", CobblemonBlocks.MECHANICAL_FRIDGE)
 
 
     // Evolution items
