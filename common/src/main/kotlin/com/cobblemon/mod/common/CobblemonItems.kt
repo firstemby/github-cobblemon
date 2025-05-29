@@ -482,6 +482,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField
     val MECHANICAL_FAN = blockItem("mechanical_fan", CobblemonBlocks.MECHANICAL_FAN)
+    @JvmField
+    val MECHANICAL_MOWER = blockItem("mechanical_mower", CobblemonBlocks.MECHANICAL_MOWER)
 
 
     // Evolution items

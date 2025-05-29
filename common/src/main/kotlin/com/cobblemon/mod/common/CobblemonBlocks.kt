@@ -490,6 +490,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
     @JvmField
     val MECHANICAL_FAN = create("mechanical_fan", MechanicalFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY)))
+    @JvmField
+    val MECHANICAL_MOWER = create("mechanical_mower", MechanicalMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL)))
 
     @JvmField
     val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)))
