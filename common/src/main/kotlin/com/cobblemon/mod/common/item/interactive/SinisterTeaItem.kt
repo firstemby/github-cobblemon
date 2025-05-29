@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
@@ -36,6 +37,14 @@ class SinisterTeaItem : Item(
                 for (effect in effectsComponent.mobEffects) {
                     val effectCopy = MobEffectInstance(effect)
                     user.addEffect(effectCopy)
+                }
+            }
+
+            if (user is Player && !user.isCreative) {
+                val bowl = ItemStack(Items.BOWL)
+
+                if (!user.inventory.add(bowl)) {
+                    user.drop(bowl, false)
                 }
             }
         }

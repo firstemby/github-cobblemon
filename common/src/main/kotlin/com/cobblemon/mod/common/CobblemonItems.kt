@@ -434,28 +434,25 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
-            .alwaysEdible()
             .build())) {})
     @JvmField
     val FRIED_RICE = create("fried_rice", object : Item(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
-            .alwaysEdible()
             .build())) {})
     @JvmField
     val CANDIED_APPLE = create("candied_apple", object : Item(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
-            .alwaysEdible()
             .build())) {})
     @JvmField
     val CANDIED_BERRY = create("candied_berry", object : Item(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
-            .alwaysEdible()
+            .usingConvertsTo(Items.STICK)
             .build())) {})
 
     //@JvmField
