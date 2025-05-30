@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
+import com.cobblemon.mod.common.block.chest.MechanicalOvenBlock
 import com.cobblemon.mod.common.block.sign.CobblemonHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
@@ -493,7 +494,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val MECHANICAL_MOWER = create("mechanical_mower", MechanicalMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE)))
     @JvmField
-    val MECHANICAL_OVEN = create("mechanical_oven", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val MECHANICAL_OVEN = create("mechanical_oven", MechanicalOvenBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
     val MECHANICAL_WASHER = this.create("mechanical_washer", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField

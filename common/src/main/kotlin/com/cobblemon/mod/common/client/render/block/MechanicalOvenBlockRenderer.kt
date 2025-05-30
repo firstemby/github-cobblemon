@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.render.block
 
-import com.cobblemon.mod.common.block.entity.GildedChestBlockEntity
 import com.cobblemon.mod.common.block.entity.MechanicalOvenBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.block.entity.GildedChestBlockEntity
+import com.cobblemon.mod.common.block.entity.MechanicalOvenBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.party
@@ -181,6 +182,16 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
 
     override fun mirror(state: BlockState, mirror: Mirror): BlockState {
         return state.rotate(mirror.getRotation(state.getValue(HORIZONTAL_FACING) as Direction))
+    }
+
+    enum class Type(val poserId: ResourceLocation) : StringRepresentable {
+        MECHANICAL_OVEN(cobblemonResource("mechanical_oven"));
+
+        override fun getSerializedName(): String = name.lowercase()
+
+        companion object {
+            val CODEC = StringRepresentable.fromValues(::values)
+        }
     }
 
     @Deprecated("Deprecated in Java")
