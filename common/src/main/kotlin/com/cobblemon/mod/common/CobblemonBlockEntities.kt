@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.block.chest.MechanicalOvenBlock
 import com.cobblemon.mod.common.block.entity.PokeCakeBlockEntity
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
@@ -97,10 +98,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val CAMPFIRE: BlockEntityType<CampfireBlockEntity> = this.create("campfire_pot",
             BlockEntityType.Builder.of(::CampfireBlockEntity, CobblemonBlocks.CAMPFIRE).build(null)
     )
-//    @JvmField
-//    val MECHANICAL_OVEN: BlockEntityType<CampfireBlockEntity> = this.create("mechanical_oven",
-//        BlockEntityType.Builder.of(::CampfireBlockEntity, CobblemonBlocks.MECHANICAL_OVEN).build(null)
-//    )
+    @JvmField
+    val MECHANICAL_OVEN: BlockEntityType<MechanicalOvenBlockEntity> = this.create("mechanical_oven",
+        BlockEntityType.Builder.of(::MechanicalOvenBlockEntity, CobblemonBlocks.MECHANICAL_OVEN).build(null)
+    )
 
     /*@JvmField
     val LURE_CAKE: BlockEntityType<LureCakeBlockEntity> =
