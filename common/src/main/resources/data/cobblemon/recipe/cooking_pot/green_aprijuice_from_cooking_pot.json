@@ -1,7 +1,7 @@
 {
     "type": "cobblemon:cooking_pot_shapeless",
     "group": "aprijuice",
-    "category": "baits",
+    "category": "complex_dishes",
     "ingredients": [
         {
             "item": "cobblemon:green_apricorn"

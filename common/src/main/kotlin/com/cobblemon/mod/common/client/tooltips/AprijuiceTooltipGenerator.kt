@@ -9,17 +9,14 @@
 package com.cobblemon.mod.common.client.tooltips
 
 import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.api.text.blue
+import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.item.AprijuiceItem
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
 object AprijuiceTooltipGenerator : TooltipGenerator() {
-    override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
-        if (stack.item !is AprijuiceItem) return null
-        return mutableListOf(seasoningHeader)
-    }
-
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.item !is AprijuiceItem) return null
 
@@ -30,7 +27,7 @@ object AprijuiceTooltipGenerator : TooltipGenerator() {
         val quality = flavourComponent.getQuality()
         resultLines.add(lang("cooking.cooking_quality", quality.getLang()))
 
-        resultLines.addAll(generateAdditionalFlavorTooltip(flavourComponent.flavours))
+        SeasoningTooltipGenerator.generateAdditionalTooltip(stack, lines)
 
         return resultLines
     }

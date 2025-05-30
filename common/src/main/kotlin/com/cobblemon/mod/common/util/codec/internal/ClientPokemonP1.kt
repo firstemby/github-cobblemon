@@ -61,8 +61,11 @@ internal class ClientPokemonP1(
         other.setFriendship(this.friendship)
         // Applied before current health for calcs to take place
         other.ivs.doWithoutEmitting {
-            this.ivs.forEach {
-                other.ivs[it.key] = it.value
+            this.ivs.forEach { (stat, value) ->
+                other.ivs[stat] = value
+                if(this.ivs.isHyperTrained(stat)) {
+                    other.ivs.setHyperTrainedIV(stat, this.ivs.hyperTrainedIVs[stat]!!)
+                }
             }
         }
         other.evs.doWithoutEmitting {

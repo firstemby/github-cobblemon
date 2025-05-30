@@ -15,7 +15,6 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
@@ -100,24 +99,6 @@ open class MoveTemplate(
             Moves::getByName,
             MoveTemplate::name
         ) { id -> "No MoveTemplate for ID $id" }
-        val hiddenPowerTable = arrayOf(
-            ElementalTypes.FIGHTING,
-            ElementalTypes.FLYING,
-            ElementalTypes.POISON,
-            ElementalTypes.GROUND,
-            ElementalTypes.ROCK,
-            ElementalTypes.BUG,
-            ElementalTypes.GHOST,
-            ElementalTypes.STEEL,
-            ElementalTypes.FIRE,
-            ElementalTypes.WATER,
-            ElementalTypes.GRASS,
-            ElementalTypes.ELECTRIC,
-            ElementalTypes.PSYCHIC,
-            ElementalTypes.ICE,
-            ElementalTypes.DRAGON,
-            ElementalTypes.DARK
-        )
     }
 
     /**
@@ -146,21 +127,7 @@ open class MoveTemplate(
             return this.elementalType
         }
         if (name == "hiddenpower") {
-            val ivs = pokemon.ivs
-            val ivArray = arrayOf(
-                ivs[Stats.HP],
-                ivs[Stats.ATTACK],
-                ivs[Stats.DEFENCE],
-                ivs[Stats.SPEED],
-                ivs[Stats.SPECIAL_ATTACK],
-                ivs[Stats.SPECIAL_DEFENCE]
-            ).map { it ?: return@getEffectiveElementalType ElementalTypes.NORMAL }
-            var tableIndex = 0
-            ivArray.forEachIndexed { index, it ->
-                tableIndex += (it % 2) shl index
-            }
-            tableIndex = tableIndex * 15 / 63
-            return hiddenPowerTable[tableIndex.coerceAtMost(hiddenPowerTable.size - 1)]
+            return HiddenPowerUtil.getHiddenPowerType(pokemon)
         }
         // TODO: Handle ability suppression: clientactivebattlepokemon needs data about volatiles
         // TODO: Handle Liquid Voice: need to know what moves have the sound flag

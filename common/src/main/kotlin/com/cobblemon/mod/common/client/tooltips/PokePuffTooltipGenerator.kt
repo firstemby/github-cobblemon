@@ -28,10 +28,7 @@ object PokePuffTooltipGenerator : TooltipGenerator() {
     override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.item !is PokePuffItem) return null
 
-        // val flavourComponent = stack.get(CobblemonItemComponents.FLAVOUR) ?: return null
         val resultLines = mutableListOf<Component>()
-
-        // resultLines.addAll(generateAdditionalFlavorTooltip(flavourComponent.flavours))
 
         val dominantFlavour = PokePuffUtils.getDominantFlavour(stack)
         if (dominantFlavour != null) {

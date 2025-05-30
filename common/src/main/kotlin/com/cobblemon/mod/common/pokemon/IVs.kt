@@ -10,32 +10,67 @@ package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 class IVs : PokemonStats() {
     override val acceptableRange = 0..MAX_VALUE
     override val defaultValue = 0
-    // TODO: Hyper training
+    val hyperTrainedIVs = mutableMapOf<Stat, Int>()
+
+    fun isHyperTrained(stat: Stat): Boolean {
+        return hyperTrainedIVs.containsKey(stat)
+    }
+
+    fun setHyperTrainedIV(stat: Stat, value: Int) {
+        if (value in acceptableRange) {
+            if(value == this[stat]) {
+                //not hypertrained any more if it ends up being the same as natural IV
+                if (hyperTrainedIVs.remove(stat) == null)
+                    return //this means nothing has changed; no hypertraining did actually happen, e.g. you hypertrain to 31 HP when your normal IVs are already 31, its moot so no update needed
+            }
+            else {
+                hyperTrainedIVs[stat] = value
+            }
+            update()
+        } else {
+            throw IllegalArgumentException("Value $value is out of acceptable range $acceptableRange")
+        }
+    }
+
+    // Used to get the value that should be used for stat calculation.
+    fun getEffectiveBattleIV(stat: Stat): Int {
+        return (this.hyperTrainedIVs[stat] ?: this[stat]) as Int
+    }
 
     companion object {
         const val MAX_VALUE = 31
 
         @JvmStatic
-        fun createRandomIVs(minPerfectIVs : Int = 0) : IVs = Cobblemon.statProvider.createEmptyIVs(minPerfectIVs)
+        fun createRandomIVs(minPerfectIVs: Int = 0): IVs = Cobblemon.statProvider.createEmptyIVs(minPerfectIVs)
 
         @JvmStatic
-        val CODEC: Codec<IVs> = Codec.unboundedMap(Stat.PERMANENT_ONLY_CODEC, Codec.intRange(0, MAX_VALUE))
-            .xmap(
-                { map ->
-                    val ivs = Cobblemon.statProvider.createEmptyIVs(0)
-                    map.forEach { (stat, value) -> ivs[stat] = value }
-                    return@xmap ivs
-                },
-                { ivs ->
-                    val map = hashMapOf<Stat, Int>()
-                    ivs.forEach { (stat, value) -> map[stat] = value }
-                    return@xmap map
+        val CODEC: Codec<IVs> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.unboundedMap(Stat.PERMANENT_ONLY_CODEC, Codec.intRange(0, MAX_VALUE)).fieldOf(DataKeys.POKEMON_IVS_BASE).forGetter(IVs::stats),
+                Codec.unboundedMap(Stat.PERMANENT_ONLY_CODEC, Codec.intRange(0, MAX_VALUE)).fieldOf(DataKeys.POKEMON_IVS_HYPERTRAINED).forGetter(IVs::hyperTrainedIVs)
+            ).apply(instance) { stats, hyperTrained ->
+                val ivs = IVs()
+                stats.entries.forEach {
+                    ivs[it.key] = it.value
                 }
-            )
+                hyperTrained.entries.forEach {
+                    ivs.setHyperTrainedIV(it.key, it.value)
+                }
+                ivs
+            }
+        }
+
+        @JvmStatic
+        val STREAM_CODEC: StreamCodec<ByteBuf, IVs> = ByteBufCodecs.fromCodec(CODEC)
     }
 }

@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeaturePr
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.italicise
+import com.cobblemon.mod.common.api.text.onHover
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -86,6 +88,10 @@ class StatWidget(
         private val spDefLabel = lang("ui.stats.sp_def")
         private val defLabel = lang("ui.stats.def")
         private val speedLabel = lang("ui.stats.speed")
+    }
+
+    var effectiveBattleIVs: Map<Stat, Int> = Stats.PERMANENT.associateWith { stat ->
+        pokemon.ivs.getEffectiveBattleIV(stat)
     }
 
     var statTabIndex = tabIndex
@@ -351,7 +357,6 @@ class StatWidget(
                 scale = SCALE
             )
         }
-
         when (statOptions.get(statTabIndex)) {
             STATS -> drawStatHexagon(
                 mapOf(
@@ -366,7 +371,7 @@ class StatWidget(
                 maximum = 400
             )
             IV -> drawStatHexagon(
-                pokemon.ivs.associate { it.key to it.value },
+                effectiveBattleIVs,
                 colour = Vector3f(216F/255, 100F/255, 1F),
                 maximum = 31
             )
@@ -494,9 +499,9 @@ class StatWidget(
     }
 
     private fun getStatValueAsText(stat: Stat): MutableComponent {
-        val value = when(statOptions.get(statTabIndex)) {
+        val value = when (statOptions.get(statTabIndex)) {
             STATS -> if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.maxHealth}" else pokemon.getStat(stat).toString()
-            IV -> pokemon.ivs.getOrDefault(stat).toString()
+            IV -> if (pokemon.ivs.isHyperTrained(stat)) "${pokemon.ivs[stat]} (${pokemon.ivs.hyperTrainedIVs[stat]})" else pokemon.ivs[stat].toString()
             EV -> pokemon.evs.getOrDefault(stat).toString()
             else -> "0"
         }
