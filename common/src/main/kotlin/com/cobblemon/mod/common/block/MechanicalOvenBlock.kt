@@ -56,8 +56,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 @Suppress("OVERRIDE_DEPRECATION")
-class MechanicalOvenBlock(settings: Properties, fireDamage: Int) : CampfireBlock(settings, fireDamage
-),
+class MechanicalOvenBlock(settings: Properties, ) : Block(settings),
     SimpleWaterloggedBlock {
 
     init {
