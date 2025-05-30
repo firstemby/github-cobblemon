@@ -489,15 +489,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F)))
 
     @JvmField
-    val MECHANICAL_FAN = create("mechanical_fan", MechanicalFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY)))
+    val MECHANICAL_FAN = create("mechanical_fan", MechanicalFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).mapColor(MapColor.COLOR_ORANGE)))
     @JvmField
-    val MECHANICAL_MOWER = create("mechanical_mower", MechanicalMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL)))
+    val MECHANICAL_MOWER = create("mechanical_mower", MechanicalMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE)))
     @JvmField
-    val MECHANICAL_OVEN = create("mechanical_oven", MechanicalOvenBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL), 0))
+    val MECHANICAL_OVEN = create("mechanical_oven", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
-    val MECHANICAL_WASHER = this.create("mechanical_washer", Block(BlockBehaviour.Properties.of()))
+    val MECHANICAL_WASHER = this.create("mechanical_washer", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
-    val MECHANICAL_FRIDGE = this.create("mechanical_fridge", Block(BlockBehaviour.Properties.of()))
+    val MECHANICAL_FRIDGE = this.create("mechanical_fridge", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
 
     @JvmField
     val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)))

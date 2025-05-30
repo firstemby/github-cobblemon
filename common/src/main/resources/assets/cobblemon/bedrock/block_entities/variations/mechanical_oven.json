@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:mechanical_oven",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:mechanical_oven",
+      "model": "cobblemon:mechanical_oven.geo",
+      "texture": "cobblemon:textures/block/mechanical_oven.png",
+      "layers": []
+    }
+  ]
+}

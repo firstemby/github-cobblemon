@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:mechanical_fridge",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:mechanical_fridge",
+      "model": "cobblemon:mechanical_fridge.geo",
+      "texture": "cobblemon:textures/block/mechanical_fridge.png",
+      "layers": []
+    }
+  ]
+}

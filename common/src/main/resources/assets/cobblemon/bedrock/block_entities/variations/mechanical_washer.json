@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:mechanical_washer",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:mechanical_washer",
+      "model": "cobblemon:mechanical_washer.geo",
+      "texture": "cobblemon:textures/block/mechanical_washer.png",
+      "layers": []
+    }
+  ]
+}

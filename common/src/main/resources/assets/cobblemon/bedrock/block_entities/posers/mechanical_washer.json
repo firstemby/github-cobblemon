@@ -1,0 +1,21 @@
+{
+  "maxScale": 1.0,
+  "yTranslation": 0.0,
+  "poses": {
+    "closed": {
+      "allPoseTypes": true,
+      "transitions": {
+        "open": "q.bedrock_stateful('mechanical_washer', 'opening')"
+      }
+    },
+    "open": {
+      "allPoseTypes": true,
+      "animations": [
+        "q.bedrock('mechanical_washer', 'open')"
+      ],
+      "transitions": {
+        "closed": "q.bedrock_stateful('mechanical_washer', 'closing')"
+      }
+    }
+  }
+}

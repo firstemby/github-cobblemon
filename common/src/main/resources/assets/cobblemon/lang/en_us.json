@@ -924,6 +924,11 @@
   "block.cobblemon.hearty_grain_bale": "Hearty Grain Bale",
   "block.cobblemon.tatami_block": "Tatami",
   "block.cobblemon.tatami_mat": "Tatami Mat",
+  "block.cobblemon.mechanical_fan": "Mechanical Pinwheel",
+  "block.cobblemon.mechanical_fridge": "Mechanical Cabinet",
+  "block.cobblemon.mechanical_mower": "Mechanical Circular Saw",
+  "block.cobblemon.mechanical_oven": "Mechanical Box",
+  "block.cobblemon.mechanical_washer": "Mechanical Tub",
 
   "block.cobblemon.small_budding_tumblestone": "Small Tumblestone Bud",
   "block.cobblemon.medium_budding_tumblestone": "Medium Tumblestone Bud",
