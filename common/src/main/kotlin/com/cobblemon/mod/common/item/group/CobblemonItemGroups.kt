@@ -244,6 +244,12 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.HEALING_MACHINE)
         entries.accept(CobblemonItems.PASTURE)
 
+        entries.accept(CobblemonItems.MECHANICAL_OVEN)
+        entries.accept(CobblemonItems.MECHANICAL_FAN)
+        entries.accept(CobblemonItems.MECHANICAL_FRIDGE)
+        entries.accept(CobblemonItems.MECHANICAL_WASHER)
+        entries.accept(CobblemonItems.MECHANICAL_MOWER)
+
         entries.accept(CobblemonItems.GILDED_CHEST)
         entries.accept(CobblemonItems.YELLOW_GILDED_CHEST)
         entries.accept(CobblemonItems.GREEN_GILDED_CHEST)

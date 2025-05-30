@@ -1,0 +1,29 @@
+{
+  "parent": "cobblemon:recipes/root",
+  "rewards": {
+    "recipes": [
+      "cobblemon:mechanical_fan"
+    ]
+  },
+  "criteria": {
+    "caught_rotom": {
+      "trigger": "cobblemon:catch_pokemon",
+      "conditions": {
+        "count": 1,
+        "species": "rotom"
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:mechanical_fan"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "caught_rotom",
+      "has_the_recipe"
+    ]
+  ]
+}

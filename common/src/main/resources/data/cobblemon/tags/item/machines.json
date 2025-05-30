@@ -5,6 +5,7 @@
     "cobblemon:pasture",
     "cobblemon:restoration_tank",
     "cobblemon:monitor",
-    "cobblemon:fossil_analyzer"
+    "cobblemon:fossil_analyzer",
+	"#cobblemon:rotom_appliances"
   ]
 }
