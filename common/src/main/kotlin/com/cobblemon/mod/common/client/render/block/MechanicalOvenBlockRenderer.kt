@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.block
 
 import com.cobblemon.mod.common.block.entity.MechanicalOvenBlockEntity
+import com.cobblemon.mod.common.block.chest.MechanicalOvenBlock.Type
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
@@ -39,7 +40,7 @@ class MechanicalOvenBlockRenderer(context: BlockEntityRendererProvider.Context) 
         state.currentAspects = aspects
         state.updatePartialTicks(tickDelta)
 
-        val poserId = entity.type.poserId
+        val poserId = Type.RED
 
         val model = VaryingModelRepository.getPoser(poserId, state) as BlockEntityModel
         model.context = context

@@ -185,7 +185,7 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
     }
 
     enum class Type(val poserId: ResourceLocation) : StringRepresentable {
-        MECHANICAL_OVEN(cobblemonResource("mechanical_oven"));
+        RED(cobblemonResource("mechanical_oven"));
 
         override fun getSerializedName(): String = name.lowercase()
 
