@@ -40,7 +40,7 @@ class MechanicalOvenBlockRenderer(context: BlockEntityRendererProvider.Context) 
         state.currentAspects = aspects
         state.updatePartialTicks(tickDelta)
 
-        val poserId = Type.RED
+        val poserId = Type.RED.poserId
 
         val model = VaryingModelRepository.getPoser(poserId, state) as BlockEntityModel
         model.context = context
