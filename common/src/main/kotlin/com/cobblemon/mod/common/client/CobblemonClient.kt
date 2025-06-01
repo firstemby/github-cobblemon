@@ -330,6 +330,7 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CANDLE_POKE_CAKE, ::CandlePokeCakeBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_OVEN, ::MechanicalOvenBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_WASHER, ::MechanicalWasherBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_FRIDGE, ::MechanicalFridgeBlockRenderer)
     }
 
     private fun registerEntityRenderers() {

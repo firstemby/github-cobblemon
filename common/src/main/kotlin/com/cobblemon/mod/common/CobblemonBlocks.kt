@@ -499,7 +499,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val MECHANICAL_WASHER = this.create("mechanical_washer", MechanicalWasherBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
-    val MECHANICAL_FRIDGE = this.create("mechanical_fridge", Block(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val MECHANICAL_FRIDGE = this.create("mechanical_fridge", MechanicalFridgeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
 
     @JvmField
     val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)))
