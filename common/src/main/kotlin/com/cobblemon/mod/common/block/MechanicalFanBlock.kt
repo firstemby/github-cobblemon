@@ -9,24 +9,24 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.util.playSoundServer
-import com.cobblemon.mod.common.util.toVec3d
+import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
+import com.cobblemon.mod.common.client.sound.instances.CancellableSoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
+import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.HorizontalDirectionalBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
-import net.minecraft.world.level.block.Rotation
-import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -105,6 +105,7 @@ class MechanicalFanBlock(settings: Properties) : Block(settings), SimpleWaterlog
         state = state.cycle(ACTIVE)
         level.setBlock(pos!!, state, 3)
         level.gameEvent(player, if (state.getValue(ACTIVE)) GameEvent.BLOCK_ACTIVATE else GameEvent.BLOCK_DEACTIVATE, pos)
+        playSound(level, pos, state, CobblemonSounds.DISPLAY_CASE_PLACE)
     }
 
     override fun getFluidState(blockState: BlockState): FluidState? {
@@ -151,5 +152,42 @@ class MechanicalFanBlock(settings: Properties) : Block(settings), SimpleWaterlog
             Shapes.box(0.4375, 0.125, 0.4375, 0.5625, 0.25, 0.5625),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.125, 0.6875)
         )
+
+        fun playSound(world: Level, pos: BlockPos, state: BlockState, sound: SoundEvent) {
+            var d = pos.x.toDouble() + 0.5
+            val e = pos.y.toDouble() + 0.5
+            var f = pos.z.toDouble() + 0.5
+            val direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING)
+            d += direction.stepX.toDouble() * 0.5
+            f += direction.stepZ.toDouble() * 0.5
+            world.playSound(
+                null,
+                d,
+                e,
+                f,
+                sound,
+                SoundSource.BLOCKS,
+                0.5f,
+                world.random.nextFloat() * 0.1f + 0.9f
+            )
+        }
     }
+
+    //TODO Get it to be a cleanly looping sound, and get Sterr to make a proper sound for it
+/*    override fun animateTick(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
+        if ((state.getValue(ACTIVE))) {
+            if (random.nextInt(6) == 0) {
+                level.playLocalSound(
+                    pos.x.toDouble() + 0.5,
+                    pos.y.toDouble() + 0.5,
+                    pos.z.toDouble() + 0.5,
+                    CobblemonSounds.EVOLUTION_NOTIFICATION,
+                    SoundSource.BLOCKS,
+                    1f,
+                    1f,
+                    false
+                )
+            }
+        }
+    }*/
 }

@@ -147,7 +147,6 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
         hit: BlockHitResult
     ): InteractionResult {
         val entity = world.getBlockEntity(pos) as? MechanicalOvenBlockEntity ?: return InteractionResult.FAIL
-        if (world.getBlockState(pos.above()).isSolidRender(world, pos.above())) return InteractionResult.FAIL
         player.openMenu(entity)
         if (!player.level().isClientSide) {
             PiglinAi.angerNearbyPiglins(player, true)
