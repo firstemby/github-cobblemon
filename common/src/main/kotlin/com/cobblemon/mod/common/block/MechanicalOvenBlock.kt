@@ -220,7 +220,7 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
     }
 
     override fun tick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
-        val blockEntity = world.getBlockEntity(pos) as? GildedChestBlockEntity ?: return
+        val blockEntity = world.getBlockEntity(pos) as? MechanicalOvenBlockEntity ?: return
         blockEntity.tick()
     }
 

@@ -69,17 +69,25 @@ class MechanicalWasherBlock(settings: Properties) : BaseEntityBlock(settings),
             it.group(propertiesCodec()).apply(it, ::MechanicalWasherBlock)
         }
 
-        val SOUTH_OUTLINE = Shapes.or(
-            Shapes.box(0.0625, 0.0, 0.125, 0.9375, 0.625, 0.8125)
+        private val NORTH_OUTLINE = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.125, 0.9375, 0.875, 1.0),
+            Shapes.box(0.25, 0.125, 0.0625, 0.75, 0.625, 0.125),
+            Shapes.box(0.9375, 0.125, 0.6875, 1.0, 0.375, 0.9375)
         )
-        val NORTH_OUTLINE = Shapes.or(
-            Shapes.box(0.0625, 0.0, 0.1875, 0.9375, 0.625, 0.875)
+        private val SOUTH_OUTLINE = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.0, 0.9375, 0.875, 0.875),
+            Shapes.box(0.25, 0.125, 0.875, 0.75, 0.625, 0.9375),
+            Shapes.box(0.0, 0.125, 0.0625, 0.0625, 0.375, 0.3125)
         )
-        val WEST_OUTLINE = Shapes.or(
-            Shapes.box(0.1875, 0.0, 0.0625, 0.875, 0.625, 0.9375)
+        private val WEST_OUTLINE = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.0625, 1.0, 0.875, 0.9375),
+            Shapes.box(0.0625, 0.125, 0.25, 0.125, 0.625, 0.75),
+            Shapes.box(0.6875, 0.125, 0.0, 0.9375, 0.375, 0.0625)
         )
-        val EAST_OUTLINE = Shapes.or(
-            Shapes.box(0.125, 0.0, 0.0625, 0.8125, 0.625, 0.9375)
+        private val EAST_OUTLINE = Shapes.or(
+            Shapes.box(0.0, 0.0, 0.0625, 0.875, 0.875, 0.9375),
+            Shapes.box(0.875, 0.125, 0.25, 0.9375, 0.625, 0.75),
+            Shapes.box(0.0625, 0.125, 0.9375, 0.3125, 0.375, 1.0)
         )
     }
 
@@ -220,7 +228,7 @@ class MechanicalWasherBlock(settings: Properties) : BaseEntityBlock(settings),
     }
 
     override fun tick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
-        val blockEntity = world.getBlockEntity(pos) as? GildedChestBlockEntity ?: return
+        val blockEntity = world.getBlockEntity(pos) as? MechanicalWasherBlockEntity ?: return
         blockEntity.tick()
     }
 
