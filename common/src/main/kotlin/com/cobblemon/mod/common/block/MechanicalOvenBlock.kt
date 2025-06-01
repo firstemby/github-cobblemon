@@ -146,7 +146,7 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
         player: Player,
         hit: BlockHitResult
     ): InteractionResult {
-        val entity = world.getBlockEntity(pos) as? GildedChestBlockEntity ?: return InteractionResult.FAIL
+        val entity = world.getBlockEntity(pos) as? MechanicalOvenBlockEntity ?: return InteractionResult.FAIL
         if (world.getBlockState(pos.above()).isSolidRender(world, pos.above())) return InteractionResult.FAIL
         player.openMenu(entity)
         if (!player.level().isClientSide) {

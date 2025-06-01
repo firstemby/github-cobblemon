@@ -102,6 +102,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val MECHANICAL_OVEN: BlockEntityType<MechanicalOvenBlockEntity> = this.create("mechanical_oven",
         BlockEntityType.Builder.of(::MechanicalOvenBlockEntity, CobblemonBlocks.MECHANICAL_OVEN).build(null)
     )
+    @JvmField
+    val MECHANICAL_WASHER: BlockEntityType<MechanicalWasherBlockEntity> = this.create("mechanical_washer",
+        BlockEntityType.Builder.of(::MechanicalWasherBlockEntity, CobblemonBlocks.MECHANICAL_WASHER).build(null)
+    )
 
     /*@JvmField
     val LURE_CAKE: BlockEntityType<LureCakeBlockEntity> =

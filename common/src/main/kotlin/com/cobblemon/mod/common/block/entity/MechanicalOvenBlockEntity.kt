@@ -75,13 +75,13 @@ class MechanicalOvenBlockEntity(pos: BlockPos, state: BlockState) : Randomizable
 
     override fun startOpen(player: Player) {
         if (!this.remove && !player.isSpectator) {
-            stateManager.incrementOpeners(player, level!!, blockPos, blockState)
+            stateManager.incrementOpeners(player, level, blockPos, blockState)
         }
     }
 
     override fun stopOpen(player: Player) {
         if (!this.remove && !player.isSpectator) {
-            stateManager.decrementOpeners(player, level!!, blockPos, blockState)
+            stateManager.decrementOpeners(player, level, blockPos, blockState)
         }
     }
 
@@ -162,7 +162,7 @@ class MechanicalOvenBlockEntity(pos: BlockPos, state: BlockState) : Randomizable
 
     fun tick() {
         if (!this.remove) {
-            stateManager.recheckOpeners(level!!, blockPos, this.blockState)
+            stateManager.recheckOpeners(level, blockPos, this.blockState)
         }
     }
 }

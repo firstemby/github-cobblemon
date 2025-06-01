@@ -13,6 +13,16 @@
 			"bones": [
 				{
 					"name": "wash",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "wash",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "shell",
+					"parent": "body",
 					"pivot": [0, 0, 0],
 					"cubes": [
 						{"origin": [-7, 0, -6], "size": [14, 14, 14], "uv": [0, 0]},
@@ -21,7 +31,7 @@
 				},
 				{
 					"name": "door",
-					"parent": "wash",
+					"parent": "body",
 					"pivot": [-4, 6, -6],
 					"cubes": [
 						{"origin": [-4, 2, -7], "size": [8, 8, 1], "uv": [0, 28]}
