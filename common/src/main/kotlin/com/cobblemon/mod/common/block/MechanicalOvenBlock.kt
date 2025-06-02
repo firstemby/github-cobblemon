@@ -139,6 +139,17 @@ class MechanicalOvenBlock(settings: Properties) : BaseEntityBlock(settings),
         return super.playerWillDestroy(world, pos, state, player)
     }
 
+    override fun onRemove(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        newState: BlockState,
+        moved: Boolean
+    ) {
+        Containers.dropContentsOnDestroy(state, newState, world, pos)
+        super.onRemove(state, world, pos, newState, moved)
+    }
+
     override fun useWithoutItem(
         state: BlockState,
         world: Level,

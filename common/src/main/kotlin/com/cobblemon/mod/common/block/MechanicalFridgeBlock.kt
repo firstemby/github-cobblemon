@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.RandomSource
 import net.minecraft.util.StringRepresentable
+import net.minecraft.world.Containers
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.piglin.PiglinAi
@@ -123,13 +124,6 @@ class MechanicalFridgeBlock(properties: Properties): BaseEntityBlock(properties)
 
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState) = if (blockState.getValue(PART) == MechanicalFridgePart.BOTTOM) MechanicalFridgeBlockEntity(blockPos, blockState) else null
 
-    private val facingToYaw: HashMap<Direction, Float> = hashMapOf(
-        Direction.NORTH to -179.0F,
-        Direction.WEST to 90.0F,
-        Direction.SOUTH to 0.0F,
-        Direction.EAST to -90.0F
-    )
-
     override fun getName(): MutableComponent {
         return Component.translatable("block.cobblemon.mechanical_fridge")
     }
@@ -196,7 +190,7 @@ class MechanicalFridgeBlock(properties: Properties): BaseEntityBlock(properties)
         val world = blockPlaceContext.level
         if (world.getBlockState(abovePosition).canBeReplaced(blockPlaceContext) && !world.isOutsideBuildHeight(abovePosition)) {
             return defaultBlockState()
-                .setValue(HorizontalDirectionalBlock.FACING, blockPlaceContext.horizontalDirection)
+                .setValue(HorizontalDirectionalBlock.FACING, blockPlaceContext.horizontalDirection.opposite)
                 .setValue(PART, MechanicalFridgePart.BOTTOM)
                 .setValue(WATERLOGGED, blockPlaceContext.level.getFluidState(blockPlaceContext.clickedPos).type == Fluids.WATER)
         }
@@ -244,19 +238,11 @@ class MechanicalFridgeBlock(properties: Properties): BaseEntityBlock(properties)
             HorizontalDirectionalBlock.FACING, rotation.rotate(blockState.getValue(
                 HorizontalDirectionalBlock.FACING)))
 
-    //TODO This doesn't seem to be working with either version of the below codes. Need to work out why and remedy that
-    //From PC
-/*    @Deprecated("Deprecated in Java")
-    override fun mirror(blockState: BlockState, mirror: Mirror): BlockState {
-        return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
-    }*/
-    //From other Mechanical blocks
-/*    override fun mirror(state: BlockState, mirror: Mirror): BlockState {
-        return state.rotate(mirror.getRotation(state.getValue(HORIZONTAL_FACING) as Direction))
-    }*/
-
     override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
+        if (!state.`is`(newState.block)) {
+            Containers.dropContentsOnDestroy(state, newState, world, pos)
+            super.onRemove(state, world, pos, newState, moved)
+        }
     }
 
     override fun hasAnalogOutputSignal(state: BlockState): Boolean {
