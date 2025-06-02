@@ -69,7 +69,7 @@ class MechanicalFridgeBlockEntity(pos: BlockPos, state: BlockState) : Randomizab
     override fun getDefaultName() = Component.translatable("block.cobblemon.mechanical_fridge")
 
     override fun createMenu(syncId: Int, playerInventory: Inventory): AbstractContainerMenu =
-        ChestMenu.threeRows(syncId, playerInventory, this)
+        ChestMenu.sixRows(syncId, playerInventory, this)
 
     override fun getItems() = inventoryContents
 
@@ -104,7 +104,7 @@ class MechanicalFridgeBlockEntity(pos: BlockPos, state: BlockState) : Randomizab
     }
 
     companion object {
-        val NUM_SLOTS = 27
+        val NUM_SLOTS = 54
         fun playSound(world: Level, pos: BlockPos, state: BlockState, sound: SoundEvent) {
             var d = pos.x.toDouble() + 0.5
             val e = pos.y.toDouble() + 0.5

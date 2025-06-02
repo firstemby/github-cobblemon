@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "CBC",
+    "bCR"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "B": {
+      "tag": "c:rods/breeze"
+    },
+    "b": {
+      "tag": "minecraft:buttons"
+    }
+  },
+  "result": {
+    "id": "cobblemon:mechanical_fan"
+  }
+}

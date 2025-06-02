@@ -260,15 +260,13 @@ class MechanicalFridgeBlock(properties: Properties): BaseEntityBlock(properties)
         player: Player,
         hit: BlockHitResult
     ): InteractionResult {
-        val entity = world.getBlockEntity(pos) as? MechanicalFridgeBlockEntity ?: return InteractionResult.FAIL
-
         val basePos = getBasePosition(state, pos)
         // Remove any duplicate block entities that may exist
         world.getBlockEntity(basePos.above())?.setRemoved()
         val baseEntity = world.getBlockEntity(basePos)
         if (baseEntity !is MechanicalFridgeBlockEntity) return InteractionResult.SUCCESS
 
-        player.openMenu(entity)
+        player.openMenu(baseEntity)
         if (!player.level().isClientSide) {
             PiglinAi.angerNearbyPiglins(player, true)
         }

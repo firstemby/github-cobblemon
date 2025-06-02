@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CID",
+    "CRC"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "I": {
+      "item": "minecraft:packed_ice"
+    },
+    "D": [
+      {
+        "item": "minecraft:copper_door"
+      },
+      {
+        "item": "minecraft:waxed_copper_door"
+      }
+    ]
+  },
+  "result": {
+    "id": "cobblemon:mechanical_fridge"
+  }
+}
