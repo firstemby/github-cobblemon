@@ -16,7 +16,7 @@
       "item": "minecraft:magma_cream"
     },
     "T": {
-        "item": "c:glass_blocks/tinted"
+        "tag": "c:glass_blocks/tinted"
       }
   },
   "result": {
