@@ -1,0 +1,88 @@
+t.x = q.pokemon_entity.x;
+t.y = q.pokemon_entity.y;
+t.z = q.pokemon_entity.z;
+
+t.world = q.pokemon_entity.world;
+
+t.biome = q.pokemon_entity.biome;
+
+t.world.is_raining_at(t.x, t.y, t.z) == 1 && t.world.is_thundering == 0 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_rainy');
+};
+
+t.world.is_raining_at(t.x, t.y, t.z) == 1 && t.world.is_thundering == 1 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_stormy');
+};
+
+t.biome.is_in('#minecraft:is_overworld') && t.y > 190 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_cloudy');
+};
+
+t.biome.is_in('#minecraft:increased_fire_burnout') ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_misty');
+};
+
+t.biome.is_in('#minecraft:snow_golem_melts') ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_dry');
+};
+
+t.biome.is_in('#cobblemon:is_desert') ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_sandstorm');
+};
+
+t.biome.is_in('#cobblemon:is_freezing') ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_snowy');
+};
+
+t.world.is_snowing_at(t.x, t.y, t.z) == 1 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_weather_blizzard');
+};
+
+t.biome.is_in('#minecraft:is_overworld') && t.world.time_of_day >= 0 && t.world.time_of_day <= 5999 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_time_dawn');
+};
+
+t.biome.is_in('#minecraft:is_overworld') && t.world.time_of_day >= 6000 && t.world.time_of_day <= 12999 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_time_lunchtime');
+};
+
+t.biome.is_in('#minecraft:is_overworld') && t.world.time_of_day >= 13000 && t.world.time_of_day <= 13999 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_time_dusk');
+};
+
+t.biome.is_in('#minecraft:is_overworld') && t.world.time_of_day >= 14000 && t.world.time_of_day <= 23999 ? {
+    q.pokemon_entity.add_potential_marks('cobblemon:mark_time_sleepy-time');
+};
+
+q.pokemon_entity.add_potential_marks(
+    'cobblemon:mark_rare',
+    'cobblemon:mark_uncommon',
+    'cobblemon:mark_personality_absent-minded',
+    'cobblemon:mark_personality_angry',
+    'cobblemon:mark_personality_calmness',
+    'cobblemon:mark_personality_charismatic',
+    'cobblemon:mark_personality_crafty',
+    'cobblemon:mark_personality_excited',
+    'cobblemon:mark_personality_ferocious',
+    'cobblemon:mark_personality_flustered',
+    'cobblemon:mark_personality_jittery',
+    'cobblemon:mark_personality_joyful',
+    'cobblemon:mark_personality_intellectual',
+    'cobblemon:mark_personality_intense',
+    'cobblemon:mark_personality_kindly',
+    'cobblemon:mark_personality_scowling',
+    'cobblemon:mark_personality_rowdy',
+    'cobblemon:mark_personality_peeved',
+    'cobblemon:mark_personality_pumped-up',
+    'cobblemon:mark_personality_smiley',
+    'cobblemon:mark_personality_teary',
+    'cobblemon:mark_personality_upbeat',
+    'cobblemon:mark_personality_zoned-out',
+    'cobblemon:mark_personality_humble',
+    'cobblemon:mark_personality_prideful',
+    'cobblemon:mark_personality_slump',
+    'cobblemon:mark_personality_thorny',
+    'cobblemon:mark_personality_unsure',
+    'cobblemon:mark_personality_vigor',
+    'cobblemon:mark_personality_zero_energy'
+);

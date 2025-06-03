@@ -6,7 +6,7 @@
 				"identifier": "geometry.incineroar",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 5,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 4.5,
 				"visible_bounds_offset": [0, 1.75, 0]
 			},
@@ -998,8 +998,16 @@
 					]
 				},
 				{
-					"name": "tail_ruff",
+					"name": "tail5",
 					"parent": "tail4",
+					"pivot": [0, 19.25, 22],
+					"cubes": [
+						{"origin": [-2.5, 16.75, 22], "size": [5, 5, 7], "uv": [64, 3]}
+					]
+				},
+				{
+					"name": "tail_ruff",
+					"parent": "tail5",
 					"pivot": [2.5, 19.25, 21.5]
 				},
 				{
@@ -1068,14 +1076,6 @@
 					"pivot": [0, 15.75, 21.5],
 					"cubes": [
 						{"origin": [-4, 12.75, 21.5], "size": [8, 3, 0], "uv": [103, 0]}
-					]
-				},
-				{
-					"name": "tail5",
-					"parent": "tail4",
-					"pivot": [0, 19.25, 22],
-					"cubes": [
-						{"origin": [-2.5, 16.75, 22], "size": [5, 5, 7], "uv": [64, 3]}
 					]
 				},
 				{

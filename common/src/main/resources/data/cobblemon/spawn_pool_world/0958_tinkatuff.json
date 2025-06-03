@@ -25,6 +25,25 @@
                     "#cobblemon:ruin"
                 ]
             }
+        },
+        {
+            "id": "tinkatuff-2",
+            "pokemon": "tinkatuff",
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "uncommon",
+            "level": "24-38",
+            "weight": 1.44,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#aether:is_aether"
+                ],
+                "structures": [
+                    "#aether:dungeons"
+                ]
+            }
         }
     ]
 }

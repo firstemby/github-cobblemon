@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
@@ -56,7 +57,9 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
         battle.dispatch {
             val effect = message.effectAt(1) ?: return@dispatch GO
             val status = Statuses.getStatus(effect.id)
-            val actionEffect = status?.getActionEffect() ?: return@dispatch GO
+            val actionEffect = status?.getActionEffect() ?: let {
+                ActionEffects.actionEffects[cobblemonResource("activate_${effect.id}")] ?: return@dispatch GO
+            }
             val providers = mutableListOf<Any>(battle)
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
             pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
@@ -83,13 +86,12 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
 
             if (effect.id == "sketch" && pokemon.effectedPokemon.moveSet.any { it.name == "sketch" } && extraEffect is String) {
                 // Apply Sketch to the pokemon's current moveset if it was successfully used in battle
-                val moveTemplate = Moves.getByName(extraEffect.replace(" ", ""))
+                val moveTemplate = Moves.getByName(extraEffect.replace(Regex("[^A-Za-z0-9]"), ""))
                 Moves.getByName("sketch")?.let {
                     moveTemplate?.let { template ->
                         pokemon.effectedPokemon.exchangeMove(oldMove = it, newMove = template)
                     }
                 }
-
             }
 
             val lang = when (effect.id) {

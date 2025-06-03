@@ -10,13 +10,13 @@
             "item": "minecraft:shulker_shell"
         },
         "l": {
-            "item": "minecraft:netherite_ingot"
+            "tag": "c:ingots/netherite"
         },
         "c": {
             "item": "minecraft:nether_star"
         },
         "r": {
-            "item": "minecraft:netherite_ingot"
+            "tag": "c:ingots/netherite"
         },
         "b": {
             "item": "minecraft:shulker_shell"

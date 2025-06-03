@@ -5,6 +5,7 @@
 	"minecraft:lily_of_the_valley",
 	"minecraft:oxeye_daisy",
 	"minecraft:white_tulip",
+	"cobblemon:pep_up_flower",
 	{
       "id": "aether:white_flower",
       "required": false

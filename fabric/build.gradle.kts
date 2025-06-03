@@ -39,6 +39,7 @@ repositories {
     mavenLocal()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://maven.terraformersmc.com/")
 }
 
 dependencies {
@@ -56,10 +57,13 @@ dependencies {
     modApi(libs.fabric.api)
     modApi(libs.bundles.fabric)
 
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+    modCompileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false
     }
+
+    modImplementation(libs.bundles.fabric.integrations.implementation)
     modRuntimeOnly(libs.bundles.fabric.integrations.runtimeOnly)
+
 //    modImplementation(libs.flywheelFabric)
 //    include(libs.flywheelFabric)
 
@@ -90,12 +94,14 @@ tasks {
         inputs.property("version", rootProject.version)
         inputs.property("fabric_loader_version", libs.fabric.loader.get().version)
         inputs.property("minecraft_version", rootProject.property("mc_version").toString())
+        inputs.property("java_version", rootProject.property("java_version").toString())
 
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to rootProject.version,
                 "fabric_loader_version" to libs.fabric.loader.get().version,
-                "minecraft_version" to rootProject.property("mc_version").toString()
+                "minecraft_version" to rootProject.property("mc_version").toString(),
+                "java_version" to rootProject.property("java_version").toString()
             )
         }
     }

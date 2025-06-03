@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_water": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "cobblemon:water_stone"
+              "cobblemon:water_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_water",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

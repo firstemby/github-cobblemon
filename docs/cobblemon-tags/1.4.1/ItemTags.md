@@ -5,7 +5,7 @@ This file contains tags related to items in cobblemon.
 ## Tags:
 
 <details>
-<summary><b>Tag:</b> #items:apricorns</summary>
+<summary><b>Tag:</b> #cobblemon:apricorns</summary>
 
 - cobblemon:black_apricorn
 - cobblemon:blue_apricorn
@@ -18,7 +18,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:apricorn_logs</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_logs</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:apricorn_wood
@@ -28,7 +28,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:apricorn_sprouts</summary>
+<summary><b>Tag:</b> #cobblemon:apricorn_sprouts</summary>
 
 - cobblemon:black_apricorn_seed
 - cobblemon:blue_apricorn_seed
@@ -41,7 +41,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:azalea_tree</summary>
+<summary><b>Tag:</b> #cobblemon:azalea_tree</summary>
 
 - minecraft:azalea
 - minecraft:flowering_azalea
@@ -49,7 +49,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:berries</summary>
+<summary><b>Tag:</b> #cobblemon:berries</summary>
 
 - cobblemon:aguav_berry
 - cobblemon:apicot_berry
@@ -124,7 +124,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:boats</summary>
+<summary><b>Tag:</b> #cobblemon:boats</summary>
 
 - cobblemon:apricorn_boat
 - cobblemon:apricorn_chest_boat
@@ -132,7 +132,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:cobblemon_seeds</summary>
+<summary><b>Tag:</b> #cobblemon:cobblemon_seeds</summary>
 
 - cobblemon:blue_mint_seeds
 - cobblemon:cyan_mint_seeds
@@ -145,7 +145,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:evolution_items</summary>
+<summary><b>Tag:</b> #cobblemon:evolution_items</summary>
 
 - #cobblemon:evolution_stones
 - cobblemon:berry_sweet
@@ -183,7 +183,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:evolution_stones</summary>
+<summary><b>Tag:</b> #cobblemon:evolution_stones</summary>
 
 - cobblemon:dawn_stone
 - cobblemon:dusk_stone
@@ -199,7 +199,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:experience_candies</summary>
+<summary><b>Tag:</b> #cobblemon:experience_candies</summary>
 
 - cobblemon:exp_candy_l
 - cobblemon:exp_candy_m
@@ -211,14 +211,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:hanging_signs</summary>
 
 - cobblemon:apricorn_hanging_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:herbs</summary>
+<summary><b>Tag:</b> #cobblemon:herbs</summary>
 
 - cobblemon:mental_herb
 - cobblemon:mirror_herb
@@ -229,7 +229,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:mints</summary>
+<summary><b>Tag:</b> #cobblemon:mints</summary>
 
 - cobblemon:adamant_mint
 - cobblemon:bold_mint
@@ -256,7 +256,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:mint_leaf</summary>
+<summary><b>Tag:</b> #cobblemon:mint_leaf</summary>
 
 - cobblemon:blue_mint_leaf
 - cobblemon:cyan_mint_leaf
@@ -268,7 +268,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:mutated_berries</summary>
+<summary><b>Tag:</b> #cobblemon:mutated_berries</summary>
 
 - cobblemon:aguav_berry
 - cobblemon:apicot_berry
@@ -313,7 +313,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:plants</summary>
+<summary><b>Tag:</b> #cobblemon:plants</summary>
 
 - #cobblemon:apricorn_sprouts
 - #cobblemon:apricorns
@@ -330,7 +330,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:poke_balls</summary>
+<summary><b>Tag:</b> #cobblemon:poke_balls</summary>
 
 - cobblemon:azure_ball
 - cobblemon:beast_ball
@@ -368,7 +368,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:protein_ingredients</summary>
+<summary><b>Tag:</b> #cobblemon:protein_ingredients</summary>
 
 - minecraft:beef
 - minecraft:chicken
@@ -379,7 +379,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:seeds</summary>
+<summary><b>Tag:</b> #cobblemon:seeds</summary>
 
 - #cobblemon:cobblemon_seeds
 - minecraft:beetroot_seeds
@@ -390,14 +390,14 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - cobblemon:apricorn_sign
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:zinc_ingredients</summary>
+<summary><b>Tag:</b> #cobblemon:zinc_ingredients</summary>
 
 - minecraft:cod
 - minecraft:salmon
@@ -557,35 +557,35 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:fences</summary>
+<summary><b>Tag:</b> #cobblemon:fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:flowers</summary>
+<summary><b>Tag:</b> #cobblemon:flowers</summary>
 
 - cobblemon:pep_up_flower
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:hanging_signs</summary>
+<summary><b>Tag:</b> #cobblemon:hanging_signs</summary>
 
 - #cobblemon:hanging_signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:leaves</summary>
+<summary><b>Tag:</b> #cobblemon:leaves</summary>
 
 - cobblemon:apricorn_leaves
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:logs</summary>
+<summary><b>Tag:</b> #cobblemon:logs</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:apricorn_wood
@@ -595,7 +595,7 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:logs_that_burn</summary>
+<summary><b>Tag:</b> #cobblemon:logs_that_burn</summary>
 
 - cobblemon:apricorn_log
 - cobblemon:apricorn_wood
@@ -605,21 +605,21 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:planks</summary>
+<summary><b>Tag:</b> #cobblemon:planks</summary>
 
 - cobblemon:apricorn_planks
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:signs</summary>
+<summary><b>Tag:</b> #cobblemon:signs</summary>
 
 - #cobblemon:signs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:villager_plantable_seeds</summary>
+<summary><b>Tag:</b> #cobblemon:villager_plantable_seeds</summary>
 
 - cobblemon:blue_mint_seeds
 - cobblemon:cyan_mint_seeds
@@ -633,49 +633,49 @@ This file contains tags related to items in cobblemon.
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_buttons</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_buttons</summary>
 
 - cobblemon:apricorn_button
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_doors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_doors</summary>
 
 - cobblemon:apricorn_door
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_fences</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_fences</summary>
 
 - cobblemon:apricorn_fence
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_pressure_plates</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_pressure_plates</summary>
 
 - cobblemon:apricorn_pressure_plate
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_slabs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_slabs</summary>
 
 - cobblemon:apricorn_slab
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_stairs</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_stairs</summary>
 
 - cobblemon:apricorn_stairs
 
 </details>
 
 <details>
-<summary><b>Tag:</b> #items:wooden_trapdoors</summary>
+<summary><b>Tag:</b> #cobblemon:wooden_trapdoors</summary>
 
 - cobblemon:apricorn_trapdoor
 

@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_glass": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:tinted_glass"
+              "cobblemon:dark_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_glass",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

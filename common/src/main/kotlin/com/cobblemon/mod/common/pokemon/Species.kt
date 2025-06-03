@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ClientDataSynchronizer
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
@@ -31,6 +32,7 @@ import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
+import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.PoseType.Companion.FLYING_POSES
@@ -107,6 +109,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
     var dynamaxBlocked = false
     var implemented = false
+    var baseAI: MutableList<BehaviourConfig>? = null
+    var ai = mutableListOf<BehaviourConfig>()
 
     /**
      * The height in decimeters
@@ -121,6 +125,9 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
 
     var forms = mutableListOf<FormData>()
+        private set
+
+    var riding: RidingProperties = RidingProperties()
         private set
 
     val standardForm by lazy { FormData(_evolutions = this.evolutions).initialize(this) }
@@ -249,6 +256,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             pb.writeBoolean(ability is CommonAbility)
             pb.writeString(ability.template.name)
         }
+
+        this.riding.encode(buffer)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -290,6 +299,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
                 pool.add(Priority.NORMAL, it)
             }
         }
+        this.riding = RidingProperties.decode(buffer)
         this.initialize()
     }
 

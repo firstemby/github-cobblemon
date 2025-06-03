@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.pasture.PastureLinkManager
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.text.textClickHandlers
 import com.cobblemon.mod.common.block.PastureBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
@@ -95,6 +96,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             blockEntity.ticksUntilCheck--
             if (blockEntity.ticksUntilCheck <= 0) {
                 blockEntity.checkPokemon()
+            }
+
+            // for every tethered pokemon tick metabolism if fullness is above 0
+            val tetheredPokemonList = blockEntity.tetheredPokemon.filter { it.getPokemon() != null }
+            for (tetheredPokemon in tetheredPokemonList) {
+                val pokemon = tetheredPokemon.getPokemon()!!
+                if (pokemon.currentFullness > 0) {
+                    pokemon.tickMetabolism()
+                }
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }

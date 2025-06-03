@@ -91,7 +91,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -177,7 +177,7 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],
@@ -250,7 +250,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {

@@ -27,6 +27,9 @@
     ],
     "dynamiclights": [
       "com.cobblemon.mod.fabric.compat.lambdynamiclights.LambDynamicLightsCompatEntrypoint"
+    ],
+    "modmenu": [
+      "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"
     ]
   },
   "mixins": [
@@ -37,8 +40,8 @@
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": "*",
-    "minecraft": ">=${minecraft_version}",
-    "java": ">=17"
+    "minecraft": "${minecraft_version}",
+    "java": "${java_version}"
   },
   "custom": {
     "modmenu": {

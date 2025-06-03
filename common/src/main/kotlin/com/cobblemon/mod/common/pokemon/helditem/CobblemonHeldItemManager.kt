@@ -124,6 +124,10 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         if (battle.isPvP && !consumeHeldItems) {
             return
         }
+        // Block stealing from NPCs
+        if (battle.isPvN) {
+            return
+        }
         // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
         if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
             this.give(pokemon, itemID)
@@ -191,5 +195,15 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
      */
     fun registerStackRemap(remap: Function<ItemStack, String?>) {
         this.stackRemaps.add(remap)
+    }
+
+    override fun nameOf(showdownId: String): Component {
+        // Check Remaps before defaulting to super
+        for (remap in remaps) {
+            if (remap.value == showdownId) {
+                return remap.key.description
+            }
+        }
+        return super.nameOf(showdownId)
     }
 }

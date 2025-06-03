@@ -1,0 +1,22 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "foods",
+    "ingredients": [
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:milk_bucket"
+        },
+        {
+            "item": "minecraft:sugar"
+        },
+        {
+            "item": "minecraft:cocoa_beans"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:rage_candy_bar"
+    },
+    "seasoningProcessors": []
+}

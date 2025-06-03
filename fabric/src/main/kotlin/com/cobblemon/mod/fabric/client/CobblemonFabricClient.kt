@@ -9,6 +9,7 @@
 package com.cobblemon.mod.fabric.client
 
 import com.cobblemon.mod.common.CobblemonClientImplementation
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
@@ -89,6 +90,7 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     pokedex.getItemModelPath("off")
                 )
             }
+            CobblemonItems.wearables.forEach { wearable -> it.addModels(wearable.getModel3d()) }
         }
 
         CobblemonFabric.networkManager.registerClientHandlers()

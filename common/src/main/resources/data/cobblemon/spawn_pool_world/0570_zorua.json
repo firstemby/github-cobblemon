@@ -18,7 +18,7 @@
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "moonPhase": "4"
+                    "moonPhase": 4
                 }
             },
             "condition": {
@@ -50,7 +50,7 @@
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
-                    "moonPhase": "4"
+                    "moonPhase": 4
                 }
             },
             "condition": {

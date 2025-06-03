@@ -13,10 +13,10 @@
   ],
   "variations": [
     {
-      "displayName": "cobblemon.pokedex.variation.metal",
+      "displayName": "cobblemon.pokedex.variation.material",
       "icon": "cobblemon:textures/gui/pokedex/variation/material.png",
       "aspects": [
-        "metals-false",
+        "metals-none",
         "metals-copper",
         "metals-iron",
         "metals-gold",

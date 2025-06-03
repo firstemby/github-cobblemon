@@ -1,0 +1,18 @@
+{
+  "ingredient": "minecraft:golden_carrot",
+  "flavours": {
+    "BITTER": 10
+  },
+  "colour": "yellow",
+  "baitEffects": [
+    {
+      "type": "cobblemon:rarity_bucket",
+      "chance": 1.0,
+      "value": 1
+    }
+  ],
+  "food": {
+    "hunger": 6,
+    "saturation": 14.4
+  }
+}

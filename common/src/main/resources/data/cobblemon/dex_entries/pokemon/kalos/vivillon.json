@@ -1,13 +1,19 @@
 {
   "id": "cobblemon:vivillon",
   "speciesId": "cobblemon:vivillon",
-  "displayAspects": ["vivillon-wings-meadow"],
+  "displayAspects": [],
   "conditionAspects": [],
   "forms": [
     {
       "displayForm": "Normal",
       "unlockForms": [
         "Normal"
+      ]
+    },
+    {
+      "displayForm": "Pokeball",
+      "unlockForms": [
+        "Pokeball"
       ]
     }
   ],
@@ -35,7 +41,6 @@
         "vivillon-wings-savanna",
         "vivillon-wings-sun",
         "vivillon-wings-tundra",
-        "vivillon-wings-poke-ball",
         "vivillon-wings-inferno",
         "vivillon-wings-void",
         "vivillon-wings-forsaken"

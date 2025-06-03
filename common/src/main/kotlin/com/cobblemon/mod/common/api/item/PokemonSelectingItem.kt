@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.PokemonInteractContext
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BagItemActionResponse
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
@@ -92,7 +93,7 @@ interface PokemonSelectingItem {
         val bagItem = bagItem
         if (!battlePokemon.actor.canFitForcedAction()) {
             player.sendSystemMessage(battleLang("bagitem.cannot").red())
-        } else if (!bagItem!!.canUse(battle, battlePokemon)) {
+        } else if (!bagItem!!.canUse(stack, battle, battlePokemon)) {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
         } else {
             battlePokemon.actor.forceChoose(BagItemActionResponse(bagItem, battlePokemon))
@@ -105,11 +106,17 @@ interface PokemonSelectingItem {
         }
     }
 
-    fun canUseOnPokemon(pokemon: Pokemon): Boolean
-    fun canUseOnBattlePokemon(battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+        if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
+            return !pokemon.isFull()
+        }
+        return true
+    }
+
+    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
 
     fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack> {
-        return if (canUseOnBattlePokemon(battlePokemon)) {
+        return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             applyToBattlePokemon(player, stack, battlePokemon)
             InteractionResultHolder.success(stack)
         } else {
@@ -127,7 +134,7 @@ interface PokemonSelectingItem {
         PartySelectCallbacks.createFromPokemon(
             player = player,
             pokemon = party,
-            canSelect = ::canUseOnPokemon,
+            canSelect = { pk -> canUseOnPokemon(stack, pk) },
             handler = { pk ->
                 if (stack.isHeld(player)) {
                     applyToPokemon(player, stack, pk)
@@ -136,6 +143,7 @@ interface PokemonSelectingItem {
             }
         )
 
+
         return InteractionResultHolder.success(stack)
     }
 
@@ -143,7 +151,7 @@ interface PokemonSelectingItem {
         PartySelectCallbacks.createBattleSelect(
             player = player,
             pokemon = actor.pokemonList,
-            canSelect = { pk -> canUseOnBattlePokemon(actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) },
+            canSelect = { pk -> canUseOnBattlePokemon(stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) },
             handler = { pk -> applyToBattlePokemon(player, stack, actor.pokemonList.find { it.effectedPokemon == pk.effectedPokemon }!!) }
         )
 

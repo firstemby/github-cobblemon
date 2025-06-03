@@ -42,26 +42,32 @@ class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike):
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "ether $data ${ genericRuntime.resolveInt(amount(), battlePokemon) }"
     }
 
-    override fun canUseOnMove(move: Move) = move.currentPp < move.maxPp
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any(::canUseOnMove)
+    override fun canUseOnMove(stack: ItemStack, move: Move) = move.currentPp < move.maxPp
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+            && super.canUseOnPokemon(stack, pokemon)
+
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon, move: Move) {
-        val moveToRecover = pokemon.moveSet.find { it.template == move.template }
-        if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
-            moveToRecover.currentPp = min(moveToRecover.maxPp, moveToRecover.currentPp + genericRuntime.resolveInt(amount(), pokemon))
-            player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-            if (!player.isCreative) {
-                stack.shrink(1)
+        if (canUseOnPokemon(stack, pokemon) && canUseOnMove(stack, move)) {
+            pokemon.feedPokemon(1)
+            val moveToRecover = pokemon.moveSet.find { it.template == move.template }
+            if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
+                moveToRecover.currentPp =
+                    min(moveToRecover.maxPp, moveToRecover.currentPp + genericRuntime.resolveInt(amount(), pokemon))
+
+                if (!player.isCreative) {
+                    stack.shrink(1)
+                }
             }
         }
     }
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
         super.applyToBattlePokemon(player, stack, battlePokemon, move)
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+        battlePokemon.originalPokemon.feedPokemon(1)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

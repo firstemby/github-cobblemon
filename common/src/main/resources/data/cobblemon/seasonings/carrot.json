@@ -1,0 +1,8 @@
+{
+  "ingredient": "minecraft:carrot",
+  "colour": "orange",
+  "food": {
+    "hunger": 3,
+    "saturation": 3.6
+  }
+}

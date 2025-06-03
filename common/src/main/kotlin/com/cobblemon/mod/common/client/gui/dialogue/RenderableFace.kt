@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.dialogue
 
+import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.gui.drawPosablePortrait
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -15,8 +16,6 @@ import com.cobblemon.mod.common.client.entity.NPCClientDelegate
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.NPCModelRepository
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import java.util.UUID
@@ -36,10 +35,12 @@ import org.joml.Vector3f
  */
 sealed interface RenderableFace {
     val isLeftSide: Boolean
+    val struct: QueryStruct
     fun render(GuiGraphics: GuiGraphics, partialTicks: Float)
 }
 
 class PlayerRenderableFace(val playerId: UUID, override val isLeftSide: Boolean) : RenderableFace {
+    override val struct: QueryStruct = QueryStruct(hashMapOf())
     override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
         val entity = Minecraft.getInstance().level?.getPlayerByUUID(playerId) ?: return
         // All of the maths below is shamelessly stolen from InventoryScreen.drawEntity.
@@ -76,13 +77,14 @@ class PlayerRenderableFace(val playerId: UUID, override val isLeftSide: Boolean)
 
 class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide: Boolean): RenderableFace {
     val state = entity.delegate as PosableState
+    override val struct: QueryStruct
+        get() = state.runtime.environment.query
     override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
         val state = this.state
         if (state is PokemonClientDelegate) {
             state.currentAspects = state.currentEntity.pokemon.aspects
             drawPosablePortrait(
                 identifier = state.currentEntity.pokemon.species.resourceIdentifier,
-                repository = PokemonModelRepository,
                 contextScale = state.currentEntity.pokemon.form.baseScale,
                 matrixStack = GuiGraphics.pose(),
                 state = state,
@@ -95,8 +97,7 @@ class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide
             val limbSwing = entity.walkAnimation.position(partialTicks)
             val limbSwingAmount = entity.walkAnimation.speed(partialTicks)
             drawPosablePortrait(
-                identifier = state.npcEntity.npc.resourceIdentifier,
-                repository = NPCModelRepository,
+                identifier = state.npcEntity.resourceIdentifier,
                 matrixStack = GuiGraphics.pose(),
                 state = state,
                 reversed = !isLeftSide,
@@ -116,6 +117,8 @@ class ArtificialRenderableFace(
     override val isLeftSide: Boolean
 ): RenderableFace {
     val state = FloatingState()
+    override val struct: QueryStruct
+        get() = state.runtime.environment.query
 
     override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
         val state = this.state
@@ -131,7 +134,6 @@ class ArtificialRenderableFace(
                 contextScale = species.getForm(aspects).baseScale,
                 state = state,
                 reversed = !isLeftSide,
-                repository = PokemonModelRepository,
                 partialTicks = partialTicks
             )
         } else if (modelType == "npc") {
@@ -140,7 +142,6 @@ class ArtificialRenderableFace(
                 matrixStack = GuiGraphics.pose(),
                 state = state,
                 reversed = !isLeftSide,
-                repository = NPCModelRepository,
                 partialTicks = partialTicks
             )
         }

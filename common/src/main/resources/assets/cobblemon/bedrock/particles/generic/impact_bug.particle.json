@@ -5,7 +5,7 @@
             "identifier": "cobblemon:impact_bug",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/impact-bug"
+                "texture": "textures/particles/generic/impact/impact_bug"
             }
         },
         "curves": {

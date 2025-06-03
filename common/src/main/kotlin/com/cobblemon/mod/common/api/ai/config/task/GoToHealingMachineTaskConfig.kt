@@ -8,38 +8,43 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.npc.ai.GoToHealingMachineTask
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class GoToHealingMachineTaskConfig(
-    val condition: ExpressionLike = "true".asExpressionLike(),
-    val horizontalSearchRange: Expression = "10".asExpression(),
-    val verticalSearchRange: Expression = "5".asExpression(),
-    val speedMultiplier: Expression = "0.35".asExpression(),
-    val completionRange: Expression = "1".asExpression()
-) : SingleTaskConfig {
+class GoToHealingMachineTaskConfig : SingleTaskConfig {
+    val condition = booleanVariable(SELF_HEALING, USE_HEALING_MACHINES, true).asExpressible()
+    val horizontalSearchRange: ExpressionOrEntityVariable = Either.left("10".asExpression())
+    val verticalSearchRange: ExpressionOrEntityVariable = Either.left("5".asExpression())
+    val completionRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
+    val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
+
+    companion object {
+        const val SELF_HEALING = "self_healing"
+        const val USE_HEALING_MACHINES = "use_healing_machines"
+    }
+
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
 
         return GoToHealingMachineTask.create(
-            horizontalSearchRange = horizontalSearchRange,
-            verticalSearchRange = verticalSearchRange,
-            speedMultiplier = speedMultiplier,
-            completionRange = completionRange
+            horizontalSearchRange = horizontalSearchRange.asExpression(),
+            verticalSearchRange = verticalSearchRange.asExpression(),
+            speedMultiplier = walkSpeed.asExpression(),
+            completionRange = completionRange.asExpression()
         )
     }
 

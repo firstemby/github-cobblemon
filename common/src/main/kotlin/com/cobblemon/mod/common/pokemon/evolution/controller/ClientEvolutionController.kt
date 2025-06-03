@@ -26,6 +26,13 @@ class ClientEvolutionController(
     evolutions: Set<EvolutionDisplay>,
 ) : EvolutionController<EvolutionDisplay, ClientEvolutionController.Intermediate> {
 
+    init {
+        if (evolutions.isNotEmpty()) {
+            Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.evolve.hint".asTranslated(pokemon.getDisplayName()).green())
+            Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
+        }
+    }
+
     private val evolutions = evolutions.toMutableSet()
 
     override val size: Int

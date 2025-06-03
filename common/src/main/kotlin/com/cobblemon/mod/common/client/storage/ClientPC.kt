@@ -10,8 +10,14 @@ package com.cobblemon.mod.common.client.storage
 
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.api.storage.pc.POKEMON_PER_BOX
+import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.client.gui.pc.PCGUI
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import java.util.UUID
+
 class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
     val boxes = MutableList(boxCount) { ClientBox() }
     override fun findByUUID(uuid: UUID): Pokemon? {
@@ -51,5 +57,17 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
             }
         }
         return null
+    }
+
+    fun renameBox(boxNumber: Int, name: String?) {
+        if (boxes.size > boxNumber) {
+            boxes[boxNumber].name = if (name.isNullOrBlank()) null else Component.literal(name).bold()
+        }
+    }
+
+    fun changeBoxWallpaper(boxNumber: Int, wallpaper: ResourceLocation) {
+        if (boxes.size > boxNumber) {
+            boxes[boxNumber].wallpaper = wallpaper
+        }
     }
 }

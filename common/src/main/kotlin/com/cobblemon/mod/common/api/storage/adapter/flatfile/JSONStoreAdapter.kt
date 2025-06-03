@@ -46,16 +46,16 @@ open class JSONStoreAdapter(
 
     override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T? {
         return try {
-            val br = BufferedReader(FileReader(file))
-            val json = gson.fromJson<JsonObject>(br)
-            br.close()
-            val store = try {
-                storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
-            } catch (exception: NoSuchMethodException) {
-                storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+            file.reader().use {
+                val json = gson.fromJson<JsonObject>(it)
+                val store = try {
+                    storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+                } catch (exception: NoSuchMethodException) {
+                    storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                }
+                store.loadFromJSON(json, registryAccess)
+                store
             }
-            store.loadFromJSON(json, registryAccess)
-            store
         } catch (e: Exception) {
             null
         }

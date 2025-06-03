@@ -4,7 +4,7 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "slugma-1",
+            "id": "slugma-3",
             "pokemon": "slugma",
             "presets": [
                 "natural"
@@ -22,7 +22,7 @@
             }
         },
         {
-            "id": "slugma-2",
+            "id": "slugma-4",
             "pokemon": "slugma",
             "presets": [
                 "lava"
@@ -40,7 +40,7 @@
             }
         },
         {
-            "id": "slugma-3",
+            "id": "slugma-1",
             "pokemon": "slugma",
             "presets": [
                 "lava"
@@ -62,7 +62,7 @@
             }
         },
         {
-            "id": "slugma-4",
+            "id": "slugma-2",
             "pokemon": "slugma",
             "presets": [
                 "natural"

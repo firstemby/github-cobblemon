@@ -11,5 +11,15 @@
       ]
     }
   ],
-  "variations": []
+  "variations": [
+    {
+      "displayName": "cobblemon.pokedex.variation.color",
+      "icon": "cobblemon:textures/gui/pokedex/variation/color.png",
+      "aspects": [
+        "mooshtank-false",
+        "mooshtank-red",
+        "mooshtank-brown"
+      ]
+    }
+  ]
 }

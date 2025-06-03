@@ -1,0 +1,74 @@
+{
+    "portraitScale": 3.0,
+    "portraitTranslation": [-0.8, 0.8, 0.0],
+    "profileScale": 0.7,
+    "profileTranslation": [0.0, 0.7, 0.0],
+    "rootBone": "wyrdeer",
+    "animations": {},
+    "poses": {
+      "in_air": {
+        "poseName": "in_air",
+        "poseTypes": ["WALK","STAND", "FLOAT", "NONE", "PORTRAIT"],
+        "isBattle": false,
+        "condition": "q.in_air",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('wyrdeer', 'ride_jump')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wyrdeer', 'blink')"
+        ],
+        "transformTicks": 2,
+        "transformToTicks": 2
+      },
+      "standing": {
+        "poseName": "standing",
+        "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+        "isBattle": false,
+        "condition": "!q.in_air",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('wyrdeer', 'ground_idle')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wyrdeer', 'blink')"
+        ],
+        "transformTicks": 10
+      },
+      "sleep": {
+        "poseTypes": ["SLEEP"],
+        "animations": [
+          "q.bedrock('wyrdeer', 'sleep')"
+        ]
+      },
+      "walk": {
+        "poseName": "walk",
+        "poseTypes": ["WALK"],
+        "isBattle": false,
+        "condition": "!q.in_air && !q.is_sprinting",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('wyrdeer', 'ground_walk')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wyrdeer', 'blink')"
+        ],
+        "transformTicks": 10
+      },
+      "run": {
+        "poseName": "run",
+        "poseTypes": ["WALK"],
+        "isBattle": false,
+        "condition": "!q.in_air && q.is_sprinting",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('wyrdeer', 'ground_run')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wyrdeer', 'blink')"
+        ],
+        "transformTicks": 10
+      }
+    }
+  }
+  

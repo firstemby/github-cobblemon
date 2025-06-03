@@ -10,13 +10,17 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
-      "animations": ["q.bedrock('riolu', 'ground_idle')"],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('riolu', 'ground_idle')"
+      ],
       "quirks": ["q.bedrock_quirk('riolu', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "isBattle": false,
       "animations": [
+        "q.look('head')",
         "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
         "q.bimanual_swing(0.66, 0.6, 'arm_left', 'arm_right')",
         "q.bedrock('riolu', 'ground_idle')"

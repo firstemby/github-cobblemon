@@ -11,12 +11,14 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
@@ -40,6 +42,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.plus
 import com.cobblemon.mod.common.util.toRGBA
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
@@ -49,9 +52,14 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
+import org.joml.Matrix4f
+import org.joml.Vector3f
 
 /**
  * A model that can be posed and animated using [PoseAnimation]s and [ActiveAnimation]s. This
@@ -71,20 +79,35 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     @Transient
     lateinit var context: RenderContext
 
-    /** Whether the renderer that will process this is going to do the weird -1.5 Y offset bullshit that the living entity renderer does. */
-    @Transient
-    open var isForLivingEntityRenderer = true
-
     var poses = mutableMapOf<String, Pose>()
 
     /** A way to view the definition of all the different locators that are registered for the model. */
     @Transient
     lateinit var locatorAccess: LocatorAccess
 
+    open var transformedParts = arrayOf<ModelPartTransformation>()
+
     open var portraitScale = 1F
     open var portraitTranslation = Vec3(0.0, 0.0, 0.0)
 
     open var profileScale = 1F
+
+    /** Used for third person riding camera */
+    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for third person riding camera */
+    open var thirdPersonPivotOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for first person riding camera */
+    open var firstPersonCameraOffset = mutableMapOf<String, Vec3>()
+
+    /**
+     * These are open-ended properties that can be used to store miscellaneous properties about the model.
+     *
+     * The internal use currently is to name locators and what display context should be used when rendering
+     * held items at that position.
+     */
+    open var properties = mutableMapOf<String, String>()
 
     /*
      * Hello future Hiro, this is past Hiro. You've gotten forgetful in your old age.
@@ -129,8 +152,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     /** Legacy faint code. */
     open fun getFaintAnimation(state: PosableState): ActiveAnimation? = null
-    /** Legacy eating code. */
-    open fun getEatAnimation(state: PosableState): ActiveAnimation? = null
     /** Legacy cry code. */
     @Transient
     open val cryAnimation: CryProvider = CryProvider { null }
@@ -157,7 +178,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * Generates an active animation by name. This can be legacy-backed cry or faint animations, a prepared builder
      * for an animation in the [animations] mapping, a product of MoLang in the name parameter, or a highly specific
      * format used in [extractAnimation].
-     *
      * First priority is given to any named animations inside of [Pose], and then to the [animations] mapping, before
      * resorting to legacy, MoLang resolution, and finally the [extractAnimation] hail-Mary.
      */
@@ -171,7 +191,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 else -> {
                     try {
                         name.asExpressionLike().resolveObject(runtime).obj as ActiveAnimation
-                    } catch (exception: Exception) {
+                    } catch (_: Exception) {
                         extractAnimation(name)
                     }
                 }
@@ -250,6 +270,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseType: PoseType,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -262,6 +283,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -276,6 +298,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseTypes: Set<PoseType>,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -288,6 +311,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -302,6 +326,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseType: PoseType,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -314,6 +339,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -385,6 +411,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     fun registerRelevantPart(pairing: Pair<String, ModelPart>) = registerRelevantPart(pairing.first, pairing.second)
 
+    /** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
+    class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
+        RenderSystem.setShaderTexture(0, texture.id)
+    }, Runnable {
+        texture.close() // Cleanup
+    })
+
     /** Renders the model. Assumes rotations have been set. Will simply render the base model and then any extra layers. */
     fun render(
         context: RenderContext,
@@ -419,8 +452,16 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val provider = bufferProvider
         if (provider != null) {
             for (layer in currentLayers) {
-                val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
-                val renderLayer = getLayer(texture, layer.emissive, layer.translucent)
+                var renderLayer : RenderType
+                if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
+                    //Handle Interpolation
+                    val texture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
+                    renderLayer = makeLayer(DynamicStateShard(texture), layer.emissive, layer.translucent, layer.translucent_cull)
+                }
+                else {
+                    val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
+                    renderLayer = getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
+                }
                 val consumer = provider.getBuffer(renderLayer)
                 val tint = layer.tint
                 val tintRed = (tint.x * r2 * 255).toInt()
@@ -443,19 +484,27 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
+    /** Checks for whether a property has been set to configure how an item would render on this locator. */
+    fun getLocatorDisplayContext(locator: String): ItemDisplayContext? {
+        val displayContextString = properties["${locator}_display_context"] ?: return null
+        return ItemDisplayContext.valueOf(displayContextString)
+    }
+
     /** Generates a [RenderType] by the power of god and anime. Only possible thanks to 100 access wideners. */
-    fun makeLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean): RenderType {
+    fun makeLayer(texture: RenderStateShard.EmptyTextureStateShard, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         val multiPhaseParameters: RenderType.CompositeState = RenderType.CompositeState.builder()
             .setShaderState(
                 when {
                     emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
+                    !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
                     !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
                     !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
                     else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER // This one should be changed to maybe a custom shader? Translucent stuffs with things
                 }
             )
-            .setTextureState(RenderStateShard.TextureStateShard(texture, false, false))
+            .setTextureState(texture)
             .setTransparencyState(if (translucent) RenderStateShard.TRANSLUCENT_TRANSPARENCY else RenderStateShard.NO_TRANSPARENCY)
+            .setLightmapState(if (!emissive) RenderStateShard.LIGHTMAP else RenderStateShard.LightmapStateShard(false))
             .setCullState(RenderStateShard.CULL)
             .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
             .setOverlayState(RenderStateShard.OVERLAY)
@@ -473,13 +522,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
-    fun getLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean): RenderType {
+    fun getLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         return if (!emissive && !translucent) {
             RenderType.entityCutout(texture)
-        } else if (!emissive) {
+        } else if (!emissive && !translucentCull) {
             RenderType.entityTranslucent(texture)
         } else {
-            makeLayer(texture, emissive = emissive, translucent = translucent)
+            makeLayer(RenderStateShard.TextureStateShard(texture, false, false), emissive = emissive, translucent = translucent, translucentCull = translucentCull)
         }
     }
 
@@ -491,7 +540,10 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun getPose(name: String) = poses[name]
 
     /** Puts the model back to its original location and rotations. */
-    fun setDefault() = defaultPositions.forEach { it.set() }
+    fun setDefault() {
+        defaultPositions.forEach { it.set() }
+        transformedParts.forEach { it.apply() }
+    }
 
     /**
      * Finds the first of the model's poses that the given state and optional [PoseType] is appropriate for.
@@ -563,11 +615,22 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         applyPose(state, pose, 1F)
 
         val primaryAnimation = state.primaryAnimation
+        val shouldRotateHead = if (entity is PokemonEntity) {
+            entity.ifRidingAvailableSupply(true) { behaviour, settings, ridingState ->
+                entity.passengers.none() || behaviour.shouldRotatePokemonHead(settings, ridingState, entity)
+            }
+        } else true
+
+
+        val headPitch = if (shouldRotateHead) headPitch else 0f
+        val headYaw = if (shouldRotateHead) headYaw else 0f
+
 
         // Quirks will run if there is no primary animation running and quirks are enabled for this context.
         if (primaryAnimation == null && context.request(RenderContext.DO_QUIRKS) != false) {
             // Remove any quirk animations that don't exist in our current pose
             state.quirks.keys.filterNot(pose.quirks::contains).forEach(state.quirks::remove)
+
             // Tick all the quirks
             pose.quirks.forEach {
                 it.apply(context, this, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, 1F)
@@ -578,6 +641,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             // The pose intensity is the complement of the primary animation's curve. This is used to blend the primary.
             state.poseIntensity = 1 - primaryAnimation.curve((state.animationSeconds - primaryAnimation.started) / primaryAnimation.duration)
             // If the primary animation is done after running we're going to clean things up.
+            //Set headYaw and headPitch to zero if Pokemon shouldn't move head during riding
             if (!primaryAnimation.run(
                     context,
                     this,
@@ -627,13 +691,15 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         if (state.activeAnimations.none { it.isTransition }) {
             // Check for a dedicated transition animation.
             val transition = previousPose.transitions[desirablePose.poseName]
+            val transformToTicks = desirablePose.transformToTicks
             val animation = if (transition == null && previousPose.transformTicks > 0) {
                 // If no dedicated transition exists then use a simple interpolator.
+                val durationTicks = transformToTicks ?: previousPose.transformTicks
                 PrimaryAnimation(
                     PoseTransitionAnimation(
                         beforePose = previousPose,
                         afterPose = desirablePose,
-                        durationTicks = previousPose.transformTicks
+                        durationTicks = durationTicks
                     ),
                     curve = { 1F }
                 )
@@ -670,36 +736,50 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * found and used from other client-side systems.
      */
     fun updateLocators(entity: Entity?, state: PosableState) {
-        entity ?: return
         val matrixStack = PoseStack()
         var scale = 1F
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - entity.yBodyRot))
+            if(entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
+                && (entity.controllingPassenger as OrientationControllable).orientationController.active){
+                val controllingPassenger = entity.controllingPassenger as OrientationControllable
+                val controller = controllingPassenger.orientationController
+                val transformationMatrix = Matrix4f()
+                val center = Vector3f(0f, entity.bbHeight/2, 0f)
+                transformationMatrix.translate(center)
+                transformationMatrix.rotate(controller.getRenderOrientation(state.getPartialTicks()))
+                transformationMatrix.translate(center.negate())
+                matrixStack.mulPose(transformationMatrix)
+            } else {
+                var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+                yRot = Mth.wrapDegrees(yRot)
+                matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
+            }
             matrixStack.pushPose()
             matrixStack.scale(-1F, -1F, 1F)
             scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
             matrixStack.scale(scale, scale, scale)
         } else if (entity is EmptyPokeBallEntity) {
-            matrixStack.mulPose(Axis.YP.rotationDegrees(entity.yRot))
+            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.wrapDegrees(yRot)
+            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
             matrixStack.pushPose()
             matrixStack.scale(1F, -1F, -1F)
             scale = 0.7F
             matrixStack.scale(scale, scale, scale)
         } else if (entity is GenericBedrockEntity) {
-            matrixStack.mulPose(Axis.YP.rotationDegrees(entity.yRot))
+            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.wrapDegrees(yRot)
+            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
             matrixStack.pushPose()
             // Not 100% convinced we need the -1 on Y but if we needed it for the Poke Ball then probably?
             matrixStack.scale(1F, -1F, 1F)
         } else if (entity is NPCEntity) {
-            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - entity.yBodyRot))
+            var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+            yRot = Mth.wrapDegrees(yRot)
+            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
             matrixStack.pushPose()
             matrixStack.scale(-1F, -1F, 1F)
-        }
-
-        if (isForLivingEntityRenderer) {
-            // Standard living entity offset, only God knows why Mojang did this.
-            matrixStack.translate(0.0, -1.5, 0.0)
         }
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
@@ -764,4 +844,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         condition = condition,
         animations = { animations(it) }
     )
+
+    fun isReadyForAnimation() = ::context.isInitialized
 }

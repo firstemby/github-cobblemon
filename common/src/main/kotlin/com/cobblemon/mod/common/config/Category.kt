@@ -8,15 +8,17 @@
 
 package com.cobblemon.mod.common.config
 
-enum class Category {
-    Starter,
-    Pokedex,
-    Pokemon,
-    Spawning,
-    Battles,
-    PassiveStatus,
-    Healing,
-    Storage,
-    World,
-    Debug
+enum class Category(val lang: String) {
+    Pokemon("pokemon"),
+    Spawning("spawning"),
+    Battles("battles"),
+    PassiveStatus("passive_status"),
+    Healing("healing"),
+    World("world"),
+    Pokedex("pokedex"),
+    Storage("storage"),
+    Starter("starter"),
+    Interface("interface"),
+    Riding("riding"),
+    Debug("debug"),
 }

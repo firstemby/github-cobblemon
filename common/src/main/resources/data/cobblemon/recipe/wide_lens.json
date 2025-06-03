@@ -7,13 +7,13 @@
     ],
     "key": {
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "A": {
-            "item": "minecraft:amethyst_shard"
+            "tag": "c:gems/amethyst"
         }
     },
     "result": {

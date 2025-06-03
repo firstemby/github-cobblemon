@@ -60,11 +60,16 @@ internal class SpawnValidator {
 
                 json.getAsJsonArray("spawns").mapNotNull { option ->
                     val obj = option as JsonObject
-                    var target = obj.get("pokemon").asString
-                    if (target.contains(" ")) {
-                        target = target.substringBefore(' ')
+                    val type = obj.get("type").asString
+                    if (type == "pokemon") {
+                        var target = obj.get("pokemon").asString
+                        if (target.contains(" ")) {
+                            target = target.substringBefore(' ')
+                        }
+                        if (!species.contains(target)) spawn.fileName.toString() else null
+                    } else {
+                        null
                     }
-                    if (!species.contains(target)) spawn.fileName.toString() else null
                 }
             }
     }

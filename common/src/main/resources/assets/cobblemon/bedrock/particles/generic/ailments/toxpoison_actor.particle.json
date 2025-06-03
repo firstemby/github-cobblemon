@@ -5,7 +5,7 @@
             "identifier": "cobblemon:toxpoison_actor",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/poison-bubble"
+                "texture": "textures/particles/generic/bubble/poisonbubble"
             }
         },
         "events": {

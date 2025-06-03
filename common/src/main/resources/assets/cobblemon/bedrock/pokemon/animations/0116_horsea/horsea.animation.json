@@ -371,7 +371,7 @@
 			},
 			"sound_effects": {
 				"0.1667": {
-					"effect": "horsea_cry"
+					"effect": "pokemon.horsea.cry"
 				}
 			}
 		},

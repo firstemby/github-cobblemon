@@ -1,21 +1,16 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        " PW",
-        "PRP",
-        "WP "
-    ],
-    "key": {
-        "P": {
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:bone_meal"
+        },
+        {
             "item": "minecraft:paper"
         },
-        "W": {
-            "item": "minecraft:white_dye"
-        },
-        "R": {
-            "item": "minecraft:red_dye"
+        {
+            "item": "minecraft:fermented_spider_eye"
         }
-    },
+    ],
     "result": {
         "id": "cobblemon:cleanse_tag"
     }

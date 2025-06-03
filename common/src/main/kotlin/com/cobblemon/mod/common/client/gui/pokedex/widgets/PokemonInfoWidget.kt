@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.api.gui.ParentWidget
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -38,7 +37,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
-import com.cobblemon.mod.common.client.render.models.blockbench.repository.PokemonModelRepository
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
@@ -459,10 +458,11 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                 formRightButton.render(context,mouseX, mouseY, delta)
 
                 val form = showableForms[selectedFormIndex]
+                val formName = if (form.displayForm.lowercase() == "normal") "" else "-${form.displayForm.lowercase().replace("-", "")}"
                 drawScaledTextJustifiedRight(
                     context = context,
                     font = CobblemonResources.DEFAULT_LARGE,
-                    text = lang("ui.pokedex.info.form.${form.displayForm.lowercase()}").bold(),
+                    text = lang("ui.pokedex.info.form.${species}${formName}").bold(),
                     x = pX + 136,
                     y = pY + 15,
                     shadow = true
@@ -655,7 +655,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     fun recalculatePoses(renderablePokemon: RenderablePokemon) {
         val state = FloatingState()
         state.currentAspects = renderablePokemon.aspects
-        val poser = PokemonModelRepository.getPoser(renderablePokemon.species.resourceIdentifier, state)
+        val poser = VaryingModelRepository.getPoser(renderablePokemon.species.resourceIdentifier, state)
         state.currentModel = poser
         this.poseList = poser.poses
             .map { it.value.poseTypes.minBy { it.ordinal } }

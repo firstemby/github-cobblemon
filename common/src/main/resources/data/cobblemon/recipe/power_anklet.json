@@ -10,10 +10,10 @@
             "item": "cobblemon:green_mint_leaf"
         },
         "C": {
-            "item": "minecraft:light_blue_concrete"
+            "tag": "c:concrete"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         }
     },
     "result": {

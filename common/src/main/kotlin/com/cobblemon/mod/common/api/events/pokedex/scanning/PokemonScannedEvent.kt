@@ -18,19 +18,17 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 
 data class PokemonScannedEvent(val player: ServerPlayer, val scannedPokemonEntityData: PokedexEntityData, val scannedEntity: ScannableEntity) {
-    val pokedexEntityData: PokedexEntityData
-        get() = scannedPokemonEntityData
-
     val isOwned: Boolean
-        get() = scannedPokemonEntityData.ownerUUID == player.uuid
+        get() = scannedPokemonEntityData.pokemon.getOwnerUUID() == player.uuid
 
     val context = mutableMapOf(
         "player" to player.asMoLangValue(),
-        "pokemon" to scannedPokemonEntityData.struct,
+        "pokemon" to scannedPokemonEntityData.pokemon.struct,
+        "disguise" to (scannedPokemonEntityData.disguise?.struct ?: DoubleValue.ZERO),
         "entity" to {
             when (scannedEntity) {
                 is LivingEntity -> scannedEntity.asMostSpecificMoLangValue()
-                else -> DoubleValue(0.0)
+                else -> DoubleValue.ZERO
             }
         },
     )

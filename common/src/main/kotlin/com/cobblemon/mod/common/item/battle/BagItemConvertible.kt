@@ -46,7 +46,7 @@ interface BagItemLike {
             return false
         }
 
-        if (!bagItem.canUse(battle, battlePokemon)) {
+        if (!bagItem.canUse(stack, battle, battlePokemon)) {
             player.sendSystemMessage(battleLang("bagitem.invalid").red())
             return false
         }

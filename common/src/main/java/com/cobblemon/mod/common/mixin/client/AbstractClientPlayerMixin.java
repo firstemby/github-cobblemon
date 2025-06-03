@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +31,14 @@ public class AbstractClientPlayerMixin {
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
         if (usageContext.getScanningGuiOpen()) {
             cir.setReturnValue(usageContext.getFovMultiplier());
+        }
+
+        LocalPlayer player = (LocalPlayer) (Object) this;
+        if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity) {
+            PokemonEntity ride = (PokemonEntity) player.getVehicle();
+
+            //Return custom fov mult
+            cir.setReturnValue(ride.rideFovMult());
         }
     }
 }

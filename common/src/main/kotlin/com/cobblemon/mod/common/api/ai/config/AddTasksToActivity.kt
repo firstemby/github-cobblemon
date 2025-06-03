@@ -8,32 +8,34 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
-class AddTasksToActivity : BrainConfig {
-    val activity = Activity.IDLE
-    val condition = "true".asExpressionLike()
+class AddTasksToActivity : BehaviourConfig {
+    val activity: Activity? = null
+    // Can be useful to add to multiple activities at once
+    val activities = mutableListOf<Activity>()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasksByPriority = mutableMapOf<Int, List<TaskConfig>>()
+    override fun getVariables(entity: LivingEntity) = tasksByPriority.values.flatten().flatMap { it.getVariables(entity) } + listOf(condition).asVariables()
 
-    override fun configure(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext) {
-        val runtime = MoLangRuntime().setup()
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+        if (!checkCondition(entity, condition)) return
 
-        val activity = brainConfigurationContext.getOrCreateActivity(activity)
+        val activities = if (activity != null) (activities + activity) else activities
+
         tasksByPriority.forEach { (priority, taskConfigs) ->
-            val tasks = taskConfigs.flatMap { it.createTasks(entity, brainConfigurationContext) }
-            activity.addTasks(priority, *tasks.toTypedArray())
+            val tasks = taskConfigs.flatMap { it.createTasks(entity, behaviourConfigurationContext) }
+            for (activity in activities) {
+                val activityContext = behaviourConfigurationContext.getOrCreateActivity(activity)
+                activityContext.addTasks(priority, *tasks.toTypedArray())
+            }
         }
     }
 }

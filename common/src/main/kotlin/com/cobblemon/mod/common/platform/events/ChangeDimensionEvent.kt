@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.platform.events
 
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class ChangeDimensionEvent(val player: ServerPlayer)
+class ChangeDimensionEvent(val player: ServerPlayer, val origin: ServerLevel?, val destination: ServerLevel?)

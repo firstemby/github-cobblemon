@@ -10,20 +10,19 @@ package com.cobblemon.mod.common.pokemon.evolution.requirements
 
 import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.evolution.predicate.NbtItemPredicate
-import com.cobblemon.mod.common.registry.ItemIdentifierCondition
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.world.item.Items
 
 /**
  * An [EvolutionRequirement] for a [Pokemon.heldItem].
  *
- * @property itemCondition The [NbtItemPredicate] expected to match the [Pokemon.heldItem].
+ * @property itemCondition The [ItemPredicate] expected to match the [Pokemon.heldItem].
  * @author Licious
  * @since March 21st, 2022
  */
-class HeldItemRequirement(val itemCondition: NbtItemPredicate) : EvolutionRequirement {
+class HeldItemRequirement(val itemCondition: ItemPredicate) : EvolutionRequirement {
 
-    constructor() : this(NbtItemPredicate(ItemIdentifierCondition(ResourceLocation.parse("air"))))
+    constructor() : this(ItemPredicate.Builder.item().of(Items.EGG).build())
 
     override fun check(pokemon: Pokemon): Boolean = this.itemCondition.test(pokemon.heldItemNoCopy())
 

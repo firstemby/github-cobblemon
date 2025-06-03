@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Pom-Pom",
-        "Pa'u",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Pom-Pom",
+      "unlockForms": [
+        "Pom-Pom"
+      ]
+    },
+    {
+      "displayForm": "Pa’u",
+      "unlockForms": [
+        "Pa’u"
+      ]
+    },
+    {
+      "displayForm": "Sensu",
+      "unlockForms": [
         "Sensu"
       ]
     }

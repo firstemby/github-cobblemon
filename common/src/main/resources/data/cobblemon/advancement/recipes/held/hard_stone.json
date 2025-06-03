@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_deepslate": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:deepslate"
+              "cobblemon:rock_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_deepslate",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

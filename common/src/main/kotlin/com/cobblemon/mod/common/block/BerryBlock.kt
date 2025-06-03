@@ -109,7 +109,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
             determineMutation(world, random, pos, newState)
         }
 
-        world.setBlock(pos, newState, Block.UPDATE_CLIENTS)
+        world.setBlock(pos, newState, UPDATE_CLIENTS)
         convertMulchToEntity(world, newState, pos)
         treeEntity.goToNextStageTimer(FRUIT_AGE - curAge)
         treeEntity.setChanged()

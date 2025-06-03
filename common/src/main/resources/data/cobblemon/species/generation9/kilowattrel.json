@@ -1,13 +1,27 @@
 {
   "implemented": true,
-  "name": "Kilowattrel",
   "nationalPokedexNumber": 941,
+  "name": "Kilowattrel",
   "primaryType": "electric",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 14,
+  "weight": 386,
+  "pokedex": [
+    "cobblemon.species.kilowattrel.desc"
+  ],
+  "labels": [
+    "gen9"
+  ],
+  "aspects": [],
   "abilities": [
     "windpower",
     "voltabsorb",
     "h:competitive"
+  ],
+  "eggGroups": [
+    "water_1",
+    "flying"
   ],
   "baseStats": {
     "hp": 70,
@@ -17,10 +31,6 @@
     "special_defence": 60,
     "speed": 125
   },
-  "catchRate": 90,
-  "maleRatio": 0.5,
-  "baseExperienceYield": 172,
-  "baseFriendship": 50,
   "evYield": {
     "hp": 0,
     "attack": 0,
@@ -29,23 +39,54 @@
     "special_defence": 0,
     "speed": 2
   },
+  "baseExperienceYield": 172,
   "experienceGroup": "medium_slow",
+  "catchRate": 90,
   "eggCycles": 20,
-  "eggGroups": [
-    "water_1",
-    "flying"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1.1,
+  "hitbox": {
+    "width": 1,
+    "height": 1.72,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "canSwimInWater": true,
+        "canSwimInLava": false,
+        "canBreatheUnderwater": true,
+        "swimSpeed": "0.2"
       }
     }
   },
+  "drops": {
+    "amount": 5,
+    "entries": [
+      {
+        "item": "minecraft:feather",
+        "quantityRange": "0-2"
+      },
+      {
+        "item": "minecraft:chicken"
+      },
+      {
+        "item": "cobblemon:sharp_beak",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:razz_berry",
+        "percentage": 5.0
+      }
+    ]
+  },
   "moves": [
+    "1:electroball",
     "1:growl",
     "1:peck",
-    "1:electroball",
     "4:thundershock",
     "7:quickattack",
     "11:pluck",
@@ -57,6 +98,12 @@
     "43:voltswitch",
     "48:discharge",
     "55:hurricane",
+    "egg:endeavor",
+    "egg:featherdance",
+    "egg:spitup",
+    "egg:stockpile",
+    "egg:swallow",
+    "egg:weatherball",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -78,8 +125,10 @@
     "tm:gigaimpact",
     "tm:hurricane",
     "tm:hyperbeam",
+    "tm:pluck",
     "tm:protect",
     "tm:rest",
+    "tm:roost",
     "tm:scaryface",
     "tm:sleeptalk",
     "tm:substitute",
@@ -95,44 +144,24 @@
     "tm:uturn",
     "tm:voltswitch",
     "tm:weatherball",
-    "tm:wildcharge"
+    "tm:wildcharge",
+    "tutor:aerialace",
+    "tutor:aircutter",
+    "tutor:chargebeam",
+    "tutor:dualwingbeat",
+    "tutor:electroweb",
+    "tutor:endeavor",
+    "tutor:gigaimpact",
+    "tutor:hyperbeam",
+    "tutor:rest",
+    "tutor:roost",
+    "tutor:sleeptalk",
+    "tutor:swift",
+    "tutor:tailwind",
+    "tutor:thunderbolt",
+    "tutor:uproar",
+    "tutor:wildcharge"
   ],
-  "labels": [
-    "gen9"
-  ],
-  "aspects": [],
-  "height": 14,
-  "weight": 386,
   "preEvolution": "wattrel",
-  "evolutions": [],
-  "baseScale": 1.1,
-  "hitbox": {
-    "width": 1,
-    "height": 1.72,
-    "fixed": false
-  },
-  "cannotDynamax": false,
-  "pokedex": [
-    "cobblemon.species.kilowattrel.desc"
-  ],
-  "drops": {
-    "amount": 5,
-    "entries": [
-      {
-        "item": "minecraft:feather",
-        "quantityRange": "0-2"
-      },
-      {
-        "item": "minecraft:chicken"
-      },
-      {
-        "item": "cobblemon:sharp_beak",
-        "percentage": 2.5
-      },
-      {
-        "item": "cobblemon:razz_berry",
-        "percentage": 5.0
-      }
-    ]
-  }
+  "evolutions": []
 }

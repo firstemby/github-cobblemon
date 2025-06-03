@@ -42,7 +42,7 @@ open class FossilMultiblockEntity(
             if(masterBlockPos != null && masterBlockPos != blockPos) {
                 val chunkPos = ChunkPos(masterBlockPos)
                 if (level?.chunkSource?.hasChunk(chunkPos.x, chunkPos.z) == true) {
-                    val entity: FossilMultiblockEntity? = level?.getBlockEntity(masterBlockPos) as FossilMultiblockEntity?
+                    val entity: FossilMultiblockEntity? = level?.getBlockEntity(masterBlockPos) as? FossilMultiblockEntity?
                     field = entity?.multiblockStructure
                 }
             }

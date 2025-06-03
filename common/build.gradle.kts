@@ -1,8 +1,9 @@
+
+import utilities.isSnapshot
+import utilities.version
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import utilities.isSnapshot
-import utilities.version
 
 /*
  *
@@ -41,7 +42,7 @@ dependencies {
 
     // Integrations
     compileOnlyApi(libs.jei.api)
-    modCompileOnly(libs.bundles.fabric.integrations.compileOnly) {
+    modCompileOnly(libs.bundles.common.integrations.compileOnly) {
         isTransitive = false
     }
     // Flywheel has no common dep so just pick one and don't use any platform specific code in common

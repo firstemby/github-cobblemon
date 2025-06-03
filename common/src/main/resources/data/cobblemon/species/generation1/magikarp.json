@@ -1,11 +1,25 @@
 {
   "implemented": true,
-  "name": "Magikarp",
   "nationalPokedexNumber": 129,
+  "name": "Magikarp",
   "primaryType": "water",
+  "maleRatio": 0.5,
+  "height": 9,
+  "weight": 100,
+  "pokedex": [
+    "cobblemon.species.magikarp.desc"
+  ],
+  "labels": [
+    "gen1"
+  ],
+  "aspects": [],
   "abilities": [
     "swiftswim",
     "h:rattled"
+  ],
+  "eggGroups": [
+    "water_2",
+    "dragon"
   ],
   "baseStats": {
     "hp": 20,
@@ -15,16 +29,25 @@
     "special_defence": 20,
     "speed": 80
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 0,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 1
+  },
   "baseExperienceYield": 40,
   "experienceGroup": "slow",
+  "catchRate": 255,
   "eggCycles": 5,
-  "eggGroups": [
-    "water_2",
-    "dragon"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.8,
+    "height": 0.8,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "canLook": false,
@@ -33,9 +56,10 @@
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": true,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true
+        "canWalkOnWater": true,
+        "canSwimInWater": true,
+        "canSwimInLava": false
       }
     }
   },
@@ -60,20 +84,7 @@
     "15:tackle",
     "25:flail",
     "tm:bounce",
-    "tm:hydropump",
-    "tutor:bounce",
-    "tutor:celebrate",
-    "tutor:flail",
-    "tutor:happyhour",
-    "tutor:hydropump",
-    "tutor:splash",
-    "tutor:tackle"
-  ],
-  "labels": [
-    "gen1"
-  ],
-  "pokedex": [
-    "cobblemon.species.magikarp.desc"
+    "tutor:bounce"
   ],
   "evolutions": [
     {
@@ -91,24 +102,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 0.8,
-    "height": 0.8,
-    "fixed": false
-  },
-  "baseFriendship": 50,
-  "evYield": {
-    "hp": 0,
-    "attack": 0,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 1
-  },
-  "height": 9,
-  "weight": 100,
-  "aspects": [],
-  "cannotDynamax": false
+  ]
 }

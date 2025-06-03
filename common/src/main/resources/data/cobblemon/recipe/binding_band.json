@@ -1,19 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        " SW",
+        " S ",
         "SsS",
-        "WS "
+        " S "
     ],
     "key": {
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         },
         "s": {
-            "item": "minecraft:slime_ball"
-        },
-        "W": {
-            "item": "minecraft:brown_wool"
+            "tag": "c:slime_balls"
         }
     },
     "result": {

@@ -1,28 +1,22 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "SPS",
-        "LAF",
-        "MPM"
+        "S S",
+        "HPH",
+        "AHA"
     ],
     "key": {
         "P": {
-            "item": "minecraft:purple_wool"
+            "item": "minecraft:pink_petals"
         },
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
         },
-        "M": {
-            "item": "minecraft:magenta_wool"
-        },
-        "L": {
-            "item": "minecraft:lilac"
+        "H": {
+            "item": "minecraft:rabbit_hide"
         },
         "A": {
-            "item": "minecraft:allium"
-        },
-        "F": {
-            "item": "minecraft:peony"
+            "tag": "c:gems/amethyst"
         }
     },
     "result": {

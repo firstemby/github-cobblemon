@@ -1,5 +1,7 @@
 {
-  "keys": ["galarian"],
+  "keys": [
+    "galarian"
+  ],
   "type": "flag",
   "isAspect": true,
   "default": false

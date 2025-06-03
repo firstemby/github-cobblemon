@@ -55,7 +55,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {
@@ -122,7 +122,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLureLevel": "3"
+                    "minLureLevel": 3
                 }
             },
             "condition": {

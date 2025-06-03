@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeaturePr
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.italicise
+import com.cobblemon.mod.common.api.text.onHover
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
@@ -70,6 +72,7 @@ class StatWidget(
         private val statsOtherBaseResource = cobblemonResource("textures/gui/summary/summary_stats_other_base.png")
         private val statsOtherBarTemplate = cobblemonResource("textures/gui/summary/summary_stats_other_bar.png")
         private val friendshipOverlayResource = cobblemonResource("textures/gui/summary/summary_stats_friendship_overlay.png")
+        private val fullnessOverlayResource = cobblemonResource("textures/gui/summary/summary_stats_fullness_overlay.png")
         private val tabMarkerResource = cobblemonResource("textures/gui/summary/summary_stats_tab_marker.png")
         private val statIncreaseResource = cobblemonResource("textures/gui/summary/summary_stats_icon_increase.png")
         private val statDecreaseResource = cobblemonResource("textures/gui/summary/summary_stats_icon_decrease.png")
@@ -85,6 +88,10 @@ class StatWidget(
         private val spDefLabel = lang("ui.stats.sp_def")
         private val defLabel = lang("ui.stats.def")
         private val speedLabel = lang("ui.stats.speed")
+    }
+
+    var effectiveBattleIVs: Map<Stat, Int> = Stats.PERMANENT.associateWith { stat ->
+        pokemon.ivs.getEffectiveBattleIV(stat)
     }
 
     var statTabIndex = tabIndex
@@ -251,6 +258,79 @@ class StatWidget(
         )
     }
 
+    private fun drawFullness(moduleX: Int, moduleY: Int, matrices: PoseStack, context: GuiGraphics, pokemon: Pokemon) {
+        val currentFullness = pokemon.currentFullness
+        val maxFullness = pokemon.getMaxFullness()
+        val barRatio = currentFullness.toFloat() / maxFullness.toFloat()
+        val barWidth = ceil(barRatio * 108)
+
+        blitk(
+                matrixStack = matrices,
+                texture = statsOtherBarTemplate,
+                x = moduleX,
+                y = moduleY,
+                height = 28,
+                width = 124
+        )
+
+        val (red, green, blue) = when {
+            barRatio <= 0.33 -> Triple(0f, 1f, 0f) // Green (full green)
+            barRatio <= 0.66 -> Triple(1f, 1f, 0f) // Yellow (red + green)
+            else -> Triple(1f, 0f, 0f)              // Red (full red)
+        }
+
+        blitk(
+                matrixStack = matrices,
+                texture = CobblemonResources.WHITE,
+                x = moduleX + 8,
+                y = moduleY + 18,
+                height = 8,
+                width = barWidth,
+                red = red,
+                green = green,
+                blue = blue
+        )
+
+        // Draw the overlay
+        blitk(
+                matrixStack = matrices,
+                texture = fullnessOverlayResource,
+                x = moduleX / SCALE,
+                y = (moduleY + 16) / SCALE,
+                height = 20,
+                width = 248,
+                scale = SCALE
+        )
+
+        drawScaledText(
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = "Fullness".text().bold(),
+                x = moduleX + 62,
+                y = moduleY + 2.5,
+                centered = true,
+                shadow = true
+        )
+
+        drawScaledText(
+                context = context,
+                text = currentFullness.toString().text(),
+                x = moduleX + 11,
+                y = moduleY + 6,
+                scale = SCALE,
+                centered = true
+        )
+
+        drawScaledText(
+                context = context,
+                text = "${floor(barRatio * 100)}%".text(),
+                x = moduleX + 113,
+                y = moduleY + 6,
+                scale = SCALE,
+                centered = true
+        )
+    }
+
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val renderChart = statOptions.get(statTabIndex) != OTHER
         val matrices = context.pose()
@@ -277,7 +357,6 @@ class StatWidget(
                 scale = SCALE
             )
         }
-
         when (statOptions.get(statTabIndex)) {
             STATS -> drawStatHexagon(
                 mapOf(
@@ -292,7 +371,7 @@ class StatWidget(
                 maximum = 400
             )
             IV -> drawStatHexagon(
-                pokemon.ivs.associate { it.key to it.value },
+                effectiveBattleIVs,
                 colour = Vector3f(216F/255, 100F/255, 1F),
                 maximum = 31
             )
@@ -391,6 +470,9 @@ class StatWidget(
             drawFriendship(x + 5, drawY, matrices, context, pokemon.friendship)
             drawY += 30
 
+            drawFullness(x + 5, drawY, matrices, context, pokemon)
+            drawY += 30
+
             for (renderableFeature in renderableFeatures) {
                 val rendered = renderableFeature.render(
                     GuiGraphics = context,
@@ -417,9 +499,9 @@ class StatWidget(
     }
 
     private fun getStatValueAsText(stat: Stat): MutableComponent {
-        val value = when(statOptions.get(statTabIndex)) {
+        val value = when (statOptions.get(statTabIndex)) {
             STATS -> if (stat == Stats.HP) "${pokemon.currentHealth} / ${pokemon.maxHealth}" else pokemon.getStat(stat).toString()
-            IV -> pokemon.ivs.getOrDefault(stat).toString()
+            IV -> if (pokemon.ivs.isHyperTrained(stat)) "${pokemon.ivs[stat]} (${pokemon.ivs.hyperTrainedIVs[stat]})" else pokemon.ivs[stat].toString()
             EV -> pokemon.evs.getOrDefault(stat).toString()
             else -> "0"
         }

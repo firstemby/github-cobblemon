@@ -35,20 +35,24 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@StatusCuringBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(target.effectedPokemon)
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true &&
+            pokemon.currentHealth > 0 &&
+            super.canUseOnPokemon(stack, pokemon)
+
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack>? {
-        val currentStatus = pokemon.status?.status
-        return if (currentStatus != null && (status.isEmpty() || currentStatus in status)) {
+        return if (canUseOnPokemon(stack, pokemon)) {
+            pokemon.feedPokemon(1)
             pokemon.status = null
-            player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+
+            pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
             if (!player.isCreative) {
                 stack.shrink(1)
             }
@@ -60,7 +64,7 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        player.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
+        battlePokemon.originalPokemon.feedPokemon(1)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

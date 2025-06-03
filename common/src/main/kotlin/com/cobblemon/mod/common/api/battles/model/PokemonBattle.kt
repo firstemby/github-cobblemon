@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.pokemon.stats.BattleEvSource
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.red
@@ -272,7 +273,7 @@ open class PokemonBattle(
                             opponent.awardExperience(opponentPokemon, experience)
                         }
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
-                            pokemon.evs.add(stat, amount)
+                            pokemon.evs.add(stat, amount, BattleEvSource(this, opponentPokemon.facedOpponents.toList(), pokemon))
                         }
 
                     }

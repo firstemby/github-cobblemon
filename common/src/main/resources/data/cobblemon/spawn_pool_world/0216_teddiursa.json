@@ -27,6 +27,24 @@
         {
             "id": "teddiursa-2",
             "pokemon": "teddiursa",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "8-33",
+            "weight": 1.8,
+            "condition": {
+                "biomes": [
+                    "aether:skyroot_forest",
+                    "aether:skyroot_woodland"
+                ]
+            }
+        },
+        {
+            "id": "teddiursa-3",
+            "pokemon": "teddiursa",
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",

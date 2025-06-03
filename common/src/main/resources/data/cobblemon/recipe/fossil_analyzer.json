@@ -7,7 +7,7 @@
     ],
     "key": {
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "D": {
             "item": "minecraft:cobbled_deepslate"
@@ -16,10 +16,10 @@
             "item": "minecraft:glass"
         },
         "R": {
-            "item": "minecraft:redstone"
+            "tag": "c:dusts/redstone"
         },
         "A": {
-            "item": "minecraft:amethyst_shard"
+            "tag": "c:gems/amethyst"
         }
     },
     "result": {

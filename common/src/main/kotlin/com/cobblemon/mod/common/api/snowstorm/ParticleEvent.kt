@@ -127,6 +127,7 @@ class ParticleEvent(
                 sourceAlive = storm.sourceAlive,
                 sourceVisible = storm.sourceVisible,
                 onDespawn = {},
+                getParticleColor = storm.getParticleColor,
                 targetPos = storm.targetPos,
                 runtime = MoLangRuntime().setup(),
                 entity = storm.entity

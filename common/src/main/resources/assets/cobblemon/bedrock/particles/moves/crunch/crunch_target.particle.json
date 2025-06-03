@@ -5,7 +5,7 @@
             "identifier": "cobblemon:crunch_target",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/bite"
+                "texture": "textures/particles/generic/bite"
             }
         },
         "events": {

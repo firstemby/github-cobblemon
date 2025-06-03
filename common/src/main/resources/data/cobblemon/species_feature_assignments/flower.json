@@ -1,4 +1,10 @@
 {
-  "pokemon": ["flabebe", "floette", "florges"],
-  "features": ["flower"]
+  "pokemon": [
+    "flabebe",
+    "floette",
+    "florges"
+  ],
+  "features": [
+    "flower"
+  ]
 }

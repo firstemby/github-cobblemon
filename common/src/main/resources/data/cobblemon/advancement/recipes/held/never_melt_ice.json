@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_ice": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:blue_ice"
+              "cobblemon:ice_gem"
             ]
           }
         ]
@@ -22,13 +22,13 @@
   },
   "requirements": [
     [
-      "has_ice",
+      "has_gem",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:never_melt_ice", "cobblemon:never_melt_ice_using_stone"
+      "cobblemon:never_melt_ice"
     ]
   }
 }

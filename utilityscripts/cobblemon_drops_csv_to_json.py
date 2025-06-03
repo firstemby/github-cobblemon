@@ -134,36 +134,43 @@ def modify_files(file, pokemon_data_dir, drops_dict):
         for row in drops_dict[pokemon]:
 
             pokemon_form = row['forms'] if 'forms' in row else None
+            blank_drops = pd.isna(row['Drops']) or row['Drops'] == ''
+            removing_drops = blank_drops == False and "REMOVED" in row['Drops']
 
             if pokemon in drops_dict:
-
+                none_existed = False
                 if 'forms' in data:
                     for form in data['forms']:
+                        # There was an explicit 'None' form? Bet, won't need to do a later process
+                        if form['name'] == 'None':
+                            none_existed = True
                         # Apply the form entry mapping to the form name if applicable
                         if pokemon_form in form_entry_mapping:
                             pokemon_form = form_entry_mapping[pokemon_form]
                         if form['name'] == pokemon_form:
-                            if pd.isna(row['Drops']) or row['Drops'] == '':
+                            if blank_drops == True:
                                 no_drops_forms.append(f'{pokemon} [{pokemon_form}]')
                                 form.pop('drops', None)
-                            elif "REMOVED" in row['Drops']:
+                            elif removing_drops:
                                 removed_drops_pokemon.append(file)
                                 form.pop('drops', None)
                             else:
                                 form['drops'] = parse_drops(row['Drops'])
-                            if 'drops' in form and 'drops' in data:
-                                if form['drops'] == data['drops']:
-                                    form.pop('drops')
-                else:
-                    if pd.isna(row['Drops']) or row['Drops'] == '':
+                if none_existed == False and pokemon_form == None:
+                    if blank_drops:
                         no_drops_base_forms.append(file)
                         data.pop('drops', None)
-                    elif "REMOVED" in row['Drops']:
+                    elif removing_drops == True:
                         removed_drops_pokemon.append(file)
                         data.pop('drops', None)
                     else:
                         data['drops'] = parse_drops(row['Drops'])
-
+                # Clean duplicates from forms
+                if 'forms' in data:
+                    for form in data['forms']:
+                        if 'drops' in form and 'drops' in data:
+                            if form['drops'] == data['drops']:
+                                form.pop('drops')
         # Write the modified data back to the file
         f.seek(0)
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -232,7 +239,8 @@ def parse_drops(drops_str):
 
 
 def replace_names_in_string(drop_str, mapping_dict):
-    for natural_name, minecraft_id in mapping_dict.items():
+    # Replace the longest known substitutions first, this works around the issue of "Stone" and "Thunder Stone" both being known replacements.
+    for natural_name, minecraft_id in sorted(mapping_dict.items(), key=lambda item: 100-len(item[0])):
         if pd.isna(drop_str):
             break
         # if natural name is not of type str, show an error

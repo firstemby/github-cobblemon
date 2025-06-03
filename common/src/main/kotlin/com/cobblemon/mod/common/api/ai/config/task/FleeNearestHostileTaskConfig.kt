@@ -8,14 +8,12 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.FLEE_DESIRED_DISTANCE
+import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.FLEE_SPEED_MULTIPLIER
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -24,18 +22,20 @@ import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FleeNearestHostileTaskConfig : SingleTaskConfig {
-    var condition = "true".asExpression()
-    var speedMultiplier = "0.5".asExpression()
-    var desiredDistance = "9".asExpression()
+    var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "flee_nearest_hostile", true).asExpressible()
+    var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
+    var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(condition, speedMultiplier, desiredDistance).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition) || entity !is PathfinderMob) return null
-        val speedMultiplier = runtime.resolveFloat(speedMultiplier)
-        val desiredDistance = runtime.resolveInt(desiredDistance)
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean() || entity !is PathfinderMob) return null
+        val speedMultiplier = speedMultiplier.resolveFloat()
+        val desiredDistance = desiredDistance.resolveInt()
         return WrapperLivingEntityTask(
             SetWalkTargetAwayFrom.entity(MemoryModuleType.NEAREST_HOSTILE, speedMultiplier, desiredDistance, false),
             PathfinderMob::class.java

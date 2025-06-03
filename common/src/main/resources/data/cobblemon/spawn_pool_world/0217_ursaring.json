@@ -27,6 +27,24 @@
         {
             "id": "ursaring-2",
             "pokemon": "ursaring",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "context": "grounded",
+            "bucket": "common",
+            "level": "30-50",
+            "weight": 0.19,
+            "condition": {
+                "biomes": [
+                    "aether:skyroot_forest",
+                    "aether:skyroot_woodland"
+                ]
+            }
+        },
+        {
+            "id": "ursaring-3",
+            "pokemon": "ursaring",
             "type": "pokemon",
             "context": "grounded",
             "bucket": "common",

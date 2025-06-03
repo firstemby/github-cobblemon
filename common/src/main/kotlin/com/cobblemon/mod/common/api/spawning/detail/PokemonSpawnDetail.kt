@@ -8,20 +8,24 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.drop.DropTable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.weightedSelection
 import com.google.gson.annotations.SerializedName
-import net.minecraft.network.chat.MutableComponent
 import kotlin.math.ceil
+import net.minecraft.network.chat.MutableComponent
 
 /**
  * A [SpawnDetail] for spawning a [PokemonEntity].
@@ -69,13 +73,15 @@ class PokemonSpawnDetail : SpawnDetail() {
     }
 
     override fun autoLabel() {
-        val pokemonStruct = pokemon.asStruct()
+        struct.addFunction("pokemon") { pokemon.asMoLangValue() }
+        struct.addFunction("min_level") { DoubleValue(pokemon.deriveLevelRange(levelRange).start.toDouble()) }
+        struct.addFunction("max_level") { DoubleValue(pokemon.deriveLevelRange(levelRange).endInclusive.toDouble()) }
         if (pokemon.species != null) {
             val species = PokemonSpecies.getByIdentifier(pokemon.species!!.asIdentifierDefaultingNamespace())
             if (species != null) {
                 labels.addAll(
                     species.secondaryType?.let { listOf(species.primaryType.name.lowercase(), it.name.lowercase()) }
-                    ?: listOf(species.primaryType.name.lowercase())
+                        ?: listOf(species.primaryType.name.lowercase())
                 )
 
                 if (height == -1) {
@@ -88,18 +94,7 @@ class PokemonSpawnDetail : SpawnDetail() {
             }
         }
 
-        struct.setDirectly("pokemon", pokemonStruct)
         super.autoLabel()
-    }
-
-    fun getDerivedLevelRange() = levelRange.let { levelRange ->
-        if (levelRange == null && pokemon.level == null) {
-            IntRange(1, config.maxPokemonLevel)
-        } else if (levelRange == null) {
-            IntRange(pokemon.level!!, pokemon.level!!)
-        } else {
-            levelRange
-        }
     }
 
     override fun isValid(): Boolean {
@@ -108,7 +103,31 @@ class PokemonSpawnDetail : SpawnDetail() {
         return super.isValid() && isValidSpecies
     }
 
-    override fun doSpawn(ctx: SpawningContext): SingleEntitySpawnAction<PokemonEntity> {
-        return PokemonSpawnAction(ctx, this)
+    override fun createSpawnAction(
+        spawnablePosition: SpawnablePosition, bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ): SingleEntitySpawnAction<PokemonEntity> {
+        val levelRange = pokemon.deriveLevelRange(levelRange)
+        val heldItems = heldItems?.takeIf { it.isNotEmpty() }?.toMutableList() ?: mutableListOf()
+        val heldItem = if (heldItems.isNotEmpty()) {
+            val until100 = 1 - heldItems.sumOf { it.percentage / 100 }
+            if (until100 > 0 && spawnablePosition.world.random.nextDouble() < until100) {
+                null
+            } else {
+                heldItems.weightedSelection { it.percentage }
+            }
+        } else {
+            null
+        }?.createStack(spawnablePosition)
+
+        return PokemonSpawnAction(
+            spawnablePosition = spawnablePosition,
+            bucket = bucket,
+            detail = this,
+            props = pokemon,
+            heldItem = heldItem,
+            drops = drops,
+            levelRange = levelRange
+        )
     }
 }

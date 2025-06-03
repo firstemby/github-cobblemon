@@ -202,6 +202,8 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->
             var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
+            if (increment <= 0) //these affects are only meant to affect positive gains
+                return@subscribe
             if (increment <= 1F) {
                 event.pokemon.caughtBall.effects.filterIsInstance<FriendshipEarningBoostEffect>()
                     .forEach { increment *= it.multiplier }

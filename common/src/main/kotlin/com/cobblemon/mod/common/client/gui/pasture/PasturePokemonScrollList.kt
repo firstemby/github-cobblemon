@@ -115,7 +115,7 @@ class PasturePokemonScrollList(
             font = CobblemonResources.DEFAULT_LARGE,
             text = "${children().count { it.isOwned() }}/${config.permissions.maxPokemon.takeIf { it >= 0 } ?: config.limit }".text().bold(),
             x = x + (WIDTH / 2),
-            y = y - 9,
+            y = y - 7,
             centered = true
         )
     }

@@ -39,7 +39,7 @@ object CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
     override val gson = GsonBuilder()
         .registerTypeAdapter(SpawnRuleComponent::class.java, SpawnRuleComponentAdapter)
         .registerTypeAdapter(SpawnDetailSelector::class.java, SpawnDetailSelectorAdapter)
-        .registerTypeAdapter(SpawningContextSelector::class.java, SpawningContextSelectorAdapter)
+        .registerTypeAdapter(SpawnablePositionSelector::class.java, SpawnablePositionSelectorAdapter)
         .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
@@ -56,8 +56,8 @@ object CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
 
         SpawnDetailSelector.register<ExpressionSpawnDetailSelector>("expression")
 
-        SpawningContextSelector.register<ExpressionSpawningContextSelector>("expression")
-        SpawningContextSelector.register<ConditionalSpawningContextSelector>("conditional")
+        SpawnablePositionSelector.register<ExpressionSpawnablePositionSelector>("expression")
+        SpawnablePositionSelector.register<ConditionalSpawnablePositionSelector>("conditional")
     }
 
     val rules = mutableMapOf<ResourceLocation, SpawnRule>()

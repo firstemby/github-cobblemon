@@ -2,14 +2,17 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "I I",
-        "GIG"
+        "GDG"
     ],
     "key": {
         "G": {
             "item": "minecraft:tinted_glass"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
+        },
+        "D": {
+            "item": "cobblemon:dark_gem"
         }
     },
     "result": {

@@ -2,18 +2,21 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "III",
-        "CHC",
+        "CGH",
         "III"
     ],
     "key": {
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "C": {
             "item": "minecraft:clay_ball"
         },
         "H": {
             "item": "minecraft:honeycomb"
+        },
+        "G": {
+            "item": "cobblemon:steel_gem"
         }
     },
     "result": {

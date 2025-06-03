@@ -535,6 +535,9 @@
 						}
 					}
 				}
+			},
+			"timeline": {
+				"0.5": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.air_fly": {
@@ -710,6 +713,9 @@
 				},
 				"wing_open_right4": {
 					"rotation": [0, 0, "7.5+math.sin(q.anim_time*90*0.8-240)*-10+math.sin(q.anim_time*90*12-120)*0.4"]
+				},
+				"locator_seat1": {
+					"position": [0, 1.5, -4]
 				}
 			}
 		},
@@ -1566,6 +1572,9 @@
 						}
 					}
 				}
+			},
+			"timeline": {
+				"1.375": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.air_fly_quirk2": {
@@ -2721,6 +2730,14 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"3.0833": {
+					"effect": "animation.plumage.wing_flap.medium"
+				}
+			},
+			"timeline": {
+				"1.4583": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.blink": {
@@ -2743,9 +2760,8 @@
 			}
 		},
 		"animation.pidgeot.cry": {
-			"animation_length": 1.33333,
 			"sound_effects": {
-				"0.04": {
+				"0.0417": {
 					"effect": "pokemon.pidgeot.cry"
 				}
 			}

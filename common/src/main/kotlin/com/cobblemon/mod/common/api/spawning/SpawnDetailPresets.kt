@@ -17,7 +17,7 @@ import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.api.spawning.detail.PossibleHeldItem
 import com.cobblemon.mod.common.api.spawning.preset.SpawnDetailPreset
 import com.cobblemon.mod.common.util.adapters.*
@@ -50,7 +50,7 @@ object SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
         .setLenient()
         .disableHtmlEscaping()
         .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
-        .registerTypeAdapter(RegisteredSpawningContext::class.java, RegisteredSpawningContextAdapter)
+        .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)

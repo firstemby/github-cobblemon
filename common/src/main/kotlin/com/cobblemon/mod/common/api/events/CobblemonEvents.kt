@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.api.events.drops.LootDroppedEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
 import com.cobblemon.mod.common.api.events.fishing.*
@@ -42,13 +43,18 @@ import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
+import com.cobblemon.mod.common.api.events.storage.ChangePCBoxWallpaperEvent
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
+import com.cobblemon.mod.common.api.events.storage.RenamePCBoxEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperCollectionEvent
+import com.cobblemon.mod.common.api.events.storage.WallpaperUnlockedEvent
 import com.cobblemon.mod.common.api.events.world.BigRootPropagatedEvent
 import com.cobblemon.mod.common.api.reactive.CancelableObservable
 import com.cobblemon.mod.common.api.reactive.EventObservable
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.map
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.level.ServerPlayer
 
@@ -65,6 +71,8 @@ object CobblemonEvents {
     val SHOULDER_MOUNT = CancelableObservable<ShoulderMountEvent>()
     @JvmField
     val FRIENDSHIP_UPDATED = EventObservable<FriendshipUpdatedEvent>()
+    @JvmField
+    val FULLNESS_UPDATED = EventObservable<FullnessUpdatedEvent>()
     @JvmField
     val POKEMON_FAINTED = EventObservable<PokemonFaintedEvent>()
     @JvmField
@@ -159,9 +167,34 @@ object CobblemonEvents {
     val EXPERIENCE_CANDY_USE_POST = EventObservable<ExperienceCandyUseEvent.Post>()
 
     @JvmField
+    val EV_GAINED_EVENT_PRE = CancelableObservable<EvGainedEvent.Pre>()
+    @JvmField
+    val EV_GAINED_EVENT_POST = EventObservable<EvGainedEvent.Post>()
+
+    @JvmField
+    val HYPER_TRAINED_IV_PRE = CancelableObservable<HyperTrainedIvEvent.Pre>()
+    @JvmField
+    val HYPER_TRAINED_IV_POST = EventObservable<HyperTrainedIvEvent.Post>()
+
+    @JvmField
     val POKEMON_RELEASED_EVENT_PRE = CancelableObservable<ReleasePokemonEvent.Pre>()
     @JvmField
     val POKEMON_RELEASED_EVENT_POST = EventObservable<ReleasePokemonEvent.Post>()
+
+    @JvmField
+    val RENAME_PC_BOX_EVENT_PRE = CancelableObservable<RenamePCBoxEvent.Pre>()
+    @JvmField
+    val RENAME_PC_BOX_EVENT_POST = EventObservable<RenamePCBoxEvent.Post>()
+
+    @JvmField
+    val WALLPAPER_COLLECTION_EVENT = EventObservable<WallpaperCollectionEvent>()
+    @JvmField
+    val WALLPAPER_UNLOCKED_EVENT = CancelableObservable<WallpaperUnlockedEvent>()
+
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_PRE = CancelableObservable<ChangePCBoxWallpaperEvent.Pre>()
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_POST = EventObservable<ChangePCBoxWallpaperEvent.Post>()
 
     @JvmField
     val LOOT_DROPPED = CancelableObservable<LootDroppedEvent>()
@@ -190,6 +223,10 @@ object CobblemonEvents {
     val HELD_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
     @JvmField
     val HELD_ITEM_POST = EventObservable<HeldItemEvent.Post>()
+    @JvmField
+    val COSMETIC_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
+    @JvmField
+    val COSMETIC_ITEM_POST = EventObservable<HeldItemEvent.Post>()
 
     @JvmField
     val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()
@@ -216,8 +253,6 @@ object CobblemonEvents {
     @JvmField
     val POKEROD_REEL = CancelableObservable<PokerodReelEvent>()
     @JvmField
-    val BOBBER_BUCKET_CHOSEN = EventObservable<BobberBucketChosenEvent>()
-    @JvmField
     val BOBBER_SPAWN_POKEMON_PRE = CancelableObservable<BobberSpawnPokemonEvent.Pre>()
     @JvmField
     val BOBBER_SPAWN_POKEMON_MODIFY = EventObservable<BobberSpawnPokemonEvent.Modify>()
@@ -227,9 +262,25 @@ object CobblemonEvents {
     val BAIT_EFFECT_REGISTRATION = EventObservable<BaitEffectFunctionRegistryEvent>()
 
     @JvmField
+    val SPAWN_BUCKET_CHOSEN = EventObservable<SpawnBucketChosenEvent>()
+
+    // Baits and Lures
+    @JvmField
+    val BAIT_SPAWN_POKEMON_MODIFY = EventObservable<BaitSpawnPokemonEvent.Modify>()
+
+
+    @JvmField
     val COLLECT_EGG = CancelableObservable<CollectEggEvent>()
     @JvmField
     val HATCH_EGG_PRE = CancelableObservable<HatchEggEvent.Pre>()
     @JvmField
     val HATCH_EGG_POST = EventObservable<HatchEggEvent.Post>()
+
+    // -------------------------------------------------------------------------------------
+    //
+    // Riding
+    //
+    // -------------------------------------------------------------------------------------
+    @JvmField
+    val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
 }

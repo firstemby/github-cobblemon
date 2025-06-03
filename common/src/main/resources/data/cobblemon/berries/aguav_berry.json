@@ -18,7 +18,15 @@
   "favoriteMulches": [
     "humid"
   ],
-  "growthFactors": [],
+  "growthFactors": [
+    {
+      "variant": "cobblemon:preferred_biome",
+      "bonusYield": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ],
   "randomizedGrowthPoints": true,
   "spawnConditions": [],
   "growthPoints": [
@@ -113,9 +121,10 @@
   },
   "sproutShape": "stand-sprout",
   "matureShape": "stand-mature",
-  "flavors": {
+  "flavours": {
     "BITTER": 15
   },
+  "colour": "LIME",
   "weight": 1.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

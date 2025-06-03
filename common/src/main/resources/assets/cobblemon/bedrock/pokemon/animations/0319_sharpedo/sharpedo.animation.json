@@ -7,14 +7,30 @@
 				"body": {
 					"rotation": [0, "1-1*math.sin(q.anim_time*90*2+90)", 0]
 				},
-				"fin_left": {
+				"fin_right": {
 					"rotation": [0, 0, "1+4*math.sin(q.anim_time*90*2+90)"]
 				},
-				"fin_right": {
+				"fin_left": {
 					"rotation": [0, 0, "1-4*math.sin(q.anim_time*90*2+90)"]
 				}
 			}
+		},
+		"animation.sharpedo.mouth_open": {
+			"loop": true,
+			"bones": {
+				"head": {
+					"rotation": [-10, 0, 0]
+				},
+				"jaw": {
+					"rotation": [22.5, 0, 0]
+				},
+				"gills_right": {
+					"rotation": [-5, 0, 0]
+				},
+				"gills_left": {
+					"rotation": [-5, 0, 0]
+				}
+			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }

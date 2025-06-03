@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.berry
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.berry.spawncondition.BerrySpawnCondition
+import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.berry.BerryYieldCalculationEvent
 import com.cobblemon.mod.common.api.mulch.MulchVariant
@@ -20,16 +21,10 @@ import com.cobblemon.mod.common.item.berry.BerryItem
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.util.readBox
 import com.cobblemon.mod.common.util.readEnumConstant
-import com.cobblemon.mod.common.util.readEnumSet
 import com.cobblemon.mod.common.util.readIdentifier
-import com.cobblemon.mod.common.util.readList
-import com.cobblemon.mod.common.util.readMap
 import com.cobblemon.mod.common.util.writeBox
-import com.cobblemon.mod.common.util.writeCollection
 import com.cobblemon.mod.common.util.writeEnumConstant
-import com.cobblemon.mod.common.util.writeEnumSet
 import com.cobblemon.mod.common.util.writeIdentifier
-import com.cobblemon.mod.common.util.writeMap
 import com.google.gson.annotations.SerializedName
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -38,6 +33,7 @@ import java.util.EnumSet
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -61,7 +57,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
  * @property growthPoints A collection of [GrowthPoint]s for the berry flowers and fruit.
  * @property sproutShapeBoxes A collection of [Box]es that make up the tree [VoxelShape] during the sprouting stages.
  * @property matureShapeBoxes A collection of [Box]es that make up the tree [VoxelShape] during the mature stages.
- * @property flavors The [Flavor] values.
+ * @property flavours The [com.cobblemon.mod.common.api.cooking.Flavour] values.
  * @property tintIndexes Determines tints at specific indexes if any.
  * @property flowerModelIdentifier The [ResourceLocation] for the model of the berry in flower form.
  * @property flowerTexture The [ResourceLocation] for the texture of the berry in flower form. This is resolved into a [ModelPart] on the client.
@@ -87,7 +83,10 @@ class Berry(
     private val sproutShapeBoxes: Collection<AABB>,
     @SerializedName("matureShape")
     private val matureShapeBoxes: Collection<AABB>,
-    private val flavors: Map<Flavor, Int>,
+    @SerializedName("flavours", alternate = ["flavor"])
+    val flavours: Map<Flavour, Int>,
+    @SerializedName("colour", alternate = ["color"])
+    val colour: DyeColor,
     val tintIndexes: Map<Int, Color>,
     @SerializedName("flowerModel")
     val flowerModelIdentifier: ResourceLocation,
@@ -99,7 +98,6 @@ class Berry(
     val weight: Float,
     val boneMealChance: Float
 ) {
-
     @Transient
     var identifier: ResourceLocation = identifier
         internal set
@@ -145,13 +143,13 @@ class Berry(
     /**
      * Query the value of a certain flavor.
      *
-     * @param flavor The [Flavor] being queried.
+     * @param flavour The [Flavour] being queried.
      * @return The value if any or 0.
      */
-    fun flavor(flavor: Flavor): Int = this.flavors[flavor] ?: 0
+    fun flavor(flavour: Flavour): Int = this.flavours[flavour] ?: 0
 
     fun dislikedBy(nature: Nature): Boolean {
-        val dislikedFlavor = nature.dislikedFlavor ?: return false
+        val dislikedFlavor = nature.dislikedFlavour ?: return false
         return flavor(dislikedFlavor) > 0
     }
 
@@ -159,7 +157,7 @@ class Berry(
      * Calculates the yield for a berry tree being planted or replanted after a life cycle.
      * Triggers [BerryYieldCalculationEvent].
      *
-     * @param world The [World] the tree is present in.
+     * @param world The [Level] the tree is present in.
      * @param state The [BlockState] of the tree.
      * @param pos The [BlockPos] of the tree.
      * @param placer The [LivingEntity] tending to the tree, if any.
@@ -173,9 +171,10 @@ class Berry(
         if (BerryBlock.getMulch(treeEntity) == MulchVariant.RICH) {
             //I hope the upper bound isnt exclusive, especially when there's a method called nextBetweenExclusive
             // update: it was meant to be exclusive, which caused #1124. I've lowered the upper bound from 3 to 2.
-            yield += world.random.nextIntBetweenInclusive(1, 2)
+            yield += world.random.nextIntBetweenInclusive(RICH_MULCH_MIN, RICH_MULCH_MAX)
             treeEntity.decrementMulchDuration(world, pos, state)
         }
+        yield = yield.coerceAtMost(growthPoints.size)
         val event = BerryYieldCalculationEvent(this, world, state, pos, placer, yield, bonus.second)
         CobblemonEvents.BERRY_YIELD.post(event) { yield = it.yield }
         return yield
@@ -193,7 +192,7 @@ class Berry(
      *
      * @return The maximum possible yield.
      */
-    fun maxYield() = this.baseYield.last + this.growthFactors.sumOf { it.maxYield() }
+    fun maxYield() = this.baseYield.last + this.growthFactors.sumOf { it.maxYield() } + RICH_MULCH_MAX
 
     /**
      * Checks if this berry can mutate with the given [partner].
@@ -231,6 +230,7 @@ class Berry(
     }
 
     // A cheat since gson doesn't invoke init block
+    // well I actually suspect it does but
     internal fun validate() {
         if (this.baseYield.first < 0 || this.baseYield.last < 0) {
             throw IllegalArgumentException("A berry base yield must be a positive range")
@@ -247,10 +247,6 @@ class Berry(
         }
          */
         this.growthFactors.forEach { it.validateArguments() }
-        val maxYield = this.maxYield()
-        if (this.growthPoints.size < maxYield) {
-            throw IllegalArgumentException("Anchor points must have enough elements for the max possible yield of $maxYield you've provided ${this.growthPoints.size} points")
-        }
         this.shapedFlower = hashMapOf()
         this.shapedFruit = hashMapOf()
         this.sproutShape = this.createAndUniteShapes(this.sproutShapeBoxes)
@@ -284,7 +280,8 @@ class Berry(
         buffer.writeCollection(this.matureShapeBoxes) { writer, value ->
             writer.writeBox(value)
         }
-        buffer.writeMap(this.flavors, { writer, key -> writer.writeEnumConstant(key) }, { writer, value -> writer.writeInt(value) })
+        buffer.writeMap(this.flavours, { writer, key -> writer.writeEnumConstant(key) }, { writer, value -> writer.writeInt(value) })
+        buffer.writeEnumConstant(colour)
         buffer.writeMap(this.tintIndexes, { writer, key -> writer.writeInt(key) }, { writer, value -> writer.writeInt(value.rgb) })
         buffer.writeIdentifier(this.flowerModelIdentifier)
         buffer.writeIdentifier(this.flowerTexture)
@@ -339,6 +336,8 @@ class Berry(
     }
 
     companion object {
+        const val RICH_MULCH_MIN = 1
+        const val RICH_MULCH_MAX = 2
 
         internal fun decode(buffer: RegistryFriendlyByteBuf): Berry {
             val identifier = buffer.readIdentifier()
@@ -354,7 +353,8 @@ class Berry(
             val mutations = buffer.readMap({ reader -> reader.readIdentifier() }, { reader -> reader.readIdentifier() })
             val sproutShapeBoxes = buffer.readList { it.readBox() }
             val matureShapeBoxes = buffer.readList { it.readBox() }
-            val flavors = buffer.readMap({ reader -> reader.readEnumConstant(Flavor::class.java) }, { reader -> reader.readInt() })
+            val flavors = buffer.readMap({ reader -> reader.readEnumConstant(Flavour::class.java) }, { reader -> reader.readInt() })
+            val colour = buffer.readEnumConstant(DyeColor::class.java)
             val tintIndexes = buffer.readMap({ reader -> reader.readInt() }, { reader -> Color(reader.readInt()) })
             val flowerModelIdentifier = buffer.readIdentifier()
             val flowerTexture = buffer.readIdentifier()
@@ -362,7 +362,7 @@ class Berry(
             val fruitTexture = buffer.readIdentifier()
             val stageOneYPos = GrowthPoint(Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()), Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble()))
             val boneMealChance = buffer.readFloat()
-            return Berry(identifier, baseYield, emptyList(), growthTime, refreshRate, favMulchs, emptySet(), emptyList(), growthPoints, randomizedGrowthPoints, mutations, sproutShapeBoxes, matureShapeBoxes, flavors, tintIndexes, flowerModelIdentifier, flowerTexture, fruitModelIdentifier, fruitTexture, stageOneYPos, 0F, boneMealChance)
+            return Berry(identifier, baseYield, emptyList(), growthTime, refreshRate, favMulchs, emptySet(), emptyList(), growthPoints, randomizedGrowthPoints, mutations, sproutShapeBoxes, matureShapeBoxes, flavors, colour, tintIndexes, flowerModelIdentifier, flowerTexture, fruitModelIdentifier, fruitTexture, stageOneYPos, 0F, boneMealChance)
         }
 
     }

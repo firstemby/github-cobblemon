@@ -1,0 +1,22 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "foods",
+    "ingredients": [
+        {
+            "item": "cobblemon:hearty_grains"
+        },
+        {
+            "item": "minecraft:honey_bottle"
+        },
+        {
+            "item": "minecraft:sweet_berries"
+        },
+        {
+            "item": "minecraft:wheat_seeds"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:jubilife_muffin"
+    },
+    "seasoningProcessors": []
+}

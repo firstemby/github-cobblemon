@@ -587,6 +587,13 @@
 					"scale": [0.335, 1, 1]
 				}
 			}
+		},
+		"animation.mantine.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.mantine.cry"
+				}
+			}
 		}
 	}
 }

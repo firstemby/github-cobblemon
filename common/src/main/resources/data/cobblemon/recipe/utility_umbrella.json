@@ -7,13 +7,13 @@
     ],
     "key": {
         "I": {
-            "item": "minecraft:iron_bars"
+            "tag": "c:ingots/iron"
         },
         "W": {
-            "item": "minecraft:black_wool"
+            "tag": "minecraft:wool"
         },
         "B": {
-            "item": "minecraft:blackstone"
+            "item": "minecraft:flint"
         }
     },
     "result": {

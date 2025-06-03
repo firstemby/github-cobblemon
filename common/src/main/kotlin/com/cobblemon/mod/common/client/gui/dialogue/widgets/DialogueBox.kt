@@ -10,8 +10,10 @@ package com.cobblemon.mod.common.client.gui.dialogue.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
+import com.cobblemon.mod.common.client.render.TextClipping
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
@@ -127,6 +129,7 @@ class DialogueBox(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        val gibber = dialogueScreen.gibber
         correctSize()
         blitk(
             matrixStack = context.pose(),
@@ -137,8 +140,9 @@ class DialogueBox(
             width = frameWidth,
             textureWidth = frameWidth + DialoguePortraitWidget.DIALOGUE_ARROW_WIDTH + SCROLL_BAR_WIDTH + SCROLL_TRACK_WIDTH
         )
-
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true && !dialogueScreen.gibberDone) dialogueScreen.gibberIndex else -1) {
+            super.renderWidget(context, mouseX, mouseY, partialTicks)
+        }
     }
 
     override fun enableScissor(context: GuiGraphics) {
@@ -158,6 +162,14 @@ class DialogueBox(
             mouseY > this.y && mouseY < this.bottom
         ) {
             if (dialogue.dialogueInput.allowSkip && dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)) {
+                val gibber = dialogueScreen.gibber
+                if (gibber != null && gibber.graduallyShowText && !dialogueScreen.gibberDone) {
+                    if (gibber.allowSkip) {
+                        dialogueScreen.gibberDone = true
+                    }
+                    return true
+                }
+
                 dialogueScreen.sendToServer(InputToDialoguePacket(dialogue.dialogueInput.inputId, "skip!"))
                 return true
             }

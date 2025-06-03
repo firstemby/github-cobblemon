@@ -1,0 +1,45 @@
+{
+  "name": "cobblemon.behaviour.panics.name",
+  "description": "cobblemon.behaviour.panics.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": ["switch_to_panic_when_hurt"]
+      }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "panic",
+      "tasksByPriority": {
+        "0": [
+          "calm_down",
+          "follow_walk_target"
+        ],
+        "1": [
+          "flee_nearest_hostile"
+        ],
+        "2": [
+          "flee_attacker"
+        ],
+        "3": [
+          {
+            "type": "wander",
+            "speedMultiplier": {
+              "variableName": "flee_speed_multiplier",
+              "category": "cobblemon.entity.variable.category.fear",
+              "defaultValue": 0.5,
+              "type": "NUMBER",
+              "displayName": "cobblemon.entity.variable.flee_speed_multiplier.name",
+              "description": "cobblemon.entity.variable.flee_speed_multiplier.desc"
+            },
+            "horizontalRange": 4,
+            "verticalRange": 4,
+            "shouldWander": true
+          }
+        ]
+      }
+    }
+  ]
+}

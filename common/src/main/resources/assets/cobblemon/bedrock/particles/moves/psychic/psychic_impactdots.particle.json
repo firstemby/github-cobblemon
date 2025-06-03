@@ -5,7 +5,7 @@
             "identifier": "cobblemon:psychic_impactdots",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/small-psychichit"
+                "texture": "textures/particles/moves/psychichit_small"
             }
         },
         "components": {

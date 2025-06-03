@@ -12,6 +12,22 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0007_squirtle/squirtle_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-black_glasses"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0007_squirtle/squirtle_triangleglasses.png"
+        }
+      ]
+    },
+    {
+      "aspects": ["cosmetic_item-wise_glasses"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0007_squirtle/squirtle_circleglasses.png"
+        }
+      ]
     }
   ]
 }

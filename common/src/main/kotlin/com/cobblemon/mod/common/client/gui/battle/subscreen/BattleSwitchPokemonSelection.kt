@@ -254,6 +254,7 @@ class BattleSwitchPokemonSelection(
                     matrixStack = matrixStack,
                     rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
                     state = state,
+                    doQuirks = false,
                     scale = 4.5F,
                     partialTicks = deltaTicks
                 )

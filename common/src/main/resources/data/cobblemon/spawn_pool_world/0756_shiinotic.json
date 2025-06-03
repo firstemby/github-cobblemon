@@ -16,6 +16,7 @@
             "weight": 0.2,
             "condition": {
                 "biomes": [
+                    "#aether:is_aether",
                     "#cobblemon:is_jungle",
                     "#cobblemon:is_magical",
                     "#cobblemon:is_mushroom"

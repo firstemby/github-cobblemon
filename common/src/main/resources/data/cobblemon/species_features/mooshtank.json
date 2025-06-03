@@ -1,7 +1,7 @@
 {
   "type": "choice",
   "keys": ["mooshtank"],
-  "default": "false",
+  "default": "none",
   "choices": [
     "red",
     "brown"

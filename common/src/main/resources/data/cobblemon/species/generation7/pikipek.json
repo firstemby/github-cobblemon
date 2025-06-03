@@ -1,13 +1,26 @@
 {
   "implemented": true,
-  "name": "Pikipek",
   "nationalPokedexNumber": 731,
+  "name": "Pikipek",
   "primaryType": "normal",
   "secondaryType": "flying",
+  "maleRatio": 0.5,
+  "height": 3,
+  "weight": 12,
+  "pokedex": [
+    "cobblemon.species.pikipek.desc"
+  ],
+  "labels": [
+    "gen7"
+  ],
+  "aspects": [],
   "abilities": [
     "keeneye",
     "skilllink",
     "h:pickup"
+  ],
+  "eggGroups": [
+    "flying"
   ],
   "baseStats": {
     "hp": 35,
@@ -17,21 +30,43 @@
     "special_defence": 30,
     "speed": 65
   },
-  "catchRate": 255,
-  "maleRatio": 0.5,
-  "shoulderMountable": false,
+  "evYield": {
+    "hp": 0,
+    "attack": 1,
+    "defence": 0,
+    "special_attack": 0,
+    "special_defence": 0,
+    "speed": 0
+  },
   "baseExperienceYield": 53,
   "experienceGroup": "medium_fast",
+  "catchRate": 255,
   "eggCycles": 15,
-  "eggGroups": [
-    "flying"
-  ],
+  "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.4,
+    "height": 0.6,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
       }
     }
+  },
+  "drops": {
+    "amount": 2,
+    "entries": [
+      {
+        "item": "minecraft:feather",
+        "quantityRange": "0-1"
+      },
+      {
+        "item": "minecraft:chicken"
+      }
+    ]
   },
   "moves": [
     "1:peck",
@@ -48,22 +83,17 @@
     "33:featherdance",
     "37:hypervoice",
     "egg:boomburst",
-    "egg:bravebird",
     "egg:gunkshot",
     "egg:mirrormove",
     "egg:skyattack",
-    "egg:tailwind",
-    "egg:uproar",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:aircutter",
     "tm:airslash",
-    "tm:attract",
     "tm:bravebird",
     "tm:brickbreak",
     "tm:bulletseed",
-    "tm:confide",
-    "tm:doubleteam",
+    "tm:defog",
     "tm:dualwingbeat",
     "tm:echoedvoice",
     "tm:endeavor",
@@ -72,48 +102,48 @@
     "tm:featherdance",
     "tm:flamecharge",
     "tm:fly",
-    "tm:frustration",
     "tm:gunkshot",
     "tm:heatwave",
     "tm:helpinghand",
-    "tm:hiddenpower",
     "tm:hypervoice",
     "tm:knockoff",
+    "tm:pluck",
     "tm:protect",
     "tm:rest",
-    "tm:return",
+    "tm:rocksmash",
     "tm:roost",
-    "tm:round",
+    "tm:screech",
+    "tm:skyattack",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:steelwing",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swordsdance",
     "tm:tailwind",
     "tm:takedown",
     "tm:terablast",
     "tm:thief",
-    "tm:toxic",
     "tm:uproar",
     "tm:uturn",
     "tm:workup",
+    "tutor:aerialace",
+    "tutor:aircutter",
     "tutor:defog",
+    "tutor:dualwingbeat",
+    "tutor:endeavor",
     "tutor:gunkshot",
     "tutor:heatwave",
+    "tutor:helpinghand",
     "tutor:hypervoice",
     "tutor:knockoff",
+    "tutor:rest",
+    "tutor:rocksmash",
+    "tutor:roost",
     "tutor:skyattack",
-    "tutor:snore",
+    "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:uproar"
-  ],
-  "labels": [
-    "gen7"
-  ],
-  "pokedex": [
-    "cobblemon.species.pikipek.desc"
   ],
   "evolutions": [
     {
@@ -129,36 +159,5 @@
         }
       ]
     }
-  ],
-  "baseScale": 1,
-  "hitbox": {
-    "width": 0.4,
-    "height": 0.6,
-    "fixed": false
-  },
-  "baseFriendship": 70,
-  "evYield": {
-    "hp": 0,
-    "attack": 1,
-    "defence": 0,
-    "special_attack": 0,
-    "special_defence": 0,
-    "speed": 0
-  },
-  "height": 3,
-  "weight": 12,
-  "aspects": [],
-  "cannotDynamax": false,
-  "drops": {
-    "amount": 2,
-    "entries": [
-      {
-        "item": "minecraft:feather",
-        "quantityRange": "0-1"
-      },
-      {
-        "item": "minecraft:chicken"
-      }
-    ]
-  }
+  ]
 }

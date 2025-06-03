@@ -2,15 +2,18 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " WS",
-        "SWW",
+        "SGW",
         "WS "
     ],
     "key": {
         "W": {
-            "item": "minecraft:white_wool"
+            "tag": "minecraft:wool"
         },
         "S": {
-            "item": "minecraft:string"
+            "tag": "c:strings"
+        },
+        "G": {
+            "item": "cobblemon:normal_gem"
         }
     },
     "result": {

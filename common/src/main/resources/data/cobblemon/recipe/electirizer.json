@@ -1,22 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "RIR",
-        "IBI",
+        "GIG",
+        "IRI",
         "GIG"
     ],
     "key": {
         "G": {
-            "item": "minecraft:glowstone"
+            "tag": "c:ingots/gold"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
-        },
-        "B": {
-            "item": "minecraft:iron_bars"
+            "tag": "c:ingots/iron"
         },
         "R": {
-            "item": "minecraft:redstone"
+            "item": "minecraft:redstone_block"
         }
     },
     "result": {

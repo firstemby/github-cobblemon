@@ -55,6 +55,7 @@ class ActiveDialogue(var playerEntity: ServerPlayer, var dialogueReference: Dial
         )
 
         dialogueReference.initializationAction.invoke(this)
+        setPage(currentPage)
 
         if (!completion.isDone) {
             val packet = DialogueOpenedPacket(this, true)

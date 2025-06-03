@@ -12,6 +12,14 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0149_dragonite/dragonite_shiny.png"
+    },
+    {
+      "aspects": ["cosmetic_item-bundle"],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0149_dragonite/dragonite_mailbag.png"
+        }
+      ]
     }
   ]
 }

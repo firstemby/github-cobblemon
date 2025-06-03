@@ -1,5 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
+    "group": "pokedex",
     "pattern": [
         "IAC",
         "ISI",
@@ -10,10 +11,10 @@
             "tag": "cobblemon:pokedex_screen"
         },
         "C": {
-            "item": "minecraft:copper_ingot"
+            "tag": "c:ingots/copper"
         },
         "I": {
-            "item": "minecraft:iron_ingot"
+            "tag": "c:ingots/iron"
         },
         "A": {
             "item": "cobblemon:black_apricorn"

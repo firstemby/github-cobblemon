@@ -5,7 +5,7 @@
             "identifier": "cobblemon:hisuicapturestar",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/hisuicapturestar"
+                "texture": "textures/particles/balls/hisuicapturestar"
             }
         },
         "components": {

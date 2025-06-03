@@ -1,7 +1,9 @@
 {
   "type": "choice",
-  "keys": ["tree"],
-  "default": "false",
+  "keys": [
+    "tree"
+  ],
+  "default": "none",
   "choices": [
     "oak",
     "birch",

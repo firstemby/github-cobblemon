@@ -46,9 +46,9 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.revival_herb"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             return "revive 0.25"
         }
     }
@@ -63,7 +63,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.isFainted()
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.isFainted()
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
@@ -77,7 +77,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
 
             pokemon.currentHealth = amount
-            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             if (!player.isCreative) {
                 stack.shrink(1)
             }

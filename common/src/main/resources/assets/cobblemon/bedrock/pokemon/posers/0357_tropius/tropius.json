@@ -1,0 +1,133 @@
+{
+  "portraitScale": 1.31,
+  "portraitTranslation": [ -1.23, 5.01, 0 ],
+  "profileScale": 0.28,
+  "profileTranslation": [ 0, 1.26, 0 ],
+  "rootBone": "tropius",
+  "seatToCameraOffset": {
+    "seat_1": [
+      0,
+      5,
+      10
+    ],
+    "seat_1_reverse": [
+      0,
+      2,
+      4
+    ]
+  },
+   "animations": {
+     "faint": "q.bedrock_primary('tropius', 'faint', q.curve('one'))",
+     "cry": "q.bedrock_stateful('tropius', 'cry')",
+     "recoil": "q.bedrock_stateful('tropius', 'recoil')"
+   },
+   "poses": {
+    "portrait": {
+      "poseTypes": ["PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "animations": [
+        "q.bedrock('tropius', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"
+      ]
+    },
+     "battle-standing": {
+       "poseTypes": ["STAND", "FLOAT"],
+       "isBattle": true,
+       "animations": [
+         "q.look('head')",
+         "q.bedrock('tropius', 'battle_idle')"
+       ],
+       "quirks": [
+         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"
+       ]
+     },
+     "standing": {
+       "poseTypes": ["STAND", "NONE", "FLOAT"],
+       "isBattle": false,
+       "animations": [
+         "q.look('head')",
+         "q.bedrock('tropius', 'ground_idle')"
+       ],
+       "quirks": [
+         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
+         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+       ]
+     },
+     "flying": {
+       "poseTypes": ["FLY"],
+       "condition": "!q.is_gliding",
+       "animations": [
+         "q.bedrock('tropius', 'air_fly')"
+       ],
+       "quirks": [
+         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
+         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+       ]
+     },
+     "glide": {
+       "poseTypes": ["FLY"],
+       "condition": "q.is_gliding",
+       "animations": [
+        "q.look('head')", 
+        "q.bedrock('tropius', 'air_glide')"
+      ],
+       "quirks": [
+         "q.bedrock_quirk('charizard', 'blink')"
+       ]
+     },
+     "hovering": {
+       "poseTypes": ["HOVER"],
+       "animations": [
+         "q.look('lower_head')",
+         "q.bedrock('tropius', 'air_idle')"
+       ],
+       "quirks": [
+         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
+         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+       ]
+     },
+     "walking": {
+       "poseTypes": ["WALK", "SWIM"],
+       "animations": [
+         "q.look('head')",
+         "q.bedrock('tropius', 'ground_walk')"
+       ],
+       "quirks": ["q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"]
+     },
+     "air-sleep": {
+       "poseTypes": ["SLEEP"],
+       "condition": "q.is_flying",
+       "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+       },
+       "animations": [
+         "q.bedrock('tropius', 'air_sleep')"
+       ]
+     },
+     "sleeping": {
+       "poseTypes": ["SLEEP"],
+       "condition": "!q.is_flying",
+       "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+       },
+       "isBattle": false,
+       "animations": [
+         "q.bedrock('tropius', 'sleep')"
+       ]
+     },
+     "battle-sleep": {
+       "poseTypes": ["SLEEP"],
+       "condition": "!q.is_flying",
+       "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+       },
+       "isBattle": true,
+       "animations": [
+         "q.bedrock('tropius', 'battle_sleep')"
+       ]
+     }
+   }
+ }
+ 

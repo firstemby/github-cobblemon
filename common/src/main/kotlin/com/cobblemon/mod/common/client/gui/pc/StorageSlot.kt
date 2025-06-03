@@ -46,6 +46,8 @@ open class StorageSlot(
         private val slotOverlayMoveIconResource = cobblemonResource("textures/gui/pasture/pc_slot_icon_move.png")
     }
 
+    protected var isSlotSelected = false;
+
     override fun playDownSound(soundManager: SoundManager) {
     }
 
@@ -82,50 +84,52 @@ open class StorageSlot(
 
         context.disableScissor()
 
-        // Ensure elements are not hidden behind Pokémon render
-        matrices.pushPose()
-        matrices.translate(0.0, 0.0, 100.0)
-        // Level
-        drawScaledText(
-            context = context,
-            text = lang("ui.lv.number", pokemon.level),
-            x = posX + 1,
-            y = posY + 1,
-            shadow = true,
-            scale = PCGUI.SCALE
-        )
-
-        if (pokemon.gender != Gender.GENDERLESS) {
-            blitk(
-                matrixStack = matrices,
-                texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
-                x = (posX + 21) / PCGUI.SCALE,
-                y = (posY + 1) / PCGUI.SCALE,
-                width = 6,
-                height = 8,
+        if (!isSlotSelected) {
+            // Ensure elements are not hidden behind Pokémon render
+            matrices.pushPose()
+            matrices.translate(0.0, 0.0, 100.0)
+            // Level
+            drawScaledText(
+                context = context,
+                text = lang("ui.lv.number", pokemon.level),
+                x = posX + 1,
+                y = posY + 1,
+                shadow = true,
                 scale = PCGUI.SCALE
             )
-        }
 
-        // Held Item
-        val heldItem = pokemon.heldItemNoCopy()
-        if (!heldItem.isEmpty) {
-            renderScaledGuiItemIcon(
-                itemStack = heldItem,
-                x = posX + 16.0,
-                y = posY + 16.0,
-                scale = 0.5,
-                matrixStack = matrices
-            )
+            if (pokemon.gender != Gender.GENDERLESS) {
+                blitk(
+                    matrixStack = matrices,
+                    texture = if (pokemon.gender == Gender.MALE) genderIconMale else genderIconFemale,
+                    x = (posX + 21) / PCGUI.SCALE,
+                    y = (posY + 1) / PCGUI.SCALE,
+                    width = 6,
+                    height = 8,
+                    scale = PCGUI.SCALE
+                )
+            }
+
+            // Held Item
+            val heldItem = pokemon.heldItemNoCopy()
+            if (!heldItem.isEmpty) {
+                renderScaledGuiItemIcon(
+                    itemStack = heldItem,
+                    x = posX + 16.0,
+                    y = posY + 16.0,
+                    scale = 0.5,
+                    matrixStack = matrices
+                )
+            }
+            matrices.popPose()
         }
-        matrices.popPose()
 
         // Ensure overlay elements are on top
         matrices.pushPose()
         matrices.translate(0.0, 0.0, 500.0)
 
         val config = parent.pcGui.configuration
-        if (pokemon.tetheringId != null) {
+        if (pokemon.tetheringId != null && !isSlotSelected) {
             if (isStationary()) {
                 blitk(
                     matrixStack = matrices,
@@ -208,7 +212,15 @@ open class StorageSlot(
     }
 
     open fun shouldRender(): Boolean {
-        return true
+        return parent.pcGui.search.passes(getPokemon())
+    }
+
+    open fun clickable(): Boolean {
+        return getPokemon() == null || parent.pcGui.search.passes(getPokemon())
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        return if (clickable()) super.mouseClicked(mouseX, mouseY, button) else false
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))

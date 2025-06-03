@@ -35,16 +35,16 @@ class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerMan
     val uuid: UUID = player.uuid
     override var ticksBetweenSpawns = config.ticksBetweenSpawnAttempts
     override fun getCauseEntity() = uuid.getPlayer()
-    override fun getArea(cause: SpawnCause): SpawningArea? {
+    override fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
         val player = uuid.getPlayer() ?: return null
-        val sliceDiameter = config.worldSliceDiameter
-        val sliceHeight = config.worldSliceHeight
+        val zoneDiameter = config.spawningZoneDiameter
+        val zoneHeight = config.spawningZoneHeight
 
         val rand = Random.Default
 
         val center = player.position()
 
-        val r = rand.nextBetween(config.minimumSliceDistanceFromPlayer, config.maximumSliceDistanceFromPlayer)
+        val r = rand.nextBetween(config.minimumSpawningZoneDistanceFromPlayer, config.maximumSpawningZoneDistanceFromPlayer)
         val thetatemp = atan(player.deltaMovement.z / player.deltaMovement.x) + rand.nextBetween(-PI/2, PI/2 )
         val theta = if (player.deltaMovement.horizontalDistance() < 0.1) {
             rand.nextDouble() * 2 * PI
@@ -56,15 +56,15 @@ class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerMan
         val x = center.x + r * cos(theta)
         val z = center.z + r * sin(theta)
 
-        return SpawningArea(
+        return SpawningZoneInput(
             cause = cause,
             world = player.level() as ServerLevel,
-            baseX = ceil(x - sliceDiameter / 2F),
-            baseY = ceil(center.y - sliceHeight / 2F),
-            baseZ = ceil(z - sliceDiameter / 2F),
-            length = sliceDiameter,
-            height = sliceHeight,
-            width = sliceDiameter
+            baseX = ceil(x - zoneDiameter / 2F),
+            baseY = ceil(center.y - zoneHeight / 2F),
+            baseZ = ceil(z - zoneDiameter / 2F),
+            length = zoneDiameter,
+            height = zoneHeight,
+            width = zoneDiameter
         )
     }
 }

@@ -8,8 +8,9 @@
 
 package com.cobblemon.mod.common.api.spawning.condition
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import net.minecraft.core.Holder
+import net.minecraft.world.level.biome.Biome
 
 /**
  * A spawning condition that is composed of a list of conditions and anticonditions.
@@ -30,11 +31,20 @@ class CompositeSpawningCondition {
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
 
-    fun satisfiedBy(ctx: SpawningContext): Boolean {
-        return if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(ctx) }) {
+    fun isBiomeValid(holder: Holder<Biome>): Boolean {
+        if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
+            if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
+                return true
+            }
+        }
+        return false
+    }
+
+    fun satisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        return if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(spawnablePosition) }) {
             false
         } else {
-            !(anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(ctx) })
+            !(anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(spawnablePosition) })
         }
     }
 }

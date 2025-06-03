@@ -18,7 +18,15 @@
   "favoriteMulches": [
     "coarse"
   ],
-  "growthFactors": [],
+  "growthFactors": [
+    {
+      "variant": "cobblemon:preferred_biome",
+      "bonusYield": {
+        "min": 0,
+        "max": 1
+      }
+    }
+  ],
   "randomizedGrowthPoints": true,
   "spawnConditions": [
     {
@@ -167,9 +175,10 @@
   },
   "sproutShape": "standard-sprout",
   "matureShape": "standard-mature",
-  "flavors": {
+  "flavours": {
     "SOUR": 10
   },
+  "colour": "YELLOW",
   "weight": 20.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

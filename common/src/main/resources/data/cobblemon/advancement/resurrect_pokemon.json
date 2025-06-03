@@ -13,7 +13,10 @@
   },
   "criteria": {
     "resurrected_pokemon": {
-      "trigger": "cobblemon:resurrect_pokemon"
+      "trigger": "cobblemon:resurrect_pokemon",
+      "conditions": {
+        "species": "any"
+      }
     }
   }
 }

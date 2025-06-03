@@ -8,24 +8,27 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.SpawnBucket
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import java.util.concurrent.CompletableFuture
 
 
 /**
- * A scheduled spawning action.
+ * A planned, actionable spawn.
  *
  * @author Hiroku
  * @since February 4th, 2022
  */
 abstract class SpawnAction<R>(
-    val ctx: SpawningContext,
+    val spawnablePosition: SpawnablePosition,
+    val bucket: SpawnBucket,
     open val detail: SpawnDetail
 ) {
-    val future = CompletableFuture<R>().also { it.thenApply { result -> ctx.spawner.afterSpawn(this, result) } }
+    val labels = mutableListOf<String>()
+    val future = CompletableFuture<R>().also { it.thenApply { result -> spawnablePosition.spawner.afterSpawn(this, result) } }
 
     /**
-     * Does whatever action is required to spawn this detail into the context.
+     * Does whatever action is required to spawn this detail into the spawnable position.
      *
      * @return The result of spawning
      */
@@ -39,7 +42,7 @@ abstract class SpawnAction<R>(
             return null
         }
 
-        ctx.applyInfluences { it.affectAction(this) }
+        spawnablePosition.applyInfluences { it.affectAction(this) }
         val result = run()
         if (result != null) {
             future.complete(result)

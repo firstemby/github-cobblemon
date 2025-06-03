@@ -1,0 +1,49 @@
+{
+  "portraitScale": 1.73,
+  "portraitTranslation": [-0.46, 0.59, 0],
+  "profileScale": 0.59,
+  "profileTranslation": [0.0, 0.87, 0],
+  "animations": {
+    "cry": "q.bedrock_stateful('excadrill', 'cry')"
+  },
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('excadrill', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('excadrill', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('excadrill', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('excadrill', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('excadrill', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('excadrill', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+	  "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('excadrill', 'sleep')"]
+    }
+  }
+ }

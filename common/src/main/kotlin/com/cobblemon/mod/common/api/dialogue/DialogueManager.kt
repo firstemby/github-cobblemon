@@ -52,6 +52,6 @@ object DialogueManager {
     fun stopDialogue(playerEntity: ServerPlayer) {
         val activeDialogue = playerEntity.activeDialogue ?: return
         DialogueClosedPacket(activeDialogue.dialogueId).sendToPlayer(playerEntity)
-        activeDialogues.remove(activeDialogue.dialogueId)
+        activeDialogues.remove(playerEntity.uuid)
     }
 }

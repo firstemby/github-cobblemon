@@ -37,14 +37,14 @@
                 {
                     "multiplier": 3.0,
                     "condition": {
-                        "minLureLevel": "2",
-                        "maxLureLevel": "2"
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
                     }
                 },
                 {
                     "multiplier": 5.0,
                     "condition": {
-                        "minLureLevel": "3"
+                        "minLureLevel": 3
                     }
                 }
             ],

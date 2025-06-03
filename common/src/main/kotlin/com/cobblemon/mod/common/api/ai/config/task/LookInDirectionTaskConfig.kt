@@ -8,18 +8,29 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.LOOKING_CATEGORY
 import com.cobblemon.mod.common.entity.ai.LookInDirectionTask
-import com.cobblemon.mod.common.util.asExpression
 import net.minecraft.world.entity.LivingEntity
 
 class LookInDirectionTaskConfig : SingleTaskConfig {
-    var yaw: Expression = "0".asExpression()
-    var pitch: Expression = "0".asExpression()
+    var condition = booleanVariable(LOOKING_CATEGORY, "locked_rotation", true).asExpressible()
+    var yaw = numberVariable(LOOKING_CATEGORY, "locked_yaw", 0F).asExpressible()
+    var pitch = numberVariable(LOOKING_CATEGORY, "locked_pitch", 0F).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        yaw,
+        pitch
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
-    ) = LookInDirectionTask(yaw, pitch)
+        behaviourConfigurationContext: BehaviourConfigurationContext
+    ) = LookInDirectionTask(
+        shouldLock = condition.asExpression(),
+        yaw = yaw.asExpression(),
+        pitch = pitch.asExpression()
+    )
 }

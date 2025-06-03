@@ -7,9 +7,24 @@
     {
       "displayForm": "Normal",
       "unlockForms": [
-        "Normal",
-        "Blue",
-        "Yellow",
+        "Normal"
+      ]
+    },
+    {
+      "displayForm": "Blue",
+      "unlockForms": [
+        "Blue"
+      ]
+    },
+    {
+      "displayForm": "Yellow",
+      "unlockForms": [
+        "Yellow"
+      ]
+    },
+    {
+      "displayForm": "White",
+      "unlockForms": [
         "White"
       ]
     }

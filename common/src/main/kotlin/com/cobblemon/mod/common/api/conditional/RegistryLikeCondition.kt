@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.conditional
 
+import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 
 /**
@@ -17,5 +18,10 @@ import net.minecraft.core.Registry
  * @since July 16th, 2022
  */
 interface RegistryLikeCondition<T> {
-    fun fits(t: T, registry: Registry<T>): Boolean
+    fun fits(t: T, registry: Registry<T>): Boolean {
+        val holder = registry.wrapAsHolder(t)
+        return holder != null && fits(holder)
+    }
+
+    fun fits(holder: Holder<T>): Boolean
 }

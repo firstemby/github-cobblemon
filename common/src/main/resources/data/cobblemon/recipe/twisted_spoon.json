@@ -2,10 +2,13 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "minecraft:iron_shovel"
+            "tag": "c:nuggets/iron"
         },
         {
-            "item": "minecraft:ender_pearl"
+            "tag": "c:ingots/iron"
+        },
+        {
+            "item": "cobblemon:psychic_gem"
         }
     ],
     "result": {

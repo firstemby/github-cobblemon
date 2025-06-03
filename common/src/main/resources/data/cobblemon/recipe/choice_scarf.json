@@ -7,10 +7,10 @@
     ],
     "key": {
         "W": {
-            "item": "minecraft:light_blue_wool"
+            "tag": "minecraft:wool"
         },
         "D": {
-            "item": "minecraft:diamond"
+            "tag": "c:gems/diamond"
         },
         "S": {
             "item": "cobblemon:silk_scarf"

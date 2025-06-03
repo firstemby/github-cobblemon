@@ -8,18 +8,20 @@
 
 package com.cobblemon.mod.common.datafixer.fix
 
+import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
 class ShoulderStateJsonFix(output: Schema) : PokemonFix(output) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
-        val moveSetJson = dynamic.get("State").result()
+        val stateJson = dynamic.get("State").result()
         //State not here
-        if (moveSetJson.isEmpty) {
+        if (stateJson.isEmpty) {
             return dynamic
         }
 
-        if (moveSetJson.get().mapValues.getOrThrow().size == 0) {
+        if (stateJson.get().mapValues.getOrThrow().isEmpty() ||
+            !stateJson.get().mapValues.getOrThrow().containsKey(dynamic.createString(DataKeys.POKEMON_STATE_TYPE))) {
             return dynamic.remove("State")
         }
 
