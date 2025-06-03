@@ -401,9 +401,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.FLOWER_SWEET)
         entries.accept(CobblemonItems.STAR_SWEET)
         entries.accept(CobblemonItems.RIBBON_SWEET)
-        entries.accept(CobblemonItems.CANDIED_APPLE)
-        entries.accept(CobblemonItems.POTATO_MOCHI)
-        entries.accept(CobblemonItems.FRIED_RICE)
 
         entries.accept(CobblemonItems.CANDIED_APPLE)
         entries.accept(CobblemonItems.CANDIED_BERRY)
@@ -780,9 +777,6 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
-        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.BRAISED_VIVICHOKE)
-        injector.putAfter(CobblemonItems.FRIED_RICE, CobblemonItems.VIVICHOKE_DIP)
-        injector.putAfter(CobblemonItems.CANDIED_APPLE, CobblemonItems.SYRUPY_APPLE)
 
     }
 
