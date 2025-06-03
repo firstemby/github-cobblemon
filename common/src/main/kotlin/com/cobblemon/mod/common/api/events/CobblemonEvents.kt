@@ -172,6 +172,11 @@ object CobblemonEvents {
     val EV_GAINED_EVENT_POST = EventObservable<EvGainedEvent.Post>()
 
     @JvmField
+    val HYPER_TRAINED_IV_PRE = CancelableObservable<HyperTrainedIvEvent.Pre>()
+    @JvmField
+    val HYPER_TRAINED_IV_POST = EventObservable<HyperTrainedIvEvent.Post>()
+
+    @JvmField
     val POKEMON_RELEASED_EVENT_PRE = CancelableObservable<ReleasePokemonEvent.Pre>()
     @JvmField
     val POKEMON_RELEASED_EVENT_POST = EventObservable<ReleasePokemonEvent.Post>()

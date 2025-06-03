@@ -37,6 +37,8 @@ object FlowHandler {
         CobblemonEvents.APRICORN_HARVESTED.subscribe { CobblemonFlows.run(cobblemonResource("apricorn_harvested"), it.context) }
         CobblemonEvents.THROWN_POKEBALL_HIT.subscribe { CobblemonFlows.run(cobblemonResource("thrown_pokeball_hit"), it.context) }
         CobblemonEvents.LEVEL_UP_EVENT.subscribe { CobblemonFlows.run(cobblemonResource("level_up"), it.context, it.functions) }
+        CobblemonEvents.HYPER_TRAINED_IV_PRE.subscribe { CobblemonFlows.run(cobblemonResource("hyper_trained_iv_pre"), it.context, it.functions) }
+        CobblemonEvents.HYPER_TRAINED_IV_POST.subscribe { CobblemonFlows.run(cobblemonResource("hyper_trained_iv_post"), it.context) }
         CobblemonEvents.POKEMON_FAINTED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_fainted"), it.context) }
         CobblemonEvents.POKEMON_GAINED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_gained"), it.context, it.functions) }
         CobblemonEvents.POKE_BALL_CAPTURE_CALCULATED.subscribe { CobblemonFlows.run(cobblemonResource("poke_ball_capture_calculated"), it.context, it.functions) }

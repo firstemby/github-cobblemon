@@ -235,10 +235,16 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun hyperTrainIV(stat: Stat, value: Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
-        ivs.setHyperTrainedIV(stat, value)
-        if (stat == Stats.HP) {
-            updateHP(quotient)
-        }
+        CobblemonEvents.HYPER_TRAINED_IV_PRE.postThen(
+            event = HyperTrainedIvEvent.Pre(this, stat, value),
+            ifSucceeded = { _ ->
+                ivs.setHyperTrainedIV(stat, value)
+                if (stat == Stats.HP) {
+                    updateHP(quotient)
+                }
+                CobblemonEvents.HYPER_TRAINED_IV_POST.post(HyperTrainedIvEvent.Post(this, stat, value))
+            }
+        )
     }
 
     fun setEV(stat: Stat, value : Int) {
