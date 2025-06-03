@@ -2255,7 +2255,7 @@ open class PokemonEntity(
     override fun canSwimInWater() = behaviour.moving.swim.canSwimInWater
     override fun canFly() = behaviour.moving.fly.canFly
     override fun canSwimInLava() = behaviour.moving.swim.canSwimInLava
-    override fun isOnGround() = onGround()
+    override fun entityOnGround() = onGround()
 
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
         return if (fluidState.`is`(FluidTags.LAVA)) {

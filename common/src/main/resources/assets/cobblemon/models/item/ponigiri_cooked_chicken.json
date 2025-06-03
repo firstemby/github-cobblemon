@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:item/ponigiri",
+  "textures": {
+    "layer2": "cobblemon:item/ponigiri/ponigiri_overlay_cooked_chicken"
+  }
+}

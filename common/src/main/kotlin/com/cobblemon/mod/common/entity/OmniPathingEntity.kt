@@ -28,5 +28,5 @@ interface OmniPathingEntity {
     fun setFlying(state: Boolean)
     /** Returns true if the entity would be ok with moving out of the flying state, or if it would prefer to continue flying. */
     fun couldStopFlying(): Boolean
-    fun isOnGround(): Boolean
+    fun entityOnGround(): Boolean
 }

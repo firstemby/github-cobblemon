@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.integration.jei
 
 import com.cobblemon.mod.common.integration.jei.berry.BerryMutationProvider
+import com.cobblemon.mod.common.integration.jei.brewing.BrewingStandJeiProvider
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotJeiProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
@@ -23,6 +24,7 @@ class CobblemonJeiPlugin : IModPlugin {
     private val jeiProviders: Set<CobblemonJeiProvider> = setOf(
         BerryMutationProvider(),
         CampfirePotJeiProvider(),
+        BrewingStandJeiProvider()
     )
 
     override fun getPluginUid(): ResourceLocation {

@@ -421,7 +421,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     fun isOnGround(): Boolean {
         return if (this.mob is OmniPathingEntity) {
-            (this.mob as OmniPathingEntity).isOnGround()
+            (this.mob as OmniPathingEntity).entityOnGround()
         } else {
             false
         }

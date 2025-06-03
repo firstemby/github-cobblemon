@@ -1131,6 +1131,7 @@
   }
   `
 - Added support for custom stashes, similar to Gimmighoul's coin and scrap stashes.
+- Added the ability to create custom brewing stand recipes.
 
 ### Localization
 - Updated translations for:

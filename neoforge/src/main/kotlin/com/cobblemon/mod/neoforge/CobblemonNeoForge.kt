@@ -31,7 +31,6 @@ import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifi
 import com.cobblemon.mod.common.world.predicate.CobblemonBlockPredicates
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonProcessorTypes
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProcessorListOverrides
-import com.cobblemon.mod.neoforge.brewing.CobblemonNeoForgeBrewingRegistry
 import com.cobblemon.mod.neoforge.client.CobblemonNeoForgeClient
 import com.cobblemon.mod.neoforge.event.NeoForgePlatformEventHandler
 import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
@@ -40,10 +39,8 @@ import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
 import java.util.Optional
 import java.util.UUID
-import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
-import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -97,6 +94,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import kotlin.reflect.KClass
 
 @Mod(Cobblemon.MODID)
 class CobblemonNeoForge : CobblemonImplementation {
@@ -132,7 +130,6 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(::onVillagerTradesRegistry)
             addListener(::onWanderingTraderRegistry)
             addListener(::onLootTableLoad)
-            addListener(::onRegisterBrewingRecipes)
         }
         NeoForgePlatformEventHandler.register()
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -473,10 +470,6 @@ class CobblemonNeoForge : CobblemonImplementation {
 
     private fun onLootTableLoad(e: LootTableLoadEvent) {
         LootInjector.attemptInjection(e.name) { builder -> e.table.addPool(builder.build()) }
-    }
-
-    private fun onRegisterBrewingRecipes(e: RegisterBrewingRecipesEvent) {
-        CobblemonNeoForgeBrewingRegistry.register(e)
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {
