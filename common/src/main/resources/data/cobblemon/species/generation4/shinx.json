@@ -48,6 +48,12 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [

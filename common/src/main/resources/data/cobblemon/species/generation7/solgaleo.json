@@ -50,7 +50,11 @@
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true
+    "fireImmune": true,
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
   },
   "moves": [
     "1:sunsteelstrike",

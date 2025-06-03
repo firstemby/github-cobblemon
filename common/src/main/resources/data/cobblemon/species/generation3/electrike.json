@@ -47,6 +47,11 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

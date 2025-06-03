@@ -51,6 +51,9 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.3
+      },
       "swim": {
         "canSwimInLava": true
       }

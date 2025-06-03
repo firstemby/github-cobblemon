@@ -304,6 +304,13 @@
 					}
 				}
 			}
+		},
+		"animation.panpour.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.panpour.cry"
+				}
+			}
 		}
 	}
 }

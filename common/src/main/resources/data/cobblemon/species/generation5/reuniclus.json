@@ -41,11 +41,29 @@
   "catchRate": 50,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": false,
+  "standingEyeHeight": 0.6,
+  "swimmingEyeHeight": 0.6,
+  "flyingEyeHeight": 0.6,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.2,
+    "height": 1.8,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true,
+        "canSwimInWater": true,
+        "canSwimInLava": true,
+        "swimSpeed": "0.2"
+      }
+    }
   },
   "drops": {
     "amount": 4,

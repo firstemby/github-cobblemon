@@ -48,6 +48,15 @@
     "height": 1.5,
     "fixed": false
   },
+  "behaviour": {
+    "walk": {
+      "walkSpeed": 0.27
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [

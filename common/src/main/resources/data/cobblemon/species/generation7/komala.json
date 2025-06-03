@@ -56,6 +56,9 @@
         "canSwimInWater": false
       },
       "canLook": false
+    },
+    "entityInteract": {
+      "avoidedByPhantom": true
     }
   },
   "drops": {

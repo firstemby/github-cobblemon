@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 1013,
   "name": "Sinistcha",
   "primaryType": "grass",
@@ -44,6 +45,12 @@
   "catchRate": 60,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.4,
+  "hitbox": {
+    "width": 1.3,
+    "height": 1.75,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [

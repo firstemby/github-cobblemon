@@ -401,6 +401,9 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.FLOWER_SWEET)
         entries.accept(CobblemonItems.STAR_SWEET)
         entries.accept(CobblemonItems.RIBBON_SWEET)
+        entries.accept(CobblemonItems.CANDIED_APPLE)
+        entries.accept(CobblemonItems.POTATO_MOCHI)
+        entries.accept(CobblemonItems.FRIED_RICE)
 
         entries.accept(CobblemonItems.CANDIED_APPLE)
         entries.accept(CobblemonItems.CANDIED_BERRY)
@@ -465,13 +468,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.CLEVER_FEATHER)
         entries.accept(CobblemonItems.SWIFT_FEATHER)
 
-        entries.accept(CobblemonItems.HP_UP)
-        entries.accept(CobblemonItems.PROTEIN)
-        entries.accept(CobblemonItems.IRON)
-        entries.accept(CobblemonItems.CALCIUM)
-        entries.accept(CobblemonItems.ZINC)
-        entries.accept(CobblemonItems.CARBOS)
-
         entries.accept(CobblemonItems.HEALTH_MOCHI)
         entries.accept(CobblemonItems.MUSCLE_MOCHI)
         entries.accept(CobblemonItems.RESIST_MOCHI)
@@ -480,8 +476,15 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.SWIFT_MOCHI)
         entries.accept(CobblemonItems.FRESH_START_MOCHI)
 
+        entries.accept(CobblemonItems.HP_UP)
+        entries.accept(CobblemonItems.PROTEIN)
+        entries.accept(CobblemonItems.IRON)
+        entries.accept(CobblemonItems.CALCIUM)
+        entries.accept(CobblemonItems.ZINC)
+        entries.accept(CobblemonItems.CARBOS)
         entries.accept(CobblemonItems.PP_UP)
         entries.accept(CobblemonItems.PP_MAX)
+
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_XS)
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_S)
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_M)
@@ -777,12 +780,17 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
+        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.BRAISED_VIVICHOKE)
+        injector.putAfter(CobblemonItems.FRIED_RICE, CobblemonItems.VIVICHOKE_DIP)
+        injector.putAfter(CobblemonItems.CANDIED_APPLE, CobblemonItems.SYRUPY_APPLE)
 
     }
 
     private fun toolsAndUtilitiesInjections(injector: Injector) {
         injector.putAfter(CobblemonItems.APRICORN_BOAT, Items.BAMBOO_CHEST_RAFT)
         injector.putAfter(CobblemonItems.APRICORN_CHEST_BOAT, CobblemonItems.APRICORN_BOAT)
+        injector.putAfter(CobblemonItems.SACCHARINE_BOAT, CobblemonItems.APRICORN_CHEST_BOAT)
+        injector.putAfter(CobblemonItems.SACCHARINE_CHEST_BOAT, CobblemonItems.SACCHARINE_BOAT)
     }
 
     private fun ingredientsInjections(injector: Injector) {

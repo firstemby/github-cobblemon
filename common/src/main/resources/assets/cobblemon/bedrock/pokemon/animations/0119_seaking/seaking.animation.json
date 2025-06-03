@@ -2354,6 +2354,14 @@
 					"position": [0, 0, 0]
 				}
 			}
+		},
+		"animation.seaking.cry": {
+			"animation_length": 1.25,
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.seaking.cry"
+				}
+			}
 		}
 	}
 }

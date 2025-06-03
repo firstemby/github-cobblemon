@@ -1238,19 +1238,11 @@
 					"position": [0, "7.8+math.sin(q.anim_time*90*2)*2", -5.6]
 				}
 			},
-			"sound_effects": {
-				"1.5": {
-					"effect": "animation.leather.wing_flap.medium"
-				},
-				"3.5": {
-					"effect": "animation.leather.wing_flap.medium"
-				},
-				"5.5": {
-					"effect": "animation.leather.wing_flap.medium"
-				},
-				"7.5": {
-					"effect": "animation.leather.wing_flap.medium"
-				}
+			"timeline": {
+				"1.5": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };",
+				"3.5": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };",
+				"5.5": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };",
+				"7.5": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };"
 			}
 		},
 		"animation.dragonite.water_idle": {

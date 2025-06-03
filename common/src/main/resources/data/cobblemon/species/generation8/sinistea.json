@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 854,
   "name": "Sinistea",
   "primaryType": "ghost",
@@ -43,7 +44,7 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.4,
   "hitbox": {
     "width": 1,
     "height": 1,

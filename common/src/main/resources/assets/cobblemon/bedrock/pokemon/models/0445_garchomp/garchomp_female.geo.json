@@ -138,11 +138,11 @@
 					}
 				},
 				{
-					"name": "locator_item_head",
+					"name": "locator_item_hat",
 					"parent": "head_angle",
 					"pivot": [0, 44, -2.5],
 					"locators": {
-						"item_head": [0, 44, -2.5]
+						"item_hat": [0, 44, -2.5]
 					}
 				},
 				{

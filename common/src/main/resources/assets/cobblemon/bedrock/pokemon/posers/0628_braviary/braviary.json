@@ -4,7 +4,9 @@
   "profileScale": 0.63,
   "profileTranslation": [-0.02, 0.88, 0],
   "rootBone": "braviary",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('braviary', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

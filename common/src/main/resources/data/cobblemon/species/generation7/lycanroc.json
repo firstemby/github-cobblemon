@@ -43,6 +43,11 @@
   "catchRate": 90,
   "eggCycles": 15,
   "baseFriendship": 50,
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "drops": {
     "amount": 6,
     "entries": [

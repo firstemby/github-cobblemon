@@ -1099,7 +1099,9 @@
       { "name": "cobblemon:animation/wings/plumage_wing_flap_small_4", "volume": 0.25 },
       { "name": "cobblemon:animation/wings/plumage_wing_flap_small_5", "volume": 0.25 },
       { "name": "cobblemon:animation/wings/plumage_wing_flap_small_6", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.25 }
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_8", "volume": 0.25 }
+
     ]
   },
   "animation.plumage.wing_flap.medium": {
@@ -1110,7 +1112,8 @@
       { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_4", "volume": 0.3 },
       { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_5", "volume": 0.3 },
       { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_6", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.3 }
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_8", "volume": 0.3 }
     ]
   },
   "animation.leather.wing_flap.small": {
@@ -1121,7 +1124,8 @@
       { "name": "cobblemon:animation/wings/leather_wing_flap_small_4", "volume": 0.25 },
       { "name": "cobblemon:animation/wings/leather_wing_flap_small_5", "volume": 0.25 },
       { "name": "cobblemon:animation/wings/leather_wing_flap_small_6", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.25 }
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_8", "volume": 0.25 }
     ]
   },
   "animation.leather.wing_flap.medium": {
@@ -1132,7 +1136,20 @@
       { "name": "cobblemon:animation/wings/leather_wing_flap_medium_4", "volume": 0.3 },
       { "name": "cobblemon:animation/wings/leather_wing_flap_medium_5", "volume": 0.3 },
       { "name": "cobblemon:animation/wings/leather_wing_flap_medium_6", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.3 }
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_8", "volume": 0.3 }
+    ]
+  },
+  "animation.chitin.wing_flap.medium": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_1", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_2", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_3", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_4", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_5", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_6", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_7", "volume": 0.3 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_8", "volume": 0.3 }
     ]
   },
   "pokemon.bulbasaur.ambient": {
@@ -4164,6 +4181,51 @@
   },
   "pokemon.ironleaves.ambient": {
     "sounds": [ "cobblemon:pokemon/ironleaves/ironleaves_ambient" ]
+  },
+  "pokemon.dipplin.ambient": {
+    "sounds": [ "cobblemon:pokemon/dipplin/dipplin_ambient" ]
+  },
+  "pokemon.sinistcha.ambient": {
+    "sounds": [ "cobblemon:pokemon/sinistcha/sinistcha_ambient" ]
+  },
+  "pokemon.poltchageist.ambient": {
+    "sounds": [ "cobblemon:pokemon/poltchageist/poltchageist_ambient" ]
+  },
+  "pokemon.okidogi.ambient": {
+    "sounds": [ "cobblemon:pokemon/okidogi/okidogi_ambient" ]
+  },
+  "pokemon.munkidori.ambient": {
+    "sounds": [ "cobblemon:pokemon/munkidori/munkidori_ambient" ]
+  },
+  "pokemon.fezandipiti.ambient": {
+    "sounds": [ "cobblemon:pokemon/fezandipiti/fezandipiti_ambient" ]
+  },
+  "pokemon.ogerpon.ambient": {
+    "sounds": [ "cobblemon:pokemon/ogerpon/ogerpon_ambient" ]
+  },
+  "pokemon.archaludon.ambient": {
+    "sounds": [ "cobblemon:pokemon/archaludon/archaludon_ambient" ]
+  },
+  "pokemon.hydrapple.ambient": {
+    "sounds": [ "cobblemon:pokemon/hydrapple/hydrapple_ambient" ]
+  },
+  "pokemon.gougingfire.ambient": {
+    "sounds": [ "cobblemon:pokemon/gougingfire/gougingfire_ambient" ]
+  },
+  "pokemon.ragingbolt.ambient": {
+    "sounds": [ "cobblemon:pokemon/ragingbolt/ragingbolt_ambient" ]
+  },
+  "pokemon.ironboulder.ambient": {
+    "sounds": [ "cobblemon:pokemon/ironboulder/ironboulder_ambient" ]
+  },
+  "pokemon.ironcrown.ambient": {
+    "sounds": [ "cobblemon:pokemon/ironcrown/ironcrown_ambient" ]
+  },
+  "pokemon.terapagos.ambient": {
+    "sounds": [ "cobblemon:pokemon/terapagos/terapagos_ambient" ]
+  },
+  "pokemon.pecharunt.ambient": {
+    "sounds": [ "cobblemon:pokemon/pecharunt/pecharunt_ambient" ]
   },
   "pokemon.bulbasaur.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/bulbasaur/bulbasaur_cry", "volume": 0.8 } ]
@@ -7294,6 +7356,15 @@
   "pokemon.ceruledge.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/ceruledge/ceruledge_cry", "volume": 0.8 } ]
   },
+  "pokemon.ceruledge.battle_cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ceruledge/ceruledge_battle_cry", "volume": 0.9 } ]
+  },
+  "pokemon.ceruledge.quirk1": {
+    "sounds": [ { "name": "cobblemon:pokemon/ceruledge/ceruledge_quirk1", "volume": 0.5 } ]
+  },
+  "pokemon.ceruledge.quirk2": {
+    "sounds": [ { "name": "cobblemon:pokemon/ceruledge/ceruledge_quirk2", "volume": 0.4 } ]
+  },
   "pokemon.toedscool.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/toedscool/toedscool_cry", "volume": 0.8 } ]
   },
@@ -7314,5 +7385,50 @@
   },
   "pokemon.ironleaves.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/ironleaves/ironleaves_cry", "volume": 0.8 } ]
+  },
+  "pokemon.dipplin.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/dipplin/dipplin_cry", "volume": 0.8 } ]
+  },
+  "pokemon.sinistcha.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/sinistcha/sinistcha_cry", "volume": 0.8 } ]
+  },
+  "pokemon.poltchageist.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/poltchageist/poltchageist_cry", "volume": 0.8 } ]
+  },
+  "pokemon.okidogi.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/okidogi/okidogi_cry", "volume": 0.8 } ]
+  },
+  "pokemon.munkidori.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/munkidori/munkidori_cry", "volume": 0.8 } ]
+  },
+  "pokemon.fezandipiti.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/fezandipiti/fezandipiti_cry", "volume": 0.8 } ]
+  },
+  "pokemon.ogerpon.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ogerpon/ogerpon_cry", "volume": 0.8 } ]
+  },
+  "pokemon.archaludon.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/archaludon/archaludon_cry", "volume": 0.8 } ]
+  },
+  "pokemon.hydrapple.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/hydrapple/hydrapple_cry", "volume": 0.8 } ]
+  },
+  "pokemon.gougingfire.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/gougingfire/gougingfire_cry", "volume": 0.8 } ]
+  },
+  "pokemon.ragingbolt.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ragingbolt/ragingbolt_cry", "volume": 0.8 } ]
+  },
+  "pokemon.ironboulder.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ironboulder/ironboulder_cry", "volume": 0.8 } ]
+  },
+  "pokemon.ironcrown.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/ironcrown/ironcrown_cry", "volume": 0.8 } ]
+  },
+  "pokemon.terapagos.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/terapagos/terapagos_cry", "volume": 0.8 } ]
+  },
+  "pokemon.pecharunt.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/pecharunt/pecharunt_cry", "volume": 0.8 } ]
   }
 }

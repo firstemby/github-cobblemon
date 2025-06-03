@@ -44,9 +44,21 @@
   "baseFriendship": 50,
   "baseScale": 0.5,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.9,
+    "width": 0.7,
+    "height": 1.5,
     "fixed": false
+  },
+  "standingEyeHeight": 0.6,
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.28
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true
+    }
   },
   "drops": {
     "amount": 1,

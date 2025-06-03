@@ -20,10 +20,10 @@ import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
 import com.cobblemon.mod.common.client.sound.instances.CancellableSoundInstance
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
+import com.cobblemon.mod.common.util.activateNearbyObservers
 import com.cobblemon.mod.common.util.playSoundServer
 import com.mojang.blaze3d.vertex.PoseStack
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
-import java.util.Optional
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -41,11 +41,7 @@ import net.minecraft.world.ContainerHelper
 import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.StackedContents
-import net.minecraft.world.inventory.AbstractContainerMenu
-import net.minecraft.world.inventory.ContainerData
-import net.minecraft.world.inventory.CraftingContainer
-import net.minecraft.world.inventory.RecipeCraftingHolder
-import net.minecraft.world.inventory.StackedContentsCompatible
+import net.minecraft.world.inventory.*
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.CraftingInput
@@ -56,9 +52,10 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector4f
-import kotlin.compareTo
+import java.util.*
 
 class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(
     CobblemonBlockEntities.CAMPFIRE,
@@ -95,14 +92,17 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             val isSoundActive = BlockEntitySoundTracker.isActive(pos, campfireBlockEntity.runningSound.location)
 
             if (isLit && !isSoundActive) {
-                BlockEntitySoundTracker.play(pos, CancellableSoundInstance(campfireBlockEntity.runningSound, pos, true, 0.8f, 1.0f))
+                BlockEntitySoundTracker.play(
+                    pos,
+                    CancellableSoundInstance(campfireBlockEntity.runningSound, pos, true, 0.8f, 1.0f)
+                )
             } else if (!isLit && isSoundActive) {
                 BlockEntitySoundTracker.stop(pos, campfireBlockEntity.runningSound.location)
             }
 
             campfireBlockEntity.brothColor =
                 getColourMixFromSeasonings(campfireBlockEntity.getSeasonings())
-                ?: BASE_BROTH_COLOR
+                    ?: BASE_BROTH_COLOR
 
             campfireBlockEntity.bubbleColor =
                 getColourMixFromSeasonings(campfireBlockEntity.getSeasonings(), true)
@@ -111,15 +111,20 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             if (campfireBlockEntity.particleCooldown > 0) {
                 campfireBlockEntity.particleCooldown--
             } else {
-                 if (isLit) {
+                if (isLit) {
                     val position = Vec3(pos.x + 0.5, pos.y + 0.5375, pos.z + 0.5)
 
                     campfireBlockEntity.particleEntityHandler(
                         position = position,
                         level = level,
-                        particle = ResourceLocation("cobblemon", if (campfireBlockEntity.getSeasonings().isEmpty()) "broth_bubbles_basic" else "broth_bubbles")
+                        particle = ResourceLocation(
+                            "cobblemon",
+                            if (campfireBlockEntity.getSeasonings()
+                                    .isEmpty()
+                            ) "broth_bubbles_basic" else "broth_bubbles"
+                        )
                     )
-                 }
+                }
 
                 campfireBlockEntity.particleCooldown = 20
             }
@@ -163,7 +168,11 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             }
 
             if (!resultSlotItem.isEmpty) {
-                if (!ItemStack.isSameItemSameComponents(resultSlotItem, cookedItem) || resultSlotItem.count >= resultSlotItem.maxStackSize) {
+                if (!ItemStack.isSameItemSameComponents(
+                        resultSlotItem,
+                        cookedItem
+                    ) || resultSlotItem.count >= resultSlotItem.maxStackSize
+                ) {
                     campfireBlockEntity.cookingProgress = 0
                     return
                 }
@@ -196,18 +205,19 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     }
 
     private val runningSound = CobblemonSounds.CAMPFIRE_POT_COOK
-    private var cookingProgress : Int = 0
-    private var cookingTotalTime : Int = COOKING_TOTAL_TIME
-    private var isLidOpen : Boolean = true
-    private var items : NonNullList<ItemStack> = NonNullList.withSize(ITEMS_SIZE, ItemStack.EMPTY)
+    private var cookingProgress: Int = 0
+    private var cookingTotalTime: Int = COOKING_TOTAL_TIME
+    private var isLidOpen: Boolean = true
+    private var items: NonNullList<ItemStack> = NonNullList.withSize(ITEMS_SIZE, ItemStack.EMPTY)
     private val recipesUsed: Object2IntOpenHashMap<ResourceLocation> = Object2IntOpenHashMap()
-    private val quickCheck: RecipeManager.CachedCheck<CraftingInput, *> = RecipeManager.createCheck(CobblemonRecipeTypes.COOKING_POT_COOKING)
+    private val quickCheck: RecipeManager.CachedCheck<CraftingInput, *> =
+        RecipeManager.createCheck(CobblemonRecipeTypes.COOKING_POT_COOKING)
     private var potComponent: PotComponent? = null
     private var particleCooldown: Int = 0
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = 0xFFFFFF
 
-    var dataAccess : ContainerData = object : ContainerData {
+    var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {
             return when (index) {
                 COOKING_PROGRESS_INDEX -> this@CampfireBlockEntity.cookingProgress
@@ -235,15 +245,16 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
         val matrix = PoseStack()
         wrapper.updateMatrix(matrix.last().pose())
         wrapper.updatePosition(position)
-        val effect = BedrockParticleOptionsRepository.getEffect(particle) ?: throw IllegalStateException("Particle with resource location $particle not found")
+        val effect = BedrockParticleOptionsRepository.getEffect(particle)
+            ?: throw IllegalStateException("Particle with resource location $particle not found")
 
         val particleStorm = ParticleStorm(
             effect,
             wrapper,
             wrapper,
             level as ClientLevel,
-             sourceAlive = { cookingProgress > 0 },
-             sourceVisible = { cookingProgress > 0 },
+            sourceAlive = { cookingProgress > 0 },
+            sourceVisible = { cookingProgress > 0 },
             getParticleColor = {
                 val red = FastColor.ARGB32.red(bubbleColor) / 255F
                 val green = FastColor.ARGB32.green(bubbleColor) / 255F
@@ -268,6 +279,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                         // Replace with empty bucket
                         setItem(i, ItemStack(Items.BUCKET))
                     }
+
                     Items.HONEY_BOTTLE -> {
                         // TODO: Currently eats the empty bottles until the honey bottle stack is empty, replace with better system later.
                         itemInSlot.shrink(1)
@@ -275,6 +287,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                             setItem(i, ItemStack.EMPTY)
                         }
                     }
+
                     else -> {
                         // Decrease the stack size by 1
                         itemInSlot.shrink(1)
@@ -323,9 +336,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     }
 
     override fun getContainerSize() = this.items.size
-    override fun getSlotsForFace(side: Direction) = intArrayOf(0, 1, 2)
-    override fun canPlaceItemThroughFace(index: Int, itemStack: ItemStack, direction: Direction?) = false
-    override fun canTakeItemThroughFace(index: Int, stack: ItemStack, direction: Direction) = false
+    override fun getSlotsForFace(side: Direction) = (0..12).toList().toIntArray()
 
     override fun setRecipeUsed(recipe: RecipeHolder<*>?) {
         if (recipe != null) {
@@ -413,4 +424,34 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             BlockEntitySoundTracker.stop(blockPos, runningSound.location)
         }
     }
+
+    fun toggleLid(isOpen: Boolean, blockPos: BlockPos) {
+        this.isLidOpen = isOpen
+        level?.let { lvl ->
+            lvl.activateNearbyObservers(blockPos)
+            lvl.playSoundServer(
+                position = blockPos.center,
+                sound = if (isOpen) CobblemonSounds.CAMPFIRE_POT_OPEN else CobblemonSounds.CAMPFIRE_POT_CLOSE
+            )
+            lvl.gameEvent(
+                null,
+                if (isOpen) GameEvent.BLOCK_OPEN else GameEvent.BLOCK_CLOSE,
+                blockPos
+            )
+        }
+        setChanged()
+    }
+
+    override fun canTakeItemThroughFace(index: Int, stack: ItemStack, direction: Direction): Boolean {
+        return index == RESULT_SLOT
+    }
+
+    override fun canPlaceItemThroughFace(index: Int, itemStack: ItemStack, direction: Direction?): Boolean {
+        return when (direction) {
+            Direction.UP -> SEASONING_SLOTS.contains(index)
+            else -> CRAFTING_GRID_SLOTS.contains(index)
+        }
+    }
+
+
 }

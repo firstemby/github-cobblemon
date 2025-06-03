@@ -294,7 +294,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         } else if (PathType.DAMAGE_OTHER in set) {
             PathType.DAMAGE_OTHER
         } else {
-            var PathType2: PathType? = PathType.BLOCKED
+            var pathType2: PathType = PathType.BLOCKED
             val nearbyTypeIterator = set.iterator()
             while (nearbyTypeIterator.hasNext()) {
                 val nearbyType = nearbyTypeIterator.next()
@@ -302,16 +302,16 @@ class OmniPathNodeMaker : NodeEvaluator() {
                     return nearbyType
                 }
                 // The || is because we prefer WALKABLE where possible - OPEN is legit but if there's either OPEN or WALKABLE then WALKABLE is better since land pokes can read that.
-                if (mob.getPathfindingMalus(nearbyType) > mob.getPathfindingMalus(PathType2) || (nearbyType == PathType.WALKABLE)) {
-                    PathType2 = nearbyType
+                if (mob.getPathfindingMalus(nearbyType) > mob.getPathfindingMalus(pathType2) || nearbyType == PathType.WALKABLE) {
+                    pathType2 = nearbyType
                 } else if (type == PathType.WATER && nearbyType == PathType.WATER) {
-                    PathType2 = PathType.WATER
+                    pathType2 = PathType.WATER
                 }
             }
-            if (type == PathType.OPEN && mob.getPathfindingMalus(PathType2) == 0.0f && sizeX <= 1) {
+            if (type == PathType.OPEN && mob.getPathfindingMalus(pathType2) == 0.0f && sizeX <= 1) {
                 PathType.OPEN
             } else {
-                PathType2!!
+                pathType2
             }
         }
     }

@@ -1,0 +1,60 @@
+{
+  "portraitScale": 1.68,
+  "portraitTranslation": [ -1.16, 0.12, 0],
+  "profileScale": 0.45,
+  "profileTranslation": [ -0.08, 1.09, 0],
+  "rootBone": "bouffalant",
+  "animations": {
+    "cry": "q.bedrock_stateful('bouffalant', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "PROFILE",
+        "PORTRAIT",
+        "NONE"
+      ],
+      "animations": [
+        "q.look('head_ai', 0.2, 0.25)",
+        "q.bedrock('bouffalant', 'ground_idle')"
+      ],
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('bouffalant', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseName": "walk",
+      "condition": "!q.is_sprinting",
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head_ai', 0.2, 0.25)",
+        "q.bedrock('bouffalant', 'ground_walk')"
+      ],
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('bouffalant', 'blink')"
+      ]
+    },
+    "run": {
+      "poseName": "run",
+      "poseTypes": ["WALK"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai', 0.2, 0.25)",
+        "q.bedrock('bouffalant', 'ground_run')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bouffalant', 'blink')"
+      ],
+      "transformTicks": 10
+    }
+
+  }
+}

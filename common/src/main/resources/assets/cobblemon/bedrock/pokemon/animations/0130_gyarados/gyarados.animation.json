@@ -2820,7 +2820,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "zapzappingsoundeffectsallsoundsezmp3.cc.mp3"
+					"effect": "pokemon.gyarados.cry"
 				}
 			}
 		},
@@ -3578,6 +3578,14 @@
 				},
 				"ride_tail3": {
 					"rotation": ["0-math.cos(q.anim_time*90*3/2-60)*20", 0, 0]
+				}
+			}
+		},
+		"animation.gyarados.cry": {
+			"animation_length": 1.25,
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.gyarados.cry"
 				}
 			}
 		}

@@ -57,6 +57,9 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "entityInteract": {
+      "avoidedBySkeleton": true
     }
   },
   "drops": {

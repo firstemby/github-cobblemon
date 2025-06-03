@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 687,
   "name": "Malamar",
   "primaryType": "dark",
@@ -45,8 +46,8 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.2,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {

@@ -473,6 +473,13 @@
 					"scale": 1
 				}
 			}
+		},
+		"animation.simisear.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.simisear.cry"
+				}
+			}
 		}
 	}
 }

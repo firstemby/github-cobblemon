@@ -78,9 +78,13 @@
   "item.cobblemon.vivichoke_seeds": "Vivichoke Seeds",
   "item.cobblemon.vivichoke": "Vivichoke",
   "item.cobblemon.galarica_nuts": "Galarica Nuts",
+  "item.cobblemon.hearty_grains": "Hearty Grains",
+  "item.cobblemon.bugwort": "Bugwort",
 
   "item.cobblemon.apricorn_boat": "Apricorn Boat",
   "item.cobblemon.apricorn_chest_boat": "Apricorn Boat with Chest",
+  "item.cobblemon.saccharine_boat": "Saccharine Boat",
+  "item.cobblemon.saccharine_chest_boat": "Saccharine Boat with Chest",
 
   "item.cobblemon.pokedex_black": "Pokédex",
   "item.cobblemon.pokedex_blue": "Pokédex",
@@ -302,6 +306,10 @@
   "item.cobblemon.naive_mint.tooltip": "Changes a Pokémon's stats to be that of a Naive nature",
   "item.cobblemon.serious_mint": "Serious Mint",
   "item.cobblemon.serious_mint.tooltip": "Changes a Pokémon's stats to be that of a Serious nature",
+
+  "item.cobblemon.potato_mochi": "Potato Mochi",
+  "item.cobblemon.fried_rice": "Fried Rice",
+  "item.cobblemon.candied_apple": "Candied Apple",
 
   "item.cobblemon.ability_shield": "Ability Shield",
   "item.cobblemon.ability_shield.tooltip": "Prevents the holder's ability from being changed or suppressed",
@@ -863,16 +871,16 @@
   "block.cobblemon.stripped_apricorn_wood": "Stripped Apricorn Wood",
   "block.cobblemon.apricorn_planks": "Apricorn Planks",
   "block.cobblemon.apricorn_leaves": "Apricorn Leaves",
+  "block.cobblemon.apricorn_stairs": "Apricorn Stairs",
+  "block.cobblemon.apricorn_slab": "Apricorn Slab",
   "block.cobblemon.apricorn_fence": "Apricorn Fence",
+  "block.cobblemon.apricorn_fence_gate": "Apricorn Fence Gate",
   "block.cobblemon.apricorn_sign": "Apricorn Sign",
   "block.cobblemon.apricorn_hanging_sign": "Apricorn Hanging Sign",
-  "block.cobblemon.apricorn_stairs": "Apricorn Stairs",
   "block.cobblemon.apricorn_pressure_plate": "Apricorn Pressure Plate",
   "block.cobblemon.apricorn_button": "Apricorn Button",
-  "block.cobblemon.apricorn_slab": "Apricorn Slab",
-  "block.cobblemon.apricorn_fence_gate": "Apricorn Fence Gate",
-  "block.cobblemon.big_root": "Big Root",
-  "block.cobblemon.big_root.tooltip": "Boosts the amount of HP the holder recovers from HP-stealing moves",
+  "block.cobblemon.apricorn_door": "Apricorn Door",
+  "block.cobblemon.apricorn_trapdoor": "Apricorn Trapdoor",
   "block.cobblemon.black_apricorn_sapling": "Black Apricorn Sapling",
   "block.cobblemon.blue_apricorn_sapling": "Blue Apricorn Sapling",
   "block.cobblemon.green_apricorn_sapling": "Green Apricorn Sapling",
@@ -887,24 +895,26 @@
   "block.cobblemon.potted_red_apricorn_sapling": "Potted Red Apricorn Sapling",
   "block.cobblemon.potted_white_apricorn_sapling": "Potted White Apricorn Sapling",
   "block.cobblemon.potted_yellow_apricorn_sapling": "Potted Yellow Apricorn Sapling",
-  "block.cobblemon.apricorn_door": "Apricorn Door",
-  "block.cobblemon.apricorn_trapdoor": "Apricorn Trapdoor",
   "block.cobblemon.saccharine_log": "Saccharine Log",
   "block.cobblemon.stripped_saccharine_log": "Stripped Saccharine Log",
   "block.cobblemon.saccharine_wood": "Saccharine Wood",
   "block.cobblemon.stripped_saccharine_wood": "Stripped Saccharine Wood",
+  "block.cobblemon.saccharine_honey_log": "Honey-Coated Saccharine Log",
   "block.cobblemon.saccharine_planks": "Saccharine Planks",
   "block.cobblemon.saccharine_leaves": "Saccharine Leaves",
+  "block.cobblemon.saccharine_stairs": "Saccharine Stairs",
+  "block.cobblemon.saccharine_slab": "Saccharine Slab",
   "block.cobblemon.saccharine_fence": "Saccharine Fence",
+  "block.cobblemon.saccharine_fence_gate": "Saccharine Fence Gate",
   "block.cobblemon.saccharine_sign": "Saccharine Sign",
   "block.cobblemon.saccharine_hanging_sign": "Saccharine Hanging Sign",
-  "block.cobblemon.saccharine_stairs": "Saccharine Stairs",
   "block.cobblemon.saccharine_pressure_plate": "Saccharine Pressure Plate",
   "block.cobblemon.saccharine_button": "Saccharine Button",
-  "block.cobblemon.saccharine_slab": "Saccharine Slab",
-  "block.cobblemon.saccharine_fence_gate": "Saccharine Fence Gate",
   "block.cobblemon.saccharine_door": "Saccharine Door",
   "block.cobblemon.saccharine_trapdoor": "Saccharine Trapdoor",
+  "block.cobblemon.saccharine_sapling": "Saccharine Sapling",
+  "block.cobblemon.big_root": "Big Root",
+  "block.cobblemon.big_root.tooltip": "Boosts the amount of HP the holder recovers from HP-stealing moves",
   "block.cobblemon.healing_machine": "Healing Machine",
   "block.cobblemon.healing_machine.tooltip1": "Must be charged after placing.",
   "block.cobblemon.healing_machine.tooltip2": "Charges over time.",
@@ -3489,6 +3499,8 @@
   "tag.item.cobblemon.held.visibility.face": "Face Displayed Held Items",
   "tag.item.cobblemon.held.visibility.hat": "Hat Displayed Held Items",
   "tag.item.cobblemon.held.visibility.hidden": "Non-Displayed Held Items",
+  "tag.item.cobblemon.saccharine_logs": "Saccharine Logs",
+  "tag.item.cobblemon.campfire_pots": "Campfire Pots",
   "tag.item.cobblemon.full_heal_ingredients": "Full Heal Ingredients",
   "tag.item.cobblemon.remedy_berries": "Remedy Berries",
   "tag.item.cobblemon.sandwich_veggies": "Sandwich Vegetables",
@@ -3499,7 +3511,6 @@
   "tag.item.cobblemon.poke_food": "Poké Foods",
   "tag.item.cobblemon.rotom_appliances": "Rotom Appliances",
 
-  "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
@@ -3686,25 +3697,60 @@
 
   "cobblemon.behaviour.pokemon_battles.name": "Pokémon Battles",
   "cobblemon.behaviour.pokemon_battles.desc": "Stops moving and looks at opponents during Pokémon battles.",
-
+  
   "cobblemon.behaviour.pokemon_follows_owner.name": "Pokémon Follows Owner",
   "cobblemon.behaviour.pokemon_follows_owner.desc": "Follows the owner around, more rarely if in a pasture.",
-
+  
   "cobblemon.behaviour.pokemon_sleeps.name": "Pokémon Sleeps",
   "cobblemon.behaviour.pokemon_sleeps.desc": "Pokémon can get drowsy and go to sleep if they aren't in battle or in a party.",
 
   "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.name": "Pokémon Sleeps on Trainer Bed",
   "cobblemon.behaviour.pokemon_sleeps_on_trainer_bed.desc": "Pokémon that can sleep will rest on the trainer if the trainer gets into bed.",
-
+  
   "cobblemon.behaviour.avoids_water.name": "Avoids Water",
   "cobblemon.behaviour.avoids_water.desc": "Tries to find air and then gets away from water.",
 
   "cobblemon.behaviour.pokemon_eats_grass.name": "Eats Grass",
   "cobblemon.behaviour.pokemon_eats_grass.desc": "The Pokémon occasionally eats grass underfoot.",
-
+  
   "cobblemon.behaviour.player_textured.name": "Player Textured",
   "cobblemon.behaviour.player_textured.desc": "The NPC will be textured based on a specific player username.",
+  
+  "npc.sacchi.name": "Professor Sacchi",
+  "npc.variable.challenge_cooldown.name": "Challenge Cooldown",
+  "npc.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
 
+  "npc.variable.player_win_command.name": "Player Win Command",
+  "npc.variable.player_win_command.desc": "Command to run when a player wins against the NPC. Use {{player}} where the player name should be.",
+
+  "npc.variable.player_lose_command.name": "Player Lose Command",
+  "npc.variable.player_lose_command.desc": "Command to run when a player loses against the NPC. Use {{player}} where the player name should be.",
+
+  "npc.variable.on_defeat.name": "On Defeat MoLang",
+  "npc.variable.on_defeat.desc": "MoLang expression to run when the NPC loses a battle. This has q.npc as the NPC entity.",
+
+  "npc.variable.on_victory.name": "On Victory MoLang",
+  "npc.variable.on_victory.desc": "MoLang expression to run when the NPC wins a battle. This has q.npc as the NPC entity.",
+
+  "npc.variable.on_player_wins.name": "On Player Wins MoLang",
+  "npc.variable.on_player_wins.desc": "MoLang expression to run when a player wins a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
+
+  "npc.variable.on_player_loses.name": "On Player Loses MoLang",
+  "npc.variable.on_player_loses.desc": "MoLang expression to run when a player loses a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
+
+  "npc.variable.home_x.name": "Home X",
+  "npc.variable.home_x.desc": "X coordinate of the NPC's home location.",
+  "npc.variable.home_y.name": "Home Y",
+  "npc.variable.home_y.desc": "Y coordinate of the NPC's home location.",
+  "npc.variable.home_z.name": "Home Z",
+  "npc.variable.home_z.desc": "Z coordinate of the NPC's home location.",
+  "npc.variable.home_radius.name": "Home Radius",
+  "npc.variable.home_radius.desc": "Maximum distance they can be from their home position before they path back to it.",
+
+  "npc.variable.yaw.name": "Yaw",
+  "npc.variable.yaw.desc": "Yaw rotation (degrees) of the NPC.",
+  "npc.variable.pitch.name": "Pitch",
+  "npc.variable.pitch.desc": "Pitch rotation (degrees) of the NPC.",
   "cobblemon.move.pound": "Pound",
   "cobblemon.move.pound.desc": "The target is physically pounded with a long tail, a foreleg, or the like.",
   "cobblemon.move.karatechop": "Karate Chop",

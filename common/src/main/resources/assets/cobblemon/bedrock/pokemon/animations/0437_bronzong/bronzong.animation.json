@@ -81,6 +81,13 @@
 					"position": [0, 0, -1]
 				}
 			}
+		},
+		"animation.bronzong.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.bronzong.cry"
+				}
+			}
 		}
 	}
 }

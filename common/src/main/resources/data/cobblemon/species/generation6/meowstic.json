@@ -43,6 +43,12 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
+  },
   "drops": {
     "amount": 1,
     "entries": [

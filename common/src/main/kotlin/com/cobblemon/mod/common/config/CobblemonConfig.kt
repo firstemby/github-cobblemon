@@ -288,7 +288,7 @@ class CobblemonConfig {
     var disableRoll = false
 
     @CobblemonConfigField(Category.Debug, lang = "enable_debug_keys")
-    var enableDebugKeys = false
+    var enableDebugKeys = true
 
     @CobblemonConfigField(Category.Spawning, lang = "despawner_near_distance")
     var despawnerNearDistance = 32f

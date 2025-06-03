@@ -2,9 +2,6 @@
   "replace": false,
   "values": [
     "#cobblemon:apricorn_logs",
-    "cobblemon:saccharine_log",
-    "cobblemon:stripped_saccharine_log",
-    "cobblemon:saccharine_wood",
-    "cobblemon:stripped_saccharine_wood"
+	"#cobblemon:saccharine_logs"
   ]
 }

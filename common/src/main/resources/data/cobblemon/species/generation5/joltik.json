@@ -50,6 +50,7 @@
     "height": 0.6,
     "fixed": false
   },
+  "standingEyeHeight": 0.3,
   "drops": {
     "amount": 4,
     "entries": [

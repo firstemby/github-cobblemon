@@ -60,6 +60,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "entityInteract": {
+      "avoidedByPhantom": true
     }
   },
   "drops": {

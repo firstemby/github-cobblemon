@@ -11,31 +11,31 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
+import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.BonemealableBlock
-import net.minecraft.world.level.block.LeavesBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
+import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.BlockHitResult
@@ -84,7 +84,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
                     if (belowAge < MAX_AGE) {
                         changeAge(state, -1)
                         changeAge(belowState, 1)
-                        }
+                    }
                     break
                 } else {
                     break
@@ -130,7 +130,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
     override fun animateTick(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
 
         val particleCount = random.nextInt(3)
-        
+
         if (state.getValue(AGE) == 2) {
             repeat(particleCount) {
                 spawnHoneyParticles(level, pos, state, 0.75f)
@@ -218,12 +218,14 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
             // give player honey bottle for now
             player.addItem(Items.HONEY_BOTTLE.defaultInstance)
             level.setBlock(pos, state.setValue(AGE, 0), 2)
+            level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
         } else if (isHoneyBottle && !isAtMaxAge(state)) {
             // decrement stack if not in creative mode
             if (!player.isCreative)
                 itemStack.shrink(1)
-            
+
             level.setBlock(pos, state.setValue(AGE, 2), 2)
+            level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
         }
 
         if (state.getValue(AGE) != MAX_AGE) {
@@ -235,11 +237,26 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
     }
 
     private fun isAtMaxAge(state: BlockState) = state.getValue(AGE) == MAX_AGE
-    private fun isAtMinAge(state: BlockState) = state.getValue(AGE) >= MIN_AGE
+    private fun isAtMinAge(state: BlockState) = state.getValue(AGE) == MIN_AGE
 
     private fun changeAge(state: BlockState, value: Int): BlockState {
         val newAge = (state.getValue(AGE) + value).coerceIn(MIN_AGE, MAX_AGE)
         return state.setValue(AGE, newAge)
+    }
+
+    override fun spawnDestroyParticles(level: Level, player: Player, pos: BlockPos, state: BlockState) {
+        if (isAtMinAge(state)) {
+            super.spawnDestroyParticles(level, player, pos, state)
+            return
+        } else {
+            // TODO: Change to Yellow Leaves in stead of concrete
+            val particle = Blocks.YELLOW_CONCRETE_POWDER.defaultBlockState()
+            level.levelEvent(
+                LevelEvent.PARTICLES_DESTROY_BLOCK,
+                pos,
+                Block.getId(particle)
+            )
+        }
     }
 
     /*override fun onBlockBreakStart(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity) {
@@ -260,6 +277,63 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), Bonemea
         const val DISTANCE_MAX = 7
 
         private val SHAPE: VoxelShape = box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+
+        fun createBehavior(item: Item): DispenseItemBehavior {
+            return DispenseItemBehavior { source, stack ->
+                val level = source.level
+                val facing = source.state.getValue(DispenserBlock.FACING)
+                val pos = source.pos.relative(facing)
+                val blockState = level.getBlockState(pos)
+
+                if (blockState.block is SaccharineLeafBlock) {
+                    val currentAge = blockState.getValue(AGE)
+                    val newAge = when {
+                        item == Items.HONEY_BOTTLE && currentAge < MAX_AGE -> (currentAge + 2).coerceAtMost(MAX_AGE)
+                        item == Items.GLASS_BOTTLE && currentAge > MIN_AGE -> (currentAge - 2).coerceAtLeast(MIN_AGE)
+                        else -> currentAge
+                    }
+
+                    if (newAge != currentAge) {
+                        level.setBlock(pos, blockState.setValue(AGE, newAge), 3)
+                        level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
+                        stack.shrink(1)
+
+                        val dispenserEntity = source.blockEntity
+                        if (dispenserEntity != null) {
+                            val outputItem = if (item == Items.HONEY_BOTTLE) Items.GLASS_BOTTLE else Items.HONEY_BOTTLE
+                            val outputStack = ItemStack(outputItem)
+                            var added = false
+
+                            for (i in 0 until dispenserEntity.containerSize) {
+                                val slotStack = dispenserEntity.getItem(i)
+
+                                if (slotStack.isEmpty) {
+                                    dispenserEntity.setItem(i, outputStack.copy())
+                                    added = true
+                                    break
+                                } else if (slotStack.`is`(outputItem) && slotStack.count < slotStack.maxStackSize) {
+                                    slotStack.grow(1)
+                                    added = true
+                                    break
+                                }
+                            }
+
+                            if (!added) {
+                                Containers.dropItemStack(
+                                    level,
+                                    source.pos.x.toDouble(),
+                                    source.pos.y.toDouble(),
+                                    source.pos.z.toDouble(),
+                                    outputStack
+                                )
+                            }
+                        }
+                    }
+                }
+
+                stack
+            }
+        }
     }
 
 }
