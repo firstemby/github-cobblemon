@@ -8,37 +8,79 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.block.MintBlock.MintType.*
 import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.StringRepresentable
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Rotation
+import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
+import net.minecraft.world.level.material.FluidState
+import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class DecorativeItemBlock(settings: Properties) : Block(settings) {
+class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(settings), SimpleWaterloggedBlock {
     init {
         registerDefaultState(stateDefinition.any()
-            .setValue(HORIZONTAL_FACING, Direction.NORTH))
+            .setValue(HORIZONTAL_FACING, Direction.NORTH)
+            .setValue(WATERLOGGED, false))
+    }
+
+    @Suppress("unused")
+    enum class ItemType : StringRepresentable {
+        TEAPOT,
+        TEACUP,
+        GENERIC_8x,
+        GENERIC_8x4;
+
+        override fun getSerializedName(): String = this.name.lowercase()
+
+        companion object {
+            val CODEC = StringRepresentable.fromEnum(::values)
+        }
     }
 
     override fun codec(): MapCodec<DecorativeItemBlock> {
         return CODEC
     }
 
-    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
-        return defaultBlockState().setValue(HORIZONTAL_FACING, blockPlaceContext.horizontalDirection)
+    override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
+        var blockState = defaultBlockState()
+            .setValue(WATERLOGGED, ctx.level.getFluidState(ctx.clickedPos).type == Fluids.WATER)
+        val worldView = ctx.level
+        val blockPos = ctx.clickedPos
+        ctx.nearestLookingDirections.forEach { direction ->
+            if (direction.axis.isHorizontal) {
+                blockState = blockState.setValue(FACING, direction) as BlockState
+                if (blockState.canSurvive(worldView, blockPos)) {
+                    return blockState
+                }
+            }
+        }
+        return null
+    }
+
+    override fun getFluidState(blockState: BlockState): FluidState? {
+        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(HORIZONTAL_FACING)
+        builder.add(WATERLOGGED)
     }
 
     override fun getShape(
@@ -47,7 +89,32 @@ class DecorativeItemBlock(settings: Properties) : Block(settings) {
         pos: BlockPos,
         collisionContext: CollisionContext
     ): VoxelShape {
-        return HITBOX
+        return if (itemType == ItemType.TEAPOT) {
+            when (state.getValue(HorizontalDirectionalBlock.FACING)) {
+                Direction.SOUTH -> TEAPOT_SOUTH
+                Direction.WEST -> TEAPOT_WEST
+                Direction.EAST -> TEAPOT_EAST
+                else -> TEAPOT_NORTH
+            }
+        } else
+        if (itemType == ItemType.TEACUP) TEACUP else
+        if (itemType == ItemType.GENERIC_8x4) ITEM_8x4 else ITEM_8x
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun updateShape(
+        state: BlockState,
+        direction: Direction,
+        neighborState: BlockState,
+        world: LevelAccessor,
+        pos: BlockPos,
+        neighborPos: BlockPos
+    ): BlockState {
+        if (state.getValue(WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        }
+        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
     @Deprecated("Deprecated in Java")
@@ -61,8 +128,56 @@ class DecorativeItemBlock(settings: Properties) : Block(settings) {
     }
 
     companion object {
-        val CODEC = simpleCodec(::DecorativeItemBlock)
+        val CODEC: MapCodec<DecorativeItemBlock> = RecordCodecBuilder.mapCodec {
+            it.group(
+                propertiesCodec(),
+                ItemType.CODEC.fieldOf("itemType").forGetter(DecorativeItemBlock::itemType)
+        ).apply(it, ::DecorativeItemBlock) }
 
-        val HITBOX = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+        val ITEM_8x = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+        val ITEM_8x4 = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.25, 0.75)
+        private val TEACUP = Shapes.or(
+            Shapes.box(0.375, 0.0, 0.375, 0.625, 0.0625, 0.625),
+            Shapes.box(0.3125, 0.0, 0.3125, 0.625, 0.25, 0.375),
+            Shapes.box(0.375, 0.0, 0.625, 0.6875, 0.25, 0.6875),
+            Shapes.box(0.625, 0.0, 0.3125, 0.6875, 0.25, 0.625),
+            Shapes.box(0.3125, 0.0, 0.375, 0.375, 0.25, 0.6875)
+        )
+        private val TEAPOT_SOUTH = Shapes.or(
+            Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
+            Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
+            Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
+            Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
+            Shapes.box(0.0, 0.125, 0.5, 0.25, 0.5625, 0.5), //handle
+            Shapes.box(0.75, 0.125, 0.40625, 0.875, 0.375, 0.59375),
+            //Shapes.box(0.8125, 0.25, 0.4375, 0.9375, 0.5, 0.5625) //spout (not angled but for the angled bit)
+        )
+        private val TEAPOT_WEST = Shapes.or(
+            Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
+            Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
+            Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
+            Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
+            Shapes.box(0.5, 0.125, 0.0, 0.5, 0.5625, 0.25), //handle
+            Shapes.box(0.40625, 0.125, 0.75, 0.59375, 0.375, 0.875),
+            //Shapes.box(0.4375, 0.25, 0.8125, 0.5625, 0.5, 0.9375) //spout (not angled but for the angled bit)
+        )
+        private val TEAPOT_NORTH = Shapes.or(
+            Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
+            Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
+            Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
+            Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
+            Shapes.box(0.75, 0.125, 0.5, 1.0, 0.5625, 0.5), //handle
+            Shapes.box(0.125, 0.125, 0.40625, 0.25, 0.375, 0.59375),
+            //Shapes.box(0.0625, 0.25, 0.4375, 0.1875, 0.5, 0.5625) //spout (not angled but for the angled bit)
+        )
+        private val TEAPOT_EAST = Shapes.or(
+            Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
+            Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
+            Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
+            Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
+            Shapes.box(0.5, 0.125, 0.75, 0.5, 0.5625, 1.0), //handle
+            Shapes.box(0.40625, 0.125, 0.125, 0.59375, 0.375, 0.25),
+            //Shapes.box(0.4375, 0.25, 0.0625, 0.5625, 0.5, 0.1875) //spout (not angled but for the angled bit)
+        )
     }
 }
