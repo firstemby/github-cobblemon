@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -65,6 +66,7 @@ import net.minecraft.world.item.SignItem
 import net.minecraft.world.item.SmithingTemplateItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
 
 @Suppress("unused", "SameParameterValue")
 object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item>() {
@@ -918,7 +920,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
     @JvmField val EXP_SHARE = wearableItem("exp_share")
     @JvmField val FOCUS_BAND = wearableItem("focus_band")
-    @JvmField val KINGS_ROCK = WearableBlockItem("kings_rock", CobblemonBlocks.KINGS_ROCK)
+    @JvmField val KINGS_ROCK = wearableItem("kings_rock", block = CobblemonBlocks.KINGS_ROCK)
     @JvmField val MUSCLE_BAND = wearableItem("muscle_band")
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
@@ -1509,36 +1511,14 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-/*    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
-        name,
-        WearableItem(name).also {
-            wearables.add(it)
-            if (heldItemRemappedName != null) {
-                CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
-            }
-        }
-    )*/
-
-    private fun wearableItem(name: String, heldItemRemappedName: String? = null, block: Block? = null): CobblemonItem {
-        val createdItem = if (block == null) create(name,
-            WearableItem(name).also {
+    private fun wearableItem(name: String, heldItemRemappedName: String? = null, block: Block = Blocks.AIR): WearableItem =
+        create(name,
+            WearableItem(name, block).also {
                 wearables.add(it)
                 if (heldItemRemappedName != null) {
                     CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
                 }
             })
-        else
-            create(name,
-                WearableBlockItem(name, block).also {
-                    wearables.add(it)
-                    if (heldItemRemappedName != null) {
-                        CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
-                    }
-                })
-        return createdItem
-    }
-
-    class WearableBlockItem(name: String, block: Block) {}
 
     private fun campfirePotItem(block: Block, type: String): CampfirePotItem {
         val item = create("campfire_pot_${type}", CampfirePotItem(block))
