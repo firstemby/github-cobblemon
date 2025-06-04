@@ -918,7 +918,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
     @JvmField val EXP_SHARE = wearableItem("exp_share")
     @JvmField val FOCUS_BAND = wearableItem("focus_band")
-    @JvmField val KINGS_ROCK = wearableItem("kings_rock"/*, CobblemonBlocks.KINGS_ROCK*/)
+    @JvmField val KINGS_ROCK = WearableBlockItem("kings_rock", CobblemonBlocks.KINGS_ROCK)
     @JvmField val MUSCLE_BAND = wearableItem("muscle_band")
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
@@ -1509,7 +1509,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
+/*    private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
         name,
         WearableItem(name).also {
             wearables.add(it)
@@ -1517,7 +1517,28 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
                 CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
             }
         }
-    )
+    )*/
+
+    private fun wearableItem(name: String, heldItemRemappedName: String? = null, block: Block? = null): CobblemonItem {
+        val createdItem = if (block == null) create(name,
+            WearableItem(name).also {
+                wearables.add(it)
+                if (heldItemRemappedName != null) {
+                    CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
+                }
+            })
+        else
+            create(name,
+                WearableBlockItem(name, block).also {
+                    wearables.add(it)
+                    if (heldItemRemappedName != null) {
+                        CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
+                    }
+                })
+        return createdItem
+    }
+
+    class WearableBlockItem(name: String, block: Block) {}
 
     private fun campfirePotItem(block: Block, type: String): CampfirePotItem {
         val item = create("campfire_pot_${type}", CampfirePotItem(block))
