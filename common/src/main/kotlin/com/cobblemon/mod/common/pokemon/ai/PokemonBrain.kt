@@ -253,7 +253,7 @@ object PokemonBrain {
     private fun battlingTasks() = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         add(0 toDF LookAtTargetedBattlePokemonTask.create())
         add(0 toDF LookAtTargetSink(Int.MAX_VALUE - 1, Int.MAX_VALUE - 1))
-
+        add(0 toDF BattleFlightTask.create())
         add(0 toDF SwapActivityTask.lacking(CobblemonMemories.POKEMON_BATTLE, Activity.IDLE))
     }
 

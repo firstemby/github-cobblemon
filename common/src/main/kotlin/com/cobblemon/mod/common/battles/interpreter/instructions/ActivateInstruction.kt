@@ -100,7 +100,7 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
                 // Includes spited move and the PP it was reduced by
                 "spite", "eeriespell" -> battleLang("activate.spite", pokemonName, extraEffect, message.argumentAt(3)!!)
                 // Don't need additional lang, announced elsewhere
-                "toxicdebris", "shedskin", "iceface", "owntempo" -> return@dispatch GO
+                "toxicdebris", "shedskin", "iceface", "owntempo", "vitalspirit" -> return@dispatch GO
                 // Add activation to each Pokemon's history
                 "destinybond" -> {
                     battle.activePokemon.mapNotNull { it.battlePokemon?.uuid }.forEach { battle.minorBattleActions[it] = message }

@@ -260,6 +260,7 @@
 - Fixed issue where the restoration tank would not accept valid items from a hopper.
 - Fixed energy root not being shearable
 - Fixed energy root always spreading into more energy roots instead of by chance (same as big root)
+- Fixed issue where Pokémon spawned by the "spawnallpokemon" command potentially receiving a raft.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
