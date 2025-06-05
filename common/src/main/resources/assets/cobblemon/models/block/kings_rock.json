@@ -41,6 +41,7 @@
 			}
 		}
 	],
+	"gui_light": "front",
 	"display": {
 		"head": {
 			"translation": [0, 19.25, 0],
