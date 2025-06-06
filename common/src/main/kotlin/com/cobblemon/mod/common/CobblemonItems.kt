@@ -59,6 +59,7 @@ import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.HangingSignItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Item.Properties
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
@@ -348,10 +349,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SACCHARINE_HANGING_SIGN = this.create("saccharine_hanging_sign", HangingSignItem(CobblemonBlocks.SACCHARINE_HANGING_SIGN, CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN, Item.Properties().stacksTo(16)))
     @JvmField
-    val SACCHARINE_SAPLING = saccharineSaplingItem("saccharine_sapling", SaccharineSaplingItem(CobblemonBlocks.SACCHARINE_SAPLING))
+    val SACCHARINE_SAPLING = compostableBlockItem("saccharine_sapling", CobblemonBlocks.SACCHARINE_SAPLING)
 
     @JvmField
-    val BUGWORT = bugwortItem("bugwort", BugwortItem(CobblemonBlocks.BUGWORT))
+    val BUGWORT = compostableBlockItem("bugwort", CobblemonBlocks.BUGWORT)
     @JvmField
     val POKE_BAIT = noSettingsItem("poke_bait")
 
@@ -434,33 +435,33 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val TWICE_SPICED_BEETROOT = noSettingsItem("twice_spiced_beetroot") // todo make a TwiceSpiceBeetrootItem class for battle purposes
 */
     @JvmField
-    val POTATO_MOCHI = create("potato_mochi", object : Item(Properties().stacksTo(16)
+    val POTATO_MOCHI = create("potato_mochi", CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
             .alwaysEdible()
-            .build())) {})
+            .build())))
     @JvmField
-    val FRIED_RICE = create("fried_rice", object : Item(Properties().stacksTo(16)
+    val FRIED_RICE = create("fried_rice", CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
             .alwaysEdible()
-            .build())) {})
+            .build())))
     @JvmField
-    val CANDIED_APPLE = create("candied_apple", object : Item(Properties().stacksTo(16)
+    val CANDIED_APPLE = create("candied_apple",  CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
             .alwaysEdible()
-            .build())) {})
+            .build())))
     @JvmField
-    val CANDIED_BERRY = create("candied_berry", object : Item(Properties().stacksTo(16)
+    val CANDIED_BERRY = create("candied_berry",  CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
             .nutrition(10) // todo get final values for this from vera
             .saturationModifier(1.2F) // todo get final values for this from vera
             .alwaysEdible()
-            .build())) {})
+            .build())))
 
     //@JvmField
     //val SCATTER_BANG = this.create("scatter_bang", ScatterBangItem(Item.Settings()))
@@ -686,11 +687,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MEDICINAL_LEEK = heldItem("medicinal_leek", MedicinalLeekItem(CobblemonBlocks.MEDICINAL_LEEK, Item.Properties().food(FoodProperties.Builder().fast().nutrition(1).saturationModifier(0.2f).build())), "leek")
     @JvmField
-    val ROASTED_LEEK = create("roasted_leek", Item(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.3f).build())))
+    val ROASTED_LEEK = create("roasted_leek", CobblemonItem(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.3f).build())))
     @JvmField
-    val BRAISED_VIVICHOKE = create("braised_vivichoke", Item(Item.Properties().food(FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).build())))
+    val BRAISED_VIVICHOKE = create("braised_vivichoke", foodItem(6, 0.6F))
     @JvmField
-    val VIVICHOKE_DIP = create("vivichoke_dip", object : Item(Properties().stacksTo(1)
+    val VIVICHOKE_DIP = create("vivichoke_dip", object : CobblemonItem(Properties().stacksTo(1)
         .food(FoodProperties.Builder()
             .nutrition(10)
             .saturationModifier(1.2F)
@@ -710,7 +711,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val PEP_UP_FLOWER = compostableBlockItem("pep_up_flower", CobblemonBlocks.PEP_UP_FLOWER)
     @JvmField
-    val MEDICINAL_BREW = create("medicinal_brew", Item(Item.Properties()))
+    val MEDICINAL_BREW = noSettingsItem("medicinal_brew")
     @JvmField
     val REMEDY = create("remedy", RemedyItem(RemedyItem.NORMAL))
     @JvmField
@@ -718,7 +719,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SUPERB_REMEDY = create("superb_remedy", RemedyItem(RemedyItem.SUPERB))
     @JvmField
-    val MOOMOO_MILK = create("moomoo_milk", Item(Item.Properties()))
+    val MOOMOO_MILK = noSettingsItem("moomoo_milk")
 
     @JvmField
     val POTION = create("potion", PotionItem(PotionType.POTION))
@@ -734,7 +735,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
     @JvmField
-    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", Item(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
+    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
     @JvmField
     val REVIVE = create("revive", ReviveItem(max = false))
     @JvmField
@@ -1581,11 +1582,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     private fun heldItem(name: String, item: Item, remappedName: String? = null) = create(
         name = name,
         entry = item.also {
-            if (remappedName != null) {
+            remappedName?.let { remappedName ->
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
-                CobblemonHeldItemManager.registerRemap(Items.BONE, "thickclub")
-                CobblemonHeldItemManager.registerRemap(Items.SNOWBALL, "snowball")
-                CobblemonHeldItemManager.registerRemap(Items.GOLD_BLOCK, "bignugget")
             }
         }
     )
@@ -1635,20 +1633,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return item
     }
 
-    private fun saccharineSaplingItem(name: String, saccharineSaplingItem: SaccharineSaplingItem): SaccharineSaplingItem {
-        val finalName = "saccharine_sapling"
-        val item = this.create(finalName, saccharineSaplingItem)
-        compostable(item, .65f)
-        return item
-    }
-
-    private fun bugwortItem(name: String, bugwortItem: BugwortItem): BugwortItem {
-        val finalName = "bugwort"
-        val item = this.create(finalName, bugwortItem)
-        compostable(item, .65f)
-        return item
-    }
-
 
     private fun mintSeed(name: String, mintBlock: MintBlock): Item {
         val finalName = "${name}_mint_seeds"
@@ -1665,7 +1649,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     }
 
     private fun compostableItem(name: String, item: Item? = null, increaseLevelChance: Float = .65f): Item {
-        val createdItem = this.create(name, item ?: Item(Item.Properties()))
+        val createdItem = this.create(name, item ?: CobblemonItem(Item.Properties()))
         compostable(createdItem, increaseLevelChance)
         return createdItem
     }
@@ -1683,6 +1667,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     }
 
     private fun foodItem(nutrition: Int, saturationModifier: Float): Item {
-        return Item(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
+        return CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
     }
 }

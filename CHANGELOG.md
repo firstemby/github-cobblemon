@@ -290,6 +290,7 @@
 - The IVs class has now been extended to include Hyper Trained values.
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`.
 - Added `HyperTrainedIvEvent.Pre` and `HyperTrainedIvEvent.Post`.
+- Added a `hoverText` option to PartySelectCallback, to display a tooltip on hovering over a Pokémon in the selection screen.
   
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)

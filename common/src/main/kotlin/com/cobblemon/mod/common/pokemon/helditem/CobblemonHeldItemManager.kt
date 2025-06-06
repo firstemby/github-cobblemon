@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.util.battleLang
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Items
 import java.util.function.Function
 
 /**
@@ -52,6 +53,9 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
     override fun load() {
         super.load()
         Cobblemon.LOGGER.info("Imported {} held item IDs from showdown", this.loadedItemCount())
+        this.registerRemap(Items.BONE, "thickclub")
+        this.registerRemap(Items.SNOWBALL, "snowball")
+        this.registerRemap(Items.GOLD_BLOCK, "bignugget")
     }
 
     override fun showdownId(pokemon: BattlePokemon): String? {

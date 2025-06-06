@@ -6,9 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.block
+package com.cobblemon.mod.common.block.general
 
-import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -24,7 +23,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import net.minecraft.world.level.block.CarpetBlock
 
-class TatamiBlock(settings: Properties) : Block(settings) {
+class HorizontalRotationCarpetBlock(settings: Properties) : CarpetBlock(settings) {
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(HORIZONTAL_FACING, Direction.NORTH))
@@ -58,8 +57,8 @@ class TatamiBlock(settings: Properties) : Block(settings) {
     }
 
     companion object {
-        val CODEC = simpleCodec(::TatamiBlock)
+        val CODEC = simpleCodec(::HorizontalRotationCarpetBlock)
 
-        val HITBOX = Shapes.box(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
+        val HITBOX = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.0625, 1.0)
     }
 }

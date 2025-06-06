@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.cooking.getColourMixFromSeasonings
-import com.cobblemon.mod.common.block.PotComponent
+import com.cobblemon.mod.common.item.components.PotComponent
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm

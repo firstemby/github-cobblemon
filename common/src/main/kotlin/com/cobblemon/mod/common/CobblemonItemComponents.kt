@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.block.PotComponent
 import com.cobblemon.mod.common.item.components.*
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.mojang.serialization.Codec

@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.entity.ai.*
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.*
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.toDF
@@ -83,6 +84,8 @@ object PokemonBrain {
         ctx.apply(entity, behaviourConfigurations)
         entity.behaviours.clear()
         entity.behaviours.addAll(ctx.appliedBehaviours)
+        //run this before brain starts ticking as otherwise pokemon will instantly wake up despite being put to sleep
+        DrowsySensor.drowsyLogic(entity)
 
         if (behaviourConfigurations.isNotEmpty()) {
             return brain
