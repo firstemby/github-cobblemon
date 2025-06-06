@@ -44,6 +44,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
     enum class ItemType : StringRepresentable {
         TEAPOT,
         TEACUP,
+        GENERIC_7x6,
         GENERIC_8x,
         GENERIC_8x4;
 
@@ -98,6 +99,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             }
         } else
         if (itemType == ItemType.TEACUP) TEACUP else
+        if (itemType == ItemType.GENERIC_7x6) ITEM_7x6 else
         if (itemType == ItemType.GENERIC_8x4) ITEM_8x4 else ITEM_8x
     }
 
@@ -136,6 +138,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
 
         val ITEM_8x = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
         val ITEM_8x4 = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.25, 0.75)
+        val ITEM_7x6 = Shapes.box(0.28125, 0.0, 0.28125, 0.71875, 0.375, 0.71875)
         private val TEACUP = Shapes.or(
             Shapes.box(0.375, 0.0, 0.375, 0.625, 0.0625, 0.625),
             Shapes.box(0.3125, 0.0, 0.3125, 0.625, 0.25, 0.375),
@@ -148,36 +151,28 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
-            Shapes.box(0.0, 0.125, 0.5, 0.25, 0.5625, 0.5), //handle
-            Shapes.box(0.75, 0.125, 0.40625, 0.875, 0.375, 0.59375),
-            //Shapes.box(0.8125, 0.25, 0.4375, 0.9375, 0.5, 0.5625) //spout (not angled but for the angled bit)
+            Shapes.box(0.75, 0.125, 0.40625, 0.875, 0.375, 0.59375)
         )
         private val TEAPOT_WEST = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
-            Shapes.box(0.5, 0.125, 0.0, 0.5, 0.5625, 0.25), //handle
-            Shapes.box(0.40625, 0.125, 0.75, 0.59375, 0.375, 0.875),
-            //Shapes.box(0.4375, 0.25, 0.8125, 0.5625, 0.5, 0.9375) //spout (not angled but for the angled bit)
+            Shapes.box(0.40625, 0.125, 0.75, 0.59375, 0.375, 0.875)
         )
         private val TEAPOT_NORTH = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
-            Shapes.box(0.75, 0.125, 0.5, 1.0, 0.5625, 0.5), //handle
-            Shapes.box(0.125, 0.125, 0.40625, 0.25, 0.375, 0.59375),
-            //Shapes.box(0.0625, 0.25, 0.4375, 0.1875, 0.5, 0.5625) //spout (not angled but for the angled bit)
+            Shapes.box(0.125, 0.125, 0.40625, 0.25, 0.375, 0.59375)
         )
         private val TEAPOT_EAST = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
-            Shapes.box(0.5, 0.125, 0.75, 0.5, 0.5625, 1.0), //handle
-            Shapes.box(0.40625, 0.125, 0.125, 0.59375, 0.375, 0.25),
-            //Shapes.box(0.4375, 0.25, 0.0625, 0.5625, 0.5, 0.1875) //spout (not angled but for the angled bit)
+            Shapes.box(0.40625, 0.125, 0.125, 0.59375, 0.375, 0.25)
         )
     }
 }
