@@ -125,10 +125,11 @@ open class PartySelectPokemonDTO(
     val heldItem: ItemStack = ItemStack.EMPTY,
     var currentHealth: Int,
     var maxHealth: Int,
-    var enabled: Boolean
+    var enabled: Boolean,
+    var hoverText: List<Component> = emptyList()
 ) {
     @JvmOverloads
-    constructor(pokemon: Pokemon, enabled: Boolean = true): this(
+    constructor(pokemon: Pokemon, enabled: Boolean = true, hoverText: List<Component> = emptyList()): this(
         pokemonProperties = pokemon.createPokemonProperties(
             PokemonPropertyExtractor.SPECIES,
             PokemonPropertyExtractor.LEVEL,
@@ -140,7 +141,8 @@ open class PartySelectPokemonDTO(
         heldItem = pokemon.heldItemNoCopy(),
         currentHealth = pokemon.currentHealth,
         maxHealth = pokemon.maxHealth,
-        enabled = enabled
+        enabled = enabled,
+        hoverText = hoverText
     )
 
     constructor(buffer: RegistryFriendlyByteBuf): this(
@@ -149,7 +151,8 @@ open class PartySelectPokemonDTO(
         heldItem = buffer.readItemStack(),
         currentHealth = buffer.readInt(),
         maxHealth = buffer.readInt(),
-        enabled = buffer.readBoolean()
+        enabled = buffer.readBoolean(),
+        hoverText = buffer.readList { buffer.readText() }
     )
 
     fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
@@ -159,6 +162,6 @@ open class PartySelectPokemonDTO(
         buffer.writeInt(currentHealth)
         buffer.writeInt(maxHealth)
         buffer.writeBoolean(enabled)
+        buffer.writeCollection(hoverText) { _, text -> buffer.writeText(text) }
     }
 }
-

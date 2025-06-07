@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.command
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.requiresWithPermission
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -45,7 +47,10 @@ object SpawnAllPokemon {
         for (species in PokemonSpecies.implemented) {
             if (species.nationalPokedexNumber in range) {
                 LOGGER.debug(species.name)
-                species.create().sendOut(player.level() as ServerLevel, player.position(), null)
+                val pokemonEntity = PokemonProperties.parse("species=${species.name} level=10").createEntity(context.source.level)
+                pokemonEntity.moveTo(player.x, player.y, player.z, pokemonEntity.yRot, pokemonEntity.xRot)
+                pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
+                context.source.level.addFreshEntity(pokemonEntity)
             }
         }
 

@@ -41,54 +41,6 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 class SaccharineHoneyLogBlock(properties: Properties) : RotatedPillarBlock(properties) {
-
-    init {
-        this.registerDefaultState(
-            this.stateDefinition.any()
-                .setValue(AXIS, Direction.Axis.Y)
-        )
-    }
-
-    override fun getShape(
-        state: BlockState,
-        level: BlockGetter,
-        pos: BlockPos,
-        context: CollisionContext
-    ): VoxelShape {
-        return SHAPE
-    }
-
-    override fun getDrops(state: BlockState, params: LootParams.Builder): List<ItemStack?>? {
-        return listOf(ItemStack(CobblemonBlocks.SACCHARINE_LOG))
-    }
-
-    override fun getCollisionShape(
-        state: BlockState,
-        level: BlockGetter,
-        pos: BlockPos,
-        context: CollisionContext
-    ): VoxelShape {
-        if (context is EntityCollisionContext && (context.entity as? ItemEntity)?.item?.`is`(CobblemonItemTags.APRICORNS) == true) {
-            return Shapes.empty()
-        }
-        return super.getCollisionShape(state, level, pos, context)
-    }
-
-    override fun updateShape(
-        state: BlockState,
-        direction: Direction,
-        neighborState: BlockState,
-        level: LevelAccessor,
-        pos: BlockPos,
-        neighborPos: BlockPos
-    ): BlockState {
-        return if (!state.canSurvive(level, pos)) {
-            Blocks.AIR.defaultBlockState()
-        } else {
-            super.updateShape(state, direction, neighborState, level, pos, neighborPos)
-        }
-    }
-
     override fun useItemOn(
         stack: ItemStack,
         state: BlockState,
@@ -122,15 +74,6 @@ class SaccharineHoneyLogBlock(properties: Properties) : RotatedPillarBlock(prope
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult)
     }
-
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(AXIS)
-    }
-
-    override fun isPathfindable(
-        state: BlockState,
-        type: PathComputationType
-    ): Boolean = false
 
     companion object {
         val AXIS: EnumProperty<Direction.Axis> = BlockStateProperties.AXIS

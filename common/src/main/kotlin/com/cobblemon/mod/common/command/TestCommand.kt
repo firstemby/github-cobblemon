@@ -13,11 +13,15 @@ import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
+import com.cobblemon.mod.common.api.callback.PartySelectPokemonDTO
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.scheduling.taskBuilder
+import com.cobblemon.mod.common.api.text.aqua
+import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.battles.BattleFormat
@@ -32,6 +36,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.ActiveTrade
 import com.cobblemon.mod.common.trade.DummyTradeParticipant
 import com.cobblemon.mod.common.trade.PlayerTradeParticipant
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.toPokemon
 import com.google.gson.GsonBuilder
@@ -47,7 +52,6 @@ import net.minecraft.world.phys.AABB
 import com.mojang.serialization.JsonOps
 import java.io.File
 import java.io.PrintWriter
-import net.minecraft.core.BlockPos
 
 @Suppress("unused")
 object TestCommand {
@@ -410,6 +414,23 @@ object TestCommand {
             }
         val jsonElement = Pokemon.CODEC.encodeStart(JsonOps.INSTANCE, pokemon).orThrow
         context.source.sendSystemMessage(Component.literal(jsonElement.toString()))
+    }
+
+    private fun testPartySelectHoverText(context: CommandContext<CommandSourceStack>) {
+        val player = context.source.playerOrException
+        val party = player.party()
+
+        PartySelectCallbacks.create(
+            player,
+            pokemon = party.toList().map {
+                PartySelectPokemonDTO(it, true, listOf(
+                    Component.literal("Nature: ").gray().append(it.nature.displayName.asTranslated().green()),
+                    Component.literal("Ability: ").gray().append(it.ability.displayName.asTranslated().aqua()),
+                ))
+            }.toList()
+        ) { player, index ->
+
+        }
     }
 
 }

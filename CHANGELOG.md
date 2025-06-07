@@ -260,6 +260,9 @@
 - Fixed issue where the restoration tank would not accept valid items from a hopper.
 - Fixed energy root not being shearable
 - Fixed energy root always spreading into more energy roots instead of by chance (same as big root)
+- Fixed issue where Pokémon spawned by the "spawnallpokemon" command potentially receiving a raft.
+- Fixed logspam on NeoForge when adorn is not installed
+- Fixed Cobblemon crashing if it tries to load a bedrock model not meant for cobblemon (example: Qlipoth Awakening)
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -289,6 +292,7 @@
 - The IVs class has now been extended to include Hyper Trained values.
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`.
 - Added `HyperTrainedIvEvent.Pre` and `HyperTrainedIvEvent.Post`.
+- Added a `hoverText` option to PartySelectCallback, to display a tooltip on hovering over a Pokémon in the selection screen.
   
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)

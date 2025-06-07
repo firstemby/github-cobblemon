@@ -472,9 +472,9 @@ open class PokemonEntity(
 //        val targetPos = node?.blockPos
 //        if (targetPos == null || world.getBlockState(targetPos.up()).isAir) {
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
-            behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
+            exposedForm.behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
         } else if (state.`is`(FluidTags.LAVA) && !isEyeInFluid(FluidTags.LAVA)) {
-            behaviour.moving.swim.canWalkOnLava
+            exposedForm.behaviour.moving.swim.canWalkOnLava
         } else {
             super.canStandOnFluid(state)
         }
@@ -529,14 +529,20 @@ open class PokemonEntity(
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
             // Clients also don't seem to have correct info about behavior
-            if (!level().isClientSide && ticksLived > 5 && platform == PlatformType.NONE
-                && ownerUUID != null
-                && isInWater && !isUnderWater
-                && !exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater
-                && !getBehaviourFlag(PokemonBehaviourFlag.FLYING)
-            ) {
-                platform = PlatformType.getPlatformTypeForPokemon((exposedForm))
+            if(!level().isClientSide && ticksLived > 5) {
+                if (platform == PlatformType.NONE
+                        && ownerUUID != null
+                        && isInWater && !isUnderWater
+                        && !exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater
+                        && !getBehaviourFlag(PokemonBehaviourFlag.FLYING)
+                ) {
+                    platform = PlatformType.getPlatformTypeForPokemon((exposedForm))
+                } else if (platform != PlatformType.NONE && onGround()) {
+                    // If the pokemon is on a non-fluid surface, remove the platform.
+                    platform = PlatformType.NONE
+                }
             }
+
         } else {
             // Battle clone destruction
             if (this.beamMode == 0 && this.isBattleClone()) {
@@ -1424,12 +1430,12 @@ open class PokemonEntity(
         var blockPos = BlockPos(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
         var blockLookCount = 5
         var foundSurface = false
-        val form = this.exposedForm
+        val exposedForm = this.exposedForm
         var result = pos
         if (this.level().isWaterAt(blockPos)) {
             // look upward for a water surface
             var testPos = blockPos
-            if (!form.behaviour.moving.swim.canBreatheUnderwater || form.behaviour.moving.fly.canFly) {
+            if (!exposedForm.behaviour.moving.swim.canBreatheUnderwater || exposedForm.behaviour.moving.fly.canFly) {
                 // move sendout pos to surface if it's near
                 for (i in 0..blockLookCount) {
                     // Try to find a surface...
@@ -1476,14 +1482,14 @@ open class PokemonEntity(
             }
         }
         if (foundSurface) {
-            val canFly = form.behaviour.moving.fly.canFly
+            val canFly = exposedForm.behaviour.moving.fly.canFly
             if (canFly) {
                 val hasHeadRoom =
                     !collidesWithBlock(Vec3(blockPos.x.toDouble(), (result.y + 1), (blockPos.z).toDouble()))
                 if (hasHeadRoom) {
                     result = Vec3(result.x, result.y + 1.0, result.z)
                 }
-            } else if (form.behaviour.moving.swim.canBreatheUnderwater && !form.behaviour.moving.swim.canWalkOnWater) {
+            } else if (exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater) {
                 // Use half hitbox height for swimmers
                 val halfHeight = getDimensions(this.pose).height / 2.0
                 for (i in 1..halfHeight.toInt()) {
@@ -1496,14 +1502,14 @@ open class PokemonEntity(
                 }
                 result = Vec3(result.x, result.y + halfHeight - halfHeight.toInt(), result.z)
             } else {
-                platform = if (form.behaviour.moving.swim.canWalkOnWater || collidesWithBlock(
+                platform = if (exposedForm.behaviour.moving.swim.canWalkOnWater || collidesWithBlock(
                         Vec3(
                             result.x,
                             result.y,
                             result.z
                         )
                     )
-                ) PlatformType.NONE else PlatformType.getPlatformTypeForPokemon(form)
+                ) PlatformType.NONE else PlatformType.getPlatformTypeForPokemon(exposedForm)
             }
         }
         this.platform = platform
@@ -2251,17 +2257,17 @@ open class PokemonEntity(
         return true
     }
 
-    override fun canWalk() = behaviour.moving.walk.canWalk
-    override fun canSwimInWater() = behaviour.moving.swim.canSwimInWater
-    override fun canFly() = behaviour.moving.fly.canFly
-    override fun canSwimInLava() = behaviour.moving.swim.canSwimInLava
+    override fun canWalk() = exposedForm.behaviour.moving.walk.canWalk
+    override fun canSwimInWater() = exposedForm.behaviour.moving.swim.canSwimInWater
+    override fun canFly() = exposedForm.behaviour.moving.fly.canFly
+    override fun canSwimInLava() = exposedForm.behaviour.moving.swim.canSwimInLava
     override fun entityOnGround() = onGround()
 
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
         return if (fluidState.`is`(FluidTags.LAVA)) {
-            behaviour.moving.swim.canBreatheUnderlava
+            exposedForm.behaviour.moving.swim.canBreatheUnderlava
         } else if (fluidState.`is`(FluidTags.WATER)) {
-            behaviour.moving.swim.canBreatheUnderwater
+            exposedForm.behaviour.moving.swim.canBreatheUnderwater
         } else {
             false
         }
