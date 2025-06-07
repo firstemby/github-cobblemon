@@ -275,6 +275,12 @@ class AnimatedModelTextureSupplier(
     }
 }
 
+class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : ModelTextureSupplier {
+    override fun invoke(state: PosableState): ResourceLocation {
+        return textures[0]
+    }
+}
+
 class VariableModelTextureSupplier : ModelTextureSupplier {
     override fun invoke(state: PosableState): ResourceLocation {
         return state.runtime.environment.variable.map["texture"]?.asString()?.asIdentifierDefaultingNamespace()
