@@ -1,8 +1,0 @@
-{
-  "parent": "cobblemon:block/mechanical_fan",
-  "textures": {
-		"0": "cobblemon:block/mechanical_fan",
-		"1": "cobblemon:block/mechanical_fan_blades_anim",
-		"particle": "block/copper_block"
-  }
-}

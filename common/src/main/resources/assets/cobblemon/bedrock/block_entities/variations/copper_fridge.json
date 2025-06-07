@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:copper_fridge",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:copper_fridge",
+      "model": "cobblemon:copper_fridge.geo",
+      "texture": "cobblemon:textures/block/copper_fridge.png",
+      "layers": []
+    }
+  ]
+}

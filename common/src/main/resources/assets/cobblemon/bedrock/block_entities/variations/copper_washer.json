@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:copper_washer",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:copper_washer",
+      "model": "cobblemon:copper_washer.geo",
+      "texture": "cobblemon:textures/block/copper_washer.png",
+      "layers": []
+    }
+  ]
+}

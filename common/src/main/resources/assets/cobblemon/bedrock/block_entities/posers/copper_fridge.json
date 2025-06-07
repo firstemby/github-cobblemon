@@ -1,0 +1,21 @@
+{
+  "maxScale": 1.0,
+  "yTranslation": 0.0,
+  "poses": {
+    "closed": {
+      "allPoseTypes": true,
+      "transitions": {
+        "open": "q.bedrock_stateful('copper_fridge', 'opening')"
+      }
+    },
+    "open": {
+      "allPoseTypes": true,
+      "animations": [
+        "q.bedrock('copper_fridge', 'open')"
+      ],
+      "transitions": {
+        "closed": "q.bedrock_stateful('copper_fridge', 'closing')"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " IC",
+    " CR",
+    "CMC"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "M": {
+        "item": "minecraft:minecart"
+      }
+  },
+  "result": {
+    "id": "cobblemon:copper_mower"
+  }
+}

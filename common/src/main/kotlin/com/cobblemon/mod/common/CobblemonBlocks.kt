@@ -34,10 +34,8 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
@@ -495,15 +493,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F)))
 
     @JvmField
-    val MECHANICAL_FAN = create("mechanical_fan", MechanicalFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).mapColor(MapColor.COLOR_ORANGE)))
+    val COPPER_FAN = create("copper_fan", CopperFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).mapColor(MapColor.COLOR_ORANGE)))
     @JvmField
-    val MECHANICAL_MOWER = create("mechanical_mower", MechanicalMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE)))
+    val COPPER_MOWER = create("copper_mower", CopperMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE)))
     @JvmField
-    val MECHANICAL_OVEN = create("mechanical_oven", MechanicalOvenBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_OVEN = create("copper_oven", CopperOvenBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
-    val MECHANICAL_WASHER = this.create("mechanical_washer", MechanicalWasherBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_WASHER = this.create("copper_washer", CopperWasherBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
     @JvmField
-    val MECHANICAL_FRIDGE = this.create("mechanical_fridge", MechanicalFridgeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_FRIDGE = this.create("copper_fridge", CopperFridgeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
 
     @JvmField
     val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)))

@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:copper_oven",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:copper_oven",
+      "model": "cobblemon:copper_oven.geo",
+      "texture": "cobblemon:textures/block/copper_oven.png",
+      "layers": []
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CMT",
+    "CRC"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    },
+    "T": {
+        "tag": "c:glass_blocks/tinted"
+      }
+  },
+  "result": {
+    "id": "cobblemon:copper_oven"
+  }
+}

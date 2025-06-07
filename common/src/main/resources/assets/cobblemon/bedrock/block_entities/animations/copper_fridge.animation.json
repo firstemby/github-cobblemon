@@ -1,0 +1,97 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.copper_fridge.opening": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.25,
+			"bones": {
+				"door_west2": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.25": [0, -105, 0]
+					}
+				},
+				"door_east2": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.25": [0, 105, 0]
+					}
+				},
+				"door_west": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.25": [0, -105, 0]
+					}
+				},
+				"door_east": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.25": [0, 105, 0]
+					}
+				},
+				"drawer": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.25": [0, 0, -6]
+					}
+				}
+			}
+		},
+		"animation.copper_fridge.open": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"door_west2": {
+					"rotation": [0, -105, 0]
+				},
+				"door_east2": {
+					"rotation": [0, 105, 0]
+				},
+				"door_west": {
+					"rotation": [0, -105, 0]
+				},
+				"door_east": {
+					"rotation": [0, 105, 0]
+				},
+				"drawer": {
+					"position": [0, 0, -6]
+				}
+			}
+		},
+		"animation.copper_fridge.closing": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.25,
+			"bones": {
+				"door_west2": {
+					"rotation": {
+						"0.0": [0, -105, 0],
+						"0.25": [0, 0, 0]
+					}
+				},
+				"door_east2": {
+					"rotation": {
+						"0.0": [0, 105, 0],
+						"0.25": [0, 0, 0]
+					}
+				},
+				"door_west": {
+					"rotation": {
+						"0.0": [0, -105, 0],
+						"0.25": [0, 0, 0]
+					}
+				},
+				"door_east": {
+					"rotation": {
+						"0.0": [0, 105, 0],
+						"0.25": [0, 0, 0]
+					}
+				},
+				"drawer": {
+					"position": {
+						"0.0": [0, 0, -6],
+						"0.25": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

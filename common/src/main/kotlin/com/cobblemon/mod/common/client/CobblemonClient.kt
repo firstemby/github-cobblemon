@@ -53,7 +53,6 @@ import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
@@ -290,7 +289,7 @@ object CobblemonClient {
             CobblemonBlocks.RED_CAMPFIRE_POT,
             CobblemonBlocks.WHITE_CAMPFIRE_POT,
             CobblemonBlocks.YELLOW_CAMPFIRE_POT,
-            CobblemonBlocks.MECHANICAL_FAN
+            CobblemonBlocks.COPPER_FAN
         )
 
         this.createBoatModelLayers()
@@ -345,9 +344,9 @@ object CobblemonClient {
             CobblemonBlockEntities.CANDLE_POKE_CAKE,
             ::CandlePokeCakeBlockEntityRenderer
         )
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_OVEN, ::MechanicalOvenBlockRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_WASHER, ::MechanicalWasherBlockRenderer)
-        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MECHANICAL_FRIDGE, ::MechanicalFridgeBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.COPPER_OVEN, ::CopperOvenBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.COPPER_WASHER, ::CopperWasherBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.COPPER_FRIDGE, ::CopperFridgeBlockRenderer)
     }
 
     private fun registerEntityRenderers() {

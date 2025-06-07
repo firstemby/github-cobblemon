@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.block.chest.MechanicalOvenBlock
 import com.cobblemon.mod.common.block.entity.PokeCakeBlockEntity
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
@@ -99,16 +98,16 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
             BlockEntityType.Builder.of(::CampfireBlockEntity, CobblemonBlocks.CAMPFIRE).build(null)
     )
     @JvmField
-    val MECHANICAL_OVEN: BlockEntityType<MechanicalOvenBlockEntity> = this.create("mechanical_oven",
-        BlockEntityType.Builder.of(::MechanicalOvenBlockEntity, CobblemonBlocks.MECHANICAL_OVEN).build(null)
+    val COPPER_OVEN: BlockEntityType<CopperOvenBlockEntity> = this.create("copper_oven",
+        BlockEntityType.Builder.of(::CopperOvenBlockEntity, CobblemonBlocks.COPPER_OVEN).build(null)
     )
     @JvmField
-    val MECHANICAL_WASHER: BlockEntityType<MechanicalWasherBlockEntity> = this.create("mechanical_washer",
-        BlockEntityType.Builder.of(::MechanicalWasherBlockEntity, CobblemonBlocks.MECHANICAL_WASHER).build(null)
+    val COPPER_WASHER: BlockEntityType<CopperWasherBlockEntity> = this.create("copper_washer",
+        BlockEntityType.Builder.of(::CopperWasherBlockEntity, CobblemonBlocks.COPPER_WASHER).build(null)
     )
     @JvmField
-    val MECHANICAL_FRIDGE: BlockEntityType<MechanicalFridgeBlockEntity> = this.create("mechanical_fridge",
-        BlockEntityType.Builder.of(::MechanicalFridgeBlockEntity, CobblemonBlocks.MECHANICAL_FRIDGE).build(null)
+    val COPPER_FRIDGE: BlockEntityType<CopperFridgeBlockEntity> = this.create("copper_fridge",
+        BlockEntityType.Builder.of(::CopperFridgeBlockEntity, CobblemonBlocks.COPPER_FRIDGE).build(null)
     )
 
     /*@JvmField
