@@ -261,6 +261,8 @@
 - Fixed energy root not being shearable
 - Fixed energy root always spreading into more energy roots instead of by chance (same as big root)
 - Fixed issue where Pokémon spawned by the "spawnallpokemon" command potentially receiving a raft.
+- Fixed logspam on NeoForge when adorn is not installed
+- Fixed Cobblemon crashing if it tries to load a bedrock model not meant for cobblemon (example: Qlipoth Awakening)
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.

@@ -453,6 +453,9 @@ class CobblemonNeoForge : CobblemonImplementation {
         // NeoForge uses data-driven files to determine compostable, vanilla code is ignored
         // eventually we probaly want to datagen the output file maybe?
         // check neoforged/resources/data/neoforge/data_maps/item/compostables.json for all considered entries
+        // you can easily update this by running the game, putting a breakpoint anywhere that gets triggered in world and then run that in the debugger
+        // ComposterBlock.COMPOSTABLES.entries.filter { it.key.toString().contains("cobblemon") }.sortedBy { it.key.toString() }.map { "\"${it.key}\": {\"chance\": ${it.value}}"}.joinToString(",")
+        // returns one single json setup that you can paste in the compostables.json values block and done
     }
 
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
