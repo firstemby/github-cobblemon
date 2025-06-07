@@ -399,7 +399,7 @@
   "item.cobblemon.loaded_dice.tooltip": "Multi-strike moves always hit at least four times",
   "item.cobblemon.lucky_egg": "Lucky Egg",
   "item.cobblemon.lucky_egg.tooltip": "Increases the amount of experience earned by the holder in battle",
-  "item.cobblemon.luminous_moss": "Luminous Moss",
+  "block.cobblemon.luminous_moss": "Luminous Moss",
   "item.cobblemon.magnet": "Magnet",
   "item.cobblemon.magnet.tooltip": "Boosts the power of the holder's Electric-type moves",
   "item.cobblemon.metronome": "Metronome",

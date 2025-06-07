@@ -44,6 +44,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
     enum class ItemType : StringRepresentable {
         TEAPOT,
         TEACUP,
+        MOSS,
         GENERIC_7x6,
         GENERIC_8x,
         GENERIC_8x4;
@@ -99,6 +100,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             }
         } else
         if (itemType == ItemType.TEACUP) TEACUP else
+        if (itemType == ItemType.MOSS) MOSS else
         if (itemType == ItemType.GENERIC_7x6) ITEM_7x6 else
         if (itemType == ItemType.GENERIC_8x4) ITEM_8x4 else ITEM_8x
     }
@@ -145,6 +147,10 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.375, 0.0, 0.625, 0.6875, 0.25, 0.6875),
             Shapes.box(0.625, 0.0, 0.3125, 0.6875, 0.25, 0.625),
             Shapes.box(0.3125, 0.0, 0.375, 0.375, 0.25, 0.6875)
+        )
+        private val MOSS = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.1875, 0.8125, 0.3125, 0.8125),
+            Shapes.box(0.25, 0.3125, 0.25, 0.75, 0.5625, 0.75)
         )
         private val TEAPOT_SOUTH = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
