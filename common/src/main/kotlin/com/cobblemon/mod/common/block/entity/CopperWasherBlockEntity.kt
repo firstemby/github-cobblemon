@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 
-class CopperWasherBlockEntity(pos: BlockPos, state: BlockState) : RandomizableContainerBlockEntity(CobblemonBlockEntities.MECHANICAL_WASHER, pos, state), WorldlyContainer {
+class CopperWasherBlockEntity(pos: BlockPos, state: BlockState) : RandomizableContainerBlockEntity(CobblemonBlockEntities.COPPER_WASHER, pos, state), WorldlyContainer {
     var inventoryContents: NonNullList<ItemStack> = NonNullList.withSize(NUM_SLOTS, ItemStack.EMPTY)
     val posableState: GildedState = GildedState()
 
@@ -66,7 +66,7 @@ class CopperWasherBlockEntity(pos: BlockPos, state: BlockState) : RandomizableCo
 
     override fun getContainerSize() = NUM_SLOTS
 
-    override fun getDefaultName() = Component.translatable("block.cobblemon.mechanical_washer")
+    override fun getDefaultName() = Component.translatable("block.cobblemon.copper_washer")
 
     override fun createMenu(syncId: Int, playerInventory: Inventory): AbstractContainerMenu =
         ChestMenu.threeRows(syncId, playerInventory, this)

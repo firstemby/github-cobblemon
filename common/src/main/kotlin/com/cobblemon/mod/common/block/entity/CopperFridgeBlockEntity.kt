@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 
-class CopperFridgeBlockEntity(pos: BlockPos, state: BlockState) : RandomizableContainerBlockEntity(CobblemonBlockEntities.MECHANICAL_FRIDGE, pos, state), WorldlyContainer {
+class CopperFridgeBlockEntity(pos: BlockPos, state: BlockState) : RandomizableContainerBlockEntity(CobblemonBlockEntities.COPPER_FRIDGE, pos, state), WorldlyContainer {
     var inventoryContents: NonNullList<ItemStack> = NonNullList.withSize(NUM_SLOTS, ItemStack.EMPTY)
     val posableState: GildedState = GildedState()
 
@@ -66,7 +66,7 @@ class CopperFridgeBlockEntity(pos: BlockPos, state: BlockState) : RandomizableCo
 
     override fun getContainerSize() = NUM_SLOTS
 
-    override fun getDefaultName() = Component.translatable("block.cobblemon.mechanical_fridge")
+    override fun getDefaultName() = Component.translatable("block.cobblemon.copper_fridge")
 
     override fun createMenu(syncId: Int, playerInventory: Inventory): AbstractContainerMenu =
         ChestMenu.sixRows(syncId, playerInventory, this)

@@ -1,10 +1,10 @@
 {
   "replace": false,
   "values": [
-    "cobblemon:mechanical_oven",
-    "cobblemon:mechanical_fan",
-    "cobblemon:mechanical_fridge",
-    "cobblemon:mechanical_washer",
-    "cobblemon:mechanical_mower"
+    "cobblemon:copper_oven",
+    "cobblemon:copper_fan",
+    "cobblemon:copper_fridge",
+    "cobblemon:copper_washer",
+    "cobblemon:copper_mower"
   ]
 }

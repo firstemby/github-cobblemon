@@ -493,15 +493,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F)))
 
     @JvmField
-    val COPPER_FAN = create("copper_fan", CopperFanBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).pushReaction(PushReaction.DESTROY).mapColor(MapColor.COLOR_ORANGE)))
+    val COPPER_FAN = create("copper_fan", CopperFanBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER)))
     @JvmField
-    val COPPER_MOWER = create("copper_mower", CopperMowerBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE)))
+    val COPPER_MOWER = create("copper_mower", CopperMowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER)))
     @JvmField
-    val COPPER_OVEN = create("copper_oven", CopperOvenBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_OVEN = create("copper_oven", CopperOvenBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER)))
     @JvmField
-    val COPPER_WASHER = this.create("copper_washer", CopperWasherBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_WASHER = this.create("copper_washer", CopperWasherBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER)))
     @JvmField
-    val COPPER_FRIDGE = this.create("copper_fridge", CopperFridgeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK)))
+    val COPPER_FRIDGE = this.create("copper_fridge", CopperFridgeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.COPPER)))
 
     @JvmField
     val INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)))
