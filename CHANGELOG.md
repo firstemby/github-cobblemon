@@ -30,6 +30,7 @@
 - Added `/pcsearch <player> <pokemonProperties>` command that searches for a specific Pokémon within a player's PC.
 - Added `/pctake <player> <box> <slot>` command that takes a specific Pokémon from a player's PC. Removes the pokemon if target is self or ran from the server.
 - Added Hyper Training items (IV Modification) as well as some additional candy items to do so (Health Candy, Sickly Candy)
+- Added Galarica Nut Bushes
 
 ### Pokémon Added
 
@@ -213,6 +214,7 @@
 - Saccharine Leaves are now Collectable
 - Saccharine Leaves Age 1 or higher will now show Yellow particles when broken
 - Destroying a Saccharine Honey Log will now drop a Saccharine Log in stead of nothing
+- Reworked some compost chances
 
 ### Fixes
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)

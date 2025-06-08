@@ -48,6 +48,7 @@ object CobblemonBlockTags {
     @JvmField val FIRE_STONE_ORES = createTag("fire_stone_ores")
     @JvmField val FLOWERS = createTag("flowers")
     @JvmField val FOSSIL_MACHINE_PARTS = createTag("fossil_machine_parts")
+    @JvmField val GALARICA_NUT_MAY_PLACE_ON = createTag("galarica_nut_may_place_on")
     @JvmField val GEMSTONES = createTag("gemstones")
     @JvmField val GILDED_CHESTS = createTag("gilded_chests")
     @JvmField val GLAZED_TERRACOTTA_BLOCKS = createTag("glazed_terracotta_blocks")
