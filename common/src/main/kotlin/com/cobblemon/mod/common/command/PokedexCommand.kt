@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.SeenCount
 import com.cobblemon.mod.common.api.pokedex.SeenPercent
 import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
+import com.cobblemon.mod.common.api.pokedex.def.SimplePokedexDef
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.command.argument.DexArgumentType
 import com.cobblemon.mod.common.command.argument.FormArgumentType
@@ -85,9 +86,14 @@ object PokedexCommand {
         val players = context.getArgument("player", EntitySelector::class.java).findPlayers(context.source)
         val species = context.getArgument("species", Species::class.java)
         val form = context.getArgument("form", FormData::class.java)
+        val nationalDexEntries = Dexes.dexEntryMap[cobblemonResource("national")]?.getEntries()
+            ?: Dexes.dexEntryMap.values.filter { it is SimplePokedexDef }.flatMap { it.getEntries() }
+                .groupBy { it.speciesId }
+                .map { it.value.reduce { a, b -> a.combinedWith(b) } }
+        val completeEntry = nationalDexEntries.first { it.speciesId == species.resourceIdentifier }
+
         players.forEach {
             val dex = Cobblemon.playerDataManager.getPokedexData(it)
-            val completeEntry = Dexes.dexEntryMap[cobblemonResource("national")]!!.getEntries().first { it.speciesId == species.resourceIdentifier }
             val entry = dex.getOrCreateSpeciesRecord(species.resourceIdentifier)
 
             completeEntry.forms

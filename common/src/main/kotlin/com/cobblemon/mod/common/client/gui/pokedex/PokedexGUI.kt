@@ -98,6 +98,12 @@ class PokedexGUI private constructor(
          * Attempts to open this screen for a client.
          */
         fun open(pokedex: ClientPokedexManager, type: PokedexType, species: ResourceLocation? = null, blockPos: BlockPos? = null) {
+            if(Dexes.dexEntryMap.isEmpty()){
+                Minecraft.getInstance().player?.sendSystemMessage(
+                    Component.literal("§cError: No Pokedex regions available.")
+                )
+                return
+            }
             val mc = Minecraft.getInstance()
             val screen = PokedexGUI(type, species, blockPos)
             mc.setScreen(screen)
@@ -141,17 +147,10 @@ class PokedexGUI private constructor(
         super.init()
         clearWidgets()
 
-        val pokedex = CobblemonClient.clientPokedexData
-
         availableRegions = Dexes.dexEntryMap.keys.toList()
         selectedRegionIndex = 0
 
-        val ownedAmount = pokedex.getDexCalculatedValue(cobblemonResource("national"),  CaughtCount)
-        ownedCount = ownedAmount.toString()
-        while (ownedCount.length < 4) ownedCount = "0$ownedCount"
-
-        seenCount = pokedex.getDexCalculatedValue(cobblemonResource("national"),  SeenCount).toString()
-        while (seenCount.length < 4) seenCount = "0$seenCount"
+        updatePokemonCounts()
 
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -392,7 +391,16 @@ class PokedexGUI private constructor(
             if (selectedRegionIndex > 0) selectedRegionIndex--
             else selectedRegionIndex = availableRegions.lastIndex
         }
+        updatePokemonCounts()
         updateFilters()
+    }
+
+    private fun updatePokemonCounts() {
+        val pokedex = CobblemonClient.clientPokedexData
+        val currentPokedexPath = availableRegions[selectedRegionIndex]
+
+        ownedCount = pokedex.getDexCalculatedValue(currentPokedexPath,  CaughtCount).toString().padStart(4, '0')
+        seenCount = pokedex.getDexCalculatedValue(currentPokedexPath,  SeenCount).toString().padStart(4, '0')
     }
 
     fun updateFilters(init: Boolean = false) {

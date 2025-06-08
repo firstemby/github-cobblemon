@@ -177,6 +177,7 @@
 - Dewgong
 
 ### Changes
+- Changed pokemon caught and seen count to update based on the current pokedex being looked
 - Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
 - Made Blocks of Gold count as Big Nuggets when held by a Pokémon (for Fling functionality)
 - Players can now eat Sweet and Tart Apples, Whipped Dreams, and the Alcremie Sweets.
@@ -217,6 +218,7 @@
 - Reworked some compost chances
 
 ### Fixes
+- Fixed game crashing when removing national pokedex using datapacks
 - Fixed Particles sometimes facing the wrong direction (looking at you, Swords Dance)
 - Fixed PCs always opening at box 2 instead of box 1.
 - Fixed not being able to do complex item requirements aside from just NBT with evolution conditions, requirements and fossil items.
@@ -265,6 +267,7 @@
 - Fixed issue where Pokémon spawned by the "spawnallpokemon" command potentially receiving a raft.
 - Fixed logspam on NeoForge when adorn is not installed
 - Fixed Cobblemon crashing if it tries to load a bedrock model not meant for cobblemon (example: Qlipoth Awakening)
+- Fixed Berries (and thus mulches) not being plantable on Farmers delight rich soil farmland
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
