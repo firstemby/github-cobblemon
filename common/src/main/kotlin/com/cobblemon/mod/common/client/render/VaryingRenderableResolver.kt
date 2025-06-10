@@ -21,7 +21,9 @@ import com.cobblemon.mod.common.util.toRGBA
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.platform.NativeImage
+import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
 import net.minecraft.resources.ResourceLocation
@@ -53,7 +55,7 @@ class VaryingRenderableResolver(
     }
 
     fun getResolvedTexture(state: PosableState): ResourceLocation {
-        return getVariationValue(state) { texture }?.invoke(state)
+        return getVariationValue(state) { texture }?.getTexture(state)
             ?: throw IllegalStateException("Unable to find a texture for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
     }
 
@@ -180,6 +182,13 @@ class ModelAssetVariation(
     }
 }
 
+/** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
+class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
+    RenderSystem.setShaderTexture(0, texture.id)
+}, Runnable {
+    texture.close() // Cleanup
+})
+
 /**
  * Given the animation seconds, returns a texture to use. Only implemented
  * by [StaticModelTextureSupplier] and [AnimatedModelTextureSupplier].
@@ -187,12 +196,17 @@ class ModelAssetVariation(
  * @author Hiroku
  * @since February 6th, 2023
  */
-fun interface ModelTextureSupplier {
-    operator fun invoke(state: PosableState): ResourceLocation
+interface ModelTextureSupplier {
+    operator fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard
+    fun getTexture(state: PosableState): ResourceLocation
 }
 
 class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+    override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
+        return RenderStateShard.TextureStateShard(texture, false, false)
+    }
+
+    override fun getTexture(state: PosableState): ResourceLocation {
         return texture
     }
 }
@@ -203,86 +217,90 @@ class AnimatedModelTextureSupplier(
     val frames: List<ResourceLocation>,
     val interpolation: Boolean
 ): ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
-        val frameIndex = floor(state.animationSeconds * fps).toInt()
-        return if (frameIndex >= frames.size && !loop) {
-            frames.last()
-        } else {
-            frames[frameIndex % frames.size]
+    override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
+        var frameIndex = state.animationSeconds * fps
+        if (frameIndex > frames.size - 1.0f && !loop) frameIndex = frames.size.toFloat() - 1.0f
+        val i = frameIndex % 1.0
+
+        if (interpolation && i != 0.0) {
+            val resourceManager = Minecraft.getInstance().resourceManager
+
+            val texture1 : NativeImage
+            val texture2 : NativeImage
+
+            val o = floor(frameIndex).toInt() % frames.size
+
+            try { //Try getting images of the frames so we can use them to make a new one
+                texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
+                val s = if (o == frames.size - 1) 0 else o + 1
+                texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
+            } catch (e : Exception) {
+                return RenderStateShard.TextureStateShard(frames[o], false, false)
+            }
+
+            for (x in 0..<texture1.width) {
+                for (y in 0..<texture1.height) {
+                    val color1 = texture1.getPixelRGBA(x,y).toRGBA()
+                    val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+
+                    var newRed : Int
+                    var newGreen : Int
+                    var newBlue : Int
+
+                    //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
+                    if (color1.w == 0F && color2.w == 1F) {
+                        newRed = floor(color2.x * 255).toInt()
+                        newGreen = floor(color2.y * 255).toInt()
+                        newBlue = floor(color2.z * 255).toInt()
+                    } else if (color1.w == 1F && color2.w == 0F) {
+                        newRed = floor(color1.x * 255).toInt()
+                        newGreen = floor(color1.y * 255).toInt()
+                        newBlue = floor(color1.z * 255).toInt()
+                    } else {
+                        newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
+                        newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
+                        newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
+                    }
+
+                    val newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
+
+                    val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
+
+                    texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+                }
+            }
+            val newTexture = DynamicTexture(texture1)
+            newTexture.setFilter(false, false)
+            return DynamicStateShard(newTexture)
+        }
+        else {
+            val frame = floor(frameIndex).toInt() % frames.size
+            return RenderStateShard.TextureStateShard(frames[frame], false, false)
         }
     }
 
-    fun interpolatedTexture(state: PosableState): DynamicTexture? {
-        val resourceManager = Minecraft.getInstance().resourceManager
-
+    override fun getTexture(state: PosableState): ResourceLocation {
         val frameIndex = floor(state.animationSeconds * fps).toInt()
-        try {
-            if (frameIndex >= frames.size && !loop) {
-                return DynamicTexture(NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
-            }
-        } catch (e : Exception) {
-            return null
-        }
-        val o = frameIndex % frames.size
-        val i = state.animationSeconds * fps - frameIndex
-
-        val texture1 : NativeImage
-        val texture2 : NativeImage
-
-        try { //Try getting images of the frames so we can use them to make a new one
-            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
-            val s = if (o == frames.size - 1) 0 else o + 1
-            texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
-        } catch (e : Exception) {
-            return null
-        }
-
-        for (x in 0..<texture1.width) {
-            for (y in 0..<texture1.height) {
-                val color1 = texture1.getPixelRGBA(x,y).toRGBA()
-                val color2 = texture2.getPixelRGBA(x,y).toRGBA()
-
-                var newRed : Int
-                var newGreen : Int
-                var newBlue : Int
-                var newAlpha : Int
-
-                //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
-                if (color1.w == 0F && color2.w == 1F) {
-                    newRed = floor(color2.x * 255).toInt()
-                    newGreen = floor(color2.y * 255).toInt()
-                    newBlue = floor(color2.z * 255).toInt()
-                } else if (color1.w == 1F && color2.w == 0F) {
-                    newRed = floor(color1.x * 255).toInt()
-                    newGreen = floor(color1.y * 255).toInt()
-                    newBlue = floor(color1.z * 255).toInt()
-                } else {
-                    newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
-                    newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
-                    newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
-                }
-
-                newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
-
-                val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
-
-                texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
-            }
-        }
-        val newTexture = DynamicTexture(texture1)
-        newTexture.setFilter(false, false)
-        return newTexture
+        return frames[frameIndex]
     }
 }
 
 class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+    override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
+        return RenderStateShard.TextureStateShard(textures[0], false, false)
+    }
+
+    override fun getTexture(state: PosableState): ResourceLocation {
         return textures[0]
     }
 }
 
 class VariableModelTextureSupplier : ModelTextureSupplier {
-    override fun invoke(state: PosableState): ResourceLocation {
+    override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
+        return RenderStateShard.TextureStateShard(getTexture(state), false, false)
+    }
+
+    override fun getTexture(state: PosableState): ResourceLocation {
         return state.runtime.environment.variable.map["texture"]?.asString()?.asIdentifierDefaultingNamespace()
             ?: cobblemonResource("textures/npcs/default.png")
     }
