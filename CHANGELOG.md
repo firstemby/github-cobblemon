@@ -268,6 +268,7 @@
 - Fixed logspam on NeoForge when adorn is not installed
 - Fixed Cobblemon crashing if it tries to load a bedrock model not meant for cobblemon (example: Qlipoth Awakening)
 - Fixed Berries (and thus mulches) not being plantable on Farmers delight rich soil farmland
+- Fixed wild Pokémon vanishing when third party mods try to tame them the "vanilla" way
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.

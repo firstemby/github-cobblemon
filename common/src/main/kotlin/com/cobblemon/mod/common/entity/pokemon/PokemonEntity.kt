@@ -98,6 +98,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
+import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
@@ -1698,6 +1699,25 @@ open class PokemonEntity(
 
     override fun isPushable(): Boolean {
         return beamMode != 3 && super.isPushable()
+    }
+
+    // this is only in place to stop crashes when other mods call this method on Pokémon, not used in cobblemon at the time of this writing
+    override fun tame(player: Player) {
+        if (!pokemon.isWild() || !isAlive || ownerUUID != null)
+            return
+        super.tame(player)
+        if (player is ServerPlayer) {
+            val party = player.party()
+            if (party.getFirstAvailablePosition() == null) {
+                discard()
+            }
+            party.add(pokemon)
+            pokemon.state = SentOutState(this)
+        }
+    }
+
+    override fun isTame(): Boolean {
+        return ownerUUID != null || !pokemon.isWild()
     }
 
     /*
