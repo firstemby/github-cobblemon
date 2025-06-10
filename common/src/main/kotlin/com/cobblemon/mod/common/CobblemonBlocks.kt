@@ -472,6 +472,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
     val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, ItemType.MOSS)) //TODO Determine brightness of 5, 11, or maybe 13
+    @JvmField
+    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x4))
+    @JvmField
+    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission()))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))

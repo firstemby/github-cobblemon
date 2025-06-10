@@ -91,18 +91,21 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         pos: BlockPos,
         collisionContext: CollisionContext
     ): VoxelShape {
-        return if (itemType == ItemType.TEAPOT) {
-            when (state.getValue(HorizontalDirectionalBlock.FACING)) {
-                Direction.SOUTH -> TEAPOT_SOUTH
-                Direction.WEST -> TEAPOT_WEST
-                Direction.EAST -> TEAPOT_EAST
-                else -> TEAPOT_NORTH
+        return when (itemType) {
+            ItemType.TEAPOT -> {
+                when (state.getValue(FACING)) {
+                    Direction.SOUTH -> TEAPOT_SOUTH
+                    Direction.WEST -> TEAPOT_WEST
+                    Direction.EAST -> TEAPOT_EAST
+                    else -> TEAPOT_NORTH
+                }
             }
-        } else
-        if (itemType == ItemType.TEACUP) TEACUP else
-        if (itemType == ItemType.MOSS) MOSS else
-        if (itemType == ItemType.GENERIC_7x6) ITEM_7x6 else
-        if (itemType == ItemType.GENERIC_8x4) ITEM_8x4 else ITEM_8x
+            ItemType.TEACUP -> TEACUP
+            ItemType.MOSS -> MOSS
+            ItemType.GENERIC_7x6 -> ITEM_7x6
+            ItemType.GENERIC_8x4 -> ITEM_8x4
+            else -> ITEM_8x
+        }
     }
 
     @Deprecated("Deprecated in Java")

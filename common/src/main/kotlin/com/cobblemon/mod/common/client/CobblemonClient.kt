@@ -292,7 +292,9 @@ object CobblemonClient {
             CobblemonBlocks.YELLOW_CAMPFIRE_POT,
             CobblemonBlocks.KINGS_ROCK,
             CobblemonBlocks.CHIPPED_POT,
-            CobblemonBlocks.CRACKED_POT
+            CobblemonBlocks.CRACKED_POT,
+            CobblemonBlocks.GALARICA_CUFF,
+            CobblemonBlocks.GALARICA_WREATH
         )
 
         this.createBoatModelLayers()
