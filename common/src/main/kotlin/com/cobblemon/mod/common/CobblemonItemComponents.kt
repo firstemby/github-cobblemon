@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.item.components.FoodComponent
 import com.cobblemon.mod.common.item.components.IngredientComponent
 import com.cobblemon.mod.common.item.components.MobEffectsComponent
+import com.cobblemon.mod.common.item.components.PotComponent
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.mojang.serialization.Codec
 import net.minecraft.core.Registry

@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.pokemon.*
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.resources.ResourceLocation
 
 class EggPokemon(
@@ -51,7 +52,9 @@ class EggPokemon(
     }
     fun toNbt(): CompoundTag {
         val result = CompoundTag()
-        val ivNbt = ivs.saveToNBT(CompoundTag())
+        val ivNbt = IVs.CODEC.encodeStart(NbtOps.INSTANCE, ivs)
+            .result()
+            .orElseThrow { IllegalStateException("Failed to encode IVs") }
 
         result.put(DataKeys.POKEMON_IVS, ivNbt)
         result.putString(DataKeys.POKEMON_NATURE, nature.name.toString())
@@ -74,8 +77,14 @@ class EggPokemon(
             val abilityName = abilityNBT.getString(DataKeys.POKEMON_ABILITY_NAME).takeIf { it.isNotEmpty() } ?: "runaway"
             val moveSet = MoveSet()
             val pokeball = nbt.getString(DataKeys.POKEMON_CAUGHT_BALL)
+            val ivs = IVs.CODEC.decode(NbtOps.INSTANCE, nbt.get(DataKeys.POKEMON_IVS))
+                .result()
+                ?.get()
+                ?.first
+                ?: throw IllegalStateException("Failed to decode IVs")
+
             return EggPokemon(
-                IVs().loadFromNBT(nbt.get(DataKeys.POKEMON_IVS) as CompoundTag) as IVs,
+                ivs,
                 Natures.getNature(ResourceLocation.tryParse(nbt.getString(DataKeys.POKEMON_NATURE))!!)!!,
                 species,
                 species.forms.firstOrNull { it.formOnlyShowdownId() == nbt.getString(DataKeys.POKEMON_FORM_ID) } ?: species.standardForm,
@@ -86,5 +95,6 @@ class EggPokemon(
                 PokeBalls.getPokeBall(ResourceLocation.tryParse(pokeball)!!) ?: PokeBalls.POKE_BALL
             )
         }
+
     }
 }
