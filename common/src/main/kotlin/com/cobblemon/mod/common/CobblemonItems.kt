@@ -959,7 +959,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
-    val DESTINY_KNOT = heldItem("destiny_knot")
+    val DESTINY_KNOT = blockItem("destiny_knot", CobblemonBlocks.DESTINY_KNOT)
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField

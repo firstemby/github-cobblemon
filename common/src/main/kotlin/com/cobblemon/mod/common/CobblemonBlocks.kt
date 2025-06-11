@@ -476,6 +476,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission(), ItemType.GENERIC_8x4)) //TODO Determine whether it should have noCollission
     @JvmField
     val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission()))
+    @JvmField
+    val DESTINY_KNOT = create("destiny_knot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOL).mapColor(MapColor.NONE).noOcclusion(), ItemType.KNOT))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))

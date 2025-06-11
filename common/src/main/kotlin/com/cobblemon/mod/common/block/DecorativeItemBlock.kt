@@ -45,6 +45,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         TEAPOT,
         TEACUP,
         MOSS,
+        KNOT,
         GENERIC_7x6,
         GENERIC_8x,
         GENERIC_8x4;
@@ -98,6 +99,14 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
                     Direction.WEST -> TEAPOT_WEST
                     Direction.EAST -> TEAPOT_EAST
                     else -> TEAPOT_NORTH
+                }
+            }
+            ItemType.KNOT -> {
+                when (state.getValue(FACING)) {
+                    Direction.SOUTH -> KNOT_SOUTH
+                    Direction.WEST -> KNOT_WEST
+                    Direction.EAST -> KNOT_EAST
+                    else -> KNOT_NORTH
                 }
             }
             ItemType.TEACUP -> TEACUP
@@ -155,6 +164,10 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.1875, 0.0, 0.1875, 0.8125, 0.3125, 0.8125),
             Shapes.box(0.25, 0.3125, 0.25, 0.75, 0.5625, 0.75)
         )
+        val KNOT_SOUTH = Shapes.box(0.375, 0.0, 0.375, 0.75, 0.375, 0.75)
+        val KNOT_EAST = Shapes.box(0.375, 0.0, 0.25, 0.75, 0.375, 0.625)
+        val KNOT_NORTH = Shapes.box(0.25, 0.0, 0.25, 0.625, 0.375, 0.625)
+        val KNOT_WEST = Shapes.box(0.25, 0.0, 0.375, 0.625, 0.375, 0.75)
         private val TEAPOT_SOUTH = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
