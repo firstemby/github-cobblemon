@@ -33,7 +33,8 @@ internal data class ClientPokemonP3(
     val potentialMarks: Set<ResourceLocation>,
     val markings: List<Int>,
     val rideBoosts: Map<String, Float>,
-    val currentFullness: Int
+    val currentFullness: Int,
+    val interactionCooldowns: Map<ResourceLocation, Int>
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -51,6 +52,7 @@ internal data class ClientPokemonP3(
         other.markings = this.markings
         this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
         other.currentFullness = this.currentFullness
+        other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
         return other
     }
 
@@ -71,7 +73,8 @@ internal data class ClientPokemonP3(
                 Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_POTENTIAL_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::potentialMarks),
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
-                Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness)
+                Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns)
             ).apply(instance, ::ClientPokemonP3)
         }
 
@@ -87,7 +90,8 @@ internal data class ClientPokemonP3(
             pokemon.potentialMarks.map { it.identifier }.toSet(),
             pokemon.markings,
             pokemon.getRideBoosts().mapKeys { it.key.name },
-            pokemon.currentFullness
+            pokemon.currentFullness,
+            pokemon.interactionCooldowns
         )
     }
 }

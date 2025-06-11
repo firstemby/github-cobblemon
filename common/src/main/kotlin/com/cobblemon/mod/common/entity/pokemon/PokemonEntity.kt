@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
+import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addLivingEntityFunctions
@@ -152,6 +153,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.ShoulderRidingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeItem
 import net.minecraft.world.item.ItemStack
@@ -991,13 +993,6 @@ open class PokemonEntity(
                 this.gameEvent(GameEvent.SHEAR, player)
                 itemStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
                 return InteractionResult.SUCCESS
-            } else if (itemStack.`is`(Items.BUCKET)) {
-                if (pokemon.aspects.any { it.contains(DataKeys.CAN_BE_MILKED) }) {
-                    player.playSound(SoundEvents.GOAT_MILK, 1.0f, 1.0f)
-                    val milkBucket = ItemUtils.createFilledResult(itemStack, player, Items.MILK_BUCKET.defaultInstance)
-                    player.setItemInHand(hand, milkBucket)
-                    return InteractionResult.sidedSuccess(level().isClientSide)
-                }
             } else if (itemStack.`is`(Items.BOWL)) {
                 if (pokemon.aspects.any { it.contains("mooshtank") }) {
                     player.playSound(SoundEvents.MOOSHROOM_MILK, 1.0f, 1.0f)
@@ -1230,53 +1225,66 @@ open class PokemonEntity(
 
             val bagItemLike = BagItems.getConvertibleForStack(stack) ?: return false
 
-            val battlePokemon =
-                battle.actors.flatMap { it.pokemonList }.find { it.effectedPokemon.uuid == pokemon.uuid }
+            val battlePokemon = battle.actors
+                    .flatMap { it.pokemonList }
+                    .find { it.effectedPokemon.uuid == pokemon.uuid }
                     ?: return false // Shouldn't be possible but anyway
+
             if (battlePokemon.actor.getSide().actors.none { it.isForPlayer(player) }) {
                 return true
             }
 
             return bagItemLike.handleInteraction(player, battlePokemon, stack)
         }
+
         if (player !is ServerPlayer || this.isBusy) {
             return false
         }
 
-        // Check evolution item interaction
+        val interaction = PokemonInteractions.findInteraction(this)
+
+        if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
+            interaction.effects.forEach { it.applyEffect(this, player) }
+            pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+            return true
+        }
+
+        // Evolution item logic
         if (pokemon.getOwnerPlayer() == player) {
             val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
             pokemon.lockedEvolutions
-                .filterIsInstance<ItemInteractionEvolution>()
-                .forEach { evolution ->
-                    if (evolution.attemptEvolution(pokemon, context)) {
-                        if (!player.isCreative) {
-                            stack.shrink(1)
+                    .filterIsInstance<ItemInteractionEvolution>()
+                    .forEach { evolution ->
+                        if (evolution.attemptEvolution(pokemon, context)) {
+                            if (!player.isCreative) {
+                                stack.shrink(1)
+                            }
+                            this.level().playSoundServer(
+                                    position = this.position(),
+                                    sound = CobblemonSounds.ITEM_USE,
+                                    volume = 1F,
+                                    pitch = 1F
+                            )
+                            return true
                         }
-                        this.level().playSoundServer(
-                            position = this.position(),
-                            sound = CobblemonSounds.ITEM_USE,
-                            volume = 1F,
-                            pitch = 1F
-                        )
-                        return true
                     }
-                }
         }
 
+        // Fallback to item-defined interaction
         (stack.item as? PokemonEntityInteraction)?.let {
             if (it.onInteraction(player, this, stack)) {
-                it.sound?.let {
+                it.sound?.let { s ->
                     this.level().playSoundServer(
-                        position = this.position(),
-                        sound = it,
-                        volume = 1F,
-                        pitch = 1F
+                            position = this.position(),
+                            sound = s,
+                            volume = 1F,
+                            pitch = 1F
                     )
                 }
                 return true
             }
         }
+
         return false
     }
 

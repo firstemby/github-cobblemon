@@ -29,7 +29,7 @@ import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
@@ -47,7 +47,7 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.adapters.*
@@ -100,7 +100,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(Evolution::class.java, CobblemonEvolutionAdapter)
         .registerTypeAdapter(AABB::class.java, BoxAdapter)
         .registerTypeAdapter(AbilityPool::class.java, AbilityPoolAdapter)
-        .registerTypeAdapter(EvolutionRequirement::class.java, CobblemonRequirementAdapter)
+        .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
         .registerTypeAdapter(PreEvolution::class.java, CobblemonPreEvolutionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)

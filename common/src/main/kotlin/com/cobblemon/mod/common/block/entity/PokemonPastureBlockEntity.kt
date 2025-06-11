@@ -98,12 +98,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 blockEntity.checkPokemon()
             }
 
-            // for every tethered pokemon tick metabolism if fullness is above 0
+            // for every tethered pokemon tick metabolism and interaction cooldown if fullness or cooldown is above 0
             val tetheredPokemonList = blockEntity.tetheredPokemon.filter { it.getPokemon() != null }
             for (tetheredPokemon in tetheredPokemonList) {
                 val pokemon = tetheredPokemon.getPokemon()!!
                 if (pokemon.currentFullness > 0) {
                     pokemon.tickMetabolism()
+                }
+                if (pokemon.interactionCooldowns.any()) {
+                    pokemon.tickInteractionCooldown()
                 }
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)

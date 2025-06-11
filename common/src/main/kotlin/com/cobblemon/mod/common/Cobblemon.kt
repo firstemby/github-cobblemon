@@ -298,9 +298,6 @@ object Cobblemon {
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
 
         SpeciesFeatures.register(
-            DataKeys.CAN_BE_MILKED,
-            FlagSpeciesFeatureProvider(keys = listOf(DataKeys.CAN_BE_MILKED), default = true))
-        SpeciesFeatures.register(
             DataKeys.HAS_BEEN_SHEARED,
             FlagSpeciesFeatureProvider(keys = listOf(DataKeys.HAS_BEEN_SHEARED), default = false))
 

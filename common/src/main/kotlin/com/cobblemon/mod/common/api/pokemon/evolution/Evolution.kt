@@ -21,7 +21,7 @@ import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionTestedEven
 import com.cobblemon.mod.common.api.moves.BenchedMove
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
@@ -71,9 +71,9 @@ interface Evolution : EvolutionLike {
     var consumeHeldItem: Boolean
 
     /**
-     * The [EvolutionRequirement]s behind this evolution.
+     * The [Requirement]s behind this evolution.
      */
-    val requirements: MutableSet<EvolutionRequirement>
+    val requirements: MutableSet<Requirement>
 
     /**
      * The [MoveTemplate]s that will be offered to be learnt upon evolving.
