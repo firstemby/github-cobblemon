@@ -517,14 +517,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val TART_APPLE = compostableItem("tart_apple", foodItem(4, 0.3f), 0.65f)
     @JvmField val SYRUPY_APPLE = compostableItem("syrupy_apple", foodItem(4, 0.3f), 0.65f)
     @JvmField val GALARICA_CUFF = blockItem("galarica_cuff", CobblemonBlocks.GALARICA_CUFF)
-    @JvmField val GALARICA_WREATH = blockItem("galarica_wreath", CobblemonBlocks.GALARICA_WREATH)
     @JvmField val BLACK_AUGURITE = noSettingsItem("black_augurite")
     @JvmField val PEAT_BLOCK = noSettingsItem("peat_block")
     @JvmField val RAZOR_CLAW = noSettingsItem("razor_claw")
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
     @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
-    @JvmField val SHELL_HELMET = heldItem("shell_helmet")
     @JvmField val METAL_ALLOY = noSettingsItem("metal_alloy")
     @JvmField val SCROLL_OF_DARKNESS = noSettingsItem("scroll_of_darkness")
     @JvmField val SCROLL_OF_WATERS = noSettingsItem("scroll_of_waters")
@@ -926,6 +924,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
     @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+    @JvmField val GALARICA_WREATH = wearableItem("galarica_wreath", block = CobblemonBlocks.GALARICA_WREATH)
+    @JvmField val SHELL_HELMET = wearableItem("shell_helmet")
 
     // Held Items
     @JvmField

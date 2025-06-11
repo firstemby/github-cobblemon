@@ -473,7 +473,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, ItemType.MOSS)) //TODO Determine brightness of 5, 11, or maybe 13
     @JvmField
-    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x4))
+    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission(), ItemType.GENERIC_8x4)) //TODO Determine whether it should have noCollission
     @JvmField
     val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission()))
 

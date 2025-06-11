@@ -15,7 +15,10 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
+import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.AttachFace
@@ -78,13 +81,23 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
-        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+        return if (getConnectedDirection(state).opposite == direction && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
+    //It does in fact override, and crashes if it isn't overriding. Don't trust this.
     override fun canSurvive(state: BlockState?, level: LevelReader?, pos: BlockPos): Boolean {
-        val direction = getConnectedDirection(state!!).opposite
-        return canSupportCenter(level!!, pos.relative(direction), direction.opposite)
+        when (state?.getValue(FACE)) {
+            AttachFace.CEILING -> {
+                val direction = getConnectedDirection(state!!).opposite
+                return canSupportCenter(level!!, pos.relative(direction), direction.opposite)
+            }
+            AttachFace.WALL, AttachFace.FLOOR -> {
+                val direction = getConnectedDirection(state!!).opposite
+                return level?.getBlockState(pos.relative(direction))?.isAir == false
+            }
+            else -> return true
+        }
     }
 
     companion object {

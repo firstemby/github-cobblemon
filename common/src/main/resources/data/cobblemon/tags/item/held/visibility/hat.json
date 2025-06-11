@@ -1,13 +1,14 @@
 {
-  "replace": false,
-  "values": [
-    "#minecraft:banners",
-
-    "cobblemon:rocky_helmet",
-    "cobblemon:exp_share",
-    "cobblemon:kings_rock",
-    "cobblemon:choice_band",
-    "cobblemon:focus_band",
-    "cobblemon:muscle_band"
-  ]
+    "replace": false,
+    "values": [
+        "#minecraft:banners",
+        "cobblemon:rocky_helmet",
+        "cobblemon:exp_share",
+        "cobblemon:kings_rock",
+        "cobblemon:choice_band",
+        "cobblemon:focus_band",
+        "cobblemon:muscle_band",
+        "cobblemon:galarica_wreath",
+        "cobblemon:shell_helmet"
+    ]
 }
