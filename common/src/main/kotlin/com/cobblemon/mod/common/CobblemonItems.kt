@@ -1011,7 +1011,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MAGNET = heldItem("magnet")
     @JvmField
-    val METRONOME = heldItem("metronome")
+    val METRONOME = blockItem("metronome", CobblemonBlocks.METRONOME)
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField

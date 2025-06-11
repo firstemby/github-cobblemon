@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/metronome"
+    },
+    "facing=west": {
+      "model": "cobblemon:block/metronome",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/metronome",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "cobblemon:block/metronome",
+      "y": 270
+    }
+  }
+}
