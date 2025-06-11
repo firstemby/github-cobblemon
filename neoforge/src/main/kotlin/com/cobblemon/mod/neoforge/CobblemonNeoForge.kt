@@ -31,7 +31,6 @@ import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifi
 import com.cobblemon.mod.common.world.predicate.CobblemonBlockPredicates
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonProcessorTypes
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProcessorListOverrides
-import com.cobblemon.mod.neoforge.brewing.CobblemonNeoForgeBrewingRegistry
 import com.cobblemon.mod.neoforge.client.CobblemonNeoForgeClient
 import com.cobblemon.mod.neoforge.event.NeoForgePlatformEventHandler
 import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
@@ -40,10 +39,8 @@ import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
 import java.util.Optional
 import java.util.UUID
-import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
-import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -97,6 +94,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import kotlin.reflect.KClass
 
 @Mod(Cobblemon.MODID)
 class CobblemonNeoForge : CobblemonImplementation {
@@ -132,7 +130,6 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(::onVillagerTradesRegistry)
             addListener(::onWanderingTraderRegistry)
             addListener(::onLootTableLoad)
-            addListener(::onRegisterBrewingRecipes)
         }
         NeoForgePlatformEventHandler.register()
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -456,6 +453,9 @@ class CobblemonNeoForge : CobblemonImplementation {
         // NeoForge uses data-driven files to determine compostable, vanilla code is ignored
         // eventually we probaly want to datagen the output file maybe?
         // check neoforged/resources/data/neoforge/data_maps/item/compostables.json for all considered entries
+        // you can easily update this by running the game, putting a breakpoint anywhere that gets triggered in world and then run that in the debugger
+        // ComposterBlock.COMPOSTABLES.entries.filter { it.key.toString().contains("cobblemon") }.sortedBy { it.key.toString() }.map { "\"${it.key}\": {\"chance\": ${it.value}}"}.joinToString(",")
+        // returns one single json setup that you can paste in the compostables.json values block and done
     }
 
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
@@ -473,10 +473,6 @@ class CobblemonNeoForge : CobblemonImplementation {
 
     private fun onLootTableLoad(e: LootTableLoadEvent) {
         LootInjector.attemptInjection(e.name) { builder -> e.table.addPool(builder.build()) }
-    }
-
-    private fun onRegisterBrewingRecipes(e: RegisterBrewingRecipesEvent) {
-        CobblemonNeoForgeBrewingRegistry.register(e)
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {

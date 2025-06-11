@@ -19,7 +19,6 @@ import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.RecipeBookCategories;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
 import net.minecraft.core.RegistryAccess;
-
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,9 +39,11 @@ public abstract class ClientRecipeBookMixin {
         return null;
     }
 
-    @Shadow private Map<RecipeBookCategories, List<RecipeCollection>> collectionsByTab;
+    @Shadow
+    private Map<RecipeBookCategories, List<RecipeCollection>> collectionsByTab;
 
-    @Shadow private List<RecipeCollection> allCollections;
+    @Shadow
+    private List<RecipeCollection> allCollections;
 
     @Inject(method = "getCategory", at = @At(value = "HEAD"), cancellable = true)
     private static void addCustomCategory(RecipeHolder<?> recipe, CallbackInfoReturnable<RecipeBookCategories> cir) {
@@ -76,8 +77,8 @@ public abstract class ClientRecipeBookMixin {
                     .collect(ImmutableList.toImmutableList());
             map2.put(recipeBookCategories, collections);
         });
-        RecipeBookCategories.AGGREGATE_CATEGORIES.forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List)list.stream().flatMap((recipeBookCategoriesx) -> ((List)map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
-        CobblemonRecipeCategories.Companion.getCustomAggregateCategories().forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List)list.stream().flatMap((recipeBookCategoriesx) -> ((List)map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
+        RecipeBookCategories.AGGREGATE_CATEGORIES.forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List) list.stream().flatMap((recipeBookCategoriesx) -> ((List) map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
+        CobblemonRecipeCategories.Companion.getCustomAggregateCategories().forEach((recipeBookCategories, list) -> map2.put(recipeBookCategories, (List) list.stream().flatMap((recipeBookCategoriesx) -> ((List) map2.getOrDefault(recipeBookCategoriesx, ImmutableList.of())).stream()).collect(ImmutableList.toImmutableList())));
 
         this.collectionsByTab = ImmutableMap.copyOf(map2);
         this.allCollections = builder.build();

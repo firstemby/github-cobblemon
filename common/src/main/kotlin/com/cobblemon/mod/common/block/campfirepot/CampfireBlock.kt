@@ -12,9 +12,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
-import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.item.CampfirePotItem
-import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.toVec3d
 import com.mojang.serialization.MapCodec
@@ -28,7 +26,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.BlockItem
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
@@ -62,6 +60,7 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
         val ITEM_DIRECTION = DirectionProperty.create("item_facing")
         val LIT = BlockStateProperties.LIT
         var SOUL = BooleanProperty.create("soul")
+        val POWERED = BlockStateProperties.POWERED
 
         private val campfireAABB = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.4375, 1.0)
         private val AABB = Shapes.or(
@@ -79,7 +78,8 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
             .setValue(FACING, Direction.NORTH)
             .setValue(LIT, true)
             .setValue(SOUL, false)
-            .setValue(ITEM_DIRECTION, Direction.NORTH))
+            .setValue(ITEM_DIRECTION, Direction.NORTH)
+            .setValue(POWERED, false))
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
@@ -198,7 +198,7 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, ITEM_DIRECTION, LIT, SOUL)
+        builder.add(FACING, ITEM_DIRECTION, LIT, SOUL, POWERED)
     }
 
     override fun updateShape(
@@ -215,13 +215,8 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
 
     override fun getRenderShape(state: BlockState) = RenderShape.MODEL
 
-    override fun getAnalogOutputSignal(state: BlockState, world: Level, pos: BlockPos): Int {
-        val stack = (world.getBlockEntity(pos) as DisplayCaseBlockEntity).getStack()
-
-        if (stack.isEmpty) return 0
-        if (stack.item is PokeBallItem) return 3
-        if (stack.item is BlockItem) return 2
-        return 1
+    override fun getAnalogOutputSignal(state: BlockState, level: Level, pos: BlockPos): Int {
+        return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos))
     }
 
     override fun hasAnalogOutputSignal(state: BlockState): Boolean = true
@@ -303,5 +298,27 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
 
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
         return if (state.getValue(SOUL)) ItemStack(Blocks.SOUL_CAMPFIRE) else ItemStack(Blocks.CAMPFIRE)
+    }
+
+    override fun neighborChanged(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        neighborBlock: Block,
+        neighborPos: BlockPos,
+        movedByPiston: Boolean
+    ) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston)
+        val isPowered = level.hasNeighborSignal(pos)
+        val blockEntity = level.getBlockEntity(pos) as? CampfireBlockEntity ?: return
+
+        if (isPowered != state.getValue(POWERED)) {
+            level.setBlock(pos, state.setValue(POWERED, isPowered), UPDATE_ALL)
+            blockEntity.toggleLid(!isPowered, pos)
+        }
+    }
+
+    override fun isSignalSource(state: BlockState): Boolean {
+        return true
     }
 }

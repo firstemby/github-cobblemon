@@ -51,6 +51,11 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "moves": [
     "1:sacredsword",
     "1:quickguard",

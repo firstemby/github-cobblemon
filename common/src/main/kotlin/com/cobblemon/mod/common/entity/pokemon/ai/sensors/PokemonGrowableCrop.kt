@@ -55,6 +55,6 @@ class PokemonGrowableCropSensor : Sensor<PokemonEntity>() {
         val blockState = world.getBlockState(pos)
         val block = blockState.block
 
-        return block is CropBlock && !block.isMaxAge(blockState)
+        return block is CropBlock && !block.isValidBonemealTarget(world, pos, blockState)
     }
 }

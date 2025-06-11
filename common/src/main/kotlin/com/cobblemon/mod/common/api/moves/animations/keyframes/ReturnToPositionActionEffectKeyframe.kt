@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.scheduling.after
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
 import com.cobblemon.mod.common.util.asExpressionLike
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3

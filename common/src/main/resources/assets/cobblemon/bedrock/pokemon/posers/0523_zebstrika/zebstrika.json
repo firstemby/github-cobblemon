@@ -4,6 +4,9 @@
   "profileScale": 0.62,
   "profileTranslation": [0.02, 0.84, 0],
   "rootBone": "zebstrika",
+  "animations": {
+    "cry": "q.bedrock_stateful('zebstrika', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],

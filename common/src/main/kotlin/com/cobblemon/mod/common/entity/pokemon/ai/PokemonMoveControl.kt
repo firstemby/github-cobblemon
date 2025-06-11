@@ -56,6 +56,13 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             return
         }
 
+        if (!pokemonEntity.isFlying() && !pokemonEntity.isInLiquid && !pokemonEntity.canWalk() && pokemonEntity.canFly()) {
+            // If it's never put into flight then there are some pathing checks that fail. In particular,
+            // #canUpdatePath in OmniPathNavigation. It can be not on ground and yet not activated flight yet.
+            // This removes that edge case.
+            pokemonEntity.setFlying(true)
+        }
+
         val behaviour = pokemonEntity.behaviour
         val mediumSpeed = runtime.resolveFloat(if (pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)) {
             behaviour.moving.fly.flySpeedHorizontal

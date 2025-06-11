@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench.repository
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ModelVariationSet
@@ -263,13 +264,9 @@ object VaryingModelRepository {
         inbuilt("chansey", ::ChanseyModel)
         inbuilt("crobat", ::CrobatModel)
         inbuilt("cubone", ::CuboneModel)
-        inbuilt("dewgong", ::DewgongModel)
         inbuilt("ditto", ::DittoModel)
         inbuilt("dodrio", ::DodrioModel)
         inbuilt("doduo", ::DoduoModel)
-        inbuilt("dragonair", ::DragonairModel)
-        inbuilt("dragonite", ::DragoniteModel)
-        inbuilt("dratini", ::DratiniModel)
         inbuilt("drowzee", ::DrowzeeModel)
         inbuilt("electabuzz", ::ElectabuzzModel)
         inbuilt("exeggcute", ::ExeggcuteModel)
@@ -295,8 +292,6 @@ object VaryingModelRepository {
         inbuilt("koffing", ::KoffingModel)
         inbuilt("krabby", ::KrabbyModel)
         inbuilt("lickitung", ::LickitungModel)
-        inbuilt("magnemite", ::MagnemiteModel)
-        inbuilt("magneton", ::MagnetonModel)
         inbuilt("marowak", ::MarowakModel)
         inbuilt("meowth", ::MeowthModel)
         inbuilt("mew", ::MewModel)
@@ -324,8 +319,6 @@ object VaryingModelRepository {
         inbuilt("rapidash", ::RapidashModel)
         inbuilt("sandshrew", ::SandshrewModel)
         inbuilt("sandslash", ::SandslashModel)
-        inbuilt("scyther", ::ScytherModel)
-        inbuilt("seel", ::SeelModel)
         inbuilt("spearow", ::SpearowModel)
         inbuilt("starmie", ::StarmieModel)
         inbuilt("staryu", ::StaryuModel)
@@ -345,7 +338,6 @@ object VaryingModelRepository {
         inbuilt("electivire", ::ElectivireModel)
         inbuilt("lickilicky", ::LickilickyModel)
         inbuilt("mimejr", ::MimejrModel)
-        inbuilt("scizor", ::ScizorModel)
         inbuilt("tangrowth", ::TangrowthModel)
         inbuilt("blissey", ::BlisseyModel)
         inbuilt("piloswine", ::PiloswineModel)
@@ -370,7 +362,6 @@ object VaryingModelRepository {
         inbuilt("yanmega", ::YanmegaModel)
         inbuilt("basculin", ::BasculinModel)
         inbuilt("emolga", ::EmolgaModel)
-        inbuilt("maractus", ::MaractusModel)
         inbuilt("bounsweet", ::BounsweetModel)
         inbuilt("dartrix", ::DartrixModel)
         inbuilt("decidueye", ::DecidueyeModel)
@@ -389,7 +380,6 @@ object VaryingModelRepository {
         inbuilt("sableye", ::SableyeModel)
         inbuilt("natu", ::NatuModel)
         inbuilt("xatu", ::XatuModel)
-        inbuilt("wailmer", ::WailmerModel)
         inbuilt("wailord", ::WailordModel)
         inbuilt("murkrow", ::MurkrowModel)
         inbuilt("nacli", :: NacliModel)
@@ -436,7 +426,6 @@ object VaryingModelRepository {
         inbuilt("exploud", :: ExploudModel)
         inbuilt("luvdisc", :: LuvdiscModel)
         inbuilt("cryogonal", :: CryogonalModel)
-        inbuilt("sigilyph", :: SigilyphModel)
         inbuilt("pumpkaboo", :: PumpkabooModel)
         inbuilt("gourgeist", :: GourgeistModel)
         inbuilt("eiscue", :: EiscueModel)
@@ -450,9 +439,7 @@ object VaryingModelRepository {
         inbuilt("shiftry", ::ShiftryModel)
         inbuilt("kricketot", ::KricketotModel)
         inbuilt("kricketune", ::KricketuneModel)
-        inbuilt("heatmor", ::HeatmorModel)
         inbuilt("durant", ::DurantModel)
-        inbuilt("sharpedo", ::SharpedoModel)
         inbuilt("mawile", ::MawileModel)
         inbuilt("walkingwake", ::WalkingwakeModel)
         inbuilt("ironleaves", ::IronleavesModel)
@@ -481,8 +468,6 @@ object VaryingModelRepository {
         inbuilt("spinarak", ::SpinarakModel)
         inbuilt("ariados", ::AriadosModel)
         inbuilt("shuckle", ::ShuckleModel)
-        inbuilt("taillow", ::TaillowModel)
-        inbuilt("swellow", ::SwellowModel)
         inbuilt("mudbray", ::MudbrayModel)
         inbuilt("comfey", ::ComfeyModel)
         inbuilt("tandemaus", ::TandemausModel)
@@ -500,8 +485,6 @@ object VaryingModelRepository {
         inbuilt("gliscor", ::GliscorModel)
         inbuilt("poochyena", ::PoochyenaModel)
         inbuilt("mightyena", ::MightyenaModel)
-        inbuilt("floragato", ::FloragatoModel)
-        inbuilt("meowscarada", ::MeowscaradaModel)
         inbuilt("shroomish", ::ShroomishModel)
         inbuilt("breloom", ::BreloomModel)
         inbuilt("charcadet", ::CharcadetModel)
@@ -528,19 +511,15 @@ object VaryingModelRepository {
         inbuilt("sirfetchd", ::SirfetchdModel)
         inbuilt("rookidee", ::RookideeModel)
         inbuilt("corvisquire", ::CorvisquireModel)
-        inbuilt("corviknight", ::CorviknightModel)
         inbuilt("duskull", ::DuskullModel)
         inbuilt("dusclops", ::DusclopsModel)
         inbuilt("dusknoir", ::DusknoirModel)
         inbuilt("nickit", ::NickitModel)
         inbuilt("thievul", ::ThievulModel)
-        inbuilt("cacnea", ::CacneaModel)
-        inbuilt("cacturne", ::CacturneModel)
         inbuilt("glimmet", ::GlimmetModel)
         inbuilt("glimmora", ::GlimmoraModel)
         inbuilt("bonsly", ::BonslyModel)
         inbuilt("sudowoodo", ::SudowoodoModel)
-        inbuilt("bouffalant", ::BouffalantModel)
         inbuilt("cetoddle", ::CetoddleModel)
         inbuilt("cetitan", ::CetitanModel)
         inbuilt("venipede", ::VenipedeModel)
@@ -549,7 +528,6 @@ object VaryingModelRepository {
         inbuilt("aipom", ::AipomModel)
         inbuilt("ambipom", ::AmbipomModel)
         inbuilt("hoothoot", ::HoothootModel)
-        inbuilt("noctowl", ::NoctowlModel)
         inbuilt("wingull", ::WingullModel)
         inbuilt("pelipper", ::PelipperModel)
         inbuilt("shinx", ::ShinxModel)
@@ -589,7 +567,6 @@ object VaryingModelRepository {
         inbuilt("fuecoco", :: FuecocoModel)
         inbuilt("crocalor", :: CrocalorModel)
         inbuilt("skeledirge", :: SkeledirgeModel)
-        inbuilt("quaxly", :: QuaxlyModel)
         inbuilt("quaxwell", :: QuaxwellModel)
         inbuilt("quaquaval", :: QuaquavalModel)
         inbuilt("snubbull", :: SnubbullModel)
@@ -639,12 +616,6 @@ object VaryingModelRepository {
         inbuilt("kirlia", ::KirliaModel)
         inbuilt("gardevoir", ::GardevoirModel)
         inbuilt("gallade", ::GalladeModel)
-        inbuilt("beldum", ::BeldumModel)
-        inbuilt("metang", ::MetangModel)
-        inbuilt("ursaluna", ::UrsalunaModel)
-        inbuilt("lechonk", ::LechonkModel)
-        inbuilt("oinkologne_male", ::OinkologneMaleModel)
-        inbuilt("oinkologne_female", ::OinkologneFemaleModel)
         inbuilt("pidove", ::PidoveModel)
         inbuilt("tranquill", ::TranquillModel)
         inbuilt("unfezant", ::UnfezantModel)
@@ -652,8 +623,6 @@ object VaryingModelRepository {
         inbuilt("gurdurr", ::GurdurrModel)
         inbuilt("conkeldurr", ::ConkeldurrModel)
         inbuilt("clodsire", ::ClodsireModel)
-        inbuilt("teddiursa", ::TeddiursaModel)
-        inbuilt("ursaring", ::UrsaringModel)
         inbuilt("litwick", ::LitwickModel)
         inbuilt("lampent", ::LampentModel)
         inbuilt("chandelure", ::ChandelureModel)
@@ -689,8 +658,6 @@ object VaryingModelRepository {
         inbuilt("zorua_hisuian", ::ZoruaHisuianModel)
         inbuilt("zoroark", ::ZoroarkModel)
         inbuilt("zoroark_hisuian", ::ZoroarkHisuianModel)
-        inbuilt("gossifleur", ::GossifleurModel)
-        inbuilt("eldegoss", ::EldegossModel)
         inbuilt("amaura", ::AmauraModel)
         inbuilt("aurorus", ::AurorusModel)
         inbuilt("voltorb_hisuian", ::VoltorbHisuianModel)
@@ -708,7 +675,6 @@ object VaryingModelRepository {
         inbuilt("darmanitan", ::DarmanitanModel)
         inbuilt("darmanitan_zen", ::DarmanitanZenModel)
         inbuilt("turtonator", ::TurtonatorModel)
-        inbuilt("stonjourner", ::StonjournerModel)
         inbuilt("cufant", ::CufantModel)
         inbuilt("copperajah", ::CopperajahModel)
         inbuilt("budew", ::BudewModel)
@@ -817,7 +783,7 @@ object VaryingModelRepository {
         for (directory in modelDirectories) {
             MODEL_FACTORIES.forEach { (key, func) ->
                 resourceManager.listResources(directory) { path -> path.endsWith(key) }
-                    .map { func.apply(it.key, it.value) }
+                    .mapNotNull { func.apply(it.key, it.value) }
                     .forEach {
                         texturedModels[it.first] = it.second
                         models++
@@ -887,7 +853,7 @@ object VaryingModelRepository {
         return null
     }
 
-    fun registerFactory(id: String, factory: BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>>) {
+    fun registerFactory(id: String, factory: BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?>) {
         MODEL_FACTORIES[id] = factory
     }
 
@@ -895,13 +861,17 @@ object VaryingModelRepository {
         Needs to be java function to work with non kotlin sidemods.
         - Waterpicker
      */
-    private var MODEL_FACTORIES = mutableMapOf<String, BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>>>().also {
-        it[".geo.json"] = BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>> { identifier: ResourceLocation, resource: Resource ->
+    private var MODEL_FACTORIES = mutableMapOf<String, BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?>>().also {
+        it[".geo.json"] = BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?> { identifier: ResourceLocation, resource: Resource ->
             resource.open().use { stream ->
                 val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
                 val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
 
                 val texturedModel = TexturedModel.from(json)
+                if (texturedModel == null) {
+                    LOGGER.warn("Failed to load model file with identifier $identifier You can ignore this (and the above message) if this is not a cobblemon model")
+                    return@BiFunction null
+                }
                 resolvedIdentifier to texturedModel.create().bakeRoot()
             }
         }

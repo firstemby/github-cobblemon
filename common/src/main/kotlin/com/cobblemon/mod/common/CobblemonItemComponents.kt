@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.block.PotComponent
 import com.cobblemon.mod.common.item.components.BaitEffectsComponent
 import com.cobblemon.mod.common.item.components.FlavourComponent
 import com.cobblemon.mod.common.item.components.FoodColourComponent

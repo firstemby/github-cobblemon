@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 917,
   "name": "Tarountula",
   "primaryType": "bug",
@@ -40,6 +41,20 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
+  "baseScale": 0.33,
+  "hitbox": {
+    "width": 0.95,
+    "height": 1.5,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.5,
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [

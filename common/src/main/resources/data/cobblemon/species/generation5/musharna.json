@@ -55,6 +55,9 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "entityInteract": {
+      "avoidedByPhantom": true
     }
   },
   "drops": {

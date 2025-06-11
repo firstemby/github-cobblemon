@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
@@ -69,8 +70,17 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         }
     }
 
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
+        val fluidState = context.level.getFluidState(context.clickedPos)
+        return this.defaultBlockState()
+            .setValue(
+            WATERLOGGED,
+            fluidState.type === Fluids.WATER
+        )
+    }
+
     private fun canGrow(world: LevelReader, pos: BlockPos, state: BlockState): Boolean {
-        return !this.isMaxAge(state) && canSurvive(state, world, pos) && (state.getValue(HALF) == DoubleBlockHalf.UPPER || canGrowInto(world, pos.above()))
+        return !this.isMaxAge(state) && canSurvive(state, world, pos)
     }
 
     private fun canGrowInto(world: LevelReader, pos: BlockPos): Boolean {
@@ -111,14 +121,15 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
-        return if (!canSurvive(state, world, pos)) Blocks.AIR.defaultBlockState() else super.updateShape(
-            state,
-            direction,
-            neighborState,
-            world,
-            pos,
-            neighborPos
-        )
+        val doubleBlockHalf = state.getValue(HALF)
+        return if (direction.axis !== Direction.Axis.Y || doubleBlockHalf == DoubleBlockHalf.LOWER != (direction == Direction.UP) ||
+            neighborState.`is`(this) && neighborState.getValue(HALF) != doubleBlockHalf) {
+            if (doubleBlockHalf == DoubleBlockHalf.LOWER && direction == Direction.DOWN && !state.canSurvive(world, pos))
+                Blocks.AIR.defaultBlockState()
+            else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+        } else {
+            Blocks.AIR.defaultBlockState()
+        }
     }
 
     override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean {
@@ -168,21 +179,27 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     override fun canSurvive(state: BlockState, world: LevelReader, pos: BlockPos): Boolean {
         return when (state.getValue(HALF)) {
             DoubleBlockHalf.LOWER -> {
-                val floor = world.getBlockState(pos.below())
-                val fluidState = world.getFluidState(pos)
+                val floorBlock = pos.below()
+                val floor = world.getBlockState(floorBlock)
 
                 // Check if bottom part is submerged in water
-                val isSubmergedInWater = fluidState.`is`(FluidTags.WATER) && fluidState.isSource
+                val fluidState = world.getFluidState(pos)
+                if (fluidState.`is`(FluidTags.WATER) && fluidState.isSource)
+                    return floor.`is`(CobblemonBlockTags.HEARTY_GRAINS_WATER_PLANTABLE) && canGrowInto(world, pos.above())
 
-                // Check for adjacency to water
-                val isNearWater = BlockPos.betweenClosed(pos.offset(-1, 0, -1), pos.offset(1, 0, 1))
-                    .any { world.getFluidState(it).`is`(FluidTags.WATER) }
+                // check if water is adjacent
+                var waterNearby = false
+                for (i in -1..1) {
+                    for (j in -1..1) {
+                        val fluidState = world.getFluidState(floorBlock.offset(i, 0, j))
+                        if (fluidState.`is`(FluidTags.WATER) && fluidState.isSource) {
+                            waterNearby = true
+                            break
+                        }
+                    }
+                }
 
-                // Check waterlogging state
-                val isWaterlogged = state.getValue(WATERLOGGED)
-
-                // Check for valid soil or survival conditions
-                isSubmergedInWater || isWaterlogged || isNearWater || floor.`is`(CobblemonBlockTags.HEARTY_GRAINS_PLANTABLE) || floor.`is`(Blocks.MUD) || floor.`is`(Blocks.FARMLAND)
+                waterNearby && floor.`is`(CobblemonBlockTags.HEARTY_GRAINS_LAND_PLANTABLE) && canGrowInto(world, pos.above())
             }
             DoubleBlockHalf.UPPER -> {
                 getLowerHalf(world, pos, state) != null

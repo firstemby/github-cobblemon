@@ -10,7 +10,7 @@
     },
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.can_walk",
+      "condition": "!q.entity.is_in_party && (q.entity.behaviour.moving.walk.can_walk || q.entity.behaviour.moving.fly.can_fly)",
       "behaviours": [
         "cobblemon:wanders"
       ]

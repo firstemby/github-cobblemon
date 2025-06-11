@@ -4,6 +4,9 @@
   "profileScale": 0.49,
   "profileTranslation": [0, 0.98, 0],
   "rootBone": "bronzong",
+  "animations": {
+    "cry": "q.bedrock_stateful('bronzong', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "HOVER", "NONE", "PORTRAIT", "PROFILE"],

@@ -21,6 +21,8 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 data class Seasoning(
     val ingredient: RegistryLikeCondition<Item>,
@@ -39,23 +41,23 @@ data class Seasoning(
         val CODEC: Codec<Seasoning> = RecordCodecBuilder.create { builder ->
             builder.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("ingredient").forGetter { it.ingredient },
-                Codec.unboundedMap(Flavour.CODEC, Codec.INT).optionalFieldOf("flavours", null).forGetter { it.flavours },
+                Codec.unboundedMap(Flavour.CODEC, Codec.INT).optionalFieldOf("flavours").forGetter { Optional.ofNullable(it.flavours) },
                 DyeColor.CODEC.fieldOf("colour").forGetter { it.colour },
-                SpawnBait.Effect.CODEC.listOf().optionalFieldOf("baitEffects", null).forGetter { it.baitEffects },
-                Food.CODEC.optionalFieldOf("food", null).forGetter { it.food },
-                SerializableMobEffectInstance.CODEC.listOf().optionalFieldOf("mobEffects", null).forGetter { it.mobEffects }
-            ).apply(builder, ::Seasoning)
+                SpawnBait.Effect.CODEC.listOf().optionalFieldOf("baitEffects").forGetter { Optional.ofNullable(it.baitEffects) },
+                Food.CODEC.optionalFieldOf("food").forGetter { Optional.ofNullable(it.food) },
+                SerializableMobEffectInstance.CODEC.listOf().optionalFieldOf("mobEffects").forGetter { Optional.ofNullable(it.mobEffects) }
+            ).apply(builder) { item, flavours, colour, baitEffects, food, mobEffects ->
+                Seasoning(
+                    item,
+                    flavours.getOrNull(),
+                    colour,
+                    baitEffects.getOrNull(),
+                    food.getOrNull(),
+                    mobEffects.getOrNull()
+                )
+            }
         }
 
         val STREAM_CODEC: StreamCodec<ByteBuf, Seasoning> = ByteBufCodecs.fromCodec(CODEC)
-
-        val BLANK_SEASONING = Seasoning(
-            ingredient = RegistryLikeIdentifierCondition<Item>(cobblemonResource("blank")),
-            flavours = Flavour.entries.associateWith { 0 },
-            colour = DyeColor.WHITE,
-            baitEffects = emptyList(),
-            food = Food(),
-            mobEffects = emptyList()
-        )
     }
 }

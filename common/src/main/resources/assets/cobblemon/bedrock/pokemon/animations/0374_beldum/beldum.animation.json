@@ -11,6 +11,10 @@
 				"body": {
 					"rotation": ["-15+1*math.sin(q.anim_time*90*2-60)", 0, "1*math.sin(q.anim_time*90*0.5-150)"],
 					"position": ["0.5*math.sin(q.anim_time*90*0.5)", "0.2*math.sin(q.anim_time*90*2)", 0]
+				},
+				"locator_target": {
+					"rotation": [15, 0, 0],
+					"position": [0, -2, 0]
 				}
 			}
 		},
@@ -25,6 +29,10 @@
 				"body": {
 					"rotation": ["-2.5+5*math.sin(q.anim_time*90*2-60)", 0, "0+3*math.sin(q.anim_time*90*3-150)"],
 					"position": ["0.5*math.sin(q.anim_time*90*0.5)", "-1*math.sin(q.anim_time*90*2+60)", "1*math.sin(q.anim_time*90*2)"]
+				},
+				"locator_target": {
+					"rotation": [7.5, 0, 0],
+					"position": [0, -1, -0.5]
 				}
 			}
 		},
@@ -38,6 +46,10 @@
 				"body": {
 					"rotation": ["-15+1*math.sin(q.anim_time*90*2-60)", 0, "1*math.sin(q.anim_time*90*0.5-150)"],
 					"position": ["0.5*math.sin(q.anim_time*90*0.5)", "0.2*math.sin(q.anim_time*90*2)", 0]
+				},
+				"locator_target": {
+					"rotation": [15, 0, 0],
+					"position": [0, -1.5, -0.5]
 				}
 			}
 		},
@@ -52,6 +64,9 @@
 				"body": {
 					"rotation": ["-2.5+5*math.sin(q.anim_time*90*2-60)", 0, "0+3*math.sin(q.anim_time*90*3-150)"],
 					"position": ["0.5*math.sin(q.anim_time*90*0.5)", "-1*math.sin(q.anim_time*90*2+60)", "1*math.sin(q.anim_time*90*2)"]
+				},
+				"locator_target": {
+					"rotation": [7.5, 0, 0]
 				}
 			}
 		},
@@ -66,24 +81,26 @@
 				"body": {
 					"rotation": ["-90+1*math.sin(q.anim_time*90*2-60)", 0, "8*math.sin(q.anim_time*90*0.5-150)"],
 					"position": ["0.5*math.sin(q.anim_time*90*0.5)", "3+0.2*math.sin(q.anim_time*90*2)", 0]
+				},
+				"locator_target": {
+					"rotation": [90, 0, 0],
+					"position": [0, -6, 6]
 				}
 			}
 		},
 		"animation.beldum.blink": {
 			"animation_length": 0.125,
 			"bones": {
-				"eye": {
+				"eye_open": {
 					"position": {
 						"0.0": [0, 0, 0.1],
-						"0.0833": [0, 0, 0.1],
-						"0.125": [0, 0, 0]
+						"0.125": {"pre": [0, 0, 0.1], "post": [0, 0, 0]}
 					}
 				},
 				"eye_closed": {
 					"position": {
 						"0.0": [0, 0, -0.1],
-						"0.0833": [0, 0, -0.1],
-						"0.125": [0, 0, 0]
+						"0.125": {"pre": [0, 0, -0.1], "post": [0, 0, 0]}
 					}
 				}
 			}
@@ -99,11 +116,15 @@
 					"rotation": [-90, 0, 0],
 					"position": [0, -1, 0]
 				},
-				"eye": {
+				"eye_open": {
 					"position": [0, 0, 0.1]
 				},
 				"eye_closed": {
 					"position": [0, 0, -0.1]
+				},
+				"locator_target": {
+					"rotation": [90, 0, 0],
+					"position": [0, -6, 6]
 				}
 			}
 		},
@@ -160,7 +181,10 @@
 						},
 						"1.9583": [0, 0, 360],
 						"2.2083": [0, 0, 360],
-						"2.25": {"pre": [0, 0, 360], "post": [0, 0, 0]}
+						"2.25": {
+							"pre": [0, 0, 360],
+							"post": [0, 0, 0]
+						}
 					}
 				},
 				"head": {
@@ -185,6 +209,55 @@
 						},
 						"2.25": [0, 0, 0]
 					}
+				}
+			}
+		},
+		"animation.beldum.shock": {
+			"loop": true,
+			"bones": {
+				"pupil": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"eye_shine": {
+					"position": [0, 0, 0.1]
+				}
+			}
+		},
+		"animation.beldum.angry": {
+			"loop": true,
+			"bones": {
+				"eye_angry": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.beldum.sad": {
+			"loop": true,
+			"bones": {
+				"eye_sad": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.beldum.happy": {
+			"loop": true,
+			"bones": {
+				"eye_open": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_happy": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.beldum.hurt": {
+			"loop": true,
+			"bones": {
+				"eye_open": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_recoil": {
+					"position": [0, 0, -0.1]
 				}
 			}
 		}

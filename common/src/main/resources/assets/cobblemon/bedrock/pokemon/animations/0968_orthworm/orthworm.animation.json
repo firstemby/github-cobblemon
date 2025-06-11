@@ -329,6 +329,13 @@
 					"rotation": [30, 0, 0]
 				}
 			}
+		},
+		"animation.orthworm.cry": {
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.orthworm.cry"
+				}
+			}
 		}
 	}
 }

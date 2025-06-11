@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 918,
   "name": "Spidops",
   "primaryType": "bug",
@@ -40,6 +41,13 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
+  "baseScale": 0.45,
+  "hitbox": {
+    "width": 1.2,
+    "height": 2.2,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.92,
   "drops": {
     "amount": 4,
     "entries": [

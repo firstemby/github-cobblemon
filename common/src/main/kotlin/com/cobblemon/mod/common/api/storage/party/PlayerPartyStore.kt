@@ -156,6 +156,11 @@ open class PlayerPartyStore(
                 if (pokemon.currentFullness > 0) {
                     pokemon.tickMetabolism()
                 }
+
+                // Interaction Cooldown
+                if (pokemon.interactionCooldowns.any()) {
+                    pokemon.tickInteractionCooldown()
+                }
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases

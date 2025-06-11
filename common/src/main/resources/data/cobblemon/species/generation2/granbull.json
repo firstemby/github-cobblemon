@@ -58,6 +58,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "entityInteract": {
+      "avoidedBySkeleton": true
     }
   },
   "drops": {

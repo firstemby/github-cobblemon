@@ -4,6 +4,9 @@
   "profileScale": 0.50,
   "profileTranslation": [0, 0.95, 0],
   "rootBone": "glalie",
+  "animations": {
+    "cry": "q.bedrock_stateful('glalie', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "HOVER", "NONE", "PORTRAIT", "PROFILE"],

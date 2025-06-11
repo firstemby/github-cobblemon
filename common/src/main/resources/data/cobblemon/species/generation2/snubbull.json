@@ -59,6 +59,9 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "entityInteract": {
+      "avoidedBySkeleton": true
     }
   },
   "drops": {

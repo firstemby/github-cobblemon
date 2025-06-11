@@ -1,0 +1,224 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.poltchageist.ground_idle": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [2.5, 0, -5],
+					"position": [0, 9, 0]
+				},
+				"swirl": {
+					"position": [0, -6, 0]
+				},
+				"swirl2": {
+					"scale": 0.5
+				},
+				"lid": {
+					"position": [0, -10, 0]
+				},
+				"arm_left": {
+					"rotation": [-105.8681, -7.92072, -10.79597],
+					"position": [-3, 5, 2]
+				},
+				"hand_left": {
+					"rotation": [0, 0, -5]
+				},
+				"finger_back_left_rotation": {
+					"rotation": [0, 0, 15]
+				},
+				"finger_back_left2": {
+					"rotation": [0, 0, 30]
+				},
+				"finger_middle_left": {
+					"rotation": [-2.11751, -4.53051, 77.58377]
+				},
+				"finger_middle_left2": {
+					"rotation": [0, 0, 80]
+				},
+				"finger_front_left_rotation": {
+					"rotation": [-22.16579, 2.57593, 59.78216]
+				},
+				"finger_front_left2": {
+					"rotation": [0, 0, 80]
+				},
+				"stick": {
+					"rotation": [180, 0, 0],
+					"position": [-3.5, 4, -1]
+				},
+				"arm_detail_left": {
+					"rotation": [0, -2.5, 10]
+				},
+				"debris_left": {
+					"position": [0, 0, 1]
+				},
+				"debris_left2": {
+					"rotation": [0, -15, 0],
+					"position": [0, 0, 4]
+				},
+				"arm_right": {
+					"rotation": [64.99558, -58.29569, -34.66402],
+					"position": [4, -1, -3]
+				},
+				"hand_right": {
+					"rotation": [0, 0, -5]
+				},
+				"finger_back_right_rotation": {
+					"rotation": [0, 0, -12.5]
+				},
+				"finger_back_right2": {
+					"rotation": [0, 0, -30]
+				},
+				"finger_middle_right": {
+					"rotation": [0, 0, -22.5]
+				},
+				"finger_middle_right2": {
+					"rotation": [0, 0, -45]
+				},
+				"finger_front_right_rotation": {
+					"rotation": [0, 0, -25]
+				},
+				"finger_front_right2": {
+					"rotation": [0, 0, -40]
+				},
+				"debris_right": {
+					"position": [0, -1, 0]
+				},
+				"debris_right2": {
+					"position": [0, -1.5, 3]
+				}
+			}
+		},
+		"animation.poltchageist.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eye_open_left": {
+					"position": {
+						"0.0": [0, 0, 0.1],
+						"0.125": [0, 0, 0.1],
+						"0.1667": [0, 0, 0]
+					}
+				},
+				"eye_closed_left": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.125": [0, 0, -0.1],
+						"0.1667": [0, 0, 0]
+					}
+				},
+				"eye_open_right": {
+					"position": {
+						"0.0": [0, 0, 0.1],
+						"0.125": [0, 0, 0.1],
+						"0.1667": [0, 0, 0]
+					}
+				},
+				"eye_closed_right": {
+					"position": {
+						"0.0": [0, 0, -0.1],
+						"0.125": [0, 0, -0.1],
+						"0.1667": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.poltchageist.shock": {
+			"loop": true,
+			"bones": {
+				"eye_shock_left": {
+					"position": [0, 0, -0.1]
+				},
+				"pupil_left": {
+					"position": [0, 0, 0.1]
+				},
+				"pupil_right": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_open": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_shock_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.poltchageist.angry": {
+			"loop": true,
+			"bones": {
+				"eye_angry_left": {
+					"position": [0, 0, -0.1]
+				},
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_angry_right": {
+					"position": [0, 0, -0.1]
+				},
+				"mouth_sad": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.poltchageist.sad": {
+			"loop": true,
+			"bones": {
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_sad": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_sad_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_sad_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.poltchageist.happy": {
+			"loop": true,
+			"bones": {
+				"eye_open_left": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_open_right": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_happy_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_happy_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.poltchageist.hurt": {
+			"loop": true,
+			"bones": {
+				"eye_open_left": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_open_right": {
+					"position": [0, 0, 0.1]
+				},
+				"eye_recoil_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_recoil_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.poltchageist.cry": {
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.poltchageist.cry"
+				}
+			}
+		}
+	}
+}

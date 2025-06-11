@@ -65,6 +65,7 @@ object CobblemonItemGroups {
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
     @JvmStatic val TOOLS_AND_UTILITIES_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("tools_and_utilities")), this::toolsAndUtilitiesInjections)
     @JvmStatic val INGREDIENTS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("ingredients")), this::ingredientsInjections)
+    @JvmStatic val OP_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("op_blocks")), this::opBlocksInjections)
 
     fun register(consumer: (holder: ItemGroupHolder) -> CreativeModeTab) {
         ALL.forEach(consumer::invoke)
@@ -484,13 +485,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.CLEVER_FEATHER)
         entries.accept(CobblemonItems.SWIFT_FEATHER)
 
-        entries.accept(CobblemonItems.HP_UP)
-        entries.accept(CobblemonItems.PROTEIN)
-        entries.accept(CobblemonItems.IRON)
-        entries.accept(CobblemonItems.CALCIUM)
-        entries.accept(CobblemonItems.ZINC)
-        entries.accept(CobblemonItems.CARBOS)
-
         entries.accept(CobblemonItems.HEALTH_MOCHI)
         entries.accept(CobblemonItems.MUSCLE_MOCHI)
         entries.accept(CobblemonItems.RESIST_MOCHI)
@@ -499,8 +493,15 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.SWIFT_MOCHI)
         entries.accept(CobblemonItems.FRESH_START_MOCHI)
 
+        entries.accept(CobblemonItems.HP_UP)
+        entries.accept(CobblemonItems.PROTEIN)
+        entries.accept(CobblemonItems.IRON)
+        entries.accept(CobblemonItems.CALCIUM)
+        entries.accept(CobblemonItems.ZINC)
+        entries.accept(CobblemonItems.CARBOS)
         entries.accept(CobblemonItems.PP_UP)
         entries.accept(CobblemonItems.PP_MAX)
+
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_XS)
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_S)
         entries.accept(CobblemonItems.EXPERIENCE_CANDY_M)
@@ -802,6 +803,8 @@ object CobblemonItemGroups {
     private fun toolsAndUtilitiesInjections(injector: Injector) {
         injector.putAfter(CobblemonItems.APRICORN_BOAT, Items.BAMBOO_CHEST_RAFT)
         injector.putAfter(CobblemonItems.APRICORN_CHEST_BOAT, CobblemonItems.APRICORN_BOAT)
+        injector.putAfter(CobblemonItems.SACCHARINE_BOAT, CobblemonItems.APRICORN_CHEST_BOAT)
+        injector.putAfter(CobblemonItems.SACCHARINE_CHEST_BOAT, CobblemonItems.SACCHARINE_BOAT)
     }
 
     private fun ingredientsInjections(injector: Injector) {
@@ -814,6 +817,10 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.AUTOMATON_ARMOR_TRIM_SMITHING_TEMPLATE, Items.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
         injector.putAfter(CobblemonItems.POKEROD_SMITHING_TEMPLATE, Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+    }
+
+    private fun opBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.NPC_EDITOR)
     }
 
     /**

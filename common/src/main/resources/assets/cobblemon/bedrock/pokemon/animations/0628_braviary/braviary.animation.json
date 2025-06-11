@@ -487,6 +487,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.braviary.cry"
+				}
 			}
 		},
 		"animation.braviary.pose": {

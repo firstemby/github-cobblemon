@@ -171,30 +171,6 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 && world.getBlockState(pos.below(1)).isPathfindable(PathComputationType.AIR)
                 && world.getBlockState(pos.below(2)).isPathfindable(PathComputationType.AIR)
 
-    override fun tick() {
-        super.tick()
-//        val currentPath = getCurrentPath()
-//        val node = if (currentPath == null || currentPath.isFinished) null else currentPath.lastNode
-//
-//        val isFlying = pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)
-//        val canWalk = pokemonEntity.behaviour.moving.walk.canWalk
-//        val canFly = pokemonEntity.behaviour.moving.fly.canFly
-//        if (node != null) {
-//            if (node.type == PathNodeType.OPEN) {
-//                val canFly = moving.fly.canFly
-//                if (canFly && !pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
-//                    pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-//                }
-//            } else if (node.type != PathNodeType.OPEN && isFlying && canWalk) {
-//                pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
-//            }
-//        } else if (!isFlying && canFly && isAirborne(pokemonEntity.world, pokemonEntity.blockPos)) {
-//            pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
-//        } else if (isFlying && canWalk && !pokemonEntity.world.getBlockState(pokemonEntity.blockPos).canPathfindThrough(pokemonEntity.world, pokemonEntity.blockPos.below(), NavigationType.LAND)) {
-//            pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
-//        }
-    }
-
     fun findPath(target: BlockPos, distance: Int): Path? = createPath(ImmutableSet.of(target), 8, false, distance)
 
     override fun createPath(target: BlockPos, distance: Int): Path? {

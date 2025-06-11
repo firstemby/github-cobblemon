@@ -42,9 +42,6 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "features": [
-    "milkable"
-  ],
   "baseScale": 0.75,
   "hitbox": {
     "width": 1.1,

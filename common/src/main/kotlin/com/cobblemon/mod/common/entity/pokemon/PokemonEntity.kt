@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
+import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addLivingEntityFunctions
@@ -104,6 +105,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
+import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
@@ -158,6 +160,7 @@ import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.ShoulderRidingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeItem
 import net.minecraft.world.item.ItemStack
@@ -482,9 +485,9 @@ open class PokemonEntity(
 //        val targetPos = node?.blockPos
 //        if (targetPos == null || world.getBlockState(targetPos.up()).isAir) {
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
-            behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
+            exposedForm.behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
         } else if (state.`is`(FluidTags.LAVA) && !isEyeInFluid(FluidTags.LAVA)) {
-            behaviour.moving.swim.canWalkOnLava
+            exposedForm.behaviour.moving.swim.canWalkOnLava
         } else {
             super.canStandOnFluid(state)
         }
@@ -539,14 +542,20 @@ open class PokemonEntity(
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
             // Clients also don't seem to have correct info about behavior
-            if (!level().isClientSide && ticksLived > 5 && platform == PlatformType.NONE
-                && ownerUUID != null
-                && isInWater && !isUnderWater
-                && !exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater
-                && !getBehaviourFlag(PokemonBehaviourFlag.FLYING)
-            ) {
-                platform = PlatformType.getPlatformTypeForPokemon((exposedForm))
+            if(!level().isClientSide && ticksLived > 5) {
+                if (platform == PlatformType.NONE
+                        && ownerUUID != null
+                        && isInWater && !isUnderWater
+                        && !exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater
+                        && !getBehaviourFlag(PokemonBehaviourFlag.FLYING)
+                ) {
+                    platform = PlatformType.getPlatformTypeForPokemon((exposedForm))
+                } else if (platform != PlatformType.NONE && onGround()) {
+                    // If the pokemon is on a non-fluid surface, remove the platform.
+                    platform = PlatformType.NONE
+                }
             }
+
         } else {
             // Battle clone destruction
             if (this.beamMode == 0 && this.isBattleClone()) {
@@ -997,13 +1006,6 @@ open class PokemonEntity(
                 this.gameEvent(GameEvent.SHEAR, player)
                 itemStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
                 return InteractionResult.SUCCESS
-            } else if (itemStack.`is`(Items.BUCKET)) {
-                if (pokemon.aspects.any { it.contains(DataKeys.CAN_BE_MILKED) }) {
-                    player.playSound(SoundEvents.GOAT_MILK, 1.0f, 1.0f)
-                    val milkBucket = ItemUtils.createFilledResult(itemStack, player, Items.MILK_BUCKET.defaultInstance)
-                    player.setItemInHand(hand, milkBucket)
-                    return InteractionResult.sidedSuccess(level().isClientSide)
-                }
             } else if (itemStack.`is`(Items.BOWL)) {
                 if (pokemon.aspects.any { it.contains("mooshtank") }) {
                     player.playSound(SoundEvents.MOOSHROOM_MILK, 1.0f, 1.0f)
@@ -1236,53 +1238,66 @@ open class PokemonEntity(
 
             val bagItemLike = BagItems.getConvertibleForStack(stack) ?: return false
 
-            val battlePokemon =
-                battle.actors.flatMap { it.pokemonList }.find { it.effectedPokemon.uuid == pokemon.uuid }
+            val battlePokemon = battle.actors
+                    .flatMap { it.pokemonList }
+                    .find { it.effectedPokemon.uuid == pokemon.uuid }
                     ?: return false // Shouldn't be possible but anyway
+
             if (battlePokemon.actor.getSide().actors.none { it.isForPlayer(player) }) {
                 return true
             }
 
             return bagItemLike.handleInteraction(player, battlePokemon, stack)
         }
+
         if (player !is ServerPlayer || this.isBusy) {
             return false
         }
 
-        // Check evolution item interaction
+        val interaction = PokemonInteractions.findInteraction(this)
+
+        if (interaction != null && !pokemon.isOnInteractionCooldown(interaction.grouping)) {
+            interaction.effects.forEach { it.applyEffect(this, player) }
+            pokemon.interactionCooldowns.put(interaction.grouping, runtime.resolveInt(interaction.cooldown))
+            return true
+        }
+
+        // Evolution item logic
         if (pokemon.getOwnerPlayer() == player) {
             val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
             pokemon.lockedEvolutions
-                .filterIsInstance<ItemInteractionEvolution>()
-                .forEach { evolution ->
-                    if (evolution.attemptEvolution(pokemon, context)) {
-                        if (!player.isCreative) {
-                            stack.shrink(1)
+                    .filterIsInstance<ItemInteractionEvolution>()
+                    .forEach { evolution ->
+                        if (evolution.attemptEvolution(pokemon, context)) {
+                            if (!player.isCreative) {
+                                stack.shrink(1)
+                            }
+                            this.level().playSoundServer(
+                                    position = this.position(),
+                                    sound = CobblemonSounds.ITEM_USE,
+                                    volume = 1F,
+                                    pitch = 1F
+                            )
+                            return true
                         }
-                        this.level().playSoundServer(
-                            position = this.position(),
-                            sound = CobblemonSounds.ITEM_USE,
-                            volume = 1F,
-                            pitch = 1F
-                        )
-                        return true
                     }
-                }
         }
 
+        // Fallback to item-defined interaction
         (stack.item as? PokemonEntityInteraction)?.let {
             if (it.onInteraction(player, this, stack)) {
-                it.sound?.let {
+                it.sound?.let { s ->
                     this.level().playSoundServer(
-                        position = this.position(),
-                        sound = it,
-                        volume = 1F,
-                        pitch = 1F
+                            position = this.position(),
+                            sound = s,
+                            volume = 1F,
+                            pitch = 1F
                     )
                 }
                 return true
             }
         }
+
         return false
     }
 
@@ -1437,12 +1452,12 @@ open class PokemonEntity(
         var blockPos = BlockPos(pos.x.toInt(), pos.y.toInt(), pos.z.toInt())
         var blockLookCount = 5
         var foundSurface = false
-        val form = this.exposedForm
+        val exposedForm = this.exposedForm
         var result = pos
         if (this.level().isWaterAt(blockPos)) {
             // look upward for a water surface
             var testPos = blockPos
-            if (!form.behaviour.moving.swim.canBreatheUnderwater || form.behaviour.moving.fly.canFly) {
+            if (!exposedForm.behaviour.moving.swim.canBreatheUnderwater || exposedForm.behaviour.moving.fly.canFly) {
                 // move sendout pos to surface if it's near
                 for (i in 0..blockLookCount) {
                     // Try to find a surface...
@@ -1489,14 +1504,14 @@ open class PokemonEntity(
             }
         }
         if (foundSurface) {
-            val canFly = form.behaviour.moving.fly.canFly
+            val canFly = exposedForm.behaviour.moving.fly.canFly
             if (canFly) {
                 val hasHeadRoom =
                     !collidesWithBlock(Vec3(blockPos.x.toDouble(), (result.y + 1), (blockPos.z).toDouble()))
                 if (hasHeadRoom) {
                     result = Vec3(result.x, result.y + 1.0, result.z)
                 }
-            } else if (form.behaviour.moving.swim.canBreatheUnderwater && !form.behaviour.moving.swim.canWalkOnWater) {
+            } else if (exposedForm.behaviour.moving.swim.canBreatheUnderwater && !exposedForm.behaviour.moving.swim.canWalkOnWater) {
                 // Use half hitbox height for swimmers
                 val halfHeight = getDimensions(this.pose).height / 2.0
                 for (i in 1..halfHeight.toInt()) {
@@ -1509,14 +1524,14 @@ open class PokemonEntity(
                 }
                 result = Vec3(result.x, result.y + halfHeight - halfHeight.toInt(), result.z)
             } else {
-                platform = if (form.behaviour.moving.swim.canWalkOnWater || collidesWithBlock(
+                platform = if (exposedForm.behaviour.moving.swim.canWalkOnWater || collidesWithBlock(
                         Vec3(
                             result.x,
                             result.y,
                             result.z
                         )
                     )
-                ) PlatformType.NONE else PlatformType.getPlatformTypeForPokemon(form)
+                ) PlatformType.NONE else PlatformType.getPlatformTypeForPokemon(exposedForm)
             }
         }
         this.platform = platform
@@ -1706,6 +1721,25 @@ open class PokemonEntity(
 
     override fun isPushable(): Boolean {
         return beamMode != 3 && super.isPushable()
+    }
+
+    // this is only in place to stop crashes when other mods call this method on Pokémon, not used in cobblemon at the time of this writing
+    override fun tame(player: Player) {
+        if (!pokemon.isWild() || !isAlive || ownerUUID != null)
+            return
+        super.tame(player)
+        if (player is ServerPlayer) {
+            val party = player.party()
+            if (party.getFirstAvailablePosition() == null) {
+                discard()
+            }
+            party.add(pokemon)
+            pokemon.state = SentOutState(this)
+        }
+    }
+
+    override fun isTame(): Boolean {
+        return ownerUUID != null || !pokemon.isWild()
     }
 
     /*
@@ -2265,17 +2299,17 @@ open class PokemonEntity(
         return true
     }
 
-    override fun canWalk() = behaviour.moving.walk.canWalk
-    override fun canSwimInWater() = behaviour.moving.swim.canSwimInWater
-    override fun canFly() = behaviour.moving.fly.canFly
-    override fun canSwimInLava() = behaviour.moving.swim.canSwimInLava
-    override fun isOnGround() = onGround()
+    override fun canWalk() = exposedForm.behaviour.moving.walk.canWalk
+    override fun canSwimInWater() = exposedForm.behaviour.moving.swim.canSwimInWater
+    override fun canFly() = exposedForm.behaviour.moving.fly.canFly
+    override fun canSwimInLava() = exposedForm.behaviour.moving.swim.canSwimInLava
+    override fun entityOnGround() = onGround()
 
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
         return if (fluidState.`is`(FluidTags.LAVA)) {
-            behaviour.moving.swim.canBreatheUnderlava
+            exposedForm.behaviour.moving.swim.canBreatheUnderlava
         } else if (fluidState.`is`(FluidTags.WATER)) {
-            behaviour.moving.swim.canBreatheUnderwater
+            exposedForm.behaviour.moving.swim.canBreatheUnderwater
         } else {
             false
         }

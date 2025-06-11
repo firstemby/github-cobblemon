@@ -1,0 +1,83 @@
+{
+    "portraitScale": 1.23,
+    "portraitTranslation": [-0.18,-0.12,0],
+    "profileScale": 0.8,
+    "profileTranslation": [0,0.45,0],
+    "animations": {
+      "faint": "q.bedrock_primary('wailmer', 'faint', q.curve('one'))",
+      "cry": "q.bedrock_stateful('wailmer', 'cry')"
+    },
+    "poses": {
+      "battle-standing": {
+        "poseTypes": [
+          "STAND"
+        ],
+        "isBattle": true,
+        "animations": [
+          "q.bedrock('wailmer', 'ground_idle')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wailmer', 'blink')"
+        ]
+      },
+      "standing": {
+        "poseTypes": [
+          "STAND",
+          "NONE",
+          "PORTRAIT",
+          "PROFILE"
+        ],
+        "isBattle": false,
+        "animations": [
+          "q.bedrock('wailmer', 'ground_idle')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wailmer', 'blink')"
+        ]
+      },
+      "walking": {
+        "poseTypes": [
+          "WALK"
+        ],
+        "animations": [
+          "q.bedrock('wailmer', 'ground_walk')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wailmer', 'blink')"
+        ]
+      },
+      "float": {
+        "poseTypes": [
+          "FLOAT"
+        ],
+        "animations": [
+          "q.bedrock('wailmer', 'water_idle')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wailmer', 'blink')"
+        ]
+      },
+      "swim": {
+        "poseTypes": [
+          "SWIM"
+        ],
+        "animations": [
+          "q.bedrock('wailmer', 'water_swim')"
+        ],
+        "quirks": [
+          "q.bedrock_quirk('wailmer', 'blink')"
+        ]
+      },
+      "sleep": {
+        "poseTypes": [
+            "SLEEP"
+          ],
+          "namedAnimations": {
+          "cry": "q.bedrock_stateful('dummy', 'cry')"
+          },
+          "animations": [
+          "q.bedrock('wailmer', 'sleep')"
+        ]
+      }
+    }
+  }

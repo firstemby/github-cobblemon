@@ -108,6 +108,8 @@ interface TaskConfig {
             cobblemonResource("place_egg_in_nest") to PlaceEggInNestTaskConfig::class.java,
             cobblemonResource("build_nest") to BuildNestTaskConfig::class.java,
             cobblemonResource("hunt_player") to HuntPlayerTaskConfig::class.java,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            cobblemonResource("battle_flight_task") to BattleFlightTaskConfig::class.java
         )
 
         val runtime = MoLangRuntime().setup()

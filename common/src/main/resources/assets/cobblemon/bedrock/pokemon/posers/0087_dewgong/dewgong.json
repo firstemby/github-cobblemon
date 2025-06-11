@@ -1,0 +1,42 @@
+{
+  "portraitScale": 1.71,
+  "portraitTranslation": [ -1.11, 0.88, 0],
+  "profileScale": 0.54,
+  "profileTranslation": [ -0.05, 0.81, 0],
+  "rootBone": "dewgong",
+  "animations": {
+    "cry": "q.bedrock_stateful('dewgong', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('dewgong', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dewgong', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('dewgong', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dewgong', 'blink')"
+      ]
+    }
+  }
+}

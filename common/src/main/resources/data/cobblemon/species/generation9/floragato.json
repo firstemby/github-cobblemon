@@ -58,6 +58,10 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
     }
   },
   "drops": {

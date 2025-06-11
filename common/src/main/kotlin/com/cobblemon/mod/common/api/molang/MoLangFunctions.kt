@@ -75,6 +75,7 @@ import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityP
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
@@ -1102,6 +1103,19 @@ object MoLangFunctions {
             }
             map.put("apply_potential_marks") {
                 return@put DoubleValue(pokemon.applyPotentialMarks())
+            }
+            map.put("hyper_train_iv") { params ->
+                val statId = params.getString(0)
+                val stat = Stats.getStat(statId)
+                val value = params.getIntOrNull(1) ?: IVs.MAX_VALUE
+
+                if (Stats.PERMANENT.contains(stat)) {
+                    pokemon.hyperTrainIV(stat, value)
+                    return@put DoubleValue.ONE
+                } else {
+                    Cobblemon.LOGGER.error("Unknown or non-permanent stat: ${stat.toString()}")
+                    return@put DoubleValue.ZERO
+                }
             }
             map
         }

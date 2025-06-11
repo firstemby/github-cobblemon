@@ -137,6 +137,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.PlainTextContents
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.FluidTags
@@ -235,10 +236,16 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun hyperTrainIV(stat: Stat, value: Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
-        ivs.setHyperTrainedIV(stat, value)
-        if (stat == Stats.HP) {
-            updateHP(quotient)
-        }
+        CobblemonEvents.HYPER_TRAINED_IV_PRE.postThen(
+            event = HyperTrainedIvEvent.Pre(this, stat, value),
+            ifSucceeded = { _ ->
+                ivs.setHyperTrainedIV(stat, value)
+                if (stat == Stats.HP) {
+                    updateHP(quotient)
+                }
+                CobblemonEvents.HYPER_TRAINED_IV_POST.post(HyperTrainedIvEvent.Post(this, stat, value))
+            }
+        )
     }
 
     fun setEV(stat: Stat, value : Int) {
@@ -358,6 +365,8 @@ open class Pokemon : ShowdownIdentifiable {
                 onChange(FullnessUpdatePacket({ this }, it.newFullness))
             }
         }
+
+    var interactionCooldowns: MutableMap<ResourceLocation, Int> = mutableMapOf()
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
@@ -979,6 +988,25 @@ open class Pokemon : ShowdownIdentifiable {
     // for setting the metabolism cycle of a pokemon back to 0 in certain cases
     fun resetMetabolismCycle() {
         this.metabolismCycle = 0
+    }
+
+    // maybe we will have an item that uses this method later, like we will do with breeding cooldowns
+    fun resetInteractionCooldown(group: ResourceLocation) {
+        this.interactionCooldowns.remove(group)
+    }
+
+    open fun tickInteractionCooldown() {
+        this.interactionCooldowns.entries.forEach { (key, value) ->
+            val newValue = value - 1
+            if(newValue <= 0)
+                this.interactionCooldowns.remove(key)
+            else
+                this.interactionCooldowns.put(key, newValue)
+        }
+    }
+
+    fun isOnInteractionCooldown(group: ResourceLocation): Boolean {
+        return this.interactionCooldowns.getOrDefault(group, 0) > 0
     }
 
     /**

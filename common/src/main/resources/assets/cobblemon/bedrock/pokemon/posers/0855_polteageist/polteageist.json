@@ -1,0 +1,46 @@
+{
+  "portraitScale": 2.12,
+  "portraitTranslation": [ -0.29, 1.33, 0],
+  "profileScale": 0.54,
+  "profileTranslation": [ 0.03, 0.96, 0],
+  "rootBone": "polteageist",
+  "animations": {
+    "cry": "q.bedrock_stateful('polteageist', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('polteageist', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('polteageist', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('polteageist', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('polteageist', 'blink')"
+      ]
+    },
+    "sleeping": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('polteageist', 'sleep')"]
+    }
+  }
+}

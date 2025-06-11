@@ -42,6 +42,12 @@
   "catchRate": 6,
   "eggCycles": 50,
   "baseFriendship": 0,
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
+  },
   "moves": [
     "1:spite",
     "1:powdersnow",

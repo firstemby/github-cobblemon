@@ -1063,6 +1063,13 @@
 					"position": [0, 0, "-query.anim_time *90 *0.25"]
 				}
 			}
+		},
+		"animation.kecleon.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.kecleon.cry"
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 702,
   "name": "Dedenne",
   "primaryType": "electric",
@@ -43,10 +44,11 @@
   "catchRate": 180,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "baseScale": 0.35,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 0.9,
     "fixed": false
   },
   "drops": {

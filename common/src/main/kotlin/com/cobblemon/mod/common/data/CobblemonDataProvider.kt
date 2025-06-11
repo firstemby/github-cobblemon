@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
 import com.cobblemon.mod.common.api.habitats.Habitats
+import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
@@ -111,6 +112,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(BreedingRules)
         this.register(Habitats)
         this.register(Seasonings)
+        this.register(PokemonInteractions)
         this.register(SpawnBaitEffects)
         SpawnBait.Effects.setupEffects()
 

@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 380,
   "name": "Latias",
   "primaryType": "dragon",
@@ -42,10 +42,10 @@
   "catchRate": 3,
   "eggCycles": 120,
   "baseFriendship": 90,
-  "baseScale": 1,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 1.7,
     "fixed": false
   },
   "drops": {
@@ -252,35 +252,92 @@
       "battleOnly": true
     }
   ],
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.3
+      },
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "canSwim": true
+      }
+    }
+  },
   "riding": {
     "stats": {
       "SPEED": {
         "ranges": {
+          "LAND": "50-100",
           "AIR": "50-100"
         }
       },
       "ACCELERATION": {
         "ranges": {
+          "LAND": "50-100",
           "AIR": "50-100"
         }
       },
       "SKILL": {
         "ranges": {
+          "LAND": "50-100",
           "AIR": "50-100"
         }
       },
       "JUMP": {
         "ranges": {
+          "LAND": "50-100",
           "AIR": "50-100"
         }
       },
       "STAMINA": {
         "ranges": {
+          "LAND": "50-100",
           "AIR": "50-100"
         }
       }
     },
-    "seats": [],
-    "behaviour": null
+    "behaviour": {
+      "key": "cobblemon:composite",
+      "transitionStrategy": "cobblemon:strategy/run",
+      "defaultBehaviour": {
+        "key": "cobblemon:land/horse",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
+      },
+      "alternateBehaviour": {
+        "key": "cobblemon:air/jet",
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [0, "0.3*q.jump_strength/50", 0]
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ]
   }
 }

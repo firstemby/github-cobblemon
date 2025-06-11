@@ -4,6 +4,9 @@
   "profileScale": 0.7,
   "profileTranslation": [0.09, 0.75, 0],
   "rootBone": "silicobra",
+  "animations": {
+    "cry": "q.bedrock_stateful('silicobra', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
