@@ -295,7 +295,8 @@ object CobblemonClient {
             CobblemonBlocks.CRACKED_POT,
             CobblemonBlocks.GALARICA_CUFF,
             CobblemonBlocks.GALARICA_WREATH,
-            CobblemonBlocks.DESTINY_KNOT
+            CobblemonBlocks.DESTINY_KNOT,
+            CobblemonBlocks.METRONOME
         )
 
         this.createBoatModelLayers()

@@ -46,7 +46,6 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         TEACUP,
         MOSS,
         KNOT,
-        METRONOME,
         GENERIC_7x6,
         GENERIC_8x,
         GENERIC_8x4;
@@ -108,15 +107,6 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
                     Direction.WEST -> KNOT_WEST
                     Direction.EAST -> KNOT_EAST
                     else -> KNOT_NORTH
-                }
-            }
-
-            ItemType.METRONOME -> {
-                when (state.getValue(FACING)) {
-                    Direction.SOUTH -> METRONOME_SOUTH
-                    Direction.WEST -> METRONOME_WEST
-                    Direction.EAST -> METRONOME_EAST
-                    else -> METRONOME_NORTH
                 }
             }
             ItemType.TEACUP -> TEACUP
@@ -205,38 +195,6 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
             Shapes.box(0.40625, 0.125, 0.125, 0.59375, 0.375, 0.25)
-        )
-        private val METRONOME_WEST = Shapes.or(
-            Shapes.box(0.5, 0.0, 0.25, 0.625, 0.25, 0.75),
-            Shapes.box(0.25, 0.0, 0.25, 0.5, 0.375, 0.75),
-            Shapes.box(0.25, 0.375, 0.3125, 0.5, 0.625, 0.6875),
-            Shapes.box(0.25, 0.625, 0.375, 0.5, 0.8125, 0.625),
-            Shapes.box(0.5624, 0.1875, 0.46875, 0.5626, 0.6875, 0.53125),
-            Shapes.box(0.53125, 0.3125, 0.4375, 0.59375, 0.375, 0.5625),
-        )
-        private val METRONOME_EAST = Shapes.or(
-            Shapes.box(0.375, 0.0, 0.25, 0.5, 0.25, 0.75),
-            Shapes.box(0.5, 0.0, 0.25, 0.75, 0.375, 0.75),
-            Shapes.box(0.5, 0.375, 0.3125, 0.75, 0.625, 0.6875),
-            Shapes.box(0.5, 0.625, 0.375, 0.75, 0.8125, 0.625),
-            Shapes.box(0.4374, 0.1875, 0.46875, 0.4376, 0.6875, 0.53125),
-            Shapes.box(0.40625, 0.3125, 0.4375, 0.46875, 0.375, 0.5625)
-        )
-        private val METRONOME_SOUTH = Shapes.or(
-            Shapes.box(0.25, 0.0, 0.375, 0.75, 0.25, 0.5),
-            Shapes.box(0.25, 0.0, 0.5, 0.75, 0.375, 0.75),
-            Shapes.box(0.3125, 0.375, 0.5, 0.6875, 0.625, 0.75),
-            Shapes.box(0.375, 0.625, 0.5, 0.625, 0.8125, 0.75),
-            Shapes.box(0.46875, 0.1875, 0.4374, 0.53125, 0.6875, 0.4376),
-            Shapes.box(0.4375, 0.3125, 0.40625, 0.5625, 0.375, 0.46875)
-        )
-        private val METRONOME_NORTH = Shapes.or(
-            Shapes.box(0.25, 0.0, 0.5, 0.75, 0.25, 0.625),
-            Shapes.box(0.25, 0.0, 0.25, 0.75, 0.375, 0.5),
-            Shapes.box(0.3125, 0.375, 0.25, 0.6875, 0.625, 0.5),
-            Shapes.box(0.375, 0.625, 0.25, 0.625, 0.8125, 0.5),
-            Shapes.box(0.46875, 0.1875, 0.5624, 0.53125, 0.6875, 0.5626),
-            Shapes.box(0.4375, 0.3125, 0.53125, 0.5625, 0.375, 0.59375)
         )
     }
 }

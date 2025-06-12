@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.AttachFace
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
+import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -40,6 +41,10 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
         builder.add(FACING)
         builder.add(FACE)
         builder.add(WATERLOGGED)
+    }
+
+    override fun getFluidState(blockState: BlockState): FluidState? {
+        return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
     }
 
     override fun codec(): MapCodec<GalaricaWreathBlock> {

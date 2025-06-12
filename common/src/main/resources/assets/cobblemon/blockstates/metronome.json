@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=south": {
-      "model": "cobblemon:block/metronome"
-    },
-    "facing=west": {
+    "facing=east,active=false": {
       "model": "cobblemon:block/metronome",
       "y": 90
     },
-    "facing=north": {
+    "facing=east,active=true": {
+      "model": "cobblemon:block/metronome_active",
+      "y": 90
+    },
+    "facing=north,active=false": {
+      "model": "cobblemon:block/metronome"
+    },
+    "facing=north,active=true": {
+      "model": "cobblemon:block/metronome_active"
+    },
+    "facing=south,active=false": {
       "model": "cobblemon:block/metronome",
       "y": 180
     },
-    "facing=east": {
+    "facing=south,active=true": {
+      "model": "cobblemon:block/metronome_active",
+      "y": 180
+    },
+    "facing=west,active=false": {
       "model": "cobblemon:block/metronome",
+      "y": 270
+    },
+    "facing=west,active=true": {
+      "model": "cobblemon:block/metronome_active",
       "y": 270
     }
   }
