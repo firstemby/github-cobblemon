@@ -12,6 +12,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
@@ -45,6 +46,33 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
 
     override fun getFluidState(blockState: BlockState): FluidState? {
         return if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState);
+    }
+
+    //May need some clean up, ended up just copying this straight from the original class so I could inject the waterlogging stuff to make it properly work, but it does look a bit ugly
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
+        val var2 = context.nearestLookingDirections
+        val var3 = var2.size
+        val fluidState = context.level.getFluidState(context.clickedPos)
+
+        for (var4 in 0 until var3) {
+            val direction = var2[var4]
+            var blockState = if (direction.axis === Direction.Axis.Y) {
+                defaultBlockState().setValue(
+                    FACE,
+                    if (direction == Direction.UP) AttachFace.CEILING else AttachFace.FLOOR
+                )
+                    .setValue(FACING, context.horizontalDirection).setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
+            } else {
+                (defaultBlockState().setValue(FACE, AttachFace.WALL) as BlockState).setValue(
+                    FACING,
+                    direction.opposite
+                ).setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
+            }
+            if (blockState.canSurvive(context.level, context.clickedPos)) {
+                return blockState
+            }
+        }
+        return null
     }
 
     override fun codec(): MapCodec<GalaricaWreathBlock> {
