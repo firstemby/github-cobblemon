@@ -6,17 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.block
+package com.cobblemon.mod.common.block.decor
 
-import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.block.MintBlock.MintType.*
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor

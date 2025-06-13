@@ -13,9 +13,12 @@ import com.cobblemon.mod.common.block.*
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.block.DecorativeItemBlock.ItemType
+import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
+import com.cobblemon.mod.common.block.decor.DecorativeItemBlock
+import com.cobblemon.mod.common.block.decor.GalaricaWreathBlock
+import com.cobblemon.mod.common.block.decor.MetronomeBlock
 import com.cobblemon.mod.common.block.general.BaleBlock
 import com.cobblemon.mod.common.block.grower.SaccharineTreeGrower
 import com.cobblemon.mod.common.block.sign.CobblemonHangingSignBlock
@@ -35,10 +38,8 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
@@ -461,33 +462,35 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.DESTROY).strength(0.4f), false))
 
     @JvmField
-    val KINGS_ROCK = create("kings_rock",DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6))
+    val KINGS_ROCK = create("kings_rock",
+        DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6)
+    )
     @JvmField
-    val CHIPPED_POT = create("chipped_pot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
+    val CHIPPED_POT = create("chipped_pot", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
     @JvmField
-    val CRACKED_POT = create("cracked_pot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
+    val CRACKED_POT = create("cracked_pot", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
     @JvmField
-    val MASTERPIECE_TEACUP = create("masterpiece_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
+    val MASTERPIECE_TEACUP = create("masterpiece_teacup", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
-    val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
+    val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
-    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, ItemType.MOSS)) //TODO Determine brightness of 5, 11, or maybe 13
+    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, ItemType.MOSS)) //TODO Determine brightness of 5, 11, or maybe 13
     @JvmField
-    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission(), ItemType.GENERIC_8x4))
+    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission(), ItemType.GENERIC_8x4))
     @JvmField
-    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission()))
+    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission()))
     @JvmField
-    val DESTINY_KNOT = create("destiny_knot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOL).mapColor(MapColor.NONE).noOcclusion(), ItemType.KNOT))
+    val DESTINY_KNOT = create("destiny_knot", DecorativeItemBlock(Properties.of().sound(SoundType.WOOL).mapColor(MapColor.NONE).noOcclusion(), ItemType.KNOT))
     @JvmField
-    val METRONOME = create("metronome", MetronomeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion()))
+    val METRONOME = create("metronome", MetronomeBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion()))
     @JvmField
-    val DAMP_ROCK = create("damp_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val DAMP_ROCK = create("damp_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val HEAT_ROCK = create("heat_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val HEAT_ROCK = create("heat_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val ICY_ROCK = create("icy_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val ICY_ROCK = create("icy_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val SMOOTH_ROCK = create("smooth_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val SMOOTH_ROCK = create("smooth_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))

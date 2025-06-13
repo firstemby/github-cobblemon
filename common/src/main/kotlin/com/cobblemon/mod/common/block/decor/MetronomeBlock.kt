@@ -6,13 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.block
+package com.cobblemon.mod.common.block.decor
 
-import com.cobblemon.mod.common.CobblemonSounds
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -23,7 +20,6 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.block.state.properties.BooleanProperty

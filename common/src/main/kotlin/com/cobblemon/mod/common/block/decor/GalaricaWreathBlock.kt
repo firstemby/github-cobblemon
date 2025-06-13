@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.block
+package com.cobblemon.mod.common.block.decor
 
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -87,7 +87,9 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
     ): VoxelShape {
         val direction = state.getValue(FACING)
         return when (state.getValue(FACE)) {
-            AttachFace.FLOOR -> {FLOOR}
+            AttachFace.FLOOR -> {
+                FLOOR
+            }
 
             AttachFace.WALL -> {
                 when (direction) {
@@ -98,7 +100,11 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
                 }
             }
 
-            AttachFace.CEILING -> return if (direction.axis === Direction.Axis.X) {HANGING_NS} else {HANGING_EW}
+            AttachFace.CEILING -> return if (direction.axis === Direction.Axis.X) {
+                HANGING_NS
+            } else {
+                HANGING_EW
+            }
         }
     }
 

@@ -3506,8 +3506,8 @@
   "tag.item.cobblemon.mochis": "Mochis",
   "tag.item.cobblemon.poke_food": "Poké Foods",
   "tag.item.cobblemon.full_heal_bottles": "Full Heal Bottles",
-  "tag.item.cobblemon.weather_rocks": "Weather Duration-Extending Items",
-
+  "tag.item.cobblemon.held.weather_rocks": "Weather Duration-Extending Items",
+  "tag.item.cobblemon.cobblemon_items_with_block_models": "3D Items in Display Case",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",

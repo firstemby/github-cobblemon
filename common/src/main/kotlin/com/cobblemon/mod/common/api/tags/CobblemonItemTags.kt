@@ -38,7 +38,7 @@ object CobblemonItemTags {
     @JvmField val BLACK_TUMBLESTONES = create("black_tumblestones")
     @JvmField val BOATS = create("boats")
     /** This tag is used for Fossil Machine natural materials */
-    @JvmField val COOKED_MEAT = create("cooked_meat")
+    @JvmField val COBBLEMON_ITEMS_WITH_BLOCK_MODELS = create("cobblemon_items_with_block_models")
     @JvmField val DAWN_STONE_ORES = create("dawn_stone_ores")
     @JvmField val POTTERY_SHERDS = create("decorated_pot_sherds")
     @JvmField val DEEP_SEAS = create("deep_seas")
@@ -72,9 +72,6 @@ object CobblemonItemTags {
     @JvmField val POKEDEX_SCREEN = create("pokedex_screen")
     @JvmField val POKE_FOOD = create("poke_food")
     @JvmField val POTIONS = create("potions")
-    @JvmField val PROTEIN_INGREDIENTS = create("protein_ingredients")
-    /** See [COOKED_MEAT] */
-    @JvmField val RAW_MEAT = create("raw_meat")
     @JvmField val RED_TUMBLESTONE_BRICKS = create("red_tumblestone_bricks")
     @JvmField val RED_TUMBLESTONES = create("red_tumblestones")
     @JvmField val REMEDIES = create("remedies")
