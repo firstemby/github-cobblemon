@@ -1101,13 +1101,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val QUICK_POWDER = heldItem("quick_powder")
     @JvmField
-    val DAMP_ROCK = heldItem("damp_rock")
+    val DAMP_ROCK = blockItem("damp_rock", CobblemonBlocks.DAMP_ROCK)
     @JvmField
-    val HEAT_ROCK = heldItem("heat_rock")
+    val HEAT_ROCK = blockItem("heat_rock", CobblemonBlocks.HEAT_ROCK)
     @JvmField
-    val SMOOTH_ROCK = heldItem("smooth_rock")
+    val SMOOTH_ROCK = blockItem("smooth_rock", CobblemonBlocks.SMOOTH_ROCK)
     @JvmField
-    val ICY_ROCK = heldItem("icy_rock")
+    val ICY_ROCK = blockItem("icy_rock", CobblemonBlocks.ICY_ROCK)
 
     // Mulch
     @JvmField

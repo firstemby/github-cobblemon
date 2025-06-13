@@ -296,7 +296,11 @@ object CobblemonClient {
             CobblemonBlocks.GALARICA_CUFF,
             CobblemonBlocks.GALARICA_WREATH,
             CobblemonBlocks.DESTINY_KNOT,
-            CobblemonBlocks.METRONOME
+            CobblemonBlocks.METRONOME,
+            CobblemonBlocks.DAMP_ROCK,
+            CobblemonBlocks.HEAT_ROCK,
+            CobblemonBlocks.ICY_ROCK,
+            CobblemonBlocks.SMOOTH_ROCK
         )
 
         this.createBoatModelLayers()
