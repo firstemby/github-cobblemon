@@ -60,7 +60,7 @@ class PotionItem(
         }
 
         // Default to standard use when not in battle
-        return InteractionResultHolder.pass(stack)
+        return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 
 
