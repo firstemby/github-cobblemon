@@ -42,6 +42,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
     @Suppress("unused")
     enum class StackableItemType : StringRepresentable {
         UPGRADE,
+        POTION,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -85,6 +86,20 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
                 3 -> UPGRADE_TRIPLE
                 4 -> UPGRADE_QUARTET
                 else -> UPGRADE_SINGLE
+            }
+            StackableItemType.POTION -> return when (state.getValue(ITEMS)) {
+                2 -> when (state.getValue(FACING)) {
+                    Direction.WEST, Direction.EAST -> ITEM_8x16
+                    else -> ITEM_16x8
+                }
+                3 -> when (state.getValue(FACING)) {
+                    Direction.SOUTH -> TRIANGLE_SOUTH
+                    Direction.WEST -> TRIANGLE_WEST
+                    Direction.EAST -> TRIANGLE_EAST
+                    else -> TRIANGLE_NORTH
+                }
+                4 -> ITEM_16xS
+                else -> ITEM_8x
             }
 
             else -> return when (state.getValue(ITEMS)) {
@@ -146,8 +161,30 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         const val MIN_ITEMS: Int = 1
         const val MAX_ITEMS: Int = 4
 
+        //Non-Specific Hitbox Shapes
         val ITEM_8x = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
+        val ITEM_16xS = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)
+        val ITEM_8x16 = Shapes.box(0.25, 0.0, 0.0, 0.75, 0.5, 1.0)
+        val ITEM_16x8 = Shapes.box(0.0, 0.0, 0.25, 1.0, 0.5, 0.75)
 
+        private val TRIANGLE_NORTH = Shapes.or(
+            Shapes.box(0.0, 0.0, 0.5, 1.0, 0.5, 1.0),
+            Shapes.box(0.25, 0.0, 0.0, 0.75, 0.5, 0.5)
+        )
+        private val TRIANGLE_EAST = Shapes.or(
+            Shapes.box(0.0, 0.0, 0.0, 0.5, 0.5, 1.0),
+            Shapes.box(0.5, 0.0, 0.25, 1.0, 0.5, 0.75)
+        )
+        private val TRIANGLE_SOUTH = Shapes.or(
+            Shapes.box(0.0, 0.0, 0.0, 1.0, 0.5, 0.5),
+            Shapes.box(0.25, 0.0, 0.5, 0.75, 0.5, 1.0)
+        )
+        private val TRIANGLE_WEST = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.0, 1.0, 0.5, 1.0),
+            Shapes.box(0.0, 0.0, 0.25, 0.5, 0.5, 0.75)
+        )
+
+        //Specific Hitbox Shapes
         val UPGRADE_SINGLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.125, 0.6875)
         val UPGRADE_DOUBLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.25, 0.6875)
         val UPGRADE_TRIPLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.375, 0.6875)

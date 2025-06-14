@@ -172,11 +172,11 @@ class PotionItem(
 }
 
 val POTION_BLOCKS: Map<PotionType, Block> = mapOf(
-    PotionType.POTION to CobblemonBlocks.POTION_BLOCK,
-    PotionType.SUPER_POTION to CobblemonBlocks.SUPER_POTION_BLOCK,
-    PotionType.HYPER_POTION to CobblemonBlocks.HYPER_POTION_BLOCK,
-    PotionType.MAX_POTION to CobblemonBlocks.MAX_POTION_BLOCK,
-    PotionType.FULL_RESTORE to CobblemonBlocks.FULL_RESTORE_BLOCK
+    PotionType.POTION to CobblemonBlocks.POTION,
+    PotionType.SUPER_POTION to CobblemonBlocks.SUPER_POTION,
+    PotionType.HYPER_POTION to CobblemonBlocks.HYPER_POTION,
+    PotionType.MAX_POTION to CobblemonBlocks.MAX_POTION,
+    PotionType.FULL_RESTORE to CobblemonBlocks.FULL_RESTORE
 )
 
 enum class PotionType(val amountToHeal: () -> ExpressionLike, val curesStatus: Boolean) : BagItem {

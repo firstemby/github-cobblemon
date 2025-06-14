@@ -497,17 +497,19 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val UPGRADE = create("upgrade", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
     @JvmField
     val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
+    @JvmField
+    val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_8x))
 
     @JvmField
-    val POTION_BLOCK = create("potion_block", PotionBlock(CobblemonItems.POTION, Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val POTION = create("potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val SUPER_POTION_BLOCK = create("super_potion_block", PotionBlock(CobblemonItems.SUPER_POTION, Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val SUPER_POTION = create("super_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val HYPER_POTION_BLOCK = create("hyper_potion_block", PotionBlock(CobblemonItems.HYPER_POTION, Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val HYPER_POTION = create("hyper_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val MAX_POTION_BLOCK = create("max_potion_block", PotionBlock(CobblemonItems.MAX_POTION, Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val MAX_POTION = create("max_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val FULL_RESTORE_BLOCK = create("full_restore_block", PotionBlock(CobblemonItems.FULL_RESTORE, Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val FULL_RESTORE = create("full_restore", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     // todo do the rest of the blocks
 
     @JvmField

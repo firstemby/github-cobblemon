@@ -720,7 +720,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val MOOMOO_MILK = noSettingsItem("moomoo_milk")
 
     @JvmField
-    val POTION = create("potion", PotionItem(PotionType.POTION))
+    val POTION = create("potion", PotionItem(PotionType.POTION/*, CobblemonBlocks.POTION*/))
     @JvmField
     val SUPER_POTION = create("super_potion", PotionItem(PotionType.SUPER_POTION))
     @JvmField
@@ -1017,7 +1017,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
     @JvmField
-    val NEVER_MELT_ICE = heldItem("never_melt_ice")
+    val NEVER_MELT_ICE = blockItem("never_melt_ice", CobblemonBlocks.NEVER_MELT_ICE)
     @JvmField
     val POISON_BARB = heldItem("poison_barb")
     @JvmField

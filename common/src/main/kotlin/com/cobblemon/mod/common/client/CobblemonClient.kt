@@ -306,7 +306,8 @@ object CobblemonClient {
             CobblemonBlocks.DAMP_ROCK,
             CobblemonBlocks.HEAT_ROCK,
             CobblemonBlocks.ICY_ROCK,
-            CobblemonBlocks.SMOOTH_ROCK
+            CobblemonBlocks.SMOOTH_ROCK,
+            CobblemonBlocks.NEVER_MELT_ICE
         )
 
         this.createBoatModelLayers()
