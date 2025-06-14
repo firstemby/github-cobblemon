@@ -720,15 +720,15 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val MOOMOO_MILK = noSettingsItem("moomoo_milk")
 
     @JvmField
-    val POTION = create("potion", PotionItem(PotionType.POTION/*, CobblemonBlocks.POTION*/))
+    val POTION = potionItem("potion", PotionType.POTION, CobblemonBlocks.POTION)
     @JvmField
-    val SUPER_POTION = create("super_potion", PotionItem(PotionType.SUPER_POTION))
+    val SUPER_POTION = potionItem("super_potion", PotionType.SUPER_POTION, CobblemonBlocks.SUPER_POTION)
     @JvmField
-    val HYPER_POTION = create("hyper_potion", PotionItem(PotionType.HYPER_POTION))
+    val HYPER_POTION = potionItem("hyper_potion", PotionType.HYPER_POTION, CobblemonBlocks.HYPER_POTION)
     @JvmField
-    val MAX_POTION = create("max_potion", PotionItem(PotionType.MAX_POTION))
+    val MAX_POTION = potionItem("max_potion", PotionType.MAX_POTION, CobblemonBlocks.MAX_POTION)
     @JvmField
-    val FULL_RESTORE = create("full_restore", PotionItem(PotionType.FULL_RESTORE))
+    val FULL_RESTORE = potionItem("full_restore", PotionType.FULL_RESTORE, CobblemonBlocks.FULL_RESTORE)
 
     @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
@@ -1673,6 +1673,27 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         compostable(createdItem, increaseLevelChance)
         return createdItem
     }
+
+    private fun potionItem(name: String, type: PotionType, block: Block): PotionItem {
+        val item = PotionItem(type, block)
+        return create(name, item)
+    }
+
+    // todo I don't think this will work at all since BlockItem and PotionItem are different types of item class types?
+    /*private fun potionItem(
+        name: String,
+        type: PotionType,
+        block: Block
+    ): PotionItem {
+
+        val item = PotionItem(type).also { it.block = block }
+
+        create(name, item)
+
+        create("${name}_block", BlockItem(block, Item.Properties()))
+
+        return item
+    }*/
 
     private fun foodItem(nutrition: Int, saturationModifier: Float): Item {
         return CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
