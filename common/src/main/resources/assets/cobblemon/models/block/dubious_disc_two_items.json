@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:block/upgrade_two_item",
+  "parent": "cobblemon:block/upgrade_two_items",
   "textures": {
 		"0": "cobblemon:block/dubious_disc",
 		"particle": "cobblemon:block/dubious_disc"

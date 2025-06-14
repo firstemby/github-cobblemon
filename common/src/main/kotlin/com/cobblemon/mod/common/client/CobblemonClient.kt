@@ -206,6 +206,12 @@ object CobblemonClient {
         this.implementation.registerBlockRenderType(RenderType.cutoutMipped(), CobblemonBlocks.APRICORN_LEAVES)
 
         this.implementation.registerBlockRenderType(
+            RenderType.translucent(),
+            CobblemonBlocks.UPGRADE,
+            CobblemonBlocks.DUBIOUS_DISC
+        )
+
+        this.implementation.registerBlockRenderType(
             RenderType.cutout(),
             CobblemonBlocks.GILDED_CHEST,
             CobblemonBlocks.FOSSIL_ANALYZER,
