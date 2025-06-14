@@ -327,6 +327,8 @@
 - The format of the `remedies.json` file has changed to allow for individual friendshipDrop amounts per remedy
 - Fixed `entity.find_nearby_block` causing crashes when attempting to use a block tag
 - Spawn Filters can now access `v.spawn.class` to get the identifier of an NPC class for when trying to influence NPC spawns
+- Adds Flows for `STARTER_CHOSEN`, `EV_GAINED`, `POKEMON_RELEASED`, `POKEMON_NICKNAMED`, `HELD_ITEM`, and `TRADE_COMPLETED` events
+- Adds Pokemon functions for `pokeball`, `held_item` and `remove_held_item`
 - Added `pokemon.hyper_train_iv` as an available Molang function.
 
 ## [1.6.1 (January 26th, 2025)](#1-6-1)
