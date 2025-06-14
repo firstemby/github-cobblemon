@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.item.HealingSource
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -76,7 +77,7 @@ class PotionItem(
             val pokemon = target.pokemon
             if (canUseOnPokemon(stack, pokemon)) {
                 val result = applyToPokemon(player, stack, pokemon)
-                if (result.result == InteractionResult.SUCCESS) {
+                if (result?.result == InteractionResult.SUCCESS) {
                     return InteractionResult.SUCCESS
                 }
             }
