@@ -8,7 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.cobblemon.mod.common.util.server
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.item.ItemStack
 
@@ -39,7 +44,19 @@ interface HeldItemEvent {
      *
      * @see [Post]
      */
-    data class Pre(override val pokemon: Pokemon, var receiving: ItemStack, var returning: ItemStack, var decrement: Boolean) : HeldItemEvent, Cancelable()
+    data class Pre(override val pokemon: Pokemon, var receiving: ItemStack, var returning: ItemStack, var decrement: Boolean) : HeldItemEvent, Cancelable() {
+        fun getContext(): MutableMap<String, MoValue> {
+            return mutableMapOf(
+                "pokemon" to pokemon.struct,
+                "receiving" to receiving.asMoLangValue(server()!!.registryAccess()),
+                "returning" to returning.asMoLangValue(server()!!.registryAccess()),
+                "decrement" to DoubleValue(if (decrement) 1.0 else 0.0),
+            )
+        }
+        val functions = moLangFunctionMap(
+            cancelFunc
+        )
+    }
 
     /**
      * Fired at the end of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
@@ -51,6 +68,15 @@ interface HeldItemEvent {
      *
      * @see [Pre]
      */
-    data class Post(override val pokemon: Pokemon, val received: ItemStack, val returned: ItemStack, val decremented: Boolean) : HeldItemEvent
+    data class Post(override val pokemon: Pokemon, val received: ItemStack, val returned: ItemStack, val decremented: Boolean) : HeldItemEvent {
+        fun getContext(): MutableMap<String, MoValue> {
+            return mutableMapOf(
+                "pokemon" to pokemon.struct,
+                "received" to received.asMoLangValue(server()!!.registryAccess()),
+                "returned" to returned.asMoLangValue(server()!!.registryAccess()),
+                "decremented" to DoubleValue(if (decremented) 1.0 else 0.0),
+            )
+        }
+    }
 
 }

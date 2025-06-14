@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/upgrade_four_items",
+  "textures": {
+		"0": "cobblemon:block/dubious_disc",
+		"particle": "cobblemon:block/dubious_disc"
+  }
+}

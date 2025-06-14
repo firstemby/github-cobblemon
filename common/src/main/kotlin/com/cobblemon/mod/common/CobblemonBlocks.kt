@@ -13,10 +13,12 @@ import com.cobblemon.mod.common.block.*
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
-import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
 import com.cobblemon.mod.common.block.decor.DecorativeItemBlock
+import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
+import com.cobblemon.mod.common.block.decor.StackableItemBlock
+import com.cobblemon.mod.common.block.decor.StackableItemBlock.StackableItemType
 import com.cobblemon.mod.common.block.decor.GalaricaWreathBlock
 import com.cobblemon.mod.common.block.decor.MetronomeBlock
 import com.cobblemon.mod.common.block.general.BaleBlock
@@ -491,6 +493,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val ICY_ROCK = create("icy_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
     val SMOOTH_ROCK = create("smooth_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val UPGRADE = create("upgrade", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
+    @JvmField
+    val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))

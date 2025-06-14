@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
  */
 object FlowHandler {
     fun setup() {
+        CobblemonEvents.STARTER_CHOSEN.subscribe { CobblemonFlows.run(cobblemonResource("starter_chosen"), it.getContext(), it.functions) }
         CobblemonEvents.POKEMON_CAPTURED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_captured"), it.context) }
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_entity_spawn"), mutableMapOf<String, MoValue>("pokemon_entity" to it.entity.asMoLangValue())) }
         CobblemonEvents.BATTLE_VICTORY.subscribe { CobblemonFlows.run(cobblemonResource("battle_victory"), it.context) }
@@ -39,14 +40,22 @@ object FlowHandler {
         CobblemonEvents.LEVEL_UP_EVENT.subscribe { CobblemonFlows.run(cobblemonResource("level_up"), it.context, it.functions) }
         CobblemonEvents.HYPER_TRAINED_IV_PRE.subscribe { CobblemonFlows.run(cobblemonResource("hyper_trained_iv_pre"), it.context, it.functions) }
         CobblemonEvents.HYPER_TRAINED_IV_POST.subscribe { CobblemonFlows.run(cobblemonResource("hyper_trained_iv_post"), it.context) }
+        CobblemonEvents.EV_GAINED_EVENT_PRE.subscribe { CobblemonFlows.run(cobblemonResource("ev_gained_pre"), it.context, it.functions) }
+        CobblemonEvents.EV_GAINED_EVENT_POST.subscribe { CobblemonFlows.run(cobblemonResource("ev_gained_post"), it.context) }
         CobblemonEvents.POKEMON_FAINTED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_fainted"), it.context) }
         CobblemonEvents.POKEMON_GAINED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_gained"), it.context, it.functions) }
+        CobblemonEvents.POKEMON_RELEASED_EVENT_PRE.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_released_pre"), it.getContext(), it.functions) }
+        CobblemonEvents.POKEMON_RELEASED_EVENT_POST.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_released_post"), it.getContext()) }
         CobblemonEvents.POKE_BALL_CAPTURE_CALCULATED.subscribe { CobblemonFlows.run(cobblemonResource("poke_ball_capture_calculated"), it.context, it.functions) }
         CobblemonEvents.EVOLUTION_TESTED.subscribe { CobblemonFlows.run(cobblemonResource("evolution_tested"), it.context, it.functions) }
         CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { CobblemonFlows.run(cobblemonResource("evolution_accepted"), it.context, it.functions) }
         CobblemonEvents.EVOLUTION_COMPLETE.subscribe { CobblemonFlows.run(cobblemonResource("evolution_completed"), it.context) }
+        CobblemonEvents.POKEMON_NICKNAMED.subscribe { CobblemonFlows.run(cobblemonResource("pokemon_nicknamed"), it.getContext()) }
+        CobblemonEvents.HELD_ITEM_PRE.subscribe { CobblemonFlows.run(cobblemonResource("held_item_pre"), it.getContext(), it.functions) }
+        CobblemonEvents.HELD_ITEM_POST.subscribe { CobblemonFlows.run(cobblemonResource("held_item_post"), it.getContext()) }
         CobblemonEvents.FOSSIL_REVIVED.subscribe { CobblemonFlows.run(cobblemonResource("fossil_revived"), it.context) }
         CobblemonEvents.BOBBER_SPAWN_POKEMON_POST.subscribe { CobblemonFlows.run(cobblemonResource("bobber_spawn_pokemon_post"), it.context) }
+        CobblemonEvents.TRADE_COMPLETED.subscribe { CobblemonFlows.run(cobblemonResource("trade_completed"), it.context) }
         CobblemonEvents.WALLPAPER_UNLOCKED_EVENT.subscribe { CobblemonFlows.run(cobblemonResource("wallpaper_unlocked"), it.context, it.functions) }
 
         PlatformEvents.SERVER_PLAYER_LOGIN.subscribe(priority = Priority.LOW) { CobblemonFlows.run(cobblemonResource("player_logged_in"), it.context) }
