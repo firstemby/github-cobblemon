@@ -23,7 +23,7 @@
 		{
 			"name": "case_int",
 			"from": [11, 2, 11],
-			"to": [5, 0, 5],
+			"to": [5, 0.01, 5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 5]},
 			"faces": {
 				"north": {"uv": [13, 2, 16, 4], "rotation": 180, "texture": "#0"},
