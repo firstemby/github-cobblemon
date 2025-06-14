@@ -33,6 +33,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
@@ -53,14 +54,36 @@ class PotionItem(
         if (user is ServerPlayer) {
             // Only invoke PokemonSelectingItem menu if we are in battle
             if (user.getBattleState() != null) {
-                val result = (this as PokemonSelectingItem).use(user, stack)
+                val result = use(user, stack)
                 if (result.result != InteractionResult.PASS)
                     return result
             }
         }
 
         // Default to standard use when not in battle
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+        return InteractionResultHolder.pass(stack)
+    }
+
+    override fun interactLivingEntity(
+        stack: ItemStack,
+        player: Player,
+        target: LivingEntity,
+        hand: InteractionHand
+    ): InteractionResult {
+        if (player.level().isClientSide) return InteractionResult.PASS
+
+        if (player is ServerPlayer && target is PokemonEntity) {
+            val pokemon = target.pokemon
+            if (canUseOnPokemon(stack, pokemon)) {
+                val result = applyToPokemon(player, stack, pokemon)
+                if (result.result == InteractionResult.SUCCESS) {
+                    return InteractionResult.SUCCESS
+                }
+            }
+            return InteractionResult.FAIL
+        }
+
+        return InteractionResult.PASS
     }
 
 
