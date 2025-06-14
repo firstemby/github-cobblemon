@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.genericRuntime
+import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.resolveInt
 import java.lang.Integer.min
@@ -30,6 +31,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
@@ -46,11 +48,21 @@ class PotionItem(
     override val bagItem = type
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        val stack = user.getItemInHand(hand)
+
         if (user is ServerPlayer) {
-            return use(user, user.getItemInHand(hand))
+            // Only invoke PokemonSelectingItem menu if we are in battle
+            if (user.getBattleState() != null) {
+                val result = (this as PokemonSelectingItem).use(user, stack)
+                if (result.result != InteractionResult.PASS)
+                    return result
+            }
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+
+        // Default to standard use when not in battle
+        return InteractionResultHolder.pass(stack)
     }
+
 
     override fun applyToPokemon(
         player: ServerPlayer,
