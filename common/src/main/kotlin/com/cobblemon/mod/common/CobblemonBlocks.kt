@@ -499,8 +499,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
 
     @JvmField
-    val POTION_BLOCK = create("potion_block", PotionBlock(CobblemonItems.POTION, Properties.of().mapColor(MapColor.COLOR_PURPLE)))
-    // todo do the rest of the blocks
+    val POTION = create("potion", DecorativeItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val SUPER_POTION = create("super_potion", DecorativeItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val HYPER_POTION = create("hyper_potion", DecorativeItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val MAX_POTION = create("max_potion", DecorativeItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val FULL_RESTORE = create("full_restore", DecorativeItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))

@@ -47,15 +47,14 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
 class PotionItem(
-    val type: PotionType
-) : CobblemonItem(Properties().apply {
+    val type: PotionType,
+    block: Block
+) : BlockItem(block, Properties().apply {
     when (type.name) {
-        PotionType.MAX_POTION.name -> rarity(Rarity.UNCOMMON)
+        PotionType.MAX_POTION.name,
         PotionType.FULL_RESTORE.name -> rarity(Rarity.UNCOMMON)
     }
 }), PokemonSelectingItem, HealingSource {
-
-    lateinit var blockItem: BlockItem
 
     override val bagItem = type
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
@@ -71,51 +70,11 @@ class PotionItem(
             }
         }
 
-        if (!world.isClientSide && user is ServerPlayer) {
-            val hit = raycastForBlock(user)
-            if (hit != null) {
-                val targetBlock = POTION_BLOCKS[type] ?: return InteractionResultHolder.fail(stack)
-                val blockItem = BlockItem(targetBlock, Item.Properties())
-
-                val context = CustomUseOnContext(world, user, hand, stack, hit)
-                val result = blockItem.useOn(context)
-
-                if (result.consumesAction()) {
-                    if (!user.isCreative) {
-                        stack.shrink(1)
-                        user.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
-                    }
-                    return InteractionResultHolder.success(stack)
-                }
-
-                return InteractionResultHolder(result, stack)
-            }
-        }
+        return super<BlockItem>.use(world, user, hand)
 
         // Default to standard use when not in battle
         return InteractionResultHolder.pass(stack)
     }
-
-    class CustomUseOnContext(
-        level: Level,
-        player: Player,
-        hand: InteractionHand,
-        stack: ItemStack,
-        hitResult: BlockHitResult
-    ) : UseOnContext(level, player, hand, stack, hitResult)
-
-    fun raycastForBlock(player: Player): BlockHitResult? {
-        val reach = 5.0
-        val eyePos = player.eyePosition
-        val lookVec = player.lookAngle
-        val end = eyePos.add(lookVec.scale(reach))
-
-        val result = player.level().clip(
-            ClipContext(eyePos, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player)
-        )
-        return if (result.type == HitResult.Type.BLOCK) result as BlockHitResult else null
-    }
-
 
     override fun interactLivingEntity(
         stack: ItemStack,
@@ -170,14 +129,6 @@ class PotionItem(
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
     }
 }
-
-val POTION_BLOCKS: Map<PotionType, Block> = mapOf(
-    PotionType.POTION to CobblemonBlocks.POTION_BLOCK,
-    PotionType.SUPER_POTION to CobblemonBlocks.SUPER_POTION_BLOCK,
-    PotionType.HYPER_POTION to CobblemonBlocks.HYPER_POTION_BLOCK,
-    PotionType.MAX_POTION to CobblemonBlocks.MAX_POTION_BLOCK,
-    PotionType.FULL_RESTORE to CobblemonBlocks.FULL_RESTORE_BLOCK
-)
 
 enum class PotionType(val amountToHeal: () -> ExpressionLike, val curesStatus: Boolean) : BagItem {
     POTION({ com.cobblemon.mod.common.CobblemonMechanics.potions.potionRestoreAmount }, false) {
