@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "cobblemon:block/peat_block"
+    },
+	"facing=down": {
+      "model": "cobblemon:block/peat_block",
+      "x": 180,
+      "uvlock": false
+    },
+	"facing=south": {
+      "model": "cobblemon:block/peat_block",
+      "x": 270,
+      "uvlock": false
+    },
+    "facing=west": {
+      "model": "cobblemon:block/peat_block",
+	  "x": 270,
+      "y": 90,
+      "uvlock": false
+    },
+    "facing=north": {
+      "model": "cobblemon:block/peat_block",
+      "x": 90,
+      "uvlock": false
+    },
+    "facing=east": {
+      "model": "cobblemon:block/peat_block",
+      "x": 90,
+	  "y": 90,
+      "uvlock": false
+    }
+  }
+}

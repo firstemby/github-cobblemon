@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/unremarkable_teacup"
+    },
+    "facing=west": {
+      "model": "cobblemon:block/unremarkable_teacup",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/unremarkable_teacup",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "cobblemon:block/unremarkable_teacup",
+      "y": 270
+    }
+  }
+}

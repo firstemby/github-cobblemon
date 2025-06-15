@@ -10,25 +10,24 @@ package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.block.*
-import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.LecternBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
+import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
-import com.cobblemon.mod.common.block.decor.DecorativeItemBlock
+import com.cobblemon.mod.common.block.decor.*
 import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
-import com.cobblemon.mod.common.block.decor.StackableItemBlock
 import com.cobblemon.mod.common.block.decor.StackableItemBlock.StackableItemType
-import com.cobblemon.mod.common.block.decor.GalaricaWreathBlock
-import com.cobblemon.mod.common.block.decor.MetronomeBlock
+import com.cobblemon.mod.common.block.decor.WallAttachedDecorativeItemBlock.WallItemType
 import com.cobblemon.mod.common.block.general.BaleBlock
+import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
+import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
+import com.cobblemon.mod.common.block.general.SixDirectionalBlock
 import com.cobblemon.mod.common.block.grower.SaccharineTreeGrower
 import com.cobblemon.mod.common.block.sign.CobblemonHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallSignBlock
-import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
-import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
 import com.cobblemon.mod.common.mixin.invoker.*
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -464,9 +463,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.DESTROY).strength(0.4f), false))
 
     @JvmField
-    val KINGS_ROCK = create("kings_rock",
-        DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6)
-    )
+    val KINGS_ROCK = create("kings_rock", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6))
     @JvmField
     val CHIPPED_POT = create("chipped_pot", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
     @JvmField
@@ -499,6 +496,12 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
     @JvmField
     val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_7x6))
+    @JvmField
+    val PEAT_BLOCK = create("peat_block", SixDirectionalBlock(Properties.of().mapColor(MapColor.CLAY).strength(0.5f).sound(SoundType.MUD)))
+    @JvmField
+    val CLEANSE_TAG = create("cleanse_tag", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.TAG))
+    @JvmField
+    val SPELL_TAG = create("spell_tag", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.TAG))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

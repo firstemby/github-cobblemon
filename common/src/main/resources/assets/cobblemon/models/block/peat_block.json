@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "cobblemon:block/peat_block_top",
+    "side": "cobblemon:block/peat_block_side",
+    "bottom": "cobblemon:block/peat_block_bottom"
+  }
+}

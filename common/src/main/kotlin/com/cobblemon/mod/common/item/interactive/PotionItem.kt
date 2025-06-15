@@ -29,16 +29,12 @@ import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.resolveInt
 import java.lang.Integer.min
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.BlockItem
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.Rarity
+import net.minecraft.world.item.*
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
@@ -49,7 +45,7 @@ import net.minecraft.world.phys.HitResult
 class PotionItem(
     val type: PotionType,
     block: Block
-) : BlockItem(block, Properties().apply {
+) : ItemNameBlockItem(block, Properties().apply {
     when (type.name) {
         PotionType.MAX_POTION.name,
         PotionType.FULL_RESTORE.name -> rarity(Rarity.UNCOMMON)
@@ -70,7 +66,7 @@ class PotionItem(
             }
         }
 
-        return super<BlockItem>.use(world, user, hand)
+        return super<ItemNameBlockItem>.use(world, user, hand)
 
         // Default to standard use when not in battle
         return InteractionResultHolder.pass(stack)
