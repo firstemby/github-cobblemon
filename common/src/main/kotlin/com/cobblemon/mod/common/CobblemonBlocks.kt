@@ -498,7 +498,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
     @JvmField
-    val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_8x))
+    val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_7x6))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

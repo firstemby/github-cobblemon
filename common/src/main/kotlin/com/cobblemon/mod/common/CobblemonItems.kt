@@ -926,6 +926,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
     @JvmField val GALARICA_WREATH = wearableItem("galarica_wreath", block = CobblemonBlocks.GALARICA_WREATH)
     @JvmField val SHELL_HELMET = wearableItem("shell_helmet")
+    @JvmField val NEVER_MELT_ICE = wearableItem("never_melt_ice", block = CobblemonBlocks.NEVER_MELT_ICE)
 
     // Held Items
     @JvmField
@@ -1016,8 +1017,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
-    @JvmField
-    val NEVER_MELT_ICE = blockItem("never_melt_ice", CobblemonBlocks.NEVER_MELT_ICE)
     @JvmField
     val POISON_BARB = heldItem("poison_barb")
     @JvmField

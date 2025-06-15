@@ -3,12 +3,13 @@
     "values": [
         "#minecraft:banners",
         "cobblemon:rocky_helmet",
+        "cobblemon:shell_helmet",
         "cobblemon:exp_share",
         "cobblemon:kings_rock",
+		"cobblemon:never_melt_ice",
+        "cobblemon:galarica_wreath",
         "cobblemon:choice_band",
         "cobblemon:focus_band",
-        "cobblemon:muscle_band",
-        "cobblemon:galarica_wreath",
-        "cobblemon:shell_helmet"
+        "cobblemon:muscle_band"
     ]
 }
