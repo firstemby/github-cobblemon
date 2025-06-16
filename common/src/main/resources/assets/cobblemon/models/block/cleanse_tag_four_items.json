@@ -1,0 +1,79 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"2": "cobblemon:block/cleanse_tag",
+		"particle": "cobblemon:block/cleanse_tag"
+	},
+	"elements": [
+		{
+			"from": [6, 4, 15.975],
+			"to": [10, 11, 15.975],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 16]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 14], "texture": "#2"},
+				"south": {"uv": [8, 0, 16, 14], "texture": "#2", "cullface": "south"}
+			}
+		},
+		{
+			"from": [10, 1, 15.975],
+			"to": [14, 8, 15.975],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [12, 8, 16]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 14], "texture": "#2"},
+				"south": {"uv": [8, 0, 16, 14], "texture": "#2", "cullface": "south"}
+			}
+		},
+		{
+			"from": [0, 8, 15.975],
+			"to": [4, 15, 15.975],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 15, 16]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 14], "texture": "#2"},
+				"south": {"uv": [8, 0, 16, 14], "texture": "#2", "cullface": "south"}
+			}
+		},
+		{
+			"from": [10, 9, 15.975],
+			"to": [14, 16, 15.975],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 16, 16]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 14], "texture": "#2"},
+				"south": {"uv": [8, 0, 16, 14], "texture": "#2", "cullface": "south"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"head": {
+			"rotation": [5, 0, 0],
+			"translation": [0, -1, -19.525],
+			"scale": [1.6, 1.6, 1.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "tag_1",
+			"origin": [0, 0, 8],
+			"color": 0,
+			"children": [0]
+		},
+		{
+			"name": "tag_2",
+			"origin": [0, 0, 8],
+			"color": 0,
+			"children": [1]
+		},
+		{
+			"name": "tag_3",
+			"origin": [0, 0, 8],
+			"color": 0,
+			"children": [2]
+		},
+		{
+			"name": "tag_4",
+			"origin": [0, 0, 8],
+			"color": 0,
+			"children": [3]
+		}
+	]
+}

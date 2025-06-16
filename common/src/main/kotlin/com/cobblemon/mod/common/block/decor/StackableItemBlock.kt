@@ -158,7 +158,6 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         ).apply(it, ::StackableItemBlock) }
 
         val ITEMS = IntegerProperty.create("items", 1, 4)
-        const val MIN_ITEMS: Int = 1
         const val MAX_ITEMS: Int = 4
 
         //Non-Specific Hitbox Shapes

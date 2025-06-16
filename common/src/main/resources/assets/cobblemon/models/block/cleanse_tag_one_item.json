@@ -1,0 +1,34 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"2": "cobblemon:block/cleanse_tag",
+		"particle": "cobblemon:block/cleanse_tag"
+	},
+	"elements": [
+		{
+			"from": [6, 4, 15.975],
+			"to": [10, 11, 15.975],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 16]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 14], "texture": "#2"},
+				"south": {"uv": [8, 0, 16, 14], "texture": "#2", "cullface": "south"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"head": {
+			"rotation": [5, 0, 0],
+			"translation": [0, -1, -19.525],
+			"scale": [1.6, 1.6, 1.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "tag_1",
+			"origin": [0, 0, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

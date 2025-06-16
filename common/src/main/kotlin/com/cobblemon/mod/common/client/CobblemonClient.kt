@@ -307,7 +307,11 @@ object CobblemonClient {
             CobblemonBlocks.HEAT_ROCK,
             CobblemonBlocks.ICY_ROCK,
             CobblemonBlocks.SMOOTH_ROCK,
-            CobblemonBlocks.NEVER_MELT_ICE
+            CobblemonBlocks.NEVER_MELT_ICE,
+            CobblemonBlocks.CLEANSE_TAG,
+            CobblemonBlocks.SPELL_TAG,
+            CobblemonBlocks.BLUNDER_POLICY,
+            CobblemonBlocks.WEAKNESS_POLICY
         )
 
         this.createBoatModelLayers()

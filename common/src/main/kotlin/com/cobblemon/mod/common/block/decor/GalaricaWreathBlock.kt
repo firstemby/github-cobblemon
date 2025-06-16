@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block.decor
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
@@ -16,10 +17,7 @@ import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
-import net.minecraft.world.level.block.SimpleWaterloggedBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.AttachFace
@@ -30,6 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
+@Suppress("DEPRECATED", "OVERRIDE_DEPRECATION")
 class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBlock(properties), SimpleWaterloggedBlock {
     init {
         registerDefaultState(stateDefinition.any()
@@ -125,15 +124,15 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
     }
 
     //It does in fact override, and crashes if it isn't overriding. Don't trust this.
+    @Deprecated("Deprecated in Java")
     override fun canSurvive(state: BlockState?, level: LevelReader?, pos: BlockPos): Boolean {
         when (state?.getValue(FACE)) {
             AttachFace.CEILING -> {
                 val direction = getConnectedDirection(state!!).opposite
                 return canSupportCenter(level!!, pos.relative(direction), direction.opposite)
             }
-            AttachFace.WALL, AttachFace.FLOOR -> {
-                val direction = getConnectedDirection(state!!).opposite
-                return level?.getBlockState(pos.relative(direction))?.isAir == false
+            AttachFace.WALL -> {
+                return level!!.getBlockState(pos.relative(state.getValue(FACING).opposite)).isSolid
             }
             else -> return true
         }

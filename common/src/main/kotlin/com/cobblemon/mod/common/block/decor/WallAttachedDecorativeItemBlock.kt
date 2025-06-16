@@ -30,6 +30,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
+@Suppress("DEPRECATED", "OVERRIDE_DEPRECATION")
 class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: WallItemType) : Block(settings), SimpleWaterloggedBlock {
     init {
         registerDefaultState(stateDefinition.any()
@@ -39,7 +40,8 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
 
     @Suppress("unused")
     enum class WallItemType : StringRepresentable {
-        TAG,
+        GENERIC_PLANE,
+        POLICY,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -60,7 +62,7 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
         val blockPos = ctx.clickedPos
         ctx.nearestLookingDirections.forEach { direction ->
             if (direction.axis.isHorizontal) {
-                blockState = blockState.setValue(FACING, direction) as BlockState
+                blockState = blockState.setValue(FACING, direction.opposite) as BlockState
                 if (blockState.canSurvive(worldView, blockPos)) {
                     return blockState
                 }
@@ -85,12 +87,20 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
         collisionContext: CollisionContext
     ): VoxelShape {
         return when (wallItemType) {
-            WallItemType.TAG -> {
+            WallItemType.GENERIC_PLANE -> {
                 when (state.getValue(FACING)) {
-                    Direction.SOUTH -> TAG_SOUTH
-                    Direction.WEST -> TAG_WEST
-                    Direction.EAST -> TAG_EAST
-                    else -> TAG_NORTH
+                    Direction.SOUTH -> FULL_PLANE_SOUTH
+                    Direction.WEST -> FULL_PLANE_WEST
+                    Direction.EAST -> FULL_PLANE_EAST
+                    else -> FULL_PLANE_NORTH
+                }
+            }
+            WallItemType.POLICY -> {
+                when (state.getValue(FACING)) {
+                    Direction.SOUTH -> POLICY_SOUTH
+                    Direction.WEST -> POLICY_WEST
+                    Direction.EAST -> POLICY_EAST
+                    else -> POLICY_NORTH
                 }
             }
             else -> {
@@ -116,7 +126,7 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
-        return if (direction == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
+        return if (direction.opposite == state.getValue(FACING) && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
@@ -130,11 +140,9 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
         return false
     }
 
+    @Deprecated("Deprecated in Java")
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {
-        val direction = state.getValue(FACING)
-        val blockpos = pos.relative(direction.opposite)
-        val blockstate = level.getBlockState(blockpos)
-        return direction.axis.isHorizontal && blockstate.isFaceSturdy(level, blockpos, direction)
+        return level!!.getBlockState(pos.relative(state.getValue(FACING).opposite)).isSolid
     }
 
     companion object {
@@ -149,9 +157,14 @@ class WallAttachedDecorativeItemBlock(settings: Properties, val wallItemType: Wa
         val ITEM_8x_SOUTH = Shapes.box(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
         val ITEM_8x_EAST = Shapes.box(0.0, 0.25, 0.25, 0.5, 0.75, 0.75)
 
-        val TAG_NORTH = Shapes.box(0.25, 0.125, 0.875, 0.75, 0.75, 1.0)
-        val TAG_WEST = Shapes.box(0.875, 0.125, 0.25, 1.0, 0.875, 0.75)
-        val TAG_SOUTH = Shapes.box(0.25, 0.125, 0.0, 0.75, 0.875, 0.125)
-        val TAG_EAST = Shapes.box(0.0, 0.125, 0.25, 0.125, 0.875, 0.75)
+        val FULL_PLANE_NORTH = Shapes.box(0.0, 0.0, 0.925, 1.0, 1.0, 1.0)
+        val FULL_PLANE_WEST = Shapes.box(0.925, 0.0, 0.0, 1.0, 1.0, 1.0)
+        val FULL_PLANE_SOUTH = Shapes.box(0.0, 0.0, 0.0, 1.0, 1.0, 0.075)
+        val FULL_PLANE_EAST = Shapes.box(0.0, 0.0, 0.0, 0.075, 1.0, 1.0)
+
+        val POLICY_NORTH = Shapes.box(0.0625, 0.125, 0.925, 1.0, 0.875, 0.9375)
+        val POLICY_WEST = Shapes.box(0.925, 0.125, 0.0625, 1.0, 0.875, 0.9375)
+        val POLICY_SOUTH = Shapes.box(0.0625, 0.125, 0.0, 0.9375, 0.875, 0.075)
+        val POLICY_EAST = Shapes.box(0.0, 0.125, 0.0625, 0.075, 0.875, 0.9375)
     }
 }

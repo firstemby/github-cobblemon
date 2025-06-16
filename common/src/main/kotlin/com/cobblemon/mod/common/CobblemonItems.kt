@@ -927,6 +927,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val GALARICA_WREATH = wearableItem("galarica_wreath", block = CobblemonBlocks.GALARICA_WREATH)
     @JvmField val SHELL_HELMET = wearableItem("shell_helmet")
     @JvmField val NEVER_MELT_ICE = wearableItem("never_melt_ice", block = CobblemonBlocks.NEVER_MELT_ICE)
+    @JvmField val CLEANSE_TAG = wearableItem("cleanse_tag", block = CobblemonBlocks.CLEANSE_TAG)
+    @JvmField val SPELL_TAG = wearableItem("spell_tag", block = CobblemonBlocks.SPELL_TAG)
 
     // Held Items
     @JvmField
@@ -946,15 +948,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
-    val BLUNDER_POLICY = heldItem("blunder_policy")
+    val BLUNDER_POLICY = itemNameBlockItem("blunder_policy", CobblemonBlocks.BLUNDER_POLICY)
     @JvmField
     val CELL_BATTERY = heldItem("cell_battery")
     @JvmField
     val CHARCOAL = heldItem("charcoal_stick", remappedName = "charcoal")
     @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
-    @JvmField
-    val CLEANSE_TAG = itemNameBlockItem("cleanse_tag", CobblemonBlocks.CLEANSE_TAG)
     @JvmField
     val CLEAR_AMULET = heldItem("clear_amulet")
     @JvmField
@@ -1060,8 +1060,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SOFT_SAND = heldItem("soft_sand")
     @JvmField
-    val SPELL_TAG = itemNameBlockItem("spell_tag", CobblemonBlocks.SPELL_TAG)
-    @JvmField
     val SMOKE_BALL = heldItem("smoke_ball")
     @JvmField
     val SOOTHE_BELL = heldItem("soothe_bell")
@@ -1078,7 +1076,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val UTILITY_UMBRELLA = heldItem("utility_umbrella")
     @JvmField
-    val WEAKNESS_POLICY = heldItem("weakness_policy")
+    val WEAKNESS_POLICY = itemNameBlockItem("weakness_policy", CobblemonBlocks.WEAKNESS_POLICY)
     @JvmField
     val WIDE_LENS = heldItem("wide_lens")
     @JvmField

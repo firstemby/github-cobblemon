@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/cleanse_tag_one_item",
+  "textures": {
+		"2": "cobblemon:block/spell_tag",
+		"particle": "cobblemon:block/spell_tag"
+  }
+}

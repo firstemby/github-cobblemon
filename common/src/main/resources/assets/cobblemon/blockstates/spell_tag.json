@@ -1,18 +1,123 @@
 {
   "variants": {
-    "facing=south": {
-      "model": "cobblemon:block/unremarkable_teacup"
+    "items=1,facing=north": {
+      "model": "cobblemon:block/spell_tag_one_item"
     },
-    "facing=west": {
-      "model": "cobblemon:block/unremarkable_teacup",
+    "items=1,facing=east": {
+      "model": "cobblemon:block/spell_tag_one_item",
       "y": 90
     },
-    "facing=north": {
-      "model": "cobblemon:block/unremarkable_teacup",
+    "items=1,facing=south": {
+      "model": "cobblemon:block/spell_tag_one_item",
       "y": 180
     },
-    "facing=east": {
-      "model": "cobblemon:block/unremarkable_teacup",
+    "items=1,facing=west": {
+      "model": "cobblemon:block/spell_tag_one_item",
+      "y": 270
+    },
+    "items=2,facing=north": {
+      "model": "cobblemon:block/spell_tag_two_items"
+    },
+    "items=2,facing=east": {
+      "model": "cobblemon:block/spell_tag_two_items",
+      "y": 90
+    },
+    "items=2,facing=south": {
+      "model": "cobblemon:block/spell_tag_two_items",
+      "y": 180
+    },
+    "items=2,facing=west": {
+      "model": "cobblemon:block/spell_tag_two_items",
+      "y": 270
+    },
+    "items=3,facing=north": {
+      "model": "cobblemon:block/spell_tag_three_items"
+    },
+    "items=3,facing=east": {
+      "model": "cobblemon:block/spell_tag_three_items",
+      "y": 90
+    },
+    "items=3,facing=south": {
+      "model": "cobblemon:block/spell_tag_three_items",
+      "y": 180
+    },
+    "items=3,facing=west": {
+      "model": "cobblemon:block/spell_tag_three_items",
+      "y": 270
+    },
+    "items=4,facing=north": {
+      "model": "cobblemon:block/spell_tag_four_items"
+    },
+    "items=4,facing=east": {
+      "model": "cobblemon:block/spell_tag_four_items",
+      "y": 90
+    },
+    "items=4,facing=south": {
+      "model": "cobblemon:block/spell_tag_four_items",
+      "y": 180
+    },
+    "items=4,facing=west": {
+      "model": "cobblemon:block/spell_tag_four_items",
+      "y": 270
+    },
+    "items=5,facing=north": {
+      "model": "cobblemon:block/spell_tag_five_items"
+    },
+    "items=5,facing=east": {
+      "model": "cobblemon:block/spell_tag_five_items",
+      "y": 90
+    },
+    "items=5,facing=south": {
+      "model": "cobblemon:block/spell_tag_five_items",
+      "y": 180
+    },
+    "items=5,facing=west": {
+      "model": "cobblemon:block/spell_tag_five_items",
+      "y": 270
+    },
+    "items=6,facing=north": {
+      "model": "cobblemon:block/spell_tag_six_items"
+    },
+    "items=6,facing=east": {
+      "model": "cobblemon:block/spell_tag_six_items",
+      "y": 90
+    },
+    "items=6,facing=south": {
+      "model": "cobblemon:block/spell_tag_six_items",
+      "y": 180
+    },
+    "items=6,facing=west": {
+      "model": "cobblemon:block/spell_tag_six_items",
+      "y": 270
+    },
+    "items=7,facing=north": {
+      "model": "cobblemon:block/spell_tag_seven_items"
+    },
+    "items=7,facing=east": {
+      "model": "cobblemon:block/spell_tag_seven_items",
+      "y": 90
+    },
+    "items=7,facing=south": {
+      "model": "cobblemon:block/spell_tag_seven_items",
+      "y": 180
+    },
+    "items=7,facing=west": {
+      "model": "cobblemon:block/spell_tag_seven_items",
+      "y": 270
+    },
+    "items=8,facing=north": {
+      "model": "cobblemon:block/spell_tag_eight_items"
+    },
+    "items=8,facing=east": {
+      "model": "cobblemon:block/spell_tag_eight_items",
+      "y": 90
+    },
+    "items=8,facing=south": {
+      "model": "cobblemon:block/spell_tag_eight_items",
+      "y": 180
+    },
+    "items=8,facing=west": {
+      "model": "cobblemon:block/spell_tag_eight_items",
       "y": 270
     }
   }

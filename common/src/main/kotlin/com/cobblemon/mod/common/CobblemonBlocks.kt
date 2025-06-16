@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.block.decor.*
 import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
 import com.cobblemon.mod.common.block.decor.StackableItemBlock.StackableItemType
 import com.cobblemon.mod.common.block.decor.WallAttachedDecorativeItemBlock.WallItemType
+import com.cobblemon.mod.common.block.decor.WallAttachedStackableItemBlock.WallStackableItemType
 import com.cobblemon.mod.common.block.general.BaleBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
@@ -499,9 +500,13 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val PEAT_BLOCK = create("peat_block", SixDirectionalBlock(Properties.of().mapColor(MapColor.CLAY).strength(0.5f).sound(SoundType.MUD)))
     @JvmField
-    val CLEANSE_TAG = create("cleanse_tag", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.TAG))
+    val CLEANSE_TAG = create("cleanse_tag", WallAttachedStackableItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallStackableItemType.TAG))
     @JvmField
-    val SPELL_TAG = create("spell_tag", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.TAG))
+    val SPELL_TAG = create("spell_tag", WallAttachedStackableItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallStackableItemType.TAG))
+    @JvmField
+    val BLUNDER_POLICY = create("blunder_policy", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
+    @JvmField
+    val WEAKNESS_POLICY = create("weakness_policy", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
