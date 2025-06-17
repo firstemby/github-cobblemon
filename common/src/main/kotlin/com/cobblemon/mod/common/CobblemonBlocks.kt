@@ -474,7 +474,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
-    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, ItemType.MOSS)) //TODO Determine brightness of 5, 11, or maybe 13
+    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, ItemType.MOSS))
     @JvmField
     val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).noOcclusion().noCollission(), ItemType.GENERIC_8x4))
     @JvmField

@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cobblemon:item/evolution/peat_block"
-  }
+  "parent": "cobblemon:block/peat_block",
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "cobblemon:item/peat_block_sprite"
+    }
+  ]
 }
