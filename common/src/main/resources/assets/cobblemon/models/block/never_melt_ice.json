@@ -1,7 +1,7 @@
 {
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "cobblemon:block/never_melt_ice"
+		"particle": "cobblemon:item/wearable/never_melt_ice"
 	},
 	"elements": [
 		{

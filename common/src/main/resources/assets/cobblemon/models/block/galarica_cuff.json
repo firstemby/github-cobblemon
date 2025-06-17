@@ -2,7 +2,7 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "cobblemon:block/galarica_cuff",
+		"0": "cobblemon:block/decorative_items/galarica_cuff",
 		"particle": "cobblemon:block/galarica_nut_bush_stage3"
 	},
 	"elements": [

@@ -2,8 +2,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "cobblemon:block/teacups",
-		"particle": "cobblemon:block/teacup_particles"
+		"0": "cobblemon:block/decorative_items/teacups",
+		"particle": "cobblemon:block/decorative_items/teacup_particles"
 	},
 	"elements": [
 		{

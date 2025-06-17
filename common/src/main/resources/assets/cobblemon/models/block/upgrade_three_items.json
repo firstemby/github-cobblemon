@@ -2,8 +2,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 16],
 	"textures": {
-		"0": "cobblemon:block/upgrade",
-		"particle": "cobblemon:block/upgrade"
+		"0": "cobblemon:block/decorative_items/upgrade",
+		"particle": "cobblemon:block/decorative_items/upgrade"
 	},
 	"elements": [
 		{

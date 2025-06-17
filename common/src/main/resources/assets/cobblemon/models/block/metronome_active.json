@@ -1,8 +1,8 @@
 {
   "parent": "cobblemon:block/metronome",
   "textures": {
-		"1": "cobblemon:block/metronome",
-		"2": "cobblemon:block/metronome_ticker_ticking",
-		"particle": "cobblemon:block/metronome"
+		"1": "cobblemon:block/decorative_items/metronome",
+		"2": "cobblemon:block/decorative_items/metronome_ticker_ticking",
+		"particle": "cobblemon:block/decorative_items/metronome"
   }
 }

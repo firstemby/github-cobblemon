@@ -2,8 +2,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "cobblemon:block/chipped_pot",
-		"particle": "cobblemon:block/pot_particles"
+		"0": "cobblemon:block/decorative_items/chipped_pot",
+		"particle": "cobblemon:block/decorative_items/pot_particles"
 	},
 	"elements": [
 		{

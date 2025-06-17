@@ -1,7 +1,7 @@
 {
   "parent": "cobblemon:block/chipped_pot",
   "textures": {
-		"0": "cobblemon:block/cracked_pot",
-		"particle": "cobblemon:block/pot_particles"
+		"0": "cobblemon:block/decorative_items/cracked_pot",
+		"particle": "cobblemon:block/decorative_items/pot_particles"
 	}
 }

@@ -2,9 +2,9 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "cobblemon:block/metronome",
-		"2": "cobblemon:block/metronome_ticker",
-		"particle": "cobblemon:block/metronome"
+		"1": "cobblemon:block/decorative_items/metronome",
+		"2": "cobblemon:block/decorative_items/metronome_ticker",
+		"particle": "cobblemon:block/decorative_items/metronome"
 	},
 	"elements": [
 		{

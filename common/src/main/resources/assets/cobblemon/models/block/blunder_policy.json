@@ -1,7 +1,7 @@
 {
   "parent": "cobblemon:block/template_wall_plane",
 	"textures": {
-		"0": "cobblemon:block/blunder_policy",
-		"particle": "cobblemon:block/blunder_policy"
+		"0": "cobblemon:block/decorative_items/blunder_policy",
+		"particle": "cobblemon:block/decorative_items/blunder_policy"
 	}
 }

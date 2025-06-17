@@ -2,8 +2,8 @@
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "cobblemon:block/damp_rock",
-		"particle": "cobblemon:block/damp_rock"
+		"0": "cobblemon:block/decorative_items/damp_rock",
+		"particle": "cobblemon:block/decorative_items/damp_rock"
 	},
 	"elements": [
 		{

@@ -1,8 +1,8 @@
 {
 	"ambientocclusion": false,
 	"textures": {
-		"2": "cobblemon:block/cleanse_tag",
-		"particle": "cobblemon:block/cleanse_tag"
+		"2": "cobblemon:block/decorative_items/cleanse_tag",
+		"particle": "cobblemon:block/decorative_items/cleanse_tag"
 	},
 	"elements": [
 		{
