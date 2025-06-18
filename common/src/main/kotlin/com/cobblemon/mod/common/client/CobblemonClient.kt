@@ -208,7 +208,12 @@ object CobblemonClient {
         this.implementation.registerBlockRenderType(
             RenderType.translucent(),
             CobblemonBlocks.UPGRADE,
-            CobblemonBlocks.DUBIOUS_DISC
+            CobblemonBlocks.DUBIOUS_DISC,
+            CobblemonBlocks.DAMP_ROCK,
+            CobblemonBlocks.HEAT_ROCK,
+            CobblemonBlocks.ICY_ROCK,
+            CobblemonBlocks.SMOOTH_ROCK,
+            CobblemonBlocks.NEVER_MELT_ICE
         )
 
         this.implementation.registerBlockRenderType(
@@ -303,11 +308,6 @@ object CobblemonClient {
             CobblemonBlocks.GALARICA_WREATH,
             CobblemonBlocks.DESTINY_KNOT,
             CobblemonBlocks.METRONOME,
-            CobblemonBlocks.DAMP_ROCK,
-            CobblemonBlocks.HEAT_ROCK,
-            CobblemonBlocks.ICY_ROCK,
-            CobblemonBlocks.SMOOTH_ROCK,
-            CobblemonBlocks.NEVER_MELT_ICE,
             CobblemonBlocks.CLEANSE_TAG,
             CobblemonBlocks.SPELL_TAG,
             CobblemonBlocks.BLUNDER_POLICY,

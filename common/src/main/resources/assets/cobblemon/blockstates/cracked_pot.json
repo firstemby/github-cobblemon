@@ -1,19 +1,19 @@
 {
   "variants": {
     "facing=south": {
-      "model": "cobblemon:block/cracked_pot"
-    },
-    "facing=west": {
-      "model": "cobblemon:block/cracked_pot",
-      "y": 90
-    },
-    "facing=north": {
       "model": "cobblemon:block/cracked_pot",
       "y": 180
     },
-    "facing=east": {
+    "facing=west": {
       "model": "cobblemon:block/cracked_pot",
       "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/cracked_pot"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/cracked_pot",
+      "y": 90
     }
   }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_pouch",
+	"textures": {
+		"3": "cobblemon:block/decorative_items/sachet",
+		"particle": "cobblemon:block/decorative_items/sachet"
+	}
+}

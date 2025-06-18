@@ -42,6 +42,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         TEACUP,
         MOSS,
         KNOT,
+        POUCH,
         GENERIC_7x6,
         GENERIC_8x,
         GENERIC_8x4;
@@ -64,7 +65,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         val blockPos = ctx.clickedPos
         ctx.nearestLookingDirections.forEach { direction ->
             if (direction.axis.isHorizontal) {
-                blockState = blockState.setValue(FACING, direction) as BlockState
+                blockState = blockState.setValue(FACING, direction.opposite) as BlockState
                 if (blockState.canSurvive(worldView, blockPos)) {
                     return blockState
                 }
@@ -107,6 +108,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             }
             ItemType.TEACUP -> TEACUP
             ItemType.MOSS -> MOSS
+            ItemType.POUCH -> POUCH
             ItemType.GENERIC_7x6 -> ITEM_7x6
             ItemType.GENERIC_8x4 -> ITEM_8x4
             else -> ITEM_8x
@@ -149,6 +151,7 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
         val ITEM_8x = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
         val ITEM_8x4 = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.25, 0.75)
         val ITEM_7x6 = Shapes.box(0.28125, 0.0, 0.28125, 0.71875, 0.375, 0.71875)
+        val POUCH = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.3125, 0.6875)
         private val TEACUP = Shapes.or(
             Shapes.box(0.375, 0.0, 0.375, 0.625, 0.0625, 0.625),
             Shapes.box(0.3125, 0.0, 0.3125, 0.625, 0.25, 0.375),
@@ -160,32 +163,32 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.1875, 0.0, 0.1875, 0.8125, 0.3125, 0.8125),
             Shapes.box(0.25, 0.3125, 0.25, 0.75, 0.5625, 0.75)
         )
-        val KNOT_SOUTH = Shapes.box(0.375, 0.0, 0.375, 0.75, 0.375, 0.75)
-        val KNOT_EAST = Shapes.box(0.375, 0.0, 0.25, 0.75, 0.375, 0.625)
-        val KNOT_NORTH = Shapes.box(0.25, 0.0, 0.25, 0.625, 0.375, 0.625)
-        val KNOT_WEST = Shapes.box(0.25, 0.0, 0.375, 0.625, 0.375, 0.75)
-        private val TEAPOT_SOUTH = Shapes.or(
+        val KNOT_NORTH = Shapes.box(0.375, 0.0, 0.375, 0.75, 0.375, 0.75)
+        val KNOT_WEST = Shapes.box(0.375, 0.0, 0.25, 0.75, 0.375, 0.625)
+        val KNOT_SOUTH = Shapes.box(0.25, 0.0, 0.25, 0.625, 0.375, 0.625)
+        val KNOT_EAST = Shapes.box(0.25, 0.0, 0.375, 0.625, 0.375, 0.75)
+        private val TEAPOT_NORTH = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
             Shapes.box(0.75, 0.125, 0.40625, 0.875, 0.375, 0.59375)
         )
-        private val TEAPOT_WEST = Shapes.or(
+        private val TEAPOT_EAST = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
             Shapes.box(0.40625, 0.125, 0.75, 0.59375, 0.375, 0.875)
         )
-        private val TEAPOT_NORTH = Shapes.or(
+        private val TEAPOT_SOUTH = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),
             Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.0625, 0.6875),
             Shapes.box(0.125, 0.125, 0.40625, 0.25, 0.375, 0.59375)
         )
-        private val TEAPOT_EAST = Shapes.or(
+        private val TEAPOT_WEST = Shapes.or(
             Shapes.box(0.3125, 0.5, 0.3125, 0.6875, 0.625, 0.6875),
             Shapes.box(0.4375, 0.625, 0.4375, 0.5625, 0.6875, 0.5625),
             Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.5, 0.75),

@@ -500,7 +500,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val PROTECTOR = noSettingsItem("protector")
     @JvmField val REAPER_CLOTH = noSettingsItem("reaper_cloth")
     @JvmField val PRISM_SCALE = noSettingsItem("prism_scale")
-    @JvmField val SACHET = noSettingsItem("sachet")
+    @JvmField val SACHET = itemNameBlockItem("sachet", CobblemonBlocks.SACHET)
     @JvmField val WHIPPED_DREAM = create("whipped_dream", foodItem(8, 0.3f))
     @JvmField val STRAWBERRY_SWEET = create("strawberry_sweet", foodItem(6, 0.125f))
     @JvmField val LOVE_SWEET = create("love_sweet", foodItem(6, 0.125f))
@@ -1092,11 +1092,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val WHITE_HERB = compostableHeldItem("white_herb", null, 1F)
     @JvmField
-    val BRIGHT_POWDER = heldItem("bright_powder")
+    val BRIGHT_POWDER = itemNameBlockItem("bright_powder", CobblemonBlocks.BRIGHT_POWDER)
     @JvmField
-    val METAL_POWDER = heldItem("metal_powder")
+    val METAL_POWDER = itemNameBlockItem("metal_powder", CobblemonBlocks.METAL_POWDER)
     @JvmField
-    val QUICK_POWDER = heldItem("quick_powder")
+    val QUICK_POWDER = itemNameBlockItem("quick_powder", CobblemonBlocks.QUICK_POWDER)
     @JvmField
     val DAMP_ROCK = itemNameBlockItem("damp_rock", CobblemonBlocks.DAMP_ROCK)
     @JvmField
