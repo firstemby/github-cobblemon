@@ -8,10 +8,8 @@
 
 package com.cobblemon.mod.common.util.adapters
 
-import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
-import com.cobblemon.mod.common.client.render.ModelTextureSupplier
-import com.cobblemon.mod.common.client.render.StaticModelTextureSupplier
-import com.cobblemon.mod.common.client.render.VariableModelTextureSupplier
+import com.cobblemon.mod.common.client.render.*
+import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -47,6 +45,13 @@ object ModelTextureSupplierAdapter : JsonDeserializer<ModelTextureSupplier> {
                 frames = frames,
                 interpolation = interpolation
             )
+        } else if (json.isJsonArray) {
+            val jsonArray = json as JsonArray
+            val textures = mutableListOf<ResourceLocation>()
+            jsonArray.forEach {
+                textures.add(ResourceLocation.parse(it.asString))
+            }
+            return KeyframableTextureSupplier(textures)
         } else {
             throw IllegalArgumentException("Invalid JSON provided for model texture, it was of type ${json::class.simpleName} instead of a String or Object.")
         }

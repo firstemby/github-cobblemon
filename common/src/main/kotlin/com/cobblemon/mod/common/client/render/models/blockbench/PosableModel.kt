@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
+import com.cobblemon.mod.common.client.render.KeyframableTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
@@ -445,6 +446,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val provider = bufferProvider
         if (provider != null) {
             for (layer in currentLayers) {
+                (layer.texture as? KeyframableTextureSupplier)?.layerName = layer.name
                 val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
                 val renderLayer = makeLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 val consumer = provider.getBuffer(renderLayer)

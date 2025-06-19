@@ -11,7 +11,10 @@ package com.cobblemon.mod.common.client.render
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
+import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -286,8 +289,48 @@ class AnimatedModelTextureSupplier(
 }
 
 class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : ModelTextureSupplier {
+    var layerName = ""
+
     override fun invoke(state: PosableState): RenderStateShard.EmptyTextureStateShard {
-        return RenderStateShard.TextureStateShard(textures[0], false, false)
+        var index = 0
+        var animation = if ((state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation?.cobblemonTextures?.get(layerName) != null) {
+            (state.primaryAnimation?.animation as? BedrockActiveAnimation)?.animation
+        } else null
+        var startTime = 0.0F
+
+        val pose = state.currentPose?.let(state.currentModel!!.poses::get)
+
+        pose?.animations?.filterIsInstance<BedrockPoseAnimation>()?.filter{ state.shouldIdleRun(it, 0F) }?.forEach {
+            if (it.animation.cobblemonTextures[layerName] != null) {
+                animation = it.animation
+            }
+        }
+
+        if (state.primaryAnimation == null && state.currentModel!!.context.request(RenderContext.DO_QUIRKS) != false) {
+            pose?.quirks?.forEach { quirk ->
+                val quirkData = quirk.getOrCreateData(state)
+                quirkData.animations.filterIsInstance<BedrockActiveAnimation>().forEach {
+                    if (it.animation.cobblemonTextures[layerName] != null) {
+                        startTime = it.startedSeconds
+                        animation = it.animation
+                    }
+                }
+            }
+        }
+
+        //Here we should either have null or the most prioritized keyframe list
+        if (animation != null) {
+            val keyframeMap = animation!!.cobblemonTextures[layerName]!!
+            var adjustedTime = (state.animationSeconds - startTime)
+            if (animation!!.shouldLoop) adjustedTime %= animation!!.animationLength.toFloat()
+            val keyIndex = keyframeMap.keys.indexOfFirst { it >= adjustedTime }
+            index = when(keyIndex) {
+                -1 -> 0
+                else -> keyframeMap[keyframeMap.keys.elementAt(keyIndex)]!!.textureSlot
+            }
+        }
+
+        return RenderStateShard.TextureStateShard(textures[index], false, false)
     }
 
     override fun getTexture(state: PosableState): ResourceLocation {

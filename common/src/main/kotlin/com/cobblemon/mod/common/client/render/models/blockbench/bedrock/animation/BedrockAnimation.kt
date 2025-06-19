@@ -132,7 +132,9 @@ data class BedrockAnimation(
     val shouldLoop: Boolean,
     val animationLength: Double,
     val effects: List<BedrockEffectKeyframe>,
-    val boneTimelines: Map<String, BedrockBoneTimeline>
+    val boneTimelines: Map<String, BedrockBoneTimeline>,
+    //This is custom data added by our custom BB plugin
+    val cobblemonTextures: MutableMap<String, TreeMap<Double, CobblemonBedrockTextureKeyframe>>
 ) {
     fun checkForErrors() {
         boneTimelines.forEach { (_, timeline) ->
@@ -397,3 +399,8 @@ enum class InterpolationType {
 enum class Transformation {
     POSITION, ROTATION, SCALE
 }
+
+data class CobblemonBedrockTextureKeyframe(
+    val textureSlot: Int,
+    val cubicLerpFunctionValues: MutableList<Double>
+)
