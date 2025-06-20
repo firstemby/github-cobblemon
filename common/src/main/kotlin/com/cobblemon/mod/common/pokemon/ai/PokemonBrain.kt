@@ -203,7 +203,9 @@ object PokemonBrain {
         CobblemonMemories.READY_TO_BUILD_NEST,
         CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
-        CobblemonMemories.RECENTLY_ATE_GRASS
+        CobblemonMemories.RECENTLY_ATE_GRASS,
+        CobblemonMemories.HERD_LEADER,
+        CobblemonMemories.HERD_SIZE
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {

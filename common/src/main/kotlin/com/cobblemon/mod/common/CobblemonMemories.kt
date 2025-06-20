@@ -60,6 +60,10 @@ object CobblemonMemories {
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
+    /** who am i following rn? */
+    val HERD_LEADER = register<String>("herd_leader", PrimitiveCodec.STRING)
+    /** how many are following me rn? */
+    val HERD_SIZE = register<Int>("herd_size") // Don't bother saving it, we'll try to keep count roughly.
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

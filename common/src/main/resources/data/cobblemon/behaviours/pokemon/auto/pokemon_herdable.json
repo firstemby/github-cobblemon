@@ -1,0 +1,12 @@
+{
+  "visible": false,
+  "configurations": [
+    {
+      "type": "apply_behaviours",
+      "condition": "!q.entity.is_in_party && q.entity.behaviour.herd.has_tolerated_leaders",
+      "behaviours": [
+        "cobblemon:pokemon_herds"
+      ]
+    }
+  ]
+}

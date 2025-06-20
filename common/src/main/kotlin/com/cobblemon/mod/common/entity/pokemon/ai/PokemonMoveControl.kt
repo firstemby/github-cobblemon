@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
-import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
@@ -34,9 +33,6 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -48,8 +44,39 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     }
 
     private var waterLevel : Double = 0.0
+    var banking = false
+    var bankDurationTicks = -1
+    var bankForwardBlocksPerTick = 0.1F
+    var bankUpwardsBlocksPerTick = 0F
+    var bankRightDegreesPerTick = 1F
+
+    fun startBanking(
+        forwardBlocksPerTick: Float = 0F,
+        upwardsBlocksPerTick: Float = 0F,
+        rightDegreesPerTick: Float = 0F,
+        durationTicks: Int = -1
+    ) {
+        this.banking = true
+        this.bankForwardBlocksPerTick = forwardBlocksPerTick
+        this.bankUpwardsBlocksPerTick = upwardsBlocksPerTick
+        this.bankRightDegreesPerTick = rightDegreesPerTick
+        this.bankDurationTicks = durationTicks
+        operation = Operation.WAIT
+    }
+
+    fun stopBanking() {
+        this.banking = false
+        this.bankForwardBlocksPerTick = 0F
+        this.bankUpwardsBlocksPerTick = 0F
+        this.bankRightDegreesPerTick = 0F
+        this.bankDurationTicks = -1
+    }
 
     override fun tick() {
+        if (banking && operation != Operation.WAIT) {
+            banking = false
+        }
+
         if (pokemonEntity.isDeadOrDying) {
             pokemonEntity.speed = 0F
             pokemonEntity.yya = 0F
@@ -74,6 +101,18 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
         val adjustedSpeed = baseSpeed * mediumSpeed
+
+        if (banking) {
+            pokemonEntity.yRot += bankRightDegreesPerTick
+            pokemonEntity.travel(Vec3(0.0, bankUpwardsBlocksPerTick.toDouble(), bankForwardBlocksPerTick.toDouble()).scale(mediumSpeed.toDouble()))
+            if (bankDurationTicks > 0) {
+                bankDurationTicks--
+            }
+            if (bankDurationTicks == 0) {
+                banking = false
+                operation = Operation.WAIT
+            }
+        }
 
         if (operation == Operation.STRAFE) {
             var movingDistanceTotal = Mth.sqrt(strafeForwards * strafeForwards + strafeRight * strafeRight)
@@ -178,8 +217,11 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     !blockState.`is`(BlockTags.DOORS) &&
                     !blockState.`is`(BlockTags.FENCES)
                 ) {
-                    mob.jumpControl.jump()
-                    operation = Operation.JUMPING
+//                    val wantedBlockPos = BlockPos(wantedX.toInt(), (wantedY).toInt(), wantedZ.toInt())
+//                    if (!voxelShape.isEmpty || (mob.y + pokemonEntity.behaviour.moving.stepHeight < mob.level().getBlockState(wantedBlockPos.below()).getCollisionShape(mob.level(), wantedBlockPos.below()).max(Direction.Axis.Y) + wantedBlockPos.below().y.toDouble())) {
+                        mob.jumpControl.jump()
+                        operation = Operation.JUMPING
+//                    }
                 }
             }
 
@@ -200,11 +242,6 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         if (operation == Operation.WAIT && !mob.navigation.isInProgress) {
             if (mob.onGround() && behaviour.moving.walk.canWalk && pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
                 pokemonEntity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
-            }
-
-            // Float
-            if (mob.isEyeInFluid(FluidTags.WATER) && behaviour.moving.swim.canSwimInWater && !this.pokemonEntity.isBattling) {
-                pokemonEntity.yya = 0.2F
             }
 
             if (this.pokemonEntity.isBattling) {
