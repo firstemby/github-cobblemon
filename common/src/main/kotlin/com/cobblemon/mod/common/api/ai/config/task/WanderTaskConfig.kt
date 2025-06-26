@@ -10,12 +10,16 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -34,16 +38,56 @@ class WanderTaskConfig : SingleTaskConfig {
     val wanderChance = numberVariable(WANDER, "wander_chance", 1/(20 * 6F)).asExpressible()
     val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 10).asExpressible()
     val verticalRange = numberVariable(WANDER, "vertical_wander_range", 5).asExpressible()
-
     val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
+    val avoidTargetingAir: ExpressionOrEntityVariable = Either.left("true".asExpression()) // Whether to avoid air blocks when wandering
+    val minimumHeight: ExpressionOrEntityVariable = Either.left("0".asExpression()) // Height off the ground
+    val maximumHeight: ExpressionOrEntityVariable = Either.left("-1".asExpression()) // Height off the ground
 
     override fun getVariables(entity: LivingEntity) = listOf(
         condition,
         wanderChance,
         horizontalRange,
         verticalRange,
-        speedMultiplier
+        speedMultiplier,
+        avoidTargetingAir,
+        minimumHeight,
+        maximumHeight
     ).asVariables()
+
+    private fun applyHeightConstraints(
+        pos: BlockPos,
+        minimumHeight: Int,
+        maximumHeight: Int,
+        world: ServerLevel
+    ): BlockPos {
+        if (minimumHeight <= 0 && maximumHeight == -1) {
+            return pos // It ain't a hoverer
+        }
+
+        val block = world.getBlockState(pos)
+        val altitude = if (!block.isAir) {
+            0
+        } else {
+            (1..64).firstOrNull {
+                val newPos = pos.below(it)
+                return@firstOrNull !world.getBlockState(newPos).isAir
+            } ?: Int.MAX_VALUE
+        }
+
+        if (altitude > maximumHeight && maximumHeight >= 0) {
+            val excess = altitude - maximumHeight
+            val excessFromMinimum = altitude - minimumHeight
+            val correction = world.random.nextIntBetweenInclusive(excess, excessFromMinimum)
+            return pos.atY(pos.y - correction)
+        } else if (altitude < minimumHeight && minimumHeight >= 0) {
+            val deficit = minimumHeight - altitude
+            val deficitFromMaximum = maximumHeight - altitude
+            val correction = world.random.nextIntBetweenInclusive(deficit, deficitFromMaximum)
+            return pos.atY(pos.y + correction)
+        } else {
+            return pos
+        }
+    }
 
     override fun createTask(
         entity: LivingEntity,
@@ -67,14 +111,41 @@ class WanderTaskConfig : SingleTaskConfig {
 
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                     val wanderChance = runtime.resolveFloat(wanderChanceExpression)
-                    if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
+                    if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) {
+                        return@Trigger false
+                    }
 
                     pathCooldown.setWithExpiry(true, 40L)
+                    val avoidsTargetingAir = avoidTargetingAir.resolveBoolean()
 
 //                    val targetVec = getLandTarget(entity) ?: return@Trigger true
-                    val targetVec = LandRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt()) ?: return@Trigger false
-                    val pos = BlockPos.containing(targetVec)
-                    walkTarget.set(CobblemonWalkTarget(pos, speedMultiplier.resolveFloat(), 0, { it !in listOf(PathType.WATER, PathType.WATER_BORDER) }))
+                    val targetVec = LandRandomPos.getPos(
+                        entity,
+                        horizontalRange.resolveInt(),
+                        verticalRange.resolveInt()
+                    ) ?: return@Trigger false
+
+                    val minimumHeight = minimumHeight.resolveInt()
+                    val maximumHeight = maximumHeight.resolveInt()
+
+                    val pos = applyHeightConstraints(
+                        pos = BlockPos.containing(targetVec),
+                        minimumHeight = minimumHeight,
+                        maximumHeight = maximumHeight,
+                        world = world
+                    )
+//                    if (targetVec.y < minimumHeight || targetVec.y > maximumHeight) {
+//                        return@Trigger false
+//                    }
+                    walkTarget.set(
+                        CobblemonWalkTarget(
+                            pos = pos,
+                            speedModifier = speedMultiplier.resolveFloat(),
+                            completionRange = 0,
+                            nodeTypeFilter = { nodeType -> nodeType !in listOf(PathType.WATER, PathType.WATER_BORDER) },
+                            destinationNodeTypeFilter = { nodeType -> !avoidsTargetingAir || nodeType !in listOf(PathType.OPEN) }
+                        )
+                    )
                     lookTarget.erase()
                     return@Trigger true
                 }

@@ -18,6 +18,7 @@ object CobblemonActivities {
     val POKEMON_SLEEPING_ACTIVITY = register(Activity("pokemon_sleeping"))
     val POKEMON_GROW_CROP = register(Activity("pokemon_grow_crop"))
     val POKEMON_SLEEP_ON_TRAINER_BED = register(Activity("pokemon_sleep_on_trainer_bed"))
+    val POKEMON_HERD = register(Activity("pokemon_herd"))
 
     fun register(activity: Activity): Activity {
         activities.add(activity)

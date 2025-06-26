@@ -7,6 +7,7 @@ licenser = "0.6.1"
 shadow = "8.1.1"
 blossom = "2.1.0"
 idea-ext = "1.1.7"
+versioning = "3.1.0"
 
 # Loom
 loom = "1.7-SNAPSHOT"
@@ -50,6 +51,7 @@ shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "s
 blossom = { group = "net.kyori", name = "blossom", version.ref = "blossom" }
 ideaExt = { group = "org.jetbrains.gradle.plugin.idea-ext", name = "org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "idea-ext"}
 licenser = { group = "gradle.plugin.org.cadixdev.gradle", name = "licenser", version.ref = "licenser" }
+versioning = { group = "net.nemerosa.versioning", name = "net.nemerosa.versioning.gradle.plugin", version.ref = "versioning" }
 
 # Kotlin
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }

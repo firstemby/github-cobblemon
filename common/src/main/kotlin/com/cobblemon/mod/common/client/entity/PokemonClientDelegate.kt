@@ -107,6 +107,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
+                locatorStates.clear() // clear locators to remove potentially non-existent locators from previous model
                 currentEntity.refreshRiding()
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)

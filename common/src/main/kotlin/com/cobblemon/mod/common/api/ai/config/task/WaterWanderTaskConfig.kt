@@ -14,10 +14,12 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WANDER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -26,7 +28,7 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.level.pathfinder.PathType
 
 class WaterWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "water_wanders", true).asExpressible()
@@ -65,7 +67,14 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     }
 
                     val target = BehaviorUtils.getRandomSwimmablePos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt()) ?: return@Trigger false
-                    walkTarget.set(WalkTarget(target, speedMultiplier.resolveFloat(), 1))
+                    walkTarget.set(
+                        CobblemonWalkTarget(
+                            pos = BlockPos.containing(target),
+                            nodeTypeFilter = { it == PathType.WATER || it == PathType.WATER_BORDER },
+                            speedModifier = speedMultiplier.resolveFloat(),
+                            completionRange = 1
+                        )
+                    )
                     lookTarget.set(BlockPosTracker(target))
                     return@Trigger true
                 }

@@ -21,7 +21,6 @@ plugins {
 
     id("net.kyori.blossom")
     id("org.jetbrains.gradle.plugin.idea-ext")
-    id("net.nemerosa.versioning") version "3.1.0"
 }
 
 architectury {

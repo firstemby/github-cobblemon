@@ -63,7 +63,6 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
             //Render Held Item
             heldItemRenderer.renderOnModel(
                 entity.mainHandItem,
-                model,
                 clientDelegate,
                 poseMatrix,
                 buffer,

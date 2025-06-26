@@ -40,6 +40,9 @@ class FormPokemonBehaviour {
     @SerializedName("combat")
     private val _combat: CombatBehaviour? = null
 
+    @SerializedName("herd")
+    private val _herd: HerdBehaviour? = null
+
     val resting: RestBehaviour
         get() = _resting ?: parent.resting
 
@@ -58,6 +61,9 @@ class FormPokemonBehaviour {
     val combat: CombatBehaviour
         get() = _combat ?: parent.combat
 
+    val herd: HerdBehaviour
+        get() = _herd ?: parent.herd
+
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("resting") { resting.struct }
@@ -65,5 +71,6 @@ class FormPokemonBehaviour {
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }
         it.addFunction("combat") { combat.struct }
+        it.addFunction("herd") { herd.struct }
     }
 }

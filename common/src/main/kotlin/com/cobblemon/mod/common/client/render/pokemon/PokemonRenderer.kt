@@ -161,7 +161,6 @@ class PokemonRenderer(
         //Render Held Item
         heldItemRenderer.renderOnModel(
             entity.shownItem,
-            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,

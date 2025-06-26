@@ -168,7 +168,7 @@ Example:
 ```json
 {
   "type": "set_variables",
-  "variables": {
+  "variableValues": {
     "aggressive": true,
     "attack_range": "10"
   }

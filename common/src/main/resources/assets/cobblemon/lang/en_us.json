@@ -3678,7 +3678,7 @@
   "cobblemon.behaviour.retaliates.name": "Retaliates",
   "cobblemon.behaviour.retaliates.desc": "Attacks back when hurt. Still needs a way to attack.",
 
-  "cobblemon.behaviour.stationary.name": "Stays at Position",
+  "cobblemon.behaviour.stationary.name": "Stays At Position",
   "cobblemon.behaviour.stationary.desc": "Does not move from a specific position.",
 
   "cobblemon.behaviour.uses_healing_machine.name": "Uses Healing Machines",
@@ -3687,7 +3687,7 @@
   "cobblemon.behaviour.battler.name": "Pokémon Battler",
   "cobblemon.behaviour.battler.desc": "Stops and watches during battles.",
 
-  "cobblemon.behaviour.looks_in_one_direction.name": "Looks in One Direction",
+  "cobblemon.behaviour.looks_in_one_direction.name": "Looks In One Direction",
   "cobblemon.behaviour.looks_in_one_direction.desc": "Looks in a fixed direction at all times.",
 
   "cobblemon.behaviour.looks_around.name": "Looks Around",
@@ -3713,7 +3713,19 @@
   
   "cobblemon.behaviour.player_textured.name": "Player Textured",
   "cobblemon.behaviour.player_textured.desc": "The NPC will be textured based on a specific player username.",
-  
+
+  "cobblemon.behaviour.wanders_hover.name": "Wanders Hovering",
+  "cobblemon.behaviour.wanders_hover.desc": "Randomly hovers around in the air, sticking some distance from the ground.",
+
+  "cobblemon.behaviour.moves_to_water.name": "Returns To Water",
+  "cobblemon.behaviour.moves_to_water.desc": "Moves to water when it is nearby.",
+
+  "cobblemon.behaviour.moves_to_lava.name": "Returns To Lava",
+  "cobblemon.behaviour.moves_to_lava.desc": "Moves to lava when it is nearby.",
+
+  "cobblemon.behaviour.pokemon_herds.name": "Pokémon Herds",
+  "cobblemon.behaviour.pokemon_herds.desc": "Pokémon will form herds with Pokémon they consider suitable leaders.",
+
   "npc.sacchi.name": "Professor Sacchi",
   "npc.variable.challenge_cooldown.name": "Challenge Cooldown",
   "npc.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",

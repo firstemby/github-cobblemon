@@ -140,7 +140,7 @@ object BattleRegistry {
          * "But why are these showdown IDs so weird"
          *
          * I'll tell you, Jimmy.
-         * https://gitlab.com/cable-mc/pokemon-Cobblemon-showdown/-/blob/master/sim/SIM-PROTOCOL.md#user-content-identifying-pok%C3%A9mon
+         * https://gitlab.com/cable-mc/cobblemon-showdown/-/blob/master/sim/SIM-PROTOCOL.md#user-content-identifying-pok%C3%A9mon
          *
          * See the lines about multi battles and free for alls. The same side of the battle will share 'parity' (even or odd) across
          * all participants. So side 1 will be 1, 3, 5, ... while side 2 will be 2, 4, 6, ...

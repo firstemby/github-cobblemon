@@ -24,7 +24,9 @@ class CookingPotResultSlot(
 ) : Slot(container, index, x, y) {
 
     override fun onTake(player: Player, stack: ItemStack) {
-        stack.set(CobblemonItemComponents.CRAFTED, true)
+        if (stack.has(CobblemonItemComponents.FLAVOUR)) {
+            stack.set(CobblemonItemComponents.CRAFTED, true)
+        }
 
         val menu = player.containerMenu
         if (menu is CookingPotMenu) {

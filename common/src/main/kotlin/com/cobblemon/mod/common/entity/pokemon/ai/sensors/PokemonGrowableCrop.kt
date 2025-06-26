@@ -37,6 +37,7 @@ class PokemonGrowableCropSensor : Sensor<PokemonEntity>() {
         for (j in -1..1) {
             for (k in -1..1) {
                 for (l in -1..1) {
+                    // do you mean mutable.set(entity.blockX + j, entity.blockY + k, entity.blockZ + l)
                     mutable.set(j, k, l)
                     if (canBoneMeal(mutable, world)) {
                         ++i

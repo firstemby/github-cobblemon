@@ -25,6 +25,7 @@ class CobblemonWalkTarget(
     speedModifier: Float,
     completionRange: Int,
     val nodeTypeFilter: (PathType) -> Boolean = { true },
+    val destinationNodeTypeFilter: (PathType) -> Boolean = { true }
 ) : WalkTarget(
     BlockPosTracker(pos),
     speedModifier,

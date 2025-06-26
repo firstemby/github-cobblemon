@@ -196,6 +196,9 @@
         "canWalkOnWater": true,
         "canSwimInLava": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true
     }
   },
   "drops": {

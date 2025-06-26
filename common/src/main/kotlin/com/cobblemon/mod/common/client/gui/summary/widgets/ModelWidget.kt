@@ -114,7 +114,6 @@ class ModelWidget(
 
         heldItemRenderer.renderOnModel(
             heldItem?: ItemStack.EMPTY,
-            state.currentModel!!,
             state,
             matrices,
             context.bufferSource(),

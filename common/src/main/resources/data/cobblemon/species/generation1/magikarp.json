@@ -49,6 +49,10 @@
     "fixed": false
   },
   "behaviour": {
+    "herd": {
+      "toleratedLeaders": ["cobblemon:magikarp"],
+      "maxSize": 9
+    },
     "moving": {
       "canLook": false,
       "walk": {
@@ -57,7 +61,6 @@
       "swim": {
         "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
         "canSwimInWater": true,
         "canSwimInLava": false
       }

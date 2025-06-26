@@ -9,36 +9,23 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.dispenser.DispenseItemBehavior
-import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.ItemInteractionResult
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.item.alchemy.PotionContents
+import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.DispenserBlock
 import net.minecraft.world.level.block.RotatedPillarBlock
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.EnumProperty
-import net.minecraft.world.level.gameevent.GameEvent
-import net.minecraft.world.level.pathfinder.PathComputationType
-import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.shapes.CollisionContext
-import net.minecraft.world.phys.shapes.EntityCollisionContext
-import net.minecraft.world.phys.shapes.Shapes
-import net.minecraft.world.phys.shapes.VoxelShape
 
 class SaccharineHoneyLogBlock(properties: Properties) : RotatedPillarBlock(properties) {
     override fun useItemOn(
@@ -51,24 +38,13 @@ class SaccharineHoneyLogBlock(properties: Properties) : RotatedPillarBlock(prope
         hitResult: BlockHitResult
     ): ItemInteractionResult? {
         val itemStack = player.getItemInHand(hand)
-        if (itemStack.`is`(Items.GLASS_BOTTLE)) {
+        val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
+        if (itemStack.`is`(waterBottle)) {
             if (!level.isClientSide) {
                 // Replace the honey with the block variant
                 val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
                     .setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS))
-                level.setBlock(pos, newState, 3)
-                level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
-
-                // Consume glass bottle
-                if (!player.isCreative) {
-                    itemStack.shrink(1)
-
-                    // Give Honey bottle
-                    val honeyBottle = ItemStack(Items.HONEY_BOTTLE)
-                    if (!player.addItem(honeyBottle)) {
-                        player.drop(honeyBottle, false)
-                    }
-                }
+                SaccharineLogBlock.changeLogType(level, pos, newState, player, itemStack)
             }
             return ItemInteractionResult.SUCCESS
         }
@@ -78,47 +54,18 @@ class SaccharineHoneyLogBlock(properties: Properties) : RotatedPillarBlock(prope
     companion object {
         val AXIS: EnumProperty<Direction.Axis> = BlockStateProperties.AXIS
 
-        private val SHAPE: VoxelShape = Shapes.block()
-
         fun createBehavior(): DispenseItemBehavior {
             return DispenseItemBehavior { source, stack ->
                 val level = source.level
                 val pos = source.pos.relative(source.state.getValue(DispenserBlock.FACING))
                 val blockState = level.getBlockState(pos)
 
-                if (blockState.block is SaccharineHoneyLogBlock) {
+                val waterBottle = PotionContents.createItemStack(Items.POTION, Potions.WATER).item
+
+                if (blockState.block is SaccharineHoneyLogBlock && stack.`is`(waterBottle)) {
                     val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState()
                         .setValue(AXIS, blockState.getValue(AXIS))
-                    level.setBlock(pos, newState, 3)
-                    level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
-                    stack.shrink(1)
-
-                    val dispenserEntity = source.blockEntity
-                    if (dispenserEntity != null) {
-                        val honeyBottle = ItemStack(Items.HONEY_BOTTLE)
-                        var added = false
-
-                        for (i in 0 until dispenserEntity.containerSize) {
-                            val slotStack = dispenserEntity.getItem(i)
-
-                            if (slotStack.isEmpty) {
-                                dispenserEntity.setItem(i, honeyBottle.copy())
-                                added = true
-                                break
-                            } else if (slotStack.`is`(Items.HONEY_BOTTLE) && slotStack.count < slotStack.maxStackSize) {
-                                slotStack.grow(1)
-                                added = true
-                                break
-                            }
-                        }
-
-                        if (!added) {
-                            Containers.dropItemStack(
-                                level,
-                                source.pos.x.toDouble(), source.pos.y.toDouble(), source.pos.z.toDouble(), honeyBottle
-                            )
-                        }
-                    }
+                    SaccharineLogBlock.changeLogTypeDispenser(level, pos, newState, stack, source)
                 }
                 stack
             }

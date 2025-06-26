@@ -27,6 +27,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.level.pathfinder.Node
+import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.Vector4f
 
@@ -181,5 +183,23 @@ fun Int.toRGBA(): Vector4f {
 inline fun <reified T> Any.ifIsType(block: T.() -> Unit) {
     if (this is T) {
         block(this)
+    }
+}
+
+// Maybe it'd be better to just Access Widen the nodes list.
+fun Path.deleteNode(index: Int) {
+    val nodesAfterwards = mutableListOf<Node>()
+    for (i in index + 1 until this.nodeCount) {
+        nodesAfterwards.add(this.getNode(i))
+    }
+    val nodesBefore = mutableListOf<Node>()
+    for (i in 0 until index) {
+        nodesBefore.add(this.getNode(i))
+    }
+    this.truncateNodes(nodesBefore.size + nodesAfterwards.size)
+    var i = 0
+    val correctNodes = nodesBefore + nodesAfterwards
+    for (node in correctNodes) {
+        this.replaceNode(i++, node)
     }
 }
