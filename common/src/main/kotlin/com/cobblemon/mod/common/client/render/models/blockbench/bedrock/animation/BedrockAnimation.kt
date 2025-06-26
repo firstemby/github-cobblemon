@@ -402,5 +402,10 @@ enum class Transformation {
 
 data class CobblemonBedrockTextureKeyframe(
     val textureSlot: Int,
-    val cubicLerpFunctionValues: MutableList<Double>
+    val cubicLerpFunctionValues: MutableList<Double>,
+    val interpolationType: TextureInterpolationType
 )
+
+enum class TextureInterpolationType {
+    STEP, LINEAR, BEZIER
+}

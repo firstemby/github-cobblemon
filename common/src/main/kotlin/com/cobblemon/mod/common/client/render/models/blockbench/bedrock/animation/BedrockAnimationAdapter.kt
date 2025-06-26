@@ -99,7 +99,13 @@ object BedrockAnimationAdapter : JsonDeserializer<BedrockAnimation> {
                     values.asJsonObject["cobblemon_cubic_lerp_function"].asString.split(",").forEach {
                         lerpFunctionValues.add(it.toDouble())
                     }
-                    textureTimeline[frame.toDouble()] = CobblemonBedrockTextureKeyframe(values.asJsonObject["cobblemon_texture_slot"].asInt, lerpFunctionValues)
+                    val interpolation = when(values.asJsonObject["cobblemon_interpolation"].asString) {
+                        "step" -> TextureInterpolationType.STEP
+                        "linear" -> TextureInterpolationType.LINEAR
+                        "bezier" -> TextureInterpolationType.BEZIER
+                        else -> TextureInterpolationType.STEP
+                    }
+                    textureTimeline[frame.toDouble()] = CobblemonBedrockTextureKeyframe(values.asJsonObject["cobblemon_texture_slot"].asInt, lerpFunctionValues, interpolation)
                 }
                 cobblemonTextures[texture] = textureTimeline
             }

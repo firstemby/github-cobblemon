@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.TextureInterpolationType
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
@@ -30,6 +31,7 @@ import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
 import net.minecraft.resources.ResourceLocation
+import org.joml.Vector2d
 import org.joml.Vector3f
 import org.joml.Vector4f
 
@@ -226,55 +228,10 @@ class AnimatedModelTextureSupplier(
         val i = frameIndex % 1.0
 
         if (interpolation && i != 0.0) {
-            val resourceManager = Minecraft.getInstance().resourceManager
-
-            val texture1 : NativeImage
-            val texture2 : NativeImage
-
             val o = floor(frameIndex).toInt() % frames.size
+            val s = if (o == frames.size - 1) 0 else o + 1
 
-            try { //Try getting images of the frames so we can use them to make a new one
-                texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
-                val s = if (o == frames.size - 1) 0 else o + 1
-                texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
-            } catch (e : Exception) {
-                return RenderStateShard.TextureStateShard(frames[o], false, false)
-            }
-
-            for (x in 0..<texture1.width) {
-                for (y in 0..<texture1.height) {
-                    val color1 = texture1.getPixelRGBA(x,y).toRGBA()
-                    val color2 = texture2.getPixelRGBA(x,y).toRGBA()
-
-                    var newRed : Int
-                    var newGreen : Int
-                    var newBlue : Int
-
-                    //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
-                    if (color1.w == 0F && color2.w == 1F) {
-                        newRed = floor(color2.x * 255).toInt()
-                        newGreen = floor(color2.y * 255).toInt()
-                        newBlue = floor(color2.z * 255).toInt()
-                    } else if (color1.w == 1F && color2.w == 0F) {
-                        newRed = floor(color1.x * 255).toInt()
-                        newGreen = floor(color1.y * 255).toInt()
-                        newBlue = floor(color1.z * 255).toInt()
-                    } else {
-                        newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
-                        newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
-                        newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
-                    }
-
-                    val newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
-
-                    val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
-
-                    texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
-                }
-            }
-            val newTexture = DynamicTexture(texture1)
-            newTexture.setFilter(false, false)
-            return DynamicStateShard(newTexture)
+            return DynamicStateShard(getInterpolatedTexture(frames[o], frames[s], i))
         }
         else {
             val frame = floor(frameIndex).toInt() % frames.size
@@ -323,10 +280,53 @@ class KeyframableTextureSupplier(val textures: MutableList<ResourceLocation>) : 
             val keyframeMap = animation!!.cobblemonTextures[layerName]!!
             var adjustedTime = (state.animationSeconds - startTime)
             if (animation!!.shouldLoop) adjustedTime %= animation!!.animationLength.toFloat()
-            val keyIndex = keyframeMap.keys.indexOfFirst { it >= adjustedTime }
-            index = when(keyIndex) {
-                -1 -> 0
-                else -> keyframeMap[keyframeMap.keys.elementAt(keyIndex)]!!.textureSlot
+            val keyIndex = keyframeMap.keys.indexOfLast { it <= adjustedTime }
+            val keyframe1 = when(keyIndex) {
+                -1 -> keyframeMap.firstEntry()
+                else -> keyframeMap.entries.toMutableList()[keyIndex]
+            }
+            val keyframe2 = when {
+                keyIndex + 1 >= keyframeMap.size -> keyframeMap.lastEntry()
+                else -> keyframeMap.entries.toMutableList()[keyIndex+1]
+            }
+
+            val i = (adjustedTime - keyframe1.key.toFloat()) / (keyframe2.key - keyframe1.key)
+            if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.LINEAR) {
+                return DynamicStateShard(getInterpolatedTexture(textures[keyframe1.value.textureSlot], textures[keyframe2.value.textureSlot], i))
+            } else if (keyframe1.value.textureSlot != keyframe2.value.textureSlot && keyframe1.value.interpolationType == TextureInterpolationType.BEZIER) {
+                val clampedCubicValues = keyframe1.value.cubicLerpFunctionValues.toMutableList()
+                for (value in 0..<clampedCubicValues.size) {
+                    clampedCubicValues[value] = Math.clamp(clampedCubicValues[value],0.0,1.0)
+                }
+
+                val points = mutableListOf<Vector2d>()
+                for (o in 0..200) {
+                    val t = o/200.0
+                    val omt = (1.0-t)
+
+                    val point = Vector2d()
+                    point.x = 3.0 * omt * omt * t * clampedCubicValues[0] + 3.0 * omt * t * t * clampedCubicValues[2] + t * t * t
+                    point.y = 3.0 * omt * omt * t * clampedCubicValues[1] + 3.0 * omt * t * t * clampedCubicValues[3] + t * t * t
+
+                    points.add(point)
+                }
+
+                var beforePoint = Vector2d(0.0,0.0)
+                var afterPoint = Vector2d(1.0, 1.0)
+
+                for (point in points) {
+                    if (point.x > beforePoint.x && point.x < i) {
+                        beforePoint = point
+                    }
+                    if (point.x < afterPoint.x && point.x > i) {
+                        afterPoint = point
+                    }
+                }
+
+                val cubicInterp = beforePoint.y + (afterPoint.y - beforePoint.y) * ((i - beforePoint.x) / (afterPoint.x - beforePoint.x))
+                return DynamicStateShard(getInterpolatedTexture(textures[keyframe1.value.textureSlot], textures[keyframe2.value.textureSlot], cubicInterp))
+            } else {
+                index = keyframe1.value.textureSlot
             }
         }
 
@@ -362,4 +362,46 @@ class ModelLayer {
 enum class SpriteType {
     PORTRAIT,
     PROFILE
+}
+
+private fun getInterpolatedTexture(resource1: ResourceLocation, resource2: ResourceLocation, i: Double): DynamicTexture {
+    val resourceManager = Minecraft.getInstance().resourceManager
+
+    val texture1 = NativeImage.read(resourceManager.getResourceOrThrow(resource1).open())
+    val texture2 = NativeImage.read(resourceManager.getResourceOrThrow(resource2).open())
+
+    for (x in 0..<texture1.width) {
+        for (y in 0..<texture1.height) {
+            val color1 = texture1.getPixelRGBA(x,y).toRGBA()
+            val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+
+            var newRed : Int
+            var newGreen : Int
+            var newBlue : Int
+
+            //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
+            if (color1.w == 0F && color2.w == 1F) {
+                newRed = floor(color2.x * 255).toInt()
+                newGreen = floor(color2.y * 255).toInt()
+                newBlue = floor(color2.z * 255).toInt()
+            } else if (color1.w == 1F && color2.w == 0F) {
+                newRed = floor(color1.x * 255).toInt()
+                newGreen = floor(color1.y * 255).toInt()
+                newBlue = floor(color1.z * 255).toInt()
+            } else {
+                newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
+                newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
+                newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
+            }
+
+            val newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
+
+            val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
+
+            texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+        }
+    }
+    val newTexture = DynamicTexture(texture1)
+    newTexture.setFilter(false, false)
+    return newTexture
 }
