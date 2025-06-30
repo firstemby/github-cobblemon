@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -50,11 +51,18 @@ class WaterWanderTaskConfig : SingleTaskConfig {
 
         val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
 
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            MemoryModuleType.LOOK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN
+        )
+
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.registered(MemoryModuleType.LOOK_TARGET)
-            ).apply(it) { walkTarget, lookTarget ->
+                it.registered(MemoryModuleType.LOOK_TARGET),
+                it.registered(CobblemonMemories.PATH_COOLDOWN)
+            ).apply(it) { walkTarget, lookTarget, pathCooldown ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isInWater) {
                         return@Trigger false
@@ -65,6 +73,8 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) {
                         return@Trigger false
                     }
+
+                    pathCooldown.setWithExpiry(true, 60L)
 
                     val target = BehaviorUtils.getRandomSwimmablePos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt()) ?: return@Trigger false
                     walkTarget.set(

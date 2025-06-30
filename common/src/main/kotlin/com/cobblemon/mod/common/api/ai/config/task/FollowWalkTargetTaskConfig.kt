@@ -20,6 +20,7 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FollowWalkTargetTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
@@ -30,6 +31,7 @@ class FollowWalkTargetTaskConfig : SingleTaskConfig {
 
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.PATH, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)
         return WrapperLivingEntityTask(
             FollowWalkTargetTask(minRunTicks.resolveInt(), maxRunTicks.resolveInt()),
             PathfinderMob::class.java

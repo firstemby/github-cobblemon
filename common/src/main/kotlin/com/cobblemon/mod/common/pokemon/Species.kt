@@ -189,6 +189,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.preEvolution?.species
         this.preEvolution?.form
         this.evolutions.size
+        behaviour.herd.initialize()
     }
 
     // Ran after initialize due to us creating a Pokémon here which requires all the properties in #initialize to be present for both this and the results, this is the easiest way to quickly resolve species + form

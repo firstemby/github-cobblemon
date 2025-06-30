@@ -8,22 +8,16 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
-import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.entity.npc.ai.MeleeAttackTask
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.tasks.BattleFlightTask
-import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.entity.pokemon.ai.tasks.ManageFlightInBattleTask
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class BattleFlightTaskConfig : SingleTaskConfig {
-
+class ManageFlightInBattleTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
-
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -31,6 +25,7 @@ class BattleFlightTaskConfig : SingleTaskConfig {
         if (entity !is PokemonEntity) {
             return null
         }
-        return BattleFlightTask.create()
+        behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_BATTLE)
+        return ManageFlightInBattleTask.create()
     }
 }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
@@ -25,9 +26,12 @@ class SwitchFromFightTaskConfig : SingleTaskConfig {
             it.absent(MemoryModuleType.ATTACK_TARGET)
         ).apply(it) { _ ->
             Trigger { level, entity, _ ->
+                entity.brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
                 entity.brain.updateActivityFromSchedule(level.dayTime, level.gameTime)
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.ATTACK_TARGET)
     }
 }

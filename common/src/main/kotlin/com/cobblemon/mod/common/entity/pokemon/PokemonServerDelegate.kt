@@ -186,6 +186,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (this::entity.isInitialized) {
             when (data) {
                 PokemonEntity.BEHAVIOUR_FLAGS -> updatePoseType()
+                PokemonEntity.SPECIES -> entity.refreshRiding()
             }
         }
     }

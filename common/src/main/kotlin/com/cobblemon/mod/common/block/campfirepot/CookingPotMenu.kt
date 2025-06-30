@@ -192,7 +192,7 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
     }
 
     override fun shouldMoveToInventory(slotIndex: Int): Boolean {
-        return slotIndex != CampfireBlockEntity.Companion.RESULT_SLOT && slotIndex != CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
+        return slotIndex != CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
     }
 
     override fun quickMoveStack(

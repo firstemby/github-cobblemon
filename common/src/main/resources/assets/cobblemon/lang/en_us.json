@@ -1409,17 +1409,6 @@
   "cobblemon.pokedex.variation.season": "Season",
   "cobblemon.pokedex.variation.snake_pattern": "Snake Pattern",
 
-  "cobblemon.cosmetic.held_logs.oak": "Oak Log",
-  "cobblemon.cosmetic.held_logs.spruce": "Spruce Log",
-  "cobblemon.cosmetic.held_logs.birch": "Birch Log",
-  "cobblemon.cosmetic.held_logs.jungle": "Jungle Log",
-  "cobblemon.cosmetic.held_logs.acacia": "Acacia Log",
-  "cobblemon.cosmetic.held_logs.dark_oak": "Dark Oak Log",
-  "cobblemon.cosmetic.held_logs.crimson": "Crimson Log",
-  "cobblemon.cosmetic.held_logs.warped": "Warped Log",
-  "cobblemon.cosmetic.held_logs.mangrove": "Mangrove Log",
-  "cobblemon.cosmetic.held_logs.cherry": "Cherry Log",
-
   "cobblemon.mark.ribbon_ability": "Ability Ribbon",
   "cobblemon.mark.ribbon_ability.desc": "A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.",
 
@@ -3647,6 +3636,21 @@
   "cobblemon.entity.variable.player_texture.name": "Player Texture Username",
   "cobblemon.entity.variable.player_texture.desc": "The username of the player to texture the entity as.",
 
+  "cobblemon.entity.variable.npc_render_scale.name": "Render Scale",
+  "cobblemon.entity.variable.npc_render_scale.desc": "The scale of the NPC entity when rendered. 1.0 is normal size.",
+
+  "cobblemon.entity.variable.npc_box_scale.name": "Hitbox Scale",
+  "cobblemon.entity.variable.npc_box_scale.desc": "The scale of the NPC entity's hitbox. 1.0 is normal size. This also affects the visible size of the NPC.",
+
+  "cobblemon.entity.variable.npc_box_width.name": "Hitbox Width",
+  "cobblemon.entity.variable.npc_box_width.desc": "The width of the NPC entity's hitbox.",
+
+  "cobblemon.entity.variable.npc_box_height.name": "Hitbox Height",
+  "cobblemon.entity.variable.npc_box_height.desc": "The height of the NPC entity's hitbox.",
+
+  "cobblemon.entity.variable.npc_box_eyes_ratio.name": "Hitbox Eyes Position Ratio",
+  "cobblemon.entity.variable.npc_box_eyes_ratio.desc": "The ratio of the NPC entity's hitbox height that the eyes are at, used for look angles. 0.85 is the value used for most humanoid models.",
+
   "cobblemon.ui.entity.behaviour_editor": "Behaviors",
   "cobblemon.ui.entity.behaviour_editor.label": "Behaviors - %1$s",
   "cobblemon.ui.entity.behaviour_editor.label.active": "Active Behaviors",
@@ -3736,41 +3740,11 @@
   "cobblemon.behaviour.pokemon_herds.name": "Pokémon Herds",
   "cobblemon.behaviour.pokemon_herds.desc": "Pokémon will form herds with Pokémon they consider suitable leaders.",
 
+  "cobblemon.behaviour.npc_scale_configuration.name": "NPC Entity Scales",
+  "cobblemon.behaviour.npc_scale_configuration.desc": "Allows configuring the render- and hitbox-scale of the NPC.",
+
   "npc.sacchi.name": "Professor Sacchi",
-  "npc.variable.challenge_cooldown.name": "Challenge Cooldown",
-  "npc.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
 
-  "npc.variable.player_win_command.name": "Player Win Command",
-  "npc.variable.player_win_command.desc": "Command to run when a player wins against the NPC. Use {{player}} where the player name should be.",
-
-  "npc.variable.player_lose_command.name": "Player Lose Command",
-  "npc.variable.player_lose_command.desc": "Command to run when a player loses against the NPC. Use {{player}} where the player name should be.",
-
-  "npc.variable.on_defeat.name": "On Defeat MoLang",
-  "npc.variable.on_defeat.desc": "MoLang expression to run when the NPC loses a battle. This has q.npc as the NPC entity.",
-
-  "npc.variable.on_victory.name": "On Victory MoLang",
-  "npc.variable.on_victory.desc": "MoLang expression to run when the NPC wins a battle. This has q.npc as the NPC entity.",
-
-  "npc.variable.on_player_wins.name": "On Player Wins MoLang",
-  "npc.variable.on_player_wins.desc": "MoLang expression to run when a player wins a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
-
-  "npc.variable.on_player_loses.name": "On Player Loses MoLang",
-  "npc.variable.on_player_loses.desc": "MoLang expression to run when a player loses a battle against the NPC. This has q.player as the player entity and q.npc as the NPC entity.",
-
-  "npc.variable.home_x.name": "Home X",
-  "npc.variable.home_x.desc": "X coordinate of the NPC's home location.",
-  "npc.variable.home_y.name": "Home Y",
-  "npc.variable.home_y.desc": "Y coordinate of the NPC's home location.",
-  "npc.variable.home_z.name": "Home Z",
-  "npc.variable.home_z.desc": "Z coordinate of the NPC's home location.",
-  "npc.variable.home_radius.name": "Home Radius",
-  "npc.variable.home_radius.desc": "Maximum distance they can be from their home position before they path back to it.",
-
-  "npc.variable.yaw.name": "Yaw",
-  "npc.variable.yaw.desc": "Yaw rotation (degrees) of the NPC.",
-  "npc.variable.pitch.name": "Pitch",
-  "npc.variable.pitch.desc": "Pitch rotation (degrees) of the NPC.",
   "cobblemon.move.pound": "Pound",
   "cobblemon.move.pound.desc": "The target is physically pounded with a long tail, a foreleg, or the like.",
   "cobblemon.move.karatechop": "Karate Chop",

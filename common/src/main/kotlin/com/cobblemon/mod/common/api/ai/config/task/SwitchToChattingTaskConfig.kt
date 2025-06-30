@@ -24,11 +24,10 @@ class SwitchToChattingTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext: BehaviourConfigurationContext
     ) = BehaviorBuilder.create {
         it.group(
-            it.present(CobblemonMemories.DIALOGUES),
-            it.registered(MemoryModuleType.WALK_TARGET)
-        ).apply(it) { _, walkTarget ->
+            it.present(CobblemonMemories.DIALOGUES)
+        ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                walkTarget.erase()
+                entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET) // it may not even have this memory but clear it if it got it
                 entity.brain.setActiveActivityIfPossible(CobblemonActivities.NPC_CHATTING)
                 return@Trigger true
             }

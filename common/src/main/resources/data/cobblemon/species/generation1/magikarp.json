@@ -50,8 +50,25 @@
   },
   "behaviour": {
     "herd": {
-      "toleratedLeaders": ["cobblemon:magikarp"],
-      "maxSize": 9
+      "toleratedLeaders": [
+        {
+          "pokemon": "magikarp shiny=false",
+          "tier": 1,
+          "ignoresLevel": false
+        },
+        {
+          "pokemon": "magikarp shiny=true",
+          "tier": 2,
+          "ignoresLevel": true
+        },
+        {
+          "pokemon": "gyarados",
+          "tier": 3,
+          "ignoresLevel": true
+        }
+      ],
+      "maxSize": 9,
+      "minMaxDistance": "1-4"
     },
     "moving": {
       "canLook": false,

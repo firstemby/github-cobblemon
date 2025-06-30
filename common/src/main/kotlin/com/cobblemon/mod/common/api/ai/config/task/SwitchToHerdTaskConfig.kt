@@ -23,6 +23,7 @@ class SwitchToHerdTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.HERD_LEADER)
         return BehaviorBuilder.create {
             it.group(
                 it.present(CobblemonMemories.HERD_LEADER)

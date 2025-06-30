@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class LookAtEntitiesTaskConfig : SingleTaskConfig {
     companion object {
@@ -36,6 +38,8 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.LOOK_TARGET)
+        behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
         return SetEntityLookTarget.create(maxDistance.resolveFloat())
     }
 }

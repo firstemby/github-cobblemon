@@ -43,6 +43,10 @@ class FindAirTaskConfig : SingleTaskConfig {
         if (entity !is PathfinderMob) {
             return null
         }
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN
+        )
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),

@@ -23,6 +23,7 @@ class SwitchToActionEffectTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.ACTIVE_ACTION_EFFECT)
         return BehaviorBuilder.create {
             it.group(
                 it.absent(CobblemonMemories.ACTIVE_ACTION_EFFECT)

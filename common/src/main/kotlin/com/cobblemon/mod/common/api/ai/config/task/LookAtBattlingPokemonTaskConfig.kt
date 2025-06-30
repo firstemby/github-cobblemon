@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -18,6 +20,7 @@ import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
     companion object {
@@ -40,6 +43,11 @@ class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!resolveBooleanVariable(LOOK_AT_BATTLING_POKEMON)) return null
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.LOOK_TARGET,
+            CobblemonMemories.BATTLING_POKEMON
+        )
+        behaviourConfigurationContext.addSensors(CobblemonSensors.BATTLING_POKEMON)
         return LookAtBattlingPokemonTask.create(
             minDurationTicks = minDurationTicks.resolveInt(),
             maxDurationTicks = maxDurationTicks.resolveInt()

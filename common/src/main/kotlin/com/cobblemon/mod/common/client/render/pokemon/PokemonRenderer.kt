@@ -161,7 +161,6 @@ class PokemonRenderer(
         //Render Held Item
         heldItemRenderer.renderOnModel(
             entity.shownItem,
-            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,
@@ -229,7 +228,7 @@ class PokemonRenderer(
         poseMatrix.pushPose()
         var beamSourcePosition = if (phaseTarget is NPCEntity) {
                 val npcDelegate = phaseTarget.delegate as NPCClientDelegate
-                val baseScale = phaseTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = phaseTarget.renderScale.toDouble()
 
                 (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
                     ?: phaseTarget.position().add(0.0, (phaseTarget.bbHeight / 2.0) * baseScale, 0.0)
@@ -315,9 +314,9 @@ class PokemonRenderer(
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
             } else if (beamTarget is NPCEntity) {
                 val npcDelegate = beamTarget.delegate as NPCClientDelegate
-                val baseScale = beamTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = beamTarget.renderScale * beamTarget.hitboxScale
 
-                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale.toDouble()))
                     ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
             } else {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()

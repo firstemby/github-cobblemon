@@ -8,15 +8,19 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.ai.LookAtSpeakerTask
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class LookAtSpeakerTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
-    ) = LookAtSpeakerTask.create()
+    ) = LookAtSpeakerTask.create().also {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET, CobblemonMemories.DIALOGUES)
+    }
 }

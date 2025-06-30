@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FlyInCirclesTaskConfig : SingleTaskConfig {
     val poseTypes: Set<PoseType> = setOf(
@@ -31,7 +32,7 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
     )
 
     val minAngularVelocityDegrees = numberVariable(WANDER, "min_fly_circling_angular_velocity", 0.0).asExpressible()
-    val maxAngularVelocityDegrees = numberVariable(WANDER, "max_fly_circling_angular_velocity", 2.0).asExpressible()
+    val maxAngularVelocityDegrees = numberVariable(WANDER, "max_fly_circling_angular_velocity", 1.0).asExpressible()
     val speed = numberVariable(WANDER, "fly_circling_speed", 0.6).asExpressible()
     val verticalSpeed: ExpressionOrEntityVariable = Either.left("0.0".asExpression())
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
@@ -55,6 +56,7 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
         if (entity !is PokemonEntity) {
             return null
         }
+        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.PATH)
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         return CircleAroundTask(
             poseTypes = poseTypes,

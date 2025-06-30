@@ -20,6 +20,7 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class FleeAttackerTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "flee_attacker", true).asExpressible()
@@ -38,6 +39,10 @@ class FleeAttackerTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean() || entity !is PathfinderMob) return null
+
+        behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET)
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
+
         val speedMultiplier = speedMultiplier.resolveFloat()
         val desiredDistance = desiredDistance.resolveInt()
         return WrapperLivingEntityTask(

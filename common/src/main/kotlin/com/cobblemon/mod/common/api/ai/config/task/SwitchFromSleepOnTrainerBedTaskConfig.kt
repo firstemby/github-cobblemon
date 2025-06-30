@@ -29,6 +29,7 @@ class SwitchFromSleepOnTrainerBedTaskConfig : SingleTaskConfig {
             return null
         }
 
+        behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_SLEEPING)
         return BehaviorBuilder.create {
             it.group(
                 it.registered(CobblemonMemories.POKEMON_SLEEPING)

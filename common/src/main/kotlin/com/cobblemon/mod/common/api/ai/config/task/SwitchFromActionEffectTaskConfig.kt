@@ -29,5 +29,7 @@ class SwitchFromActionEffectTaskConfig : SingleTaskConfig {
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.ACTIVE_ACTION_EFFECT)
     }
 }

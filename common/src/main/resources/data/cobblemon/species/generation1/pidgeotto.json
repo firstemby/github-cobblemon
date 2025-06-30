@@ -58,8 +58,26 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "fightsMelee": true,
+      "willDefendSelf": true
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          {
+            "type": "cobblemon:target_entity",
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:magikarp' && q.entity.world.is_air(q.entity.x, q.entity.y + 1, q.entity.z)"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [

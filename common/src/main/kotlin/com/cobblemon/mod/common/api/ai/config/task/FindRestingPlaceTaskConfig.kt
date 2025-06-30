@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
@@ -18,6 +20,7 @@ import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FindRestingPlaceTaskConfig : SingleTaskConfig {
     val horizontalSearchDistance: ExpressionOrEntityVariable = Either.left("16".asExpression())
@@ -28,6 +31,13 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(
+            CobblemonMemories.PATH_COOLDOWN,
+            CobblemonMemories.POKEMON_DROWSY,
+            MemoryModuleType.WALK_TARGET
+        )
+        behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)
+
         return WrapperLivingEntityTask(
             FindRestingPlaceTask.create(horizontalSearchDistance.resolveInt(), verticalSearchDistance.resolveInt()),
             PokemonEntity::class.java

@@ -40,5 +40,7 @@ class SwitchToFightTaskConfig : SingleTaskConfig {
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.ATTACK_TARGET)
     }
 }

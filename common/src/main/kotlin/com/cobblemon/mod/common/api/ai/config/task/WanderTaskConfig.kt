@@ -98,6 +98,12 @@ class WanderTaskConfig : SingleTaskConfig {
 
         val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
 
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            MemoryModuleType.LOOK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN
+        )
+
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
@@ -134,9 +140,6 @@ class WanderTaskConfig : SingleTaskConfig {
                         maximumHeight = maximumHeight,
                         world = world
                     )
-//                    if (targetVec.y < minimumHeight || targetVec.y > maximumHeight) {
-//                        return@Trigger false
-//                    }
                     walkTarget.set(
                         CobblemonWalkTarget(
                             pos = pos,

@@ -20,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class LookAtTargetTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
@@ -38,6 +39,7 @@ class LookAtTargetTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET)
         return WrapperLivingEntityTask(LookAtTargetSink(minDurationTicks.resolveInt(), maxDurationTicks.resolveInt()), Mob::class.java)
     }
 }

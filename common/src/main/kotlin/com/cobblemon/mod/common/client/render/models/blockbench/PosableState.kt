@@ -342,14 +342,14 @@ abstract class PosableState : Schedulable {
                 val locator = if (params.params.size > 1) params.getString(1) else "root"
                 val effect = BedrockParticleOptionsRepository.getEffect(effectId) ?: run {
                     LOGGER.error("Unable to find a particle effect with id $effectId")
-                    return@addFunction Unit
+                    return@addFunction DoubleValue.ZERO
                 }
 
-                val entity = getEntity() ?: return@addFunction Unit
+                val entity = getEntity() ?: return@addFunction DoubleValue.ZERO
                 val world = entity.level() as ClientLevel
 
-                val rootMatrix = locatorStates["root"]!!
-                val locatorMatrix = locatorStates[locator] ?: locatorStates["root"]!!
+                val rootMatrix = locatorStates["root"] ?: return@addFunction DoubleValue.ZERO // Played before it's on screen for the first time
+                val locatorMatrix = locatorStates[locator] ?: rootMatrix
                 val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
                 val particleRuntime = MoLangRuntime().setup().setupClient()
                 particleRuntime.environment.query.addFunction("entity") { runtime.environment.query }

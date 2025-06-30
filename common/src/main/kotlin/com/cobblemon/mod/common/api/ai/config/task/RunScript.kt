@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 /**
  * Runs a registered MoLang script (from the molang datapack folder) each tick.
@@ -38,6 +39,8 @@ class RunScript : SingleTaskConfig {
 
     val script = stringVariable(SCRIPT_CATEGORY, "script", "cobblemon:dummy_script").asExpressible()
     val variables = mutableListOf<MoLangConfigVariable>()
+    val memories = emptySet<MemoryModuleType<*>>()
+    val sensors = emptySet<SensorType<*>>()
 
     override fun getVariables(entity: LivingEntity) = listOf(script).asVariables() + variables
 
@@ -45,6 +48,8 @@ class RunScript : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? = BehaviorBuilder.create {
+        behaviourConfigurationContext.addMemories(memories + MemoryModuleType.LOOK_TARGET)
+        behaviourConfigurationContext.addSensors(sensors)
         it.group(
             it.registered(MemoryModuleType.LOOK_TARGET) // I think I need to have at least something here?
         ).apply(it) { _ ->

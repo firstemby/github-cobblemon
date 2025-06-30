@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
@@ -36,6 +37,8 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
         return if (includePassiveDamage.resolveBoolean()) {
+            behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY)
+            behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
             BehaviorBuilder.create {
                 it.group(it.present(MemoryModuleType.HURT_BY))
                     .apply(it) { _ ->
@@ -47,6 +50,8 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
                     }
             }
         } else {
+            behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY_ENTITY)
+            behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
             BehaviorBuilder.create {
                 it.group(it.present(MemoryModuleType.HURT_BY_ENTITY))
                     .apply(it) { _ ->

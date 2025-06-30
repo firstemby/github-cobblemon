@@ -40,6 +40,11 @@ class SpawnNPCPacket(
     var poseType: PoseType,
     var texture: NPCPlayerTexture,
     var hideNameTag: Boolean,
+    var hitboxWidth: Float = 0.6F,
+    var hitboxHeight: Float = 1.8F,
+    var hitboxEyesHeight: Float = 1.62F,
+    var hitboxScale: Float = 1F,
+    var renderScale: Float = 1F,
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnNPCPacket, NPCEntity>(vanillaSpawnPacket) {
 
@@ -55,6 +60,11 @@ class SpawnNPCPacket(
         entity.entityData.get(NPCEntity.POSE_TYPE),
         entity.entityData.get(NPCEntity.NPC_PLAYER_TEXTURE),
         entity.hideNameTag,
+        entity.hitboxWidth,
+        entity.hitboxHeight,
+        entity.hitboxEyesHeight,
+        entity.hitboxScale,
+        entity.renderScale,
         vanillaSpawnPacket
     )
 
@@ -71,6 +81,11 @@ class SpawnNPCPacket(
             buffer.writeByteArray(this.texture.texture)
         }
         buffer.writeBoolean(this.hideNameTag)
+        buffer.writeFloat(hitboxWidth)
+        buffer.writeFloat(hitboxHeight)
+        buffer.writeFloat(hitboxEyesHeight)
+        buffer.writeFloat(hitboxScale)
+        buffer.writeFloat(renderScale)
     }
 
     override fun applyData(entity: NPCEntity, level: ClientLevel) {
@@ -85,6 +100,11 @@ class SpawnNPCPacket(
         entity.entityData.set(NPCEntity.POSE_TYPE, poseType)
         entity.entityData.set(NPCEntity.NPC_PLAYER_TEXTURE, texture)
         entity.entityData.set(NPCEntity.HIDE_NAME_TAG, this.hideNameTag)
+        entity.hitboxWidth = this.hitboxWidth
+        entity.hitboxHeight = this.hitboxHeight
+        entity.hitboxEyesHeight = this.hitboxEyesHeight
+        entity.hitboxScale = this.hitboxScale
+        entity.renderScale = this.renderScale
     }
 
     override fun checkType(entity: Entity): Boolean = entity is NPCEntity
@@ -106,9 +126,14 @@ class SpawnNPCPacket(
                 NPCPlayerTexture(byteArrayOf(), model)
             }
             val hideNameTag = buffer.readBoolean()
+            val hitboxWidth = buffer.readFloat()
+            val hitboxHeight = buffer.readFloat()
+            val hitboxEyesHeight = buffer.readFloat()
+            val hitboxScale = buffer.readFloat()
+            val renderScale = buffer.readFloat()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnNPCPacket(npc, resourceIdentifier, aspects, level, battleIds, name, poseType, texture, hideNameTag, vanillaPacket)
+            return SpawnNPCPacket(npc, resourceIdentifier, aspects, level, battleIds, name, poseType, texture, hideNameTag, hitboxWidth, hitboxHeight, hitboxEyesHeight, hitboxScale, renderScale, vanillaPacket)
         }
     }
 

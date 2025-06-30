@@ -9,12 +9,12 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.toDF
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.RunOne
@@ -35,14 +35,14 @@ class OneOfTaskConfig : SingleTaskConfig {
         val task: TaskConfig = SingleTaskConfig.nothing()
     }
 
-    val condition: ExpressionLike = "true".asExpressionLike()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val options = mutableListOf<OneOfTaskOption>()
 
     override fun getVariables(entity: LivingEntity) = options.flatMap { it.task.getVariables(entity) }
 
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!runtime.resolveBoolean(condition)) return null
+        if (!condition.resolveBoolean()) return null
         return RunOne(options.map { it.task.createTasks(entity, behaviourConfigurationContext).first() toDF it.weight })
     }
 }

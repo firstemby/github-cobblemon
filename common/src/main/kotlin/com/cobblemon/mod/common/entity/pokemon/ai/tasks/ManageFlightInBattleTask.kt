@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
-
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
@@ -19,19 +18,17 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 
-
-object BattleFlightTask {
+object ManageFlightInBattleTask {
     fun create(): OneShot<LivingEntity> = BehaviorBuilder.create { context ->
         context.group(
-                context.present(CobblemonMemories.POKEMON_BATTLE)
+            context.present(CobblemonMemories.POKEMON_BATTLE)
         ).apply(context) {
             Trigger { _, entity, _ ->
-
                 if (entity !is PokemonEntity) {
                     return@Trigger false
                 }
-                if (entity.exposedForm.behaviour.moving.fly.canFly) {
 
+                if (entity.exposedForm.behaviour.moving.fly.canFly) {
                     if (entity.ticksLived > 0 && !entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) && entity.navigation.isAirborne(entity.level(), entity.blockPosition())) {
                         // Let flyers fly in battle if they're in the air
                         entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)

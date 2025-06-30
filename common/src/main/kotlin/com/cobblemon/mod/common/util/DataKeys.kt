@@ -250,7 +250,10 @@ object DataKeys {
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    @Deprecated("Divided into RENDER_SCALE and BOX_SCALE")
     const val NPC_BASE_SCALE = "BaseScale"
+    const val NPC_BOX_SCALE = "BoxScale"
+    const val NPC_RENDER_SCALE = "RenderScale"
     const val NPC_HITBOX = "Hitbox"
     const val NPC_HITBOX_WIDTH = "Width"
     const val NPC_HITBOX_HEIGHT = "Height"

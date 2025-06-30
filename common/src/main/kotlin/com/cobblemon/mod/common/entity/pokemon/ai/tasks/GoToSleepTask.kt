@@ -23,12 +23,9 @@ object GoToSleepTask {
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.absent(MemoryModuleType.ANGRY_AT),
-                it.absent(MemoryModuleType.ATTACK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.absent(CobblemonMemories.POKEMON_BATTLE),
                 it.registered(CobblemonMemories.POKEMON_DROWSY)
-            ).apply(it) { _, _, _, _, pokemonDrowsy ->
+            ).apply(it) { _, pokemonDrowsy ->
                 Trigger { world, entity, _ ->
                     val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
                     if (entity.behaviour.resting.canSleep && ((it.tryGet(pokemonDrowsy).orElse(false) && entity.canSleepAt(entity.blockPosition().below())) || hasSleepStatus) && entity.pokemon.storeCoordinates.get()?.store !is PartyStore) {

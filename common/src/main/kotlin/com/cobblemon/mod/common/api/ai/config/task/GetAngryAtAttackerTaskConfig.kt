@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.entity.ai.GetAngryAtAttackerTask
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
     companion object {
@@ -32,6 +34,11 @@ class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.HURT_BY_ENTITY,
+            MemoryModuleType.ANGRY_AT,
+        )
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
         return GetAngryAtAttackerTask.create()
     }
 }

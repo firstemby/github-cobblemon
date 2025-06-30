@@ -108,6 +108,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
@@ -295,6 +296,13 @@ object MoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL)
+            }
+            map.put("is_air") { params ->
+                val x = params.getDouble(0).toInt()
+                val y = params.getDouble(1).toInt()
+                val z = params.getDouble(2).toInt()
+                val blockState = world.getBlockState(BlockPos(x, y, z))
+                return@put DoubleValue(blockState.isAir)
             }
             map.put("get_block") { params ->
                 val x = params.getInt(0)
@@ -919,6 +927,34 @@ object MoLangFunctions {
                     Cobblemon.LOGGER.error("Unknown NPC class: $identifier")
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("set_render_scale") { params ->
+                val scale = params.getDouble(0)
+                npc.renderScale = scale.toFloat()
+                return@put DoubleValue.ONE
+            }
+            map.put("render_scale") { _ -> DoubleValue(npc.renderScale) }
+            map.put("set_hitbox_scale") { params ->
+                val scale = params.getDouble(0).toFloat()
+                npc.hitboxScale = scale
+                npc.refreshDimensions()
+                return@put DoubleValue.ONE
+            }
+            map.put("hitbox_scale") { _ -> DoubleValue(npc.hitboxScale) }
+            map.put("set_hitbox") { params ->
+                if (params.params.size == 0) {
+                    npc.hitbox = null
+                    return@put DoubleValue.ONE
+                }
+                val width = params.getDouble(0).toFloat()
+                val height = params.getDouble(1).toFloat()
+                val eyeHeight = params.getDoubleOrNull(2)?.toFloat() ?: (height * 0.85F)
+                npc.hitbox = EntityDimensions.scalable(width, height).withEyeHeight(eyeHeight)
+                return@put DoubleValue.ONE
+            }
+            map.put("unset_hitbox") {
+                npc.hitbox = null
+                return@put DoubleValue.ONE
             }
             map.put("aspects") {
                 val aspects = npc.aspects

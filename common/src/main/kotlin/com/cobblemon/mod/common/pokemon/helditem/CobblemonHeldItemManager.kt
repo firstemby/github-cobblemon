@@ -105,13 +105,13 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
         }
         val effect = battleMessage.effect()
         val battlerName = pokemon.getName()
+        val itemName = this.nameOf(itemID)
         // Airballoon is the only item using the null effect gimmick
         if (effect == null) {
-            battle.broadcastChatMessage(battleLang("item.$itemID", battlerName))
+            battle.broadcastChatMessage(battleLang("item.$itemID", battlerName, itemName))
             return
         }
         val sourceName = battleMessage.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
-        val itemName = this.nameOf(itemID)
         val effectId = effect.id
         val text = when (effectId) {
             "magician", "pickpocket", "covet", "thief" -> battleLang("item.thief", battlerName, itemName, sourceName) // The "source" is actually the target here
