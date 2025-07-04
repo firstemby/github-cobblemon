@@ -11,8 +11,10 @@ package com.cobblemon.mod.common.client.gui
 import com.cobblemon.mod.common.mixin.accessor.EntryListWidgetAccessor
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ComponentPath
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ObjectSelectionList
+import net.minecraft.client.gui.navigation.FocusNavigationEvent
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.entity.layers.RenderLayer
@@ -40,6 +42,11 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     init {
         setRectangle(width, height, top, top + height)
         setLeft(left)
+    }
+
+    override fun nextFocusPath(event: FocusNavigationEvent): ComponentPath? {
+        if (!this.visible) return null
+        return super.nextFocusPath(event)
     }
 
     final override fun setRectangle(width: Int, height: Int, top: Int, bottom: Int) {

@@ -36,7 +36,7 @@ class ExitButton(
             y = y,
             width = WIDTH,
             height = HEIGHT,
-            vOffset = if (isHovered(pMouseX.toDouble(), pMouseY.toDouble())) HEIGHT else 0,
+            vOffset = if (isFocused || isHovered(pMouseX.toDouble(), pMouseY.toDouble())) HEIGHT else 0,
             textureHeight = HEIGHT * 2
         )
 

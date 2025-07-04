@@ -47,7 +47,7 @@ class IconButton(
             texture = if (altResource != null && showAlt) altResource else resource,
             width = buttonWidth,
             height = buttonHeight,
-            vOffset = if (isHovered() || highlighted) buttonHeight else 0,
+            vOffset = if (isHoveredOrFocused() || highlighted) buttonHeight else 0,
             textureHeight = buttonHeight * 2,
             scale = SCALE
         )
