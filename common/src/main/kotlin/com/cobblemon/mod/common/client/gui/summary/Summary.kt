@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
+import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
@@ -117,7 +118,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     override val schedulingTracker = SchedulingTracker()
 
-    internal lateinit var selectedPokemon: Pokemon
+    private val party = ArrayList(party)
+    internal var selectedPokemon: Pokemon = this.party[selection] ?: this.party.first { it != null }!!
     private lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
     private lateinit var modelWidget: ModelWidget
@@ -128,7 +130,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private lateinit var heldItemVisibilityButton: SummaryButton
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
-    private val party = ArrayList(party)
 
     override fun renderBlurredBackground(delta: Float) { }
 
@@ -143,12 +144,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         if (this.party.size > 6) {
             throw IllegalArgumentException("Summary UI cannot display more than six Pokemon")
         }
-        val idealSelected = this.party[selection]
-        if (idealSelected == null) {
-            this.selectedPokemon = this.party.first { it != null }!!
-        } else {
-            this.selectedPokemon = idealSelected
-        }
+        switchSelection(selection)
         this.listenToMoveSet()
 
         val x = (width - BASE_WIDTH) / 2
@@ -193,7 +189,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             clickAction = {
                 selectedPokemon.heldItemVisible = !selectedPokemon.heldItemVisible
                 heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
-                modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
                 // Send item visibility update to server
                 sendToServer(SetItemHiddenPacket(selectedPokemon.uuid, selectedPokemon.heldItemVisible))
             },
@@ -288,7 +283,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             rotationY = 325F,
             offsetY = -10.0,
             shouldFollowCursor = true,
-            heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
         )
         addRenderableOnly(this.modelWidget)
     }
@@ -324,20 +318,26 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     fun switchSelection(newSelection: Int) {
         saveMarkings()
         this.selectedPokemon.moveSet.changeFunction = {}
-        this.party.getOrNull(newSelection)?.let { this.selectedPokemon = it }
+        this.party.getOrNull(newSelection)?.let { newPokemon ->
+            newPokemon.changeObservable.pipe( stopAfter { Minecraft.getInstance().screen != this || this.selectedPokemon != newPokemon } ).subscribe {
+                updatePokemonInfo()
+            }
+            this.selectedPokemon = newPokemon
+        }
+        updatePokemonInfo()
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
-        children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
-
-        if (::modelWidget.isInitialized) {
-            modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
-            modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
-            heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
-        }
-
-        if (::nicknameEntryWidget.isInitialized) nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
-
         if (::markingsWidget.isInitialized) markingsWidget.setActivePokemon(selectedPokemon)
+        children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
+    }
+
+    fun updatePokemonInfo() {
+        val pokemon = selectedPokemon.asRenderablePokemon()
+        if (::modelWidget.isInitialized && modelWidget.pokemon != pokemon) {
+            modelWidget.pokemon = pokemon
+            heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
+            if (::nicknameEntryWidget.isInitialized) nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
+        }
     }
 
     /**
@@ -437,7 +437,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 sideScreen = PartyWidget(
                         pX = x + 216,
                         pY = y + 24,
-                        isParty = selectedPokemon in CobblemonClient.storage.myParty,
+                        isParty = selectedPokemon in CobblemonClient.storage.party,
                         summary = this,
                         partyList = this.party
                 )

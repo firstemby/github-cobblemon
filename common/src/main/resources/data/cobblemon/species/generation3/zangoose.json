@@ -50,8 +50,26 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "combat": {
+      "fightsMelee": true,
+      "willDefendSelf": true
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          {
+            "type": "cobblemon:hate_entity",
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:seviper'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 3,
     "entries": [

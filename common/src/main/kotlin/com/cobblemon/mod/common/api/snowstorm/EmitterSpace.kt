@@ -37,17 +37,10 @@ class EmitterSpace(
         if (rootRotation.x.isNaN() || rootRotation.y.isNaN() || rootRotation.z.isNaN() || rootRotation.angle.isNaN()) {
             rootRotation = AxisAngle4f()
         }
-        val scale = Vector3f()
+        val scale = Vector3f(1f, 1f, 1f)
 
         if (scaling == ScalingMode.ENTITY) {
             locatorMatrix.matrix.getScale(scale)
-        }
-        else {
-            rootMatrix.matrix.getScale(scale)
-            //Incase they are multiplying some axis by -1 to rotate
-            scale.x = Math.signum(scale.x)
-            scale.y = Math.signum(scale.y)
-            scale.z = Math.signum(scale.z)
         }
 
         val particleScale = Vector3f(scale.x, scale.y, scale.z)

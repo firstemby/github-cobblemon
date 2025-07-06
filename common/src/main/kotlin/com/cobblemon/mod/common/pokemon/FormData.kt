@@ -258,6 +258,7 @@ class FormData(
         this.preEvolution?.form
         this.evolutions.size
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
+        behaviour.herd.initialize()
         return this
     }
 

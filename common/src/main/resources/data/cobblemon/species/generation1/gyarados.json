@@ -61,6 +61,9 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": 20
     }
   },
   "riding": {

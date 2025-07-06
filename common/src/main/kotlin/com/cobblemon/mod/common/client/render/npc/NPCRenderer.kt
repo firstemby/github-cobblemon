@@ -29,6 +29,10 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
 
     private val heldItemRenderer = HeldItemRenderer()
 
+    override fun scale(livingEntity: NPCEntity, poseStack: PoseStack, partialTickTime: Float) {
+        poseStack.scale(livingEntity.renderScale, livingEntity.renderScale, livingEntity.renderScale)
+    }
+
     override fun render(
         entity: NPCEntity,
         entityYaw: Float,

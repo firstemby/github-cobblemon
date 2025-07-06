@@ -619,6 +619,22 @@
 					}
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "torso",
+					"pivot": [0, 31, -2],
+					"locators": {
+						"seat_1": [0, 31, -2]
+					}
+				},
+				{
+					"name": "locator_seat_2",
+					"parent": "torso",
+					"pivot": [0, 33, 9],
+					"locators": {
+						"seat_2": [0, 31, 9]
+					}
+				},
+				{
 					"name": "legs",
 					"parent": "body",
 					"pivot": [0, 0.25, 0.25]

@@ -32,7 +32,7 @@
             "maxAngularVelocityDegrees": {
               "variableName": "max_swim_circling_angular_velocity",
               "category": "cobblemon.entity.variable.category.wander",
-              "defaultValue": 2.0,
+              "defaultValue": 1.0,
               "type": "NUMBER",
               "displayName": "cobblemon.entity.variable.max_swim_circling_angular_velocity.name",
               "description": "cobblemon.entity.variable.max_swim_circling_angular_velocity.desc"

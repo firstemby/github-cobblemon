@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 /**
  * Checks nearby entities and counts how many have nominated this entity as their leader.
@@ -44,6 +45,12 @@ class CountFollowersTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         val checkTicksValue = checkTicks.resolveInt()
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
+            CobblemonMemories.HERD_SIZE,
+            CobblemonMemories.HERD_LEADER
+        )
+        behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
         return BehaviorBuilder.create { instance ->
             instance.group(
                 instance.present(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES),
@@ -55,9 +62,15 @@ class CountFollowersTaskConfig : SingleTaskConfig {
                     }
                     val myUUID = entity.uuid.toString()
                     val followersCount = instance.get(nearbyEntities).findAll {
-                        it is PokemonEntity && it.brain.getMemory(CobblemonMemories.HERD_LEADER).getOrNull() == myUUID
+                        it is PokemonEntity
+                                && it.brain.hasMemoryValue(CobblemonMemories.HERD_LEADER)
+                                && it.brain.getMemory(CobblemonMemories.HERD_LEADER).getOrNull() == myUUID
                     }.count()
-                    herdCount.set(followersCount)
+                    if (followersCount == 0) {
+                        herdCount.erase()
+                    } else {
+                        herdCount.set(followersCount)
+                    }
                     return@Trigger true
                 }
             }

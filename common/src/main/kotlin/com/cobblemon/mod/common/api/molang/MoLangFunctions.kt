@@ -108,6 +108,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
@@ -295,6 +296,13 @@ object MoLangFunctions {
                         return@put DoubleValue.ZERO
                     }
                 world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL)
+            }
+            map.put("is_air") { params ->
+                val x = params.getDouble(0).toInt()
+                val y = params.getDouble(1).toInt()
+                val z = params.getDouble(2).toInt()
+                val blockState = world.getBlockState(BlockPos(x, y, z))
+                return@put DoubleValue(blockState.isAir)
             }
             map.put("get_block") { params ->
                 val x = params.getInt(0)
@@ -920,6 +928,34 @@ object MoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
+            map.put("set_render_scale") { params ->
+                val scale = params.getDouble(0)
+                npc.renderScale = scale.toFloat()
+                return@put DoubleValue.ONE
+            }
+            map.put("render_scale") { _ -> DoubleValue(npc.renderScale) }
+            map.put("set_hitbox_scale") { params ->
+                val scale = params.getDouble(0).toFloat()
+                npc.hitboxScale = scale
+                npc.refreshDimensions()
+                return@put DoubleValue.ONE
+            }
+            map.put("hitbox_scale") { _ -> DoubleValue(npc.hitboxScale) }
+            map.put("set_hitbox") { params ->
+                if (params.params.size == 0) {
+                    npc.hitbox = null
+                    return@put DoubleValue.ONE
+                }
+                val width = params.getDouble(0).toFloat()
+                val height = params.getDouble(1).toFloat()
+                val eyeHeight = params.getDoubleOrNull(2)?.toFloat() ?: (height * 0.85F)
+                npc.hitbox = EntityDimensions.scalable(width, height).withEyeHeight(eyeHeight)
+                return@put DoubleValue.ONE
+            }
+            map.put("unset_hitbox") {
+                npc.hitbox = null
+                return@put DoubleValue.ONE
+            }
             map.put("aspects") {
                 val aspects = npc.aspects
                 return@put aspects.asArrayValue { StringValue(it) }
@@ -1235,6 +1271,7 @@ object MoLangFunctions {
             map.put("is_sprinting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("sprinting"))) }
             map.put("in_air") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("in_air"))) }
             map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
+            map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) }
             map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
             map.put("is_pokemon") { DoubleValue.ONE }
@@ -1243,6 +1280,12 @@ object MoLangFunctions {
             }) }
             map.put("is_wearing_hat") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
             map.put("is_wearing_face") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
+            map.put("is_pastured") {
+                DoubleValue((pokemonEntity.tethering != null))
+            }
+            map.put("pasture_conflict_enabled") {
+                DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.PASTURE_CONFLICT))
+            }
             map
         }
     )

@@ -15,8 +15,6 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WANDER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
@@ -50,6 +48,7 @@ class AirWanderTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, CobblemonMemories.PATH_COOLDOWN)
         val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
 
         return BehaviorBuilder.create {

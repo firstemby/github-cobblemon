@@ -15,6 +15,11 @@ import kotlin.jvm.optionals.getOrNull
 
 typealias ExpressionOrEntityVariable = Either<Expression, MoLangConfigVariable>
 
+/**
+ * In the case of [ExpressionOrEntityVariable] the right side is the only one that requires visibility for a user,
+ * this function is a shorthand for finding all of the values in the list that have something to show the user to
+ * potentially edit.
+ */
 fun List<ExpressionOrEntityVariable>.asVariables() = mapNotNull { it.right().getOrNull() }
 
 

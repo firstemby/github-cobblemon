@@ -336,6 +336,17 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
             behaviour.isActive(behaviourSettings, behaviourState, vehicle)
         }
     }
+
+    override fun canStopRiding(
+        settings: CompositeSettings,
+        state: CompositeState,
+        vehicle: PokemonEntity,
+        passenger: Player
+    ): Boolean {
+        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
+            behaviour.canStopRiding(behaviourSettings, behaviourState, vehicle, passenger)
+        }
+    }
 }
 
 open class CompositeSettings : RidingBehaviourSettings {

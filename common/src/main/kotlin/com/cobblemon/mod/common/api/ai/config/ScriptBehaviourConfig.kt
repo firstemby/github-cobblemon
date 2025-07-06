@@ -14,6 +14,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.ai.ActivityConfigurationContext
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
@@ -21,34 +22,42 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.activityRegistry
-import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolve
-import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import com.mojang.datafixers.util.Pair
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class ScriptBehaviourConfig : BehaviourConfig {
-    val condition = "true".asExpressionLike()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val script = cobblemonResource("dummy")
     val variables = mutableListOf<MoLangConfigVariable>()
+    val memories = emptySet<MemoryModuleType<*>>()
+    val sensors = emptySet<SensorType<*>>()
 
     override fun getVariables(entity: LivingEntity) = variables
 
-    override fun configure(entity: LivingEntity, context: BehaviourConfigurationContext) {
+    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+        if (!checkCondition(entity, condition)) return
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!runtime.resolveBoolean(condition)) return
 
-        val struct = createBrainStruct(entity, context)
+        val struct = createBrainStruct(entity, behaviourConfigurationContext)
         val script = CobblemonScripts.scripts[this.script]
             ?: run {
                 Cobblemon.LOGGER.error("Tried loading script $script as part of an entity brain but that script does not exist")
                 return
             }
+
+        behaviourConfigurationContext.addMemories(memories)
+        behaviourConfigurationContext.addSensors(sensors)
+
         runtime.resolve(script, mapOf("brain" to struct))
     }
 

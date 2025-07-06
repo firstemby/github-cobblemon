@@ -5,8 +5,14 @@
       "type": "apply_behaviours",
       "behaviours": [
         "cobblemon:core",
-        "cobblemon:looks_around",
         "cobblemon:pokemon_battles"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.can_look",
+      "behaviours": [
+        "cobblemon:looks_around"
       ]
     }
   ]

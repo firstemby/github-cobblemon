@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
 import net.minecraft.world.entity.Entity
 
 /**
@@ -73,41 +74,43 @@ class LocatorAccess(
         matrixStack.pushPose()
         joint.transform(matrixStack)
 
-        if (isRoot && null!=entity) {
+        if (isRoot) {
             matrixStack.pushPose()
-            matrixStack.scale(1F, -1F, 1F)
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
             state.getOrPut("root") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
             matrixStack.popPose()
 
-            // Put in an approximation of the target locator. If the model has one defined,
-            // this will be overridden.
-            matrixStack.pushPose()
-            matrixStack.translate(0.0, -entity.boundingBox.ysize / 2.0 / scale, -entity.bbWidth * 0.6 / scale)
-            matrixStack.scale(-1F, -1F, 1F)
-            state.getOrPut("target") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
-            state.getOrPut("special_attack") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
-            matrixStack.popPose()
+            if (entity != null) {
+                // Put in an approximation of the target locator. If the model has one defined,
+                // this will be overridden.
+                matrixStack.pushPose()
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
+                matrixStack.translate(0.0, entity.boundingBox.ysize / 2.0 / scale, -entity.bbWidth * 0.6 / scale)
+                state.getOrPut("target") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
+                state.getOrPut("special_attack") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
+                matrixStack.popPose()
 
-            // If we have the entity, put in a "middle" locator for center of mass
-            // this will be overridden.
-            matrixStack.pushPose()
-            matrixStack.translate(0.0, -entity.boundingBox.ysize / 2.0 / scale, 0.0)
-            matrixStack.scale(-1F, -1F, 1F)
-            state.getOrPut("middle") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
-            matrixStack.popPose()
+                // If we have the entity, put in a "middle" locator for center of mass
+                // this will be overridden.
+                matrixStack.pushPose()
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
+                matrixStack.translate(0.0, entity.boundingBox.ysize / 2.0 / scale, 0.0)
+                state.getOrPut("middle") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
+                matrixStack.popPose()
 
-            // If we have the entity, put in a "top" locator for top center of hitbox.
-            matrixStack.pushPose()
-            matrixStack.translate(0.0, -entity.boundingBox.ysize, 0.0)
-            matrixStack.scale(-1F, -1F, 1F)
-            state.getOrPut("top") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
-            matrixStack.popPose()
+                // If we have the entity, put in a "top" locator for top center of hitbox.
+                matrixStack.pushPose()
+                matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
+                matrixStack.translate(0.0, entity.boundingBox.ysize, 0.0)
+                state.getOrPut("top") { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
+                matrixStack.popPose()
+            }
         }
 
         for ((name, locator) in locators) {
             matrixStack.pushPose()
             locator.transform(matrixStack)
-            matrixStack.scale(-1F, -1F, 1F)
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(180f)) //Undo rotation from previous flip
             state.getOrPut(name) { MatrixWrapper() }.updateMatrix(matrixStack.last().pose())
             matrixStack.popPose()
         }

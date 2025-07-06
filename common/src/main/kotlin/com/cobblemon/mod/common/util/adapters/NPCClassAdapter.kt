@@ -57,7 +57,6 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("resourceIdentifier")?.let { npcClass.resourceIdentifier = it.asString.asIdentifierDefaultingNamespace() }
         obj.get("aspects")?.let { npcClass.aspects = it.normalizeToArray().map { it.asString }.toMutableSet() }
         obj.get("variation")?.let { it.asJsonObject.entrySet().forEach { (key, value) -> npcClass.variations[key] = ctx.deserialize(value, NPCVariationProvider::class.java) } }
-        obj.get("baseScale")?.let { npcClass.baseScale = it.asFloat }
         obj.get("hitbox")?.let { npcClass.hitbox = ctx.deserialize(it, EntityDimensions::class.java) }
         obj.get("battleConfiguration")?.let { npcClass.battleConfiguration = ctx.deserialize(it, NPCBattleConfiguration::class.java) }
         obj.get("interaction")?.let { npcClass.interaction = ctx.deserialize(it, NPCInteractConfiguration::class.java) }

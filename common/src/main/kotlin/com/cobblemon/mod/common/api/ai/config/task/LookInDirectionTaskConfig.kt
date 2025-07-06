@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.LOOKING_CATEGORY
 import com.cobblemon.mod.common.entity.ai.LookInDirectionTask
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class LookInDirectionTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(LOOKING_CATEGORY, "locked_rotation", true).asExpressible()
@@ -32,5 +33,7 @@ class LookInDirectionTaskConfig : SingleTaskConfig {
         shouldLock = condition.asExpression(),
         yaw = yaw.asExpression(),
         pitch = pitch.asExpression()
-    )
+    ).also {
+        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET)
+    }
 }

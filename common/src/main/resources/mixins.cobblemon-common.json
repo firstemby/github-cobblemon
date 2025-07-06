@@ -8,6 +8,7 @@
   },
   "client": [
     "BuiltinModelItemRendererMixin",
+    "ClientPacketListenerMixin",
     "EntityRenderDispatcherMixin",
     "ItemPropertiesMixin",
     "MusicManagerMixin",
@@ -38,6 +39,7 @@
     "client.RecipeCollectionMixin",
     "client.SearchTreeMixin",
     "client.StringRenderOutputMixin",
+    "client.snapshots.SnapshotWarningMixin",
     "invoker.ClientPlayNetworkHandlerInvoker",
     "riding.JetMixin"
   ],

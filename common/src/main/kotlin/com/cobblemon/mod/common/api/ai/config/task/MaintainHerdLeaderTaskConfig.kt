@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.withQueryValue
@@ -25,6 +24,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 /**
  * Task that looks around for a better herd leader or gives up on a leader
@@ -48,6 +48,11 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
         if (entity !is PokemonEntity) {
             return null
         }
+        behaviourConfigurationContext.addMemories(
+            CobblemonMemories.HERD_LEADER,
+            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
+        )
+        behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         val checkTicks = checkTicks.resolveInt()
         return BehaviorBuilder.create { instance ->
@@ -62,26 +67,22 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
                     }
 
                     val leader = instance.get(herdLeader).let(UUID::fromString).let(world::getEntity) as? PokemonEntity
-                    if (leader == null) {
+                    val currentLeaderDefinition = leader?.let { leader ->
+                        entity.behaviour.herd.toleratedLeaders.find { it.pokemon.matches(leader) }
+                    }
+                    if (leader == null || currentLeaderDefinition == null) {
                         entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
                         return@Trigger true // No leader, so we erase the memory
-                    } else if (leader.brain.hasMemoryValue(CobblemonMemories.HERD_LEADER)) {
-                        entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
-                        return@Trigger true
-                    } else if (leader.exposedSpecies.resourceIdentifier !in entity.behaviour.herd.toleratedLeaders) {
-                        // Zoroark getting exposed then herd members pausing and saying "hey wait a minute"
-                        entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
                     } else {
-                        val bestSurroundingLeader = instance.get(nearbyEntities).findAll {
-                            it is PokemonEntity &&
-                                    it != leader &&
-                                    it.pokemon.storeCoordinates.get()?.store !is PartyStore &&
-                                    it.exposedSpecies.resourceIdentifier in entity.behaviour.herd.toleratedLeaders &&
-                                    !it.brain.hasMemoryValue(CobblemonMemories.HERD_LEADER) &&
-                                    it.pokemon.level > leader.pokemon.level // Has to be a superior leader to the existing one
-                        }.maxByOrNull { (it as PokemonEntity).pokemon.level } as? PokemonEntity
-                        if (bestSurroundingLeader != null) {
-                            entity.brain.setMemory(CobblemonMemories.HERD_LEADER, bestSurroundingLeader.uuid.toString())
+                        val bestLeader = FindHerdLeaderTaskConfig.getBestHerdLeader(
+                            currentLeader = (leader to currentLeaderDefinition),
+                            nearbyEntities = instance.get(nearbyEntities),
+                            entity = entity
+                        )
+
+                        if (bestLeader != null && bestLeader != leader) {
+                            bestLeader.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
+                            entity.brain.setMemory(CobblemonMemories.HERD_LEADER, bestLeader.uuid.toString())
                         }
                     }
                     return@Trigger true
@@ -89,5 +90,4 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
             }
         }
     }
-
 }

@@ -12,17 +12,17 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.NPCClass
-import net.minecraft.world.entity.ai.Brain
+import com.mojang.serialization.Dynamic
 
 object NPCBrain {
-    fun configure(npcEntity: NPCEntity, npcClass: NPCClass, brain: Brain<out NPCEntity>) {
+    fun configure(npcEntity: NPCEntity, npcClass: NPCClass, dynamic: Dynamic<*>) {
         var behaviourConfigurations: List<BehaviourConfig> = npcClass.behaviours
         if (npcEntity.behavioursAreCustom) {
             behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(npcEntity.behaviours) })
         }
 
         val ctx = BehaviourConfigurationContext()
-        ctx.apply(npcEntity, behaviourConfigurations)
+        ctx.apply(npcEntity, behaviourConfigurations, dynamic)
         npcEntity.behaviours.clear()
         npcEntity.behaviours.addAll(ctx.appliedBehaviours)
     }

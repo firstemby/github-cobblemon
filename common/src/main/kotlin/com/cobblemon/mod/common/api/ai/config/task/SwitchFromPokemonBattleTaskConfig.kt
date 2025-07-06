@@ -22,6 +22,7 @@ class SwitchFromPokemonBattleTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_BATTLE)
         return BehaviorBuilder.create {
             it.group(it.absent(CobblemonMemories.POKEMON_BATTLE)).apply(it) { _ ->
                 Trigger { level, entity, _ ->

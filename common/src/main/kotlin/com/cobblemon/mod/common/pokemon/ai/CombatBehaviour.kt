@@ -15,11 +15,13 @@ class CombatBehaviour {
     var willDefendSelf = false
     var willFlee = false
     var willDefendOwner = false
+    var fightsMelee = true
 
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("will_defend_self") { DoubleValue(willDefendSelf) }
         it.addFunction("will_flee") { DoubleValue(willFlee) }
         it.addFunction("will_defend_owner") { DoubleValue(willDefendOwner) }
+        it.addFunction("fights_melee") { DoubleValue(fightsMelee) }
     }
 }

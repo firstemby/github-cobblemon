@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.net.messages.client.pasture
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pasture.PasturePermissions
+import com.cobblemon.mod.common.client.net.pasture.OpenPastureHandler
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.util.*
 import java.util.UUID
@@ -21,6 +23,8 @@ import net.minecraft.resources.ResourceLocation
 /**
  * Opens a pasture GUI using the provided data.
  *
+ * Handled by [OpenPastureHandler].
+ *
  * @author Hiroku
  * @since April 9th, 2023
  */
@@ -29,32 +33,38 @@ class OpenPasturePacket(val pcId: UUID, val pastureId: UUID, val limit: Int, val
         val pokemonId: UUID,
         val playerId: UUID,
         val displayName: Component,
+        val ownerName: String?,
         val species: ResourceLocation,
         val aspects: Set<String>,
         val heldItem: ItemStack,
         val level: Int,
-        val entityKnown: Boolean
+        val entityKnown: Boolean,
+        var behaviourFlags: Set<PokemonBehaviourFlag> = emptySet()
     ) {
         companion object {
             fun decode(buffer: RegistryFriendlyByteBuf): PasturePokemonDataDTO {
                 val pokemonId = buffer.readUUID()
                 val playerId = buffer.readUUID()
                 val displayName = buffer.readText()
+                val ownerName = buffer.readNullable { it.readString() }
                 val species = buffer.readIdentifier()
                 val aspects = buffer.readList { it.readString() }.toSet()
                 val heldItem = buffer.readItemStack()
                 val level = buffer.readSizedInt(IntSize.U_SHORT)
                 val entityKnown = buffer.readBoolean()
+                val behaviourFlags = buffer.readList { it.readEnumConstant(PokemonBehaviourFlag::class.java) }.toSet()
 
                 return PasturePokemonDataDTO(
                     pokemonId = pokemonId,
                     playerId = playerId,
                     displayName = displayName,
+                    ownerName = ownerName,
                     species = species,
                     aspects = aspects,
                     heldItem = heldItem,
                     level = level,
-                    entityKnown = entityKnown
+                    entityKnown = entityKnown,
+                    behaviourFlags = behaviourFlags
                 )
             }
         }
@@ -63,11 +73,13 @@ class OpenPasturePacket(val pcId: UUID, val pastureId: UUID, val limit: Int, val
             buffer.writeUUID(pokemonId)
             buffer.writeUUID(playerId)
             buffer.writeText(displayName)
+            buffer.writeNullable(ownerName) { _, v -> buffer.writeString(v) }
             buffer.writeIdentifier(species)
             buffer.writeCollection(aspects) { _, v -> buffer.writeString(v) }
             buffer.writeItemStack(heldItem)
             buffer.writeSizedInt(IntSize.U_SHORT, level)
             buffer.writeBoolean(entityKnown)
+            buffer.writeCollection(behaviourFlags) { _, flag -> buffer.writeEnumConstant(flag) }
         }
     }
 

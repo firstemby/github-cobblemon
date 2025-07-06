@@ -30,7 +30,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(MouseHandler.class)
 public abstract class MouseHandlerMixin {
@@ -121,11 +120,12 @@ public abstract class MouseHandlerMixin {
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
             this.smoothTurnX.reset();
-            var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6000000238418579 + 0.20000000298023224;
+            var defaultSensitivity = this.minecraft.options.sensitivity().get() * 0.6 + 0.2;
             var spyglassSensitivity = Math.pow(defaultSensitivity, 3);
             var lookSensitivity = spyglassSensitivity * 8.0;
             var sensitivity = Mth.lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
-            player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity));
+            var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
+            player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
             return false;
         }
 

@@ -19,22 +19,29 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.phys.Vec3
 
-class FollowHerdLeaderTask(
-    val tooFar: Float = 16F,
-    val closeEnough: Float = 8F
-) : Behavior<PokemonEntity>(
-    ImmutableMap.of(CobblemonMemories.HERD_LEADER, MemoryStatus.VALUE_PRESENT),
-    0,
-    0
+class FollowHerdLeaderTask : Behavior<PokemonEntity>(
+    ImmutableMap.of(
+        CobblemonMemories.HERD_LEADER, MemoryStatus.VALUE_PRESENT,
+        MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED,
+    ),
+    Int.MAX_VALUE,
+    Int.MAX_VALUE
 ) {
     var leader: PokemonEntity? = null
+    var tooFar = 8F
+    var closeEnough = 4F
 
     override fun checkExtraStartConditions(level: ServerLevel, owner: PokemonEntity): Boolean {
         leader = level.getEntity(owner.brain.getMemory(CobblemonMemories.HERD_LEADER).map(UUID::fromString).orElse(null) ?: return false) as? PokemonEntity
+        val definition = leader?.let { leader -> owner.behaviour.herd.bestMatchLeader(owner, leader) }
+        definition?.let {
+            tooFar = (it.followDistance?.endInclusive ?: owner.behaviour.herd.followDistance.endInclusive).toFloat()
+            closeEnough = (it.followDistance?.start ?: owner.behaviour.herd.followDistance.start).toFloat()
+        }
         return leader != null
     }
 
-    override fun canStillUse(level: ServerLevel, entity: PokemonEntity, gameTime: Long) = leader?.isAlive == true
+    override fun canStillUse(level: ServerLevel, entity: PokemonEntity, gameTime: Long) = leader?.isAlive == true && leader?.uuid?.toString() == entity.brain.getMemory(CobblemonMemories.HERD_LEADER).orElse(null)
 
     override fun tick(level: ServerLevel, entity: PokemonEntity, gameTime: Long) {
         val leader = leader ?: return

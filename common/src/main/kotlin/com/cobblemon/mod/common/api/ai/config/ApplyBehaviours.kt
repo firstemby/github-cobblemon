@@ -24,6 +24,7 @@ class ApplyBehaviours : BehaviourConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     @SerializedName("behaviours", alternate = ["behaviors"])
     val behaviours = mutableListOf<ResourceLocation>()
+
     override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
         return if (checkCondition(entity, condition)) {
             behaviours.flatMap {

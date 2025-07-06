@@ -44,6 +44,7 @@ interface BehaviourConfig {
             cobblemonResource("set_core_activities") to SetCoreActivities::class.java,
             cobblemonResource("add_variables") to AddVariablesConfig::class.java,
             cobblemonResource("set_variables") to SetVariablesConfig::class.java,
+            cobblemonResource("add_memories_and_sensors") to AddMemoriesAndSensorsConfig::class.java,
         )
     }
 

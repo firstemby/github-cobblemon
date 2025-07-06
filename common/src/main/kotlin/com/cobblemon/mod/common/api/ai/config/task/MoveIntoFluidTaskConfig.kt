@@ -63,6 +63,10 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN
+        )
         val movesIntoWater = this@MoveIntoFluidTaskConfig.movesIntoWater.resolveBoolean()
         val movesIntoLava = movesIntoLava.resolveBoolean()
         val speedModifier = speedModifier.resolveFloat()

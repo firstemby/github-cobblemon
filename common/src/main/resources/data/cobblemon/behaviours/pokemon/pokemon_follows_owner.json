@@ -5,12 +5,12 @@
   "configurations": [
     {
       "type": "add_tasks_to_activity",
+      "condition": "q.entity.is_in_party ? true : (math.random(0, 1) < (0.1/20) && q.entity.distance_to_owner < 24 && q.entity.can_see(q.entity.owner, 24))",
       "activity": "idle",
       "tasksByPriority": {
         "4": [
           {
             "type": "move_to_owner",
-            "condition": "q.entity.is_in_party ? true : (math.random(0, 1) < (0.1/20) && q.entity.distance_to_owner < 24 && q.entity.can_see(q.entity.owner, 24))",
             "teleportDistance": "q.entity.is_in_party ? 24 : 99999" ,
             "maxDistance": "q.entity.is_in_party ? 14 : 8"
           }

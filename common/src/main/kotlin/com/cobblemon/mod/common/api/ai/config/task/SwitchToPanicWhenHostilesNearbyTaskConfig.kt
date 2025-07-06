@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToPanicWhenHostilesNearbyTaskConfig : SingleTaskConfig {
@@ -30,6 +31,8 @@ class SwitchToPanicWhenHostilesNearbyTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
+        behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_HOSTILE)
+        behaviourConfigurationContext.addSensors(SensorType.VILLAGER_HOSTILES)
         return BehaviorBuilder.create {
             it.group(it.present(MemoryModuleType.NEAREST_HOSTILE))
                 .apply(it) { nearestHostile ->

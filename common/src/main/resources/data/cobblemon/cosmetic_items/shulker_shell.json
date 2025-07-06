@@ -3,8 +3,6 @@
   "cosmeticItems": [
     {
       "consumedItem": "minecraft:shulker_shell",
-      "displayName": "cobblemon.cosmetic.shulker_shell",
-      "displayItem": "minecraft:shulker_shell",
       "aspects": ["cosmetic_item-shulker_shell"]
     }
   ]

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.pasture.PastureLinkManager
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.text.italicise
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.textClickHandlers
 import com.cobblemon.mod.common.block.PastureBlock
@@ -64,28 +65,34 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         val tetheringId: UUID,
         val pokemonId: UUID,
         val pcId: UUID,
-        val entityId: Int
+        val entityId: Int,
+        val pasturePos: BlockPos
     ) {
-        fun getPokemon() = Cobblemon.storage.getPC(pcId, server()!!.registryAccess())[pokemonId]
+        fun getPokemon(): Pokemon? {
+            val srv = server() ?: return null
+            val pc = Cobblemon.storage.getPC(pcId, srv.registryAccess())
+            return pc[pokemonId]
+        }
         val box = AABB(minRoamPos.toVec3d(), maxRoamPos.toVec3d())
         open fun canRoamTo(pos: BlockPos) = box.contains(pos.center)
 
         fun toDTO(player: ServerPlayer): OpenPasturePacket.PasturePokemonDataDTO? {
             val pokemon = getPokemon() ?: return null
+            val entity = pokemon.entity
+
+            val behaviourFlags = entity?.getActiveBehaviourFlags() ?: emptySet()
+
             return OpenPasturePacket.PasturePokemonDataDTO(
                 pokemonId = pokemonId,
                 playerId = playerId,
-                displayName = if (playerId == player.uuid) pokemon.getDisplayName() else lang(
-                    "ui.pasture.owned_name",
-                    pokemon.getDisplayName(),
-                    playerName
-                ),
+                displayName = if (playerId == player.uuid) pokemon.getDisplayName() else pokemon.getDisplayName().italicise(),
+                ownerName = if (playerId == player.uuid) null else playerName,
                 species = pokemon.species.resourceIdentifier,
                 aspects = pokemon.aspects,
                 heldItem = pokemon.heldItem(),
                 level = pokemon.level,
-                entityKnown = (player.level()
-                    .getEntity(entityId) as? PokemonEntity)?.tethering?.tetheringId == tetheringId
+                entityKnown = (entity?.tethering?.tetheringId == tetheringId),
+                behaviourFlags = behaviourFlags
             )
         }
     }
@@ -98,7 +105,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 blockEntity.checkPokemon()
             }
 
-            // for every tethered pokemon tick metabolism and interaction cooldown if fullness or cooldown is above 0
+            // for every tethered Pokémon, tick metabolism and interaction cooldown if fullness or cooldown is above 0
             val tetheredPokemonList = blockEntity.tetheredPokemon.filter { it.getPokemon() != null }
             for (tetheredPokemon in tetheredPokemonList) {
                 val pokemon = tetheredPokemon.getPokemon()!!
@@ -185,7 +192,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                         tetheringId = UUID.randomUUID(),
                         pokemonId = pokemon.uuid,
                         pcId = pc.uuid,
-                        entityId = entity.id
+                        entityId = entity.id,
+                        pasturePos = blockPos
                     )
                     pokemon.tetheringId = tethering.tetheringId
                     tetheredPokemon.add(tethering)
@@ -258,7 +266,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     }
 
     // Place the tether block like this: https://gyazo.com/7c163bccfde238688e9a2c600c27aace
-    // You'll find you can't place pokemon into the tether. It's because of this function somehow
+    // You'll find you can't place Pokémon into the tether. It's because of this function somehow
     fun makeSuitableY(world: Level, pos: BlockPos, entity: PokemonEntity, box: AABB): BlockPos? {
         if (world.collidesWithSuffocatingBlock(entity, box)) {
             for (i in 1..15) {
@@ -362,7 +370,8 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                     tetheringId = tetheringId,
                     pokemonId = pokemonId,
                     pcId = pcId,
-                    entityId = entityId
+                    entityId = entityId,
+                    pasturePos = blockPos
                 )
             )
         }

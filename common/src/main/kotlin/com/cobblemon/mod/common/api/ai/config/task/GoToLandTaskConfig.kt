@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.util.closestPosition
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -43,7 +44,10 @@ class GoToLandTaskConfig : SingleTaskConfig {
         if (entity !is PathfinderMob) {
             return null
         }
-
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN
+        )
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
@@ -55,6 +59,8 @@ class GoToLandTaskConfig : SingleTaskConfig {
                     }
 
                     entity as PathfinderMob
+
+                    val walkSpeedValue = walkSpeed.resolveFloat()
 
                     val iterable = BlockPos.betweenClosed(
                         Mth.floor(entity.x - 8.0),
@@ -71,7 +77,7 @@ class GoToLandTaskConfig : SingleTaskConfig {
                         isSafeLandPosAround(entity.level() as ServerLevel, it, entity)
                     } ?: return@Trigger false
 
-                    walkTarget.set(WalkTarget(blockPos.above(), 0.35F, 1))
+                    walkTarget.set(WalkTarget(blockPos.above(), walkSpeedValue, 0))
                     return@Trigger true
                 }
             }
@@ -82,7 +88,7 @@ class GoToLandTaskConfig : SingleTaskConfig {
         val blockState = world.getBlockState(pos)
 
         val isFluid = world.getFluidState(pos.above()).isEmpty.not()
-        val solidBelow = blockState.isSolid
+        val solidBelow = blockState.isSolid || (mob is OmniPathingEntity && mob.canFly())
 
         if (isFluid || !solidBelow) {
             return false

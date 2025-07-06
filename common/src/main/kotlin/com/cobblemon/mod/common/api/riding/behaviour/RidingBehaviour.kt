@@ -90,6 +90,8 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun maxUpStep(settings: Settings, state: State, vehicle: PokemonEntity): Float? = null
 
+    fun canStopRiding(settings: Settings, state: State, vehicle: PokemonEntity, passenger: Player): Boolean = true
+
     fun createDefaultState(settings: Settings): State
 
 }

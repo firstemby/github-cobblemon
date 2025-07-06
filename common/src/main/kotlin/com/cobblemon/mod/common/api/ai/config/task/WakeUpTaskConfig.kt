@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -22,6 +24,11 @@ class WakeUpTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        if (entity !is PokemonEntity) {
+            return null
+        }
+        behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_DROWSY, CobblemonMemories.POKEMON_SLEEPING)
+        behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)
         return WrapperLivingEntityTask(WakeUpTask.create(), PokemonEntity::class.java)
     }
 }

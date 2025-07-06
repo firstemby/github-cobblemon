@@ -27,11 +27,13 @@ fabric-permissions-api = "0.2-SNAPSHOT"
 lambDynamicLights = "3.0.1+1.21.1"
 debugutils-fabric = "1.21-1.0.6-fabric"
 mod-menu = "11.0.3"
+c2me-fabric = "0.3.0+alpha.0.320+1.21.1"
 
 # NeoForge
 neoforge = "21.1.66"
 neo-kotlin-for-forge = "5.5.0"
 debugutils-forge = "1.21-1.0.6-neoforge"
+c2me-neoforge = "0.3.0+alpha.0.72+1.21.1"
 
 # Data Storage
 mongo = "4.10.2"
@@ -73,12 +75,14 @@ lambDynamicLights = { group = "maven.modrinth", name = "lambdynamiclights", vers
 jei-fabric = { group = "mezz.jei", name = "jei-1.21-fabric", version.ref = "jei-api"}
 fabric-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-fabric"}
 mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-menu" }
+c2me-fabric = { group = "maven.modrinth", name = "c2me-fabric", version.ref = "c2me-fabric" }
 
 # NeoForge
 neoforge = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
 neo-kotlin-forge = { group = "thedarkcolour", name = "kotlinforforge-neoforge", version.ref = "neo-kotlin-for-forge" }
 neoforge-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-forge"}
 jei-neoforge = { group = "mezz.jei", name = "jei-1.21-neoforge", version.ref = "jei-api"}
+c2me-neoforge = { group = "maven.modrinth", name = "c2me-neoforge", version.ref = "c2me-neoforge" }
 
 # Data Storage
 mongo-driver-core = { group = "org.mongodb", name = "mongodb-driver-core", version.ref = "mongo" }
@@ -96,7 +100,7 @@ kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
 fabric = [ "fabric-kotlin", "fabric-permissions" ]
 common-integrations-compileOnly = [ "adorn-fabric", "lambDynamicLights", "jei-api" ]
 fabric-integrations-implementation = [ "mod-menu" ]
-fabric-integrations-runtimeOnly = [ "jei-fabric" ]
-neoforge-integrations-runtimeOnly = [ "jei-neoforge" ]
+fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric" ]
+neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
 unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]

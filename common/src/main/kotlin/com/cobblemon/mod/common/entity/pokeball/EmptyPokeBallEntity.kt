@@ -393,6 +393,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         pokemon.setPos(position())
         pokemon.beamMode = 2
         pokemon.isInvisible = false
+        pokemon.isSilent = false
 
         if (pokemon.battleId == null) {
             pokemon.pokemon.status?.takeIf { it.status == Statuses.SLEEP }?.let { pokemon.pokemon.status = null }
@@ -468,6 +469,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
             // Time to begin falling
             pokemonEntity.phasingTargetId = -1
             pokemonEntity.isInvisible = true
+            pokemonEntity.isSilent = true
             captureState = CaptureState.FALL
             after(seconds = 1.5F) {
                 // If it was still falling after a second and a half, just assume it's landed because we can't wait all day.

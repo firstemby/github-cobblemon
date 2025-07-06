@@ -42,7 +42,7 @@ abstract class CobblemonPartyLockedKeyBinding(
      *  - Shows a message if the player initially skipped the starter selection.
      */
     private fun hasPartyMembers(): Boolean {
-        val havePokemon = CobblemonClient.storage.myParty.slots.any { it != null }
+        val havePokemon = CobblemonClient.storage.party.slots.any { it != null }
         val starterSelected = CobblemonClient.clientPlayerData.starterSelected
         val startersLocked = CobblemonClient.clientPlayerData.starterLocked
         if (!starterSelected && !havePokemon) {

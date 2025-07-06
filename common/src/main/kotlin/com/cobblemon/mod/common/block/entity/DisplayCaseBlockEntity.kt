@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -71,7 +72,7 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
             setCaseStack(playerStack.copy())
             if (!player.isCreative) {
                 playerStack.shrink(1)
-                player.addItem(oldCaseStack)
+                player.giveOrDropItemStack(oldCaseStack)
             }
 
             return InteractionResult.SUCCESS

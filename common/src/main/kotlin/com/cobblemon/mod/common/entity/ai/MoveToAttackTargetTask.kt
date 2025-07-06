@@ -27,7 +27,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 object MoveToAttackTargetTask {
     fun create(
         speedMultiplier: Expression = "0.5".asExpression(),
-        closeEnoughDistance: Expression = "1".asExpression()
+        closeEnoughDistance: Expression = "0".asExpression()
     ): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ATTACK_TARGET),

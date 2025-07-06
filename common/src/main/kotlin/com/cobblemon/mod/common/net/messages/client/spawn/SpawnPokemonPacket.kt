@@ -27,6 +27,7 @@ import net.minecraft.resources.ResourceLocation
 
 class SpawnPokemonPacket(
         var ownerId: UUID?,
+        var pokemonUUID: UUID,
         var scaleModifier: Float,
         var speciesId: ResourceLocation,
         var gender: Gender,
@@ -56,6 +57,7 @@ class SpawnPokemonPacket(
 
     constructor(entity: PokemonEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
             entity.ownerUUID,
+            entity.pokemon.uuid,
             entity.pokemon.scaleModifier,
             entity.exposedSpecies.resourceIdentifier,
             entity.pokemon.gender,
@@ -83,6 +85,7 @@ class SpawnPokemonPacket(
 
     override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
         buffer.writeNullable(ownerId) { _, v -> buffer.writeUUID(v) }
+        buffer.writeUUID(this.pokemonUUID)
         buffer.writeFloat(this.scaleModifier)
         buffer.writeIdentifier(this.speciesId)
         buffer.writeEnumConstant(this.gender)
@@ -110,6 +113,7 @@ class SpawnPokemonPacket(
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
         entity.ownerUUID = ownerId
         entity.pokemon.apply {
+            uuid = this@SpawnPokemonPacket.pokemonUUID
             scaleModifier = this@SpawnPokemonPacket.scaleModifier
             species = this@SpawnPokemonPacket.speciesId.let { PokemonSpecies.getByIdentifier(it) ?: PokemonSpecies.random() }
             gender = this@SpawnPokemonPacket.gender
@@ -149,6 +153,7 @@ class SpawnPokemonPacket(
         val ID = cobblemonResource("spawn_pokemon_entity")
         fun decode(buffer: RegistryFriendlyByteBuf): SpawnPokemonPacket {
             val ownerId = buffer.readNullable { buffer.readUUID() }
+            val pokemonUUID = buffer.readUUID()
             val scaleModifier = buffer.readFloat()
             val speciesId = buffer.readIdentifier()
             val gender = buffer.readEnumConstant(Gender::class.java)
@@ -173,7 +178,7 @@ class SpawnPokemonPacket(
             val tickSpawned = buffer.readInt()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
-            return SpawnPokemonPacket(ownerId, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, passengers, tickSpawned, vanillaPacket)
+            return SpawnPokemonPacket(ownerId, pokemonUUID, scaleModifier, speciesId, gender, shiny, formName, aspects, battleId, phasingTargetId, beamModeEmitter, platform, nickname, mark, labelLevel, poseType, unbattlable, hideLabel, caughtBall, spawnAngle, friendship, freezeFrame, passengers, tickSpawned, vanillaPacket)
         }
     }
 

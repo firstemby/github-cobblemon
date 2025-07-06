@@ -222,6 +222,7 @@
 - Saccharine Leaves Age 1 or higher will now show Yellow particles when broken
 - Destroying a Saccharine Honey Log will now drop a Saccharine Log in stead of nothing
 - Reworked some compost chances
+- Updated interaction interface to include 4 more option spaces
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
@@ -281,7 +282,10 @@
 - Fixed swimming Pokémon attempting to swim up through solid blocks.
 - Fixed Pokémon surface swimming diving downward a block for the duration of the swim.
 - Improved flyers avoiding getting stuck on fence posts.
-- Fixed air balloon battle text not correctly displaying the Pokémon or item name,
+- Fixed air balloon battle text not correctly displaying the Pokémon or item name
+- Fixed an issue where items retrieved from a Display case would disappear if a player's inventory is full
+- Fixed Pokédex Scanner not respecting the "Invert Mouse" option.
+- Fixed a crash due to a ConcurrentModificationException that could occur during world generation.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -312,6 +316,7 @@
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`.
 - Added `HyperTrainedIvEvent.Pre` and `HyperTrainedIvEvent.Post`.
 - Added a `hoverText` option to PartySelectCallback, to display a tooltip on hovering over a Pokémon in the selection screen.
+- `PokemonEntity` instances spawned into the world now appropriately finalize the spawn for mod compatibility.
   
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)

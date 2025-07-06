@@ -203,7 +203,7 @@ class MovesWidget(
             RequestMoveSwapPacket(
                 move1 = movePos,
                 move2 = targetSlot,
-                slot = CobblemonClient.storage.myParty.getPosition(summary.selectedPokemon.uuid)
+                slot = CobblemonClient.storage.party.getPosition(summary.selectedPokemon.uuid)
             )
         )
     }

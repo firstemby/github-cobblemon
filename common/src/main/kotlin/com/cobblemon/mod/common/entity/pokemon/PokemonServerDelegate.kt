@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.update
@@ -275,7 +276,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             return
         }
 
-        val isSleeping = (entity.brain.getMemory(CobblemonMemories.POKEMON_SLEEPING).orElse(false) || entity.pokemon.status?.status == Statuses.SLEEP) && entity.behaviour.resting.canSleep
+        val isSleeping = (entity.brain.getMemorySafely(CobblemonMemories.POKEMON_SLEEPING).orElse(false) || entity.pokemon.status?.status == Statuses.SLEEP) && entity.behaviour.resting.canSleep
         val isMoving = entity.entityData.get(PokemonEntity.MOVING)
         val isPassenger = entity.isPassenger
         val isUnderwater = entity.getIsSubmerged()

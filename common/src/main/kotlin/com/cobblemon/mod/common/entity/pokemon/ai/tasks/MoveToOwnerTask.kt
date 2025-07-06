@@ -35,9 +35,8 @@ object MoveToOwnerTask {
 
     fun create(condition: Expression, completionRange: Expression, maxDistance: Expression, teleportDistance: Expression, speedMultiplier: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
-            it.registered(MemoryModuleType.WALK_TARGET),
-            it.absent(MemoryModuleType.ANGRY_AT)
-        ).apply(it) { walkTarget, _ ->
+            it.registered(MemoryModuleType.WALK_TARGET)
+        ).apply(it) { walkTarget ->
             Trigger { _, entity, _ ->
                 val owner = entity.owner ?: return@Trigger false
                 if (owner.level() != entity.level()) {

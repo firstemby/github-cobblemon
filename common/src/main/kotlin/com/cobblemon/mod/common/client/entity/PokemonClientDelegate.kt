@@ -48,6 +48,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
@@ -107,7 +108,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
-                locatorStates.clear() // clear locators to remove potentially non-existent locators from previous model
                 currentEntity.refreshRiding()
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
@@ -171,7 +171,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                 playedThrowingSound = true
                             }
                             lerpOnClient(POKEBALL_AIR_TIME) { ballOffset = it }
-                            ballRotOffset = ((Math.random()) * currentEntity.level().random.nextIntBetweenInclusive(-15, 15)).toFloat()
+                            ballRotOffset = ((Math.random()) * currentEntity.random.nextIntBetweenInclusive(-15, 15)).toFloat()
 
                             currentEntity.after(seconds = POKEBALL_AIR_TIME) {
                                 beamStartTime = System.currentTimeMillis()
@@ -457,12 +457,15 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         cryAnimation = animation
     }
 
+    fun getSeatLocator(passenger: Entity): String {
+        val seatIndex = this.getEntity().occupiedSeats.indexOf(passenger)
+        if (seatIndex == -1) throw IllegalArgumentException("Entity is not currently riding a seat")
+        return this.getEntity().rideProp.seats[seatIndex].locator ?: "seat_${seatIndex + 1}"
+    }
+
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
-        val index =
-            this.getEntity().passengers.indexOf(passenger).takeIf { it >= 0 && it < this.getEntity().seats.size }
-                ?: return
-        val seat = this.getEntity().seats[index]
-        val locator = this.locatorStates[seat.locator]
+        val locatorName = getSeatLocator(passenger)
+        val locator = this.locatorStates[locatorName]
 
         if (locator == null) return
 

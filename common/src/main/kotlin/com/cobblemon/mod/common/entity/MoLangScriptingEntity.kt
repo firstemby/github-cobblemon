@@ -16,11 +16,16 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
+import com.mojang.serialization.Dynamic
+import com.mojang.serialization.DynamicOps
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.Brain
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 /**
  * An interface representing an entity that can have MoLang variables and data. Originally was part of [NPCEntity]
@@ -38,6 +43,27 @@ interface MoLangScriptingEntity {
 
     fun getExtraVariables(): List<MoLangConfigVariable> = emptyList()
     fun remakeBrain()
+
+    /**
+     * The job of this function is to do the instantiation and assignment of a new brain to the entity. The
+     * reason why this is needed is because of how sensors are generic upon entity type which makes it
+     * much harder to have a generic function that is given some generic set of all used memories and
+     * sensors by the Behaviours and composes a Brain. We send the memories and sensors in, and the
+     * type-certain implementation can use the provided memories and sensors as a filter rather than the
+     * actual list to apply.
+     *
+     * This does rely on having some master list of sensors for each of our scriptable entity types.
+     *
+     * That is simply the price of greatness.
+     *
+     * If you can figure out a way to have the Behaviours produce their sensor and memory lists that somehow
+     * doesn't require this function, wow me. - Hiro
+     */
+    fun assignNewBrainWithMemoriesAndSensors(
+        dynamic: Dynamic<*>,
+        memories: Set<MemoryModuleType<*>>,
+        sensors: Set<SensorType<*>>
+    ): Brain<out LivingEntity>
 
     fun registerVariables(brainVariables: Collection<MoLangConfigVariable>) {
         registeredVariables.clear()

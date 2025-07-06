@@ -25,6 +25,8 @@ import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionOrEntityVariableAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.MemoryModuleTypeAdapter
+import com.cobblemon.mod.common.util.adapters.SensorTypeAdapter
 import com.cobblemon.mod.common.util.adapters.TaskConfigAdapter
 import com.cobblemon.mod.common.util.adapters.TranslatedTextAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -39,6 +41,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
@@ -47,6 +51,8 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
         .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(

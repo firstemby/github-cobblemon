@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class MoveToOwnerTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
@@ -38,6 +39,10 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            MemoryModuleType.LOOK_TARGET
+        )
         return WrapperLivingEntityTask(
             MoveToOwnerTask.create(
                 condition = condition.asExpression(),

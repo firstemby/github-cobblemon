@@ -25,6 +25,10 @@ class SleepIfOnTrainerBedTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            CobblemonMemories.POKEMON_SLEEPING
+        )
         return BehaviorBuilder.create {
             it.group(
                 it.registered(MemoryModuleType.WALK_TARGET),

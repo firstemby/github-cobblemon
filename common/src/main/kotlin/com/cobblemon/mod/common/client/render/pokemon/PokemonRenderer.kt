@@ -45,7 +45,6 @@ import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
-import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
@@ -228,7 +227,7 @@ class PokemonRenderer(
         poseMatrix.pushPose()
         var beamSourcePosition = if (phaseTarget is NPCEntity) {
                 val npcDelegate = phaseTarget.delegate as NPCClientDelegate
-                val baseScale = phaseTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = phaseTarget.renderScale.toDouble()
 
                 (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
                     ?: phaseTarget.position().add(0.0, (phaseTarget.bbHeight / 2.0) * baseScale, 0.0)
@@ -277,7 +276,7 @@ class PokemonRenderer(
                 partialTicks = partialTicks,
                 buff = buffer,
                 packedLight = packedLight,
-                ball = CobblemonClient.storage.myParty.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
+                ball = CobblemonClient.storage.party.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
                     ?: clientDelegate.currentEntity.pokemon.caughtBall,
                 distance = ceil(beamSourcePosition.distanceTo(entity.position())/4f).toInt()
             )
@@ -314,9 +313,9 @@ class PokemonRenderer(
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
             } else if (beamTarget is NPCEntity) {
                 val npcDelegate = beamTarget.delegate as NPCClientDelegate
-                val baseScale = beamTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = beamTarget.renderScale * beamTarget.hitboxScale
 
-                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale.toDouble()))
                     ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
             } else {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()

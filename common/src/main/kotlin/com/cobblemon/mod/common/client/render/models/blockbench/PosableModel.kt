@@ -738,9 +738,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun updateLocators(entity: Entity?, state: PosableState) {
         val matrixStack = PoseStack()
         var scale = 1F
+        var yRot = 0f
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            if(entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
+            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
                 && (entity.controllingPassenger as OrientationControllable).orientationController.active){
                 val controllingPassenger = entity.controllingPassenger as OrientationControllable
                 val controller = controllingPassenger.orientationController
@@ -751,36 +753,26 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 transformationMatrix.translate(center.negate())
                 matrixStack.mulPose(transformationMatrix)
             } else {
-                var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
-                yRot = Mth.wrapDegrees(yRot)
-                matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
+                yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+                yRot = 180f - Mth.wrapDegrees(yRot)
             }
-            matrixStack.pushPose()
-            matrixStack.scale(-1F, -1F, 1F)
-            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
-            matrixStack.scale(scale, scale, scale)
         } else if (entity is EmptyPokeBallEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
-            yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
-            matrixStack.pushPose()
-            matrixStack.scale(1F, -1F, -1F)
             scale = 0.7F
-            matrixStack.scale(scale, scale, scale)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.wrapDegrees(yRot)
         } else if (entity is GenericBedrockEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
             yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
-            matrixStack.pushPose()
-            // Not 100% convinced we need the -1 on Y but if we needed it for the Poke Ball then probably?
-            matrixStack.scale(1F, -1F, 1F)
         } else if (entity is NPCEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
-            yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
-            matrixStack.pushPose()
-            matrixStack.scale(-1F, -1F, 1F)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+            yRot = 180f - Mth.wrapDegrees(yRot)
         }
+
+        matrixStack.scale(scale, scale, scale)
+        matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
+
+        //For some reason locators are positioned upside-down so this fixes that
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
     }

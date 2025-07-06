@@ -29,5 +29,7 @@ class SwitchFromChattingTaskConfig : SingleTaskConfig {
                 return@Trigger true
             }
         }
+    }.also {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.DIALOGUES)
     }
 }

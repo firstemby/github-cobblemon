@@ -68,6 +68,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
@@ -82,6 +84,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(Stat::class.java, Cobblemon.statProvider.typeAdapter)
+        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
         .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
         .registerTypeAdapter(

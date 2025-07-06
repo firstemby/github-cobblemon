@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_when_hurt", true).asExpressible()
@@ -36,10 +38,19 @@ class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val includePassiveDamage = includePassiveDamage.resolveBoolean()
         if (!condition.resolveBoolean()) return null
 
+        val includePassiveDamage = includePassiveDamage.resolveBoolean()
+
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.HURT_BY,
+            MemoryModuleType.HURT_BY_ENTITY
+        )
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
+
         if (entity is NPCEntity) {
+            behaviourConfigurationContext.addMemories(CobblemonMemories.NPC_BATTLING)
+            behaviourConfigurationContext.addSensors(CobblemonSensors.NPC_BATTLING)
             fun cancelNPCBattles(npcEntity: NPCEntity): Boolean {
                 val battles = npcEntity.battleIds.mapNotNull(BattleRegistry::getBattle)
                 battles.forEach { it.end() }
@@ -58,6 +69,7 @@ class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
                 }
             }
         } else if (entity is PokemonEntity) {
+            behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_BATTLE)
             fun cancelPokemonBattle(pokemonEntity: PokemonEntity): Boolean {
                 val battle = BattleRegistry.getBattle(pokemonEntity.battleId ?: return false)
                 battle?.end()

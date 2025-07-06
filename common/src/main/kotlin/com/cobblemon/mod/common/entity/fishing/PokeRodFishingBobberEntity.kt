@@ -466,9 +466,8 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         super.recreateFromPacket(clientboundAddEntityPacket)
         val owner = this.owner
         if (this.state == State.FLYING && owner != null) {  // starts casting sound when instantiated on client
-            val rand = this.level().random
             val toPlay =
-                EntityBoundSoundInstance(this.castingSound, SoundSource.PLAYERS, 1.0F, 1.0f, owner, rand.nextLong())
+                EntityBoundSoundInstance(this.castingSound, SoundSource.PLAYERS, 1.0F, 1.0f, owner, this.random.nextLong())
             EntitySoundTracker.play(owner.id, toPlay)
         }
     }

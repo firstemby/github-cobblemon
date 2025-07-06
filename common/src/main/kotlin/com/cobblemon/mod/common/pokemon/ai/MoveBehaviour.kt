@@ -25,7 +25,6 @@ class MoveBehaviour {
     val wanderChance = 120
     val wanderSpeed = 1.0
     val canLook = true
-    val looksAtEntities = true
 
     @Transient
     val struct = ObjectValue<MoveBehaviour>(this).also {
@@ -36,6 +35,5 @@ class MoveBehaviour {
         it.addFunction("wander_chance") { DoubleValue(wanderChance) }
         it.addFunction("wander_speed") { DoubleValue(wanderSpeed) }
         it.addFunction("can_look") { DoubleValue(canLook) }
-        it.addFunction("looks_at_entities") { DoubleValue(looksAtEntities) }
     }
 }

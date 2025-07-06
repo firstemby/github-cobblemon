@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.ai.SwitchToBattleTask
@@ -20,6 +21,7 @@ class SwitchToPokemonBattleTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
+        behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_BATTLE)
         return SwitchToBattleTask.createForPokemon()
     }
 }
