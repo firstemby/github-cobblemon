@@ -463,68 +463,68 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.DESTROY).strength(0.4f), false))
 
     @JvmField
-    val KINGS_ROCK = create("kings_rock", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6))
+    val KINGS_ROCK = create("kings_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_7x6))
     @JvmField
-    val CHIPPED_POT = create("chipped_pot", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
+    val CHIPPED_POT = create("chipped_pot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
     @JvmField
-    val CRACKED_POT = create("cracked_pot", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
+    val CRACKED_POT = create("cracked_pot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEAPOT))
     @JvmField
-    val MASTERPIECE_TEACUP = create("masterpiece_teacup", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
+    val MASTERPIECE_TEACUP = create("masterpiece_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
-    val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
+    val UNREMARKABLE_TEACUP = create("unremarkable_teacup", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.TUMBLESTONE_SOUNDS).mapColor(MapColor.NONE).noOcclusion(), ItemType.TEACUP))
     @JvmField
-    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, ItemType.MOSS))
+    val LUMINOUS_MOSS = create("luminous_moss", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.MOSS).mapColor(MapColor.NONE).noOcclusion().lightLevel{5}, ItemType.MOSS))
     @JvmField
-    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), ItemType.GENERIC_8x4))
+    val GALARICA_CUFF = create("galarica_cuff", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), ItemType.GENERIC_8x4))
     @JvmField
-    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission()))
+    val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.SWEET_BERRY_BUSH).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission()))
     @JvmField
-    val DESTINY_KNOT = create("destiny_knot", DecorativeItemBlock(Properties.of().sound(SoundType.WOOL).mapColor(MapColor.NONE).noOcclusion(), ItemType.KNOT))
+    val DESTINY_KNOT = create("destiny_knot", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOL).mapColor(MapColor.NONE).noOcclusion(), ItemType.KNOT))
     @JvmField
-    val METRONOME = create("metronome", MetronomeBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion()))
+    val METRONOME = create("metronome", MetronomeBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion()))
     @JvmField
-    val DAMP_ROCK = create("damp_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val DAMP_ROCK = create("damp_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val HEAT_ROCK = create("heat_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val HEAT_ROCK = create("heat_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val ICY_ROCK = create("icy_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val ICY_ROCK = create("icy_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val SMOOTH_ROCK = create("smooth_rock", DecorativeItemBlock(Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    val SMOOTH_ROCK = create("smooth_rock", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.DRIPSTONE_BLOCK).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
     @JvmField
-    val UPGRADE = create("upgrade", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
+    val UPGRADE = create("upgrade", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
     @JvmField
-    val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
+    val DUBIOUS_DISC = create("dubious_disc", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.UPGRADE))
     @JvmField
-    val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_7x6))
+    val NEVER_MELT_ICE = create("never_melt_ice", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().friction(0.989F), ItemType.GENERIC_7x6))
     @JvmField
-    val PEAT_BLOCK = create("peat_block", SixDirectionalBlock(Properties.of().mapColor(MapColor.CLAY).strength(0.5f).sound(SoundType.MUD)))
+    val PEAT_BLOCK = create("peat_block", SixDirectionalBlock(BlockBehaviour.Properties.of().mapColor(MapColor.CLAY).strength(0.5f).sound(SoundType.MUD)))
     @JvmField
-    val CLEANSE_TAG = create("cleanse_tag", WallAttachedStackableItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallStackableItemType.TAG))
+    val CLEANSE_TAG = create("cleanse_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallStackableItemType.TAG))
     @JvmField
-    val SPELL_TAG = create("spell_tag", WallAttachedStackableItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallStackableItemType.TAG))
+    val SPELL_TAG = create("spell_tag", WallAttachedStackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().noCollission(), WallStackableItemType.TAG))
     @JvmField
-    val BLUNDER_POLICY = create("blunder_policy", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
+    val BLUNDER_POLICY = create("blunder_policy", WallAttachedDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
     @JvmField
-    val WEAKNESS_POLICY = create("weakness_policy", WallAttachedDecorativeItemBlock(Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
+    val WEAKNESS_POLICY = create("weakness_policy", WallAttachedDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().noCollission(), WallItemType.POLICY))
     @JvmField
-    val SACHET = create("sachet", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
+    val SACHET = create("sachet", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
     @JvmField
-    val BRIGHT_POWDER = create("bright_powder", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().lightLevel{2}, ItemType.POUCH))
+    val BRIGHT_POWDER = create("bright_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion().lightLevel{2}, ItemType.POUCH))
     @JvmField
-    val METAL_POWDER = create("metal_powder", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
+    val METAL_POWDER = create("metal_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
     @JvmField
-    val QUICK_POWDER = create("quick_powder", DecorativeItemBlock(Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
+    val QUICK_POWDER = create("quick_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
 
     @JvmField
-    val POTION = create("potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
+    val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val SUPER_POTION = create("super_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
+    val SUPER_POTION = create("super_potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val HYPER_POTION = create("hyper_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
+    val HYPER_POTION = create("hyper_potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val MAX_POTION = create("max_potion", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
+    val MAX_POTION = create("max_potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
     @JvmField
-    val FULL_RESTORE = create("full_restore", StackableItemBlock(Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
+    val FULL_RESTORE = create("full_restore", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
 
     @JvmField
     val GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED))
