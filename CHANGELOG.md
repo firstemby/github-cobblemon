@@ -317,7 +317,8 @@
 - Added `HyperTrainedIvEvent.Pre` and `HyperTrainedIvEvent.Post`.
 - Added a `hoverText` option to PartySelectCallback, to display a tooltip on hovering over a Pokémon in the selection screen.
 - `PokemonEntity` instances spawned into the world now appropriately finalize the spawn for mod compatibility.
-  
+- Added PokedexManager.obtain as a replacement for .catch which is not a friendly function name in Java.
+
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
   - The `requiredContext` for an item interaction evolution

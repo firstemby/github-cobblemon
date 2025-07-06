@@ -24,23 +24,18 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
     override val resourceKey: ResourceKey<Registry<PoiType>> = Registries.POINT_OF_INTEREST_TYPE
 
     @JvmField
-    val NURSE_KEY: ResourceKey<PoiType> = createKey("nurse")
+    val NURSE_KEY = createKey("nurse", CobblemonBlocks.HEALING_MACHINE, 1, 1)
     @JvmField
-    val NURSE = create(NURSE_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.HEALING_MACHINE), 1, 1))
+    val LURE_CAKE_KEY = createKey("lure_cake", CobblemonBlocks.LURE_CAKE, 0, 1)
     @JvmField
-    val LURE_CAKE_KEY: ResourceKey<PoiType> = createKey("lure_cake")
+    val SACCHARINE_LOG_SLATHERED_KEY = createKey("saccharine_log_slathered", CobblemonBlocks.SACCHARINE_LOG_SLATHERED, 0, 1)
     @JvmField
-    val LURE_CAKE = create(LURE_CAKE_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.LURE_CAKE), 0, 1))
-    @JvmField
-    val SACCHARINE_HONEY_LOG_KEY: ResourceKey<PoiType> = createKey("saccharine_honey_log")
-    @JvmField
-    val SACCHARINE_HONEY_LOG = create(SACCHARINE_HONEY_LOG_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.SACCHARINE_HONEY_LOG), 0, 1))
-    @JvmField
-    val INCENSE_SWEET_KEY: ResourceKey<PoiType> = createKey("incense_sweet")
-    @JvmField
-    val INCENSE_SWEET = create(INCENSE_SWEET_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.INCENSE_SWEET), 0, 1))
+    val INCENSE_SWEET_KEY = createKey("incense_sweet", CobblemonBlocks.INCENSE_SWEET, 0, 1)
 
-    private fun createKey(string: String): ResourceKey<PoiType> = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, cobblemonResource(string))
+    private fun createKey(string: String, block: Block, maxTickets: Int, validRange: Int ): ResourceKey<PoiType> =
+        ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, cobblemonResource(string)).also { resourceKey ->
+            create(resourceKey.location().path, PoiType(getBlockStates(block), maxTickets, validRange))
+        }
 
     private fun getBlockStates(block: Block): Set<BlockState> = ImmutableSet.copyOf(block.stateDefinition.possibleStates)
 }

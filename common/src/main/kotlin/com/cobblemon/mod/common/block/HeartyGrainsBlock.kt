@@ -230,7 +230,7 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
 
     companion object {
         val CODEC = simpleCodec(::HeartyGrainsBlock)
-        const val MATURE_AGE = 7
+        const val MATURE_AGE = 6
         val WATERLOGGED = BlockStateProperties.WATERLOGGED
         val AGE: IntegerProperty = BlockStateProperties.AGE_7
         val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
@@ -243,7 +243,6 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
             box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 4
             box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 5
             box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0),  // Stage 6
-            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)  // Stage 7
         )
     }
 

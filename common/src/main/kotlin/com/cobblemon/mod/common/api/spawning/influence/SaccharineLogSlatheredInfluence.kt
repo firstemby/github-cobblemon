@@ -1,0 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.spawning.influence
+
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
+import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.core.BlockPos
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.block.RotatedPillarBlock
+
+class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInfluence {
+
+    companion object {
+        const val SACCHARINE_LOG_SLATHERED_MARKER = "saccharine_log_slathered"
+    }
+
+    var used = false
+    val chanceForHA = 0.05
+
+    override fun affectSpawnablePosition(spawnablePosition: SpawnablePosition) {
+        spawnablePosition.markers.add(SACCHARINE_LOG_SLATHERED_MARKER)
+    }
+
+    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+        if (entity is PokemonEntity) {
+            if (Math.random() <= chanceForHA) {
+                FishingSpawnCause.alterHAAttempt(entity)
+            }
+
+            if (!used) {
+                val logPos = pos
+                val level = action.spawnablePosition.world.level
+                if (logPos != null) {
+                    val blockState = level.getBlockState(logPos)
+                    if (blockState.block == CobblemonBlocks.SACCHARINE_LOG_SLATHERED) {
+                        val axis = blockState.getValue(RotatedPillarBlock.AXIS)
+                        val newState = CobblemonBlocks.SACCHARINE_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, axis)
+                        level.setBlock(logPos, newState, 3)
+                    }
+                }
+                used = true
+            }
+        }
+    }
+}

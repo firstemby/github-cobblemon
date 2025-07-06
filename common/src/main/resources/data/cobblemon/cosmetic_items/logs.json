@@ -2,6 +2,14 @@
   "pokemon": ["timburr", "komala"],
   "cosmeticItems": [
     {
+      "consumedItem": "#cobblemon:apricorn_logs",
+      "aspects": ["tree-apricorn"]
+    },
+    {
+      "consumedItem": "#cobblemon:saccharine_logs",
+      "aspects": ["tree-saccharine"]
+    },
+    {
       "consumedItem": "#minecraft:oak_logs",
       "aspects": ["tree-oak"]
     },

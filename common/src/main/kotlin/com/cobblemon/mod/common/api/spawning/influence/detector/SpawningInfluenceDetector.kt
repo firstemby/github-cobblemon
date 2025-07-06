@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.prospecting.IncenseSweetDetector
 import com.cobblemon.mod.common.api.spawning.prospecting.LureCakeDetector
-import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineHoneyLogDetector
+import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineLogSlatheredDetector
 
 /**
  * Prospects for [SpawningZoneInfluence] in a world at a given position. Occurs as part of a
@@ -32,7 +32,7 @@ interface SpawningInfluenceDetector {
         @JvmStatic
         val detectors = mutableSetOf<SpawningInfluenceDetector>(
             LureCakeDetector,
-            SaccharineHoneyLogDetector,
+            SaccharineLogSlatheredDetector,
             IncenseSweetDetector
         )
     }

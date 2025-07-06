@@ -77,7 +77,7 @@
   "item.cobblemon.vivichoke_seeds": "Vivichoke Seeds",
   "item.cobblemon.vivichoke": "Vivichoke",
   "item.cobblemon.galarica_nuts": "Galarica Nuts",
-  "item.cobblemon.hearty_grains": "Hearty Grains",
+  "item.cobblemon.hearty_grains": "Hearty Rice",
   "item.cobblemon.bugwort": "Bugwort",
 
   "item.cobblemon.apricorn_boat": "Apricorn Boat",
@@ -899,7 +899,7 @@
   "block.cobblemon.stripped_saccharine_log": "Stripped Saccharine Log",
   "block.cobblemon.saccharine_wood": "Saccharine Wood",
   "block.cobblemon.stripped_saccharine_wood": "Stripped Saccharine Wood",
-  "block.cobblemon.saccharine_honey_log": "Honey-Coated Saccharine Log",
+  "block.cobblemon.saccharine_log_slathered": "Honey-Coated Saccharine Log",
   "block.cobblemon.saccharine_planks": "Saccharine Planks",
   "block.cobblemon.saccharine_leaves": "Saccharine Leaves",
   "block.cobblemon.saccharine_stairs": "Saccharine Stairs",
@@ -951,7 +951,7 @@
   "block.cobblemon.campfire_pot_red": "Red Campfire Pot",
   "block.cobblemon.campfire_pot_white": "White Campfire Pot",
   "block.cobblemon.campfire_pot_yellow": "Yellow Campfire Pot",
-  "block.cobblemon.hearty_grain_bale": "Hearty Grain Bale",
+  "block.cobblemon.hearty_grain_bale": "Hearty Rice Bale",
   "block.cobblemon.tatami_block": "Tatami",
   "block.cobblemon.tatami_mat": "Tatami Mat",
 
