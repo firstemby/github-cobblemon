@@ -1,0 +1,32 @@
+{
+    "replace": false,
+    "values": [
+        "cobblemon:relic_coin_pouch",
+        "cobblemon:kings_rock",
+        "cobblemon:chipped_pot",
+        "cobblemon:cracked_pot",
+        "cobblemon:masterpiece_teacup",
+        "cobblemon:unremarkable_teacup",
+        "cobblemon:luminous_moss",
+        "cobblemon:galarica_cuff",
+        "cobblemon:galarica_wreath",
+        "cobblemon:destiny_knot",
+        "cobblemon:metronome",
+        "cobblemon:damp_rock",
+        "cobblemon:heat_rock",
+        "cobblemon:icy_rock",
+        "cobblemon:smooth_rock",
+        "cobblemon:upgrade",
+        "cobblemon:dubious_disc",
+        "cobblemon:sachet",
+        "cobblemon:bright_powder",
+        "cobblemon:metal_powder",
+        "cobblemon:quick_powder",
+        "cobblemon:never_melt_ice",
+		
+        "cobblemon:blunder_policy",
+        "cobblemon:weakness_policy",
+        "cobblemon:cleanse_tag",
+        "cobblemon:spell_tag"
+    ]
+}

@@ -16,17 +16,17 @@
         "cobblemon:heat_rock",
         "cobblemon:icy_rock",
         "cobblemon:smooth_rock",
-		"cobblemon:upgrade",
-		"cobblemon:dubious_disc",
-		"cobblemon:sachet",
-		"cobblemon:bright_powder",
-		"cobblemon:metal_powder",
-		"cobblemon:quick_powder",
-		"cobblemon:never_melt_ice",
+        "cobblemon:upgrade",
+        "cobblemon:dubious_disc",
+        "cobblemon:sachet",
+        "cobblemon:bright_powder",
+        "cobblemon:metal_powder",
+        "cobblemon:quick_powder",
+        "cobblemon:never_melt_ice",
 		
-		"cobblemon:blunder_policy",
-		"cobblemon:weakness_policy",
-		"cobblemon:cleanse_tag",
-		"cobblemon:spell_tag"
+        "cobblemon:blunder_policy",
+        "cobblemon:weakness_policy",
+        "cobblemon:cleanse_tag",
+        "cobblemon:spell_tag"
     ]
 }

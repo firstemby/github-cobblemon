@@ -31,7 +31,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
-    
+
     override fun render(
         entity: DisplayCaseBlockEntity,
         tickDelta: Float,
