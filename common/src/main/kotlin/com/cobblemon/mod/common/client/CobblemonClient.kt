@@ -215,12 +215,7 @@ object CobblemonClient {
         this.implementation.registerBlockRenderType(
             RenderType.translucent(),
             CobblemonBlocks.UPGRADE,
-            CobblemonBlocks.DUBIOUS_DISC,
-            CobblemonBlocks.DAMP_ROCK,
-            CobblemonBlocks.HEAT_ROCK,
-            CobblemonBlocks.ICY_ROCK,
-            CobblemonBlocks.SMOOTH_ROCK,
-            CobblemonBlocks.NEVER_MELT_ICE
+            CobblemonBlocks.DUBIOUS_DISC
         )
 
         this.implementation.registerBlockRenderType(
@@ -315,10 +310,32 @@ object CobblemonClient {
             CobblemonBlocks.GALARICA_WREATH,
             CobblemonBlocks.DESTINY_KNOT,
             CobblemonBlocks.METRONOME,
+            CobblemonBlocks.DAMP_ROCK,
+            CobblemonBlocks.HEAT_ROCK,
+            CobblemonBlocks.ICY_ROCK,
+            CobblemonBlocks.SMOOTH_ROCK,
+            CobblemonBlocks.NEVER_MELT_ICE,
             CobblemonBlocks.CLEANSE_TAG,
             CobblemonBlocks.SPELL_TAG,
             CobblemonBlocks.BLUNDER_POLICY,
-            CobblemonBlocks.WEAKNESS_POLICY
+            CobblemonBlocks.WEAKNESS_POLICY,
+
+            CobblemonBlocks.WHITE_PLAQUE,
+            CobblemonBlocks.LIGHT_GRAY_PLAQUE,
+            CobblemonBlocks.GRAY_PLAQUE,
+            CobblemonBlocks.BLACK_PLAQUE,
+            CobblemonBlocks.BROWN_PLAQUE,
+            CobblemonBlocks.RED_PLAQUE,
+            CobblemonBlocks.ORANGE_PLAQUE,
+            CobblemonBlocks.YELLOW_PLAQUE,
+            CobblemonBlocks.LIME_PLAQUE,
+            CobblemonBlocks.GREEN_PLAQUE,
+            CobblemonBlocks.CYAN_PLAQUE,
+            CobblemonBlocks.LIGHT_BLUE_PLAQUE,
+            CobblemonBlocks.BLUE_PLAQUE,
+            CobblemonBlocks.PURPLE_PLAQUE,
+            CobblemonBlocks.MAGENTA_PLAQUE,
+            CobblemonBlocks.PINK_PLAQUE
         )
 
         this.createBoatModelLayers()

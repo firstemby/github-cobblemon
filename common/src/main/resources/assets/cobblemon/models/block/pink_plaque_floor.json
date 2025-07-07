@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/plaque_floor",
+  "textures": {
+		"0": "cobblemon:block/plaques/plaques",
+		"particle": "cobblemon:block/plaques/pink_plaque"
+  }
+}

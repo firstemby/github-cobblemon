@@ -1,0 +1,32 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "cobblemon:block/plaques/plaques",
+		"particle": "cobblemon:block/plaques/red_plaque"
+	},
+	"elements": [
+		{
+			"from": [1, 2, 15],
+			"to": [15, 14, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 2, 15]},
+			"faces": {
+				"north": {"uv": [1, 2, 15, 14], "texture": "#particle"},
+				"east": {"uv": [14.5, 0, 15, 12], "texture": "#0"},
+				"south": {"uv": [0, 0, 7, 12], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [15, 0, 15.5, 12], "texture": "#0"},
+				"up": {"uv": [14, 2, 7, 1], "texture": "#0"},
+				"down": {"uv": [14, 3, 7, 4], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "wall",
+			"origin": [2, 0, 7],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}
