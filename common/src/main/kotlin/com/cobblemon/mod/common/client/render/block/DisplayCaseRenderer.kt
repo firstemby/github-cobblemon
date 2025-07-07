@@ -31,9 +31,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
-    val coinPouchStack: ItemStack by lazy { ItemStack(
-        CobblemonItems.RELIC_COIN_POUCH
-    ).also { it.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(1)) } }
+    
     override fun render(
         entity: DisplayCaseBlockEntity,
         tickDelta: Float,
@@ -42,8 +40,8 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         light: Int,
         overlay: Int
     ) {
-        val stack: ItemStack = if (entity.getStack().`is`(CobblemonItems.RELIC_COIN_POUCH)) {
-            coinPouchStack
+        val stack: ItemStack = if (entity.getStack().`is`(CobblemonItemTags.COBBLEMON_ITEMS_WITH_BLOCK_MODELS )) {
+            entity.getStack().copyWithCount(1).also { it.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(1)) }
         } else {
             entity.getStack()
         }
@@ -161,12 +159,12 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             stack.item is BannerItem -> PositioningType.BANNER
             stack.`is`(CobblemonItemTags.POKE_BALLS) -> PositioningType.POKE_BALL
             stack.item is PokedexItem -> PositioningType.POKEDEX
-            stack.item == CobblemonItems.RELIC_COIN_POUCH -> PositioningType.COIN_POUCH
-            stack.`is`(CobblemonItemTags.COBBLEMON_ITEMS_WITH_BLOCK_MODELS) -> PositioningType.COIN_POUCH
+            stack.`is`(CobblemonItemTags.COBBLEMON_ITEMS_WITH_BLOCK_MODELS) -> PositioningType.ITEM_BLOCK
             stack.item == CobblemonItems.PASTURE -> PositioningType.PASTURE
             //stack.item == CobblemonItems.POKEMON_MODEL -> PositioningType.ITEM_MODEL
             stack.item == Items.SHIELD -> PositioningType.SHIELD
             stack.item == Items.DECORATED_POT -> PositioningType.MOB_HEAD
+            stack.`is`(CobblemonItemTags.PLAQUES) -> PositioningType.ITEM_MODEL
             Minecraft.getInstance().itemRenderer.getModel(stack, world, null, 0).isGui3d -> PositioningType.BLOCK_MODEL
             else -> PositioningType.ITEM_MODEL
         }
@@ -186,6 +184,6 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         MOB_HEAD(1f, 1f, 1f, 0f, -0.025f, 0f, 180f),
         SHIELD(1f, 1f, 1f, 0f, -0.045f, 0f, 180f),
         PASTURE(1f, 1f, 1f, 0f, 0.0375f, 0f),
-        COIN_POUCH(1f, 1f, 1f, 0f, 0.415f, 0f)
+        ITEM_BLOCK(1f, 1f, 1f, 0f, 0.415f, 0f)
     }
 }

@@ -66,6 +66,7 @@ object CobblemonItemTags {
     @JvmField val MOON_STONE_ORES = create("moon_stone_ores")
     @JvmField val MUTATED_BERRIES = create("mutated_berries")
     @JvmField val PLANTS = create("plants")
+    @JvmField val PLAQUES = create("plaques")
     @JvmField val POKE_BALLS = create("poke_balls")
     @JvmField val POKE_RODS = create("poke_rods")
     @JvmField val POKEDEX = create("pokedex")

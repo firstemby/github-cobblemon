@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "IAI",
+        "NDN"
+    ],
+    "key": {
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "N": {
+            "tag": "c:nuggets/iron"
+        },
+        "A": {
+            "tag": "cobblemon:apricorns"
+        },
+        "D": {
+            "tag": "c:dyes/cyan"
+        }
+    },
+    "result": {
+        "id": "cobblemon:cyan_plaque"
+    }
+}
