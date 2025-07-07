@@ -60,7 +60,7 @@ class GalaricaWreathBlock(properties : Properties) : FaceAttachedHorizontalDirec
                     FACE,
                     if (direction == Direction.UP) AttachFace.CEILING else AttachFace.FLOOR
                 )
-                    .setValue(FACING, context.horizontalDirection).setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
+                    .setValue(FACING, context.horizontalDirection.opposite).setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
             } else {
                 (defaultBlockState().setValue(FACE, AttachFace.WALL) as BlockState).setValue(
                     FACING,
