@@ -2,13 +2,5 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cobblemon:item/evolution/galarica_wreath"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "custom_model_data": 1
-      },
-      "model": "cobblemon:block/galarica_wreath_floor"
-    }
-  ]
+  }
 }

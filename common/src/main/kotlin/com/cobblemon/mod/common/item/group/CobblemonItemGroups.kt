@@ -397,7 +397,32 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MAGENTA_PLAQUE)
         entries.accept(CobblemonItems.PINK_PLAQUE)
 
-        //Placeable Items here?
+        //Decorative Items
+        entries.accept(CobblemonItems.KINGS_ROCK)
+        entries.accept(CobblemonItems.CHIPPED_POT)
+        entries.accept(CobblemonItems.CRACKED_POT)
+        entries.accept(CobblemonItems.MASTERPIECE_TEACUP)
+        entries.accept(CobblemonItems.UNREMARKABLE_TEACUP)
+        entries.accept(CobblemonItems.LUMINOUS_MOSS)
+        entries.accept(CobblemonItems.GALARICA_CUFF)
+        entries.accept(CobblemonItems.GALARICA_WREATH)
+        entries.accept(CobblemonItems.DESTINY_KNOT)
+        entries.accept(CobblemonItems.METRONOME)
+        entries.accept(CobblemonItems.DAMP_ROCK)
+        entries.accept(CobblemonItems.HEAT_ROCK)
+        entries.accept(CobblemonItems.ICY_ROCK)
+        entries.accept(CobblemonItems.SMOOTH_ROCK)
+        entries.accept(CobblemonItems.UPGRADE)
+        entries.accept(CobblemonItems.DUBIOUS_DISC)
+        entries.accept(CobblemonItems.SACHET)
+        entries.accept(CobblemonItems.BRIGHT_POWDER)
+        entries.accept(CobblemonItems.METAL_POWDER)
+        entries.accept(CobblemonItems.QUICK_POWDER)
+        entries.accept(CobblemonItems.NEVER_MELT_ICE)
+        entries.accept(CobblemonItems.BLUNDER_POLICY)
+        entries.accept(CobblemonItems.WEAKNESS_POLICY)
+        entries.accept(CobblemonItems.CLEANSE_TAG)
+        entries.accept(CobblemonItems.SPELL_TAG)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

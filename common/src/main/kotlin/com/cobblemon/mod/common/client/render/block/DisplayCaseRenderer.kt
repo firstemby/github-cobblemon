@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.block.DisplayCaseBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.item.PokedexItem
+import com.cobblemon.mod.common.item.WearableItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
@@ -164,6 +165,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             //stack.item == CobblemonItems.POKEMON_MODEL -> PositioningType.ITEM_MODEL
             stack.item == Items.SHIELD -> PositioningType.SHIELD
             stack.item == Items.DECORATED_POT -> PositioningType.MOB_HEAD
+            stack.item is WearableItem -> PositioningType.ITEM_MODEL
             stack.`is`(CobblemonItemTags.PLAQUES) -> PositioningType.ITEM_MODEL
             Minecraft.getInstance().itemRenderer.getModel(stack, world, null, 0).isGui3d -> PositioningType.BLOCK_MODEL
             else -> PositioningType.ITEM_MODEL
