@@ -5,7 +5,7 @@
       "predicate": {
         "custom_model_data": 1
       },
-      "model": "cobblemon:item/peat_block_sprite"
+      "model": "cobblemon:item/contexts/peat_block_sprite"
     }
   ]
 }
