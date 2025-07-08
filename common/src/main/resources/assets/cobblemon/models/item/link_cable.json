@@ -8,41 +8,53 @@
       "predicate": {
         "custom_model_data": 1
       },
-      "model": "cobblemon:item/cobblemon"
+      "model": "cobblemon:item/contexts/cobblemon"
     },
 	{
       "predicate": {
         "custom_model_data": 2
       },
-      "model": "cobblemon:item/cobblemon_blue"
+      "model": "cobblemon:item/contexts/cobblemon_blue"
     },
 	{
       "predicate": {
         "custom_model_data": 3
       },
-      "model": "cobblemon:item/cobblemon_green"
+      "model": "cobblemon:item/contexts/cobblemon_green"
     },
 	{
       "predicate": {
         "custom_model_data": 4
       },
-      "model": "cobblemon:item/cobblemon_purple"
+      "model": "cobblemon:item/contexts/cobblemon_purple"
     },
 	{
       "predicate": {
         "custom_model_data": 5
       },
-      "model": "cobblemon:item/cobblemon_yellow"
+      "model": "cobblemon:item/contexts/cobblemon_yellow"
     },
 	{
       "predicate": {
         "custom_model_data": 6
       },
-      "model": "cobblemon:item/shiny_marker"
+      "model": "cobblemon:item/contexts/shiny_marker"
     },
 	{
       "predicate": {
         "custom_model_data": 7
+      },
+      "model": "cobblemon:item/contexts/cobblemon_orange"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 8
+      },
+      "model": "cobblemon:item/contexts/cobblemon_teal"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 9
       },
       "model": "cobblemon:item/link_cable"
     }

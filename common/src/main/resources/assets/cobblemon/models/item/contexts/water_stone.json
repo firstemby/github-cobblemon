@@ -1,0 +1,6 @@
+{
+	"parent": "cobblemon:item/contexts/template_evolution_stone",
+	"textures": {
+		"particle": "cobblemon:item/display_case/water_stone"
+	}
+}
