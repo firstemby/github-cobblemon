@@ -1,6 +1,7 @@
 {
-	"parent": "cobblemon:item/contexts/template_evolution_stone",
+	"parent": "cobblemon:item/contexts/template_wide_evolution_stone",
 	"textures": {
+		"0": "cobblemon:item/display_case/leaf_stone",
 		"particle": "cobblemon:item/display_case/leaf_stone"
 	}
 }
