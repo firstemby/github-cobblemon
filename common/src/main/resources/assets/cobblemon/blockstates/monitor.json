@@ -1,17 +1,17 @@
 {
   "variants": {
-    "facing=south,screen=off": {
+    "facing=south,screen=off,damaged=false": {
       "model": "cobblemon:block/monitor"
     },
-    "facing=west,screen=off": {
+    "facing=west,screen=off,damaged=false": {
       "model": "cobblemon:block/monitor",
       "y": 90
     },
-    "facing=north,screen=off": {
+    "facing=north,screen=off,damaged=false": {
       "model": "cobblemon:block/monitor",
       "y": 180
     },
-    "facing=east,screen=off": {
+    "facing=east,screen=off,damaged=false": {
       "model": "cobblemon:block/monitor",
       "y": 270
     },
@@ -163,6 +163,51 @@
     },
     "facing=east,screen=green_progress_9": {
       "model": "cobblemon:block/monitor_locked",
+      "y": 270
+    },
+    "facing=south,screen=off,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged"
+    },
+    "facing=west,screen=off,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 90
+    },
+    "facing=north,screen=off,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 180
+    },
+    "facing=east,screen=off,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 270
+    },
+    "facing=south,screen=glitching,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged_glitching"
+    },
+    "facing=west,screen=glitching,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 90
+    },
+    "facing=north,screen=glitching,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 180
+    },
+    "facing=east,screen=glitching,damaged=true": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 270
+    },
+    "facing=south,screen=glitching,damaged=false": {
+      "model": "cobblemon:block/monitor_glitching"
+    },
+    "facing=west,screen=glitching,damaged=false": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 90
+    },
+    "facing=north,screen=glitching,damaged=false": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 180
+    },
+    "facing=east,screen=glitching,damaged=false": {
+      "model": "cobblemon:block/monitor_glitching",
       "y": 270
     }
   }

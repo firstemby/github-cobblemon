@@ -398,6 +398,7 @@ object Cobblemon {
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()
             playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
+            ServerTaskTracker.clear()
         }
         PlatformEvents.SERVER_STARTED.subscribe { event ->
             bestSpawner.onServerStarted(event.server)

@@ -10,6 +10,9 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.multiblock.MultiblockBlock
+import com.cobblemon.mod.common.block.MonitorBlock.Companion.DAMAGED
+import com.cobblemon.mod.common.block.MonitorBlock.Companion.SCREEN
+import com.cobblemon.mod.common.block.MonitorBlock.MonitorScreen
 import com.cobblemon.mod.common.block.entity.FossilAnalyzerBlockEntity
 import com.cobblemon.mod.common.block.entity.FossilMultiblockEntity
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockBuilder
@@ -70,6 +73,22 @@ class FossilAnalyzerBlock(settings: Properties) : MultiblockBlock(settings), Wor
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(HorizontalDirectionalBlock.FACING)
         builder.add(ON)
+    }
+
+    override fun neighborChanged(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        neighborBlock: Block,
+        neighborPos: BlockPos,
+        movedByPiston: Boolean
+    ) {
+        if (level.hasNeighborSignal(pos)) {
+            level.setBlockAndUpdate(pos, state.setValue(ON, true))
+        } else {
+            level.setBlockAndUpdate(pos, state.setValue(ON, false))
+        }
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston)
     }
 
     companion object {
