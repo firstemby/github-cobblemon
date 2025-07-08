@@ -9,6 +9,12 @@
         "custom_model_data": 1
       },
       "model": "cobblemon:block/metronome"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "cobblemon:block/metronome_active"
     }
   ]
 }

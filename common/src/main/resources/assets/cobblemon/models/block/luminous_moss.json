@@ -1,9 +1,11 @@
 {
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "cobblemon:block/decorative_items/luminous_moss",
-		"particle": "minecraft:block/moss_block"
+		"particle": "block/moss_block"
 	},
 	"elements": [
 		{
@@ -101,5 +103,11 @@
 				"down": {"uv": [3, 13.5, 2, 14.5], "texture": "#0"}
 			}
 		}
-	]
+	],
+	"display": {
+		"ground": {
+			"translation": [0, -2, 0],
+			"scale": [0.75, 0.75, 0.75]
+		}
+	}
 }

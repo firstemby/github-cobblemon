@@ -40,7 +40,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         light: Int,
         overlay: Int
     ) {
-        val stack: ItemStack = if (entity.getStack().`is`(CobblemonItemTags.COBBLEMON_ITEMS_WITH_BLOCK_MODELS )) {
+        val stack: ItemStack = if (entity.getStack().`is`(CobblemonItemTags.DISPLAY_CASE_ITEMS)) {
             entity.getStack().copyWithCount(1).also { it.set(DataComponents.CUSTOM_MODEL_DATA, CustomModelData(1)) }
         } else {
             entity.getStack()
@@ -159,7 +159,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             stack.item is BannerItem -> PositioningType.BANNER
             stack.`is`(CobblemonItemTags.POKE_BALLS) -> PositioningType.POKE_BALL
             stack.item is PokedexItem -> PositioningType.POKEDEX
-            stack.`is`(CobblemonItemTags.COBBLEMON_ITEMS_WITH_BLOCK_MODELS) -> PositioningType.ITEM_BLOCK
+            stack.`is`(CobblemonItemTags.DISPLAY_CASE_ITEMS) -> PositioningType.ITEM_BLOCK
             stack.item == CobblemonItems.PASTURE -> PositioningType.PASTURE
             //stack.item == CobblemonItems.POKEMON_MODEL -> PositioningType.ITEM_MODEL
             stack.item == Items.SHIELD -> PositioningType.SHIELD

@@ -1,18 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "IAI",
-        "NDN"
+        "CC",
+		"ID",
+        "II"
     ],
     "key": {
         "I": {
             "tag": "c:ingots/iron"
         },
-        "N": {
-            "tag": "c:nuggets/iron"
-        },
-        "A": {
-            "tag": "cobblemon:apricorns"
+        "C": {
+            "tag": "c:chains"
         },
         "D": {
             "tag": "c:dyes/cyan"
