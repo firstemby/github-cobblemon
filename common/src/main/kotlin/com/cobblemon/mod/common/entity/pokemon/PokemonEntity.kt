@@ -11,13 +11,8 @@ package com.cobblemon.mod.common.entity.pokemon
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonEntities
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -65,19 +60,13 @@ import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
-import com.cobblemon.mod.common.entity.BehaviourEditingTracker
-import com.cobblemon.mod.common.entity.MoLangScriptingEntity
-import com.cobblemon.mod.common.entity.OmniPathingEntity
-import com.cobblemon.mod.common.entity.PlatformType
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.*
 import com.cobblemon.mod.common.entity.PoseType.Companion.NO_GRAV_POSES
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -91,6 +80,7 @@ import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimati
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
+import com.cobblemon.mod.common.net.messages.server.behaviour.DamageOnCollisionPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
@@ -111,11 +101,6 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
-import java.util.Optional
-import java.util.UUID
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
-import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -169,6 +154,10 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.*
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
+import kotlin.math.ceil
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -206,10 +195,18 @@ open class PokemonEntity(
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
 
+        const val FALL_DAMAGE_MULT_FLYINGTYPE = 0.5f
+        const val FALL_DAMAGE_MULT_MOVEMENT_FLY = 0.2f
+
         fun createAttributes(): AttributeSupplier.Builder = createLivingAttributes()
             .add(Attributes.FOLLOW_RANGE, 32.0)
             .add(Attributes.ATTACK_KNOCKBACK)
             .add(Attributes.ATTACK_DAMAGE)
+            .add(Attributes.ARMOR)
+            .add(Attributes.ARMOR_TOUGHNESS)
+            // TODO: When jump strength is configured more thoroughly this should be updated to be dynamic based on jump strength.
+            .add(Attributes.SAFE_FALL_DISTANCE, 5.0)
+            .add(Attributes.GRAVITY)
     }
 
     val removalObservable = SimpleObservable<RemovalReason?>()
@@ -549,7 +546,7 @@ open class PokemonEntity(
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
             // Clients also don't seem to have correct info about behavior
-            if(!level().isClientSide && ticksLived > 5) {
+            if (!level().isClientSide && ticksLived > 5) {
                 if (platform == PlatformType.NONE
                         && ownerUUID != null
                         && isInWater && !isUnderWater
@@ -645,11 +642,18 @@ open class PokemonEntity(
      * Prevents flying type Pokémon from taking fall damage.
      */
     override fun causeFallDamage(fallDistance: Float, damageMultiplier: Float, damageSource: DamageSource): Boolean {
-        return if (ElementalTypes.FLYING in pokemon.types || pokemon.ability.name == "levitate" || pokemon.species.behaviour.moving.fly.canFly) {
+        /*return if (pokemon.ability.name == "levitate") {
             false
         } else {
-            super.causeFallDamage(fallDistance, damageMultiplier, damageSource)
-        }
+            val flying_type = ElementalTypes.FLYING in pokemon.types;
+            val flying_movement = pokemon.species.behaviour.moving.fly.canFly;
+            // Reduce fall damage in case the Pokémon is either a FLYING type or uses flying movement.
+            val damageMultiplier = damageMultiplier * when {
+                ElementalTypes.FLYING in pokemon.types -> FALL_DAMAGE_MULT_FLYINGTYPE
+                pokemon.species.behaviour.moving.fly.canFly -> FALL_DAMAGE_MULT_MOVEMENT_FLY
+                else -> { 1.0f }
+            }*/
+        return super.causeFallDamage(fallDistance, damageMultiplier, damageSource)
     }
 
     override fun isInvulnerableTo(damageSource: DamageSource): Boolean {
@@ -814,7 +818,7 @@ open class PokemonEntity(
                 pokemon = this.createSidedPokemon()
                 health = 0F
             }
-        } else if(pokemon.storeCoordinates.get() == null) {
+        } else if (pokemon.storeCoordinates.get() == null) {
             // when the vanilla /data merge command is used, it will also run through this load method
             // and if we are not careful here, the pokemon instance will get rebuilt from scratch
             // this will fuck with storages, as they are tied to these very pokemon instances and their observables
@@ -1191,10 +1195,11 @@ open class PokemonEntity(
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return if (super.hurt(source, amount)) {
             effects.mockEffect?.takeIf { it is IllusionEffect && this.battleId == null }?.end(this)
+
             if (this.health == 0F) {
                 pokemon.currentHealth = 0
             } else {
-//                pokemon.currentHealth = this.health.toInt()
+                pokemon.currentHealth = (pokemon.maxHealth * (this.health / this.maxHealth)).toInt()
             }
             true
         } else false
@@ -1711,6 +1716,16 @@ open class PokemonEntity(
     }
      */
 
+    override fun move(type: MoverType, pos: Vec3) {
+        if (this.controllingPassenger != null || this.passengers.filterIsInstance<LivingEntity>().isNotEmpty()) {
+            // Reset fall distance every tick if the Pokémon isn't nosediving
+            if (this.deltaMovement.y() > -0.5F && this.fallDistance > 1.0F) {
+                this.fallDistance = 1.0F
+            }
+        }
+        super.move(type, pos)
+    }
+
     override fun travel(movementInput: Vec3) {
         val prevBlockPos = this.blockPosition()
         if (beamMode != 3) { // Don't let Pokémon move during recall
@@ -1719,8 +1734,7 @@ open class PokemonEntity(
             val riders = this.passengers.filterIsInstance<LivingEntity>()
             if ( riders.isEmpty() || this.controllingPassenger == null) {
                 super.travel(movementInput)
-            }
-            else {
+            } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                     behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
                 }
@@ -1741,10 +1755,22 @@ open class PokemonEntity(
                 }
 
                 this.deltaMovement = this.deltaMovement.add( diff.scale(inertia) )
+                val triedMovement = this.deltaMovement
 
                 this.move(MoverType.SELF, this.deltaMovement)
-            }
 
+                if (this.horizontalCollision && this.isControlledByLocalInstance) {
+                    ifRidingAvailable { behaviour, settings, state ->
+                        // Tried minus performed = vector pointing at where we *couldn't* go
+                        val delta = triedMovement.subtract(this.deltaMovement)
+                        if (behaviour.damageOnCollision(settings, state, this, delta)) {
+                            DamageOnCollisionPacket(delta).sendToServer()
+                            // Reset ride velocity
+                            state.rideVelocity.set(state.rideVelocity.get().multiply(0.0, 1.0, 0.0))
+                        }
+                    }
+                }
+            }
 
             this.updateBlocksTraveled(prevBlockPos)
         }

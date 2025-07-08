@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.summary
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -172,8 +173,16 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
-                renderRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null },
-                clickRequirement = { selectedPokemon.evolutionProxy.client().isNotEmpty() && CobblemonClient.battle == null }
+                renderRequirement = {
+                    selectedPokemon.evolutionProxy.client().isNotEmpty()
+                        && CobblemonClient.battle == null
+                        && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE
+                },
+                clickRequirement = {
+                    selectedPokemon.evolutionProxy.client().isNotEmpty()
+                        && CobblemonClient.battle == null
+                        && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE
+                }
             )
         )
 

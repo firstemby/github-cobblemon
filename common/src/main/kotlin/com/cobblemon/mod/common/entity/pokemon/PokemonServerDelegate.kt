@@ -41,6 +41,8 @@ import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
@@ -48,11 +50,16 @@ import net.minecraft.world.level.pathfinder.PathType
 import org.joml.Matrix3f
 import org.joml.Vector3f
 import java.util.*
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
-    var acknowledgedHPStat = -1
+    var acknowledgedHPValue = -1
 
     /** Mocked properties exposed to the client [PokemonEntity]. */
     private val mock: PokemonProperties?
@@ -61,7 +68,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
     override fun changePokemon(pokemon: Pokemon) {
         updatePathfindingPenalties(pokemon)
 //        entity.registerGoals()
-        updateMaxHealth()
+        updateAttributes(pokemon)
+        updateHealth(pokemon)
         entity.struct.addPokemonFunctions(pokemon)
         entity.struct.addPokemonEntityFunctions(entity)
     }
@@ -88,21 +96,72 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.navigation.setCanPathThroughFire(entity.fireImmune())
     }
 
-    fun updateMaxHealth() {
-        val currentHealthRatio = entity.health.toDouble() / entity.maxHealth
-        // Why you would remove HP is beyond me but protects us from obscure crash due to crappy addon
-        acknowledgedHPStat = entity.form.baseStats[Stats.HP] ?: return
+    fun updateAttributes(pokemon: Pokemon) {
+        entity.removeAllEffects()
 
-        val minStat = 50 // Metapod's base HP
-        val maxStat = 150 // Slaking's base HP
-        val baseStat = acknowledgedHPStat.coerceIn(minStat..maxStat)
-        val r = (baseStat - minStat) / (maxStat - minStat).toDouble()
-        val minPossibleHP = 10.0 // half of a player's HP
-        val maxPossibleHP = 100.0 // Iron Golem HP
-        val maxHealth = minPossibleHP + r * (maxPossibleHP - minPossibleHP)
+        if (pokemon.ability.name == "levitate") {
+            entity.getAttribute(Attributes.GRAVITY)?.baseValue = 0.04
+        }
 
+        val maxHealth: Double = this.maxHpToMaxHealthCurve(pokemon.maxHealth).toDouble()
         entity.getAttribute(Attributes.MAX_HEALTH)?.baseValue = maxHealth
-        entity.health = currentHealthRatio.toFloat() * maxHealth.toFloat()
+
+        val (armour, toughness) = this.defenceToArmourCurve(pokemon.defence)
+        entity.getAttribute(Attributes.ARMOR)?.baseValue = armour
+        entity.getAttribute(Attributes.ARMOR_TOUGHNESS)?.baseValue = toughness
+    }
+
+    /**
+     * Apply inverse scaling to the given HP value so that bulky Pokémon don't end up with 100 Hearts while starters all have half a heart.
+     */
+    fun maxHpToMaxHealthCurve(max_hp: Int): Int {
+        return when {
+            // Escape hatch niche situations such as Shedinja which should have a fixed half-a-heart too
+            max_hp <= 1 -> 1;
+            // Really squishy Pokémon should still have *some* health so they don't die instantly. 6 Health is as much as a bat.
+            // There are extremely few Pokémon that have less than 12 HP even at level 1, so this is a rare edgecase.
+            max_hp < 12 -> 6;
+            else -> {
+                val max_hp_d: Double = max_hp.toDouble();
+                // This will give a 30-HP starter 5½ hearts and a max bulk Blissey of 714 HP a round 50 hearts.
+                sqrt(max_hp_d.pow(1.402)).roundToInt()
+            }
+        }
+    }
+
+    /**
+     * Apply inverse scaling to the given Defence value, returning a touple of (Armour, Armour Toughness) that the given Pokémon should have.
+     */
+    fun defenceToArmourCurve(defense: Int): Pair<Double, Double> {
+        val armour = when {
+            defense < 200 -> 0.0;
+            else -> {
+                min(30.0, round((defense - 200) / 10.0))
+            }
+        }
+        val toughness = when {
+            defense < 300 -> 0.0;
+            else -> {
+                min(20.0, round((defense - 300) / 7.5))
+            }
+        }
+        return armour to toughness
+    }
+
+
+    /**
+     * Update Minecraft-side Health (i.e. hearts) based on the Pokémon's current HP value
+     */
+    fun updateHealth(pokemon: Pokemon) {
+        if (acknowledgedHPValue != pokemon.currentHealth) {
+            acknowledgedHPValue = pokemon.currentHealth
+            val currentHPRatio: Float = pokemon.currentHealth / pokemon.maxHealth.toFloat()
+
+            if (currentHPRatio.isFinite()) {
+                // Entity Health is stored as float but only ever in-/decreased by whole numbers.
+                entity.health = round(entity.maxHealth * currentHPRatio)
+            }
+        }
     }
 
     override fun initialize(entity: PokemonEntity) {
@@ -237,10 +296,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
             }
         }
 
-        if (entity.form.baseStats[Stats.HP] != acknowledgedHPStat) {
-            updateMaxHealth()
-        }
+        updateHealth(entity.pokemon)
 
+        // TODO: updateTrackedValues does the same check and set again, refactor.
         if (entity.ownerUUID != entity.pokemon.getOwnerUUID()) {
             entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }

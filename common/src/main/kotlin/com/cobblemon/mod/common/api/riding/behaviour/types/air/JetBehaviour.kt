@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.air
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
@@ -20,7 +21,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
-import com.bedrockk.molang.runtime.MoLangMath.lerp
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -173,15 +173,33 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         if (driver.zza > 0.0 && speed < topSpeed && state.stamina.get() > 0.0f && !pushingHeightLimit) {
             //modify acceleration to be slower when at closer speeds to top speed
             val accelMod = max(-(normalizeSpeed(speed, minSpeed, topSpeed)) + 1, 0.0)
-            state.rideVelocity.set(Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, min(state.rideVelocity.get().z + (accel * accelMod), topSpeed)))
+            state.rideVelocity.set(
+                Vec3(
+                    state.rideVelocity.get().x,
+                    state.rideVelocity.get().y,
+                    min(state.rideVelocity.get().z + (accel * accelMod), topSpeed)
+                )
+            )
         } else if (driver.zza >= 0.0 && (state.stamina.get() == 0.0f || pushingHeightLimit)) {
-            state.rideVelocity.set(Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, max(state.rideVelocity.get().z - ((accel) / 4), minSpeed)))
+            state.rideVelocity.set(
+                Vec3(
+                    state.rideVelocity.get().x,
+                    state.rideVelocity.get().y,
+                    max(state.rideVelocity.get().z - ((accel) / 4), minSpeed)
+                )
+            )
         } else if (driver.zza < 0.0 && speed > minSpeed) {
             //modify deccel to be slower when at closer speeds to minimum speed
             val deccelMod = max((normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2) * 4, 0.1)
 
             //Decelerate currently always a constant half of max acceleration.
-            state.rideVelocity.set(Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, max(state.rideVelocity.get().z - ((accel * deccelMod) / 2), minSpeed)))
+            state.rideVelocity.set(
+                Vec3(
+                    state.rideVelocity.get().x,
+                    state.rideVelocity.get().y,
+                    max(state.rideVelocity.get().z - ((accel * deccelMod) / 2), minSpeed)
+                )
+            )
         }
     }
 
@@ -258,14 +276,13 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         val mouseRotation = Vec3(0.0, pitchRot, rollRot)
 
         // Have accumulated input begin decay when no input detected
-        if(abs(mouseX) == 0.0) {
+        if (abs(mouseX) == 0.0) {
             // Have decay on roll be much stronger.
-            state.currMouseXForce.set(lerp( state.currMouseXForce.get(), 0.0, 0.02 ))
+            state.currMouseXForce.set(lerp(state.currMouseXForce.get(), 0.0, 0.02))
         }
-        if(mouseY == 0.0) {
-            state.currMouseYForce.set(lerp(state.currMouseYForce.get(), 0.0, 0.005 ))
+        if (mouseY == 0.0) {
+            state.currMouseYForce.set(lerp(state.currMouseYForce.get(), 0.0, 0.005))
         }
-
 
 
         //yaw, pitch, roll
@@ -368,6 +385,16 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
     }
 
     override fun createDefaultState(settings: JetSettings) = JetState()
+
+    override fun damageOnCollision(
+        settings: JetSettings,
+        state: JetState,
+        vehicle: PokemonEntity,
+        impactVec: Vec3
+    ): Boolean {
+        val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
+        return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
+    }
 }
 
 class JetSettings : RidingBehaviourSettings {
@@ -391,11 +418,12 @@ class JetSettings : RidingBehaviourSettings {
 
     var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 300.0, 128.0)".asExpression()
         private set
-    var handlingExpr: Expression =  "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
         private set
-    var speedExpr: Expression =  "q.get_ride_stats('SPEED', 'AIR', 1.8, 1.0)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.8, 1.0)".asExpression()
         private set
-    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
+    var accelerationExpr: Expression =
+        "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.0)), (1.0 / (20.0 * 5.0)))".asExpression()
         private set
     var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
         private set

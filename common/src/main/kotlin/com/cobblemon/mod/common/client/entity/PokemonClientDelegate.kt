@@ -200,7 +200,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                     sendOutPosition?.let {
                                         val newPos = it.add(sendOutOffset)
                                         val ballType =
-                                            currentEntity.pokemon.caughtBall.name.path.toLowerCase().replace("_", "")
+                                            currentEntity.pokemon.caughtBall.name.path.lowercase().replace("_", "")
                                         val mode = if (currentEntity.isBattling) "battle" else "casual"
                                         //TODO: A lot of this is probably able to be simplified by just using a single particle with events
                                         //Do it in the particle file, not code.

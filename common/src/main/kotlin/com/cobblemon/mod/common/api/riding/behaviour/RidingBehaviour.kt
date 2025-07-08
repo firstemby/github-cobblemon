@@ -94,4 +94,8 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun createDefaultState(settings: Settings): State
 
+    /**
+     * Calculate the damage a horizontal collision will do to a ridden Pokémon. This is only relevant to fast flying behaviours, fall damage is separate!
+     */
+    fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
 }
