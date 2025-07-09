@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.compat;
 import com.cobblemon.mod.common.CobblemonEntities;
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.item.PokedexItem;
 import com.cobblemon.mod.common.pokemon.FormData;
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData;
 import dev.lambdaurora.lambdynlights.LambDynLights;
@@ -36,20 +37,20 @@ public class LambDynamicLightsCompat {
     public static void hookCompat() {
         // Pokémon entities
         DynamicLightHandlers.registerDynamicLightHandler(
-                CobblemonEntities.POKEMON,
-                DynamicLightHandler.makeHandler(
-                        LambDynamicLightsCompat::resolvedPokemonLightLevel,
-                        pokemon -> false
-                )
+            CobblemonEntities.POKEMON,
+            DynamicLightHandler.makeHandler(
+                LambDynamicLightsCompat::resolvedPokemonLightLevel,
+                pokemon -> false
+            )
         );
 
         // Shouldered Pokémon
         DynamicLightHandlers.registerDynamicLightHandler(
-                EntityType.PLAYER,
-                DynamicLightHandler.makeHandler(
-                        LambDynamicLightsCompat::resolvedShoulderLightLevel,
-                        player -> false
-                )
+            EntityType.PLAYER,
+            DynamicLightHandler.makeHandler(
+                LambDynamicLightsCompat::resolvedPlayerLightLevel,
+                player -> false
+            )
         );
     }
 
@@ -63,11 +64,13 @@ public class LambDynamicLightsCompat {
         return Math.max(itemLightLevel, formLightLevel);
     }
 
-    private static int resolvedShoulderLightLevel(Player player) {
+    private static int resolvedPlayerLightLevel(Player player) {
         var underwater = !player.level().getFluidState(BlockPos.containing(player.getX(), player.getEyeY(), player.getZ())).isEmpty();
-        final int leftLightLevel = extractShoulderLightLevel(PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityLeft()), underwater);
-        final int rightLightLevel = extractShoulderLightLevel(PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityRight()), underwater);
-        return Math.max(leftLightLevel, rightLightLevel);
+        final int leftShoulderLightLevel = extractShoulderLightLevel(PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityLeft()), underwater);
+        final int rightShoulderLightLevel = extractShoulderLightLevel(PokemonOnShoulderRenderer.shoulderDataFrom(player.getShoulderEntityRight()), underwater);
+        final int itemLightLevel = customHeldItemLightLevel(player.getMainHandItem(), player.getOffhandItem());
+
+        return Math.max(itemLightLevel, Math.max(leftShoulderLightLevel, rightShoulderLightLevel));
     }
 
     private static Optional<Integer> extractFormLightLevel(@NotNull FormData form, boolean underwater) {
@@ -83,14 +86,17 @@ public class LambDynamicLightsCompat {
         }
 
         ItemStack item = shoulderData.getShownItem();
-        int itemLightLevel = item.isEmpty()?0:LambDynLights.getLuminanceFromItemStack(item, underwater);
+        int itemLightLevel = item.isEmpty() ? 0 :LambDynLights.getLuminanceFromItemStack(item, underwater);
         int formLightLevel = extractFormLightLevel(shoulderData.getForm(), underwater).orElse(0);
 
         return Math.max(itemLightLevel, formLightLevel);
     }
 
+    private static int customHeldItemLightLevel(ItemStack mainhand, ItemStack offhand) {
+        return (mainhand.getItem() instanceof PokedexItem || offhand.getItem() instanceof PokedexItem) ? 13 : 0;
+    }
+
     private static boolean liquidGlowModeSupport(@NotNull LightingData.LiquidGlowMode liquidGlowMode, boolean underwater) {
         return underwater ? liquidGlowMode.getGlowsUnderwater() : liquidGlowMode.getGlowsInLand();
     }
-
 }

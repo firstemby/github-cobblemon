@@ -129,6 +129,7 @@ object DataKeys {
     const val TETHERING_POS = "Pos"
     const val TETHERING_PLAYER_ID = "PlayerId"
     const val TETHERING_ENTITY_ID = "EntityId"
+    const val TETHER_PASTURE_POS = "TetherPasturePos"
 
     // Form stuff
     const val ALOLAN = "alolan"

@@ -122,7 +122,7 @@ interface Evolution : EvolutionLike {
         val owner = pokemon.getOwnerPlayer() ?: return false
         // If the player has at least one Pokeball in their inventory.
         var pokeballStack: ItemStack? = null
-        if (!owner.isCreative) {
+        if (!owner.hasInfiniteMaterials()) {
             for (i in 0 until owner.inventory.containerSize) {
                 val stackI = owner.inventory.getItem(i)
                 if (stackI.`is`(CobblemonItemTags.POKE_BALLS)) {
@@ -141,8 +141,8 @@ interface Evolution : EvolutionLike {
         shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
         pokemon.storeCoordinates.get()?.store?.add(shedPokemon)
         CobblemonCriteria.EVOLVE_POKEMON.trigger(owner, EvolvePokemonContext(pokemon.preEvolution!!.species.resourceIdentifier, shedPokemon.species.resourceIdentifier, playerDataManager.getGenericData(owner).advancementData.totalEvolvedCount))
-        // Consume one of the balls
-        pokeballStack?.shrink(1)
+        // Consume one of the balls (if the player isn't creative)
+        pokeballStack?.consume(1, owner)
 
         return true
     }
@@ -202,20 +202,24 @@ interface Evolution : EvolutionLike {
         this.result.apply(pokemon)
 
         val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
-        movesToLearn.forEach { move ->
-            val couldAddMove =
-                if (pokemon.moveSet.hasSpace()) {
-                    pokemon.moveSet.add(move.create())
-                } else {
-                    pokemon.benchedMoves.add(BenchedMove(move, 0))
+        // This adds moves the BenchedMoves piecemeal, so unless we add doWithoutEmitting this will send a *lot* of BenchedMovesUpdate packets.
+        pokemon.benchedMoves.doWithoutEmitting {
+            movesToLearn.forEach { move ->
+                val couldAddMove =
+                    if (pokemon.moveSet.hasSpace()) {
+                        pokemon.moveSet.add(move.create())
+                    } else {
+                        pokemon.benchedMoves.add(BenchedMove(move, 0))
+                    }
+
+                val previousSpeciesKnewMove = previousSpeciesLearnableMoves.any { move.name == it.name }
+
+                if (couldAddMove && !previousSpeciesKnewMove) {
+                    pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
                 }
-
-            val previousSpeciesKnewMove = previousSpeciesLearnableMoves.any { move.name == it.name }
-
-            if (couldAddMove && !previousSpeciesKnewMove) {
-                pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
             }
         }
+        pokemon.benchedMoves.update()
 
         // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available
         pokemon.evolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }

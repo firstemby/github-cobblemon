@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
+import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
@@ -88,6 +89,7 @@ object CobblemonClient {
 
     /** If true then we won't bother them anymore about choosing a starter even if it's a thing they can do. */
     var checkedStarterScreen = false
+    var lastPcBoxViewed = 0
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
     /*var posableModelRepositories = listOf(
@@ -103,6 +105,7 @@ object CobblemonClient {
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
     val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
+    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
@@ -210,7 +213,11 @@ object CobblemonClient {
 
     private fun registerBlockRenderTypes() {
 
-        this.implementation.registerBlockRenderType(RenderType.cutoutMipped(), CobblemonBlocks.APRICORN_LEAVES)
+        this.implementation.registerBlockRenderType(
+            RenderType.cutoutMipped(),
+            CobblemonBlocks.APRICORN_LEAVES,
+            CobblemonBlocks.SACCHARINE_LEAVES
+        )
 
         this.implementation.registerBlockRenderType(
             RenderType.cutout(),
@@ -341,6 +348,7 @@ object CobblemonClient {
         } else {
             battleOverlay.render(context, partialDeltaTicks)
         }
+        rideControlsOverlay.render(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")

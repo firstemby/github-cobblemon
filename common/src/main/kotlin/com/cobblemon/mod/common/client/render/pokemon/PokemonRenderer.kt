@@ -45,7 +45,6 @@ import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
-import net.minecraft.client.player.RemotePlayer
 import net.minecraft.client.renderer.*
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
@@ -277,7 +276,7 @@ class PokemonRenderer(
                 partialTicks = partialTicks,
                 buff = buffer,
                 packedLight = packedLight,
-                ball = CobblemonClient.storage.myParty.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
+                ball = CobblemonClient.storage.party.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
                     ?: clientDelegate.currentEntity.pokemon.caughtBall,
                 distance = ceil(beamSourcePosition.distanceTo(entity.position())/4f).toInt()
             )

@@ -40,9 +40,7 @@ abstract class EVIncreaseItem(
         val evsGained = pokemon.evs.add(stat, evIncreaseAmount, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
             pokemon.entity?.playSound(sound, 1F, 1F)
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

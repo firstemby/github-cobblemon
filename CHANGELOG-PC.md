@@ -4,10 +4,16 @@
   - The button on the right allows for changing the box wallpaper.
   - The option buttons on the left side allow for sorting the box by name, level, Pokédex number, gender, and type. Shift clicking allows for sorting in reverse order.
 - Added filter functionality in PC UI, which supports `PokemonProperties` (e.g. `shiny=yes` shows all shiny Pokémon).
+  - Names can be filtered by exact or partial matches, e.g. entering "cha" will show Charmander, Charmeleon, etc.
 - Added `/changewallpaper <player> <boxNumber> <wallpaper>` command to change a box wallpaper through commands.
 - Added `/renamebox <player> <boxNumber> <name>` command to rename a PC box through commands.
 - Added IVs and EVs stat displays in PC.
-- improved filter by Name, now is available search by exact names or partial matches, for example "cha" will show Charmander, Charmeleon and Charizard among others that match.
+- Added ability to change boxes by scrolling.
+- PC will now open to last box viewed within a session.
+
+### Changes
+- Slots in pastures will now have darker backgrounds and italicised Pokémon names if the Pokémon is not owned by the player.
+- The pasture slot will show the name of the Pokémon owner when hovered if the Pokémon is not owned.
 
 ### Developer
 - Added `RenamePCBoxEvent.Pre` and `RenamePCBoxEvent.Post` events to prevent players from renaming a box or changing their input.

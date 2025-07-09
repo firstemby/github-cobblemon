@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
@@ -32,8 +33,7 @@ class DrowsySensor : Sensor<PokemonEntity>(20) {
         fun drowsyLogic(entity: PokemonEntity) {
             val world = entity.level()
             val rest = entity.behaviour.resting
-
-            val isDrowsy = entity.brain.getMemory(CobblemonMemories.POKEMON_DROWSY).orElse(false)
+            val isDrowsy = entity.brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false)
             val hurtLately = entity.brain.hasMemoryValue(MemoryModuleType.HURT_BY)
             val shouldBeDrowsy = rest.canSleep && !hurtLately && (world.dayTime.toInt() % 24000) in rest.times && !entity.brain.hasMemoryValue(MemoryModuleType.ANGRY_AT)
             val forcedAsleep = entity.pokemon.status?.status == Statuses.SLEEP
@@ -45,9 +45,9 @@ class DrowsySensor : Sensor<PokemonEntity>(20) {
                     entity.brain.eraseMemory(CobblemonMemories.POKEMON_DROWSY)
                 }
             } else {
-                if (!isDrowsy && (shouldBeDrowsy || forcedAsleep)) {
+                if (!isDrowsy && shouldBeDrowsy) {
                     entity.brain.setMemory(CobblemonMemories.POKEMON_DROWSY, true)
-                } else if (isDrowsy && !shouldBeDrowsy && !forcedAsleep) {
+                } else if (isDrowsy && !shouldBeDrowsy) {
                     entity.brain.eraseMemory(CobblemonMemories.POKEMON_DROWSY)
                 }
             }

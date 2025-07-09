@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
@@ -29,7 +28,6 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
-import org.joml.Vector3f
 import kotlin.math.*
 
 class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {

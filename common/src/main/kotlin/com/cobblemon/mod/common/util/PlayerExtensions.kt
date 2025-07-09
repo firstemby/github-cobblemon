@@ -470,7 +470,7 @@ fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(t
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
     if (this.level().isClientSide)
-        CobblemonClient.storage.myParty.find { it?.entity?.isBusy == true } != null
+        CobblemonClient.storage.party.find { it?.entity?.isBusy == true } != null
     else
         Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it?.entity?.isBusy == true } != null
 

@@ -18,10 +18,8 @@ import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -472,7 +470,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     }
 
     override fun createDefaultState(settings: BirdSettings) = BirdState()
-
 }
 
 class BirdSettings : RidingBehaviourSettings {

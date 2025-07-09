@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.item.ItemStack
 
@@ -27,9 +26,7 @@ class MochiItem(stat: Stats): EVIncreaseItem(stat, 10) {
 
         pokemon.feedPokemon(1)
 
-        if (!player.isCreative) {
-            stack.shrink(1)
-        }
+        stack.consume(1, player)
 
         return super.applyToPokemon(player, stack, pokemon)
     }

@@ -1271,6 +1271,7 @@ object MoLangFunctions {
             map.put("is_sprinting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("sprinting"))) }
             map.put("in_air") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("in_air"))) }
             map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
+            map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
             map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) }
             map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
             map.put("is_pokemon") { DoubleValue.ONE }
@@ -1279,6 +1280,12 @@ object MoLangFunctions {
             }) }
             map.put("is_wearing_hat") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
             map.put("is_wearing_face") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
+            map.put("is_pastured") {
+                DoubleValue((pokemonEntity.tethering != null))
+            }
+            map.put("pasture_conflict_enabled") {
+                DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.PASTURE_CONFLICT))
+            }
             map
         }
     )

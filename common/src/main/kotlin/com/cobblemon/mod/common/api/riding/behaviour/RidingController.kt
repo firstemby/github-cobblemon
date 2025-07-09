@@ -194,5 +194,14 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.createDefaultState(settings)
     }
 
+    override fun damageOnCollision(
+        settings: Settings,
+        state: State,
+        vehicle: PokemonEntity,
+        impactVec: Vec3
+    ): Boolean {
+        return behaviour.damageOnCollision(settings, state, vehicle, impactVec)
+    }
+
 
 }

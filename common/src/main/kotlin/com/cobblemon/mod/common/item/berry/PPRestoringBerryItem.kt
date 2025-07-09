@@ -8,9 +8,6 @@
 
 package com.cobblemon.mod.common.item.berry
 
-import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.item.PokemonAndMoveSelectingItem
@@ -58,9 +55,7 @@ class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike):
                 moveToRecover.currentPp =
                     min(moveToRecover.maxPp, moveToRecover.currentPp + genericRuntime.resolveInt(amount(), pokemon))
 
-                if (!player.isCreative) {
-                    stack.shrink(1)
-                }
+                stack.consume(1, player)
             }
         }
     }

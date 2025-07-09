@@ -119,14 +119,12 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity) {
-            int seatIndex = pokemonEntity.getPassengers().indexOf(this);
-            Seat seat = pokemonEntity.getSeats().get(seatIndex);
-
             PokemonClientDelegate delegate = (PokemonClientDelegate) pokemonEntity.getDelegate();
-            MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
+            String locatorName = delegate.getSeatLocator(this);
+            MatrixWrapper locator = delegate.getLocatorStates().get(locatorName);
 
             if (locator == null) {
-                super.pick(hitDistance, partialTicks, hitFluids);
+                return super.pick(hitDistance, partialTicks, hitFluids);
             }
 
             Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
@@ -138,7 +136,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
 
             if (Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
                 PosableModel model = VaryingModelRepository.INSTANCE.getPoser(pokemonEntity.getPokemon().getSpecies().getResourceIdentifier(), new FloatingState());
-                offset.add(cobblemon$getFirstPersonOffset(model, seat));
+                offset.add(cobblemon$getFirstPersonOffset(model, locatorName));
             }
 
             Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
@@ -160,11 +158,11 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     }
 
     @Unique
-    private static @NotNull Vector3f cobblemon$getFirstPersonOffset(PosableModel model, Seat seat) {
+    private static @NotNull Vector3f cobblemon$getFirstPersonOffset(PosableModel model, String locatorName) {
         Map<String, Vec3> cameraOffsets = model.getFirstPersonCameraOffset();
 
-        if (cameraOffsets.containsKey(seat.getLocator())) {
-            return cameraOffsets.get(seat.getLocator()).toVector3f();
+        if (cameraOffsets.containsKey(locatorName)) {
+            return cameraOffsets.get(locatorName).toVector3f();
         } else {
             return new Vector3f(0f, 0f, 0f);
         }

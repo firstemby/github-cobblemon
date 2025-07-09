@@ -1,16 +1,13 @@
 {
-  "multipart": [
-    {
-      "when": { "age": 0 },
-      "apply": { "model": "cobblemon:block/saccharine_leaves" }
+  "variants": {
+    "age=0": {
+      "model": "cobblemon:block/saccharine_leaves"
     },
-    {
-      "when": { "age": 1 },
-      "apply": { "model": "cobblemon:block/saccharine_sticky_leaves" }
+    "age=1": {
+      "model": "cobblemon:block/saccharine_leaves_sticky"
     },
-    {
-      "when": { "age": 2 },
-      "apply": { "model": "cobblemon:block/saccharine_glistening_leaves" }
+    "age=2": {
+      "model": "cobblemon:block/saccharine_leaves_dripping"
     }
-  ]
+  }
 }

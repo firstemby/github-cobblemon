@@ -21,6 +21,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.MobSpawnType
 
 object SpawnAllPokemon {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
@@ -43,13 +44,15 @@ object SpawnAllPokemon {
 
     private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange) : Int {
         val player = context.source.playerOrException
-
+        val world = context.source.level
         for (species in PokemonSpecies.implemented) {
             if (species.nationalPokedexNumber in range) {
                 LOGGER.debug(species.name)
                 val pokemonEntity = PokemonProperties.parse("species=${species.name} level=10").createEntity(context.source.level)
+                val blockPos = player.blockPosition()
                 pokemonEntity.moveTo(player.x, player.y, player.z, pokemonEntity.yRot, pokemonEntity.xRot)
                 pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
+                pokemonEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(blockPos), MobSpawnType.COMMAND, null)
                 context.source.level.addFreshEntity(pokemonEntity)
             }
         }

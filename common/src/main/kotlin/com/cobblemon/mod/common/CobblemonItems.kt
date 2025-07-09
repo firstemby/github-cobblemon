@@ -311,7 +311,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SACCHARINE_LOG = blockItem("saccharine_log", CobblemonBlocks.SACCHARINE_LOG)
     @JvmField
-    val SACCHARINE_HONEY_LOG = blockItem("saccharine_honey_log", CobblemonBlocks.SACCHARINE_HONEY_LOG)
+    val SACCHARINE_LOG_SLATHERED = blockItem("saccharine_log_slathered", CobblemonBlocks.SACCHARINE_LOG_SLATHERED)
     @JvmField
     val STRIPPED_SACCHARINE_LOG = blockItem("stripped_saccharine_log", CobblemonBlocks.STRIPPED_SACCHARINE_LOG)
     @JvmField

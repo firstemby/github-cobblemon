@@ -16,7 +16,15 @@ import com.cobblemon.mod.common.api.ai.config.task.GuardNestTaskConfig
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
-import com.cobblemon.mod.common.entity.ai.*
+import com.cobblemon.mod.common.entity.ai.AttackAngryAtTask
+import com.cobblemon.mod.common.entity.ai.ChooseLandWanderTargetTask
+import com.cobblemon.mod.common.entity.ai.FleeFromAttackerTask
+import com.cobblemon.mod.common.entity.ai.FollowWalkTargetTask
+import com.cobblemon.mod.common.entity.ai.GetAngryAtAttackerTask
+import com.cobblemon.mod.common.entity.ai.LookAroundTaskWrapper
+import com.cobblemon.mod.common.entity.ai.MoveToAttackTargetTask
+import com.cobblemon.mod.common.entity.ai.StayAfloatTask
+import com.cobblemon.mod.common.entity.ai.SwapActivityTask
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
@@ -91,8 +99,11 @@ object PokemonBrain {
         ctx.apply(entity, behaviourConfigurations, dynamic)
         entity.behaviours.clear()
         entity.behaviours.addAll(ctx.appliedBehaviours)
+
         //run this before brain starts ticking as otherwise pokemon will instantly wake up despite being put to sleep
-        DrowsySensor.drowsyLogic(entity)
+        if (entity.brain.checkMemory(CobblemonMemories.POKEMON_DROWSY, MemoryStatus.REGISTERED)) {
+            DrowsySensor.drowsyLogic(entity)
+        }
 
         if (behaviourConfigurations.isNotEmpty()) {
             return
@@ -242,10 +253,6 @@ object PokemonBrain {
     private fun idleTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         add(0 toDF WakeUpTask.create() )
         if (pokemon.form.behaviour.moving.canLook) {
-            if (pokemon.form.behaviour.moving.looksAtEntities) {
-                add(0 toDF LookAtMobTaskWrapper.create(15F))
-            }
-
             add(0 toDF LookAroundTaskWrapper(45, 90))
         }
 

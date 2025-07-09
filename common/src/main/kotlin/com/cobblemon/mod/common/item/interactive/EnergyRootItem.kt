@@ -58,9 +58,7 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
             pokemon.currentHealth += amount
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("root", runtime))
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
-            if (!player.isCreative)  {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

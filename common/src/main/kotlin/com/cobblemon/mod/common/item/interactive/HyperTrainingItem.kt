@@ -11,19 +11,15 @@ package com.cobblemon.mod.common.item.interactive
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.lang
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.util.Mth.clamp
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import kotlin.math.roundToInt
 
 // An item that modifies a Pokémon's IVs according to a given modifier and valid range.
 class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, val validRange: IntRange) : CobblemonItem(Properties()), PokemonSelectingItem {
@@ -57,9 +53,7 @@ class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, v
             }
         }
 
-        if (!player.isCreative) {
-            stack.shrink(1)
-        }
+        stack.consume(1, player)
         pokemon.entity?.playSound(CobblemonSounds.MEDICINE_PILLS_USE, 1F, 1F)
         return InteractionResultHolder.success(stack)
     }

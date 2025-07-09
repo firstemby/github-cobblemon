@@ -31,10 +31,9 @@ object MountedPlayerRenderer {
         if(player.vehicle !is Rideable) return
         val matrix = stack.last().pose()
 
-        val seatIndex = entity.passengers.indexOf(player)
-        val seat = entity.seats[seatIndex]
         val delegate = entity.delegate as PokemonClientDelegate
-        val locator = delegate.locatorStates[seat.locator]
+        val locatorName = delegate.getSeatLocator(player)
+        val locator = delegate.locatorStates[locatorName]
 
         //Positions player
         if (locator != null) {
@@ -80,7 +79,7 @@ object MountedPlayerRenderer {
     ) {
         val seatIndex = pokemonEntity.passengers.indexOf(player).takeIf { it != -1 && it < pokemonEntity.seats.size } ?: return
         val seat = pokemonEntity.seats[seatIndex]
-        val animations = seat.poseAnimations.firstOrNull { it.poseTypes.isEmpty() || it.poseTypes.contains(pokemonEntity.getCurrentPoseType()) }?.animations
+        val animations = seat.poseAnimations?.firstOrNull { it.poseTypes.isEmpty() || it.poseTypes.contains(pokemonEntity.getCurrentPoseType()) }?.animations
             ?: return
         val state = pokemonEntity.delegate as PokemonClientDelegate
 

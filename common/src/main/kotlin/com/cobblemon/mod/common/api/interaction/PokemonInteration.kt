@@ -112,7 +112,7 @@ class ShrinkItemEffect(val amount: Int = 1): InteractionEffect {
         if (player.getItemInHand(InteractionHand.MAIN_HAND).isDamageableItem)
             player.getItemInHand(InteractionHand.MAIN_HAND).hurtAndBreak(amount, player, EquipmentSlot.MAINHAND)
         else
-            player.getItemInHand(InteractionHand.MAIN_HAND).shrink(amount)
+            player.getItemInHand(InteractionHand.MAIN_HAND).consume(amount, player)
     }
 
     companion object {

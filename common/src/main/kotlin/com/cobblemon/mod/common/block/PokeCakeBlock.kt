@@ -91,7 +91,7 @@ class PokeCakeBlock(settings: Properties): CakeBlock(settings) {
         if (stack.`is`(ItemTags.CANDLES) && block?.getBites(level, pos) == 0) {
             val candleBlock = byItem(item)
             if (candleBlock is CandleBlock) {
-                stack.shrink(1)
+                stack.consume(1, player)
                 level.playSound(null, pos, SoundEvents.CAKE_ADD_CANDLE, SoundSource.BLOCKS, 1.0f, 1.0f)
 
                 val oldCookingComponent = block.getFoodColourComponent(level, pos)

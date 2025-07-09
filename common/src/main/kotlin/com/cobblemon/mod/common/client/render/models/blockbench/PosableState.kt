@@ -72,9 +72,10 @@ abstract class PosableState : Schedulable {
             field = value
             if (value != null && changed) {
                 runtime.environment.query.addFunctions(value.functions.functions)
-
                 val entity = getEntity() as? PosableEntity ?: return
                 entity.struct.addFunctions(value.functions.functions)
+                // clear locators to remove potentially non-existent locators from previous model
+                locatorStates.clear()
                 // Locators need to be initialized asap, even if they aren't in perfect positions. The reason for this
                 // is that the locators might be called upon by frame 0 particle effects and if they aren't defined
                 // it'll crash. For non-entity states we don't give a shit though.
