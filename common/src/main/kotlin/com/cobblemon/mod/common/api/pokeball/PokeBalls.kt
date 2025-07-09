@@ -237,11 +237,12 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         model2d: ResourceLocation = cobblemonResource(name),
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
-        ancient: Boolean = false
+        ancient: Boolean = false,
+        maxBounces: Int = 3
     ): PokeBall {
         val identifier = cobblemonResource(name)
         //val finalModifiers = if (appendUltraBeastPenalty) modifiers + listOf(LabelModifier(0.1F, true, CobblemonPokemonLabels.ULTRA_BEAST)) else modifiers
-        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient)
+        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient, maxBounces)
         this.defaults[identifier] = pokeball
         return pokeball
     }

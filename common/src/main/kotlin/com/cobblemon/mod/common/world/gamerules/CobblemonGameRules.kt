@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.world.gamerules
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.mixin.invoker.BooleanRuleInvoker
+import com.cobblemon.mod.common.mixin.invoker.IntegerRuleInvoker
 import net.minecraft.world.level.GameRules
 
 object CobblemonGameRules {
@@ -24,5 +25,9 @@ object CobblemonGameRules {
     val MOB_TARGET_IN_BATTLE: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("mobTargetInBattle", GameRules.Category.MOBS, BooleanRuleInvoker.`cobblemon$create`(true))
     @JvmField
     val SHINY_STARTERS: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("doShinyStarters", GameRules.Category.MISC, BooleanRuleInvoker.`cobblemon$create`(false))
+    @JvmField
+    val BOUNCY_BALLS: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("bouncyBouncyBalls", GameRules.Category.MISC, BooleanRuleInvoker.`cobblemon$create`(false))
+    @JvmField
+    val BOUNCY_BALLS_BOUNCE: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyBallsBouncyness", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(3))
 
 }

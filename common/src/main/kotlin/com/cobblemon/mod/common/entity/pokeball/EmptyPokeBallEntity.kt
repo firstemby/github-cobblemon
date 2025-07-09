@@ -48,8 +48,10 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
+import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
@@ -63,15 +65,22 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.PI
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity
+import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.entity.projectile.ProjectileDeflection
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.ClipContext.Block
+import net.minecraft.world.level.ClipContext.Fluid
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.CollisionContext
 import java.util.concurrent.CompletableFuture
 
 class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragModifier, Schedulable {
@@ -91,6 +100,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         val HIT_VELOCITY = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, Vec3DataSerializer)
         val SHAKE = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.BOOLEAN)
         val ASPECTS = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, StringSetDataSerializer)
+        val BOUNCES = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
 
         const val SECONDS_BETWEEN_SHAKES = 1.25F
         const val SECONDS_BEFORE_SHAKE = 1F
@@ -109,6 +119,10 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     var aspects: Set<String>
         get() = entityData.get(ASPECTS)
         set(value) { entityData.set(ASPECTS, value) }
+    var bounces: Int
+        get() = entityData.get(BOUNCES)
+        set(value) { entityData.set(BOUNCES, value) }
+
 
     override val delegate = if (level().isClientSide) {
         EmptyPokeBallClientDelegate()
@@ -129,6 +143,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         builder.define(HIT_TARGET_POSITION, Vec3.ZERO)
         builder.define(HIT_VELOCITY, Vec3.ZERO)
         builder.define(SHAKE, false)
+        builder.define(BOUNCES, 0)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -174,6 +189,62 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     }
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
+
+    class BounceDeflect (val newVec: Vec3) : ProjectileDeflection {
+        override fun deflect(
+            projectile: Projectile,
+            entity: Entity?,
+            randomSource: RandomSource
+        ) {
+            projectile.deltaMovement = newVec
+            projectile.hasImpulse = true;
+        }
+
+    }
+
+    fun raycastFullCollision() {
+        // The entire movement budget we have this tick (done as squared because it's cheaper)
+        var remainingMovementSqr = this.deltaMovement.lengthSqr()
+        var position = this.position()
+        var movement = this.deltaMovement
+
+        val maxBounces = level().gameRules.getInt(CobblemonGameRules.BOUNCY_BALLS_BOUNCE)
+        while (remainingMovementSqr > 0 && bounces < maxBounces) {
+            val hitResult = this.level().clip(ClipContext(position, position.add(movement), Block.COLLIDER, Fluid.NONE, this))
+                ?: break
+            if (hitResult.type == HitResult.Type.MISS) {
+                break
+            }
+            val scale = position.distanceToSqr(hitResult.location) / remainingMovementSqr
+            remainingMovementSqr -= position.distanceToSqr(hitResult.location)
+
+            bounces = bounces.inc()
+
+            position = hitResult.location
+
+            val normal = hitResult.direction.normal
+            val isBounceX = normal.x != 0
+            val isBounceY = normal.y != 0
+            val isBounceZ = normal.z != 0
+            movement = movement.multiply(
+                if (isBounceX) -1.0 else 1.0,
+                if (isBounceY) -1.0 else 1.0,
+                if (isBounceZ) -1.0 else 1.0
+            ).scale(scale)
+
+            this.deltaMovement = this.deltaMovement.multiply(
+                if (isBounceX) -1.0 else 1.0,
+                if (isBounceY) -1.0 else 1.0,
+                if (isBounceZ) -1.0 else 1.0
+            )
+
+            val hitBlock = this.level().getBlockState(hitResult.blockPos)
+            playSound(hitBlock.soundType.hitSound, 1.0f, 1.0f)
+            playSound(SoundEvents.ANVIL_PLACE, 0.04f, 0.5f)
+        }
+
+        this.setPos(position)
+    }
 
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
@@ -288,6 +359,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     override fun shouldBeSaved() = false
 
     override fun tick() {
+        if (level().gameRules.getBoolean(CobblemonGameRules.BOUNCY_BALLS)) {
+            raycastFullCollision()
+        }
         super.tick()
         delegate.tick(this)
 
