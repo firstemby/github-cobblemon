@@ -75,10 +75,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
 import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonBreedGoal
-import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonLookAtEntityGoal
-import com.cobblemon.mod.common.entity.pokemon.ai.goals.PokemonWanderAroundGoal
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket

@@ -34,7 +34,7 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
     @JvmField
     val INCENSE_SWEET = create(INCENSE_SWEET_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.INCENSE_SWEET), 0, 1))
     @JvmField
-    val GROTTO_BLOCK_KEY: ResourceKey<PoiType> = createKey("grotto_block")
+    val GROTTO_BLOCK_KEY: ResourceKey<PoiType> = createKey("grotto_block", CobblemonBlocks.GROTTO_BLOCK, 0, 1)
     @JvmField
     val GROTTO_BLOCK = create(GROTTO_BLOCK_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.GROTTO_BLOCK), 0, 1))
 
