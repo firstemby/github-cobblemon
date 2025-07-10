@@ -2,6 +2,11 @@
     "replace": false,
     "values": [
         "#cobblemon:evolution_stones",
+		"cobblemon:oval_stone",
+		"cobblemon:black_augurite",
+		"cobblemon:metal_alloy",
+		"cobblemon:everstone",
+		"cobblemon:eviolite",
 		
         "cobblemon:relic_coin_pouch",
         "cobblemon:chipped_pot",

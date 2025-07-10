@@ -1,0 +1,7 @@
+{
+	"parent": "cobblemon:item/contexts/everstone",
+	"textures": {
+		"0": "cobblemon:item/display_case/eviolite",
+		"particle": "cobblemon:item/display_case/eviolite"
+	}
+}
