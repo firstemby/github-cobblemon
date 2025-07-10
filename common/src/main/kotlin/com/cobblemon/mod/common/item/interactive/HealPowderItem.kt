@@ -56,9 +56,7 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
             pokemon.status = null
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
             pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("heal_powder", runtime))
-            if (!player.isCreative)  {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

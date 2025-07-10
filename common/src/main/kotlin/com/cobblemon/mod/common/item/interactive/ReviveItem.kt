@@ -80,9 +80,7 @@ class ReviveItem(
                             player.playSound(CobblemonSounds.ITEM_USE, 1F, 1F)
                             actor.forceChoose(BagItemActionResponse(bagItem = bagItem, target = bp, data = bp.uuid.toString()))
                             val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
-                            if (!player.isCreative) {
-                                stack.shrink(1)
-                            }
+                            stack.consume(1, player)
                             CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(bp.effectedPokemon.species.resourceIdentifier, stackName))
                         }
                     }
@@ -101,9 +99,7 @@ class ReviveItem(
                         }
                         pk.currentHealth = amount
                         val stackName = BuiltInRegistries.ITEM.getKey(stack.item)
-                        if (!player.isCreative) {
-                            stack.shrink(1)
-                        }
+                        stack.consume(1, player)
                         CobblemonCriteria.POKEMON_INTERACT.trigger(player, PokemonInteractContext(pk.species.resourceIdentifier, stackName))
                     }
                 }

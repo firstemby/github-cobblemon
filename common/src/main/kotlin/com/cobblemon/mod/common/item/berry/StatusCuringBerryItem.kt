@@ -53,9 +53,7 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
             pokemon.status = null
 
             pokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

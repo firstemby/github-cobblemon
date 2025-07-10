@@ -225,7 +225,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
 
             if (isGlassBottle && !isAtMinAge(state)) {
                 // Decrement stack if not in creative mode
-                if (!player.isCreative) itemStack.shrink(1)
+                itemStack.consume(1, player)
 
                 // Give player honey bottle for now
                 player.addItem(Items.HONEY_BOTTLE.defaultInstance)
@@ -236,7 +236,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                 return ItemInteractionResult.SUCCESS
             } else if (isHoneyBottle && !isAtMaxAge(state)) {
                 // Decrement stack if not in creative mode
-                if (!player.isCreative) itemStack.shrink(1)
+                itemStack.consume(1, player)
 
                 level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS)
                 level.setBlock(pos, state.setValue(AGE, 2), 2)

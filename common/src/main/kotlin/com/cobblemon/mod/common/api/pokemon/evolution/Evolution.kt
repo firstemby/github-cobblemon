@@ -122,7 +122,7 @@ interface Evolution : EvolutionLike {
         val owner = pokemon.getOwnerPlayer() ?: return false
         // If the player has at least one Pokeball in their inventory.
         var pokeballStack: ItemStack? = null
-        if (!owner.isCreative) {
+        if (!owner.hasInfiniteMaterials()) {
             for (i in 0 until owner.inventory.containerSize) {
                 val stackI = owner.inventory.getItem(i)
                 if (stackI.`is`(CobblemonItemTags.POKE_BALLS)) {
@@ -141,8 +141,8 @@ interface Evolution : EvolutionLike {
         shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
         pokemon.storeCoordinates.get()?.store?.add(shedPokemon)
         CobblemonCriteria.EVOLVE_POKEMON.trigger(owner, EvolvePokemonContext(pokemon.preEvolution!!.species.resourceIdentifier, shedPokemon.species.resourceIdentifier, playerDataManager.getGenericData(owner).advancementData.totalEvolvedCount))
-        // Consume one of the balls
-        pokeballStack?.shrink(1)
+        // Consume one of the balls (if the player isn't creative)
+        pokeballStack?.consume(1, owner)
 
         return true
     }

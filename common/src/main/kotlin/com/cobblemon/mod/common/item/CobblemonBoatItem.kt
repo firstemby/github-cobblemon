@@ -51,9 +51,7 @@ class CobblemonBoatItem(val boatType: CobblemonBoatType, val hasChest: Boolean, 
         if (!world.isClientSide) {
             world.addFreshEntity(boatEntity)
             world.gameEvent(user, GameEvent.ENTITY_PLACE, hitResult.blockPos)
-            if (!user.abilities.instabuild) {
-                stack.shrink(1)
-            }
+            stack.consume(1, user)
         }
         user.awardStat(Stats.ITEM_USED.get(this))
         return InteractionResultHolder.sidedSuccess(stack, world.isClientSide)

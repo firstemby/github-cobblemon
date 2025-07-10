@@ -83,8 +83,8 @@ class SaccharineLogBlock(properties: Properties) : RotatedPillarBlock(properties
             level.setBlock(pos, newState, 3)
             level.gameEvent(null, GameEvent.BLOCK_CHANGE, pos)
 
-            if (player != null && !player.isCreative && itemStack != null) {
-                itemStack.shrink(1)
+            if (player != null && !player.hasInfiniteMaterials() && itemStack != null) {
+                itemStack.consume(1, player)
 
                 // Give glass bottle
                 val glassBottle = ItemStack(Items.GLASS_BOTTLE)

@@ -1109,16 +1109,14 @@ open class PokemonEntity(
                         }
 
                         this.pokemon.updateAspects()
-                        if (!player.isCreative) {
-                            itemStack.shrink(1)
-                        }
+                        itemStack.consume(1, player)
                     }
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
             } else if (itemStack.item.equals(Items.WATER_BUCKET) && colorFeatureType != null) {
                 if (player is ServerPlayer) {
                     if (colorFeature != null) {
-                        if (!player.isCreative) {
+                        if (!player.hasInfiniteMaterials()) {
                             itemStack.shrink(1)
                             player.giveOrDropItemStack(Items.BUCKET.defaultInstance)
                         }
@@ -1326,9 +1324,7 @@ open class PokemonEntity(
                     .filterIsInstance<ItemInteractionEvolution>()
                     .forEach { evolution ->
                         if (evolution.attemptEvolution(pokemon, context)) {
-                            if (!player.isCreative) {
-                                stack.shrink(1)
-                            }
+                            stack.consume(1, player)
                             this.level().playSoundServer(
                                     position = this.position(),
                                     sound = CobblemonSounds.ITEM_USE,

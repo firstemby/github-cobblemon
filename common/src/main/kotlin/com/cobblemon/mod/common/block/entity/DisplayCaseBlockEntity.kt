@@ -62,7 +62,7 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
         // Case is empty, player's hand is not - put playerStack in the case
         if (getStack().isEmpty && !playerStack.isEmpty) {
             setCaseStack(playerStack.copy())
-            if (!player.isCreative) playerStack.shrink(1)
+            playerStack.consume(1, player)
             return InteractionResult.sidedSuccess(true)
         }
 
@@ -70,7 +70,7 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
         if (!getStack().isEmpty && !playerStack.isEmpty) {
             val oldCaseStack = getStack()
             setCaseStack(playerStack.copy())
-            if (!player.isCreative) {
+            if (!player.hasInfiniteMaterials()) {
                 playerStack.shrink(1)
                 player.giveOrDropItemStack(oldCaseStack)
             }

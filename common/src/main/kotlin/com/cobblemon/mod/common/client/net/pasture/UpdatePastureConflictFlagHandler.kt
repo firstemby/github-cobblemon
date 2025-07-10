@@ -17,9 +17,8 @@ import net.minecraft.client.Minecraft
 object UpdatePastureConflictFlagHandler : ClientNetworkPacketHandler<UpdatePastureConflictFlagPacket> {
     override fun handle(packet: UpdatePastureConflictFlagPacket, client: Minecraft) {
         val screen = client.screen as? PCGUI ?: return
-        val scrollList = screen.storage.pastureWidget?.pastureScrollList ?: return
-
-        for (slot in scrollList.children()) {
+        val pastureWidget = screen.storage.pastureWidget ?: return
+        for (slot in pastureWidget.pastureScrollList.children()) {
             if (slot.pokemon.pokemonId == packet.pokemonId) {
                 // Update behavior flags
                 slot.pokemon.behaviourFlags = if (packet.enabled) {
