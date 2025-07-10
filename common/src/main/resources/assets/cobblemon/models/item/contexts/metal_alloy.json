@@ -1,0 +1,65 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 16],
+	"textures": {
+		"0": "cobblemon:item/display_case/metal_alloy",
+		"particle": "cobblemon:item/display_case/metal_alloy"
+	},
+	"elements": [
+		{
+			"from": [5.5, 3, 4],
+			"to": [10.5, 7, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 3, 4]},
+			"faces": {
+				"north": {"uv": [7, 0, 9.5, 4], "texture": "#0"},
+				"east": {"uv": [3, 0, 7, 4], "texture": "#0"},
+				"south": {"uv": [13.5, 0, 16, 4], "texture": "#0"},
+				"west": {"uv": [9.5, 0, 13.5, 4], "texture": "#0"},
+				"up": {"uv": [2.5, 8, 0, 0], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.5, 0, 4],
+			"to": [10.5, 3, 12],
+			"light_emission": 4,
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 0, 4]},
+			"faces": {
+				"north": {"uv": [7, 4, 9.5, 7], "texture": "#0"},
+				"east": {"uv": [3, 4, 7, 7], "texture": "#0"},
+				"south": {"uv": [13.5, 4, 16, 7], "texture": "#0"},
+				"west": {"uv": [9.5, 4, 13.5, 7], "texture": "#0"},
+				"down": {"uv": [2.5, 8, 0, 16], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 6.25]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 6.25]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 5, 0]
+		},
+		"ground": {
+			"rotation": [0, -22.5, 0]
+		},
+		"gui": {
+			"rotation": [12.25, -45, 0],
+			"translation": [0, 4, 0]
+		},
+		"head": {
+			"translation": [0, 14.5, 0]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [0, 4.5, 0.5]
+		}
+	}
+}
