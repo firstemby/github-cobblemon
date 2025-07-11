@@ -514,6 +514,18 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val METAL_POWDER = create("metal_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
     @JvmField
     val QUICK_POWDER = create("quick_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
+    @JvmField
+    val LIFE_ORB = create("life_orb", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{2}, ItemType.GENERIC_8x))
+    @JvmField
+    val FLAME_ORB = create("flame_orb", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{15}, ItemType.GENERIC_8x))
+    @JvmField
+    val TOXIC_ORB = create("toxic_orb", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    @JvmField
+    val LIGHT_BALL = create("light_ball", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{13}, ItemType.GENERIC_8x))
+    @JvmField
+    val SMOKE_BALL = create("smoke_ball", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), ItemType.GENERIC_8x))
+    /*@JvmField
+    val SOUL_DEW = create("soul_dew", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, ItemType.GENERIC_8x))*/
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

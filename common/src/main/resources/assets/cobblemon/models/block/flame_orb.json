@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_orb",
+  "textures": {
+		"0": "cobblemon:block/decorative_items/flame_orb",
+		"particle": "block/red_stained_glass"
+  }
+}

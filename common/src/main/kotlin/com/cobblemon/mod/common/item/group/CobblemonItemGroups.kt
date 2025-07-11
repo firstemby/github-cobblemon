@@ -423,6 +423,11 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WEAKNESS_POLICY)
         entries.accept(CobblemonItems.CLEANSE_TAG)
         entries.accept(CobblemonItems.SPELL_TAG)
+        entries.accept(CobblemonItems.FLAME_ORB)
+        entries.accept(CobblemonItems.LIFE_ORB)
+        entries.accept(CobblemonItems.LIGHT_BALL)
+        entries.accept(CobblemonItems.SMOKE_BALL)
+        entries.accept(CobblemonItems.TOXIC_ORB)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

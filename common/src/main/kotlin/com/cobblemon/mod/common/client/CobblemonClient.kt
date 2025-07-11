@@ -319,6 +319,11 @@ object CobblemonClient {
             CobblemonBlocks.SPELL_TAG,
             CobblemonBlocks.BLUNDER_POLICY,
             CobblemonBlocks.WEAKNESS_POLICY,
+            CobblemonBlocks.LIFE_ORB,
+            CobblemonBlocks.FLAME_ORB,
+            CobblemonBlocks.TOXIC_ORB,
+            CobblemonBlocks.LIGHT_BALL,
+            CobblemonBlocks.SMOKE_BALL,
 
             CobblemonBlocks.WHITE_PLAQUE,
             CobblemonBlocks.LIGHT_GRAY_PLAQUE,

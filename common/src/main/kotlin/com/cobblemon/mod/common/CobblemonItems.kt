@@ -995,7 +995,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val FAIRY_FEATHER = heldItem("fairy_feather")
     @JvmField
-    val FLAME_ORB = heldItem("flame_orb")
+    val FLAME_ORB = itemNameBlockItem("flame_orb", CobblemonBlocks.FLAME_ORB)
     @JvmField
     val FLOAT_STONE = heldItem("float_stone")
     @JvmField
@@ -1015,9 +1015,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val LEFTOVERS = compostableHeldItem("leftovers", null, 0.50f)
     @JvmField
-    val LIFE_ORB = heldItem("life_orb")
+    val LIFE_ORB = itemNameBlockItem("life_orb", CobblemonBlocks.LIFE_ORB)
     @JvmField
-    val LIGHT_BALL = heldItem("light_ball")
+    val LIGHT_BALL = itemNameBlockItem("light_ball", CobblemonBlocks.LIGHT_BALL)
     @JvmField
     val LIGHT_CLAY = heldItem("light_clay")
     @JvmField
@@ -1077,7 +1077,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SOFT_SAND = heldItem("soft_sand")
     @JvmField
-    val SMOKE_BALL = heldItem("smoke_ball")
+    val SMOKE_BALL = itemNameBlockItem("smoke_ball", CobblemonBlocks.SMOKE_BALL)
     @JvmField
     val SOOTHE_BELL = heldItem("soothe_bell")
     @JvmField
@@ -1087,7 +1087,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val THROAT_SPRAY = heldItem("throat_spray")
     @JvmField
-    val TOXIC_ORB = heldItem("toxic_orb")
+    val TOXIC_ORB = itemNameBlockItem("toxic_orb", CobblemonBlocks.TOXIC_ORB)
     @JvmField
     val TWISTED_SPOON = heldItem("twisted_spoon")
     @JvmField

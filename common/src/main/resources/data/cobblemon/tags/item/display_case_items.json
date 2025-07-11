@@ -27,6 +27,11 @@
         "cobblemon:bright_powder",
         "cobblemon:metal_powder",
         "cobblemon:quick_powder",
+        "cobblemon:light_ball",
+        "cobblemon:smoke_ball",
+        "cobblemon:life_orb",
+        "cobblemon:flame_orb",
+        "cobblemon:toxic_orb",
 		
         "cobblemon:blunder_policy",
         "cobblemon:weakness_policy"
