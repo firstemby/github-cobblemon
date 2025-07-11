@@ -1,7 +1,49 @@
 {
-	"parent": "cobblemon:item/contexts/everstone",
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "cobblemon:item/display_case/eviolite",
 		"particle": "cobblemon:item/display_case/eviolite"
+	},
+	"elements": [
+		{
+			"from": [5.5, 0, 5.5],
+			"to": [10.5, 5, 10.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 0, 5.5]},
+			"faces": {
+				"north": {"uv": [5, 0, 10, 5], "texture": "#0"},
+				"east": {"uv": [0, 0, 5, 5], "texture": "#0"},
+				"south": {"uv": [5, 5, 10, 10], "texture": "#0"},
+				"west": {"uv": [0, 5, 5, 10], "texture": "#0"},
+				"up": {"uv": [15, 5, 10, 0], "texture": "#0"},
+				"down": {"uv": [15, 5, 10, 10], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 6.25]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 6.25]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 5, 0]
+		},
+		"gui": {
+			"rotation": [12.25, -22.5, 0],
+			"translation": [0, 5.75, 0]
+		},
+		"head": {
+			"translation": [0, 14.5, 0]
+		},
+		"fixed": {
+			"translation": [0, 6, 0]
+		}
 	}
 }
