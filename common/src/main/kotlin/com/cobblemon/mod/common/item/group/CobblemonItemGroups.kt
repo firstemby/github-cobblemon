@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.item.group
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.ItemLike
@@ -52,6 +53,9 @@ object CobblemonItemGroups {
     @JvmStatic val EVOLUTION_ITEMS_KEY = this.create("evolution_item", this::evolutionItemEntries) {
         ItemStack(CobblemonItems.BLACK_AUGURITE)
     }
+    @JvmStatic val POKEMON_MODEL_ITEMS_KEY = this.create("pokemon_model_items", this::pokemonModelItemsEntries) {
+        ItemStack(Items.PAPER)
+    }
 
     @JvmStatic val BLOCKS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(BLOCKS_KEY)
     @JvmStatic val UTILITY_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(UTILITY_ITEMS_KEY)
@@ -60,6 +64,7 @@ object CobblemonItemGroups {
     @JvmStatic val CONSUMABLES get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(CONSUMABLES_KEY)
     @JvmStatic val HELD_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(HELD_ITEMS_KEY)
     @JvmStatic val EVOLUTION_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(EVOLUTION_ITEMS_KEY)
+    @JvmStatic val POKEMON_MODEL_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(POKEMON_MODEL_ITEMS_KEY)
 
     @JvmStatic val BUILDING_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("building_blocks")), this::blocksInjections)
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
@@ -93,6 +98,30 @@ object CobblemonItemGroups {
     private fun inject(key: ResourceKey<CreativeModeTab>, consumer: (injector: Injector) -> Unit): (injector: Injector) -> Unit {
         this.INJECTORS[key] = consumer
         return consumer
+    }
+
+    private fun pokemonModelItemsEntries(displayContext: ItemDisplayParameters, entries: Output) {
+        val orderedSpecies = PokemonSpecies.species.sortedBy { it.nationalPokedexNumber }
+        orderedSpecies.forEach { species ->
+            if (species.forms.isEmpty()) {
+                entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, emptySet()))
+            } else {
+                species.forms.forEach { form ->
+                    val formAspects = form.aspects.toSet()
+                    entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, formAspects))
+                }
+            }
+        }
+        orderedSpecies.forEach { species ->
+            if (species.forms.isEmpty()) {
+                entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, setOf("shiny")))
+            } else {
+                species.forms.forEach { form ->
+                    val formAspects = form.aspects.toSet()
+                    entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, formAspects+setOf("shiny")))
+                }
+            }
+        }
     }
 
     private fun agricultureEntries(displayContext: ItemDisplayParameters, entries: Output) {
