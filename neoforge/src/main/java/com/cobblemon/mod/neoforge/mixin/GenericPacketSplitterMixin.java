@@ -30,21 +30,12 @@ public class GenericPacketSplitterMixin {
 
     @Inject(method = "encode(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/protocol/Packet;Ljava/util/List;)V", at=@At("HEAD"), cancellable = true)
     public void encode(ChannelHandlerContext channelHandlerContext, Packet packet, List<Object> list, CallbackInfo ci) {
-        if (packet instanceof ClientboundCustomPayloadPacket) {
-            ClientboundCustomPayloadPacket pac = (ClientboundCustomPayloadPacket) packet;
-            if (((ClientboundCustomPayloadPacket) packet).payload() instanceof UnsplittablePacket) {
-                list.add(packet);
-                ci.cancel();
-                return;
-            }
-        }
-        if (packet instanceof ServerboundCustomPayloadPacket) {
-            ServerboundCustomPayloadPacket pac = (ServerboundCustomPayloadPacket) packet;
-            if (((ServerboundCustomPayloadPacket) packet).payload() instanceof UnsplittablePacket) {
-                list.add(packet);
-                ci.cancel();
-                return;
-            }
+        if (packet instanceof ClientboundCustomPayloadPacket(UnsplittablePacket payload )) {
+            list.add(packet);
+            ci.cancel();
+        } else if (packet instanceof ServerboundCustomPayloadPacket(UnsplittablePacket payload)) {
+            list.add(packet);
+            ci.cancel();
         }
     }
 }

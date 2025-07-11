@@ -95,6 +95,7 @@
     "invoker.PressurePlateBlockInvoker",
     "invoker.StairsBlockInvoker",
     "invoker.TrapdoorBlockInvoker",
-    "pokeball.ThrownEntityMixin"
+    "pokeball.ProjectileMixin",
+    "pokeball.ThrowableProjectileMixin"
   ]
 }

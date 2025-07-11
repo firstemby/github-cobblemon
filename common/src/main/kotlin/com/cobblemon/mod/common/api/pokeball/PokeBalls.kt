@@ -170,7 +170,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("moon_ball", CatchRateModifiers.MOON_PHASES)
         createDefault("sport_ball", MultiplierModifier(1.5F))
         createDefault("net_ball", CatchRateModifiers.typeBoosting(3F, ElementalTypes.BUG, ElementalTypes.WATER))
-        createDefault("dive_ball", CatchRateModifiers.SUBMERGED_IN_WATER, waterDragValue = 0.99F)
+        createDefault("dive_ball", CatchRateModifiers.SUBMERGED_IN_WATER, waterDragValue = 0.99)
         createDefault("nest_ball", CatchRateModifiers.NEST)
         createDefault("repeat_ball", CatchRateModifiers.REPEAT)
         createDefault("timer_ball", CatchRateModifiers.turnBased { turn -> (1F * turn * (1229F / 4096F)).coerceAtMost(4F) })
@@ -192,12 +192,12 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("ancient_ivory_ball", ancient = true)
         createDefault("ancient_great_ball", MultiplierModifier(1.5F), ancient = true)
         createDefault("ancient_ultra_ball", MultiplierModifier(2F), ancient = true)
-        createDefault("ancient_heavy_ball", throwPower = 0.75f, ancient = true)
-        createDefault("ancient_leaden_ball", throwPower = 0.75f, ancient = true)
-        createDefault("ancient_gigaton_ball", throwPower = 0.75f, ancient = true)
-        createDefault("ancient_feather_ball", throwPower = 2.5f, ancient = true)
-        createDefault("ancient_wing_ball", throwPower = 2.5f, ancient = true)
-        createDefault("ancient_jet_ball", throwPower = 2.5f, ancient = true)
+        createDefault("ancient_heavy_ball", throwPower = 0.75f, ancient = true, waterDragValue = 0.9)
+        createDefault("ancient_leaden_ball", throwPower = 0.75f, ancient = true, waterDragValue = 0.9)
+        createDefault("ancient_gigaton_ball", throwPower = 0.75f, ancient = true, waterDragValue = 0.9)
+        createDefault("ancient_feather_ball", throwPower = 2.5f, ancient = true, waterDragValue = 0.7)
+        createDefault("ancient_wing_ball", throwPower = 2.5f, ancient = true, waterDragValue = 0.7)
+        createDefault("ancient_jet_ball", throwPower = 2.5f, ancient = true, waterDragValue = 0.7)
         createDefault("ancient_origin_ball", GuaranteedModifier(), ancient = true)
         // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->
@@ -233,16 +233,17 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         name: String,
         modifier: CatchRateModifier = MultiplierModifier(1F) { _, _ -> true },
         effects: List<CaptureEffect> = emptyList(),
-        waterDragValue: Float = 0.8F,
+        waterDragValue: Double = 0.8,
         model2d: ResourceLocation = cobblemonResource(name),
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
         ancient: Boolean = false,
-        maxBounces: Int = 3
+        maxBounces: Int = 3,
+        bouncyness: Double = 0.7,
     ): PokeBall {
         val identifier = cobblemonResource(name)
         //val finalModifiers = if (appendUltraBeastPenalty) modifiers + listOf(LabelModifier(0.1F, true, CobblemonPokemonLabels.ULTRA_BEAST)) else modifiers
-        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient, maxBounces)
+        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient, maxBounces, bouncyness)
         this.defaults[identifier] = pokeball
         return pokeball
     }

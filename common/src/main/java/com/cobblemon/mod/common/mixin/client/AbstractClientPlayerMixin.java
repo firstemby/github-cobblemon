@@ -34,9 +34,7 @@ public class AbstractClientPlayerMixin {
         }
 
         LocalPlayer player = (LocalPlayer) (Object) this;
-        if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity) {
-            PokemonEntity ride = (PokemonEntity) player.getVehicle();
-
+        if (player != null && player.isPassenger() && player.getVehicle() instanceof PokemonEntity ride) {
             //Return custom fov mult
             cir.setReturnValue(ride.rideFovMult());
         }

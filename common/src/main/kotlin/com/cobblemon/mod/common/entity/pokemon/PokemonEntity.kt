@@ -442,6 +442,7 @@ open class PokemonEntity(
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(data)
         // "But it's imposs-" shut up nerd, it happens during super construction and that's before delegate is assigned by class construction
+        @Suppress("SENSELESS_COMPARISON")
         if (delegate != null) {
             delegate.onSyncedDataUpdated(data)
         }

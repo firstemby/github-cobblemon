@@ -12,6 +12,10 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.core.component.DataComponents
+import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.InteractionHand
@@ -22,7 +26,9 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
+import org.joml.Vector3f
 import kotlin.math.cos
+import kotlin.math.max
 import kotlin.math.min
 
 class PokeBallItem(
@@ -44,22 +50,17 @@ class PokeBallItem(
     }
 
     override fun releaseUsing(stack: ItemStack, level: Level, player: LivingEntity, remainingUseDuration: Int) {
+        if (level.isClientSide) {
+            stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)
+        }
         if (player is ServerPlayer) {
             val ticksHeld = getUseDuration(stack, player) - remainingUseDuration
             val force = getPowerForTime(ticksHeld)
+            val inaccuracy = getInaccuracyForTime(level, ticksHeld)
 
-            if (force > 0.1) {
-                val inaccuracy = when {
-                    ticksHeld < 10 -> 3f
-                    ticksHeld < 20 -> 2f
-                    ticksHeld < 30 -> 0f
-                    else -> 1f
-                }
-
-                throwPokeBall(level, player, min(force, 1f), inaccuracy)
-                player.cooldowns.addCooldown(this, 10)
-                stack.consume(1, player)
-            }
+            throwPokeBall(level, player, min(force, 1f), inaccuracy)
+            player.cooldowns.addCooldown(this, 10)
+            stack.consume(1, player)
         } else {
             super.releaseUsing(stack, level, player, remainingUseDuration)
         }
@@ -75,11 +76,53 @@ class PokeBallItem(
         return f
     }
 
+    fun getInaccuracyForTime(level: Level, charge: Int): Float {
+        return when {
+            charge < 20 -> 0.04f / max(0.5f, charge / 20f)
+            charge < 25 -> 0f
+            else -> 0.04f
+        }
+    }
+
+    fun drawAimReticule(level: ClientLevel, player: Player, ticksHeld: Int) {
+        val inaccuracy = getInaccuracyForTime(level, ticksHeld)
+        val colour = if (inaccuracy == 0f) {
+            Vector3f(0.0f, 1.0f, 0f)
+        } else {
+            Vector3f(1.0f, 0.5f, 0f)
+        }
+
+        for (i in 0 until 8) {
+            val angle = when (i) {
+                0 -> 0.0
+                1 -> 0.25
+                2 -> 0.5
+                3 -> 0.75
+                4 -> 1.0
+                5 -> 1.25
+                6 -> 1.5
+                else -> 1.75
+            } * Math.PI
+
+            val v = EmptyPokeBallEntity
+                .getAimVector(player.lookAngle.x, player.lookAngle.y, player.lookAngle.z, inaccuracy.toDouble(), angle)
+                .scale(4.0)
+                .add(player.eyePosition)
+
+            level.addParticle(DustParticleOptions(colour, 1.0f), v.x, v.y, v.z, 0.0, 0.0, 0.0)
+        }
+    }
+
     override fun onUseTick(level: Level, livingEntity: LivingEntity, stack: ItemStack, remainingUseDuration: Int) {
         if (level.isClientSide && livingEntity is Player) {
             val ticksHeld = getUseDuration(stack, livingEntity) - remainingUseDuration
+            (level as? ClientLevel)?.let { drawAimReticule(it, livingEntity, ticksHeld) }
             if (ticksHeld == 20) {
                 livingEntity.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, livingEntity.soundSource, 1.0F, 1.0F)
+                stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+            }
+            if (ticksHeld == 31) {
+                stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)
             }
         }
         super.onUseTick(level, livingEntity, stack, remainingUseDuration)
