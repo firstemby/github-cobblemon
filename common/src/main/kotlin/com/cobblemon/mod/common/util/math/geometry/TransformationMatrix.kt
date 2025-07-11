@@ -21,6 +21,7 @@ import org.joml.Vector3f
  * @property values the values of the matrix, in the form of a two-dimensional immutable array
  * @author landonjw
  */
+@ConsistentCopyVisibility
 data class TransformationMatrix internal constructor(val values: ImmutableArray<ImmutableArray<Float>>) {
 
     operator fun get(row: Int): ImmutableArray<Float> = values[row]

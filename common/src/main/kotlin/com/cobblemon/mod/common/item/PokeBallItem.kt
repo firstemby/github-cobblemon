@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.random
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.component.DataComponents
@@ -26,10 +27,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.text.toDouble
 
 class PokeBallItem(
         val pokeBall: PokeBall
@@ -50,15 +53,12 @@ class PokeBallItem(
     }
 
     override fun releaseUsing(stack: ItemStack, level: Level, player: LivingEntity, remainingUseDuration: Int) {
-        if (level.isClientSide) {
-            stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)
-        }
         if (player is ServerPlayer) {
             val ticksHeld = getUseDuration(stack, player) - remainingUseDuration
             val force = getPowerForTime(ticksHeld)
             val inaccuracy = getInaccuracyForTime(level, ticksHeld)
 
-            throwPokeBall(level, player, min(force, 1f), inaccuracy)
+            throwPokeBall(level, player, force, inaccuracy)
             player.cooldowns.addCooldown(this, 10)
             stack.consume(1, player)
         } else {
@@ -67,7 +67,7 @@ class PokeBallItem(
     }
 
     fun getPowerForTime(charge: Int): Float {
-        var f = charge.toFloat() / 20.0f
+        var f = charge.toFloat() / 10.0f + 0.5f
         f = (f * f + f * 2.0f) / 3.0f
         if (f > 1.0f) {
             f = 1.0f
@@ -85,6 +85,7 @@ class PokeBallItem(
     }
 
     fun drawAimReticule(level: ClientLevel, player: Player, ticksHeld: Int) {
+        val inaccuracy_mult = 1.0
         val inaccuracy = getInaccuracyForTime(level, ticksHeld)
         val colour = if (inaccuracy == 0f) {
             Vector3f(0.0f, 1.0f, 0f)
@@ -105,11 +106,11 @@ class PokeBallItem(
             } * Math.PI
 
             val v = EmptyPokeBallEntity
-                .getAimVector(player.lookAngle.x, player.lookAngle.y, player.lookAngle.z, inaccuracy.toDouble(), angle)
+                .getAimVector(player.lookAngle.x, player.lookAngle.y, player.lookAngle.z, inaccuracy_mult * inaccuracy, angle)
                 .scale(4.0)
                 .add(player.eyePosition)
 
-            level.addParticle(DustParticleOptions(colour, 1.0f), v.x, v.y, v.z, 0.0, 0.0, 0.0)
+            level.addParticle(DustParticleOptions(colour, 0.5f), v.x, v.y, v.z, 0.0, 0.0, 0.0)
         }
     }
 
@@ -119,10 +120,6 @@ class PokeBallItem(
             (level as? ClientLevel)?.let { drawAimReticule(it, livingEntity, ticksHeld) }
             if (ticksHeld == 20) {
                 livingEntity.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, livingEntity.soundSource, 1.0F, 1.0F)
-                stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
-            }
-            if (ticksHeld == 31) {
-                stack.remove(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)
             }
         }
         super.onUseTick(level, livingEntity, stack, remainingUseDuration)
@@ -140,8 +137,8 @@ class PokeBallItem(
                 5f
             }
 
-            shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower * force, inaccuracy)
-            setPos(position().add(deltaMovement.normalize().scale(1.0)))
+            shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower * force * 0.7f, inaccuracy)
+            setPos(position().add(deltaMovement.normalize()))
             owner = player
         }
         world.addFreshEntity(pokeBallEntity)

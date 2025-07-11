@@ -51,6 +51,7 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
+import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
@@ -74,19 +75,12 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.ClipContext.Block
 import net.minecraft.world.level.ClipContext.Fluid
 import net.minecraft.world.level.Level
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.EntityHitResult
-import net.minecraft.world.phys.HitResult
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.*
 import org.joml.Quaterniond
 import org.joml.Vector3d
 import java.util.concurrent.CompletableFuture
-import kotlin.math.abs
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.pow
-import kotlin.math.sqrt
+import java.util.function.Predicate
+import kotlin.math.*
 
 class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokeballMarker, Schedulable {
     enum class CaptureState {
@@ -150,6 +144,32 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
                 .let { Vec3(it.x, it.y, it.z) }
         }
 
+        fun getEntityHitResult(
+            level: Level,
+            projectile: Entity,
+            startVec: Vec3,
+            endVec: Vec3,
+            boundingBox: AABB,
+            filter: Predicate<Entity>,
+            inflationAmount: Double
+        ): EntityHitResult? {
+            var entity: Pair<Entity, Vec3>? = null
+
+            level.getEntities(projectile, boundingBox, filter).forEach {
+                val aABB = it.boundingBox.inflate(inflationAmount)
+                val optional = aABB.clip(startVec, endVec)
+                if (optional.isPresent) {
+                    val vec = optional.orElseThrow()
+                    val distanceToEntity = startVec.distanceToSqr(vec)
+                    if (distanceToEntity < Double.MAX_VALUE) {
+                        entity = it to vec
+                        return@forEach
+                    }
+                }
+            }
+
+            return entity?.let { (entity, location) -> EntityHitResult(entity, location) }
+        }
     }
 
     val dataTrackerEmitter = SimpleObservable<EntityDataAccessor<*>>()
@@ -251,7 +271,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
         val FLOAT_MARGIN = 0.01
 
         val entityFilter = this::canHitEntity
-        val entityHitMargin = 0.3f
+        val entityHitMargin = 0.3
 
         val deltaMovementSqr = this.deltaMovement.lengthSqr()
         // The entire movement budget we have this tick (done as squared because it's cheaper)
@@ -337,25 +357,24 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
                 }
             }
 
-            val entityHitResult = ProjectileUtil.getEntityHitResult(this.level(), this, this.position(), hitResult.location, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), entityFilter, entityHitMargin)
+            val entityHitResult = EmptyPokeBallEntity.getEntityHitResult(this.level(), this, this.position(), hitResult.location, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), entityFilter, entityHitMargin)
 
             // The actual hit that happened
             val effectiveHitResult = entityHitResult ?: hitResult
 
-            remainingMovementSqr = if (!isMiss) {
+            remainingMovementSqr = if (effectiveHitResult.type != HitResult.Type.MISS) {
                 remainingMovementSqr - this.position().distanceToSqr(effectiveHitResult.location)
             } else {
                 0.0
             }
 
-            this.setPos(effectiveHitResult.location)
-
             if (bounces >= maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY) {
                 val deflection = this.hitTargetOrDeflectSelf(effectiveHitResult)
                 val entity = (effectiveHitResult as? EntityHitResult)?.entity
                 deflection.deflect(this, entity, this.random)
-                remainingMovementSqr = 0.0
             }
+
+            this.setPos(effectiveHitResult.location)
         }
 
         this.deltaMovement = this.deltaMovement.multiply(
