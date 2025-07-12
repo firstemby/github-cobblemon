@@ -2,5 +2,5 @@
   "match": {
     "items": "cobblemon:bright_powder"
   },
-  "luminance": 2
+  "luminance": "block_self"
 }

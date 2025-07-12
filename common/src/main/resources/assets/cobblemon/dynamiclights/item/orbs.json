@@ -1,0 +1,10 @@
+{
+  "match": {
+    "items": [
+      "cobblemon:flame_orb",
+      "cobblemon:light_ball",
+      "cobblemon:life_orb"
+    ]
+  },
+  "luminance": "block_self"
+}
