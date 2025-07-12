@@ -102,6 +102,8 @@ import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
@@ -126,6 +128,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.FluidTags
+import net.minecraft.tags.GameEventTags
+import net.minecraft.tags.TagKey
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -149,13 +153,19 @@ import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.gameevent.DynamicGameEventListener
+import net.minecraft.world.level.gameevent.EntityPositionSource
 import net.minecraft.world.level.gameevent.GameEvent
+import net.minecraft.world.level.gameevent.PositionSource
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.function.BiConsumer
 import kotlin.math.PI
 import kotlin.math.ceil
 
@@ -164,7 +174,8 @@ open class PokemonEntity(
     world: Level,
     pokemon: Pokemon = Pokemon().apply { isClient = world.isClientSide },
     type: EntityType<out PokemonEntity> = CobblemonEntities.POKEMON,
-) : ShoulderRidingEntity(type, world), PosableEntity, Shearable, Schedulable, Rideable, ScannableEntity, MoLangScriptingEntity, OmniPathingEntity {
+) : ShoulderRidingEntity(type, world), PosableEntity, Shearable, Schedulable, Rideable, ScannableEntity, MoLangScriptingEntity, OmniPathingEntity,
+    VibrationSystem {
     companion object {
         @JvmStatic val SPECIES = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val NICKNAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.COMPONENT)
@@ -288,6 +299,10 @@ open class PokemonEntity(
     override var riding: RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>? = null
 
     private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, Double>>()
+
+    var vibrationSystemData = VibrationSystem.Data()
+    var vibrationSystemUser = VibrationUser()
+    var dynamicVibrationListener = DynamicGameEventListener(VibrationSystem.Listener(this))
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -609,6 +624,10 @@ open class PokemonEntity(
                     }
                 }
             }
+        }
+
+        if (!this.level().isClientSide) {
+            VibrationSystem.Ticker.tick(this.level(), this.vibrationData, this.vibrationUser)
         }
 
         previousRidingState = ridingState?.copy()
@@ -2403,7 +2422,7 @@ open class PokemonEntity(
 
     /**
      * If the Pokémon is following another Pokémon, checks the herd size using the leader. Otherwise check this Pokémon's
-     * herd count. Not necessarily strictly up to date but it should be good enough for typical purposes.
+     * herd count. Not necessarily strictly up to datreturn super.getListenableEvents()e but it should be good enough for typical purposes.
      */
     fun getHerdSize(): Int {
         val world = level() as? ServerLevel ?: return 0
@@ -2446,5 +2465,50 @@ open class PokemonEntity(
         } else {
             herdLeader.behaviour.herd.bestMatchLeader(follower = this, possibleLeader = herdLeader)?.tier ?: 0
         }
+    }
+
+    override fun getVibrationData(): VibrationSystem.Data = vibrationSystemData
+
+    override fun getVibrationUser(): VibrationSystem.User = vibrationSystemUser
+
+    override fun updateDynamicGameEventListener(listenerConsumer: BiConsumer<DynamicGameEventListener<*>, ServerLevel>) {
+        val level = this.level()
+        if (level is ServerLevel) {
+            listenerConsumer.accept(this.dynamicVibrationListener, level)
+        }
+    }
+
+    inner class VibrationUser() : VibrationSystem.User {
+        val positionSource = EntityPositionSource(this@PokemonEntity, this@PokemonEntity.getEyeHeight())
+
+        override fun getListenerRadius(): Int = 16
+
+        override fun getPositionSource(): PositionSource = positionSource
+
+        override fun canReceiveVibration(
+            level: ServerLevel,
+            pos: BlockPos,
+            gameEvent: Holder<GameEvent>,
+            context: GameEvent.Context
+        ): Boolean = this@PokemonEntity.owner == null && context.sourceEntity is Player
+
+        override fun onReceiveVibration(
+            level: ServerLevel,
+            pos: BlockPos,
+            gameEvent: Holder<GameEvent>,
+            entity: Entity?,
+            playerEntity: Entity?,
+            distance: Float
+        ) {
+            if (playerEntity != null) {
+                val x = this@PokemonEntity.x
+                val y = this@PokemonEntity.y + 1.0
+                val z = this@PokemonEntity.z
+
+                level.addParticle(DustParticleOptions(Vector3f(1.0f, 0.0f, 0f), 1.0f), x, y, z, 0.0, 0.0, 0.0)
+            }
+        }
+
+        override fun getListenableEvents(): TagKey<GameEvent> = GameEventTags.IGNORE_VIBRATIONS_SNEAKING
     }
 }

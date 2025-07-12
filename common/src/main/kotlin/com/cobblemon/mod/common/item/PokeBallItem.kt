@@ -127,7 +127,7 @@ class PokeBallItem(
 
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int = 72000
 
-    override fun getUseAnimation(stack: ItemStack): UseAnim? = UseAnim.BOW
+    override fun getUseAnimation(stack: ItemStack): UseAnim? = UseAnim.SPEAR
 
     private fun throwPokeBall(world: Level, player: ServerPlayer, force: Float, inaccuracy: Float) {
         val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player).apply {
