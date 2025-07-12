@@ -526,6 +526,10 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val SMOKE_BALL = create("smoke_ball", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
     /*@JvmField
     val SOUL_DEW = create("soul_dew", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, SixFaceItemType.GENERIC_8x))*/
+    @JvmField
+    val IRON_BALL = create("iron_ball", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion().strength(5f), ItemType.GENERIC_8x)) //TODO Determine whether this should be a falling block with damage source - Idea is solid, but the damage bit is concerning to get working, so leaving it as a maybe for now
+    @JvmField
+    val HARD_STONE = create("hard_stone", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).mapColor(MapColor.NONE).noOcclusion().strength(0.5f), ItemType.GENERIC_8x))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

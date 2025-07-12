@@ -1005,11 +1005,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val GRIP_CLAW = heldItem("grip_claw")
     @JvmField
-    val HARD_STONE = heldItem("hard_stone")
+    val HARD_STONE = itemNameBlockItem("hard_stone", CobblemonBlocks.HARD_STONE)
     @JvmField
     val HEAVY_DUTY_BOOTS = heldItem("heavy_duty_boots")
     @JvmField
-    val IRON_BALL = heldItem("iron_ball")
+    val IRON_BALL = itemNameBlockItem("iron_ball", CobblemonBlocks.IRON_BALL)
     @JvmField
     val LAGGING_TAIL = heldItem("lagging_tail")
     @JvmField

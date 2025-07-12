@@ -94,6 +94,8 @@
 		"cobblemon:thunder_stone_block",
 		"cobblemon:water_stone_block",
 		"cobblemon:display_case",
-		"#cobblemon:plaques"
+		"#cobblemon:plaques",
+		"cobblemon:iron_ball",
+		"cobblemon:hard_stone"
     ]
 }
