@@ -2500,7 +2500,7 @@ open class PokemonEntity(
             playerEntity: Entity?,
             distance: Float
         ) {
-            if (playerEntity != null) {
+            if (entity is Player) {
                 val x = this@PokemonEntity.x
                 val y = this@PokemonEntity.y + 1.0
                 val z = this@PokemonEntity.z

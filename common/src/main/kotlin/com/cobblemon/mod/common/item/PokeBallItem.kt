@@ -56,7 +56,7 @@ class PokeBallItem(
         if (player is ServerPlayer) {
             val ticksHeld = getUseDuration(stack, player) - remainingUseDuration
             val force = getPowerForTime(ticksHeld)
-            val inaccuracy = getInaccuracyForTime(level, ticksHeld)
+            val inaccuracy = getInaccuracyForTime(ticksHeld)
 
             throwPokeBall(level, player, force, inaccuracy)
             player.cooldowns.addCooldown(this, 10)
@@ -76,55 +76,10 @@ class PokeBallItem(
         return f
     }
 
-    fun getInaccuracyForTime(level: Level, charge: Int): Float {
-        return when {
-            charge < 20 -> 0.04f / max(0.5f, charge / 20f)
-            charge < 25 -> 0f
-            else -> 0.04f
-        }
-    }
+    // Calculate the max inaccuracy (in radians over the entire screen space) for the given charge time.
+    fun getInaccuracyForTime(charge: Int): Float = 0.02f
 
-    fun drawAimReticule(level: ClientLevel, player: Player, ticksHeld: Int) {
-        val inaccuracy_mult = 1.0
-        val inaccuracy = getInaccuracyForTime(level, ticksHeld)
-        val colour = if (inaccuracy == 0f) {
-            Vector3f(0.0f, 1.0f, 0f)
-        } else {
-            Vector3f(1.0f, 0.5f, 0f)
-        }
-
-        for (i in 0 until 8) {
-            val angle = when (i) {
-                0 -> 0.0
-                1 -> 0.25
-                2 -> 0.5
-                3 -> 0.75
-                4 -> 1.0
-                5 -> 1.25
-                6 -> 1.5
-                else -> 1.75
-            } * Math.PI
-
-            val v = EmptyPokeBallEntity
-                .getAimVector(player.lookAngle.x, player.lookAngle.y, player.lookAngle.z, inaccuracy_mult * inaccuracy, angle)
-                .scale(4.0)
-                .add(player.eyePosition)
-
-            level.addParticle(DustParticleOptions(colour, 0.5f), v.x, v.y, v.z, 0.0, 0.0, 0.0)
-        }
-    }
-
-    override fun onUseTick(level: Level, livingEntity: LivingEntity, stack: ItemStack, remainingUseDuration: Int) {
-        if (level.isClientSide && livingEntity is Player) {
-            val ticksHeld = getUseDuration(stack, livingEntity) - remainingUseDuration
-            (level as? ClientLevel)?.let { drawAimReticule(it, livingEntity, ticksHeld) }
-            if (ticksHeld == 20) {
-                livingEntity.playNotifySound(SoundEvents.EXPERIENCE_ORB_PICKUP, livingEntity.soundSource, 1.0F, 1.0F)
-            }
-        }
-        super.onUseTick(level, livingEntity, stack, remainingUseDuration)
-    }
-
+    // How long the item can be used for before resetting. Not the time it takes to fully charge up
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int = 72000
 
     override fun getUseAnimation(stack: ItemStack): UseAnim? = UseAnim.SPEAR
@@ -137,7 +92,7 @@ class PokeBallItem(
                 5f
             }
 
-            shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower * force * 0.7f, inaccuracy)
+            shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower * force, inaccuracy)
             setPos(position().add(deltaMovement.normalize()))
             owner = player
         }

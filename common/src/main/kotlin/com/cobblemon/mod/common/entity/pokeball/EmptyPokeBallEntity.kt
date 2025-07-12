@@ -51,7 +51,6 @@ import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
-import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
@@ -68,7 +67,6 @@ import net.minecraft.util.Mth
 import net.minecraft.util.Mth.PI
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity
-import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.ClipContext
@@ -235,7 +233,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
         addPosableFunctions(struct)
     }
 
-    constructor(world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
+    constructor(entityType: EntityType<out EmptyPokeBallEntity> = EMPTY_POKEBALL, world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world, entityType = entityType)
     constructor(
         pokeBall: PokeBall,
         world: Level,
@@ -255,7 +253,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
 
-    fun getMaxBounces(): Int = level().gameRules.getInt(CobblemonGameRules.BOUNCY_BALLS_BOUNCE)
+    fun getMaxBounces(): Int = pokeBall.maxBounces
 
     override fun isPushedByFluid(): Boolean = false
 
@@ -266,7 +264,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
         return getAimVector(x, y, z, missMagnitudeRad, missAngleRad).scale(velocity.toDouble())
     }
 
-    fun raycastFullCollision() {
+    fun moveWithCollision() {
         // Account for floating point inaccuracies, always.
         val FLOAT_MARGIN = 0.01
 
@@ -331,7 +329,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
                     }
 
                     // At a flat enough angle (we're comparing against the normal so > is correct) balls bounce off of water.
-                    if (bounceAngle < targetAngle && deltaMovementSqr > 0.0) {
+                    if (bounceAngle < targetAngle && deltaMovementSqr > 0.4) {
                         isBounceX = isBounceX.xor(normal.x != 0)
                         isBounceY = isBounceY.xor(normal.y != 0)
                         isBounceZ = isBounceZ.xor(normal.z != 0)
@@ -352,8 +350,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
 
                     cummulativeDrag = cummulativeDrag * pokeBall.bouncyness
 
-                    playSound(hitBlock.soundType.hitSound, 1.0f, 1.0f)
-                    playSound(SoundEvents.ANVIL_PLACE, 0.04f, 0.5f)
+                    if (captureState == CaptureState.NOT) {
+                        playSound(hitBlock.soundType.hitSound, 1.0f, 1.0f)
+                    }
                 }
             }
 
@@ -368,7 +367,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
                 0.0
             }
 
-            if (bounces >= maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY) {
+            if (bounces > maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY) {
                 val deflection = this.hitTargetOrDeflectSelf(effectiveHitResult)
                 val entity = (effectiveHitResult as? EntityHitResult)?.entity
                 deflection.deflect(this, entity, this.random)
@@ -494,7 +493,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
 
     override fun tick() {
         super.tick()
-        raycastFullCollision()
+        moveWithCollision()
 
         // Do the things that [ThrowableProjectile.tick] does that we want but skipped because of our mixin
         checkInsideBlocks()
