@@ -56,18 +56,21 @@ class PokeBallItem(
         if (player is ServerPlayer) {
             val ticksHeld = getUseDuration(stack, player) - remainingUseDuration
             val force = getPowerForTime(ticksHeld)
-            val inaccuracy = getInaccuracyForTime(ticksHeld)
 
-            throwPokeBall(level, player, force, inaccuracy)
-            player.cooldowns.addCooldown(this, 10)
-            stack.consume(1, player)
+            if (force > 0.1) {
+                val inaccuracy = getInaccuracyForTime(ticksHeld)
+
+                throwPokeBall(level, player, force, inaccuracy)
+                player.cooldowns.addCooldown(this, 10)
+                stack.consume(1, player)
+            }
         } else {
             super.releaseUsing(stack, level, player, remainingUseDuration)
         }
     }
 
     fun getPowerForTime(charge: Int): Float {
-        var f = charge.toFloat() / 10.0f + 0.5f
+        var f = charge.toFloat() / 20.0f
         f = (f * f + f * 2.0f) / 3.0f
         if (f > 1.0f) {
             f = 1.0f
@@ -77,7 +80,7 @@ class PokeBallItem(
     }
 
     // Calculate the max inaccuracy (in radians over the entire screen space) for the given charge time.
-    fun getInaccuracyForTime(charge: Int): Float = 0.02f
+    fun getInaccuracyForTime(charge: Int): Float = 1.00f
 
     // How long the item can be used for before resetting. Not the time it takes to fully charge up
     override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int = 72000

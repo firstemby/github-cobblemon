@@ -48,7 +48,6 @@ import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
@@ -258,15 +257,22 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
     override fun isPushedByFluid(): Boolean = false
 
     override fun getMovementToShoot(x: Double, y: Double, z: Double, velocity: Float, inaccuracy: Float): Vec3? {
-        val missMagnitudeRad: Double = inaccuracy * this.random.nextDouble()
+        // We multiply the inaccuracy value by 0.02 to have rough equivalence to vanilla, meaning an inaccuracy of
+        // `1.0f` passed to getMovementToShoot will give you about as much of an inaccurate throw as a 1.0f would for a
+        // bow or snowball.
+        val missMagnitudeRad: Double = inaccuracy * 0.02 * this.random.nextDouble()
         val missAngleRad: Double = this.random.nextDouble() * 2 * Math.PI
 
-        return getAimVector(x, y, z, missMagnitudeRad, missAngleRad).scale(velocity.toDouble())
+        // Also make velocity inaccurate by a linear factor. This will mean it becomes much more impactful on weak throws.
+        val adjustedVelocity = velocity + 0.02 * (this.random.nextDouble() - this.random.nextDouble())
+
+        return getAimVector(x, y, z, missMagnitudeRad, missAngleRad).scale(adjustedVelocity)
     }
 
     fun moveWithCollision() {
         // Account for floating point inaccuracies, always.
         val FLOAT_MARGIN = 0.01
+        val MIN_MOVEMENT = 0.1
 
         val entityFilter = this::canHitEntity
         val entityHitMargin = 0.3
@@ -304,8 +310,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
             val fluidFilter = if (this.isInWater || isInWaterSubtick) Fluid.NONE else Fluid.ANY
             val hitResult = this.level().clip(ClipContext(this.position(), this.position().add(movement), Block.COLLIDER, fluidFilter, this))
 
-            val isMiss = hitResult.type == HitResult.Type.MISS
-            if (!isMiss) {
+            val bounceSound = if (hitResult.type != HitResult.Type.MISS) {
                 bounces = bounces.inc()
 
                 val hitBlock = this.level().getBlockState(hitResult.blockPos)
@@ -339,24 +344,23 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
 
                     cummulativeDrag = cummulativeDrag * pokeBall.waterDragValue
                 } else {
-                    // If we're moving really slow just drop the item instead.
-                    if (deltaMovementSqr < 0.05) {
-                        onHitBlock(hitResult)
-                    }
-
                     isBounceX = isBounceX.xor(normal.x != 0)
                     isBounceY = isBounceY.xor(normal.y != 0)
                     isBounceZ = isBounceZ.xor(normal.z != 0)
 
                     cummulativeDrag = cummulativeDrag * pokeBall.bouncyness
-
-                    if (captureState == CaptureState.NOT) {
-                        playSound(hitBlock.soundType.hitSound, 1.0f, 1.0f)
-                    }
                 }
+
+                if (captureState == CaptureState.NOT) {
+                    hitBlock.soundType.hitSound
+                } else {
+                    null
+                }
+            } else {
+                null
             }
 
-            val entityHitResult = EmptyPokeBallEntity.getEntityHitResult(this.level(), this, this.position(), hitResult.location, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), entityFilter, entityHitMargin)
+            val entityHitResult = getEntityHitResult(this.level(), this, this.position(), hitResult.location, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), entityFilter, entityHitMargin)
 
             // The actual hit that happened
             val effectiveHitResult = entityHitResult ?: hitResult
@@ -367,10 +371,14 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
                 0.0
             }
 
-            if (bounces > maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY) {
+            val speedEstimateAfterBounce = deltaMovementSqr * cummulativeDrag.pow(2)
+
+            if (bounces > maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY || speedEstimateAfterBounce < MIN_MOVEMENT) {
                 val deflection = this.hitTargetOrDeflectSelf(effectiveHitResult)
                 val entity = (effectiveHitResult as? EntityHitResult)?.entity
                 deflection.deflect(this, entity, this.random)
+            } else {
+                bounceSound?.let { playSound(it, 0.5f, 1f) }
             }
 
             this.setPos(effectiveHitResult.location)
@@ -388,11 +396,11 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
             if (level().isServerSide()) {
                 super.onHitBlock(hitResult)
                 level().sendParticlesServer(ParticleTypes.CLOUD, hitResult.location, 2, hitResult.location.subtract(position()).normalize().scale(-0.1), 0.0)
-                level().playSoundServer(position(), SoundEvents.WOOD_PLACE, pitch = 2.5F)
+                playSound(SoundEvents.WOOD_BREAK, 0.5f, 2.5f)
                 return drop()
             }
         } else {
-            setNoGravity(false)
+            isNoGravity = false
             deltaMovement = Vec3.ZERO
         }
     }
@@ -483,9 +491,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokebal
     private fun drop() {
         val owner = owner
         discard()
-        val player = owner?.takeIf { it is ServerPlayer } as? ServerPlayer
-        if (player?.hasInfiniteMaterials() != true) spawnAtLocation(defaultItem)
-        return
+        if (owner is ServerPlayer && !owner.hasInfiniteMaterials()) {
+            spawnAtLocation(defaultItem)?.deltaMovement = deltaMovement
+        }
     }
 
     // Poké Balls don't save to the world.
