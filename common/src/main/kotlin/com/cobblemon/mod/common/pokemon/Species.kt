@@ -230,8 +230,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
             { _, value -> buffer.writeSizedInt(IntSize.U_SHORT, value) }
         )
         // ToDo remake once we have custom typing support
-        buffer.writeString(this.primaryType.name)
-        buffer.writeNullable(this.secondaryType) { pb, type -> pb.writeString(type.name) }
+        buffer.writeString(this.primaryType.showdownId)
+        buffer.writeNullable(this.secondaryType) { pb, type -> pb.writeString(type.showdownId) }
         buffer.writeString(this.experienceGroup.name)
         buffer.writeFloat(this.height)
         buffer.writeFloat(this.weight)

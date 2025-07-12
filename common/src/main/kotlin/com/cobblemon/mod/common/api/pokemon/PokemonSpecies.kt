@@ -265,7 +265,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
             "H" to "No Ability",
             "S" to "No Ability"
         )
-        val types = (form?.types ?: species.types).map { it.name.replaceFirstChar(Char::uppercase) }
+        val types = (form?.types ?: species.types).map { it.name }
         val preevo: String? = (form?.preEvolution ?: species.preEvolution)?.let { if (it.form == it.species.standardForm) createShowdownName(it.species) else "${createShowdownName(it.species)}-${it.form.name}" }
         // For the context of battles the content here doesn't matter whatsoever and due to how PokemonProperties work we can't guarantee an actual specific species is defined.
         val evos = if ((form?.evolutions ?: species.evolutions).isEmpty()) emptyList() else arrayListOf("")

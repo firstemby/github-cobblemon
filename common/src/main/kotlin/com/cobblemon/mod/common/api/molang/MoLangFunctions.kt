@@ -1552,8 +1552,8 @@ object MoLangFunctions {
 
             map.put("identifier") { StringValue(species.resourceIdentifier.toString()) }
             map.put("name") { StringValue(species.name) }
-            map.put("primary_type") { StringValue(species.primaryType.name) }
-            map.put("secondary_type") { StringValue(species.secondaryType?.name ?: "null") }
+            map.put("primary_type") { StringValue(species.primaryType.showdownId) }
+            map.put("secondary_type") { StringValue(species.secondaryType?.showdownId ?: "null") }
             map.put("experience_group") { StringValue(species.experienceGroup.name) }
             map.put("height") { DoubleValue(species.height) }
             map.put("weight") { DoubleValue(species.weight) }

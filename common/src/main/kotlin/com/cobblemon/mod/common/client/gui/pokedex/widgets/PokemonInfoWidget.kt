@@ -669,7 +669,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         val primaryType = type[0]
         if (primaryType != null) {
             return try {
-                cobblemonResource("textures/gui/pokedex/platform_base_${primaryType.name}.png")
+                cobblemonResource("textures/gui/pokedex/platform_base_${primaryType.showdownId}.png")
             } catch (error: FileNotFoundException) {
                 null
             }
