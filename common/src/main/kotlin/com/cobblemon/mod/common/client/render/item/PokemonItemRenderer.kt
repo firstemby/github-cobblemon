@@ -64,6 +64,10 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         val rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(transformations.rotation.x, transformations.rotation.y, transformations.rotation.z))
         matrices.mulPose(rotation)
         rotation.conjugate()
+
+        // TO-DO: Flip the model to show the back
+        //matrices.mulPose(Quaternionf().fromAxisAngleRad(0f, 1f, 0f, Math.PI.toFloat()))
+
         val vertexConsumer: VertexConsumer = vertexConsumers.getBuffer(renderLayer)
         matrices.pushPose()
         val packedLight = if (mode == ItemDisplayContext.GUI) {
