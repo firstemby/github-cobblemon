@@ -1,7 +1,0 @@
-{
-  "parent": "cobblemon:block/template_orb",
-  "textures": {
-		"0": "cobblemon:block/decorative_items/toxic_orb",
-		"particle": "block/magenta_stained_glass"
-  }
-}

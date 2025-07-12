@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_wall_orb",
+  "textures": {
+		"0": "cobblemon:block/decorative_items/light_ball",
+		"particle": "block/yellow_stained_glass"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:block/template_orb",
+  "parent": "cobblemon:block/template_floor_orb",
   "textures": {
 		"0": "cobblemon:block/decorative_items/light_ball",
 		"particle": "block/yellow_stained_glass"

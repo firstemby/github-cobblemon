@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_ceiling_orb",
+  "textures": {
+		"0": "cobblemon:block/decorative_items/life_orb",
+		"particle": "block/pink_stained_glass"
+  }
+}
