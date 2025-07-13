@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "cobblemon:block/pep_up_flower"
+    "cross": "cobblemon:block/crops/pep_up_flower"
   }
 }

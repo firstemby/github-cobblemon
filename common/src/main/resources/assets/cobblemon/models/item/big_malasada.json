@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/big_malasada"
+    "layer0": "cobblemon:item/food/big_malasada"
   }
 }

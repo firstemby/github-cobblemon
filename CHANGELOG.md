@@ -31,6 +31,7 @@
 - Added `/pctake <player> <box> <slot>` command that takes a specific Pokémon from a player's PC. Removes the pokemon if target is self or ran from the server.
 - Added Hyper Training items (IV Modification) as well as some additional candy items to do so (Health Candy, Sickly Candy)
 - Added Galarica Nut Bushes
+- Many Pokémon (mostly cats) are now feared by phantoms
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
 
 ### Pokémon Added
@@ -225,6 +226,9 @@
 - Updated interaction interface to include 4 more option spaces
 - Made lecterns that hold a Pokédex emit light.
 - Updated light levels for active PC, Pasture, Healing Machine, and Data Monitor.
+- Vivichokes now always drop one seed when harvested, and converting a fully grown Vivichoke to seeds via crafting results in 1 seed.
+- Healing Machine recipe rebalanced.
+- Reorganised the `block` texture folder to be more organised, in line with the `item` texture folder.
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks

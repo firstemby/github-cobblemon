@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:block/large_budding_tumblestone"
+    "layer0": "cobblemon:block/tumblestone/large_budding_tumblestone"
   }
 }

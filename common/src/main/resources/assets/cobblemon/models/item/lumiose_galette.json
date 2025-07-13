@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/lumiose_galette"
+    "layer0": "cobblemon:item/food/lumiose_galette"
   }
 }

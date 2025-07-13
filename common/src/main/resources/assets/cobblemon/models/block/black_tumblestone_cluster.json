@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "cobblemon:block/black_tumblestone_cluster"
+    "cross": "cobblemon:block/tumblestone/black_tumblestone_cluster"
   }
 }

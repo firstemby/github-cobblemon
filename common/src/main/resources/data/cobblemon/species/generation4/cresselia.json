@@ -47,6 +47,11 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByPhantom": true
+    }
+  },
   "moves": [
     "1:confusion",
     "1:doubleteam",

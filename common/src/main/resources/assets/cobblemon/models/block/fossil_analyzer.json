@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "cobblemon:block/fossil_analyzer",
-		"particle": "cobblemon:block/fossil_analyzer_particle"
+		"1": "cobblemon:block/functional/fossil_analyzer",
+		"particle": "cobblemon:block/functional/fossil_analyzer_particle"
 	},
 	"elements": [
 		{

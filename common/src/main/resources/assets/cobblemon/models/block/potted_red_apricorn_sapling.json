@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/flower_pot_cross",
   "textures": {
-    "plant": "cobblemon:block/red_apricorn_sapling"
+    "plant": "cobblemon:block/crops/red_apricorn_sapling"
   }
 }

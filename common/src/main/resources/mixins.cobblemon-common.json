@@ -58,6 +58,7 @@
     "LivingEntityMixin",
     "MinecraftDedicatedServerMixin",
     "NbtUtilsMixin",
+    "PhantomSweepAttackGoalMixin",
     "PiglinBarterMixin",
     "PiglinEntityMixin",
     "PlayerAdvancementsMixin",

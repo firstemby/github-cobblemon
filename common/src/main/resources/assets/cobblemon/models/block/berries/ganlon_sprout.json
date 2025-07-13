@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "block/farmland_moist",
-		"3": "cobblemon:block/ganlon_sprout",
+		"3": "cobblemon:block/berries/ganlon_sprout",
 		"particle": "block/farmland_moist"
 	},
 	"elements": [

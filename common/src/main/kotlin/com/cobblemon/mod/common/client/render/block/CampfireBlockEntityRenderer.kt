@@ -39,8 +39,8 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         const val BROTH_START = 0F
         const val BROTH_END = 1F
         const val BROTH_HEIGHT = 0.3F
-        val BROTH_BASIC_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot_broth_basic"))
-        val BROTH_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot_broth"))
+        val BROTH_BASIC_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot/campfire_pot_broth_basic"))
+        val BROTH_SPRITE: TextureAtlasSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation("cobblemon", "block/campfire_pot/campfire_pot_broth"))
 
         const val CIRCLE_RADIUS = 0.4F
         const val ROTATION_SPEED = 1.5F

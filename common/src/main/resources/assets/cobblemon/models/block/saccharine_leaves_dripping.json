@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "cobblemon:block/saccharine_leaves_dripping"
+    "all": "cobblemon:block/wood/saccharine_leaves_dripping"
   }
 }

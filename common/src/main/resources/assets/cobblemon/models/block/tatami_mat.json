@@ -2,8 +2,8 @@
 	"ambientocclusion": false,
 	"parent": "minecraft:block/thin_block",
 	"textures": {
-		"0": "cobblemon:block/tatami",
-		"particle": "cobblemon:block/tatami"
+		"0": "cobblemon:block/building_blocks/tatami",
+		"particle": "cobblemon:block/building_blocks/tatami"
 	},
 	"elements": [
 		{

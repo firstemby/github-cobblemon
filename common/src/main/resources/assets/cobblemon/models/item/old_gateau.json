@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/old_gateau"
+    "layer0": "cobblemon:item/food/old_gateau"
   }
 }
