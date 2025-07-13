@@ -34,6 +34,7 @@
         "cobblemon:blunder_policy",
         "cobblemon:weakness_policy",
         "cobblemon:cleanse_tag",
-        "cobblemon:spell_tag"
+        "cobblemon:spell_tag",
+        "cobblemon:ring_target"
     ]
 }

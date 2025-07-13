@@ -36,6 +36,7 @@
         "cobblemon:hard_stone",
 		
         "cobblemon:blunder_policy",
-        "cobblemon:weakness_policy"
+        "cobblemon:weakness_policy",
+        "cobblemon:ring_target"
     ]
 }

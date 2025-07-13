@@ -1059,7 +1059,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val RED_CARD = heldItem("red_card")
     @JvmField
-    val RING_TARGET = heldItem("ring_target")
+    val RING_TARGET = itemNameBlockItem("ring_target", CobblemonBlocks.RING_TARGET)
     @JvmField
     val ROOM_SERVICE = heldItem("room_service")
     @JvmField

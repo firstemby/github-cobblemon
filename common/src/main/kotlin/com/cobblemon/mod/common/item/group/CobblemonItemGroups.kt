@@ -430,6 +430,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.TOXIC_ORB)
         entries.accept(CobblemonItems.IRON_BALL)
         entries.accept(CobblemonItems.HARD_STONE)
+        entries.accept(CobblemonItems.RING_TARGET)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

@@ -3,7 +3,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "cobblemon:block/decorative_items/galarica_wreath",
-		"particle": "cobblemon:block/galarica_nut_bush_stage3"
+		"particle": "cobblemon:block/crops/galarica_nut_bush_stage3"
 	},
 	"elements": [
 		{

@@ -530,6 +530,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val IRON_BALL = create("iron_ball", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion().strength(5f), ItemType.GENERIC_8x)) //TODO Determine whether this should be a falling block with damage source - Idea is solid, but the damage bit is concerning to get working, so leaving it as a maybe for now
     @JvmField
     val HARD_STONE = create("hard_stone", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.STONE).mapColor(MapColor.NONE).noOcclusion().strength(0.5f), ItemType.GENERIC_8x))
+    @JvmField
+    val RING_TARGET = create("ring_target", WallAttachedTargetBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().strength(0.5f))) //TODO Make it work as a Target block
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))
