@@ -24,7 +24,8 @@
 	"display": {
 		"ground": {
 			"rotation": [67.5, 0, 0],
-			"translation": [0, 1.75, -3]
+			"translation": [0, 1.75, -3],
+			"scale": [0.9875, 0.9875, 0.9875]
 		}
 	}
 }
