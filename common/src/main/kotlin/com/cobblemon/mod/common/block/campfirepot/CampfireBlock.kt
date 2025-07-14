@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.util.toVec3d
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
@@ -165,7 +166,9 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
         val potItem = blockEntity.getPotItem()
 
         if (!byWater && player != null) {
-            player.setItemInHand(InteractionHand.MAIN_HAND, potItem)
+            if (!player.isCreative && potItem != null) {
+                player.setItemInHand(InteractionHand.MAIN_HAND, potItem)
+            }
         } else {
             val direction = blockState.getValue(FACING) as Direction
             val f = 0.25F * direction.stepX.toFloat()
@@ -267,35 +270,6 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
         }
     }
 
-    override fun playerWillDestroy(level: Level, blockPos: BlockPos, blockState: BlockState, player: Player): BlockState {
-        if (!level.isClientSide) {
-            val blockEntity = level.getBlockEntity(blockPos)
-            if (blockEntity is CampfireBlockEntity && !player.isCreative) {
-                Containers.dropContents(level, blockPos, blockEntity)
-                val potItem = blockEntity.getPotItem() ?: ItemStack.EMPTY
-
-                if (!potItem.isEmpty) {
-                    val direction = blockState.getValue(FACING) as Direction
-                    val f = 0.25F * direction.stepX.toFloat()
-                    val g = 0.25F * direction.stepZ.toFloat()
-
-                    val itemEntity = ItemEntity(level, blockPos.x.toDouble() + 0.5 + f.toDouble(), (blockPos.y + 1).toDouble(), blockPos.z.toDouble() + 0.5 + g.toDouble(), potItem)
-                    itemEntity.setDefaultPickUpDelay()
-
-                    level.addFreshEntity(itemEntity)
-                }
-            }
-
-            level.playSoundServer(
-                position = blockPos.toVec3d(),
-                sound = CobblemonSounds.CAMPFIRE_POT_OPEN,
-                volume = 0.25F
-            )
-        }
-
-        return super.playerWillDestroy(level, blockPos, blockState, player)
-    }
-
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
         return if (state.getValue(SOUL)) ItemStack(Blocks.SOUL_CAMPFIRE) else ItemStack(Blocks.CAMPFIRE)
     }
@@ -320,5 +294,39 @@ class CampfireBlock(settings: Properties) : BaseEntityBlock(settings), SimpleWat
 
     override fun isSignalSource(state: BlockState): Boolean {
         return true
+    }
+
+    override fun onRemove(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        newState: BlockState,
+        movedByPiston: Boolean
+    ) {
+        if (!state.`is`(newState.block)) {
+            val blockEntity = level.getBlockEntity(pos)
+            if (blockEntity is CampfireBlockEntity) {
+                if (level is ServerLevel) {
+                    Containers.dropContents(level, pos, blockEntity)
+                    val potItem = blockEntity.getPotItem() ?: ItemStack.EMPTY
+
+                    if (!potItem.isEmpty) {
+                        val direction = state.getValue(FACING) as Direction
+                        val f = 0.25F * direction.stepX.toFloat()
+                        val g = 0.25F * direction.stepZ.toFloat()
+
+                        val itemEntity = ItemEntity(level, pos.x.toDouble() + 0.5 + f.toDouble(), (pos.y + 1).toDouble(), pos.z.toDouble() + 0.5 + g.toDouble(), potItem)
+                        itemEntity.setDefaultPickUpDelay()
+
+                        level.addFreshEntity(itemEntity)
+                    }
+                }
+
+                super.onRemove(state, level, pos, newState, movedByPiston)
+                level.updateNeighbourForOutputSignal(pos, this)
+            } else {
+                super.onRemove(state, level, pos, newState, movedByPiston)
+            }
+        }
     }
 }

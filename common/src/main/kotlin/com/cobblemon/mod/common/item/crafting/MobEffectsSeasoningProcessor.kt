@@ -29,4 +29,9 @@ object MobEffectSeasoningProcessor : SeasoningProcessor {
             result.set(CobblemonItemComponents.MOB_EFFECTS, MobEffectsComponent(mergedEffects))
         }
     }
+
+    override fun consumesItem(seasoning: ItemStack): Boolean {
+        val seasoningData = Seasonings.getFromItemStack(seasoning)
+        return seasoningData?.mobEffects != null
+    }
 }

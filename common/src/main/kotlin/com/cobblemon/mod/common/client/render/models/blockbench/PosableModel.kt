@@ -742,6 +742,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
             scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            // If scale is 0 we start getting NaNs
+            scale.coerceAtLeast(0.01f)
             if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
                 && (entity.controllingPassenger as OrientationControllable).orientationController.active){
                 val controllingPassenger = entity.controllingPassenger as OrientationControllable

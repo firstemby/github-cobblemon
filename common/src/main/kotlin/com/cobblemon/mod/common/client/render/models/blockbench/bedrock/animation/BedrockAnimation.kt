@@ -85,7 +85,7 @@ class BedrockParticleKeyframe(
         val storm = ParticleStorm(
             effect = effect,
             emitterSpaceMatrix = particleMatrix,
-            locatorSpaceMatrix = locatorMatrix,
+            attachedMatrix = locatorMatrix,
             world = world,
             runtime = particleRuntime,
             sourceVelocity = { entity.deltaMovement },

@@ -100,7 +100,7 @@ class ParticleEvent(
 
             val locatorMatrix = when (effect.type) {
                 EventParticleOptions.EventParticleType.EMITTER -> particleMatrix
-                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.locatorSpaceMatrix
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.attachedMatrix
                 EventParticleOptions.EventParticleType.PARTICLE,
                 EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> particleMatrix
             }
@@ -121,7 +121,7 @@ class ParticleEvent(
             val newStorm = ParticleStorm(
                 effect = bedrockParticleOptions,
                 emitterSpaceMatrix = particleMatrix,
-                locatorSpaceMatrix = locatorMatrix,
+                attachedMatrix = locatorMatrix,
                 world = storm.world,
                 sourceVelocity = sourceVelocity,
                 sourceAlive = storm.sourceAlive,

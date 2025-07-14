@@ -14,6 +14,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.snowstorm.AttachedType
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.api.snowstorm.ParticleEmitterAction
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
@@ -33,6 +34,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
+import org.joml.AxisAngle4f
+import org.joml.Vector3f
 import org.joml.Vector4f
 
 /**
@@ -44,11 +47,7 @@ import org.joml.Vector4f
 class ParticleStorm(
     val effect: BedrockParticleOptions,
     val emitterSpaceMatrix: MatrixWrapper,
-    //This is a mildly inaccurate name. This matrix is basically the matrix we want to peg our movement to.
-    //Often times, this is the locator matrix, but sometimes, when we want the emitter to NOT track the locator, this value is the same obj as emitterSpaceMatrix.
-    //Currently only position is tracked. Ideally we would come up with a way to configure whether the emitter tracks any combination of position/rotation (or neither)
-    //on this matrix.
-    val locatorSpaceMatrix: MatrixWrapper,
+    val attachedMatrix: MatrixWrapper, // Can be the same as emitterSpaceMatrix
     val world: ClientLevel,
     val sourceVelocity: () -> Vec3 = { Vec3.ZERO },
     val sourceAlive: () -> Boolean = { true },
@@ -173,7 +172,7 @@ class ParticleStorm(
                     ParticleStorm(
                         effect = effect,
                         emitterSpaceMatrix = matrixWrapper,
-                        locatorSpaceMatrix = matrixWrapper,
+                        attachedMatrix = matrixWrapper,
                         world = world,
                         runtime = particleRuntime,
                         sourceVelocity = { entity.deltaMovement },
@@ -191,7 +190,7 @@ class ParticleStorm(
                     ParticleStorm(
                         effect = effect,
                         emitterSpaceMatrix = matrixWrapper,
-                        locatorSpaceMatrix = matrixWrapper,
+                        attachedMatrix = matrixWrapper,
                         world = world,
                         runtime = particleRuntime,
                         sourceVelocity = { entity.deltaMovement },
@@ -247,7 +246,7 @@ class ParticleStorm(
             return
         }
 
-        val pos = locatorSpaceMatrix.getOrigin()
+        val pos = attachedMatrix.getOrigin()
         xo = x
         yo = y
         zo = z
@@ -256,8 +255,38 @@ class ParticleStorm(
         y = pos.y
         z = pos.z
 
-        //Keeps emitter attached to locator
-        emitterSpaceMatrix.updatePosition(locatorSpaceMatrix.getOrigin())
+        if (emitterSpaceMatrix != attachedMatrix){
+            val attachmentOptions = effect.emitter.shape.getAttachmentOptions()
+            //Keeps emitter attached to locator based on the settings
+            if (attachmentOptions[AttachedType.POSITION] == true){
+                emitterSpaceMatrix.updatePosition(attachedMatrix.getOrigin())
+            }
+
+            val setRotation = attachmentOptions[AttachedType.ROTATION] == true
+            val setScale = attachmentOptions[AttachedType.SCALE] == true
+            if (setRotation || setScale){
+                val translation = emitterSpaceMatrix.matrix.getTranslation(Vector3f())
+                val rotation = if (setRotation){
+                    attachedMatrix.matrix.getRotation(AxisAngle4f())
+                } else {
+                    emitterSpaceMatrix.matrix.getRotation(AxisAngle4f())
+                }
+                val scale = if (setScale) {
+                    attachedMatrix.matrix.getScale(Vector3f())
+                } else {
+                    emitterSpaceMatrix.matrix.getScale(Vector3f())
+                }
+                // If any value is zero we get NaNs, so default to a large enough value to be safe
+                scale.x.coerceAtLeast(0.01f)
+                scale.y.coerceAtLeast(0.01f)
+                scale.z.coerceAtLeast(0.01f)
+
+                emitterSpaceMatrix.matrix.identity()
+                    .translate(translation)
+                    .rotate(rotation)
+                    .scale(scale)
+            }
+        }
 
         val oldDistanceTravelled = distanceTravelled
         distanceTravelled += Vec3(x - xo, y - yo, z - zo).length().toFloat()
@@ -292,12 +321,22 @@ class ParticleStorm(
         runtime.environment.setSimpleVariable("particle_random_3", DoubleValue(Random.Default.nextDouble()))
         runtime.environment.setSimpleVariable("particle_random_4", DoubleValue(Random.Default.nextDouble()))
 
-        val newPosition = transformPosition(effect.emitter.shape.getNewParticlePosition(runtime, entity))
+        val pos = effect.emitter.shape.getNewParticlePosition(runtime, entity)
+        val newPosition = if (effect.emitter.shape.getAttachmentOptions()[AttachedType.SCALE] == true) {
+            transformPosition(pos)
+        } else {
+            transformPositionWithoutScale(pos)
+        }
         return newPosition
     }
 
     fun getNextParticleVelocity(nextParticlePosition: Vec3): Vec3 {
-        val center = transformPosition(effect.emitter.shape.getCenter(runtime, entity))
+        val pos = effect.emitter.shape.getCenter(runtime, entity)
+        val center = if (effect.emitter.shape.getAttachmentOptions()[AttachedType.SCALE] == true) {
+            transformPosition(pos)
+        } else {
+            transformPositionWithoutScale(pos)
+        }
         val initialVelocity = effect.particle.motion.getInitialVelocity(runtime, storm = this, particlePos = nextParticlePosition, emitterPos = center)
         return initialVelocity
             .scale(1 / 20.0)
@@ -311,6 +350,14 @@ class ParticleStorm(
         contextStorm = this
         world.addParticle(particleEffect, newPosition.x, newPosition.y, newPosition.z, velocity.x, velocity.y, velocity.z)
         contextStorm = null
+    }
+
+    // Sometimes we need to transform without scale, IE just rotation and position.
+    fun transformPositionWithoutScale(position: Vec3): Vec3 {
+        val matrixWrapper = emitterSpaceMatrix.clone()
+        val scale = matrixWrapper.matrix.getScale(Vector3f())
+        matrixWrapper.matrix.scale(1 / scale.x, 1 / scale.y, 1 / scale.z)
+        return matrixWrapper.transformPosition(position)
     }
 
     fun transformPosition(position: Vec3): Vec3 = emitterSpaceMatrix.transformPosition(position)

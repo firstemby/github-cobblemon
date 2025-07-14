@@ -19,9 +19,14 @@ object FoodColourSeasoningProcessor : SeasoningProcessor {
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
         val colours = mutableListOf<DyeColor>()
         for (seasoningStack in seasoning) {
-            val seasoning = Seasonings.getFromItemStack(seasoningStack)
-            seasoning?.colour?.run(colours::add)
+            val seasoningData = Seasonings.getFromItemStack(seasoningStack)
+            seasoningData?.colour?.run(colours::add)
         }
         result.set(CobblemonItemComponents.FOOD_COLOUR, FoodColourComponent(colours))
+    }
+
+    override fun consumesItem(seasoning: ItemStack): Boolean {
+        val seasoningData = Seasonings.getFromItemStack(seasoning)
+        return seasoningData != null
     }
 }

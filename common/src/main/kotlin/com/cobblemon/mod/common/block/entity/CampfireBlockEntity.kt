@@ -143,7 +143,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 return optional.map { it as RecipeHolder<CookingPotRecipeBase> }
             }
 
-            // Check for both COOKING_POT_COOKING and COOKING_POT_SHAPELESS recipes
+            // Check for all Cooking Pot Recipe Types recipes
             val optionalRecipe = fetchRecipe(CobblemonRecipeTypes.COOKING_POT_COOKING)
                 .orElseGet { fetchRecipe(CobblemonRecipeTypes.COOKING_POT_SHAPELESS).orElse(null) }
 
@@ -191,7 +191,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                         resultSlotItem.grow(cookedItem.count)
                     }
 
-                    campfireBlockEntity.consumeCraftingIngredients()
+                    campfireBlockEntity.consumeCraftingIngredients(recipe)
 
                     level.playSoundServer(
                         position = pos.bottomCenter,
@@ -270,21 +270,21 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
         return particleStorm
     }
 
-    fun consumeCraftingIngredients() {
-        for (i in CRAFTING_GRID_SLOTS.first..SEASONING_SLOTS.last) {
-            val itemInSlot = getItem(i)
+    fun consumeCraftingIngredients(recipe: CookingPotRecipeBase) {
+        fun consumeItem(slot: Int) {
+            val itemInSlot = getItem(slot)
             if (!itemInSlot.isEmpty) {
                 when (itemInSlot.item) {
                     Items.LAVA_BUCKET, Items.WATER_BUCKET, Items.MILK_BUCKET -> {
                         // Replace with empty bucket
-                        setItem(i, ItemStack(Items.BUCKET))
+                        setItem(slot, ItemStack(Items.BUCKET))
                     }
 
                     Items.HONEY_BOTTLE -> {
                         // TODO: Currently eats the empty bottles until the honey bottle stack is empty, replace with better system later.
                         itemInSlot.shrink(1)
                         if (itemInSlot.count <= 0) {
-                            setItem(i, ItemStack.EMPTY)
+                            setItem(slot, ItemStack.EMPTY)
                         }
                     }
 
@@ -292,11 +292,18 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                         // Decrease the stack size by 1
                         itemInSlot.shrink(1)
                         if (itemInSlot.count <= 0) {
-                            setItem(i, ItemStack.EMPTY) // Clear the slot if empty
+                            setItem(slot, ItemStack.EMPTY) // Clear the slot if empty
                         }
                     }
                 }
             }
+        }
+
+        for (i in CRAFTING_GRID_SLOTS.first..CRAFTING_GRID_SLOTS.last) {
+            consumeItem(i)
+        }
+        for (i in SEASONING_SLOTS.first..SEASONING_SLOTS.last) {
+            if (recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
         }
     }
 

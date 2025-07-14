@@ -45,7 +45,6 @@ import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.commands.arguments.item.ItemParser
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -359,7 +358,7 @@ abstract class PosableState : Schedulable {
                         effect = effect,
                         entity = entity,
                         emitterSpaceMatrix = particleMatrix,
-                        locatorSpaceMatrix = locatorMatrix,
+                        attachedMatrix = locatorMatrix,
                         world = world,
                         runtime = particleRuntime,
                         sourceVelocity = { entity.deltaMovement },

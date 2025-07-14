@@ -115,7 +115,7 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
             @Suppress("UNCHECKED_CAST")
             val castedRecipe = recipe as RecipeHolder<CookingPotRecipeBase>
 
-            // Save seasoning contents in case the next recipe absorbs seasoning data
+            // Save seasoning contents
             val seasoningSlots = CampfireBlockEntity.SEASONING_SLOTS
             val preservedSeasonings = seasoningSlots.map { container.getItem(it).copy() }
 
@@ -127,14 +127,9 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
                 this.finishPlacingRecipe(castedRecipe)
             }
 
-            // Check if new result item supports seasoning
-            val result = castedRecipe.value().result
-            if (itemTakesSeasoningData(result)) {
-                seasoningSlots.forEachIndexed { index, slot ->
-                    container.setItem(slot, preservedSeasonings[index])
-                }
+            seasoningSlots.forEachIndexed { index, slot ->
+                container.setItem(slot, preservedSeasonings[index])
             }
-
         } else {
             throw IllegalArgumentException("Unsupported recipe type: ${recipeValue::class.java.name}")
         }
@@ -192,7 +187,7 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
     }
 
     override fun shouldMoveToInventory(slotIndex: Int): Boolean {
-        return slotIndex != CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
+        return slotIndex != CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT && !CampfireBlockEntity.SEASONING_SLOTS.contains(slotIndex)
     }
 
     override fun quickMoveStack(

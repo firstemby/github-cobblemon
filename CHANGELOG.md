@@ -33,6 +33,7 @@
 - Added Galarica Nut Bushes
 - Many Pokémon (mostly cats) are now feared by phantoms
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
+- Added new optional property `attachment_options` for most EmitterShapes to be attached to the locator/entities scale, rotation, and/or position. Position is true by default.
 
 ### Pokémon Added
 
@@ -229,6 +230,7 @@
 - Vivichokes now always drop one seed when harvested, and converting a fully grown Vivichoke to seeds via crafting results in 1 seed.
 - Healing Machine recipe rebalanced.
 - Reorganised the `block` texture folder to be more organised, in line with the `item` texture folder.
+- Offset in EmitterShape now ignores scale to be more like Blockbench by default. You can get this behaviour back by adding `"scale": true` in the `attachment_options` property in most EmitterShapes.
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
