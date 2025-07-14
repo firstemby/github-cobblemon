@@ -16,15 +16,13 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock
-import net.minecraft.world.level.block.SimpleWaterloggedBlock
+import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.AttachFace
@@ -212,8 +210,18 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
         }
     }
 
-    fun checkPressed(state: BlockState, level: Level, pos: BlockPos) {
-        if (state.getValue(POWERED)) {
+    protected fun checkPressed(state: BlockState, level: Level, pos: BlockPos) {
+        val abstractArrow = null
+        val bl = false
+        val bl2 = state.getValue(POWERED) as Boolean
+        if (bl != bl2) {
+            level.setBlock(pos, state.setValue(POWERED, bl) as BlockState, 3)
+            this.updateNeighbours(state, level, pos)
+            //this.playSound(null as Player?, level, pos, bl)
+            level.gameEvent(abstractArrow, if (bl) GameEvent.BLOCK_ACTIVATE else GameEvent.BLOCK_DEACTIVATE, pos)
+        }
+
+        if (bl) {
             level.scheduleTick(BlockPos(pos), this, this.ticksToStayPressed)
         }
     }
