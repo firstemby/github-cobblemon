@@ -981,7 +981,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField
-    val EJECT_BUTTON = heldItem("eject_button")
+    val EJECT_BUTTON = itemNameBlockItem("eject_button", CobblemonBlocks.EJECT_BUTTON)
     @JvmField
     val EJECT_PACK = heldItem("eject_pack")
     @JvmField
