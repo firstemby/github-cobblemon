@@ -1,8 +1,9 @@
 {
   "type": "choice",
   "keys": ["metals"],
-  "default": "false",
+  "default": "none",
   "choices": [
+    "none",
     "copper",
     "iron",
     "gold",
