@@ -148,25 +148,17 @@
 			}
 		},
 		{
-			"name": "chain",
-			"from": [8, 14, 6.5],
-			"to": [8, 16, 9.5],
-			"shade": false,
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+			"name": "cube inverted",
+			"from": [13.25, 13.25, 9.75],
+			"to": [2.75, 2.75, 6.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 12.5, 8]},
 			"faces": {
-				"east": {"uv": [14.5, 5, 16, 6], "texture": "#0"},
-				"west": {"uv": [16, 5, 14.5, 6], "texture": "#0"}
-			}
-		},
-		{
-			"name": "chain",
-			"from": [6.5, 13, 8],
-			"to": [9.5, 15, 8],
-			"shade": false,
-			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
-			"faces": {
-				"north": {"uv": [16, 2.5, 14.5, 3.5], "texture": "#0"},
-				"south": {"uv": [14.5, 2.5, 16, 3.5], "texture": "#0"}
+				"north": {"uv": [5, 5, 0, 10], "texture": "#0"},
+				"east": {"uv": [15, 10, 10, 11.5], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [10, 10, 5, 5], "rotation": 180, "texture": "#0"},
+				"west": {"uv": [5, 10, 0, 11.5], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [15, 8.5, 10, 10], "texture": "#0"},
+				"down": {"uv": [10, 10, 5, 11.5], "rotation": 180, "texture": "#0"}
 			}
 		}
 	],
@@ -182,13 +174,7 @@
 			"name": "wreath",
 			"origin": [8, 6.42678, 13],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-		},
-		{
-			"name": "chain",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"children": [13, 14]
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 		}
 	]
 }

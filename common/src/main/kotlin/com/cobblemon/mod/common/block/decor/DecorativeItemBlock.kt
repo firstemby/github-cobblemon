@@ -160,8 +160,8 @@ class DecorativeItemBlock(settings: Properties, val itemType: ItemType) : Block(
             Shapes.box(0.3125, 0.0, 0.375, 0.375, 0.25, 0.6875)
         )
         private val MOSS = Shapes.or(
-            Shapes.box(0.1875, 0.0, 0.1875, 0.8125, 0.3125, 0.8125),
-            Shapes.box(0.25, 0.3125, 0.25, 0.75, 0.5625, 0.75)
+            Shapes.box(0.25, 0.0, 0.25, 0.75, 0.25, 0.75),
+            Shapes.box(0.3125, 0.25, 0.3125, 0.6875, 0.4375, 0.6875)
         )
         val KNOT_NORTH = Shapes.box(0.375, 0.0, 0.375, 0.75, 0.375, 0.75)
         val KNOT_WEST = Shapes.box(0.375, 0.0, 0.25, 0.75, 0.375, 0.625)

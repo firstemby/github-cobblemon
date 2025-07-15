@@ -1,46 +1,129 @@
 {
-    "variants": {
-        "face=ceiling,facing=east": {
-            "model": "cobblemon:block/galarica_wreath_ceiling_east"
-        },
-        "face=ceiling,facing=north": {
-            "model": "cobblemon:block/galarica_wreath_ceiling_north"
-        },
-        "face=ceiling,facing=south": {
-            "model": "cobblemon:block/galarica_wreath_ceiling_south"
-        },
-        "face=ceiling,facing=west": {
-            "model": "cobblemon:block/galarica_wreath_ceiling_west"
-        },
-        "face=floor,facing=east": {
-            "model": "cobblemon:block/galarica_wreath_floor",
-            "y": 90
-        },
-        "face=floor,facing=north": {
-            "model": "cobblemon:block/galarica_wreath_floor"
-        },
-        "face=floor,facing=south": {
-            "model": "cobblemon:block/galarica_wreath_floor",
-            "y": 180
-        },
-        "face=floor,facing=west": {
-            "model": "cobblemon:block/galarica_wreath_floor",
-            "y": 270
-        },
-        "face=wall,facing=east": {
-            "model": "cobblemon:block/galarica_wreath_wall",
-            "y": 90
-        },
-        "face=wall,facing=north": {
-            "model": "cobblemon:block/galarica_wreath_wall"
-        },
-        "face=wall,facing=south": {
-            "model": "cobblemon:block/galarica_wreath_wall",
-            "y": 180
-        },
-        "face=wall,facing=west": {
-            "model": "cobblemon:block/galarica_wreath_wall",
-            "y": 270
-        }
+  "multipart": [
+    {
+      "when": {
+        "face": "ceiling"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_chain"
+      }
+    },
+    {
+      "when": {
+        "face": "ceiling",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_ceiling",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "face": "ceiling",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_ceiling"
+      }
+    },
+    {
+      "when": {
+        "face": "ceiling",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_ceiling",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "face": "ceiling",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_ceiling",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "face": "floor",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_floor",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "face": "floor",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_floor"
+      }
+    },
+    {
+      "when": {
+        "face": "floor",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_floor",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "face": "floor",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_floor",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "face": "wall",
+        "facing": "east"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_wall",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "face": "wall",
+        "facing": "north"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_wall"
+      }
+    },
+    {
+      "when": {
+        "face": "wall",
+        "facing": "south"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_wall",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "face": "wall",
+        "facing": "west"
+      },
+      "apply": {
+        "model": "cobblemon:block/galarica_wreath_wall",
+        "y": 270
+      }
     }
+  ]
 }

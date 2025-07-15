@@ -16,7 +16,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.entity.projectile.AbstractArrow
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -112,6 +111,30 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
             }
 
             AttachFace.CEILING ->  return if (state.getValue(POWERED)) {CEILING_POWERED} else {CEILING_UNPOWERED}
+        }
+    }
+
+    override fun getCollisionShape(
+        state: BlockState,
+        level: BlockGetter,
+        pos: BlockPos,
+        context: CollisionContext
+    ): VoxelShape {
+        val direction = state.getValue(FACING)
+        return when (state.getValue(FACE)) {
+            AttachFace.FLOOR -> {FLOOR_PANEL}
+
+            AttachFace.WALL -> {
+                when (direction) {
+                    Direction.EAST  -> {EAST_WALL_PANEL}
+                    Direction.WEST -> {WEST_WALL_PANEL}
+                    Direction.SOUTH -> {SOUTH_WALL_PANEL}
+                    Direction.NORTH -> {NORTH_WALL_PANEL}
+                    else -> {FLOOR_PANEL}
+                }
+            }
+
+            AttachFace.CEILING -> {CEILING_PANEL}
         }
     }
 
@@ -239,12 +262,14 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
         val FLOOR_POWERED = Shapes.or(
             Shapes.box(0.125, 0.0, 0.125, 0.875, 0.1875, 0.875),
             Shapes.box(0.375, 0.1875, 0.375, 0.625, 0.25, 0.625) )
+        val FLOOR_PANEL = Shapes.box(0.125, 0.0, 0.125, 0.875, 0.1875, 0.875)
         val CEILING_UNPOWERED = Shapes.or(
             Shapes.box(0.125, 0.8125, 0.125, 0.875, 1.0, 0.875),
             Shapes.box(0.375, 0.6875, 0.375, 0.625, 0.8125, 0.625) )
         val CEILING_POWERED = Shapes.or(
             Shapes.box(0.125, 0.8125, 0.125, 0.875, 1.0, 0.875),
             Shapes.box(0.375, 0.75, 0.375, 0.625, 0.8125, 0.625) )
+        val CEILING_PANEL = Shapes.box(0.125, 0.8125, 0.125, 0.875, 1.0, 0.875)
 
         val EAST_WALL_UNPOWERED = Shapes.or(
             Shapes.box(0.0, 0.125, 0.125, 0.1875, 0.875, 0.875),
@@ -252,23 +277,27 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
         val EAST_WALL_POWERED = Shapes.or(
             Shapes.box(0.0, 0.125, 0.125, 0.1875, 0.875, 0.875),
             Shapes.box(0.1875, 0.375, 0.375, 0.25, 0.625, 0.625) )
+        val EAST_WALL_PANEL = Shapes.box(0.0, 0.125, 0.125, 0.1875, 0.875, 0.875)
         val WEST_WALL_UNPOWERED = Shapes.or(
             Shapes.box(0.8125, 0.125, 0.125, 1.0, 0.875, 0.875),
             Shapes.box(0.6875, 0.375, 0.375, 0.8125, 0.625, 0.625) )
         val WEST_WALL_POWERED = Shapes.or(
             Shapes.box(0.8125, 0.125, 0.125, 1.0, 0.875, 0.875),
             Shapes.box(0.75, 0.375, 0.375, 0.8125, 0.625, 0.625) )
+        val WEST_WALL_PANEL = Shapes.box(0.8125, 0.125, 0.125, 1.0, 0.875, 0.875)
         val NORTH_WALL_UNPOWERED = Shapes.or(
             Shapes.box(0.125, 0.125, 0.8125, 0.875, 0.875, 1.0),
             Shapes.box(0.375, 0.375, 0.6875, 0.625, 0.625, 0.8125) )
         val NORTH_WALL_POWERED = Shapes.or(
             Shapes.box(0.125, 0.125, 0.8125, 0.875, 0.875, 1.0),
             Shapes.box(0.375, 0.375, 0.75, 0.625, 0.625, 0.8125) )
+        val NORTH_WALL_PANEL = Shapes.box(0.125, 0.125, 0.8125, 0.875, 0.875, 1.0)
         val SOUTH_WALL_UNPOWERED = Shapes.or(
             Shapes.box(0.125, 0.125, 0.0, 0.875, 0.875, 0.1875),
             Shapes.box(0.375, 0.375, 0.1875, 0.625, 0.625, 0.3125) )
         val SOUTH_WALL_POWERED = Shapes.or(
             Shapes.box(0.125, 0.125, 0.0, 0.875, 0.875, 0.1875),
             Shapes.box(0.375, 0.375, 0.1875, 0.625, 0.625, 0.25) )
+        val SOUTH_WALL_PANEL = Shapes.box(0.125, 0.125, 0.0, 0.875, 0.875, 0.1875)
     }
 }

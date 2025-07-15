@@ -126,6 +126,20 @@
 				"north": {"uv": [11.5, 5.5, 13, 7.5], "texture": "#0"},
 				"south": {"uv": [10, 5.5, 11.5, 7.5], "texture": "#0"}
 			}
+		},
+		{
+			"name": "cube inverted",
+			"from": [13.25, 13.25, 16.25],
+			"to": [2.75, 2.75, 12.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 14.5]},
+			"faces": {
+				"north": {"uv": [5, 5, 0, 10], "texture": "#0"},
+				"east": {"uv": [15, 10, 10, 11.5], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [10, 10, 5, 5], "rotation": 180, "texture": "#0"},
+				"west": {"uv": [5, 10, 0, 11.5], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [15, 8.5, 10, 10], "texture": "#0"},
+				"down": {"uv": [10, 10, 5, 11.5], "rotation": 180, "texture": "#0"}
+			}
 		}
 	],
 	"gui_light": "front",
