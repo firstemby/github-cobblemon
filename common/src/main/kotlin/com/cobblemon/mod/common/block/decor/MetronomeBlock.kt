@@ -10,6 +10,9 @@ package com.cobblemon.mod.common.block.decor
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -98,6 +101,14 @@ class MetronomeBlock(settings: Properties) : Block(settings), SimpleWaterloggedB
             state = state.cycle(ACTIVE)
             level.setBlock(pos!!, state, 3)
             level.gameEvent(player, if (state.getValue(ACTIVE)) GameEvent.BLOCK_ACTIVATE else GameEvent.BLOCK_DEACTIVATE, pos)
+        }
+
+        override fun hasAnalogOutputSignal(state: BlockState): Boolean {
+            return true
+        }
+
+        override fun getAnalogOutputSignal(state: BlockState, level: Level, pos: BlockPos): Int {
+            return if (level.getBlockState(pos).getValue(ACTIVE) as Boolean) 4 else 0
         }
 
         override fun getFluidState(blockState: BlockState): FluidState? {

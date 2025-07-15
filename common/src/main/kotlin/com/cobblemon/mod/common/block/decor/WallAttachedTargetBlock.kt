@@ -20,7 +20,9 @@ import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
+import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathComputationType
@@ -29,11 +31,12 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 @Suppress("DEPRECATED", "OVERRIDE_DEPRECATION")
-class WallAttachedTargetBlock(settings: Properties) : Block(settings), SimpleWaterloggedBlock {
+class WallAttachedTargetBlock(settings: Properties) : TargetBlock(settings), SimpleWaterloggedBlock {
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
-            .setValue(WATERLOGGED, false))
+            .setValue(WATERLOGGED, false)
+            .setValue(OUTPUT_POWER, 0))
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
@@ -59,6 +62,7 @@ class WallAttachedTargetBlock(settings: Properties) : Block(settings), SimpleWat
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
         builder.add(WATERLOGGED)
+        builder.add(*arrayOf<Property<*>>(OUTPUT_POWER))
     }
 
     override fun getShape(
@@ -111,6 +115,8 @@ class WallAttachedTargetBlock(settings: Properties) : Block(settings), SimpleWat
             it.group(
                 propertiesCodec()
         ).apply(it, ::WallAttachedTargetBlock) }
+
+        val OUTPUT_POWER = BlockStateProperties.POWER;
 
         val FULL_PLANE_NORTH = Shapes.box(0.0, 0.0, 0.925, 1.0, 1.0, 1.0)
         val FULL_PLANE_WEST = Shapes.box(0.925, 0.0, 0.0, 1.0, 1.0, 1.0)
