@@ -42,6 +42,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
     @Suppress("unused")
     enum class StackableItemType : StringRepresentable {
         UPGRADE,
+        METAL_COAT,
         POTION,
         GENERIC_8x;
 
@@ -81,39 +82,55 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         collisionContext: CollisionContext
     ): VoxelShape {
         return when (stackableItemType) {
-            StackableItemType.UPGRADE -> return when (state.getValue(ITEMS)) {
-                2 -> UPGRADE_DOUBLE
-                3 -> UPGRADE_TRIPLE
-                4 -> UPGRADE_QUARTET
-                else -> UPGRADE_SINGLE
-            }
-            StackableItemType.POTION -> return when (state.getValue(ITEMS)) {
-                2 -> when (state.getValue(FACING)) {
-                    Direction.WEST, Direction.EAST -> ITEM_8x16
-                    else -> ITEM_16x8
+            StackableItemType.UPGRADE -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> UPGRADE_DOUBLE
+                    3 -> UPGRADE_TRIPLE
+                    4 -> UPGRADE_QUARTET
+                    else -> UPGRADE_SINGLE
                 }
-                3 -> when (state.getValue(FACING)) {
-                    Direction.SOUTH -> TRIANGLE_SOUTH
-                    Direction.WEST -> TRIANGLE_WEST
-                    Direction.EAST -> TRIANGLE_EAST
-                    else -> TRIANGLE_NORTH
-                }
-                4 -> ITEM_16xS
-                else -> ITEM_8x
             }
 
-            else -> return when (state.getValue(ITEMS)) {
-                1 -> ITEM_8x
-                2 -> ITEM_8x
-                3 -> ITEM_8x
-                4 -> when (state.getValue(FACING)) {
-                    Direction.SOUTH -> ITEM_8x
-                    Direction.WEST -> ITEM_8x
-                    Direction.EAST -> ITEM_8x
+            StackableItemType.METAL_COAT -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> METAL_DOUBLE_EW
+                        else -> METAL_DOUBLE_NS
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> METAL_TRIPLE_S
+                        Direction.WEST -> METAL_TRIPLE_W
+                        Direction.EAST -> METAL_TRIPLE_E
+                        else -> METAL_TRIPLE_N
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> METAL_QUARTET_EW
+                        else -> METAL_QUARTET_NS
+                    }
+                    else -> METAL_SINGLE
+                }
+            }
+
+            StackableItemType.POTION -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> ITEM_8x16
+                        else -> ITEM_16x8
+                    }
+
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> TRIANGLE_SOUTH
+                        Direction.WEST -> TRIANGLE_WEST
+                        Direction.EAST -> TRIANGLE_EAST
+                        else -> TRIANGLE_NORTH
+                    }
+
+                    4 -> ITEM_16xS
                     else -> ITEM_8x
                 }
-                else -> ITEM_8x
             }
+
+            else -> ITEM_8x
         }
     }
 
@@ -188,5 +205,47 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         val UPGRADE_DOUBLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.25, 0.6875)
         val UPGRADE_TRIPLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.375, 0.6875)
         val UPGRADE_QUARTET = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.5, 0.6875)
+
+        val METAL_SINGLE = Shapes.box(0.3125, 0.0, 0.3125, 0.6875, 0.375, 0.6875)
+        val METAL_DOUBLE_NS = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.125, 0.875, 0.375, 0.5),
+            Shapes.box(0.125, 0.0, 0.5, 0.5, 0.375, 0.875)
+        )
+        val METAL_DOUBLE_EW = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.5, 0.875, 0.375, 0.875),
+            Shapes.box(0.125, 0.0, 0.125, 0.5, 0.375, 0.5)
+        )
+        val METAL_TRIPLE_N = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.0625, 0.6875, 0.375, 0.4375),
+            Shapes.box(0.5625, 0.0, 0.5, 0.9375, 0.375, 0.875),
+            Shapes.box(0.125, 0.0, 0.5, 0.5, 0.375, 0.875)
+        )
+        val METAL_TRIPLE_E = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.3125, 0.9375, 0.375, 0.6875),
+            Shapes.box(0.125, 0.0, 0.5625, 0.5, 0.375, 0.9375),
+            Shapes.box(0.125, 0.0, 0.125, 0.5, 0.375, 0.5)
+        )
+        val METAL_TRIPLE_S = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.5625, 0.6875, 0.375, 0.9375),
+            Shapes.box(0.0625, 0.0, 0.125, 0.4375, 0.375, 0.5),
+            Shapes.box(0.5, 0.0, 0.125, 0.875, 0.375, 0.5)
+        )
+        val METAL_TRIPLE_W = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.3125, 0.4375, 0.375, 0.6875),
+            Shapes.box(0.5, 0.0, 0.0625, 0.875, 0.375, 0.4375),
+            Shapes.box(0.5, 0.0, 0.5, 0.875, 0.375, 0.875)
+        )
+        val METAL_QUARTET_NS = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.0625, 0.9375, 0.375, 0.4375),
+            Shapes.box(0.125, 0.0, 0.125, 0.5, 0.375, 0.5),
+            Shapes.box(0.5, 0.0, 0.5, 0.875, 0.375, 0.875),
+            Shapes.box(0.0625, 0.0, 0.5625, 0.4375, 0.375, 0.9375)
+        )
+        val METAL_QUARTET_EW = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.5625, 0.9375, 0.375, 0.9375),
+            Shapes.box(0.5, 0.0, 0.125, 0.875, 0.375, 0.5),
+            Shapes.box(0.125, 0.0, 0.5, 0.5, 0.375, 0.875),
+            Shapes.box(0.0625, 0.0, 0.0625, 0.4375, 0.375, 0.4375)
+        )
     }
 }

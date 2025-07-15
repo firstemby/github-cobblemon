@@ -534,6 +534,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val RING_TARGET = create("ring_target", WallAttachedTargetBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).mapColor(MapColor.NONE).noOcclusion().strength(0.5f)))
     @JvmField
     val EJECT_BUTTON = create("eject_button", EjectButtonBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).strength(1.0f).pushReaction(PushReaction.DESTROY)))
+    @JvmField
+    val METAL_COAT = create("metal_coat", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.METAL_COAT))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

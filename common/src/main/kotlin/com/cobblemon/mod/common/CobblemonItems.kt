@@ -489,7 +489,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
     @JvmField val DRAGON_SCALE = noSettingsItem("dragon_scale")
-    @JvmField val METAL_COAT = noSettingsItem("metal_coat")
+    @JvmField val METAL_COAT = itemNameBlockItem("metal_coat", CobblemonBlocks.METAL_COAT)
     @JvmField val UPGRADE = itemNameBlockItem("upgrade", CobblemonBlocks.UPGRADE)
     @JvmField val DUBIOUS_DISC = itemNameBlockItem("dubious_disc", CobblemonBlocks.DUBIOUS_DISC)
     @JvmField val DEEP_SEA_SCALE = noSettingsItem("deep_sea_scale")

@@ -9,6 +9,24 @@
         "custom_model_data": 1
       },
       "model": "cobblemon:block/upgrade_one_item"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "cobblemon:block/upgrade_two_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "cobblemon:block/upgrade_three_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "cobblemon:block/upgrade_four_items"
     }
   ]
 }
