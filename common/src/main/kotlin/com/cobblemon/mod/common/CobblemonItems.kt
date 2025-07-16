@@ -1027,7 +1027,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val LUMINOUS_MOSS = itemNameBlockItem("luminous_moss", CobblemonBlocks.LUMINOUS_MOSS)
     @JvmField
-    val MAGNET = heldItem("magnet")
+    val MAGNET = itemNameBlockItem("magnet", CobblemonBlocks.MAGNET)
     @JvmField
     val METRONOME = itemNameBlockItem("metronome", CobblemonBlocks.METRONOME)
     @JvmField

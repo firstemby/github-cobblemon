@@ -433,6 +433,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.RING_TARGET)
         entries.accept(CobblemonItems.EJECT_BUTTON)
         entries.accept(CobblemonItems.METAL_COAT)
+        entries.accept(CobblemonItems.MAGNET)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

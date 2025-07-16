@@ -20,7 +20,7 @@
 				"down": {"uv": [9, 0, 6, 6], "texture": "#0", "cullface": "down"}
 			}
 		}
-	]
+	],
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [45, 45, 0],

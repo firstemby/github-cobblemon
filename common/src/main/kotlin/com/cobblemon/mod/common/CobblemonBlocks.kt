@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.block.decor.DecorativeItemBlock.ItemType
 import com.cobblemon.mod.common.block.decor.StackableItemBlock.StackableItemType
 import com.cobblemon.mod.common.block.decor.WallAttachedDecorativeItemBlock.WallItemType
 import com.cobblemon.mod.common.block.decor.WallAttachedStackableItemBlock.WallStackableItemType
+import com.cobblemon.mod.common.block.decor.SixFaceDecorativeItemBlock.SixFaceItemType
 import com.cobblemon.mod.common.block.general.BaleBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
@@ -515,15 +516,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     @JvmField
     val QUICK_POWDER = create("quick_powder", DecorativeItemBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noOcclusion(), ItemType.POUCH))
     @JvmField
-    val LIFE_ORB = create("life_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{2}))
+    val LIFE_ORB = create("life_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{2}, SixFaceItemType.GENERIC_8x))
     @JvmField
-    val FLAME_ORB = create("flame_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{15}))
+    val FLAME_ORB = create("flame_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{15}, SixFaceItemType.GENERIC_8x))
     @JvmField
-    val TOXIC_ORB = create("toxic_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val TOXIC_ORB = create("toxic_orb", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), SixFaceItemType.GENERIC_8x))
     @JvmField
-    val LIGHT_BALL = create("light_ball", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{13}))
+    val LIGHT_BALL = create("light_ball", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{13}, SixFaceItemType.GENERIC_8x))
     @JvmField
-    val SMOKE_BALL = create("smoke_ball", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
+    val SMOKE_BALL = create("smoke_ball", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), SixFaceItemType.GENERIC_8x))
     /*@JvmField
     val SOUL_DEW = create("soul_dew", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{11}, SixFaceItemType.GENERIC_8x))*/
     @JvmField
@@ -536,6 +537,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val EJECT_BUTTON = create("eject_button", EjectButtonBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).strength(1.0f).pushReaction(PushReaction.DESTROY)))
     @JvmField
     val METAL_COAT = create("metal_coat", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.METAL_COAT))
+    @JvmField
+    val MAGNET = create("magnet", SixFaceDecorativeItemBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.NONE).noOcclusion(), SixFaceItemType.MAGNET))
 
     @JvmField
     val POTION = create("potion", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.POTION))

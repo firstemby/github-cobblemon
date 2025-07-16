@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
 @Suppress("DEPRECATED", "OVERRIDE_DEPRECATION")
-class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizontalDirectionalBlock(properties), SimpleWaterloggedBlock {
+class SixFaceDecorativeItemBlock(properties : Properties, val sixFaceItemType: SixFaceItemType) : FaceAttachedHorizontalDirectionalBlock(properties), SimpleWaterloggedBlock {
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
@@ -38,8 +38,9 @@ class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizont
             .setValue(WATERLOGGED, false))
     }
 
-/*    @Suppress("unused")
+    @Suppress("unused")
     enum class SixFaceItemType : StringRepresentable {
+        MAGNET,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -47,7 +48,7 @@ class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizont
         companion object {
             val CODEC = StringRepresentable.fromEnum(::values)
         }
-    }*/
+    }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(FACING)
@@ -97,19 +98,51 @@ class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizont
         collisionContext: CollisionContext
     ): VoxelShape {
         val direction = state.getValue(FACING)
-        return when (state.getValue(FACE)) {
-            AttachFace.FLOOR -> {
-                FLOOR_8x
-            }
-            AttachFace.WALL -> {
-                when (direction) {
-                    Direction.EAST -> EAST_WALL_8x
-                    Direction.WEST -> WEST_WALL_8x
-                    Direction.SOUTH -> SOUTH_WALL_8x
-                    Direction.NORTH, Direction.UP, Direction.DOWN -> NORTH_WALL_8x
+        return when (sixFaceItemType) {
+            SixFaceItemType.MAGNET -> {
+                when (state.getValue(FACE)) {
+                    AttachFace.FLOOR -> {
+                            when (direction) {
+                                Direction.EAST -> EAST_FLOOR_MAGNET
+                                Direction.WEST -> WEST_FLOOR_MAGNET
+                                Direction.SOUTH -> SOUTH_FLOOR_MAGNET
+                                Direction.NORTH, Direction.UP, Direction.DOWN -> NORTH_FLOOR_MAGNET
+                            }
+                    }
+                    AttachFace.WALL -> {
+                        when (direction) {
+                            Direction.EAST -> EAST_WALL_MAGNET
+                            Direction.WEST -> WEST_WALL_MAGNET
+                            Direction.SOUTH -> SOUTH_WALL_MAGNET
+                            Direction.NORTH, Direction.UP, Direction.DOWN -> NORTH_WALL_MAGNET
+                        }
+                    }
+                    AttachFace.CEILING -> {
+                        when (direction) {
+                            Direction.EAST -> EAST_CEILING_MAGNET
+                            Direction.WEST -> WEST_CEILING_MAGNET
+                            Direction.SOUTH -> SOUTH_CEILING_MAGNET
+                            Direction.NORTH, Direction.UP, Direction.DOWN -> NORTH_CEILING_MAGNET
+                        }
+                    }
                 }
             }
-            AttachFace.CEILING -> CEILING_8x
+            else -> {
+                when (state.getValue(FACE)) {
+                    AttachFace.FLOOR -> {
+                        FLOOR_8x
+                    }
+                    AttachFace.WALL -> {
+                        when (direction) {
+                            Direction.EAST -> EAST_WALL_8x
+                            Direction.WEST -> WEST_WALL_8x
+                            Direction.SOUTH -> SOUTH_WALL_8x
+                            Direction.NORTH, Direction.UP, Direction.DOWN -> NORTH_WALL_8x
+                        }
+                    }
+                    AttachFace.CEILING -> CEILING_8x
+                }
+            }
         }
     }
 
@@ -137,7 +170,8 @@ class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizont
     companion object {
         val CODEC: MapCodec<SixFaceDecorativeItemBlock> = RecordCodecBuilder.mapCodec {
             it.group(
-                propertiesCodec()
+                propertiesCodec(),
+                SixFaceItemType.CODEC.fieldOf("sixFaceItemType").forGetter(SixFaceDecorativeItemBlock::sixFaceItemType)
             ).apply(it, ::SixFaceDecorativeItemBlock) }
 
         val FLOOR_8x = Shapes.box(0.25, 0.0, 0.25, 0.75, 0.5, 0.75)
@@ -146,5 +180,56 @@ class SixFaceDecorativeItemBlock(properties : Properties) : FaceAttachedHorizont
         val NORTH_WALL_8x = Shapes.box(0.25, 0.25, 0.5, 0.75, 0.75, 1.0)
         val SOUTH_WALL_8x = Shapes.box(0.25, 0.25, 0.0, 0.75, 0.75, 0.5)
         val CEILING_8x = Shapes.box(0.25, 0.5, 0.25, 0.75, 1.0, 0.75)
+
+        val NORTH_FLOOR_MAGNET = Shapes.or(
+            Shapes.box(0.25, 0.0, 0.25, 0.4375, 0.1875, 0.5625),
+            Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.1875, 0.5625),
+            Shapes.box(0.25, 0.0, 0.5625, 0.75, 0.1875, 0.75) )
+        val EAST_FLOOR_MAGNET = Shapes.or(
+            Shapes.box(0.4375, 0.0, 0.25, 0.75, 0.1875, 0.4375),
+            Shapes.box(0.4375, 0.0, 0.5625, 0.75, 0.1875, 0.75),
+            Shapes.box(0.25, 0.0, 0.25, 0.4375, 0.1875, 0.75) )
+        val SOUTH_FLOOR_MAGNET = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.4375, 0.75, 0.1875, 0.75),
+            Shapes.box(0.25, 0.0, 0.4375, 0.4375, 0.1875, 0.75),
+            Shapes.box(0.25, 0.0, 0.25, 0.75, 0.1875, 0.4375) )
+        val WEST_FLOOR_MAGNET = Shapes.or(
+            Shapes.box(0.25, 0.0, 0.5625, 0.5625, 0.1875, 0.75),
+            Shapes.box(0.25, 0.0, 0.25, 0.5625, 0.1875, 0.4375),
+            Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.1875, 0.75) )
+
+        val NORTH_WALL_MAGNET = Shapes.or(
+            Shapes.box(0.25, 0.25, 0.8125, 0.4375, 0.5625, 1.0),
+            Shapes.box(0.5625, 0.25, 0.8125, 0.75, 0.5625, 1.0),
+            Shapes.box(0.25, 0.5625, 0.8125, 0.75, 0.75, 1.0) )
+        val EAST_WALL_MAGNET = Shapes.or(
+            Shapes.box(0.0, 0.25, 0.25, 0.1875, 0.5625, 0.4375),
+            Shapes.box(0.0, 0.25, 0.5625, 0.1875, 0.5625, 0.75),
+            Shapes.box(0.0, 0.5625, 0.25, 0.1875, 0.75, 0.75) )
+        val SOUTH_WALL_MAGNET = Shapes.or(
+            Shapes.box(0.5625, 0.25, 0.0, 0.75, 0.5625, 0.1875),
+            Shapes.box(0.25, 0.25, 0.0, 0.4375, 0.5625, 0.1875),
+            Shapes.box(0.25, 0.5625, 0.0, 0.75, 0.75, 0.1875) )
+        val WEST_WALL_MAGNET = Shapes.or(
+            Shapes.box(0.8125, 0.25, 0.5625, 1.0, 0.5625, 0.75),
+            Shapes.box(0.8125, 0.25, 0.25, 1.0, 0.5625, 0.4375),
+            Shapes.box(0.8125, 0.5625, 0.25, 1.0, 0.75, 0.75) )
+
+        val NORTH_CEILING_MAGNET = Shapes.or(
+            Shapes.box(0.25, 0.8125, 0.25, 0.4375, 1.0, 0.5625),
+            Shapes.box(0.5625, 0.8125, 0.25, 0.75, 1.0, 0.5625),
+            Shapes.box(0.25, 0.8125, 0.5625, 0.75, 1.0, 0.75) )
+        val EAST_CEILING_MAGNET = Shapes.or(
+            Shapes.box(0.4375, 0.8125, 0.25, 0.75, 1.0, 0.4375),
+            Shapes.box(0.4375, 0.8125, 0.5625, 0.75, 1.0, 0.75),
+            Shapes.box(0.25, 0.8125, 0.25, 0.4375, 1.1875, 0.75) )
+        val SOUTH_CEILING_MAGNET = Shapes.or(
+            Shapes.box(0.5625, 0.8125, 0.4375, 0.75, 1.0, 0.75),
+            Shapes.box(0.25, 0.8125, 0.4375, 0.4375, 1.0, 0.75),
+            Shapes.box(0.25, 0.8125, 0.25, 0.75, 1.0, 0.4375) )
+        val WEST_CEILING_MAGNET = Shapes.or(
+            Shapes.box(0.25, 0.8125, 0.5625, 0.5625, 1.0, 0.75),
+            Shapes.box(0.25, 0.8125, 0.25, 0.5625, 1.0, 0.4375),
+            Shapes.box(0.5625, 0.8125, 0.25, 0.75, 1.0, 0.75) )
     }
 }

@@ -7,7 +7,7 @@
 		"cobblemon:metal_alloy",
 		"cobblemon:everstone",
 		"cobblemon:eviolite",
-		
+        
         "cobblemon:relic_coin_pouch",
         "cobblemon:chipped_pot",
         "cobblemon:cracked_pot",
@@ -27,15 +27,17 @@
         "cobblemon:bright_powder",
         "cobblemon:metal_powder",
         "cobblemon:quick_powder",
+        "cobblemon:iron_ball",
+        "cobblemon:hard_stone",
+        "cobblemon:metal_coat",
+        
         "cobblemon:light_ball",
         "cobblemon:smoke_ball",
         "cobblemon:life_orb",
         "cobblemon:flame_orb",
         "cobblemon:toxic_orb",
-        "cobblemon:iron_ball",
-        "cobblemon:hard_stone",
         "cobblemon:eject_button",
-        "cobblemon:metal_coat",
+        "cobblemon:magnet",
 		
         "cobblemon:blunder_policy",
         "cobblemon:weakness_policy",
