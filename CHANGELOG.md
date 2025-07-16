@@ -37,9 +37,12 @@
 ### Pokémon Added
 
 #### Gen 2
+- Marill
+- Azumarill
 - Dunsparce
 
 #### Gen 3
+- Azurill
 - Spoink
 - Grumpig
 - Snorunt
@@ -291,6 +294,9 @@
 - Fixed Pokédex Scanner not respecting the "Invert Mouse" option.
 - Fixed a crash due to a ConcurrentModificationException that could occur during world generation.
 - Fixed Moon Ball moon phase logic to actually work correctly
+- Fixed recoil eyes on Shellder & Cloyster.
+- Fixed Shroomish spinning at lightning speed when fainting (no longer allowed to let it rip.)
+- Fixed Quaxly's animations showing hidden wing sets
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.

@@ -439,7 +439,7 @@
 			}
 		},
 		"animation.shellder.recoil": {
-			"loop": true,
+			"animation_length": 0.5,
 			"bones": {
 				"eyelid_recoil_left": {
 					"position": [0, 0, -0.1]
