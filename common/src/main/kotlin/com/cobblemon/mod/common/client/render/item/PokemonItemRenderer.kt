@@ -64,6 +64,11 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         // TO-DO: Flip the model to show the back
         //matrices.mulPose(Quaternionf().fromAxisAngleRad(0f, 1f, 0f, Math.PI.toFloat()))
 
+        // Tilt the model to an isometric angle
+        //matrices.mulPose(Quaternionf().fromAxisAngleRad(1f, 0f, 0f, Math.toRadians(15.0).toFloat()))
+        //matrices.mulPose(Quaternionf().fromAxisAngleRad(0f, 1f, 0f, Math.toRadians(5.0).toFloat()))
+        //matrices.mulPose(Quaternionf().fromAxisAngleRad(0f, 0f, 1f, Math.toRadians(10.0).toFloat()))
+
         val vertexConsumer: VertexConsumer = vertexConsumers.getBuffer(renderLayer)
         matrices.pushPose()
         val packedLight = LightTexture.pack(15, 15)
