@@ -7,7 +7,8 @@
  */
 
 package com.cobblemon.mod.common.item.group
-
+import java.io.File
+import com.google.gson.JsonParser
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -101,6 +102,504 @@ object CobblemonItemGroups {
     }
 
     private fun pokemonModelItemsEntries(displayContext: ItemDisplayParameters, entries: Output) {
+        val extraAspects: Map<String, List<Set<String>>> = mapOf(
+            "Magikarp" to listOf(
+                setOf("female"),
+                setOf("magikarp-jump-apricot-stripes"),
+                setOf("magikarp-jump-apricot-tiger"),
+                setOf("magikarp-jump-apricot-zebra"),
+                setOf("magikarp-jump-black-forehead"),
+                setOf("magikarp-jump-black-mask"),
+                setOf("magikarp-jump-blue-raindrops"),
+                setOf("magikarp-jump-blue-saucy"),
+                setOf("magikarp-jump-brown-stripes"),
+                setOf("magikarp-jump-brown-tiger"),
+                setOf("magikarp-jump-brown-zebra"),
+                setOf("magikarp-jump-calico-orange-gold"),
+                setOf("magikarp-jump-calico-orange-white"),
+                setOf("magikarp-jump-calico-orange-white-black"),
+                setOf("magikarp-jump-calico-white-orange"),
+                setOf("magikarp-jump-gray-bubbles"),
+                setOf("magikarp-jump-gray-diamonds"),
+                setOf("magikarp-jump-gray-patches"),
+                setOf("magikarp-jump-orange-dapples"),
+                setOf("magikarp-jump-orange-forehead"),
+                setOf("magikarp-jump-orange-mask"),
+                setOf("magikarp-jump-orange-orca"),
+                setOf("magikarp-jump-orange-two-tone"),
+                setOf("magikarp-jump-pink-dapples"),
+                setOf("magikarp-jump-pink-orca"),
+                setOf("magikarp-jump-pink-two-tone"),
+                setOf("magikarp-jump-purple-bubbles"),
+                setOf("magikarp-jump-purple-diamonds"),
+                setOf("magikarp-jump-purple-patches"),
+                setOf("magikarp-jump-skelly"),
+                setOf("magikarp-jump-violet-raindrops"),
+                setOf("magikarp-jump-violet-saucy")
+            ),
+            "Vivillon" to listOf(
+                setOf("vivillon-wings-archipelago"),
+                setOf("vivillon-wings-continental"),
+                setOf("vivillon-wings-elegant"),
+                setOf("vivillon-wings-fancy"),
+                setOf("vivillon-wings-forsaken"),
+                setOf("vivillon-wings-garden"),
+                setOf("vivillon-wings-high-plains"),
+                setOf("vivillon-wings-icy-snow"),
+                setOf("vivillon-wings-inferno"),
+                setOf("vivillon-wings-jungle"),
+                setOf("vivillon-wings-marine"),
+                setOf("vivillon-wings-modern"),
+                setOf("vivillon-wings-monsoon"),
+                setOf("vivillon-wings-ocean"),
+                setOf("vivillon-wings-polar"),
+                setOf("vivillon-wings-river"),
+                setOf("vivillon-wings-sandstorm"),
+                setOf("vivillon-wings-savanna"),
+                setOf("vivillon-wings-sun"),
+                setOf("vivillon-wings-tundra"),
+                setOf("vivillon-wings-void")
+            ),
+            "Wooloo" to listOf(
+                setOf("color-black"),
+                setOf("color-blue"),
+                setOf("color-brown"),
+                setOf("color-cyan"),
+                setOf("color-gray"),
+                setOf("color-green"),
+                setOf("color-light_blue"),
+                setOf("color-light_gray"),
+                setOf("color-lime"),
+                setOf("color-magenta"),
+                setOf("color-orange"),
+                setOf("color-pink"),
+                setOf("color-purple"),
+                setOf("color-red"),
+                setOf("color-yellow")
+            ),
+            "Smeargle" to listOf(
+                setOf("color-black"),
+                setOf("color-blue"),
+                setOf("color-brown"),
+                setOf("color-cyan"),
+                setOf("color-gray"),
+                setOf("color-light_blue"),
+                setOf("color-light_gray"),
+                setOf("color-lime"),
+                setOf("color-magenta"),
+                setOf("color-orange"),
+                setOf("color-pink"),
+                setOf("color-purple"),
+                setOf("color-red"),
+                setOf("color-white"),
+                setOf("color-yellow")
+            ),
+            "Dubwool" to listOf(
+                setOf("color-black"),
+                setOf("color-blue"),
+                setOf("color-brown"),
+                setOf("color-cyan"),
+                setOf("color-gray"),
+                setOf("color-green"),
+                setOf("color-light_blue"),
+                setOf("color-light_gray"),
+                setOf("color-lime"),
+                setOf("color-magenta"),
+                setOf("color-orange"),
+                setOf("color-pink"),
+                setOf("color-purple"),
+                setOf("color-red"),
+                setOf("color-yellow")
+            ),
+            "Conkeldurr" to listOf(
+                setOf("color-black"),
+                setOf("color-blue"),
+                setOf("color-brown"),
+                setOf("color-cyan"),
+                setOf("color-gray"),
+                setOf("color-green"),
+                setOf("color-light_blue"),
+                setOf("color-lime"),
+                setOf("color-magenta"),
+                setOf("color-orange"),
+                setOf("color-pink"),
+                setOf("color-purple"),
+                setOf("color-red"),
+                setOf("color-white"),
+                setOf("color-yellow")
+            ),
+            "Komala" to listOf(
+                setOf("tree-acacia"),
+                setOf("tree-apricorn"),
+                setOf("tree-birch"),
+                setOf("tree-cherry"),
+                setOf("tree-crimson"),
+                setOf("tree-darkoak"),
+                setOf("tree-jungle"),
+                setOf("tree-mangrove"),
+                setOf("tree-oak"),
+                setOf("tree-saccharine"),
+                setOf("tree-spruce"),
+                setOf("tree-warped")
+            ),
+            "Timburr" to listOf(
+                setOf("tree-acacia"),
+                setOf("tree-birch"),
+                setOf("tree-cherry"),
+                setOf("tree-crimson"),
+                setOf("tree-darkoak"),
+                setOf("tree-jungle"),
+                setOf("tree-mangrove"),
+                setOf("tree-oak"),
+                setOf("tree-saccharine"),
+                setOf("tree-spruce"),
+                setOf("tree-warped")
+            ),
+            "Torterra" to listOf(
+                setOf("tree-acacia"),
+                setOf("tree-azalea"),
+                setOf("tree-birch"),
+                setOf("tree-cherry"),
+                setOf("tree-darkoak"),
+                setOf("tree-jungle"),
+                setOf("tree-mangrove"),
+                setOf("tree-oak"),
+                setOf("tree-spruce"),
+                setOf("tree-swamp")
+            ),
+            "Gholdengo" to listOf(
+                setOf("netherite-coating-full"),
+                setOf("netherite-coating-stage1"),
+                setOf("netherite-coating-stage2"),
+                setOf("netherite-coating-stage3"),
+                setOf("netherite-coating-stage4"),
+                setOf("netherite-coating-stage5"),
+                setOf("netherite-coating-stage6"),
+                setOf("netherite-coating-stage7")
+            ),
+            "Arbok" to listOf(
+                setOf("snake-pattern-attack"),
+                setOf("snake-pattern-dark"),
+                setOf("snake-pattern-elusive"),
+                setOf("snake-pattern-heart"),
+                setOf("snake-pattern-legacy"),
+                setOf("snake-pattern-sound"),
+                setOf("snake-pattern-speed")
+            ),
+            "Flabebe" to listOf(
+                setOf("flower-pink")
+            ),
+            "Floette" to listOf(
+                setOf("flower-pink")
+            ),
+            "Florges" to listOf(
+                setOf("flower-pink")
+            ),
+            "Wooper" to listOf(
+                setOf("female"),
+                setOf("female", "wooper_heart"),
+                setOf("wooper_heart")
+            ),
+            "Gurdurr" to listOf(
+                setOf("metals-copper"),
+                setOf("metals-gold"),
+                setOf("metals-iron"),
+                setOf("metals-netherite")
+            ),
+            "Sneasel" to listOf(
+                setOf("female"),
+                setOf("female", "hisuian")
+            ),
+            "Clauncher" to listOf(
+                setOf("claw-left"),
+                setOf("claw-right"),
+                setOf("right")
+            ),
+            "Clawitzer" to listOf(
+                setOf("claw-left"),
+                setOf("claw-right"),
+                setOf("right")
+            ),
+            "Squirtle" to listOf(
+                setOf("cosmetic_item-black_glasses"),
+                setOf("cosmetic_item-wise_glasses")
+            ),
+            "Wartortle" to listOf(
+                setOf("cosmetic_item-black_glasses"),
+                setOf("cosmetic_item-wise_glasses")
+            ),
+            "Blastoise" to listOf(
+                setOf("cosmetic_item-black_glasses"),
+                setOf("cosmetic_item-wise_glasses")
+            ),
+            "Butterfree" to listOf(
+                setOf("female"),
+                setOf("valencian")
+            ),
+            "Rattata" to listOf(
+                setOf("female")
+            ),
+            "Raticate" to listOf(
+                setOf("female")
+            ),
+            "Raichu" to listOf(
+                setOf("female")
+            ),
+            "Gloom" to listOf(
+                setOf("female"),
+                setOf("valencian")
+            ),
+            "Vileplume" to listOf(
+                setOf("female"),
+                setOf("valencian")
+            ),
+            "Gyarados" to listOf(
+                setOf("female"),
+                setOf("gyarados-eye-color-purple")
+            ),
+            "Miltank" to listOf(
+                setOf("mooshtank-brown"),
+                setOf("mooshtank-red")
+            ),
+            "Gimmighoul" to listOf(
+                setOf("minecraft")
+            ),
+            "Bulbasaur" to listOf(
+                setOf("female")
+            ),
+            "Ivysaur" to listOf(
+                setOf("female")
+            ),
+            "Venusaur" to listOf(
+                setOf("female")
+            ),
+            "Pikachu" to listOf(
+                setOf("female")
+            ),
+            "Zubat" to listOf(
+                setOf("female")
+            ),
+            "Golbat" to listOf(
+                setOf("female")
+            ),
+            "Kadabra" to listOf(
+                setOf("female")
+            ),
+            "Alakazam" to listOf(
+                setOf("female")
+            ),
+            "Doduo" to listOf(
+                setOf("female")
+            ),
+            "Dodrio" to listOf(
+                setOf("female")
+            ),
+            "Hypno" to listOf(
+                setOf("female")
+            ),
+            "Rhyhorn" to listOf(
+                setOf("female")
+            ),
+            "Rhydon" to listOf(
+                setOf("female")
+            ),
+            "Goldeen" to listOf(
+                setOf("female")
+            ),
+            "Seaking" to listOf(
+                setOf("female")
+            ),
+            "Scyther" to listOf(
+                setOf("female")
+            ),
+            "Eevee" to listOf(
+                setOf("female")
+            ),
+            "Dragonite" to listOf(
+                setOf("cosmetic_item-bundle")
+            ),
+            "Ledyba" to listOf(
+                setOf("female")
+            ),
+            "Ledian" to listOf(
+                setOf("female")
+            ),
+            "Xatu" to listOf(
+                setOf("female")
+            ),
+            "Bellossom" to listOf(
+                setOf("valencian")
+            ),
+            "Aipom" to listOf(
+                setOf("female")
+            ),
+            "Quagsire" to listOf(
+                setOf("female")
+            ),
+            "Murkrow" to listOf(
+                setOf("female")
+            ),
+            "Wobbuffet" to listOf(
+                setOf("female")
+            ),
+            "Girafarig" to listOf(
+                setOf("female")
+            ),
+            "Forretress" to listOf(
+                setOf("cosmetic_item-shulker_shell")
+            ),
+            "Scizor" to listOf(
+                setOf("female")
+            ),
+            "Heracross" to listOf(
+                setOf("female")
+            ),
+            "Piloswine" to listOf(
+                setOf("female")
+            ),
+            "Octillery" to listOf(
+                setOf("female")
+            ),
+            "Donphan" to listOf(
+                setOf("female")
+            ),
+            "Treecko" to listOf(
+                setOf("cosmetic_item-stick")
+            ),
+            "Grovyle" to listOf(
+                setOf("cosmetic_item-stick")
+            ),
+            "Sceptile" to listOf(
+                setOf("cosmetic_item-stick")
+            ),
+            "Torchic" to listOf(
+                setOf("female")
+            ),
+            "Combusken" to listOf(
+                setOf("female")
+            ),
+            "Blaziken" to listOf(
+                setOf("female")
+            ),
+            "Ludicolo" to listOf(
+                setOf("female")
+            ),
+            "Nuzleaf" to listOf(
+                setOf("female")
+            ),
+            "Shiftry" to listOf(
+                setOf("female")
+            ),
+            "Roselia" to listOf(
+                setOf("female")
+            ),
+            "Cacturne" to listOf(
+                setOf("female")
+            ),
+            "Whiscash" to listOf(
+                setOf("whiscash_nero")
+            ),
+            "Milotic" to listOf(
+                setOf("female")
+            ),
+            "Relicanth" to listOf(
+                setOf("female")
+            ),
+            "Bidoof" to listOf(
+                setOf("female")
+            ),
+            "Bibarel" to listOf(
+                setOf("female")
+            ),
+            "Kricketot" to listOf(
+                setOf("female")
+            ),
+            "Kricketune" to listOf(
+                setOf("female")
+            ),
+            "Shinx" to listOf(
+                setOf("female")
+            ),
+            "Luxio" to listOf(
+                setOf("female")
+            ),
+            "Luxray" to listOf(
+                setOf("female")
+            ),
+            "Roserade" to listOf(
+                setOf("female")
+            ),
+            "Combee" to listOf(
+                setOf("female")
+            ),
+            "Buizel" to listOf(
+                setOf("female")
+            ),
+            "Floatzel" to listOf(
+                setOf("female")
+            ),
+            "Ambipom" to listOf(
+                setOf("female")
+            ),
+            "Gible" to listOf(
+                setOf("female")
+            ),
+            "Gabite" to listOf(
+                setOf("female")
+            ),
+            "Garchomp" to listOf(
+                setOf("female")
+            ),
+            "Hippopotas" to listOf(
+                setOf("female")
+            ),
+            "Hippowdon" to listOf(
+                setOf("female")
+            ),
+            "Croagunk" to listOf(
+                setOf("female")
+            ),
+            "Toxicroak" to listOf(
+                setOf("female")
+            ),
+            "Weavile" to listOf(
+                setOf("female")
+            ),
+            "Rhyperior" to listOf(
+                setOf("female")
+            ),
+            "Mamoswine" to listOf(
+                setOf("female")
+            ),
+            "Unfezant" to listOf(
+                setOf("female")
+            ),
+            "Sandile" to listOf(
+                setOf("cosmetic_item-black_glasses")
+            ),
+            "Krokorok" to listOf(
+                setOf("cosmetic_item-black_glasses")
+            ),
+            "Krookodile" to listOf(
+                setOf("cosmetic_item-black_glasses")
+            ),
+            "Frillish" to listOf(
+                setOf("female")
+            ),
+            "Jellicent" to listOf(
+                setOf("female")
+            ),
+            "Braixen" to listOf(
+                setOf("cosmetic_item-silk_scarf")
+            ),
+            "Delphox" to listOf(
+                setOf("cosmetic_item-silk_scarf")
+            ),
+            "Sneasler" to listOf(
+                setOf("cosmetic_item-composter")
+            )
+        )
+
         val orderedSpecies = PokemonSpecies.species.sortedBy { it.nationalPokedexNumber }
         orderedSpecies.forEach { species ->
             if (species.forms.isEmpty()) {
@@ -111,6 +610,10 @@ object CobblemonItemGroups {
                     entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, formAspects))
                 }
             }
+            // Add extra aspects if present for this species
+            extraAspects[species.name]?.forEach { aspectSet ->
+                entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, aspectSet))
+            }
         }
         orderedSpecies.forEach { species ->
             if (species.forms.isEmpty()) {
@@ -118,8 +621,12 @@ object CobblemonItemGroups {
             } else {
                 species.forms.forEach { form ->
                     val formAspects = form.aspects.toSet()
-                    entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, formAspects+setOf("shiny")))
+                    entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, formAspects + setOf("shiny")))
                 }
+            }
+            // Add extra aspects + shiny if present for this species
+            extraAspects[species.name]?.forEach { aspectSet ->
+                entries.accept(com.cobblemon.mod.common.item.PokemonItem.from(species, aspectSet + setOf("shiny")))
             }
         }
     }
