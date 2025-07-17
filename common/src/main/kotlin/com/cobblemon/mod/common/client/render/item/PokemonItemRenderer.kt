@@ -50,10 +50,6 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
 
         val transformations = positions[mode]!!
 
-        if (mode == ItemDisplayContext.GUI) {
-            Lighting.setupForFlatItems()
-        }
-
         matrices.scale(transformations.scale.x, transformations.scale.y, transformations.scale.z)
         matrices.translate(transformations.translation.x, transformations.translation.y, transformations.translation.z)
         state.setPoseToFirstSuitable(PoseType.PORTRAIT)
@@ -70,11 +66,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
 
         val vertexConsumer: VertexConsumer = vertexConsumers.getBuffer(renderLayer)
         matrices.pushPose()
-        val packedLight = if (mode == ItemDisplayContext.GUI) {
-            LightTexture.pack(13, 13)
-        } else {
-            light
-        }
+        val packedLight = LightTexture.pack(15, 15)
 
         // x = red, y = green, z = blue, w = alpha
         val tint = pokemonItem.tint(stack)
@@ -91,9 +83,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         matrices.popPose()
         matrices.popPose()
 
-        if (mode == ItemDisplayContext.GUI) {
-            Lighting.setupFor3DItems()
-        }
+        Lighting.setupForFlatItems()
     }
 
     companion object {
