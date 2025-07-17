@@ -11,7 +11,7 @@
       },
       {
         "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0183_azurma/marill_shiny.png"
+        "texture": "cobblemon:textures/pokemon/0183_marill/marill_shiny.png"
       }
     ]
   }
