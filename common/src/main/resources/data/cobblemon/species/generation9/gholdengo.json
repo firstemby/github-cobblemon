@@ -53,6 +53,11 @@
       "canSleep": true,
       "light": "0-4"
     },
+	"entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true,
+	  "lovedByPiglin": true
+    },
     "moving": {
       "swim": {
         "canWalkOnWater": true,
