@@ -61,6 +61,7 @@
     "PhantomSweepAttackGoalMixin",
     "PiglinBarterMixin",
     "PiglinEntityMixin",
+    "PiglinSpecificSensorMixin",
     "PlayerAdvancementsMixin",
     "PlayerMixin",
     "PointedDripstoneBlockMixin",

@@ -23,6 +23,7 @@ class EntityBehaviour {
     val avoidedByPhantom = false
     val avoidedBySkeleton = false
     val lovedByPiglin = false
+    val avoidedByPiglin = false
 
     @Transient
     val struct = ObjectValue(this).also {
@@ -30,6 +31,7 @@ class EntityBehaviour {
         it.addFunction("avoided_by_phantom") { DoubleValue(avoidedByPhantom) }
         it.addFunction("avoided_by_skeleton") { DoubleValue(avoidedBySkeleton) }
         it.addFunction("loved_by_piglin") { DoubleValue(lovedByPiglin) }
+        it.addFunction("avoid_by_piglin") { DoubleValue(avoidedByPiglin) }
     }
 
     companion object {

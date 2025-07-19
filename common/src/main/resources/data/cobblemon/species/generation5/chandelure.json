@@ -58,6 +58,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "entityInteract": {
+	  "avoidedByPiglin": true
     }
   },
   "drops": {
