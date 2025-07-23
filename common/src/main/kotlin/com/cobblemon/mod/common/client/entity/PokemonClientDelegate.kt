@@ -17,7 +17,9 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
+import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.aspect.ParticleData
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnClient
@@ -48,7 +50,6 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
@@ -439,6 +440,37 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN) {
             playShinyEffect("cobblemon:ambient_shiny_sparkle")
             lastShinyParticle = System.currentTimeMillis()
+        }
+    }
+
+    override fun spawnAspectParticle() {
+        currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
+        currentAspects.forEach { aspect ->
+            aspectParticleMap[aspect]?.let { particleData ->
+                val random = currentEntity.level().random
+                when (particleData) {
+                    is ParticleData.SnowstormParticle -> {
+                        val locator = particleData.locators.firstOrNull { this.locatorStates[it] != null } ?: "root"
+                        if (particleData.chance > random.nextDouble()) {
+                            repeat(particleData.amount) {
+                                runtime.resolve("q.particle('${particleData.particle}', '$locator')".asExpressionLike())
+                            }
+                        }
+                    }
+                    is ParticleData.MinecraftParticle -> {
+                        if (particleData.chance > random.nextDouble()) {
+                            val box = currentEntity.boundingBox
+                            repeat(particleData.amount) {
+                                val x = box.minX + (box.maxX - box.minX) * random.nextDouble()
+                                val y = box.minY + (box.maxY - box.minY) * random.nextDouble()
+                                val z = box.minZ + (box.maxZ - box.minZ) * random.nextDouble()
+
+                                currentEntity.level().addParticle(particleData.particle, x, y, z, 0.0, 0.0, 0.0)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

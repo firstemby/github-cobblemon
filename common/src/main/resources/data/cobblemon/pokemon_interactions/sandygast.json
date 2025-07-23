@@ -2,7 +2,7 @@
   "requirements": [
     {
       "variant": "properties",
-      "target": "sandyghast"
+      "target": "sandygast"
     }
   ],
   "interactions": [

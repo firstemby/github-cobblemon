@@ -2,7 +2,7 @@
   "requirements": [
     {
       "variant": "properties",
-      "target": "bombardier"
+      "target": "bombirdier"
     }
   ],
   "interactions": [

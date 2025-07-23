@@ -161,13 +161,16 @@ object CobblemonClient {
                 if (event.client.isPaused) {
                     return@subscribe
                 }
-                val nearbyShinies = player.level().getEntities(
+
+                val nearbyPokemon = player.level().getEntities(
                     player,
                     AABB.ofSize(player.position(), 16.0, 16.0, 16.0)
-                ) { it is PokemonEntity && it.pokemon.shiny && !it.isSilent }
-                nearbyShinies?.firstOrNull { player.isLookingAt(it) && !player.isSpectator }.let {
-                    if (it is PokemonEntity) {
-                        it.delegate.spawnShinyParticle(player)
+                ) { it is PokemonEntity }
+
+                nearbyPokemon?.forEach { entity ->
+                    if (entity is PokemonEntity && !entity.isSilent) {
+                        if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(player)
+                        entity.delegate.spawnAspectParticle()
                     }
                 }
             }

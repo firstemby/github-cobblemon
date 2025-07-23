@@ -233,17 +233,6 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         }
     }
 
-    private fun isWaterNearby(level: LevelReader, pos: BlockPos): Boolean {
-        val floorBlock = pos.below()
-        for (i in -1..1) {
-            for (j in -1..1) {
-                val fluidState = level.getFluidState(floorBlock.offset(i, 0, j))
-                if (fluidState.`is`(FluidTags.WATER) && fluidState.isSource) return true
-            }
-        }
-        return false
-    }
-
     private fun getLowerHalf(level: LevelReader, pos: BlockPos, state: BlockState): Pair<BlockPos, BlockState>? {
         if (isLower(state)) {
             return Pair(pos, state)

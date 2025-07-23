@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.npc
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.config.ApplyBehaviours
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
@@ -22,6 +23,8 @@ object NPCBrain {
         }
 
         val ctx = BehaviourConfigurationContext()
+        ctx.addMemories(CobblemonMemories.DIALOGUES)
+        ctx.addMemories(CobblemonMemories.NPC_BATTLING)
         ctx.apply(npcEntity, behaviourConfigurations, dynamic)
         npcEntity.behaviours.clear()
         npcEntity.behaviours.addAll(ctx.appliedBehaviours)

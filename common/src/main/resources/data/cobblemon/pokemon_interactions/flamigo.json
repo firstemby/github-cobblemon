@@ -2,7 +2,7 @@
   "requirements": [
     {
       "variant": "properties",
-      "target": "flamingo"
+      "target": "flamigo"
     }
   ],
   "interactions": [

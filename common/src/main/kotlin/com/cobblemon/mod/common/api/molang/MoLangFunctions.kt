@@ -1214,6 +1214,14 @@ object MoLangFunctions {
             map.put("remove_held_item") { _ ->
                 pokemon.removeHeldItem()
             }
+            map.put("add_aspects") { params ->
+                for (aspect in params.params) pokemon.forcedAspects += aspect.asString()
+                pokemon.updateAspects()
+            }
+            map.put("remove_aspects") { params ->
+                for (aspect in params.params) pokemon.forcedAspects -= aspect.asString()
+                pokemon.updateAspects()
+            }
             map.put("add_marks") { params ->
                 for (param in params.params) {
                     val identifier = param.asString().asIdentifierDefaultingNamespace()

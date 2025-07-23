@@ -2,7 +2,7 @@
   "requirements": [
     {
       "variant": "properties",
-      "target": "swallow"
+      "target": "swellow"
     }
   ],
   "interactions": [
