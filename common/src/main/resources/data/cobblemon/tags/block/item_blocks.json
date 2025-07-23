@@ -39,6 +39,12 @@
         "cobblemon:weakness_policy",
         "cobblemon:cleanse_tag",
         "cobblemon:spell_tag",
-        "cobblemon:ring_target"
+        "cobblemon:ring_target",
+        
+        "cobblemon:potion",
+        "cobblemon:super_potion",
+        "cobblemon:hyper_potion",
+        "cobblemon:max_potion",
+        "cobblemon:full_restore"
     ]
 }

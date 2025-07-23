@@ -44,6 +44,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         UPGRADE,
         METAL_COAT,
         POTION,
+        MAX_POTION,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -114,19 +115,49 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             StackableItemType.POTION -> {
                 when (state.getValue(ITEMS)) {
                     2 -> when (state.getValue(FACING)) {
-                        Direction.WEST, Direction.EAST -> ITEM_8x16
-                        else -> ITEM_16x8
+                        Direction.WEST, Direction.EAST -> POTION_DOUBLE_EW
+                        else -> POTION_DOUBLE_NS
                     }
-
                     3 -> when (state.getValue(FACING)) {
-                        Direction.SOUTH -> TRIANGLE_SOUTH
-                        Direction.WEST -> TRIANGLE_WEST
-                        Direction.EAST -> TRIANGLE_EAST
-                        else -> TRIANGLE_NORTH
+                        Direction.SOUTH -> POTION_TRIPLE_SOUTH
+                        Direction.WEST -> POTION_TRIPLE_WEST
+                        Direction.EAST -> POTION_TRIPLE_EAST
+                        else -> POTION_TRIPLE_NORTH
                     }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> POTION_QUARTET_SOUTH
+                        Direction.WEST -> POTION_QUARTET_WEST
+                        Direction.EAST -> POTION_QUARTET_EAST
+                        else -> POTION_QUARTET_NORTH
+                    }
+                    else -> POTION_SINGLE
+                }
+            }
 
-                    4 -> ITEM_16xS
-                    else -> ITEM_8x
+            StackableItemType.MAX_POTION -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> MAX_POTION_DOUBLE_SOUTH
+                        Direction.WEST -> MAX_POTION_DOUBLE_WEST
+                        Direction.EAST -> MAX_POTION_DOUBLE_EAST
+                        else -> MAX_POTION_DOUBLE_NORTH
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> MAX_POTION_TRIPLE_SOUTH
+                        Direction.WEST -> MAX_POTION_TRIPLE_WEST
+                        Direction.EAST -> MAX_POTION_TRIPLE_EAST
+                        else -> MAX_POTION_TRIPLE_NORTH
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> MAX_POTION_QUARTET_SOUTH
+                        Direction.WEST -> MAX_POTION_QUARTET_WEST
+                        Direction.EAST -> MAX_POTION_QUARTET_EAST
+                        else -> MAX_POTION_QUARTET_NORTH
+                    }
+                    else ->  when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> MAX_POTION_SINGLE_EW
+                        else -> MAX_POTION_SINGLE_NS
+                    }
                 }
             }
 
@@ -246,6 +277,123 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             Shapes.box(0.5, 0.0, 0.125, 0.875, 0.375, 0.5),
             Shapes.box(0.125, 0.0, 0.5, 0.5, 0.375, 0.875),
             Shapes.box(0.0625, 0.0, 0.0625, 0.4375, 0.375, 0.4375)
+        )
+
+        val POTION_SINGLE = Shapes.box(0.34375, 0.0, 0.34375, 0.65625, 0.625, 0.65625)
+        val POTION_DOUBLE_EW = Shapes.or(
+            Shapes.box(0.4375, 0.0, 0.5625, 0.75, 0.625, 0.875),
+            Shapes.box(0.25, 0.0, 0.125, 0.5625, 0.625, 0.4375)
+        )
+        val POTION_DOUBLE_NS = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.25, 0.875, 0.625, 0.5625),
+            Shapes.box(0.125, 0.0, 0.4375, 0.4375, 0.625, 0.75)
+        )
+        val POTION_TRIPLE_EAST = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.375, 0.875, 0.625, 0.6875),
+            Shapes.box(0.1875, 0.0, 0.125, 0.5, 0.625, 0.4375),
+            Shapes.box(0.0625, 0.0, 0.5625, 0.375, 0.625, 0.875)
+        )
+        val POTION_TRIPLE_WEST = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.3125, 0.4375, 0.625, 0.625),
+            Shapes.box(0.5, 0.0, 0.5625, 0.8125, 0.625, 0.875),
+            Shapes.box(0.625, 0.0, 0.125, 0.9375, 0.625, 0.4375)
+        )
+        val POTION_TRIPLE_NORTH = Shapes.or(
+            Shapes.box(0.375, 0.0, 0.125, 0.6875, 0.625, 0.4375),
+            Shapes.box(0.125, 0.0, 0.5, 0.4375, 0.625, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.625, 0.875, 0.625, 0.9375)
+        )
+        val POTION_TRIPLE_SOUTH = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.5625, 0.625, 0.625, 0.875),
+            Shapes.box(0.5625, 0.0, 0.1875, 0.875, 0.625, 0.5),
+            Shapes.box(0.125, 0.0, 0.0625, 0.4375, 0.625, 0.375)
+        )
+        val POTION_QUARTET_EAST = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.5, 0.875, 0.625, 0.8125),
+            Shapes.box(0.5, 0.0, 0.125, 0.8125, 0.625, 0.4375),
+            Shapes.box(0.0625, 0.0, 0.0625, 0.375, 0.625, 0.375),
+            Shapes.box(0.125, 0.0, 0.5625, 0.4375, 0.625, 0.875)
+        )
+        val POTION_QUARTET_WEST = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.1875, 0.4375, 0.625, 0.5),
+            Shapes.box(0.1875, 0.0, 0.5625, 0.5, 0.625, 0.875),
+            Shapes.box(0.625, 0.0, 0.625, 0.9375, 0.625, 0.9375),
+            Shapes.box(0.5625, 0.0, 0.125, 0.875, 0.625, 0.4375)
+        )
+        val POTION_QUARTET_NORTH = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.125, 0.8125, 0.625, 0.4375),
+            Shapes.box(0.125, 0.0, 0.1875, 0.4375, 0.625, 0.5),
+            Shapes.box(0.0625, 0.0, 0.625, 0.375, 0.625, 0.9375),
+            Shapes.box(0.5625, 0.0, 0.5625, 0.875, 0.625, 0.875)
+        )
+        val POTION_QUARTET_SOUTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.5625, 0.5, 0.625, 0.875),
+            Shapes.box(0.5625, 0.0, 0.5, 0.875, 0.625, 0.8125),
+            Shapes.box(0.625, 0.0, 0.0625, 0.9375, 0.625, 0.375),
+            Shapes.box(0.125, 0.0, 0.125, 0.4375, 0.625, 0.4375)
+        )
+
+        val MAX_POTION_SINGLE_NS = Shapes.box(0.34375, 0.0, 0.3125, 0.65625, 0.5, 0.6875)
+        val MAX_POTION_SINGLE_EW = Shapes.box(0.3125, 0.0, 0.34375, 0.6875, 0.5, 0.65625)
+        val MAX_POTION_DOUBLE_EAST = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.5, 0.6875, 0.5, 0.8125),
+            Shapes.box(0.25, 0.0, 0.125, 0.625, 0.5, 0.4375)
+        )
+        val MAX_POTION_DOUBLE_WEST = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.1875, 0.6875, 0.5, 0.5),
+            Shapes.box(0.375, 0.0, 0.5625, 0.75, 0.5, 0.875)
+        )
+        val MAX_POTION_DOUBLE_NORTH = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.3125, 0.8125, 0.5, 0.6875),
+            Shapes.box(0.125, 0.0, 0.375, 0.4375, 0.5, 0.75)
+        )
+        val MAX_POTION_DOUBLE_SOUTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.3125, 0.5, 0.5, 0.6875),
+            Shapes.box(0.5625, 0.0, 0.25, 0.875, 0.5, 0.625)
+        )
+        val MAX_POTION_TRIPLE_EAST = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.625, 0.5625, 0.5, 0.9375),
+            Shapes.box(0.125, 0.0, 0.125, 0.5, 0.5, 0.4375),
+            Shapes.box(0.5625, 0.0, 0.3125, 0.9375, 0.5, 0.625)
+        )
+        val MAX_POTION_TRIPLE_WEST = Shapes.or(
+            Shapes.box(0.4375, 0.0, 0.0625, 0.8125, 0.5, 0.375),
+            Shapes.box(0.5, 0.0, 0.5625, 0.875, 0.5, 0.875),
+            Shapes.box(0.0625, 0.0, 0.375, 0.4375, 0.5, 0.6875)
+        )
+        val MAX_POTION_TRIPLE_NORTH = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.4375, 0.9375, 0.5, 0.8125),
+            Shapes.box(0.125, 0.0, 0.5, 0.4375, 0.5, 0.875),
+            Shapes.box(0.3125, 0.0, 0.0625, 0.625, 0.5, 0.4375)
+        )
+        val MAX_POTION_TRIPLE_SOUTH = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.1875, 0.375, 0.5, 0.5625),
+            Shapes.box(0.5625, 0.0, 0.125, 0.875, 0.5, 0.5),
+            Shapes.box(0.375, 0.0, 0.5625, 0.6875, 0.5, 0.9375)
+        )
+        val MAX_POTION_QUARTET_EAST = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.625, 0.5, 0.5, 0.9375),
+            Shapes.box(0.0625, 0.0, 0.125, 0.4375, 0.5, 0.4375),
+            Shapes.box(0.5625, 0.0, 0.5625, 0.9375, 0.5, 0.875),
+            Shapes.box(0.5, 0.0, 0.1875, 0.875, 0.5, 0.5)
+        )
+        val MAX_POTION_QUARTET_WEST = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.0625, 0.875, 0.5, 0.375),
+            Shapes.box(0.5625, 0.0, 0.5625, 0.9375, 0.5, 0.875),
+            Shapes.box(0.0625, 0.0, 0.125, 0.4375, 0.5, 0.4375),
+            Shapes.box(0.125, 0.0, 0.5, 0.5, 0.5, 0.8125)
+        )
+        val MAX_POTION_QUARTET_NORTH = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.5, 0.9375, 0.5, 0.875),
+            Shapes.box(0.125, 0.0, 0.5625, 0.4375, 0.5, 0.9375),
+            Shapes.box(0.5625, 0.0, 0.0625, 0.875, 0.5, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.125, 0.5, 0.5, 0.5)
+        )
+        val MAX_POTION_QUARTET_SOUTH = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.125, 0.375, 0.5, 0.5),
+            Shapes.box(0.5625, 0.0, 0.0625, 0.875, 0.5, 0.4375),
+            Shapes.box(0.125, 0.0, 0.5625, 0.4375, 0.5, 0.9375),
+            Shapes.box(0.5, 0.0, 0.5, 0.8125, 0.5, 0.875)
         )
     }
 }

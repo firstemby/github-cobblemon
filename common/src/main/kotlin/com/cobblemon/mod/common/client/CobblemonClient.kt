@@ -328,6 +328,12 @@ object CobblemonClient {
             CobblemonBlocks.LIGHT_BALL,
             CobblemonBlocks.SMOKE_BALL,
 
+            CobblemonBlocks.POTION,
+            CobblemonBlocks.SUPER_POTION,
+            CobblemonBlocks.HYPER_POTION,
+            CobblemonBlocks.MAX_POTION,
+            CobblemonBlocks.FULL_RESTORE,
+
             CobblemonBlocks.WHITE_PLAQUE,
             CobblemonBlocks.LIGHT_GRAY_PLAQUE,
             CobblemonBlocks.GRAY_PLAQUE,
