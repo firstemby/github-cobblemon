@@ -184,52 +184,64 @@ class SixFaceDecorativeItemBlock(properties : Properties, val sixFaceItemType: S
         val NORTH_FLOOR_MAGNET = Shapes.or(
             Shapes.box(0.25, 0.0, 0.25, 0.4375, 0.1875, 0.5625),
             Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.1875, 0.5625),
-            Shapes.box(0.25, 0.0, 0.5625, 0.75, 0.1875, 0.75) )
+            Shapes.box(0.25, 0.0, 0.5625, 0.75, 0.1875, 0.75)
+        )
         val EAST_FLOOR_MAGNET = Shapes.or(
             Shapes.box(0.4375, 0.0, 0.25, 0.75, 0.1875, 0.4375),
             Shapes.box(0.4375, 0.0, 0.5625, 0.75, 0.1875, 0.75),
-            Shapes.box(0.25, 0.0, 0.25, 0.4375, 0.1875, 0.75) )
+            Shapes.box(0.25, 0.0, 0.25, 0.4375, 0.1875, 0.75)
+        )
         val SOUTH_FLOOR_MAGNET = Shapes.or(
             Shapes.box(0.5625, 0.0, 0.4375, 0.75, 0.1875, 0.75),
             Shapes.box(0.25, 0.0, 0.4375, 0.4375, 0.1875, 0.75),
-            Shapes.box(0.25, 0.0, 0.25, 0.75, 0.1875, 0.4375) )
+            Shapes.box(0.25, 0.0, 0.25, 0.75, 0.1875, 0.4375)
+        )
         val WEST_FLOOR_MAGNET = Shapes.or(
             Shapes.box(0.25, 0.0, 0.5625, 0.5625, 0.1875, 0.75),
             Shapes.box(0.25, 0.0, 0.25, 0.5625, 0.1875, 0.4375),
-            Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.1875, 0.75) )
+            Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.1875, 0.75)
+        )
 
         val NORTH_WALL_MAGNET = Shapes.or(
             Shapes.box(0.25, 0.25, 0.8125, 0.4375, 0.5625, 1.0),
             Shapes.box(0.5625, 0.25, 0.8125, 0.75, 0.5625, 1.0),
-            Shapes.box(0.25, 0.5625, 0.8125, 0.75, 0.75, 1.0) )
+            Shapes.box(0.25, 0.5625, 0.8125, 0.75, 0.75, 1.0)
+        )
         val EAST_WALL_MAGNET = Shapes.or(
             Shapes.box(0.0, 0.25, 0.25, 0.1875, 0.5625, 0.4375),
             Shapes.box(0.0, 0.25, 0.5625, 0.1875, 0.5625, 0.75),
-            Shapes.box(0.0, 0.5625, 0.25, 0.1875, 0.75, 0.75) )
+            Shapes.box(0.0, 0.5625, 0.25, 0.1875, 0.75, 0.75)
+        )
         val SOUTH_WALL_MAGNET = Shapes.or(
             Shapes.box(0.5625, 0.25, 0.0, 0.75, 0.5625, 0.1875),
             Shapes.box(0.25, 0.25, 0.0, 0.4375, 0.5625, 0.1875),
-            Shapes.box(0.25, 0.5625, 0.0, 0.75, 0.75, 0.1875) )
+            Shapes.box(0.25, 0.5625, 0.0, 0.75, 0.75, 0.1875)
+        )
         val WEST_WALL_MAGNET = Shapes.or(
             Shapes.box(0.8125, 0.25, 0.5625, 1.0, 0.5625, 0.75),
             Shapes.box(0.8125, 0.25, 0.25, 1.0, 0.5625, 0.4375),
-            Shapes.box(0.8125, 0.5625, 0.25, 1.0, 0.75, 0.75) )
+            Shapes.box(0.8125, 0.5625, 0.25, 1.0, 0.75, 0.75)
+        )
 
         val NORTH_CEILING_MAGNET = Shapes.or(
             Shapes.box(0.25, 0.8125, 0.25, 0.4375, 1.0, 0.5625),
             Shapes.box(0.5625, 0.8125, 0.25, 0.75, 1.0, 0.5625),
-            Shapes.box(0.25, 0.8125, 0.5625, 0.75, 1.0, 0.75) )
+            Shapes.box(0.25, 0.8125, 0.5625, 0.75, 1.0, 0.75)
+        )
         val EAST_CEILING_MAGNET = Shapes.or(
             Shapes.box(0.4375, 0.8125, 0.25, 0.75, 1.0, 0.4375),
             Shapes.box(0.4375, 0.8125, 0.5625, 0.75, 1.0, 0.75),
-            Shapes.box(0.25, 0.8125, 0.25, 0.4375, 1.1875, 0.75) )
+            Shapes.box(0.25, 0.8125, 0.25, 0.4375, 1.1875, 0.75)
+        )
         val SOUTH_CEILING_MAGNET = Shapes.or(
             Shapes.box(0.5625, 0.8125, 0.4375, 0.75, 1.0, 0.75),
             Shapes.box(0.25, 0.8125, 0.4375, 0.4375, 1.0, 0.75),
-            Shapes.box(0.25, 0.8125, 0.25, 0.75, 1.0, 0.4375) )
+            Shapes.box(0.25, 0.8125, 0.25, 0.75, 1.0, 0.4375)
+        )
         val WEST_CEILING_MAGNET = Shapes.or(
             Shapes.box(0.25, 0.8125, 0.5625, 0.5625, 1.0, 0.75),
             Shapes.box(0.25, 0.8125, 0.25, 0.5625, 1.0, 0.4375),
-            Shapes.box(0.5625, 0.8125, 0.25, 0.75, 1.0, 0.75) )
+            Shapes.box(0.5625, 0.8125, 0.25, 0.75, 1.0, 0.75)
+        )
     }
 }

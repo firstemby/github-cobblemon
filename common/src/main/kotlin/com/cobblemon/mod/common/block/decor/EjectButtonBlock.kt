@@ -13,6 +13,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
@@ -99,7 +101,6 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
         val direction = state.getValue(FACING)
         return when (state.getValue(FACE)) {
             AttachFace.FLOOR -> return if (state.getValue(POWERED)) {FLOOR_POWERED} else {FLOOR_UNPOWERED}
-
             AttachFace.WALL -> {
                 when (direction) {
                     Direction.EAST  -> return if (state.getValue(POWERED)) {EAST_WALL_POWERED} else {EAST_WALL_UNPOWERED}
@@ -109,7 +110,6 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
                     else -> {FLOOR_UNPOWERED}
                 }
             }
-
             AttachFace.CEILING ->  return if (state.getValue(POWERED)) {CEILING_POWERED} else {CEILING_UNPOWERED}
         }
     }
@@ -123,7 +123,6 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
         val direction = state.getValue(FACING)
         return when (state.getValue(FACE)) {
             AttachFace.FLOOR -> {FLOOR_PANEL}
-
             AttachFace.WALL -> {
                 when (direction) {
                     Direction.EAST  -> {EAST_WALL_PANEL}
@@ -133,7 +132,6 @@ class EjectButtonBlock(properties : Properties) : FaceAttachedHorizontalDirectio
                     else -> {FLOOR_PANEL}
                 }
             }
-
             AttachFace.CEILING -> {CEILING_PANEL}
         }
     }
