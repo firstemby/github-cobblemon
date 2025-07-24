@@ -22,7 +22,7 @@ import net.minecraft.world.level.material.Fluids
 
 
 class SixDirectionalBlock(properties: Properties) : DirectionalBlock(properties) {
-    init {registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN))}
+    init {registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP))}
 
     companion object {
         val CODEC = simpleCodec(::SixDirectionalBlock)}

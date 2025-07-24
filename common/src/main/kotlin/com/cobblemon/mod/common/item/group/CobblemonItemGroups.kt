@@ -444,6 +444,14 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.HYPER_POTION)
         entries.accept(CobblemonItems.MAX_POTION)
         entries.accept(CobblemonItems.FULL_RESTORE)
+
+        entries.accept(CobblemonItems.ANTIDOTE)
+        entries.accept(CobblemonItems.AWAKENING)
+        entries.accept(CobblemonItems.BURN_HEAL)
+        entries.accept(CobblemonItems.ICE_HEAL)
+        entries.accept(CobblemonItems.PARALYZE_HEAL)
+
+        entries.accept(CobblemonItems.FULL_HEAL)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

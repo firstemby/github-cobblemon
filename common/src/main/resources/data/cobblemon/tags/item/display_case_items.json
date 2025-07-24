@@ -47,6 +47,12 @@
         "cobblemon:super_potion",
         "cobblemon:hyper_potion",
         "cobblemon:max_potion",
-        "cobblemon:full_restore"
+        "cobblemon:full_restore",
+        "cobblemon:antidote",
+        "cobblemon:awakening",
+        "cobblemon:burn_heal",
+        "cobblemon:ice_heal",
+        "cobblemon:paralyze_heal",
+        "cobblemon:full_heal"
     ]
 }

@@ -45,6 +45,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         METAL_COAT,
         POTION,
         MAX_POTION,
+        RESTORE,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -158,6 +159,28 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
                         Direction.WEST, Direction.EAST -> MAX_POTION_SINGLE_EW
                         else -> MAX_POTION_SINGLE_NS
                     }
+                }
+            }
+
+            StackableItemType.RESTORE -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> RESTORE_DOUBLE_EW
+                        else -> RESTORE_DOUBLE_NS
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> RESTORE_TRIPLE_SOUTH
+                        Direction.WEST -> RESTORE_TRIPLE_WEST
+                        Direction.EAST -> RESTORE_TRIPLE_EAST
+                        else -> RESTORE_TRIPLE_NORTH
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> RESTORE_QUARTET_SOUTH
+                        Direction.WEST -> RESTORE_QUARTET_WEST
+                        Direction.EAST -> RESTORE_QUARTET_EAST
+                        else -> RESTORE_QUARTET_NORTH
+                    }
+                    else -> RESTORE_SINGLE
                 }
             }
 
@@ -394,6 +417,60 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             Shapes.box(0.5625, 0.0, 0.0625, 0.875, 0.5, 0.4375),
             Shapes.box(0.125, 0.0, 0.5625, 0.4375, 0.5, 0.9375),
             Shapes.box(0.5, 0.0, 0.5, 0.8125, 0.5, 0.875)
+        )
+
+        val RESTORE_SINGLE = Shapes.box(0.375, 0.0, 0.375, 0.625, 0.5, 0.625)
+        val RESTORE_DOUBLE_EW = Shapes.or(
+            Shapes.box(0.375, 0.0, 0.1875, 0.625, 0.5, 0.4375),
+            Shapes.box(0.375, 0.0, 0.5625, 0.625, 0.5, 0.8125)
+        )
+        val RESTORE_DOUBLE_NS = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.375, 0.4375, 0.5, 0.625),
+            Shapes.box(0.5625, 0.0, 0.375, 0.8125, 0.5, 0.625)
+        )
+        val RESTORE_TRIPLE_EAST = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.1875, 0.4375, 0.5, 0.4375),
+            Shapes.box(0.25, 0.0, 0.5625, 0.5, 0.5, 0.8125),
+            Shapes.box(0.625, 0.0, 0.375, 0.875, 0.5, 0.625)
+        )
+        val RESTORE_TRIPLE_WEST = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.5625, 0.8125, 0.5, 0.8125),
+            Shapes.box(0.5, 0.0, 0.1875, 0.75, 0.5, 0.4375),
+            Shapes.box(0.125, 0.0, 0.375, 0.375, 0.5, 0.625)
+        )
+        val RESTORE_TRIPLE_NORTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.5625, 0.4375, 0.5, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.5, 0.8125, 0.5, 0.75),
+            Shapes.box(0.375, 0.0, 0.125, 0.625, 0.5, 0.375)
+        )
+        val RESTORE_TRIPLE_SOUTH = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.1875, 0.8125, 0.5, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.25, 0.4375, 0.5, 0.5),
+            Shapes.box(0.375, 0.0, 0.625, 0.625, 0.5, 0.875)
+        )
+        val RESTORE_QUARTET_EAST = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.1875, 0.375, 0.5, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.625, 0.4375, 0.5, 0.875),
+            Shapes.box(0.625, 0.0, 0.5, 0.875, 0.5, 0.75),
+            Shapes.box(0.625, 0.0, 0.125, 0.875, 0.5, 0.375)
+        )
+        val RESTORE_QUARTET_WEST = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.5625, 0.875, 0.5, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.125, 0.8125, 0.5, 0.375),
+            Shapes.box(0.125, 0.0, 0.25, 0.375, 0.5, 0.5),
+            Shapes.box(0.125, 0.0, 0.625, 0.375, 0.5, 0.875)
+        )
+        val RESTORE_QUARTET_NORTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.625, 0.4375, 0.5, 0.875),
+            Shapes.box(0.625, 0.0, 0.5625, 0.875, 0.5, 0.8125),
+            Shapes.box(0.5, 0.0, 0.125, 0.75, 0.5, 0.375),
+            Shapes.box(0.125, 0.0, 0.125, 0.375, 0.5, 0.375)
+        )
+        val RESTORE_QUARTET_SOUTH = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.125, 0.8125, 0.5, 0.375),
+            Shapes.box(0.125, 0.0, 0.1875, 0.375, 0.5, 0.4375),
+            Shapes.box(0.25, 0.0, 0.625, 0.5, 0.5, 0.875),
+            Shapes.box(0.625, 0.0, 0.625, 0.875, 0.5, 0.875)
         )
     }
 }
