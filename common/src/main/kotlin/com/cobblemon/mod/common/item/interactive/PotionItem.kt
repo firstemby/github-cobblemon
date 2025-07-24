@@ -67,9 +67,6 @@ class PotionItem(
         }
 
         return super<ItemNameBlockItem>.use(world, user, hand)
-
-        // Default to standard use when not in battle
-        return InteractionResultHolder.pass(stack)
     }
 
     override fun interactLivingEntity(
