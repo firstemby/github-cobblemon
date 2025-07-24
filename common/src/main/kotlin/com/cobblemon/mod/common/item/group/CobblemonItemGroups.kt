@@ -378,6 +378,8 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.THUNDER_STONE_BLOCK)
         entries.accept(CobblemonItems.WATER_STONE_BLOCK)
 
+        entries.accept(CobblemonItems.PEAT_BLOCK)
+
         CobblemonItems.campfire_pots.forEach(entries::accept)
 
         entries.accept(CobblemonItems.WHITE_PLAQUE)

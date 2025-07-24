@@ -1,4 +1,6 @@
 {
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
 	"textures": {
@@ -30,18 +32,15 @@
 		}
 	],
 	"gui_light": "front",
-	"display": {
-		"head": {
-			"translation": [0, 16, 0],
-			"scale": [1.6, 1.6, 1.6]
-		}
-	},
+	"display": {},
 	"groups": [
+		0,
+		1,
 		{
 			"name": "chain",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [13, 14]
+			"children": []
 		}
 	]
 }
