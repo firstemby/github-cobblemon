@@ -26,4 +26,12 @@ object CobblemonGameRules {
     @JvmField
     val SHINY_STARTERS: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("doShinyStarters", GameRules.Category.MISC, BooleanRuleInvoker.`cobblemon$create`(false))
 
+    @JvmField
+    val BOUNCY_BOUNCYNESS: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyElasticity", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(60))
+    @JvmField
+    val BOUNCY_WATER_SKIP_FACTOR: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyWaterSkipAngle", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(40))
+    @JvmField
+    val BOUNCY_BOUNCE_COUNT: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyBounceCount", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(0))
+    @JvmField
+    val BOUNCY_BOUNCE_DRAG: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyBounceDrag", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(40))
 }

@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity.Companion.BOUNCES
 import com.cobblemon.mod.common.pokeball.PokeBall
+import com.cobblemon.mod.common.util.isServerSide
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.random
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -19,6 +21,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.core.particles.DustParticleOptions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.LivingEntity
@@ -63,6 +66,8 @@ class PokeBallItem(
                 throwPokeBall(level, player, force, inaccuracy)
                 player.cooldowns.addCooldown(this, 10)
                 stack.consume(1, player)
+
+                player.awardStat(Stats.ITEM_USED.get(this));
             }
         } else {
             super.releaseUsing(stack, level, player, remainingUseDuration)
@@ -93,6 +98,14 @@ class PokeBallItem(
                 5f * cos(player.xRot.toRadians())
             } else {
                 5f
+            }
+
+            // Query gamerules
+            if (world.isServerSide()) {
+                this.bouncynessPercent = world.gameRules.getInt(CobblemonGameRules.BOUNCY_BOUNCYNESS)
+                this.waterSkipFactor = world.gameRules.getInt(CobblemonGameRules.BOUNCY_WATER_SKIP_FACTOR)
+                this.maxBounces = world.gameRules.getInt(CobblemonGameRules.BOUNCY_BOUNCE_COUNT)
+                this.bounceDragPercent = world.gameRules.getInt(CobblemonGameRules.BOUNCY_BOUNCE_DRAG)
             }
 
             shootFromRotation(player, player.xRot - overhandFactor, player.yRot, 0.0f, pokeBall.throwPower * force, inaccuracy)
