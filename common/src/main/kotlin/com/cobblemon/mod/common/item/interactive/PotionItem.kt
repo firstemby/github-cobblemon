@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.resolveInt
+import net.minecraft.server.level.ServerLevel
 import java.lang.Integer.min
 import net.minecraft.world.entity.player.Player
 import net.minecraft.server.level.ServerPlayer
@@ -55,40 +56,10 @@ class PotionItem(
     override val bagItem = type
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        val stack = user.getItemInHand(hand)
-
-        if (user is ServerPlayer) {
-            // Only invoke PokemonSelectingItem menu if we are in battle
-            if (user.getBattleState() != null) {
-                val result = use(user, stack)
-                if (result.result != InteractionResult.PASS)
-                    return result
-            }
+        if (world is ServerLevel && user is ServerPlayer) {
+            return use(user, user.getItemInHand(hand))
         }
-
         return super<ItemNameBlockItem>.use(world, user, hand)
-    }
-
-    override fun interactLivingEntity(
-        stack: ItemStack,
-        player: Player,
-        target: LivingEntity,
-        hand: InteractionHand
-    ): InteractionResult {
-        if (player.level().isClientSide) return InteractionResult.PASS
-
-        if (player is ServerPlayer && target is PokemonEntity) {
-            val pokemon = target.pokemon
-            if (canUseOnPokemon(stack, pokemon)) {
-                val result = applyToPokemon(player, stack, pokemon)
-                if (result?.result == InteractionResult.SUCCESS) {
-                    return InteractionResult.SUCCESS
-                }
-            }
-            return InteractionResult.FAIL
-        }
-
-        return InteractionResult.PASS
     }
 
     override fun applyToPokemon(

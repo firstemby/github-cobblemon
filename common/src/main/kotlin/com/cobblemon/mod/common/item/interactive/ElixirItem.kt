@@ -87,39 +87,9 @@ class ElixirItem(
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        val stack = user.getItemInHand(hand)
-
-        if (user is ServerPlayer) {
-            // Only invoke PokemonSelectingItem menu if we are in battle
-            if (user.getBattleState() != null) {
-                val result = use(user, stack)
-                if (result.result != InteractionResult.PASS)
-                    return result
-            }
+        if (world is ServerLevel && user is ServerPlayer) {
+            return use(user, user.getItemInHand(hand))
         }
-
         return super<ItemNameBlockItem>.use(world, user, hand)
-    }
-
-    override fun interactLivingEntity(
-        stack: ItemStack,
-        player: Player,
-        target: LivingEntity,
-        hand: InteractionHand
-    ): InteractionResult {
-        if (player.level().isClientSide) return InteractionResult.PASS
-
-        if (player is ServerPlayer && target is PokemonEntity) {
-            val pokemon = target.pokemon
-            if (canUseOnPokemon(stack, pokemon)) {
-                val result = applyToPokemon(player, stack, pokemon)
-                if (result?.result == InteractionResult.SUCCESS) {
-                    return InteractionResult.SUCCESS
-                }
-            }
-            return InteractionResult.FAIL
-        }
-
-        return InteractionResult.PASS
     }
 }
