@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class LookAtTargetTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
@@ -39,7 +40,8 @@ class LookAtTargetTaskConfig : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (!condition.resolveBoolean()) return null
-        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET)
+        behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)
+        behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
         return WrapperLivingEntityTask(LookAtTargetSink(minDurationTicks.resolveInt(), maxDurationTicks.resolveInt()), Mob::class.java)
     }
 }
