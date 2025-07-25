@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/ether_one_item",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/elixir",
+		"particle": "cobblemon:block/decorative_items/elixir"
+  }
+}

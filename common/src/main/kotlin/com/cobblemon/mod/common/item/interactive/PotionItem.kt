@@ -91,7 +91,6 @@ class PotionItem(
         return InteractionResult.PASS
     }
 
-
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,

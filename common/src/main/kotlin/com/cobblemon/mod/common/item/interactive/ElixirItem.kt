@@ -13,9 +13,11 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import kotlin.math.min
 import net.minecraft.world.entity.player.Player
@@ -24,9 +26,13 @@ import net.minecraft.world.item.Items
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
 
 /**
  * Items for recovering PP in all moves at once.
@@ -35,8 +41,8 @@ import net.minecraft.world.level.Level
  * @since June 30th, 2023
  */
 class ElixirItem(
-    val max: Boolean
-) : CobblemonItem(Properties().apply {
+    val max: Boolean, block: Block
+) : ItemNameBlockItem(block, Properties().apply {
     if (max) rarity(Rarity.UNCOMMON)
 }), PokemonSelectingItem {
     override val bagItem = object : BagItem {
@@ -81,10 +87,39 @@ class ElixirItem(
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        if (world is ServerLevel && user is ServerPlayer) {
-            val stack = user.getItemInHand(hand)
-            return use(user, stack)
+        val stack = user.getItemInHand(hand)
+
+        if (user is ServerPlayer) {
+            // Only invoke PokemonSelectingItem menu if we are in battle
+            if (user.getBattleState() != null) {
+                val result = use(user, stack)
+                if (result.result != InteractionResult.PASS)
+                    return result
+            }
         }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
+
+        return super<ItemNameBlockItem>.use(world, user, hand)
+    }
+
+    override fun interactLivingEntity(
+        stack: ItemStack,
+        player: Player,
+        target: LivingEntity,
+        hand: InteractionHand
+    ): InteractionResult {
+        if (player.level().isClientSide) return InteractionResult.PASS
+
+        if (player is ServerPlayer && target is PokemonEntity) {
+            val pokemon = target.pokemon
+            if (canUseOnPokemon(stack, pokemon)) {
+                val result = applyToPokemon(player, stack, pokemon)
+                if (result?.result == InteractionResult.SUCCESS) {
+                    return InteractionResult.SUCCESS
+                }
+            }
+            return InteractionResult.FAIL
+        }
+
+        return InteractionResult.PASS
     }
 }

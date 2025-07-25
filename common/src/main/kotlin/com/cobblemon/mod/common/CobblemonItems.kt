@@ -857,10 +857,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField val FULL_HEAL = create("full_heal", StatusCureItem("item.cobblemon.full_heal", block = CobblemonBlocks.FULL_HEAL))
 
-    @JvmField val ETHER = create("ether", EtherItem(max = false))
-    @JvmField val MAX_ETHER = create("max_ether", EtherItem(max = true))
-    @JvmField val ELIXIR = create("elixir", ElixirItem(max = false))
-    @JvmField val MAX_ELIXIR = create("max_elixir", ElixirItem(max = true))
+    @JvmField val ETHER = create("ether", EtherItem(max = false, block = CobblemonBlocks.ETHER))
+    @JvmField val MAX_ETHER = create("max_ether", EtherItem(max = true, block = CobblemonBlocks.MAX_ETHER))
+    @JvmField val ELIXIR = create("elixir", ElixirItem(max = false, block = CobblemonBlocks.ELIXIR))
+    @JvmField val MAX_ELIXIR = create("max_elixir", ElixirItem(max = true, block = CobblemonBlocks.MAX_ELIXIR))
 
     @JvmField
     val ABILITY_CAPSULE = this.create("ability_capsule", AbilityChangeItem(AbilityChanger.COMMON_ABILITY))

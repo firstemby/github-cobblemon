@@ -452,6 +452,11 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.PARALYZE_HEAL)
 
         entries.accept(CobblemonItems.FULL_HEAL)
+
+        entries.accept(CobblemonItems.ETHER)
+        entries.accept(CobblemonItems.MAX_ETHER)
+        entries.accept(CobblemonItems.ELIXIR)
+        entries.accept(CobblemonItems.MAX_ELIXIR)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

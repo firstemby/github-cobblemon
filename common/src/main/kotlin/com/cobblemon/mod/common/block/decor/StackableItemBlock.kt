@@ -46,6 +46,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         POTION,
         MAX_POTION,
         RESTORE,
+        ETHER,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -181,6 +182,34 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
                         else -> RESTORE_QUARTET_NORTH
                     }
                     else -> RESTORE_SINGLE
+                }
+            }
+
+            StackableItemType.ETHER -> {
+                when (state.getValue(ITEMS)) {
+                    1 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> ETHER_SINGLE_EW
+                        else -> ETHER_SINGLE_NS
+                    }
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> ETHER_DOUBLE_SOUTH
+                        Direction.WEST -> ETHER_DOUBLE_WEST
+                        Direction.EAST -> ETHER_DOUBLE_EAST
+                        else -> ETHER_DOUBLE_NORTH
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> ETHER_TRIPLE_SOUTH
+                        Direction.WEST -> ETHER_TRIPLE_WEST
+                        Direction.EAST -> ETHER_TRIPLE_EAST
+                        else -> ETHER_TRIPLE_NORTH
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> ETHER_QUARTET_SOUTH
+                        Direction.WEST -> ETHER_QUARTET_WEST
+                        Direction.EAST -> ETHER_QUARTET_EAST
+                        else -> ETHER_QUARTET_NORTH
+                    }
+                    else -> ETHER_SINGLE_NS
                 }
             }
 
@@ -471,6 +500,69 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             Shapes.box(0.125, 0.0, 0.1875, 0.375, 0.5, 0.4375),
             Shapes.box(0.25, 0.0, 0.625, 0.5, 0.5, 0.875),
             Shapes.box(0.625, 0.0, 0.625, 0.875, 0.5, 0.875)
+        )
+
+        val ETHER_SINGLE_EW = Shapes.box(0.34375, 0.0, 0.40625, 0.65625, 0.4375, 0.59375)
+        val ETHER_SINGLE_NS = Shapes.box(0.40625, 0.0, 0.34375, 0.59375, 0.4375, 0.65625)
+        val ETHER_DOUBLE_EAST = Shapes.or(
+            Shapes.box(0.375, 0.0, 0.5, 0.6875, 0.4375, 0.6875),
+            Shapes.box(0.25, 0.0, 0.25, 0.5625, 0.4375, 0.4375)
+        )
+        val ETHER_DOUBLE_WEST = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.3125, 0.625, 0.4375, 0.5),
+            Shapes.box(0.4375, 0.0, 0.5625, 0.75, 0.4375, 0.75)
+        )
+        val ETHER_DOUBLE_NORTH = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.3125, 0.6875, 0.4375, 0.625),
+            Shapes.box(0.25, 0.0, 0.4375, 0.4375, 0.4375, 0.75)
+        )
+        val ETHER_DOUBLE_SOUTH = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.375, 0.5, 0.4375, 0.6875),
+            Shapes.box(0.5625, 0.0, 0.25, 0.75, 0.4375, 0.5625)
+        )
+        val ETHER_TRIPLE_EAST = Shapes.or(
+            Shapes.box(0.25, 0.0, 0.625, 0.5625, 0.4375, 0.8125),
+            Shapes.box(0.125, 0.0, 0.1875, 0.4375, 0.4375, 0.375),
+            Shapes.box(0.5, 0.0, 0.375, 0.8125, 0.4375, 0.5625)
+        )
+        val ETHER_TRIPLE_WEST = Shapes.or(
+            Shapes.box(0.4375, 0.0, 0.1875, 0.75, 0.4375, 0.375),
+            Shapes.box(0.5625, 0.0, 0.625, 0.875, 0.4375, 0.8125),
+            Shapes.box(0.1875, 0.0, 0.4375, 0.5, 0.4375, 0.625)
+        )
+        val ETHER_TRIPLE_NORTH = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.4375, 0.8125, 0.4375, 0.75),
+            Shapes.box(0.1875, 0.0, 0.5625, 0.375, 0.4375, 0.875),
+            Shapes.box(0.375, 0.0, 0.1875, 0.5625, 0.4375, 0.5)
+        )
+        val ETHER_TRIPLE_SOUTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.25, 0.375, 0.4375, 0.5625),
+            Shapes.box(0.625, 0.0, 0.125, 0.8125, 0.4375, 0.4375),
+            Shapes.box(0.4375, 0.0, 0.5, 0.625, 0.4375, 0.8125)
+        )
+        val ETHER_QUARTET_EAST = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.5625, 0.4375, 0.4375, 0.75),
+            Shapes.box(0.0625, 0.0, 0.1875, 0.375, 0.4375, 0.375),
+            Shapes.box(0.5625, 0.0, 0.625, 0.875, 0.4375, 0.8125),
+            Shapes.box(0.5, 0.0, 0.125, 0.8125, 0.4375, 0.3125)
+        )
+        val ETHER_QUARTET_WEST = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.25, 0.875, 0.4375, 0.4375),
+            Shapes.box(0.625, 0.0, 0.625, 0.9375, 0.4375, 0.8125),
+            Shapes.box(0.125, 0.0, 0.1875, 0.4375, 0.4375, 0.375),
+            Shapes.box(0.1875, 0.0, 0.6875, 0.5, 0.4375, 0.875)
+        )
+        val ETHER_QUARTET_NORTH = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.5625, 0.75, 0.4375, 0.875),
+            Shapes.box(0.1875, 0.0, 0.625, 0.375, 0.4375, 0.9375),
+            Shapes.box(0.625, 0.0, 0.125, 0.8125, 0.4375, 0.4375),
+            Shapes.box(0.125, 0.0, 0.1875, 0.3125, 0.4375, 0.5)
+        )
+        val ETHER_QUARTET_SOUTH = Shapes.or(
+            Shapes.box(0.25, 0.0, 0.125, 0.4375, 0.4375, 0.4375),
+            Shapes.box(0.625, 0.0, 0.0625, 0.8125, 0.4375, 0.375),
+            Shapes.box(0.1875, 0.0, 0.5625, 0.375, 0.4375, 0.875),
+            Shapes.box(0.6875, 0.0, 0.5, 0.875, 0.4375, 0.8125)
         )
     }
 }

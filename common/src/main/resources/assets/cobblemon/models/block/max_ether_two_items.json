@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/ether_two_items",
+  "textures": {
+		"potion": "cobblemon:block/decorative_items/max_ether",
+		"particle": "cobblemon:block/decorative_items/max_ether"
+  }
+}

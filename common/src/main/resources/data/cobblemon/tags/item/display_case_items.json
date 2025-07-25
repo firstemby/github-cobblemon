@@ -53,6 +53,10 @@
         "cobblemon:burn_heal",
         "cobblemon:ice_heal",
         "cobblemon:paralyze_heal",
-        "cobblemon:full_heal"
+        "cobblemon:full_heal",
+        "cobblemon:ether",
+        "cobblemon:max_ether",
+        "cobblemon:elixir",
+        "cobblemon:max_elixir"
     ]
 }
