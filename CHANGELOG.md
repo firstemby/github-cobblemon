@@ -40,6 +40,17 @@
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
 - Added new optional property `attachment_options` for most EmitterShapes to be attached to the locator/entities scale, rotation, and/or position. Position is true by default.
 - Galarica Nut bushes now generate on beaches
+- Added a lot of new blocks
+  - Floor Placeable: Damp Rock, Heat Rock, Icy Rock, Smooth Rock, Sachet, Bright Powder, Metal Powder, Quick Powder, Luminous Moss, Chipped Pot, Cracked Pot, Masterpiece Teacup, Unremarkable Teacup, Destiny Knot, Iron Ball, Hard Stone, Galarica Cuff, Kings Rock, Never-Melt Ice
+  - Floor Stackable: Upgrade, Dubious Disc, Metal Coat, Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Antidote, Awakening, Burn Heal, Ice Heal, Paralyze Heal, Full Heal, Ether, Elixir, Max Ether, Max Elixir, X Accuracy, X Attack, X Defence, X Special Attack, X Special Defence, X Speed, Dire Hit, Guard Spec, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max
+  - Floor Interactive: Metronome
+  - Wall Placeable: Weakness Policy, Blunder Policy
+  - Wall Stackable: Cleanse Tag, Spell Tag
+  - Wall Interactive: Ring Target
+  - Six Face (Rotation): Galarica Wreath, Magnet, Flame Orb, Toxic Orb, Life Orb, Smoke Ball, Light Ball, White Plaque, Light Gray Plaque, Gray Plaque, Black Plaque, Brown Plaque, Red Plaque, Orange Plaque, Yellow Plaque, Lime Plaque, Green Plaque, Cyan Plaque, Light Blue Plaque, Blue Plaque, Purple Plaque, Magenta Plaque, Pink Plaque
+  - Six Face (Rotation) Interactive: Eject Button
+  - Six Directional Block: Peat Block
+- Added recipe to Smoke Ball and Light Ball
 
 ### Pokémon Added
 
@@ -224,11 +235,11 @@
 - Tweaked Berry flavor data to balance cooking pot mechanics
 - Made Red, Yellow, Green, Blue, Pink, Black, and White Apricorn Sprout and Saccharine Sapling able to be placed into flower pots.
 - Added all Potted Apricorn Sprouts, Potted Saccharine Saplings, and Potted Pep-Up Flowers to the `#minecraft:flower_pots` block tag
-- Corrected the healing values of the remedies and energy root, and reintroduced the friendship lowering mechanics for them, revivl herb, and heal powder
+- Corrected the healing values of the remedies and energy root, and reintroduced the friendship lowering mechanics for them, revival herb, and heal powder
 - Updated battle language keys for side effects to use position-specific formats, improving grammatical consistency
 - Saccharine Leaves are now Collectable
 - Saccharine Leaves Age 1 or higher will now show Yellow particles when broken
-- Destroying a Saccharine Honey Log will now drop a Saccharine Log in stead of nothing
+- Destroying a Saccharine Honey Log will now drop a Saccharine Log instead of nothing
 - Reworked some compost chances
 - Updated interaction interface to include 4 more option spaces
 - Made lecterns that hold a Pokédex emit light.
@@ -238,6 +249,10 @@
 - Reorganised the `block` texture folder to be more organised, in line with the `item` texture folder.
 - Offset in EmitterShape now ignores scale to be more like Blockbench by default. You can get this behaviour back by adding `"scale": true` in the `attachment_options` property in most EmitterShapes.
 - Not specifying a dex in `/pokedex printcalculations {player} {dex}` will now print the National Dex statistics instead of showing all dexes. `/pokedex printcalculations {player} all` is how to view all dex statistics in one command.
+- `custom_model_data=1` on items can now be displayed when placed in a Display Case by adding to the item tag `cobblemon:display_case_items`
+- Upgrade, Dubious Disc, and Luminous Moss sprites have been updated to better match the new block forms
+- Updated Peat Block and Peat Mulch recipes
+- Minor tab reorganisation
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
