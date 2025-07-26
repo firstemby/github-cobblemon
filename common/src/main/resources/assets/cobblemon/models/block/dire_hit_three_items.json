@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_battle_item_three_items",
+  "textures": {
+		"x": "cobblemon:block/decorative_items/dire_hit",
+		"particle": "cobblemon:block/decorative_items/dire_hit"
+  }
+}

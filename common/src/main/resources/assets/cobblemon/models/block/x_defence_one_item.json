@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_battle_item_one_item",
+  "textures": {
+		"x": "cobblemon:block/decorative_items/x_defence",
+		"particle": "cobblemon:block/decorative_items/x_defence"
+  }
+}

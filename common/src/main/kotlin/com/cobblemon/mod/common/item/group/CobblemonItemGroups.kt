@@ -457,6 +457,16 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MAX_ETHER)
         entries.accept(CobblemonItems.ELIXIR)
         entries.accept(CobblemonItems.MAX_ELIXIR)
+
+        entries.accept(CobblemonItems.X_ATTACK)
+        entries.accept(CobblemonItems.X_DEFENSE)
+        entries.accept(CobblemonItems.X_SP_ATK)
+        entries.accept(CobblemonItems.X_SP_DEF)
+        entries.accept(CobblemonItems.X_SPEED)
+        entries.accept(CobblemonItems.X_ACCURACY)
+
+        entries.accept(CobblemonItems.DIRE_HIT)
+        entries.accept(CobblemonItems.GUARD_SPEC)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

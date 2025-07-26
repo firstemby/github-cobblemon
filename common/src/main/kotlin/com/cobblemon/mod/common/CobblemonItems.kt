@@ -838,15 +838,15 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SERIOUS_MINT = mintItem("serious_mint", MintItem(Natures.SERIOUS))
 
-    @JvmField val X_ACCURACY = create("x_${Stats.ACCURACY.identifier.path}", XStatItem(Stats.ACCURACY))
-    @JvmField val X_ATTACK = create("x_${Stats.ATTACK.identifier.path}", XStatItem(Stats.ATTACK))
-    @JvmField val X_DEFENSE = create("x_${Stats.DEFENCE.identifier.path}", XStatItem(Stats.DEFENCE))
-    @JvmField val X_SP_ATK = create("x_${Stats.SPECIAL_ATTACK.identifier.path}", XStatItem(Stats.SPECIAL_ATTACK))
-    @JvmField val X_SP_DEF = create("x_${Stats.SPECIAL_DEFENCE.identifier.path}", XStatItem(Stats.SPECIAL_DEFENCE))
-    @JvmField val X_SPEED = create("x_${Stats.SPEED.identifier.path}", XStatItem(Stats.SPEED))
+    @JvmField val X_ACCURACY = create("x_${Stats.ACCURACY.identifier.path}", XStatItem(Stats.ACCURACY, block = CobblemonBlocks.X_ACCURACY))
+    @JvmField val X_ATTACK = create("x_${Stats.ATTACK.identifier.path}", XStatItem(Stats.ATTACK, block = CobblemonBlocks.X_ATTACK))
+    @JvmField val X_DEFENSE = create("x_${Stats.DEFENCE.identifier.path}", XStatItem(Stats.DEFENCE, block = CobblemonBlocks.X_DEFENCE))
+    @JvmField val X_SP_ATK = create("x_${Stats.SPECIAL_ATTACK.identifier.path}", XStatItem(Stats.SPECIAL_ATTACK, block = CobblemonBlocks.X_SPECIAL_ATTACK))
+    @JvmField val X_SP_DEF = create("x_${Stats.SPECIAL_DEFENCE.identifier.path}", XStatItem(Stats.SPECIAL_DEFENCE, block = CobblemonBlocks.X_SPECIAL_DEFENCE))
+    @JvmField val X_SPEED = create("x_${Stats.SPEED.identifier.path}", XStatItem(Stats.SPEED, block = CobblemonBlocks.X_SPEED))
 
-    @JvmField val DIRE_HIT = create("dire_hit", DireHitItem())
-    @JvmField val GUARD_SPEC = create("guard_spec", GuardSpecItem())
+    @JvmField val DIRE_HIT = create("dire_hit", DireHitItem(block = CobblemonBlocks.DIRE_HIT))
+    @JvmField val GUARD_SPEC = create("guard_spec", GuardSpecItem(block = CobblemonBlocks.GUARD_SPEC))
 
     @JvmField val BURN_HEAL = create("burn_heal", StatusCureItem("item.cobblemon.burn_heal", Statuses.BURN, block = CobblemonBlocks.BURN_HEAL))
     @JvmField val PARALYZE_HEAL = create("paralyze_heal", StatusCureItem(

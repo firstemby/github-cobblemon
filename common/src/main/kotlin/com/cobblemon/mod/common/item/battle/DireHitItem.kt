@@ -13,10 +13,11 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.CobblemonItem
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
+import net.minecraft.world.item.*
+import net.minecraft.world.level.block.Block
 
 
-class DireHitItem : CobblemonItem(Properties()), SimpleBagItemLike {
+class DireHitItem(block: Block) : ItemNameBlockItem(block, Properties()), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.dire_hit"
         override val returnItem = Items.AIR

@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_battle_item_four_items",
+  "textures": {
+		"x": "cobblemon:block/decorative_items/x_speed",
+		"particle": "cobblemon:block/decorative_items/x_speed"
+  }
+}

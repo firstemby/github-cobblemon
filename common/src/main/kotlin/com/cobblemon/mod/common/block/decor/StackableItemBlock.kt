@@ -47,6 +47,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         MAX_POTION,
         RESTORE,
         ETHER,
+        BATTLE_X,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -210,6 +211,26 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
                         else -> ETHER_QUARTET_NORTH
                     }
                     else -> ETHER_SINGLE_NS
+                }
+            }
+
+            StackableItemType.BATTLE_X -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> BATTLE_DOUBLE_EW
+                        else -> BATTLE_DOUBLE_NS
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> BATTLE_TRIPLE_S
+                        Direction.WEST -> BATTLE_TRIPLE_W
+                        Direction.EAST -> BATTLE_TRIPLE_E
+                        else -> BATTLE_TRIPLE_N
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> BATTLE_QUARTET_EW
+                        else -> BATTLE_QUARTET_NS
+                    }
+                    else -> BATTLE_SINGLE
                 }
             }
 
@@ -563,6 +584,48 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             Shapes.box(0.625, 0.0, 0.0625, 0.8125, 0.4375, 0.375),
             Shapes.box(0.1875, 0.0, 0.5625, 0.375, 0.4375, 0.875),
             Shapes.box(0.6875, 0.0, 0.5, 0.875, 0.4375, 0.8125)
+        )
+
+        val BATTLE_SINGLE = Shapes.box(0.375, 0.0, 0.375, 0.625, 0.4375, 0.625)
+        val BATTLE_DOUBLE_NS = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.4375, 0.8125, 0.4375, 0.6875),
+            Shapes.box(0.1875, 0.0, 0.3125, 0.4375, 0.4375, 0.5625)
+        )
+        val BATTLE_DOUBLE_EW = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.5625, 0.5625, 0.4375, 0.8125),
+            Shapes.box(0.4375, 0.0, 0.1875, 0.6875, 0.4375, 0.4375)
+        )
+        val BATTLE_TRIPLE_N = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.625, 0.875, 0.4375, 0.875),
+            Shapes.box(0.125, 0.0, 0.5, 0.375, 0.4375, 0.75),
+            Shapes.box(0.4375, 0.0, 0.125, 0.6875, 0.4375, 0.375)
+        )
+        val BATTLE_TRIPLE_E = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.625, 0.375, 0.4375, 0.875),
+            Shapes.box(0.25, 0.0, 0.125, 0.5, 0.4375, 0.375),
+            Shapes.box(0.625, 0.0, 0.4375, 0.875, 0.4375, 0.6875)
+        )
+        val BATTLE_TRIPLE_S = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.125, 0.375, 0.4375, 0.375),
+            Shapes.box(0.625, 0.0, 0.25, 0.875, 0.4375, 0.5),
+            Shapes.box(0.3125, 0.0, 0.625, 0.5625, 0.4375, 0.875)
+        )
+        val BATTLE_TRIPLE_W = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.125, 0.875, 0.4375, 0.375),
+            Shapes.box(0.5, 0.0, 0.625, 0.75, 0.4375, 0.875),
+            Shapes.box(0.125, 0.0, 0.3125, 0.375, 0.4375, 0.5625)
+        )
+        val BATTLE_QUARTET_NS = Shapes.or(
+            Shapes.box(0.625, 0.0, 0.625, 0.875, 0.4375, 0.875),
+            Shapes.box(0.1875, 0.0, 0.5625, 0.4375, 0.4375, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.1875, 0.8125, 0.4375, 0.4375),
+            Shapes.box(0.125, 0.0, 0.125, 0.375, 0.4375, 0.375)
+        )
+        val BATTLE_QUARTET_EW = Shapes.or(
+            Shapes.box(0.125, 0.0, 0.625, 0.375, 0.4375, 0.875),
+            Shapes.box(0.1875, 0.0, 0.1875, 0.4375, 0.4375, 0.4375),
+            Shapes.box(0.5625, 0.0, 0.5625, 0.8125, 0.4375, 0.8125),
+            Shapes.box(0.625, 0.0, 0.125, 0.875, 0.4375, 0.375)
         )
     }
 }
