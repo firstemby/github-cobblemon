@@ -401,7 +401,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.MAGENTA_PLAQUE)
         entries.accept(CobblemonItems.PINK_PLAQUE)
 
-        //Decorative Items
+        //Decorative Items - Easy to move around if we later want down here
         entries.accept(CobblemonItems.CHIPPED_POT)
         entries.accept(CobblemonItems.CRACKED_POT)
         entries.accept(CobblemonItems.MASTERPIECE_TEACUP)
@@ -450,7 +450,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.BURN_HEAL)
         entries.accept(CobblemonItems.ICE_HEAL)
         entries.accept(CobblemonItems.PARALYZE_HEAL)
-
         entries.accept(CobblemonItems.FULL_HEAL)
 
         entries.accept(CobblemonItems.ETHER)
@@ -464,9 +463,17 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.X_SP_DEF)
         entries.accept(CobblemonItems.X_SPEED)
         entries.accept(CobblemonItems.X_ACCURACY)
-
         entries.accept(CobblemonItems.DIRE_HIT)
         entries.accept(CobblemonItems.GUARD_SPEC)
+
+        entries.accept(CobblemonItems.HP_UP)
+        entries.accept(CobblemonItems.PROTEIN)
+        entries.accept(CobblemonItems.IRON)
+        entries.accept(CobblemonItems.CALCIUM)
+        entries.accept(CobblemonItems.ZINC)
+        entries.accept(CobblemonItems.CARBOS)
+        entries.accept(CobblemonItems.PP_UP)
+        entries.accept(CobblemonItems.PP_MAX)
     }
 
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {

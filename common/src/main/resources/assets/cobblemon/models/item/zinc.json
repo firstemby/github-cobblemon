@@ -2,5 +2,31 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cobblemon:item/medicine/zinc"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "cobblemon:block/zinc_one_item"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "cobblemon:block/zinc_two_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "cobblemon:block/zinc_three_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "cobblemon:block/zinc_four_items"
+    }
+  ]
 }

@@ -2,5 +2,31 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cobblemon:item/medicine/iron"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "cobblemon:block/iron_one_item"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "cobblemon:block/iron_two_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "cobblemon:block/iron_three_items"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "cobblemon:block/iron_four_items"
+    }
+  ]
 }

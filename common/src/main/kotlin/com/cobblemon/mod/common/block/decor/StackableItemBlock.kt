@@ -48,6 +48,7 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
         RESTORE,
         ETHER,
         BATTLE_X,
+        VITAMIN,
         GENERIC_8x;
 
         override fun getSerializedName(): String = this.name.lowercase()
@@ -231,6 +232,28 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
                         else -> BATTLE_QUARTET_NS
                     }
                     else -> BATTLE_SINGLE
+                }
+            }
+
+            StackableItemType.VITAMIN -> {
+                when (state.getValue(ITEMS)) {
+                    2 -> when (state.getValue(FACING)) {
+                        Direction.WEST, Direction.EAST -> VITAMIN_DOUBLE_EW
+                        else -> VITAMIN_DOUBLE_NS
+                    }
+                    3 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> VITAMIN_TRIPLE_SOUTH
+                        Direction.WEST -> VITAMIN_TRIPLE_WEST
+                        Direction.EAST -> VITAMIN_TRIPLE_EAST
+                        else -> VITAMIN_TRIPLE_NORTH
+                    }
+                    4 -> when (state.getValue(FACING)) {
+                        Direction.SOUTH -> VITAMIN_QUARTET_SOUTH
+                        Direction.WEST -> VITAMIN_QUARTET_WEST
+                        Direction.EAST -> VITAMIN_QUARTET_EAST
+                        else -> VITAMIN_QUARTET_NORTH
+                    }
+                    else -> VITAMIN_SINGLE
                 }
             }
 
@@ -626,6 +649,60 @@ class StackableItemBlock(settings: Properties, val stackableItemType: StackableI
             Shapes.box(0.1875, 0.0, 0.1875, 0.4375, 0.4375, 0.4375),
             Shapes.box(0.5625, 0.0, 0.5625, 0.8125, 0.4375, 0.8125),
             Shapes.box(0.625, 0.0, 0.125, 0.875, 0.4375, 0.375)
+        )
+
+        val VITAMIN_SINGLE = Shapes.box(0.375, 0.0, 0.375, 0.625, 0.375, 0.625)
+        val VITAMIN_DOUBLE_EW = Shapes.or(
+            Shapes.box(0.3125, 0.0, 0.5625, 0.5625, 0.375, 0.8125),
+            Shapes.box(0.4375, 0.0, 0.1875, 0.6875, 0.375, 0.4375)
+        )
+        val VITAMIN_DOUBLE_NS = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.4375, 0.8125, 0.375, 0.6875),
+            Shapes.box(0.1875, 0.0, 0.3125, 0.4375, 0.375, 0.5625)
+        )
+        val VITAMIN_TRIPLE_EAST = Shapes.or(
+            Shapes.box(0.5, 0.0, 0.5625, 0.75, 0.375, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.1875, 0.8125, 0.375, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.375, 0.4375, 0.375, 0.625)
+        )
+        val VITAMIN_TRIPLE_WEST = Shapes.or(
+            Shapes.box(0.25, 0.0, 0.1875, 0.5, 0.375, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.5625, 0.4375, 0.375, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.375, 0.8125, 0.375, 0.625)
+        )
+        val VITAMIN_TRIPLE_NORTH = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.25, 0.8125, 0.375, 0.5),
+            Shapes.box(0.1875, 0.0, 0.1875, 0.4375, 0.375, 0.4375),
+            Shapes.box(0.375, 0.0, 0.5625, 0.625, 0.375, 0.8125)
+        )
+        val VITAMIN_TRIPLE_SOUTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.5, 0.4375, 0.375, 0.75),
+            Shapes.box(0.5625, 0.0, 0.5625, 0.8125, 0.375, 0.8125),
+            Shapes.box(0.375, 0.0, 0.1875, 0.625, 0.375, 0.4375)
+        )
+        val VITAMIN_QUARTET_EAST = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.5625, 0.8125, 0.375, 0.8125),
+            Shapes.box(0.625, 0.0, 0.1875, 0.875, 0.375, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.125, 0.4375, 0.375, 0.375),
+            Shapes.box(0.125, 0.0, 0.625, 0.375, 0.375, 0.875)
+        )
+        val VITAMIN_QUARTET_WEST = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.1875, 0.4375, 0.375, 0.4375),
+            Shapes.box(0.125, 0.0, 0.5625, 0.375, 0.375, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.625, 0.8125, 0.375, 0.875),
+            Shapes.box(0.625, 0.0, 0.125, 0.875, 0.375, 0.375)
+        )
+        val VITAMIN_QUARTET_NORTH = Shapes.or(
+            Shapes.box(0.5625, 0.0, 0.1875, 0.8125, 0.375, 0.4375),
+            Shapes.box(0.1875, 0.0, 0.125, 0.4375, 0.375, 0.375),
+            Shapes.box(0.125, 0.0, 0.5625, 0.375, 0.375, 0.8125),
+            Shapes.box(0.625, 0.0, 0.625, 0.875, 0.375, 0.875)
+        )
+        val VITAMIN_QUARTET_SOUTH = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.5625, 0.4375, 0.375, 0.8125),
+            Shapes.box(0.5625, 0.0, 0.625, 0.8125, 0.375, 0.875),
+            Shapes.box(0.625, 0.0, 0.1875, 0.875, 0.375, 0.4375),
+            Shapes.box(0.125, 0.0, 0.125, 0.375, 0.375, 0.375)
         )
     }
 }

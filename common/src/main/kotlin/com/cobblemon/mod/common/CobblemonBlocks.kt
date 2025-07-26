@@ -586,6 +586,22 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val DIRE_HIT = create("dire_hit", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.BATTLE_X))
     @JvmField
     val GUARD_SPEC = create("guard_spec", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.BATTLE_X))
+    @JvmField
+    val HP_UP = create("hp_up", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val PROTEIN = create("protein", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val IRON = create("iron", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val CARBOS = create("carbos", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val CALCIUM = create("calcium", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val ZINC = create("zinc", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val PP_UP = create("pp_up", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
+    @JvmField
+    val PP_MAX = create("pp_max", StackableItemBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion(), StackableItemType.VITAMIN))
 
     @JvmField
     val WHITE_PLAQUE = create("white_plaque", PlaqueBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).mapColor(MapColor.METAL).noOcclusion().pushReaction(PushReaction.DESTROY).strength(5.0F)))

@@ -670,17 +670,17 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val EXPERIENCE_CANDY_XL = candyItem("exp_candy_xl") { _, _ -> CandyItem.DEFAULT_XL_CANDY_YIELD }
     @JvmField
-    val CALCIUM = create("calcium", VitaminItem(Stats.SPECIAL_ATTACK))
+    val CALCIUM = create("calcium", VitaminItem(Stats.SPECIAL_ATTACK, block = CobblemonBlocks.CALCIUM))
     @JvmField
-    val CARBOS = create("carbos", VitaminItem(Stats.SPEED))
+    val CARBOS = create("carbos", VitaminItem(Stats.SPEED, block = CobblemonBlocks.CARBOS))
     @JvmField
-    val HP_UP = create("hp_up", VitaminItem(Stats.HP))
+    val HP_UP = create("hp_up", VitaminItem(Stats.HP, block = CobblemonBlocks.HP_UP))
     @JvmField
-    val IRON = create("iron", VitaminItem(Stats.DEFENCE))
+    val IRON = create("iron", VitaminItem(Stats.DEFENCE, block = CobblemonBlocks.IRON))
     @JvmField
-    val PROTEIN = create("protein", VitaminItem(Stats.ATTACK))
+    val PROTEIN = create("protein", VitaminItem(Stats.ATTACK, block = CobblemonBlocks.PROTEIN))
     @JvmField
-    val ZINC = create("zinc", VitaminItem(Stats.SPECIAL_DEFENCE))
+    val ZINC = create("zinc", VitaminItem(Stats.SPECIAL_DEFENCE, block = CobblemonBlocks.ZINC))
     @JvmField
     val HEALTH_MOCHI = create("health_mochi", MochiItem(Stats.HP))
     @JvmField
@@ -764,9 +764,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MAX_REVIVE = create("max_revive", ReviveItem(max = true))
     @JvmField
-    val PP_UP = create("pp_up", PPUpItem(1))
+    val PP_UP = create("pp_up", PPUpItem(1, block = CobblemonBlocks.PP_UP))
     @JvmField
-    val PP_MAX = create("pp_max", PPUpItem(3))
+    val PP_MAX = create("pp_max", PPUpItem(3, block = CobblemonBlocks.PP_MAX))
 
     @JvmField
     val RED_MINT_SEEDS = mintSeed("red", MintType.RED.getCropBlock())

@@ -65,6 +65,14 @@
         "cobblemon:x_speed",
         "cobblemon:x_accuracy",
         "cobblemon:dire_hit",
-        "cobblemon:guard_spec"
+        "cobblemon:guard_spec",
+        "cobblemon:hp_up",
+        "cobblemon:protein",
+        "cobblemon:iron",
+        "cobblemon:calcium",
+        "cobblemon:zinc",
+        "cobblemon:carbos",
+        "cobblemon:pp_up",
+        "cobblemon:pp_max"
     ]
 }

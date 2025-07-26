@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/template_vitamin_three_items",
+  "textures": {
+		"vitamin": "cobblemon:block/decorative_items/iron",
+		"particle": "cobblemon:block/decorative_items/iron"
+  }
+}
