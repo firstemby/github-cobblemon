@@ -21,12 +21,18 @@ object MobEffectSeasoningProcessor : SeasoningProcessor {
 
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
         val allEffects: List<SerializableMobEffectInstance> = seasoning
-                .flatMap { Seasonings.getMobEffectsFromItemStack(it) }
+            .flatMap { Seasonings.getMobEffectsFromItemStack(it) }
 
-        val mergedEffects = MobEffectUtils.mergeEffects(allEffects).map { it.toInstance() }
+        val mergedEffects = MobEffectUtils.mergeEffects(allEffects)
+            .map { it.toInstance() }
+
+        val foodComponents = allEffects.mapNotNull { it.food?.toComponent() }
+        val mergedFood = if (foodComponents.isNotEmpty()) {
+            com.cobblemon.mod.common.api.cooking.FoodUtils.merge(foodComponents)
+        } else null
 
         if (mergedEffects.isNotEmpty()) {
-            result.set(CobblemonItemComponents.MOB_EFFECTS, MobEffectsComponent(mergedEffects))
+            result.set(CobblemonItemComponents.MOB_EFFECTS, MobEffectsComponent(mergedEffects, mergedFood))
         }
     }
 

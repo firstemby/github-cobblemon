@@ -13,26 +13,34 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.effect.MobEffectInstance
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 data class FoodComponent(
-        val hunger: Int,
-        val saturation: Float
+    val hunger: Int,
+    val saturation: Float,
+    val mobEffects: List<MobEffectInstance>? = null
 ) {
     companion object {
         val CODEC: Codec<FoodComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
-                    Codec.INT.fieldOf("hunger").forGetter { it.hunger },
-                    Codec.FLOAT.fieldOf("saturation").forGetter { it.saturation }
-            ).apply(builder, ::FoodComponent)
+                Codec.INT.fieldOf("hunger").forGetter { it.hunger },
+                Codec.FLOAT.fieldOf("saturation").forGetter { it.saturation },
+                MobEffectInstance.CODEC.listOf().optionalFieldOf("mob_effects").forGetter { Optional.ofNullable(it.mobEffects) }
+            ).apply(builder) { hunger, saturation, mobEffects ->
+                FoodComponent(hunger, saturation, mobEffects.getOrNull())
+            }
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, FoodComponent> = ByteBufCodecs.fromCodec(CODEC)
     }
 
     override fun equals(other: Any?): Boolean =
-            other is FoodComponent &&
-                    hunger == other.hunger &&
-                    saturation == other.saturation
+        other is FoodComponent &&
+                hunger == other.hunger &&
+                saturation == other.saturation &&
+                mobEffects == other.mobEffects
 
-    override fun hashCode(): Int = 31 * hunger + saturation.hashCode()
+    override fun hashCode(): Int = 31 * hunger + saturation.hashCode() + (mobEffects?.hashCode() ?: 0)
 }

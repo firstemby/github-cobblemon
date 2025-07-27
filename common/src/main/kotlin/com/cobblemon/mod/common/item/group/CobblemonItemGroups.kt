@@ -409,7 +409,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.OLD_GATEAU)
         entries.accept(CobblemonItems.CASTELIACONE)
         entries.accept(CobblemonItems.LUMIOSE_GALETTE)
-        entries.accept(CobblemonItems.SHALOUR_SABLE)
         entries.accept(CobblemonItems.BIG_MALASADA)
         entries.accept(CobblemonItems.SMOKED_TAIL_CURRY)
         entries.accept(CobblemonItems.OPEN_FACED_SANDWICH)
@@ -765,8 +764,7 @@ object CobblemonItemGroups {
         injector.putAfter(CobblemonItems.OLD_GATEAU, CobblemonItems.JUBILIFE_MUFFIN)
         injector.putAfter(CobblemonItems.CASTELIACONE, CobblemonItems.OLD_GATEAU)
         injector.putAfter(CobblemonItems.LUMIOSE_GALETTE, CobblemonItems.CASTELIACONE)
-        injector.putAfter(CobblemonItems.SHALOUR_SABLE, CobblemonItems.LUMIOSE_GALETTE)
-        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.SHALOUR_SABLE)
+        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.LUMIOSE_GALETTE)
         injector.putAfter(CobblemonItems.SMOKED_TAIL_CURRY, CobblemonItems.BIG_MALASADA)
         injector.putAfter(CobblemonItems.OPEN_FACED_SANDWICH, CobblemonItems.SMOKED_TAIL_CURRY)
 

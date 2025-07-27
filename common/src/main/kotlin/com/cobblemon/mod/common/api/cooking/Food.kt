@@ -11,19 +11,25 @@ package com.cobblemon.mod.common.api.cooking
 import com.cobblemon.mod.common.item.components.FoodComponent
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 data class Food(
-        val hunger: Int = 0,
-        val saturation: Float = 0f,
+    val hunger: Int = 0,
+    val saturation: Float = 0f,
+    val mobEffects: List<SerializableMobEffectInstance>? = null
 ) {
     companion object {
         val CODEC: Codec<Food> = RecordCodecBuilder.create { builder ->
             builder.group(
-                    Codec.INT.optionalFieldOf("hunger", 0).forGetter { it.hunger },
-                    Codec.FLOAT.optionalFieldOf("saturation", 0f).forGetter { it.saturation },
-            ).apply(builder, ::Food)
+                Codec.INT.optionalFieldOf("hunger", 0).forGetter { it.hunger },
+                Codec.FLOAT.optionalFieldOf("saturation", 0f).forGetter { it.saturation },
+                SerializableMobEffectInstance.CODEC.listOf().optionalFieldOf("mobEffects").forGetter { Optional.ofNullable(it.mobEffects) }
+            ).apply(builder) { hunger, saturation, mobEffects ->
+                Food(hunger, saturation, mobEffects.getOrNull())
+            }
         }
     }
 
-    fun toComponent(): FoodComponent = FoodComponent(hunger, saturation)
+    fun toComponent(): FoodComponent = FoodComponent(hunger, saturation, mobEffects?.map { it.toInstance() })
 }

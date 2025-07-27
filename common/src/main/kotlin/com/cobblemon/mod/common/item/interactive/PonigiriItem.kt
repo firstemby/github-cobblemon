@@ -45,16 +45,20 @@ class PonigiriItem : Item(
     }
 
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
-        val effects = stack.get(CobblemonItemComponents.FOOD)
+        val food = stack.get(CobblemonItemComponents.FOOD)
 
-        if (effects != null && !world.isClientSide) {
-            if (user is Player) { // todo maybe we want to be able to let other mobs eat these? or modded creatures that have hunder? idk
-                user.foodData.eat(effects.hunger, effects.saturation)
+        if (food != null && !world.isClientSide) {
+            if (user is Player) {
+                user.foodData.eat(food.hunger, food.saturation)
+            }
+            food.mobEffects?.forEach {
+                user.addEffect(it)
             }
         }
 
         return super.finishUsingItem(stack, world, user)
     }
+
 
     override fun getUseAnimation(stack: ItemStack) = UseAnim.EAT
 

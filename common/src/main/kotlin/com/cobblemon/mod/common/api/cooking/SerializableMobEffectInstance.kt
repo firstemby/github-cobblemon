@@ -15,31 +15,38 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 data class SerializableMobEffectInstance(
-        val effect: ResourceLocation,
-        val duration: Int,
-        val amplifier: Int = 0,
-        val ambient: Boolean = false,
-        val visible: Boolean = true,
-        val showIcon: Boolean = true
+    val effect: ResourceLocation,
+    val duration: Int,
+    val amplifier: Int = 0,
+    val ambient: Boolean = false,
+    val visible: Boolean = true,
+    val showIcon: Boolean = true,
+    val food: Food? = null
 ) {
     fun toInstance(): MobEffectInstance {
         val holder = BuiltInRegistries.MOB_EFFECT.getHolder(effect)
-                .orElseThrow { IllegalArgumentException("Unknown MobEffect: $effect") }
+            .orElseThrow { IllegalArgumentException("Unknown MobEffect: $effect") }
         return MobEffectInstance(holder, duration, amplifier, ambient, visible, showIcon)
     }
 
     companion object {
         val CODEC: Codec<SerializableMobEffectInstance> = RecordCodecBuilder.create { builder ->
             builder.group(
-                    ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },
-                    Codec.INT.fieldOf("duration").forGetter { it.duration },
-                    Codec.INT.fieldOf("amplifier").forGetter { it.amplifier },
-                    Codec.BOOL.optionalFieldOf("ambient", false).forGetter { it.ambient },
-                    Codec.BOOL.optionalFieldOf("visible", true).forGetter { it.visible },
-                    Codec.BOOL.optionalFieldOf("showIcon", true).forGetter { it.showIcon }
-            ).apply(builder, ::SerializableMobEffectInstance)
+                ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },
+                Codec.INT.fieldOf("duration").forGetter { it.duration },
+                Codec.INT.fieldOf("amplifier").forGetter { it.amplifier },
+                Codec.BOOL.optionalFieldOf("ambient", false).forGetter { it.ambient },
+                Codec.BOOL.optionalFieldOf("visible", true).forGetter { it.visible },
+                Codec.BOOL.optionalFieldOf("showIcon", true).forGetter { it.showIcon },
+                Food.CODEC.optionalFieldOf("food").forGetter { Optional.ofNullable(it.food) }
+            ).apply(builder) { effect, duration, amplifier, ambient, visible, showIcon, food ->
+                SerializableMobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon, food.getOrNull())
+            }
         }
     }
 }
+

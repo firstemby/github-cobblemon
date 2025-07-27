@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.item.crafting
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.FoodUtils
+import com.cobblemon.mod.common.api.cooking.MobEffectUtils
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.item.components.FoodComponent
 import net.minecraft.core.component.DataComponents
@@ -25,17 +26,34 @@ object FoodSeasoningProcessor : SeasoningProcessor {
         val baseSaturation = foodData?.saturation ?: 0f
 
         val foodComponents = seasoning.mapNotNull {
-            Seasonings.getFromItemStack(it)?.food?.toComponent()
+            Seasonings.getFromItemStack(it)?.food
         }
 
-        if (foodComponents.isNotEmpty()) {
-            val merged = FoodUtils.merge(foodComponents, extraHunger = baseHunger, extraSaturation = baseSaturation)
-            result.set(CobblemonItemComponents.FOOD, merged)
-        } // we still want there to be food data on the output item still? To be conistent? idk
-        else {
-            result.set(CobblemonItemComponents.FOOD, FoodComponent(baseHunger, baseSaturation))
+        val mergedFood = FoodUtils.merge(
+            foodComponents.map { it.toComponent() },
+            extraHunger = baseHunger,
+            extraSaturation = baseSaturation
+        )
+
+        val allEffects = foodComponents
+            .mapNotNull { it.mobEffects }
+            .flatMap { it }
+
+        val mergedEffects = if (allEffects.isNotEmpty()) {
+            MobEffectUtils
+                .mergeEffects(allEffects)
+                .map { it.toInstance() }
+        } else null
+
+        val finalComponent = if (mergedEffects != null && mergedEffects.isNotEmpty()) {
+            FoodComponent(mergedFood.hunger, mergedFood.saturation, mergedEffects)
+        } else {
+            mergedFood
         }
+
+        result.set(CobblemonItemComponents.FOOD, finalComponent)
     }
+
 
     override fun consumesItem(seasoning: ItemStack): Boolean {
         val seasoningData = Seasonings.getFromItemStack(seasoning)

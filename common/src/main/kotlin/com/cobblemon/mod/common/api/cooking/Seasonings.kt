@@ -51,7 +51,6 @@ object Seasonings : JsonDataRegistry<Seasoning> {
     }
 
     override fun reload(data: Map<ResourceLocation, Seasoning>) {
-        // this needs to sideload the berry data so we don't get duplicate JSONs.
         val finalData = Berries.all().associate {
             it.identifier to Seasoning(
                 ingredient = RegistryLikeIdentifierCondition(it.identifier),
@@ -62,7 +61,16 @@ object Seasonings : JsonDataRegistry<Seasoning> {
                 mobEffects = emptyList()
             )
         }.toMutableMap()
-        finalData.putAll(data)
+
+        data.forEach { (id, seasoning) ->
+            try {
+                finalData[id] = seasoning
+            } catch (e: Exception) {
+                System.err.println("Failed to parse seasoning: $id")
+                e.printStackTrace()
+            }
+        }
+
         seasonings.addAll(finalData.values)
     }
 

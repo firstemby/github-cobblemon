@@ -15,22 +15,30 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.effect.MobEffectInstance
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 data class MobEffectsComponent(
-        val mobEffects: List<MobEffectInstance>
+    val mobEffects: List<MobEffectInstance>,
+    val food: FoodComponent? = null
 ) {
     companion object {
         val CODEC: Codec<MobEffectsComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
-                    MobEffectInstance.CODEC.listOf().fieldOf("mob_effects").forGetter { it.mobEffects }
-            ).apply(builder, ::MobEffectsComponent)
+                MobEffectInstance.CODEC.listOf().fieldOf("mob_effects").forGetter { it.mobEffects },
+                FoodComponent.CODEC.optionalFieldOf("food").forGetter { Optional.ofNullable(it.food) }
+            ).apply(builder) { effects, food ->
+                MobEffectsComponent(effects, food.getOrNull())
+            }
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, MobEffectsComponent> = ByteBufCodecs.fromCodec(CODEC)
     }
 
     override fun equals(other: Any?): Boolean =
-            other is MobEffectsComponent && mobEffects == other.mobEffects
+        other is MobEffectsComponent &&
+                mobEffects == other.mobEffects &&
+                food == other.food
 
-    override fun hashCode(): Int = 31 * mobEffects.hashCode()
+    override fun hashCode(): Int = 31 * mobEffects.hashCode() + (food?.hashCode() ?: 0)
 }
