@@ -12,7 +12,7 @@
     }
   ],
   "food": {
-    "hunger": 6,
-    "saturation": 14.4
+    "hunger": 3,
+    "saturation": 7.2
   }
 }

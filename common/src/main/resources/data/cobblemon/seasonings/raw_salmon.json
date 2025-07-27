@@ -2,7 +2,7 @@
   "ingredient": "minecraft:raw_salmon",
   "colour": "brown",
   "food": {
-    "hunger": 6,
-    "saturation": 9.6
+    "hunger": 3,
+    "saturation": 4.8
   }
 }

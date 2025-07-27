@@ -140,7 +140,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         val hasFlavour = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours?.any { it.value > 0 } == true
 
         if (!hasFlavour && user is Player && !world.isClientSide) {
-            user.foodData.eat(1, 0.1f)
+            user.foodData.eat(4, 1.2f)
             stack.consume(1, user)
         }
 

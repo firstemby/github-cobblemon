@@ -2,7 +2,7 @@
   "ingredient": "minecraft:raw_chicken",
   "colour": "brown",
   "food": {
-    "hunger": 6,
-    "saturation": 7.2
+    "hunger": 3,
+    "saturation": 3.6
   }
 }

@@ -2,7 +2,7 @@
   "ingredient": "minecraft:raw_porkchop",
   "colour": "brown",
   "food": {
-    "hunger": 8,
-    "saturation": 12.8
+    "hunger": 4,
+    "saturation": 6.4
   }
 }

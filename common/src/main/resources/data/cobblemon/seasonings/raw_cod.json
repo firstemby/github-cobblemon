@@ -2,7 +2,7 @@
   "ingredient": "minecraft:raw_cod",
   "colour": "brown",
   "food": {
-    "hunger": 5,
-    "saturation": 6
+    "hunger": 2.5,
+    "saturation": 3
   }
 }
