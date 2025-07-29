@@ -24,7 +24,6 @@ import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
-import kotlin.math.abs
 
 interface ParticleRotation : CodecMapped {
     companion object : ArbitrarilyMappedSerializableCompanion<ParticleRotation, ParticleRotationType>(
@@ -40,9 +39,7 @@ interface ParticleRotation : CodecMapped {
 
     val type: ParticleRotationType
 
-    fun getInitialRotation(runtime: MoLangRuntime): Double
-    fun getInitialAngularVelocity(runtime: MoLangRuntime): Double
-    fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double): Double
+    fun getAngle(runtime: MoLangRuntime, age: Int): Double
 }
 
 class ParametricParticleRotation(var expression: Expression = NumberExpression(0.0)): ParticleRotation {
@@ -59,9 +56,12 @@ class ParametricParticleRotation(var expression: Expression = NumberExpression(0
 
     override val type = ParticleRotationType.PARAMETRIC
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun getInitialRotation(runtime: MoLangRuntime) = runtime.resolveDouble(expression)
-    override fun getInitialAngularVelocity(runtime: MoLangRuntime) = 0.0
-    override fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double) = runtime.resolveDouble(expression) - angle
+    override fun getAngle(
+        runtime: MoLangRuntime,
+        age: Int,
+    ): Double {
+        return runtime.resolveDouble(expression)
+    }
 
     override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
         expression = MoLang.createParser(buffer.readString()).parseExpression()
@@ -92,19 +92,12 @@ class DynamicParticleRotation(
         }
     }
 
+    var angularVelocity: Double? = null
+
     override val type = ParticleRotationType.DYNAMIC
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun getInitialRotation(runtime: MoLangRuntime) = runtime.resolveDouble(startRotation)
-    override fun getInitialAngularVelocity(runtime: MoLangRuntime) = runtime.resolveDouble(speed) / 20
-    override fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double): Double {
-        val acceleration = runtime.resolveDouble(acceleration)
-        val nextVelocity = angularVelocity * 20 + acceleration
-        val drag = nextVelocity * runtime.resolveDouble(drag)
-        return angularVelocity + (if (abs(drag) > abs(nextVelocity)) {
-            0.0
-        } else {
-            nextVelocity - drag - angularVelocity * 20
-        })
+    override fun getAngle(runtime: MoLangRuntime, age: Int): Double {
+        return getInitialRotation(runtime) + getAngularVelocity(runtime) * age
     }
 
     override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
@@ -119,6 +112,18 @@ class DynamicParticleRotation(
         buffer.writeString(speed.getString())
         buffer.writeString(acceleration.getString())
         buffer.writeString(drag.getString())
+    }
+
+    fun getInitialRotation(runtime: MoLangRuntime) = runtime.resolveDouble(startRotation)
+    fun getInitialAngularVelocity(runtime: MoLangRuntime) = runtime.resolveDouble(speed) / 20
+    fun getAngularVelocity(runtime: MoLangRuntime): Double {
+        if (angularVelocity == null) angularVelocity = getInitialAngularVelocity(runtime)
+
+        val drag = runtime.resolveDouble(drag)
+        var acceleration = runtime.resolveDouble(acceleration)
+        acceleration += -drag * angularVelocity!!
+        val nextVelocity = angularVelocity!! + acceleration / 20
+        return nextVelocity
     }
 }
 

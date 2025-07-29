@@ -60,7 +60,6 @@ class SnowstormParticle(
     val sprite = getSpriteFromAtlas()
 
     val particleTextureSheet: ParticleRenderType
-    var angularVelocity = 0.0
     var colliding = false
 
     var texture = storm.effect.particle.texture
@@ -110,9 +109,8 @@ class SnowstormParticle(
 
     init {
         setParticleSpeed(initialVelocity.x, initialVelocity.y, initialVelocity.z)
-        roll = -storm.effect.particle.rotation.getInitialRotation(runtime).toFloat()
+        roll = -storm.effect.particle.rotation.getAngle(runtime, 0).toFloat()
         oRoll = roll
-        angularVelocity = storm.effect.particle.rotation.getInitialAngularVelocity(runtime)
         friction = 1F
         lifetime = (runtime.resolveDouble(storm.effect.particle.maxAge) * 20).toInt()
         storm.particles.add(this)
@@ -247,9 +245,8 @@ class SnowstormParticle(
         setParticleAgeInRuntime()
         storm.effect.curves.forEach { it.apply(runtime) }
         runtime.execute(storm.effect.particle.updateExpressions)
-        angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
-        if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
+        if (age > lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
             runExpirationEvents()
             remove()
             return
@@ -261,8 +258,8 @@ class SnowstormParticle(
             yd = velocity.y
             zd = velocity.z
             oRoll = roll
-            // Subtract because Bedrock particles are counter-clockwise and Java Edition is clockwise.
-            roll = oRoll - angularVelocity.toFloat()
+            // negative because Bedrock particles are counter-clockwise and Java Edition is clockwise.
+            roll = -storm.effect.particle.rotation.getAngle(runtime, age).toFloat()
         }
 
         viewDirection = storm.effect.particle.viewDirection.getDirection(

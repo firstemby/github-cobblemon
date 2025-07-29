@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.api.snowstorm
 
 import com.cobblemon.mod.common.api.codec.CodecMapped
 import com.cobblemon.mod.common.api.data.ArbitrarilyMappedSerializableCompanion
+import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.client.render.MatrixWrapper
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.hamiltonProduct
 import com.cobblemon.mod.common.util.set
 import com.mojang.math.Axis
@@ -26,6 +28,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import net.minecraft.world.phys.Vec3
 import org.joml.AxisAngle4d
+import org.joml.AxisAngle4f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -88,7 +91,7 @@ class RotateXYZCameraMode : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val i = if (angle == 0.0f) 0F else Mth.lerp(deltaTicks, prevAngle, angle)
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
         val q = Quaternionf(cameraAngle)
         q.hamiltonProduct(Axis.ZP.rotationDegrees(i))
         return q
@@ -122,7 +125,7 @@ class RotateYCameraMode : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val i = if (angle == 0F) 0F else Mth.lerp(deltaTicks, prevAngle, angle)
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
         val q2 = Axis.YP.rotationDegrees(-cameraYaw)
         q2.hamiltonProduct(Axis.ZP.rotationDegrees(i))
         q2.hamiltonProduct(Axis.YP.rotationDegrees(180F))
@@ -160,7 +163,7 @@ class LookAtXYZ : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val i = if (angle == 0F) 0F else Mth.lerp(deltaTicks, prevAngle, angle)
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
         val rotation = Quaternionf()
         rotation.hamiltonProduct(Axis.YP.rotationDegrees(-cameraYaw - 180))
         rotation.hamiltonProduct(Axis.XP.rotationDegrees(cameraPitch))
@@ -190,7 +193,7 @@ class LookAtY : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val i = if (angle == 0F) 0F else Mth.lerp(deltaTicks, prevAngle, angle)
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
         val q2 = Axis.YP.rotationDegrees(-cameraYaw + 180)
         q2.hamiltonProduct(Axis.ZP.rotationDegrees(i))
         return q2
@@ -257,15 +260,11 @@ class EmitterYZPlane : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val rotation = Quaternionf(0F, 0F, 0F, 1F)
-
-        val quat = AxisAngle4d(rotation)
-        matrixWrapper.matrix.getRotation(quat)
-        rotation.set(quat)
-
-        rotation.hamiltonProduct(Axis.YP.rotationDegrees(180F)) // Don't worry about it.
-        rotation.hamiltonProduct(Axis.YP.rotationDegrees(90F))
-        return rotation
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
+        val forward = matrixWrapper.matrix.transformDirection(OrientationController.LEFT)
+        val q = Quaternionf(AxisAngle4f(i.toRadians(), forward))
+        q.mul(Axis.YP.rotationDegrees(90F))
+        return q
     }
 
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
@@ -296,14 +295,11 @@ class EmitterXZPlane : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val rotation = Quaternionf(0F, 0F, 0F, 1F)
-
-        val quat = AxisAngle4d(rotation)
-        matrixWrapper.matrix.getRotation(quat)
-        rotation.set(quat)
-        rotation.hamiltonProduct(Axis.YP.rotationDegrees(180F)) // Don't worry about it.
-        rotation.hamiltonProduct(Axis.XP.rotationDegrees(-90F))
-        return rotation
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
+        val up = matrixWrapper.matrix.transformDirection(OrientationController.UP)
+        val q = Quaternionf(AxisAngle4f(-i.toRadians(), up))
+        q.mul(Axis.XP.rotationDegrees(-90F))
+        return q
     }
 
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
@@ -334,15 +330,11 @@ class EmitterXYPlane : ParticleCameraMode {
         cameraPitch: Float,
         viewDirection: Vec3
     ): Quaternionf {
-        val rotation = Quaternionf(0F, 0F, 0F, 1F)
-
-        val quat = AxisAngle4d(rotation)
-        matrixWrapper.matrix.getRotation(quat)
-        rotation.set(quat)
-
-        rotation.hamiltonProduct(Axis.YP.rotationDegrees(180F)) // Don't worry about it.
-
-        return rotation
+        val i = Mth.lerp(deltaTicks, prevAngle, angle)
+        val forward = matrixWrapper.matrix.transformDirection(OrientationController.FORWARDS)
+        val q = Quaternionf(AxisAngle4f(i.toRadians(), forward))
+        q.mul(Axis.ZP.rotationDegrees(90F))
+        return q
     }
 
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
