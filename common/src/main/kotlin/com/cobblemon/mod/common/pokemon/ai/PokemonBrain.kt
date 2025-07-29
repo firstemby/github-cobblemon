@@ -75,7 +75,7 @@ object PokemonBrain {
         CobblemonSensors.NEST_SENSOR,
         CobblemonSensors.EGG_SENSOR,
         CobblemonSensors.NEST_MATERIAL_SENSOR,
-        CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR
+        CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
         CobblemonSensors.NEARBY_FLOWER

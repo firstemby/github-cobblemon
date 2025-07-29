@@ -114,7 +114,7 @@ class BedrockParticleKeyframe(
             ParticleStorm(
                 effect = effect,
                 emitterSpaceMatrix = matrix,
-                locatorSpaceMatrix = matrix,
+                attachedMatrix = matrix,
                 world = world,
                 runtime = particleRuntime,
                 sourceVelocity = { Vec3.ZERO },
