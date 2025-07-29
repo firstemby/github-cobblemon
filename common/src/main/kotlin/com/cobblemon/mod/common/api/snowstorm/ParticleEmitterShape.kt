@@ -53,9 +53,12 @@ interface ParticleEmitterShape : CodecMapped {
     }
 
     val type: ParticleEmitterShapeType
+    val defaultAttachedOptions: MutableMap<AttachedType, Boolean>
+        get() = mutableMapOf(AttachedType.POSITION to true, AttachedType.ROTATION to false, AttachedType.SCALE to false)
 
     fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3
     fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3
+    fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> = defaultAttachedOptions // Default Values
 }
 
 enum class ParticleEmitterShapeType {
@@ -66,6 +69,12 @@ enum class ParticleEmitterShapeType {
     ENTITY_BOUNDING_BOX
 }
 
+enum class AttachedType {
+    ROTATION,
+    SCALE,
+    POSITION
+}
+
 class SphereParticleEmitterShape(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
@@ -73,7 +82,8 @@ class SphereParticleEmitterShape(
         NumberExpression(0.0)
     ),
     var radius: Expression = NumberExpression(0.0),
-    var surfaceOnly: Boolean = false
+    var surfaceOnly: Boolean = false,
+    val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ) : ParticleEmitterShape {
     companion object {
         val CODEC: Codec<SphereParticleEmitterShape> = RecordCodecBuilder.create { instance ->
@@ -114,15 +124,23 @@ class SphereParticleEmitterShape(
         buffer.writeBoolean(surfaceOnly)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 {
-        return runtime.resolveVec3d(offset)
-    }
+    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
 
     override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
         val radius = runtime.resolveDouble(radius) * if (surfaceOnly) 1.0 else Random.Default.nextDouble()
         val theta = Math.PI * 2 * Random.Default.nextDouble()
         val psi = Math.PI * 2 * Random.Default.nextDouble()
         return getCenter(runtime, entity).add(convertSphericalToCartesian(radius = radius, theta = theta, psi = psi))
+    }
+
+    override fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> {
+        val map = super.getAttachmentOptions()
+        if (pAttachmentOptions != null) {
+            AttachedType.entries.forEach {
+                pAttachmentOptions[it]?.let { bool -> map.put(it, bool) }
+            }
+        }
+        return map
     }
 }
 
@@ -131,7 +149,8 @@ class PointParticleEmitterShape(
         NumberExpression(0.0),
         NumberExpression(0.0),
         NumberExpression(0.0)
-    )
+    ),
+    val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ): ParticleEmitterShape {
     companion object {
         val CODEC: Codec<PointParticleEmitterShape> = RecordCodecBuilder.create { instance ->
@@ -145,9 +164,19 @@ class PointParticleEmitterShape(
     }
 
     override val type = ParticleEmitterShapeType.POINT
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?) = runtime.resolveVec3d(offset)
+    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
     override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 {
         return Vec3.ZERO
+    }
+
+    override fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> {
+        val map = super.getAttachmentOptions()
+        if (pAttachmentOptions != null) {
+            AttachedType.entries.forEach {
+                pAttachmentOptions[it]?.let { bool -> map.put(it, bool) }
+            }
+        }
+        return map
     }
 
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
@@ -177,7 +206,8 @@ class BoxParticleEmitterShape(
         NumberExpression(1.0),
         NumberExpression(1.0)
     ),
-    var surfaceOnly: Boolean = false
+    var surfaceOnly: Boolean = false,
+    val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ) : ParticleEmitterShape {
     companion object {
         val CODEC: Codec<BoxParticleEmitterShape> = RecordCodecBuilder.create { instance ->
@@ -226,7 +256,7 @@ class BoxParticleEmitterShape(
         buffer.writeBoolean(surfaceOnly)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?) = runtime.resolveVec3d(offset)
+    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
 
     override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
         val center = getCenter(runtime, entity)
@@ -274,6 +304,16 @@ class BoxParticleEmitterShape(
 
         return center.add(disposition)
     }
+
+    override fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> {
+        val map = super.getAttachmentOptions()
+        if (pAttachmentOptions != null) {
+            AttachedType.entries.forEach {
+                pAttachmentOptions[it]?.let { bool -> map.put(it, bool) }
+            }
+        }
+        return map
+    }
 }
 
 class DiscParticleEmitterShape(
@@ -288,7 +328,8 @@ class DiscParticleEmitterShape(
         NumberExpression(1.0),
         NumberExpression(0.0)
     ),
-    var surfaceOnly: Boolean = false
+    var surfaceOnly: Boolean = false,
+    val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ): ParticleEmitterShape {
     companion object {
         val CODEC: Codec<DiscParticleEmitterShape> = RecordCodecBuilder.create { instance ->
@@ -333,7 +374,18 @@ class DiscParticleEmitterShape(
         return center.add(displacement)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?) = runtime.resolveVec3d(offset)
+    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
+
+    override fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> {
+        val map = super.getAttachmentOptions()
+        if (pAttachmentOptions != null) {
+            AttachedType.entries.forEach {
+                pAttachmentOptions[it]?.let { bool -> map.put(it, bool) }
+            }
+        }
+        return map
+    }
+
     override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
     override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
         offset = Triple(

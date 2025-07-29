@@ -137,7 +137,16 @@
     "tutor:sleeptalk",
     "tutor:telekinesis",
     "tutor:thunderbolt",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

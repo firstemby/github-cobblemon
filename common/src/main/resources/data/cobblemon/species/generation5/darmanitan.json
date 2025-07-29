@@ -201,7 +201,17 @@
     "tutor:superpower",
     "tutor:trick",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "darumaka",
   "evolutions": [],
@@ -517,7 +527,10 @@
         "tutor:stoneedge",
         "tutor:superpower",
         "tutor:uproar",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "preEvolution": "darumaka galarian",
       "evolutions": [],

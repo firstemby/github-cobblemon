@@ -146,7 +146,19 @@
     "tutor:swift",
     "tutor:synthesis",
     "tutor:uproar",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

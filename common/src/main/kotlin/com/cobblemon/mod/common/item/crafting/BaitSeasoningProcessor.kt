@@ -33,4 +33,9 @@ object BaitSeasoningProcessor : SeasoningProcessor {
         }
         result.set(CobblemonItemComponents.BAIT_EFFECTS, BaitEffectsComponent(baitIdentifiers.toList()))
     }
+
+    override fun consumesItem(seasoning: ItemStack): Boolean {
+        val seasoningData = Seasonings.getFromItemStack(seasoning)
+        return seasoningData != null && !seasoningData.baitEffects.isNullOrEmpty()
+    }
 }

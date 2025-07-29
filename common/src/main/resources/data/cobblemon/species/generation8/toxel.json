@@ -81,7 +81,10 @@
     "tm:terablast",
     "tutor:endeavor",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

@@ -41,11 +41,15 @@ class EmitterSpace(
 
         if (scaling == ScalingMode.ENTITY) {
             locatorMatrix.matrix.getScale(scale)
+
+            // If any value is zero we get NaNs, so default to a large enough value to be safe
+            scale.x.coerceAtLeast(.01f)
+            scale.y.coerceAtLeast(.01f)
+            scale.z.coerceAtLeast(.01f)
         }
 
-        val particleScale = Vector3f(scale.x, scale.y, scale.z)
         //Presumably we will want to make the initial rotation configurable instead of always using root
-        val particleRawMatrix = Matrix4f().scale(particleScale).rotate(rootRotation)
+        val particleRawMatrix = Matrix4f().scale(scale).rotate(rootRotation)
         return MatrixWrapper().updateMatrix(particleRawMatrix).updatePosition(locatorMatrix.getOrigin())
     }
 

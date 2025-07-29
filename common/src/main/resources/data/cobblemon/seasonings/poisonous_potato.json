@@ -3,7 +3,7 @@
   "colour": "brown",
   "food": {
     "hunger": 2,
-    "saturation": 1.2
+    "saturation": 0.6
   },
   "mobEffects": [
     {

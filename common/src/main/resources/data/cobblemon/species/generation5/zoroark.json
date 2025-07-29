@@ -168,7 +168,6 @@
     "tm:toxic",
     "tm:trick",
     "tm:uturn",
-    "tutor:aerialace",
     "tutor:bounce",
     "tutor:burningjealousy",
     "tutor:calmmind",
@@ -199,7 +198,18 @@
     "tutor:suckerpunch",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:uproar"
   ],
   "preEvolution": "zorua",
   "evolutions": [],
@@ -365,7 +375,8 @@
         "tutor:spite",
         "tutor:swift",
         "tutor:throatchop",
-        "tutor:trick"
+        "tutor:trick",
+        "special:happyhour"
       ],
       "preEvolution": "zorua hisuian",
       "evolutions": [],

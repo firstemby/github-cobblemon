@@ -76,6 +76,9 @@ object PokemonBrain {
         CobblemonSensors.EGG_SENSOR,
         CobblemonSensors.NEST_MATERIAL_SENSOR,
         CobblemonSensors.IDEAL_NEST_LOCATION_SENSOR
+        CobblemonSensors.NEARBY_GROWABLE_CROPS,
+        CobblemonSensors.NEARBY_BEE_HIVE,
+        CobblemonSensors.NEARBY_FLOWER
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -213,6 +216,11 @@ object PokemonBrain {
         CobblemonMemories.READY_TO_BUILD_NEST,
         CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
+        CobblemonMemories.RECENTLY_ATE_GRASS,
+        CobblemonMemories.HIVE_LOCATION,
+        CobblemonMemories.HIVE_COOLDOWN,
+        CobblemonMemories.NEARBY_FLOWERS,
+        CobblemonMemories.POLLINATED,
         CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,

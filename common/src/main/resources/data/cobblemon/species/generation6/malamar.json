@@ -198,7 +198,18 @@
     "tutor:telekinesis",
     "tutor:throatchop",
     "tutor:thunderbolt",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:happyhour"
   ],
   "preEvolution": "inkay",
   "evolutions": []

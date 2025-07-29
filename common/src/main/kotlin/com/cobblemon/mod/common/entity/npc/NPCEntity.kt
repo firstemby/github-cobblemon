@@ -15,9 +15,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
@@ -55,7 +53,6 @@ import com.cobblemon.mod.common.util.getBattleState
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.makeEmptyBrainDynamic
 import com.cobblemon.mod.common.util.withNPCValue
-import com.google.common.collect.ImmutableList
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.ProfileLookupCallback
 import com.mojang.serialization.Dynamic

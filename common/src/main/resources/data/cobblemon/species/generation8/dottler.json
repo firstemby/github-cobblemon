@@ -119,7 +119,10 @@
     "tutor:sleeptalk",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "blipbug",
   "evolutions": [

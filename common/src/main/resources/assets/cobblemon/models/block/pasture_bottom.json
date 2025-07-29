@@ -3,8 +3,8 @@
 	"texture_size": [128, 128],
 	"ambientocclusion": false,
 	"textures": {
-		"0": "cobblemon:block/pasture",
-		"particle": "cobblemon:block/pasture_particle"
+		"0": "cobblemon:block/functional/pasture",
+		"particle": "cobblemon:block/functional/pasture_particle"
 	},
 	"elements": [
 		{

@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/lure_cake",
-    "layer1": "cobblemon:item/lure_cake_overlay1",
-    "layer2": "cobblemon:item/lure_cake_overlay2"
+    "layer0": "cobblemon:item/food/lure_cake",
+    "layer1": "cobblemon:item/food/lure_cake_overlay1",
+    "layer2": "cobblemon:item/food/lure_cake_overlay2"
   }
 }

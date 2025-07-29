@@ -166,7 +166,22 @@
     "tutor:stealthrock",
     "tutor:superfang",
     "tutor:superpower",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:rockclimb",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

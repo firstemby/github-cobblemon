@@ -133,7 +133,10 @@
     "tutor:suckerpunch",
     "tutor:swift",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "sobble",
   "evolutions": [

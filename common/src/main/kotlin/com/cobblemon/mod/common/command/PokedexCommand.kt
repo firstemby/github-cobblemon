@@ -11,12 +11,7 @@ package com.cobblemon.mod.common.command
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
-import com.cobblemon.mod.common.api.pokedex.CaughtCount
-import com.cobblemon.mod.common.api.pokedex.CaughtPercent
-import com.cobblemon.mod.common.api.pokedex.Dexes
-import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokedex.SeenCount
-import com.cobblemon.mod.common.api.pokedex.SeenPercent
+import com.cobblemon.mod.common.api.pokedex.*
 import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
 import com.cobblemon.mod.common.api.pokedex.def.SimplePokedexDef
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
@@ -36,6 +31,7 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 
 object PokedexCommand {
 
@@ -47,9 +43,8 @@ object PokedexCommand {
         val grantCommandBuilder = Commands.literal(GRANT_NAME).then(
             Commands.argument("player", EntityArgument.player())
                 .then(Commands.literal("all").then(
-                        Commands.argument("dex", DexArgumentType.dex()).executes(::executeGrantAll)
-                    )
-                )
+                    Commands.argument("dex", DexArgumentType.dex()).executes(::executeGrantAll)
+                ))
                 .then(Commands.literal("only").then(
                     Commands.argument("species", SpeciesArgumentType.species()).then(
                         Commands.argument("form", FormArgumentType.form()).executes(::executeGrantOnly)
@@ -60,13 +55,12 @@ object PokedexCommand {
             Commands.argument("player", EntityArgument.player())
                 .then(Commands.literal("all").then(
                     Commands.argument("dex", DexArgumentType.dex()).executes(::executeRemoveAll)
-                )
-            )
-            .then(Commands.literal("only").then(
-                Commands.argument("species", SpeciesArgumentType.species()).then(
-                    Commands.argument("form", FormArgumentType.form()).executes(::executeRemoveOnly)
-                )
-            ))
+                ))
+                .then(Commands.literal("only").then(
+                    Commands.argument("species", SpeciesArgumentType.species()).then(
+                        Commands.argument("form", FormArgumentType.form()).executes(::executeRemoveOnly)
+                    )
+                ))
         )
         commandArgumentBuilder
             .permission(CobblemonPermissions.POKEDEX)
@@ -74,7 +68,8 @@ object PokedexCommand {
             .then(revokeCommandBuilder)
             .then(Commands.literal("printcalculations")
                 .then(Commands.argument("player", EntityArgument.player())
-                    .executes(::printValuesGlobal)
+                    .executes(::printNationalDexValues)
+                    .then(Commands.literal("all").executes(::printValuesGlobal))
                     .then(Commands.argument("dex", DexArgumentType.dex())
                         .executes(::printValues))))
 
@@ -181,7 +176,19 @@ object PokedexCommand {
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
         calculators.forEach {
             var value = dex.getGlobalCalculatedValue(it)
-            context.source.sendSystemMessage(Component.literal("${it.javaClass.simpleName} result: $value"))
+            val percentString = if (it.outputIsPercentage) "%" else ""
+
+            context.source.sendSystemMessage(Component.literal("${it.javaClass.simpleName} result: $value$percentString"))
+        }
+
+        Dexes.dexEntryMap.forEach { (dexId, dexDef) ->
+            val seenCompletion = dex.getDexCalculatedValue(dexId, SeenPercent)
+            val caughtCompletion = dex.getDexCalculatedValue(dexId, CaughtPercent)
+
+            // Send system message with completion percentages for each Dex
+            context.source.sendSystemMessage(
+                Component.literal("Completion for ${dexId}: Seen: ${seenCompletion}% Caught: ${caughtCompletion}%")
+            )
         }
 
         return 1
@@ -194,7 +201,24 @@ object PokedexCommand {
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
         calculators.forEach {
             var value = dex.getDexCalculatedValue(dexDef.id, it)
-            context.source.sendSystemMessage(Component.literal("${it.javaClass.simpleName} result: $value"))
+            val percentString = if (it.outputIsPercentage) "%" else ""
+
+            context.source.sendSystemMessage(Component.literal("${it.javaClass.simpleName} result for ${dexDef.id}: $value$percentString"))
+        }
+
+        return 1
+    }
+
+    private fun printNationalDexValues (context: CommandContext<CommandSourceStack>) : Int {
+        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val dex = Cobblemon.playerDataManager.getPokedexData(player)
+        val dexDef = Dexes.dexEntryMap[ResourceLocation("cobblemon", "national")] ?: throw IllegalStateException("No National Dex")
+        var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
+        calculators.forEach {
+            var value = dex.getDexCalculatedValue(dexDef.id, it)
+            val percentString = if (it.outputIsPercentage) "%" else ""
+
+            context.source.sendSystemMessage(Component.literal("${it.javaClass.simpleName} result for ${dexDef.id}: $value$percentString"))
         }
 
         return 1

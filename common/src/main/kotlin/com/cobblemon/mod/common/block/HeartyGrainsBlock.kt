@@ -60,10 +60,10 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         )
 
         val AGE_TO_SHAPE_TOP = arrayOf(
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 0
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 1
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 2
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 3
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 0
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 1
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 2
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 3
             box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),  // Stage 4
             box(0.0, 0.0, 0.0, 16.0, 11.0, 16.0),  // Stage 5
             box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0),  // Stage 6
@@ -231,17 +231,6 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
                 // Upper part survives only if the lower part is valid
             }
         }
-    }
-
-    private fun isWaterNearby(level: LevelReader, pos: BlockPos): Boolean {
-        val floorBlock = pos.below()
-        for (i in -1..1) {
-            for (j in -1..1) {
-                val fluidState = level.getFluidState(floorBlock.offset(i, 0, j))
-                if (fluidState.`is`(FluidTags.WATER) && fluidState.isSource) return true
-            }
-        }
-        return false
     }
 
     private fun getLowerHalf(level: LevelReader, pos: BlockPos, state: BlockState): Pair<BlockPos, BlockState>? {

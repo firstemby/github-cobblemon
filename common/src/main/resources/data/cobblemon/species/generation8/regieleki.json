@@ -115,7 +115,9 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": []
 }

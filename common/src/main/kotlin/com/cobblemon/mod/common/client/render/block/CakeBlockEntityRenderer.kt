@@ -95,7 +95,7 @@ open class CakeBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : B
 
     class CakeTexture(textureName: String, val color: LayerColor) {
 
-        val texture = loadTexture("block/${textureName}")
+        val texture = loadTexture("block/food/${textureName}")
 
         fun getColor(primaryColor: Int, secondaryColor: Int, tertiaryColor: Int): Int {
             return when (color) {

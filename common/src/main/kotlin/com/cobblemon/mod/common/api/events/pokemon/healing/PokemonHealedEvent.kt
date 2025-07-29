@@ -8,9 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.pokemon.healing
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.item.HealingSource
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.item.berry.HealingBerryItem
 import com.cobblemon.mod.common.item.interactive.PotionItem
 import com.cobblemon.mod.common.item.interactive.PotionType
@@ -31,4 +34,14 @@ class PokemonHealedEvent(
 ) : Cancelable() {
     fun isFullHeal() = amount == -1
     fun isHealed() = amount > 0
+
+    val context = mutableMapOf(
+        "pokemon" to pokemon.struct,
+        "amount" to DoubleValue(amount),
+        "source" to StringValue(source.toString())
+    )
+
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
 }

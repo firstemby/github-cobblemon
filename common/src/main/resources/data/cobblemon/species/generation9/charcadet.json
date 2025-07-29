@@ -119,7 +119,8 @@
     "tutor:helpinghand",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:spite"
+    "tutor:spite",
+    "special:celebrate"
   ],
   "evolutions": [
     {

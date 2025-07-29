@@ -93,6 +93,7 @@ tasks {
         dependsOn(copyAccessWidener)
         inputs.property("version", rootProject.version)
         inputs.property("fabric_loader_version", libs.fabric.loader.get().version)
+        inputs.property("fabric_api_version", libs.fabric.api.get().version)
         inputs.property("minecraft_version", rootProject.property("mc_version").toString())
         inputs.property("java_version", rootProject.property("java_version").toString())
 
@@ -100,6 +101,7 @@ tasks {
             expand(
                 "version" to rootProject.version,
                 "fabric_loader_version" to libs.fabric.loader.get().version,
+                "fabric_api_version" to libs.fabric.api.get().version,
                 "minecraft_version" to rootProject.property("mc_version").toString(),
                 "java_version" to rootProject.property("java_version").toString()
             )

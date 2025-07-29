@@ -107,7 +107,6 @@
     "tm:workup",
     "tm:xscissor",
     "tutor:aerialace",
-    "tutor:block",
     "tutor:gigaimpact",
     "tutor:hyperbeam",
     "tutor:icywind",
@@ -122,7 +121,16 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:terrainpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

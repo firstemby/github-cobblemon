@@ -1,8 +1,5 @@
 {
   "ingredient": "minecraft:glistering_melon_slice",
-  "flavours": {
-    "SWEET": 10
-  },
   "colour": "yellow",
   "baitEffects": [
     {

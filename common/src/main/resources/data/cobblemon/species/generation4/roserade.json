@@ -183,7 +183,22 @@
     "tutor:swift",
     "tutor:synthesis",
     "tutor:uproar",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "special:sweetkiss"
   ],
   "preEvolution": "roselia",
   "evolutions": []

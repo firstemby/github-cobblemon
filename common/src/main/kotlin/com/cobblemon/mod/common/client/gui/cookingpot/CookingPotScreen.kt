@@ -35,6 +35,7 @@ import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
+import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.RecipeBookMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.crafting.CraftingInput
@@ -258,5 +259,11 @@ class CookingPotScreen(
             if (filterButton.isStateTriggered()) Tooltip.create(Component.translatable("cobblemon.container.campfire_pot.recipe_book.toggle_recipes"))
             else Tooltip.create(Component.translatable("gui.recipebook.toggleRecipes.all"))
         )
+    }
+
+    // Java nullability with kotlin is my greatest enemy, it'll complain but this works
+    override fun slotClicked(slot: Slot?, slotId: Int, mouseButton: Int, type: ClickType) {
+        super.slotClicked(slot, slotId, mouseButton, type)
+        recipeBookComponent.slotClicked(slot)
     }
 }

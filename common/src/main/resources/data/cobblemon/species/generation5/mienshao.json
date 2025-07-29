@@ -179,7 +179,20 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:tripleaxel",
-    "tutor:vacuumwave"
+    "tutor:vacuumwave",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:rockslide",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "mienfoo",
   "evolutions": []

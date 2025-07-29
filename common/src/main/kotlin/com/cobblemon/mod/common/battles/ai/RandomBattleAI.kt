@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.battles.ai
 
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
+import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.DefaultActionResponse
 import com.cobblemon.mod.common.battles.MoveActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
@@ -26,6 +28,8 @@ import com.cobblemon.mod.common.battles.SwitchActionResponse
 class RandomBattleAI : BattleAI {
     override fun choose(
         activeBattlePokemon: ActiveBattlePokemon,
+        battle: PokemonBattle,
+        aiSide: BattleSide,
         moveset: ShowdownMoveset?,
         forceSwitch: Boolean
     ): ShowdownActionResponse {

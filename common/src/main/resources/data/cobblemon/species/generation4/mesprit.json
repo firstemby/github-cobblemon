@@ -194,7 +194,16 @@
     "tutor:trick",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

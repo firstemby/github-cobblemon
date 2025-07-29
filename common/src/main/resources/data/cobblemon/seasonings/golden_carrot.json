@@ -1,8 +1,5 @@
 {
   "ingredient": "minecraft:golden_carrot",
-  "flavours": {
-    "BITTER": 10
-  },
   "colour": "yellow",
   "baitEffects": [
     {
@@ -13,6 +10,6 @@
   ],
   "food": {
     "hunger": 6,
-    "saturation": 14.4
+    "saturation": 7.2
   }
 }

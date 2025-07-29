@@ -163,7 +163,25 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:thunderbolt",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

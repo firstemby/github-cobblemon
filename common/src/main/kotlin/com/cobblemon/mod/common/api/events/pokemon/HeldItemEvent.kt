@@ -50,7 +50,7 @@ interface HeldItemEvent {
                 "pokemon" to pokemon.struct,
                 "receiving" to receiving.asMoLangValue(server()!!.registryAccess()),
                 "returning" to returning.asMoLangValue(server()!!.registryAccess()),
-                "decrement" to DoubleValue(if (decrement) 1.0 else 0.0),
+                "decrement" to DoubleValue(if (decrement) 1.0 else 0.0)
             )
         }
         val functions = moLangFunctionMap(
@@ -74,7 +74,7 @@ interface HeldItemEvent {
                 "pokemon" to pokemon.struct,
                 "received" to received.asMoLangValue(server()!!.registryAccess()),
                 "returned" to returned.asMoLangValue(server()!!.registryAccess()),
-                "decremented" to DoubleValue(if (decremented) 1.0 else 0.0),
+                "decremented" to DoubleValue(if (decremented) 1.0 else 0.0)
             )
         }
     }

@@ -148,7 +148,11 @@
     "tutor:terrainpulse",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:futuresight",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [
@@ -269,7 +273,12 @@
         "tutor:swift",
         "tutor:terrainpulse",
         "tutor:trick",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:expandingforce",
+        "legacy:futuresight",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [],
       "battleOnly": false

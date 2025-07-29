@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/crop",
   "textures": {
-    "crop": "cobblemon:block/hearty_grains_stage5_bottom"
+    "crop": "cobblemon:block/crops/hearty_grains_stage5_bottom"
   }
 }

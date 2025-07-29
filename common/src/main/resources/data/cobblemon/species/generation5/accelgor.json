@@ -139,7 +139,16 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:spikes",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "shelmet",
   "evolutions": []

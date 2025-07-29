@@ -179,7 +179,10 @@
     "tutor:superpower",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "thwackey",
   "evolutions": [],

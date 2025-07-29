@@ -159,7 +159,20 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

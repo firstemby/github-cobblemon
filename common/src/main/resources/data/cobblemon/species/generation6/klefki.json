@@ -136,7 +136,6 @@
     "tm:thunderwave",
     "tm:torment",
     "tm:trickroom",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:covet",
     "tutor:dazzlinggleam",
@@ -159,7 +158,17 @@
     "tutor:spikes",
     "tutor:steelbeam",
     "tutor:swift",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

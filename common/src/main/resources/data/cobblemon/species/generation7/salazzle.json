@@ -203,8 +203,15 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "salandit",
   "evolutions": []

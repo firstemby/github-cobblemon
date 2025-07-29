@@ -165,7 +165,6 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
-    "tutor:aircutter",
     "tutor:aquatail",
     "tutor:babydolleyes",
     "tutor:bounce",
@@ -185,7 +184,19 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "finneon",
   "evolutions": []

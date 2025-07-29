@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "cobblemon:item/candied_berry"
+    "layer0": "cobblemon:item/food/candied_berry"
   }
 }

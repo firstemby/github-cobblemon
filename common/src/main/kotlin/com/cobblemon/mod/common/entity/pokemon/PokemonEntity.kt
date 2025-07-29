@@ -61,6 +61,7 @@ import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
@@ -134,6 +135,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.Brain
@@ -525,6 +527,23 @@ open class PokemonEntity(
             occupiedSeats[passengerIndex] = null
         }
         super.removePassenger(passenger)
+    }
+
+    override fun thunderHit(level: ServerLevel, lightning: LightningBolt) {
+        // Deals with special cases in which Pokemon should either be immune or buffed by lightning strikes.
+        when (pokemon.ability.name) {
+            "lightningrod" -> {
+                this.addEffect(MobEffectInstance(MobEffects.DAMAGE_BOOST, 1200, 1))
+            }
+            "motordrive" -> {
+                this.addEffect(MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 0))
+            }
+            "voltabsorb" -> {
+                this.addEffect(MobEffectInstance(MobEffects.HEAL, 1, 1))
+            }
+            // Ground types shouldn't take lightning damage
+            else -> if (this.pokemon.types.none { it == ElementalTypes.GROUND }) super.thunderHit(level, lightning)
+        }
     }
 
     override fun tick() {
@@ -1176,8 +1195,7 @@ open class PokemonEntity(
                 this.getUUID(),
                 canSitOnShoulder() && pokemon in player.party(),
                 !(pokemon.heldItemNoCopy().isEmpty && itemStack.isEmpty),
-                (!pokemon.cosmeticItem.isEmpty && itemStack.isEmpty) || cosmeticItemDefinition != null,
-                canRide
+                (!pokemon.cosmeticItem.isEmpty && itemStack.isEmpty) || cosmeticItemDefinition != null, canRide
             ).sendToPlayer(player)
         }
         else {
@@ -1207,7 +1225,8 @@ open class PokemonEntity(
 
             if (this.health == 0F) {
                 pokemon.currentHealth = 0
-            } else {
+            } else if (this.ownerUUID != null) {
+                // Only touch battle HP for non-wild Pokémon so that quick ball et. al. aren't owerpowered.
                 pokemon.currentHealth = (pokemon.maxHealth * (this.health / this.maxHealth)).toInt()
             }
             true

@@ -69,7 +69,8 @@
     "tm:amnesia",
     "tm:charm",
     "tm:encore",
-    "tm:safeguard"
+    "tm:safeguard",
+    "special:tickle"
   ],
   "evolutions": [
     {

@@ -39,6 +39,9 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
 
         if (isGenerating) {
             val biome = worldGenLevel.getBiome(origin)
+            if (!biome.`is`(CobblemonBiomeTags.ALLOWED_BIOMES_SACCHARINE_TREE)) {
+                return false
+            }
             val multiplier = when {
                 biome.`is`(CobblemonBiomeTags.HAS_APRICORNS_SPARSE) -> 0.1F
                 biome.`is`(CobblemonBiomeTags.HAS_APRICORNS_DENSE) -> 10F

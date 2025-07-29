@@ -149,7 +149,6 @@
     "tutor:knockoff",
     "tutor:lashout",
     "tutor:outrage",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
     "tutor:seedbomb",
@@ -163,7 +162,10 @@
     "tutor:thunderfang",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [

@@ -2,12 +2,12 @@
 	"credit": "Made with Blockbench by dhi_holo (@holo_modeller)",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "cobblemon:block/display_case_bottom",
-		"1": "cobblemon:block/display_case_side",
-		"2": "cobblemon:block/display_case_top",
-		"3": "cobblemon:block/display_case_internal",
-		"4": "cobblemon:block/display_case_pillow",
-		"particle": "cobblemon:block/display_case_bottom"
+		"0": "cobblemon:block/functional/display_case_bottom",
+		"1": "cobblemon:block/functional/display_case_side",
+		"2": "cobblemon:block/functional/display_case_top",
+		"3": "cobblemon:block/functional/display_case_internal",
+		"4": "cobblemon:block/functional/display_case_pillow",
+		"particle": "cobblemon:block/functional/display_case_bottom"
 	},
 	"elements": [
 		{

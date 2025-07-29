@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/button_pressed",
   "textures": {
-    "texture": "cobblemon:block/apricorn_planks"
+    "texture": "cobblemon:block/wood/apricorn_planks"
   }
 }

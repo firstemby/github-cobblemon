@@ -30,8 +30,8 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
     override fun use(world: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = player.getItemInHand(hand)
 
-        // Allow eating normally if player needs food
-        if (player.foodData.needsFood()) {
+        // Allow eating normally if player needs food OR in creative
+        if (player.foodData.needsFood() || player.isCreative) {
             player.startUsingItem(hand)
             return InteractionResultHolder.consume(stack)
         }

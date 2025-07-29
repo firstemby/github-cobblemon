@@ -142,7 +142,18 @@
     "tutor:superpower",
     "tutor:synthesis",
     "tutor:worryseed",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:poisonjab",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

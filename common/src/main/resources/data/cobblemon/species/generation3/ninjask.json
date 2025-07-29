@@ -171,7 +171,21 @@
     "tutor:stringshot",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "nincada",
   "evolutions": []

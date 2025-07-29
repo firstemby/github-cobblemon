@@ -151,7 +151,15 @@
     "tutor:snore",
     "tutor:stealthrock",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:swagger"
   ],
   "preEvolution": "tympole",
   "evolutions": [

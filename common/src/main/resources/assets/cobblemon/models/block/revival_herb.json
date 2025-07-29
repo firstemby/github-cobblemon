@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench / EikoBiko",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "cobblemon:block/revival_herb_stage_0",
-		"particle": "cobblemon:block/revival_herb_stage_0"
+		"0": "cobblemon:block/crops/revival_herb_stage_0",
+		"particle": "cobblemon:block/crops/revival_herb_stage_0"
 	},
 	"elements": [
 		{

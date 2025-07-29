@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
@@ -113,7 +112,7 @@ object BattleRegistry {
             packedTeamBuilder.append("$pokeball,")
             // Hidden Power Type
             // This is empty if the pokemon is not Hyper Trained, and the provided type corresponds to base IVs and not battle IVs.
-            val hiddenPowerType = if (pk.ivs.hyperTrainedIVs.any()) HiddenPowerUtil.getHiddenPowerType(pk).name.replaceFirstChar { it.uppercase() } else ""
+            val hiddenPowerType = if (pk.ivs.hyperTrainedIVs.any()) HiddenPowerUtil.getHiddenPowerType(pk).name else ""
             packedTeamBuilder.append("$hiddenPowerType,")
             // Gigantamax
             packedTeamBuilder.append("${if (pk.gmaxFactor) "G" else ""},")
@@ -121,7 +120,7 @@ object BattleRegistry {
             // 0 - 9, empty == 10
             packedTeamBuilder.append("${if (pk.dmaxLevel < 10) pk.dmaxLevel else ""},")
             // Teratype
-            packedTeamBuilder.append("${pokemon.effectedPokemon.teraType.showdownId()},")
+            packedTeamBuilder.append("${pokemon.effectedPokemon.teraType.name},")
 
             team.add(packedTeamBuilder.toString())
         }

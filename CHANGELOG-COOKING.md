@@ -8,7 +8,8 @@
   - Lure Cakes can be used to modify the spawn rate of Pokémon in the wild.
 - Added the Saccharine Tree, which can be found in the wild and is used to obtain Honey Bottles.
   - The leaves of the tree can be harvested to obtain honey, which can be used in the Campfire Pot to make Lure Cakes.
-  - The Log of the tree can be clicked on with honey to create a Honey Log, which increases the change of spawning a Pokemon with an Hidden Ability.
+  - The Log of the tree can be interacted with using a honey bottle to create a Honey-Slathered Saccharine Log, which increases the change of spawning a Pokémon with a Hidden Ability.
+- Added Hearty Grains
 - Clicking on the Progress Arrow will show the JEI Recipe Book for the Campfire Pot, which will show all recipes that can be made with it.
 - Added a Ton of Redstone Compatibility.
    - Dispenser can now Honey and Unhoney:

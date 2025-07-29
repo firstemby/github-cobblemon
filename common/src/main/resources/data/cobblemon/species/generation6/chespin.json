@@ -184,7 +184,27 @@
     "tutor:synthesis",
     "tutor:thunderpunch",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bulkup",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:gyroball",
+    "legacy:hiddenpower",
+    "legacy:irondefense",
+    "legacy:lowsweep",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:sludgebomb",
+    "legacy:smackdown",
+    "legacy:snore",
+    "legacy:stoneedge",
+    "legacy:swagger",
+    "legacy:swordsdance",
+    "legacy:taunt",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

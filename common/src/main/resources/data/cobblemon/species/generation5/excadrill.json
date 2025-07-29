@@ -172,7 +172,19 @@
     "tutor:steelbeam",
     "tutor:stompingtantrum",
     "tutor:throatchop",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:sludgebomb",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "drilbur",
   "evolutions": []

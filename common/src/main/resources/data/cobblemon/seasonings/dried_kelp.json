@@ -2,7 +2,7 @@
   "ingredient": "minecraft:dried_kelp",
   "colour": "brown",
   "food": {
-    "hunger": 1,
-    "saturation": 0.6
+    "hunger": 2,
+    "saturation": 0.3
   }
 }

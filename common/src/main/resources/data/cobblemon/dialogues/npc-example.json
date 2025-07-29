@@ -55,7 +55,7 @@
             "value": "battle",
             "action": [
               "q.dialogue.close();",
-              "q.npc.start_battle(q.player);"
+              "q.npc.start_battle(q.player, 'double');"
             ],
             "isSelectable": "!q.run_script('cobblemon:npc_battle_cooling_down') && c.npc.can_battle;"
           },

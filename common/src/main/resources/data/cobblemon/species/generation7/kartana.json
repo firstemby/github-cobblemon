@@ -125,7 +125,16 @@
     "tutor:synthesis",
     "tutor:tailwind",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

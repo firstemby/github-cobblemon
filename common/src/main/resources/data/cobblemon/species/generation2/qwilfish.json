@@ -206,7 +206,22 @@
     "tutor:steelroller",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [],
   "forms": [

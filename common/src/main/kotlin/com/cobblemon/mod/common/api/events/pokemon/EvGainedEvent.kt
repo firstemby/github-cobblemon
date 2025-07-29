@@ -14,9 +14,7 @@ import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
-import com.cobblemon.mod.common.api.pokemon.stats.EvSource
-import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
-import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.stats.*
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.ifIsType
@@ -56,7 +54,15 @@ interface EvGainedEvent {
         val context = mutableMapOf(
             "pokemon" to source.pokemon.struct,
             "stat" to StringValue(stat.identifier.toString()),
-            "amount" to DoubleValue(amount.toDouble())
+            "amount" to DoubleValue(amount.toDouble()),
+            "source" to StringValue(
+                when (source) {
+                    is BattleEvSource -> "battle"
+                    is ItemEvSource -> "interaction"
+                    is SidemodEvSource -> source.sidemodId
+                    else -> "unknown"
+                }
+            )
         )
         val functions = moLangFunctionMap(
             cancelFunc,
@@ -78,7 +84,15 @@ interface EvGainedEvent {
         val context = mutableMapOf(
             "pokemon" to source.pokemon.struct,
             "stat" to StringValue(stat.identifier.toString()),
-            "amount" to DoubleValue(amount.toDouble())
+            "amount" to DoubleValue(amount.toDouble()),
+            "source" to StringValue(
+                when (source) {
+                    is BattleEvSource -> "battle"
+                    is ItemEvSource -> "interaction"
+                    is SidemodEvSource -> source.sidemodId
+                    else -> "unknown"
+                }
+            )
         )
     }
 

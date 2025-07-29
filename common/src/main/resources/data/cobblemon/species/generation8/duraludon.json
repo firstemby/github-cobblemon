@@ -147,7 +147,11 @@
     "tutor:steelbeam",
     "tutor:steelroller",
     "tutor:stoneedge",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:stompingtantrum"
   ],
   "evolutions": [
     {

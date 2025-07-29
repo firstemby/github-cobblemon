@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.net.IntSize
+import com.cobblemon.mod.common.util.getStringOrNull
 import com.cobblemon.mod.common.util.readSizedInt
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeSizedInt
@@ -29,19 +30,44 @@ data class BattleFormat(
     var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
 ) {
     companion object {
+        fun setBattleRules(
+            battleFormat: BattleFormat,
+            rules: Set<String>? = null
+        ): BattleFormat {
+            val filteredRules = rules?.filter { it.isNotBlank() }?.toSet()
+            val ruleValues = filteredRules?.mapNotNull { ruleName ->
+                BattleRules::class.members
+                    .filterIsInstance<kotlin.reflect.KProperty1<BattleRules, String>>()
+                    .find { it.name == ruleName }
+                    ?.getter
+                    ?.call()
+            }.orEmpty()
+
+            return battleFormat.copy(
+                ruleSet = filteredRules ?: (battleFormat.ruleSet + ruleValues)
+            )
+        }
+
+        fun fromFormatIdentifier(id: String): BattleFormat = when (id) {
+            "single_battle", "single", "singles" -> BattleFormat.GEN_9_SINGLES
+            "double_battle", "double", "doubles" -> BattleFormat.GEN_9_DOUBLES
+            "triple_battle", "triple", "triples" -> BattleFormat.GEN_9_TRIPLES
+            else ->  BattleFormat.GEN_9_SINGLES
+        }
+
         val GEN_9_SINGLES = BattleFormat(
             battleType = BattleTypes.SINGLES,
-            ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_DOUBLES = BattleFormat(
             battleType = BattleTypes.DOUBLES,
-            ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_TRIPLES = BattleFormat(
                 battleType = BattleTypes.TRIPLES,
-                ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+                ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_MULTI = BattleFormat(

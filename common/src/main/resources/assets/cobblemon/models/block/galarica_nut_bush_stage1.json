@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "cobblemon:block/galarica_nut_bush_stage1"
+    "cross": "cobblemon:block/crops/galarica_nut_bush_stage1"
   }
 }

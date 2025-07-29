@@ -145,7 +145,17 @@
     "tutor:terrainpulse",
     "tutor:thunderbolt",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [

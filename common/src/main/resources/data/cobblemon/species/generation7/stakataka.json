@@ -156,9 +156,14 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:telekinesis",
-    "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

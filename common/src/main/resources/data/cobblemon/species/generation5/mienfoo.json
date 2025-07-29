@@ -161,7 +161,20 @@
     "tutor:roleplay",
     "tutor:sleeptalk",
     "tutor:stoneedge",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:rockslide",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

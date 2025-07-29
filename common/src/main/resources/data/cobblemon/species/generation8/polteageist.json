@@ -137,7 +137,9 @@
     "tutor:spite",
     "tutor:suckerpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "sinistea tea_authenticity=phony",
   "evolutions": [],

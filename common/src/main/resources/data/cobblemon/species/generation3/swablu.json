@@ -159,7 +159,26 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:aircutter",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:falseswipe",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:outrage",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

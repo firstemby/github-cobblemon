@@ -3,8 +3,8 @@
 	"parent": "block/block",
 	"texture_size": [32, 32],
 	"textures": {
-		"pot": "cobblemon:block/campfire_pot_red",
-		"particle": "cobblemon:block/campfire_pot_red"
+		"pot": "cobblemon:block/campfire_pot/campfire_pot_red",
+		"particle": "cobblemon:block/campfire_pot/campfire_pot_red"
 	},
 	"elements": [
 		{
