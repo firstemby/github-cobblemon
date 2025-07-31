@@ -37,32 +37,32 @@
 		},
 		{
 			"name": "armcross",
-			"from": [11, 6, 8.5],
-			"to": [12, 9, 8.5],
+			"from": [10.5, 7, 8],
+			"to": [10.5, 9, 9],
 			"light_emission": 5,
-			"rotation": {"angle": 45, "axis": "y", "origin": [11.5, 8, 8.5], "rescale": true},
+			"rotation": {"angle": 0, "axis": "y", "origin": [10.5, 8, 8.5], "rescale": true},
 			"faces": {
-				"north": {"uv": [0, 5, 0.5, 8], "texture": "#0"},
-				"south": {"uv": [0.5, 5, 1, 8], "texture": "#0"}
+				"east": {"uv": [0.5, 5, 1, 8], "texture": "#0"},
+				"west": {"uv": [0, 6, 0.5, 8], "texture": "#0"}
 			}
 		},
 		{
 			"name": "armcross",
-			"from": [11, 6, 8.5],
-			"to": [12, 9, 8.5],
+			"from": [10, 7, 8.5],
+			"to": [11, 9, 8.5],
 			"light_emission": 5,
-			"rotation": {"angle": -45, "axis": "y", "origin": [11.5, 8, 8.5], "rescale": true},
+			"rotation": {"angle": 0, "axis": "y", "origin": [10.5, 8, 8.5], "rescale": true},
 			"faces": {
-				"north": {"uv": [1, 5, 1.5, 8], "texture": "#0"},
+				"north": {"uv": [1, 6, 1.5, 8], "texture": "#0"},
 				"south": {"uv": [1.5, 5, 2, 8], "texture": "#0"}
 			}
 		},
 		{
 			"name": "mosshroom_s",
-			"from": [11, 9, 8],
-			"to": [12, 10, 9],
+			"from": [10, 9, 8],
+			"to": [11, 10, 9],
 			"light_emission": 5,
-			"rotation": {"angle": 0, "axis": "y", "origin": [11, 6, 9]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [10, 6, 9]},
 			"faces": {
 				"north": {"uv": [0.5, 4, 1, 5], "texture": "#0"},
 				"east": {"uv": [0, 4, 0.5, 5], "texture": "#0"},
@@ -74,21 +74,21 @@
 		},
 		{
 			"name": "shroomcross",
-			"from": [9.5, 7, 10],
-			"to": [10.5, 10, 10],
+			"from": [9, 7, 9.5],
+			"to": [9, 10, 10.5],
 			"light_emission": 5,
-			"rotation": {"angle": 45, "axis": "y", "origin": [10, 9, 10], "rescale": true},
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 9, 10], "rescale": true},
 			"faces": {
-				"north": {"uv": [2, 5, 2.5, 8], "texture": "#0"},
-				"south": {"uv": [2.5, 5, 3, 8], "texture": "#0"}
+				"east": {"uv": [2.5, 5, 3, 8], "texture": "#0"},
+				"west": {"uv": [2, 5, 2.5, 8], "texture": "#0"}
 			}
 		},
 		{
 			"name": "shroomcross",
-			"from": [9.5, 7, 10],
-			"to": [10.5, 10, 10],
+			"from": [8.5, 7, 10],
+			"to": [9.5, 10, 10],
 			"light_emission": 5,
-			"rotation": {"angle": -45, "axis": "y", "origin": [10, 9, 10], "rescale": true},
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 9, 10], "rescale": true},
 			"faces": {
 				"north": {"uv": [3, 5, 3.5, 8], "texture": "#0"},
 				"south": {"uv": [3.5, 5, 4, 8], "texture": "#0"}
@@ -96,10 +96,10 @@
 		},
 		{
 			"name": "mosshroom_t",
-			"from": [9.5, 10, 9.5],
-			"to": [10.5, 11, 10.5],
+			"from": [8.5, 10, 9.5],
+			"to": [9.5, 11, 10.5],
 			"light_emission": 5,
-			"rotation": {"angle": 0, "axis": "y", "origin": [9.5, 7, 10.5]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.5, 7, 10.5]},
 			"faces": {
 				"north": {"uv": [2.5, 4, 3, 5], "texture": "#0"},
 				"east": {"uv": [2, 4, 2.5, 5], "texture": "#0"},
