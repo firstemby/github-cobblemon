@@ -148,7 +148,16 @@
     "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -172,7 +181,7 @@
       "battleOnly": false
     },
     {
-      "name": "Paâ€™u",
+      "name": "Pa’u",
       "primaryType": "psychic",
       "secondaryType": "flying",
       "maleRatio": 0.25,

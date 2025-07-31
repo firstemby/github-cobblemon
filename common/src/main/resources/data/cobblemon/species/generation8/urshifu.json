@@ -137,7 +137,6 @@
     "tm:zenheadbutt",
     "tutor:aerialace",
     "tutor:bulkup",
-    "tutor:coaching",
     "tutor:darkpulse",
     "tutor:drainpunch",
     "tutor:falseswipe",
@@ -164,7 +163,10 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "kubfu",
   "evolutions": [],
@@ -268,7 +270,6 @@
         "tm:zenheadbutt",
         "tutor:aerialace",
         "tutor:bulkup",
-        "tutor:coaching",
         "tutor:dive",
         "tutor:drainpunch",
         "tutor:falseswipe",
@@ -291,7 +292,11 @@
         "tutor:superpower",
         "tutor:swift",
         "tutor:thunderpunch",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:scald",
+        "legacy:snore"
       ],
       "preEvolution": "kubfu",
       "evolutions": [],

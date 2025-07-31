@@ -231,7 +231,7 @@ object CobblemonEvents {
     @JvmField
     val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()
     @JvmField
-    val POKEMON_SEEN = EventObservable<PokemonSeenEvent>()
+    val POKEMON_SEEN = CancelableObservable<PokemonSeenEvent>()
     @JvmField
     val POKEMON_ASPECTS_CHANGED = EventObservable<PokemonAspectsChangedEvent>()
     @JvmField

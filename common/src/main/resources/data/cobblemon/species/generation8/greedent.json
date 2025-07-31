@@ -137,7 +137,6 @@
     "tutor:knockoff",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rollout",
     "tutor:seedbomb",
@@ -146,7 +145,11 @@
     "tutor:superfang",
     "tutor:superpower",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "preEvolution": "skwovet",
   "evolutions": []

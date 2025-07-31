@@ -89,7 +89,8 @@
     "tutor:bugbite",
     "tutor:electroweb",
     "tutor:irondefense",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "preEvolution": "caterpie",
   "evolutions": [

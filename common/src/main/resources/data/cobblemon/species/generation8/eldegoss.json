@@ -135,7 +135,9 @@
     "tutor:seedbomb",
     "tutor:sleeptalk",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:snore"
   ],
   "preEvolution": "gossifleur",
   "evolutions": []

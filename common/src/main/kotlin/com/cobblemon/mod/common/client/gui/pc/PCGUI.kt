@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.storage.pc.search.Search
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.italicise
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -602,9 +603,11 @@ class PCGUI(
                             scale = SCALE
                         )
 
+                        val iv = pokemon.ivs.get(stats[i])
+                        val effectiveIv = pokemon.ivs.getEffectiveBattleIV(stats[i])
                         drawScaledText(
                             context = context,
-                            text = pokemon.ivs.get(stats[i]).toString().text(),
+                            text = if (iv != effectiveIv) effectiveIv.toString().text().italicise() else iv.toString().text(),
                             x = x + 65,
                             y = y + 139 + (10 * i),
                             centered = true,

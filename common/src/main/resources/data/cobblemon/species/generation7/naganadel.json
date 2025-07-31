@@ -186,7 +186,14 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:uproar",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "poipole",
   "evolutions": []

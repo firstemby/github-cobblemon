@@ -129,7 +129,8 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "special:celebrate"
   ],
   "preEvolution": "pawmi",
   "evolutions": [

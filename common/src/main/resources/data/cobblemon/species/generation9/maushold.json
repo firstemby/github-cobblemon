@@ -154,7 +154,8 @@
     "tutor:sleeptalk",
     "tutor:superfang",
     "tutor:swift",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "special:celebrate"
   ],
   "preEvolution": "tandemaus",
   "evolutions": [],

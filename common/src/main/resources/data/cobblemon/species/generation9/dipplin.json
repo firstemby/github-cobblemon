@@ -100,12 +100,10 @@
     "tm:takedown",
     "tm:terablast",
     "tutor:bugbite",
-    "tutor:dracometeor",
     "tutor:dragonpulse",
     "tutor:energyball",
     "tutor:gigadrain",
     "tutor:gigaimpact",
-    "tutor:grassyglide",
     "tutor:hyperbeam",
     "tutor:outrage",
     "tutor:recycle",
@@ -113,7 +111,8 @@
     "tutor:rollout",
     "tutor:seedbomb",
     "tutor:sleeptalk",
-    "tutor:suckerpunch"
+    "tutor:suckerpunch",
+    "legacy:attract"
   ],
   "preEvolution": "applin",
   "evolutions": [

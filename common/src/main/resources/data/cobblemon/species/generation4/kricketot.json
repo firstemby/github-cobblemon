@@ -81,7 +81,10 @@
     "tutor:bugbite",
     "tutor:endeavor",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:mudslap",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

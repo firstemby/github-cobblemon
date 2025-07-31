@@ -169,7 +169,8 @@
     "tutor:spite",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
   "evolutions": []

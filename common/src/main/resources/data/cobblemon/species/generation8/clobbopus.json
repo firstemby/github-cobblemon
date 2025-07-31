@@ -133,7 +133,10 @@
     "tutor:rocksmash",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

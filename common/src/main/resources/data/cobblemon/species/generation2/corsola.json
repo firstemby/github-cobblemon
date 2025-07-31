@@ -186,7 +186,24 @@
     "tutor:stoneedge",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:mudsport"
   ],
   "evolutions": [],
   "forms": [
@@ -341,7 +358,10 @@
         "tutor:stompingtantrum",
         "tutor:stoneedge",
         "tutor:throatchop",
-        "tutor:waterpulse"
+        "tutor:waterpulse",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {

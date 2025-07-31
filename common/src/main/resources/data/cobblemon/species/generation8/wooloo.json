@@ -108,7 +108,10 @@
     "tutor:grassyglide",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

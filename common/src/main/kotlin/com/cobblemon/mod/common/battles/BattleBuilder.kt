@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
+import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
@@ -322,6 +323,28 @@ object BattleBuilder {
         val playerActor = PlayerBattleActor(player.uuid, playerTeam)
         val npcParty = npcEntity.getPartyForChallenge(listOf(player))
         val errors = ErroredBattleStart()
+
+        val adjustLevel = battleFormat.adjustLevel
+        val playerPartyStores = mutableListOf<PlayerPartyStore>()
+        val npcPartyStores = mutableListOf<NPCPartyStore>()
+
+        if (adjustLevel > 0) {
+            val tempStorePlayer = PlayerPartyStore(player.uuid)
+            playerTeam.forEachIndexed { index, battlePokemon ->
+                battlePokemon.effectedPokemon.level = adjustLevel
+                battlePokemon.effectedPokemon.heal()
+                tempStorePlayer.set(index, battlePokemon.effectedPokemon)
+            }
+            playerPartyStores.add(tempStorePlayer)
+
+            val tempStoreNpc = NPCPartyStore(npcEntity)
+            npcParty!!.forEachIndexed { index, battlePokemon ->
+                battlePokemon.level = adjustLevel
+                battlePokemon.heal()
+                tempStoreNpc.set(index, battlePokemon)
+            }
+            npcPartyStores.add(npcParty)
+        }
 
         if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(

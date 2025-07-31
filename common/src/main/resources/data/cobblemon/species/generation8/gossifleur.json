@@ -121,7 +121,9 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:snore"
   ],
   "evolutions": [
     {

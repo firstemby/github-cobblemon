@@ -78,6 +78,9 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
      */
     val autoPokemonBehaviours = mutableListOf<CobblemonBehaviour>()
 
+    /** See [autoPokemonBehaviours] but think npc instead of pokemon*/
+    val autoNPCBehaviours = mutableListOf<CobblemonBehaviour>()
+
     val behaviours = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
 
     override fun sync(player: ServerPlayer) {
@@ -94,6 +97,8 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
                     val behaviour = parse(reader, resolvedIdentifier)
                     if ("pokemon/auto/" in identifier.path) {
                         autoPokemonBehaviours.add(behaviour)
+                    } else if ("npc/auto/" in identifier.path) {
+                        autoNPCBehaviours.add(behaviour)
                     }
                     data[resolvedIdentifier] = behaviour
                 }

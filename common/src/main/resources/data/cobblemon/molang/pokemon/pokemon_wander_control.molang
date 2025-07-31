@@ -1,0 +1,8 @@
+t.wander_control = q.entity.get_wander_control_memory();
+t.wander_control.reset();
+
+t.wander_control.set_allow_land((q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || (!q.entity.behaviour.moving.walk.can_walk && q.entity.behaviour.moving.fly.can_fly));
+t.wander_control.set_allow_water(q.entity.behaviour.moving.swim.can_swim && !q.entity.behaviour.moving.swim.avoids_water);
+t.wander_control.set_allow_air(q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk);
+
+t.wander_control.set_walk_speed(0.35);

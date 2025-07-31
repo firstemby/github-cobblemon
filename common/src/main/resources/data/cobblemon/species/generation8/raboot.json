@@ -155,7 +155,10 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:superfang",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "scorbunny",
   "evolutions": [

@@ -340,6 +340,7 @@ open class PokemonProperties {
     var originalTrainer: String? = null // Original Trainer by Username or UUID
     var moves: List<String>? = null
     var heldItem: String? = null
+    var cosmeticItem: String? = null
 
     var ivs: IVs? = null
     var evs: EVs? = null

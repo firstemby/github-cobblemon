@@ -156,7 +156,10 @@
     "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:round",
+    "legacy:snore",
+    "special:celebrate"
   ],
   "preEvolution": "milcery",
   "evolutions": [],

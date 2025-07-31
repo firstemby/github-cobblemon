@@ -151,7 +151,6 @@
     "tm:trickroom",
     "tm:zenheadbutt",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:covet",
     "tutor:darkpulse",
@@ -178,7 +177,20 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

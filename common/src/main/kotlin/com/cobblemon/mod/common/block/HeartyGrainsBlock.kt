@@ -60,10 +60,10 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         )
 
         val AGE_TO_SHAPE_TOP = arrayOf(
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 0
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 1
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 2
-            box(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // Stage 3
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 0
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 1
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 2
+            box(1.0, 0.0, 1.0, 15.0, 1.0, 15.0), // Stage 3
             box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),  // Stage 4
             box(0.0, 0.0, 0.0, 16.0, 11.0, 16.0),  // Stage 5
             box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0),  // Stage 6

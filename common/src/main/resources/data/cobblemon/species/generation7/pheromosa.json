@@ -148,7 +148,16 @@
     "tutor:snatch",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:tripleaxel"
+    "tutor:tripleaxel",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

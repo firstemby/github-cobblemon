@@ -68,7 +68,9 @@ object PokemonBrain {
         CobblemonSensors.POKEMON_DROWSY,
         CobblemonSensors.POKEMON_ADULT,
         SensorType.IS_IN_WATER,
-        CobblemonSensors.NEARBY_GROWABLE_CROPS
+        CobblemonSensors.NEARBY_GROWABLE_CROPS,
+        CobblemonSensors.NEARBY_BEE_HIVE,
+        CobblemonSensors.NEARBY_FLOWER
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -183,6 +185,11 @@ object PokemonBrain {
         CobblemonMemories.NEARBY_GROWABLE_CROPS,
         MemoryModuleType.AVOID_TARGET,
         CobblemonMemories.POKEMON_SLEEPING,
+        CobblemonMemories.RECENTLY_ATE_GRASS,
+        CobblemonMemories.HIVE_LOCATION,
+        CobblemonMemories.HIVE_COOLDOWN,
+        CobblemonMemories.NEARBY_FLOWERS,
+        CobblemonMemories.POLLINATED,
         CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,

@@ -99,6 +99,11 @@ interface TaskConfig {
             cobblemonResource("eat_grass") to EatGrassTaskConfig::class.java,
             cobblemonResource("find_air") to FindAirTaskConfig::class.java,
             cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig::class.java,
+            cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig::class.java,
+            cobblemonResource("path_to_flower") to PathToFlowerTaskConfig::class.java,
+            cobblemonResource("pollinate_flower") to PollinateFlowerTaskConfig::class.java,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
             cobblemonResource("manage_flight_in_battle") to ManageFlightInBattleTaskConfig::class.java,
             cobblemonResource("attack_hostile_mobs") to AttackHostileMobsTaskConfig::class.java,
             cobblemonResource("move_into_fluid") to MoveIntoFluidTaskConfig::class.java,
@@ -110,6 +115,8 @@ interface TaskConfig {
             cobblemonResource("count_followers") to CountFollowersTaskConfig::class.java,
             cobblemonResource("hate_entity") to HateEntityTaskConfig::class.java,
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
+            cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
+            cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
         )
 
         val runtime = MoLangRuntime().setup()

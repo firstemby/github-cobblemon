@@ -119,7 +119,10 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:stealthrock",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

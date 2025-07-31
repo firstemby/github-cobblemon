@@ -14,6 +14,18 @@
       "behaviours": [
         "cobblemon:looks_around"
       ]
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "tasksByPriority": {
+        "0": [
+          {
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:pokemon_wander_control"
+          }
+        ]
+      }
     }
   ]
 }

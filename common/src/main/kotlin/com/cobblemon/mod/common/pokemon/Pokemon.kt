@@ -1155,7 +1155,11 @@ open class Pokemon : ShowdownIdentifiable {
      */
     fun swapHeldItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
         val existing = this.heldItem()
-        CobblemonEvents.HELD_ITEM_PRE.postThen(HeldItemEvent.Pre(this, stack, existing, decrement), ifSucceeded = { event ->
+        val event = HeldItemEvent.Pre(this, stack, existing, decrement)
+        if (!isClient) {
+            CobblemonEvents.HELD_ITEM_PRE.post(event)
+        }
+        if (!event.isCanceled) {
             val giving = event.receiving.copy().apply { count = 1 }
             if (event.decrement) {
                 event.receiving.shrink(1)
@@ -1166,13 +1170,37 @@ open class Pokemon : ShowdownIdentifiable {
                 StashHandler.giveHeldItem(it)
             }
             return event.returning
-        })
+        }
         return stack
     }
 
+    /**
+     * Returns a copy of the cosmetic item.
+     * In order to change the [ItemStack] use [swapCosmeticItem].
+     *
+     * @return A copy of the [ItemStack] cosmetic item held by this Pokémon.
+     */
+    fun cosmeticItem(): ItemStack = this.cosmeticItem.copy()
+
+    /**
+     * Swaps out the current [cosmeticItem] for the given [stack].
+     * The assigned [cosmeticItem] will always have the [ItemStack.count] of 1.
+     *
+     * The behavior of this method may be modified by third party, please see the [HeldItemEvent].
+     *
+     * @param stack The new [ItemStack] being set as the cosmetic item.
+     * @param decrement If the given [stack] should have [ItemStack.decrement] invoked with the parameter of 1. Default is true.
+     * @return The existing [ItemStack] being held or the [stack] if [HeldItemEvent.Pre] is canceled.
+     *
+     * @see [HeldItemEvent]
+     */
     fun swapCosmeticItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
         val existing = this.cosmeticItem.copy()
-        CobblemonEvents.COSMETIC_ITEM_PRE.postThen(HeldItemEvent.Pre(this, stack, existing, decrement), ifSucceeded = { event ->
+        val event = HeldItemEvent.Pre(this, stack, existing, decrement)
+        if (!isClient) {
+            CobblemonEvents.COSMETIC_ITEM_PRE.post(event)
+        }
+        if (!event.isCanceled) {
             val giving = event.receiving.copy().apply { count = 1 }
             if (event.decrement) {
                 event.receiving.shrink(1)
@@ -1180,7 +1208,7 @@ open class Pokemon : ShowdownIdentifiable {
             this.cosmeticItem = giving
             CobblemonEvents.COSMETIC_ITEM_POST.post(HeldItemEvent.Post(this, this.cosmeticItem.copy(), event.returning.copy(), event.decrement))
             return event.returning
-        })
+        }
         return stack
     }
 
@@ -1190,6 +1218,13 @@ open class Pokemon : ShowdownIdentifiable {
      * @return The existing [ItemStack] being held.
      */
     fun removeHeldItem(): ItemStack = this.swapHeldItem(ItemStack.EMPTY)
+
+    /**
+     * Swaps out the current [cosmeticItem] for an [ItemStack.EMPTY].
+     *
+     * @return The existing [ItemStack] being held.
+     */
+    fun removeCosmeticItem(): ItemStack = this.swapCosmeticItem(ItemStack.EMPTY)
 
     fun addPotentialMark(mark: Mark) {
         potentialMarks.add(mark)
@@ -1671,6 +1706,58 @@ open class Pokemon : ShowdownIdentifiable {
         return ability
     }
 
+    /**
+     * Teaches all moves that are potentially available to this Pokémon.
+     *
+     * TO-DO: Implement Legacy source moves.
+     * @param includeLegacy If moves that were only learnable in previous versions should be considered valid and taught.
+     */
+    fun teachLearnableMoves(includeLegacy: Boolean = true) {
+        // Get all learnable moves
+        val possibleMoves = form.moves.getAllLegalMoves()
+        // Add all possible moves to the moveset
+        val possibleMovesSet = HashSet<BenchedMove>()
+        val query = if (includeLegacy) LearnsetQuery.ANY else LearnsetQuery.LEGAL
+        for (move in possibleMoves) {
+            if (query.canLearn(move, this.form.moves) && moveSet.none { it.template == move }) {
+                possibleMovesSet.add(BenchedMove(move, 0))
+            }
+        }
+        this.benchedMoves.addAll(possibleMovesSet)
+        this.benchedMoves.update()
+        moveSet.update()
+    }
+
+    /**
+     * Validates the moveset of this Pokémon, removing any invalid moves.
+     * This will also remove any benched moves that cannot be learned by the current form.
+     *
+     * TO-DO: Implement Legacy source moves.
+     * @param includeLegacy If moves that were only learnable in previous versions should be considered valid.
+     */
+    fun validateMoveset(includeLegacy: Boolean = true) {
+        // Validate the moveset, removing any invalid moves
+        val query = if (includeLegacy) LearnsetQuery.ANY else LearnsetQuery.LEGAL
+        moveSet.doWithoutEmitting {
+            benchedMoves.doWithoutEmitting {
+                for (i in 0 until MoveSet.MOVE_COUNT) {
+                    val move = this.moveSet[i]
+                    if (move != null && !query.canLearn(move.template, this.form.moves)) {
+                        this.moveSet.setMove(i, null)
+                    }
+                }
+                val benchedIterator = this.benchedMoves.iterator()
+                while (benchedIterator.hasNext()) {
+                    val benchedMove = benchedIterator.next()
+                    if (!query.canLearn(benchedMove.moveTemplate, this.form.moves)) {
+                        benchedIterator.remove()
+                    }
+                }
+            }
+        }
+        moveSet.update()
+    }
+
     fun initializeMoveset(preferLatest: Boolean = true) {
         val possibleMoves = form.moves.getLevelUpMovesUpTo(level).toMutableList()
         moveSet.doWithoutEmitting {
@@ -1695,6 +1782,30 @@ open class Pokemon : ShowdownIdentifiable {
             for (i in 0 until 4) {
                 val move = selector() ?: break
                 moveSet.setMove(i, move.create())
+            }
+        }
+        moveSet.update()
+    }
+
+    /**
+     * Removes the specified [move] from the Pokémon's current move set if it exists.
+     */
+    fun unlearnMove(move: MoveTemplate) {
+        moveSet.doWithoutEmitting {
+            for (i in 0 until MoveSet.MOVE_COUNT) {
+                val currentMove = this.moveSet[i]
+                if (currentMove != null && currentMove.template == move) {
+                    this.moveSet.setMove(i, null)
+                }
+            }
+            this.benchedMoves.doWithoutEmitting {
+                val benchedIterator = this.benchedMoves.iterator()
+                while (benchedIterator.hasNext()) {
+                    val benchedMove = benchedIterator.next()
+                    if (benchedMove.moveTemplate == move) {
+                        benchedIterator.remove()
+                    }
+                }
             }
         }
         moveSet.update()
@@ -1924,6 +2035,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (packet != null && storeCoordinates.get() != null) {
             notify(packet)
         }
+
         changeObservable.emit(this)
     }
 

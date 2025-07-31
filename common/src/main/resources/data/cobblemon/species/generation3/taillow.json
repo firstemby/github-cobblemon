@@ -149,7 +149,24 @@
     "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:tailwind",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic",
+    "special:featherdance"
   ],
   "evolutions": [
     {

@@ -3,6 +3,6 @@
   "colour": "red",
   "food": {
     "hunger": 1,
-    "saturation": 1.2
+    "saturation": 0.6
   }
 }

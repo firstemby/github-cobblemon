@@ -208,7 +208,10 @@
     "tutor:tripleaxel",
     "tutor:uproar",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "mrmime galarian",
   "evolutions": []

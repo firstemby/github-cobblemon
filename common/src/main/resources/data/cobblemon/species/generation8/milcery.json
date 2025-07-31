@@ -101,7 +101,11 @@
     "tutor:helpinghand",
     "tutor:lastresort",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:fling",
+    "legacy:round",
+    "legacy:snore",
+    "special:celebrate"
   ],
   "evolutions": [
     {

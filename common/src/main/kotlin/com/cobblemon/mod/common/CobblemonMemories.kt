@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.mojang.serialization.Codec
@@ -43,11 +44,16 @@ object CobblemonMemories {
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")
     val NEARBY_GROWABLE_CROPS = register<BlockPos>("nearby_growable_crops")
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
+    val HIVE_LOCATION = register<BlockPos>("hive_location")
+    val HIVE_COOLDOWN = register<Boolean>("hive_cooldown")
+    val NEARBY_FLOWERS = register<List<BlockPos>>("nearby_flower")
+    val POLLINATED = register<Boolean>("pollinated", PrimitiveCodec.BOOL)
     /** who am i following rn? */
     val HERD_LEADER = register<String>("herd_leader", PrimitiveCodec.STRING)
     /** how many are following me rn? */
     val HERD_SIZE = register<Int>("herd_size") // Don't bother saving it, we'll try to keep count roughly.
     val ATTACK_TARGET_DATA = register<CobblemonAttackTargetData>("attack_target_data") // This is used to store additional information about the attack target, such as when to give up pursuit.
+    val WANDER_CONTROL = register<CobblemonWanderControl>("wander_control")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

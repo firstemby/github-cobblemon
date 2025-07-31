@@ -177,7 +177,11 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scaryface",
+    "legacy:snore"
   ],
   "preEvolution": "cufant",
   "evolutions": [],

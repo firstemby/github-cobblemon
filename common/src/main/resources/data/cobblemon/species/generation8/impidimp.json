@@ -135,7 +135,11 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

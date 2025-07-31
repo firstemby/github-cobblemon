@@ -159,7 +159,6 @@
     "tutor:knockoff",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:seedbomb",
     "tutor:shockwave",
@@ -169,7 +168,18 @@
     "tutor:thunderfang",
     "tutor:thunderpunch",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "preEvolution": "yungoos",
   "evolutions": []

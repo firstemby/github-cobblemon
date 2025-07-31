@@ -125,7 +125,10 @@
     "tutor:recycle",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:spite"
+    "tutor:spite",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam"
   ],
   "evolutions": []
 }

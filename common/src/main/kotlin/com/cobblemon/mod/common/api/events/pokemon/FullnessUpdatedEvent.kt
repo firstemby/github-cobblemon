@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.api.events.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
+import com.bedrockk.molang.runtime.value.DoubleValue
 
 /**
  * Event that is fired when a player owned Pokémon has its fullness changed
@@ -22,4 +24,16 @@ data class FullnessUpdatedEvent(
         set(value) {
             field = value.coerceIn(0, pokemon.getMaxFullness())
         }
+
+    val context = mutableMapOf(
+        "pokemon" to pokemon.struct,
+        "new_fullness" to DoubleValue(newFullness.toDouble())
+    )
+
+    val functions = moLangFunctionMap(
+        "set_new_fullness" to {
+            newFullness = it.getInt(0)
+            DoubleValue.ONE
+        }
+    )
 }

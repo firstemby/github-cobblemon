@@ -58,7 +58,18 @@
     }
   },
   "moves": [
-    "1:sketch"
+    "1:sketch",
+    "tutor:falseswipe",
+    "tutor:flamethrower",
+    "legacy:captivate",
+    "legacy:sleeptalk",
+    "special:falseswipe",
+    "special:flamethrower",
+    "special:furyswipes",
+    "special:meanlook",
+    "special:odorsleuth",
+    "special:seismictoss",
+    "special:spore"
   ],
   "evolutions": []
 }

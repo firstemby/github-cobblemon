@@ -134,7 +134,6 @@
     "tm:weatherball",
     "tm:wildcharge",
     "tm:zenheadbutt",
-    "tutor:block",
     "tutor:bulkup",
     "tutor:chargebeam",
     "tutor:darkpulse",
@@ -162,7 +161,17 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [

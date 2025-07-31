@@ -154,7 +154,11 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stealthrock",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:highhorsepower",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "rolycoly",
   "evolutions": [
