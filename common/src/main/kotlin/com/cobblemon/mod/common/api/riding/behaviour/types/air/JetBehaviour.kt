@@ -21,6 +21,8 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
+import com.bedrockk.molang.runtime.MoLangMath.lerp
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -380,8 +382,20 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: JetSettings, state: JetState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotatePlayerHead(
+        settings: JetSettings,
+        state: JetState,
+        vehicle: PokemonEntity
+    ): Boolean {
         return false
+    }
+
+    override fun getRideSounds(
+        settings: JetSettings,
+        state: JetState,
+        vehicle: PokemonEntity
+    ): RideSoundSettingsList {
+        return settings.rideSounds
     }
 
     override fun createDefaultState(settings: JetSettings) = JetState()
@@ -428,8 +442,11 @@ class JetSettings : RidingBehaviourSettings {
     var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 60.0, 10.0)".asExpression()
         private set
 
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        rideSounds.encode(buffer)
         buffer.writeExpression(gravity)
         buffer.writeExpression(minSpeed)
         buffer.writeExpression(handlingYawExpr)
@@ -443,6 +460,7 @@ class JetSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        rideSounds = RideSoundSettingsList.decode(buffer)
         gravity = buffer.readExpression()
         minSpeed = buffer.readExpression()
         handlingYawExpr = buffer.readExpression()
