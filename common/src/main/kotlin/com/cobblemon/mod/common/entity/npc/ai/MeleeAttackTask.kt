@@ -9,12 +9,10 @@
 package com.cobblemon.mod.common.entity.npc.ai
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig.Companion.runtime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.entity.npc.NPCEntity
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
@@ -28,9 +26,10 @@ object MeleeAttackTask {
     fun create(range: Expression, cooldownTicks: Expression): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ATTACK_TARGET),
-            it.absent(MemoryModuleType.ATTACK_COOLING_DOWN)
+            it.absent(MemoryModuleType.ATTACK_COOLING_DOWN),
         ).apply(it) { attackTarget, cooldown ->
             Trigger { world, entity, _ ->
+                val attackTargetData = entity.brain.getMemorySafely(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
                 runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 val range = runtime.resolveFloat(range)
                 val cooldownTicks = runtime.resolveInt(cooldownTicks)
@@ -39,6 +38,15 @@ object MeleeAttackTask {
                 if (entity.distanceTo(attackTarget) <= range) {
                     entity.doHurtTarget(attackTarget)
                     cooldown.setWithExpiry(true, cooldownTicks.toLong())
+                    if (attackTargetData != null) {
+                        if (attackTargetData.hitsUntilDisengage == 1) {
+                            attackTargetData.hitsUntilDisengage = 0
+                            entity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
+                            attackTargetData.disengageAction(entity)
+                        } else if (attackTargetData.hitsUntilDisengage > 0){
+                            attackTargetData.hitsUntilDisengage--
+                        }
+                    }
                     true
                 } else {
                     false
