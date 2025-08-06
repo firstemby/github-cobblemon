@@ -41,15 +41,15 @@ import net.minecraft.world.entity.Entity
 class CobblemonAttackTargetData(
     /** An expression that returns false when the target is no longer worth attacking. */
     var shouldContinue: Expression = "true".asExpression(),
-    var hitsUntilDisengage: Int = -1, // -1 means no limit
+    var dealtHitsUntilDisengage: Int = -1, // -1 means no limit
     var disengageAction: (entity: Entity) -> Unit = {}
 ) {
     val struct = ObjectValue<CobblemonAttackTargetData>(this).also {
-        it.addFunction("hits_until_disengage") { DoubleValue(hitsUntilDisengage.toDouble()) }
-        it.addFunction("set_hits_until_disengage") { params ->
+        it.addFunction("dealt_hits_until_disengage") { DoubleValue(dealtHitsUntilDisengage.toDouble()) }
+        it.addFunction("set_dealt_hits_until_disengage") { params ->
             val value = params.getDouble(0)
-            hitsUntilDisengage = value.toInt()
-            DoubleValue(hitsUntilDisengage.toDouble())
+            dealtHitsUntilDisengage = value.toInt()
+            DoubleValue(dealtHitsUntilDisengage.toDouble())
         }
         it.addFunction("set_disengage_action") { params ->
             val script = params.getString(0).asIdentifierDefaultingNamespace()

@@ -39,12 +39,12 @@ object MeleeAttackTask {
                     entity.doHurtTarget(attackTarget)
                     cooldown.setWithExpiry(true, cooldownTicks.toLong())
                     if (attackTargetData != null) {
-                        if (attackTargetData.hitsUntilDisengage == 1) {
-                            attackTargetData.hitsUntilDisengage = 0
+                        if (attackTargetData.dealtHitsUntilDisengage == 1) {
+                            attackTargetData.dealtHitsUntilDisengage = 0
                             entity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
                             attackTargetData.disengageAction(entity)
-                        } else if (attackTargetData.hitsUntilDisengage > 0){
-                            attackTargetData.hitsUntilDisengage--
+                        } else if (attackTargetData.dealtHitsUntilDisengage > 0){
+                            attackTargetData.dealtHitsUntilDisengage--
                         }
                     }
                     true

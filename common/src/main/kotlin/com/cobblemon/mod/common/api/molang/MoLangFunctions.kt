@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
+import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
@@ -293,10 +294,7 @@ object MoLangFunctions {
             val b = format.parse(dateB)
             DoubleValue(a.after(b))
         },
-        "create_simple_party_provider" to java.util.function.Function { params ->
-            val partyProvider = SimplePartyProvider()
-            return@Function partyProvider.struct
-        }
+        "create_simple_party_provider" to java.util.function.Function { SimplePartyProvider().struct },
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
     val worldFunctions = mutableListOf<(Holder<Level>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
@@ -909,6 +907,17 @@ object MoLangFunctions {
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
+            map.put("get_attack_target_data_memory") {
+                val value = entity.brain.getMemorySafely(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
+                    ?: CobblemonAttackTargetData()
+                if (
+                    !entity.brain.checkMemory(CobblemonMemories.ATTACK_TARGET_DATA, MemoryStatus.VALUE_PRESENT)
+                    && entity.brain.checkMemory(CobblemonMemories.ATTACK_TARGET_DATA, MemoryStatus.REGISTERED)
+                ) {
+                    entity.brain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, value)
+                }
+                return@put value.struct
+            }
             map.put("get_wander_control_memory") {
                 val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                     ?: CobblemonWanderControl()
@@ -945,6 +954,30 @@ object MoLangFunctions {
                 } else {
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("get_entity_memory") { params ->
+                val id = params.getString(0).asIdentifierDefaultingNamespace()
+                val memoryType = BuiltInRegistries.MEMORY_MODULE_TYPE.get(id)
+                if (entity.brain.checkMemory(memoryType, MemoryStatus.VALUE_PRESENT)) {
+                    val memory = entity.brain.getMemory(memoryType).get()
+                    return@put when (memory) {
+                        is Entity -> memory.asMostSpecificMoLangValue()
+                        else -> DoubleValue.ZERO
+                    }
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+            }
+            map.put("set_entity_memory") { params ->
+                val memory = params.getString(0).asIdentifierDefaultingNamespace().let(BuiltInRegistries.MEMORY_MODULE_TYPE::get) as MemoryModuleType<LivingEntity>
+                val entity = (params.get<MoValue>(1) as? ObjectValue<*>)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                val expiry = params.getIntOrNull(2) ?: -1
+                if (expiry != -1) {
+                    entity.brain.setMemoryWithExpiry(memory, entity, expiry.toLong())
+                } else {
+                    entity.brain.setMemory(memory, entity)
+                }
+                return@put DoubleValue.ONE
             }
             map.put("set_uuid_memory") { params ->
                 val memory = params.getString(0).asIdentifierDefaultingNamespace().let(BuiltInRegistries.MEMORY_MODULE_TYPE::get) as MemoryModuleType<UUID>
