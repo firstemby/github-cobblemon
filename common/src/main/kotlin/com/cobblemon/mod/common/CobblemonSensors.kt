@@ -37,6 +37,8 @@ object CobblemonSensors {
 
     val NEARBY_FLOWER = register("nearby_flower", ::FlowerSensor)
 
+    val NEARBY_SACCHARINE_LOG = register("nearby_saccharine_log", ::SaccharineLogSensor)
+
     fun <E : Entity, U : Sensor<E>> register(id: String, supplier: Supplier<U>): SensorType<U> {
         val sensor = SensorType(supplier)
         sensors[id] = sensor

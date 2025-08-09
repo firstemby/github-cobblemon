@@ -117,7 +117,10 @@ interface TaskConfig {
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
             cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
             cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
-        )
+            cobblemonResource("steal_honey_from_hive") to StealHoneyFromHiveTaskConfig::class.java,
+            cobblemonResource("path_to_saccharine_log") to PathToSaccharineLogTaskConfig::class.java,
+            cobblemonResource("slather_honey_on_log") to SlatherHoneyOnLogTaskConfig::class.java,
+            )
 
         val runtime = MoLangRuntime().setup()
     }

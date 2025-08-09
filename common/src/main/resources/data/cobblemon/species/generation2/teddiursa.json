@@ -53,7 +53,15 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
-    }
+    },
+    "ai": [
+      {
+        "type": "apply_behaviours",
+        "behaviours": [
+          "cobblemon:pokemon_honey_heist"
+        ]
+      }
+    ]
   },
   "drops": {
     "amount": 6,

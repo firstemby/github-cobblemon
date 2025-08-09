@@ -27,12 +27,20 @@ object PathToBeeHiveTask {
             it.group(
                 it.registered(MemoryModuleType.LOOK_TARGET),
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.present(CobblemonMemories.POLLINATED),
+                it.registered(CobblemonMemories.POLLINATED),
+                it.registered(CobblemonMemories.HAS_HONEY),
                 it.present(CobblemonMemories.HIVE_LOCATION),
                 it.absent(CobblemonMemories.HIVE_COOLDOWN)
-            ).apply(it) { lookTarget, walkTarget, pollinated, hiveMemory, hiveCooldown ->
+            ).apply(it) { lookTarget, walkTarget, pollinated, hasHoney, hiveMemory, hiveCooldown ->
                 Trigger { world, entity, time ->
                     if (entity !is PathfinderMob || !entity.isAlive) {
+                        return@Trigger false
+                    }
+
+                    val brain = entity.brain
+                    val hasPollinated = brain.hasMemoryValue(CobblemonMemories.POLLINATED)
+                    val hasHoneyMem   = brain.hasMemoryValue(CobblemonMemories.HAS_HONEY)
+                    if (!hasPollinated && !hasHoneyMem) {
                         return@Trigger false
                     }
 

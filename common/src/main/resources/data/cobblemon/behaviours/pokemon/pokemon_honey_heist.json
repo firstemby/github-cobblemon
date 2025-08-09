@@ -1,0 +1,41 @@
+{
+  "name": "cobblemon.behaviour.pokemon_honey_heist.name",
+  "description": "cobblemon.behaviour.pokemon_honey_heist.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "cobblemon:pokemon_pollination",
+      "condition": "!q.entity.is_in_party",
+      "tasksByPriority": {
+        "0": [
+          { "type": "cobblemon:activity_change",
+            "activity": "minecraft:idle",
+            "condition": "q.entity.has_memory_value('cobblemon:hive_cooldown')"
+          }
+        ],
+
+        "2": [ "steal_honey_from_hive" ],
+        "3": [ "path_to_hive" ]
+      }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "condition": "!q.entity.is_in_party",
+      "tasksByPriority": {
+        "0": [
+          { "type": "cobblemon:activity_change",
+            "activity": "cobblemon:pokemon_pollination",
+            "condition": "!q.entity.has_memory_value('cobblemon:has_honey') && !q.entity.has_memory_value('cobblemon:hive_cooldown') && q.entity.has_memory_value('cobblemon:hive_location')"
+          }
+        ],
+        "1": [
+          { "type": "cobblemon:run_script", "script": "cobblemon:wander_around_hive" }
+        ],
+        "2": [ "slather_honey_on_log" ],
+        "3": [ "path_to_saccharine_log" ]
+      }
+    }
+  ]
+}
