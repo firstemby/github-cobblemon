@@ -177,7 +177,19 @@
     "tutor:spikes",
     "tutor:swift",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:darkpulse",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "froakie",
   "evolutions": [

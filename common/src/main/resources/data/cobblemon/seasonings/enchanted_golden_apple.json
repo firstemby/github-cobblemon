@@ -1,0 +1,11 @@
+{
+  "ingredient": "minecraft:enchanted_golden_apple",
+  "colour": "yellow",
+  "baitEffects": [
+    {
+      "type": "cobblemon:rarity_bucket",
+      "chance": 1.0,
+      "value": 10
+    }
+  ]
+}

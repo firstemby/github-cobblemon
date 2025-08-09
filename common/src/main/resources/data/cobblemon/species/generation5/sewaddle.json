@@ -147,7 +147,21 @@
     "tutor:snore",
     "tutor:stringshot",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:agility",
+    "legacy:airslash",
+    "legacy:attract",
+    "legacy:calmmind",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:lightscreen",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

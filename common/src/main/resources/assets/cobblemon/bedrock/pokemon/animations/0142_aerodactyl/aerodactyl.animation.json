@@ -644,10 +644,8 @@
 					"rotation": [0, "0+math.sin(q.anim_time*90*3+90)*3", "0+math.sin(q.anim_time*90*3+90)*1.5"]
 				}
 			},
-			"sound_effects": {
-				"1.0833": {
-					"effect": "animation.leather.wing_flap.medium"
-				}
+			"timeline": {
+				"1.0833": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };"
 			}
 		},
 		"animation.aerodactyl.air_fly": {
@@ -835,10 +833,8 @@
 					"rotation": ["math.sin(q.anim_time*90*12-160)*2", 0, 0]
 				}
 			},
-			"sound_effects": {
-				"0.9583": {
-					"effect": "animation.leather.wing_flap.medium"
-				}
+			"timeline": {
+				"0.9583": "q.has_entity ? { q.sound('animation.leather.wing_flap.medium'); };"
 			}
 		},
 		"animation.aerodactyl.sleep": {
@@ -1133,6 +1129,11 @@
 						"1.25": [35, 0, 0],
 						"1.5": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.aerodactyl.cry"
 				}
 			}
 		}

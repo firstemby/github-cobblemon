@@ -144,7 +144,11 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:superfang",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:mudshot",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

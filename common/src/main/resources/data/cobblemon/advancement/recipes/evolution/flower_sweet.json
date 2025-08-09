@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:flower_sweet"
+        "recipe": "cobblemon:cooking_pot/flower_sweet_from_cooking_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:flower_sweet"
+      "cobblemon:cooking_pot/flower_sweet_from_cooking_pot"
     ]
   }
 }

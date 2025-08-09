@@ -17,6 +17,7 @@ import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.asin
+import kotlin.math.sign
 
 open class OrientationController(val entity: LivingEntity) {
 
@@ -108,21 +109,15 @@ open class OrientationController(val entity: LivingEntity) {
         get() = Mth.wrapDegrees(-upVector.angleSigned(UP, forwardVector).toDegrees())
 
     fun applyGlobalYaw(deltaYawDegrees: Float) = updateOrientation { original ->
-        val euler = Vector3f()
-        original.getEulerAnglesXYZ(euler)
-        val pitch0 = euler.x
-        val roll0 = euler.z
+        return@updateOrientation original.rotateLocalY(-deltaYawDegrees.toRadians())
+    }
 
-        val unroll = Matrix3f().rotateZ(-roll0)
-        val unpitch = Matrix3f().rotateX(-pitch0)
-        val flattened = Matrix3f(original).mul(unroll).mul(unpitch)
-
-        //Flip to reflect current acceptance of what direction is pos for yaw
-        val globalYaw = Matrix3f().rotationY(-1.0f * deltaYawDegrees.toRadians())
-        val rePitch = Matrix3f().rotateX(pitch0)
-        val reRoll = Matrix3f().rotateZ(roll0)
-
-        return@updateOrientation Matrix3f(globalYaw).mul(flattened).mul(rePitch).mul(reRoll)
+    fun applyGlobalPitch(deltaPitchDegrees: Float) = updateOrientation { original ->
+        val currQuat = Quaternionf().setFromUnnormalized(original)
+        val horzLeftVector = Vector3f(this.leftVector.x, 0.0f, this.leftVector.z)
+        val globalPitch = Quaternionf().fromAxisAngleRad(horzLeftVector.normalize(), -deltaPitchDegrees.toRadians())
+        val resultQuat = globalPitch.mul(currQuat)
+        return@updateOrientation Matrix3f().set(resultQuat)
     }
 
 }

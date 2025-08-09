@@ -15,12 +15,9 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
-import com.cobblemon.mod.common.api.riding.Seat;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
-import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
-import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
@@ -40,18 +37,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
-import org.joml.Vector3f;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -283,42 +278,5 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Override
     public OrientationController getOrientationController() {
         return cobblemon$orientationController;
-    }
-
-    @Override
-    public HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
-        Entity vehicle = this.getVehicle();
-        if (vehicle instanceof PokemonEntity pokemonEntity) {
-            int seatIndex = pokemonEntity.getPassengers().indexOf(this);
-            Seat seat = pokemonEntity.getSeats().get(seatIndex);
-
-            PokemonClientDelegate delegate = (PokemonClientDelegate) pokemonEntity.getDelegate();
-            MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
-
-            if (locator == null) {
-                super.pick(hitDistance, partialTicks, hitFluids);
-            }
-
-            Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
-
-            OrientationController controller = this.getOrientationController();
-
-            float currEyeHeight = this.getEyeHeight();
-            Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
-            Vec3 rotatedEyeHeight = new Vec3(orientation.transform(new Vector3f(0f, currEyeHeight - (this.getBbHeight() / 2), 0f)));
-
-            Vec3 eyePosition = locatorOffset.add(pokemonEntity.position()).add(rotatedEyeHeight);
-
-            Vec3 viewVector = this.getViewVector(partialTicks);
-            Vec3 viewDistanceVector = eyePosition.add(viewVector.x * hitDistance, viewVector.y * hitDistance, viewVector.z * hitDistance);
-            return this.level()
-                    .clip(
-                            new ClipContext(
-                                    eyePosition, viewDistanceVector, ClipContext.Block.OUTLINE, hitFluids ? net.minecraft.world.level.ClipContext.Fluid.ANY : net.minecraft.world.level.ClipContext.Fluid.NONE, this
-                            )
-                    );
-        }
-
-        return super.pick(hitDistance, partialTicks, hitFluids);
     }
 }

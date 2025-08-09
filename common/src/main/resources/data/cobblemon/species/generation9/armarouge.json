@@ -172,7 +172,8 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:spite",
-    "tutor:trick"
+    "tutor:trick",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
   "evolutions": []

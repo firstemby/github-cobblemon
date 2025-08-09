@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_leaf": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "cobblemon:leaf_stone"
+              "cobblemon:grass_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_leaf",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.storage.StorePosition
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.gui.pasture.PastureWidget
@@ -82,12 +83,12 @@ class StorageWidget(
 
     var box = 0
         set(value) {
-            // If value is within min and max
-            field = if (value > 0 && value < pc.boxes.size) value
-            // If value is less than zero, wrap around to end
-            else if (value < 0) pc.boxes.size - 1
-            // Else it's greater than max, wrap around to start
-            else 0
+            field =
+                if (value > 0 && value < pc.boxes.size) value // If value is within min and max
+                else if (value < 0) pc.boxes.size - 1 // If value is less than zero, wrap around to end
+                else 0 // Else it's greater than max, wrap around to start
+
+            CobblemonClient.lastPcBoxViewed = field
             this.setupStorageSlots()
         }
 

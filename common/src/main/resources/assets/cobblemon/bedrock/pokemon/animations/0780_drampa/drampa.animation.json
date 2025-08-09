@@ -505,6 +505,13 @@
 					}
 				}
 			}
+		},
+		"animation.drampa.cry": {
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.drampa.cry"
+				}
+			}
 		}
 	}
 }

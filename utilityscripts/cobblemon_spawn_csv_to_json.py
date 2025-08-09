@@ -375,7 +375,7 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
 
             more_spawn_data = {
                 "type": "pokemon",
-                "context": row['Context'],
+                "spawnablePositionType": row['Context'],
                 "bucket": row['Bucket'],
                 "level": f"{int(row['Lv. Min'])}-{int(row['Lv. Max'])}",
                 "weight": row['Weight'],

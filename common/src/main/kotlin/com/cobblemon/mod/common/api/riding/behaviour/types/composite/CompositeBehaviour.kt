@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.composite
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.CompositeRidingStrategies
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
@@ -171,7 +172,7 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         state: CompositeState,
         vehicle: PokemonEntity,
         driver: Player
-    ): Boolean {
+    ): ResourceLocation {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
             behaviour.useRidingAltPose(behaviourSettings, behaviourState, vehicle, driver)
         }
@@ -327,6 +328,16 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         }
     }
 
+    override fun getRideSounds(
+        settings: CompositeSettings,
+        state: CompositeState,
+        vehicle: PokemonEntity
+    ): RideSoundSettingsList {
+        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
+            behaviour.getRideSounds(behaviourSettings, behaviourState, vehicle)
+        }
+    }
+
     override fun isActive(
         settings: CompositeSettings,
         state: CompositeState,
@@ -334,6 +345,28 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
     ): Boolean {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
             behaviour.isActive(behaviourSettings, behaviourState, vehicle)
+        }
+    }
+
+    override fun canStopRiding(
+        settings: CompositeSettings,
+        state: CompositeState,
+        vehicle: PokemonEntity,
+        passenger: Player
+    ): Boolean {
+        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
+            behaviour.canStopRiding(behaviourSettings, behaviourState, vehicle, passenger)
+        }
+    }
+
+    override fun damageOnCollision(
+        settings: CompositeSettings,
+        state: CompositeState,
+        vehicle: PokemonEntity,
+        impactVec: Vec3
+    ): Boolean {
+        return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
+            behaviour.damageOnCollision(behaviourSettings, behaviourState, vehicle, impactVec)
         }
     }
 }

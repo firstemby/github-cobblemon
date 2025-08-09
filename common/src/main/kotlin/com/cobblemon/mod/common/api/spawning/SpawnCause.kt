@@ -16,7 +16,6 @@ import net.minecraft.world.entity.EntityType
 
 open class SpawnCause(
     val spawner: Spawner,
-    val bucket: SpawnBucket,
     entity: Entity? = null
 ): SpawningInfluence {
     val entityWorldId = entity?.level()?.dimension()
@@ -25,5 +24,9 @@ open class SpawnCause(
     val entityType = entity?.type
 
     val entity: Entity?
-        get() = if (entityType == EntityType.PLAYER) server()?.playerList?.getPlayer(entityUUID) else server()?.getLevel(entityWorldId)?.getEntity(entityId!!)
+        get() = if (entityType == EntityType.PLAYER) {
+            server()?.playerList?.getPlayer(entityUUID!!)
+        } else {
+            server()?.getLevel(entityWorldId!!)?.getEntity(entityId!!)
+        }
 }

@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:whipped_dream"
+        "recipe": "cobblemon:cooking_pot/whipped_dream_from_cooking_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:whipped_dream"
+      "cobblemon:cooking_pot/whipped_dream_from_cooking_pot"
     ]
   }
 }

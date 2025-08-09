@@ -150,7 +150,20 @@
     "tutor:sleeptalk",
     "tutor:synthesis",
     "tutor:waterpulse",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:lightscreen",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:shadowball",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

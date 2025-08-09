@@ -183,7 +183,26 @@
     "tutor:sludgebomb",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -351,7 +370,18 @@
         "tutor:swift",
         "tutor:thunderbolt",
         "tutor:thunderpunch",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:megadrain",
+        "legacy:return",
+        "legacy:round",
+        "legacy:snore",
+        "legacy:swagger"
       ],
       "evolutions": [
         {

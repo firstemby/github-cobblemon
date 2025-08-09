@@ -150,7 +150,10 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "rookidee",
   "evolutions": [

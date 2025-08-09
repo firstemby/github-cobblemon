@@ -1,0 +1,20 @@
+{
+  "species": "cobblemon:poltchageist",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["artisan"],
+      "poser": "cobblemon:poltchageist",
+      "model": "cobblemon:poltchageist_artisan.geo",
+      "texture": "cobblemon:textures/pokemon/1012_poltchageist/poltchageist.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "artisan",
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/1012_poltchageist/poltchageist_shiny.png"
+    }
+  ]
+}

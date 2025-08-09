@@ -19,7 +19,7 @@
       "trigger": "cobblemon:catch_pokemon",
       "conditions": {
         "count": 1,
-        "type": "any"
+        "species": "any"
       }
     }
   },

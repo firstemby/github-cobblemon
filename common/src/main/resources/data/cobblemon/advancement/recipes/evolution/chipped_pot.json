@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_glaze": {
+    "has_original": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:white_glazed_terracotta"
+              "cobblemon:chipped_pot"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_glaze",
+      "has_original",
       "has_the_recipe"
     ]
   ],

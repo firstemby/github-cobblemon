@@ -15,9 +15,7 @@ import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
 import com.cobblemon.mod.common.client.particle.ParticleStorm
-import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
-import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveDouble
 import com.mojang.blaze3d.platform.GlStateManager
@@ -130,6 +128,10 @@ class SnowstormParticle(
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
+        if (invisible) {
+            return
+        }
+
         if (Cobblemon.implementation.modAPI != ModAPI.FORGE) {
            if (!Minecraft.getInstance().levelRenderer.cullingFrustum.isVisible(boundingBox)) {
                return
@@ -199,7 +201,7 @@ class SnowstormParticle(
         }
 
         val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
-        val colour = storm.effect.particle.tinting.getTint(runtime)
+        val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
 
         val spriteURange = sprite.u1 - sprite.u0
         val spriteVRange = sprite.v1 - sprite.v0
@@ -285,7 +287,7 @@ class SnowstormParticle(
         //So instead of being bound to the emitter, the particle is actually bound to the locator for local rotation.
         //If you're messing with this - make sure evo particles still rotate with the pokemon
         if (storm.effect.space.localRotation) {
-            storm.locatorSpaceMatrix.matrix.getRotation(axisRotation)
+            storm.attachedMatrix.matrix.getRotation(axisRotation)
         }
         else {
             matrixWrapper.matrix.getRotation(axisRotation)
@@ -367,7 +369,7 @@ class SnowstormParticle(
     }
 
     fun updatePosition() {
-        val localVector = if (storm.effect.space.localRotation) storm.locatorSpaceMatrix.matrix.transformDirection(
+        val localVector = if (storm.effect.space.localRotation) storm.attachedMatrix.matrix.transformDirection(
             Vec3(
                 localX,
                 localY,

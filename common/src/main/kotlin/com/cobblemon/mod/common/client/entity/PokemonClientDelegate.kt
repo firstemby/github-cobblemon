@@ -17,7 +17,9 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
+import com.cobblemon.mod.common.api.pokemon.aspect.aspectParticleMap
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.aspect.ParticleData
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnClient
@@ -34,7 +36,11 @@ import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.MovingSoundInstance
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.resolve
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -144,6 +150,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                             beamStartTime = System.currentTimeMillis()
                             ballStartTime = System.currentTimeMillis()
                             currentEntity.isInvisible = true
+                            currentEntity.isSilent = true
                             ballDone = false
                             var soundPos = currentEntity.position()
                             currentEntity.ownerUUID?.let {
@@ -165,7 +172,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                 playedThrowingSound = true
                             }
                             lerpOnClient(POKEBALL_AIR_TIME) { ballOffset = it }
-                            ballRotOffset = ((Math.random()) * currentEntity.level().random.nextIntBetweenInclusive(-15, 15)).toFloat()
+                            ballRotOffset = ((Math.random()) * currentEntity.random.nextIntBetweenInclusive(-15, 15)).toFloat()
 
                             currentEntity.after(seconds = POKEBALL_AIR_TIME) {
                                 beamStartTime = System.currentTimeMillis()
@@ -194,7 +201,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                     sendOutPosition?.let {
                                         val newPos = it.add(sendOutOffset)
                                         val ballType =
-                                            currentEntity.pokemon.caughtBall.name.path.toLowerCase().replace("_", "")
+                                            currentEntity.pokemon.caughtBall.name.path.lowercase().replace("_", "")
                                         val mode = if (currentEntity.isBattling) "battle" else "casual"
                                         //TODO: A lot of this is probably able to be simplified by just using a single particle with events
                                         //Do it in the particle file, not code.
@@ -252,6 +259,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                                 if (scaleAnimTask == null || scaleAnimTask!!.expired) {
                                     scaleAnimTask = lerpOnClient(BEAM_SHRINK_TIME) { entityScaleModifier = it }
                                     currentEntity.isInvisible = false
+                                    currentEntity.isSilent = false
                                     currentEntity.after(seconds = POKEBALL_AIR_TIME * 2) {
                                         ballOffset = 0f
                                         ballRotOffset = 0f
@@ -268,6 +276,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                             playedSendOutSound = false
                             entityScaleModifier = 0F
                             currentEntity.isInvisible = false
+                            currentEntity.isSilent = false
                             ballDone = false
                             val soundPos = currentEntity.position()
                             val client = Minecraft.getInstance()
@@ -423,14 +432,6 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         this.phaseTarget = currentEntity.level().getEntity(targetId)
     }
 
-    override fun handleStatus(status: Byte) {
-        if (status == 10.toByte()) {
-            val model = (currentModel ?: return)
-            val animation = model.getEatAnimation(this) ?: return
-            activeAnimations.add(animation)
-        }
-    }
-
     override fun updatePostDeath() {
         ++currentEntity.deathTime
     }
@@ -439,6 +440,37 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         if (secondsSinceLastShinyParticle > SHINY_PARTICLE_COOLDOWN) {
             playShinyEffect("cobblemon:ambient_shiny_sparkle")
             lastShinyParticle = System.currentTimeMillis()
+        }
+    }
+
+    override fun spawnAspectParticle() {
+        currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
+        currentAspects.forEach { aspect ->
+            aspectParticleMap[aspect]?.let { particleData ->
+                val random = currentEntity.level().random
+                when (particleData) {
+                    is ParticleData.SnowstormParticle -> {
+                        val locator = particleData.locators.firstOrNull { this.locatorStates[it] != null } ?: "root"
+                        if (particleData.chance > random.nextDouble()) {
+                            repeat(particleData.amount) {
+                                runtime.resolve("q.particle('${particleData.particle}', '$locator')".asExpressionLike())
+                            }
+                        }
+                    }
+                    is ParticleData.MinecraftParticle -> {
+                        if (particleData.chance > random.nextDouble()) {
+                            val box = currentEntity.boundingBox
+                            repeat(particleData.amount) {
+                                val x = box.minX + (box.maxX - box.minX) * random.nextDouble()
+                                val y = box.minY + (box.maxY - box.minY) * random.nextDouble()
+                                val z = box.minZ + (box.maxZ - box.minZ) * random.nextDouble()
+
+                                currentEntity.level().addParticle(particleData.particle, x, y, z, 0.0, 0.0, 0.0)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -457,12 +489,15 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         cryAnimation = animation
     }
 
+    fun getSeatLocator(passenger: Entity): String {
+        val seatIndex = this.getEntity().occupiedSeats.indexOf(passenger)
+        if (seatIndex == -1) throw IllegalArgumentException("Entity is not currently riding a seat")
+        return this.getEntity().rideProp.seats[seatIndex].locator ?: "seat_${seatIndex + 1}"
+    }
+
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
-        val index =
-            this.getEntity().passengers.indexOf(passenger).takeIf { it >= 0 && it < this.getEntity().seats.size }
-                ?: return
-        val seat = this.getEntity().seats[index]
-        val locator = this.locatorStates[seat.locator]
+        val locatorName = getSeatLocator(passenger)
+        val locator = this.locatorStates[locatorName]
 
         if (locator == null) return
 

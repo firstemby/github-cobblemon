@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.resources.ResourceLocation
@@ -39,9 +40,9 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun speed(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Float
 
-    fun clampPassengerRotation(settings: Settings, state: State, entity: PokemonEntity, driver: LivingEntity) {}
+    fun clampPassengerRotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity) {}
 
-    fun updatePassengerRotation(settings: Settings, state: State, entity: PokemonEntity, driver: LivingEntity) {}
+    fun updatePassengerRotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity) {}
 
     fun rotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity): Vec2
 
@@ -74,7 +75,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun useAngVelSmoothing(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
-    fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Boolean
+    fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): ResourceLocation
 
     fun inertia(settings: Settings, state: State, vehicle: PokemonEntity): Double
 
@@ -88,6 +89,16 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun shouldRotatePlayerHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
+    fun getRideSounds(settings: Settings, state: State, vehicle: PokemonEntity): RideSoundSettingsList
+
+    fun maxUpStep(settings: Settings, state: State, vehicle: PokemonEntity): Float? = null
+
+    fun canStopRiding(settings: Settings, state: State, vehicle: PokemonEntity, passenger: Player): Boolean = true
+
     fun createDefaultState(settings: Settings): State
 
+    /**
+     * Calculate the damage a horizontal collision will do to a ridden Pokémon. This is only relevant to fast flying behaviours, fall damage is separate!
+     */
+    fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
 }

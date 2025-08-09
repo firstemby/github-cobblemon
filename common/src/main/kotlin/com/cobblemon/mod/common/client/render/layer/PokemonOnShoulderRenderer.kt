@@ -161,7 +161,6 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
             heldItemRenderer.renderOnModel(
                 shoulderData.shownItem,
-                model,
                 state,
                 matrixStack,
                 buffer,

@@ -72,7 +72,7 @@
         "description": "Its top speed",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "ACCELERATION": {
@@ -80,7 +80,7 @@
         "description": "How fast it can speed up",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "SKILL": {
@@ -88,7 +88,7 @@
         "description": "How fast it can turn",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "JUMP": {
@@ -96,7 +96,7 @@
         "description": "How high it can fly",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "STAMINA": {
@@ -104,7 +104,7 @@
         "description": "How long it can stay off the ground",
         "ranges": {
           "LAND": "40-60",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       }
     },
@@ -112,7 +112,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
+        "key": "cobblemon:land/horse",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [
@@ -324,7 +324,21 @@
     "tutor:tailwind",
     "tutor:twister",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

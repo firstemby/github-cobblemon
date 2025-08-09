@@ -96,6 +96,8 @@ object CobblemonPermissions {
     @JvmStatic
     val PC = this.create("${COMMAND_PREFIX}pc", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
+    val PC_SEARCH = this.create("${COMMAND_PREFIX}pcsearch", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
     val POKEBOX = this.create("${COMMAND_PREFIX}pokebox", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic
@@ -126,6 +128,8 @@ object CobblemonPermissions {
     @JvmStatic
     val APPLY_PLAYER_TEXTURE = this.create("${COMMAND_PREFIX}applyplayertexture", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
+    val BEHAVIOUR_EDIT = this.create("${COMMAND_PREFIX}behaviouredit", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
     val ABANDON_MULTITEAM = this.create("${COMMAND_PREFIX}abandonmultiteam", PermissionLevel.NONE)
     @JvmStatic
     val RUN_MOLANG_SCRIPT = this.create("${COMMAND_PREFIX}runmolangscript", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
@@ -137,6 +141,9 @@ object CobblemonPermissions {
     val CHANGE_BOX_COUNT = this.create("${COMMAND_PREFIX}boxcount", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val SPECTATE_BATTLE = this.create("${COMMAND_PREFIX}spectatebattle", PermissionLevel.ALL_COMMANDS)
+
+    @JvmStatic
+    val SEE_HIDDEN_NPCS = this.create("seehiddennpcs", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     fun all(): Iterable<Permission> = this.permissions
 

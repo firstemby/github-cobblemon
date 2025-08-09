@@ -127,7 +127,11 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scaleshot",
+    "legacy:snore"
   ],
   "evolutions": [
     {

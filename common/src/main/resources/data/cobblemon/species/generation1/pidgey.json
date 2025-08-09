@@ -59,6 +59,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -138,7 +141,32 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:heatwave",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:takedown",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

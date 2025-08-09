@@ -48,6 +48,12 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [
@@ -144,7 +150,6 @@
     "tutor:bounce",
     "tutor:bulldoze",
     "tutor:burningjealousy",
-    "tutor:darkpulse",
     "tutor:endeavor",
     "tutor:firefang",
     "tutor:flamethrower",
@@ -155,7 +160,6 @@
     "tutor:hypervoice",
     "tutor:irontail",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:sleeptalk",
@@ -163,7 +167,18 @@
     "tutor:snatch",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "litleo",
   "evolutions": []

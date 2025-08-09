@@ -4,6 +4,9 @@
   "profileScale": 0.61,
   "profileTranslation": [-0.02, 0.81, 0],
   "rootBone": "sandaconda",
+  "animations": {
+    "cry": "q.bedrock_stateful('sandaconda', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],

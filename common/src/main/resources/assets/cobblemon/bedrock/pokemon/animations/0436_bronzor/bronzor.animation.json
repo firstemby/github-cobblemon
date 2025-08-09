@@ -219,6 +219,13 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.bronzor.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.bronzor.cry"
+				}
+			}
 		}
 	}
 }

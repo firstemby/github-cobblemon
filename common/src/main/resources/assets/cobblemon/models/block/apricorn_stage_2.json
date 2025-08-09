@@ -1,8 +1,8 @@
 {
 	"texture_size": [32, 16],
 	"textures": {
-		"1": "cobblemon:block/apricorn_stage_2",
-		"particle": "cobblemon:block/apricorn_stage_2"
+		"1": "cobblemon:block/crops/apricorn_stage_2",
+		"particle": "cobblemon:block/crops/apricorn_stage_2"
 	},
 	"elements": [
 		{

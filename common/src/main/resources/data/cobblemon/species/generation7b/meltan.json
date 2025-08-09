@@ -74,7 +74,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:steelbeam",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

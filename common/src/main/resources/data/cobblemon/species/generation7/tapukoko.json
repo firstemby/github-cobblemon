@@ -144,7 +144,16 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

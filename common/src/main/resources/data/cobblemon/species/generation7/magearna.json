@@ -189,7 +189,15 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [],
   "forms": [

@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.stats
 
-import com.cobblemon.mod.common.api.berry.Flavor
+import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
 
@@ -19,13 +19,13 @@ import net.minecraft.network.chat.Component
  * @since February 17th, 2025
  */
 enum class RidingStat(
-    val flavour: Flavor
+    val flavour: Flavour
 ) {
-    SPEED(Flavor.SWEET),
-    ACCELERATION(Flavor.SPICY),
-    SKILL(Flavor.DRY),
-    JUMP(Flavor.BITTER),
-    STAMINA(Flavor.SOUR);
+    SPEED(Flavour.SWEET),
+    ACCELERATION(Flavour.SPICY),
+    SKILL(Flavour.DRY),
+    JUMP(Flavour.BITTER),
+    STAMINA(Flavour.SOUR);
 
     companion object {
         fun getByName(name: String) = RidingStat.entries.firstOrNull { it.name.equals(name, ignoreCase = true) }

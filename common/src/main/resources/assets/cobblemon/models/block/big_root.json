@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cobblemon:block/big_root",
-		"particle": "cobblemon:block/big_root"
+		"0": "cobblemon:block/crops/big_root",
+		"particle": "cobblemon:block/crops/big_root"
 	},
 	"elements": [
 		{

@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_wool": {
+    "has_tear": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:red_wool"
+              "minecraft:ghast_tear"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_wool",
+      "has_tear",
       "has_the_recipe"
     ]
   ],

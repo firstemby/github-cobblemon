@@ -171,8 +171,18 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:telekinesis",
-    "tutor:trick",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:breakingswipe",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:thunderwave",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -336,7 +346,6 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],
@@ -502,7 +511,6 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],

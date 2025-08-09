@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readSizedInt
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ExperienceUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket<ExperienceUpdatePacket>(pokemon, value) {
+class ExperienceUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<ExperienceUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.INT
     override fun set(pokemon: Pokemon, value: Int) = pokemon.setExperienceAndUpdateLevel(value)

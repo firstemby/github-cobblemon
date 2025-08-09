@@ -28,8 +28,10 @@ class SideEndInstruction(val message: BattleMessage): InterpreterInstruction {
             val side = if (message.argumentAt(0)?.get(1) == '1') battle.side1 else battle.side2
             val effect = message.effectAt(1) ?: return@dispatchWaiting
             battle.sides.forEach {
-                val subject = if (it == side) battleLang("side_subject.ally") else battleLang("side_subject.opponent")
-                val lang = battleLang("sideend.${effect.id}", subject)
+                val isAllySide = it == side
+                val positionSpecificKey = if (isAllySide) "sideend.ally.${effect.id}" else "sideend.opponent.${effect.id}"
+                val lang = battleLang(positionSpecificKey)
+                
                 it.broadcastChatMessage(lang)
             }
 

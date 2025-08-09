@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.api.drop
 
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 class EvolutionItemDropEntry : ItemDropEntry() {
-    val requirements: MutableSet<EvolutionRequirement> = mutableSetOf()
+    val requirements: MutableSet<Requirement> = mutableSetOf()
 
     override fun canDrop(pokemon: Pokemon?): Boolean = pokemon != null && requirements.all { it.check(pokemon) }
 }

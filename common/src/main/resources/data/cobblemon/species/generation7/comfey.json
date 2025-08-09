@@ -190,7 +190,18 @@
     "tutor:tailwind",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:celebrate"
   ],
   "evolutions": []
 }

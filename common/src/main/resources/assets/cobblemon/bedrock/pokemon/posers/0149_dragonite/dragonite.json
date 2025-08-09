@@ -1,0 +1,146 @@
+{
+  "rootBone": "dragonite",
+  "portraitScale": 1.2,
+  "portraitTranslation": [
+    -0.2,
+    2.6,
+    0
+  ],
+  "profileScale": 0.41,
+  "profileTranslation": [
+    0,
+    1.1,
+    -6
+  ],
+  "animations": {
+    "cry": "q.bedrock_stateful('dragonite', 'cry')"
+  },
+  "poses": {
+    "sleep": {
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('dragonite', 'sleep')"
+      ]
+    },
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseTypes": [
+        "WALK"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": [
+        "STAND"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "hover": {
+      "poseTypes": [
+        "HOVER"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'air_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "float": {
+      "isTouchingWater": true,
+      "poseTypes": [
+        "FLOAT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'water_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "swim": {
+      "isTouchingWater": true,
+      "poseTypes": [
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'water_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "surface_idle": {
+      "isTouchingWater": true,
+      "isUnderWater": false,
+      "poseTypes": [
+        "STAND",
+        "FLOAT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'surfacewater_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    },
+    "surface_swim": {
+      "isTouchingWater": true,
+      "isUnderWater": false,
+      "poseTypes": [
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('dragonite', 'surfacewater_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('dragonite', 'blink')"
+      ]
+    }
+  }
+}

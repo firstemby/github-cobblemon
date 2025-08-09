@@ -165,7 +165,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [

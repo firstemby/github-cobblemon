@@ -1,0 +1,30 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "complex_dishes",
+    "ingredients": [
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:milk_bucket"
+        },
+        {
+            "item": "minecraft:egg"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:poke_puff",
+        "count": 4
+    },
+    "seasoningProcessors": [
+        "ingredient",
+        "flavour",
+        "food_colour"
+    ]
+}

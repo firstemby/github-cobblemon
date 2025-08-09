@@ -53,14 +53,20 @@
     "moving": {
       "canLook": false,
       "walk": {
+        "walkSpeed": 0.14,
         "avoidsLand": true
       },
       "swim": {
-        "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
         "canSwimInWater": true,
-        "canSwimInLava": false
+        "canSwimInLava": false,
+        "swimSpeed": "0.2"
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "light": "0-4"
     }
   },
   "drops": {
@@ -162,7 +168,19 @@
     "tutor:snore",
     "tutor:steelroller",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

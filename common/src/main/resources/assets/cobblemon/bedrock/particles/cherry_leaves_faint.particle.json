@@ -5,7 +5,7 @@
             "identifier": "cobblemon:cherry_leaves_faint_particle",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/cherry_petal"
+                "texture": "textures/particles/vanilla/cherry_petal"
             }
         },
         "components": {

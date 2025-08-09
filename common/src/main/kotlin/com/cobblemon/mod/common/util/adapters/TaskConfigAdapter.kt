@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.util.adapters
 
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -28,13 +29,13 @@ import java.lang.reflect.Type
 object TaskConfigAdapter : JsonDeserializer<TaskConfig> {
     override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): TaskConfig? {
         if (json.isJsonPrimitive) {
-            val type = json.asString
+            val type = json.asString.asIdentifierDefaultingNamespace()
             val clazz = TaskConfig.types[type]
                 ?: throw IllegalArgumentException("Unknown task config type: $type")
             return ctx.deserialize(JsonObject(), clazz)
         } else {
             val obj = json.asJsonObject
-            val type = obj.get("type")?.asString
+            val type = obj.get("type")?.asString?.asIdentifierDefaultingNamespace()
                 ?: throw IllegalArgumentException("Missing task config type. A task config element must have a 'type' value.")
             val clazz = TaskConfig.types[type]
                 ?: throw IllegalArgumentException("Unknown task config type: $type")

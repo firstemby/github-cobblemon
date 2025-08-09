@@ -18,17 +18,17 @@ import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RidingProperties(
-    val stats: MutableMap<RidingStat, RidingStatDefinition> = mutableMapOf(),
-    val seats: List<Seat> = listOf(),
-    val conditions: List<Expression> = listOf(),
-    val behaviour: RidingBehaviourSettings? = null
+        val stats: MutableMap<RidingStat, RidingStatDefinition> = mutableMapOf(),
+        val seats: List<Seat> = listOf(),
+        val conditions: List<Expression> = listOf(),
+        val behaviour: RidingBehaviourSettings? = null
 ) {
 
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {
             val stats: MutableMap<RidingStat, RidingStatDefinition> = buffer.readMap(
-                { buffer.readEnum(RidingStat::class.java) },
-                { RidingStatDefinition.decode(buffer) }
+                    { buffer.readEnum(RidingStat::class.java) },
+                    { RidingStatDefinition.decode(buffer) }
             ).toMutableMap()
             val seats: List<Seat> = buffer.readList { _ -> Seat.decode(buffer) }
             val conditions = buffer.readList { buffer.readString().asExpression() }
@@ -53,9 +53,9 @@ class RidingProperties(
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeMap(
-            stats,
-            { _, stat -> buffer.writeEnum(stat) },
-            { _, stat -> stat.encode(buffer) }
+                stats,
+                { _, stat -> buffer.writeEnum(stat) },
+                { _, stat -> stat.encode(buffer) }
         )
         buffer.writeCollection(seats) { _, seat -> seat.encode(buffer) }
         buffer.writeCollection(conditions) { _, condition -> buffer.writeString(condition.getString()) }

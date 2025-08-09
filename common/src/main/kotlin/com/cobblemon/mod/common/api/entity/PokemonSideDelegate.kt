@@ -21,6 +21,7 @@ interface PokemonSideDelegate : EntitySideDelegate<PokemonEntity> {
     fun updatePostDeath() {}
     fun handleStatus(status: Byte) {}
     fun spawnShinyParticle(player: Player) {}
+    fun spawnAspectParticle() {}
     fun positionRider(passenger: Entity, positionUpdater: MoveFunction)
     fun updateAge(age: Int) {}
 }

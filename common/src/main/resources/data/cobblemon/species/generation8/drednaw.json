@@ -180,7 +180,12 @@
     "tutor:superfang",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:scaleshot",
+    "legacy:snore"
   ],
   "preEvolution": "chewtle",
   "evolutions": [],

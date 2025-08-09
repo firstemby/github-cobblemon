@@ -11,13 +11,12 @@ package com.cobblemon.mod.common.api.spawning.spawner
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.SpawnerManager
-import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.context.calculators.AreaSpawningContextCalculator
-import com.cobblemon.mod.common.api.spawning.context.calculators.SpawningContextCalculator.Companion.prioritizedAreaCalculators
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
+import com.cobblemon.mod.common.api.spawning.position.calculators.AreaSpawnablePositionCalculator
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.prioritizedAreaCalculators
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBoxLoaded
 import com.cobblemon.mod.common.util.squeezeWithinBounds
@@ -34,8 +33,8 @@ import net.minecraft.world.phys.Vec3
 
 /**
  * A type of [TickingSpawner] that operates within some area. When this spawner type
- * is told to do a spawning action, the subclass can provide a [SpawningArea] to use.
- * If a non-null value is returned, the [prospector] and [resolver] will be used to
+ * is told to do a spawning action, the subclass can provide a [SpawningZoneInput] to use.
+ * If a non-null value is returned, the [spawningZoneGenerator] and [spawnablePositionResolver] will be used to
  * select a spawn and action it.
  *
  * Subclasses must implement the function retrieving what area to do the spawning in,
@@ -49,20 +48,21 @@ abstract class AreaSpawner(
     spawns: SpawnPool,
     manager: SpawnerManager
 ) : TickingSpawner(name, spawns, manager) {
-    abstract fun getArea(cause: SpawnCause): SpawningArea?
+    abstract fun getZoneInput(cause: SpawnCause): SpawningZoneInput?
 
     companion object {
         const val CHUNK_REACH = 3
     }
 
-    var prospector: SpawningProspector = Cobblemon.prospector
-    var resolver: AreaContextResolver = Cobblemon.areaContextResolver
-    var contextCalculators: List<AreaSpawningContextCalculator<*>> = prioritizedAreaCalculators
+    var spawningZoneGenerator: SpawningZoneGenerator = Cobblemon.spawningZoneGenerator
+    var spawnablePositionResolver: AreaSpawnablePositionResolver = Cobblemon.areaSpawnablePositionResolver
+    var spawnablePositionCalculators: List<AreaSpawnablePositionCalculator<*>> = prioritizedAreaCalculators
 
+    var spawnsPerPass: Int? = null
 
-    override fun run(cause: SpawnCause): Pair<SpawningContext, SpawnDetail>? {
-        val area = getArea(cause)
-        val constrainedArea = if (area != null) constrainArea(area) else null
+    override fun run(cause: SpawnCause): List<SpawnAction<*>> {
+        val areaInput = getZoneInput(cause)
+        val constrainedArea = if (areaInput != null) constrainArea(areaInput) else null
         if (constrainedArea != null) {
 
             val areaBox = AABB.ofSize(
@@ -73,7 +73,7 @@ abstract class AreaSpawner(
             )
 
             if (!constrainedArea.world.isBoxLoaded(areaBox)) {
-                return null
+                return emptyList()
             }
 
             val numberNearby = constrainedArea.world.getEntitiesOfClass(
@@ -84,22 +84,26 @@ abstract class AreaSpawner(
 
             val chunksCovered = CHUNK_REACH * CHUNK_REACH
             if (numberNearby.toFloat() / chunksCovered >= Cobblemon.config.pokemonPerChunk) {
-                return null
+                return emptyList()
             }
 
             //val prospectStart = System.currentTimeMillis()
-            val slice = prospector.prospect(this, constrainedArea)
+            val zone = spawningZoneGenerator.generate(this, constrainedArea)
             //val prospectEnd = System.currentTimeMillis()
-            val contexts = resolver.resolve(this, contextCalculators, slice)
+            val spawnablePositions = spawnablePositionResolver.resolve(this, spawnablePositionCalculators, zone)
+
+            val influences = this.getAllInfluences() + zone.unconditionalInfluences
+
+            val bucket = chooseBucket(cause, influences)
             //val resolveEnd = System.currentTimeMillis()
             //val prospectDuration = prospectEnd - prospectStart
             //val resolveDuration = resolveEnd - prospectEnd
             //println("Prospecting took: $prospectDuration ms. Resolution took: $resolveDuration ms")
-            // Takes about 3ms on my laptop to prospect, similar to context resolve - not very good, needs some thought
-            return getSpawningSelector().select(this, contexts)
+            // Takes about 3ms on my laptop to prospect, similar to spawnable position resolve - not very good, needs some thought
+            return getSpawningSelector().select(spawner = this, bucket = bucket, spawnablePositions = spawnablePositions, max = spawnsPerPass ?: Cobblemon.config.maximumSpawnsPerPass)
         }
 
-        return null
+        return emptyList()
     }
 
     fun isValidStartPoint(world: Level, chunk: ChunkAccess, startPos: BlockPos.MutableBlockPos): Boolean {
@@ -123,7 +127,7 @@ abstract class AreaSpawner(
         return true
     }
 
-    fun constrainArea(area: SpawningArea): SpawningArea? {
+    fun constrainArea(area: SpawningZoneInput): SpawningZoneInput? {
         val basePos = BlockPos.MutableBlockPos(area.baseX, area.baseY, area.baseZ)
         val originalY = area.baseY
 
@@ -158,7 +162,7 @@ abstract class AreaSpawner(
             if (area.world.isLoaded(min) && area.world.isLoaded(max) &&
                 min.x < max.x && min.y < max.y && min.z < max.z
             ) {
-                return SpawningArea(
+                return SpawningZoneInput(
                     cause = area.cause,
                     world = area.world,
                     baseX = min.x,

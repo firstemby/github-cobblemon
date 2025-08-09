@@ -47,8 +47,7 @@ class PastureSlotIconButton(
         yPos = y
     }
 
-    override fun playDownSound(pHandler: SoundManager) {
-    }
+    override fun playDownSound(pHandler: SoundManager) {}
 
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (xPos.toFloat()..(xPos.toFloat() + (SIZE * SCALE))) && mouseY.toFloat() in (yPos.toFloat()..(yPos.toFloat() + (SIZE * SCALE)))
 }

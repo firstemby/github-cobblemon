@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 947,
   "name": "Brambleghast",
   "primaryType": "grass",
@@ -41,6 +42,12 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.3,
+    "height": 1.5,
+    "fixed": false
+  },
   "drops": {
     "amount": 5,
     "entries": [

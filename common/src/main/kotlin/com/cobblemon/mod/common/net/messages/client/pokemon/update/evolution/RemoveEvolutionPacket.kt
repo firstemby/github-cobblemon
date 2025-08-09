@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RemoveEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
+class RemoveEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 

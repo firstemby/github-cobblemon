@@ -8,10 +8,12 @@
 
 package com.cobblemon.mod.common.util
 
-import com.cobblemon.mod.common.api.text.yellow
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.common.collect.ImmutableMap
 import com.mojang.serialization.Dynamic
+import java.util.ArrayDeque
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.NbtOps
@@ -27,11 +29,6 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
-import java.util.*
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.min
-import kotlin.time.measureTime
 
 
 fun Entity.makeEmptyBrainDynamic() = Dynamic(

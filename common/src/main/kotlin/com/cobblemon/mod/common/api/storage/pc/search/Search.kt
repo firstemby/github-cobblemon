@@ -44,7 +44,17 @@ class Search(
                     "legendary" -> PokemonFilter { pokemon -> pokemon.isLegendary() }
                     "mythical" -> PokemonFilter { pokemon -> pokemon.isMythical() }
                     "ultrabeast", "ultra_beast" -> PokemonFilter { pokemon -> pokemon.isUltraBeast() }
-                    else -> PokemonFilter { pokemon -> PokemonProperties.parse(filter).matches(pokemon) }
+                    else -> {
+                        val nameFilter = filter.lowercase(Locale.ROOT)
+                        PokemonFilter { pokemon ->
+                            // search by partial name
+                            if (pokemon.species.resourceIdentifier.path.contains(nameFilter)) {
+                                return@PokemonFilter true
+                            }
+                            // search by exactly match in different props
+                            return@PokemonFilter PokemonProperties.parse(filter).matches(pokemon)
+                        }
+                    }
                 }
 
                 if (inverted) {

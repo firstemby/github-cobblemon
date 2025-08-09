@@ -536,10 +536,8 @@
 					}
 				}
 			},
-			"sound_effects": {
-				"0.5": {
-					"effect": "animation.plumage.wing_flap.medium"
-				}
+			"timeline": {
+				"0.5": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.air_fly": {
@@ -1575,10 +1573,8 @@
 					}
 				}
 			},
-			"sound_effects": {
-				"1.375": {
-					"effect": "animation.plumage.wing_flap.medium"
-				}
+			"timeline": {
+				"1.375": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.air_fly_quirk2": {
@@ -2736,12 +2732,12 @@
 				}
 			},
 			"sound_effects": {
-				"1.4583": {
-					"effect": "animation.plumage.wing_flap.medium"
-				},
 				"3.0833": {
 					"effect": "animation.plumage.wing_flap.medium"
 				}
+			},
+			"timeline": {
+				"1.4583": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.pidgeot.blink": {
@@ -2760,6 +2756,13 @@
 						"0.1667": [-0.1, 0, -0.1],
 						"0.2083": [0, 0, 0]
 					}
+				}
+			}
+		},
+		"animation.pidgeot.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.pidgeot.cry"
 				}
 			}
 		}

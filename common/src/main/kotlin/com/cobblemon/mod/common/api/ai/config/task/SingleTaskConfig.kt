@@ -8,17 +8,31 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
+import net.minecraft.world.entity.ai.behavior.DoNothing
 
-fun interface SingleTaskConfig : TaskConfig {
-    override fun createTasks(
-        entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
-    ): List<BehaviorControl<in LivingEntity>> {
-        return createTask(entity, brainConfigurationContext)?.let { listOf(it) } ?: emptyList()
+interface SingleTaskConfig : TaskConfig {
+    companion object {
+        fun nothing() = object : SingleTaskConfig {
+            override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+            override fun createTask(
+                entity: LivingEntity,
+                behaviourConfigurationContext: BehaviourConfigurationContext
+            ): BehaviorControl<in LivingEntity>? {
+                return DoNothing(0, 1)
+            }
+        }
     }
 
-    fun createTask(entity: LivingEntity, brainConfigurationContext: BrainConfigurationContext): BehaviorControl<in LivingEntity>?
+    override fun createTasks(
+        entity: LivingEntity,
+        behaviourConfigurationContext: BehaviourConfigurationContext
+    ): List<BehaviorControl<in LivingEntity>> {
+        return createTask(entity, behaviourConfigurationContext)?.let { listOf(it) } ?: emptyList()
+    }
+
+    fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>?
 }

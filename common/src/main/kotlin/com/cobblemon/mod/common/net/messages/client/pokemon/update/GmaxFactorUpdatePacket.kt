@@ -18,7 +18,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since July 27, 2023
  */
-class GmaxFactorUpdatePacket(pokemon: () -> Pokemon, value: Boolean) : BooleanUpdatePacket<GmaxFactorUpdatePacket>(pokemon, value) {
+class GmaxFactorUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<GmaxFactorUpdatePacket>(pokemon, value) {
     override val id = ID
 
     override fun set(pokemon: Pokemon, value: Boolean) {

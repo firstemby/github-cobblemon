@@ -134,7 +134,11 @@
     "tutor:stealthrock",
     "tutor:steelbeam",
     "tutor:stoneedge",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:stompingtantrum"
   ],
   "preEvolution": "duraludon",
   "evolutions": []

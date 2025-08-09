@@ -119,7 +119,10 @@
     "tutor:sleeptalk",
     "tutor:snarl",
     "tutor:stompingtantrum",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": []
 }

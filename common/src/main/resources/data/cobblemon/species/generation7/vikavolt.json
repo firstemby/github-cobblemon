@@ -164,7 +164,18 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:wildcharge",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dualwingbeat",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "charjabug",
   "evolutions": []

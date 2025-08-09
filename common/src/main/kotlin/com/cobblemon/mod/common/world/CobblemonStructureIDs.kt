@@ -52,4 +52,11 @@ object CobblemonStructureIDs {
     val TAIGA_BERRY_SMALL = cobblemonResource("village_taiga/taiga_berry_small")
     @JvmField
     val TAIGA_BERRY_LARGE = cobblemonResource("village_taiga/taiga_berry_large")
+    
+    @JvmField
+    val STONJOURNER_HENGE = cobblemonResource("ruins/stonjourner_henge_ruins")
+    @JvmField
+    val SOL_HENGE = cobblemonResource("ruins/sol_henge_ruins")
+    @JvmField
+    val LUNA_HENGE = cobblemonResource("ruins/luna_henge_ruins")
 }

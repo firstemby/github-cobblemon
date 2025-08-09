@@ -118,7 +118,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

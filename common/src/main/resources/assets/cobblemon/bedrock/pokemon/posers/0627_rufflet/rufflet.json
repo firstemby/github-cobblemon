@@ -4,7 +4,9 @@
   "profileScale": 0.7,
   "profileTranslation": [0.02, 0.76, 0],
   "rootBone": "rufflet",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('rufflet', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

@@ -127,7 +127,6 @@
     "tm:twister",
     "tm:uturn",
     "tutor:aerialace",
-    "tutor:dracometeor",
     "tutor:dragonpulse",
     "tutor:dualwingbeat",
     "tutor:endeavor",
@@ -135,7 +134,6 @@
     "tutor:focusenergy",
     "tutor:gigadrain",
     "tutor:gigaimpact",
-    "tutor:grassyglide",
     "tutor:hyperbeam",
     "tutor:irondefense",
     "tutor:magicalleaf",
@@ -146,7 +144,10 @@
     "tutor:seedbomb",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "applin",
   "evolutions": [],

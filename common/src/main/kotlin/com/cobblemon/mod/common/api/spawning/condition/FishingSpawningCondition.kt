@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 import com.cobblemon.mod.common.util.itemRegistry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
@@ -18,13 +18,13 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
 
 /**
- * A spawning condition that applies to [FishingSpawningContext]s.
+ * A spawning condition that applies to [FishingSpawnablePosition]s.
  *
  * @author Hiroku
  * @since February 3rd, 2024
  */
-class FishingSpawningCondition: SpawningCondition<FishingSpawningContext>() {
-    override fun contextClass() = FishingSpawningContext::class.java
+class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
+    override fun spawnablePositionClass() = FishingSpawnablePosition::class.java
 
     var rod: RegistryLikeCondition<Item>? = null
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
@@ -33,19 +33,19 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawningContext>() {
     var bait: ResourceLocation? = null
     var rodType: ResourceLocation? = null
 
-    override fun fits(ctx: FishingSpawningContext): Boolean {
-        if (!super.fits(ctx)) {
+    override fun fits(spawnablePosition: FishingSpawnablePosition): Boolean {
+        if (!super.fits(spawnablePosition)) {
             return false
-        } else if (rod != null && !rod!!.fits(ctx.rodItem ?: return false, ctx.world.itemRegistry)) {
+        } else if (rod != null && !rod!!.fits(spawnablePosition.rodItem ?: return false, spawnablePosition.world.itemRegistry)) {
             return false
-        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> ctx.nearbyBlockTypes.any { cond.fits(it, ctx.blockRegistry) } }) {
+        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> spawnablePosition.nearbyBlockTypes.any { cond.fits(it, spawnablePosition.blockRegistry) } }) {
             return false
         }
 
         if (minLureLevel != null) { // check for the lureLevel of the rod
-            val pokerodStack = ctx.rodStack
+            val pokerodStack = spawnablePosition.rodStack
             val lureLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                ctx.enchantmentRegistry.getHolder(Enchantments.LURE).get(),
+                spawnablePosition.enchantmentRegistry.getHolder(Enchantments.LURE).get(),
                 pokerodStack
             )
             if (lureLevel < minLureLevel!!) {
@@ -55,27 +55,17 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawningContext>() {
             }
         }
         if (bait != null) { // check for the bait on the bobber
-            val pokerodBait = ctx.rodBait?.item
+            val pokerodBait = spawnablePosition.baitStack.itemHolder.unwrapKey().orElse(null)?.location()
             if (pokerodBait != bait) {
                 return false
             }
         }
         if (rodType != null) { // check for the type of pokerod being used
-            val pokerodItem = ctx.rodItem
+            val pokerodItem = spawnablePosition.rodItem
             if (pokerodItem?.pokeRodId != rodType) {
                 return false
             }
         }
-
-        /*if (ctx is FishingSpawningContext && (ctx as FishingSpawningContext).rodItem != null) { // check if the bait attracts certain EV yields
-            val pokerodItem = (ctx as FishingSpawningContext).rodItem
-
-            // todo check if the EV yield of the berry matches the bait EV attract maybe?
-
-            if (// todo if bait EV yield != EV yield of pokemon consideration        //Registries.ITEM.getId(pokerodItem?.bait?.item).path == )
-                return false
-        }*/
-
         return true
     }
 

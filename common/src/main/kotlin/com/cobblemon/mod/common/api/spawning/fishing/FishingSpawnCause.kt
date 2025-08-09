@@ -12,26 +12,25 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.fishing.BobberSpawnPokemonEvent
-import com.cobblemon.mod.common.api.fishing.FishingBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
+import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.pokemon.Natures
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
-import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.util.cobblemonResource
+import kotlin.random.Random.Default.nextInt
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
-import kotlin.random.Random.Default.nextInt
 
 /**
  * A spawning cause that is embellished with fishing information. Could probably also
@@ -42,13 +41,13 @@ import kotlin.random.Random.Default.nextInt
  */
 class FishingSpawnCause(
     spawner: Spawner,
-    bucket: SpawnBucket,
     entity: Entity?,
-    val rodStack: ItemStack
-) : SpawnCause(spawner, bucket, entity) {
+    val rodStack: ItemStack,
+    val lureLevel: Int
+) : SpawnCause(spawner, entity) {
     companion object {
         const val FISHED_ASPECT = "fished"
-        fun shinyReroll(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun shinyReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.shiny) return
 
             val shinyOdds = Cobblemon.config.shinyRate.toInt()
@@ -62,7 +61,7 @@ class FishingSpawnCause(
             }
         }
 
-        fun alterNatureAttempt(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun alterNatureAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             val baitStat = effect.subcategory?.let { it1 -> Stats.getStat(it1.path).identifier } ?: run {
                 LOGGER.warn("One of your nature baits is missing a subcategory and failed to effect a fished Pokemon")
                 return
@@ -76,7 +75,7 @@ class FishingSpawnCause(
             pokemonEntity.pokemon.nature = Natures.getNature(takenNature.name.path) ?: return
         }
 
-        fun alterIVAttempt(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun alterIVAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             val iv = effect.subcategory ?: return
 
             if ((pokemonEntity.pokemon.ivs[Stats.getStat(iv.path)] ?: 0) + effect.value > 31) // if HP IV is already less than 3 away from 31
@@ -85,7 +84,7 @@ class FishingSpawnCause(
                 pokemonEntity.pokemon.ivs.set(Stats.getStat(iv.path), (pokemonEntity.pokemon.ivs[Stats.getStat(iv.path)] ?: 0) + (effect.value).toInt())
         }
 
-        fun alterGenderAttempt(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun alterGenderAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.species.maleRatio > 0 && pokemonEntity.pokemon.species.maleRatio < 1) // if the pokemon is allowed to be male or female
                 when (effect.subcategory) {
                     cobblemonResource("male") -> if (pokemonEntity.pokemon.gender != Gender.MALE) pokemonEntity.pokemon.gender = Gender.MALE
@@ -93,7 +92,7 @@ class FishingSpawnCause(
                 }
         }
 
-        fun alterLevelAttempt(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun alterLevelAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             var level = pokemonEntity.pokemon.level + effect.value.toInt()
             if (level > Cobblemon.config.maxPokemonLevel)
                 level = Cobblemon.config.maxPokemonLevel
@@ -124,7 +123,7 @@ class FishingSpawnCause(
 
         }
 
-        fun alterFriendshipAttempt(pokemonEntity: PokemonEntity, effect: FishingBait.Effect) {
+        fun alterFriendshipAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.friendship + effect.value > Cobblemon.config.maxPokemonFriendship)
                 pokemonEntity.pokemon.setFriendship(Cobblemon.config.maxPokemonFriendship)
             else
@@ -133,89 +132,31 @@ class FishingSpawnCause(
     }
 
     val rodItem = rodStack.item as? PokerodItem
-    val bait = PokerodItem.getBaitOnRod(rodStack)
+    // Determine the combined bait effects if any
+    val baitEffects = SpawnBaitInfluence(SpawnBaitEffects.getEffectsFromRodItemStack(rodStack))
 
-    override fun affectSpawn(entity: Entity) {
-        super.affectSpawn(entity)
+    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+        super.affectSpawn(action, entity)
         if (entity is PokemonEntity) {
             entity.pokemon.forcedAspects += FISHED_ASPECT
-
-            bait?.effects?.forEach { it ->
-                if (Math.random() > it.chance) return
-                FishingBait.Effects.getEffectFunction(it.type)?.invoke(entity, it)
-            }
-
+            baitEffects.affectSpawn(action, entity)
             // Some of the bait actions might have changed the aspects and we need it to be
             // in the entityData IMMEDIATELY otherwise it will flash as what it would be
             // with the old aspects.
             // New aspects copy into the entity data only on the next tick.
             entity.entityData.set(PokemonEntity.ASPECTS, entity.pokemon.aspects)
-            CobblemonEvents.BOBBER_SPAWN_POKEMON_MODIFY.post(BobberSpawnPokemonEvent.Modify(bucket, rodStack, entity))
+            CobblemonEvents.BOBBER_SPAWN_POKEMON_MODIFY.post(
+                BobberSpawnPokemonEvent.Modify(
+                    spawnAction = action,
+                    rod = rodStack,
+                    pokemon = entity
+                )
+            )
         }
     }
 
-    // EV related bait effects
-    override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
-        // if bait exists and any effects are related to EV yields
-        if (bait != null && bait.effects.any{ it.type == FishingBait.Effects.EV }){
-            if (detail is PokemonSpawnDetail) {
-               val detailSpecies = detail.pokemon.species?.let { PokemonSpecies.getByName(it) }
-               val baitEVStat = bait.effects.firstOrNull { it.type == FishingBait.Effects.EV }?.subcategory?.path?.let { Stats.getStat(it) }
-
-               if (detailSpecies != null && baitEVStat != null) {
-                   val evYieldValue = detailSpecies.evYield[baitEVStat]?.toFloat() ?: 0f
-                   return when {
-                       evYieldValue > 0 -> super.affectWeight(detail, ctx, weight) // use original weight if EV yield is greater than 0
-                       else -> super.affectWeight(detail, ctx, 0f) // use spawn weight of 0 if EV yield is 0
-                   }
-               }
-            }
-        }
-        // if bait exists and any effects are related to Typing
-        if (bait != null && bait.effects.any{ it.type == FishingBait.Effects.TYPING }){
-            if (detail is PokemonSpawnDetail) {
-                val detailSpecies = detail.pokemon.species?.let { PokemonSpecies.getByName(it) }
-                val baitEffect = bait.effects.firstOrNull { it.type == FishingBait.Effects.TYPING }
-                val baitTypingEffect = baitEffect?.subcategory?.path?.let { ElementalTypes.get(it) }
-
-                if (detailSpecies != null && baitTypingEffect != null) {
-                    val isMatchingType = detailSpecies.types.contains(baitTypingEffect)
-                    return when {
-                        isMatchingType -> super.affectWeight(detail, ctx, weight * baitEffect.value.toFloat()) // multiply weight by multiplier of bait effect if typing is found
-                        else -> super.affectWeight(detail, ctx, weight) // use base spawn weight if typing is not same as bait
-                    }
-                }
-            }
-        }
-        // if bait exists and any effects are related to Egg Groups
-        if (bait != null && bait.effects.any { it.type == FishingBait.Effects.EGG_GROUP }) {
-            if (detail is PokemonSpawnDetail) {
-                val detailSpecies = detail.pokemon.species?.let { PokemonSpecies.getByName(it) }
-
-                if (detailSpecies != null) {
-                    // Collect all the egg group effects
-                    val eggGroupEffects = bait.effects.filter { it.type == FishingBait.Effects.EGG_GROUP }
-
-                    // Check if any of the egg group effects match the species' egg groups
-                    val matchingEffect = eggGroupEffects.firstOrNull { effect ->
-                        val effectEggGroupKey = effect.subcategory?.path ?: return@firstOrNull false
-                        val eggGroup = EggGroup.fromIdentifier(effectEggGroupKey)
-                        if (eggGroup == null) {
-                            LOGGER.warn("Unknown egg group identifier: $effectEggGroupKey")
-                            return@firstOrNull false
-                        }
-                        detailSpecies.eggGroups.contains(eggGroup)
-                    }
-
-                    if (matchingEffect != null) {
-                        val multiplier = matchingEffect.value
-                        return super.affectWeight(detail, ctx, (weight * multiplier).toFloat())
-                    }
-                }
-            }
-        }
-        return super.affectWeight(detail, ctx, weight)
+    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {
+        val weight = baitEffects.affectWeight(detail, spawnablePosition, weight)
+        return super.affectWeight(detail, spawnablePosition, weight)
     }
-
-
 }

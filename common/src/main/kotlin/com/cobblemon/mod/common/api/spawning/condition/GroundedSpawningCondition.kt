@@ -9,28 +9,28 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.context.GroundedSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.GroundedSpawnablePosition
 import com.cobblemon.mod.common.util.Merger
 import net.minecraft.world.level.block.Block
 
 /**
- * Base type for a spawning condition that applies to some kind of [GroundedSpawningContext]. This
- * can be extended for subclasses of [GroundedSpawningContext].
+ * Base type for a spawning condition that applies to some kind of [GroundedSpawnablePosition]. This
+ * can be extended for subclasses of [GroundedSpawnablePosition].
  *
  * @author Hiroku
  * @since February 7th, 2022
  */
-abstract class GroundedTypeSpawningCondition<T : GroundedSpawningContext> : AreaTypeSpawningCondition<T>() {
+abstract class GroundedTypeSpawningCondition<T : GroundedSpawnablePosition> : AreaTypeSpawningCondition<T>() {
     var neededBaseBlocks: MutableList<RegistryLikeCondition<Block>>? = null
 
-    override fun fits(ctx: T): Boolean {
-        return if (!super.fits(ctx)) {
+    override fun fits(spawnablePosition: T): Boolean {
+        return if (!super.fits(spawnablePosition)) {
             false
-        } else if (minHeight != null && ctx.height < minHeight!!) {
+        } else if (minHeight != null && spawnablePosition.height < minHeight!!) {
             return false
-        } else if (maxHeight != null && ctx.height > maxHeight!!) {
+        } else if (maxHeight != null && spawnablePosition.height > maxHeight!!) {
             return false
-        } else if (neededBaseBlocks != null && neededBaseBlocks!!.none { it.fits(ctx.baseBlockHolder) }) {
+        } else if (neededBaseBlocks != null && neededBaseBlocks!!.none { it.fits(spawnablePosition.baseBlockHolder) }) {
             return false
         } else {
             return true
@@ -51,13 +51,13 @@ abstract class GroundedTypeSpawningCondition<T : GroundedSpawningContext> : Area
 }
 
 /**
- * A spawning condition for a [GroundedSpawningContext].
+ * A spawning condition for a [GroundedSpawnablePosition].
  *
  * @author Hiroku
  * @since February 7th, 2022
  */
-open class GroundedSpawningCondition : GroundedTypeSpawningCondition<GroundedSpawningContext>() {
-    override fun contextClass() = GroundedSpawningContext::class.java
+open class GroundedSpawningCondition : GroundedTypeSpawningCondition<GroundedSpawnablePosition>() {
+    override fun spawnablePositionClass() = GroundedSpawnablePosition::class.java
     companion object {
         const val NAME = "grounded"
     }

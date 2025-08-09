@@ -55,40 +55,40 @@
 	        "displayName": "Speed",
 	        "description": "Its top speed",
 	        "ranges": {
-	          "LAND": "2-10",
-	          "AIR": "100-101"
+	          "LAND": "10-20",
+	          "AIR": "25-50"
 	        }
 	      },
 	      "ACCELERATION": {
 	        "displayName": "Acceleration",
 	        "description": "How fast it can speed up",
 	        "ranges": {
-	          "LAND": "2-10",
-	          "AIR": "100-101"
+	          "LAND": "90-100",
+	          "AIR": "20-40"
 	        }
 	      },
 	      "SKILL": {
 	        "displayName": "Handling",
 	        "description": "How fast it can turn",
 	        "ranges": {
-	          "LAND": "2-10",
-	          "AIR": "100-101"
+	          "LAND": "15-30",
+	          "AIR": "50-100"
 	        }
 	      },
 	      "JUMP": {
 	        "displayName": "Altitude",
 	        "description": "How high it can fly",
 	        "ranges": {
-	          "LAND": "2-10",
-	          "AIR": "100-101"
+	          "LAND": "10-20",
+	          "AIR": "25-50"
 	        }
 	      },
 	      "STAMINA": {
 	        "displayName": "Fuel/Stamina",
 	        "description": "How long it can stay off the ground",
 	        "ranges": {
-	          "LAND": "2-10",
-	          "AIR": "100-101"
+	          "LAND": "15-30",
+	          "AIR": "35-70"
 	        }
 	      }
 	    },
@@ -96,7 +96,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
+        "key": "cobblemon:land/horse",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [
@@ -113,6 +113,15 @@
           0,
           "0.3*q.jump_strength/50",
           0
+        ],
+        "rideSounds": [
+          {
+            "soundLocation": "cobblemon:ride.loop.leather",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "muffleEnabled": true
+          }
         ]
       }
     },
@@ -184,6 +193,7 @@
     },
     "moving": {
       "walk": {
+        "canWalk": true,
         "walkSpeed": 0.147
       },
       "fly": {
@@ -195,6 +205,10 @@
         "canWalkOnWater": true,
         "canSwimInLava": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -324,10 +338,9 @@
     "tm:weatherball",
     "tm:willowisp",
     "tm:workup",
-    "tutor:aerialace",
-    "tutor:aircutter",
     "tutor:ancientpower",
     "tutor:blastburn",
+    "tutor:block",
     "tutor:bulldoze",
     "tutor:dragonpulse",
     "tutor:firefang",
@@ -353,7 +366,45 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:thunderpunch",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:defog",
+    "legacy:doubleteam",
+    "legacy:dualwingbeat",
+    "legacy:dynamicpunch",
+    "legacy:falseswipe",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:furyswipes",
+    "legacy:hiddenpower",
+    "legacy:leer",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scaleshot",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:tailwind",
+    "legacy:toxic",
+    "special:blastburn",
+    "special:block",
+    "special:celebrate",
+    "special:holdhands",
+    "special:howl",
+    "special:quickattack"
   ],
   "preEvolution": "charmeleon",
   "evolutions": [],
@@ -429,7 +480,7 @@
           "key": "cobblemon:composite",
           "transitionStrategy": "cobblemon:strategy/jump",
           "defaultBehaviour": {
-            "key": "cobblemon:land/generic",
+            "key": "cobblemon:land/horse",
             "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
             "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
             "jumpVector": [
@@ -522,7 +573,7 @@
           "key": "cobblemon:composite",
           "transitionStrategy": "cobblemon:strategy/jump",
           "defaultBehaviour": {
-            "key": "cobblemon:land/generic",
+            "key": "cobblemon:land/horse",
             "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
             "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
             "jumpVector": [

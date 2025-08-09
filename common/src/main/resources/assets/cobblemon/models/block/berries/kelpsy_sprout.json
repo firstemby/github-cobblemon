@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "block/farmland_moist",
-		"3": "cobblemon:block/kelpsy_sprout",
+		"3": "cobblemon:block/berries/kelpsy_sprout",
 		"particle": "block/farmland_moist"
 	},
 	"elements": [

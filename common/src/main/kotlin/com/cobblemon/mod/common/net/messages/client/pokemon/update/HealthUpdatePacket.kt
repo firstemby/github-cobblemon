@@ -20,7 +20,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 12, 2022
  */
-class HealthUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket<HealthUpdatePacket>(pokemon, value) {
+class HealthUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<HealthUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_SHORT
     override fun set(pokemon: Pokemon, value: Int) {

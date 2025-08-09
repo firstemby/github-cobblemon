@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.entity.npc.ai
 
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
@@ -26,11 +27,25 @@ object SwitchToBattleTask {
     fun create(): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(
-                it.registered(MemoryModuleType.WALK_TARGET),
                 it.present(CobblemonMemories.NPC_BATTLING)
-            ).apply(it) { walkTarget, _ ->
+            ).apply(it) { _ ->
                 Trigger { _, entity, _ ->
-                    walkTarget.erase()
+                    entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+                    entity.brain.setActiveActivityIfPossible(CobblemonActivities.BATTLING)
+                    true
+                }
+            }
+        }
+    }
+
+    fun createForPokemon(): OneShot<LivingEntity> {
+        return BehaviorBuilder.create {
+            it.group(
+                it.present(CobblemonMemories.POKEMON_BATTLE)
+            ).apply(it) { _ ->
+                Trigger { _, entity, _ ->
+                    entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+                    entity as PokemonEntity
                     entity.brain.setActiveActivityIfPossible(CobblemonActivities.BATTLING)
                     true
                 }

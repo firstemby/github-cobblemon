@@ -147,7 +147,6 @@
     "tutor:grassyglide",
     "tutor:helpinghand",
     "tutor:hyperbeam",
-    "tutor:knockoff",
     "tutor:laserfocus",
     "tutor:lowkick",
     "tutor:magicalleaf",
@@ -159,7 +158,17 @@
     "tutor:synthesis",
     "tutor:tripleaxel",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:celebrate"
   ],
   "preEvolution": "steenee",
   "evolutions": []

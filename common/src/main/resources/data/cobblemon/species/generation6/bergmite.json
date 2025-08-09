@@ -150,7 +150,21 @@
     "tutor:rockslide",
     "tutor:rocksmash",
     "tutor:sleeptalk",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:flashcannon",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:surf",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse"
   ],
   "evolutions": [
     {

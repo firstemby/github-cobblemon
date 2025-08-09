@@ -169,10 +169,22 @@
     "tutor:sludgebomb",
     "tutor:snarl",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {

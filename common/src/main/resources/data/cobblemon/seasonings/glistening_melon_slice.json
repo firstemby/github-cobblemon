@@ -1,0 +1,11 @@
+{
+  "ingredient": "minecraft:glistering_melon_slice",
+  "colour": "yellow",
+  "baitEffects": [
+    {
+      "type": "cobblemon:rarity_bucket",
+      "chance": 1.0,
+      "value": 1
+    }
+  ]
+}

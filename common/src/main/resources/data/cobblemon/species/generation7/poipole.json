@@ -111,8 +111,13 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

@@ -151,7 +151,16 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

@@ -152,10 +152,11 @@
   },
   "sproutShape": "tail-sprout",
   "matureShape": "tail-mature",
-  "flavors": {
+  "flavours": {
     "SPICY": 25,
     "DRY": 10
   },
+  "colour": "LIME",
   "weight": 2.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

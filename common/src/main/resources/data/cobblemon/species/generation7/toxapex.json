@@ -168,8 +168,20 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:lightscreen",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger"
   ],
   "preEvolution": "mareanie",
   "evolutions": []

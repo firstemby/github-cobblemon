@@ -178,7 +178,25 @@
     "tutor:snarl",
     "tutor:spite",
     "tutor:swift",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -332,7 +350,22 @@
         "tutor:sleeptalk",
         "tutor:spite",
         "tutor:swift",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:aquatail",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:reflect",
+        "legacy:return",
+        "legacy:round",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:tackle",
+        "legacy:toxic",
+        "special:celebrate"
       ],
       "evolutions": [
         {

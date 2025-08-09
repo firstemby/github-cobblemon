@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_shovel": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:iron_shovel"
+              "cobblemon:psychic_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_shovel",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

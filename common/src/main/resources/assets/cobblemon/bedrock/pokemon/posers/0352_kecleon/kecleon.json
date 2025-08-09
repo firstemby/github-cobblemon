@@ -4,7 +4,9 @@
   "profileScale": 0.77,
   "profileTranslation": [0, 0.66, 0],
   "rootBone": "kecleon",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('kecleon', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],

@@ -32,10 +32,10 @@ open class FixedAreaSpawner(
     val verticalRadius: Int,
     override var ticksBetweenSpawns: Float = 20F
 ) : AreaSpawner(name, spawns, manager) {
-    override fun getArea(cause: SpawnCause): SpawningArea? {
+    override fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
         val basePos = position.offset(-horizontalRadius, -verticalRadius, -horizontalRadius)
 
-        return SpawningArea(
+        return SpawningZoneInput(
             cause = cause,
             world = world,
             baseX = basePos.x,

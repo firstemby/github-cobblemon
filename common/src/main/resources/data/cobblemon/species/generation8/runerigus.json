@@ -154,12 +154,14 @@
     "tutor:shadowclaw",
     "tutor:skillswap",
     "tutor:sleeptalk",
-    "tutor:spikes",
     "tutor:stealthrock",
     "tutor:stoneedge",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "yamask galarian",
   "evolutions": []

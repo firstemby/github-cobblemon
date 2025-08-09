@@ -114,7 +114,11 @@
     "tutor:rollout",
     "tutor:seedbomb",
     "tutor:sleeptalk",
-    "tutor:superfang"
+    "tutor:superfang",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

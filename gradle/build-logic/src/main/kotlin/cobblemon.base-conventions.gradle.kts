@@ -8,6 +8,7 @@
  *
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import utilities.ACCESS_WIDENER
 
@@ -67,7 +68,7 @@ tasks {
     }
 
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "21"
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
 
     withType<Jar> {

@@ -81,7 +81,8 @@
     "tm:amnesia",
     "tm:charm",
     "tm:encore",
-    "tm:safeguard"
+    "tm:safeguard",
+    "special:tickle"
   ],
   "preEvolution": "wynaut",
   "evolutions": []

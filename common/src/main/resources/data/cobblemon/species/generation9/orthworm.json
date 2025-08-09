@@ -126,7 +126,8 @@
     "tutor:spikes",
     "tutor:stealthrock",
     "tutor:steelbeam",
-    "tutor:stompingtantrum"
+    "tutor:stompingtantrum",
+    "special:headbutt"
   ],
   "evolutions": []
 }

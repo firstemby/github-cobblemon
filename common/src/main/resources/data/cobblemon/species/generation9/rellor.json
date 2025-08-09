@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 953,
   "name": "Rellor",
   "primaryType": "bug",
@@ -40,6 +41,12 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.5,
+  "hitbox": {
+    "width": 1.15,
+    "height": 1,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [

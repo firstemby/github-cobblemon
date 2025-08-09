@@ -206,7 +206,17 @@
     "tutor:thunderpunch",
     "tutor:tripleaxel",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

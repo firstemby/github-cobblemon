@@ -21,6 +21,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -79,7 +80,12 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         pos: BlockPos,
         collisionContext: CollisionContext
     ): VoxelShape {
-        return HITBOX
+        return when (state.getValue(HorizontalDirectionalBlock.FACING)) {
+            Direction.WEST -> HITBOX_WEST
+            Direction.EAST -> HITBOX_EAST
+            Direction.SOUTH -> HITBOX_SOUTH
+            else -> HITBOX_NORTH
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -97,12 +103,33 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
 
         //0 is off
         val SCREEN = EnumProperty.create("screen", MonitorScreen::class.java)
-        val HITBOX = Shapes.or(
+        val HITBOX_SOUTH = Shapes.or(
             Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.375, 0.9375),
             Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1.0, 0.9375),
             Shapes.box(0.8125, 0.375, 0.0625, 0.9375, 0.875, 0.9375),
             Shapes.box(0.1875, 0.375, 0.125, 0.8125, 0.875, 0.9375),
             Shapes.box(0.0625, 0.375, 0.0625, 0.1875, 0.875, 0.9375)
+        )
+        val HITBOX_NORTH = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.375, 0.9375),
+            Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1.0, 0.9375),
+            Shapes.box(0.0625, 0.375, 0.0625, 0.1875, 0.875, 0.9375),
+            Shapes.box(0.1875, 0.375, 0.0625, 0.8125, 0.875, 0.875),
+            Shapes.box(0.8125, 0.375, 0.0625, 0.9375, 0.875, 0.9375)
+        )
+        val HITBOX_EAST = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.375, 0.9375),
+            Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1.0, 0.9375),
+            Shapes.box(0.0625, 0.375, 0.0625, 0.9375, 0.875, 0.1875),
+            Shapes.box(0.125, 0.375, 0.1875, 0.9375, 0.875, 0.8125),
+            Shapes.box(0.0625, 0.375, 0.8125, 0.9375, 0.875, 0.9375)
+        )
+        val HITBOX_WEST = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.0625, 0.9375, 0.375, 0.9375),
+            Shapes.box(0.0625, 0.875, 0.0625, 0.9375, 1.0, 0.9375),
+            Shapes.box(0.0625, 0.375, 0.8125, 0.9375, 0.875, 0.9375),
+            Shapes.box(0.0625, 0.375, 0.1875, 0.875, 0.875, 0.8125),
+            Shapes.box(0.0625, 0.375, 0.0625, 0.9375, 0.875, 0.1875)
         )
     }
     enum class MonitorScreen : StringRepresentable {

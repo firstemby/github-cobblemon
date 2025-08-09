@@ -130,7 +130,20 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:stringshot",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

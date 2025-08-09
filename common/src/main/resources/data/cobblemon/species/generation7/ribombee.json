@@ -171,7 +171,6 @@
     "tutor:covet",
     "tutor:dazzlinggleam",
     "tutor:defog",
-    "tutor:dualwingbeat",
     "tutor:energyball",
     "tutor:gigaimpact",
     "tutor:helpinghand",
@@ -192,7 +191,18 @@
     "tutor:tailwind",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "cutiefly",
   "evolutions": []

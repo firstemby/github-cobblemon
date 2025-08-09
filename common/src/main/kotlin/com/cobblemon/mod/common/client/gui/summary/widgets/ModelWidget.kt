@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
@@ -30,7 +29,6 @@ class ModelWidget(
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,
     val shouldFollowCursor: Boolean = false,
-    var heldItem: ItemStack? = null
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
@@ -113,8 +111,7 @@ class ModelWidget(
         )
 
         heldItemRenderer.renderOnModel(
-            heldItem?: ItemStack.EMPTY,
-            state.currentModel!!,
+            pokemon.heldItem,
             state,
             matrices,
             context.bufferSource(),

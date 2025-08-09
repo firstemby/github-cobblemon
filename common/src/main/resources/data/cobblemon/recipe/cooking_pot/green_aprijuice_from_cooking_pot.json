@@ -1,0 +1,19 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "group": "aprijuice",
+    "category": "complex_dishes",
+    "ingredients": [
+        {
+            "item": "cobblemon:green_apricorn"
+        },
+        {
+            "item": "cobblemon:pep_up_flower"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:aprijuice_green"
+    },
+    "seasoningProcessors": [
+        "flavour"
+    ]
+}

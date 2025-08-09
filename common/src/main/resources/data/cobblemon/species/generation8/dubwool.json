@@ -57,6 +57,12 @@
       "light": "0-4"
     }
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "presets": ["cobblemon:eats_grass"]
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [
@@ -125,7 +131,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "wooloo",
   "evolutions": []

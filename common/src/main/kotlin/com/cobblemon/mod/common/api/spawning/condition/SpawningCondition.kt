@@ -11,32 +11,29 @@ package com.cobblemon.mod.common.api.spawning.condition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.spawning.MoonPhaseRange
 import com.cobblemon.mod.common.api.spawning.TimeRange
-import com.cobblemon.mod.common.api.spawning.context.FishingSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.util.Merger
 import com.cobblemon.mod.common.util.math.orMax
 import com.cobblemon.mod.common.util.math.orMin
 import com.mojang.datafixers.util.Either
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.WorldgenRandom
 import net.minecraft.world.level.levelgen.structure.Structure
 
 /**
- * The root of spawning conditions that can be applied to a spawning context. What type
- * of spawning context it can be applied to is relevant for any subclasses.
+ * The root of spawning conditions that can be applied to a spawnable position. What type
+ * of spawnable position it can be applied to is relevant for any subclasses.
  *
  * @author Hiroku
  * @since January 24th, 2022
  */
-abstract class SpawningCondition<T : SpawningContext> {
+abstract class SpawningCondition<T : SpawnablePosition> {
     companion object {
         val conditionTypes = mutableMapOf<String, Class<out SpawningCondition<*>>>()
         fun getByName(name: String) = conditionTypes[name]
-        fun <T : SpawningContext, C : SpawningCondition<T>> register(name: String, clazz: Class<C>) {
+        fun <T : SpawnablePosition, C : SpawningCondition<T>> register(name: String, clazz: Class<C>) {
             conditionTypes[name] = clazz
         }
     }
@@ -61,69 +58,72 @@ abstract class SpawningCondition<T : SpawningContext> {
     var timeRange: TimeRange? = null
     var structures: MutableList<Either<ResourceLocation, TagKey<Structure>>>? = null
     var isSlimeChunk: Boolean? = null
+    var markers: MutableList<String>? = null
 
     @Transient
     var appendages = mutableListOf<AppendageCondition>()
 
-    abstract fun contextClass(): Class<out T>
-    fun contextMatches(ctx: SpawningContext) = contextClass().isAssignableFrom(ctx::class.java)
+    abstract fun spawnablePositionClass(): Class<out T>
+    fun spawnablePositionMatches(spawnablePosition: SpawnablePosition) = spawnablePositionClass().isAssignableFrom(spawnablePosition::class.java)
 
-    fun isSatisfiedBy(ctx: SpawningContext): Boolean {
-        return if (contextMatches(ctx)) {
-            fits(ctx as T)
+    fun isSatisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        return if (spawnablePositionMatches(spawnablePosition)) {
+            fits(spawnablePosition as T)
         } else {
             false
         }
     }
 
-    protected open fun fits(ctx: T): Boolean {
-        if (ctx.position.x < minX.orMin() || ctx.position.x > maxX.orMax()) {
+    protected open fun fits(spawnablePosition: T): Boolean {
+        if (spawnablePosition.position.x < minX.orMin() || spawnablePosition.position.x > maxX.orMax()) {
             return false
-        } else if (ctx.position.y < minY.orMin() || ctx.position.y > maxY.orMax()) {
+        } else if (spawnablePosition.position.y < minY.orMin() || spawnablePosition.position.y > maxY.orMax()) {
             return false
-        } else if (ctx.position.z < minZ.orMin() || ctx.position.z > maxZ.orMax()) {
+        } else if (spawnablePosition.position.z < minZ.orMin() || spawnablePosition.position.z > maxZ.orMax()) {
             return false
-        } else if (moonPhase != null && ctx.moonPhase !in moonPhase!!) {
+        } else if (moonPhase != null && spawnablePosition.moonPhase !in moonPhase!!) {
             return false
-        } else if (ctx.light > maxLight.orMax() || ctx.light < minLight.orMin()) {
+        } else if (spawnablePosition.light > maxLight.orMax() || spawnablePosition.light < minLight.orMin()) {
             return false
-        } else if (ctx.skyLight > maxSkyLight.orMax() || ctx.skyLight < minSkyLight.orMin()) {
+        } else if (spawnablePosition.skyLight > maxSkyLight.orMax() || spawnablePosition.skyLight < minSkyLight.orMin()) {
             return false
-        } else if (timeRange != null && !timeRange!!.contains((ctx.world.dayTime() % 24000).toInt())) {
+        } else if (timeRange != null && !timeRange!!.contains((spawnablePosition.world.dayTime() % 24000).toInt())) {
             return false
-        } else if (canSeeSky != null && canSeeSky != ctx.canSeeSky) {
+        } else if (canSeeSky != null && canSeeSky != spawnablePosition.canSeeSky) {
             return false
-        } else if (isRaining != null && ctx.world.isRaining != isRaining!!) {
+        } else if (isRaining != null && spawnablePosition.world.isRaining != isRaining!!) {
             return false
-        } else if (isThundering != null && ctx.world.isThundering != isThundering!!) {
+        } else if (isThundering != null && spawnablePosition.world.isThundering != isThundering!!) {
             return false
-        } else if (dimensions != null && dimensions!!.isNotEmpty() && ctx.world.dimensionType().effectsLocation !in dimensions!!) {
+        } else if (dimensions != null && dimensions!!.isNotEmpty() && spawnablePosition.world.dimension().location() !in dimensions!!) {
             return false
-        } else if (biomes != null && biomes!!.isNotEmpty() && biomes!!.none { condition -> condition.fits(ctx.biomeHolder) }) {
+        } else if (markers != null && markers!!.isNotEmpty() && markers!!.none { marker -> marker in spawnablePosition.markers }) {
             return false
-        } else if (appendages.any { !it.fits(ctx) }) {
+        } else if (biomes != null && biomes!!.isNotEmpty() && biomes!!.none { condition -> condition.fits(spawnablePosition.biomeHolder) }) {
+            return false
+        } else if (appendages.any { !it.fits(spawnablePosition) }) {
             return false
         } else if (structures != null && structures!!.isNotEmpty() &&
             structures!!.let { structures ->
-                val structureAccess = ctx.world.structureManager()
-                val cache = ctx.getStructureCache(ctx.position)
+                val structureAccess = spawnablePosition.world.structureManager()
+                val cache = spawnablePosition.getStructureCache(spawnablePosition.position)
                 return@let structures.none {
-                    it.map({ cache.check(structureAccess, ctx.position, it) }, { cache.check(structureAccess, ctx.position, it) })
+                    it.map({ cache.check(structureAccess, spawnablePosition.position, it) }, { cache.check(structureAccess, spawnablePosition.position, it) })
                 }
             }
         ) {
             return false
         } else if (isSlimeChunk != null && isSlimeChunk != false) {
-            val isSlimeChunk = WorldgenRandom.seedSlimeChunk(ctx.position.x shr 4, ctx.position.z shr 4, ctx.world.seed, 987234911L).nextInt(10) == 0
+            val isSlimeChunk = WorldgenRandom.seedSlimeChunk(spawnablePosition.position.x shr 4, spawnablePosition.position.z shr 4, spawnablePosition.world.seed, 987234911L).nextInt(10) == 0
 
             if (!isSlimeChunk) {
                 return false
             }
 
-            /*val chunkX = ctx.position.x shr 4
-            val chunkZ = ctx.position.z shr 4
+            /*val chunkX = spawnablePosition.position.x shr 4
+            val chunkZ = spawnablePosition.position.z shr 4
 
-            val seed = (ctx.world.seed +
+            val seed = (spawnablePosition.world.seed +
                     (chunkX * chunkX * 4987142L) + (chunkX * 5947611L) +
                     (chunkZ * chunkZ * 4392871L) + (chunkZ * 389711L)) xor 987234911L
 

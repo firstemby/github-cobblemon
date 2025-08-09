@@ -95,7 +95,11 @@
     "tutor:icywind",
     "tutor:rest",
     "tutor:skittersmack",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:endure",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

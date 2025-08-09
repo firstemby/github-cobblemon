@@ -5,7 +5,7 @@
             "identifier": "cobblemon:infatuate_actorresidual",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/attract_heart"
+                "texture": "textures/particles/generic/status/infatuation_heart"
             }
         },
         "components": {

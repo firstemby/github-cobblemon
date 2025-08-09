@@ -181,7 +181,10 @@
     "tutor:spite",
     "tutor:steelbeam",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "corvisquire",
   "evolutions": [],
@@ -243,7 +246,7 @@
     },
     "seats": [],
     "behaviour": {
-      "key": "cobblemon:land/generic"
+      "key": "cobblemon:land/horse"
     }
   }
 }

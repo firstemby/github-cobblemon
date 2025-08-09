@@ -42,7 +42,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.25,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -213,7 +213,25 @@
     "tutor:thunderbolt",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleteam",
+    "legacy:dualwingbeat",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:swagger",
+    "legacy:thunderwave",
+    "legacy:waterpulse",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {

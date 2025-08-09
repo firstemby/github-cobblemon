@@ -9,18 +9,18 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import net.minecraft.resources.ResourceLocation
 
 /**
  * A type of precalculation that can occur on a list of [SpawnDetail] to accelerate
- * checks on whether a spawn can occur at a particular [SpawningContext]. This process
+ * checks on whether a spawn can occur at a particular [SpawnablePosition]. This process
  * works by creating a [HashMap] keying from some property of a [SpawnDetail] and
- * [SpawningContext] and mapping it to a list of spawns that were calculated ahead of
+ * [SpawnablePosition] and mapping it to a list of spawns that were calculated ahead of
  * time as sharing that value. The requirement of implementations is only to get that
- * key from both a [SpawnDetail] and a [SpawningContext].
+ * key from both a [SpawnDetail] and a [SpawnablePosition].
  *
  * When a precalculation has been registered with a [Spawner] by adding to [Spawner.precalculators],
  * the precalculation result will need to be updated by running [Spawner.precalculate]. That
@@ -33,8 +33,8 @@ import net.minecraft.resources.ResourceLocation
 interface SpawningPrecalculation<T : Any> {
     /** Retrieves the precalculation keys for the given spawn detail. */
     fun select(detail: SpawnDetail): Collection<T>
-    /** Retrieves the precalculation key for the given context, if that key exists for this context. */
-    fun select(ctx: SpawningContext): T?
+    /** Retrieves the precalculation key for the given spawnable position, if that key exists for this position. */
+    fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): T?
 
     /**
      * Generates a precalculation result for the list of [SpawnDetail]s and the subsequent precalculations.
@@ -74,23 +74,23 @@ interface SpawningPrecalculation<T : Any> {
 object RootPrecalculation : SpawningPrecalculation<Any> {
     val list = listOf(Unit)
     override fun select(detail: SpawnDetail): List<Any> = list
-    override fun select(ctx: SpawningContext): Any = Unit
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): Any = Unit
 }
 
 /**
- * A precalculation based on what context a spawn can be. This is a pretty sweet precalc.
+ * A precalculation based on what spawnable position type a spawn can be. This is a pretty sweet precalc.
  *
  * @author Hiroku
  * @since February 14th, 2022
  */
-object ContextPrecalculation : SpawningPrecalculation<Class<out SpawningContext>> {
-    override fun select(detail: SpawnDetail) = listOf(detail.context.clazz)
-    override fun select(ctx: SpawningContext) = ctx::class.java
+object SpawnablePositionTypePrecalculation : SpawningPrecalculation<Class<out SpawnablePosition>> {
+    override fun select(detail: SpawnDetail) = listOf(detail.spawnablePositionType.clazz)
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition::class.java
 }
 
 object BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
     override fun select(detail: SpawnDetail) = listOf(detail.bucket)
-    override fun select(ctx: SpawningContext) = ctx.cause.bucket
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = bucket
 }
 
 /**
@@ -99,7 +99,7 @@ object BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
  */
 object BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
     override fun select(detail: SpawnDetail) = detail.validBiomes
-    override fun select(ctx: SpawningContext) = ctx.biomeHolder.unwrapKey().map { it.location() }.orElse(null)
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition.biomeHolder.unwrapKey().map { it.location() }.orElse(null)
 }
 
 /**
@@ -113,8 +113,8 @@ object BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
 sealed class PrecalculationResult<T : Any>(
     val calculation: SpawningPrecalculation<*>
 ) {
-    /** Gets the list of spawn details that fit this context. */
-    abstract fun retrieve(ctx: SpawningContext): List<SpawnDetail>
+    /** Gets the list of spawn details that fit this spawnable position. */
+    abstract fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail>
 }
 
 /**
@@ -127,7 +127,7 @@ class NestedPrecalculationResult<T : Any>(
     calculation: SpawningPrecalculation<T>,
     val mapping: Map<T, PrecalculationResult<*>> = mutableMapOf()
 ) : PrecalculationResult<T>(calculation) {
-    override fun retrieve(ctx: SpawningContext) = mapping[calculation.select(ctx)]?.retrieve(ctx) ?: emptyList()
+    override fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = mapping[calculation.select(bucket, spawnablePosition)]?.retrieve(bucket, spawnablePosition) ?: emptyList()
 }
 
 /**
@@ -141,5 +141,5 @@ class FinalPrecalculationResult<T : Any>(
     calculation: SpawningPrecalculation<*>,
     val mapping: Map<T, List<SpawnDetail>>
 ) : PrecalculationResult<T>(calculation) {
-    override fun retrieve(ctx: SpawningContext) = mapping[calculation.select(ctx)] ?: emptyList()
+    override fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = mapping[calculation.select(bucket, spawnablePosition)] ?: emptyList()
 }

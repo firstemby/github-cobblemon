@@ -1,0 +1,42 @@
+{
+  "portraitScale": 1.2,
+  "portraitTranslation": [-1.1, 0.4, 0],
+  "profileScale": 0.45,
+  "profileTranslation": [0, 0.9, 0],
+  "rootBone": "ursaluna",
+  "poses": {
+    "standing": {
+      "poseName": "standing",
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('ursaluna', 'ground_idle')"
+      ],
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('ursaluna', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseName": "walk",
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('ursaluna', 'ground_walk')"
+      ],
+      "transformTicks": 5,
+      "quirks": [
+        "q.bedrock_quirk('ursaluna', 'blink')"
+      ]
+    }
+  }
+}

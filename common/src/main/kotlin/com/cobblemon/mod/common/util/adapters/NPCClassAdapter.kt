@@ -9,13 +9,13 @@
 package com.cobblemon.mod.common.util.adapters
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.npc.NPCPartyProvider
 import com.cobblemon.mod.common.api.npc.NPCPreset
 import com.cobblemon.mod.common.api.npc.NPCPresets
 import com.cobblemon.mod.common.api.npc.configuration.NPCBattleConfiguration
-import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -57,14 +57,13 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("resourceIdentifier")?.let { npcClass.resourceIdentifier = it.asString.asIdentifierDefaultingNamespace() }
         obj.get("aspects")?.let { npcClass.aspects = it.normalizeToArray().map { it.asString }.toMutableSet() }
         obj.get("variation")?.let { it.asJsonObject.entrySet().forEach { (key, value) -> npcClass.variations[key] = ctx.deserialize(value, NPCVariationProvider::class.java) } }
-        obj.get("baseScale")?.let { npcClass.baseScale = it.asFloat }
         obj.get("hitbox")?.let { npcClass.hitbox = ctx.deserialize(it, EntityDimensions::class.java) }
         obj.get("battleConfiguration")?.let { npcClass.battleConfiguration = ctx.deserialize(it, NPCBattleConfiguration::class.java) }
         obj.get("interaction")?.let { npcClass.interaction = ctx.deserialize(it, NPCInteractConfiguration::class.java) }
         obj.get("canDespawn")?.let { npcClass.canDespawn = it.asBoolean }
         obj.get("config")?.let {
             val obj = it.asJsonArray
-            obj.forEach { npcClass.config.add(ctx.deserialize(it, NPCConfigVariable::class.java)) }
+            obj.forEach { npcClass.config.add(ctx.deserialize(it, MoLangConfigVariable::class.java)) }
         }
         obj.get("variations")?.let {
             val obj = it.asJsonObject
@@ -78,7 +77,7 @@ object NPCClassAdapter : JsonDeserializer<NPCClass> {
         obj.get("autoHealParty")?.let { npcClass.autoHealParty = it.asBoolean }
         obj.get("randomizePartyOrder")?.let { npcClass.randomizePartyOrder = it.asBoolean }
         obj.get("battleTheme")?.let { npcClass.battleTheme = it.asString.asIdentifierDefaultingNamespace() }
-        obj.get("ai")?.let { npcClass.ai.addAll(it.asJsonArray.map<JsonElement, BrainConfig> { ctx.deserialize(it, BrainConfig::class.java) }.toMutableList()) }
+        obj.get("ai")?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
         obj.get("isMovable")?.let { npcClass.isMovable = it.asBoolean }
         obj.get("isInvulnerable")?.let { npcClass.isInvulnerable = it.asBoolean }
         obj.get("isLeashable")?.let { npcClass.isLeashable = it.asBoolean }

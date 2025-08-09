@@ -163,86 +163,98 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:extremespeed",
+    "special:shiftgear"
   ],
   "evolutions": [],
   "forms": [
     {
-      "name": "Water",
+      "name": "Douse",
       "primaryType": "bug",
       "secondaryType": "steel",
       "maleRatio": -1,
       "height": 15,
       "weight": 825,
       "pokedex": [
-        "cobblemon.species.genesect-water.desc"
+        "cobblemon.species.genesect-douse.desc"
       ],
       "labels": [
         "gen5",
         "mythical"
       ],
       "aspects": [
-        "water-drive"
+        "douse-drive"
       ],
       "evolutions": [],
       "battleOnly": false
     },
     {
-      "name": "Electric",
+      "name": "Shock",
       "primaryType": "bug",
       "secondaryType": "steel",
       "maleRatio": -1,
       "height": 15,
       "weight": 825,
       "pokedex": [
-        "cobblemon.species.genesect-electric.desc"
+        "cobblemon.species.genesect-shock.desc"
       ],
       "labels": [
         "gen5",
         "mythical"
       ],
       "aspects": [
-        "electric-drive"
+        "shock-drive"
       ],
       "evolutions": [],
       "battleOnly": false
     },
     {
-      "name": "Fire",
+      "name": "Burn",
       "primaryType": "bug",
       "secondaryType": "steel",
       "maleRatio": -1,
       "height": 15,
       "weight": 825,
       "pokedex": [
-        "cobblemon.species.genesect-fire.desc"
+        "cobblemon.species.genesect-burn.desc"
       ],
       "labels": [
         "gen5",
         "mythical"
       ],
       "aspects": [
-        "fire-drive"
+        "burn-drive"
       ],
       "evolutions": [],
       "battleOnly": false
     },
     {
-      "name": "Ice",
+      "name": "Chill",
       "primaryType": "bug",
       "secondaryType": "steel",
       "maleRatio": -1,
       "height": 15,
       "weight": 825,
       "pokedex": [
-        "cobblemon.species.genesect-ice.desc"
+        "cobblemon.species.genesect-chill.desc"
       ],
       "labels": [
         "gen5",
         "mythical"
       ],
       "aspects": [
-        "ice-drive"
+        "chill-drive"
       ],
       "evolutions": [],
       "battleOnly": false

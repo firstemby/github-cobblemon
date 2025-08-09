@@ -48,6 +48,12 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -142,7 +148,6 @@
     "tutor:irontail",
     "tutor:magnetrise",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
     "tutor:shockwave",
@@ -152,7 +157,20 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

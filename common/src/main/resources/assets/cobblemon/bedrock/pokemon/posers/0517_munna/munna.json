@@ -4,6 +4,9 @@
   "profileScale": 0.66,
   "profileTranslation": [0, 0.69, 0],
   "rootBone": "munna",
+  "animations": {
+    "cry": "q.bedrock_stateful('munna', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "HOVER", "NONE", "PORTRAIT", "PROFILE"],

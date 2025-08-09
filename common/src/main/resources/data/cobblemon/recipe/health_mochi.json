@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "cobblemon:hearty_grains"
+        },
+        {
+            "item": "minecraft:honey_bottle"
+        },
+        {
+            "item": "cobblemon:pomeg_berry"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:health_mochi"
+    }
+}

@@ -212,10 +212,19 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:trick",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:present"
   ],
   "evolutions": [],
   "forms": [

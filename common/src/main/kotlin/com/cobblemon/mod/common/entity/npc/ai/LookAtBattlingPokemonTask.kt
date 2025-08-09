@@ -23,8 +23,8 @@ object LookAtBattlingPokemonTask {
                 it.absent(MemoryModuleType.LOOK_TARGET),
                 it.present(CobblemonMemories.BATTLING_POKEMON)
             ).apply(it) { lookTarget, visibleMobs ->
-                Trigger { world, _, _ ->
-                    val lookEntity = it.get(visibleMobs).randomOrNull()?.let(world::getEntity)
+                Trigger { world, entity, _ ->
+                    val lookEntity = it.get(visibleMobs).filter { it != entity }.randomOrNull()?.let(world::getEntity)
                     if (lookEntity == null) {
                         return@Trigger false
                     } else {

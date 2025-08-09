@@ -3,6 +3,7 @@
   "keys": ["color", "colour"],
   "default": "none",
   "choices": [
+    "none",
     "white",
     "orange",
     "magenta",

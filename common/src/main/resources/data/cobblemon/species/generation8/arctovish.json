@@ -128,13 +128,14 @@
     "tutor:ironhead",
     "tutor:liquidation",
     "tutor:meteorbeam",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:sleeptalk",
     "tutor:stoneedge",
     "tutor:superfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

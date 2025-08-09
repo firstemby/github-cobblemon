@@ -82,7 +82,7 @@
         "description": "Its top speed",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "ACCELERATION": {
@@ -90,7 +90,7 @@
         "description": "How fast it can speed up",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "SKILL": {
@@ -98,7 +98,7 @@
         "description": "How fast it can turn",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "JUMP": {
@@ -106,7 +106,7 @@
         "description": "How high it can fly",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "STAMINA": {
@@ -114,7 +114,7 @@
         "description": "How long it can stay off the ground",
         "ranges": {
           "LAND": "2-10",
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       }
     },
@@ -122,7 +122,7 @@
       "key": "cobblemon:composite",
       "transitionStrategy": "cobblemon:strategy/jump",
       "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
+        "key": "cobblemon:land/horse",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "jumpVector": [
           0,
@@ -323,7 +323,17 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "archen",
   "evolutions": []

@@ -132,7 +132,6 @@
     "tutor:irontail",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:seedbomb",
     "tutor:shockwave",
@@ -141,7 +140,19 @@
     "tutor:superfang",
     "tutor:thunderfang",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:earthquake",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {
