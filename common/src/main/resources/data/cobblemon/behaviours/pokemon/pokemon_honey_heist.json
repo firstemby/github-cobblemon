@@ -5,7 +5,7 @@
   "configurations": [
     {
       "type": "add_tasks_to_activity",
-      "activity": "cobblemon:pokemon_pollination",
+      "activity": "cobblemon:pokemon_steal_honey",
       "condition": "!q.entity.is_in_party",
       "tasksByPriority": {
         "0": [
@@ -26,7 +26,7 @@
       "tasksByPriority": {
         "0": [
           { "type": "cobblemon:activity_change",
-            "activity": "cobblemon:pokemon_pollination",
+            "activity": "cobblemon:pokemon_steal_honey",
             "condition": "!q.entity.has_memory_value('cobblemon:has_honey') && !q.entity.has_memory_value('cobblemon:hive_cooldown') && q.entity.has_memory_value('cobblemon:hive_location')"
           }
         ],
