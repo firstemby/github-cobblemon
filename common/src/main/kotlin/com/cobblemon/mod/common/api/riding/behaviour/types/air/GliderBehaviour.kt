@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -187,6 +188,10 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         return false
     }
 
+    override fun getRideSounds(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): RideSoundSettingsList {
+        return settings.rideSounds
+    }
+
     override fun createDefaultState(settings: GliderSettings) = RidingBehaviourState()
 }
 
@@ -202,14 +207,18 @@ class GliderSettings : RidingBehaviourSettings {
     var canStrafe: Expression = "false".asExpression()
         private set
 
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        rideSounds.encode(buffer)
         buffer.writeExpression(glideSpeed)
         buffer.writeExpression(speed)
         buffer.writeExpression(canStrafe)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        rideSounds = RideSoundSettingsList.decode(buffer)
         glideSpeed = buffer.readExpression()
         speed = buffer.readExpression()
         canStrafe = buffer.readExpression()

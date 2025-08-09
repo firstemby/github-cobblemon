@@ -1152,6 +1152,33 @@
       { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_8", "volume": 0.3 }
     ]
   },
+  "ride.loop.leather": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/leather_flight_loop",
+        "stream": true,
+        "attenuation_distance": 48.0
+      }
+    ]
+  },
+  "ride.loop.plumage": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/plumage_flight_loop",
+        "stream": true,
+        "attenuation_distance": 48.0,
+        "volume": 0.25
+      }
+    ]
+  },
+  "ride.loop.saucer": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/saucer_flight_loop",
+        "attenuation_distance": 48.0
+      }
+    ]
+  },
   "pokemon.bulbasaur.ambient": {
     "sounds": [ "cobblemon:pokemon/bulbasaur/bulbasaur_ambient" ]
   },

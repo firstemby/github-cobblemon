@@ -25,7 +25,7 @@ import org.joml.Vector3f
  */
 
 
-class RidingAnimationData
+class RidingAnimationData(val ride: PokemonEntity)
 {
     var prevOrientation: Matrix3f = Matrix3f()
     var prevRot: Vec3 = Vec3.ZERO
@@ -34,29 +34,30 @@ class RidingAnimationData
     var rotDeltaSpring: Vec3Spring = Vec3Spring()
     var localVelocitySpring: Vec3Spring = Vec3Spring()
 
-    fun update(entity: PokemonEntity) {
+    fun update() {
+        val activeRide = ride.hasControllingPassenger()
+
+        if (!activeRide) return
 
         var currRot = Vec3.ZERO
         var angDelta = Vec3.ZERO
 
         val stiffness = 90.0
         val damping = 18.0
-//        val stiffness = 16.0
-//        val damping = 8.0
 
         // Update velocity first
         val currentVelocity = Vec3(
-            entity.x - entity.xOld,
-            entity.y - entity.yOld,
-            entity.z - entity.zOld
+            ride.x - ride.xOld,
+            ride.y - ride.yOld,
+            ride.z - ride.zOld
         )
 
-        val r = entity.ifRidingAvailableSupply(false) { behaviour, settings, state ->
-            behaviour.shouldRoll(settings, state, entity);
+        val r = ride.ifRidingAvailableSupply(false) { behaviour, settings, state ->
+            behaviour.shouldRoll(settings, state, ride);
         }
         if( r ) {
             //TODO: should this return?
-            val controller = (entity.firstPassenger as? OrientationControllable)?.orientationController ?: return
+            val controller = (ride.firstPassenger as? OrientationControllable)?.orientationController ?: return
             val orientation = controller.orientation ?: Matrix3f()
 
             val currPitch = controller.pitch
@@ -105,8 +106,8 @@ class RidingAnimationData
             // Update previous values
             prevOrientation.set(currOrientation)
         } else {
-            val currPitch = entity.xRot
-            val currYaw = entity.yRot
+            val currPitch = ride.xRot
+            val currYaw = ride.yRot
             val currRoll = 0.0f
             currRot = Vec3(currPitch.toDouble(), currYaw.toDouble(), currRoll.toDouble())
 
@@ -120,7 +121,7 @@ class RidingAnimationData
             /******************************************************
              * Calculate ride local velocity
              *****************************************************/
-            val yaw360 = -1.0 * (entity.yRot + 360.0f) % 360.0f
+            val yaw360 = -1.0 * (ride.yRot + 360.0f) % 360.0f
             val orientationNonRollable = Matrix3f().rotateY(yaw360.toRadians())
 
             //Convert to Vector3f

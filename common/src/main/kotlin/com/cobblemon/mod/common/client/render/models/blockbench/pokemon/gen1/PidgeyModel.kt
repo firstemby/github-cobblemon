@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1
 
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.createTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
@@ -86,6 +87,7 @@ class PidgeyModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
             transformTicks = 10,
             quirks = arrayOf(blink),
             animations = arrayOf(
+                PitchTiltAnimation(bone = getPart("body"), maxChangePerTick = 1F),
                 singleBoneLook(),
                 bedrock("pidgey", "air_idle")
             )
@@ -103,6 +105,7 @@ class PidgeyModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
             transformTicks = 10,
             quirks = arrayOf(blink),
             animations = arrayOf(
+                PitchTiltAnimation(bone = getPart("body"), maxChangePerTick = 1F),
                 singleBoneLook(),
                 bedrock("pidgey", "air_fly")
             )

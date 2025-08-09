@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.client.render.models.blockbench.animation
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PITCHED_TILT
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PREVIOUS_ANGLE
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
@@ -63,7 +65,10 @@ class SingleBoneLookAnimation(
         val head = bone ?: return
         val pitch = pitchMultiplier * headPitch.coerceIn(minPitch, maxPitch)
         val yaw = yawMultiplier * headYaw.coerceIn(minYaw, maxYaw)
-        head.addRotation(X_AXIS, pitch.toRadians() * intensity)
+        // If PitchTiltAnimation was applied then we should counteract that tilt. It does kinda
+        // assume that the tilt was on the body bone, though.
+        val counterTiltDegrees = if (PITCHED_TILT in state.renderMarkers) { state.numbers[PREVIOUS_ANGLE] ?: 0 } else 0F
+        head.addRotation(X_AXIS, (pitch.toRadians() * intensity) + counterTiltDegrees.toRadians())
         head.addRotation(Y_AXIS, yaw.toRadians() * intensity)
     }
 }

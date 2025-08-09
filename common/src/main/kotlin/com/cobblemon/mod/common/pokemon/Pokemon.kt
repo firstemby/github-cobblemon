@@ -56,9 +56,7 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
-import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
-import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -625,7 +623,7 @@ open class Pokemon : ShowdownIdentifiable {
 
     /**
      * Arbitrary data compound. Be aware that updating this is not enough for a Pokémon to be recognized as dirty
-     * and in need of saving. Emit to [changeObservable] if you are making a change otherwise you'll see reversions.
+     * and in need of saving. Call [onChange] if you are making a change otherwise you'll potentially see reversions.
      */
     var persistentData: CompoundTag =
         CompoundTag()
@@ -2023,20 +2021,18 @@ open class Pokemon : ShowdownIdentifiable {
         onChange(packet)
     }
 
-    /** An [Observable] that emits the Pokémon whenever any change is made to it. The change itself is not included. */
-    val changeObservable = SimpleObservable<Pokemon>()
-
     /**
      * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
-     * players just for convenience, but the main thing is that this will push an update to [changeObservable] which
-     * is primarily (for our purposes, at least) so that we can detect when storage needs to be queued for saving.
+     * players just for convenience, but the main thing is that this will notify the store that this Pokémon is in
+     * (if it's in a party/PC/whatever) that the Pokémon has changed and that it should consider saving it when it can.
      */
     fun onChange(packet: PokemonUpdatePacket<*>? = null) {
-        if (packet != null && storeCoordinates.get() != null) {
+        val storeCoordinates = storeCoordinates.get() ?: return // If they aren't in a store then we don't care.
+        if (packet != null) {
             notify(packet)
         }
 
-        changeObservable.emit(this)
+        storeCoordinates.store.onPokemonChanged(pokemon = this)
     }
 
     /**

@@ -1,8 +1,8 @@
 {
-  "ingredient": "minecraft:raw_cod",
+  "ingredient": "minecraft:rabbit",
   "colour": "brown",
   "food": {
     "hunger": 5,
-    "saturation": 6
+    "saturation": 3
   }
 }

@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -337,6 +338,14 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return true
     }
 
+    override fun getRideSounds(
+        settings: BoatSettings,
+        state: BoatState,
+        vehicle: PokemonEntity
+    ): RideSoundSettingsList {
+        return settings.rideSounds
+    }
+
     override fun maxUpStep(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity) = 0f
 
     override fun createDefaultState(settings: BoatSettings) = BoatState()
@@ -345,6 +354,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
 class BoatSettings : RidingBehaviourSettings {
     override val key = BoatBehaviour.KEY
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     var terminalVelocity = "-2.0".asExpression()
         private set
@@ -354,10 +364,12 @@ class BoatSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        rideSounds.encode(buffer)
         buffer.writeExpression(terminalVelocity)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        rideSounds = RideSoundSettingsList.decode(buffer)
         terminalVelocity = buffer.readExpression()
     }
 }

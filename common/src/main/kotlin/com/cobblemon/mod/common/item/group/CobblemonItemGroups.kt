@@ -383,7 +383,6 @@ object CobblemonItemGroups {
     private fun consumableEntries(displayContext: ItemDisplayParameters, entries: Output) {
         entries.accept(CobblemonItems.ROASTED_LEEK)
         entries.accept(CobblemonItems.LEEK_AND_POTATO_STEW)
-        entries.accept(CobblemonItems.BRAISED_VIVICHOKE)
         entries.accept(CobblemonItems.VIVICHOKE_DIP)
         entries.accept(CobblemonItems.TART_APPLE)
         entries.accept(CobblemonItems.SWEET_APPLE)
@@ -399,8 +398,9 @@ object CobblemonItemGroups {
 
         entries.accept(CobblemonItems.CANDIED_APPLE)
         entries.accept(CobblemonItems.CANDIED_BERRY)
-        entries.accept(CobblemonItems.FRIED_RICE)
         entries.accept(CobblemonItems.POTATO_MOCHI)
+        entries.accept(CobblemonItems.PONIGIRI)
+        entries.accept(CobblemonItems.SINISTER_TEA)
 
         entries.accept(CobblemonItems.PEWTER_CRUNCHIES)
         entries.accept(CobblemonItems.RAGE_CANDY_BAR)
@@ -409,7 +409,6 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.OLD_GATEAU)
         entries.accept(CobblemonItems.CASTELIACONE)
         entries.accept(CobblemonItems.LUMIOSE_GALETTE)
-        entries.accept(CobblemonItems.SHALOUR_SABLE)
         entries.accept(CobblemonItems.BIG_MALASADA)
         entries.accept(CobblemonItems.SMOKED_TAIL_CURRY)
         entries.accept(CobblemonItems.OPEN_FACED_SANDWICH)
@@ -419,6 +418,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.FINE_REMEDY)
         entries.accept(CobblemonItems.SUPERB_REMEDY)
         entries.accept(CobblemonItems.HEAL_POWDER)
+        entries.accept(CobblemonItems.MOOMOO_MILK)
         entries.accept(CobblemonItems.MEDICINAL_BREW)
 
         entries.accept(CobblemonItems.POTION)
@@ -518,10 +518,23 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.JOLLY_MINT)
         entries.accept(CobblemonItems.NAIVE_MINT)
         entries.accept(CobblemonItems.SERIOUS_MINT)
-        entries.accept(CobblemonItems.MOOMOO_MILK)
 
         entries.accept(CobblemonItems.ABILITY_CAPSULE)
         entries.accept(CobblemonItems.ABILITY_PATCH)
+
+        entries.accept(CobblemonItems.POKE_BAIT)
+        entries.accept(CobblemonItems.LURE_CAKE)
+        entries.accept(CobblemonItems.POKE_CAKE)
+        entries.accept(CobblemonItems.POKE_PUFF)
+
+        entries.accept(CobblemonItems.APRIJUICE_RED)
+        entries.accept(CobblemonItems.APRIJUICE_YELLOW)
+        entries.accept(CobblemonItems.APRIJUICE_GREEN)
+        entries.accept(CobblemonItems.APRIJUICE_BLUE)
+        entries.accept(CobblemonItems.APRIJUICE_PINK)
+        entries.accept(CobblemonItems.APRIJUICE_BLACK)
+        entries.accept(CobblemonItems.APRIJUICE_WHITE)
+
     }
 
     private fun evolutionItemEntries(displayContext: ItemDisplayParameters, entries: Output) {
@@ -742,7 +755,6 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.MEDICINAL_LEEK, Items.POISONOUS_POTATO)
         injector.putAfter(CobblemonItems.ROASTED_LEEK, CobblemonItems.MEDICINAL_LEEK)
-        injector.putAfter(CobblemonItems.BRAISED_VIVICHOKE, CobblemonItems.ROASTED_LEEK)
 
         injector.putAfter(CobblemonItems.WHIPPED_DREAM, Items.PUMPKIN_PIE)
         injector.putAfter(CobblemonItems.STRAWBERRY_SWEET, CobblemonItems.WHIPPED_DREAM)
@@ -755,24 +767,24 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.CANDIED_APPLE, CobblemonItems.RIBBON_SWEET)
         injector.putAfter(CobblemonItems.CANDIED_BERRY, CobblemonItems.CANDIED_APPLE)
-        injector.putAfter(CobblemonItems.FRIED_RICE, CobblemonItems.CANDIED_BERRY)
-        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.FRIED_RICE)
+        injector.putAfter(CobblemonItems.POTATO_MOCHI, CobblemonItems.CANDIED_BERRY)
+        injector.putAfter(CobblemonItems.PONIGIRI, CobblemonItems.POTATO_MOCHI)
 
-        injector.putAfter(CobblemonItems.PEWTER_CRUNCHIES, CobblemonItems.POTATO_MOCHI)
+        injector.putAfter(CobblemonItems.PEWTER_CRUNCHIES, CobblemonItems.PONIGIRI)
         injector.putAfter(CobblemonItems.RAGE_CANDY_BAR, CobblemonItems.PEWTER_CRUNCHIES)
         injector.putAfter(CobblemonItems.LAVA_COOKIE, CobblemonItems.RAGE_CANDY_BAR)
         injector.putAfter(CobblemonItems.JUBILIFE_MUFFIN, CobblemonItems.LAVA_COOKIE)
         injector.putAfter(CobblemonItems.OLD_GATEAU, CobblemonItems.JUBILIFE_MUFFIN)
         injector.putAfter(CobblemonItems.CASTELIACONE, CobblemonItems.OLD_GATEAU)
         injector.putAfter(CobblemonItems.LUMIOSE_GALETTE, CobblemonItems.CASTELIACONE)
-        injector.putAfter(CobblemonItems.SHALOUR_SABLE, CobblemonItems.LUMIOSE_GALETTE)
-        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.SHALOUR_SABLE)
+        injector.putAfter(CobblemonItems.BIG_MALASADA, CobblemonItems.LUMIOSE_GALETTE)
         injector.putAfter(CobblemonItems.SMOKED_TAIL_CURRY, CobblemonItems.BIG_MALASADA)
         injector.putAfter(CobblemonItems.OPEN_FACED_SANDWICH, CobblemonItems.SMOKED_TAIL_CURRY)
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
 
+        injector.putAfter(CobblemonItems.SINISTER_TEA, Items.MILK_BUCKET)
     }
 
     private fun toolsAndUtilitiesInjections(injector: Injector) {

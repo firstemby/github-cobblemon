@@ -23,8 +23,10 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
+import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
+import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -166,6 +168,20 @@ object MoLangFunctions {
             val search = params.getString(1)
             val replace = params.getString(2)
             return@Function StringValue(text.replace(search, replace))
+        },
+        "is_included" to java.util.function.Function { params ->
+            val text = params.getString(0)
+            val search = params.getString(1)
+            return@Function DoubleValue(text.contains(search))
+        },
+        "to_lower" to java.util.function.Function { params ->
+            return@Function StringValue(params.getString(0).lowercase())
+        },
+        "to_upper" to java.util.function.Function { params ->
+            return@Function StringValue(params.getString(0).uppercase())
+        },
+        "string_length" to java.util.function.Function { params ->
+            return@Function DoubleValue(params.getString(0).length)
         },
         "is_blank" to java.util.function.Function { params ->
             val arg = params.get<MoValue>(0)
@@ -689,6 +705,9 @@ object MoLangFunctions {
                 val owner = entity.owner
                 return@put owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
             }
+            map.put("delta_movement") {
+                return@put listOf(entity.deltaMovement.x, entity.deltaMovement.y, entity.deltaMovement.z).asArrayValue(::DoubleValue)
+            }
 
             if (entity is MoLangScriptingEntity) {
                 map.put("add_callback") { params ->
@@ -907,6 +926,15 @@ object MoLangFunctions {
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
+            map.put("look_at_position") { params ->
+                val x = params.getDouble(0)
+                val y = params.getDouble(1)
+                val z = params.getDouble(2)
+                val duration = params.getIntOrNull(3) ?: 20
+                val flags = params.params.subList(4, params.params.size).map { it.asString() }
+                val brain = entity.brain
+                brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, CobblemonBlockPosTracker(Vec3(x, y, z), flags.toSet()), duration.toLong())
+            }
             map.put("get_attack_target_data_memory") {
                 val value = entity.brain.getMemorySafely(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
                     ?: CobblemonAttackTargetData()
@@ -1308,6 +1336,23 @@ object MoLangFunctions {
                 map.put("player") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             } else if (battleActor is PokemonBattleActor) {
                 map.put("pokemon") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+            }
+            return@mutableListOf map
+        }
+    )
+
+    val battleMessageFunctions = mutableListOf<(BattleMessage) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+        { message ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("has_argument_at") { params ->
+                val index = params.getInt(0)
+                val value = params.getStringOrNull(1) ?: ""
+                return@put DoubleValue(value == message.argumentAt(index))
+            }
+            map.put("has_argument") { params ->
+                val argumentName = params.getString(0)
+                val value = params.getStringOrNull(1) ?: ""
+                return@put DoubleValue(value == message.optionalArgument(argumentName))
             }
             return@mutableListOf map
         }
@@ -2266,6 +2311,14 @@ object MoLangFunctions {
     fun QueryStruct.addPokemonFunctions(pokemon: Pokemon): QueryStruct {
         val addedFunctions = pokemonFunctions
             .flatMap { it.invoke(pokemon).entries }
+            .associate { it.key to it.value }
+        functions.putAll(addedFunctions)
+        return this
+    }
+
+    fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
+        val addedFunctions = battleMessageFunctions
+            .flatMap { it.invoke(battleMessage).entries }
             .associate { it.key to it.value }
         functions.putAll(addedFunctions)
         return this

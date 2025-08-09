@@ -389,40 +389,28 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val SWEET_HEART = noSettingsItem("sweet_heart") // todo make a SweetHeartItem class for breeding purposes
 
     @JvmField
-    val TASTY_TAIL = noSettingsItem("tasty_tail")
+    val TASTY_TAIL = create("tasty_tail", foodItem(3, 0.3f))
 
-    @JvmField // todo get final values for this from vera
-    val PEWTER_CRUNCHIES = regionalFoodItem("pewter_crunchies", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f, false)
-
-    @JvmField // todo get final values for this from vera
-    val RAGE_CANDY_BAR = regionalFoodItem("rage_candy_bar", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f, false)
-
-    @JvmField // todo get final values for this from vera
-    val LAVA_COOKIE = regionalFoodItem("lava_cookie", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val OLD_GATEAU = regionalFoodItem("old_gateau", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val CASTELIACONE = regionalFoodItem("casteliacone", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val SHALOUR_SABLE = regionalFoodItem("shalour_sable", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val LUMIOSE_GALETTE = regionalFoodItem("lumiose_galette", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val BIG_MALASADA = regionalFoodItem("big_malasada", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f, false, ItemStack(Items.BOWL, 1))
-
-    @JvmField // todo get final values for this from vera
-    val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
-
-    @JvmField // todo get final values for this from vera
-    val OPEN_FACED_SANDWICH = regionalFoodItem("open_faced_sandwich", 16, 10, 1.2f, MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1f)
+    @JvmField
+    val PEWTER_CRUNCHIES = regionalFoodItem("pewter_crunchies", 16, 7, 0.343f, false)
+    @JvmField
+    val RAGE_CANDY_BAR = regionalFoodItem("rage_candy_bar", 16, 8, 0.2f, false)
+    @JvmField
+    val LAVA_COOKIE = regionalFoodItem("lava_cookie", 16, 7, 0.343f, false)
+    @JvmField
+    val OLD_GATEAU = regionalFoodItem("old_gateau", 16, 9, 0.1335f, false)
+    @JvmField
+    val CASTELIACONE = regionalFoodItem("casteliacone", 16, 5, .28f, false)
+    @JvmField
+    val LUMIOSE_GALETTE = regionalFoodItem("lumiose_galette", 16, 8, 0.2f, false)
+    @JvmField
+    val BIG_MALASADA = regionalFoodItem("big_malasada", 16, 7, 0.343f, false)
+    @JvmField
+    val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 16, 10, 0.6f, false, ItemStack(Items.BOWL, 1))
+    @JvmField
+    val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 16, 8, 0.2f, false)
+    @JvmField
+    val OPEN_FACED_SANDWICH = regionalFoodItem("open_faced_sandwich", 16, 13, 0.5f, false)
 
     // todo we might need to wait on these for later? These impact battles and may be harder to do
     /*@JvmField
@@ -435,28 +423,21 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val POTATO_MOCHI = create("potato_mochi", CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
-            .nutrition(10) // todo get final values for this from vera
-            .saturationModifier(1.2F) // todo get final values for this from vera
-            .build())))
-    @JvmField
-    val FRIED_RICE = create("fried_rice", CobblemonItem(Properties().stacksTo(16)
-        .food(FoodProperties.Builder()
-            .nutrition(10) // todo get final values for this from vera
-            .saturationModifier(1.2F) // todo get final values for this from vera
-            .usingConvertsTo(Items.BOWL)
+            .nutrition(8)
+            .saturationModifier(0.2375F)
             .build())))
     @JvmField
     val CANDIED_APPLE = create("candied_apple",  CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
-            .nutrition(10) // todo get final values for this from vera
-            .saturationModifier(1.2F) // todo get final values for this from vera
+            .nutrition(6)
+            .saturationModifier(0.2335F)
             .usingConvertsTo(Items.STICK)
             .build())))
     @JvmField
     val CANDIED_BERRY = create("candied_berry",  CobblemonItem(Properties().stacksTo(16)
         .food(FoodProperties.Builder()
-            .nutrition(10) // todo get final values for this from vera
-            .saturationModifier(1.2F) // todo get final values for this from vera
+            .nutrition(5)
+            .saturationModifier(0.22F)
             .usingConvertsTo(Items.STICK)
             .build())))
 
@@ -684,14 +665,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MEDICINAL_LEEK = heldItem("medicinal_leek", MedicinalLeekItem(CobblemonBlocks.MEDICINAL_LEEK, Item.Properties().food(FoodProperties.Builder().fast().nutrition(1).saturationModifier(0.2f).build())), "leek")
     @JvmField
-    val ROASTED_LEEK = compostableItem("roasted_leek", CobblemonItem(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.3f).build())), 0.85f)
-    @JvmField
-    val BRAISED_VIVICHOKE = compostableItem("braised_vivichoke", foodItem(6, 0.6F), 0.85f)
+    val ROASTED_LEEK = compostableItem("roasted_leek", CobblemonItem(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.2f).build())), 0.85f)
     @JvmField
     val VIVICHOKE_DIP = create("vivichoke_dip", object : CobblemonItem(Properties().stacksTo(1)
         .food(FoodProperties.Builder()
             .nutrition(10)
-            .saturationModifier(1.2F)
+            .saturationModifier(0.6F)
             .effect(MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1F)
             .alwaysEdible()
             .usingConvertsTo(Items.BOWL)
@@ -702,7 +681,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         }
     })
     @JvmField
-    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Item.Properties().food(FoodProperties.Builder().nutrition(1).fast().saturationModifier(0.2f).build())), 0.60f)
+    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Properties()), 0.60f)
     @JvmField
     val REVIVAL_HERB = compostableItem("revival_herb", RevivalHerbItem(CobblemonBlocks.REVIVAL_HERB))
     @JvmField
@@ -732,7 +711,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
     @JvmField
-    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
+    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
     @JvmField
     val REVIVE = create("revive", ReviveItem(max = false))
     @JvmField
@@ -1543,18 +1522,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         stacksTo: Int,
         nutrition: Int,
         saturationModifier: Float,
-        effect: MobEffectInstance? = null,
-        effectChance: Float? = null,
         alwaysEdible: Boolean = false,
         convertsToOnUse: ItemStack? = null
     ): RegionalFoodItem {
         val foodPropertiesBuilder = FoodProperties.Builder()
             .nutrition(nutrition)
             .saturationModifier(saturationModifier)
-
-        if (effect != null && effectChance != null) {
-            foodPropertiesBuilder.effect(effect, effectChance)
-        }
 
         if (alwaysEdible == true) {
             foodPropertiesBuilder.alwaysEdible()

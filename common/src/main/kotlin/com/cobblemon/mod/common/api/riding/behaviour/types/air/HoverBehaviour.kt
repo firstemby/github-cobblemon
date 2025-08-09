@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.sound.RideLoopSound
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -458,11 +460,23 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         return false
     }
 
+    override fun getRideSounds(
+        settings: HoverSettings,
+        state: HoverState,
+        vehicle: PokemonEntity
+    ): RideSoundSettingsList {
+        return settings.rideSounds
+    }
+
     override fun createDefaultState(settings: HoverSettings) = HoverState()
 }
 
 class HoverSettings : RidingBehaviourSettings {
     override val key = HoverBehaviour.KEY
+
+    var rideSound: ResourceLocation = "ride.loop.saucer".asIdentifierDefaultingNamespace()
+    var volumeExpr: Expression = "math.pow(math.min(q.ride_velocity() / 0.8, 1.0),2)".asExpression()
+    var pitchExpr: Expression =  "math.pow(math.min(1.0 + 0.2*(q.ride_velocity() / 0.8), 1.2),2)".asExpression()
 
     var canJump = "true".asExpression()
         private set
@@ -486,8 +500,11 @@ class HoverSettings : RidingBehaviourSettings {
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 140.0, 20.0)".asExpression()
         private set
 
+    var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        rideSounds.encode(buffer)
         buffer.writeExpression(speedExpr)
         buffer.writeExpression(accelerationExpr)
         buffer.writeExpression(staminaExpr)
@@ -496,6 +513,7 @@ class HoverSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        rideSounds = RideSoundSettingsList.decode(buffer)
         speedExpr = buffer.readExpression()
         accelerationExpr = buffer.readExpression()
         staminaExpr = buffer.readExpression()

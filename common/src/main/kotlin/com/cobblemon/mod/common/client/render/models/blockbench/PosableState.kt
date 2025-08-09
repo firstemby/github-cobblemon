@@ -131,6 +131,14 @@ abstract class PosableState : Schedulable {
     /** A list of items to be rendered on a PosableModel during an animation */
     val animationItems = mutableMapOf<String, ItemStack>()
 
+    /** Just some numbers that might be getting arbitrarily set and referenced. */
+    val numbers = mutableMapOf<String, Float>()
+    /**
+     * Markers that have been added to the state this render, cleared when animation is about to start.
+     * This is used to hand basic state from one animation to another.
+     */
+    val renderMarkers = mutableSetOf<String>()
+
     /** All of the MoLang functions that can be expose current riding data. */
     val ridingFunctions = QueryStruct(hashMapOf())
         .addFunction("pitch") { params ->
