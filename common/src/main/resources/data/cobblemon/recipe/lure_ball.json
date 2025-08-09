@@ -16,10 +16,10 @@
             "tag": "cobblemon:tier_2_poke_ball_materials"
         },
         "r": {
-            "item": "cobblemon:green_apricorn"
+            "item": "cobblemon:blue_apricorn"
         },
         "b": {
-            "item": "cobblemon:red_apricorn"
+            "item": "cobblemon:green_apricorn"
         }
     },
     "result": {

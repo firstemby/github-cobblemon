@@ -4,6 +4,9 @@
   "profileScale": 0.37,
   "profileTranslation": [-0.07, 1.22, 0],
   "rootBone": "drampa",
+  "animations": {
+    "cry": "q.bedrock_stateful('drampa', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

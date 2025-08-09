@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.storage
 
-import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
@@ -45,9 +44,6 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
     override fun initialize() {
         pokemon.forEachIndexed { index, pokemon ->
             pokemon.storeCoordinates.set(StoreCoordinates(this, BottomlessPosition(index)))
-            pokemon.changeObservable.pipe(
-                stopAfter { pokemon.storeCoordinates.get()?.store != this }
-            ).subscribe { storeChangeObservable.emit(Unit) }
         }
     }
 
@@ -115,5 +111,9 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
             }
             storeChangeObservable.emit(Unit)
         }
+    }
+
+    override fun onPokemonChanged(pokemon: Pokemon) {
+        this.storeChangeObservable.emit(Unit)
     }
 }

@@ -73,40 +73,49 @@
         "displayName": "Speed",
         "description": "Its top speed",
         "ranges": {
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "ACCELERATION": {
         "displayName": "Acceleration",
         "description": "How fast it can speed up",
         "ranges": {
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "SKILL": {
         "displayName": "Handling",
         "description": "How fast it can turn",
         "ranges": {
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "JUMP": {
         "displayName": "Altitude",
         "description": "How high it can jump",
         "ranges": {
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       },
       "STAMINA": {
         "displayName": "Fuel/Stamina",
         "description": "How long it can sprint",
         "ranges": {
-          "AIR": "100-101"
+          "AIR": "50-100"
         }
       }
     },
     "behaviour": {
-      "key": "cobblemon:air/hover"
+      "key": "cobblemon:air/hover",
+      "rideSounds": [
+        {
+          "soundLocation": "cobblemon:ride.loop.saucer",
+          "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
+          "pitchExpr": "math.pow(math.min(math.max(0.5,(q.ride_velocity()*0.5 / 1.5) + 0.5), 1.0),2)",
+          "playForNonPassengers": true,
+          "muffleEnabled": true
+        }
+      ]
     },
     "seats": [
       {
@@ -239,7 +248,6 @@
     "tutor:chargebeam",
     "tutor:electroweb",
     "tutor:flashcannon",
-    "tutor:gigaimpact",
     "tutor:gravity",
     "tutor:helpinghand",
     "tutor:hyperbeam",
@@ -258,7 +266,26 @@
     "tutor:steelroller",
     "tutor:swift",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "preEvolution": "magneton",
   "evolutions": []

@@ -23,8 +23,8 @@ import net.minecraft.world.phys.Vec3
  * @author landonjw
  */
 open class RidingBehaviourState {
-    open val rideVelocity: SidedRidingState<Vec3> = ridingState(Vec3.ZERO, Side.BOTH)
-    open val stamina: SidedRidingState<Float> = ridingState(1.0F, Side.BOTH)
+    open val rideVelocity: SidedRidingState<Vec3> = ridingState(Vec3.ZERO, Side.CLIENT)
+    open val stamina: SidedRidingState<Float> = ridingState(1.0F, Side.CLIENT)
 
     open fun reset() {
         rideVelocity.set(Vec3.ZERO, true)

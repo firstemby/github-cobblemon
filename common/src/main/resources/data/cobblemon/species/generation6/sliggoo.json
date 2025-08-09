@@ -129,7 +129,18 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:poisontail",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "goomy",
   "evolutions": [
@@ -277,7 +288,19 @@
         "tutor:sludgebomb",
         "tutor:steelbeam",
         "tutor:thunderbolt",
-        "tutor:waterpulse"
+        "tutor:waterpulse",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:poisontail",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "preEvolution": "goomy",
       "evolutions": [

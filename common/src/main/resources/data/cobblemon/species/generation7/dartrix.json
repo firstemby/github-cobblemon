@@ -177,7 +177,18 @@
     "tutor:swift",
     "tutor:synthesis",
     "tutor:tailwind",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:ominouswind",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "rowlet",
   "evolutions": [

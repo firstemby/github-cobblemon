@@ -136,14 +136,15 @@
     "tutor:lowkick",
     "tutor:meteorbeam",
     "tutor:outrage",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_wool": {
+    "has_leather": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:yellow_wool"
+              "minecraft:leather"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_wool",
+      "has_leather",
       "has_the_recipe"
     ]
   ],

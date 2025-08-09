@@ -48,6 +48,15 @@
     "height": 0.9,
     "fixed": false
   },
+  "ai": [
+    {
+      "type": "cobblemon:set_variables",
+      "variableValues": {
+        "hover_wander_minimum_height": 2,
+        "hover_wander_maximum_height": 10
+      }
+    }
+  ],
   "behaviour": {
     "moving": {
       "walk": {
@@ -162,7 +171,21 @@
     "tutor:stringshot",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "nincada",
   "evolutions": []

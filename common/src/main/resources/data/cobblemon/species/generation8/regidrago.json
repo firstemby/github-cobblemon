@@ -117,7 +117,9 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": []
 }

@@ -173,7 +173,11 @@
     "tutor:swift",
     "tutor:vacuumwave",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scaleshot",
+    "legacy:snore"
   ],
   "preEvolution": "drizzile",
   "evolutions": [],

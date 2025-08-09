@@ -4,6 +4,9 @@
   "profileScale": 0.59,
   "profileTranslation": [0.03, 0.89, 0],
   "rootBone": "snorunt",
+  "animations": {
+    "cry": "q.bedrock_stateful('snorunt', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

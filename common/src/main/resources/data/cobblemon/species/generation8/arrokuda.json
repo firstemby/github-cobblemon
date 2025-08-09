@@ -132,13 +132,17 @@
     "tutor:icefang",
     "tutor:laserfocus",
     "tutor:liquidation",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:poisonjab",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore"
   ],
   "evolutions": [
     {

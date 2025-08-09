@@ -107,7 +107,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         }
 
         val panelX = 0
-        val party = CobblemonClient.storage.myParty
+        val party = CobblemonClient.storage.party
         val matrices = context.pose()
         if (party.slots.none { it != null }) {
             if (CobblemonClient.clientPlayerData.promptStarter &&

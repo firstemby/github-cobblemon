@@ -165,7 +165,9 @@
     "tutor:superpower",
     "tutor:swift",
     "tutor:synthesis",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [

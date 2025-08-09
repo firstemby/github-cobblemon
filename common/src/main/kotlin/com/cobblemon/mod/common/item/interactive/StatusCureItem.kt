@@ -36,11 +36,11 @@ class StatusCureItem(val itemName: String, vararg val status: Status) : Cobblemo
     override val bagItem = object : BagItem {
         override val itemName = this@StatusCureItem.itemName
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(target.effectedPokemon)
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true && pokemon.currentHealth > 0
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
@@ -50,7 +50,7 @@ class StatusCureItem(val itemName: String, vararg val status: Status) : Cobblemo
         return if (currentStatus != null && (status.isEmpty() || currentStatus in status)) {
             pokemon.status = null
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
-            if (!player.isCreative)  {
+            if (!player.hasInfiniteMaterials())  {
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }

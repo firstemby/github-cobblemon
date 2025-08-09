@@ -126,7 +126,10 @@
     "tutor:rollout",
     "tutor:scorchingsands",
     "tutor:skittersmack",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

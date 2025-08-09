@@ -43,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 0.8,
+  "baseScale": 0.72,
   "hitbox": {
-    "width": 0.9,
-    "height": 2,
+    "width": 1.2,
+    "height": 2.35,
     "fixed": false
   },
   "behaviour": {
@@ -165,7 +165,28 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:morningsun"
   ],
   "evolutions": [
     {

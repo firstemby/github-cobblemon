@@ -1,7 +1,7 @@
 {
   "version": 1,
   "replaceWithNewVersion": true,
-  "contextWeights": {
+  "spawnablePositionTypeWeights": {
     "grounded": 1.0,
     "submerged": 1.0,
     "surface": 1.0

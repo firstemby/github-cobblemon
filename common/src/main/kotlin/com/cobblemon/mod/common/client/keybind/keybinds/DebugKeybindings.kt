@@ -39,7 +39,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -55,7 +55,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -72,7 +72,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -88,7 +88,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -105,7 +105,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -122,7 +122,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -138,7 +138,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)

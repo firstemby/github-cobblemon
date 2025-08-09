@@ -43,13 +43,13 @@ class SwapInstruction(val message: BattleMessage, val instructionSet: Instructio
 
                 val posA = activePokemonA.getSendOutPosition() ?: activePokemonA.position?.second
                 if (posA != null && battlePokemonA.entity != null) {
-                    battlePokemonA.entity?.setPositionSafely(battlePokemonA.entity!!.getAjustedSendoutPosition(posA))
+                    battlePokemonA.entity?.setPositionSafely(battlePokemonA.entity!!.getAdjustedSendoutPosition(posA))
                 }
 
                 val posB = activePokemonB.getSendOutPosition() ?: activePokemonB.position?.second
                 val battlePokemonB = activePokemonB.battlePokemon
                 if (posB != null && battlePokemonB?.entity != null) {
-                    activePokemonB.battlePokemon?.entity?.setPositionSafely(battlePokemonB.entity!!.getAjustedSendoutPosition(posB))
+                    activePokemonB.battlePokemon?.entity?.setPositionSafely(battlePokemonB.entity!!.getAdjustedSendoutPosition(posB))
                 }
 
                 // Notify clients of the swap

@@ -51,6 +51,11 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "moves": [
     "1:wideguard",
     "1:metalclaw",
@@ -139,7 +144,6 @@
     "tutor:irontail",
     "tutor:laserfocus",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",
@@ -147,7 +151,9 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [

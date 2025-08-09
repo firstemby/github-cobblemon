@@ -43,6 +43,8 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         val tmInterpreter = Interpreter.parseFromPrefixIntoList("tm") { it.tmMoves }
         val eggInterpreter = Interpreter.parseFromPrefixIntoList("egg") { it.eggMoves }
         val tutorInterpreter = Interpreter.parseFromPrefixIntoList("tutor") { it.tutorMoves }
+        val legacyInterpreter = Interpreter.parseFromPrefixIntoList("legacy") { it.legacyMoves }
+        val specialInterpreter = Interpreter.parseFromPrefixIntoList("special") { it.specialMoves }
         val formChangeInterpreter = Interpreter.parseFromPrefixIntoList("form_change") { it.formChangeMoves }
         val levelUpInterpreter = Interpreter { element, learnset ->
             val str = element.takeIf { it.isJsonPrimitive }?.asString ?: return@Interpreter false
@@ -70,6 +72,8 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
             tmInterpreter,
             eggInterpreter,
             tutorInterpreter,
+            legacyInterpreter,
+            specialInterpreter,
             levelUpInterpreter,
             formChangeInterpreter
         )
@@ -78,6 +82,8 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
     val levelUpMoves = mutableMapOf<Int, MutableList<MoveTemplate>>()
     val eggMoves = mutableListOf<MoveTemplate>()
     val tutorMoves = mutableListOf<MoveTemplate>()
+    val legacyMoves = mutableListOf<MoveTemplate>()
+    val specialMoves = mutableListOf<MoveTemplate>()
     val tmMoves = mutableListOf<MoveTemplate>()
     /**
      * Moves the species/form will have learnt when evolving into itself.
@@ -92,6 +98,15 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         .sortedBy { it.key }
         .flatMap { it.value }
         .toSet()
+
+    fun getAllLegalMoves(): Set<MoveTemplate> {
+        return levelUpMoves.values.flatten().toSet() +
+                eggMoves +
+                tutorMoves +
+                tmMoves +
+                formChangeMoves +
+                evolutionMoves
+    }
 
     // We only sync level up moves atm
     override fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves

@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
 import com.cobblemon.mod.common.util.asExpressionLike
 import java.util.concurrent.CompletableFuture
 import kotlin.math.pow
@@ -46,7 +46,7 @@ class MoveToTargetActionEffectKeyframe : ActionEffectKeyframe {
         val timeoutEffect = timeoutActionEffect?.let { ActionEffects.actionEffects[it] } ?: ActionEffectTimeline.NONE
 
         val nav = user.navigation
-        val navContext = PokemonNavigation.NavigationContext(
+        val navContext = NavigationContext(
             destinationProximity = proximity,
             onArrival = {
                 if (!future.isDone && !timedOut) {

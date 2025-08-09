@@ -94,7 +94,8 @@
     "tm:strugglebug",
     "tm:terablast",
     "tutor:bugbite",
-    "tutor:irondefense"
+    "tutor:irondefense",
+    "legacy:electroweb"
   ],
   "preEvolution": "scatterbug",
   "evolutions": [

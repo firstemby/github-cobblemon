@@ -43,12 +43,12 @@ class RidingStatDefinition {
         buffer.writeNullable(displayName) { _, it -> buffer.writeText(it) }
         buffer.writeNullable(description) { _, it -> buffer.writeText(it) }
         buffer.writeMap(
-            ranges,
-            { _, it -> buffer.writeEnum(it) },
-            { _, it ->
-                buffer.writeSizedInt(IntSize.U_BYTE, it.first)
-                buffer.writeSizedInt(IntSize.U_BYTE, it.last)
-            }
+                ranges,
+                { _, it -> buffer.writeEnum(it) },
+                { _, it ->
+                    buffer.writeSizedInt(IntSize.U_BYTE, it.first)
+                    buffer.writeSizedInt(IntSize.U_BYTE, it.last)
+                }
         )
     }
 
@@ -57,8 +57,8 @@ class RidingStatDefinition {
             val displayName = buffer.readNullable { buffer.readText() }
             val description = buffer.readNullable { buffer.readText() }
             val ranges = buffer.readMap<RidingStyle, IntRange>(
-                { buffer.readEnum<RidingStyle>(RidingStyle::class.java) },
-                { IntRange(buffer.readSizedInt(IntSize.U_BYTE), buffer.readSizedInt(IntSize.U_BYTE)) }
+                    { buffer.readEnum<RidingStyle>(RidingStyle::class.java) },
+                    { IntRange(buffer.readSizedInt(IntSize.U_BYTE), buffer.readSizedInt(IntSize.U_BYTE)) }
             )
             return RidingStatDefinition().apply {
                 this.displayName = displayName

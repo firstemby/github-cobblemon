@@ -142,14 +142,16 @@
     "tutor:icefang",
     "tutor:laserfocus",
     "tutor:liquidation",
-    "tutor:poisonjab",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore"
   ],
   "preEvolution": "arrokuda",
   "evolutions": []

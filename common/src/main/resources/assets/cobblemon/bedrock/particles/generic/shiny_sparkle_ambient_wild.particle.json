@@ -5,7 +5,7 @@
             "identifier": "cobblemon:shiny_sparkle_ambient_wild",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/shine_sparkle_rainbow"
+                "texture": "textures/particles/generic/sparkle/shinesparkle_rainbow"
             }
         },
         "curves": {

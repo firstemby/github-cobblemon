@@ -8,19 +8,20 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.resolveInt
+import com.cobblemon.mod.common.util.toVec3d
 import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -28,44 +29,219 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.entity.ai.util.HoverRandomPos
 import net.minecraft.world.entity.ai.util.LandRandomPos
+import net.minecraft.world.level.pathfinder.PathType
 
 class WanderTaskConfig : SingleTaskConfig {
-    val condition: ExpressionLike = "true".asExpressionLike()
-    val shouldWander: ExpressionLike = "math.random(0, 20 * 8) <= 1".asExpressionLike()
-    val horizontalRange: Expression = "10".asExpression()
-    val verticalRange: Expression = "5".asExpression()
-    val speedMultiplier: Expression = "0.35".asExpression()
-    val completionRange: Expression = "1".asExpression()
-    val lookTargetYOffset: Expression = "1.5".asExpression()
+    companion object {
+        const val WANDER = "wander" // Category
+    }
+
+    val condition = booleanVariable(WANDER, "wanders", true).asExpressible()
+    val wanderChance = numberVariable(WANDER, "wander_chance", 1/(20 * 6F)).asExpressible()
+    val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 10).asExpressible()
+    val verticalRange = numberVariable(WANDER, "vertical_wander_range", 5).asExpressible()
+    val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
+    val avoidTargetingAir: ExpressionOrEntityVariable = Either.left("true".asExpression()) // Whether to avoid air blocks when wandering
+    val minimumHeight: ExpressionOrEntityVariable = Either.left("0".asExpression()) // Height off the ground
+    val maximumHeight: ExpressionOrEntityVariable = Either.left("-1".asExpression()) // Height off the ground
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        wanderChance,
+        horizontalRange,
+        verticalRange,
+        speedMultiplier,
+        avoidTargetingAir,
+        minimumHeight,
+        maximumHeight
+    ).asVariables()
+
+    private fun applyHeightConstraints(
+        pos: BlockPos,
+        minimumHeight: Int,
+        maximumHeight: Int,
+        world: ServerLevel
+    ): BlockPos {
+        if (minimumHeight <= 0 && maximumHeight == -1) {
+            return pos // It ain't a hoverer
+        }
+
+        val block = world.getBlockState(pos)
+        val altitude = if (!block.isAir) {
+            0
+        } else {
+            (1..64).firstOrNull {
+                val newPos = pos.below(it)
+                return@firstOrNull !world.getBlockState(newPos).isAir
+            } ?: Int.MAX_VALUE
+        }
+
+        if (altitude > maximumHeight && maximumHeight >= 0) {
+            val excess = altitude - maximumHeight
+            val excessFromMinimum = altitude - minimumHeight
+            val correction = world.random.nextIntBetweenInclusive(excess, excessFromMinimum)
+            return pos.atY(pos.y - correction)
+        } else if (altitude < minimumHeight && minimumHeight >= 0) {
+            val deficit = minimumHeight - altitude
+            val deficitFromMaximum = maximumHeight - altitude
+            val correction = world.random.nextIntBetweenInclusive(deficit, deficitFromMaximum)
+            return pos.atY(pos.y + correction)
+        } else {
+            return pos
+        }
+    }
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
+
+        val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
+
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.WALK_TARGET,
+            MemoryModuleType.LOOK_TARGET,
+            CobblemonMemories.PATH_COOLDOWN,
+            CobblemonMemories.WANDER_CONTROL
+        )
 
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
-                it.registered(MemoryModuleType.LOOK_TARGET)
-            ).apply(it) { walkTarget, lookTarget ->
+                it.registered(MemoryModuleType.LOOK_TARGET),
+                it.absent(CobblemonMemories.PATH_COOLDOWN),
+                it.registered(CobblemonMemories.WANDER_CONTROL)
+            ).apply(it) { walkTarget, lookTarget, pathCooldown, wanderControl ->
                 Trigger { world, entity, time ->
-                    if (entity !is PathfinderMob) {
+                    if (entity !is PathfinderMob || entity.isUnderWater) {
                         return@Trigger false
                     }
 
-                    runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-                    if (!runtime.resolveBoolean(shouldWander)) return@Trigger false
+                    val wanderControl = it.tryGet(wanderControl).orElse(null) ?: CobblemonWanderControl()
+                    val avoidsTargetingAir = avoidTargetingAir.resolveBoolean()
 
-                    val targetVec = LandRandomPos.getPos(entity, runtime.resolveInt(horizontalRange), runtime.resolveInt(verticalRange)) ?: return@Trigger false
-                    walkTarget.set(WalkTarget(targetVec, runtime.resolveFloat(speedMultiplier), runtime.resolveInt(completionRange)))
-                    lookTarget.set(BlockPosTracker(targetVec.add(0.0, runtime.resolveDouble(lookTargetYOffset), 0.0)))
+                    runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                    val wanderChance = runtime.resolveFloat(wanderChanceExpression)
+                    if (wanderChance <= 0 || world.random.nextFloat() > wanderChance || !wanderControl.allowLand) {
+                        return@Trigger false
+                    }
+
+                    pathCooldown.setWithExpiry(true, wanderControl.pathCooldownTicks.toLong())
+                    val minimumHeight = minimumHeight.resolveInt()
+                    val maximumHeight = maximumHeight.resolveInt()
+
+                    var attempts = 0
+                    var pos: BlockPos? = null
+                    while (attempts++ < wanderControl.maxAttempts && pos == null) {
+//                    val targetVec = getLandTarget(entity) ?: return@Trigger true
+                        val targetVec = if (maximumHeight != -1) {
+                            HoverRandomPos.getPos(
+                                entity,
+                                horizontalRange.resolveInt(),
+                                maxOf(verticalRange.resolveInt(), maximumHeight), // In case they fly up pretty high and need to find a way down
+                                entity.random.nextFloat() - 0.5,
+                                entity.random.nextFloat() - 0.5,
+                                Math.PI.toFloat(),
+                                maximumHeight,
+                                minimumHeight
+                            )
+                        } else {
+                                LandRandomPos.getPos(
+                                    entity,
+                                    horizontalRange.resolveInt(),
+                                    verticalRange.resolveInt()
+                                )
+                        } ?: continue
+
+                        pos = applyHeightConstraints(
+                            pos = BlockPos.containing(targetVec),
+                            minimumHeight = minimumHeight,
+                            maximumHeight = maximumHeight,
+                            world = world
+                        ).takeIf(wanderControl::isSuitable)
+                    }
+
+                    if (pos == null) {
+                        return@Trigger false
+                    }
+
+                    walkTarget.set(
+                        CobblemonWalkTarget(
+                            pos = pos,
+                            speedModifier = speedMultiplier.resolveFloat(),
+                            completionRange = 0,
+                            nodeTypeFilter = { nodeType -> nodeType !in listOf(PathType.WATER, PathType.WATER_BORDER) },
+                            destinationNodeTypeFilter = { nodeType -> !avoidsTargetingAir || nodeType !in listOf(PathType.OPEN) }
+                        )
+                    )
+                    lookTarget.set(BlockPosTracker(pos.toVec3d().add(0.0, entity.eyeHeight.toDouble(), 0.0)))
                     return@Trigger true
                 }
             }
         }
     }
+
+    /*
+     * This method is from the old wander goal. It is very verbose but reliably finds decent land wander targets. Its only advantage over
+     * the LandRandomPos method (with our CobblemonWalkTarget) is that it doesn't lead entities in the direction of water.
+     */
+//    fun getLandTarget(entity: PathfinderMob): Vec3? {
+//        val roamDistanceCondition: (BlockPos) -> Boolean = if (entity is PokemonEntity) ({ entity.tethering?.canRoamTo(it) != false }) else ({ true })
+//        val iterable: Iterable<BlockPos> = BlockPos.randomBetweenClosed(entity.random, 64, entity.blockX - 10, entity.blockY, entity.blockZ - 10, entity.blockX + 10, entity.blockY, entity.blockZ + 10)
+//        val condition: (BlockState, BlockPos) -> Boolean = { _, pos -> entity.canFit(pos) && roamDistanceCondition(pos) }
+//        val iterator = iterable.iterator()
+//        position@
+//        while (iterator.hasNext()) {
+//            val pos = iterator.next().mutable()
+//            var blockState = entity.level().getBlockState(pos)
+//
+//            val maxSteps = 16
+//            var steps = 0
+//            var good = false
+//            if (!blockState.isSolid && !blockState.liquid()) {
+//                pos.move(0, -1, 0)
+//                var previousWasAir = true
+//                while (steps++ < maxSteps && pos.y > entity.level().minBuildHeight) {
+//                    if (pos.y <= entity.level().minBuildHeight) {
+//                        continue@position
+//                    }
+//                    blockState = entity.level().getBlockState(pos)
+//                    if (blockState.isSolid && !blockState.`is`(BlockTags.LEAVES) && previousWasAir) {
+//                        pos.move(0, 1, 0)
+//                        blockState = entity.level().getBlockState(pos)
+//                        good = true
+//                        break
+//                    } else {
+//                        previousWasAir = blockState.isAir
+//                    }
+//                    pos.move(0, -1, 0)
+//                }
+//            } else {
+//                var previousWasSolid = blockState.isSolid && !blockState.`is`(BlockTags.LEAVES)
+//                pos.move(0, 1, 0)
+//                while (steps++ < maxSteps) {
+//                    if (pos.y >= entity.level().maxBuildHeight) {
+//                        continue@position
+//                    }
+//                    blockState = entity.level().getBlockState(pos)
+//                    if (blockState.isAir && previousWasSolid) {
+//                        good = true
+//                        break
+//                    }
+//                    previousWasSolid = blockState.isSolid && !blockState.`is`(BlockTags.LEAVES)
+//                    pos.move(0, 1, 0)
+//                }
+//            }
+//
+//            if (good && condition(blockState, pos)) {
+//                return pos.toVec3d()
+//            }
+//        }
+//
+//        return null
+//    }
 }

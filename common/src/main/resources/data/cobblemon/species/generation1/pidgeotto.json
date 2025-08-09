@@ -58,8 +58,26 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "combat": {
+      "fightsMelee": true,
+      "willDefendSelf": true
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          {
+            "type": "cobblemon:target_entity",
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:magikarp' && q.entity.world.is_air(q.entity.x, q.entity.y + 1, q.entity.z)"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [
@@ -134,7 +152,6 @@
     "tutor:aircutter",
     "tutor:defog",
     "tutor:dualwingbeat",
-    "tutor:heatwave",
     "tutor:mudslap",
     "tutor:ominouswind",
     "tutor:rest",
@@ -143,7 +160,32 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:takedown",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "preEvolution": "pidgey",
   "evolutions": [

@@ -40,14 +40,14 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
     override val bagItem = object : BagItem {
         override val itemName = if (remedyStrength.equals(NORMAL)) "item.cobblemon.remedy" else "item.cobblemon.${remedyStrength}_remedy"  // remedy, fine_remedy, superb_remedy
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
+            battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
             return "potion ${CobblemonMechanics.remedies.getHealingAmount(remedyStrength, runtime, 20)}"
         }
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
@@ -60,10 +60,8 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
             }
             pokemon.currentHealth += amount
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
-            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(runtime))
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            pokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
+            stack.consume(1, player)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

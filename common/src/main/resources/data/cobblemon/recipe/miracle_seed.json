@@ -10,14 +10,9 @@
         "S": {
             "tag": "c:seeds"
         },
-        "L": [
-            {
-                "item": "cobblemon:leaf_stone"
-            },
-            {
+        "L": {
                 "item": "cobblemon:grass_gem"
-            }
-        ]
+        }
     },
     "result": {
         "id": "cobblemon:miracle_seed"

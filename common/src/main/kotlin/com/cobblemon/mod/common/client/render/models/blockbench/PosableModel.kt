@@ -48,7 +48,6 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
-import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
@@ -94,7 +93,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     open var profileScale = 1F
 
     /** Used for third person riding camera */
-    open var seatToCameraOffset = mutableMapOf<String, Vec3>()
+    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for third person riding camera */
+    open var thirdPersonPivotOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for first person riding camera */
+    open var firstPersonCameraOffset = mutableMapOf<String, Vec3>()
 
     /**
      * These are open-ended properties that can be used to store miscellaneous properties about the model.
@@ -147,8 +152,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     /** Legacy faint code. */
     open fun getFaintAnimation(state: PosableState): ActiveAnimation? = null
-    /** Legacy eating code. */
-    open fun getEatAnimation(state: PosableState): ActiveAnimation? = null
     /** Legacy cry code. */
     @Transient
     open val cryAnimation: CryProvider = CryProvider { null }
@@ -188,7 +191,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 else -> {
                     try {
                         name.asExpressionLike().resolveObject(runtime).obj as ActiveAnimation
-                    } catch (exception: Exception) {
+                    } catch (_: Exception) {
                         extractAnimation(name)
                     }
                 }
@@ -267,6 +270,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseType: PoseType,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -279,6 +283,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -293,6 +298,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseTypes: Set<PoseType>,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -305,6 +311,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -319,6 +326,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         poseType: PoseType,
         condition: ((PosableState) -> Boolean)? = null,
         transformTicks: Int = 10,
+        transformToTicks: Int = 10,
         namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
         onTransitionedInto: (PosableState) -> Unit = {},
         animations: Array<PoseAnimation> = emptyArray(),
@@ -331,6 +339,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             condition,
             onTransitionedInto,
             transformTicks,
+            transformToTicks,
             namedAnimations,
             animations,
             transformedParts,
@@ -612,6 +621,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
             }
         } else true
 
+
+        val headPitch = if (shouldRotateHead) headPitch else 0f
+        val headYaw = if (shouldRotateHead) headYaw else 0f
+
+
         // Quirks will run if there is no primary animation running and quirks are enabled for this context.
         if (primaryAnimation == null && context.request(RenderContext.DO_QUIRKS) != false) {
             // Remove any quirk animations that don't exist in our current pose
@@ -619,7 +633,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
             // Tick all the quirks
             pose.quirks.forEach {
-                it.apply(context, this, state, limbSwing, limbSwingAmount, ageInTicks, if(shouldRotateHead) headYaw else 0f, if(shouldRotateHead) headPitch else 0f, 1F)
+                it.apply(context, this, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, 1F)
             }
         }
 
@@ -635,8 +649,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                     limbSwing,
                     limbSwingAmount,
                     ageInTicks,
-                    if(shouldRotateHead) headYaw else 0f,
-                    if(shouldRotateHead) headPitch else 0f,
+                    headYaw,
+                    headPitch,
                     1 - state.poseIntensity
                 )
             ) {
@@ -648,11 +662,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         // Run active animations and return back any that are done and can be removed.
         val removedActiveAnimations = state.activeAnimations.toList()
-            .filterNot { it.run(context, this, state, limbSwing, limbSwingAmount, ageInTicks, if(shouldRotateHead) headYaw else 0f, if(shouldRotateHead) headPitch else 0f, 1F) }
+            .filterNot { it.run(context, this, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, 1F) }
         state.activeAnimations.removeAll(removedActiveAnimations)
         // Applies the pose's animations.
         state.currentPose?.let(poses::get)
-            ?.apply(context, this, state, limbSwing, limbSwingAmount, ageInTicks, if(shouldRotateHead) headYaw else 0f, if(shouldRotateHead) headPitch else 0f)
+            ?.apply(context, this, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch)
         // Updates the locator positions now that all the animations are in effect. This is the last thing we do!
         updateLocators(entity, state)
     }
@@ -677,13 +691,15 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         if (state.activeAnimations.none { it.isTransition }) {
             // Check for a dedicated transition animation.
             val transition = previousPose.transitions[desirablePose.poseName]
+            val transformToTicks = desirablePose.transformToTicks
             val animation = if (transition == null && previousPose.transformTicks > 0) {
                 // If no dedicated transition exists then use a simple interpolator.
+                val durationTicks = transformToTicks ?: previousPose.transformTicks
                 PrimaryAnimation(
                     PoseTransitionAnimation(
                         beforePose = previousPose,
                         afterPose = desirablePose,
-                        durationTicks = previousPose.transformTicks
+                        durationTicks = durationTicks
                     ),
                     curve = { 1F }
                 )
@@ -722,9 +738,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun updateLocators(entity: Entity?, state: PosableState) {
         val matrixStack = PoseStack()
         var scale = 1F
+        var yRot = 0f
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            if(entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
+            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            // If scale is 0 we start getting NaNs
+            scale.coerceAtLeast(0.01f)
+            if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable
                 && (entity.controllingPassenger as OrientationControllable).orientationController.active){
                 val controllingPassenger = entity.controllingPassenger as OrientationControllable
                 val controller = controllingPassenger.orientationController
@@ -735,36 +755,25 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 transformationMatrix.translate(center.negate())
                 matrixStack.mulPose(transformationMatrix)
             } else {
-                var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
-                yRot = Mth.wrapDegrees(yRot)
-                matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
+                yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+                yRot = 180f - Mth.wrapDegrees(yRot)
             }
-            matrixStack.pushPose()
-            matrixStack.scale(-1F, -1F, 1F)
-            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
-            matrixStack.scale(scale, scale, scale)
+            //For some reason locators are positioned upside-down so this fixes that
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
         } else if (entity is EmptyPokeBallEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
-            yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
-            matrixStack.pushPose()
-            matrixStack.scale(1F, -1F, -1F)
             scale = 0.7F
-            matrixStack.scale(scale, scale, scale)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.wrapDegrees(yRot)
         } else if (entity is GenericBedrockEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
             yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
-            matrixStack.pushPose()
-            // Not 100% convinced we need the -1 on Y but if we needed it for the Poke Ball then probably?
-            matrixStack.scale(1F, -1F, 1F)
         } else if (entity is NPCEntity) {
-            var yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
-            yRot = Mth.wrapDegrees(yRot)
-            matrixStack.mulPose(Axis.YP.rotationDegrees(180 - yRot))
-            matrixStack.pushPose()
-            matrixStack.scale(-1F, -1F, 1F)
+            yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
+            yRot = 180f - Mth.wrapDegrees(yRot)
         }
+
+        matrixStack.scale(scale, scale, scale)
+        matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
     }

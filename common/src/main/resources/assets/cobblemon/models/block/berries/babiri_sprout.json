@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "block/farmland_moist",
-		"3": "cobblemon:block/babiri_sprout",
+		"3": "cobblemon:block/berries/babiri_sprout",
 		"particle": "block/farmland_moist"
 	},
 	"elements": [

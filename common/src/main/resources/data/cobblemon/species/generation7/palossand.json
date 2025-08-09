@@ -172,7 +172,17 @@
     "tutor:stealthrock",
     "tutor:stoneedge",
     "tutor:terrainpulse",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "sandygast",
   "evolutions": []

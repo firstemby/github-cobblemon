@@ -167,13 +167,16 @@
     "tutor:helpinghand",
     "tutor:lastresort",
     "tutor:outrage",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore"
   ],
   "preEvolution": "dreepy",
   "evolutions": [

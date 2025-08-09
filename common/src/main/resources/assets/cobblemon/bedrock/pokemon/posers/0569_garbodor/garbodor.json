@@ -4,6 +4,9 @@
   "profileScale": 0.46,
   "profileTranslation": [-0.04, 1.07, 0],
   "rootBone": "garbodor",
+  "animations": {
+    "cry": "q.bedrock_stateful('garbodor', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

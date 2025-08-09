@@ -8,9 +8,14 @@
 
 package com.cobblemon.mod.common.api.events.berry
 
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.berry.Berry
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
+import com.cobblemon.mod.common.util.toArrayStruct
+import com.cobblemon.mod.common.util.worldRegistry
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -38,4 +43,11 @@ data class BerryHarvestEvent(
     val state: BlockState,
     val blockEntity: BerryBlockEntity,
     val drops: MutableList<ItemStack>
-) : BerryEvent
+) : BerryEvent {
+    val context = mutableMapOf(
+        "player" to player.asMoLangValue(),
+        "berry" to StringValue(berry.identifier.toString()),
+        "world" to world.worldRegistry.wrapAsHolder(world).asMoLangValue(Registries.DIMENSION),
+        "pos" to pos.toArrayStruct()
+    )
+}

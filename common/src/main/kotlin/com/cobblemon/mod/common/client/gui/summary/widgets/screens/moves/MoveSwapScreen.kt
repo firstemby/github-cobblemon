@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
@@ -217,7 +216,7 @@ class MoveSwapScreen(
         override fun mouseClicked(d: Double, e: Double, i: Int): Boolean {
             if (isMouseOver(d, e)) {
                 val pokemon = pane.movesWidget.summary.selectedPokemon
-                val isParty = pokemon in CobblemonClient.storage.myParty
+                val isParty = pokemon in CobblemonClient.storage.party
                 CobblemonNetwork.sendToServer(
                     BenchMovePacket(
                         isParty = isParty,

@@ -161,7 +161,6 @@
     "tm:toxic",
     "tm:uproar",
     "tm:uturn",
-    "tutor:aerialace",
     "tutor:aircutter",
     "tutor:block",
     "tutor:darkpulse",
@@ -186,7 +185,16 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:throatchop",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "vullaby",
   "evolutions": []

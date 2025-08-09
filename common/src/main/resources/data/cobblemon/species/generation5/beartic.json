@@ -207,7 +207,17 @@
     "tutor:superpower",
     "tutor:throatchop",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "cubchoo",
   "evolutions": []

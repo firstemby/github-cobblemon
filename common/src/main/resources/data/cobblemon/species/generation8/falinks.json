@@ -156,7 +156,9 @@
     "tutor:superpower",
     "tutor:throatchop",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": []
 }

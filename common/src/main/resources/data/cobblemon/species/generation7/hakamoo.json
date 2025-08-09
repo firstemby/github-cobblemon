@@ -148,7 +148,6 @@
     "tm:vacuumwave",
     "tm:workup",
     "tm:xscissor",
-    "tutor:aerialace",
     "tutor:aquatail",
     "tutor:bulkup",
     "tutor:bulldoze",
@@ -171,7 +170,18 @@
     "tutor:sleeptalk",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "preEvolution": "jangmoo",
   "evolutions": [

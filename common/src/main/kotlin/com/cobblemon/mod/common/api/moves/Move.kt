@@ -103,7 +103,7 @@ open class Move(
                 "name" to Function { StringValue(name) },
                 "display_name" to Function { StringValue(displayName.string) },
                 "description" to Function { StringValue(description.string) },
-                "type" to Function { StringValue(type.name) },
+                "type" to Function { StringValue(type.showdownId) },
                 "damage_category" to Function { StringValue(damageCategory.name) },
                 "power" to Function { DoubleValue(power) },
                 "accuracy" to Function { DoubleValue(accuracy) },

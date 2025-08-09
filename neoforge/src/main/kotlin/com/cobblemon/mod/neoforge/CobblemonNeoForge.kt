@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
@@ -30,7 +31,6 @@ import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifi
 import com.cobblemon.mod.common.world.predicate.CobblemonBlockPredicates
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonProcessorTypes
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProcessorListOverrides
-import com.cobblemon.mod.neoforge.brewing.CobblemonNeoForgeBrewingRegistry
 import com.cobblemon.mod.neoforge.client.CobblemonNeoForgeClient
 import com.cobblemon.mod.neoforge.event.NeoForgePlatformEventHandler
 import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
@@ -39,7 +39,6 @@ import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
 import java.util.Optional
 import java.util.UUID
-import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
 import net.minecraft.core.registries.Registries
@@ -95,6 +94,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.neoforged.neoforge.registries.RegisterEvent
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
+import kotlin.reflect.KClass
 
 @Mod(Cobblemon.MODID)
 class CobblemonNeoForge : CobblemonImplementation {
@@ -130,7 +130,6 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(::onVillagerTradesRegistry)
             addListener(::onWanderingTraderRegistry)
             addListener(::onLootTableLoad)
-            addListener(::onRegisterBrewingRecipes)
         }
         NeoForgePlatformEventHandler.register()
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -264,6 +263,7 @@ class CobblemonNeoForge : CobblemonImplementation {
                 helper.register(Vec3DataSerializer.ID, Vec3DataSerializer)
                 helper.register(StringSetDataSerializer.ID, StringSetDataSerializer)
                 helper.register(PoseTypeDataSerializer.ID, PoseTypeDataSerializer)
+                helper.register(RideBoostsDataSerializer.ID, RideBoostsDataSerializer)
                 helper.register(PlatformTypeDataSerializer.ID, PlatformTypeDataSerializer)
                 helper.register(IdentifierDataSerializer.ID, IdentifierDataSerializer)
                 helper.register(UUIDSetDataSerializer.ID, UUIDSetDataSerializer)
@@ -288,11 +288,31 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+    override fun registerMenu() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonMenuType.resourceKey) { helper ->
+                    CobblemonMenuType.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
+        }
+    }
+
     private fun handleBlockStripping(e: BlockEvent.BlockToolModificationEvent) {
         if (e.itemAbility == ItemAbilities.AXE_STRIP) {
             val start = e.state.block
             val result = CobblemonBlocks.strippedBlocks()[start] ?: return
             e.setFinalState(result.withPropertiesOf(e.state))
+        }
+    }
+
+    override fun registerRecipeTypes() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonRecipeTypes.resourceKey) { helper ->
+                    CobblemonRecipeTypes.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
         }
     }
 
@@ -346,16 +366,26 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    override fun registerVillagers() {
+    override fun registerPoiTypes() {
         MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(CobblemonVillagerPoiTypes.resourceKey) { helper ->
-                CobblemonVillagerPoiTypes.register { identifier, type -> helper.register(identifier, type) }
+            event.register(CobblemonPoiTypes.resourceKey) { helper ->
+                CobblemonPoiTypes.register { identifier, type -> helper.register(identifier, type) }
             }
         }
+    }
 
+    override fun registerVillagers() {
         MOD_BUS.addListener<RegisterEvent> { event ->
             event.register(CobblemonVillagerProfessions.resourceKey) { helper ->
                 CobblemonVillagerProfessions.register { identifier, profession -> helper.register(identifier, profession) }
+            }
+        }
+    }
+
+    override fun registerRecipeSerializers() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonRecipeSerializers.resourceKey) { helper ->
+                CobblemonRecipeSerializers.register { identifier, feature -> helper.register(identifier, feature) }
             }
         }
     }
@@ -423,6 +453,9 @@ class CobblemonNeoForge : CobblemonImplementation {
         // NeoForge uses data-driven files to determine compostable, vanilla code is ignored
         // eventually we probaly want to datagen the output file maybe?
         // check neoforged/resources/data/neoforge/data_maps/item/compostables.json for all considered entries
+        // you can easily update this by running the game, putting a breakpoint anywhere that gets triggered in world and then run that in the debugger
+        // ComposterBlock.COMPOSTABLES.entries.filter { it.key.toString().contains("cobblemon") }.sortedBy { it.key.toString() }.map { "\"${it.key}\": {\"chance\": ${it.value}}"}.joinToString(",")
+        // returns one single json setup that you can paste in the compostables.json values block and done
     }
 
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
@@ -440,10 +473,6 @@ class CobblemonNeoForge : CobblemonImplementation {
 
     private fun onLootTableLoad(e: LootTableLoadEvent) {
         LootInjector.attemptInjection(e.name) { builder -> e.table.addPool(builder.build()) }
-    }
-
-    private fun onRegisterBrewingRecipes(e: RegisterBrewingRecipesEvent) {
-        CobblemonNeoForgeBrewingRegistry.register(e)
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {

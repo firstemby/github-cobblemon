@@ -225,3 +225,9 @@ fun Iterable<MoValue>.asArrayValue(): ArrayStruct {
     forEachIndexed { index, value -> array.setDirectly("$index", value) }
     return array
 }
+
+fun MoLangEnvironment.createDuplicateRuntime(): MoLangRuntime {
+    val runtime = MoLangRuntime()
+    runtime.environment.cloneFrom(this)
+    return runtime
+}

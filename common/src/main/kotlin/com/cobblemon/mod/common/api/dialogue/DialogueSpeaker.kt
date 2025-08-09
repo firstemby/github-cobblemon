@@ -19,7 +19,16 @@ import net.minecraft.network.chat.MutableComponent
  */
 class DialogueSpeaker(
     val name: DialogueText? = null,
-    val face: DialogueFaceProvider? = null
+    val face: DialogueFaceProvider? = null,
+    val gibber: DialogueGibber? = null
 ) {
-    fun of(name: MutableComponent = "".text(), face: DialogueFaceProvider? = null) = DialogueSpeaker(WrappedDialogueText(name), face)
+    fun of(
+        name: MutableComponent = "".text(),
+        face: DialogueFaceProvider? = null,
+        gibber: DialogueGibber? = null
+    ) = DialogueSpeaker(
+        name = WrappedDialogueText(name),
+        face = face,
+        gibber = gibber
+    )
 }

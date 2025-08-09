@@ -31,11 +31,11 @@ class VolatileCuringBerryItem(block: BerryBlock, val volatileStatus: String): Be
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = true // When we track volatiles, can check for confusion
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = true // When we track volatiles, can check for confusion
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_volatile $volatileStatus"
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = false
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = false
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon) = null
     override fun interactGeneral(player: ServerPlayer, stack: ItemStack) = InteractionResultHolder.pass(stack)
 

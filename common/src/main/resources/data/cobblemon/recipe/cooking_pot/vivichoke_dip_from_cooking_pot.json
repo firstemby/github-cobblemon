@@ -1,0 +1,22 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "category": "foods",
+    "ingredients": [
+        {
+            "item": "cobblemon:vivichoke"
+        },
+        {
+            "tag": "c:buckets/milk"
+        },
+        {
+            "item": "minecraft:bowl"
+        },
+        {
+            "tag": "c:foods/bread"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:vivichoke_dip"
+    },
+    "seasoningProcessors": []
+}

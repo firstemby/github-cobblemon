@@ -17,23 +17,23 @@ import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
 
-class ReelInPokemonContext(val pokemonId : ResourceLocation, val baitId: ResourceLocation)
+class ReelInPokemonContext(val species : ResourceLocation, val baitId: ResourceLocation)
 
 class ReelInPokemonCriterionCondition(
         playerCtx: Optional<ContextAwarePredicate>,
-        val pokemonId: String,
+        val species: String,
         val baitId: String
 ) : SimpleCriterionCondition<ReelInPokemonContext>(playerCtx) {
 
     companion object {
         val CODEC: Codec<ReelInPokemonCriterionCondition> = RecordCodecBuilder.create { it.group(
             EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter { it.playerCtx },
-            Codec.STRING.optionalFieldOf("pokemonId", "any").forGetter { it.pokemonId },
+            Codec.STRING.optionalFieldOf("species", "any").forGetter { it.species },
             Codec.STRING.optionalFieldOf("baitId", "empty_bait").forGetter { it.baitId }
         ).apply(it, { playerCtx, pokemonId, baitId -> ReelInPokemonCriterionCondition(playerCtx, pokemonId, baitId.ifEmpty { "empty_bait" }) }) }
     }
 
     override fun matches(player: ServerPlayer, context: ReelInPokemonContext): Boolean {
-        return (context.pokemonId == this.pokemonId.asIdentifierDefaultingNamespace() || this.pokemonId == "any") && (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId == "empty_bait")
+        return (context.species == this.species.asIdentifierDefaultingNamespace() || this.species == "any") && (context.baitId == this.baitId.asIdentifierDefaultingNamespace() || this.baitId == "empty_bait")
     }
 }

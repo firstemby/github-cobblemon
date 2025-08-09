@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.client.util.adapters.LocatorBoneAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -293,11 +294,12 @@ class TexturedModel {
             .registerTypeAdapter(LocatorBone::class.java, LocatorBoneAdapter)
             .create()
 
-        fun from(json: String) : TexturedModel {
-            try {
-                return GSON.fromJson(json, TexturedModel::class.java)
+        fun from(json: String) : TexturedModel? {
+            return try {
+                GSON.fromJson(json, TexturedModel::class.java)
             } catch (exception: Exception) {
-                throw IllegalStateException("Issue loading pokemon geo: $json", exception)
+                LOGGER.warn(exception)
+                null
             }
         }
     }

@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.storage.party
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.reactive.Observable
-import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.storage.PokemonStore
@@ -62,20 +61,8 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
             throw IllegalArgumentException("Slot position is out of bounds")
         } else {
             slots[position.slot] = pokemon
-            if (pokemon != null) {
-                if (pokemon.storeCoordinates.get()?.store != this) {
-                    // It's new to this store. Attach the listener
-                    trackPokemon(pokemon)
-                }
-            }
             anyChangeObservable.emit(Unit)
         }
-    }
-
-    fun trackPokemon(pokemon: Pokemon) {
-        pokemon.changeObservable
-            .pipe(stopAfter { pokemon.storeCoordinates.get()?.store != this })
-            .subscribe { anyChangeObservable.emit(Unit) }
     }
 
     override fun getFirstAvailablePosition(): PartyPosition? {
@@ -148,8 +135,11 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         for (slot in slots.indices) {
             val pokemon = get(slot) ?: continue
             pokemon.storeCoordinates.set(StoreCoordinates(this, PartyPosition(slot)))
-            trackPokemon(pokemon)
         }
+    }
+
+    override fun onPokemonChanged(pokemon: Pokemon) {
+        anyChangeObservable.emit(Unit)
     }
 
     fun toGappyList() = slots.toList()

@@ -165,12 +165,22 @@
     "tutor:skillswap",
     "tutor:sleeptalk",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:spite",
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -299,10 +309,12 @@
         "tutor:shadowball",
         "tutor:skillswap",
         "tutor:sleeptalk",
-        "tutor:spikes",
         "tutor:trick",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {

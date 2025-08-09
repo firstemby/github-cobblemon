@@ -5,7 +5,7 @@
             "identifier": "cobblemon:pop_particle",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/pop_particle"
+                "texture": "textures/particles/generic/pop"
             }
         },
         "curves": {

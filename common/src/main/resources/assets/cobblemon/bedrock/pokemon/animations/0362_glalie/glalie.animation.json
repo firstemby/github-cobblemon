@@ -109,6 +109,13 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.glalie.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.glalie.cry"
+				}
+			}
 		}
 	}
 }

@@ -40,9 +40,9 @@ import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.scheduling.ServerRealTimeTaskTracker
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.CobblemonSpawningProspector
-import com.cobblemon.mod.common.api.spawning.context.AreaContextResolver
-import com.cobblemon.mod.common.api.spawning.prospecting.SpawningProspector
+import com.cobblemon.mod.common.api.spawning.CobblemonSpawningZoneGenerator
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
+import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.starter.StarterHandler
 import com.cobblemon.mod.common.api.storage.PokemonStoreManager
 import com.cobblemon.mod.common.api.storage.adapter.conversions.ReforgedConversion
@@ -63,13 +63,10 @@ import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBacken
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
-import com.cobblemon.mod.common.battles.BagItems
-import com.cobblemon.mod.common.battles.BattleFormat
-import com.cobblemon.mod.common.battles.BattleRegistry
-import com.cobblemon.mod.common.battles.BattleSide
-import com.cobblemon.mod.common.battles.ShowdownThread
+import com.cobblemon.mod.common.battles.*
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.block.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.command.argument.*
 import com.cobblemon.mod.common.config.CobblemonConfig
@@ -78,6 +75,7 @@ import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.config.starter.StarterConfig
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.events.AdvancementHandler
+import com.cobblemon.mod.common.events.EntityCallbackHandler
 import com.cobblemon.mod.common.events.FlowHandler
 import com.cobblemon.mod.common.events.PokedexHandler
 import com.cobblemon.mod.common.events.ServerTickHandler
@@ -91,23 +89,11 @@ import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
-import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
-import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
-import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
-import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
-import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.properties.*
 import com.cobblemon.mod.common.pokemon.properties.tags.PokemonFlagProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.util.DataKeys
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.ifDedicatedServer
-import com.cobblemon.mod.common.util.isLaterVersion
-import com.cobblemon.mod.common.util.party
-import com.cobblemon.mod.common.util.requestWallpapers
-import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -115,17 +101,6 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoClients
-import java.io.File
-import java.io.FileReader
-import java.io.FileWriter
-import java.io.PrintWriter
-import java.util.UUID
-import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
-import kotlin.properties.Delegates
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaField
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.resources.ResourceKey
@@ -138,6 +113,17 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.storage.LevelResource
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.PrintWriter
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
+import kotlin.properties.Delegates
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 
 object Cobblemon {
     const val MODID = CobblemonBuildDetails.MOD_ID
@@ -159,8 +145,8 @@ object Cobblemon {
     var isDedicatedServer = false
     val showdownThread = ShowdownThread()
     lateinit var config: CobblemonConfig
-    var prospector: SpawningProspector = CobblemonSpawningProspector
-    var areaContextResolver: AreaContextResolver = object : AreaContextResolver {}
+    var spawningZoneGenerator: SpawningZoneGenerator = CobblemonSpawningZoneGenerator
+    var areaSpawnablePositionResolver: AreaSpawnablePositionResolver = object : AreaSpawnablePositionResolver {}
     val bestSpawner = BestSpawner
     val battleRegistry = BattleRegistry
     var storage = PokemonStoreManager()
@@ -194,6 +180,8 @@ object Cobblemon {
             this.LOGGER.info("  - Branch: ${CobblemonBuildDetails.BRANCH}")
         }
 
+        implementation.registerRecipeSerializers()
+        implementation.registerRecipeTypes()
         implementation.registerPermissionValidator()
         implementation.registerSoundEvents()
         implementation.registerDataComponents()
@@ -202,12 +190,15 @@ object Cobblemon {
         implementation.registerEntityTypes()
         implementation.registerEntityAttributes()
         implementation.registerBlockEntityTypes()
+        implementation.registerPoiTypes()
         implementation.registerVillagers()
         implementation.registerWorldGenFeatures()
         implementation.registerParticles()
+        implementation.registerMenu()
         implementation.registerEntityDataSerializers()
         implementation.registerCriteria()
         implementation.registerEntitySubPredicates()
+        DispenserBehaviorRegistry.registerDispenserBehaviors()
 
         DropEntry.register("command", CommandDropEntry::class.java)
         DropEntry.register("item", ItemDropEntry::class.java, isDefault = true)
@@ -308,9 +299,6 @@ object Cobblemon {
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
 
         SpeciesFeatures.register(
-            DataKeys.CAN_BE_MILKED,
-            FlagSpeciesFeatureProvider(keys = listOf(DataKeys.CAN_BE_MILKED), default = true))
-        SpeciesFeatures.register(
             DataKeys.HAS_BEEN_SHEARED,
             FlagSpeciesFeatureProvider(keys = listOf(DataKeys.HAS_BEEN_SHEARED), default = false))
 
@@ -326,6 +314,7 @@ object Cobblemon {
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
         FlowHandler.setup()
+        EntityCallbackHandler.setup()
 
         ifDedicatedServer {
             isDedicatedServer = true

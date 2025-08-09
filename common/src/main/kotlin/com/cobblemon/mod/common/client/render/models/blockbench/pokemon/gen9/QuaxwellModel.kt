@@ -24,7 +24,7 @@ class QuaxwellModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val head = getPart("head")
 
     override var portraitScale = 1.8F
-    override var portraitTranslation = Vec3(-0.2, 1.8, 0.0)
+    override var portraitTranslation = Vec3(-0.2, 1.4, 0.0)
 
     override var profileScale = 0.5F
     override var profileTranslation = Vec3(0.0, 1.0, 0.0)

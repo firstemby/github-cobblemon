@@ -152,7 +152,25 @@
     "tutor:snarl",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:crushclaw",
+    "special:howl"
   ],
   "evolutions": []
 }

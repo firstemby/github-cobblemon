@@ -122,7 +122,11 @@
     "tutor:stompingtantrum",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:iciclespear",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": []
 }

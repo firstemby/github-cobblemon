@@ -11,18 +11,21 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.ModDependant
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
 import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.condition.CompositeSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
+import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asTranslated
+import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -45,7 +48,8 @@ abstract class SpawnDetail : ModDependant {
     abstract val type: String
     var id = ""
     var displayName: String? =  null
-    lateinit var context: RegisteredSpawningContext<*>
+    @SerializedName("spawnablePositionType", alternate = ["context"])
+    lateinit var spawnablePositionType: SpawnablePositionType<*>
     var bucket = SpawnBucket("", 0F)
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
@@ -74,7 +78,7 @@ abstract class SpawnDetail : ModDependant {
         "bucket" to { StringValue(bucket.name) },
         "width" to { DoubleValue(width.toDouble()) },
         "height" to { DoubleValue(height.toDouble()) },
-        "context" to { StringValue(context.name) },
+        "spawnable_position_type" to { StringValue(spawnablePositionType.name) },
         "labels" to { labels.asArrayValue { StringValue(it) } }
     )
 
@@ -102,16 +106,16 @@ abstract class SpawnDetail : ModDependant {
         }
     }
 
-    open fun isSatisfiedBy(ctx: SpawningContext): Boolean {
-        if (!ctx.preFilter(this)) {
+    open fun isSatisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        if (!spawnablePosition.preFilter(this)) {
             return false
-        } else if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(ctx) }) {
+        } else if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(spawnablePosition) }) {
             return false
-        } else if (anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(ctx) }) {
+        } else if (anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(spawnablePosition) }) {
             return false
-        } else if (compositeCondition?.satisfiedBy(ctx) == false) {
+        } else if (compositeCondition?.satisfiedBy(spawnablePosition) == false) {
             return false
-        } else if (!ctx.postFilter(this)) {
+        } else if (!spawnablePosition.postFilter(this)) {
             return false
         }
 
@@ -131,5 +135,46 @@ abstract class SpawnDetail : ModDependant {
         return super.isModDependencySatisfied() && !containsNullValues
     }
 
-    abstract fun doSpawn(ctx: SpawningContext): SpawnAction<*>
+    /**
+     * Runs when selected by a selection algorithm. This handles removing any nearby spawns in the selection
+     * data and whatever else.
+     *
+     * [selectionData] the algorithm data that is being used to choose spawns.
+     * [spawnablePosition] where the spawn is taking place.
+     * [spawnAction] the spawn action that was chosen based off this [SpawnDetail] to spawn at this position.
+     */
+    protected open fun onSelection(
+        spawnablePosition: SpawnablePosition,
+        spawnAction: SpawnAction<*>,
+        selectionData: SpawnSelectionData
+    ) {
+        selectionData.removeSpawnablePositions { _, pos ->
+            pos.distanceTo(spawnablePosition) < Cobblemon.config.minimumDistanceBetweenEntities
+        }
+    }
+
+    /**
+     * Chooses this spawn detail from selection data, returning a functional
+     * spawn action.
+     */
+    fun choose(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*> {
+        val action = createSpawnAction(spawnablePosition, bucket, selectionData)
+        onSelection(
+            spawnablePosition = spawnablePosition,
+            spawnAction = action,
+            selectionData = selectionData
+        )
+        return action
+    }
+
+    /** Instantiates an action at the given [SpawnablePosition] for the given [SpawnBucket]. */
+    protected abstract fun createSpawnAction(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*>
 }

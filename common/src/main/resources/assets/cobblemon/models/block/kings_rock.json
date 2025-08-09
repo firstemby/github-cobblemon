@@ -1,0 +1,59 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "cobblemon:item/wearable/kings_rock"
+	},
+	"elements": [
+		{
+			"from": [10.5, 0, 5.5],
+			"to": [10.5, 5, 10.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"east": {"uv": [0, 6, 5, 11], "texture": "#particle"},
+				"west": {"uv": [5, 6, 10, 11], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [5.5, 0, 5.5],
+			"to": [5.5, 2, 10.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"east": {"uv": [10, 6, 15, 8], "texture": "#particle"},
+				"west": {"uv": [10, 8, 15, 10], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [5.5, 0, 10.5],
+			"to": [10.5, 3, 10.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"north": {"uv": [10, 0, 15, 3], "texture": "#particle"},
+				"south": {"uv": [10, 3, 15, 6], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [5.5, 0, 5.5],
+			"to": [10.5, 6, 5.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 6], "texture": "#particle"},
+				"south": {"uv": [5, 0, 10, 6], "texture": "#particle"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"head": {
+			"translation": [0, 19.25, 0],
+			"scale": [1.6, 1.6, 1.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "kingsrock",
+			"origin": [8, 1.58333, 8.08167],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

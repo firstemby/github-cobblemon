@@ -149,7 +149,10 @@
     "tutor:snarl",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "nickit",
   "evolutions": []

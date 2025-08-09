@@ -4,6 +4,9 @@
   "profileScale": 0.9,
   "profileTranslation": [0, 0.4, 0],
   "rootBone": "pidgeot",
+  "animations": {
+    "cry": "q.bedrock_stateful('pidgeot', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

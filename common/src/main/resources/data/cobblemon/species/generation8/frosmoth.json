@@ -150,7 +150,10 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:tripleaxel"
+    "tutor:tripleaxel",
+    "legacy:dualwingbeat",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "snom",
   "evolutions": []

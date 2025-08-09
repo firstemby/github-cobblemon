@@ -49,6 +49,27 @@
     "fixed": false
   },
   "behaviour": {
+    "herd": {
+      "toleratedLeaders": [
+        {
+          "pokemon": "magikarp shiny=false",
+          "tier": 1,
+          "ignoresLevel": false
+        },
+        {
+          "pokemon": "magikarp shiny=true",
+          "tier": 2,
+          "ignoresLevel": true
+        },
+        {
+          "pokemon": "gyarados",
+          "tier": 3,
+          "ignoresLevel": true
+        }
+      ],
+      "maxSize": 9,
+      "minMaxDistance": "1-4"
+    },
     "moving": {
       "canLook": false,
       "walk": {
@@ -57,7 +78,6 @@
       "swim": {
         "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
         "canSwimInWater": true,
         "canSwimInLava": false
       }
@@ -84,7 +104,10 @@
     "15:tackle",
     "25:flail",
     "tm:bounce",
-    "tutor:bounce"
+    "tutor:bounce",
+    "legacy:hydropump",
+    "special:celebrate",
+    "special:happyhour"
   ],
   "evolutions": [
     {

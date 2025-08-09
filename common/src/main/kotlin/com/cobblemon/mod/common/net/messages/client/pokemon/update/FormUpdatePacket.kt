@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
+class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         this.value.encode(buffer)
     }
@@ -30,7 +30,7 @@ class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePac
         fun decode(buffer: RegistryFriendlyByteBuf): FormUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val form = FormData()
-            form.species = pokemon().species
+            form.species = pokemon()!!.species
             form.decode(buffer)
             return FormUpdatePacket(pokemon, form)
         }

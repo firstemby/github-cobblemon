@@ -1,12 +1,12 @@
 {
   "parent": "cobblemon:recipes/root",
   "criteria": {
-    "has_eye": {
+    "has_gem": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:fermented_spider_eye"
+              "cobblemon:poison_gem"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_eye",
+      "has_gem",
       "has_the_recipe"
     ]
   ],

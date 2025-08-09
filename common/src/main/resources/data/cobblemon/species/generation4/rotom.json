@@ -134,7 +134,21 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:defog",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:disarmingvoice"
   ],
   "evolutions": [],
   "forms": [

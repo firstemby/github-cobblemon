@@ -15,6 +15,10 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.npc.NPCEntity.Companion.HITBOX_EYES_HEIGHT
+import com.cobblemon.mod.common.entity.npc.NPCEntity.Companion.HITBOX_HEIGHT
+import com.cobblemon.mod.common.entity.npc.NPCEntity.Companion.HITBOX_SCALE
+import com.cobblemon.mod.common.entity.npc.NPCEntity.Companion.HITBOX_WIDTH
 import com.cobblemon.mod.common.entity.npc.NPCPlayerModelType
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.platform.NativeImage
@@ -47,6 +51,25 @@ class NPCClientDelegate : PosableState(), NPCSideDelegate {
                 Minecraft.getInstance().textureManager.register(textureResource, DynamicTexture(NativeImage.read(currentTexture.texture)))
                 runtime.environment.setSimpleVariable("texture", StringValue(textureResource.toString()))
             }
+        } else if (data == HITBOX_EYES_HEIGHT) {
+            /*
+             * The logic with all these hitbox updates here is a bit confusing. The issue is
+             * that the hitbox on NPCEntity is a thing that can be left null to always rely
+             * on the NPC class's definition of the hitbox, which can be useful if the goal is
+             * to change the hitbox or class at some point and not have to manually update the
+             * hitbox. However, we also need something being synced to the client for customized
+             * hitbox properties so the client can recreate it. I landed on all this as the solution.
+             *
+             * This particular part, with the 3 properties, is making sure that we trigger the client
+             * side update to the npcEntity.hitbox property which triggers a hitbox refresh.
+             */
+            npcEntity.hitboxEyesHeight = npcEntity.entityData.get(HITBOX_EYES_HEIGHT)
+        } else if (data == HITBOX_HEIGHT) {
+            npcEntity.hitboxHeight = npcEntity.entityData.get(HITBOX_HEIGHT)
+        } else if (data == HITBOX_WIDTH) {
+            npcEntity.hitboxWidth = npcEntity.entityData.get(HITBOX_WIDTH)
+        } else if (data == HITBOX_SCALE) {
+            npcEntity.refreshDimensions()
         }
     }
 

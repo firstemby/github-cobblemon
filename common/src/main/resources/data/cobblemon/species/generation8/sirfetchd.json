@@ -1,7 +1,7 @@
 {
   "implemented": true,
   "nationalPokedexNumber": 865,
-  "name": "Sirfetch'd",
+  "name": "Sirfetch’d",
   "primaryType": "fighting",
   "maleRatio": 0.5,
   "height": 8,
@@ -153,7 +153,10 @@
     "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:superpower",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "farfetchd galarian",
   "evolutions": []

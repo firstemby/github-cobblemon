@@ -184,6 +184,13 @@
 					"position": [0.1, 0, 0]
 				}
 			}
+		},
+		"animation.zebstrika.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.zebstrika.cry"
+				}
+			}
 		}
 	}
 }

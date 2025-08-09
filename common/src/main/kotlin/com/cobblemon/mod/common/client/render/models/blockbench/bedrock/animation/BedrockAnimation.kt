@@ -85,7 +85,7 @@ class BedrockParticleKeyframe(
         val storm = ParticleStorm(
             effect = effect,
             emitterSpaceMatrix = particleMatrix,
-            locatorSpaceMatrix = locatorMatrix,
+            attachedMatrix = locatorMatrix,
             world = world,
             runtime = particleRuntime,
             sourceVelocity = { entity.deltaMovement },
@@ -109,7 +109,9 @@ class BedrockSoundKeyframe(
         val soundEvent = SoundEvent.createVariableRangeEvent(sound) // Means we don't need to setup a sound registry entry for every single thing
         if (soundEvent != null) {
             if (entity != null) {
-                entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                if (!entity.isSilent) {
+                    entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                }
             } else {
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
             }

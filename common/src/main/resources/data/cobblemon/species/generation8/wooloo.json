@@ -51,6 +51,12 @@
     "height": 1,
     "fixed": false
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "presets": ["cobblemon:eats_grass"]
+    }
+  ],
   "standingEyeHeight": 0.6,
   "drops": {
     "amount": 3,
@@ -102,7 +108,10 @@
     "tutor:grassyglide",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {

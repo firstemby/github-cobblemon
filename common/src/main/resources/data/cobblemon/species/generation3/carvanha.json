@@ -157,7 +157,6 @@
     "tutor:icywind",
     "tutor:liquidation",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
@@ -167,7 +166,21 @@
     "tutor:swift",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "evolutions": [
     {

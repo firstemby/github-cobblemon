@@ -165,7 +165,6 @@
     "tm:worryseed",
     "tm:xscissor",
     "tutor:bugbite",
-    "tutor:calmmind",
     "tutor:electroweb",
     "tutor:energyball",
     "tutor:falseswipe",
@@ -194,7 +193,18 @@
     "tutor:throatchop",
     "tutor:tripleaxel",
     "tutor:worryseed",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "swadloon",
   "evolutions": []

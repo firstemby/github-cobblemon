@@ -71,7 +71,10 @@
     "tm:terablast",
     "tutor:bugbite",
     "tutor:electroweb",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:hiddenpower",
+    "legacy:protect",
+    "legacy:snore"
   ],
   "evolutions": [
     {

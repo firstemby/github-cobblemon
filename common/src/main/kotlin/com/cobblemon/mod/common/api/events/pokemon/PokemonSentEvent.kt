@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.api.events.pokemon
 
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerLevel
@@ -25,7 +27,15 @@ data class PokemonSentPreEvent(
     val pokemon: Pokemon,
     val level: ServerLevel,
     val position: Vec3
-) : Cancelable()
+) : Cancelable() {
+    val context = mutableMapOf(
+        "pokemon" to pokemon.struct,
+        "position" to StringValue(position.toString())
+    )
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
+}
 
 /**
  * Event fired after a [PokemonEntity] is spawned from a player's party and after its animations are finished.
@@ -37,4 +47,9 @@ data class PokemonSentPreEvent(
 data class PokemonSentPostEvent(
     val pokemon: Pokemon,
     val pokemonEntity: PokemonEntity
-)
+) {
+    val context = mutableMapOf(
+        "pokemon" to pokemon.struct,
+        "pokemon_entity" to pokemonEntity.struct
+    )
+}

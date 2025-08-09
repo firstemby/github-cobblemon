@@ -1,8 +1,9 @@
+
+import utilities.isSnapshot
+import utilities.version
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import utilities.isSnapshot
-import utilities.version
 
 /*
  *
@@ -20,7 +21,6 @@ plugins {
 
     id("net.kyori.blossom")
     id("org.jetbrains.gradle.plugin.idea-ext")
-    id("net.nemerosa.versioning") version "3.1.0"
 }
 
 architectury {

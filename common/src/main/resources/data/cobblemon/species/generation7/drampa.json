@@ -44,7 +44,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "standingEyeHeight": 0.7,
-  "baseScale": 1,
+  "baseScale": 1.1,
   "hitbox": {
     "width": 3,
     "height": 2.85,
@@ -197,7 +197,16 @@
     "tutor:thunderbolt",
     "tutor:twister",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

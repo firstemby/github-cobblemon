@@ -175,7 +175,11 @@
     "tutor:throatchop",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "preEvolution": "morgrem",
   "evolutions": [],

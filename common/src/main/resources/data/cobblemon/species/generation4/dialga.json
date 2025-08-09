@@ -172,7 +172,21 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:aerialace",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:healblock",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [

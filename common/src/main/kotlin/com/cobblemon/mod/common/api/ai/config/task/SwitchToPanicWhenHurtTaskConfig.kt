@@ -8,11 +8,9 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -20,19 +18,27 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
-    var condition = "true".asExpression()
-    var includePassiveDamage = false
+    var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_when_hurt", true).asExpressible()
+    var includePassiveDamage =  booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_on_passive_damage", false).asExpressible()
+
+    override fun getVariables(entity: LivingEntity) = listOf(
+        condition,
+        includePassiveDamage
+    ).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return null
-        return if (includePassiveDamage) {
+        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        if (!condition.resolveBoolean()) return null
+        return if (includePassiveDamage.resolveBoolean()) {
+            behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY)
+            behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
             BehaviorBuilder.create {
                 it.group(it.present(MemoryModuleType.HURT_BY))
                     .apply(it) { _ ->
@@ -44,6 +50,8 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
                     }
             }
         } else {
+            behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY_ENTITY)
+            behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
             BehaviorBuilder.create {
                 it.group(it.present(MemoryModuleType.HURT_BY_ENTITY))
                     .apply(it) { _ ->

@@ -60,6 +60,10 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
     }
   },
   "drops": {

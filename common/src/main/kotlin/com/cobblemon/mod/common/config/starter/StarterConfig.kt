@@ -31,6 +31,9 @@ class StarterConfig {
     @LastChangedVersion("1.5.0")
     var promptStarterOnceOnly = true
 
+    @CobblemonConfigField(Category.Starter, lang = "use_config_starters")
+    var useConfigStarters = false
+
     @CobblemonConfigField(Category.Starter, lang = "starters")
     var starters = mutableListOf(
         StarterCategory(

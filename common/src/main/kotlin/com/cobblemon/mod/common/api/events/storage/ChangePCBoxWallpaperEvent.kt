@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.api.events.storage
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.events.Cancelable
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.storage.pc.PCBox
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -42,11 +45,26 @@ interface ChangePCBoxWallpaperEvent {
         override val player: ServerPlayer,
         override val box: PCBox,
         override var wallpaper: ResourceLocation
-    ) : ChangePCBoxWallpaperEvent, Cancelable()
+    ) : ChangePCBoxWallpaperEvent, Cancelable() {
+        val context = mutableMapOf(
+            "player" to player.asMoLangValue(),
+            "box" to StringValue(box.toString()),
+            "wallpaper" to StringValue(wallpaper.toString())
+        )
+        val functions = mapOf(
+            cancelFunc
+        )
+    }
 
     class Post(
         override val player: ServerPlayer,
         override val box: PCBox,
         override val wallpaper: ResourceLocation
-    ) : ChangePCBoxWallpaperEvent
+    ) : ChangePCBoxWallpaperEvent {
+        val context = mutableMapOf(
+            "player" to player.asMoLangValue(),
+            "box" to StringValue(box.toString()),
+            "wallpaper" to StringValue(wallpaper.toString())
+        )
+    }
 }

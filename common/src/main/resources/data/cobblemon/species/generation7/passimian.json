@@ -179,7 +179,19 @@
     "tutor:snatch",
     "tutor:superpower",
     "tutor:uproar",
-    "tutor:vacuumwave"
+    "tutor:vacuumwave",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:endeavor",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

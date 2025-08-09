@@ -13,13 +13,18 @@ import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.Abilities
+import com.cobblemon.mod.common.api.callback.PartySelectCallbacks
+import com.cobblemon.mod.common.api.callback.PartySelectPokemonDTO
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.scheduling.taskBuilder
+import com.cobblemon.mod.common.api.text.aqua
+import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.BattleSide
@@ -27,13 +32,16 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.ActiveTrade
 import com.cobblemon.mod.common.trade.DummyTradeParticipant
 import com.cobblemon.mod.common.trade.PlayerTradeParticipant
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.toPokemon
+import com.cobblemon.mod.common.util.traceFirstEntityCollision
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.mojang.brigadier.Command
@@ -67,6 +75,7 @@ object TestCommand {
         try {
             //this.testCodecOutput(context)
             val player = context.source.entity as ServerPlayer
+            //tryTamePokemon(player)
             player.party().forEach { it.currentHealth = it.hp / 2 }
             val npc = NPCEntity(player.level())
             npc.setPos(player.x, player.y, player.z)
@@ -112,10 +121,10 @@ object TestCommand {
 //            val enemyPokemon3 = BattlePokemon(PokemonSpecies.random().create())
 //            val enemyPokemon4 = BattlePokemon(PokemonSpecies.random().create())
 //
-//            enemyPokemon.effectedPokemon.sendOut(player.level() as ServerWorld, player.pos.add(2.0, 0.0, 0.0))
-//            enemyPokemon2.effectedPokemon.sendOut(player.level() as ServerWorld, player.pos.add(-2.0, 0.0, 0.0))
-//            enemyPokemon3.effectedPokemon.sendOut(player.level() as ServerWorld, player.pos.add(0.0, 0.0, 2.0))
-//            enemyPokemon4.effectedPokemon.sendOut(player.level() as ServerWorld, player.pos.add(0.0, 0.0, -2.0))
+//            enemyPokemon.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(2.0, 0.0, 0.0))
+//            enemyPokemon2.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(-2.0, 0.0, 0.0))
+//            enemyPokemon3.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(0.0, 0.0, 2.0))
+//            enemyPokemon4.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(0.0, 0.0, -2.0))
 //
 //            // Start the battle
 //            BattleRegistry.startBattle(
@@ -409,6 +418,38 @@ object TestCommand {
             }
         val jsonElement = Pokemon.CODEC.encodeStart(JsonOps.INSTANCE, pokemon).orThrow
         context.source.sendSystemMessage(Component.literal(jsonElement.toString()))
+    }
+
+    private fun testPartySelectHoverText(context: CommandContext<CommandSourceStack>) {
+        val player = context.source.playerOrException
+        val party = player.party()
+
+        PartySelectCallbacks.create(
+            player,
+            pokemon = party.toList().map {
+                PartySelectPokemonDTO(it, true, listOf(
+                    Component.literal("Nature: ").gray().append(it.nature.displayName.asTranslated().green()),
+                    Component.literal("Ability: ").gray().append(it.ability.displayName.asTranslated().aqua()),
+                ))
+            }.toList()
+        ) { player, index ->
+
+        }
+    }
+
+    private fun tryTamePokemon(player: ServerPlayer) {
+        val pokemon = player.traceFirstEntityCollision(entityClass = PokemonEntity::class.java)
+        if (pokemon == null)
+        {
+            player.sendSystemMessage("Not looking at pokemon".text())
+            return
+        }
+        if (pokemon.isTame) {
+            player.sendSystemMessage("Cant tame an owned pokemon".text())
+            return
+        }
+        pokemon.tame(player)
+        player.sendSystemMessage("Pokemon tamed".text())
     }
 
 }

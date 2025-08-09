@@ -81,7 +81,10 @@
     "tm:terablast",
     "tutor:endeavor",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -308,7 +311,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxellonely_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -325,7 +328,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbold_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -342,7 +345,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelrelaxed_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -359,7 +362,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxeltimid_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -376,7 +379,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelserious_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -393,7 +396,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmodest_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -410,7 +413,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmild_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -427,7 +430,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelquiet_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -444,7 +447,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbashful_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -461,7 +464,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcalm_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -478,7 +481,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelgentle_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,
@@ -495,7 +498,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcareful_toxtricitylowkey",
       "variant": "level_up",
       "result": "toxtricity punk_form=low_key",
       "consumeHeldItem": false,

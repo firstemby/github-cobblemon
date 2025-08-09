@@ -177,7 +177,24 @@
     "tutor:throatchop",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:pursuit",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:thunderbolt",
+    "legacy:toxic",
+    "special:phantomforce",
+    "special:roaroftime",
+    "special:spacialrend"
   ],
   "evolutions": []
 }

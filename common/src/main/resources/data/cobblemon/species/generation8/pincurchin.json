@@ -140,7 +140,10 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": []
 }

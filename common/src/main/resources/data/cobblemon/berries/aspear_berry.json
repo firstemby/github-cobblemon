@@ -175,9 +175,10 @@
   },
   "sproutShape": "standard-sprout",
   "matureShape": "standard-mature",
-  "flavors": {
+  "flavours": {
     "SOUR": 10
   },
+  "colour": "YELLOW",
   "weight": 20.0,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",

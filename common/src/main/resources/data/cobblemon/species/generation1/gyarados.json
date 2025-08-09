@@ -61,8 +61,79 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": 20
     }
   },
+  "riding": {
+    "stats": {
+      "SPEED": {
+        "displayName": "Speed",
+        "description": "Its top speed",
+        "ranges": {
+          "LAND": "35-70",
+          "AIR": "10-70"
+        }
+      },
+      "ACCELERATION": {
+        "displayName": "Acceleration",
+        "description": "How fast it can speed up",
+        "ranges": {
+          "LAND": "35-75",
+          "AIR": "10-75"
+        }
+      },
+      "SKILL": {
+        "displayName": "Handling",
+        "description": "How fast it can turn",
+        "ranges": {
+          "LAND": "40-80",
+          "AIR": "10-80"
+        }
+      },
+      "JUMP": {
+        "displayName": "Altitude",
+        "description": "How high it can jump",
+        "ranges": {
+          "LAND": "50-100",
+          "AIR": "10-60"
+        }
+      },
+      "STAMINA": {
+        "displayName": "Fuel/Stamina",
+        "description": "How long it can sprint",
+        "ranges": {
+          "LAND": "40-85",
+          "AIR": "10-85"
+        }
+      }
+    },
+    "behaviour": {
+      "key": "cobblemon:air/bird"
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "poseOffsets": [
+          {
+            "poseTypes": [
+              "FLY"
+            ],
+            "offset": {
+              "x": 0,
+              "y": 0.0,
+              "z": 0
+            }
+          }
+        ]
+      }
+    ]
+},
   "drops": {
     "amount": 3,
     "entries": [
@@ -195,7 +266,34 @@
     "tutor:stoneedge",
     "tutor:thunderbolt",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bind",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:dragonbreath",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "legacy:watergun",
+    "legacy:zapcannon",
+    "special:celebrate",
+    "special:happyhour"
   ],
   "preEvolution": "magikarp",
   "evolutions": [],
@@ -248,41 +346,5 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LIQUID": "35-70",
-          "AIR": "10-70"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LIQUID": "35-75",
-          "AIR": "10-75"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LIQUID": "40-80",
-          "AIR": "10-80"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LIQUID": "50-100",
-          "AIR": "10-60"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LIQUID": "40-85",
-          "AIR": "10-85"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": null
-  }
+  ]
 }

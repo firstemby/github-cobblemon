@@ -2,24 +2,17 @@
     "type": "minecraft:crafting_shaped",
     "group": "never_melt_ice",
     "pattern": [
-        " P ",
-        "PBP"
+        " S ",
+        "SSS",
+		"SGS"
     ],
     "key": {
-        "P": {
-            "item": "minecraft:packed_ice"
+        "S": {
+            "item": "minecraft:snowball"
         },
-        "B": [
-            {
-                "item": "minecraft:blue_ice"
-            },
-            {
-                "item": "cobblemon:ice_stone"
-            },
-            {
-                "item": "cobblemon:ice_gem"
-            }
-        ]
+        "G": {
+			"item": "cobblemon:ice_gem"
+		}
     },
     "result": {
         "id": "cobblemon:never_melt_ice"

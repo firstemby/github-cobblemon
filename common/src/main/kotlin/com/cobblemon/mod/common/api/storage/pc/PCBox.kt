@@ -62,14 +62,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
     open operator fun set(index: Int, pokemon: Pokemon?) {
         if (index in 0 until POKEMON_PER_BOX) {
             this.pokemon[index] = pokemon
-            if (pokemon != null) {
-                val previousCoordinates = pokemon.storeCoordinates.get()
-                val position = previousCoordinates?.position
-                pokemon.storeCoordinates.set(StoreCoordinates(pc, PCPosition(boxNumber, index)))
-                if (previousCoordinates?.store !is PCStore || previousCoordinates.store.uuid != pc.uuid || (position as PCPosition).box != boxNumber) {
-                    trackPokemon(pokemon)
-                }
-            }
+            pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, index)))
             if (emit) {
                 boxChangeEmitter.emit(Unit)
             }
@@ -97,7 +90,6 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
             if (pokemon != null) {
                 val position = PCPosition(box, slot)
                 pokemon.storeCoordinates.set(StoreCoordinates(pc, position))
-                trackPokemon(pokemon)
             }
         }
         boxChangeEmitter.subscribe { pc.pcChangeObservable.emit(Unit) }
@@ -108,17 +100,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         pokemon.forEachIndexed { slot, pokemon ->
             pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, slot)))
         }
-    }
-
-    fun trackPokemon(pokemon: Pokemon) {
-        pokemon.changeObservable
-            .pipe(
-                stopAfter {
-                    val coordinates = it.storeCoordinates.get() ?: return@stopAfter true
-                    return@stopAfter coordinates.store !is PCStore || coordinates.store.uuid != pc.uuid || (coordinates.position as PCPosition).box != boxNumber
-                }
-            )
-            .subscribe { boxChangeEmitter.emit(Unit) }
+        boxChangeEmitter.emit(Unit)
     }
 
     fun sendTo(player: ServerPlayer) {

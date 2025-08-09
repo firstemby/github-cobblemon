@@ -1,0 +1,35 @@
+### Additions
+- Added the Campfire Pot, made from apricorns and placed onto campfires.
+  - This pot can be used to make bait for fishing, Poké Cakes, Lure Cakes, local specialties, and potions (less efficiently than a brewing stand).
+  - There is a different pot for each apricorn colour because at this point I think we may have an addiction.
+- Added Aprijuice, made from the Campfire Pot using apricorns with seasoning to give flavours.
+  - Aprijuice can be fed to ride-able Pokémon to improve their riding characteristics, depending on the flavour and the Pokémon's nature.
+- Added Lure Cakes, made from the Campfire Pot using honey and berries.
+  - Lure Cakes can be used to modify the spawn rate of Pokémon in the wild.
+- Added the Saccharine Tree, which can be found in the wild and is used to obtain Honey Bottles.
+  - The leaves of the tree can be harvested to obtain honey, which can be used in the Campfire Pot to make Lure Cakes.
+  - The Log of the tree can be interacted with using a honey bottle to create a Honey-Slathered Saccharine Log, which increases the change of spawning a Pokémon with a Hidden Ability.
+- Added Hearty Grains
+- Clicking on the Progress Arrow will show the JEI Recipe Book for the Campfire Pot, which will show all recipes that can be made with it.
+- Added a Ton of Redstone Compatibility.
+   - Dispenser can now Honey and Unhoney:
+      - Saccharine Log
+      - Saccharine Leaves
+   - Redstone can Close and Open the Lid of a Cooking Pot
+      - Powered = Closed
+      - Unpowered = Open
+   - Hoppers can be used to insert items into a Cooking pot
+      - Top = Seasonals
+      - All Sides = Crafting
+      - Bottom = Extract the Result
+   - Observer will recognise when a Cooking pot is Closed or Opened
+   - Comparator Calculates a Signal Strength depending on the items inside the cooking pot
+   - Sculk Sensor
+       - Saccharine Leaves
+       - Opening and Closing the Cooking Pot
+       - Saccharine Log
+
+### Datapack and Addon Changes
+- Renamed the fishing_baits datapack folder to spawn_bait_effects.
+- Added `seasonings` datapack folder for controlling usable items in the campfire pot and what colour and flavour they apply.
+- Added campfire pot recipe type, which you could use to make anything work as fishing bait.

@@ -1,0 +1,32 @@
+{
+  "parent": "cobblemon:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:cooking_pot/open_faced_sandwich_from_cooking_pot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_bread": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bread"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bread"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:cooking_pot/open_faced_sandwich_from_cooking_pot"
+    ]
+  }
+}

@@ -12,6 +12,8 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.api.storage.pc.link.PCLink
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.writeIdentifier
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -30,25 +32,25 @@ import net.minecraft.resources.ResourceLocation
  */
 class OpenPCPacket : NetworkPacket<OpenPCPacket> {
     val storeID: UUID
-    val box: Int
+    val box: Int?
     val unseenWallpapers: Set<ResourceLocation>
 
     @JvmOverloads
     @Deprecated("Use the constructor with the PCStore object instead, this will become private in a future title update", level = DeprecationLevel.WARNING)
-    constructor(storeID: UUID, box: Int = 0, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
+    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
         this.storeID = storeID
         this.box = box
         this.unseenWallpapers = unseenWallpapers
     }
 
     @JvmOverloads
-    constructor(pc: PCStore, box: Int = 0): this(pc.uuid, box, pc.unseenWallpapers)
+    constructor(pc: PCStore, box: Int? = null): this(pc.uuid, box, pc.unseenWallpapers)
 
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeUUID(storeID)
-        buffer.writeInt(box)
+        buffer.writeNullable(box) { buf, value -> buf.writeInt(value)}
         buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeResourceLocation(it) }
     }
 
@@ -56,7 +58,7 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
         val ID = cobblemonResource("open_pc")
         fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(
             buffer.readUUID(),
-            buffer.readInt(),
+            buffer.readNullable { it.readInt() },
             buffer.readList { buffer.readResourceLocation() }.toSet()
         )
     }

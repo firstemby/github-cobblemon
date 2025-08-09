@@ -47,6 +47,11 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    }
+  },
   "drops": {
     "amount": 4,
     "entries": [
@@ -148,7 +153,6 @@
     "tutor:lastresort",
     "tutor:mudslap",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:sleeptalk",
@@ -158,7 +162,16 @@
     "tutor:stoneedge",
     "tutor:suckerpunch",
     "tutor:thunderfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -301,7 +314,6 @@
         "tutor:lastresort",
         "tutor:mudslap",
         "tutor:playrough",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:rockslide",
         "tutor:sleeptalk",
@@ -311,7 +323,17 @@
         "tutor:stoneedge",
         "tutor:suckerpunch",
         "tutor:thunderfang",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic",
+        "special:happyhour"
       ],
       "evolutions": [
         {

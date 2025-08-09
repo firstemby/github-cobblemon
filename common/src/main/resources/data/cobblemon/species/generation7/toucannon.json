@@ -168,7 +168,17 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:throatchop",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "trumbeak",
   "evolutions": []

@@ -9,30 +9,30 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.context.AreaSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
 import com.cobblemon.mod.common.util.Merger
 import net.minecraft.world.level.block.Block
 
 /**
- * Base type for a spawning condition that applies to some kind of [AreaSpawningContext]. This
- * can be extended for subclasses of [AreaSpawningContext].
+ * Base type for a spawning condition that applies to some kind of [AreaSpawnablePosition]. This
+ * can be extended for subclasses of [AreaSpawnablePosition].
  *
  * @author Hiroku
  * @since February 7th, 2022
  */
-abstract class AreaTypeSpawningCondition<T : AreaSpawningContext> : SpawningCondition<T>() {
+abstract class AreaTypeSpawningCondition<T : AreaSpawnablePosition> : SpawningCondition<T>() {
     var minHeight: Int? = null
     var maxHeight: Int? = null
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
 
-    override fun fits(ctx: T): Boolean {
-        if (!super.fits(ctx)) {
+    override fun fits(spawnablePosition: T): Boolean {
+        if (!super.fits(spawnablePosition)) {
             return false
-        } else if (minHeight != null && ctx.height < minHeight!!) {
+        } else if (minHeight != null && spawnablePosition.height < minHeight!!) {
             return false
-        } else if (maxHeight != null && ctx.height > maxHeight!!) {
+        } else if (maxHeight != null && spawnablePosition.height > maxHeight!!) {
             return false
-        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> ctx.nearbyBlockHolders.any { cond.fits(it) } }) {
+        } else if (neededNearbyBlocks != null && neededNearbyBlocks!!.none { cond -> spawnablePosition.nearbyBlockHolders.any { cond.fits(it) } }) {
             return false
         } else {
             return true
@@ -49,19 +49,19 @@ abstract class AreaTypeSpawningCondition<T : AreaSpawningContext> : SpawningCond
     }
 
     override fun isValid(): Boolean {
-        val containsNullValues = neededNearbyBlocks != null && neededNearbyBlocks!!.any {it == null}
+        val containsNullValues = neededNearbyBlocks != null && neededNearbyBlocks!!.any { it == null }
         return super.isValid() && !containsNullValues
     }
 }
 
 /**
- * A spawning condition for an [AreaSpawningContext].
+ * A spawning condition for an [AreaSpawnablePosition].
  *
  * @author Hiroku
  * @since February 7th, 2022
  */
-class AreaSpawningCondition : AreaTypeSpawningCondition<AreaSpawningContext>() {
-    override fun contextClass(): Class<out AreaSpawningContext> = AreaSpawningContext::class.java
+class AreaSpawningCondition : AreaTypeSpawningCondition<AreaSpawnablePosition>() {
+    override fun spawnablePositionClass(): Class<out AreaSpawnablePosition> = AreaSpawnablePosition::class.java
     companion object {
         const val NAME = "area"
     }

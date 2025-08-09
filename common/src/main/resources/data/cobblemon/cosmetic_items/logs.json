@@ -2,63 +2,51 @@
   "pokemon": ["timburr", "komala"],
   "cosmeticItems": [
     {
+      "consumedItem": "#cobblemon:apricorn_logs",
+      "aspects": ["tree-apricorn"]
+    },
+    {
+      "consumedItem": "#cobblemon:saccharine_logs",
+      "aspects": ["tree-saccharine"]
+    },
+    {
       "consumedItem": "#minecraft:oak_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.oak",
-      "displayItem": "minecraft:oak_log",
       "aspects": ["tree-oak"]
     },
     {
       "consumedItem": "#minecraft:spruce_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.spruce",
-      "displayItem": "minecraft:spruce_log",
       "aspects": ["tree-spruce"]
     },
     {
       "consumedItem": "#minecraft:birch_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.birch",
-      "displayItem": "minecraft:birch_log",
       "aspects": ["tree-birch"]
     },
     {
       "consumedItem": "#minecraft:jungle_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.jungle",
-      "displayItem": "minecraft:jungle_log",
       "aspects": ["tree-jungle"]
     },
     {
       "consumedItem": "#minecraft:acacia_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.acacia",
-      "displayItem": "minecraft:acacia_log",
       "aspects": ["tree-acacia"]
     },
     {
       "consumedItem": "#minecraft:dark_oak_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.dark_oak",
-      "displayItem": "minecraft:dark_oak_log",
       "aspects": ["tree-darkoak"]
     },
     {
       "consumedItem": "#minecraft:mangrove_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.mangrove",
-      "displayItem": "minecraft:mangrove_log",
       "aspects": ["tree-mangrove"]
     },
     {
       "consumedItem": "#minecraft:crimson_stems",
-      "displayName": "cobblemon.cosmetic.held_logs.crimson",
-      "displayItem": "minecraft:crimson_stem",
       "aspects": ["tree-crimson"]
     },
     {
       "consumedItem": "#minecraft:warped_stems",
-      "displayName": "cobblemon.cosmetic.held_logs.warped",
-      "displayItem": "minecraft:warped_stem",
       "aspects": ["tree-warped"]
     },
     {
       "consumedItem": "#minecraft:cherry_logs",
-      "displayName": "cobblemon.cosmetic.held_logs.cherry",
-      "displayItem": "minecraft:cherry_log",
       "aspects": ["tree-cherry"]
     }
   ]

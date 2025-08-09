@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.requirement.EvolutionRequirement
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 // Used only to comply with pokemon update packet structure
@@ -23,7 +23,7 @@ internal class DummyEvolution : Evolution {
     override val shedder: PokemonProperties? = null
     override var optional = false
     override var consumeHeldItem = false
-    override val requirements: MutableSet<EvolutionRequirement> = mutableSetOf()
+    override val requirements: MutableSet<Requirement> = mutableSetOf()
     override val learnableMoves: MutableSet<MoveTemplate> = mutableSetOf()
     override val drops: DropTable = DropTable()
 

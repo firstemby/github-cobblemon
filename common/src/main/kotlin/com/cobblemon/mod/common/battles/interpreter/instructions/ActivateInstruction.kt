@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
@@ -40,6 +41,11 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("activate")
+
+    override fun addMolangQueries(runtime: MoLangRuntime) {
+        super.addMolangQueries(runtime)
+        runtime.environment.query.addBattleMessageFunctions(message)
+    }
 
     override fun preActionEffect(battle: PokemonBattle) {
         val pokemon = message.battlePokemon(0, battle) ?: return
@@ -86,13 +92,12 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
 
             if (effect.id == "sketch" && pokemon.effectedPokemon.moveSet.any { it.name == "sketch" } && extraEffect is String) {
                 // Apply Sketch to the pokemon's current moveset if it was successfully used in battle
-                val moveTemplate = Moves.getByName(extraEffect.replace(" ", ""))
+                val moveTemplate = Moves.getByName(extraEffect.replace(Regex("[^A-Za-z0-9]"), ""))
                 Moves.getByName("sketch")?.let {
                     moveTemplate?.let { template ->
                         pokemon.effectedPokemon.exchangeMove(oldMove = it, newMove = template)
                     }
                 }
-
             }
 
             val lang = when (effect.id) {
@@ -101,7 +106,7 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
                 // Includes spited move and the PP it was reduced by
                 "spite", "eeriespell" -> battleLang("activate.spite", pokemonName, extraEffect, message.argumentAt(3)!!)
                 // Don't need additional lang, announced elsewhere
-                "toxicdebris", "shedskin", "iceface", "owntempo" -> return@dispatch GO
+                "toxicdebris", "shedskin", "iceface", "owntempo", "vitalspirit" -> return@dispatch GO
                 // Add activation to each Pokemon's history
                 "destinybond" -> {
                     battle.activePokemon.mapNotNull { it.battlePokemon?.uuid }.forEach { battle.minorBattleActions[it] = message }

@@ -167,7 +167,6 @@
     "tutor:meteorbeam",
     "tutor:outrage",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -178,7 +177,18 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:thunderfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

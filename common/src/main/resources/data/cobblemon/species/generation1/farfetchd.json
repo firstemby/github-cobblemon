@@ -1,7 +1,7 @@
 {
   "implemented": true,
   "nationalPokedexNumber": 83,
-  "name": "Farfetch'd'",
+  "name": "Farfetch’d",
   "primaryType": "normal",
   "secondaryType": "flying",
   "maleRatio": 0.5,
@@ -204,7 +204,33 @@
     "tutor:tailwind",
     "tutor:throatchop",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorleaf",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:toxic",
+    "legacy:whirlwind",
+    "special:wish",
+    "special:yawn"
   ],
   "evolutions": [],
   "forms": [
@@ -331,7 +357,10 @@
         "tutor:skyattack",
         "tutor:sleeptalk",
         "tutor:superpower",
-        "tutor:throatchop"
+        "tutor:throatchop",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
