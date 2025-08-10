@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -127,6 +128,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
         .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
+        .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()

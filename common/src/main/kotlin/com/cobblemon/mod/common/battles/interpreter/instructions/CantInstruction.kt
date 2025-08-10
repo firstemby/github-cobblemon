@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
@@ -35,6 +36,12 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("cant")
+
+    override fun addMolangQueries(runtime: MoLangRuntime) {
+        super.addMolangQueries(runtime)
+        runtime.environment.query.addBattleMessageFunctions(message)
+    }
+
     override fun preActionEffect(battle: PokemonBattle) {
 
     }

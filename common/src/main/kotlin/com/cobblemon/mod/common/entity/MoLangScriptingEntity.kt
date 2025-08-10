@@ -17,11 +17,11 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Dynamic
-import com.mojang.serialization.DynamicOps
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -40,6 +40,7 @@ interface MoLangScriptingEntity {
     val registeredVariables: MutableList<MoLangConfigVariable>
     var config: VariableStruct
     var data: VariableStruct
+    var callbacks: EntityCallbacks
 
     fun getExtraVariables(): List<MoLangConfigVariable> = emptyList()
     fun remakeBrain()
@@ -100,7 +101,7 @@ interface MoLangScriptingEntity {
     fun updateBehaviours(behaviours: Collection<ResourceLocation>) {
         val removingBehaviours = this@MoLangScriptingEntity.behaviours.filterNot(behaviours::contains).mapNotNull(CobblemonBehaviours.behaviours::get)
         removingBehaviours.forEach { behaviour ->
-            behaviour.undo(this as LivingEntity)
+            behaviour.onRemove(this as LivingEntity)
         }
         this@MoLangScriptingEntity.behaviours.clear()
         this@MoLangScriptingEntity.behaviours.addAll(behaviours)

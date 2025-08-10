@@ -12,16 +12,20 @@ import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.google.common.collect.ImmutableMap
 import com.mojang.serialization.Dynamic
+import com.mojang.serialization.JavaOps
 import java.util.ArrayDeque
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.tags.TagKey
+import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.level.Level
@@ -207,12 +211,21 @@ fun Entity.isStandingOnSandOrRedSand(): Boolean {
 }
 
 fun Entity.isStandingOn(blocks: Set<Block>, depth: Int = 2): Boolean {
+fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
     for (currentDepth in 1..depth) {
         val bellowBlockPos = blockPosition().below(currentDepth)
         val blockState = level().getBlockState(bellowBlockPos)
 
         if (blockState.isAir || !blockState.isCollisionShapeFullBlock(level(), bellowBlockPos)) continue
-        if (blocks.contains(blockState.block)) return true
+
+        val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks).result().get().first
+        elementOrTags.forEach {
+            if (it.tag) {
+                if (blockState.blockHolder.`is`(TagKey.create(Registries.BLOCK, it.id))) return true
+            } else {
+                if (blockState.blockHolder.`is`(it.id)) return true
+            }
+        }
     }
 
     return false

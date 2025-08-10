@@ -10,14 +10,12 @@ package com.cobblemon.mod.common.api.orientation
 
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.asin
-import kotlin.math.sign
 
 open class OrientationController(val entity: LivingEntity) {
 

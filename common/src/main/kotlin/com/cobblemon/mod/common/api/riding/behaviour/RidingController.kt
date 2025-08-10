@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.riding.RidingStyle
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -119,9 +120,9 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.canJump(settings, state, vehicle, driver)
     }
 
-    override fun shouldRotatePlayerHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
         if (!isActive(settings, state, vehicle)) return false
-        return behaviour.shouldRotatePlayerHead(settings, state, vehicle)
+        return behaviour.shouldRotateRiderHead(settings, state, vehicle)
     }
 
     override fun shouldRotatePokemonHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
@@ -188,6 +189,11 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
     override fun maxUpStep(settings: Settings, state: State, vehicle: PokemonEntity): Float? {
         if (!isActive(settings, state, vehicle)) return null
         return behaviour.maxUpStep(settings, state, vehicle)
+    }
+
+    override fun getRideSounds(settings: Settings, state: State, vehicle: PokemonEntity): RideSoundSettingsList {
+        if (!isActive(settings, state, vehicle)) return RideSoundSettingsList()
+        return behaviour.getRideSounds(settings, state, vehicle)
     }
 
     override fun createDefaultState(settings: Settings): State {

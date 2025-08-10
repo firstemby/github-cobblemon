@@ -9,7 +9,17 @@
 package com.cobblemon.mod.common.api.ai
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.resolve
+import net.minecraft.world.entity.Entity
 
 /**
  * This is used in the AI system to store optional additional information about the attack target,
@@ -30,5 +40,32 @@ import com.cobblemon.mod.common.util.asExpression
  */
 class CobblemonAttackTargetData(
     /** An expression that returns false when the target is no longer worth attacking. */
-    val shouldContinue: Expression = "true".asExpression()
-)
+    var shouldContinue: Expression = "true".asExpression(),
+    var hitsUntilDisengage: Int = -1, // -1 means no limit
+    var disengageAction: (entity: Entity) -> Unit = {}
+) {
+    val struct = ObjectValue<CobblemonAttackTargetData>(this).also {
+        it.addFunction("hits_until_disengage") { DoubleValue(hitsUntilDisengage.toDouble()) }
+        it.addFunction("set_hits_until_disengage") { params ->
+            val value = params.getDouble(0)
+            hitsUntilDisengage = value.toInt()
+            DoubleValue(hitsUntilDisengage.toDouble())
+        }
+        it.addFunction("set_disengage_action") { params ->
+            val script = params.getString(0).asIdentifierDefaultingNamespace()
+            val function = CobblemonScripts.scripts[script] ?: run {
+                Cobblemon.LOGGER.warn("set_disengage_action was given script '$script' which does not exist.")
+                return@addFunction DoubleValue.ZERO
+            }
+            disengageAction = { entity ->
+                val runtime = MoLangRuntime().setup()
+                runtime.environment.query.addFunction("entity") { entity.asMostSpecificMoLangValue() }
+                runtime.resolve(function)
+            }
+            DoubleValue.ONE
+        }
+        it.addFunction("unset_disengage_action") { params ->
+            disengageAction = {}
+        }
+    }
+}

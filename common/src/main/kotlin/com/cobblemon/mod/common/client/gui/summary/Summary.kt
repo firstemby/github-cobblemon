@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.Move
-import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
@@ -25,7 +24,11 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
-import com.cobblemon.mod.common.client.gui.summary.widgets.*
+import com.cobblemon.mod.common.client.gui.summary.widgets.EvolutionSelectScreen
+import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget
@@ -328,9 +331,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         saveMarkings()
         this.selectedPokemon.moveSet.changeFunction = {}
         this.party.getOrNull(newSelection)?.let { newPokemon ->
-            newPokemon.changeObservable.pipe( stopAfter { Minecraft.getInstance().screen != this || this.selectedPokemon != newPokemon } ).subscribe {
-                updatePokemonInfo()
-            }
             this.selectedPokemon = newPokemon
         }
         updatePokemonInfo()

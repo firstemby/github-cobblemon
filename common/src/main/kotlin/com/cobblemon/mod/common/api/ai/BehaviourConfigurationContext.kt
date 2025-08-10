@@ -8,8 +8,15 @@
 
 package com.cobblemon.mod.common.api.ai
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
+import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
+import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.resolve
+import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.serialization.Dynamic
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
@@ -27,6 +34,9 @@ class BehaviourConfigurationContext {
     val schedule = Schedule.EMPTY
     val memories = mutableSetOf<MemoryModuleType<*>>()
     val sensors = mutableSetOf<SensorType<*>>()
+
+    val onAddScripts = mutableListOf<ResourceLocation>()
+    val onAdd = mutableListOf<ExpressionLike>()
 
     fun getOrCreateActivity(activity: Activity): ActivityConfigurationContext {
         return activities.firstOrNull { it.activity == activity } ?: ActivityConfigurationContext(activity).also(activities::add)
@@ -48,6 +58,14 @@ class BehaviourConfigurationContext {
         this.sensors.addAll(sensors)
     }
 
+    fun addOnAddScript(script: ResourceLocation) {
+        onAddScripts.add(script)
+    }
+
+    fun addOnAddScript(script: ExpressionLike) {
+        onAdd.add(script)
+    }
+
     fun apply(entity: LivingEntity, behaviourConfigs: List<BehaviourConfig>, dynamic: Dynamic<*>) {
 
         if (entity is MoLangScriptingEntity) {
@@ -62,6 +80,11 @@ class BehaviourConfigurationContext {
         // Apply the brain config
         if (entity is MoLangScriptingEntity) {
             brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, sensors)
+
+            val runtime = MoLangRuntime().setup()
+            runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+            onAddScripts.forEach { CobblemonScripts.run(it, runtime) }
+            onAdd.forEach { runtime.resolve(it) }
         }
         activities.forEach { it.apply(entity) }
         brain.setCoreActivities(coreActivities)

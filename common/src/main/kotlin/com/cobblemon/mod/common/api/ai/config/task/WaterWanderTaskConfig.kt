@@ -108,7 +108,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                             completionRange = 0
                         )
                     )
-                    lookTarget.set(BlockPosTracker(target /* trust me dude. */))
+                    lookTarget.set(BlockPosTracker(target))
                     return@Trigger true
                 }
             }

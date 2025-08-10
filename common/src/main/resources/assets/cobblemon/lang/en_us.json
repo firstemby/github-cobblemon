@@ -3739,6 +3739,15 @@
   "cobblemon.behaviour.npc_scale_configuration.name": "NPC Entity Scales",
   "cobblemon.behaviour.npc_scale_configuration.desc": "Allows configuring the render- and hitbox-scale of the NPC.",
 
+  "cobblemon.behaviour.pokemon_gets_mad_at_thrower.name": "Gets Mad At Poké Ball Thrower",
+  "cobblemon.behaviour.pokemon_gets_mad_at_thrower.desc": "Gets angry at the player that threw a Poké Ball at it. Aggressive Pokémon will attack the player, while non-aggressive Pokémon will flee.",
+
+  "cobblemon.behaviour.attack_hostile_mobs.name": "Attacks Hostile Mobs",
+  "cobblemon.behaviour.attack_hostile_mobs.desc": "Attacks hostile mobs that are nearby, even if unprovoked.",
+
+  "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
+  "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

@@ -607,6 +607,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         setDefault()
         // Applies any of the state's queued actions.
         state.preRender()
+        state.renderMarkers.clear()
         // Performs a check that the current pose is correct and returns back which pose we should be applying. Even if
         // a change of pose is necessary, if it's going to gradually transition there then we're still going to keep
         // applying our current pose until that process is done.
@@ -772,8 +773,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         matrixStack.scale(scale, scale, scale)
         matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
 
-        //For some reason locators are positioned upside-down so this fixes that
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
+        // Entities' locators are positioned upside-down so this fixes that
+        if(entity != null) matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
     }
