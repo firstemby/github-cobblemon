@@ -189,10 +189,6 @@ fun Entity.isDusk(): Boolean {
     return time in 12000..13000
 }
 
-fun Entity.isStandingOnSand(): Boolean {
-    return isStandingOn(setOf(Blocks.SAND))
-}
-
 fun PathfinderMob.getPathTypeSimplified(): PathType {
     return when {
         this.isInWater -> PathType.WATER
@@ -202,15 +198,6 @@ fun PathfinderMob.getPathTypeSimplified(): PathType {
     }
 }
 
-fun Entity.isStandingOnRedSand(): Boolean {
-    return isStandingOn(setOf(Blocks.RED_SAND))
-}
-
-fun Entity.isStandingOnSandOrRedSand(): Boolean {
-    return isStandingOn(setOf(Blocks.SAND, Blocks.RED_SAND))
-}
-
-fun Entity.isStandingOn(blocks: Set<Block>, depth: Int = 2): Boolean {
 fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
     for (currentDepth in 1..depth) {
         val bellowBlockPos = blockPosition().below(currentDepth)
