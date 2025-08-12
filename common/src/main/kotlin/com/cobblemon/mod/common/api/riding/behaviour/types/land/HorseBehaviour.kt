@@ -212,8 +212,11 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         //Flag for determining if player is actively inputting
         var activeInput = false
 
-        var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z).normalize().scale(vehicle.deltaMovement.length())
-        //var newVelocity = vehicle.deltaMovement.normalize()
+        // Gather the previous velocity and set the horizontal fields of the velocity vector to the magnitude of the
+        // ones from deltaMovement. This is important as when a collision happens the Deltamovement will reflect it
+        // but rideVelocity won't.
+        var newVelocity = Vec3(state.rideVelocity.get().x, 0.0, state.rideVelocity.get().z).normalize().scale(vehicle.deltaMovement.horizontalDistance())
+        newVelocity = newVelocity.add(0.0, state.rideVelocity.get().y, 0.0)
 
         //speed up and slow down based on input
         if (driver.zza != 0.0f && state.stamina.get() > 0.0) {

@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
@@ -28,5 +29,20 @@ public abstract class EntityMixin {
             ci.cancel();
         }
     }
+
+    @Redirect(
+            method = "collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
+            at = @At(
+                    value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;onGround()Z"
+    )
+    )
+    private boolean cobblemon$forceOnGroundForStepUp(Entity entity) {
+        if (entity instanceof PokemonEntity pokemon && entity.hasControllingPassenger()) {
+            return true;
+        }
+        return entity.onGround();
+    }
+
 
 }
