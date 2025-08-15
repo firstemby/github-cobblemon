@@ -18791,6 +18791,10 @@
 				"3.0833": {
 					"effect": "animation.leather.wing_flap.medium"
 				}
+			},
+			"particle_effects": {},
+			"timeline": {
+				"1.0833": "q.particle('cobblemon:ambient_shiny_sparkle', 'root');"
 			}
 		},
 		"animation.charizard.air_glide_TEST": {
