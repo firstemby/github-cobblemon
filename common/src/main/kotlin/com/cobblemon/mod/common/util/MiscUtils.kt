@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import java.util.UUID
@@ -27,6 +28,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.Node
 import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -201,5 +203,15 @@ fun Path.deleteNode(index: Int) {
     val correctNodes = nodesBefore + nodesAfterwards
     for (node in correctNodes) {
         this.replaceNode(i++, node)
+    }
+}
+
+fun Collection<ObtainableItem>.findMatchingEntry(stack: ItemStack): ObtainableItem? {
+    val server = server() ?: return null
+    val registryAccess = server.registryAccess()
+    return if (stack == ItemStack.EMPTY) {
+        null
+    } else {
+        this.find { it.item?.isItemObtainable(registryAccess, stack) != false }
     }
 }

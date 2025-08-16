@@ -27,7 +27,7 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.LOOKING_CATEGORY, LOOK_AT_ENTITIES, true).asExpressible()
     val maxDistance = numberVariable(SharedEntityVariables.LOOKING_CATEGORY, SEE_DISTANCE, 15).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         maxDistance
     ).asVariables()
@@ -36,10 +36,9 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.LOOK_TARGET)
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
-        return SetEntityLookTarget.create(maxDistance.resolveFloat())
+        return SetEntityLookTarget.create(maxDistance.resolveFloat(behaviourConfigurationContext.runtime))
     }
 }

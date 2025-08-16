@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -42,7 +43,7 @@ class RunScript : SingleTaskConfig {
     val memories = emptySet<MemoryModuleType<*>>()
     val sensors = emptySet<SensorType<*>>()
 
-    override fun getVariables(entity: LivingEntity) = listOf(script).asVariables() + variables
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(script).asVariables() + variables
 
     override fun createTask(
         entity: LivingEntity,
@@ -50,13 +51,14 @@ class RunScript : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? = BehaviorBuilder.create {
         behaviourConfigurationContext.addMemories(memories + MemoryModuleType.LOOK_TARGET)
         behaviourConfigurationContext.addSensors(sensors)
+        val runtime = MoLangRuntime()
         it.group(
             it.registered(MemoryModuleType.LOOK_TARGET) // I think I need to have at least something here?
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
                 runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 return@Trigger CobblemonScripts.run(
-                    identifier = script.resolveString().asIdentifierDefaultingNamespace(),
+                    identifier = script.resolveString(runtime).asIdentifierDefaultingNamespace(),
                     runtime = runtime
                 ) == DoubleValue.ONE
             }

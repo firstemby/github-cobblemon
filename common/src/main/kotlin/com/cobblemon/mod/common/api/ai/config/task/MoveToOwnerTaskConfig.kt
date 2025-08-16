@@ -27,7 +27,7 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
     var teleportDistance: ExpressionOrEntityVariable = Either.left("24.0".asExpression())
     var maxDistance: ExpressionOrEntityVariable = Either.left("14.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         completionRange,
         speedMultiplier,

@@ -14,7 +14,7 @@ loom = "1.10-SNAPSHOT"
 architectury-plugin = "3.4-SNAPSHOT"
 
 # Common
-molang = "1.1.18"
+molang = "1.1.19"
 graal = "22.3.0"
 icu4j = "71.1"
 jei-api = "19.21.2.313"

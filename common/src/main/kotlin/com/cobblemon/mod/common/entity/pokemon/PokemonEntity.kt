@@ -87,6 +87,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
@@ -107,6 +108,7 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
@@ -1046,6 +1048,11 @@ open class PokemonEntity(
         return pokemon.form.shoulderMountable
     }
 
+    override fun wantsToPickUp(stack: ItemStack): Boolean {
+        val pickupItems = config.getObjectList<ObtainableItem>(PokemonItemSensor.PICKUP_ITEMS)
+        return this.canHoldItem(stack) && (pickupItems.findMatchingEntry(stack)?.pickupPriority ?: 0) > 0
+    }
+
     override fun mobInteract(player: Player, hand: InteractionHand): InteractionResult {
         if (!this.isBattling && this.isBattleClone()) {
             return InteractionResult.FAIL
@@ -1228,7 +1235,7 @@ open class PokemonEntity(
     }
 
     override fun shouldBeSaved(): Boolean {
-        if (ownerUUID == null && !pokemon.isNPCOwned() && (Cobblemon.config.savePokemonToWorld || isPersistenceRequired)) {
+        if (ownerUUID == null && !pokemon.isNPCOwned() && (Cobblemon.config.savePokemonToWorld || isPersistenceRequired || this.pokemon.canDropHeldItem)) {
             CobblemonEvents.POKEMON_ENTITY_SAVE_TO_WORLD.postThen(PokemonEntitySaveToWorldEvent(this)) {
                 return true
             }
@@ -1237,7 +1244,7 @@ open class PokemonEntity(
     }
 
     override fun checkDespawn() {
-        if (pokemon.getOwnerUUID() == null && !isPersistenceRequired && despawner.shouldDespawn(this)) {
+        if (pokemon.getOwnerUUID() == null && !isPersistenceRequired && !this.pokemon.canDropHeldItem && despawner.shouldDespawn(this) ) {
             discard()
         }
     }
@@ -1420,7 +1427,7 @@ open class PokemonEntity(
         val returned = if (isCosmetic) {
             this.pokemon.swapCosmeticItem(stack = stack, decrement = !player.isCreative)
         } else {
-            this.pokemon.swapHeldItem(stack = stack, decrement = !player.isCreative)
+            this.pokemon.swapHeldItem(stack = stack, decrement = !player.isCreative, false)
         }
 
         val text = when {

@@ -27,7 +27,7 @@ class FleeAttackerTaskConfig : SingleTaskConfig {
     var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
     var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         speedMultiplier,
         desiredDistance
@@ -37,14 +37,13 @@ class FleeAttackerTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean() || entity !is PathfinderMob) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime) || entity !is PathfinderMob) return null
 
         behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET)
         behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
 
-        val speedMultiplier = speedMultiplier.resolveFloat()
-        val desiredDistance = desiredDistance.resolveInt()
+        val speedMultiplier = speedMultiplier.resolveFloat(behaviourConfigurationContext.runtime)
+        val desiredDistance = desiredDistance.resolveInt(behaviourConfigurationContext.runtime)
         return WrapperLivingEntityTask(
             SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, speedMultiplier, desiredDistance, false),
             PathfinderMob::class.java

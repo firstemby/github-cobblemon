@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.WA
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
@@ -38,7 +39,7 @@ class AirWanderTaskConfig : SingleTaskConfig {
     val minUpwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
     val minDownwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(condition, wanderChance, horizontalRange, verticalRange, speedMultiplier, minUpwardsMovement, minDownwardsMovement).asVariables()
     }
 
@@ -46,8 +47,7 @@ class AirWanderTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, CobblemonMemories.PATH_COOLDOWN)
         val wanderChanceExpression = wanderChance.asSimplifiedExpression(entity)
 
@@ -62,15 +62,16 @@ class AirWanderTaskConfig : SingleTaskConfig {
                         return@Trigger false
                     }
 
+                    val runtime = mainThreadRuntime
                     runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                     val wanderChance = runtime.resolveFloat(wanderChanceExpression)
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) return@Trigger false
 
                     val rotVec = entity.getViewVector(0F)
                     pathCooldown.setWithExpiry(true, 60L)
-                    val target = HoverRandomPos.getPos(entity, horizontalRange.resolveInt(), verticalRange.resolveInt(), rotVec.x, rotVec.y, 1.5707964f, minUpwardsMovement.resolveInt(), minDownwardsMovement.resolveInt())
+                    val target = HoverRandomPos.getPos(entity, horizontalRange.resolveInt(runtime), verticalRange.resolveInt(runtime), rotVec.x, rotVec.y, 1.5707964f, minUpwardsMovement.resolveInt(runtime), minDownwardsMovement.resolveInt(runtime))
                         ?: return@Trigger false
-                    walkTarget.set(WalkTarget(target, speedMultiplier.resolveFloat(), 3))
+                    walkTarget.set(WalkTarget(target, speedMultiplier.resolveFloat(runtime), 3))
                     lookTarget.set(BlockPosTracker(target))
                     return@Trigger true
                 }

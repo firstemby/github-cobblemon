@@ -29,7 +29,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
     val cooldown = numberVariable(category = EATING_GRASS, name = COOLDOWN, default = 20 * 20).asExpressible()
     val eatGrassChance = numberVariable(category = EATING_GRASS, name = EAT_GRASS_CHANCE, default = 1 / (20 * 20F)).asExpressible()
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             cooldown,
             eatGrassChance
@@ -44,7 +44,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
             return null
         }
 
-        val chance = eatGrassChance.resolveFloat()
+        val chance = eatGrassChance.resolveFloat(behaviourConfigurationContext.runtime)
         if (chance == 0F) {
             return null
         }
@@ -54,7 +54,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
         return WrapperLivingEntityTask(
             EatGrassTask(
                 chance,
-                cooldown.resolveInt().toLong()
+                cooldown.resolveInt(behaviourConfigurationContext.runtime).toLong()
             ),
             PokemonEntity::class.java
         )

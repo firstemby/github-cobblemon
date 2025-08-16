@@ -20,7 +20,7 @@ class LookInDirectionTaskConfig : SingleTaskConfig {
     var yaw = numberVariable(LOOKING_CATEGORY, "locked_yaw", 0F).asExpressible()
     var pitch = numberVariable(LOOKING_CATEGORY, "locked_pitch", 0F).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         yaw,
         pitch

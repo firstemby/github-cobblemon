@@ -38,7 +38,9 @@ interface MoLangScriptingEntity {
     var behavioursAreCustom: Boolean
     val behaviours: MutableList<ResourceLocation>
     val registeredVariables: MutableList<MoLangConfigVariable>
+    /** Configuration properties that are managed and reset prior to entity behaviour initialization. */
     var config: VariableStruct
+    /** Data that is persisted. */
     var data: VariableStruct
     var callbacks: EntityCallbacks
 

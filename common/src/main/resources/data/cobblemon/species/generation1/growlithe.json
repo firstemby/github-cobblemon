@@ -59,7 +59,8 @@
       "light": "0-4"
     },
     "entityInteract": {
-      "avoidedBySkeleton": true
+      "avoidedBySkeleton": true,
+      "avoidedByFox": true
     }
   },
   "drops": {

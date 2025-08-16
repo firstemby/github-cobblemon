@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity
 class SetVariablesConfig : BehaviourConfig {
     var variableValues = mutableMapOf<String, ExpressionLike>()
 
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())

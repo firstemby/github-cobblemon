@@ -28,7 +28,7 @@ class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_when_hurt", true).asExpressible()
     var includePassiveDamage = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_from_passive_damage", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         includePassiveDamage
     ).asVariables()
@@ -37,10 +37,9 @@ class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
 
-        val includePassiveDamage = includePassiveDamage.resolveBoolean()
+        val includePassiveDamage = includePassiveDamage.resolveBoolean(behaviourConfigurationContext.runtime)
 
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.HURT_BY,

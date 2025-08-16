@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
@@ -24,7 +25,7 @@ class PathToFlowerTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(POLLINATE, "can_pollinate", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 
@@ -36,7 +37,7 @@ class PathToFlowerTaskConfig : SingleTaskConfig {
             return null
         }
 
-        if (!checkCondition(entity, condition)) {
+        if (!checkCondition(behaviourConfigurationContext.runtime, condition)) {
             return null
         }
         behaviourConfigurationContext.addMemories(

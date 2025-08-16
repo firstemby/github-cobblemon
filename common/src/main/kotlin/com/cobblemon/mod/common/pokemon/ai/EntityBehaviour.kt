@@ -21,18 +21,31 @@ import net.minecraft.server.level.ServerPlayer
 class EntityBehaviour {
     val avoidedByCreeper = false
     val avoidedByPhantom = false
+    val avoidedByFox = false
+//    val avoidedByPhantom = false
     val avoidedBySkeleton = false
+    val avoidedByChicken = false
+    val immuneToSweetBerryBushBlock = false
 
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("avoided_by_creeper") { DoubleValue(avoidedByCreeper) }
         it.addFunction("avoided_by_phantom") { DoubleValue(avoidedByPhantom) }
+        it.addFunction("avoided_by_fox") { DoubleValue(avoidedByFox) }
+//        it.addFunction("avoided_by_phantom") { DoubleValue(avoidedByPhantom) }
         it.addFunction("avoided_by_skeleton") { DoubleValue(avoidedBySkeleton) }
+        it.addFunction("immune_to_sweet_berry_bush") {
+            DoubleValue(immuneToSweetBerryBushBlock)
+        }
     }
 
     companion object {
         fun hasCreeperFearedShoulderMount(player: ServerPlayer) : Boolean {
             return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByCreeper }
+        }
+
+        fun hasFoxFearedShoulderMount(player: ServerPlayer) : Boolean {
+            return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByFox }
         }
 
         fun hasSkeletonFearedShoulderMount(player: ServerPlayer) : Boolean {

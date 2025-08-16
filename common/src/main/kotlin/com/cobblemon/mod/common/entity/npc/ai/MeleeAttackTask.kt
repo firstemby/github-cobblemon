@@ -12,6 +12,7 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig.Companion.runtime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
@@ -30,9 +31,10 @@ object MeleeAttackTask {
         ).apply(it) { attackTarget, cooldown ->
             Trigger { world, entity, _ ->
                 val attackTargetData = entity.brain.getMemorySafely(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
-                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                val range = runtime.resolveFloat(range)
-                val cooldownTicks = runtime.resolveInt(cooldownTicks)
+
+                mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                val range = mainThreadRuntime.resolveFloat(range)
+                val cooldownTicks = mainThreadRuntime.resolveInt(cooldownTicks)
 
                 val attackTarget = it.get(attackTarget)
                 if (entity.distanceTo(attackTarget) <= range) {

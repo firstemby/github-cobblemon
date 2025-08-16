@@ -2,6 +2,11 @@
   "visible": false,
   "configurations": [
     {
+      "type": "script",
+      "executeEarly": true,
+      "script": "cobblemon:apply_species_properties"
+    },
+    {
       "type": "apply_behaviours",
       "behaviours": [
         "cobblemon:core",

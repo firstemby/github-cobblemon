@@ -70,7 +70,8 @@ object PokemonBrain {
         SensorType.IS_IN_WATER,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
-        CobblemonSensors.NEARBY_FLOWER
+        CobblemonSensors.NEARBY_FLOWER,
+        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -193,7 +194,8 @@ object PokemonBrain {
         CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
-        CobblemonMemories.ATTACK_TARGET_DATA
+        CobblemonMemories.ATTACK_TARGET_DATA,
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {

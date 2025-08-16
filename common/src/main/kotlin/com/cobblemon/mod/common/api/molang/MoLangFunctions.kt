@@ -94,6 +94,8 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
@@ -108,6 +110,7 @@ import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
@@ -135,6 +138,7 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ClipContext
@@ -235,7 +239,7 @@ object MoLangFunctions {
             return@Function array
         },
         "length" to java.util.function.Function { params ->
-            val array = params.get<ArrayStruct>(0)
+            val array = (params.getOrNull<MoValue>(0) as? VariableStruct) ?: return@Function DoubleValue.ZERO
             return@Function DoubleValue(array.map.size.toDouble())
         },
         "append" to java.util.function.Function { params ->
@@ -325,6 +329,12 @@ object MoLangFunctions {
             DoubleValue(a.after(b))
         },
         "create_simple_party_provider" to java.util.function.Function { SimplePartyProvider().struct },
+        "create_pickup_item" to java.util.function.Function { params ->
+            val item = params.getOrNull<MoValue>(0)?.asString()?.let(ObtainableItemCondition::parseFromString)
+            val pickupPriority = params.getIntOrNull(1) ?: 0
+            val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
+            return@Function pickupItem.struct
+        }
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
     val worldFunctions = mutableListOf<(Holder<Level>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
@@ -688,6 +698,7 @@ object MoLangFunctions {
             map.put("grow") { params -> stack.grow(params.getInt(0)) }
             map.put("is_of") { params -> DoubleValue(holder.`is`(params.getString(0).asIdentifierDefaultingNamespace())) }
             map.put("is_in") { params -> DoubleValue(holder.`is`(TagKey.create(Registries.ITEM, params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()))) }
+            map.put("is_food") { params -> DoubleValue(stack.has(DataComponents.FOOD)) }
             return@mutableListOf map
         }
     )
@@ -961,6 +972,10 @@ object MoLangFunctions {
     val livingEntityFunctions: MutableList<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("heal") { params ->
+                val amount = params.getDouble(0)
+                entity.heal(amount.toFloat())
+            }
             map.put("is_living_entity") { DoubleValue.ONE }
             map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) }
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
@@ -2334,6 +2349,11 @@ object MoLangFunctions {
             is Player -> asMoLangValue()
             is PokemonEntity -> struct
             is NPCEntity -> struct
+            is ItemEntity -> ObjectValue(this).also {
+                it.addStandardFunctions()
+                it.addFunctions(entityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+                it.addFunctions(itemStackFunctions.flatMap { it(this.item, this.registryAccess()).entries.map { it.key to it.value } }.toMap())
+            }
             else -> ObjectValue(this).also {
                 it.addStandardFunctions()
                 it.addFunctions(entityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.bedrockk.molang.ast.StringExpression
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
@@ -16,6 +17,7 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.resolveString
 import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -35,7 +37,7 @@ class MemoryAspectTaskConfig : SingleTaskConfig {
     var memory: MemoryModuleType<*> = MemoryModuleType.DUMMY
     var aspect: ExpressionOrEntityVariable = Either.left(StringExpression(StringValue("")))
 
-    override fun getVariables(entity: LivingEntity) = listOf(aspect).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(aspect).asVariables()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -50,7 +52,7 @@ class MemoryAspectTaskConfig : SingleTaskConfig {
             return null
         }
 
-        val aspect = aspect.resolveString()
+        val aspect = behaviourConfigurationContext.runtime.resolveString(aspect.asExpression())
 
         return object : Behavior<LivingEntity>(
             mapOf(memory to MemoryStatus.REGISTERED),
