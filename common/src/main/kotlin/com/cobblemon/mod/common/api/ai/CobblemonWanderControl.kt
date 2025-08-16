@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.getDoubleOrNull
 import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
-import net.minecraft.world.entity.PathfinderMob
 
 /**
  * Used to maintain some settings around how the entity should wander this tick. The idea is you
@@ -30,7 +29,7 @@ class CobblemonWanderControl(
     var allowWater: Boolean = false,
     var allowAir: Boolean = false,
     var pathCooldownTicks: Int = 20 * 5, // Used to mitigate the cost of pathfinding.
-    var wanderSpeed: Float = 0.35F,
+    var speedMultiplier: Float = 1F,
 ) {
     class WanderCenter(val x: Number, val y: Number, val z: Number, val minRange: Float, val maxRange: Float)
 
@@ -46,7 +45,7 @@ class CobblemonWanderControl(
         .addFunction("allow_water") { if (allowWater) 1.0 else 0.0 }
         .addFunction("allow_air") { if (allowAir) 1.0 else 0.0 }
         .addFunction("path_cooldown_ticks") { pathCooldownTicks.toDouble() }
-        .addFunction("wander_speed") { wanderSpeed }
+        .addFunction("speed_multiplier") { speedMultiplier }
         .addFunction("set_center") { params ->
             if (params.params.size < 3) {
                 throw IllegalArgumentException("set_center requires at least 3 parameters: x, y, z")
@@ -69,14 +68,14 @@ class CobblemonWanderControl(
         .addFunction("set_allow_water") { params -> allowWater = params.getBooleanOrNull(0) ?: false }
         .addFunction("set_allow_air") { params -> allowAir = params.getBooleanOrNull(0) ?: false }
         .addFunction("set_path_cooldown_ticks") { params -> pathCooldownTicks = params.getDoubleOrNull(0)?.toInt() ?: (20 * 5) }
-        .addFunction("set_wander_speed") { params -> wanderSpeed = params.getDoubleOrNull(0)?.toFloat() ?: 0.35F }
+        .addFunction("set_speed_multiplier") { params -> speedMultiplier = params.getDoubleOrNull(0)?.toFloat() ?: 0.35F }
         .addFunction("reset") {
             center = null
             allowLand = false
             allowWater = false
             allowAir = false
             pathCooldownTicks = 20 * 5
-            wanderSpeed = 0.35F
+            speedMultiplier = 1F
             maxAttempts = 4
         }
 

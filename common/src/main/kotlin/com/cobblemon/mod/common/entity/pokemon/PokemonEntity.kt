@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addLivingEntityFuncti
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
@@ -1229,6 +1230,14 @@ open class PokemonEntity(
                 // Only touch battle HP for non-wild Pokémon so that quick ball et. al. aren't owerpowered.
                 pokemon.currentHealth = (pokemon.maxHealth * (this.health / this.maxHealth)).toInt()
             }
+
+            callbacks.process(
+                type = EntityCallbacks.HURT,
+                functions = mapOf(
+                    "source" to { source.asMoLangValue() },
+                    "amount" to { DoubleValue(amount.toDouble()) },
+                )
+            )
             true
         } else false
     }

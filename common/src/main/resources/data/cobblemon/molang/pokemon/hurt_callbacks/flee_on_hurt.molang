@@ -1,0 +1,3 @@
+q.source.entity.is_living_entity != 0 ? {
+    q.entity.set_entity_memory('cobblemon:avoid_target', q.source.entity);
+}

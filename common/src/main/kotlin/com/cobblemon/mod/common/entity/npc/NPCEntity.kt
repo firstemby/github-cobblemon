@@ -644,6 +644,20 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         return InteractionResult.SUCCESS
     }
 
+    override fun hurt(source: DamageSource, amount: Float): Boolean {
+        if (super.hurt(source, amount)) {
+            callbacks.process(
+                type = EntityCallbacks.HURT,
+                functions = mapOf(
+                    "source" to { source.asMoLangValue() },
+                    "amount" to { DoubleValue(amount.toDouble()) },
+                )
+            )
+            return true
+        }
+        return false
+    }
+
     override fun recalling(pokemonEntity: PokemonEntity): CompletableFuture<Unit> {
         playAnimation(RECALL_ANIMATION, pokemonExpressions(pokemonEntity.pokemon))
         return delayedFuture(seconds = 1.6F)

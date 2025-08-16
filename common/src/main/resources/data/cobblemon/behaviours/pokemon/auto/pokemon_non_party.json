@@ -30,18 +30,17 @@
       ]
     },
     {
-      "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.combat.will_flee",
-      "behaviours": [
-        "cobblemon:panics"
-      ]
-    },
-    {
-      "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.combat.will_defend_self",
-      "behaviours": [
-        "cobblemon:retaliates"
-      ]
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "condition": "!q.entity_is_in_party && q.entity.behaviour.moving.can_move",
+      "tasksByPriority": {
+        "1": [
+          {
+            "type": "run_script",
+            "script": "cobblemon:wanders_avoid"
+          }
+        ]
+      }
     },
     {
       "type": "apply_behaviours",

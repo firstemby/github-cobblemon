@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.api.ai.CobblemonAvoidTargetData
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
@@ -53,6 +54,7 @@ object CobblemonMemories {
     /** how many are following me rn? */
     val HERD_SIZE = register<Int>("herd_size") // Don't bother saving it, we'll try to keep count roughly.
     val ATTACK_TARGET_DATA = register<CobblemonAttackTargetData>("attack_target_data") // This is used to store additional information about the attack target, such as when to give up pursuit.
+    val AVOID_TARGET_DATA = register<CobblemonAvoidTargetData>("avoid_target_data") // This is used to store additional information about the avoid target, such as how fast to move.
     val WANDER_CONTROL = register<CobblemonWanderControl>("wander_control")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {

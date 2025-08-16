@@ -1,0 +1,34 @@
+{
+  "name": "cobblemon.behaviour.panics.name",
+  "description": "cobblemon.behaviour.panics.desc",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "panic",
+      "tasksByPriority": {
+        "0": [
+          "calm_down",
+          "follow_walk_target",
+          {
+            "type": "run_script",
+            "script": "cobblemon:wander_panic"
+          },
+          {
+            "type": "run_script",
+            "script": "cobblemon:wander_avoid"
+          }
+        ],
+        "3": [
+          {
+            "_comment": "It's like wandering but far more frequently tries to do it and moves much quicker. The scripts will configure the avoid target for wanders.",
+            "type": "wander",
+            "speedMultiplier": 0.5,
+            "horizontalRange": 8,
+            "verticalRange": 8,
+            "shouldWander": true
+          }
+        ]
+      }
+    }
+  ]
+}

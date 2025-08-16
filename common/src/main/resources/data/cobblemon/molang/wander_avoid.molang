@@ -1,0 +1,21 @@
+'Takes the avoid target and uses their position as a place to avoid being near. This goes for move away and for panic fleeing.';
+
+q.entity.has_memory_value('minecraft:avoid_target') == 0 ? {
+  return 0;
+}
+
+t.wander_control = q.entity.get_wander_control_memory();
+t.avoid_target_data = q.entity.get_avoid_target_data_memory();
+t.avoid_entity = q.entity.get_entity_memory('minecraft:avoid_target');
+t.avoid_entity == 0 || t.avoid_entity.world.id != q.entity.world.id ? {
+  return 0;
+};
+
+t.distance_to_entity = t.avoid_entity.distance_to_entity(q.entity);
+t.distance_to_entity - 8 > 24 ? {
+  t.min_distance = 24;
+} : {
+  t.min_distance = t.distance_to_entity + 8;
+}
+
+t.wander_control.set_center(t.avoid_entity.x, t.avoid_entity.y, t.avoid_entity.z, t.min_distance, 9999);

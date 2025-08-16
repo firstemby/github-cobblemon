@@ -38,6 +38,7 @@ class EntityCallbacks(val entity: Entity) : HashMap<ResourceLocation, MutableLis
     companion object {
         val HIT_BY_POKEBALL = cobblemonResource("hit_by_pokeball")
         val SAW_ENTITY = cobblemonResource("saw_entity")
+        val LOST_ENTITY = cobblemonResource("lost_sight_of_entity")
         val HURT = cobblemonResource("hurt")
         val DIED = cobblemonResource("died")
     }

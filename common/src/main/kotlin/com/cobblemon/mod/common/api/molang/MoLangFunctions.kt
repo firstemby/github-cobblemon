@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.api.ai.CobblemonAvoidTargetData
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -317,6 +318,7 @@ object MoLangFunctions {
         { worldHolder ->
             val world = worldHolder.value()
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("id") { StringValue(world.dimension().location().toString()) }
             map.put("is_time_of_day") { params ->
                 val timeOfDay = TimeRange.timeRanges[params.getString(0).lowercase()]
                     ?: return@put DoubleValue.ZERO
@@ -691,6 +693,13 @@ object MoLangFunctions {
                 val source = DamageSource(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolder(DamageTypes.GENERIC).get())
                 entity.hurt(source, amount.toFloat())
             }
+            map.put("damage_source") { params ->
+                val registry = entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                val type = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()?.let(registry::getHolder)
+                    ?: registry.getHolder(DamageTypes.GENERIC)
+                val damageSource = DamageSource(type.get(), entity)
+                return@put damageSource.asMoLangValue()
+            }
             map.put("distance_to_owner") {
                 if (entity !is TamableAnimal) {
                     return@put DoubleValue.ZERO
@@ -795,6 +804,10 @@ object MoLangFunctions {
             map.put("is_on_fire") { _ -> DoubleValue(entity.isOnFire) }
             map.put("is_invisible") { _ -> DoubleValue(entity.isInvisible) }
             map.put("is_riding") { _ -> DoubleValue(entity.isPassenger) }
+            map.put("distance_to_entity") { params ->
+                val otherEntity = params.get<MoValue>(0) as? ObjectValue<Entity> ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(entity.distanceTo(otherEntity.obj))
+            }
             map.put("distance_to_pos") { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
@@ -918,7 +931,19 @@ object MoLangFunctions {
         }
     )
 
-    val livingEntityFunctions: MutableList<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+    val damageSourceFunctions: MutableList<(DamageSource) -> java.util.HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
+        { source ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("direct_entity") { source.directEntity?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO }
+            map.put("entity") { source.entity?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO }
+            map.put("is_food_exhaustion") { DoubleValue(source.foodExhaustion) }
+            map.put("is_direct") { DoubleValue(source.isDirect) }
+            map.put("type") { StringValue(source.typeHolder().unwrapKey().get().location().toString()) }
+            return@mutableListOf map
+        }
+    )
+
+    val livingEntityFunctions: MutableList<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
             map.put("is_living_entity") { DoubleValue.ONE }
@@ -934,6 +959,15 @@ object MoLangFunctions {
                 val flags = params.params.subList(4, params.params.size).map { it.asString() }
                 val brain = entity.brain
                 brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, CobblemonBlockPosTracker(Vec3(x, y, z), flags.toSet()), duration.toLong())
+            }
+            map.put("is_doing_activity") { params ->
+                val identifiers = params.params.map { it.asString().asIdentifierDefaultingNamespace(namespace = "minecraft") }
+                val activities = identifiers.mapNotNull(BuiltInRegistries.ACTIVITY::get)
+                if (activities.isNotEmpty()) {
+                    return@put DoubleValue(activities.any(entity.brain::isActive))
+                } else {
+                    return@put DoubleValue.ZERO
+                }
             }
             map.put("get_attack_target_data_memory") {
                 val value = entity.brain.getMemorySafely(CobblemonMemories.ATTACK_TARGET_DATA).orElse(null)
@@ -954,6 +988,17 @@ object MoLangFunctions {
                     && entity.brain.checkMemory(CobblemonMemories.WANDER_CONTROL, MemoryStatus.REGISTERED)
                 ) {
                     entity.brain.setMemory(CobblemonMemories.WANDER_CONTROL, value)
+                }
+                return@put value.struct
+            }
+            map.put("get_avoid_target_data_memory") {
+                val value = entity.brain.getMemorySafely(CobblemonMemories.AVOID_TARGET_DATA).orElse(null)
+                    ?: CobblemonAvoidTargetData()
+                if (
+                    !entity.brain.checkMemory(CobblemonMemories.AVOID_TARGET_DATA, MemoryStatus.VALUE_PRESENT)
+                    && entity.brain.checkMemory(CobblemonMemories.AVOID_TARGET_DATA, MemoryStatus.REGISTERED)
+                ) {
+                    entity.brain.setMemory(CobblemonMemories.AVOID_TARGET_DATA, value)
                 }
                 return@put value.struct
             }
@@ -1093,15 +1138,6 @@ object MoLangFunctions {
             map.put("in_battle") { DoubleValue(npc.isInBattle()) }
             map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) }
             map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
-            map.put("is_doing_activity") { params ->
-                val identifiers = params.params.map { it.asString().asIdentifierDefaultingNamespace(namespace = "minecraft") }
-                val activities = identifiers.mapNotNull { identifier -> BuiltInRegistries.ACTIVITY.get(identifier) }
-                if (activities.isNotEmpty()) {
-                    return@put DoubleValue(activities.any { activity -> npc.brain.isActive(activity) })
-                } else {
-                    return@put DoubleValue.ZERO
-                }
-            }
             map.put("run_script_on_client") { params ->
                 val world = npc.level()
                 if (world is ServerLevel) {
@@ -2234,6 +2270,15 @@ object MoLangFunctions {
             stringify = { it.toString() }
         )
         value.addFunctions(spawningContextFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+        return value
+    }
+
+    fun DamageSource.asMoLangValue(): ObjectValue<DamageSource> {
+        val value = ObjectValue(
+            obj = this,
+            stringify = { it.toString() }
+        )
+        value.addFunctions(damageSourceFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
     }
 

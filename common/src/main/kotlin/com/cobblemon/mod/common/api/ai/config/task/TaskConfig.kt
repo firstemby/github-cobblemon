@@ -117,6 +117,7 @@ interface TaskConfig {
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
             cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
             cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
+            cobblemonResource("notify_about_entity_visibility") to NotifyAboutEntityVisibilityTaskConfig::class.java,
         )
 
         val runtime = MoLangRuntime().setup()
