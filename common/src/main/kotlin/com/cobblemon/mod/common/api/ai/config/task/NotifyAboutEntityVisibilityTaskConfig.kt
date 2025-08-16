@@ -33,7 +33,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 class NotifyAboutEntityVisibilityTaskConfig : SingleTaskConfig {
     val ticksBetweenChecks: ExpressionOrEntityVariable = Either.left("20".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(ticksBetweenChecks).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(ticksBetweenChecks).asVariables()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -42,7 +42,7 @@ class NotifyAboutEntityVisibilityTaskConfig : SingleTaskConfig {
             return null
         }
 
-        val ticksBetweenChecks = ticksBetweenChecks.resolveInt()
+        val ticksBetweenChecks = ticksBetweenChecks.resolveInt(behaviourConfigurationContext.runtime)
 
         behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_LIVING_ENTITIES)
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)

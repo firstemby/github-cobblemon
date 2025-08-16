@@ -10,10 +10,9 @@ package com.cobblemon.mod.common.entity.npc.ai
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.config.task.TaskConfig.Companion.runtime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
