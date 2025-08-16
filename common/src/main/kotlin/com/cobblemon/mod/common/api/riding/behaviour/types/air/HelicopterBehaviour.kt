@@ -12,9 +12,9 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
@@ -269,7 +269,11 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: HelicopterSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(
+        settings: HelicopterSettings,
+        state: RidingBehaviourState,
+        vehicle: PokemonEntity
+    ): Boolean {
         return false
     }
 

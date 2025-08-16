@@ -2340,6 +2340,7 @@
   "cobblemon.command.takemark": "%1$s was taken from %2$s's %3$s.",
   "cobblemon.command.takemark.does_not_have": "%1$s's %2$s does not have a %3$s!",
   "cobblemon.command.mark.invalid": "Invalid mark name.",
+  "cobblemon.command.molang.out":  "MoLang output: %1$s",
   "cobblemon.command.pokeheal.in_battle": "You cannot heal your party while in a battle!",
   "cobblemon.command.spawnpokemonfrompool": "A %1$s has spawned in the area.",
   "cobblemon.command.spawnpokemonfrompool.unable_to_spawn": "Unable to spawn a Pokémon.",
@@ -2677,6 +2678,8 @@
   "advancements.cobblemon.craft_pokedex.description": "Craft a Pokédex out of Apricorns, Iron, Copper, and any glowing powder",
   "advancements.cobblemon.ride_pokemon": "Pokémon Jockey!",
   "advancements.cobblemon.ride_pokemon.description": "Ride a Pokémon for the first time",
+  "advancements.cobblemon.place_campfire_pot": "We Need To Cook",
+  "advancements.cobblemon.place_campfire_pot.description": "Place down a Campfire Pot on a lit Campfire",
 
   "cobblemon.battle.crash": "A battle error has occurred. If playing single-player, report this to the mod team. Otherwise, report this to the servers administrator.",
   "cobblemon.battle.damage_dealt": "%1$s took %2$s damage!",
@@ -3369,8 +3372,8 @@
   "block.cobblemon.terracotta_sun_stone_ore": "Terracotta Sun Stone Ore",
   "block.cobblemon.pasture": "Pasture Block",
 
-  "block.cobblemon.lure_cake": "Lure Cake",
   "block.cobblemon.poke_cake": "Poké Cake",
+  "block.cobblemon.poke_snack": "Poké Snack",
 
   "gamerule.doPokemonSpawning": "Spawn Pokémon",
   "gamerule.doShinyStarters": "Starters will be shiny",
@@ -3491,6 +3494,9 @@
   "tag.item.cobblemon.mochis": "Mochis",
   "tag.item.cobblemon.poke_food": "Poké Foods",
   "tag.item.cobblemon.full_heal_bottles": "Full Heal Bottles",
+  "tag.item.cobblemon.small_flowers": "Small Flowers",
+  "tag.item.cobblemon.held.blacklisted_items_to_hold": "Blacklisted Held Items",
+  "tag.item.cobblemon.held.whitelisted_items_to_hold": "Whitelisted Held Items",
 
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",

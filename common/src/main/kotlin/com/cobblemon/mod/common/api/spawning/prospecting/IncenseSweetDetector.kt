@@ -37,18 +37,19 @@ object IncenseSweetDetector : SpawningInfluenceDetector {
         val searchRange = RANGE + ceil(sqrt(((input.length pow 2) + (input.width pow 2)).toDouble())).toInt()
         val centerPos = input.getCenter().toBlockPos()
 
-        val sweetIncensePositions = world.poiManager.findAll(
-                { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.INCENSE_SWEET_KEY) },
-                { true },
-                centerPos,
-                searchRange,
-                PoiManager.Occupancy.ANY
-        ).toList()
-
-        for (pos in sweetIncensePositions) {
-            val influence = SpatialSpawningZoneInfluence(pos, radius = RANGE.toFloat(), IncenseSweetInfluence(pos))
-            listOfInfluences.add(influence)
-        }
+        // TODO after 1.7
+//        val sweetIncensePositions = world.poiManager.findAll(
+//                { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.INCENSE_SWEET_KEY) },
+//                { true },
+//                centerPos,
+//                searchRange,
+//                PoiManager.Occupancy.ANY
+//        ).toList()
+//
+//        for (pos in sweetIncensePositions) {
+//            val influence = SpatialSpawningZoneInfluence(pos, radius = RANGE.toFloat(), IncenseSweetInfluence(pos))
+//            listOfInfluences.add(influence)
+//        }
 
         return listOfInfluences
     }

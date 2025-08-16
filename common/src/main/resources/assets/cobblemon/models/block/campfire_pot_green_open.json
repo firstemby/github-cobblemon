@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:block/campfire_pot_red_open",
+  "parent": "cobblemon:block/campfire_pot_open",
   "textures": {
     "pot": "cobblemon:block/campfire_pot/campfire_pot_green",
     "particle": "cobblemon:block/campfire_pot/campfire_pot_green"

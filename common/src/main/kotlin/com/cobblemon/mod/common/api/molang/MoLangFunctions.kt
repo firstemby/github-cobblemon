@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
+import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -40,6 +41,7 @@ import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
+import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
@@ -157,6 +159,17 @@ object MoLangFunctions {
         "print" to java.util.function.Function { params ->
             val message = params.get<MoValue>(0).asString()
             Cobblemon.LOGGER.info(message)
+        },
+        "delete_variable" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            val variable = params.getString(1)
+            struct.map.remove(variable)
+            DoubleValue.ONE
+        },
+        "delete_variables" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            struct.map.clear()
+            DoubleValue.ONE
         },
         "set_query" to java.util.function.Function { params ->
             val variable = params.getString(0)
@@ -865,14 +878,12 @@ object MoLangFunctions {
             }
             map.put("is_standing_on_blocks") { params ->
                 val depth = params.getDouble(0).toInt()
-                val blocks: MutableSet<Block> = mutableSetOf()
+                val blockStrings: MutableSet<String> = mutableSetOf()
                 for (blockIndex in 1..<params.params.size) {
-                    val blockString = params.getString(blockIndex)
-                    val block = BuiltInRegistries.BLOCK.get(blockString.asIdentifierDefaultingNamespace("minecraft"))
-                    blocks.add(block)
+                    blockStrings.add(params.getString(blockIndex))
                 }
 
-                return@put if (entity.isStandingOn(blocks, depth)) DoubleValue.ONE else DoubleValue.ZERO
+                return@put if (entity.isStandingOn(blockStrings, depth)) DoubleValue.ONE else DoubleValue.ZERO
             }
             if (entity is PosableEntity) {
                 map.put("play_animation") { params ->
@@ -897,6 +908,10 @@ object MoLangFunctions {
                         packet.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
                         return@put DoubleValue.ONE
                     }
+                }
+
+                map.put("face") { params -> ObjectValue(ReferenceDialogueFaceProvider(entity.id, params.getBooleanOrNull(0) != false))
+
                 }
             }
             if (entity is Schedulable) {
@@ -1134,7 +1149,6 @@ object MoLangFunctions {
             map.put("name") { StringValue(npc.name.string) }
             map.put("level") { DoubleValue(npc.level) }
             map.put("has_aspect") { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
-            map.put("face") { params -> ObjectValue(ReferenceDialogueFaceProvider(npc.id, params.getBooleanOrNull(0) != false)) }
             map.put("in_battle") { DoubleValue(npc.isInBattle()) }
             map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) }
             map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
@@ -1731,6 +1745,8 @@ object MoLangFunctions {
             map.put("get_alt_pose") { StringValue(pokemonEntity.getAltPose()) }
             map.put("is_gliding") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("gliding"))) }
             map.put("is_sprinting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("sprinting"))) }
+            map.put("is_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("drifting"))) }
+            map.put("is_powered_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("powered_drifting"))) }
             map.put("in_air") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("in_air"))) }
             map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
             map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
@@ -1747,6 +1763,34 @@ object MoLangFunctions {
             }
             map.put("pasture_conflict_enabled") {
                 DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.PASTURE_CONFLICT))
+            }
+            map.put("run_action_effect") { params ->
+                val runtime = MoLangRuntime().setup()
+                runtime.environment.cloneFrom(params.environment)
+                runtime.withQueryValue("entity", pokemonEntity.struct)
+                val actionEffect = ActionEffects.actionEffects[params.getString(0).asIdentifierDefaultingNamespace()]
+                if (actionEffect != null) {
+                    val context = ActionEffectContext(
+                        actionEffect = actionEffect,
+                        providers = mutableListOf(TargetsProvider(pokemonEntity)),
+                        runtime = runtime,
+                        level = pokemonEntity.level()
+                    )
+                    // This was taken from NPC run_action_effect but this variable isn't used, so I just commented it out.
+                    // pokemonEntity.actionEffect = context
+                    pokemonEntity.brain.setMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT, context)
+                    pokemonEntity.brain.setActiveActivityIfPossible(CobblemonActivities.ACTION_EFFECT)
+                    actionEffect.run(context).thenRun {
+                        val pokemonActionEffect = pokemonEntity.brain.getMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT).orElse(null)
+                        if (pokemonActionEffect == context && pokemonEntity.brain.isActive(CobblemonActivities.ACTION_EFFECT)) {
+                            pokemonEntity.brain.eraseMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT)
+                            //pokemonEntity.actionEffect = null
+                        }
+                    }
+
+                    return@put DoubleValue.ONE
+                }
+                return@put DoubleValue.ZERO
             }
             map
         }

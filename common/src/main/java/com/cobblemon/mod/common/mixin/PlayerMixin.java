@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
+import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
@@ -47,6 +48,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,7 +63,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable {
+public abstract class PlayerMixin extends LivingEntity implements ScannableEntity, OrientationControllable, PlayerDuck {
+
+    @Unique
+    private Vector3f cobblemon$driverInput;
+    @Unique
+    private Vector3f cobblemon$lastSentDriverInput;
 
     @Shadow public abstract CompoundTag getShoulderEntityLeft();
 
@@ -279,4 +286,25 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     public OrientationController getOrientationController() {
         return cobblemon$orientationController;
     }
+
+    @Override
+    public void setDriverInput(Vector3f driverInput) {
+        cobblemon$driverInput = driverInput;
+    }
+
+    @Override
+    public Vector3f getDriverInput() {
+        return cobblemon$driverInput;
+    }
+
+    @Override
+    public void setLastSentDriverInput(Vector3f lastSentDriverInput) {
+        cobblemon$lastSentDriverInput = lastSentDriverInput;
+    }
+
+    @Override
+    public Vector3f getLastSentDriverInput() {
+        return cobblemon$lastSentDriverInput;
+    }
+
 }

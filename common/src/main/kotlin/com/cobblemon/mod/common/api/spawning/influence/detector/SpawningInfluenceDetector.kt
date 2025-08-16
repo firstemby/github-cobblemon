@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.prospecting.IncenseSweetDetector
-import com.cobblemon.mod.common.api.spawning.prospecting.LureCakeDetector
+import com.cobblemon.mod.common.api.spawning.prospecting.LurePokeSnackDetector
 import com.cobblemon.mod.common.api.spawning.prospecting.SaccharineLogSlatheredDetector
 
 /**
@@ -31,7 +31,7 @@ interface SpawningInfluenceDetector {
     companion object {
         @JvmStatic
         val detectors = mutableSetOf<SpawningInfluenceDetector>(
-            LureCakeDetector,
+            LurePokeSnackDetector,
             SaccharineLogSlatheredDetector,
             IncenseSweetDetector
         )

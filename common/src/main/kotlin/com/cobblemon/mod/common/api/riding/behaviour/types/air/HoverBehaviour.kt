@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
-import com.cobblemon.mod.common.api.riding.sound.RideLoopSound
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -452,7 +451,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: HoverSettings,
         state: HoverState,
         vehicle: PokemonEntity

@@ -1,7 +1,31 @@
 {
   "variants": {
-    "": {
-      "model": "builtin/entity"
+    "bites=0": {
+      "model": "cobblemon:block/poke_snack"
+    },
+    "bites=1": {
+      "model": "cobblemon:block/poke_snack_slice1"
+    },
+    "bites=2": {
+      "model": "cobblemon:block/poke_snack_slice2"
+    },
+    "bites=3": {
+      "model": "cobblemon:block/poke_snack_slice3"
+    },
+    "bites=4": {
+      "model": "cobblemon:block/poke_snack_slice4"
+    },
+    "bites=5": {
+      "model": "cobblemon:block/poke_snack_slice5"
+    },
+    "bites=6": {
+      "model": "cobblemon:block/poke_snack_slice6"
+    },
+    "bites=7": {
+      "model": "cobblemon:block/poke_snack_slice7"
+    },
+    "bites=8": {
+      "model": "cobblemon:block/poke_snack_slice8"
     }
   }
 }

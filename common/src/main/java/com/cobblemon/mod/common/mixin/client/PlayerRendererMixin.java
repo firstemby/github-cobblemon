@@ -9,12 +9,10 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon;
-import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -53,19 +51,6 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         if (player.isPassenger() && player.getVehicle() instanceof PokemonEntity) {
             PlayerModel<AbstractClientPlayer> playerModel = this.getModel();
             playerModel.crouching = false;
-        }
-    }
-
-    @Inject(
-            method = "setupRotations(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;FFFF)V",
-            at = @At("HEAD")
-    )
-    private void cobblemon$modifyRoll(AbstractClientPlayer player, PoseStack poseStack, float a, float b, float partialTicks, float i, CallbackInfo ci) {
-        if (player.isPassenger()) {
-            var vehicle = player.getVehicle();
-            if (vehicle instanceof PokemonEntity entity) {
-                MountedPlayerRenderer.INSTANCE.render(player, entity, poseStack, a, b, partialTicks, i);
-            }
         }
     }
 }

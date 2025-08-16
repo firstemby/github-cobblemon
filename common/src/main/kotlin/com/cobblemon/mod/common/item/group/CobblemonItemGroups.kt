@@ -110,7 +110,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.GALARICA_NUTS)
         entries.accept(CobblemonItems.HEARTY_GRAINS)
         entries.accept(CobblemonItems.TASTY_TAIL)
-        entries.accept(CobblemonItems.BUGWORT)
+//        entries.accept(CobblemonItems.BUGWORT) // TODO after 1.7
 
         entries.accept(CobblemonItems.RED_APRICORN)
         entries.accept(CobblemonItems.YELLOW_APRICORN)
@@ -256,7 +256,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.RELIC_COIN_POUCH)
         entries.accept(CobblemonItems.RELIC_COIN_SACK)
 
-        entries.accept(CobblemonItems.INCENSE_SWEET)
+//        entries.accept(CobblemonItems.INCENSE_SWEET) // TODO after 1.7
         entries.accept(CobblemonItems.DISPLAY_CASE)
         entries.accept(CobblemonItems.APRICORN_LOG)
         entries.accept(CobblemonItems.APRICORN_WOOD)
@@ -523,7 +523,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.ABILITY_PATCH)
 
         entries.accept(CobblemonItems.POKE_BAIT)
-        entries.accept(CobblemonItems.LURE_CAKE)
+        entries.accept(CobblemonItems.POKE_SNACK)
         entries.accept(CobblemonItems.POKE_CAKE)
         entries.accept(CobblemonItems.POKE_PUFF)
 
@@ -783,6 +783,8 @@ object CobblemonItemGroups {
 
         injector.putAfter(CobblemonItems.LEEK_AND_POTATO_STEW, Items.RABBIT_STEW)
         injector.putAfter(CobblemonItems.VIVICHOKE_DIP, CobblemonItems.LEEK_AND_POTATO_STEW)
+
+        injector.putAfter(CobblemonItems.POKE_CAKE, Items.CAKE)
 
         injector.putAfter(CobblemonItems.SINISTER_TEA, Items.MILK_BUCKET)
     }

@@ -8,8 +8,11 @@
 
 package com.cobblemon.mod.common.api.pokemon.aspect
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.spawning.influence.SaccharineLogSlatheredInfluence
+import com.cobblemon.mod.common.api.spawning.prospecting.LurePokeSnackDetector
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.resources.ResourceLocation
@@ -18,7 +21,12 @@ import net.minecraft.resources.ResourceLocation
  * Used by [PokemonClientDelegate.spawnAspectParticle] to spawn associated particles for aspects
  */
 val aspectParticleMap: Map<String, ParticleData> = mapOf(
-    SaccharineLogSlatheredInfluence.HONEY_DRENCHED_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_HONEY, 0.075, 1)
+    SaccharineLogSlatheredInfluence.HONEY_DRENCHED_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_HONEY, 0.075, 1),
+    LurePokeSnackDetector.POKE_SNACK_CRUMBED_ASPECT to ParticleData.MinecraftParticle(
+        BlockParticleOption(
+            ParticleTypes.BLOCK,
+            CobblemonBlocks.POKE_SNACK.defaultBlockState()
+        ), 0.05, 3),
 )
 
 sealed class ParticleData {

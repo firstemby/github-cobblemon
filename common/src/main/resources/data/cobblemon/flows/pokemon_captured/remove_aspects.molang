@@ -1,3 +1,4 @@
 q.pokemon.remove_aspects(
-    'honey_drenched'
+    'honey_drenched',
+    'poke_snack_crumbed'
 );

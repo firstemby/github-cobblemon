@@ -32,10 +32,11 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
 
     internal open fun load() {
         this.itemIds.clear()
-        val itemsJson = ShowdownService.service.getItemIds()
+        val itemsJson = ShowdownService.service.getRegistryData("heldItem")
         val showdownIds = hashSetOf<String>()
         for (i in 0 until itemsJson.size()) {
-            showdownIds += itemsJson[i].asString
+            val jsItem = itemsJson[i].asJsonObject
+            showdownIds += jsItem.get("id").asString
         }
         BuiltInRegistries.ITEM.forEach { item ->
             val identifier = BuiltInRegistries.ITEM.getKey(item)

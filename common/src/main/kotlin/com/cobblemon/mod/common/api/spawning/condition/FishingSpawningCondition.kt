@@ -44,10 +44,12 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
 
         if (minLureLevel != null) { // check for the lureLevel of the rod
             val pokerodStack = spawnablePosition.rodStack
-            val lureLevel = EnchantmentHelper.getItemEnchantmentLevel(
-                spawnablePosition.enchantmentRegistry.getHolder(Enchantments.LURE).get(),
-                pokerodStack
-            )
+            val lureLevel = spawnablePosition.enchantmentRegistry.getHolder(Enchantments.LURE).map {
+                EnchantmentHelper.getItemEnchantmentLevel(
+                    it,
+                    pokerodStack
+                )
+            }.orElse(0)
             if (lureLevel < minLureLevel!!) {
                 return false
             } else if (maxLureLevel != null && lureLevel > maxLureLevel!!) {

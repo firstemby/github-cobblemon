@@ -120,9 +120,9 @@ class RidingController<Settings : RidingBehaviourSettings, State : RidingBehavio
         return behaviour.canJump(settings, state, vehicle, driver)
     }
 
-    override fun shouldRotatePlayerHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
         if (!isActive(settings, state, vehicle)) return false
-        return behaviour.shouldRotatePlayerHead(settings, state, vehicle)
+        return behaviour.shouldRotateRiderHead(settings, state, vehicle)
     }
 
     override fun shouldRotatePokemonHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {

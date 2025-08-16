@@ -107,13 +107,13 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         }
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: CompositeSettings,
         state: CompositeState,
         vehicle: PokemonEntity
     ): Boolean {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
-            behaviour.shouldRotatePlayerHead(behaviourSettings, behaviourState, vehicle)
+            behaviour.shouldRotateRiderHead(behaviourSettings, behaviourState, vehicle)
         }
     }
 

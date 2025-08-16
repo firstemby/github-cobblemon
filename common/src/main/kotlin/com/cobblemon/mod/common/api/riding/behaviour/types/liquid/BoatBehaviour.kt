@@ -330,7 +330,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return vehicle.runtime.resolveBoolean(settings.rotatePokemonHead)
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: BoatSettings,
         state: BoatState,
         vehicle: PokemonEntity

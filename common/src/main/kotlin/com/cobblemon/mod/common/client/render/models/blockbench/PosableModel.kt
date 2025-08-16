@@ -759,8 +759,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
                 yRot = 180f - Mth.wrapDegrees(yRot)
             }
-            //For some reason locators are positioned upside-down so this fixes that
-            matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
         } else if (entity is EmptyPokeBallEntity) {
             scale = 0.7F
             yRot = Mth.lerp(state.getPartialTicks(), entity.yRot, entity.yRotO)
@@ -775,6 +773,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         matrixStack.scale(scale, scale, scale)
         matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
+
+        // Entities' locators are positioned upside-down so this fixes that
+        if(entity != null) matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
     }

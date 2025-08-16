@@ -914,6 +914,8 @@ open class Pokemon : ShowdownIdentifiable {
         return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
 
+    fun dampensVibrations(): Boolean = form.behaviour.dampensVibrations
+
     // function to return the max hunger for the pokemon
     fun getMaxFullness(): Int = ((getGrassKnotPower(this.species.weight.toDouble()) / 10 / 2) + 1)
 

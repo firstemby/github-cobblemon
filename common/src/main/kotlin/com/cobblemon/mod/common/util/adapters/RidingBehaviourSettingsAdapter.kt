@@ -19,6 +19,8 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.RunStrategy
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.*
@@ -37,15 +39,19 @@ import java.lang.reflect.Type
 object RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings?> {
     val types: MutableMap<ResourceLocation, Class<out RidingBehaviourSettings>> = mutableMapOf(
         BirdBehaviour.KEY to BirdSettings::class.java,
+        BirdNoRollBehaviour.KEY to BirdNoRollSettings::class.java,
         DolphinBehaviour.KEY to DolphinSettings::class.java,
         HorseBehaviour.KEY to HorseSettings::class.java,
         BoatBehaviour.KEY to BoatSettings::class.java,
         GliderBehaviour.KEY to GliderSettings::class.java,
         HelicopterBehaviour.KEY to HelicopterSettings::class.java,
         JetBehaviour.KEY to JetSettings::class.java,
+        JetNoRollBehaviour.KEY to JetNoRollSettings::class.java,
         BurstBehaviour.KEY to BurstSettings::class.java,
         VehicleBehaviour.KEY to VehicleSettings::class.java,
+        MinekartBehaviour.KEY to MinekartSettings::class.java,
         HoverBehaviour.KEY to HoverSettings::class.java,
+        RocketBehaviour.KEY to RocketSettings::class.java,
         CompositeBehaviour.KEY to CompositeSettings::class.java,
 
         /*

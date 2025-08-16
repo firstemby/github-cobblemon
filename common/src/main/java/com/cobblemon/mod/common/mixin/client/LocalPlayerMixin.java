@@ -17,8 +17,10 @@ import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel;
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository;
+import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -28,6 +30,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
@@ -83,6 +86,23 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         controllable.getOrientationController().setActive(shouldUseCustomOrientation);
     }
 
+    @Inject(method = "rideTick", at = @At("HEAD"))
+    private void cobblemon$updateDriverInputRideTick(CallbackInfo ci) {
+        if (Minecraft.getInstance().player != (Object)this) return;
+        if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
+
+        // Gather driver Input
+        float vertInput = this.jumping ? 1.0f : (((Player)this).isShiftKeyDown() ? -1.0f : 0.0f);
+        Vector3f driverInput = new Vector3f(Math.signum(this.xxa), vertInput, Math.signum(this.zza));
+
+        // Check if player input has changed. If it has then update the last sent and send it
+        Vector3f lastSentDriverInput = ((PlayerDuck)this).getLastSentDriverInput();
+        if (driverInput.equals(lastSentDriverInput)) return;
+        ((PlayerDuck)this).setLastSentDriverInput(driverInput);
+
+        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateDriverInputPacket(driverInput));
+    }
+
     @Unique
     private boolean cobblemon$shouldUseCustomOrientation(LocalPlayer player) {
         var playerVehicle = player.getVehicle();
@@ -127,7 +147,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
                 return super.pick(hitDistance, partialTicks, hitFluids);
             }
 
-            Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));
+            Vec3 locatorOffset = locator != null ? new Vec3(locator.getMatrix().getTranslation(new Vector3f())) : Vec3.ZERO;
 
             OrientationController controller = this.getOrientationController();
 

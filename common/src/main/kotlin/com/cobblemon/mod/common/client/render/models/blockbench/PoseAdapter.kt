@@ -10,15 +10,12 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
-import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
 import com.cobblemon.mod.common.util.isDusk
-import com.cobblemon.mod.common.util.isStandingOnRedSand
-import com.cobblemon.mod.common.util.isStandingOnSand
-import com.cobblemon.mod.common.util.isStandingOnSandOrRedSand
+import com.cobblemon.mod.common.util.isStandingOn
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -57,9 +54,9 @@ class PoseAdapter(
         addCondition("isUnderWater") { entity, expectedValue -> entity.isUnderWater == expectedValue }
 
         // Kept for compatibility
-        addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOnRedSand() == expectedValue }
-        addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOnSand() == expectedValue }
-        addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOnSandOrRedSand() == expectedValue }
+        addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:red_sand")) == expectedValue }
+        addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:sand")) == expectedValue }
+        addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:sand", "minecraft:red_sand")) == expectedValue }
 
         addCondition("isDusk") { entity, expectedValue -> entity.isDusk() == expectedValue }
 

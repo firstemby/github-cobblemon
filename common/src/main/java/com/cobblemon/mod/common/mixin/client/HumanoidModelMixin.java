@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
@@ -59,9 +60,9 @@ public class HumanoidModelMixin {
         }
 
         Entity vehicle = entity.getVehicle();
-        if (vehicle instanceof PokemonEntity pokemonEntity && entity instanceof AbstractClientPlayer) {
+        if (vehicle instanceof PokemonEntity pokemonEntity && entity instanceof OrientationControllable) {
             var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
-                return behaviour.shouldRotatePlayerHead(settings, state, pokemonEntity);
+                return behaviour.shouldRotateRiderHead(settings, state, pokemonEntity);
             });
 
             if (!shouldRotatePlayerHead) {
@@ -73,7 +74,9 @@ public class HumanoidModelMixin {
                 }
             }
 
-            MountedPlayerRenderer.INSTANCE.animate(pokemonEntity, (AbstractClientPlayer) entity, relevantPartsByName, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
+            if (!(entity instanceof AbstractClientPlayer player)) return;
+
+            MountedPlayerRenderer.INSTANCE.animate(pokemonEntity, player, relevantPartsByName, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
         }
     }
 }

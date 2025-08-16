@@ -54,10 +54,9 @@ class CampfirePotItem(block: Block): BlockItem(block, Properties()) {
 
                 blockEntity.setRemoved()
 
-                val newBlockState = CobblemonBlocks.CAMPFIRE.defaultBlockState()
+                val newBlockState = (if (isSoul) CobblemonBlocks.SOUL_CAMPFIRE else CobblemonBlocks.CAMPFIRE).defaultBlockState()
                     .setValue(HorizontalDirectionalBlock.FACING, facing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.ITEM_DIRECTION, itemFacing)
-                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.SOUL, isSoul)
+                    .setValue(com.cobblemon.mod.common.block.campfirepot.CampfireBlock.Companion.ITEM_DIRECTION, itemFacing.opposite)
                 world.setBlockAndUpdate(blockPos, newBlockState)
 
                 // Retrieve the new block entity and set the PotItem

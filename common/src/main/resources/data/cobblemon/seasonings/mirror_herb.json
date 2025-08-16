@@ -1,6 +1,6 @@
 {
   "ingredient": "cobblemon:mirror_herb",
-  "colour": "white",
+  "colour": "lime",
   "mobEffects": [
     {
       "effect": "minecraft:invisibility",

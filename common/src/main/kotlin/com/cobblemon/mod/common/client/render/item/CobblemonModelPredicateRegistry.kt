@@ -113,13 +113,13 @@ object CobblemonModelPredicateRegistry {
                 "minecraft:brown_mushroom" -> 0.07f
                 "minecraft:pumpkin" -> 0.08f
                 "cobblemon:rice" -> 0.09f
-                "minecraft:raw_chicken" -> 0.10f
-                "minecraft:raw_cod" -> 0.11f
-                "minecraft:raw_mutton" -> 0.12f
-                "minecraft:raw_porkchop" -> 0.13f
-                "minecraft:raw_rabbit" -> 0.14f
-                "minecraft:raw_salmon" -> 0.15f
-                "minecraft:raw_beef" -> 0.16f
+                "minecraft:chicken" -> 0.10f
+                "minecraft:cod" -> 0.11f
+                "minecraft:mutton" -> 0.12f
+                "minecraft:porkchop" -> 0.13f
+                "minecraft:rabbit" -> 0.14f
+                "minecraft:salmon" -> 0.15f
+                "minecraft:beef" -> 0.16f
                 "minecraft:egg" -> 0.17f
                 "minecraft:poisonous_potato" -> 0.18f
                 "minecraft:rotten_flesh" -> 0.19f

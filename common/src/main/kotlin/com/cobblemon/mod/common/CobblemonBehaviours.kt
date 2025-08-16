@@ -89,6 +89,7 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
 
     override fun reload(manager: ResourceManager) {
         autoPokemonBehaviours.clear()
+        autoNPCBehaviours.clear()
         val data = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             resource.open().use { stream ->

@@ -87,7 +87,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
     fun shouldRotatePokemonHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
-    fun shouldRotatePlayerHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
+    fun shouldRotateRiderHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean
 
     fun getRideSounds(settings: Settings, state: State, vehicle: PokemonEntity): RideSoundSettingsList
 

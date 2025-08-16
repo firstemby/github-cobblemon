@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.PrioritizedList
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -40,17 +39,13 @@ object BagItems : DataRegistry {
     val bagItems = PrioritizedList<BagItemLike>()
     internal val bagItemsScripts = mutableMapOf<String, String>() // itemId to JavaScript
 
-    init {
-        observable.subscribe {
-            Cobblemon.showdownThread.queue(ShowdownService::registerBagItems)
-        }
-    }
-
     fun getConvertibleForStack(stack: ItemStack): BagItemLike? {
         return bagItems.firstOrNull { it.getBagItem(stack) != null }
     }
 
     override fun reload(manager: ResourceManager) {
+        this.bagItemsScripts.clear()
+        ShowdownService.service.resetRegistryData("bagItem")
         manager.listResources("bag_items") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
@@ -60,6 +55,8 @@ object BagItems : DataRegistry {
                 }
             }
         }
+        ShowdownService.service.sendRegistryData(bagItemsScripts, "bagItem")
+
         this.observable.emit(this)
     }
 }

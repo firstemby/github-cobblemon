@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:sweet_berries",
-  "colour": "white",
+  "colour": "red",
   "food": {
     "hunger": 2,
     "saturation": 0.4

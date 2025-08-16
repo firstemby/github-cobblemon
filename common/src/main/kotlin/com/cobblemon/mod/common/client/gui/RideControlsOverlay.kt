@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.air.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeState
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
@@ -133,25 +134,34 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 // Configure what controls to show for each behaviour
                 when (currentBehaviourKey) {
                     BirdBehaviour.KEY -> {}
+                    BoatBehaviour.KEY -> {}
+                    BurstBehaviour.KEY -> {}
                     DolphinBehaviour.KEY -> {}
+                    GliderBehaviour.KEY -> {}
+                    HelicopterBehaviour.KEY -> {}
                     HorseBehaviour.KEY -> {
                         showVerticalMouse = false
                         disableHorizontalMovementKeys = true
                         showSneakKey = false
                     }
-                    BoatBehaviour.KEY -> {}
-                    GliderBehaviour.KEY -> {}
-                    HelicopterBehaviour.KEY -> {}
+                    HoverBehaviour.KEY -> {
+                        showVerticalMouse = false
+                    }
                     JetBehaviour.KEY -> {
                        showMovementKeys = false
                        showSneakKey = false
                        showJumpKey = false
                     }
-                    BurstBehaviour.KEY -> {}
-                    VehicleBehaviour.KEY -> {}
-                    HoverBehaviour.KEY -> {
+                    MinekartBehaviour.KEY -> {
                         showVerticalMouse = false
+                        showHorizontalMouse = false
+                        showSneakKey = false
                     }
+                    RocketBehaviour.KEY -> {
+                        showVerticalMouse = false
+                        showHorizontalMouse = false
+                    }
+                    VehicleBehaviour.KEY -> {}
                 }
 
                 val centerX = minecraft.window.guiScaledWidth / 2

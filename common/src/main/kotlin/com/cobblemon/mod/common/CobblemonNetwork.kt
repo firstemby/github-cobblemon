@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.UnlockReloadPacketHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
+import com.cobblemon.mod.common.client.net.effect.PokeSnackBlockParticlesHandler
 import com.cobblemon.mod.common.client.net.effect.RunPosableMoLangHandler
 import com.cobblemon.mod.common.client.net.effect.SaccharineLogBlockParticlesHandler
 import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormEntityParticleHandler
@@ -41,6 +42,7 @@ import com.cobblemon.mod.common.client.net.pasture.UpdatePastureConflictFlagHand
 import com.cobblemon.mod.common.client.net.pokedex.ServerConfirmedRegisterHandler
 import com.cobblemon.mod.common.client.net.pokemon.update.ClientboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.client.net.pokemon.update.PokemonUpdatePacketHandler
+import com.cobblemon.mod.common.client.net.riding.ClientboundUpdateDriverInputHandler
 import com.cobblemon.mod.common.client.net.settings.OpenCobblemonConfigEditorHandler
 import com.cobblemon.mod.common.client.net.settings.ServerSettingsPacketHandler
 import com.cobblemon.mod.common.client.net.sound.UnvalidatedPlaySoundS2CPacketHandler
@@ -77,12 +79,14 @@ import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidP
 import com.cobblemon.mod.common.net.messages.client.data.*
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
+import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
 import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SaccharineLogBlockParticlesPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
 import com.cobblemon.mod.common.net.messages.client.npc.CloseNPCEditorPacket
 import com.cobblemon.mod.common.net.messages.client.npc.OpenNPCEditorPacket
+import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.client.pasture.ClosePasturePacket
 import com.cobblemon.mod.common.net.messages.client.pasture.OpenPasturePacket
@@ -173,6 +177,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPa
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
 import com.cobblemon.mod.common.net.messages.server.starter.RequestStarterScreenPacket
 import com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
@@ -223,6 +228,7 @@ import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetActiveMarkH
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.SetMarkingsHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
 import com.cobblemon.mod.common.net.serverhandling.riding.DismountPokemonPacketHandler
+import com.cobblemon.mod.common.net.serverhandling.riding.DriverInputPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.RequestStarterScreenHandler
 import com.cobblemon.mod.common.net.serverhandling.starter.SelectStarterPacketHandler
 import com.cobblemon.mod.common.net.serverhandling.storage.BenchMoveHandler
@@ -405,6 +411,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SpawnSnowstormEntityParticlePacket.ID, SpawnSnowstormEntityParticlePacket::decode, SpawnSnowstormEntityParticleHandler))
         list.add(PacketRegisterInfo(RunPosableMoLangPacket.ID, RunPosableMoLangPacket::decode, RunPosableMoLangHandler))
         list.add(PacketRegisterInfo(SaccharineLogBlockParticlesPacket.ID, SaccharineLogBlockParticlesPacket::decode, SaccharineLogBlockParticlesHandler))
+        list.add(PacketRegisterInfo(PokeSnackBlockParticlesPacket.ID, PokeSnackBlockParticlesPacket::decode, PokeSnackBlockParticlesHandler))
 
         // Hax
         list.add(PacketRegisterInfo(UnvalidatedPlaySoundS2CPacket.ID, UnvalidatedPlaySoundS2CPacket::decode, UnvalidatedPlaySoundS2CPacketHandler))
@@ -465,6 +472,7 @@ object CobblemonNetwork {
 
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
+        list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
 
         return list
     }
@@ -571,6 +579,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ServerboundUpdateRidingStatsPacket.ID, ServerboundUpdateRidingStatsPacket::decode, ServerboundUpdateRidingStatsHandler))
         list.add(PacketRegisterInfo(ServerboundUpdateRidingStatRangePacket.ID, ServerboundUpdateRidingStatRangePacket::decode, ServerboundUpdateRidingStatRangeHandler))
         list.add(PacketRegisterInfo(DismountPokemonPacket.ID, DismountPokemonPacket::decode, DismountPokemonPacketHandler))
+        list.add(PacketRegisterInfo(ServerboundUpdateDriverInputPacket.ID, ServerboundUpdateDriverInputPacket::decode, DriverInputPacketHandler))
 
         // Cooking
         list.add(PacketRegisterInfo(ToggleCookingPotLidPacket.ID, ToggleCookingPotLidPacket::decode, ToggleCookingPotLidHandler))

@@ -38,6 +38,8 @@ class Search(
                     filter = filter.substring(1)
                 }
 
+                filter = filter.lowercase(Locale.ROOT)
+
                 val pokemonFilter: PokemonFilter = when (filter) {
                     "holding", "helditem", "held_item" -> PokemonFilter { pokemon -> !pokemon.heldItem().isEmpty }
                     "fainted" -> PokemonFilter { pokemon -> pokemon.isFainted() }
@@ -45,14 +47,16 @@ class Search(
                     "mythical" -> PokemonFilter { pokemon -> pokemon.isMythical() }
                     "ultrabeast", "ultra_beast" -> PokemonFilter { pokemon -> pokemon.isUltraBeast() }
                     else -> {
-                        val nameFilter = filter.lowercase(Locale.ROOT)
                         PokemonFilter { pokemon ->
-                            // search by partial name
-                            if (pokemon.species.resourceIdentifier.path.contains(nameFilter)) {
-                                return@PokemonFilter true
+                            if (filter.isEmpty()) {
+                                true
+                            } else {
+                                val species = pokemon.species.translatedName.string.lowercase(Locale.ROOT)
+                                val name = pokemon.getDisplayName().string.lowercase(Locale.ROOT)
+                                val props = PokemonProperties.parse(filter)
+
+                                species.contains(filter) || name.contains(filter) || (props.matches(pokemon) && props.asString().isNotEmpty())
                             }
-                            // search by exactly match in different props
-                            return@PokemonFilter PokemonProperties.parse(filter).matches(pokemon)
                         }
                     }
                 }

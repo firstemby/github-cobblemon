@@ -1175,6 +1175,14 @@
     "sounds": [
       {
         "name": "cobblemon:ride/loop/saucer_flight_loop",
+        "attenuation_distance": 64.0
+      }
+    ]
+  },
+  "ride.loop.rocket": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/rocket_flight_loop",
         "attenuation_distance": 48.0
       }
     ]

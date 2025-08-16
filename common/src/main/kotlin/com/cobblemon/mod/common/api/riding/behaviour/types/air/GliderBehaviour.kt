@@ -184,7 +184,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
+    override fun shouldRotateRiderHead(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity): Boolean {
         return false
     }
 

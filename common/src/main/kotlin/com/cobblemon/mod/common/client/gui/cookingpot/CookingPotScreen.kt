@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
-import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
@@ -39,6 +38,7 @@ import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.RecipeBookMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.crafting.CraftingInput
+import java.util.*
 import kotlin.math.ceil
 
 @Environment(EnvType.CLIENT)
@@ -174,24 +174,27 @@ class CookingPotScreen(
             this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, true, partialTicks)
         }
 
-        this.renderTooltip(context, mouseX, mouseY)
-        this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
-    }
+        val resultSlot = menu.slots[menu.resultSlotIndex]
+        val optionalRecipe = menu.currentActiveRecipe
+        if (optionalRecipe != null && !optionalRecipe.value.result.isEmpty && !resultSlot.hasItem()) {
+            val resultItem = menu.previewItem
 
-    override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
-        if (slot.index != PREVIEW_ITEM_SLOT) {
-            super.renderSlot(guiGraphics, slot)
-            return
+            RenderSystem.enableBlend()
+            RenderSystem.setShaderColor(1F, 1F, 1F, 0.5F)
+
+            context.renderFakeItem(resultItem, leftPos + resultSlot.x, topPos + resultSlot.y);
+            context.renderItemDecorations(font, resultItem, leftPos + resultSlot.x, topPos + resultSlot.y)
+
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+            RenderSystem.disableBlend()
+
+            if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.carried.isEmpty) {
+                context.renderTooltip(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
+            }
         }
 
-        RenderSystem.enableBlend()
-        RenderSystem.setShaderColor(1F, 1F, 1F, 0.5F)
-
-        guiGraphics.renderFakeItem(slot.item, slot.x, slot.y);
-        guiGraphics.renderItemDecorations(minecraft!!.font, slot.item, slot.x, slot.y)
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
-        RenderSystem.disableBlend()
+        this.renderTooltip(context, mouseX, mouseY)
+        this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
     override fun recipesUpdated() {

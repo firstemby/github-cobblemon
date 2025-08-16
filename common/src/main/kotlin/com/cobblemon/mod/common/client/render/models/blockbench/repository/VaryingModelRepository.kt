@@ -405,7 +405,6 @@ object VaryingModelRepository {
         inbuilt("lombre", :: LombreModel)
         inbuilt("ludicolo", :: LudicoloModel)
         inbuilt("golett", :: GolettModel)
-        inbuilt("golurk", :: GolurkModel)
         inbuilt("stantler", :: StantlerModel)
         inbuilt("sneasel", :: SneaselModel)
         inbuilt("weavile", :: WeavileModel)

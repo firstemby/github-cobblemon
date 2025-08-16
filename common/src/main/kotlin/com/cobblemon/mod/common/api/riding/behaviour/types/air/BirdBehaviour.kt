@@ -16,7 +16,6 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
-import com.cobblemon.mod.common.api.riding.sound.RideLoopSound
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -25,7 +24,6 @@ import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -107,14 +105,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             upForce -= 0.3
         }
 
-        val altitudeLimit = vehicle.runtime.resolveDouble(settings.jumpExpr)
-
-        //Only limit altitude if altitude is not infinite
-        if (!vehicle.runtime.resolveBoolean(settings.infiniteAltitude)) {
-            //Provide a hard limit on altitude
-            upForce = if (vehicle.y >= altitudeLimit && upForce > 0) 0.0 else upForce
-        }
-
 
         val velocity = Vec3(state.rideVelocity.get().x , upForce, forwardForce)
         return velocity
@@ -129,12 +119,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glidespeedExpr)
         val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
         val staminaStat = vehicle.runtime.resolveDouble(settings.staminaExpr)
-
         var glideSpeedChange = 0.0
-
-        val currSpeed = state.rideVelocity.get().length()
-
-        //Flag for determining if player is actively inputting
         var activeInput = false
 
         var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z)
@@ -464,12 +449,12 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: BirdSettings,
         state: BirdState,
         vehicle: PokemonEntity
     ): Boolean {
-        return true
+        return false
     }
 
     override fun getRideSounds(

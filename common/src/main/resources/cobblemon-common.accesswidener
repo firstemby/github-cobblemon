@@ -146,3 +146,5 @@ transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$Ingre
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$FuelSlot
 
 transitive-accessible method net/minecraft/world/entity/ai/behavior/RandomStroll getTargetSwimPos (Lnet/minecraft/world/entity/PathfinderMob;)Lnet/minecraft/world/phys/Vec3;
+
+transitive-accessible method net/minecraft/world/food/FoodData add (IF)V

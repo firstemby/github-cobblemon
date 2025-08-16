@@ -33,6 +33,7 @@ class PitchTiltAnimation(
 ) : PoseAnimation() {
     companion object {
         const val PREVIOUS_ANGLE = "previous_pitch_tilt_angle"
+        const val CORRECTED_ANGLE = "corrected_pitch_tilt_angle"
         const val PITCHED_TILT = "has_pitched_tilt"
     }
 
@@ -52,10 +53,9 @@ class PitchTiltAnimation(
             return
         }
         val delta = entity.deltaMovement
-        // The angleOfMotion should be 0 in the case that horizontal movement is 1 and vertical movement is 0.
-        // It should be the angle in degrees that becomes higher as the entity's motion becomes more upwards, and negative as the entity's motion becomes more downwards
         val vertical = delta.y
         val horizontal = delta.horizontalDistance()
+        // It should be the angle in degrees that becomes higher as the entity's motion becomes more upwards, and negative as the entity's motion becomes more downwards
         val angleOfMotion = if (horizontal == 0.0) {
             when {
                 vertical > 0 -> maxPitch
@@ -64,20 +64,21 @@ class PitchTiltAnimation(
             }
         } else {
             Mth.atan2(vertical, horizontal).toDegrees()
-        }.coerceIn(minPitch, maxPitch)
-
-        val maxChangePerTick = this.maxChangePerTick * intensity
+        }.coerceIn(minPitch, maxPitch) * -1
 
         val lastAngle = state.numbers[PREVIOUS_ANGLE] ?: 0F
-        val interpolatedAngle = if (angleOfMotion - lastAngle > maxChangePerTick) {
-            lastAngle + maxChangePerTick
-        } else if (angleOfMotion - lastAngle < -maxChangePerTick) {
-            lastAngle - maxChangePerTick
+        val change = (angleOfMotion - lastAngle).coerceIn(-maxChangePerTick, maxChangePerTick)
+        println("With intensity $intensity, change is $change, last angle is $lastAngle, target angle is $angleOfMotion")
+        if (PITCHED_TILT !in state.renderMarkers) {
+            state.numbers.remove(CORRECTED_ANGLE)
+            val correctedAngle = (lastAngle + change) * intensity
+            bone.addRotation(0, correctedAngle.toRadians())
+            state.numbers[PREVIOUS_ANGLE] = correctedAngle
         } else {
-            angleOfMotion
+            // It was already pitched, which means the body bone already has a rotation, so only rotate it a pinch more.
+            bone.addRotation(0, change.toRadians() * intensity)
+            state.numbers[PREVIOUS_ANGLE] = lastAngle + change * intensity
         }
-        bone.addRotation(0, -interpolatedAngle.toRadians())
-        state.numbers[PREVIOUS_ANGLE] = interpolatedAngle
         state.renderMarkers += PITCHED_TILT
     }
 }

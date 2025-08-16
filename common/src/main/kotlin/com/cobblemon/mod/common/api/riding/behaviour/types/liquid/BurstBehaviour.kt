@@ -215,7 +215,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         return false
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: BurstSettings,
         state: BurstState,
         vehicle: PokemonEntity

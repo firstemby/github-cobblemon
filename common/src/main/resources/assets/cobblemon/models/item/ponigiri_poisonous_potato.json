@@ -1,6 +1,6 @@
 {
   "parent": "cobblemon:item/ponigiri",
   "textures": {
-    "layer2": "cobblemon:item/ponigiri/ponigiri_overlay_poisonous_potato"
+    "layer1": "cobblemon:item/food/ponigiri/ponigiri_poisonous"
   }
 }

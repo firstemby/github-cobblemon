@@ -719,6 +719,7 @@ class PCGUI(
             if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
         }
         if (storageWidget.isHovered && mouseX < (storageWidget.x + StorageWidget.SCREEN_WIDTH)) this.storageWidget.box -= verticalAmount.toInt()
+        if (wallpaperWidget.isHovered) wallpaperWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
         return super.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
     }
 
