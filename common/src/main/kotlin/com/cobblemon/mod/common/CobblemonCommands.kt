@@ -59,6 +59,7 @@ object CobblemonCommands {
         ApplyPlayerTextureCommand.register(dispatcher)
         RenameBoxCommand.register(dispatcher)
         ChangeBoxWallpaperCommand.register(dispatcher)
+        RunMolangCommand.register(dispatcher)
         RunMolangScriptCommand.register(dispatcher)
         GivePokemonEggCommand.register(dispatcher)
         GiveAllPokemonEggCommand.register(dispatcher)

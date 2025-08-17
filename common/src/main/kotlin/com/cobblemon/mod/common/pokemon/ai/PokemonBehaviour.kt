@@ -21,6 +21,7 @@ open class PokemonBehaviour {
     var moving = MoveBehaviour()
     val idle = IdleBehaviour()
     val fireImmune = false
+    val dampensVibrations = false
     val entityInteract = EntityBehaviour()
     val combat = CombatBehaviour()
     val herd = HerdBehaviour()

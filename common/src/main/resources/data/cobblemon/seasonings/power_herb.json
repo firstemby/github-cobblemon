@@ -1,6 +1,6 @@
 {
   "ingredient": "cobblemon:power_herb",
-  "colour": "orange",
+  "colour": "red",
   "mobEffects": [
     {
       "effect": "minecraft:haste",

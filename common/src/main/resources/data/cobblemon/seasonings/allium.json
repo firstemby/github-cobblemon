@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:allium",
-  "colour": "pink",
+  "colour": "magenta",
   "mobEffects": [
     {
       "effect": "minecraft:fire_resistance",

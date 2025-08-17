@@ -18,7 +18,7 @@ import com.mojang.serialization.Dynamic
 
 object NPCBrain {
     fun configure(npcEntity: NPCEntity, npcClass: NPCClass, dynamic: Dynamic<*>) {
-        var behaviourConfigurations: List<BehaviourConfig> = CobblemonBehaviours.autoPokemonBehaviours.flatMap { it.configurations } + npcClass.behaviours
+        var behaviourConfigurations: List<BehaviourConfig> = CobblemonBehaviours.autoNPCBehaviours.flatMap { it.configurations } + npcClass.behaviours
         if (npcEntity.behavioursAreCustom) {
             behaviourConfigurations = listOf(ApplyBehaviours().apply { behaviours.addAll(npcEntity.behaviours) })
         }

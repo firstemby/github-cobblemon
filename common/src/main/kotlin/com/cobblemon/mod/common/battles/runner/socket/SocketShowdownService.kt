@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.battles.runner.socket
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.pokemon.FormData
@@ -102,48 +101,44 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         ShowdownInterpreter.interpretMessage(battleId, message)
     }
 
-    override fun getAbilityIds(): JsonArray {
-        writer.write(">getCobbledAbilityIds")
-        writer.flush()
-        val response = readMessage()
-        return gson.fromJson(response, JsonArray::class.java)
-    }
+    override fun sendRegistryData(data: Map<String, String>, type: String) {
+        data.forEach { (_, value) -> sendRegistryEntry(value, type) }
+        // The code for sending bulk data is commented out below, because:
+        // 1) while debugging it's useful to have individual entries, and socket is only used for debug atm
+        // 2) the species JSONs are way too big to be handled as one line on the JS side (maybe both sides?)
+        // this can eventually be remedied if socket is intended to be used for any actual servers/etc.
+        // alternatively, you could get around this limitation by just having ONLY PokemonSpecies send individually,
+        // but it's likely that with enough custom data for moves/abilities/etc. you'd run into the same issue
 
-    override fun getMoves(): JsonArray {
-        writer.write(">getCobbledMoves\n")
-        writer.flush()
-        val response = readMessage()
-        return gson.fromJson(response, JsonArray::class.java)
-    }
-
-    override fun getItemIds(): JsonArray {
-        writer.write(">getCobbledItemIds")
-        writer.flush()
-        val response = readMessage()
-        return gson.fromJson(response, JsonArray::class.java)
-    }
-
-    private fun sendSpeciesData(species: Species, form: FormData?) {
-        writer.write(">receiveSpeciesData ${gson.toJson(PokemonSpecies.ShowdownSpecies(species, form))}\n")
-        acknowledge()
-    }
-
-    private fun sendBagItem(itemId: String, js: String) {
-        writer.write(">receiveBagItemData $itemId $js")
-        acknowledge { Cobblemon.LOGGER.error("Failed to send bag item to Showdown: $itemId") }
-    }
-
-    override fun registerSpecies() {
-        writer.write(">resetSpeciesData\n")
-        acknowledge()
-        PokemonSpecies.species.forEach { species ->
-            sendSpeciesData(species, null)
-            species.forms.forEach { form ->
-                if (form != species.standardForm) {
-                    sendSpeciesData(species, form)
-                }
-            }
+        /*val payload = data.entries.joinToString(prefix = "{", postfix = "}") { (k, v) ->
+            val newV = v.replace(Regex("[\r\n]+"), " ")
+            "\"$k\": $newV"
         }
+        writer.write(">receiveData $type payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $data") }*/
+    }
+
+    override fun sendRegistryEntry(data: String, type: String) {
+        val payload = data.replace(Regex("[\r\n]+"), " ")
+        writer.write(">receiveEntry $type $payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $payload") }
+    }
+
+    override fun getRegistryData(type: String): JsonArray {
+        writer.write(">getData $type")
+        writer.flush()
+        val response = readMessage()
+        return gson.fromJson(response, JsonArray::class.java)
+    }
+
+    override fun resetRegistryData(type: String) {
+        writer.write(">resetData $type")
+        acknowledge()
+    }
+
+    override fun resetAllRegistries() {
+        writer.write(">resetAll")
+        acknowledge()
     }
 
     fun acknowledge(ifFails: () -> Unit = {}) {
@@ -155,14 +150,8 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         }
     }
 
-    override fun registerBagItems() {
-        for ((itemId, js) in BagItems.bagItemsScripts) {
-            sendBagItem(itemId, js.replace("\n", " "))
-        }
-    }
-
     override fun indicateSpeciesInitialized() {
-        writer.write(">afterCobbledSpeciesInit")
+        writer.write(">afterSpeciesInit")
         acknowledge()
     }
 

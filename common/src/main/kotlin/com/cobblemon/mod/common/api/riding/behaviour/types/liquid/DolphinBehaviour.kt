@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
@@ -19,6 +20,7 @@ import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
@@ -29,7 +31,9 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     companion object {
@@ -43,7 +47,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 
     val poseProvider = PoseProvider<DolphinSettings, DolphinState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.entityData.get(PokemonEntity.MOVING) })
+        .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.deltaMovement.length() > 0.1 })
 
     override fun isActive(settings: DolphinSettings, state: DolphinState, vehicle: PokemonEntity): Boolean {
         return Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
@@ -161,11 +165,59 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         deltaTime: Double
     ): Vec3 {
         if (driver !is OrientationControllable) return Vec3.ZERO
+        val controller = (driver as OrientationControllable).orientationController
 
-        //Might need to add the smoothing here for default.
+        //TODO:hook up handling
+        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+
+        //Interpret mouse input
+        val smoothingSpeed = 4.0
         val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
         val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        val mouseXc = (mouseX).coerceIn(-60.0, 60.0)
+        val mouseYc = (mouseY).coerceIn(-60.0, 60.0)
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1 * invertRoll, deltaTime * smoothingSpeed);
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1 * invertPitch, deltaTime * smoothingSpeed);
+        val rollRot = xInput
+        val pitchRot = yInput
+
+        // Roll
+//        if (abs(controller.pitch + rollRot) >= 89.5 ) {
+//            mouseXSmoother.reset()
+//        } else {
+//
+//        }
+
+        controller.rotateRoll(rollRot.toFloat())
+
+        // Yaw
+        // TODO:move all magic numbers to handling expression
+        val yawSpeed = handling * deltaTime * 0.25
+        val yawForce =  sin(controller.roll.toRadians()) * yawSpeed * ( 1.0 - min(sqrt(normalizeVal(state.rideVelocity.get().length(), 0.0, topSpeed)), 0.5))
+        //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
+        controller.applyGlobalYaw(yawForce.toFloat())
+
+        // Pitch
+        if (abs(controller.pitch + pitchRot) >= 89.5 ) {
+            mouseYSmoother.reset()
+        } else {
+            //controller.applyGlobalPitch(pitchRot.toFloat()  * -1.0f)
+            controller.rotatePitch(pitchRot.toFloat())
+        }
+
+        //yaw, pitch, roll
+        return Vec3.ZERO
+    }
+
+    /*
+    *  Normalizes the given value between a min and a max.
+    *  The result is clamped between 0.0 and 1.0, where 0.0 represents x is at or below min
+    *  and 1.0 represents x is at or above it.
+    */
+    private fun normalizeVal(x: Double, min: Double, max: Double): Double {
+        require(max > min) { "max must be greater than min" }
+        return ((x - min) / (max - min)).coerceIn(0.0, 1.0)
     }
 
     override fun canJump(
@@ -294,6 +346,12 @@ class DolphinSettings : RidingBehaviourSettings {
 
     var strafeFactor = "0.2".asExpression()
         private set
+
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
+    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression()
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 

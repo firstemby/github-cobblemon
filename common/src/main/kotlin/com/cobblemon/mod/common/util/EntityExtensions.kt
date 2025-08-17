@@ -205,7 +205,7 @@ fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
 
         if (blockState.isAir || !blockState.isCollisionShapeFullBlock(level(), bellowBlockPos)) continue
 
-        val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks).result().get().first
+        val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks.toList()).result().get().first
         elementOrTags.forEach {
             if (it.tag) {
                 if (blockState.blockHolder.`is`(TagKey.create(Registries.BLOCK, it.id))) return true

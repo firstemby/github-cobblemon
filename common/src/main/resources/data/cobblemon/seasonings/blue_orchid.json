@@ -1,6 +1,6 @@
 {
   "ingredient": "minecraft:blue_orchid",
-  "colour": "blue",
+  "colour": "light_blue",
   "mobEffects": [
     {
       "effect": "minecraft:saturation",

@@ -1,8 +1,9 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "cobblemon:item/ponigiri/ponigiri_base_color",
-    "layer1": "cobblemon:item/ponigiri/ponigiri_base_seaweed"
+    "layer0": "cobblemon:item/food/ponigiri/ponigiri_filling",
+    "layer1": "cobblemon:item/food/ponigiri/ponigiri_base",
+    "particle": "#layer1"
   },
   "overrides": [
     {
@@ -38,36 +39,32 @@
       "model": "cobblemon:item/ponigiri_pumpkin"
     },
     {
-      "predicate": { "cobblemon:ponigiri_overlay": 0.09 },
-      "model": "cobblemon:item/ponigiri_rice"
-    },
-    {
       "predicate": { "cobblemon:ponigiri_overlay": 0.10 },
-      "model": "cobblemon:item/ponigiri_raw_chicken"
+      "model": "cobblemon:item/ponigiri_chicken"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.11 },
-      "model": "cobblemon:item/ponigiri_raw_cod"
+      "model": "cobblemon:item/ponigiri_cod"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.12 },
-      "model": "cobblemon:item/ponigiri_raw_mutton"
+      "model": "cobblemon:item/ponigiri_mutton"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.13 },
-      "model": "cobblemon:item/ponigiri_raw_porkchop"
+      "model": "cobblemon:item/ponigiri_porkchop"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.14 },
-      "model": "cobblemon:item/ponigiri_raw_rabbit"
+      "model": "cobblemon:item/ponigiri_rabbit"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.15 },
-      "model": "cobblemon:item/ponigiri_raw_salmon"
+      "model": "cobblemon:item/ponigiri_salmon"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.16 },
-      "model": "cobblemon:item/ponigiri_raw_beef"
+      "model": "cobblemon:item/ponigiri_beef"
     },
     {
       "predicate": { "cobblemon:ponigiri_overlay": 0.17 },

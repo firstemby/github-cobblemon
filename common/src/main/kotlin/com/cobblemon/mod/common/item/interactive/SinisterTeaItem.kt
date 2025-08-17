@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
@@ -26,6 +27,7 @@ class SinisterTeaItem : Item(
                         .alwaysEdible()
                         .nutrition(0)
                         .saturationModifier(0.0f)
+                        .usingConvertsTo(Items.BOWL)
                         .build())
 ) {
     override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {

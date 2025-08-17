@@ -48,6 +48,9 @@
     "height": 0.8,
     "fixed": false
   },
+  "behaviour": {
+    "dampensVibrations": true
+  },
   "drops": {
     "amount": 1,
     "entries": [

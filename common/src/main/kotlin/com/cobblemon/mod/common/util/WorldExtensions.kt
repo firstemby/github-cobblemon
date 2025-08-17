@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -230,6 +231,8 @@ val Level.blockRegistry: Registry<Block>
     get() = registryAccess().registryOrThrow(Registries.BLOCK)
 val Level.entityTypeRegistry: Registry<EntityType<*>>
     get() = registryAccess().registryOrThrow(Registries.ENTITY_TYPE)
+val Level.fluidRegistry: Registry<Fluid>
+    get() = registryAccess().registryOrThrow(Registries.FLUID)
 
 fun Vec3.traceDownwards(
     world: Level,

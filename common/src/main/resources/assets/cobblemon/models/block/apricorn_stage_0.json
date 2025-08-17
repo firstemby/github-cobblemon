@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"1": "cobblemon:block/crops/apricorn_stage_0",
-		"particle": "cobblemon:block/crops/apricorn_stage_0"
+		"apricorn": "cobblemon:block/crops/apricorn_stage_0",
+		"particle": "#apricorn"
 	},
 	"elements": [
 		{
@@ -10,12 +10,8 @@
 			"to": [8, 13.5, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [1, 0, 1, 1], "texture": "#1"},
-				"east": {"uv": [0, 0, 1, 1], "texture": "#1"},
-				"south": {"uv": [2, 0, 2, 1], "texture": "#1"},
-				"west": {"uv": [1, 0, 2, 1], "texture": "#1"},
-				"up": {"uv": [1, 0, 1, -1], "texture": "#1"},
-				"down": {"uv": [1, -1, 1, 0], "texture": "#1"}
+				"east": {"uv": [0, 0, 1, 1], "texture": "#apricorn"},
+				"west": {"uv": [1, 0, 2, 1], "texture": "#apricorn"}
 			}
 		},
 		{
@@ -24,12 +20,8 @@
 			"to": [8, 12.5, 15],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [1, 1, 1, 2], "texture": "#1"},
-				"east": {"uv": [0, 1, 1, 2], "texture": "#1"},
-				"south": {"uv": [2, 1, 2, 2], "texture": "#1"},
-				"west": {"uv": [1, 1, 2, 2], "texture": "#1"},
-				"up": {"uv": [1, 1, 1, 0], "texture": "#1"},
-				"down": {"uv": [1, 0, 1, 1], "texture": "#1"}
+				"east": {"uv": [0, 1, 1, 2], "texture": "#apricorn"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#apricorn"}
 			}
 		},
 		{
@@ -38,40 +30,25 @@
 			"to": [9, 11.5, 15.5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [10, 7, 12, 8], "texture": "#1"},
-				"east": {"uv": [8, 7, 10, 8], "texture": "#1"},
-				"south": {"uv": [14, 7, 16, 8], "texture": "#1"},
-				"west": {"uv": [12, 7, 14, 8], "texture": "#1"},
-				"up": {"uv": [12, 7, 10, 5], "texture": "#1"},
-				"down": {"uv": [14, 5, 12, 7], "texture": "#1"}
+				"north": {"uv": [2, 8, 4, 9], "texture": "#apricorn"},
+				"east": {"uv": [0, 8, 2, 9], "texture": "#apricorn"},
+				"south": {"uv": [6, 8, 8, 9], "texture": "#apricorn"},
+				"west": {"uv": [4, 8, 6, 9], "texture": "#apricorn"},
+				"up": {"uv": [4, 8, 2, 6], "texture": "#apricorn"}
 			}
 		},
 		{
 			"name": "apricorn1",
-			"from": [6.5, 9, 13],
+			"from": [6.5, 8, 13],
 			"to": [9.5, 11, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [3, 3, 6, 5], "texture": "#1"},
-				"east": {"uv": [0, 3, 3, 5], "texture": "#1"},
-				"south": {"uv": [9, 3, 12, 5], "texture": "#1"},
-				"west": {"uv": [6, 3, 9, 5], "texture": "#1"},
-				"up": {"uv": [6, 3, 3, 0], "texture": "#1"},
-				"down": {"uv": [9, 0, 6, 3], "texture": "#1"}
-			}
-		},
-		{
-			"name": "apricorn2",
-			"from": [7, 8.5, 13.5],
-			"to": [9, 9.5, 15.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
-			"faces": {
-				"north": {"uv": [2, 7, 4, 8], "texture": "#1"},
-				"east": {"uv": [0, 7, 2, 8], "texture": "#1"},
-				"south": {"uv": [6, 7, 8, 8], "texture": "#1"},
-				"west": {"uv": [4, 7, 6, 8], "texture": "#1"},
-				"up": {"uv": [4, 7, 2, 5], "texture": "#1"},
-				"down": {"uv": [6, 5, 4, 7], "texture": "#1"}
+				"north": {"uv": [3, 3, 6, 6], "texture": "#apricorn"},
+				"east": {"uv": [0, 3, 3, 6], "texture": "#apricorn"},
+				"south": {"uv": [9, 3, 12, 6], "texture": "#apricorn"},
+				"west": {"uv": [6, 3, 9, 6], "texture": "#apricorn"},
+				"up": {"uv": [6, 3, 3, 0], "texture": "#apricorn"},
+				"down": {"uv": [9, 0, 6, 3], "texture": "#apricorn"}
 			}
 		}
 	],
@@ -80,7 +57,7 @@
 			"name": "apricorn_stage_1",
 			"origin": [0, 0, 0],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4]
+			"children": [0, 1, 2, 3]
 		}
 	]
 }

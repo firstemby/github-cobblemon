@@ -38,5 +38,4 @@ class CookingPotResultSlot(
     }
 
     override fun mayPlace(stack: ItemStack): Boolean = false
-    override fun isActive(): Boolean = hasItem()
 }

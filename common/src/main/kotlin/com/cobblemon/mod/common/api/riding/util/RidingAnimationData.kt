@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.sign
 
 /**
  * Class to handle the updating and containment of ride data used in animation.
@@ -33,6 +34,7 @@ class RidingAnimationData(val ride: PokemonEntity)
     var rotSpring: Vec3Spring = Vec3Spring()
     var rotDeltaSpring: Vec3Spring = Vec3Spring()
     var localVelocitySpring: Vec3Spring = Vec3Spring()
+    var driverInputSpring: Vec3Spring = Vec3Spring()
 
     fun update() {
         val activeRide = ride.hasControllingPassenger()
@@ -136,6 +138,14 @@ class RidingAnimationData(val ride: PokemonEntity)
         /******************************************************
          * Update springs
          *****************************************************/
+        val driver = ride.controllingPassenger
+        val vertInput = when {
+            driver != null && driver.jumping-> 1.0
+            driver != null && driver.isShiftKeyDown -> -1.0
+            else -> 0.0
+        }
+        val input = if(driver != null) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
+        driverInputSpring.update(input, stiffness * 2, damping)
         rotDeltaSpring.update(angDelta, stiffness, damping)
         velocitySpring.update(currentVelocity, stiffness, damping)
         rotSpring.update(currRot, stiffness, damping)

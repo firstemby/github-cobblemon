@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.material.Fluid
 
 /**
  * Behavioural properties relating to a Pokémon sleeping. This can be wild sleeping or sleeping on the player or both.
@@ -27,6 +28,7 @@ class RestBehaviour {
     val times = TimeRange.timeRanges["night"]!!
     val blocks = mutableListOf<RegistryLikeCondition<Block>>()
     val biomes = mutableListOf<RegistryLikeCondition<Biome>>()
+    val fluids = mutableListOf<RegistryLikeCondition<Fluid>>()
     val light = IntRange(0, 15)
     val depth = SleepDepth.normal
     val canSeeSky: Boolean? = null

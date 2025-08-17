@@ -28,6 +28,7 @@
     "client.HumanoidModelMixin",
     "client.ItemInHandRendererMixin",
     "client.ItemRendererMixin",
+    "client.LivingEntityRendererMixin",
     "client.LocalPlayerMixin",
     "client.ModelLoaderMixin",
     "client.ModelPartMixin",
@@ -44,8 +45,8 @@
     "riding.JetMixin"
   ],
   "mixins": [
-    "ChannelMixin",
     "BeeEntityMixin",
+    "ChannelMixin",
     "ChunkStorageMixin",
     "CrashReportMixin",
     "DecoratedPotPatternsMixin",
@@ -56,8 +57,8 @@
     "ExplosionMixin",
     "ItemStackComponentizationFixMixin",
     "LecternBlockMixin",
-    "LivingEntityMixin",
     "LightningBoltMixin",
+    "LivingEntityMixin",
     "MinecraftDedicatedServerMixin",
     "NbtUtilsMixin",
     "PhantomSweepAttackGoalMixin",

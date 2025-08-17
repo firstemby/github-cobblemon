@@ -32,7 +32,7 @@ object SaccharineLogBlockParticlesHandler : ClientNetworkPacketHandler<Saccharin
         val entityPos = packet.entityPos
         if (entityPos != null) {
             val random = level.random
-            repeat(10) {
+            repeat(5) {
                 level.addParticle(
                     ParticleTypes.POOF,
                     entityPos.x + random.nextDouble(),

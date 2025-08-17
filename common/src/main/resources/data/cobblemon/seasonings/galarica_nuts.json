@@ -1,6 +1,6 @@
 {
   "ingredient": "cobblemon:galarica_nuts",
-  "colour": "red",
+  "colour": "orange",
   "mobEffects": [
     {
       "effect": "minecraft:fire_resistance",

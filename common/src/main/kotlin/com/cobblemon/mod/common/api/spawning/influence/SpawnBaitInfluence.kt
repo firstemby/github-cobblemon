@@ -29,13 +29,13 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku, Plastered_Crab
  * @since March 18th, 2025
  */
-class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (time: Int) -> Unit = {}) : SpawningInfluence {
+open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (time: Int, entity: PokemonEntity?) -> Unit = { _, _ -> }) : SpawningInfluence {
 
     var usedTimes = 0
 
-    private fun markUsed() {
+    private fun markUsed(entity: PokemonEntity? = null) {
         usedTimes++
-        onUsed(usedTimes)
+        onUsed(usedTimes, entity)
     }
 
     override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
@@ -43,7 +43,7 @@ class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (time:
             val merged = SpawnBaitUtils.mergeEffects(effects)
             merged.forEach { effect ->
                 if (Math.random() <= effect.chance) {
-                    markUsed()
+                    markUsed(entity)
                     Effects.getEffectFunction(effect.type)?.invoke(entity, effect)
                 }
             }

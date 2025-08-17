@@ -63,6 +63,12 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "times": "night",
+      "light": "0-4",
+      "fluids": ["#minecraft:water"]
     }
   },
   "drops": {

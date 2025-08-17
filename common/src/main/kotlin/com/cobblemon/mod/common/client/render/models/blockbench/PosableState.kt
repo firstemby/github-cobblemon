@@ -263,6 +263,36 @@ abstract class PosableState : Schedulable {
             //?: return@addFunction DoubleValue(0.0)
             return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
         }
+        .addFunction("input_right") { params ->
+            val lookBackTick = params.getInt(0)
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
+
+            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
+            //?: return@addFunction DoubleValue(0.0)
+            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+        }
+        .addFunction("input_up") { params ->
+            val lookBackTick = params.getInt(0)
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
+
+            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
+            //?: return@addFunction DoubleValue(0.0)
+            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+        }
+        .addFunction("input_forward") { params ->
+            val lookBackTick = params.getInt(0)
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+
+            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
+
+            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
+            //?: return@addFunction DoubleValue(0.0)
+            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+        }
 
 
     /** All of the MoLang functions that can be applied to something with this state. */
