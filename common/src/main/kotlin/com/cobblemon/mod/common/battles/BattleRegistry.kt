@@ -121,6 +121,8 @@ object BattleRegistry {
             packedTeamBuilder.append("${if (pk.dmaxLevel < 10) pk.dmaxLevel else ""},")
             // Teratype
             packedTeamBuilder.append("${pokemon.effectedPokemon.teraType.name},")
+            // Original nature
+            packedTeamBuilder.append("${pk.nature.name.path},")
 
             team.add(packedTeamBuilder.toString())
         }
