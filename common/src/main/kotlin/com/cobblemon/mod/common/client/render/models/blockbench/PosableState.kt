@@ -326,6 +326,31 @@ abstract class PosableState : Schedulable {
                 }
             }
         }
+        .addFunction("recurring_sound") { params ->
+            if (params.get<MoValue>(0) !is StringValue) {
+                return@addFunction Unit
+            }
+            //param 0 - sound
+            //param 1 - offset
+            //param 2 -
+            val curr_time = reusableAnimTime.value
+            val entity = getEntity()
+            val soundEvent = SoundEvent.createVariableRangeEvent(params.getString(0).asIdentifierDefaultingNamespace())
+            val offset = params.getDouble(1)
+            val loopLength = params.getDouble(2)
+            if (soundEvent != null) {
+                val volume = 1F
+                val pitch = 1F
+                if( )
+                    if (entity != null) {
+                        if (!entity.isSilent) {
+                            entity.level().playLocalSound(entity, soundEvent, entity.soundSource, volume, pitch)
+                        }
+                    } else {
+                        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, volume, pitch))
+                    }
+            }
+        }
         .addFunction("render_item") { params ->
             if (params.get<MoValue>(0) !is StringValue) return@addFunction Unit
 

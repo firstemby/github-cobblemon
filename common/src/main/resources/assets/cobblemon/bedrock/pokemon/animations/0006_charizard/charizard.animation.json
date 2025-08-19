@@ -17503,6 +17503,10 @@
 				"3.1667": {
 					"effect": "animation.leather.wing_flap.medium"
 				}
+			},
+			"timeline": {
+				"1.125": "q.has_entity ? { q.sound('animation.chitin.wing_flap.medium'); };",
+				"3.1667": "q.has_entity ? { q.particle('cobblemon:ambient_shiny_sparkle', 'root'); };"
 			}
 		},
 		"animation.charizard.air_fly": {
@@ -18792,9 +18796,9 @@
 					"effect": "animation.leather.wing_flap.medium"
 				}
 			},
-			"particle_effects": {},
 			"timeline": {
-				"1.0833": "q.particle('cobblemon:ambient_shiny_sparkle', 'root');"
+				"1.0833": "q.particle('cobblemon:ambient_shiny_sparkle', 'root');",
+				"3.0833": "q.sound('animation.chitin.wing_flap.medium');"
 			}
 		},
 		"animation.charizard.air_glide_TEST": {
