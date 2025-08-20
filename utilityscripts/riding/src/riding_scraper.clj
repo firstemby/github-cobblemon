@@ -493,9 +493,7 @@
         files (file-seq (file path))
         csv (fetch-csv)
         updates (get-file-updates csv files)]
-    (println updates)
     (doseq [[file contents] updates]
-      (println "Spitting")
       (spit file contents))))
 
 (defn -main []
@@ -504,3 +502,5 @@
                   (run [_]
                     (run-script)
                     (.setRunnable PokemonRenderer/Companion nil)))))
+
+(-main)
