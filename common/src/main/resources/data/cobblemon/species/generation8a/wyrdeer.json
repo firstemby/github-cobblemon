@@ -45,78 +45,180 @@
   "baseFriendship": 50,
   "baseScale": 1.4,
   "hitbox": {
-    "width": 1.2,
     "height": 1.8,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "41-60",
+          "JUMP": "61-80",
+          "SKILL": "41-60",
+          "SPEED": "41-60",
+          "STAMINA": "61-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -1.0625,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0625,
+              "z": 0.0
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.18749999,
+              "y": -0.23437509,
+              "z": -2.1708083E-19
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "light": "0-4"
     }
-  },
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can jump",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    },
-    "seats": [
-      {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.0,
-              "z": 0
-            }
-          }
-        ]
-      }
-    ]
   },
   "drops": {
     "amount": 3,

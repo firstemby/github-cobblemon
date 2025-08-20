@@ -45,28 +45,205 @@
   "baseFriendship": 50,
   "baseScale": 1.8,
   "hitbox": {
-    "width": 1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "canJump": false,
+        "canSprint": false,
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "21-40",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/boat",
+        "stats": {
+          "ACCELERATION": "41-60",
+          "JUMP": "0-20",
+          "SKILL": "41-60",
+          "SPEED": "21-40",
+          "STAMINA": "41-60"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -0.9624828,
+          "z": 0.4943037
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.99539363,
+              "z": 0.48606288
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.015114415,
+              "y": -1.0480949,
+              "z": 0.3059882
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.9624828,
+              "z": 0.4943037
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.97137415,
+              "z": 0.3422527
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.0056688,
+              "z": 0.39250305
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "moving": {
       "canLook": false,
-      "walk": {
-        "walkSpeed": 0.14,
-        "avoidsLand": true
-      },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
         "canSwimInLava": false,
+        "canSwimInWater": true,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.14
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": false,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": false
     }
   },
   "drops": {
@@ -184,17 +361,17 @@
   ],
   "evolutions": [
     {
-      "id": "wailmer_wailord",
-      "variant": "level_up",
-      "result": "wailord",
       "consumeHeldItem": false,
+      "id": "wailmer_wailord",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 40
+          "minLevel": 40,
+          "variant": "level"
         }
-      ]
+      ],
+      "result": "wailord",
+      "variant": "level_up"
     }
   ]
 }

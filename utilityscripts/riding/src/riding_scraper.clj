@@ -16,7 +16,8 @@
            (org.joml Quaternionf)
            (java.lang.reflect Field)
            (org.joml Vector3f)
-           (net.minecraft.client Minecraft)))
+           (net.minecraft.client Minecraft)
+           (com.mojang.blaze3d.vertex PoseStack)))
 
 (defn vector3f->vec
   "Converts a 3D vector into a simple Clojure map."
@@ -225,23 +226,11 @@
           identity)
 
 (defmethod behaviour-type->json :default
-  "Returns:
-  - {:key <mapped-key>} if the provided type is present in behaviour-keys
-  - nil otherwise"
-
   [type]
   (when-let [key (get behaviour-keys type)]
     {:key key}))
 
 (defmethod behaviour-type->json "Basic"
-  "Serializes the \"Basic\" behaviour type.
-
-  Returns:
-  - {:key <mapped-key>
-     :canJump false
-     :canSprint false}
-  or nil if the type cannot be mapped via behaviour-keys."
-
   [type]
   (when-let [key (get behaviour-keys type)]
     {:key       key

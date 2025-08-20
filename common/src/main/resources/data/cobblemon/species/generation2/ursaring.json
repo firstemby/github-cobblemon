@@ -44,9 +44,174 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1,
     "height": 2.14,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "21-40",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -2.235829,
+          "z": 0.17551601
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.029130775,
+              "y": -2.4408767,
+              "z": 0.15646893
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.029130775,
+              "y": -2.4408767,
+              "z": 0.15646893
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.235829,
+              "z": 0.17551601
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "drops": {
     "amount": 7,
@@ -237,24 +402,24 @@
   "preEvolution": "teddiursa",
   "evolutions": [
     {
-      "id": "ursaring_ursaluna",
-      "variant": "item_interact",
-      "result": "ursaluna",
       "consumeHeldItem": false,
+      "id": "ursaring_ursaluna",
       "learnableMoves": [
         "headlongrush"
       ],
+      "requiredContext": "cobblemon:peat_block",
       "requirements": [
         {
-          "variant": "moon_phase",
-          "moonPhase": "FULL_MOON"
+          "moonPhase": "FULL_MOON",
+          "variant": "moon_phase"
         },
         {
-          "variant": "time_range",
-          "range": "night"
+          "range": "night",
+          "variant": "time_range"
         }
       ],
-      "requiredContext": "cobblemon:peat_block"
+      "result": "ursaluna",
+      "variant": "item_interact"
     }
   ]
 }
