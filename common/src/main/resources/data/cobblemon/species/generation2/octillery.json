@@ -45,21 +45,198 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
     "height": 1.35,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "canJump": false,
+        "canSprint": false,
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "21-40",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/burst",
+        "stats": {
+          "ACCELERATION": "21-40",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -0.484375,
+          "z": 0.578125
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.484375,
+              "z": 0.578125
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
     "moving": {
       "canLook": false,
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canSwimInLava": false,
+        "canSwimInWater": true,
+        "swimSpeed": 0.15
+      },
       "walk": {
         "walkSpeed": 0.15
-      },
-      "swim": {
-        "swimSpeed": 0.15,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
       }
     }
   },
