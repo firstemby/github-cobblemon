@@ -45,11 +45,192 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 0.6,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 0.6
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "stats": {
+          "ACCELERATION": "61-80",
+          "JUMP": "61-80",
+          "SKILL": "61-80",
+          "SPEED": "41-60",
+          "STAMINA": "21-40"
+        }
+      },
+      "LAND": {
+        "canJump": false,
+        "canSprint": false,
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "21-40",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -0.804502,
+          "z": 0.12564507
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.84006137,
+              "z": 0.1807966
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.804502,
+              "z": 0.12564507
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "fightsMelee": true,
+      "willDefendSelf": true
+    },
     "moving": {
       "fly": {
         "canFly": true
@@ -58,26 +239,8 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    },
-    "combat": {
-      "fightsMelee": true,
-      "willDefendSelf": true
     }
   },
-  "ai": [
-    {
-      "type": "cobblemon:add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
-        "7": [
-          {
-            "type": "cobblemon:target_entity",
-            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:magikarp' && q.entity.world.is_air(q.entity.x, q.entity.y + 1, q.entity.z)"
-          }
-        ]
-      }
-    }
-  ],
   "drops": {
     "amount": 5,
     "entries": [
@@ -190,40 +353,32 @@
   "preEvolution": "pidgey",
   "evolutions": [
     {
-      "id": "pidgeotto_pidgeot",
-      "variant": "level_up",
-      "result": "pidgeot",
       "consumeHeldItem": false,
+      "id": "pidgeotto_pidgeot",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 36
+          "minLevel": 36,
+          "variant": "level"
         }
-      ]
+      ],
+      "result": "pidgeot",
+      "variant": "level_up"
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "30-60"
+  "forms": [],
+  "ai": [
+    {
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          {
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:magikarp' && q.entity.world.is_air(q.entity.x, q.entity.y + 1, q.entity.z)",
+            "type": "cobblemon:target_entity"
+          }
+        ]
       },
-      "ACCELERATION": {
-        "ranges": "30-60"
-      },
-      "SKILL": {
-        "ranges": "30-60"
-      },
-      "JUMP": {
-        "ranges": "25-50"
-      },
-      "STAMINA": {
-        "ranges": "30-60"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:air/glider"
+      "type": "cobblemon:add_tasks_to_activity"
     }
-  }
+  ]
 }

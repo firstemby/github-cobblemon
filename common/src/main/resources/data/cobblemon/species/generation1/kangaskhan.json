@@ -44,11 +44,175 @@
   "baseFriendship": 50,
   "baseScale": 0.9,
   "hitbox": {
-    "width": 2,
     "height": 3.2,
-    "fixed": false
+    "fixed": false,
+    "width": 2
   },
-  "standingEyeHeight": 0.85,
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "ACCELERATION": "41-60",
+          "JUMP": "21-40",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "61-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": -2.3185656,
+          "z": 0.83532387
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.05773924,
+              "y": -2.3953402,
+              "z": 0.7799598
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "OPEN"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.3185656,
+              "z": 0.83532387
+            },
+            "poseTypes": [
+              "PROFILE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "SHOULDER_LEFT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.05773924,
+              "y": -2.3953402,
+              "z": 0.7799598
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.3185656,
+              "z": 0.83532387
+            },
+            "poseTypes": [
+              "PORTRAIT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.3185656,
+              "z": 0.83532387
+            },
+            "poseTypes": [
+              "NONE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "SHOULDER_RIGHT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.3185656,
+              "z": 0.83532387
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.4284565,
+              "z": 0.5387885
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.2921317,
+              "z": 0.57115996
+            },
+            "poseTypes": [
+              "SLEEP"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "behaviour": {
     "moving": {
       "walk": {
@@ -60,7 +224,7 @@
       "willSleepOnBed": false
     }
   },
-"drops": {
+  "drops": {
     "amount": 1,
     "entries": [
       {
@@ -274,85 +438,175 @@
         "speed": 100
       },
       "baseExperienceYield": 207,
-      "dynamaxBlocked": true,
-      "evolutions": [],
-      "battleOnly": true,
       "riding": {
-        "stats": {
-          "SPEED": {
-            "ranges": {
-              "LAND": "20-50",
-              "LIQUID": "10-20"
-            }
-          },
-          "ACCELERATION": {
-            "ranges": {
-              "LAND": "50-50",
-              "LIQUID": "50-50"
-            }
-          },
-          "SKILL": {
-            "ranges": {
-              "LAND": "20-40",
-              "LIQUID": "20-40"
-            }
-          },
-          "JUMP": {
-            "ranges": {
-              "LAND": "5-10",
-              "LIQUID": "5-10"
-            }
-          },
-          "STAMINA": {
-            "ranges": {
-              "LAND": "30-65",
-              "LIQUID": "30-65"
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "stats": {
+              "ACCELERATION": "21-40",
+              "JUMP": "21-40",
+              "SKILL": "21-40",
+              "SPEED": "21-40",
+              "STAMINA": "21-40"
             }
           }
         },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/horse"
-        }
-      }
+        "seats": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -2.3185656,
+              "z": 0.83532387
+            },
+            "poseOffsets": [
+              {
+                "offset": {
+                  "x": 0.05773924,
+                  "y": -2.3953402,
+                  "z": 0.7799598
+                },
+                "poseTypes": [
+                  "WALK"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "OPEN"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.3185656,
+                  "z": 0.83532387
+                },
+                "poseTypes": [
+                  "PROFILE"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "SHOULDER_LEFT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.05773924,
+                  "y": -2.3953402,
+                  "z": 0.7799598
+                },
+                "poseTypes": [
+                  "SWIM"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.3185656,
+                  "z": 0.83532387
+                },
+                "poseTypes": [
+                  "PORTRAIT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "FLY"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.3185656,
+                  "z": 0.83532387
+                },
+                "poseTypes": [
+                  "NONE"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "GLIDE"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "SHOULDER_RIGHT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "HOVER"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.3185656,
+                  "z": 0.83532387
+                },
+                "poseTypes": [
+                  "STAND"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.4284565,
+                  "z": 0.5387885
+                },
+                "poseTypes": [
+                  "FLOAT"
+                ]
+              },
+              {
+                "offset": {
+                  "x": 0.0,
+                  "y": -2.2921317,
+                  "z": 0.57115996
+                },
+                "poseTypes": [
+                  "SLEEP"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "evolutions": [],
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "20-45",
-          "LIQUID": "10-20"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "50-50",
-          "LIQUID": "50-50"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "20-40",
-          "LIQUID": "20-40"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "5-10",
-          "LIQUID": "5-10"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "30-65",
-          "LIQUID": "30-65"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  "standingEyeHeight": 0.85
 }
