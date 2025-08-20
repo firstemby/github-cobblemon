@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 864,
   "name": "Cursola",
   "primaryType": "ghost",
@@ -43,20 +43,27 @@
   "catchRate": 30,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.9,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "walking":
+      {"walkSpeed": 0.125},
       "swim": {
         "canSwimInWater": true,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": 0.125
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "light": "0-4"
     }
   },
   "drops": {

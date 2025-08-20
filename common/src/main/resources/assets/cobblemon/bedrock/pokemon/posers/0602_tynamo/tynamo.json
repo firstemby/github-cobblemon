@@ -1,0 +1,34 @@
+{
+  "portraitScale": 3.05,
+  "portraitTranslation": [-0.59, -2.13, 0],
+  "profileScale": 0.66,
+  "profileTranslation": [0, 0.75, 0],
+  "rootBone": "tynamo",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": true,
+      "animations": ["q.look('head')", "q.bedrock('tynamo', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('tynamo', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"]
+    },
+    "float": {
+      "poseTypes": ["FLOAT"],
+      "animations": ["q.bedrock('tynamo', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"]
+    },
+    "swim": {
+      "poseTypes": ["SWIM"],
+      "animations": ["q.bedrock('tynamo', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('tynamo', 'blink')"]
+    }
+  }
+}

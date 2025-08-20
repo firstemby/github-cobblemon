@@ -1,0 +1,215 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.gogoat.ground_idle": {
+			"loop": true,
+			"bones": {
+				"torso": {
+					"rotation": [2.5, 0, 0]
+				},
+				"tail": {
+					"rotation": [42.5, 0, 0]
+				},
+				"head": {
+					"rotation": [2.5, 0, 0]
+				},
+				"torso2": {
+					"rotation": [-5, 0, 0],
+					"position": [0, 0.5, 0]
+				},
+				"ear_right": {
+					"rotation": [10.29354, 38.86967, 16.14054]
+				},
+				"ear_left": {
+					"rotation": [10.29354, -38.86967, -16.14054]
+				}
+			}
+		},
+		"animation.gogoat.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eye_left": {
+					"position": {
+						"0.0": [-0.1, 0, 0.1],
+						"0.125": {"pre": [-0.1, 0, 0.1], "post": [-0.1, 0, 0.1]},
+						"0.1667": {"pre": [-0.1, 0, 0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eye_right": {
+					"position": {
+						"0.0": [0.1, 0, 0.1],
+						"0.125": {"pre": [0.1, 0, 0.1], "post": [0.1, 0, 0.1]},
+						"0.1667": {"pre": [0.1, 0, 0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eyelid_left": {
+					"position": {
+						"0.0": [0.1, 0, -0.1],
+						"0.125": {"pre": [0.1, 0, -0.1], "post": [0.1, 0, -0.1]},
+						"0.1667": {"pre": [0.1, 0, -0.1], "post": [0, 0, 0]}
+					}
+				},
+				"eyelid_right": {
+					"position": {
+						"0.0": [-0.1, 0, -0.1],
+						"0.125": {"pre": [-0.1, 0, -0.1], "post": [-0.1, 0, -0.1]},
+						"0.1667": {"pre": [-0.1, 0, -0.1], "post": [0, 0, 0]}
+					}
+				}
+			}
+		},
+		"animation.gogoat.pose": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [0, -80, 0]
+				},
+				"torso": {
+					"rotation": [0, 0, 0]
+				},
+				"torso2": {
+					"rotation": [-5, 0, 0]
+				},
+				"head": {
+					"rotation": [5.00238, 2.49762, 0.10912]
+				},
+				"tail": {
+					"rotation": [67.78025, -3.40487, -9.40804]
+				},
+				"leg_front_left": {
+					"rotation": [-12.48848, -0.54094, -2.44081]
+				},
+				"leg_front_left2": {
+					"rotation": [80, 0, 0],
+					"position": [0, -1.1, 0]
+				},
+				"leg_front_left3": {
+					"rotation": [-15, 0, 0]
+				},
+				"leg_front_right": {
+					"rotation": [-5, 0, 0]
+				},
+				"leg_front_right3": {
+					"rotation": [5, 0, 0]
+				},
+				"leg_back_left": {
+					"rotation": [15, 0, 0],
+					"position": [0, -1.8, 0]
+				},
+				"leg_back_left3": {
+					"rotation": [-42.5, 0, 0],
+					"position": [0, -1, 0]
+				},
+				"foot_back_left": {
+					"rotation": [25, 0, 0]
+				},
+				"leg_back_right": {
+					"rotation": [2.5, 0, 5],
+					"position": [0, -0.5, 0]
+				},
+				"leg_back_right3": {
+					"rotation": [-5, 0, 0]
+				},
+				"foot_back_right": {
+					"rotation": [0, 0, -2.5]
+				}
+			}
+		},
+		"animation.gogoat.open_mouth": {
+			"loop": true,
+			"bones": {
+				"neck": {
+					"rotation": [-10, 0, 0]
+				},
+				"head": {
+					"rotation": [-15, 0, 0]
+				},
+				"mouth_open": {
+					"position": [0, -0.1, -0.2]
+				},
+				"mouth_open1": {
+					"position": [0, 0, -0.3]
+				},
+				"eyelid_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_left": {
+					"position": [-0.1, 0, 0.1]
+				},
+				"eye_right": {
+					"position": [0.1, 0, 0.1]
+				},
+				"eyelid_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.gogoat.happy": {
+			"loop": true,
+			"bones": {
+				"eye_left": {
+					"position": [-0.1, 0, 0.1]
+				},
+				"eyelid_happy_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_right": {
+					"position": [0.1, 0, 0.1]
+				},
+				"eyelid_happy_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.gogoat.sad": {
+			"loop": true,
+			"bones": {
+				"eyelid_sad_left": {
+					"position": [0.1, 0, 0]
+				},
+				"eyelid_sad_right": {
+					"position": [-0.1, 0, 0]
+				}
+			}
+		},
+		"animation.gogoat.angry": {
+			"loop": true,
+			"bones": {
+				"eyelid_angry_left": {
+					"position": [0, -0.4, 0]
+				},
+				"eyelid_angry_right": {
+					"position": [0, -0.4, 0]
+				}
+			}
+		},
+		"animation.gogoat.annoyed": {
+			"loop": true,
+			"bones": {
+				"eyelid_umamused_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eyelid_umamused_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.gogoat.hurt": {
+			"loop": true,
+			"bones": {
+				"eye_left": {
+					"position": [-0.1, 0, 0.1]
+				},
+				"eyelid_recoil_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_right": {
+					"position": [0.1, 0, 0.1]
+				},
+				"eyelid_recoil_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		}
+	}
+}

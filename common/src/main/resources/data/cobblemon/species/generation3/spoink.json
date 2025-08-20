@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 325,
   "name": "Spoink",
   "primaryType": "psychic",
@@ -41,7 +41,7 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 0.6,
     "height": 2.2,
