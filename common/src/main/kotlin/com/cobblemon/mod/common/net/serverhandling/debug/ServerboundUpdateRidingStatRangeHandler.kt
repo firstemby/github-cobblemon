@@ -25,20 +25,21 @@ object ServerboundUpdateRidingStatRangeHandler : ServerNetworkPacketHandler<Serv
         if (entity !is PokemonEntity) return
         if (entity.controllingPassenger != player) return
 
+        val behaviour = entity.rideProp.behaviours?.get(packet.ridingStyle) ?: return
         if (packet.minSpeed < packet.maxSpeed) {
-            entity.rideProp.updateStatRange(RidingStat.SPEED, packet.ridingStyle, packet.minSpeed, packet.maxSpeed)
+            behaviour.stats.set(RidingStat.SPEED, packet.minSpeed..packet.maxSpeed)
         }
         if (packet.minAcceleration < packet.maxAcceleration) {
-            entity.rideProp.updateStatRange(RidingStat.ACCELERATION, packet.ridingStyle, packet.minAcceleration, packet.maxAcceleration)
+            behaviour.stats.set(RidingStat.ACCELERATION, packet.minSpeed..packet.maxSpeed)
         }
         if (packet.minSkill < packet.maxSkill) {
-            entity.rideProp.updateStatRange(RidingStat.SKILL, packet.ridingStyle, packet.minSkill, packet.maxSkill)
+            behaviour.stats.set(RidingStat.SKILL, packet.minSpeed..packet.maxSpeed)
         }
         if (packet.minJump < packet.maxJump) {
-            entity.rideProp.updateStatRange(RidingStat.JUMP, packet.ridingStyle, packet.minJump, packet.maxJump)
+            behaviour.stats.set(RidingStat.JUMP, packet.minSpeed..packet.maxSpeed)
         }
         if (packet.minStamina < packet.maxStamina) {
-            entity.rideProp.updateStatRange(RidingStat.STAMINA, packet.ridingStyle, packet.minStamina, packet.maxStamina)
+            behaviour.stats.set(RidingStat.STAMINA, packet.minSpeed..packet.maxSpeed)
         }
     }
 

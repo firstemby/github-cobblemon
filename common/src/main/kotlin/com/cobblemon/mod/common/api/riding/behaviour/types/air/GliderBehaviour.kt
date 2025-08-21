@@ -75,8 +75,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe)) driver.xxa.toDouble() else 0.0
         val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed)
         val zVector = driver.zza.toDouble()
-        val statSpeed = vehicle.rideProp.calculate(RidingStat.SPEED, RidingStyle.AIR, 0 )
-
+        val speedStat = settings.calculate(RidingStat.SPEED, 0)
         return Vec3(xVector, yVector, zVector)
     }
 
@@ -197,6 +196,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
 
 class GliderSettings : RidingBehaviourSettings {
     override val key = GliderBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var glideSpeed: Expression = "0.1".asExpression()
         private set
@@ -211,6 +211,7 @@ class GliderSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(glideSpeed)
         buffer.writeExpression(speed)
@@ -218,6 +219,7 @@ class GliderSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         glideSpeed = buffer.readExpression()
         speed = buffer.readExpression()

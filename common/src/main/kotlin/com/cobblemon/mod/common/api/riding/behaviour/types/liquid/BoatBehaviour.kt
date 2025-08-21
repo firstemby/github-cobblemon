@@ -354,6 +354,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
 class BoatSettings : RidingBehaviourSettings {
     override val key = BoatBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     var terminalVelocity = "-2.0".asExpression()
@@ -364,11 +365,13 @@ class BoatSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(terminalVelocity)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         terminalVelocity = buffer.readExpression()
     }

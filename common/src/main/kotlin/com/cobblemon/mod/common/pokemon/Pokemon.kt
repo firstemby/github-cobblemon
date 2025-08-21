@@ -1812,7 +1812,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun getMaxRideBoost(stat: RidingStat): Int {
-        return form.riding.stats[stat]?.ranges?.maxOf { it.value.endInclusive } ?: 0
+        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.endInclusive ?: 0 } ?: 0
     }
 
     fun getRideBoost(stat: RidingStat): Float {

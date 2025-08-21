@@ -18,11 +18,4 @@ import net.minecraft.world.entity.PlayerRideableJumping
  *
  * @since 1.7.0
  */
-interface Rideable : PlayerRideableJumping {
-
-    /**
-     * Denotes the manager responsible for handling any instance of riding taking place on an entity
-     */
-    val riding: RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>?
-
-}
+interface Rideable : PlayerRideableJumping

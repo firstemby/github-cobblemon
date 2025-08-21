@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -284,15 +285,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         return newVelocity
     }
 
-    /*
-    *  Normalizes the current speed between minSpeed and maxSpeed.
-    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minSpeed and 1.0 represents maxSpeed.
-    */
-    private fun normalizeVal(currSpeed: Double, minSpeed: Double, maxSpeed: Double): Double {
-        require(maxSpeed > minSpeed) { "maxSpeed must be greater than minSpeed" }
-        return ((currSpeed - minSpeed) / (maxSpeed - minSpeed)).coerceIn(0.0, 1.0)
-    }
-
     override fun angRollVel(
         settings: RocketSettings,
         state: RocketState,
@@ -373,7 +365,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
             //val exceededSpeed = max(vehicle.deltaMovement.length() - topSpeed, 0.0)
 
             //TODO: Remove this magic number and get a better comparison for boost top speed
-            val normalizedBoostSpeed = normalizeVal(state.rideVelocity.get().length(), topSpeed, topSpeed * 3)
+            val normalizedBoostSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), topSpeed, topSpeed * 3)
             return 1.0f + normalizedBoostSpeed.pow(2).toFloat() * 0.2f
         } else {
             return 1.0f
@@ -458,6 +450,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
 
 class RocketSettings : RidingBehaviourSettings {
     override val key = RocketBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 0.65, 0.3) * 0.25".asExpression()
         private set
@@ -485,6 +478,7 @@ class RocketSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(speedExpr)
         buffer.writeExpression(accelerationExpr)
@@ -494,6 +488,7 @@ class RocketSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         speedExpr = buffer.readExpression()
         accelerationExpr = buffer.readExpression()

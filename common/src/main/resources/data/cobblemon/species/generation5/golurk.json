@@ -50,56 +50,8 @@
     "fixed": false
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "10-50",
-          "AIR": "50-100"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can stay off the ground",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:composite",
-      "transitionStrategy": "cobblemon:strategy/jump",
-      "defaultBehaviour": {
-        "key": "cobblemon:land/horse",
-        "canJump": false
-      },
-      "alternateBehaviour": {
+    "behaviours": {
+      "AIR": {
         "key": "cobblemon:air/rocket",
         "rideSounds": [
           {
@@ -109,7 +61,25 @@
             "playForNonPassengers": true,
             "muffleEnabled": true
           }
-        ]
+        ],
+        "stats": {
+          "SPEED": "50-100",
+          "ACCELERATION": "50-100",
+          "SKILL": "50-100",
+          "JUMP": "50-100",
+          "STAMINA": "50-100"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "canJump": false,
+        "stats": {
+          "SPEED": "50-100",
+          "ACCELERATION": "50-100",
+          "SKILL": "50-100",
+          "JUMP": "50-100",
+          "STAMINA": "50-100"
+        }
       }
     },
     "seats": [

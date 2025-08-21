@@ -68,7 +68,6 @@ class PitchTiltAnimation(
 
         val lastAngle = state.numbers[PREVIOUS_ANGLE] ?: 0F
         val change = (angleOfMotion - lastAngle).coerceIn(-maxChangePerTick, maxChangePerTick)
-        println("With intensity $intensity, change is $change, last angle is $lastAngle, target angle is $angleOfMotion")
         if (PITCHED_TILT !in state.renderMarkers) {
             state.numbers.remove(CORRECTED_ANGLE)
             val correctedAngle = (lastAngle + change) * intensity

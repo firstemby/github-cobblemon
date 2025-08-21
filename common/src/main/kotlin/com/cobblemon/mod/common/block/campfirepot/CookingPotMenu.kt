@@ -236,8 +236,8 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
                 slot.onQuickCraft(slotItemStack, itemStack);
             } else if (index in CampfireBlockEntity.Companion.PLAYER_INVENTORY_SLOTS || index in CampfireBlockEntity.Companion.PLAYER_HOTBAR_SLOTS) {
                 if (Seasonings.isSeasoning(slotItemStack)) {
-                    if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.SEASONING_SLOTS.first, CampfireBlockEntity.Companion.SEASONING_SLOTS.last + 1, false) &&
-                        !this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.last + 1, false)
+                    if (!this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.first, CampfireBlockEntity.Companion.CRAFTING_GRID_SLOTS.last + 1, false) &&
+                        !this.moveItemStackTo(slotItemStack, CampfireBlockEntity.Companion.SEASONING_SLOTS.first, CampfireBlockEntity.Companion.SEASONING_SLOTS.last + 1, false)
                     ) {
                         return ItemStack.EMPTY
                     }

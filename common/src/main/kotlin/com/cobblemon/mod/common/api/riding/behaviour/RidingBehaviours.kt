@@ -41,7 +41,7 @@ object RidingBehaviours {
 
     fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
-        behaviours[key] = RidingController(behaviour) as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
+        behaviours[key] = behaviour as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
     fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {

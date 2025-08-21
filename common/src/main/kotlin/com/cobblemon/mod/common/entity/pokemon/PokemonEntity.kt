@@ -56,6 +56,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviours
+import com.cobblemon.mod.common.api.riding.behaviour.RidingController
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.sound.RideSoundManager
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
@@ -302,12 +303,12 @@ open class PokemonEntity(
     val ridingAnimationData: RidingAnimationData = RidingAnimationData(this)
     var rideSoundManager: RideSoundManager = RideSoundManager(this)
 
-    var previousRidingState: RidingBehaviourState? = null
-    var ridingState: RidingBehaviourState? = null
-    var ridingBehaviourSettings: RidingBehaviourSettings? = null
-    override var riding: RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>? = null
-
     private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, Double>>()
+    var ridingController: RidingController? = null
+        private set
+
+    var previousRidingState: RidingBehaviourState? = null
+        private set
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -329,15 +330,9 @@ open class PokemonEntity(
 
     fun refreshRiding() {
         pokemon.entity?.ejectPassengers()
-
-        riding = null
-        ridingState = null
-        ridingBehaviourSettings = null
-        if (pokemon.riding.behaviour == null) return
-
-        riding = RidingBehaviours.get(pokemon.riding.behaviour!!.key)
-        ridingBehaviourSettings = pokemon.riding.behaviour!!
-        ridingState = riding!!.createDefaultState(ridingBehaviourSettings!!)
+        if (pokemon.form.riding.behaviours != null) {
+            ridingController = RidingController(this, pokemon.form.riding.behaviours!!)
+        }
         occupiedSeats = arrayOfNulls(seats.size)
     }
 
@@ -586,6 +581,8 @@ open class PokemonEntity(
 
         flyDistO = flyDist
 
+        ridingController?.tick()
+
         if (isBattling) {
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
             // This can't be done in the BattleMovementGoal as the sleep goal will override it.
@@ -654,7 +651,7 @@ open class PokemonEntity(
             }
         }
 
-        previousRidingState = ridingState?.copy()
+        previousRidingState = ridingController?.context?.state?.copy()
         schedulingTracker.update(1 / 20F)
     }
 
@@ -2045,7 +2042,7 @@ open class PokemonEntity(
         if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
             return (((baseMax - baseMin) / 100) * rideStatOverrides[style]!![stat]!!) + baseMin
         }
-        val stat = this.rideProp.calculate(stat, style, 0)
+        val stat = this.rideProp.behaviours?.get(style)?.calculate(stat, 0) ?: return 0.0
         val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
         return statVal
     }
@@ -2054,7 +2051,7 @@ open class PokemonEntity(
         if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
             return rideStatOverrides[style]!![stat]!!
         }
-        return this.rideProp.calculate(stat, style, 0).toDouble()
+        return this.rideProp.behaviours?.get(style)?.calculate(stat, 0)?.toDouble() ?: 0.0
     }
 
     internal fun overrideRideStat(style: RidingStyle, stat: RidingStat, value: Double) {
@@ -2088,8 +2085,10 @@ open class PokemonEntity(
     }
 
     fun ifRidingAvailable(block: (RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>, RidingBehaviourSettings, RidingBehaviourState) -> Unit) {
-        if (riding == null || ridingBehaviourSettings == null || ridingState == null) return
-        block(riding!!, ridingBehaviourSettings!!, ridingState!!)
+        val behaviour = ridingController?.getBehaviour() ?: return
+        val settings = ridingController?.context?.settings ?: return
+        val state = ridingController?.context?.state ?: return
+        block(behaviour, settings, state)
     }
 
     fun <T> ifRidingAvailableSupply(
@@ -2186,7 +2185,7 @@ open class PokemonEntity(
     override fun getControllingPassenger(): LivingEntity? {
         val riders = this.passengers.filterIsInstance<LivingEntity>()
         if (riders.isEmpty()) {
-            ridingState?.reset()
+            ridingController?.context?.state?.reset()
             return null
         }
 

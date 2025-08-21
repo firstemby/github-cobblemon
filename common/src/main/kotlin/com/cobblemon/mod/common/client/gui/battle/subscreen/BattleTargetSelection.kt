@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.battles.InBattleGimmickMove
 import com.cobblemon.mod.common.battles.InBattleMove
 import com.cobblemon.mod.common.battles.MoveActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -43,7 +44,9 @@ import kotlin.math.sin
 class BattleTargetSelection(
         battleGUI: BattleGUI,
         request: SingleActionRequest,
-        val move: InBattleMove
+        val move: InBattleMove,
+        val gimmickID: String?,
+        gimmickMove: InBattleGimmickMove?
 ) : BattleActionSelection(
     battleGUI = battleGUI,
     request = request,
@@ -81,9 +84,10 @@ class BattleTargetSelection(
 
     val targets = request.activePokemon.getAllActivePokemon()
 
+    val targetType = if (gimmickID != null && gimmickMove != null) gimmickMove.target else move.target
     val backButton = BattleBackButton(x + 9F, Minecraft.getInstance().window.guiScaledHeight - 22F)
-    val selectableTargetList = move.target.targetList(request.activePokemon)
-    val multiTargetList = if(selectableTargetList == null) request.activePokemon.getMultiTargetList(move.target) else null
+    val selectableTargetList = targetType.targetList(request.activePokemon)
+    val multiTargetList = if(selectableTargetList == null) request.activePokemon.getMultiTargetList(targetType) else null
 
     val baseTiles = targets.mapIndexed { index, target ->
         val isAlly = target.isAllied(request.activePokemon)

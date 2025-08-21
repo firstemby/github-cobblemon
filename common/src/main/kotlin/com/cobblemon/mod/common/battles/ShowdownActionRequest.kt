@@ -127,7 +127,8 @@ data class MoveActionResponse(var moveName: String, var targetPnx: String? = nul
             // No PP or disabled or something
             return false
         }
-        val availableTargets = (gimmickMove?.target ?: move.target).targetList(activeBattlePokemon)?.takeIf { it.isNotEmpty() } ?: return true
+        val availableTargets = (if (gimmickID != null && validGimmickMove) gimmickMove.target else move.target)
+            .targetList(activeBattlePokemon)?.takeIf { it.isNotEmpty() } ?: return true
 
         val pnx = targetPnx ?: return false // If the targets list is non-null then they need to have specified a target
         val (_, targetPokemon) = activeBattlePokemon.actor.battle.getActorAndActiveSlotFromPNX(pnx)

@@ -42,6 +42,7 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
+import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPacket
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
@@ -159,7 +160,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
             }
             this.species.forEach(Species::resolveEvolutionMoves)
             Cobblemon.showdownThread.queue {
-                it.registerSpecies()
+                it.resetRegistryData("species")
+                it.sendRegistryData(allShowdownSpecies(), "species")
                 it.indicateSpeciesInitialized()
                 // Reload this with the mod
                 CobblemonHeldItemManager.load()
@@ -314,4 +316,18 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         return "${species.resourceIdentifier.namespace}:${species.name}"
     }
 
+    internal fun allShowdownSpecies(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+        this.species.forEach {species ->
+            val baseSpecies = ShowdownSpecies(species, null)
+            result[baseSpecies.name] = this.gson.toJson(baseSpecies)
+            species.forms.forEach { form ->
+                if (form != species.standardForm) {
+                    val formSpecies = ShowdownSpecies(species, form)
+                    result[formSpecies.name] = this.gson.toJson(formSpecies)
+                }
+            }
+        }
+        return result
+    }
 }

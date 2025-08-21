@@ -101,4 +101,19 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
      * Calculate the damage a horizontal collision will do to a ridden Pokémon. This is only relevant to fast flying behaviours, fall damage is separate!
      */
     fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
+
+
+    /**
+     * Internal helpers to help behaviour specific calculations
+     */
+    companion object {
+        /**
+         *  Scales a given value between a min and a max.
+         *  The result is clamped between 0.0 and 1.0, where 0.0 represents x is at or below min
+         *  and 1.0 represents x is at or above it.
+         */
+        internal fun scaleToRange(x: Double, min: Double, max: Double): Double {
+            return ((x - min) / (max - min)).coerceIn(0.0, 1.0)
+        }
+    }
 }

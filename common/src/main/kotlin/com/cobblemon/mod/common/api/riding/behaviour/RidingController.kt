@@ -8,206 +8,119 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour
 
+import com.cobblemon.mod.common.DoubleJump
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.SmoothDouble
+import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.phys.Vec2
-import net.minecraft.world.phys.Vec3
+import kotlin.collections.get
 
 /**
  * Small wrapper around a RidingBehaviour to provide sane defaults in the event that the behaviour is not active.
  *
  * @author landonjw
  */
-class RidingController<Settings : RidingBehaviourSettings, State : RidingBehaviourState>(val behaviour: RidingBehaviour<Settings, State>) : RidingBehaviour<Settings, State> {
+class RidingController(
+    val entity: PokemonEntity,
+    val behaviours: Map<RidingStyle, RidingBehaviourSettings>) {
 
-    override val key = behaviour.key
+    var lastTransitionAge: Int = 0
+        private set
 
-    override fun getRidingStyle(settings: Settings, state: State): RidingStyle {
-        return behaviour.getRidingStyle(settings, state)
+    var context: ActiveRidingContext? = null
+        private set
+
+    fun changeBehaviour(behaviour: ResourceLocation) {
+        if (entity.form.riding.behaviours == null) return
+        val style = entity.form.riding.behaviours!!.filter { it.value.key == behaviour }.keys.firstOrNull() ?: return
+        val behaviourSettings = entity.pokemon.riding.behaviours?.get(style) ?: return
+        val newState = RidingBehaviours.get(behaviourSettings.key).createDefaultState(behaviourSettings)
+        context?.let { newState.stamina.set(it.state.stamina.get(), forced = true) }
+        context = ActiveRidingContext(behaviourSettings.key, behaviourSettings, newState, style)
+        lastTransitionAge = entity.ticksLived
     }
 
-    override fun isActive(settings: Settings, state: State, vehicle: PokemonEntity) =
-        behaviour.isActive(settings, state, vehicle)
+    fun tick() {
+        if (entity.ticksLived - lastTransitionAge < 10) return
+        val newTransition = checkForNewTransition(entity.controllingPassenger)
+        val behaviourSettings = entity.pokemon.riding.behaviours?.get(newTransition)
+        if (newTransition != context?.style) {
+            if (newTransition != null && behaviourSettings != null) {
+                val newState = RidingBehaviours.get(behaviourSettings.key).createDefaultState(behaviourSettings)
+                context?.let { newState.stamina.set(it.state.stamina.get(), forced = true) }
+                context = ActiveRidingContext(behaviourSettings.key, behaviourSettings, newState, newTransition)
+                lastTransitionAge = entity.ticksLived
+            } else {
+                context = null
+            }
+        }
 
-    override fun tick(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player, input: Vec3) =
-        behaviour.tick(settings, state, vehicle, driver, input)
-
-    override fun pose(settings: Settings, state: State, vehicle: PokemonEntity) =
-        behaviour.pose(settings, state, vehicle)
-
-    override fun speed(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Float {
-        if (!isActive(settings, state, vehicle)) return 0.0F
-        return behaviour.speed(settings, state, vehicle, driver)
+        if (context == null && !this.entity.level().isClientSide) {
+            entity.ejectPassengers()
+        }
     }
 
-    override fun updatePassengerRotation(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        driver: LivingEntity
-    ) {
-        if (!isActive(settings, state, vehicle)) return
-        return behaviour.updatePassengerRotation(settings, state, vehicle, driver)
+    fun getBehaviour(): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>? {
+        if (context == null) return null
+        return RidingBehaviours.get(context!!.behaviour)
     }
 
-    override fun clampPassengerRotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity) {
-        if (!isActive(settings, state, vehicle)) return
-        return behaviour.clampPassengerRotation(settings, state, vehicle, driver)
+    private fun checkForNewTransition(driver: LivingEntity?): RidingStyle? {
+        when (context?.style) {
+            RidingStyle.AIR -> {
+                if (canTransitionToLand()) return RidingStyle.LAND
+                if (canTransitionToLiquid()) return RidingStyle.LIQUID
+                return RidingStyle.AIR
+            }
+
+            RidingStyle.LIQUID -> {
+                if (canTransitionToAir(driver)) return RidingStyle.AIR
+                if (canTransitionToLand()) return RidingStyle.LAND
+                return RidingStyle.LIQUID
+            }
+
+            RidingStyle.LAND -> {
+                if (canTransitionToAir(driver)) return RidingStyle.AIR
+                if (canTransitionToLiquid()) return RidingStyle.LIQUID
+                return RidingStyle.LAND
+            }
+
+            null -> {
+                if (canTransitionToAir(driver)) return RidingStyle.AIR
+                if (canTransitionToLiquid()) return RidingStyle.LIQUID
+                if (canTransitionToLand()) return RidingStyle.LAND
+                return null
+            }
+        }
     }
 
-    override fun rotation(settings: Settings, state: State, vehicle: PokemonEntity, driver: LivingEntity): Vec2 {
-        if (!isActive(settings, state, vehicle)) return driver.rotationVector
-        return behaviour.rotation(settings, state, vehicle, driver)
+    private fun canTransitionToLand(): Boolean {
+        if (entity.isInLiquid || entity.isUnderWater) return false
+        return entity.onGround()
     }
 
-    override fun velocity(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        driver: Player,
-        input: Vec3
-    ): Vec3 {
-        if (!isActive(settings, state, vehicle)) return Vec3.ZERO
-        return behaviour.velocity(settings, state, vehicle, driver, input)
+    private fun canTransitionToLiquid(): Boolean {
+        return entity.isInLiquid || entity.isUnderWater
     }
 
-    override fun angRollVel(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        driver: Player,
-        deltaTime: Double
-    ): Vec3 {
-        if (!isActive(settings, state, vehicle)) return Vec3.ZERO
-        return behaviour.angRollVel(settings, state, vehicle, driver, deltaTime)
+    private fun canTransitionToAir(driver: LivingEntity?): Boolean {
+        if (driver != null) {
+            if (driver !is DoubleJump) return false
+            // check if style is water and player is submerged
+            val isEyeInLiquid = entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA)
+            if (context?.style == RidingStyle.LIQUID && isEyeInLiquid) return false
+            return (driver as DoubleJump).isDoubleJumping
+        }
+        else {
+            return !entity.onGround() && !(entity.isInLiquid || entity.isUnderWater)
+        }
     }
-
-    override fun rotationOnMouseXY(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        driver: Player,
-        mouseY: Double,
-        mouseX: Double,
-        mouseYSmoother: SmoothDouble,
-        mouseXSmoother: SmoothDouble,
-        sensitivity: Double,
-        deltaTime: Double
-    ): Vec3 {
-        if (!isActive(settings, state, vehicle)) return Vec3.ZERO
-        return behaviour.rotationOnMouseXY(
-            settings,
-            state,
-            vehicle,
-            driver,
-            mouseY,
-            mouseX,
-            mouseYSmoother,
-            mouseXSmoother,
-            sensitivity,
-            deltaTime
-        )
-    }
-
-    override fun canJump(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.canJump(settings, state, vehicle, driver)
-    }
-
-    override fun shouldRotateRiderHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.shouldRotateRiderHead(settings, state, vehicle)
-    }
-
-    override fun shouldRotatePokemonHead(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.shouldRotatePokemonHead(settings, state, vehicle)
-    }
-
-    override fun dismountOnShift(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.dismountOnShift(settings, state, vehicle)
-    }
-
-    override fun turnOffOnGround(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.turnOffOnGround(settings, state, vehicle)
-    }
-
-    override fun shouldRoll(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return false
-        return behaviour.shouldRoll(settings, state, vehicle)
-    }
-
-    override fun inertia(settings: Settings, state: State, vehicle: PokemonEntity): Double {
-        if (!isActive(settings, state, vehicle)) return 0.5
-        return behaviour.inertia(settings, state, vehicle)
-    }
-
-    override fun useRidingAltPose(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): ResourceLocation {
-        if (!isActive(settings, state, vehicle)) return cobblemonResource("no_pose")
-        return behaviour.useRidingAltPose(settings, state, vehicle, driver)
-    }
-
-    override fun useAngVelSmoothing(settings: Settings, state: State, vehicle: PokemonEntity): Boolean {
-        if (!isActive(settings, state, vehicle)) return true
-        return behaviour.useAngVelSmoothing(settings, state, vehicle)
-    }
-
-    override fun rideFovMultiplier(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Float {
-        if (!isActive(settings, state, vehicle)) return 1.0F
-        return behaviour.rideFovMultiplier(settings, state, vehicle, driver)
-    }
-
-    override fun gravity(settings: Settings, state: State, vehicle: PokemonEntity, regularGravity: Double): Double {
-        if (!isActive(settings, state, vehicle)) return regularGravity
-        return behaviour.gravity(settings, state, vehicle, regularGravity)
-    }
-
-    override fun jumpForce(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        driver: Player,
-        jumpStrength: Int
-    ): Vec3 {
-        if (!isActive(settings, state, vehicle)) return Vec3.ZERO
-        return behaviour.jumpForce(settings, state, vehicle, driver, jumpStrength)
-    }
-
-    override fun setRideBar(settings: Settings, state: State, vehicle: PokemonEntity, driver: Player): Float {
-        if (!isActive(settings, state, vehicle)) return 0.0F
-        return behaviour.setRideBar(settings, state, vehicle, driver)
-    }
-
-    override fun maxUpStep(settings: Settings, state: State, vehicle: PokemonEntity): Float? {
-        if (!isActive(settings, state, vehicle)) return null
-        return behaviour.maxUpStep(settings, state, vehicle)
-    }
-
-    override fun getRideSounds(settings: Settings, state: State, vehicle: PokemonEntity): RideSoundSettingsList {
-        if (!isActive(settings, state, vehicle)) return RideSoundSettingsList()
-        return behaviour.getRideSounds(settings, state, vehicle)
-    }
-
-    override fun createDefaultState(settings: Settings): State {
-        return behaviour.createDefaultState(settings)
-    }
-
-    override fun damageOnCollision(
-        settings: Settings,
-        state: State,
-        vehicle: PokemonEntity,
-        impactVec: Vec3
-    ): Boolean {
-        return behaviour.damageOnCollision(settings, state, vehicle, impactVec)
-    }
-
-
 }
+
+class ActiveRidingContext(
+    val behaviour: ResourceLocation,
+    val settings: RidingBehaviourSettings,
+    val state: RidingBehaviourState,
+    val style: RidingStyle
+)
