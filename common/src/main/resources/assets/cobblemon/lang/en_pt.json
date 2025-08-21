@@ -900,6 +900,7 @@
     "cobblemon.battle.lose": "%1$s be out of usable monsters!",
     "cobblemon.battle.forfeit": "%1$s forfeited th' battle!",
     "cobblemon.battle.flee": "Th' battle was fled.",
+    "cobblemon.battle.wild_flee": "Th' scallywag, %1$s abandoned ship.",
     "cobblemon.battle.switch_option": "Switch monsters: ",
     "cobblemon.battle.your_team": "Ye crew:",
     "cobblemon.battle.must_switch": "Choose a monster to switch in",
