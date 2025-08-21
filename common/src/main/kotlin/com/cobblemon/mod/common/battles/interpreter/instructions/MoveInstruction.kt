@@ -103,12 +103,12 @@ class MoveInstruction(
             }
             battle.broadcastChatMessage(lang)
             if (move.name == "teleport" && userPokemon.originalPokemon.isWild()) {
+                var teleportSuccess = false
                 val teleportingEntity = userPokemon.originalPokemon.entity
                 if (teleportingEntity != null) {
-                    tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
+                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
                 }
-                CobblemonEvents.BATTLE_FLED.post(BattleFledEvent(battle, battle.actors.asSequence().filterIsInstance<PlayerBattleActor>().iterator().next()))
-                battle.stop()
+                if (teleportSuccess) {battle.stop()}
             }
             battle.majorBattleActions[userPokemon.uuid] = message
 
