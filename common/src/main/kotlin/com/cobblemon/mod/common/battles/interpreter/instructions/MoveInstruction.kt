@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
@@ -23,18 +25,23 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.dispatch.CauserInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import java.util.concurrent.CompletableFuture
-import net.minecraft.world.entity.LivingEntity
+import java.lang.Math.*
+import kotlin.math.roundToInt
 
 /**
  * Format: |move|POKEMON|MOVE|TARGET
@@ -95,6 +102,14 @@ class MoveInstruction(
                     battleLang("used_move", pokemonName, move.displayName)
             }
             battle.broadcastChatMessage(lang)
+            if (move.name == "teleport" && userPokemon.originalPokemon.isWild()) {
+                val teleportingEntity = userPokemon.originalPokemon.entity
+                if (teleportingEntity != null) {
+                    tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
+                }
+                CobblemonEvents.BATTLE_FLED.post(BattleFledEvent(battle, battle.actors.asSequence().filterIsInstance<PlayerBattleActor>().iterator().next()))
+                battle.stop()
+            }
             battle.majorBattleActions[userPokemon.uuid] = message
 
             val runtime = MoLangRuntime().also {
@@ -167,5 +182,40 @@ class MoveInstruction(
                 userPokemonId.let { id -> targets.forEach { it.brain.setMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON, id) } }
             }
         }
+    }
+
+    fun tryTeleport(level: ServerLevel, pokemon: PokemonEntity, minRadius: Int, maxRadius: Int, attempts: Int): Boolean {
+        val origin = pokemon.blockPosition()
+        val rng = level.random
+
+        for(i in 0 until attempts) {
+            val dist = rng.nextInt(minRadius, maxRadius + 1)
+            val angle = rng.nextDouble() * (PI * 2.0)
+            val dx = (cos(angle) * dist).roundToInt()
+            val dz = (sin(angle) * dist).roundToInt()
+            val x = (origin.x + dx)
+            val z = (origin.z + dz)
+
+            val minY = max((origin.y - 20), level.minBuildHeight)
+            val maxY = min((origin.y + 20), level.maxBuildHeight)
+
+            for (y in minY..maxY) {
+                val candidate = BlockPos(x, y, z)
+
+                if (pokemon.pokemon.isPositionSafe(level, candidate) && level.getBlockState(candidate).isAir) {
+                    val success = pokemon.teleportTo(
+                        level,
+                        candidate.x + 0.5,
+                        candidate.y.toDouble(),
+                        candidate.z + 0.5,
+                        mutableSetOf(),
+                        pokemon.yRot,
+                        pokemon.xRot
+                    )
+                    if (success) return true
+                }
+            }
+        }
+        return false
     }
 }
