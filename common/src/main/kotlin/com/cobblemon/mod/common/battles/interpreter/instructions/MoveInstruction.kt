@@ -36,11 +36,10 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
-import com.cobblemon.mod.common.util.asArrayValue
-import com.cobblemon.mod.common.util.battleLang
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.sounds.SoundEvents
 import java.util.concurrent.CompletableFuture
 import java.lang.Math.*
 import kotlin.math.roundToInt
@@ -105,17 +104,16 @@ class MoveInstruction(
             }
             battle.broadcastChatMessage(lang)
             if (move.name == "teleport" && userPokemon.originalPokemon.isWild()) {
-                var teleportSuccess = false
                 val teleportingEntity = userPokemon.originalPokemon.entity
                 if (teleportingEntity != null) {
-                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
+                    tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
                 }
-                if (teleportSuccess) {
-                    battle.dispatchWaiting(1.0F) {
-                        battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }.forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
-                        battle.stop()
-                    }
+
+                battle.dispatchWaiting(1.0F) {
+                    battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }.forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
+                    battle.stop()
                 }
+
             }
             battle.majorBattleActions[userPokemon.uuid] = message
 
@@ -210,6 +208,7 @@ class MoveInstruction(
                 val candidate = BlockPos(x, y, z)
 
                 if (pokemon.pokemon.isPositionSafe(level, candidate) && level.getBlockState(candidate).isAir) {
+                    level.playSoundServer(origin.toVec3d(), SoundEvents.PLAYER_TELEPORT)
                     val success = pokemon.teleportTo(
                         level,
                         candidate.x + 0.5,
