@@ -16,11 +16,7 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.interpreter.Effect
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
-import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
@@ -113,7 +109,6 @@ class MoveInstruction(
                     battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }.forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
                     battle.stop()
                 }
-
             }
             battle.majorBattleActions[userPokemon.uuid] = message
 
