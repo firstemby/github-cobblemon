@@ -108,7 +108,10 @@ class MoveInstruction(
                 if (teleportingEntity != null) {
                     teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 16)
                 }
-                if (teleportSuccess) {battle.stop()}
+                if (teleportSuccess) {
+                    battle.broadcastChatMessage(battleLang("wild_flee", userPokemon.getName()))
+                    battle.stop()
+                }
             }
             battle.majorBattleActions[userPokemon.uuid] = message
 
