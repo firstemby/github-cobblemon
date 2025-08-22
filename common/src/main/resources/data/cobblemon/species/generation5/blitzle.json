@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 522,
   "name": "Blitzle",
   "primaryType": "electric",
@@ -46,6 +46,13 @@
     "width": 1,
     "height": 1.5,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.175
+      }
+    }
   },
   "drops": {
     "amount": 2,

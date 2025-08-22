@@ -3,7 +3,9 @@
     "portraitTranslation": [-0.17, 0.98, 0],
     "profileScale": 0.62,
     "profileTranslation": [0, 0.95, 0],
-    "animations": {},
+    "animations": {
+      "cry": "q.bedrock_stateful('honedge', 'cry')"
+    },
     "poses": {
       "standing": {
         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT", "HOVER"],

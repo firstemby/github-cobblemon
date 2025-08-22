@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 834,
   "name": "Drednaw",
   "primaryType": "water",
@@ -43,7 +44,7 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -51,6 +52,9 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "canSwimInWater": true,
         "canSwimInLava": false,

@@ -1,0 +1,48 @@
+{
+  "portraitScale": 1.5,
+  "portraitTranslation": [ 0, 0, 0],
+  "profileScale": 1,
+  "profileTranslation": [ 0.05, 0.4, 0],
+  "rootBone": "weezing",
+  "animations": {
+    "cry": "q.bedrock_stateful('weezing', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('weezing', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('weezing', 'blink1')",
+        "q.bedrock_quirk('weezing', 'blink2')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('weezing', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('weezing', 'blink1')",
+        "q.bedrock_quirk('weezing', 'blink2')"
+      ]
+    },
+            "sleeping": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('weezing', 'sleep')"]
+    }
+  }
+}

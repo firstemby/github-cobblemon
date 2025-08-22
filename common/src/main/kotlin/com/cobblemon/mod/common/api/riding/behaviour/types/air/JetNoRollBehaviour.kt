@@ -23,6 +23,7 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
@@ -77,16 +78,6 @@ class JetNoRollBehaviour : RidingBehaviour<JetNoRollSettings, JetNoRollState> {
         state.stamina.set(1.0f)
 
         return state.rideVelocity.get().length().toFloat()
-    }
-
-    //TODO: Move these functions to a riding util class.
-    /*
-    *  Normalizes the current speed between minSpeed and maxSpeed.
-    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minSpeed and 1.0 represents maxSpeed.
-    */
-    private fun normalizeSpeed(currSpeed: Double, minSpeed: Double, maxSpeed: Double): Double {
-        require(maxSpeed > minSpeed) { "maxSpeed must be greater than minSpeed" }
-        return ((currSpeed - minSpeed) / (maxSpeed - minSpeed)).coerceIn(0.0, 1.0)
     }
 
     override fun rotation(
@@ -145,7 +136,7 @@ class JetNoRollBehaviour : RidingBehaviour<JetNoRollSettings, JetNoRollState> {
         //speed up and slow down based on input
         if (driver.zza > 0.0 && speed < topSpeed && state.stamina.get() > 0.0f) {
             //modify acceleration to be slower when at closer speeds to top speed
-            val accelMod = max(-(normalizeSpeed(speed, minSpeed, topSpeed)) + 1, 0.0)
+            val accelMod = max(-(RidingBehaviour.scaleToRange(speed, minSpeed, topSpeed)) + 1, 0.0)
             state.rideVelocity.set(
                 Vec3(
                     state.rideVelocity.get().x,
@@ -163,7 +154,7 @@ class JetNoRollBehaviour : RidingBehaviour<JetNoRollSettings, JetNoRollState> {
             )
         } else if (driver.zza < 0.0 && speed > minSpeed) {
             //modify deccel to be slower when at closer speeds to minimum speed
-            val deccelMod = max((normalizeSpeed(speed, minSpeed, topSpeed) - 1).pow(2) * 4, 0.1)
+            val deccelMod = max((RidingBehaviour.scaleToRange(speed, minSpeed, topSpeed) - 1).pow(2) * 4, 0.1)
 
             //Decelerate currently always a constant half of max acceleration.
             state.rideVelocity.set(
@@ -307,7 +298,7 @@ class JetNoRollBehaviour : RidingBehaviour<JetNoRollSettings, JetNoRollState> {
         val minSpeed = vehicle.runtime.resolveDouble(settings.minSpeed)
 
         //Must I ensure that topspeed is greater than minimum?
-        val normalizedSpeed = normalizeSpeed(state.rideVelocity.get().length(), minSpeed, topSpeed)
+        val normalizedSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), minSpeed, topSpeed)
 
         //TODO: Determine if this should be based on max possible speed instead of top speed.
         //Only ever want the fov change to be a max of 0.2 and for it to have non linear scaling.
@@ -382,6 +373,7 @@ class JetNoRollBehaviour : RidingBehaviour<JetNoRollSettings, JetNoRollState> {
 
 class JetNoRollSettings : RidingBehaviourSettings {
     override val key = JetNoRollBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var gravity: Expression = "0".asExpression()
         private set
@@ -412,6 +404,7 @@ class JetNoRollSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(gravity)
         buffer.writeExpression(minSpeed)
@@ -425,6 +418,7 @@ class JetNoRollSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         gravity = buffer.readExpression()
         minSpeed = buffer.readExpression()

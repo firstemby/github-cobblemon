@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 228,
   "name": "Houndour",
   "primaryType": "dark",
@@ -42,15 +43,20 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 35,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.2,
     "fixed": false
   },
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "moving": {
+      "swim": {
+        "canSwimInLava": true
+      }
     }
   },
   "drops": {

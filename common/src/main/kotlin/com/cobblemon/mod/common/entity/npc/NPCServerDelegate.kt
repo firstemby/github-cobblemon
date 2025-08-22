@@ -102,7 +102,6 @@ class NPCServerDelegate : NPCSideDelegate {
                 val cloneParties = (setLevel != -1) || (params.getBooleanOrNull(3) ?: false)
                 val healFirst = params.getBooleanOrNull(4) ?: false
 
-                println("Cobblemon: Starting battle with format: $modifiedBattleFormat, level: ${modifiedBattleFormat.adjustLevel}")
                 val battleStartResult = BattleBuilder.pvn(
                     player = opponent,
                     npcEntity = entity,

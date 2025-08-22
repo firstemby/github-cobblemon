@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 603,
   "name": "Eelektrik",
   "primaryType": "electric",
@@ -40,15 +41,16 @@
   "catchRate": 60,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
+        "canBreatheUnderwater": true,
         "canSwimInWater": true
       },
       "fly": {

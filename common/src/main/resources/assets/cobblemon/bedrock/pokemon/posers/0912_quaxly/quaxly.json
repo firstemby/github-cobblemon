@@ -18,67 +18,63 @@
     "faint": "q.bedrock_primary('quaxly', 'faint', q.curve('one'))"
   },
   "poses": {
-    "sleep": {
+    "battle_idle": {
       "isTouchingWater": "false",
       "isUnderWater": "false",
+      "isBattle": "true",
       "poseTypes": [
-        "SLEEP"
+        "STAND"
       ],
       "animations": [
-        "q.bedrock('quaxly', 'sleep')"
+        "q.look('head')",
+        "q.bedrock('quaxly', 'battle_idle')"
       ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
-        }
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('quaxly', 'blink')"
       ]
     },
-    "surface_sleep": {
+    "surface_battle_idle": {
       "isTouchingWater": "true",
       "isUnderWater": "false",
+      "isBattle": "true",
       "poseTypes": [
-        "SLEEP"
+        "STAND","FLOAT"
       ],
       "animations": [
-        "q.bedrock('quaxly', 'surfacewater_sleep')"
+        "q.look('head')",
+        "q.bedrock('quaxly', 'surfacewater_battle_idle')"
       ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
-        }
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('quaxly', 'blink')"
       ]
     },
-    "water_sleep": {
+    "water_battle_idle": {
       "isTouchingWater": "true",
       "isUnderWater": "true",
+      "isBattle": "true",
       "poseTypes": [
-        "SLEEP"
+        "STAND","FLOAT"
       ],
       "animations": [
-        "q.bedrock('quaxly', 'water_sleep')"
+        "q.look('head')",
+        "q.bedrock('quaxly', 'water_battle_idle')"
+      ],
+      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('quaxly', 'blink')"
       ],
       "transformedParts": [
         {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
+          "part": "body",
+          "position": [0, -10, 0]
         }
       ]
     },
     "standing": {
+      "isTouchingWater": "false",
+      "isBattle": "false",
       "poseTypes": [
         "PROFILE",
         "PORTRAIT",
@@ -89,23 +85,13 @@
         "q.look('head')",
         "q.bedrock('quaxly', 'ground_idle')"
       ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
       "transformTicks": 10,
       "quirks": [
         "q.bedrock_quirk('quaxly', 'blink')"
       ]
     },
     "walk": {
-      "poseName": "walk",
+      "isTouchingWater": "false",
       "poseTypes": [
         "WALK"
       ],
@@ -113,38 +99,62 @@
         "q.look('head')",
         "q.bedrock('quaxly', 'ground_walk')"
       ],
-      "transformedParts": [
-        {
-          "part": "wing_right",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
       "transformTicks": 10,
       "quirks": [
         "q.bedrock_quirk('quaxly', 'blink')"
       ]
     },
+    "surface_idle": {
+      "isTouchingWater": "true",
+      "isUnderWater": "false",
+      "isBattle": "false",
+      "poseTypes": [
+        "STAND","FLOAT"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('quaxly', 'surfacewater_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('quaxly', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
+      ]
+    },
+    "surface_swim": {
+      "isTouchingWater": "true",
+      "isUnderWater": "false",
+      "poseTypes": [
+        "WALK","SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('quaxly', 'surfacewater_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('quaxly', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
+      ]
+    },
     "float": {
+      "isTouchingWater": "true",
+      "isUnderWater": "true",
+      "isBattle": "false",
       "poseTypes": [
         "FLOAT"
       ],
       "animations": [
         "q.look('head')",
         "q.bedrock('quaxly', 'water_idle')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
-        }
       ],
       "transformTicks": 10,
       "quirks": [
@@ -161,145 +171,39 @@
         "q.look('head')",
         "q.bedrock('quaxly', 'water_swim')"
       ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
-        }
-      ],
       "transformTicks": 10,
       "quirks": [
         "q.bedrock_quirk('quaxly', 'blink')"
       ]
     },
-    "battle_idle": {
+    "sleep": {
       "isTouchingWater": "false",
       "isUnderWater": "false",
-      "isBattle": "true",
       "poseTypes": [
-        "STAND"
+        "SLEEP"
       ],
       "animations": [
-        "q.look('head')",
-        "q.bedrock('quaxly', 'battle_idle')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
-      "transformTicks": 10,
-      "quirks": [
-        "q.bedrock_quirk('quaxly', 'blink')"
+        "q.bedrock('quaxly', 'sleep')"
       ]
     },
-    "water_battle_idle": {
+    "surface_sleep": {
+      "isTouchingWater": "true",
+      "isUnderWater": "false",
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('quaxly', 'surfacewater_sleep')"
+      ]
+    },
+    "water_sleep": {
       "isTouchingWater": "true",
       "isUnderWater": "true",
-      "isBattle": "true",
       "poseTypes": [
-        "FLOAT"
+        "SLEEP"
       ],
       "animations": [
-        "q.look('head')",
-        "q.bedrock('quaxly', 'water_battle_idle')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
-      "transformTicks": 10,
-      "quirks": [
-        "q.bedrock_quirk('quaxly', 'blink')"
-      ]
-    },
-    "surface_battle_idle": {
-      "isTouchingWater": "true",
-      "isUnderWater": "false",
-      "iBattle": "true",
-      "poseTypes": [
-        "FLOAT"
-      ],
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('quaxly', 'surfacewater_battle_idle')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right_closed",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left_closed",
-          "isVisible": false
-        }
-      ],
-      "transformTicks": 10,
-      "quirks": [
-        "q.bedrock_quirk('quaxly', 'blink')"
-      ]
-    },
-    "surface_idle": {
-      "isTouchingWater": "true",
-      "isUnderWater": "false",
-      "poseTypes": [
-        "FLOAT"
-      ],
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('quaxly', 'surfacewater_idle')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
-      "quirks": [
-        "q.bedrock_quirk('quaxly', 'blink')"
-      ]
-    },
-    "surface_swim": {
-      "isTouchingWater": "true",
-      "isUnderWater": "false",
-      "poseTypes": [
-        "SWIM"
-      ],
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('quaxly', 'surfacewater_swim')"
-      ],
-      "transformedParts": [
-        {
-          "part": "wing_right",
-          "isVisible": false
-        },
-                {
-          "part": "wing_left",
-          "isVisible": false
-        }
-      ],
-      "quirks": [
-        "q.bedrock_quirk('quaxly', 'blink')"
+        "q.bedrock('quaxly', 'water_sleep')"
       ]
     }
   }

@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 523,
   "name": "Zebstrika",
   "primaryType": "electric",
@@ -46,6 +46,13 @@
     "width": 1.3,
     "height": 2,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.24
+      }
+    }
   },
   "drops": {
     "amount": 3,

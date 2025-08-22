@@ -63,13 +63,15 @@ public abstract class ServerEntityMixin {
 
     private void cobblemon$sendRidingStateChanges() {
         if (!(this.entity instanceof PokemonEntity pokemonEntity)) return;
-        if (pokemonEntity.getRidingState() == null) return;
-        if (pokemonEntity.getRiding() == null) return;
-        var ridingBehaviour = pokemonEntity.getRiding();
-        var ridingState = pokemonEntity.getRidingState();
+        if (pokemonEntity.getRidingController() == null) return;
+        var ridingController = pokemonEntity.getRidingController();
+        if (ridingController.getContext() == null) return;
+        var context = ridingController.getContext();
+        var ridingBehaviour = context.getBehaviour();
+        var ridingState = context.getState();
         var previousRidingState = pokemonEntity.getPreviousRidingState();
         if (previousRidingState != null && !ridingState.shouldSync(previousRidingState)) return;
-        cobblemon$broadcast(new ClientboundUpdateRidingStatePacket(pokemonEntity.getId(), ridingBehaviour.getKey(), pokemonEntity.getRidingState(), null));
+        cobblemon$broadcast(new ClientboundUpdateRidingStatePacket(pokemonEntity.getId(), ridingBehaviour, ridingState, null));
     }
 
     private void cobblemon$sendOrientationChanges() {

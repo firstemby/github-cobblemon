@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 542,
   "name": "Leavanny",
   "primaryType": "bug",
@@ -42,7 +42,7 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1,
     "height": 1,

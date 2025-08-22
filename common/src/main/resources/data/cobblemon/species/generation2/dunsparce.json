@@ -37,6 +37,17 @@
     "special_defence": 0,
     "speed": 0
   },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      }
+    }
+  },
   "baseExperienceYield": 145,
   "experienceGroup": "medium_fast",
   "catchRate": 190,

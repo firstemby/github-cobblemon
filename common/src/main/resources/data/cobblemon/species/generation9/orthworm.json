@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 968,
   "name": "Orthworm",
   "primaryType": "steel",
@@ -40,6 +40,7 @@
   "catchRate": 25,
   "eggCycles": 35,
   "baseFriendship": 50,
+  "baseScale": 1,
   "drops": {
     "amount": 3,
     "entries": [

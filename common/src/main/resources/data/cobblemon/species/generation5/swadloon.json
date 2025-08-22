@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 541,
   "name": "Swadloon",
   "primaryType": "bug",
@@ -42,7 +42,7 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.67,
   "hitbox": {
     "width": 1,
     "height": 1,

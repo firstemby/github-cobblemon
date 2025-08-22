@@ -1,4 +1,4 @@
-{
+{ "implemented": true,
   "nationalPokedexNumber": 938,
   "name": "Tadbulb",
   "primaryType": "electric",
@@ -41,6 +41,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.4,
   "behaviour": {
     "moving": {
       "swim": {

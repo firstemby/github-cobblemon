@@ -44,20 +44,39 @@
 - Some Pokémon now pitch their bodies in the direction they're moving.
 - Added new advancements Didn't Stop To Think, We Need To Cook, and Pokémon Jockey!.
 - Berries can now be smelted into their respective dyes.
+- Added Syrupy Apples.
 - Added `/runmolang <molang> [<npc>|<player>|<pokemon>]` command that executes a MoLang expression with the provided options as environment variables, as well as the entity (as `q.entity`) that executed the command.
 
 ### Pokémon Added
 
 #### Gen 2
+- Marill
+- Azumarill
+- Hoppip
+- Skiploom
+- Jumpluff
 - Dunsparce
+- Togepi
+- Togetic
+- Houndour
+- Houndoom
 
 #### Gen 3
+- Azurill
+- Meditite
+- Medicham
+- Electrike
+- Manectric
 - Spoink
 - Grumpig
+- Swablu
+- Altaria
 - Snorunt
 - Glalie
 - Latias
 - Latios
+- Swablu
+- Altaria
 
 #### Gen 4
 - Bronzor
@@ -67,6 +86,9 @@
 - Froslass
 - Glameow
 - Purugly
+- Skorupi
+- Drapion
+- Togekiss
 
 #### Gen 5
 - Pansage
@@ -89,10 +111,20 @@
 - Solosis
 - Duosion
 - Reuniclus
+- Tynamo
+- Eelektrik
+- Eelektross
 - Mienfoo
 - Mienshao
+- Sewaddle
+- Swadloon
+- Leavanny
 
 #### Gen 6
+- Skiddo
+- Gogoat
+- Espurr
+- Meowstic
 - Inkay
 - Malamar
 - Hawlucha
@@ -101,13 +133,25 @@
 - Noivern
 
 #### Gen 7
+- Yungoos
+- Gumshoos
 - Drampa
+- Alolan Grimer
+- Alolan Muk
+- Togedemaru
 
 #### Gen 8
+- Skwovet
+- Greedent
+- Toxel
+- Toxtricity
+- Morpeko
 - Silicobra
 - Sandaconda
 - Sinistea
 - Polteageist
+- Galarian Corsola
+- Cursola
 
 #### Gen 9
 - Smoliv
@@ -120,6 +164,12 @@
 - Cyclizar
 - Poltchageist
 - Sinistcha
+- Capsakid
+- Scovillain
+- Tadbulb
+- Bellibolt
+- Toedscool
+- Toedscruel
 
 ### Animation updates for the following Pokémon
 - Garchomp
@@ -141,6 +191,13 @@
 - Dratini
 - Dragonair
 - Dragonite
+- G. Corsola
+- Cursola
+- Dunsparce
+- Dudunsparce (both forms)
+- Porygon
+- Porygon2
+- Porygon-Z
 
 ### Model updates for the following Pokémon
 - Gyarados
@@ -188,12 +245,21 @@
 - Cacturne
 - Taillow
 - Swellow
-- Added Syrupy Apples.
 - Seel
 - Dewgong
 - Honedge
 - Doublade
 - Aegislash
+- Drowzee
+- Hypno
+- Mudkip
+- Marshtomp
+- Swampert
+- Shelmet
+- Escavalier
+- Klink
+- Klank
+- Klinklang
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -247,6 +313,7 @@
 - Updated Pokémon state icons shown in party interfaces
 - MoLang `face` function can now be run on any `PosableEntity` (Like Pokémon!) instead of just NPCs.
 - MoLang `run_action_effect` now works on Pokémon.
+- Changed MoLang entity function `is_standing_on` to allow for block tags in the list.
 - Changed MoLang entity function `is_standing_on` to allow for block tags in the list. 
 - Added entity (as `q.entity`) that executed the command to the `executemolangscript` command.
 
@@ -292,8 +359,8 @@
 - Fix issue where locator X axis was not aligned with blockbench.
 - Fix issue where particle effects that play on frame 1 on sendout would never play (Gastly)
 - The Wiglett line will now sink in water again.
-- Fixed the Sprigatito line's portraits being zoomed in too far. 
-- Fixed Floragato's battle cry animation from breaking. 
+- Fixed the Sprigatito line's portraits being zoomed in too far.
+- Fixed Floragato's battle cry animation from breaking.
 - Fixed the block texture name for the Pep-Up Flower being inaccurate
 - Fixed issue where the restoration tank would not accept valid items from a hopper.
 - Fixed energy root not being shearable
@@ -311,8 +378,12 @@
 - Improved flyers avoiding getting stuck on fence posts.
 - Fixed air balloon battle text not correctly displaying the Pokémon or item name
 - Fixed an issue where items retrieved from a Display case would disappear if a player's inventory is full
+- Fixed Pokédex Scanner not respecting the "Invert Mouse" option
+- Fixed recoil eyes on Shellder & Cloyster.
+- Fixed Shroomish spinning at lightning speed when fainting (no longer allowed to let it rip.)
 - Fixed Pokédex Scanner not respecting the "Invert Mouse" option.
 - Fixed a crash due to a ConcurrentModificationException that could occur during world generation.
+- Fixed Quaxly's animations showing hidden wing sets
 - Fixed Moon Ball moon phase logic to actually work correctly
 - Fixed `/pokedex printcalculations` to now show the correct percentage completed of the Pokedex
 - Fixed mod incompatibility with the `Raised` mod
@@ -329,7 +400,7 @@
 - Renamed Cobblemon's creative tabs to start with "Cobblemon: " to distinguish Cobblemon's tabs from tabs for other mods.
 - Various items now have a rarity value.
 - Reworked observable handling in `Pokemon.kt` to cut down on RAM usage and clarify the file.
-  - Note: This will break mods that used our observable functionality there or in MoveSet, IVs, EVs, or BenchedMoves. 
+  - Note: This will break mods that used our observable functionality there or in MoveSet, IVs, EVs, or BenchedMoves.
   - Using `Pokemon#onChange()` is now the way to mark a Pokémon as needing a save.
   - Using `[Pokemon].changeObservable` is now the way to get an `Observable` for any save-worthy changes.
 - Updated NPCEntity beam positioning to properly account for the baseScale property.
@@ -360,7 +431,7 @@
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`
 - `ElementalType` now implements `ShowdownIdentifiable` to ensure the communcation with showdown stays consistent (also in regards to TeraTypes)
 - Pokemon no longer have a change observable
-  
+
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
   - The `requiredContext` for an item interaction evolution
@@ -410,6 +481,8 @@
 - Added `q.has_argument_at(<index>, [argument_value])` MoLang function to several battle-related action effect contexts.
 - Added `q.hit_count` MoLang function to move action effect contexts.
 - Added `is_included`, `to_lower`, `to_upper`, and `string_length` as available Molang functions.
+- Fixed a crash that would occur during battles if the opponent wild Pokémon species comes from a namespace other than cobblemon
+- Fixed `clientActions` inside Dialogue pages being executed twice
 
 ## [1.6.1 (January 26th, 2025)](#1-6-1)
 
@@ -422,7 +495,7 @@
 - Added optional box argument to the /pc command.
 - Pokédex and Dialogue screens now close when the inventory keybind is pressed.
 - Added config setting `maxPokedexScanningDetectionRange` to control from what distance the player can scan Pokémon using the Pokédex.
-- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
+- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true.
 - Added debug renderer for posable entity locators.
 - Added crossover paintings from Close Combat, Premonition, Altar, Slumber, and Nomad.
 - Added optional box argument to the /pc command
@@ -576,7 +649,7 @@
 - Fixed Vivichoke Dip and Leek & Potato Stew not returning a bowl upon consumption.
 - Fixed Fossil Restoration Tank not accepting Hay Bales as organic material.
 - Fixed Potion items applying double their intended healing value.
-- Fixed Fast Ball capture bonuses applying to all Pokémon, making it the Best Ball instead of the Mediocre Edge-Case Ball. 
+- Fixed Fast Ball capture bonuses applying to all Pokémon, making it the Best Ball instead of the Mediocre Edge-Case Ball.
 - Fixed "learned new move" messages appearing for already-known moves on Pokémon evolutions.
 - Fixed Pokémon Item Models breaking shadows nearby when being placed in Display Cases or Item Frames.
 - Fixed berries not giving bonus yields when planted in their preferred biomes. I'm sure we've fixed that 5 times now.
@@ -585,7 +658,7 @@
 - Fixed players with shouldered Pokémon not being able to rejoin their 1.5.2 worlds using 1.6.
 - Fixed `PokemonProperties` utilizing `ability=<some ability>` being treated as a forced ability even when it is a legal ability for the Pokémon.
 - Fixed type formatting in Pokédex scanner mode when dual types require two lines.
-- Fixed trading sometimes crashing the game or server. 
+- Fixed trading sometimes crashing the game or server.
 - Fixed Wild shiny sounds not respecting the `shinyNoticeParticlesDistance` config setting.
 - Fixed Pokémon being able to evolve mid-battle.
 - Fixed NPC held items being able to be stolen by players. Don't be a thief!
@@ -679,7 +752,7 @@
 - Stonjourner Henge Ruins, Luna Henge Ruins, and Sol Henge Ruins.
 - Submerged Shipwreck Cove and Lush Shipwreck Cove.
 - Pokémon Centers to all 5 village types.
- 
+
 ### Pokémon Added
 #### Gen 1
 - Alola Bias Cubone (built-in resource pack)
@@ -1002,7 +1075,7 @@
 - Big Roots and Energy Roots now share the same sounds as intended.
 - Fixed sounds made by blocks playing at a lower pitch than intended.
 - Fixed Chimchar and Monferno comically T posing whenever they sleep.
-- Fixed Cetitan's cry breaking its walk and sleep animations. 
+- Fixed Cetitan's cry breaking its walk and sleep animations.
 - Fixed the Magby line not having any placeholder walk animations.
 - Fixed Duskull and Dusclops using skylight levels for their nether spawn data. There is no sun in the Nether!
 - Fixed Hisuian Zoroark using base Zoroark stats.
@@ -1018,7 +1091,7 @@
 - Fixed Trevenant T-posing after 8 seconds of sleeping. I also do that.
 - Fixed Bewear T-posing for a bit if a wild one faints where you can see.
 - Fixed Noctowl's placeholder fly animation.
-- Corrected Lotad blinking animation. 
+- Corrected Lotad blinking animation.
 - Fixed reviving items causing errors when used in battle.
 - Fixed messages for Focus Sash, Confusion, Mummy, Ice Face, Own Tempo, and Revive.
 - Improve error handling when loading spawn-sets to ensure invalid configurations don't crash the server.
@@ -1108,7 +1181,7 @@
 - Added a new universal locator called "top".
 - Added `eggs_collected` and `eggs_hatched` Advancement triggers.
 - Added missing `minYaw` configuration to the `q.look()` function for JSON posers.
-- Some pose condition names have been changed: 
+- Some pose condition names have been changed:
   - `isTouchingWaterOrRain` has been changed to `isInWaterOrRain`
   - `isSubermegedInWater` has been changed to `isUnderWater`
 

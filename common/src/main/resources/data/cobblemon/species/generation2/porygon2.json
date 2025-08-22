@@ -57,6 +57,7 @@
         "canWalk": false
       },
       "swim": {
+        "canBreatheUnderwater": true,
         "avoidsWater": true,
         "canSwimInWater": false
       }

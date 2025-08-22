@@ -10,7 +10,10 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,6 +44,12 @@ public abstract class ServerPlayerMixin {
     public void cobblemon$resetOrientationOnDismount(CallbackInfo ci) {
         if (!(this instanceof OrientationControllable controllable)) return;
         controllable.getOrientationController().setActive(false);
+    }
+
+    //TODO: Switch to sending out on load instead of preventing saving
+    @ModifyExpressionValue(method = "addAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hasExactlyOnePlayerPassenger()Z"))
+    private boolean cobblemon$cancelSavingPokemonMounts(boolean original, @Local(ordinal=0) Entity entity) {
+        return original && !(entity instanceof PokemonEntity);
     }
 
 }

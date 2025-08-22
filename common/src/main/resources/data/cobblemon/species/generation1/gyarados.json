@@ -67,50 +67,37 @@
     }
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "35-70",
-          "AIR": "10-70"
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/jet",
+        "stats": {
+          "SPEED": "30-60",
+          "ACCELERATION": "30-65",
+          "SKILL": "30-60",
+          "JUMP": "30-60",
+          "STAMINA": "35-75"
         }
       },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "35-75",
-          "AIR": "10-75"
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "10-20",
+          "ACCELERATION": "90-100",
+          "SKILL": "15-30",
+          "JUMP": "10-20",
+          "STAMINA": "15-30"
         }
       },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "40-80",
-          "AIR": "10-80"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can jump",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "10-60"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint",
-        "ranges": {
-          "LAND": "40-85",
-          "AIR": "10-85"
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "stats": {
+          "SPEED": "30-60",
+          "ACCELERATION": "30-65",
+          "SKILL": "30-60",
+          "JUMP": "30-60",
+          "STAMINA": "35-75"
         }
       }
-    },
-    "behaviour": {
-      "key": "cobblemon:air/bird"
     },
     "seats": [
       {

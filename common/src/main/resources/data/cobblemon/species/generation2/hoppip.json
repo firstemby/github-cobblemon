@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 187,
   "name": "Hoppip",
   "primaryType": "grass",
@@ -43,11 +44,24 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 0.7,
     "fixed": false
+  },
+  "standingEyeHeight": 0.5,
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    }
   },
   "drops": {
     "amount": 1,

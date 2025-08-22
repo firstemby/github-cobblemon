@@ -63,9 +63,9 @@ class RideSoundManager(
     }
 
     fun getActiveRideKey(): ResourceLocation {
-        val key = ride.ridingBehaviourSettings?.key ?: cobblemonResource("no_key")
+        val key = ride.ridingController?.context?.settings?.key ?: cobblemonResource("no_key")
         if (key == CompositeBehaviour.KEY) {
-            return (ride.ridingState as? CompositeState)?.activeBehaviour?.get() ?: cobblemonResource("no_key")
+            return (ride.ridingController?.context?.state as? CompositeState)?.activeBehaviour?.get() ?: cobblemonResource("no_key")
         } else {
             return key
         }

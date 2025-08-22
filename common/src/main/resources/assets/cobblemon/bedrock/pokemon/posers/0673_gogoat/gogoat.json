@@ -1,0 +1,40 @@
+{
+  "portraitScale": 1.98,
+  "portraitTranslation": [ -1.4, 1.27, 0],
+  "profileScale": 0.55,
+  "profileTranslation": [ 0, 0.9, 0],
+  "rootBone": "gogoat",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gogoat', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('gogoat', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gogoat', 'ground_idle')",
+        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('gogoat', 'blink')"
+      ]
+    }
+  }
+}

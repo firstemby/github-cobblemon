@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 949,
   "name": "Toedscruel",
   "primaryType": "ground",
@@ -41,6 +42,19 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 1.0,
+    "height": 1.0,
+    "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": false,
+      "light": "0-4"
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [

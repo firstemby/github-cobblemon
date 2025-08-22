@@ -12,7 +12,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": false,
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('escavalier', 'ground_idle')"

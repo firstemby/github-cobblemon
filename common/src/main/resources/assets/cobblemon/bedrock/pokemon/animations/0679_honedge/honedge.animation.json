@@ -475,6 +475,14 @@
 					"rotation": [-5, 0, 0]
 				}
 			}
+		},
+		"animation.honedge.cry": {
+			"loop": true,
+			"sound_effects": {
+				"0.0": {
+					"effect": "pokemon.honedge.cry"
+				}
+			}
 		}
 	}
 }

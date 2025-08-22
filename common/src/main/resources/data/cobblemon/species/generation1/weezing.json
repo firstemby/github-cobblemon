@@ -229,6 +229,7 @@
         ]
       },
       "moves": [
+        "1:aromatherapy",
         "1:doublehit",
         "1:strangesteam",
         "1:defog",
@@ -251,7 +252,6 @@
         "56:memento",
         "62:destinybond",
         "68:mistyterrain",
-        "egg:aromatherapy",
         "egg:curse",
         "egg:grudge",
         "egg:painsplit",
