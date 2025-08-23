@@ -1,0 +1,2 @@
+t.seen_entity = q.other_entity;
+'Do some stuff if we are in the right activity or whatever';

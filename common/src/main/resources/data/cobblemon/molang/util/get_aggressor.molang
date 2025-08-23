@@ -1,0 +1,10 @@
+q.pokeball != 0 ? {
+  return q.pokeball.thrower;
+};
+q.source != 0 ? {
+  return q.source.entity;
+};
+q.other_entity != 0 ? {
+  return q.other_entity;
+};
+return 0;

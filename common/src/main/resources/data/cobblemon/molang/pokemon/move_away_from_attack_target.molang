@@ -1,0 +1,7 @@
+t.attack_target = q.entity.get_entity_memory('minecraft:attack_target');
+t.attack_target == 0 ? {
+  return 0;
+};
+q.entity.erase_memory('minecraft:attack_target');
+q.entity.set_entity_memory('minecraft:avoid_target', t.attack_target);
+q.entity.set_activity('minecraft:avoid');

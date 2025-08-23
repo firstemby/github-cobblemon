@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.behaviour.callback_hooks.name",
+  "description": "cobblemon.behaviour.callback_hooks.desc",
+  "configurations": [
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:core",
+      "tasksByPriority": {
+        "0": [
+          "cobblemon:notify_about_entity_visibility"
+        ]
+      }
+    }
+  ]
+}

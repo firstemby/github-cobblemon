@@ -124,7 +124,7 @@ class WanderTaskConfig : SingleTaskConfig {
                     val wanderControl = it.tryGet(wanderControl).orElse(null) ?: CobblemonWanderControl()
                     mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                     val avoidsTargetingAir = avoidTargetingAir.resolveBoolean(mainThreadRuntime)
-                    val wanderChance = mainThreadRuntime.resolveFloat(wanderChanceExpression)
+                    val wanderChance = wanderControl.wanderChance ?: mainThreadRuntime.resolveFloat(wanderChanceExpression)
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance || !wanderControl.allowLand) {
                         return@Trigger false
                     }
@@ -171,7 +171,7 @@ class WanderTaskConfig : SingleTaskConfig {
                     walkTarget.set(
                         CobblemonWalkTarget(
                             pos = pos,
-                            speedModifier = speedMultiplier.resolveFloat(mainThreadRuntime),
+                            speedModifier = speedMultiplier.resolveFloat(mainThreadRuntime) * wanderControl.speedMultiplier,
                             completionRange = 0,
                             nodeTypeFilter = { nodeType -> nodeType !in listOf(PathType.WATER, PathType.WATER_BORDER) },
                             destinationNodeTypeFilter = { nodeType -> !avoidsTargetingAir || nodeType !in listOf(PathType.OPEN) }

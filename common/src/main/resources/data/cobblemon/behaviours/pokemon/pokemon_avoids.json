@@ -1,0 +1,28 @@
+{
+  "_comment": "Used to give the basics of avoidance behaviour for Pokémon.",
+  "visible": false,
+  "configurations": [
+    {
+      "type": "cobblemon:add_memories_and_sensors",
+      "memories": [
+        "minecraft:avoid_target",
+        "cobblemon:avoid_target_data"
+      ]
+    },
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:avoid",
+      "tasksByPriority": {
+        "0": [
+          "cobblemon:follow_walk_target"
+        ],
+        "1": [
+          {
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:wander_avoid"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -19,6 +19,19 @@
           "look_at_target"
         ]
       }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "condition": "q.entity.is_pokemon",
+      "tasksByPriority": {
+        "0": [
+          {
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:pokemon_wander_control"
+          }
+        ]
+      }
     }
   ]
 }

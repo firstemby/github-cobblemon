@@ -3,11 +3,11 @@
   "description": "cobblemon.behaviour.wanders_water.desc",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
+      "type": "cobblemon:add_tasks_to_activity",
+      "activities": ["minecraft:idle", "minecraft:avoid", "minecraft:panic"],
       "tasksByPriority": {
         "7": [
-          "water_wander"
+          "cobblemon:water_wander"
         ],
         "9": [
           {

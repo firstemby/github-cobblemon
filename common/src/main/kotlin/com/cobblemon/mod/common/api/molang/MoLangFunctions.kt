@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
-import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -976,6 +975,23 @@ object MoLangFunctions {
                 val amount = params.getDouble(0)
                 entity.heal(amount.toFloat())
             }
+            map.put("reset_activity") { _ ->
+                entity.brain.updateActivityFromSchedule(entity.level().dayTime, entity.level().gameTime)
+                DoubleValue.ONE
+            }
+            map.put("activity") { _ ->
+                return@put entity.brain.activeNonCoreActivity.map { StringValue(it.name) }.orElse(null) ?: DoubleValue.ZERO
+            }
+            map.put("set_activity") { params ->
+                val activityId = params.getString(0).asIdentifierDefaultingNamespace()
+                val activity = BuiltInRegistries.ACTIVITY.get(activityId)
+                if (activity != null) {
+                    entity.brain.setActiveActivityIfPossible(activity)
+                    return@put DoubleValue.ONE
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+            }
             map.put("is_living_entity") { DoubleValue.ONE }
             map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) }
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
@@ -1073,12 +1089,12 @@ object MoLangFunctions {
             }
             map.put("set_entity_memory") { params ->
                 val memory = params.getString(0).asIdentifierDefaultingNamespace().let(BuiltInRegistries.MEMORY_MODULE_TYPE::get) as MemoryModuleType<LivingEntity>
-                val entity = (params.get<MoValue>(1) as? ObjectValue<*>)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                val entityValue = (params.get<MoValue>(1) as? ObjectValue<*>)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
                 val expiry = params.getIntOrNull(2) ?: -1
                 if (expiry != -1) {
-                    entity.brain.setMemoryWithExpiry(memory, entity, expiry.toLong())
+                    entity.brain.setMemoryWithExpiry(memory, entityValue, expiry.toLong())
                 } else {
-                    entity.brain.setMemory(memory, entity)
+                    entity.brain.setMemory(memory, entityValue)
                 }
                 return@put DoubleValue.ONE
             }
@@ -1127,6 +1143,18 @@ object MoLangFunctions {
                 } else {
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("is_visible_entity") { params ->
+                val otherEntity = params.get<ObjectValue<*>>(0)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                val visibleMobs = entity.brain.getMemorySafely(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(null)
+                    ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(visibleMobs.contains(otherEntity))
+            }
+            map.put("is_nearby_entity") { params ->
+                val otherEntity = params.get<ObjectValue<*>>(0)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                val nearbyMobs = entity.brain.getMemorySafely(MemoryModuleType.NEAREST_LIVING_ENTITIES).orElse(null)
+                    ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(nearbyMobs.contains(otherEntity))
             }
             if (entity is PathfinderMob) {
                 map.put("walk_to") { params ->

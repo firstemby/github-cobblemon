@@ -1,0 +1,5 @@
+t.avoid_target = q.entity.get_entity_memory('minecraft:avoid_target');
+t.avoid_target == 0 || !q.entity.is_nearby_entity(t.avoid_target) ? {
+  q.entity.reset_activity();
+  return 0;
+};

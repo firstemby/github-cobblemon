@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.resolve
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 /**
  * This is used in the AI system to store optional additional information about the attack target,
@@ -42,8 +44,14 @@ class CobblemonAttackTargetData(
     /** An expression that returns false when the target is no longer worth attacking. */
     var shouldContinue: Expression = "true".asExpression(),
     var dealtHitsUntilDisengage: Int = -1, // -1 means no limit
-    var disengageAction: (entity: Entity) -> Unit = {}
+    var disengageAction: (entity: LivingEntity) -> Unit = ::defaultDisengage
 ) {
+    companion object {
+        fun defaultDisengage(entity: LivingEntity) {
+            entity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
+            entity.brain.updateActivityFromSchedule(entity.level().dayTime, entity.level().gameTime)
+        }
+    }
     val struct = ObjectValue<CobblemonAttackTargetData>(this).also {
         it.addFunction("dealt_hits_until_disengage") { DoubleValue(dealtHitsUntilDisengage.toDouble()) }
         it.addFunction("set_dealt_hits_until_disengage") { params ->
@@ -64,8 +72,15 @@ class CobblemonAttackTargetData(
             }
             DoubleValue.ONE
         }
+        it.addFunction("reset") {
+            shouldContinue = "true".asExpression()
+            dealtHitsUntilDisengage = -1
+            disengageAction = ::defaultDisengage
+            DoubleValue.ONE
+        }
         it.addFunction("unset_disengage_action") { params ->
-            disengageAction = {}
+            disengageAction = ::defaultDisengage
         }
     }
+
 }

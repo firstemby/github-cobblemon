@@ -1,0 +1,22 @@
+t.aggressor = q.run_script('cobblemon:get_aggressor');
+t.aggressor == 0 ? {
+  return 0;
+};
+t.activity = q.entity.activity;
+q.entity.is_doing_activity('cobblemon:battling', 'cobblemon:fight', 'cobblemon:sleep') ? {
+  return 0;
+};
+q.entity.is_doing_activity('cobblemon:avoid') ? {
+  'Oh we are very angry now';
+  q.entity.set_entity_memory('minecraft:attack_target', t.aggressor);
+  q.entity.erase_memory('cobblemon:path_cooldown', 'cobblemon:attack_target_data');
+  q.entity.set_activity('minecraft:fight');
+} : {
+  t.attack_target_data = q.entity.get_attack_target_data_memory();
+  t.attack_target_data.set_disengage_action('cobblemon:move_away_from_attack_target');
+  t.attack_target_data.set_dealt_hits_until_disengage(1);
+  q.entity.set_entity_memory('minecraft:attack_target', t.aggressor);
+  q.entity.erase_memory('cobblemon:path_cooldown');
+  q.entity.set_activity('minecraft:fight');
+};
+

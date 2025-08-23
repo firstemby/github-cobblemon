@@ -42,7 +42,6 @@ object MeleeAttackTask {
                     if (attackTargetData != null) {
                         if (attackTargetData.dealtHitsUntilDisengage == 1) {
                             attackTargetData.dealtHitsUntilDisengage = 0
-                            entity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
                             attackTargetData.disengageAction(entity)
                         } else if (attackTargetData.dealtHitsUntilDisengage > 0){
                             attackTargetData.dealtHitsUntilDisengage--

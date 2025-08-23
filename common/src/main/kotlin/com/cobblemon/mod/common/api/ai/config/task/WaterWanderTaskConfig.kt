@@ -78,7 +78,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     }
 
                     mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                    val wanderChance = mainThreadRuntime.resolveFloat(wanderChanceExpression)
+                    val wanderChance = wanderControl.wanderChance ?: mainThreadRuntime.resolveFloat(wanderChanceExpression)
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) {
                         return@Trigger false
                     }
@@ -104,7 +104,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                         CobblemonWalkTarget(
                             pos = pos,
                             nodeTypeFilter = { it == PathType.WATER || it == PathType.WATER_BORDER },
-                            speedModifier = speedMultiplier.resolveFloat(mainThreadRuntime),
+                            speedModifier = speedMultiplier.resolveFloat(mainThreadRuntime) * wanderControl.speedMultiplier,
                             completionRange = 0
                         )
                     )

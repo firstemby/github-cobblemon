@@ -1,31 +1,32 @@
 {
-  "name": "cobblemon.behaviour.panics.name",
-  "description": "cobblemon.behaviour.panics.desc",
+  "visible": false,
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "panic",
+      "type": "cobblemon:add_memories_and_sensors",
+      "memories": [
+        "minecraft:visible_mobs"
+      ],
+      "sensors": [
+        "minecraft:nearest_living_entities"
+      ]
+    },
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:panic",
       "tasksByPriority": {
         "0": [
-          "calm_down",
-          "follow_walk_target",
+          "cobblemon:follow_walk_target"
+        ],
+        "1": [
           {
-            "type": "run_script",
-            "script": "cobblemon:wander_panic"
-          },
-          {
-            "type": "run_script",
+            "type": "cobblemon:run_script",
             "script": "cobblemon:wander_avoid"
           }
         ],
-        "3": [
+        "2": [
           {
-            "_comment": "It's like wandering but far more frequently tries to do it and moves much quicker. The scripts will configure the avoid target for wanders.",
-            "type": "wander",
-            "speedMultiplier": 0.5,
-            "horizontalRange": 8,
-            "verticalRange": 8,
-            "shouldWander": true
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:wander_panic"
           }
         ]
       }

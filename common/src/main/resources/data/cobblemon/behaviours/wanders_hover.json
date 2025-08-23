@@ -3,8 +3,8 @@
   "description": "cobblemon.behaviour.wanders_hover.desc",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
+      "type": "cobblemon:add_tasks_to_activity",
+      "activities": ["minecraft:idle", "minecraft:avoid", "minecraft:panic"],
       "tasksByPriority": {
         "7": [
           {

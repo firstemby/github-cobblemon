@@ -3742,6 +3742,15 @@
   "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
   "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
 
+  "cobblemon.behaviour.pokemon_neutral_response.name": "Pokémon Response - Neutral",
+  "cobblemon.behaviour.pokemon_neutral_response.desc": "Neutral-style Pokémon responses to triggers. Attacks once and moves away when aggravated. Attacks persistently when attacked while moving away.",
+
+  "cobblemon.behaviour.pokemon_friendly_response.name": "Pokémon Response - Friendly",
+  "cobblemon.behaviour.pokemon_friendly_response.desc": "Friendly-style Pokémon responses to triggers. Flees when attacked. Observes players.",
+
+  "cobblemon.behaviour.callback_hooks.name": "Callback Hooks",
+  "cobblemon.behaviour.callback_hooks.desc": "Runs MoLang scripts when certain events happen, such as when the entity is attacked or when it sees a new entity. Needed for some behaviours to function.",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

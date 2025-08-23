@@ -48,9 +48,11 @@ class NotifyAboutEntityVisibilityTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
 
         return object : Behavior<LivingEntity>(mapOf(MemoryModuleType.NEAREST_LIVING_ENTITIES to MemoryStatus.VALUE_PRESENT), Int.MAX_VALUE) {
-            // Buffer of known entities
-            var knownEntities = listOf<LivingEntity>()
+            override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long) = true
             override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity) = true
+
+            // Buffer of known entities
+            val knownEntities = mutableListOf<LivingEntity>()
             override fun tick(level: ServerLevel, owner: LivingEntity, gameTime: Long) {
                 if (gameTime % ticksBetweenChecks != 0L) {
                     return
@@ -77,7 +79,8 @@ class NotifyAboutEntityVisibilityTaskConfig : SingleTaskConfig {
                     )
                 }
 
-                knownEntities = visibleEntities.toList()
+                knownEntities.clear()
+                knownEntities.addAll(visibleEntities)
             }
         }
     }

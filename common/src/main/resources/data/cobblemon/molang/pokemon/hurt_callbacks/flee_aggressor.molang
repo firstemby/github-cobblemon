@@ -1,0 +1,7 @@
+t.aggressor = q.run_script('cobblemon:get_aggressor');
+t.aggressor == 0 ? {
+  return 0;
+};
+q.entity.set_entity_memory('minecraft:avoid_target', t.aggressor);
+q.entity.erase_memory('cobblemon:path_cooldown');
+q.entity.set_activity('minecraft:panic');

@@ -2,6 +2,12 @@
   "visible": false,
   "configurations": [
     {
+      "type": "cobblemon:apply_behaviours",
+      "behaviours": [
+        "cobblemon:callback_hooks"
+      ]
+    },
+    {
       "type": "add_tasks_to_activity",
       "activity": "minecraft:idle",
       "tasksByPriority": {

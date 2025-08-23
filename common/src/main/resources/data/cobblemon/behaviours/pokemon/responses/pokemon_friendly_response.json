@@ -1,0 +1,41 @@
+{
+  "name": "cobblemon.behaviour.pokemon_friendly_response.name",
+  "description": "cobblemon.behaviour.pokemon_friendly_response.desc",
+  "onAdd": [
+    "q.entity.add_callback('cobblemon:hurt', 'cobblemon:flee_aggressor');",
+    "q.entity.add_callback('cobblemon:saw_entity', 'cobblemon:begin_to_observe_from_distance');",
+    "q.entity.add_callback('cobblemon:lost_sight_of_entity', 'cobblemon:stop_observing_from_distance');"
+  ],
+  "onRemove": [
+    "q.entity.remove_callback('cobblemon:hurt', 'cobblemon:flee_aggressor');",
+    "q.entity.remove_callback('cobblemon:saw_entity', 'cobblemon:begin_to_observe_from_distance');",
+    "q.entity.remove_callback('cobblemon:lost_sight_of_entity', 'cobblemon:stop_observing_from_distance');"
+  ],
+  "configurations": [
+    {
+      "type": "cobblemon:apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_panics"
+      ]
+    },
+    {
+      "type": "cobblemon:add_memories_and_sensors",
+      "memories": [
+        "minecraft:avoid_target",
+        "cobblemon:avoid_target_data"
+      ]
+    },
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:panic",
+      "tasksByPriority": {
+        "2": [
+          {
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:stop_avoiding_when_target_gone"
+          }
+        ]
+      }
+    }
+  ]
+}

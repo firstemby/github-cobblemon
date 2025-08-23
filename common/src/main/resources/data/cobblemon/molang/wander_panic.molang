@@ -3,8 +3,10 @@
 t.wander_control = q.entity.get_wander_control_memory();
 t.avoid_target_data = q.entity.get_avoid_target_data_memory();
 t.avoid_entity = q.entity.get_entity_memory('minecraft:avoid_target');
-t.avoid_entity != 0 && (t.avoid_entity.world.id != q.entity.world.id || t.avoid_entity.distance_to_entity(q.entity) > 32) ? {
+t.avoid_entity != 0 && q.entity.distance_to_entity(t.avoid_entity) > 20 ? {
   return 0;
 };
 
-t.wander_control.set_speed_multiplier(1.25);
+t.wander_control.set_speed_multiplier(1.4);
+t.wander_control.set_wander_chance(1);
+t.wander_control.set_path_cooldown_ticks(10);

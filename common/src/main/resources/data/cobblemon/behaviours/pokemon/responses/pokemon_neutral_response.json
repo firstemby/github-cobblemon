@@ -1,0 +1,39 @@
+{
+  "name": "cobblemon.behaviour.pokemon_neutral_response.name",
+  "description": "cobblemon.behaviour.pokemon_neutral_response.desc",
+  "onAdd": [
+    "q.entity.add_callback('cobblemon:hurt', 'cobblemon:attack_aggressor_once_then_avoid');",
+    "q.entity.add_callback('cobblemon:hit_by_pokeball', 'cobblemon:attack_aggressor_once_then_avoid');"
+  ],
+  "onRemove": [
+    "q.entity.remove_callback('cobblemon:hurt', 'cobblemon:attack_aggressor_once_then_avoid');",
+    "q.entity.remove_callback('cobblemon:hit_by_pokeball', 'cobblemon:attack_aggressor_once_then_avoid');"
+  ],
+  "configurations": [
+    {
+      "type": "cobblemon:apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_avoids"
+      ]
+    },
+    {
+      "type": "cobblemon:add_memories_and_sensors",
+      "memories": [
+        "minecraft:attack_target",
+        "cobblemon:attack_target_data"
+      ]
+    },
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:avoid",
+      "tasksByPriority": {
+        "2": [
+          {
+            "type": "cobblemon:run_script",
+            "script": "cobblemon:stop_avoiding_when_target_gone"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -30,6 +30,7 @@ class CobblemonWanderControl(
     var allowAir: Boolean = false,
     var pathCooldownTicks: Int = 20 * 5, // Used to mitigate the cost of pathfinding.
     var speedMultiplier: Float = 1F,
+    var wanderChance: Float? = null
 ) {
     class WanderCenter(val x: Number, val y: Number, val z: Number, val minRange: Float, val maxRange: Float)
 
@@ -69,6 +70,9 @@ class CobblemonWanderControl(
         .addFunction("set_allow_air") { params -> allowAir = params.getBooleanOrNull(0) ?: false }
         .addFunction("set_path_cooldown_ticks") { params -> pathCooldownTicks = params.getDoubleOrNull(0)?.toInt() ?: (20 * 5) }
         .addFunction("set_speed_multiplier") { params -> speedMultiplier = params.getDoubleOrNull(0)?.toFloat() ?: 0.35F }
+        .addFunction("set_wander_chance") { params ->
+            wanderChance = params.getDoubleOrNull(0)?.toFloat()
+        }
         .addFunction("reset") {
             center = null
             allowLand = false
@@ -77,6 +81,7 @@ class CobblemonWanderControl(
             pathCooldownTicks = 20 * 5
             speedMultiplier = 1F
             maxAttempts = 4
+            wanderChance = null
         }
 
     fun isSuitable(position: BlockPos): Boolean {
