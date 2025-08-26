@@ -106,7 +106,7 @@ interface TaskConfig {
             cobblemonResource("path_to_ideal_nest_location") to PathToIdealNestLocationTaskConfig::class.java,
             cobblemonResource("place_egg_in_nest") to PlaceEggInNestTaskConfig::class.java,
             cobblemonResource("build_nest") to BuildNestTaskConfig::class.java,
-            cobblemonResource("hunt_player") to HuntPlayerTaskConfig::class.java,
+            /*cobblemonResource("hunt_player") to HuntPlayerTaskConfig::class.java,*/
             cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
             cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig::class.java,
             cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig::class.java,
