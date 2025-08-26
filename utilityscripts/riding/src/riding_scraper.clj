@@ -58,9 +58,10 @@
         (into {} (map (fn [x] [x (get-seat-locator state x)]) seat-locators))))))
 
 (def headers
-  [:generation :dex-no :species :land-behaviour :liquid-behaviour :air-behaviour :land-speed :land-acceleration
-   :land-skill :land-jump :land-stamina :liquid-speed :liquid-acceleration :liquid-skill :liquid-jump :liquid-stamina
-   :air-speed :air-acceleration :air-skill :air-jump :air-stamina])
+  [:generation :dex-no :species :land-behaviour :liquid-behaviour :air-behaviour :land-ready-to-scrape?
+   :liquid-ready-to-scrape? :air-ready-to-scrape? :land-speed :land-acceleration :land-skill :land-jump
+   :land-stamina :liquid-speed :liquid-acceleration :liquid-skill :liquid-jump :liquid-stamina :air-speed
+   :air-acceleration :air-skill :air-jump :air-stamina])
 
 (def behaviour-keys
   {"Jet"       "cobblemon:air/jet"
@@ -86,8 +87,8 @@
 
 (defn csv->map
   "Takes a series of CSV rows and returns a map of the columns with the header as the key"
-  [csv-data]
-  (let [data (drop 3 csv-data)]
+  [csv-data headers start]
+  (let [data (drop start csv-data)]
     (map zipmap (repeat headers) data)))
 
 (defn concat-keyword
@@ -105,7 +106,7 @@
     => {:air {:behaviour \"Boat\" :skills {:speed \"B\"}}
   "
   [data type]
-  (if (= "N/A" (get data (concat-keyword type "behaviour")))
+  (if (or (not (= "Yes" (get data (concat-keyword  type "ready-to-scrape?")))) (= "N/A" (get data (concat-keyword type "behaviour"))))
     data
     (assoc data (keyword type)
                 {:behaviour (get data (concat-keyword type "behaviour"))
@@ -197,10 +198,49 @@
 (defn fetch-csv
   "Fetch and parse the riding data CSV"
   []
-  (let [url "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=50216943"]
-    (->> (client/get url)
+  (let [riding-stat-url "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=50216943"]
+    (->> (client/get riding-stat-url)
          (:body)
          (csv/read-csv))))
+
+(defn get-sound-mappings []
+  (let [data (->> (client/get "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=513653624")
+                  (:body)
+                  (csv/read-csv)
+                  (rest)
+                  (into {}))]
+    (update-vals data #(read-str % :key-fn keyword))))
+
+(def sound-headers
+  [:generation :dex-no :species
+   :land-riding-sound-1 :land-riding-sound-2 :land-riding-sound-3 :land-riding-sound-4 :land-riding-sound-5
+   :liquid-riding-sound-1 :liquid-riding-sound-2 :liquid-riding-sound-3 :liquid-riding-sound-4 :liquid-riding-sound-5
+   :air-riding-sound-1 :air-riding-sound-2 :air-riding-sound-3 :air-riding-sound-4 :air-riding-sound-5])
+
+(defn get-sounds []
+  (->> (client/get "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=1378925558")
+       (:body)
+       (csv/read-csv)
+       (#(csv->map % sound-headers 3))
+       (map #(merge % (name->species-form (:species %))))
+       (map #(assoc % :form (or (:form %) "Normal")))))
+
+(defn condense-sound-type [sound-data sound-mappings riding-type]
+  (let [keys (map #(concat-keyword riding-type (str "riding-sound-" %)) [1 2 3 4 5])
+        values (vec (filter not-empty (map #(get sound-data %) keys)))
+        json (map #(get sound-mappings %) values)]
+    (vec json)))
+
+(defn sound-data->json [sound-mappings sound-data riding-type]
+  (->> (map #(assoc % :sound-json (condense-sound-type % sound-mappings riding-type)) sound-data)
+       (map (fn [x] {[(:species x) (:form x)] x}))
+       (apply merge)
+       (#(update-vals % :sound-json))))
+
+(defn get-sounds-map [sound-mappings sounds]
+  (->> ["air" "liquid" "land"]
+       (map (fn [x] [x (sound-data->json sound-mappings sounds x)]))
+       (into {})))
 
 (defn stats->json
   "Builds a JSON-ready map of riding stat grades from the provided stats-data."
@@ -242,13 +282,13 @@
    - Expects `behaviour-data` like {:behaviour \"...\" :stats {:speed \"A\" ...}}.
    - Resolves a stable key via `behaviour-keys`; returns nil if behaviour is unknown.
    - Translates letter grades to numeric ranges via `grade-ranges`."
-  [behaviour-data]
+  [behaviour-data behaviour-sounds]
   (let [behaviour (:behaviour behaviour-data)
         behaviour-json (behaviour-type->json behaviour)
         stats (:stats behaviour-data)
         stats-json (stats->json stats)]
     (when (and behaviour-json stats-json)
-      (merge behaviour-json stats-json))))
+      (merge behaviour-json stats-json behaviour-sounds))))
 
 (defn assoc-behaviour
   "Conditionally assoc a behaviour block into the accumulator `map`.
@@ -256,9 +296,10 @@
    - `behaviour` is the keyword to read (e.g., :air).
    - When present and valid, associates under an upper-cased key (e.g., :AIR).
    Returns the updated map or the original map if nothing was added."
-  [map species-data behaviour]
-  (let [behaviour-data (get species-data behaviour)
-        behaviour-json (behaviour->json behaviour-data)]
+  [map species-data behaviour sounds]
+  (let [behaviour-sounds (get-in sounds [(name behaviour) [(:species species-data) (or (:form species-data) "Normal")]])
+        behaviour-data (get species-data behaviour)
+        behaviour-json (behaviour->json behaviour-data {:ridingSounds behaviour-sounds})]
     (if (and behaviour-data behaviour-json)
       (assoc map (keyword (upper-case (name behaviour))) behaviour-json)
       map)))
@@ -306,12 +347,12 @@
   "Assemble the behaviours section for a species in the expected JSON schema.
    Builds a map of available behaviours (:AIR, :LAND, :LIQUID) using `assoc-behaviour`.
    Wraps the result as {:riding {:behaviours {...}}}. Returns nil when no behaviours exist."
-  [species-data]
+  [species-data sounds]
   (let [behaviours
         (-> {}
-            (assoc-behaviour species-data :air)
-            (assoc-behaviour species-data :land)
-            (assoc-behaviour species-data :liquid))]
+            (assoc-behaviour species-data :air sounds)
+            (assoc-behaviour species-data :land sounds)
+            (assoc-behaviour species-data :liquid sounds))]
     (when (not-empty behaviours)
       {:riding {:behaviours behaviours
                 :seats      (seats->json (:seat-data species-data))}})))
@@ -319,7 +360,10 @@
 (defn sanitize-species-name
   "Normalizes `species` by lower-casing and removing spaces, underscores, colons, dots, and hyphens."
   [species]
-  (s/replace (lower-case species) #"([ _:\.\-]+)" ""))
+  (-> species
+      (lower-case)
+      (s/replace #"([ _:\.\-']+)" "")
+      (s/replace "é" "e")))
 
 (defn get-file-for-species
   "Return the first JSON file from `files` whose name matches `species`.
@@ -475,14 +519,14 @@
    - Collapse the data into just the file and new updates, and group results by :file.
    - Merge all updates into a single text blob
    Returns a map: java.io.File -> string"
-  [csv files]
+  [csv files sounds]
   (let [file-updates (->> csv
-                          (csv->map)
+                          (#(csv->map % headers 3))
                           (map sanitize-riding-data)
                           (filter #(or (:air %) (:land %) (:liquid %)))
                           (map #(assoc % :seat-data (generate-seat-data %)))
                           (filter #(:seat-data %))
-                          (map #(assoc % :json (behaviours->json %)))
+                          (map #(assoc % :json (behaviours->json % sounds)))
                           (filter #(:json %))
                           (map #(riding-data->cobblemon-json % files))
                           (group-by :file))]
@@ -491,8 +535,9 @@
 (defn run-script []
   (let [path "../../common/src/main/resources/data/cobblemon/species"
         files (file-seq (file path))
-        csv (fetch-csv)
-        updates (get-file-updates csv files)]
+        riding-data-csv (fetch-csv)
+        sounds (get-sounds-map (get-sound-mappings) (get-sounds))
+        updates (get-file-updates riding-data-csv files sounds)]
     (doseq [[file contents] updates]
       (spit file contents))))
 
@@ -504,3 +549,5 @@
                     (.setRunnable PokemonRenderer/Companion nil)))))
 
 (-main)
+
+(.setRunnable PokemonRenderer/Companion nil)

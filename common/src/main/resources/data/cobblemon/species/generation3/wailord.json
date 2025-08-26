@@ -51,26 +51,15 @@
   },
   "riding": {
     "behaviours": {
-      "LAND": {
-        "canJump": false,
-        "canSprint": false,
-        "key": "cobblemon:land/horse",
-        "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "21-40",
-          "SKILL": "21-40",
-          "SPEED": "21-40",
-          "STAMINA": "21-40"
-        }
-      },
       "LIQUID": {
         "key": "cobblemon:liquid/submarine",
+        "ridingSounds": [],
         "stats": {
-          "ACCELERATION": "41-60",
+          "ACCELERATION": "21-40",
           "JUMP": "41-60",
           "SKILL": "41-60",
           "SPEED": "21-40",
-          "STAMINA": "61-80"
+          "STAMINA": "41-60"
         }
       }
     },

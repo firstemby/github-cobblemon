@@ -54,32 +54,35 @@
     "behaviours": {
       "AIR": {
         "key": "cobblemon:air/jet",
+        "ridingSounds": [],
         "stats": {
-          "ACCELERATION": "41-60",
+          "ACCELERATION": "61-80",
           "JUMP": "41-60",
-          "SKILL": "41-60",
-          "SPEED": "61-80",
-          "STAMINA": "21-40"
-        }
-      },
-      "LAND": {
-        "key": "cobblemon:land/horse",
-        "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "61-80",
           "SKILL": "41-60",
           "SPEED": "41-60",
           "STAMINA": "41-60"
         }
       },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "ridingSounds": [],
+        "stats": {
+          "ACCELERATION": "41-60",
+          "JUMP": "41-60",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "61-80"
+        }
+      },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
+        "ridingSounds": [],
         "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "0-20",
-          "SKILL": "41-60",
-          "SPEED": "0-20",
-          "STAMINA": "41-60"
+          "ACCELERATION": "0-20",
+          "JUMP": "41-60",
+          "SKILL": "21-40",
+          "SPEED": "41-60",
+          "STAMINA": "0-20"
         }
       }
     },
