@@ -54,22 +54,24 @@
     "behaviours": {
       "AIR": {
         "key": "cobblemon:air/bird",
+        "ridingSounds": [],
         "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "21-40",
-          "SKILL": "41-60",
-          "SPEED": "0-20",
-          "STAMINA": "41-60"
+          "ACCELERATION": "0-20",
+          "JUMP": "41-60",
+          "SKILL": "21-40",
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
+        "ridingSounds": [],
         "stats": {
-          "ACCELERATION": "41-60",
-          "JUMP": "21-40",
+          "ACCELERATION": "0-20",
+          "JUMP": "41-60",
           "SKILL": "41-60",
-          "SPEED": "0-20",
-          "STAMINA": "61-80"
+          "SPEED": "21-40",
+          "STAMINA": "21-40"
         }
       }
     },
