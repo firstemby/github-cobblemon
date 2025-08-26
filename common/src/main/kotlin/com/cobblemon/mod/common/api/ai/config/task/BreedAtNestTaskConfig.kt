@@ -38,7 +38,7 @@ class BreedAtNestTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(BREED, "can_breed", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 

@@ -38,7 +38,7 @@ class BuildNestTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(BREED, "breeds", true).asExpressible()
     val speedMultiplier = numberVariable(BREED, "speed_multiplier", 0.6).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         speedMultiplier
     ).asVariables()

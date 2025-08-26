@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonFlows.runtime
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -31,7 +32,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
 
-class HuntPlayerTaskConfig : SingleTaskConfig {
+/*class HuntPlayerTaskConfig : SingleTaskConfig {
     // todo make new variables
     companion object {
         const val BREED = "breed"
@@ -40,7 +41,7 @@ class HuntPlayerTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(BREED, "breeds", true).asExpressible()
     val speedMultiplier = numberVariable(BREED, "speed_multiplier", 0.6).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         speedMultiplier
     ).asVariables()
@@ -144,4 +145,4 @@ class HuntPlayerTaskConfig : SingleTaskConfig {
 
         return null // No valid position found
     }
-}
+}*/
