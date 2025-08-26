@@ -213,5 +213,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "magmortar",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

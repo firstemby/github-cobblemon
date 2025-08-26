@@ -53,6 +53,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vanilluxe",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

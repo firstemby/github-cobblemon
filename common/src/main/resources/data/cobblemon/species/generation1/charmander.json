@@ -64,6 +64,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "charmeleon",
+          "tier": 1
+        },
+        {
+          "pokemon": "charizard mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "charizard megax",
+          "tier": 3
+        },
+        {
+          "pokemon": "charizard megay",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

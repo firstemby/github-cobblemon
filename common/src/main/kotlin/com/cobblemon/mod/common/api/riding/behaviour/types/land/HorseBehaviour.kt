@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -173,7 +174,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         val normSpeed = 1.0f
 
         // TurnRate should always be quick if not sprinting
-        val invRelSpeed = (inverseLerp(vehicle.deltaMovement.horizontalDistance(), 0.0, topSpeed ).pow(0.5) - 1.0f) * -1.0f
+        val invRelSpeed = (RidingBehaviour.scaleToRange(vehicle.deltaMovement.horizontalDistance(), 0.0, topSpeed ).pow(0.5) - 1.0f) * -1.0f
         val turnRate = ((handling.toFloat() / 20.0f) * max(walkHandlingBoost * invRelSpeed, 1.0)).toFloat()
 
         //Ensure you only ever rotate as much difference as there is between the angles.
@@ -201,19 +202,17 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Vec3 {
-
-        // Check to see if the ride should be walking or sprinting
-        val walkSpeed = getWalkSpeed(vehicle)
+        val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint)
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
         val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) * 1.3
-        val topSpeed = if(state.sprinting.get()) rideTopSpeed else walkSpeed
-
+        val walkSpeed = getWalkSpeed(vehicle)
+        val topSpeed = if(canSprint && state.sprinting.get()) rideTopSpeed else walkSpeed
         val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr) * 2
 
         //Flag for determining if player is actively inputting
         var activeInput = false
 
         var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z).normalize().scale(vehicle.deltaMovement.length())
-        //var newVelocity = vehicle.deltaMovement.normalize()
 
         //speed up and slow down based on input
         if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
@@ -236,9 +235,6 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         if (vehicle.onGround()) {
             newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
         } else {
-            //TODO: Should we just go back to standard minecraft gravity or do the lerp modifications prevent that?
-            //I think minecrafts gravity logic is also too harsh and isn't gamefied enough for mounts maybe? Need
-            //to do some testing and get other's opinions
             val gravity = (9.8 / ( 20.0)) * 0.2 * 0.8
             val terminalVel = 2.0
 
@@ -252,33 +248,18 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         }
 
         //TODO: Change this so its tied to a jumping stat and representative of the amount of jumps
-        val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
         //Jump the thang!
         if (driver.jumping && vehicle.onGround() && canJump) {
             val jumpForce = 1.0
             val velMag = newVelocity.length()
 
             newVelocity = newVelocity.add(0.0, jumpForce, 0.0)
-
-            val test = 0.0
-            //Ensure this doesn't add unwanted forward velocity
-            //val mag = if(newVelocity.length() < rideTopSpeed) newVelocity.length() else rideTopSpeed
-            //newVelocity = newVelocity.normalize().scale(mag)
         }
 
         //Zero out lateral velocity possibly picked up from a controller transition
         newVelocity = Vec3(0.0, newVelocity.y, newVelocity.z)
 
         return newVelocity
-    }
-
-    /*
-    *  lerps the current val between minVal and maxVal.
-    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minVal and 1.0 represents maxVal.
-    */
-    private fun inverseLerp(currVal: Double, minVal: Double, maxVal: Double): Double {
-        require(maxVal > minVal) { "minVal must be greater than maxVal" }
-        return ((currVal - minVal) / (maxVal - minVal)).coerceIn(0.0, 1.0)
     }
 
     private fun getWalkSpeed( vehicle: PokemonEntity ): Double {
@@ -449,8 +430,12 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
 
 class HorseSettings : RidingBehaviourSettings {
     override val key = HorseBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var canJump = "true".asExpression()
+        private set
+
+    var canSprint = "true".asExpression()
         private set
 
     var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.3)".asExpression()
@@ -476,6 +461,7 @@ class HorseSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(speedExpr)
         buffer.writeExpression(accelerationExpr)
@@ -485,6 +471,7 @@ class HorseSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         speedExpr = buffer.readExpression()
         accelerationExpr = buffer.readExpression()

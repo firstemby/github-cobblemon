@@ -203,5 +203,10 @@
     "special:refresh"
   ],
   "preEvolution": "spinarak",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

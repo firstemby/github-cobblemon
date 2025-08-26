@@ -53,6 +53,27 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fennekin",
+          "tier": 1
+        },
+        {
+          "pokemon": "ninetales",
+          "tier": 2
+        },
+        {
+          "pokemon": "braixen",
+          "tier": 2
+        },
+        {
+          "pokemon": "delphox",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

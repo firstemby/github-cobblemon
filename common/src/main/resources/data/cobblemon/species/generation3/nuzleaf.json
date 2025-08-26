@@ -230,5 +230,20 @@
       "requirements": [],
       "requiredContext": "cobblemon:leaf_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nuzleaf",
+          "tier": 1
+        },
+        {
+          "pokemon": "shiftry",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

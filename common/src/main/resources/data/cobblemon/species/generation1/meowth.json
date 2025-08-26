@@ -446,7 +446,8 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     },
     {
       "name": "Galar",

@@ -167,5 +167,6 @@
     "legacy:toxic"
   ],
   "preEvolution": "dwebble",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

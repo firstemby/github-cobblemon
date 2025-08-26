@@ -439,7 +439,8 @@
       ],
       "preEvolution": "sandshrew alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

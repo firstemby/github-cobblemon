@@ -160,5 +160,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "swirlix",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

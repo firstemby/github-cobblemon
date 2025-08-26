@@ -57,6 +57,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "paras",
+          "tier": 1
+        },
+        {
+          "pokemon": "parasect",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

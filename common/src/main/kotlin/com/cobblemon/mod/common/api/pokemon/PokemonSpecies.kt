@@ -24,15 +24,16 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -47,27 +48,30 @@ import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPack
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
+import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.adapters.*
-import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.ifClient
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.advancements.critereon.ItemPredicate
 import com.mojang.datafixers.util.Either
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.tags.TagKey
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -132,7 +136,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
         .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
         .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()

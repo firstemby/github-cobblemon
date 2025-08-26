@@ -65,6 +65,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "piplup",
+          "tier": 1
+        },
+        {
+          "pokemon": "eiscue",
+          "tier": 2
+        },
+        {
+          "pokemon": "prinplup",
+          "tier": 3
+        },
+        {
+          "pokemon": "empoleon",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

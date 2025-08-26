@@ -55,6 +55,15 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rhyhorn",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

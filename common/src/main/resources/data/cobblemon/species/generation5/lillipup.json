@@ -51,6 +51,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "herdier",
+          "tier": 1
+        },
+        {
+          "pokemon": "stoutland",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

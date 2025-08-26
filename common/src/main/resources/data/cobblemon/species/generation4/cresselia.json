@@ -50,6 +50,15 @@
   "behaviour": {
     "entityInteract": {
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cresselia",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

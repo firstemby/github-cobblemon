@@ -230,5 +230,40 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pichu",
+          "tier": 1
+        },
+        {
+          "pokemon": "dedenne",
+          "tier": 1
+        },
+        {
+          "pokemon": "plusle",
+          "tier": 2
+        },
+        {
+          "pokemon": "minun",
+          "tier": 2
+        },
+        {
+          "pokemon": "morpeko",
+          "tier": 2
+        },
+        {
+          "pokemon": "pikachu",
+          "tier": 3
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

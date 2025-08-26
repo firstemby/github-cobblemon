@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 951,
   "name": "Capsakid",
   "primaryType": "grass",
@@ -131,5 +132,20 @@
       "requirements": [],
       "requiredContext": "cobblemon:fire_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "capsakid",
+          "tier": 1
+        },
+        {
+          "pokemon": "scovillain",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

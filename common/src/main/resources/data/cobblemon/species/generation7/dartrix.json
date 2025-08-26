@@ -57,6 +57,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {

@@ -169,5 +169,6 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

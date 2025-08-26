@@ -66,6 +66,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "drops": {
@@ -421,7 +424,12 @@
       ],
       "preEvolution": "graveler alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4"
+        }
+      }
     }
   ],
   "riding": {

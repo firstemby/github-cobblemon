@@ -61,13 +61,22 @@
       "fly": {
         "canFly": true
       },
-      "walk":  {
+      "walk": {
         "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dragapult",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

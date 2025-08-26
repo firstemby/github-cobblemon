@@ -55,6 +55,9 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "drops": {

@@ -58,6 +58,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zapdos galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -372,6 +381,17 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zapdos galarian",
+              "tier": 1
+            }
+          ]
         }
       }
     }

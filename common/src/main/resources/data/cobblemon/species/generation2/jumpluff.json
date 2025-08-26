@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 189,
   "name": "Jumpluff",
   "primaryType": "grass",
@@ -43,11 +44,41 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.1,
   "hitbox": {
     "width": 1,
     "height": 1,
     "fixed": false
+  },
+  "standingEyeHeight": 0.4,
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "jumpluff",
+          "tier": 1
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 1
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,

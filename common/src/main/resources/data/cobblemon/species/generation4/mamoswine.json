@@ -53,6 +53,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "8",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mamoswine",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

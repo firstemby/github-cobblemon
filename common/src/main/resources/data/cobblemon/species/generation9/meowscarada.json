@@ -63,6 +63,9 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {

@@ -207,5 +207,6 @@
     "special:sing"
   ],
   "preEvolution": "eevee",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

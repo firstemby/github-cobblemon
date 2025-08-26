@@ -240,5 +240,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "pancham",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

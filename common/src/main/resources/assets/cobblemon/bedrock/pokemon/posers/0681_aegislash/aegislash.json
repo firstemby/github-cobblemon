@@ -3,7 +3,9 @@
     "portraitTranslation": [-0.27, 2.29, 0],
     "profileScale": 0.56,
     "profileTranslation": [0, 1.2, 0],
-    "animations": {},
+    "animations": {
+      "cry": "q.bedrock_stateful('aegislash', 'cry')"
+    },
     "poses": {
       "standing": {
         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT", "HOVER"],

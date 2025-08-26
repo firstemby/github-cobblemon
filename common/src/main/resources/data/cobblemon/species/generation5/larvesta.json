@@ -175,5 +175,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvesta",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

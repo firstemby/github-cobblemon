@@ -212,5 +212,10 @@
     "special:teeterdance"
   ],
   "preEvolution": "loudred",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6"
+    }
+  }
 }

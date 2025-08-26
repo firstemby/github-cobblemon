@@ -162,5 +162,32 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pansage",
+          "tier": 1
+        },
+        {
+          "pokemon": "grookey",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 3
+        },
+        {
+          "pokemon": "thwackey",
+          "tier": 4
+        },
+        {
+          "pokemon": "rillaboom",
+          "tier": 5
+        }
+      ]
+    }
+  }
 }

@@ -56,6 +56,15 @@
     },
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fearow",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

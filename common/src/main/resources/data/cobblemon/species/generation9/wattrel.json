@@ -61,6 +61,27 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wingull",
+          "tier": 1
+        },
+        {
+          "pokemon": "pelipper",
+          "tier": 2
+        },
+        {
+          "pokemon": "wattrel",
+          "tier": 3
+        },
+        {
+          "pokemon": "kilowattrel",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

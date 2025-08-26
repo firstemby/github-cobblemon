@@ -218,5 +218,16 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "oricorio",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

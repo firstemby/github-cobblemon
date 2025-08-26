@@ -62,6 +62,19 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "litten",
+          "tier": 1
+        },
+        {
+          "pokemon": "torracat",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

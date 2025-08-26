@@ -53,6 +53,47 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "morelull",
+          "tier": 1
+        },
+        {
+          "pokemon": "foongus",
+          "tier": 2
+        },
+        {
+          "pokemon": "toedscool",
+          "tier": 3
+        },
+        {
+          "pokemon": "shroomish",
+          "tier": 4
+        },
+        {
+          "pokemon": "shiinotic",
+          "tier": 5
+        },
+        {
+          "pokemon": "amoonguss",
+          "tier": 6
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 7
+        },
+        {
+          "pokemon": "toedscruel",
+          "tier": 8
+        },
+        {
+          "pokemon": "breloom",
+          "tier": 9
+        }
+      ]
     }
   },
   "drops": {

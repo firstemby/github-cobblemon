@@ -57,6 +57,19 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shieldon",
+          "tier": 1
+        },
+        {
+          "pokemon": "bastiodon",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

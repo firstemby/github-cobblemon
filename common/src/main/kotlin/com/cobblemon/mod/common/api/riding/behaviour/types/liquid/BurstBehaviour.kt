@@ -15,10 +15,13 @@ import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.blockPositionsAsListRounded
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.SmoothDouble
@@ -127,9 +130,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseX * invertPitch, mouseY * invertRoll)
+        return Vec3(0.0, mouseX, mouseY)
     }
 
     override fun canJump(
@@ -236,6 +237,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
 
 class BurstSettings : RidingBehaviourSettings {
     override val key = BurstBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var dashSpeed = 1F
         private set
@@ -244,11 +246,13 @@ class BurstSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeFloat(dashSpeed)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         dashSpeed = buffer.readFloat()
     }

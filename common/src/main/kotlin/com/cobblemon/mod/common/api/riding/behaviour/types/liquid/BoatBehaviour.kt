@@ -239,9 +239,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(
@@ -354,6 +352,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
 
 class BoatSettings : RidingBehaviourSettings {
     override val key = BoatBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
     var terminalVelocity = "-2.0".asExpression()
@@ -364,11 +363,13 @@ class BoatSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(terminalVelocity)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         terminalVelocity = buffer.readExpression()
     }

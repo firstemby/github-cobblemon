@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 833,
   "name": "Chewtle",
   "primaryType": "water",
@@ -42,7 +43,7 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.45,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -50,12 +51,36 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.35
+      },
       "swim": {
         "canSwimInWater": true,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wartortle",
+          "tier": 1
+        },
+        {
+          "pokemon": "drednaw",
+          "tier": 2
+        },
+        {
+          "pokemon": "blastoise mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "blastoise mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

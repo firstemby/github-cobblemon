@@ -89,61 +89,8 @@
     ]
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "10-20",
-          "AIR": "30-60"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "90-100",
-          "AIR": "30-65"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "15-30",
-          "AIR": "30-60"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "10-20",
-          "AIR": "30-60"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can stay off the ground",
-        "ranges": {
-          "LAND": "15-30",
-          "AIR": "35-75"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:composite",
-      "transitionStrategy": "cobblemon:strategy/jump",
-      "defaultBehaviour": {
-        "key": "cobblemon:land/horse",
-        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [
-          0,
-          "0.3*q.jump_strength/50",
-          "-1 * 0.5*q.jump_strength/50"
-        ]
-      },
-      "alternateBehaviour": {
+    "behaviours": {
+      "AIR": {
         "key": "cobblemon:air/bird",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
@@ -151,7 +98,30 @@
           0,
           "0.3*q.jump_strength/50",
           0
-        ]
+        ],
+        "stats": {
+          "SPEED": "30-60",
+          "ACCELERATION": "30-65",
+          "SKILL": "30-60",
+          "JUMP": "30-60",
+          "STAMINA": "35-75"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ],
+        "stats": {
+          "SPEED": "10-20",
+          "ACCELERATION": "90-100",
+          "SKILL": "15-30",
+          "JUMP": "10-20",
+          "STAMINA": "15-30"
+        }
       }
     },
     "seats": [

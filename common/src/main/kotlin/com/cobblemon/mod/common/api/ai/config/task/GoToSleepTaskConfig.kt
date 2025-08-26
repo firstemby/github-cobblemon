@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class GoToSleepTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext

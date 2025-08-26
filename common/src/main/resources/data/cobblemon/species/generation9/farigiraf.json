@@ -212,5 +212,16 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "girafarig",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "farigiraf",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

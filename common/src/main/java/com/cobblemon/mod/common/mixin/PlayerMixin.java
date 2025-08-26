@@ -88,8 +88,8 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Shadow @Final private static Map<Pose, EntityDimensions> POSES;
     @Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
-    @Unique
-    private final OrientationController cobblemon$orientationController = new OrientationController(this);
+    @Shadow protected int jumpTriggerTime;
+    @Unique private final OrientationController cobblemon$orientationController = new OrientationController(this);
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.resolveBoolean
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -28,9 +29,9 @@ class AddMemoriesAndSensorsConfig : BehaviourConfig {
     val memories: Set<MemoryModuleType<*>> = emptySet()
     val sensors: Set<SensorType<*>> = mutableSetOf()
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
-        if (!checkCondition(entity, condition)) return
+        if (!checkCondition(behaviourConfigurationContext, condition)) return
         behaviourConfigurationContext.addMemories(memories)
         behaviourConfigurationContext.addSensors(sensors)
     }

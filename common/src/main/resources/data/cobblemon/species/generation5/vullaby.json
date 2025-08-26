@@ -193,5 +193,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vullaby",
+          "tier": 1
+        },
+        {
+          "pokemon": "mandibuzz",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

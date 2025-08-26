@@ -260,7 +260,33 @@
       "baseExperienceYield": 425,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "3",
+          "toleratedLeaders": [
+            {
+              "pokemon": "audino mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "audino mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "audino mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

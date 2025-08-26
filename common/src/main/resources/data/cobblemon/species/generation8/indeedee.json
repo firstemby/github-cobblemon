@@ -283,5 +283,15 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "toleratedLeaders": [
+        {
+          "pokemon": "indeedee",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

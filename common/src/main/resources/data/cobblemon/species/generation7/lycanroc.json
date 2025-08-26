@@ -46,6 +46,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lycanroc wolf_form=midday",
+          "tier": 1
+        },
+        {
+          "pokemon": "lycanroc dusk",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -366,7 +379,18 @@
       ],
       "preEvolution": "rockruff",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7",
+          "toleratedLeaders": [
+            {
+              "pokemon": "lycanroc midnight",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Dusk",
@@ -525,7 +549,18 @@
       ],
       "preEvolution": "rockruff wolf_form=dusk",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "8",
+          "toleratedLeaders": [
+            {
+              "pokemon": "lycanroc dusk",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

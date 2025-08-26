@@ -200,5 +200,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ariados",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -63,6 +63,19 @@
         "canFly": true,
         "flySpeedHorizontal": 0.6
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tropius",
+          "tier": 1
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 2
+        }
+      ]
     }
   },
   "riding": {

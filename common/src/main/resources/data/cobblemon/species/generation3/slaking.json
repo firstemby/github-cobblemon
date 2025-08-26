@@ -61,6 +61,9 @@
       "canSleep": true,
       "sleepChance": "0.0023",
       "light": "0-14"
+    },
+    "herd": {
+      "maxSize": "8"
     }
   },
   "drops": {

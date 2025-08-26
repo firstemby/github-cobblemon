@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 436,
   "name": "Bronzor",
   "primaryType": "steel",
@@ -44,7 +45,7 @@
   "baseFriendship": 50,
   "standingEyeHeight": 0.65,
   "flyingEyeHeight": 0.65,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
     "width": 0.8,
     "height": 1.25,
@@ -62,6 +63,15 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bronzong",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

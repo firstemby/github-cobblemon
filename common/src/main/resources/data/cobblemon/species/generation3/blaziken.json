@@ -277,7 +277,17 @@
       "baseExperienceYield": 315,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "8"
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

@@ -225,5 +225,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "blaziken mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "blaziken mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

@@ -198,5 +198,10 @@
     "special:morningsun"
   ],
   "preEvolution": "tangela",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

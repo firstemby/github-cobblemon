@@ -58,6 +58,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "braviary",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -380,7 +389,18 @@
       ],
       "preEvolution": "rufflet",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "braviary",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

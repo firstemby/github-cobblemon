@@ -57,6 +57,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ampharos mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "ampharos mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -274,6 +287,9 @@
         "resting": {
           "canSleep": true,
           "light": "0-4"
+        },
+        "herd": {
+          "maxSize": "9"
         }
       },
       "evolutions": [],

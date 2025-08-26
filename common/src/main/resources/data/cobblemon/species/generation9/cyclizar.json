@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 967,
   "name": "Cyclizar",
   "primaryType": "dragon",
@@ -203,5 +204,24 @@
     "tutor:uproar",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cyclizar",
+          "tier": 1
+        },
+        {
+          "pokemon": "koraidon",
+          "tier": 2
+        },
+        {
+          "pokemon": "miraidon",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

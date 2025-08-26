@@ -55,6 +55,19 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rufflet",
+          "tier": 1
+        },
+        {
+          "pokemon": "braviary",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

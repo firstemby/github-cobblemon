@@ -176,5 +176,28 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cobalion",
+          "tier": 1
+        },
+        {
+          "pokemon": "terrakion",
+          "tier": 1
+        },
+        {
+          "pokemon": "virizion",
+          "tier": 1
+        },
+        {
+          "pokemon": "keldeo resolute",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

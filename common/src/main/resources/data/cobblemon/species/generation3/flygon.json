@@ -58,6 +58,9 @@
         "canFly": true,
         "flySpeedHorizontal": 0.6
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {

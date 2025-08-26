@@ -55,6 +55,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "noivern",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

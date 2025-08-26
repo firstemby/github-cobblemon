@@ -221,5 +221,10 @@
     "special:refresh"
   ],
   "preEvolution": "makuhita",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

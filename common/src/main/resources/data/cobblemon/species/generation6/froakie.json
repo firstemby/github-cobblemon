@@ -61,6 +61,27 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "froakie",
+          "tier": 1
+        },
+        {
+          "pokemon": "frogadier",
+          "tier": 2
+        },
+        {
+          "pokemon": "greninja ash=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "greninja ash",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

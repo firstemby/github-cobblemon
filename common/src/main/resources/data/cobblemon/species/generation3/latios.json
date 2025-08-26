@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 381,
   "name": "Latios",
   "primaryType": "dragon",
@@ -257,7 +258,22 @@
       "baseExperienceYield": 350,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7",
+          "toleratedLeaders": [
+            {
+              "pokemon": "latias mega",
+              "tier": 1
+            },
+            {
+              "pokemon": "latios mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "behaviour": {
@@ -275,6 +291,27 @@
       "swim": {
         "canSwim": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "latias mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "latios mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "latias mega",
+          "tier": 3
+        },
+        {
+          "pokemon": "latios mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "riding": {
@@ -317,13 +354,21 @@
         "key": "cobblemon:land/horse",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ]
       },
       "alternateBehaviour": {
         "key": "cobblemon:air/jet",
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [0, "0.3*q.jump_strength/50", 0]
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ]
       }
     },
     "seats": [

@@ -57,9 +57,23 @@
         "canWalk": false
       },
       "swim": {
+        "canBreatheUnderwater": true,
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "porygon",
+          "tier": 1
+        },
+        {
+          "pokemon": "porygon2",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [

@@ -25,7 +25,7 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_when_hurt", true).asExpressible()
     var includePassiveDamage =  booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_on_passive_damage", false).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         includePassiveDamage
     ).asVariables()
@@ -34,9 +34,8 @@ class SwitchToPanicWhenHurtTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
-        return if (includePassiveDamage.resolveBoolean()) {
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
+        return if (includePassiveDamage.resolveBoolean(behaviourConfigurationContext.runtime)) {
             behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY)
             behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
             BehaviorBuilder.create {

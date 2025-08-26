@@ -49,6 +49,22 @@
       "behaviours": [
         "cobblemon:moves_to_water"
       ]
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "minecraft:idle",
+      "condition": "!q.entity.is_in_party && q.length(q.entity.config.pickup_items) > 0",
+      "tasksByPriority": {
+        "1": [
+          "eat_held_item",
+          "pickup_item",
+          "stop_moving_to_item",
+          {
+            "type": "move_to_item",
+            "condition": "(math.random(0, 1) < (1/10))"
+          }
+        ]
+      }
     }
   ]
 }

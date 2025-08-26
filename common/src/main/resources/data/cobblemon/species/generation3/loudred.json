@@ -200,5 +200,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "exploud",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

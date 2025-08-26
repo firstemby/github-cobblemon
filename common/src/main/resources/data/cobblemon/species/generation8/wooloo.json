@@ -54,7 +54,9 @@
   "ai": [
     {
       "type": "apply_behaviours",
-      "presets": ["cobblemon:eats_grass"]
+      "presets": [
+        "cobblemon:eats_grass"
+      ]
     }
   ],
   "standingEyeHeight": 0.6,
@@ -127,5 +129,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mareep",
+          "tier": 1
+        },
+        {
+          "pokemon": "wooloo",
+          "tier": 1
+        },
+        {
+          "pokemon": "flaaffy",
+          "tier": 2
+        },
+        {
+          "pokemon": "dubwool",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

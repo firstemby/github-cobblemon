@@ -66,6 +66,15 @@
       "walk": {
         "walkSpeed": 0.14
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "omastar",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

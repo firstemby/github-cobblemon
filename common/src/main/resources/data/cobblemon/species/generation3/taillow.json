@@ -59,6 +59,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "taillow",
+          "tier": 1
+        },
+        {
+          "pokemon": "swellow",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

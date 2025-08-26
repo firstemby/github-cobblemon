@@ -62,6 +62,23 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cyndaquil",
+          "tier": 1
+        },
+        {
+          "pokemon": "quilava",
+          "tier": 2
+        },
+        {
+          "pokemon": "typhlosion",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

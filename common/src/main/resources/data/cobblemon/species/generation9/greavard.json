@@ -164,5 +164,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "houndstone",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

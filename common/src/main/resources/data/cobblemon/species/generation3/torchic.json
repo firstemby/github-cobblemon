@@ -191,5 +191,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "torchic",
+          "tier": 1
+        },
+        {
+          "pokemon": "combusken",
+          "tier": 2
+        },
+        {
+          "pokemon": "blaziken mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "blaziken mega",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

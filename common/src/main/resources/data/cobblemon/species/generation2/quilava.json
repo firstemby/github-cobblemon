@@ -60,6 +60,19 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quilava",
+          "tier": 1
+        },
+        {
+          "pokemon": "typhlosion",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

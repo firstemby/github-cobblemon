@@ -56,6 +56,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wiglett",
+          "tier": 1
+        },
+        {
+          "pokemon": "wugtrio",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [

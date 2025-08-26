@@ -56,6 +56,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "raichu",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -302,6 +311,15 @@
           "fly": {
             "canFly": true
           }
+        },
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "raichu",
+              "tier": 1
+            }
+          ]
         }
       },
       "moves": [

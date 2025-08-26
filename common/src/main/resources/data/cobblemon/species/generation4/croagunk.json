@@ -53,6 +53,15 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "toxicroak",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

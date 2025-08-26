@@ -236,5 +236,10 @@
     "legacy:snore"
   ],
   "preEvolution": "croagunk",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

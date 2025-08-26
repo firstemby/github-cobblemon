@@ -63,6 +63,19 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "basculin striped=red",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -205,7 +218,22 @@
         "h:moldbreaker"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=blue",
+              "tier": 1
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 2
+            }
+          ]
+        }
+      }
     },
     {
       "name": "White-Striped",
@@ -313,7 +341,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=white",
+              "tier": 1
+            },
+            {
+              "pokemon": "basculegion",
+              "tier": 2
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 3
+            }
+          ]
+        }
+      }
     }
   ]
 }

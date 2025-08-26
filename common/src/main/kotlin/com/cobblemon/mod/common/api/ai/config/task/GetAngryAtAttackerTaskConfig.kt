@@ -26,14 +26,13 @@ class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(ATTACKING_CATEGORY, GET_ANGRY_AT_ATTACKER, true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.HURT_BY_ENTITY,
             MemoryModuleType.ANGRY_AT,

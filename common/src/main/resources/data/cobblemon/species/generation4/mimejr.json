@@ -301,5 +301,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mrmime",
+          "tier": 1
+        },
+        {
+          "pokemon": "mrrime",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

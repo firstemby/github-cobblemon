@@ -51,6 +51,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "crocalor",
+          "tier": 1
+        },
+        {
+          "pokemon": "skeledirge",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

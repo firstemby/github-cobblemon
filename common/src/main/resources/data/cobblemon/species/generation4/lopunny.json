@@ -58,6 +58,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lopunny mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "lopunny mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -278,7 +291,18 @@
       "baseExperienceYield": 203,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "lopunny mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

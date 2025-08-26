@@ -42,13 +42,12 @@ class RandomTaskConfig : TaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val choices = mutableListOf<RandomTaskChoice>()
 
-    override fun getVariables(entity: LivingEntity) = choices.flatMap { it.task.getVariables(entity) } + listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = choices.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) } + listOf(condition).asVariables()
     override fun createTasks(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<BehaviorControl<in LivingEntity>> {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return emptyList()
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return emptyList()
         val task = choices.weightedSelection { it.weight }?.task ?: throw IllegalStateException("No tasks to choose from in random_task config")
         return task.createTasks(entity, behaviourConfigurationContext)
     }

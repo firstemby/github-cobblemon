@@ -26,7 +26,7 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
     val horizontalSearchDistance: ExpressionOrEntityVariable = Either.left("16".asExpression())
     val verticalSearchDistance: ExpressionOrEntityVariable = Either.left("5".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(horizontalSearchDistance, verticalSearchDistance).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(horizontalSearchDistance, verticalSearchDistance).asVariables()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -39,7 +39,7 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)
 
         return WrapperLivingEntityTask(
-            FindRestingPlaceTask.create(horizontalSearchDistance.resolveInt(), verticalSearchDistance.resolveInt()),
+            FindRestingPlaceTask.create(horizontalSearchDistance.resolveInt(behaviourConfigurationContext.runtime), verticalSearchDistance.resolveInt(behaviourConfigurationContext.runtime)),
             PokemonEntity::class.java
         )
     }

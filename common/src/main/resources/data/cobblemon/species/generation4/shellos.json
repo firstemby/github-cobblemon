@@ -223,7 +223,8 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

@@ -172,5 +172,6 @@
     "special:crushclaw",
     "special:howl"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

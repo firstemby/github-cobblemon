@@ -38,7 +38,7 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("180".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             minAngularVelocityDegrees,
             maxAngularVelocityDegrees,
@@ -57,15 +57,14 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
             return null
         }
         behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.PATH)
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         return CircleAroundTask(
             poseTypes = poseTypes,
-            minTurnAngleDegrees = minAngularVelocityDegrees.resolveFloat(),
-            maxTurnAngleDegrees = maxAngularVelocityDegrees.resolveFloat(),
-            speed = speed.resolveFloat(),
-            verticalSpeed = verticalSpeed.resolveFloat(),
-            minDurationTicks = minDurationTicks.resolveFloat().toInt(),
-            maxDurationTicks = maxDurationTicks.resolveFloat().toInt()
+            minTurnAngleDegrees = minAngularVelocityDegrees.resolveFloat(behaviourConfigurationContext.runtime),
+            maxTurnAngleDegrees = maxAngularVelocityDegrees.resolveFloat(behaviourConfigurationContext.runtime),
+            speed = speed.resolveFloat(behaviourConfigurationContext.runtime),
+            verticalSpeed = verticalSpeed.resolveFloat(behaviourConfigurationContext.runtime),
+            minDurationTicks = minDurationTicks.resolveFloat(behaviourConfigurationContext.runtime).toInt(),
+            maxDurationTicks = maxDurationTicks.resolveFloat(behaviourConfigurationContext.runtime).toInt()
         ).wrapped<PokemonEntity>()
     }
 }

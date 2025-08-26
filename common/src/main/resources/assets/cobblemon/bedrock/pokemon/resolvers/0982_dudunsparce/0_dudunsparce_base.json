@@ -3,14 +3,14 @@
   "order": 0,
   "variations": [
     {
-      "aspects": ["two-segment-form"],
+      "aspects": [],
       "poser": "cobblemon:dudunsparce_two_segment",
       "model": "cobblemon:dudunsparce_two_segment.geo",
       "texture": "cobblemon:textures/pokemon/0982_dudunsparce/dudunsparce_two_segment.png",
       "layers": []
     },
     {
-      "aspects": ["two-segment-form","shiny"],
+      "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0982_dudunsparce/dudunsparce_two_segment_shiny.png"
     },
     {

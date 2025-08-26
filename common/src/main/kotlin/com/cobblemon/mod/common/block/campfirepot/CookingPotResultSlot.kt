@@ -31,7 +31,7 @@ class CookingPotResultSlot(
         val menu = player.containerMenu
         if (menu is CookingPotMenu) {
             menu.broadcastChanges()
-            player.playNotifySound(CobblemonSounds.CAMPFIRE_POT_USE, SoundSource.MASTER, 1.0f, 1.0f)
+            player.playNotifySound(CobblemonSounds.CAMPFIRE_POT_TAKE_ITEM, SoundSource.MASTER, 1.0f, 1.0f)
         }
 
         super.onTake(player, stack)

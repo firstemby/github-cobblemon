@@ -1085,5 +1085,6 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {}
 }

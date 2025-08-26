@@ -209,5 +209,16 @@
     "legacy:zapcannon",
     "special:celebrate"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hooh",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

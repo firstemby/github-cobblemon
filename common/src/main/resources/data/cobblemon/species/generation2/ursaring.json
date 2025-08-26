@@ -256,5 +256,10 @@
       ],
       "requiredContext": "cobblemon:peat_block"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

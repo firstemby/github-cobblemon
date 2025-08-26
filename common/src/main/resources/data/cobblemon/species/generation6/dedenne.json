@@ -174,5 +174,28 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dedenne",
+          "tier": 1
+        },
+        {
+          "pokemon": "pikachu",
+          "tier": 2
+        },
+        {
+          "pokemon": "morpeko",
+          "tier": 2
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

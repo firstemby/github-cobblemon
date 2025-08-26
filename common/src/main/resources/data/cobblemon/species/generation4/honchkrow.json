@@ -58,6 +58,15 @@
     "resting": {
       "canSleep": true,
       "times": "day"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "honchkrow",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

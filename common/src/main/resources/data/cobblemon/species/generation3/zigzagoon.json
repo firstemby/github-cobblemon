@@ -59,6 +59,31 @@
       "willSleepOnBed": true,
       "light": "0-4",
       "canSeeSky": false
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sentret",
+          "tier": 1
+        },
+        {
+          "pokemon": "furret",
+          "tier": 2
+        },
+        {
+          "pokemon": "zigzagoon",
+          "tier": 3
+        },
+        {
+          "pokemon": "linoone",
+          "tier": 4
+        },
+        {
+          "pokemon": "obstagoon",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {
@@ -333,7 +358,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zigzagoon",
+              "tier": 1
+            },
+            {
+              "pokemon": "linoone",
+              "tier": 2
+            },
+            {
+              "pokemon": "obstagoon",
+              "tier": 3
+            }
+          ]
+        }
+      }
     }
   ]
 }

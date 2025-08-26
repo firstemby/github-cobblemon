@@ -58,9 +58,22 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": false
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kangaskhan mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "kangaskhan mega",
+          "tier": 2
+        }
+      ]
     }
   },
-"drops": {
+  "drops": {
     "amount": 1,
     "entries": [
       {
@@ -313,6 +326,17 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "kangaskhan mega",
+              "tier": 1
+            }
+          ]
         }
       }
     }

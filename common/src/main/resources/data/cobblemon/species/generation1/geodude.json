@@ -63,6 +63,9 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "2"
     }
   },
   "drops": {
@@ -409,7 +412,12 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "2"
+        }
+      }
     }
   ]
 }

@@ -54,6 +54,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gardevoir mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "gardevoir mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -357,7 +370,18 @@
       "baseExperienceYield": 309,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "gardevoir mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

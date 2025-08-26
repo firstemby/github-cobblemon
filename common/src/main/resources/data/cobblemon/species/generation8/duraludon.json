@@ -188,5 +188,6 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {}
 }

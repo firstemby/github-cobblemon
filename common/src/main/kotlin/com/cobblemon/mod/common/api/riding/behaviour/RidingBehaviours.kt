@@ -23,14 +23,12 @@ object RidingBehaviours {
 
     init {
         register(BirdBehaviour.KEY, BirdBehaviour())
-        register(BirdNoRollBehaviour.KEY, BirdNoRollBehaviour())
         register(DolphinBehaviour.KEY, DolphinBehaviour())
         register(HorseBehaviour.KEY, HorseBehaviour())
         register(BoatBehaviour.KEY, BoatBehaviour())
         register(GliderBehaviour.KEY, GliderBehaviour())
         register(HelicopterBehaviour.KEY, HelicopterBehaviour())
         register(JetBehaviour.KEY, JetBehaviour())
-        register(JetNoRollBehaviour.KEY, JetNoRollBehaviour())
         register(BurstBehaviour.KEY, BurstBehaviour())
         register(VehicleBehaviour.KEY, VehicleBehaviour())
         register(MinekartBehaviour.KEY, MinekartBehaviour())
@@ -41,7 +39,7 @@ object RidingBehaviours {
 
     fun register(key: ResourceLocation, behaviour: RidingBehaviour<out RidingBehaviourSettings, out RidingBehaviourState>) {
         if (behaviours.contains(key)) error("Behaviour already registered to key $key")
-        behaviours[key] = RidingController(behaviour) as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
+        behaviours[key] = behaviour as RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>
     }
 
     fun get(key: ResourceLocation): RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState> {

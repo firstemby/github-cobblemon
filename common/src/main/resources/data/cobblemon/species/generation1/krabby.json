@@ -56,6 +56,19 @@
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "krabby",
+          "tier": 1
+        },
+        {
+          "pokemon": "kingler",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

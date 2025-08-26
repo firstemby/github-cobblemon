@@ -57,6 +57,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dodrio",
+          "tier": 1
+        },
+        {
+          "pokemon": "espathra",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

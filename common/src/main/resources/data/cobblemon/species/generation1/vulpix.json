@@ -56,8 +56,40 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "_comment": "Drop it",
+          "item": "minecraft:glass_bottle",
+          "pickupPriority": -1
+        },
+        {
+          "item": "minecraft:potion",
+          "pickupPriority": 1,
+          "returnItem": "minecraft:glass_bottle",
+          "fullnessValue": 10
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ninetales",
+          "tier": 1
+        }
+      ]
     }
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_fox"
+      ]
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [
@@ -380,7 +412,18 @@
           "requiredContext": "cobblemon:ice_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "ninetales",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

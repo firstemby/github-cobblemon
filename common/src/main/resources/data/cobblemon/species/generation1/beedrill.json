@@ -64,6 +64,19 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "beedrill mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "beedrill mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

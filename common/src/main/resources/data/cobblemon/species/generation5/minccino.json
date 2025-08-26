@@ -184,5 +184,20 @@
       "requirements": [],
       "requiredContext": "cobblemon:shiny_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "minccino",
+          "tier": 1
+        },
+        {
+          "pokemon": "cinccino",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

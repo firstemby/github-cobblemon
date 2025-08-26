@@ -224,5 +224,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cleffa",
+          "tier": 1
+        },
+        {
+          "pokemon": "clefairy",
+          "tier": 2
+        },
+        {
+          "pokemon": "clefable",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

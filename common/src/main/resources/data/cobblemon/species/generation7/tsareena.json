@@ -171,5 +171,10 @@
     "special:celebrate"
   ],
   "preEvolution": "steenee",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

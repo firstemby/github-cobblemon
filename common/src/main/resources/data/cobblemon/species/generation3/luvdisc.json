@@ -62,6 +62,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "luvdisc",
+          "tier": 1
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

@@ -60,6 +60,19 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "koffing",
+          "tier": 1
+        },
+        {
+          "pokemon": "weezing",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

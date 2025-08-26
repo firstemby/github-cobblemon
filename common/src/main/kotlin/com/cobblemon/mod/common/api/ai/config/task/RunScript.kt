@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -42,7 +43,7 @@ class RunScript : SingleTaskConfig {
     val memories = emptySet<MemoryModuleType<*>>()
     val sensors = emptySet<SensorType<*>>()
 
-    override fun getVariables(entity: LivingEntity) = listOf(script).asVariables() + variables
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(script).asVariables() + variables
 
     override fun createTask(
         entity: LivingEntity,
@@ -54,10 +55,10 @@ class RunScript : SingleTaskConfig {
             it.registered(MemoryModuleType.LOOK_TARGET) // I think I need to have at least something here?
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 return@Trigger CobblemonScripts.run(
-                    identifier = script.resolveString().asIdentifierDefaultingNamespace(),
-                    runtime = runtime
+                    identifier = script.resolveString(mainThreadRuntime).asIdentifierDefaultingNamespace(),
+                    runtime = mainThreadRuntime
                 ) == DoubleValue.ONE
             }
         }

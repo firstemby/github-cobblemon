@@ -199,5 +199,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "smoochum",
+          "tier": 1
+        },
+        {
+          "pokemon": "jynx",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

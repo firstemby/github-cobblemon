@@ -50,6 +50,27 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rockruff",
+          "tier": 1
+        },
+        {
+          "pokemon": "lycanroc midnight",
+          "tier": 2
+        },
+        {
+          "pokemon": "lycanroc wolf_form=midday",
+          "tier": 3
+        },
+        {
+          "pokemon": "lycanroc dusk",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

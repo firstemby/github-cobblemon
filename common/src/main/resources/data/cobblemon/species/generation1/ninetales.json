@@ -55,6 +55,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -417,7 +420,12 @@
       ],
       "preEvolution": "vulpix alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "3"
+        }
+      }
     }
   ]
 }

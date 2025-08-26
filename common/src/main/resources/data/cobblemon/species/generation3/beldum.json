@@ -65,6 +65,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "beldum",
+          "tier": 1
+        },
+        {
+          "pokemon": "metang",
+          "tier": 2
+        },
+        {
+          "pokemon": "metagross mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "metagross mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

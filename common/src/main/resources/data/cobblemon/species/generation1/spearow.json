@@ -57,6 +57,19 @@
     },
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spearow",
+          "tier": 1
+        },
+        {
+          "pokemon": "fearow",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

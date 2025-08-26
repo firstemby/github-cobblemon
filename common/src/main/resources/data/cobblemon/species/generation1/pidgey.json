@@ -62,6 +62,57 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "item": "#minecraft:chicken_food",
+          "pickupPriority": 1,
+          "fullnessValue": 1,
+          "onUseEffect": "q.entity.heal(1)"
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pidove",
+          "tier": 1
+        },
+        {
+          "pokemon": "starly",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgey",
+          "tier": 2
+        },
+        {
+          "pokemon": "tranquill",
+          "tier": 3
+        },
+        {
+          "pokemon": "staravia",
+          "tier": 3
+        },
+        {
+          "pokemon": "pidgeotto",
+          "tier": 4
+        },
+        {
+          "pokemon": "unfezant",
+          "tier": 5
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 6
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

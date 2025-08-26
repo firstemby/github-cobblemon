@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.CobblemonNetwork;
+import com.cobblemon.mod.common.DoubleJump;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Seat;
@@ -26,6 +27,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -49,12 +51,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable{
+public abstract class LocalPlayerMixin extends AbstractClientPlayer implements OrientationControllable, DoubleJump {
 
     @Unique Matrix3f cobblemon$lastOrientation;
 
+    @Unique boolean cobblemon$isDoubleJumping = false;
+
     @Shadow
     private float jumpRidingScale;
+
+    @Shadow public Input input;
+
+    @Shadow private int autoJumpTime;
+
+    @Unique private int cobblemon$survivalJumpTriggerTime;
+
+    @Unique private boolean cobblemon$isJumping;
 
     public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
@@ -133,6 +145,33 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
                 cir.setReturnValue(rideValue);
             }
         }
+    }
+
+    @Inject(method = "aiStep", at = @At("HEAD"))
+    private void cobblemon$aiStep(CallbackInfo ci) {
+        this.cobblemon$isDoubleJumping = false;
+        this.cobblemon$isJumping = this.input.jumping;
+    }
+
+    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSprinting()Z", shift = At.Shift.BEFORE))
+    private void cobblemon$updateDoubleJumping(CallbackInfo ci) {
+        if (!this.cobblemon$isJumping && this.input.jumping && this.autoJumpTime <= 0 && !this.isSwimming()) {
+            if (this.cobblemon$survivalJumpTriggerTime != 0) {
+                this.cobblemon$isDoubleJumping = true;
+                this.cobblemon$survivalJumpTriggerTime = 0;
+            }
+            else {
+                this.cobblemon$survivalJumpTriggerTime = 7;
+            }
+        }
+        else if (this.cobblemon$survivalJumpTriggerTime > 0) {
+            this.cobblemon$survivalJumpTriggerTime--;
+        }
+    }
+
+    @Override
+    public boolean isDoubleJumping() {
+        return this.cobblemon$isDoubleJumping;
     }
 
     @Override

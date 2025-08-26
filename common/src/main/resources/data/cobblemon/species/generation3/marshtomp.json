@@ -43,7 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.85,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 0.9,
     "height": 1.4,
@@ -57,6 +57,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swampert mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "swampert mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -2,14 +2,19 @@
   "name": "cobblemon.behaviour.npc_scale_configuration.name",
   "description": "cobblemon.behaviour.npc_scale_configuration.desc",
   "entityType": "cobblemon:npc",
-  "undo": [
+  "onAdd": [
+    "!q.is_blank(q.entity.config.npc_render_scale) ? q.entity.set_render_scale(q.entity.config.npc_render_scale);",
+    "!q.is_blank(q.entity.config.npc_box_scale) ? q.entity.set_hitbox_scale(q.entity.config.npc_box_scale);",
+    "q.entity.set_hitbox(q.entity.config.npc_box_width, q.entity.config.npc_box_height, q.entity.config.npc_box_eyes_ratio * q.entity.config.npc_box_height);"
+  ],
+  "onRemove": [
     "q.entity.set_render_scale(1.0);",
     "q.entity.set_hitbox_scale(1.0);",
     "q.entity.unset_hitbox();"
   ],
   "configurations": [
     {
-      "type": "custom_script",
+      "type": "add_variables",
       "variables": [
         {
           "variableName": "npc_render_scale",
@@ -51,11 +56,6 @@
           "type": "NUMBER",
           "defaultValue": "0.85"
         }
-      ],
-      "script": [
-        "!q.is_blank(q.entity.config.npc_render_scale) ? q.entity.set_render_scale(q.entity.config.npc_render_scale);",
-        "!q.is_blank(q.entity.config.npc_box_scale) ? q.entity.set_hitbox_scale(q.entity.config.npc_box_scale);",
-        "q.entity.set_hitbox(q.entity.config.npc_box_width, q.entity.config.npc_box_height, q.entity.config.npc_box_eyes_ratio * q.entity.config.npc_box_height);"
       ]
     }
   ]

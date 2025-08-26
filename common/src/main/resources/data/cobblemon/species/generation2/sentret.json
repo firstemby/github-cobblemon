@@ -226,5 +226,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zigzagoon",
+          "tier": 1
+        },
+        {
+          "pokemon": "linoone",
+          "tier": 2
+        },
+        {
+          "pokemon": "sentret",
+          "tier": 3
+        },
+        {
+          "pokemon": "furret",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

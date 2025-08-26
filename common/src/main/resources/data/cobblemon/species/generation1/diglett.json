@@ -62,6 +62,19 @@
         "canSwimInWater": false,
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "diglett",
+          "tier": 1
+        },
+        {
+          "pokemon": "dugtrio",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -400,6 +413,21 @@
             "percentage": 2.5
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "diglett",
+              "tier": 1
+            },
+            {
+              "pokemon": "dugtrio",
+              "tier": 2
+            }
+          ]
+        }
       }
     }
   ]

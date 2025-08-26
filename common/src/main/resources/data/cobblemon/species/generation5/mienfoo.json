@@ -190,5 +190,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mienshao",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -67,6 +67,23 @@
       "canSleep": true,
       "willSleepOnBed": false,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wailmer",
+          "tier": 1
+        },
+        {
+          "pokemon": "wailord",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

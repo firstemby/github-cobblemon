@@ -201,10 +201,10 @@ class BattleMoveSelection(
         val move = moveTiles.find { it.isHovered(mouseX, mouseY) }
         val gimmick = gimmickButtons.find { it.isHovered(mouseX, mouseY) }
         if (move != null) {
-            if(this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
+            if(request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
                 move.onClick()
             } else {
-                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move))
+                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID, move.move.gimmickMove))
                 playDownSound(Minecraft.getInstance().soundManager)
             }
             return true

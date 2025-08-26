@@ -57,6 +57,7 @@
         "canWalk": false
       },
       "swim": {
+        "canBreatheUnderwater": true,
         "avoidsWater": true,
         "canSwimInWater": false
       }
@@ -64,6 +65,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "porygon2",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -16,6 +16,9 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
  * @author Segfault Guy
  * @since April 10th, 2023
  */
+@Deprecated(message =
+    "This was designed before Doubles and Multi battle formats were introduce and has not been maintained since." +
+    "Accurate context for formats other than Singles is not guaranteed. This will be replaced in the near future.")
 class ContextManager {
 
     /** [BattleContext.Type] buckets containing [BattleContexts] of that type. */

@@ -597,6 +597,14 @@
 					"rotation": [-110, 0, 0]
 				}
 			}
+		},
+		"animation.doublade.cry": {
+			"loop": true,
+			"sound_effects": {
+				"0.0": {
+					"effect": "pokemon.doublade.cry"
+				}
+			}
 		}
 	}
 }

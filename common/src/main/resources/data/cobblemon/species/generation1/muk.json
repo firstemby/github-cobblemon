@@ -408,7 +408,8 @@
       ],
       "preEvolution": "grimer alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

@@ -61,6 +61,10 @@ object CobblemonMemories {
     val SENSED_NEST_MATERIAL = register<ItemEntity>("sensed_nest_material")
     val IDEAL_NEST_LOCATION = register<BlockPos>("ideal_nest_location")
     val READY_TO_BUILD_NEST = register("ready_to_build_nest", PrimitiveCodec.BOOL)
+    val NEARBY_SWEET_BERRY_BUSH = register<BlockPos>("nearest_sweet_berry_bush")
+    val DISABLE_WALK_TO_BERRY_BUSH = register<Boolean>("disable_walk_to_berry_bush")
+    val TIME_TRYING_TO_REACH_BERRY_BUSH = register<Int>("time_trying_to_reach_berry_bush")
+    val IS_CONSUMING_ITEM = register<Boolean>("is_consuming_item")
     val RECENTLY_ATE_GRASS = register<Boolean>("recently_ate_grass")
     val HIVE_LOCATION = register<BlockPos>("hive_location")
     val HIVE_COOLDOWN = register<Boolean>("hive_cooldown")
@@ -72,6 +76,8 @@ object CobblemonMemories {
     val HERD_SIZE = register<Int>("herd_size") // Don't bother saving it, we'll try to keep count roughly.
     val ATTACK_TARGET_DATA = register<CobblemonAttackTargetData>("attack_target_data") // This is used to store additional information about the attack target, such as when to give up pursuit.
     val WANDER_CONTROL = register<CobblemonWanderControl>("wander_control")
+    val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
+    val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

@@ -177,27 +177,26 @@ Example:
 
 ### script
 The `script` type executes a registered MoLang script which will apply some changes to the brain or entity. This can be 
-useful if the goal is to apply some kind of configuration to the entity that would otherwise be performed by an NPC preset
-or NPC class. `q.entity` will refer to the entity. This is powerful when combined with [add_variables](#add_variables)
-configs in the same behaviour preset.
+useful for complex variable configuration. `q.entity` will refer to the entity.
+
+- `executeEarly`: If true, the script will be executed in the variable phase which occurs before tasks are added to the brain. Use this when your script might influence which tasks are put onto the brain.
+- `script`: Either a resource location for the `molang` datapack folder or a MoLang expression that will be executed.
+- `variables`: A list of variables that can be configured in the UI. Each variable has the same properties as in `add_variables`.
 
 Example:
 ```json
 {
   "type": "script",
-  "script": "cobblemon:configure_npc_party"
-}
-```
-
-### custom_script
-The `custom_script` type executes a custom MoLang script from this config which will apply some changes to the brain or
-entity. This is useful for when you want to apply some kind of configuration to the entity that would otherwise be
-by an NPC preset or NPC class. `q.entity` will refer to the entity.
-
-Example:
-```json
-{
-  "type": "custom_script",
-  "script": "q.entity.set_pathfinding_malus('WATER', -1);"
+  "executeEarly": true,
+  "script": "cobblemon:configure_npc_party",
+  "variables": [
+    {
+      "variableName": "party_size",
+      "defaultValue": "3",
+      "displayName": "Party Size",
+      "description": "The number of Pokémon in the NPC's party.",
+      "type": "NUMBER"
+    }
+  ]
 }
 ```

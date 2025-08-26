@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 866,
   "name": "Mr. Rime",
   "primaryType": "ice",
@@ -44,10 +45,10 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 2.35,
     "fixed": false
   },
   "drops": {
@@ -214,5 +215,6 @@
     "legacy:snore"
   ],
   "preEvolution": "mrmime galarian",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

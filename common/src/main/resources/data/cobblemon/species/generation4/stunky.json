@@ -202,5 +202,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skuntank",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

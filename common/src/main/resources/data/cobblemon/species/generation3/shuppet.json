@@ -210,5 +210,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gastly",
+          "tier": 1
+        },
+        {
+          "pokemon": "misdreavus",
+          "tier": 1
+        },
+        {
+          "pokemon": "shuppet",
+          "tier": 1
+        },
+        {
+          "pokemon": "duskull",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

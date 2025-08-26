@@ -64,6 +64,23 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "klink",
+          "tier": 1
+        },
+        {
+          "pokemon": "klang",
+          "tier": 2
+        },
+        {
+          "pokemon": "klinklang",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

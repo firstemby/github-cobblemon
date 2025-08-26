@@ -335,7 +335,8 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     },
     {
       "name": "Mega-Y",
@@ -370,7 +371,8 @@
       "baseExperienceYield": 390,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     }
   ],
   "riding": {

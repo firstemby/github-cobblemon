@@ -62,6 +62,31 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "eelektrik",
+          "tier": 1
+        },
+        {
+          "pokemon": "huntail",
+          "tier": 2
+        },
+        {
+          "pokemon": "gorebyss",
+          "tier": 3
+        },
+        {
+          "pokemon": "eelektross",
+          "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

@@ -59,6 +59,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "moltres galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -341,7 +350,18 @@
         "legacy:snore"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "moltres galarian",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

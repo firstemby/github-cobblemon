@@ -197,5 +197,16 @@
     "legacy:swagger"
   ],
   "preEvolution": "vullaby",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mandibuzz",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
@@ -210,6 +211,18 @@ public abstract class MouseHandlerMixin {
         if (vehicle == null) return Vec3.ZERO;
         if (!(vehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
+        var invertYaw = Cobblemon.config.getInvertYaw();
+        var invertPitch = Cobblemon.config.getInvertPitch();
+
+        var xValue = mouseX * Cobblemon.config.getXAxisSensitivity();
+        var yValue = mouseY * Cobblemon.config.getYAxisSensitivity();
+
+        var swapXAndY = Cobblemon.config.getSwapXAndYAxes();
+
+        var yaw = (swapXAndY ? yValue : xValue) * (invertYaw? -1.0f : 1.0f);
+
+        var pitch = (swapXAndY ? xValue : yValue) * (invertPitch? -1.0f : 1.0f);
+
         var sensitivity = cobblemon$getRidingSensitivity();
         return pokemonEntity.ifRidingAvailableSupply(Vec3.ZERO, (behaviour, settings, state) -> {
             return behaviour.rotationOnMouseXY(
@@ -217,8 +230,8 @@ public abstract class MouseHandlerMixin {
                     state,
                     pokemonEntity,
                     player,
-                    mouseY,
-                    mouseX,
+                    pitch,
+                    yaw,
                     yMouseSmoother,
                     xMouseSmoother,
                     sensitivity,

@@ -62,6 +62,35 @@
     "combat": {
       "fightsMelee": true,
       "willDefendSelf": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tranquill",
+          "tier": 1
+        },
+        {
+          "pokemon": "staravia",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgeotto",
+          "tier": 2
+        },
+        {
+          "pokemon": "unfezant",
+          "tier": 3
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 5
+        }
+      ]
     }
   },
   "ai": [

@@ -63,6 +63,9 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -313,6 +316,11 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
         }
       }
     },

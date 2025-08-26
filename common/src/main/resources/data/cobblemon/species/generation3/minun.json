@@ -192,5 +192,28 @@
     "legacy:toxic",
     "special:mudsport"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikachu",
+          "tier": 1
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 2
+        },
+        {
+          "pokemon": "plusle",
+          "tier": 3
+        },
+        {
+          "pokemon": "minun",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

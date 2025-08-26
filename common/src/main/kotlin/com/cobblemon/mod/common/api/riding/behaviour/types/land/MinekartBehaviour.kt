@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -66,7 +67,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
             //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (vehicle.position().y)) {
                 val blockState = vehicle.level().getBlockState(it.below())
-                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
+                return@any (!blockState.isAir && blockState.fluidState.isEmpty)
             }
             true
         }
@@ -146,7 +147,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         val turnInput =  (driver.xxa *-1.0f) * turningAcceleration
         val driftInput = turnInput * 0.25f
 
-        val lowSpeedTurnBoost = (inverseLerp(vehicle.deltaMovement.horizontalDistance(), 0.0, topSpeed ).pow(0.5) - 2.0f) * -1.0f
+        val lowSpeedTurnBoost = (RidingBehaviour.scaleToRange(vehicle.deltaMovement.horizontalDistance(), 0.0, topSpeed ).pow(0.5) - 2.0f) * -1.0f
         val forcedDriftTurnMomentum = (80.0f / 20.0f) * lowSpeedTurnBoost
         val maxTurnMomentum = (60.0f / 20.0f) * lowSpeedTurnBoost
         val maxDriftMomentum = forcedDriftTurnMomentum * 0.6f
@@ -292,15 +293,6 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         return newVelocity
     }
 
-    /*
-    *  lerps the current val between minVal and maxVal.
-    *  The result is clamped between 0.0 and 1.0, where 0.0 represents minVal and 1.0 represents maxVal.
-    */
-    private fun inverseLerp(currVal: Double, minVal: Double, maxVal: Double): Double {
-        require(maxVal > minVal) { "minVal must be greater than maxVal" }
-        return ((currVal - minVal) / (maxVal - minVal)).coerceIn(0.0, 1.0)
-    }
-
     override fun angRollVel(
         settings: MinekartSettings,
         state: MinekartState,
@@ -326,9 +318,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(
@@ -455,6 +445,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
 
 class MinekartSettings : RidingBehaviourSettings {
     override val key = MinekartBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     var canJump = "true".asExpression()
         private set
@@ -484,12 +475,14 @@ class MinekartSettings : RidingBehaviourSettings {
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
+        buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeExpression(canJump)
         buffer.writeExpression(boostLimit)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         canJump = buffer.readExpression()
         boostLimit = buffer.readExpression()

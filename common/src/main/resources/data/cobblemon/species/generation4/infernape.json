@@ -52,6 +52,15 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "infernape",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

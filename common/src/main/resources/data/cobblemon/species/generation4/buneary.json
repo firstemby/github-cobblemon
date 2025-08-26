@@ -58,6 +58,43 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bunnelby",
+          "tier": 1
+        },
+        {
+          "pokemon": "buneary",
+          "tier": 2
+        },
+        {
+          "pokemon": "scorbunny",
+          "tier": 2
+        },
+        {
+          "pokemon": "raboot",
+          "tier": 3
+        },
+        {
+          "pokemon": "diggersby",
+          "tier": 4
+        },
+        {
+          "pokemon": "cinderace",
+          "tier": 4
+        },
+        {
+          "pokemon": "lopunny mega=false",
+          "tier": 5
+        },
+        {
+          "pokemon": "lopunny mega",
+          "tier": 6
+        }
+      ]
     }
   },
   "drops": {

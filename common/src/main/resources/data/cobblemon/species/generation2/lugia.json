@@ -231,5 +231,16 @@
     "special:featherdance",
     "special:psychoboost"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lugia",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

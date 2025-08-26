@@ -62,6 +62,27 @@
     "resting": {
       "canSleep": true,
       "times": "day"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "corvisquire",
+          "tier": 1
+        },
+        {
+          "pokemon": "murkrow",
+          "tier": 2
+        },
+        {
+          "pokemon": "corviknight",
+          "tier": 3
+        },
+        {
+          "pokemon": "honchkrow",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

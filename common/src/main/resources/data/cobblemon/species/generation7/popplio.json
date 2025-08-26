@@ -66,6 +66,47 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "seel",
+          "tier": 1
+        },
+        {
+          "pokemon": "spheal",
+          "tier": 1
+        },
+        {
+          "pokemon": "popplio",
+          "tier": 2
+        },
+        {
+          "pokemon": "dewgong",
+          "tier": 3
+        },
+        {
+          "pokemon": "sealeo",
+          "tier": 3
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 4
+        },
+        {
+          "pokemon": "walrein",
+          "tier": 5
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 6
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

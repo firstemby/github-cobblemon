@@ -1,0 +1,276 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.scovillain.ground_idle": {
+			"loop": true,
+			"bones": {
+				"jaw_right": {
+					"rotation": [5, 0, 0]
+				},
+				"tongue_right": {
+					"rotation": [5, 0, 0]
+				},
+				"tongue_right2": {
+					"rotation": [-15, 0, 0]
+				},
+				"tongue_right4": {
+					"rotation": [-45, 0, 0]
+				},
+				"head_angle_left": {
+					"rotation": [27.5, 5, -25]
+				},
+				"leaves_left_bottom": {
+					"rotation": [7.5, 0, 0]
+				},
+				"tongue_left2": {
+					"rotation": [17.5, 0, 0]
+				},
+				"tongue_left3": {
+					"rotation": [-35, 0, 0]
+				},
+				"jaw_left": {
+					"rotation": [5, 0, 0]
+				},
+				"body": {
+					"position": [0, -3.75, 0]
+				},
+				"neck_right3": {
+					"rotation": [20, 0, 0]
+				},
+				"neck_right": {
+					"rotation": [0, 45, -15]
+				},
+				"neck_left": {
+					"rotation": [0, -45, 15]
+				},
+				"neck_left3": {
+					"rotation": [20, 0, 0]
+				},
+				"head_angle_right": {
+					"rotation": [27.5, -5, 25]
+				},
+				"leg_left": {
+					"rotation": [-45, -45, 0]
+				},
+				"leg_left2": {
+					"rotation": [50, 0, 0]
+				},
+				"foot_left": {
+					"rotation": [-5, 0, 0]
+				},
+				"leg_right": {
+					"rotation": [-45, 45, 0]
+				},
+				"leg_right2": {
+					"rotation": [50, 0, 0]
+				},
+				"foot_right": {
+					"rotation": [-5, 0, 0]
+				},
+				"tail": {
+					"rotation": [-22.5, 0, 0]
+				},
+				"tail2": {
+					"rotation": [35, 0, 0]
+				},
+				"tongue_right3": {
+					"rotation": [45, 0, 0]
+				},
+				"tongue_left4": {
+					"rotation": [22.5, 0, 0]
+				},
+				"arm_left": {
+					"rotation": [0, -15, 60]
+				},
+				"arm_left2": {
+					"rotation": [0, 67.5, 0]
+				},
+				"hand_left": {
+					"rotation": [0, 0, 35]
+				},
+				"arm_right": {
+					"rotation": [0, 15, -60]
+				},
+				"arm_right2": {
+					"rotation": [0, -65, 0]
+				},
+				"hand_right": {
+					"rotation": [0, 0, -35]
+				},
+				"neck_right4": {
+					"rotation": [30, 0, 0]
+				},
+				"neck_left4": {
+					"rotation": [30, 0, 0]
+				},
+				"tail3": {
+					"rotation": [27.5, 0, 0]
+				},
+				"necks": {
+					"rotation": [10, 0, 0]
+				},
+				"collar_front_left": {
+					"rotation": [0, -15, 0]
+				},
+				"collar_front_left2": {
+					"rotation": [42.5, 0, 0]
+				},
+				"collar": {
+					"rotation": [5, 0, 0]
+				},
+				"collar_front_right": {
+					"rotation": [0, 15, 0]
+				},
+				"collar_front_right2": {
+					"rotation": [42.5, 0, 0]
+				},
+				"collar_back_left": {
+					"rotation": [5, 7.5, 0]
+				},
+				"collar_back_left2": {
+					"rotation": [-25, 0, 0]
+				},
+				"collar_back_right": {
+					"rotation": [5, -10, 0]
+				},
+				"collar_back_right2": {
+					"rotation": [-27.5, 0, 0]
+				},
+				"collar_back_right3": {
+					"rotation": [0, 0, -40]
+				},
+				"collar_back_left3": {
+					"rotation": [0, 0, 40]
+				}
+			}
+		},
+		"animation.scovillain.blink": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eye_outer_right": {
+					"position": {
+						"0.0": [0.1, -0.1, 0],
+						"0.125": {
+							"pre": [0.1, -0.1, 0],
+							"post": [0.1, -0.1, 0]
+						},
+						"0.1667": {
+							"pre": [0.1, -0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eyelid_outer_right": {
+					"position": {
+						"0.0": [-0.1, 0.1, 0],
+						"0.125": {
+							"pre": [-0.1, 0.1, 0],
+							"post": [-0.1, 0.1, 0]
+						},
+						"0.1667": {
+							"pre": [-0.1, 0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eye_inner_right": {
+					"position": {
+						"0.0": [-0.1, -0.1, 0],
+						"0.125": {
+							"pre": [-0.1, -0.1, 0],
+							"post": [-0.1, -0.1, 0]
+						},
+						"0.1667": {
+							"pre": [-0.1, -0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eyelid_inner_right": {
+					"position": {
+						"0.0": [0.1, 0.1, 0],
+						"0.125": {
+							"pre": [0.1, 0.1, 0],
+							"post": [0.1, 0.1, 0]
+						},
+						"0.1667": {
+							"pre": [0.1, 0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.scovillain.blink2": {
+			"animation_length": 0.1667,
+			"bones": {
+				"eye_outer_left": {
+					"position": {
+						"0.0": [-0.1, -0.1, 0],
+						"0.125": {
+							"pre": [-0.1, -0.1, 0],
+							"post": [-0.1, -0.1, 0]
+						},
+						"0.1667": {
+							"pre": [-0.1, -0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eyelid_outer_left": {
+					"position": {
+						"0.0": [0.1, 0.1, 0],
+						"0.125": {
+							"pre": [0.1, 0.1, 0],
+							"post": [0.1, 0.1, 0]
+						},
+						"0.1667": {
+							"pre": [0.1, 0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eyelid_inner_left": {
+					"position": {
+						"0.0": [-0.1, 0.1, 0],
+						"0.125": {
+							"pre": [-0.1, 0.1, 0],
+							"post": [-0.1, 0.1, 0]
+						},
+						"0.1667": {
+							"pre": [-0.1, 0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				},
+				"eye_inner_left": {
+					"position": {
+						"0.0": [0.1, -0.1, 0],
+						"0.125": {
+							"pre": [0.1, -0.1, 0],
+							"post": [0.1, -0.1, 0]
+						},
+						"0.1667": {
+							"pre": [0.1, -0.1, 0],
+							"post": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.scovillain.hold_item": {
+			"loop": true,
+			"bones": {
+				"arm_right": {
+					"rotation": [0, -5, 20]
+				},
+				"arm_right2": {
+					"rotation": [0, 35, 0]
+				},
+				"hand_right": {
+					"rotation": [0, 0, 27.5]
+				}
+			}
+		}
+	}
+}

@@ -179,5 +179,16 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "xerneas",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

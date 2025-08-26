@@ -128,5 +128,32 @@
     "legacy:snore",
     "legacy:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spectrier",
+          "tier": 1
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 2
+        },
+        {
+          "pokemon": "calyrex",
+          "tier": 3
+        },
+        {
+          "pokemon": "calyrex shadow",
+          "tier": 4
+        },
+        {
+          "pokemon": "calyrex ice",
+          "tier": 5
+        }
+      ]
+    }
+  }
 }

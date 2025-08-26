@@ -52,6 +52,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lucario mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "lucario mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

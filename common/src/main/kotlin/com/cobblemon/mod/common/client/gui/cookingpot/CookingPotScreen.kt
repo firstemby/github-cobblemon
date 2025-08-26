@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.cookingpot
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
+import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
@@ -195,6 +196,15 @@ class CookingPotScreen(
 
         this.renderTooltip(context, mouseX, mouseY)
         this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
+    }
+
+    override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
+        if (slot is SeasoningSlot && !menu.carried.isEmpty && !slot.mayPlace(menu.carried)) {
+            val x = slot.x
+            val y = slot.y
+            guiGraphics.fill(x,y,x+16,y+16,822018048)
+        }
+        super.renderSlot(guiGraphics, slot)
     }
 
     override fun recipesUpdated() {

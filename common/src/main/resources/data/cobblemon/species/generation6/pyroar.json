@@ -52,6 +52,19 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pyroar female",
+          "tier": 1
+        },
+        {
+          "pokemon": "pyroar male",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

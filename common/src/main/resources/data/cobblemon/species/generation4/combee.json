@@ -62,6 +62,19 @@
         "canFly": true,
         "flySpeedHorizontal": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "combee",
+          "tier": 1
+        },
+        {
+          "pokemon": "vespiquen",
+          "tier": 2
+        }
+      ]
     }
   },
   "ai": [

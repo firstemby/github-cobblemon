@@ -151,5 +151,6 @@
       "requirements": [],
       "requiredContext": "cobblemon:sun_stone"
     }
-  ]
+  ],
+  "behaviour": {}
 }

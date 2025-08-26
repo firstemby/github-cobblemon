@@ -53,6 +53,15 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "haxorus",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

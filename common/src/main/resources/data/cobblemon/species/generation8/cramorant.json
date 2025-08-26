@@ -57,6 +57,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cramorant",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

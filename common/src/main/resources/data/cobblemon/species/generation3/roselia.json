@@ -59,6 +59,19 @@
       "walk": {
         "walkSpeed": 0.12
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "roselia",
+          "tier": 1
+        },
+        {
+          "pokemon": "roserade",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -319,7 +319,8 @@
         "legacy:snore"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

@@ -58,6 +58,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "articuno galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -368,6 +377,17 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:air/bird"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "articuno galarian",
+              "tier": 1
+            }
+          ]
         }
       }
     }

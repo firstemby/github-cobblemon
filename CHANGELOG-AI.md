@@ -6,6 +6,7 @@
   - Cat Pokémon (Meowth, Persian, etc.) intimidate Creepers and Phantoms.
   - Sleep-related Pokémon (Munsharna, Komala, etc.) intimidate Phantoms.
   - Some Pokémon naturally hunt each other.
+  - Some Pokémon herd together.
 - Added a Behaviour Editor to the NPC editing screen.
 - Added /behaviouredit command for opening the Behaviour Editor on Pokémon and NPCs.
   - Editing variables for Pokémon is not yet supported.

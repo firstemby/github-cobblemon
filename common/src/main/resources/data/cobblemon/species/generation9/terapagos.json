@@ -224,5 +224,6 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {}
 }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 579,
   "name": "Reuniclus",
   "primaryType": "psychic",
@@ -63,6 +64,15 @@
         "canSwimInLava": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "reuniclus",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

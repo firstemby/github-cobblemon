@@ -60,6 +60,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "venusaur mega",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -274,6 +283,11 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "8"
         }
       }
     },

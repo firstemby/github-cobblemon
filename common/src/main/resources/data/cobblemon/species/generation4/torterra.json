@@ -58,6 +58,15 @@
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "torterra",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -64,6 +64,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quaxwell",
+          "tier": 1
+        },
+        {
+          "pokemon": "quaquaval",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

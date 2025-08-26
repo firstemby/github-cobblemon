@@ -62,6 +62,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {

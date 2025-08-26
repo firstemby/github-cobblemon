@@ -159,5 +159,16 @@
     "special:celebrate"
   ],
   "preEvolution": "pawmo",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pawmot",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

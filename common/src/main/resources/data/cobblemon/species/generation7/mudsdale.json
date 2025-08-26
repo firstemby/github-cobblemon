@@ -57,6 +57,31 @@
       "walk": {
         "walkSpeed": 0.27
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rapidash",
+          "tier": 1
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 2
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 3
+        }
+      ]
     }
   },
   "riding": {

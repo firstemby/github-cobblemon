@@ -52,6 +52,35 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bouffalant",
+          "tier": 1
+        },
+        {
+          "pokemon": "tauros",
+          "tier": 2
+        },
+        {
+          "pokemon": "tauros bull_breed=combat",
+          "tier": 2
+        },
+        {
+          "pokemon": "tauros bull_breed=aqua",
+          "tier": 3
+        },
+        {
+          "pokemon": "tauros bull_breed=blaze",
+          "tier": 3
+        },
+        {
+          "pokemon": "miltank",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

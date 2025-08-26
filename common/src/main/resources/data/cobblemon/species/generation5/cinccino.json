@@ -187,5 +187,16 @@
     "legacy:toxic"
   ],
   "preEvolution": "minccino",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cinccino",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -64,6 +64,19 @@
     },
     "resting": {
       "canSleep": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lunatone",
+          "tier": 1
+        },
+        {
+          "pokemon": "solrock",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

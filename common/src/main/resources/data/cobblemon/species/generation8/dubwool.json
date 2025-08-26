@@ -55,12 +55,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dubwool",
+          "tier": 1
+        }
+      ]
     }
   },
   "ai": [
     {
       "type": "apply_behaviours",
-      "presets": ["cobblemon:eats_grass"]
+      "presets": [
+        "cobblemon:eats_grass"
+      ]
     }
   ],
   "drops": {

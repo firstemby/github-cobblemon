@@ -64,6 +64,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bergmite",
+          "tier": 1
+        },
+        {
+          "pokemon": "avalugg",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

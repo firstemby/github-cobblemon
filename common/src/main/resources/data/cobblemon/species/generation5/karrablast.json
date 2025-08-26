@@ -159,5 +159,16 @@
       "requirements": [],
       "requiredContext": "cobblemon:shell_helmet"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "karrablast",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

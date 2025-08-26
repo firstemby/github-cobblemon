@@ -60,6 +60,23 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sharpedo mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "sharpedo mega",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -248,6 +265,19 @@
             "canSwimInWater": true,
             "canSwimInLava": false
           }
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "sharpedo mega",
+              "tier": 1
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 2
+            }
+          ]
         }
       },
       "evolutions": [],

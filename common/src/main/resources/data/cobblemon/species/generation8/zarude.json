@@ -191,5 +191,16 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zarude",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

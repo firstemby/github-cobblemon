@@ -60,6 +60,39 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tympole",
+          "tier": 1
+        },
+        {
+          "pokemon": "poliwag",
+          "tier": 2
+        },
+        {
+          "pokemon": "palpitoad",
+          "tier": 3
+        },
+        {
+          "pokemon": "poliwhirl",
+          "tier": 4
+        },
+        {
+          "pokemon": "seismitoad",
+          "tier": 5
+        },
+        {
+          "pokemon": "poliwrath",
+          "tier": 6
+        },
+        {
+          "pokemon": "politoed",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

@@ -148,5 +148,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "typenull",
+          "tier": 1
+        },
+        {
+          "pokemon": "silvally",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

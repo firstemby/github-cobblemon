@@ -231,5 +231,6 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {}
 }

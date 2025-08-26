@@ -56,6 +56,31 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "luxio",
+          "tier": 1
+        },
+        {
+          "pokemon": "pyroar female",
+          "tier": 2
+        },
+        {
+          "pokemon": "pyroar male",
+          "tier": 3
+        },
+        {
+          "pokemon": "luxray female",
+          "tier": 4
+        },
+        {
+          "pokemon": "luxray male",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

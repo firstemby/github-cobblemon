@@ -43,11 +43,32 @@
   "catchRate": 180,
   "eggCycles": 10,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "baseScale": 0.5,
   "hitbox": {
-    "width": 1,
+    "width": 0.9,
     "height": 1,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walking": {
+        "walkSpeed": 0.2
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "togedemaru",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,

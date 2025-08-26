@@ -179,5 +179,20 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tauros",
+          "tier": 1
+        },
+        {
+          "pokemon": "bouffalant",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }
