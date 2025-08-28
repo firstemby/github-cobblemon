@@ -569,13 +569,14 @@
 - Added `Pokemon#hyperTrainIV()` and `IVs#setHyperTrainedIV(Stat, Int)`
 - `ElementalType` now implements `ShowdownIdentifiable` to ensure the communcation with showdown stays consistent (also in regards to TeraTypes)
 - Pokemon no longer have a change observable
+- The event `EVOLUTION_ACCEPTED` was renamed to `EVOLUTION_STARTED` to better reflect the sequence of events when evolutions are started outside of UI code. To avoid confusion, `PokemonEntity.EVOLUTION_STARTED` has been renamed to `PokemonEntity.EVOLVING`.
 
 ### MoLang & Datapacks
 - The following usages for item predicates can now use item conditions like advancements do, you can learn about them in the [Minecraft wiki](https://minecraft.wiki/w/Advancement_definition#minecraft:filled_bucket)
   - The `requiredContext` for an item interaction evolution
   - The `itemCondition` for a held item evolution requirement
   - The `fossils` for a fossil entry
-- Added MoLang flows for `poke_ball_capture_calculated`, `evolution_tested`, `evolution_accepted`, `evolution_completed`
+- Added MoLang flows for `poke_ball_capture_calculated`, `evolution_tested`, `evolution_started`, `evolution_completed`
 - Added `interpolate` boolean property to animated textures to allow gradual colour changes between frames.
 - Fixed species additions not being capable of changing implemented status.
 - Added support for action effects that are triggered by `|-activate|` Showdown instructions. `activate_{effect_id}` is the syntax.
@@ -658,6 +659,7 @@
 - Added `q.pokemon.is_busy` Returns whether the Pokémon is busy.
 - Added `q.pokemon.is_rideable` Returns whether the Pokémon is rideable.
 - Fixed `background` field and added `textColor` field for dialogues.
+- Fixed forced evolutions (`"optional": false`) firing the evolution sequence multiple times in a row
 
 ### Particles
 Added new/updated particles for the following moves:

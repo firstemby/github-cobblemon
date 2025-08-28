@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
- * Fired when an evolution is accepted.
+ * Fired when an evolution starts.
  * Canceling will not notify users nor remove the evolution from the pending list.
  *
  * @param pokemon The [Pokemon] about to evolve.
@@ -25,7 +25,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since April 28th, 2022
  */
-data class EvolutionAcceptedEvent(
+data class EvolutionStartedEvent(
     override val pokemon: Pokemon,
     override val evolution: Evolution
 ) : Cancelable(), EvolutionEvent {

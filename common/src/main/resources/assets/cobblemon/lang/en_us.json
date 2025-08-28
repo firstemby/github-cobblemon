@@ -2103,6 +2103,7 @@
   "cobblemon.ui.evolution": "Evolution",
   "cobblemon.ui.evolve.hint": "%1$s seems ready to evolve!",
   "cobblemon.ui.evolve.into": "%1$s evolved into %2$s!",
+  "cobblemon.ui.evolve.forced": "%1$s is evolving!",
 
   "cobblemon.label.lv": "Lv. %1$s",
 
