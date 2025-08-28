@@ -15,9 +15,10 @@ import com.cobblemon.mod.common.pokemon.Species
 internal data class CobblemonEvolutionDisplay(
     override val id: String,
     override val species: Species,
-    override val aspects: Set<String>
+    override val aspects: Set<String>,
+    override val optional: Boolean
 ) : EvolutionDisplay {
 
-    constructor(id: String, pokemon: Pokemon) : this(id, pokemon.species, pokemon.aspects)
+    constructor(id: String, pokemon: Pokemon, optional: Boolean = true) : this(id, pokemon.species, pokemon.aspects, optional)
 
 }
