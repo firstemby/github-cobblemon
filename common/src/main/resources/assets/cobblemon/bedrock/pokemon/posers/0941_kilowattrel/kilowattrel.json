@@ -171,6 +171,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('kilowattrel', 'air_glide')",
+        "q.bedrock('kilowattrel', 'ride_dive')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('kilowattrel', 'ride_air_glide')"

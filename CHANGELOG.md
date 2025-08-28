@@ -62,6 +62,8 @@
 - Unown
 - Houndour
 - Houndoom
+- Ho-Oh
+- Lugia
 
 #### Gen 3
 - Azurill
@@ -77,7 +79,6 @@
 - Glalie
 - Latias
 - Latios
-
 
 #### Gen 4
 - Bronzor
@@ -221,6 +222,12 @@
 - Ariados
 - Wyrdeer
 - Tyrantrum
+- Pidove
+- Tranquill
+- Unfezant
+- Beldum
+- Metang
+- Metagross
 
 ### Model updates for the following Pokémon
 - Gyarados
@@ -285,6 +292,9 @@
 - Klinklang
 - Spinarak
 - Ariados
+- Pidove
+- Tranquill
+- Unfezant
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked

@@ -30,7 +30,7 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
       "isBattle": false,
-      "condition": "!q.in_air",
+      "condition": "q.has_entity ? !q.in_air : 1.0",
       "animations": [
         "q.look('head_ai')", 
         "q.bedrock('zebstrika', 'ground_idle')"
@@ -43,18 +43,20 @@
     "in_air": {
       "poseTypes": ["WALK","STAND", "NONE"],
       "isBattle": false,
-      "condition": "q.in_air",
+      "condition": "q.has_entity ? q.in_air && q.is_ridden : 0.0",
       "animations": [
         "q.look('head_ai')", 
         "q.bedrock('zebstrika', 'ride_jump')"
       ],
       "quirks": [
         "q.bedrock_quirk('zebstrika', 'blink')"
-      ]
+      ],
+      "transformTicks": 2,
+      "transformToTicks": 2
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.in_air && !q.is_sprinting",
+      "condition": "q.has_entity ? !q.in_air && !q.is_sprinting : 1.0",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('zebstrika', 'ground_walk')",
@@ -67,7 +69,7 @@
     },
     "running": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.in_air && q.is_sprinting",
+      "condition": "q.has_entity ? !q.in_air && q.is_sprinting : 0.0",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('zebstrika', 'ground_run')",

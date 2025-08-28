@@ -37,8 +37,13 @@
 					"pivot": [0, 26, 0]
 				},
 				{
-					"name": "locator_middle",
+					"name": "body2",
 					"parent": "body",
+					"pivot": [0, 26, 0]
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body2",
 					"pivot": [0, 25.5, 0],
 					"locators": {
 						"middle": [0, 25.5, 0]
@@ -46,7 +51,7 @@
 				},
 				{
 					"name": "locator_target",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [0, 25.5, -19],
 					"locators": {
 						"target": [0, 25.5, -19]
@@ -54,7 +59,7 @@
 				},
 				{
 					"name": "torso",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [-0.5, 18, 0],
 					"cubes": [
 						{"origin": [-10.5, 16.5, -10.5], "size": [21, 5, 21], "uv": [0, 36]},
@@ -349,7 +354,7 @@
 				},
 				{
 					"name": "legs",
-					"parent": "body",
+					"parent": "body2",
 					"pivot": [0, 27, 0]
 				},
 				{

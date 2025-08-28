@@ -29,7 +29,7 @@
         "q.bedrock('tropius', 'ground_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"
+        "q.bedrock_quirk('tropius', 'blink')"
       ]
     },
      "battle-standing": {
@@ -40,7 +40,7 @@
          "q.bedrock('tropius', 'battle_idle')"
        ],
        "quirks": [
-         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"
+         "q.bedrock_quirk('tropius', 'blink')"
        ]
      },
      "standing": {
@@ -51,8 +51,8 @@
          "q.bedrock('tropius', 'ground_idle')"
        ],
        "quirks": [
-         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
-         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+         "q.bedrock_quirk('tropius', 'blink')",
+         "q.bedrock_quirk('tropius', 'look_quirk')"
        ]
      },
      "flying": {
@@ -66,8 +66,7 @@
         }
        ],
        "quirks": [
-         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
-         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+         "q.bedrock_quirk('tropius', 'blink')"
        ]
      },
      "glide": {
@@ -76,13 +75,14 @@
        "animations": [
         "q.look('head')", 
         "q.bedrock('tropius', 'air_glide')",
+         "q.bedrock('tropius', 'ride_dive')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('tropius', 'ride_air_glide')"
         }
       ],
        "quirks": [
-         "q.bedrock_quirk('charizard', 'blink')"
+         "q.bedrock_quirk('tropius', 'blink')"
        ]
      },
      "hovering": {
@@ -92,8 +92,8 @@
          "q.bedrock('tropius', 'air_idle')"
        ],
        "quirks": [
-         "q.bedrock_quirk('tropius', 'blink', 8, 20, 1)",
-         "q.bedrock_quirk('tropius', 'look_quirk', 20, 48, 1)"
+         "q.bedrock_quirk('tropius', 'blink')",
+         "q.bedrock_quirk('tropius', 'look_quirk')"
        ]
      },
      "walking": {
@@ -103,16 +103,16 @@
          "q.look('head')",
          "q.bedrock('tropius', 'ground_walk')"
        ],
-       "quirks": ["q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"]
+       "quirks": ["q.bedrock_quirk('tropius', 'blink')"]
      },
      "running": {
        "poseTypes": ["WALK"],
        "condition": "q.is_sprinting",
        "animations": [
          "q.look('head')",
-         "q.bedrock('tropius', 'ground_walk')"
+         "q.bedrock('tropius', 'ground_run')"
        ],
-       "quirks": ["q.bedrock_quirk('tropius', 'blink', 8, 20, 1)"]
+       "quirks": ["q.bedrock_quirk('tropius', 'blink')"]
      },
      "air-sleep": {
        "poseTypes": ["SLEEP"],

@@ -101,6 +101,7 @@
       "animations": [
         "q.look('head_ai', 1, 1, 15, 0, 0, 0)",
         "q.bedrock('togekiss', 'air_glide')",
+        "q.bedrock('togekiss', 'ride_dive')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('togekiss', 'ride_air_fly')"

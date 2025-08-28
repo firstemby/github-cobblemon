@@ -32,7 +32,7 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "!q.is_sprinting",
+      "condition": "q.has_entity ? !q.is_sprinting : 1.0",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blitzle', 'ground_walk')"
@@ -41,7 +41,7 @@
     },
     "running": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "q.is_sprinting",
+      "condition": "q.has_entity ? q.is_sprinting : 0.0",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blitzle', 'ground_walk')"
