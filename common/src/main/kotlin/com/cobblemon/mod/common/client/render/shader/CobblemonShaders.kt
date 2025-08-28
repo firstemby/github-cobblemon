@@ -20,6 +20,7 @@ object CobblemonShaders {
     lateinit var PARTICLE_BLEND: ShaderInstance
     // This is Material.ALPHA. Weird internal name for "alphatest" shader.
     lateinit var PARTICLE_CUTOUT: ShaderInstance
+    lateinit var OVERLAY: ShaderInstance
 
     private fun registerShader(shader: (ResourceProvider) -> ShaderRegistryData, callback: Consumer<ShaderInstance>){
         SHADERS_TO_REGISTER.add(Pair(shader, callback))
@@ -30,6 +31,9 @@ object CobblemonShaders {
         }
         registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP) }) {
             PARTICLE_CUTOUT = it
+        }
+        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("overlay"), DefaultVertexFormat.NEW_ENTITY) }) {
+            OVERLAY = it
         }
     }
 }

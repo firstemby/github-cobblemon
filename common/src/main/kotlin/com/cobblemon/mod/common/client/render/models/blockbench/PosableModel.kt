@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
@@ -33,6 +34,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.SimpleQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
+import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -40,26 +42,33 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.plus
 import com.cobblemon.mod.common.util.toRGBA
+import com.google.common.collect.ImmutableList
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.phys.Vec3
+import org.apache.commons.lang3.tuple.Triple
 import org.joml.Matrix4f
 import org.joml.Vector3f
+import java.lang.reflect.Constructor
 
 /**
  * A model that can be posed and animated using [PoseAnimation]s and [ActiveAnimation]s. This
@@ -414,6 +423,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     /** Needed a custom one, so I can make it take in a dynamic texture instead of resource location */
     class DynamicStateShard(texture: DynamicTexture) : RenderStateShard.EmptyTextureStateShard(Runnable {
         RenderSystem.setShaderTexture(0, texture.id)
+        RenderSystem.setShaderTexture(1, cobblemonResource("textures/tera_layer.png"))
     }, Runnable {
         texture.close() // Cleanup
     })
@@ -440,6 +450,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         val color2 = (a2 * 255).toInt() shl 24 or ((r2 * 255).toInt() shl 16) or ((g2 * 255).toInt() shl 8) or (b2 * 255).toInt()
 
+        context.request(RenderContext.TEXTURE)?.let { renderWithOverlay(stack, it) }
         rootPart.render(
             context,
             stack,
@@ -453,13 +464,14 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         if (provider != null) {
             for (layer in currentLayers) {
                 var renderLayer : RenderType
+                var texture: ResourceLocation? = null
                 if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
                     //Handle Interpolation
                     val texture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
                     renderLayer = makeLayer(DynamicStateShard(texture), layer.emissive, layer.translucent, layer.translucent_cull)
                 }
                 else {
-                    val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
+                    texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
                     renderLayer = getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 }
                 val consumer = provider.getBuffer(renderLayer)
@@ -469,6 +481,10 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val tintBlue = (tint.z * b2 * 255).toInt()
                 val tintAlpha = (tint.w * a2 * 255).toInt()
                 val tintColor = tintAlpha shl 24 or (tintRed shl 16) or (tintGreen shl 8) or tintBlue
+
+                texture?.let {
+                    renderWithOverlay(stack, texture)
+                }
 
                 stack.pushPose()
                 rootPart.render(
@@ -490,18 +506,21 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         return ItemDisplayContext.valueOf(displayContextString)
     }
 
+    companion object {
+        var test: Any? = null
+
+        fun getOrMakeShard(): Any {
+            if (test == null) {
+                test = RenderStateShard.ShaderStateShard({ CobblemonShaders.OVERLAY })
+            }
+            return test!!
+        }
+    }
+
     /** Generates a [RenderType] by the power of god and anime. Only possible thanks to 100 access wideners. */
     fun makeLayer(texture: RenderStateShard.EmptyTextureStateShard, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         val multiPhaseParameters: RenderType.CompositeState = RenderType.CompositeState.builder()
-            .setShaderState(
-                when {
-                    emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
-                    !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
-                    !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
-                    !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
-                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER // This one should be changed to maybe a custom shader? Translucent stuffs with things
-                }
-            )
+            .setShaderState(getOrMakeShard() as RenderStateShard.ShaderStateShard)
             .setTextureState(texture)
             .setTransparencyState(if (translucent) RenderStateShard.TRANSLUCENT_TRANSPARENCY else RenderStateShard.NO_TRANSPARENCY)
             .setLightmapState(if (!emissive) RenderStateShard.LIGHTMAP else RenderStateShard.LightmapStateShard(false))
@@ -521,6 +540,12 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         )
     }
 
+    private fun renderWithOverlay(matrices: PoseStack, texture: ResourceLocation) {
+        RenderSystem.setShader { CobblemonShaders.OVERLAY }
+        RenderSystem.setShaderTexture(0, texture)
+//        RenderSystem.setShaderTexture(1, cobblemonResource("textures/tera_layer.png"))
+    }
+
     /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
     fun getLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         return if (!emissive && !translucent) {
@@ -528,7 +553,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         } else if (!emissive && !translucentCull) {
             RenderType.entityTranslucent(texture)
         } else {
-            makeLayer(RenderStateShard.TextureStateShard(texture, false, false), emissive = emissive, translucent = translucent, translucentCull = translucentCull)
+            val texture = RenderStateShard.MultiTextureStateShard(ImmutableList.of(
+                Triple.of(texture, false, false),
+                Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+            ))
+            makeLayer(texture, emissive = emissive, translucent = translucent, translucentCull = translucentCull)
         }
     }
 

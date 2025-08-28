@@ -41,6 +41,8 @@ public class GameRendererMixin {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            FabricShaderProgram finalProgram = program;
+            list2.removeIf(x -> x.getFirst().getName().equals(finalProgram.getName()));
             list2.add(Pair.of(program, pair.getSecond()));
         });
     }

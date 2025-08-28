@@ -8,17 +8,26 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel.Companion.getOrMakeShard
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
 import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.google.common.collect.ImmutableList
+import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.RenderType
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.model.EntityModel
+import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.resources.ResourceLocation
+import org.apache.commons.lang3.tuple.Triple
 
 /**
  * A wrapping around a [PosableModel] that presents as an [EntityModel]. This is used to continue using
@@ -29,12 +38,44 @@ import net.minecraft.resources.ResourceLocation
  * @since January 5th, 2024
  */
 abstract class PosableEntityModel<T : Entity>(
-    renderTypeFunc: (ResourceLocation) -> RenderType = RenderType::entityCutout
+    renderTypeFunc: (ResourceLocation) -> RenderType = {
+        val textures = ImmutableList.of(
+            Triple.of(it, false, false),
+            Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+            Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+            Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+        )
+        makeLayer(RenderStateShard.MultiTextureStateShard(textures), false, false, false)
+    }
 ) : EntityModel<T>(renderTypeFunc) {
     val context: RenderContext = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
     lateinit var posableModel: PosableModel
+
+    companion object {
+        fun makeLayer(texture: RenderStateShard.EmptyTextureStateShard, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
+            val multiPhaseParameters: RenderType.CompositeState = RenderType.CompositeState.builder()
+                .setShaderState(getOrMakeShard() as RenderStateShard.ShaderStateShard)
+                .setTextureState(texture)
+                .setTransparencyState(if (translucent) RenderStateShard.TRANSLUCENT_TRANSPARENCY else RenderStateShard.NO_TRANSPARENCY)
+                .setLightmapState(if (!emissive) RenderStateShard.LIGHTMAP else RenderStateShard.LightmapStateShard(false))
+                .setCullState(RenderStateShard.CULL)
+                .setWriteMaskState(RenderStateShard.COLOR_DEPTH_WRITE)
+                .setOverlayState(RenderStateShard.OVERLAY)
+                .createCompositeState(false)
+
+            return RenderType.create(
+                "cobblemon_entity_layer",
+                DefaultVertexFormat.NEW_ENTITY,
+                VertexFormat.Mode.QUADS,
+                256,
+                true,
+                translucent,
+                multiPhaseParameters
+            )
+        }
+    }
 
     override fun renderToBuffer(
         stack: PoseStack,
@@ -49,6 +90,7 @@ abstract class PosableEntityModel<T : Entity>(
             // We're using the living entity renderer, ergo we need to apply a Y offset of 24 model units (1.5 blocks) for reasons only God can tell us.
             stack.translate(0.0, 1.5, 0.0)
         }
+//        RenderSystem.setShader { CobblemonShaders.OVERLAY }
         posableModel.render(context, stack, buffer, packedLight, overlay, color)
     }
 
