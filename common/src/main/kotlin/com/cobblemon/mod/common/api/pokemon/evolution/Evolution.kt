@@ -23,14 +23,17 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
+import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionController
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
+import com.cobblemon.mod.common.util.isInBattle
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -105,15 +108,23 @@ interface Evolution : EvolutionLike {
      * @param pokemon The [Pokemon] being evolved.
      */
     fun evolve(pokemon: Pokemon): Boolean {
-        if (this.consumeHeldItem) {
-            pokemon.swapHeldItem(ItemStack.EMPTY)
+        val serverController = pokemon.evolutionProxy.server() as ServerEvolutionController
+        if (pokemon.getOwnerPlayer()?.isInBattle() == true) return false
+        if (pokemon.entity?.isBusy == true) return false
+
+        if (this.consumeHeldItem) pokemon.swapHeldItem(ItemStack.EMPTY)
+
+        // All the networking is handled under the hood, see EvolutionController.
+        if (this.optional) return serverController.add(this)
+        else {
+            if (pokemon.entity != null) {
+                // delay necessary for chained forced evolutions for their particles not break
+                pokemon.entity?.after(0.5F) { serverController.start(this) }
+            } else {
+                serverController.start(this)
+            }
+            return true
         }
-        if (this.optional) {
-            // All the networking is handled under the hood, see EvolutionController.
-            return pokemon.evolutionProxy.server().add(this)
-        }
-        this.forceEvolve(pokemon)
-        return true
     }
 
     fun shed(pokemon: Pokemon): Boolean {
@@ -153,7 +164,7 @@ interface Evolution : EvolutionLike {
      *
      * @param pokemon The [Pokemon] being evolved.
      */
-    fun forceEvolve(pokemon: Pokemon) {
+    fun forceEvolve(pokemon: Pokemon, optional: Boolean = true) {
         // This is a switch to enable/disable the evolution effect while we get particles improved
         val useEvolutionEffect = true
 
@@ -163,12 +174,18 @@ interface Evolution : EvolutionLike {
 
         val preEvoName = pokemon.getDisplayName()
         val pokemonEntity = pokemon.entity
+        val player = pokemon.getOwnerPlayer()
         if (pokemonEntity == null || !useEvolutionEffect) {
-            pokemon.getOwnerPlayer()?.playNotifySound(CobblemonSounds.EVOLUTION_UI, SoundSource.PLAYERS, 1F, 1F)
+            player?.playNotifySound(CobblemonSounds.EVOLUTION_UI, SoundSource.PLAYERS, 1F, 1F)
             evolutionMethod(pokemon)
-            pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
+            player?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
-            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
+            pokemonEntity.entityData.set(PokemonEntity.EVOLVING, true)
+            if (optional)
+            {
+                player?.playNotifySound(CobblemonSounds.EVOLUTION_UI, SoundSource.PLAYERS, 1F, 1F)
+                player?.sendSystemMessage(lang("ui.evolve.forced", pokemon.getDisplayName()).green())
+            }
             pokemonEntity.navigation.stop()
             pokemonEntity.after(1F) {
                 evolutionAnimation(pokemonEntity)
@@ -178,8 +195,8 @@ interface Evolution : EvolutionLike {
             }
             pokemonEntity.after(seconds = 12F) {
                 cryAnimation(pokemonEntity)
-                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
                 pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
+                pokemonEntity.entityData.set(PokemonEntity.EVOLVING, false)
             }
         }
     }

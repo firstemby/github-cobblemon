@@ -44,7 +44,7 @@ class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : Sin
         internal fun Evolution.convertToDisplay(pokemon: Pokemon, registryAccess: RegistryAccess): EvolutionDisplay {
             val result = pokemon.clone(registryAccess = registryAccess)
             this.result.apply(result)
-            val expectedDisplay = CobblemonEvolutionDisplay(this.id, result)
+            val expectedDisplay = CobblemonEvolutionDisplay(this.id, result, this.optional)
             val event = EvolutionDisplayEvent(result, expectedDisplay, this)
             CobblemonEvents.EVOLUTION_DISPLAY.post(event)
             return event.display
@@ -54,6 +54,7 @@ class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : Sin
             buffer.writeString(this.id)
             buffer.writeIdentifier(this.species.resourceIdentifier)
             buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
+            buffer.writeBoolean(this.optional)
         }
 
         internal fun decodeDisplay(buffer: RegistryFriendlyByteBuf): EvolutionDisplay {
@@ -62,7 +63,8 @@ class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : Sin
             val species = PokemonSpecies.getByIdentifier(speciesIdentifier)
                 ?: throw IllegalArgumentException("Cannot resolve species from $speciesIdentifier")
             val aspects = buffer.readList(ByteBuf::readString).toSet()
-            return CobblemonEvolutionDisplay(id, species, aspects)
+            val optional = buffer.readBoolean()
+            return CobblemonEvolutionDisplay(id, species, aspects, optional)
         }
     }
 }
