@@ -3748,6 +3748,9 @@
   "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
   "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
 
+  "cobblemon.behaviour.pokemon_boids.name": "Boids",
+  "cobblemon.behaviour.pokemon_boids.desc": "Boids Around.",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

@@ -119,6 +119,8 @@ interface TaskConfig {
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
             cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
             cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
+            cobblemonResource("switch_from_boid") to SwitchFromBoidTaskConfig::class.java,
+            cobblemonResource("switch_to_boid") to SwitchToBoidTaskConfig::class.java,
         )
     }
 

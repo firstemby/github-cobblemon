@@ -71,7 +71,8 @@ object PokemonBrain {
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
         CobblemonSensors.NEARBY_FLOWER,
-        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH
+        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH,
+        CobblemonSensors.PLAYER_DEBUGGING
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -173,6 +174,7 @@ object PokemonBrain {
         MemoryModuleType.HURT_BY_ENTITY,
         MemoryModuleType.NEAREST_PLAYERS,
         MemoryModuleType.NEAREST_VISIBLE_PLAYER,
+        MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
         MemoryModuleType.ANGRY_AT,
         MemoryModuleType.ATTACK_COOLING_DOWN,
         CobblemonMemories.POKEMON_DROWSY,
@@ -195,7 +197,8 @@ object PokemonBrain {
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,
-        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH,
+        CobblemonMemories.DIAMOND_DEBUGGER
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {

@@ -1,0 +1,25 @@
+{
+  "name": "cobblemon.behaviour.pokemon_boids.name",
+  "description": "cobblemon.behaviour.pokemon_boids.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "0": [
+          "switch_to_boid"
+        ]
+      }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "cobblemon:pokemon_boid",
+      "tasksByPriority": {
+        "0": [
+          "switch_from_boid"
+        ]
+      }
+    }
+  ]
+}

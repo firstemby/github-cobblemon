@@ -86,6 +86,7 @@ import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.BoidsMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -2327,6 +2328,10 @@ open class PokemonEntity(
 
     override fun getDefaultGravity(): Double {
         val regularGravity = super.getDefaultGravity()
+        return 0.0
+        if (this.moveControl is BoidsMoveControl) {
+            return 0.0
+        }
         if (this.passengers.isEmpty()) {
             return regularGravity
         }

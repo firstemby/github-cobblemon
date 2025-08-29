@@ -21,6 +21,7 @@ import java.util.Optional
 import java.util.UUID
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
@@ -60,6 +61,8 @@ object CobblemonMemories {
     val WANDER_CONTROL = register<CobblemonWanderControl>("wander_control")
     val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
+    /** Is the nearest player holding a diamond for debugging purposes? */
+    val DIAMOND_DEBUGGER = register<Player>("diamond_debugger")
 
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
         val memoryModule = MemoryModuleType(Optional.of(codec))

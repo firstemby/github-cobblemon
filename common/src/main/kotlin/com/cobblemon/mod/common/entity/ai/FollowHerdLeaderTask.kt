@@ -92,14 +92,14 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
 
             val herdTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null)?.target?.currentBlockPosition()
                 ?: leader.blockPosition()
-            val randomHerdPos = LandRandomPos.getPos(leader, closeEnough.toInt(), closeEnough.toInt())?.toBlockPos()
+            val randomHerdPos = LandRandomPos.getPos(leader, tooFar.toInt(), tooFar.toInt())?.toBlockPos()
                 ?: herdTarget
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
                     pos = randomHerdPos,
                     speedModifier = entity.runtime.resolveDouble(entity.behaviour.moving.walk.walkSpeed).toFloat(),
-                    completionRange = closeEnough.toInt()
+                    completionRange = 1
                 )
             )
             herdReactionExpiry = null // We are moving so what movement would we be waiting for
