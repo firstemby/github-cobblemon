@@ -1,25 +1,36 @@
 #version 150
 
-in vec2 texCoord0;
-in vec4 vertexColor;
+#moj_import <fog.glsl>
 
-uniform sampler2D Sampler0; // base texture
-uniform sampler2D Sampler3; // overlay texture
+uniform sampler2D Sampler0;
+uniform sampler2D Sampler3;
+
+uniform vec4 ColorModulator;
+uniform float FogStart;
+uniform float FogEnd;
+uniform vec4 FogColor;
+uniform float u_evo_progress;
+
+in float vertexDistance;
+in vec4 vertexColor;
+in vec4 lightMapColor;
+in vec4 overlayColor;
+in vec2 texCoord0;
+in vec4 normal;
 
 out vec4 fragColor;
 
 void main() {
-    vec4 baseColor = texture(Sampler0, texCoord0);
+    vec4 color = texture(Sampler0, texCoord0);
+    vec4 teraColor = texture(Sampler3, texCoord0);
 
-    fragColor = baseColor;
-    return;
-
-    vec4 overlayColor = texture(Sampler3, texCoord0);
-
-    // Apply overlay at 50% opacity, masked by base alpha
-    float overlayAlpha = 0.5; // overlay contributes 50%
-    vec3 blendedRGB = mix(baseColor.rgb, overlayColor.rgb, overlayAlpha);
-
-    // Keep alpha same as base
-    fragColor = vec4(blendedRGB, baseColor.a) * vertexColor;
+    if (color.a < 0.1) {
+        discard;
+    }
+    vec4 mixed = mix(color, teraColor, teraColor.a);
+    color = mixed * vertexColor * ColorModulator;
+    color.rgb = mix(overlayColor.rgb, color.rgb, overlayColor.a);
+    color *= lightMapColor;
+    color = mix(color, vec4(1.0, 1.0, 1.0, 1.0), u_evo_progress);
+    fragColor = linear_fog(color, vertexDistance, FogStart, FogEnd, FogColor);
 }

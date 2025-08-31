@@ -450,7 +450,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         val color2 = (a2 * 255).toInt() shl 24 or ((r2 * 255).toInt() shl 16) or ((g2 * 255).toInt() shl 8) or (b2 * 255).toInt()
 
-        context.request(RenderContext.TEXTURE)?.let { renderWithOverlay(stack, it) }
         rootPart.render(
             context,
             stack,
@@ -481,10 +480,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val tintBlue = (tint.z * b2 * 255).toInt()
                 val tintAlpha = (tint.w * a2 * 255).toInt()
                 val tintColor = tintAlpha shl 24 or (tintRed shl 16) or (tintGreen shl 8) or tintBlue
-
-                texture?.let {
-                    renderWithOverlay(stack, texture)
-                }
 
                 stack.pushPose()
                 rootPart.render(
@@ -540,12 +535,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         )
     }
 
-    private fun renderWithOverlay(matrices: PoseStack, texture: ResourceLocation) {
-        RenderSystem.setShader { CobblemonShaders.OVERLAY }
-        RenderSystem.setShaderTexture(0, texture)
-//        RenderSystem.setShaderTexture(1, cobblemonResource("textures/tera_layer.png"))
-    }
-
     /** Makes a [RenderType] in a jank way. Mostly works so that's cool. */
     fun getLayer(texture: ResourceLocation, emissive: Boolean, translucent: Boolean, translucentCull: Boolean): RenderType {
         return if (!emissive && !translucent) {
@@ -555,6 +544,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         } else {
             val texture = RenderStateShard.MultiTextureStateShard(ImmutableList.of(
                 Triple.of(texture, false, false),
+                Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+                Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+                Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
                 Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
             ))
             makeLayer(texture, emissive = emissive, translucent = translucent, translucentCull = translucentCull)

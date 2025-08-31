@@ -44,6 +44,7 @@ abstract class PosableEntityModel<T : Entity>(
             Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
             Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
             Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
+            Triple.of(cobblemonResource("textures/tera_layer.png"), false, false),
         )
         makeLayer(RenderStateShard.MultiTextureStateShard(textures), false, false, false)
     }
