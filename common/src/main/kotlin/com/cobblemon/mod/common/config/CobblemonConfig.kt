@@ -16,8 +16,11 @@ import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.pokeball.catching.calculators.CobblemonCaptureCalculator
 import com.cobblemon.mod.common.util.adapters.CaptureCalculatorAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.adapters.ZoneIdAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
+import java.time.ZoneId
+import java.time.ZoneOffset
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -29,6 +32,7 @@ class CobblemonConfig {
             .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
             .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
             .registerTypeAdapter(CaptureCalculator::class.java, CaptureCalculatorAdapter)
+            .registerTypeHierarchyAdapter(ZoneId::class.java, ZoneIdAdapter)
             .create()
     }
 
@@ -262,6 +266,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex")
     var hideUnimplementedPokemonInThePokedex = false
+
+    @CobblemonConfigField(Category.System, lang = "time_zone_id")
+    var timeZoneId: ZoneId = ZoneOffset.systemDefault()
 
     @CobblemonConfigField(Category.Interface, lang = "summary_pokemon_follow_cursor")
     var summaryPokemonFollowCursor = true

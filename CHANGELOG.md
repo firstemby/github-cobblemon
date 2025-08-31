@@ -292,6 +292,17 @@
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
 - Renamed `chargeGainedPerTick` config to `secondsToChargeHealingMachine`.
+- Added config setting `maxPokedexScanningDetectionRange` to control from what distance the player can scan Pokémon using the Pokédex.
+- Added the `is_standing_on_blocks(depth, blocks...)` MoLang function, which returns whether the specified entity is standing on a specific block or set of blocks. Example usage: `q.is_standing_on_blocks(2, minecraft:sand)` 
+- Added config setting `hideUnimplementedPokemonInThePokedex` which hides unimplemented Pokémon from the Pokédex when set to true. 
+- Added molang particle queries for getting distance to targeted entities
+- Added debug renderer for poseable entity locators
+- Added time zone as a config option
+- Added an optional MoValue to either use system timezone when set as true, or use the supplied string as a timezone for MoLang functions `date_local_time` and `date_of`. If the timezone supplied fails to parse this function now returns `0.0`.
+
+### Additions
+- Added time zone as a config option
+- Added optional boolean to use time zone for MoLang function "date_local_time" and "date_of"
 - Made Blocks of Gold count as Big Nuggets when held by a Pokémon (for Fling functionality)
 - Players can now eat Sweet and Tart Apples, Whipped Dreams, and the Alcremie Sweets.
 - Updated Sweet and Tart Apple sprites
