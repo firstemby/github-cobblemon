@@ -34,7 +34,8 @@ internal data class ClientPokemonP3(
     val markings: List<Int>,
     val rideBoosts: Map<String, Float>,
     val currentFullness: Int,
-    val interactionCooldowns: Map<ResourceLocation, Int>
+    val interactionCooldowns: Map<ResourceLocation, Int>,
+    val skillCooldownTicks: Map<ResourceLocation, Int>
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -53,6 +54,7 @@ internal data class ClientPokemonP3(
         this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
         other.currentFullness = this.currentFullness
         other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
+        other.skillCooldownsTicks = this.skillCooldownTicks.toMutableMap()
         return other
     }
 
@@ -74,7 +76,8 @@ internal data class ClientPokemonP3(
                 Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
                 Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns)
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_SKILL_COOLDOWNS).forGetter(ClientPokemonP3::skillCooldownTicks)
             ).apply(instance, ::ClientPokemonP3)
         }
 
@@ -91,7 +94,8 @@ internal data class ClientPokemonP3(
             pokemon.markings,
             pokemon.getRideBoosts().mapKeys { it.key.name },
             pokemon.currentFullness,
-            pokemon.interactionCooldowns
+            pokemon.interactionCooldowns,
+            pokemon.skillCooldownsTicks
         )
     }
 }

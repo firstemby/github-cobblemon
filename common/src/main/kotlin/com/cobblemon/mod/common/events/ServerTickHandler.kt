@@ -22,12 +22,13 @@ object ServerTickHandler {
 
         secondsTick++
 
-        if (secondsTick == 20) {
-            secondsTick = 0
-
-            // Party tick
-            for (player in server.playerList.players) {
-                player.party().onSecondPassed(player)
+        // Party tick
+        for (player in server.playerList.players) {
+            val party = player.party()
+            party.forEach { it.tickSkillCooldowns() }
+            if (secondsTick == 20) {
+                secondsTick = 0
+                party.onSecondPassed(player)
             }
         }
     }

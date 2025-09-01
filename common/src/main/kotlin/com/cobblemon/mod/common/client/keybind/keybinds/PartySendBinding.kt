@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.interact.wheel.createPokeSkillGui
 import com.cobblemon.mod.common.client.keybind.CobblemonBlockingKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -25,12 +26,12 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isUsingPokedex
 import com.cobblemon.mod.common.util.traceFirstEntityCollision
 import com.mojang.blaze3d.platform.InputConstants
+import kotlin.math.pow
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
-import kotlin.math.pow
 
 object PartySendBinding : CobblemonBlockingKeyBinding(
     "key.cobblemon.throwpartypokemon",
@@ -38,6 +39,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     InputConstants.KEY_R,
     KeybindCategories.COBBLEMON_CATEGORY
 ) {
+    const val POKE_SKILL_TIME = 1F
     var canApplyChange = true
     var heldDownSeconds = 0F
 
@@ -52,7 +54,19 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     override fun onTick() {
         if (wasDown) {
             if (heldDownSeconds < 100) {
+                val couldRunSkill = heldDownSeconds < POKE_SKILL_TIME
                 heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+                if (couldRunSkill && heldDownSeconds >= POKE_SKILL_TIME && canApplyChange) {
+                    val player = Minecraft.getInstance().player
+                    val selectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+                    if (selectedPokemon != null && player != null) {
+                        canApplyChange = false
+                        val gui = createPokeSkillGui(player, selectedPokemon)
+                        Minecraft.getInstance().setScreen(gui)
+                    }
+                }
+
+
             }
         } else {
             heldDownSeconds = 0F
@@ -83,8 +97,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         val selectedPartyPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot) ?: return
         if (isRidingPokemon(player) && canAttemptDismount(player, selectedPartyPokemon)) {
             sendToServer(DismountPokemonPacket())
-        }
-        else {
+        } else {
             checkForTargetInteractions(player, selectedPartyPokemon)
         }
     }
@@ -101,11 +114,11 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
             entityClass = LivingEntity::class.java,
             ignoreEntity = player,
             maxDistance = Cobblemon.config.battleSpectateMaxDistance,
-            collideBlock = ClipContext.Fluid.NONE)
+            collideBlock = ClipContext.Fluid.NONE
+        )
         if (canSendOutPokemon(player, targetEntity)) {
             sendToServer(SendOutPokemonPacket(CobblemonClient.storage.selectedSlot))
-        }
-        else {
+        } else {
             processEntityTarget(player, selectedPartyPokemon, targetEntity)
         }
     }
@@ -124,10 +137,13 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
                 //The server sends a packet back that opens the player interaction menu with the proper options
                 sendToServer(RequestPlayerInteractionsPacket(entity.uuid, entity.id, pokemon.uuid))
             }
+
             is PokemonEntity -> {
-                if (!entity.canBattle(player) || entity.position().distanceToSqr(player.position()) > Cobblemon.config.battleWildMaxDistance.pow(2)) return
-                    sendToServer(BattleChallengePacket(entity.id,  pokemon.uuid, BattleFormat.GEN_9_SINGLES))
-                }
+                if (!entity.canBattle(player) || entity.position()
+                        .distanceToSqr(player.position()) > Cobblemon.config.battleWildMaxDistance.pow(2)
+                ) return
+                sendToServer(BattleChallengePacket(entity.id, pokemon.uuid, BattleFormat.GEN_9_SINGLES))
+            }
         }
     }
 
@@ -144,8 +160,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         val vehicle = player.vehicle as PokemonEntity
         if (player != vehicle.controllingPassenger) {
             return true
-        }
-        else {
+        } else {
             return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
         }
     }

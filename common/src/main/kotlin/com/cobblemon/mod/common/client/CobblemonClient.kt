@@ -150,7 +150,7 @@ object CobblemonClient {
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
-                var selectedItem = player.inventory.getItem(player.inventory.selected)
+                val selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
                     !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
@@ -164,6 +164,8 @@ object CobblemonClient {
                 if (event.client.isPaused) {
                     return@subscribe
                 }
+
+                storage.party.forEach { it?.tickSkillCooldowns() }
 
                 val nearbyPokemon = player.level().getEntities(
                     player,

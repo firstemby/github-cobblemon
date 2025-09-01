@@ -9,20 +9,24 @@
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
 import com.cobblemon.mod.common.CobblemonNetwork
+import com.cobblemon.mod.common.CobblemonPokeSkills
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.interact.battleRequest.BattleConfigureGUI
 import com.cobblemon.mod.common.net.messages.client.PlayerInteractOptionsPacket
+import com.cobblemon.mod.common.net.messages.server.UsePokeSkillPacket
 import com.cobblemon.mod.common.net.messages.server.battle.SpectateBattlePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.trade.AcceptTradeRequestPacket
 import com.cobblemon.mod.common.net.messages.server.trade.OfferTradePacket
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
 import java.util.UUID
 import net.minecraft.client.Minecraft
+import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.network.chat.Component
 import org.joml.Vector3f
 
@@ -30,7 +34,7 @@ fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGive
     val mountShoulder = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/interact_wheel_icon_shoulder.png"),
         tooltipText = "cobblemon.ui.interact.mount.shoulder",
-        enabled = canMountShoulder,
+        enabled = { canMountShoulder },
         onPress = {
             if (canMountShoulder) {
                 InteractPokemonPacket(pokemonID, InteractTypePokemon.SHOULDER).sendToServer()
@@ -41,7 +45,7 @@ fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGive
     val giveHeldItem = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/interact_wheel_icon_held_item.png"),
         tooltipText = "cobblemon.ui.interact.give.item",
-        enabled = canGiveHeld,
+        enabled = { canGiveHeld },
         onPress = {
             if (canGiveHeld) {
                 InteractPokemonPacket(pokemonID, InteractTypePokemon.HELD_ITEM).sendToServer()
@@ -52,7 +56,7 @@ fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGive
     val giveCosmeticItem = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/interact_wheel_icon_cosmetic_item.png"),
         tooltipText = "cobblemon.ui.interact.give.cosmetic_item",
-        enabled = canGiveCosmetic,
+        enabled = { canGiveCosmetic },
         onPress = {
             if (canGiveCosmetic) {
                 InteractPokemonPacket(pokemonID, InteractTypePokemon.COSMETIC_ITEM).sendToServer()
@@ -64,7 +68,7 @@ fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGive
     val ride = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/interact_wheel_icon_ride.png"),
         tooltipText = "cobblemon.ui.interact.ride",
-        enabled = canRide,
+        enabled = { canRide },
         onPress = {
             if (canRide) {
                 InteractPokemonPacket(pokemonID, InteractTypePokemon.RIDE).sendToServer()
@@ -175,6 +179,35 @@ fun createPlayerInteractGui(optionsPacket: PlayerInteractOptionsPacket): Interac
     }
 
     return InteractWheelGUI(options, Component.translatable("cobblemon.ui.interact.player"))
+}
+
+fun createPokeSkillGui(player: AbstractClientPlayer, pokemon: Pokemon): InteractWheelGUI {
+    val accessibleSkills = CobblemonPokeSkills.getAccessibleSkills(player, pokemon)
+    val options: Multimap<Orientation, InteractWheelOption> = ArrayListMultimap.create()
+    for (skill in accessibleSkills) {
+        val skillOption = InteractWheelOption(
+            iconResource = skill.icon,
+            enabled = { skill.id !in pokemon.skillCooldownsTicks },
+            tooltipText = skill.name,
+            onPress = {
+                CobblemonNetwork.sendToServer(UsePokeSkillPacket(skillId = skill.id, pokemonId = pokemon.uuid))
+                closeGUI()
+            }
+        )
+        when (options.size()) {
+            0 -> options.put(Orientation.NORTH, skillOption)
+            1 -> options.put(Orientation.NORTHEAST, skillOption)
+            2 -> options.put(Orientation.SOUTHEAST, skillOption)
+            3 -> options.put(Orientation.SOUTH, skillOption)
+            4 -> options.put(Orientation.SOUTHWEST, skillOption)
+            5 -> options.put(Orientation.NORTHWEST, skillOption)
+            6 -> options.put(Orientation.WEST, skillOption)
+            7 -> options.put(Orientation.EAST, skillOption)
+            else -> break // We only have 8 slots
+        }
+    }
+
+    return InteractWheelGUI(options, Component.translatable("cobblemon.ui.interact.poke_skill"))
 }
 
 private fun getLangKey(status: PlayerInteractOptionsPacket.OptionStatus) : String {

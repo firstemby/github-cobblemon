@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.util.codec
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.MoLang
+import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.getString
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Codec.optionalField
@@ -28,6 +30,17 @@ val EXPRESSION_CODEC = object : PrimitiveCodec<Expression> {
         return ops.createString(value.getString())
     }
 }
+
+val EXPRESSION_LIKE_CODEC = object : PrimitiveCodec<ExpressionLike> {
+    override fun <T> read(ops: DynamicOps<T>, input: T): DataResult<ExpressionLike> {
+        return ops.getStringValue(input).map { it.asExpressionLike() }
+    }
+
+    override fun <T> write(ops: DynamicOps<T>, value: ExpressionLike): T {
+        return ops.createString(value.getString())
+    }
+}
+
 
 // special codec that always writes default value
 // vanilla changed the behaviour of Codec#optionalFieldOf(String, A) so that it OMITS default values when encoding

@@ -1,0 +1,12 @@
+{
+  "timeline": [
+    {
+      "type": "molang",
+      "expressions": [
+        "q.pokemon.entity.set_position(q.player.x, q.player.y, q.player.z);",
+        "q.player.ride(q.pokemon.entity);",
+        "q.pokemon.add_skill_cooldown(q.skill_id);"
+      ]
+    }
+  ]
+}

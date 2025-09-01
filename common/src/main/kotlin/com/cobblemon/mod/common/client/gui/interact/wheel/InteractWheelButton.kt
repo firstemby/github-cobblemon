@@ -28,7 +28,7 @@ class InteractWheelButton(
     private val tooltipText: String?,
     x: Int,
     y: Int,
-    private val isEnabled: Boolean,
+    private val isEnabled: () -> Boolean,
     private val colour: () -> Vector3f?,
     onPress: OnPress,
     private val canHover: (Double, Double) -> Boolean
@@ -74,12 +74,12 @@ class InteractWheelButton(
             y = y,
             width = width,
             height = height,
-            vOffset = if (isHovered(mouseX.toFloat(), mouseY.toFloat()) && isEnabled) height else 0,
+            vOffset = if (isHovered(mouseX.toFloat(), mouseY.toFloat()) && isEnabled()) height else 0,
             textureHeight = height * 2,
-            alpha = if (isEnabled) 1f else 0.4F
+            alpha = if (isEnabled()) 1f else 0.4F
         )
 
-        if(isEnabled && isHovered(mouseX.toFloat(), mouseY.toFloat())){
+        if (isEnabled() && isHovered(mouseX.toFloat(), mouseY.toFloat())){
             tooltipText?.let {
                 context.renderTooltip(Minecraft.getInstance().font, Component.translatable(it), mouseX, mouseY)
             }
@@ -95,7 +95,7 @@ class InteractWheelButton(
                 y = iconY,
                 width = ICON_SIZE,
                 height = ICON_SIZE,
-                alpha = if (isEnabled) 1F else 0.2F,
+                alpha = if (isEnabled()) 1F else 0.2F,
                 red = colour.x,
                 green = colour.y,
                 blue = colour.z,
@@ -114,7 +114,7 @@ class InteractWheelButton(
                     y = iconY - ICON_SIZE,
                     width = ICON_SIZE,
                     height = ICON_SIZE,
-                    alpha = if (isEnabled) 1F else 0.4F,
+                    alpha = if (isEnabled()) 1F else 0.4F,
                     red = colour.x,
                     green = colour.y,
                     blue = colour.z,

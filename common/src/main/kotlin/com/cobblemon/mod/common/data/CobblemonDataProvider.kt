@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMechanics
+import com.cobblemon.mod.common.CobblemonPokeSkills
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
@@ -76,6 +77,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(GlobalSpeciesFeatures)
         this.register(SpeciesFeatureAssignments)
         this.register(ActionEffects)
+        this.register(CobblemonPokeSkills)
         this.register(Moves)
         this.register(Abilities)
         this.register(CobblemonBehaviours)

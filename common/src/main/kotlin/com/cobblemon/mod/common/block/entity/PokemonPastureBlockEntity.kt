@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.api.pasture.PastureLinkManager
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.italicise
 import com.cobblemon.mod.common.api.text.red
-import com.cobblemon.mod.common.api.text.textClickHandlers
 import com.cobblemon.mod.common.block.PastureBlock
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
@@ -113,7 +112,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                     pokemon.tickMetabolism()
                 }
                 if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
+                    pokemon.tickInteractionCooldowns()
                 }
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)

@@ -1,0 +1,8 @@
+{
+  "name": "cobblemon.poke_skill.quick_ride.name",
+  "actionEffect": "cobblemon:begin_riding",
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
+  "cooldownTicks": 40,
+  "accessCondition": "q.pokemon.is_rideable",
+  "useCondition": "q.pokemon.is_sent_out && !q.pokemon.entity.is_passenger(q.player)"
+}

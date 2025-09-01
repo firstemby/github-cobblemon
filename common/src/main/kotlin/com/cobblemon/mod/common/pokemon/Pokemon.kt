@@ -652,6 +652,8 @@ open class Pokemon : ShowdownIdentifiable {
     val riding: RidingProperties
         get() = this.form.riding
 
+    var skillCooldownsTicks: MutableMap<ResourceLocation, Int> = mutableMapOf()
+
     init {
         storeCoordinates.subscribe { if (it != null && it.store !is PCStore && this.tetheringId != null) afterOnServer(seconds = 0.05F) { this.tetheringId = null } }
         storeCoordinates.subscribe {
@@ -1009,13 +1011,23 @@ open class Pokemon : ShowdownIdentifiable {
         this.interactionCooldowns.remove(group)
     }
 
-    open fun tickInteractionCooldown() {
+    open fun tickInteractionCooldowns() {
         this.interactionCooldowns.entries.forEach { (key, value) ->
             val newValue = value - 1
-            if(newValue <= 0)
-                this.interactionCooldowns.remove(key)
+            if (newValue <= 0)
+                this.interactionCooldowns -= key
             else
-                this.interactionCooldowns.put(key, newValue)
+                this.interactionCooldowns[key] = newValue
+        }
+    }
+
+    fun tickSkillCooldowns() {
+        this.skillCooldownsTicks.entries.forEach { (key, value) ->
+            val newValue = value - 1
+            if (newValue <= 0)
+                this.skillCooldownsTicks -= key
+            else
+                this.skillCooldownsTicks[key] = newValue
         }
     }
 
@@ -2014,6 +2026,11 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
         return true
+    }
+
+    fun addSkillCooldown(skillId: ResourceLocation, cooldownTicks: Int) {
+        skillCooldownsTicks[skillId] = cooldownTicks
+        onChange(SkillCooldownsUpdatePacket({ this }, skillId, cooldownTicks))
     }
 
     fun notify(packet: PokemonUpdatePacket<*>) {

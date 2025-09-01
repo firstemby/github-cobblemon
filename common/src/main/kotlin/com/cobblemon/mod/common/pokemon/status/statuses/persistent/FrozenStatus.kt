@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.status.statuses.persistent
 
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.util.cobblemonResource
+
 class FrozenStatus : PersistentStatus(
     name = cobblemonResource("frozen"),
     showdownName = "frz",

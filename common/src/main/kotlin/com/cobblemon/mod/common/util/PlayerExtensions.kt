@@ -98,7 +98,12 @@ fun ServerPlayer.didSleep(): Boolean {
     return true
 }
 
-fun ServerPlayer.isInBattle() = BattleRegistry.getBattleByParticipatingPlayer(this) != null
+fun Player.isInBattle() = if (this is ServerPlayer) {
+    BattleRegistry.getBattleByParticipatingPlayer(this) != null
+} else {
+    CobblemonClient.battle?.spectating == false
+}
+
 fun ServerPlayer.getBattleState(): Pair<PokemonBattle, BattleActor>? {
     val battle = BattleRegistry.getBattleByParticipatingPlayer(this)
     if (battle != null) {

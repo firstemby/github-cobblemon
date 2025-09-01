@@ -21,7 +21,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.util.*
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import java.util.*
@@ -102,7 +101,7 @@ open class PlayerPartyStore(
             for (pokemon in this) {
                 // Awake from fainted
                 if (pokemon.isFainted()) {
-                    //Skip awaken logic check if config value is 0
+                    // Skip awaken logic check if config value is 0
                     if (Cobblemon.config.faintAwakenHealthPercent > 0) {
                         pokemon.faintedTimer -= 1
                         if (pokemon.faintedTimer <= -1) {
@@ -119,7 +118,7 @@ open class PlayerPartyStore(
                 }
                 // Passive healing while less than full health
                 else if (pokemon.currentHealth < pokemon.maxHealth) {
-                    //Skip passive healing logic check if config value is 0
+                    // Skip passive healing logic check if config value is 0
                     if (Cobblemon.config.healPercent > 0) {
                         pokemon.healTimer--
                         if (pokemon.healTimer <= -1) {
@@ -159,7 +158,7 @@ open class PlayerPartyStore(
 
                 // Interaction Cooldown
                 if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
+                    pokemon.tickInteractionCooldowns()
                 }
             }
             // Friendship

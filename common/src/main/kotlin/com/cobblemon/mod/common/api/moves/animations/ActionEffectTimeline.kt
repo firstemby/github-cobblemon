@@ -50,7 +50,7 @@ class ActionEffectTimeline(
     }
 
     fun chainKeyframes(context: ActionEffectContext, iterator: Iterator<ActionEffectKeyframe>, finalFuture: CompletableFuture<Unit>) {
-        if (!iterator.hasNext()) {
+        if (!iterator.hasNext() || context.cancelled) {
             finalFuture.complete(Unit)
         } else {
             val keyframe = iterator.next()
@@ -70,6 +70,7 @@ class ActionEffectContext(
     val runtime: MoLangRuntime,
     var canBeInterrupted: Boolean = false,
     var interrupted: Boolean = false,
+    var cancelled: Boolean = false,
     var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf(),
     var level: Level? = null
 ) {

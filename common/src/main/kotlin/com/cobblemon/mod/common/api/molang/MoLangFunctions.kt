@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.CobblemonPokeSkills
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
@@ -75,6 +76,7 @@ import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunctions
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
@@ -92,6 +94,9 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
+import com.cobblemon.mod.common.pokemon.activestate.SentOutState
+import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
@@ -102,6 +107,7 @@ import com.mojang.datafixers.util.Either
 import java.util.UUID
 import kotlin.math.sqrt
 import kotlin.random.Random
+import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.commands.arguments.EntityAnchorArgument
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -550,7 +556,19 @@ object MoLangFunctions {
                 environment
             }
             map.put("is_player") { DoubleValue.ONE }
+            if (player is AbstractClientPlayer) {
+                map.put("is_battling") {
+                    DoubleValue(CobblemonClient.battle?.spectating == false) // Checks not-null and not-spectating at the same time, trust
+                }
+            }
             if (player is ServerPlayer) {
+                map.put("ride") { params ->
+                    val entity = (params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? Entity ?: return@put DoubleValue.ZERO
+                    player.startRiding(entity)
+                }
+                map.put("is_battling") {
+                    DoubleValue(player.isInBattle())
+                }
                 map.put("run_command") { params ->
                     val command = params.getString(0)
                     player.server.commands.performPrefixedCommand(player.createCommandSourceStack(), command)
@@ -733,6 +751,13 @@ object MoLangFunctions {
             }
             map.put("delta_movement") {
                 return@put listOf(entity.deltaMovement.x, entity.deltaMovement.y, entity.deltaMovement.z).asArrayValue(::DoubleValue)
+            }
+            map.put("set_position") { params ->
+                val x = params.getDouble(0)
+                val y = params.getDouble(1)
+                val z = params.getDouble(2)
+                entity.setPos(x, y, z)
+                return@put DoubleValue.ONE
             }
 
             if (entity is MoLangScriptingEntity) {
@@ -1049,6 +1074,10 @@ object MoLangFunctions {
                 } else {
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("is_passenger") { params ->
+                val passengerEntity = (params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? LivingEntity ?: return@put DoubleValue.ZERO
+                return@put DoubleValue(passengerEntity in entity.passengers)
             }
             if (entity is PathfinderMob) {
                 map.put("walk_to") { params ->
@@ -1512,7 +1541,7 @@ object MoLangFunctions {
                 return@put aspects.asArrayValue { StringValue(it) }
             }
             map.put("form_name") {
-                StringValue(pokemon.form.name.toString())
+                StringValue(pokemon.form.name)
             }
             // Yes, this is the lazy call for a single hardcoded pre-evolution.
             // Lol. Lmao, even.
@@ -1676,6 +1705,29 @@ object MoLangFunctions {
                 } else {
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("is_sent_out") {
+                DoubleValue(pokemon.state is SentOutState)
+            }
+            map.put("is_shouldered") {
+                DoubleValue(pokemon.state is ShoulderedState)
+            }
+            map.put("entity") {
+                (pokemon.state as? ActivePokemonState)?.entity?.struct ?: DoubleValue.ZERO
+            }
+            map.put("is_rideable") {
+                return@put DoubleValue(!pokemon.riding.behaviours.isNullOrEmpty())
+            }
+            map.put("has_status") { params ->
+                val status = params.getString(0).asIdentifierDefaultingNamespace()
+                return@put DoubleValue(pokemon.status?.status?.name == status)
+            }
+            map.put("add_skill_cooldown") { params ->
+                val skillId = params.getString(0).asIdentifierDefaultingNamespace()
+                val cooldownTicks = params.getIntOrNull(1)
+                val skill = CobblemonPokeSkills.skills[skillId] ?: return@put DoubleValue.ZERO
+                pokemon.addSkillCooldown(skillId, cooldownTicks ?: skill.cooldownTicks)
+                return@put DoubleValue.ONE
             }
             map
         }
@@ -2041,7 +2093,7 @@ object MoLangFunctions {
             map.put("max_selectable_times") { DoubleValue(dropEntry.maxSelectableTimes.toDouble()) }
             map.put("can_drop") { params ->
                 val pokemon = params.getOrNull<ObjectValue<Pokemon>>(0)?.obj
-                DoubleValue(if (dropEntry.canDrop(pokemon)) 1.0 else 0.0)
+                DoubleValue(dropEntry.canDrop(pokemon))
             }
             map
         }
@@ -2292,11 +2344,11 @@ object MoLangFunctions {
         )
         value.functions.put("is_in") {
             val tag = TagKey.create(key, ResourceLocation.parse(it.getString(0).replace("#", "")))
-            return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
+            return@put DoubleValue(value.obj.`is`(tag))
         }
         value.functions.put("is_of") {
             val identifier = ResourceLocation.parse(it.getString(0))
-            return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
+            return@put DoubleValue(value.obj.`is`(identifier))
         }
         return value
     }
