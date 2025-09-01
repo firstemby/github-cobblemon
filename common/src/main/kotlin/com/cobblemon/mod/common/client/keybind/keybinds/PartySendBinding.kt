@@ -39,7 +39,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     InputConstants.KEY_R,
     KeybindCategories.COBBLEMON_CATEGORY
 ) {
-    const val POKE_SKILL_TIME = 1F
+    const val POKE_SKILL_TIME = 0.7F
     var canApplyChange = true
     var heldDownSeconds = 0F
 
