@@ -116,6 +116,7 @@ class MoveInstruction(
             if (isWildTeleport(battle)) {
                 val teleportingEntity = userPokemon.originalPokemon.entity
                 if (teleportingEntity != null) {
+                    teleportingEntity.randomTeleport()
                     tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
                 }
 
@@ -225,25 +226,10 @@ class MoveInstruction(
             val x = (origin.x + dx)
             val z = (origin.z + dz)
 
-            val minY = max((origin.y - 20), level.minBuildHeight)
-            val maxY = min((origin.y + 20), level.maxBuildHeight)
-
-            for (y in minY..maxY) {
-                val candidate = BlockPos(x, y, z)
-
-                if (pokemon.pokemon.isPositionSafe(level, candidate) && level.getBlockState(candidate).isAir) {
-                    level.playSoundServer(origin.toVec3d(), SoundEvents.PLAYER_TELEPORT)
-                    val success = pokemon.teleportTo(
-                        level,
-                        candidate.x + 0.5,
-                        candidate.y.toDouble(),
-                        candidate.z + 0.5,
-                        mutableSetOf(),
-                        pokemon.yRot,
-                        pokemon.xRot
-                    )
-                    if (success) return true
-                }
+            val success = pokemon.randomTeleport(x, pokemon.position().y, z, false)
+            if (success){
+                level.playSoundServer(origin.toVec3d(), SoundEvents.PLAYER_TELEPORT)
+                return true
             }
         }
         return false
