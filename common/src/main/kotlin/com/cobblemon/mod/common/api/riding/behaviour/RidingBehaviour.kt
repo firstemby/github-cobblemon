@@ -105,7 +105,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
 
 
     /**
-     * Internal helpers to help behaviour specific calculations
+     * Internal helpers for behaviour specific calculations
      */
     companion object {
         /**

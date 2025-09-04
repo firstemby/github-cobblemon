@@ -111,6 +111,7 @@ class RidingController(
             // check if style is water and player is submerged
             val isEyeInLiquid = entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA)
             if (context?.style == RidingStyle.LIQUID && isEyeInLiquid) return false
+            if (!entity.onGround() && driver.jumping) return true
             return (driver as DoubleJump).isDoubleJumping
         }
         else {
