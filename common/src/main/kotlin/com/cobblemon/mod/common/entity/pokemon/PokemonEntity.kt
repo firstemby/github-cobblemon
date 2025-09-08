@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
@@ -2328,8 +2329,7 @@ open class PokemonEntity(
 
     override fun getDefaultGravity(): Double {
         val regularGravity = super.getDefaultGravity()
-        return 0.0
-        if (this.moveControl is BoidsMoveControl) {
+        if (this.brain.activeNonCoreActivity == CobblemonActivities.POKEMON_BOIDS) {
             return 0.0
         }
         if (this.passengers.isEmpty()) {
