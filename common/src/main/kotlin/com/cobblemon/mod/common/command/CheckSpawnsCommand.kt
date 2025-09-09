@@ -34,6 +34,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth
+import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
+
 
 object CheckSpawnsCommand {
     const val PURPLE_THRESHOLD = 0.01F
@@ -47,11 +50,19 @@ object CheckSpawnsCommand {
             .then(
                 Commands.argument("bucket", SpawnBucketArgumentType.spawnBucket())
                     .requires { it.player != null }
-                    .executes { execute(it, it.source.playerOrException) }
+
+                    .then(Commands.literal("npc")
+                        .executes {
+                                it -> execute(it, it.source.playerOrException, includeNPC = true)
+                        }
+                    )
+
+                    .executes { it -> execute(it, it.source.playerOrException, includeNPC = false)
+                    }
             ))
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer, includeNPC: Boolean) : Int {
         if (!config.enableSpawning) {
             return 0
         }
@@ -75,28 +86,34 @@ object CheckSpawnsCommand {
         )
 
         val contexts = spawner.spawnablePositionResolver.resolve(spawner, spawner.spawnablePositionCalculators, slice)
-
         val spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, bucket, contexts)
 
         val spawnNames = mutableMapOf<String, MutableComponent>()
         val namedProbabilities = mutableMapOf<MutableComponent, Float>()
 
-        spawnProbabilities.entries.forEach {
-            val nameText = it.key.getName()
+        spawnProbabilities.entries.forEach { entry ->
+            val nameText = entry.key.getName()
             val nameString = nameText.string
-            if (!spawnNames.containsKey(nameString)) {
-                spawnNames[nameString] = it.key.getName()
+
+            val isNPC = checkNPC(entry.key, nameString)
+
+            if (!includeNPC && isNPC) return@forEach
+
+            val displayNameText = if (isNPC) ("[NPC] ".text() + nameText) else nameText
+            val keyForMap = displayNameText.string
+
+            if (!spawnNames.containsKey(keyForMap)) {
+                spawnNames[keyForMap] = displayNameText
             }
 
-            val standardizedNameText = spawnNames[nameString]!!
-            namedProbabilities[standardizedNameText] = (namedProbabilities[standardizedNameText] ?: 0F) + it.value
+            val standardizedNameText = spawnNames[keyForMap]!!
+            namedProbabilities[standardizedNameText] = (namedProbabilities[standardizedNameText] ?: 0F) + entry.value
         }
 
         val sortedEntries = namedProbabilities.entries.sortedByDescending { it.value }
         val messages = mutableListOf<MutableComponent>()
         sortedEntries.forEach { (name, percentage) ->
             val message = name + ": " + applyColour("${df.format(percentage)}%".text(), percentage)
-//            player.sendMessage()
             messages.add(message)
         }
 
@@ -112,6 +129,20 @@ object CheckSpawnsCommand {
         }
 
         return Command.SINGLE_SUCCESS
+    }
+
+    private fun checkNPC(key: Any, displayName: String): Boolean {
+        val spawnType = (key as? SpawnDetail)?.type?.lowercase()
+        if (spawnType != null) {
+            if (spawnType == PokemonSpawnDetail.TYPE) return false
+            if (spawnType.contains("npc") || spawnType.contains("trainer")) return true
+        }
+
+        val className = key.javaClass.simpleName.lowercase()
+        if (className.contains("npc") || className.contains("trainer")) return true
+
+        val name = displayName.lowercase()
+        return name.contains("npc") || name.contains("trainer")
     }
 
     fun applyColour(name: MutableComponent, percentage: Float): MutableComponent {
