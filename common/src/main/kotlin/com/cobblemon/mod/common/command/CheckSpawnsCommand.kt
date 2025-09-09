@@ -50,13 +50,11 @@ object CheckSpawnsCommand {
             .then(
                 Commands.argument("bucket", SpawnBucketArgumentType.spawnBucket())
                     .requires { it.player != null }
-
                     .then(Commands.literal("npc")
                         .executes {
                                 it -> execute(it, it.source.playerOrException, includeNPC = true)
                         }
                     )
-
                     .executes { it -> execute(it, it.source.playerOrException, includeNPC = false)
                     }
             ))
