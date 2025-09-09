@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+/*
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonFlows.runtime
 import com.cobblemon.mod.common.CobblemonMemories
@@ -32,7 +33,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import java.util.UUID
 
-/*class HuntPlayerTaskConfig : SingleTaskConfig {
+class HuntPlayerTaskConfig : SingleTaskConfig {
     // todo make new variables
     companion object {
         const val BREED = "breed"
