@@ -12,6 +12,7 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.control.MoveControl
@@ -19,14 +20,16 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 import kotlin.math.asin
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sign
 
 class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntity) : MoveControl(pokemonEntity) {
     companion object {
         const val VERY_CLOSE = 2.500000277905201E-3
-        const val MAX_SPEED = 0.5
-        const val MAX_FORCE = 0.02
+        const val MAX_SPEED = 0.3
+        const val MAX_FORCE = 0.013
     }
 
     // TODO: might need to hold its own velocity so minecraft doesn't do its nonsense to it?
@@ -53,9 +56,9 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         // ignore all the friction stuff from outside
         speed?.let { pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.normalize().scale(it)) }
 
-        val cubeWidth = 16.0
-        val cubeHeight = 8.0
-        val cubeCenter = target.position().add(cubeWidth / 2.0, cubeHeight / 2.0, 0.0)
+        val cubeWidth = 15.0
+        val cubeHeight = 6.0
+        val cubeCenter = target.position().add(cubeWidth, cubeHeight / 2.0, 0.0)
         forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
 
         // TODO: maybe move this to a sensor that lives spins up on the boid activity creation
@@ -67,22 +70,22 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             }
         }.orElse(emptyList())
 
-//        // separation
-//        val separationForce = separation(boids)?.scale(1.0)
-//        separationForce?.let { force ->
-//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-//        }
-//        // alignment
-//        val alignmentForce = alignment(boids)?.scale(1.0)
-//        alignmentForce?.let { force ->
-//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-//        }
-//
-//        // cohesion
-//        val cohesionForce = cohesion(boids)?.scale(1.0)
-//        cohesionForce?.let { force ->
-//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-//        }
+        // separation
+        val separationForce = separation(boids)?.scale(0.8)
+        separationForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
+        // alignment
+        val alignmentForce = alignment(boids)?.scale(0.7)
+        alignmentForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
+
+        // cohesion
+        val cohesionForce = cohesion(boids)?.scale(0.6)
+        cohesionForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
 
 
         // Apply steering force to current movement
@@ -91,6 +94,14 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // Take note of speed again to avoid minecraft's friction logic
         speed = pokemonEntity.deltaMovement.length()
+
+        // Limit upwards speed to be half of max speed. The boids kept bumping into the top of the box more so than birds
+        // would. Honestly birds probably mostly want to move in the x,z plane anyhow
+        pokemonEntity.deltaMovement = Vec3(
+            pokemonEntity.deltaMovement.x,
+            min(pokemonEntity.deltaMovement.y, MAX_SPEED),
+            pokemonEntity.deltaMovement.y
+        ).normalize().scale(speed!!)
 
         orientEntityToTravel()
     }
@@ -120,16 +131,17 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun separation(boids: List<PokemonEntity>): Vec3? {
-        val desiredSeperation = 2.0
+        val desiredSeperation = 1.5
         var seperationVec: Vec3? = null
 
         // Gather the total separation vec of all close entities
         boids.forEach { boid ->
             val toTargetVec = pokemonEntity.position().subtract(boid.position())
-            if (toTargetVec.length() < desiredSeperation) {
+            val currDist = toTargetVec.length()
+            if (currDist < desiredSeperation) {
                 if (seperationVec == null) seperationVec = Vec3.ZERO
-                // TODO: instead of normalizing make close boids influence further than ones on the edge of the range
-                seperationVec = seperationVec.add(toTargetVec.normalize())
+                // Make the seperation force inversely proprotional the serperation distance
+                seperationVec = seperationVec.add(toTargetVec.normalize().scale(1.0 - (currDist / desiredSeperation)))
             }
         }
 
@@ -144,15 +156,23 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun alignment(boids: List<PokemonEntity>): Vec3? {
+        val neighborDist = 3.0
         var summedVel: Vec3? = null
         var alignmentVec: Vec3? = null
         var boidCount = 0
 
         // Gather the average position of the boid
         boids.forEach { boid ->
-            if (summedVel == null) summedVel = Vec3.ZERO
-            summedVel = summedVel.add(boid.deltaMovement.normalize())
-            boidCount++
+            val vecToOther = boid.position().subtract(this.pokemonEntity.position())
+            val distToOther = vecToOther.length()
+            val widthOfViewInDeg = 90
+            val isInSightLine = pokemonEntity.deltaMovement.normalize().dot(vecToOther) > cos((widthOfViewInDeg / 2.0).toRadians())
+
+            if (isInSightLine && distToOther < neighborDist) {
+                if (summedVel == null) summedVel = Vec3.ZERO
+                summedVel = summedVel.add(boid.deltaMovement.normalize())
+                boidCount++
+            }
         }
 
         if (summedVel != null) {
@@ -169,6 +189,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun cohesion(boids: List<PokemonEntity>): Vec3? {
+        //val neighborDist = 5.0
         var summedPos: Vec3? = null
         var cohesionVec: Vec3? = null
         var boidCount = 0
@@ -195,12 +216,13 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun forceRectBoundary(basePos: Vec3, rectWidth: Double, rectHeight: Double) {
+        val maxBoundaryForce = MAX_FORCE * 2.0
         val correctiveForce = getRectCorrectiveForce(basePos, rectWidth, rectHeight)
         if (correctiveForce != null) {
             //val correctiveForce = steerToTargetForce(correctivePos, speedLimit, maxForce)
             var steer = correctiveForce.subtract(pokemonEntity.deltaMovement)
-            if (steer.length() > MAX_FORCE) {
-                steer = steer.normalize().scale(MAX_FORCE)
+            if (steer.length() > maxBoundaryForce) {
+                steer = steer.normalize().scale(maxBoundaryForce)
             }
             pokemonEntity.setDeltaMovement(pokemonEntity.deltaMovement.add(steer))
         }
@@ -222,9 +244,9 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
             null
         } else {
             var retVel = pokemonEntity.deltaMovement
-            if (xExceed != 0.0) retVel = Vec3( -posFromBase.x.sign * MAX_SPEED, retVel.y, retVel.z)
-            if (yExceed != 0.0) retVel = Vec3( retVel.x, -posFromBase.y.sign * MAX_SPEED, retVel.z)
-            if (zExceed != 0.0) retVel = Vec3( retVel.x, retVel.y, -posFromBase.z.sign * MAX_SPEED)
+            if (xExceed != 0.0) retVel = Vec3( -posFromBase.x.sign * abs(retVel.x), retVel.y, retVel.z)
+            if (yExceed != 0.0) retVel = Vec3( retVel.x, -posFromBase.y.sign * abs(retVel.y), retVel.z)
+            if (zExceed != 0.0) retVel = Vec3( retVel.x, retVel.y, -posFromBase.z.sign * abs(retVel.z))
             retVel = retVel.normalize().scale(MAX_SPEED)
             return retVel
         }
