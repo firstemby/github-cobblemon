@@ -43,7 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.95,
   "hitbox": {
     "width": 2.5,
     "height": 3,
@@ -52,7 +52,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.24
+        "walkSpeed": 0.2
       }
     },
     "resting": {
@@ -70,6 +70,29 @@
       {
         "item": "cobblemon:pecha_berry",
         "percentage": 10.0
+      }
+    ]
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "20-70",
+          "ACCELERATION": "90-100",
+          "SKILL": "40-60",
+          "JUMP": "10-30",
+          "STAMINA": "50-70"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
       }
     ]
   },

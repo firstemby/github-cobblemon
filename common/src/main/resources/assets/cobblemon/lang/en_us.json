@@ -78,7 +78,7 @@
   "item.cobblemon.vivichoke_seeds": "Vivichoke Seeds",
   "item.cobblemon.vivichoke": "Vivichoke",
   "item.cobblemon.galarica_nuts": "Galarica Nuts",
-  "item.cobblemon.hearty_grains": "Hearty Rice",
+  "item.cobblemon.hearty_grains": "Hearty Grains",
   "item.cobblemon.bugwort": "Bugwort",
 
   "item.cobblemon.apricorn_boat": "Apricorn Boat",
@@ -944,7 +944,7 @@
   "block.cobblemon.campfire_pot_red": "Red Campfire Pot",
   "block.cobblemon.campfire_pot_white": "White Campfire Pot",
   "block.cobblemon.campfire_pot_yellow": "Yellow Campfire Pot",
-  "block.cobblemon.hearty_grain_bale": "Hearty Rice Bale",
+  "block.cobblemon.hearty_grain_bale": "Hearty Grain Bale",
   "block.cobblemon.tatami_block": "Tatami",
   "block.cobblemon.tatami_mat": "Tatami Mat",
 
@@ -3515,7 +3515,7 @@
   "tag.item.cobblemon.small_flowers": "Small Flowers",
   "tag.item.cobblemon.held.blacklisted_items_to_hold": "Blacklisted Held Items",
   "tag.item.cobblemon.held.whitelisted_items_to_hold": "Whitelisted Held Items",
-
+  "tag.item.cobblemon.poke_puff_berries": "Poké Puff Berries",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",

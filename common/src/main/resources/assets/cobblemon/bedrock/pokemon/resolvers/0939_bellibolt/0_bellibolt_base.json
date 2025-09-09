@@ -9,9 +9,14 @@
       "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt.png",
       "layers": [
         {
-          "name": "emissives",
-          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_emissive.png",
+          "name": "emissive",
           "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_emissive.png",
+          "translucent": true
+        },
+        {
+          "name": "transparent",
+          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_transparency.png",
           "translucent": true
         }
       ]
@@ -21,13 +26,16 @@
       "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_shiny.png",
       "layers": [
         {
-          "name": "emissives",
-          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_shiny_emissive.png",
+          "name": "emissive",
           "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_emissive_shiny.png"
+        },
+        {
+          "name": "transparent",
+          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_transparency_shiny.png",
           "translucent": true
         }
       ]
     }
   ]
 }
-

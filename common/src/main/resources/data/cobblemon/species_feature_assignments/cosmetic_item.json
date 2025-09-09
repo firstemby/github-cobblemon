@@ -12,7 +12,9 @@
     "sceptile",
     "braixen",
     "delphox",
-    "dragonite"
+    "dragonite",
+    "hawlucha",
+    "pikachu"
   ],
   "features": ["cosmetic_item"]
 }

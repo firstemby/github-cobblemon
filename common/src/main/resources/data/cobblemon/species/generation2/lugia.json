@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 249,
   "name": "Lugia",
   "primaryType": "psychic",
@@ -45,9 +46,34 @@
   "baseFriendship": 0,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 2,
+    "height": 4.5,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true,
+        "canSwimInWater": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lugia",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,
@@ -231,16 +257,5 @@
     "special:featherdance",
     "special:psychoboost"
   ],
-  "evolutions": [],
-  "behaviour": {
-    "herd": {
-      "maxSize": "2",
-      "toleratedLeaders": [
-        {
-          "pokemon": "lugia",
-          "tier": 1
-        }
-      ]
-    }
-  }
+  "evolutions": []
 }

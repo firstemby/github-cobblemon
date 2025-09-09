@@ -52,10 +52,40 @@
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.35
+      }
+    },
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
     }
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "30-65",
+          "SKILL": "10-40",
+          "SPEED": "0-10",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        }
+      }
+    ]
   },
   "drops": {
     "amount": 3,

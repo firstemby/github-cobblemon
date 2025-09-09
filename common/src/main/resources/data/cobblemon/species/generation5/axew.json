@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 610,
   "name": "Axew",
   "primaryType": "dragon",
@@ -42,14 +43,20 @@
   "catchRate": 75,
   "eggCycles": 40,
   "baseFriendship": 35,
-  "baseScale": 1,
+  "standingEyeHeight": 0.65,
+  "swimmingEyeHeight": 0.65,
+  "flyingEyeHeight": 0.65,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
+    "width": 0.6,
     "height": 1,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.12
+      },
       "swim": {
         "canSwimInLava": true
       }

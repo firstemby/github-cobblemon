@@ -11,11 +11,11 @@
 - Pokémon's held items can now be rendered, with a visibility toggle in the Summary screen.
 - Added cosmetic item functionality for Pokémon. Certain cosmetic items can be given to applicable Pokémon via the interact menu.
   - Added the various log blocks as cosmetic items for Timburr and Komala.
+  - Added cosmetics for Spoink, Gurdurr, Conkeldurr, Squirtle Line, Sneasler, Sandile line, Treecko line, Braixen, Delphox, and Dragonite.
+  - Added Gilded Chest cosmetics for Chest Gimmighoul and Gholdengo
 - Added `visibility/hidden`, `visibility/hat` and `visibility/face` tags to control where and how certain items are rendered.
 - Added Pokémon markings, toggleable within the summary.
 - Added `/boxcount` command to change PC boxes amount
-- Added cosmetics for Gurdurr, Conkeldurr, Squirtle Line, Sneasler, Sandile line, Treecko line, Braixen, Delphox, and Dragonite.
-- Added cosmetics for Gurdurr, Conkeldurr, Squirtle Line, Sneasler, Sandle line, Treecko line, Braixen, Delphox, and Dragonite.
 - Added `/transformmodelpart (position|rotation|scale) <modelPart> <transform: x y z>` command that can add transformations to a pokemon's model part.
   - The player executing the command must be facing the target pokemon entity. Transformations are not persistent and will revert when resources are reloaded.
 - Added `legacy` and `special` sourced moves to Pokémon.
@@ -23,7 +23,7 @@
 - Added `translucent_cull` boolean option into resolver's layer to allow for translucent textures with culling
 - Added [LambDynamicLights](https://modrinth.com/mod/lambdynamiclights) support for items held by Pokémon, evolution stone blocks, evolution stone items, Pokédex, Luminous Moss, Flame Orb, and Magmarizer.
 - Added the Clear Amulet, Grip Claw, Lagging Tail, Luminous Moss, Metal Alloy, Scroll of Darkness, Scroll of Waters
-- Added Recipes for Masterpiece Cup, Eject Pack
+- Added Recipes for Masterpiece Cup, Eject Pack.
 - Added modification to Minecraft Creative Inventory search to account for item names that contain `poké` when input contains `poke`.
 - Added Campfire Pot as well as loads of new food items (Poke Puffs, Ponigiri, Sinister Tea, etc)
 - Added Hearty Grains, a new crop used in the new cooking mechanic
@@ -39,6 +39,7 @@
   - Pokémon with the ability Volt Absorb are immune to lightning damage and receive Regeneration II for a short duration
   - Ground type Pokémon are immune to lightning damage
 - Added functionality to Everstone when held by a Pokémon; suppresses evolution notification and hides evolve button in summary interface.
+- Added optional `filePath` parameter to MoLang functions to allow for global stores (ex. `../global/`). Path must end in a forward slash.
 - Added new optional property `attachment_options` for most EmitterShapes to be attached to the locator/entities scale, rotation, and/or position. Position is true by default.
 - Galarica Nut bushes now generate on beaches.
 - Some Pokémon now pitch their bodies in the direction they're moving.
@@ -46,6 +47,11 @@
 - Berries can now be smelted into their respective dyes.
 - Added Syrupy Apples.
 - Added `/runmolang <molang> [<npc>|<player>|<pokemon>]` command that executes a MoLang expression with the provided options as environment variables, as well as the entity (as `q.entity`) that executed the command.
+- Added bubble quirk to Kingler; like Krabby, Kingler will blows bubbles during dusk.
+- Added `.Pre` and `.Post` to the following events:
+    - `PokemonRecallEvent`
+    - `TradeEvent`
+- Added a new gamerule, 'healerHealsPC', when set to true a successful use of a healer will also heal all of the Pokemon in that player's PC.
 
 ### Pokémon Added
 
@@ -58,8 +64,12 @@
 - Dunsparce
 - Togepi
 - Togetic
+- Unown
 - Houndour
 - Houndoom
+- Ho-Oh
+- Lugia
+- Alola Bias Pichu (built-in resourcepack)
 
 #### Gen 3
 - Azurill
@@ -75,8 +85,6 @@
 - Glalie
 - Latias
 - Latios
-- Swablu
-- Altaria
 
 #### Gen 4
 - Bronzor
@@ -114,11 +122,15 @@
 - Tynamo
 - Eelektrik
 - Eelektross
+- Axew
+- Fraxure
+- Haxorus
 - Mienfoo
 - Mienshao
 - Sewaddle
 - Swadloon
 - Leavanny
+- Druddigon
 
 #### Gen 6
 - Skiddo
@@ -143,6 +155,8 @@
 #### Gen 8
 - Skwovet
 - Greedent
+- Chewtle
+- Drednaw
 - Toxel
 - Toxtricity
 - Morpeko
@@ -152,6 +166,11 @@
 - Polteageist
 - Galarian Corsola
 - Cursola
+- Mr. Rime
+- Galarian Mr. Mime
+- Clobbopus
+- Grapploct
+- Galarian Weezing
 
 #### Gen 9
 - Smoliv
@@ -170,13 +189,18 @@
 - Bellibolt
 - Toedscool
 - Toedscruel
+- Rellor
+- Rabsca
+- Bramblin
+- Brambleghast
 
 ### Animation updates for the following Pokémon
 - Garchomp
 - Tropius
-- Torpius
 - Nosepass
 - Probopass
+- Sneasel
+- Weavile
 - Sneasler
 - Braixen
 - Delphox
@@ -198,8 +222,66 @@
 - Porygon
 - Porygon2
 - Porygon-Z
+- Wattrel
+- Kilowattrel
+- Golurk
+- Spinarak
+- Ariados
+- Wyrdeer
+- Tyrantrum
+- Pidove
+- Tranquill
+- Unfezant
+- Beldum
+- Metang
+- Metagross
+- Plusle
+- Minun
+- Murkrow
+- Honchkrow
+- Larvesta
+- Volcarona
+- Dwebble
+- Crustle
+- Mr. Mime
+- Flygon
+- Pichu
+- Pikachu
+- Raichu
+- Alolan Raichu
+- Espathra
+- Abra
+- Kadabra
+- Alakazam
+- Deino
+- Zweilous
+- Hydreigon
+- Slaking
+- Klink
+- Klang
+- Klinklang
+- Baltoy
+- Claydol
+- Mamoswine
+- Rufflet
+- Braviary
+- Girafarig
+- Farigiraf
+- Rookidee
+- Corvisquire
+- Corviknight
+- Venipede
+- Whirlipede
+- Scolipede
+- Venusaur
+- Parasect
+- Bastiodon
+- Amaura
 
 ### Model updates for the following Pokémon
+- Cleffa
+- Clefairy
+- Clefable
 - Gyarados
 - Dragonite
 - Eevee
@@ -260,6 +342,47 @@
 - Klink
 - Klank
 - Klinklang
+- Spinarak
+- Ariados
+- Pidove
+- Tranquill
+- Unfezant
+- Sobble
+- Drizzile
+- Inteleon
+- Plusle
+- Minun
+- Murkrow
+- Zorua
+- Zoroark
+- Mime.Jr
+- Mr. Mime
+- Pichu
+- Pikachu
+- Raichu
+- Alolan Raichu
+- Dusknoir
+- Deino
+- Zweilous
+- Hydreigon
+- Dreepy
+- Drakloak
+- Dragapult
+- Mamoswine
+- Rookidee
+- Corvisquire
+- Corviknight
+- Venipede
+- Whirlipede
+- Scolipede
+- Farigiraf
+- Staryu
+- Starmie
+- Gimmighoul
+- Gholdengo
+- Starly
+- Staravia
+- Staraptor
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -313,9 +436,16 @@
 - Updated Pokémon state icons shown in party interfaces
 - MoLang `face` function can now be run on any `PosableEntity` (Like Pokémon!) instead of just NPCs.
 - MoLang `run_action_effect` now works on Pokémon.
-- Changed MoLang entity function `is_standing_on` to allow for block tags in the list.
 - Changed MoLang entity function `is_standing_on` to allow for block tags in the list. 
 - Added entity (as `q.entity`) that executed the command to the `executemolangscript` command.
+- Refactored the following events to `.Pre` and `.Post` for consistency:
+- `PokemonSentEvent`
+- `ExperienceGainedEvent`
+- `BattleStartedEvent`
+- Updated `PokemonSentEvent` parameters to include the Position and Level of the Pokémon being sent out.
+- Updated `EvolutionCompleteEvent` parameters to include the Source Pokemon that evolved.
+- Updated `HatchEggEvent.Post` to include the Pokemon that hatched.
+- Roseli Berry Trees now naturally generate in their preferred biomes.
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
@@ -390,6 +520,14 @@
 - Fixed a vulnerability that could cause party and PC rollbacks under specific circumstances.
 - Fixed a rare edge case where sorting your PC could be rolled back later.
 - Fixed BotanyPots built-in integration
+- Fixed shading of berries on berry trees.
+- Fixed static text cursor for nickname input in summary.
+- Fixed Cobblemon brewing recipes placing result into all slots, and not just slots with correct ingredients inside the brewing stand.
+- Fixed an issue where hoppers and brewing stands were not recognizing Cobblemon brewing recipes.
+- Fixed global species features... not working. Since they were created. Oops.
+- Fixed Pokémon with alternate forms being created with an incorrect 'forced' tag on their ability.
+- Fixed busted abilities and moves in Pokémon data due to removed datapacks etc. causing storage corruption. It now just rerolls their ability / uses Tackle.
+- Fixed singular Pokémon corruption causing entire storage corruption. Storages will now skip corrupted Pokémon and print an error to console.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.
@@ -403,7 +541,6 @@
 - Reworked observable handling in `Pokemon.kt` to cut down on RAM usage and clarify the file.
   - Note: This will break mods that used our observable functionality there or in MoveSet, IVs, EVs, or BenchedMoves.
   - Using `Pokemon#onChange()` is now the way to mark a Pokémon as needing a save.
-  - Using `[Pokemon].changeObservable` is now the way to get an `Observable` for any save-worthy changes.
 - Updated NPCEntity beam positioning to properly account for the baseScale property.
 - Updated NPCEntity pokeball throw positioning to properly account for the baseScale property.
 - Fixed `[Pokemon].copyFrom` error causing forms, IVs, and EVs to not be applied properly when using `[Pokemon].loadFromJSON` or `[Pokemon].loadFromNBT`
@@ -484,6 +621,152 @@
 - Added `is_included`, `to_lower`, `to_upper`, and `string_length` as available Molang functions.
 - Fixed a crash that would occur during battles if the opponent wild Pokémon species comes from a namespace other than cobblemon
 - Fixed `clientActions` inside Dialogue pages being executed twice
+- Added `q.split_string(<text>, <delimiter/comma>)` Outputs an array with the divided text.
+- Added `q.spawn_npc(<x>, <y>, <z>, <npc>)` Spawns an NPC at the given coordinates and returns the NPC.
+- Added `q.player.seen_credits` Returns whether the player has seen the end credits.
+- Added `q.player.is_in_dialogue` Returns whether the player is currently in a dialogue.
+- Added `q.player.active_dialogue` Returns the active dialogue of the player, or null if none.
+- Added `q.player.is_spectator` Returns whether the player is in spectator mode.
+- Added `q.player.is_adventure` Returns whether the player is in adventure mode.
+- Added `q.player.is_creative` Returns whether the player is in creative mode.
+- Added `q.player.is_survival` Returns whether the player is in survival mode.
+- Added `q.player.set_battle_theme(<sound resource>)` Sets the player's battle theme to the given theme.
+- Added `q.player.battle_music(<sound_resource>, <volume>, <pitch>)` Plays the given battle music for the player.
+- Added `q.player.stop_battle_music()` Stops any currently playing battle music for the player. (With a fade out).
+- Added `q.player.riding_pokemon` Returns the Pokémon the player is currently riding.
+- Added `q.entity.is_player` Returns whether the entity is a player.
+- Added `q.entity.is_pokemon` Returns whether the entity is a Pokémon.
+- Added `q.entity.is_npc` Returns whether the entity is an NPC.
+- Added `q.entity.is_mob` Returns whether the entity is a vanilla mob.
+- Added `q.entity.is_animal` Returns whether the entity is an animal.
+- Added `q.entity.is_hostile` Returns whether the entity is a hostile mob.
+- Added `q.entity.is_baby` Returns whether the entity is a baby.
+- Added `q.entity.is_adult` Returns whether the entity is an adult.
+- Added `q.entity.is_tamable` Returns whether the entity is tamable.
+- Added `q.entity.is_tamed` Returns whether the entity is tamed.
+- Added `q.entity.add_effect(<effect>, <duration>, <amplifier>, <ambient> <show_particles>)` Adds a status effect to the entity.
+- Added `q.entity.remove_effect(<effect>)` Removes a status effect from the entity.
+- Added `q.entity.has_effect(<effect>)` Returns whether the entity has the given status effect.
+- Added `q.entity.is_looking_at(<entity>)` Returns whether the entity is looking at the given entity.
+- Added `q.entity.tags` Returns an array of the entity's tags.
+- Added `q.entity.add_tag(<tag>)` Adds the given tag to the entity.
+- Added `q.entity.remove_tag(<tag>)` Removes the given tag from the entity.
+- Added `q.entity.has_tag(<tag>)` Returns whether the entity has the given tag.
+- Added `q.entity.make_intangible(<true/false>)` Makes the entity intangible.
+- Added `q.pokemon.force_evolve(<index>)` Forces the Pokémon at the given index.
+- Added `q.pokemon.can_evolve` Returns whether the Pokémon at the given index can evolve.
+- Added `q.pokemon.is_busy` Returns whether the Pokémon is busy.
+- Added `q.pokemon.is_rideable` Returns whether the Pokémon is rideable.
+- Fixed `background` field and added `textColor` field for dialogues.
+
+### Particles
+Added new/updated particles for the following moves:
+- Absorb
+- Acid
+- Acid Spray
+- Aerial Ace
+- Amnesia
+- Aurora Beam
+- Bite
+- Body Slam
+- Bubble
+- Bubble Beam
+- Bulldoze
+- Bullet Punch
+- Close Combat
+- Confusion
+- Crunch
+- Cotton Guard
+- Double Team
+- Dragon Claw
+- Egg Bomb
+- Ember
+- Eruption
+- Explosion
+- Fire Blast
+- Fire Punch
+- Fire Spin
+- Flame Burst
+- Flame Charge
+- Flamethrower
+- Flame Wheel
+- Frost Breath
+- Frustration
+- Giga Drain
+- Growl
+- Haze
+- Hidden Power
+- Horn Attack
+- Hyper Fang
+- Hypnosis
+- Ice Beam
+- Ice Punch
+- Ice Shard
+- Icy Wind
+- Infestation
+- Kinesis
+- Lava Plume
+- Leech Life
+- Leech Seed
+- Leer
+- Lick
+- Magical Leaf
+- Mega Drain
+- Minimize
+- Mist
+- Mud Bomb
+- MudSport
+- Mystical Fire
+- Nasty Plot
+- Poison Fang
+- Poison Gas
+- Poison Powder
+- Population Bomb
+- Pound
+- Powder
+- Powder Snow
+- Present
+- Protect
+- Psybeam
+- Psychic
+- Pursuit
+- Quick Attack
+- Rage Powder
+- Razor Leaf
+- Return
+- Rock Throw
+- Sand Attack
+- Scary Face
+- Scratch
+- Seed Bomb
+- Seismic Toss
+- Self Destruct
+- Shadow Ball
+- Shadow Claw
+- Sing
+- Sleep Powder
+- Sludge Bomb
+- Smokescreen
+- Spike
+- Spore
+- Stomp
+- String Shot
+- Stun Spore
+- Super Fang
+- Swords Dance
+- Tackle
+- Tail Whip
+- Thunder
+- Thunder Punch
+- Thunderbolt
+- Thunder Shock
+- Thunder Wave
+- Toxic
+- Water Gun
+- Water Pulse
+- Water Sport
+- Will-O-Wisp
+- Withdraw
 
 ## [1.6.1 (January 26th, 2025)](#1-6-1)
 

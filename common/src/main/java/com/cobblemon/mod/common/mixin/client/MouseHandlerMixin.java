@@ -130,6 +130,11 @@ public abstract class MouseHandlerMixin {
             return false;
         }
 
+        // Clamp player rotation if riding and the vehicle demands it
+        if (player.isPassenger() && player.getVehicle() instanceof PokemonEntity vehicle) {
+            vehicle.clampPassengerRotation(player);
+        }
+
         if (!(player instanceof OrientationControllable controllable)) return true;
 
         if (!controllable.getOrientationController().isActive()) {

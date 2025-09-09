@@ -13,7 +13,7 @@
         "north": {"uv": [1, 9, 15, 16], "texture": "#side", "tintindex": 0},
         "east": {"uv": [1, 9, 15, 16], "texture": "#side", "tintindex": 0},
         "south": {"uv": [1, 9, 15, 16], "texture": "#side", "tintindex": 0},
-        "west": {"uv": [1, 9, 15, 16], "texture": "#side", "tintindex": 1},
+        "west": {"uv": [1, 9, 15, 16], "texture": "#side", "tintindex": 0},
         "up": {"uv": [1, 1, 15, 15], "texture": "#top", "tintindex": 0},
         "down": {"uv": [1, 1, 15, 15], "texture": "#bottom", "tintindex": 0}
       }

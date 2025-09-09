@@ -6,7 +6,7 @@
 				"identifier": "geometry.tyrantrum",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 10,
+				"visible_bounds_width": 12,
 				"visible_bounds_height": 6.5,
 				"visible_bounds_offset": [0, 2.75, 0]
 			},
@@ -468,6 +468,14 @@
 					"cubes": [
 						{"origin": [5.5, 38.5, -73.92], "size": [2, 3, 0], "uv": [90, 22]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "neck",
+					"pivot": [0, 42, -49],
+					"locators": {
+						"seat_1": [0, 42, -49]
+					}
 				},
 				{
 					"name": "fluff",
@@ -937,6 +945,14 @@
 						{"origin": [9.5, 4.3, -2], "size": [3, 3, 3], "uv": [228, 80]},
 						{"origin": [8.5, 4.3, 1], "size": [5, 5, 4], "uv": [235, 183]}
 					]
+				},
+				{
+					"name": "locator_root",
+					"parent": "tyrantrum",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
 				}
 			]
 		}

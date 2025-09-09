@@ -45,9 +45,128 @@
   "baseFriendship": 50,
   "baseScale": 1.05,
   "hitbox": {
-    "width": 0.9,
     "height": 1.9,
-    "fixed": false
+    "fixed": false,
+    "width": 0.9
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "10-40",
+          "SPEED": "30-65",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 3.3534473E-19,
+              "y": -1.0998156,
+              "z": 0.22897746
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -6.446602E-19,
+              "y": -1.060447,
+              "z": 0.23613866
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 3.3534473E-19,
+              "y": -1.0998156,
+              "z": 0.22897746
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -6.446602E-19,
+              "y": -1.060447,
+              "z": 0.23613866
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 3.3534473E-19,
+              "y": -1.0998156,
+              "z": 0.22897746
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -6.446602E-19,
+              "y": -1.060447,
+              "z": 0.23613866
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 3.3534473E-19,
+              "y": -1.0998156,
+              "z": 0.22897746
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "girafarig",
+          "tier": 1
+        },
+        {
+          "pokemon": "farigiraf",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "canWalk": true,
+      "walkSpeed": "0.2"
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
   },
   "drops": {
     "amount": 3,
@@ -232,32 +351,17 @@
   ],
   "evolutions": [
     {
-      "id": "girafarig_farigiraf",
-      "variant": "level_up",
-      "result": "farigiraf",
       "consumeHeldItem": false,
+      "id": "girafarig_farigiraf",
       "learnableMoves": [],
       "requirements": [
         {
-          "variant": "has_move",
-          "move": "twinbeam"
+          "move": "twinbeam",
+          "variant": "has_move"
         }
-      ]
+      ],
+      "result": "farigiraf",
+      "variant": "level_up"
     }
-  ],
-  "behaviour": {
-    "herd": {
-      "maxSize": "9",
-      "toleratedLeaders": [
-        {
-          "pokemon": "girafarig",
-          "tier": 1
-        },
-        {
-          "pokemon": "farigiraf",
-          "tier": 2
-        }
-      ]
-    }
-  }
+  ]
 }

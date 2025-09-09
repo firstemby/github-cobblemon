@@ -29,6 +29,14 @@
 					]
 				},
 				{
+					"name": "seat_1_locator",
+					"parent": "torso",
+					"pivot": [0, 28, 1],
+					"locators": {
+						"seat_1": [0, 27, 4]
+					}
+				},
+				{
 					"name": "neck_fluff",
 					"parent": "torso",
 					"pivot": [-0.5, -1.05, 0]
@@ -1044,7 +1052,6 @@
 					"name": "toe_outer_left3",
 					"parent": "toe_outer_left2",
 					"pivot": [5.1, 15, -13],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [5.1, 15, -14], "size": [0, 2, 1], "uv": [25, 58]}
 					]
@@ -1071,7 +1078,6 @@
 					"name": "toe_inner_left3",
 					"parent": "toe_inner_left2",
 					"pivot": [3.55, 15, -13],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [3.3, 15, -14], "size": [0, 2, 1], "uv": [29, 58]}
 					]
@@ -1199,7 +1205,6 @@
 					"name": "toe_outer_right3",
 					"parent": "toe_outer_right2",
 					"pivot": [-5.1, 15, -13],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-5.1, 15, -14], "size": [0, 2, 1], "uv": [27, 58], "mirror": true}
 					]
@@ -1226,7 +1231,6 @@
 					"name": "toe_inner_right3",
 					"parent": "toe_inner_right2",
 					"pivot": [-3.3, 15, -13],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-3.3, 15, -14], "size": [0, 2, 1], "uv": [31, 58], "mirror": true}
 					]

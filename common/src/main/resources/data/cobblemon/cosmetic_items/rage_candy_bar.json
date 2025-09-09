@@ -1,0 +1,9 @@
+{
+  "pokemon": ["pikachu"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "cobblemon:rage_candy_bar",
+      "aspects": ["cosmetic_item-rage_candy_bar"]
+    }
+  ]
+}

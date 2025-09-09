@@ -401,7 +401,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val OLD_GATEAU = regionalFoodItem("old_gateau", 64, 9, 0.1335f, false)
     @JvmField
-    val CASTELIACONE = regionalFoodItem("casteliacone", 64, 5, .28f, false)
+    val CASTELIACONE = regionalFoodItem("casteliacone", 64, 5, 0.28f, false)
     @JvmField
     val LUMIOSE_GALETTE = regionalFoodItem("lumiose_galette", 64, 4, 0.4f, false)
     @JvmField
@@ -723,7 +723,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SUPERB_REMEDY = compostableItem("superb_remedy", RemedyItem(RemedyItem.SUPERB), 0.85f)
     @JvmField
-    val MOOMOO_MILK = create("moomoo_milk", CobblemonItem(Item.Properties().craftRemainder(Items.GLASS_BOTTLE)))
+    val MOOMOO_MILK = create("moomoo_milk", CobblemonItem(Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo((16))))
 
     @JvmField
     val POTION = create("potion", PotionItem(PotionType.POTION))

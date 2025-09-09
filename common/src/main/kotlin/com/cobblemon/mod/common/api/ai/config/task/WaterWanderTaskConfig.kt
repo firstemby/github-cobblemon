@@ -39,7 +39,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
     val wanderChance = numberVariable(WANDER, "water_wander_chance", 1/(20 * 3F)).asExpressible()
     val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
     val horizontalRange: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
-    val verticalRange: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
+    val verticalRange: ExpressionOrEntityVariable = Either.left("7.0".asExpression())
 
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(condition, wanderChance, speedMultiplier).asVariables()

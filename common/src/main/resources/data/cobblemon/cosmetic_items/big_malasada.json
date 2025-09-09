@@ -1,0 +1,9 @@
+{
+  "pokemon": ["pikachu"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "cobblemon:big_malasada",
+      "aspects": ["cosmetic_item-big_malasada"]
+    }
+  ]
+}

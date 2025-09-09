@@ -43,10 +43,10 @@
   "catchRate": 3,
   "eggCycles": 120,
   "baseFriendship": 0,
-  "baseScale": 1.2,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.75,
-    "height": 1.7,
+    "width": 1.25,
+    "height": 2.75,
     "fixed": false
   },
   "behaviour": {
@@ -393,7 +393,15 @@
         "ranges": "45-90"
       }
     },
-    "seats": [],
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ],
     "behaviour": null
   }
 }

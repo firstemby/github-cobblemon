@@ -1,14 +1,22 @@
 ### Additions
 - Added ability to rename PC Boxes by clicking on the name of a box.
 - Added box options buttons for boxes, toggleable by clicking the right icon button in the bottom bar.
-  - The button on the right allows for changing the box wallpaper.
   - The option buttons on the left side allow for sorting the box by name, level, Pokédex number, gender, and type. Shift clicking allows for sorting in reverse order.
+  - The button on the right allows for changing the box wallpaper.
+  - 10 additional color-based wallpapers have been added.
+    - 5 unlockable biome-based wallpapers have been added, which can be unlocked by visiting:
+      - Forest biome
+      - Ocean biome
+      - Cave Biome
+      - The End
+      - The Nether
 - Added filter functionality in PC UI, which supports `PokemonProperties` (e.g. `shiny=yes` shows all shiny Pokémon).
   - Names can be filtered by exact or partial matches, e.g. entering "cha" will show Charmander, Charmeleon, etc.
 - Added `/changewallpaper <player> <boxNumber> <wallpaper>` command to change a box wallpaper through commands.
 - Added `/renamebox <player> <boxNumber> <name>` command to rename a PC box through commands.
 - Added IVs and EVs stat displays in PC.
-- Added ability to change boxes by scrolling.
+  - The displays can be cycled through by scrolling when the display is hovered over.
+- Added ability to cycle through boxes by scrolling when the box is hovered over.
 - PC will now open to last box viewed within a session.
 
 ### Changes

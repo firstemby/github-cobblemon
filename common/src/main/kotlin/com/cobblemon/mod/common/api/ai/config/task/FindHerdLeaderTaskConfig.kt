@@ -53,7 +53,8 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
                 it is PokemonEntity &&
                         it != currentLeader &&
                         it.pokemon.storeCoordinates.get()?.store !is PartyStore &&
-                        it.getHerdSize() < it.behaviour.herd.maxSize
+                        it.getHerdSize() < it.behaviour.herd.maxSize &&
+                        !it.brain.hasMemoryValue(CobblemonMemories.POKEMON_DROWSY)
             }.forEach { possibleLeader ->
                 possibleLeader as PokemonEntity
                 val matchingHerdLeader = entity.behaviour.herd.bestMatchLeader(entity, possibleLeader) ?: return@forEach

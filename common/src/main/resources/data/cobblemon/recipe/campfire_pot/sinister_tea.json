@@ -12,9 +12,14 @@
         {
             "item": "minecraft:bowl"
         },
-        {
+        [
+          {
             "item": "minecraft:water_bucket"
-        }
+          },
+          {
+            "tag": "c:drinks/milk"
+          }
+        ]
     ],
     "result": {
         "id": "cobblemon:sinister_tea",

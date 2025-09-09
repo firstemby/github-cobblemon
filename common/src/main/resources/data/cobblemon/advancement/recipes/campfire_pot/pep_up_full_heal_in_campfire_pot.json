@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:campfire_pot/full_heal_in_campfire_pot_1"
+        "recipe": "cobblemon:campfire_pot/pep_up_full_heal_in_campfire_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -16,31 +16,17 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_ingredient": {
-      "conditions": {
-        "items": [
-          {
-            "items": "#cobblemon:full_heal_ingredients"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_flower"
-    ],
-	[
-      "has_the_recipe",
-      "has_ingredient"
     ]
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:campfire_pot/full_heal_in_campfire_pot_1"
+      "cobblemon:campfire_pot/pep_up_full_heal_in_campfire_pot"
     ]
   }
 }

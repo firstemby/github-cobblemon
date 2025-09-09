@@ -15,9 +15,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -27,6 +29,8 @@ import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +47,9 @@ public class BrewingStandBlockEntityMixin {
 		//copied from vanilla doBrew logic, but slightly tweaked to work for cobblemon, this was needed as replacing the loop was not quite possible inside doBrew
 		ItemStack itemStack = slots.get(3);
 		for(int i = 0; i < 3; ++i) {
-			slots.set(i, recipe.getResult().copy());
+			if (!slots.get(i).isEmpty()){
+				slots.set(i, recipe.getResult().copy());
+			}
 		}
 
 		itemStack.shrink(1);
@@ -90,5 +96,36 @@ public class BrewingStandBlockEntityMixin {
 				recipeManager.getRecipeFor(CobblemonRecipeTypes.INSTANCE.getBREWING_STAND(), input, level);
 
 		return recipeHolder.map(RecipeHolder::value).orElse(null);
+	}
+
+	@Inject(method = "canPlaceItem", at = @At("HEAD"), cancellable = true)
+	private void cobblemon$canPlaceItem(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if (stack == null || stack.isEmpty()) return;
+
+		BrewingStandBlockEntity self = (BrewingStandBlockEntity) (Object) this;
+		Level level = self.getLevel();
+
+		if (level != null) {
+
+			var rm = level.getRecipeManager();
+
+			//Input slot
+			if (slot == 3) {
+				if (BrewingStandRecipe.Companion.isInput(stack, rm)) {
+					cir.setReturnValue(true);
+					return;
+				}
+			}
+			// Output slots
+			if (slot >= 0 && slot < 3) {
+				if (BrewingStandRecipe.Companion.isBottle(stack, rm)) {
+					if (self.getItem(slot).isEmpty()) {
+						cir.setReturnValue(true);
+					} else {
+						cir.setReturnValue(false);
+					}
+				}
+			}
+		}
 	}
 }

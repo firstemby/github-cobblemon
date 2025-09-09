@@ -4,12 +4,19 @@
   "profileScale": 0.60,
   "profileTranslation": [0.0, 0.84, 0],
   "animations": {
-    "cry": "q.bedrock_stateful('drilbur', 'cry')"
+    "cry": "q.bedrock_stateful('drilbur', 'cry')",
+    "recoil": "q.bedrock_stateful('drilbur', 'recoil')",
+    "physical": "q.bedrock_primary('drilbur', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('drilbur', 'special', q.curve('symmetrical'))",
+    "status": "q.bedrock_primary('drilbur', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],
      "isBattle": true,
+     "namedAnimations": {
+      "cry": "q.bedrock_primary('drilbur', 'battle_cry', q.curve('symmetrical'))"
+      },
      "animations": [
 		"q.look('head_ai')",
         "q.bedrock('drilbur', 'battle_idle')"
@@ -32,7 +39,7 @@
     "walking": {
       "poseTypes": ["WALK"],
       "animations": [
-        "q.bedrock('drilbur', 'ground_idle')"
+        "q.bedrock('drilbur', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('drilbur', 'blink')"

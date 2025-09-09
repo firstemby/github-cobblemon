@@ -54,6 +54,12 @@
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.15
+      }
+    },
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true

@@ -34,14 +34,13 @@ object RequestChangePCBoxWallpaperHandler : ServerNetworkPacketHandler<RequestCh
             }
         }
 
-
         val box = pc.boxes[packet.boxNumber]
-        val event = ChangePCBoxWallpaperEvent.Pre(player, box, packet.wallpaper)
+        val event = ChangePCBoxWallpaperEvent.Pre(player, box, packet.wallpaper, packet.altWallpaper)
         CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_PRE.postThenFinally(
             event = event,
             ifSucceeded = { preEvent ->
-                box.wallpaper = preEvent.wallpaper
-                CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_POST.post(ChangePCBoxWallpaperEvent.Post(player, box, preEvent.wallpaper))
+                box.wallpaper = preEvent.altWallpaper?.let { preEvent.altWallpaper } ?: preEvent.wallpaper
+                CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_POST.post(ChangePCBoxWallpaperEvent.Post(player, box, preEvent.wallpaper, preEvent.altWallpaper))
             },
             finally = {
                 ChangePCBoxWallpaperPacket(pc.uuid, packet.boxNumber, box.wallpaper).sendToPlayer(player)

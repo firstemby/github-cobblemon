@@ -12,6 +12,7 @@ import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangMath.lerp
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import net.minecraft.client.Minecraft
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -30,7 +32,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import org.joml.Vector3f
 import kotlin.math.*
 
 class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
@@ -62,6 +63,38 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player
     ): Float {
         return state.rideVelocity.get().length().toFloat()
+    }
+
+    override fun tick(
+        settings: BirdSettings,
+        state: BirdState,
+        vehicle: PokemonEntity,
+        driver: Player,
+        input: Vec3
+    ) {
+        if(vehicle.level().isClientSide) {
+            tickStamina(settings, state, vehicle, driver)
+        }
+    }
+
+    fun tickStamina(
+        settings: BirdSettings,
+        state: BirdState,
+        vehicle: PokemonEntity,
+        driver: Player
+    ) {
+        val stam = state.stamina.get()
+
+        // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
+        // proportional to the number of ticks of boost thus making a full boost take x ticks
+        // in short: "Stamina drains slower at higher values and also replenishes slower"
+        val totalStam = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
+        val stamDrainRate = (1.0f / totalStam).toFloat()
+
+        val newStam = if (driver.zza > 0.0) max(0.0f,stam - stamDrainRate)
+            else min(1.0f,stam + stamDrainRate)
+
+        state.stamina.set(newStam)
     }
 
     override fun rotation(
@@ -100,13 +133,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             forwardForce += sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().y
         }
 
-
-        //Bring the ride out of the sky when stamina is depleted.
-        if (state.stamina.get() <= 0.0) {
-            upForce -= 0.3
-        }
-
-
         val velocity = Vec3(state.rideVelocity.get().x , upForce, forwardForce)
         return velocity
     }
@@ -115,20 +141,25 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     *  Calculates the change in the ride space vector due to player input and ride state
     */
     fun calculateRideSpaceVel(settings: BirdSettings, state: BirdState, vehicle: PokemonEntity, driver: Player) {
-        //retrieve stats
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glidespeedExpr)
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
-        val staminaStat = vehicle.runtime.resolveDouble(settings.staminaExpr)
+        // retrieve stats
+        val topSpeed = (vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0)
+        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)
+        val glideTopSpeed = topSpeed * vehicle.runtime.resolveDouble(settings.glidespeedExpr)
         var glideSpeedChange = 0.0
         var activeInput = false
 
         var newVelocity = Vec3(state.rideVelocity.get().x, state.rideVelocity.get().y, state.rideVelocity.get().z)
 
+        // Account for collision
+        if (vehicle.verticalCollision || vehicle.horizontalCollision) {
+            newVelocity = newVelocity.normalize().scale(vehicle.deltaMovement.length())
+        }
+
         //speed up and slow down based on input
         if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
             //make sure it can't exceed top speed
             val forwardInput = when {
+                state.stamina.get() == 0.0f -> 0.0
                 driver.zza > 0 && newVelocity.z > topSpeed -> 0.0
                 driver.zza < 0 && newVelocity.z < (-topSpeed / 3.0) -> 0.0
                 else -> driver.zza.sign
@@ -148,7 +179,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             glideSpeedChange = sin(Math.toRadians(controller.pitch.toDouble()))
             glideSpeedChange = glideSpeedChange * 0.25
 
-            //TODO: Possibly create a deadzone around parallel where glide doesn't affect speed?
             if (glideSpeedChange <= 0.0) {
                 //Ensures that a propelling force is still able to be applied when
                 //climbing in height
@@ -176,6 +206,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         //Vertical movement based on driver input.
         val vertTopSpeed = topSpeed / 2.0
         val vertInput = when {
+            state.stamina.get() == 0.0f -> 0.0
             driver.jumping && state.rideVelocity.get().length() < 0.3 -> 1.0
             driver.isShiftKeyDown && state.rideVelocity.get().length() < 0.3  -> -1.0
             else -> 0.0
@@ -204,21 +235,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             }
         }
 
-        //TODO: Reintroduce stamina drain once stats start to be polished and tweaked
-//        //Only perform stamina logic if the ride does not have infinite stamina
-//        if (!vehicle.runtime.resolveBoolean(settings.infiniteStamina)) {
-//            if (activeInput) {
-//                state.stamina.set(state.stamina.get() - (0.05 / staminaStat).toFloat())
-//            }
-//
-//            //Lose a base amount of stamina just for being airborne
-//            state.stamina.set(state.stamina.get() - (0.01 / staminaStat).toFloat())
-//        }
-//        else
-//        {
-//            state.stamina.set(1.0f)
-//        }
-
         //air resistance
         if( abs(newVelocity.z) > 0) {
             newVelocity = newVelocity.subtract(0.0, 0.0, min(0.0015 * newVelocity.z.sign, newVelocity.z))
@@ -233,39 +249,85 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player,
         deltaTime: Double
     ): Vec3 {
+        if (Cobblemon.config.disableRoll) return Vec3.ZERO
         if (driver !is OrientationControllable) return Vec3.ZERO
         val controller = (driver as OrientationControllable).orientationController
 
-        //limit rolling based on handling and current speed.
-        //modulated by speed so that when flapping idle in air you are ont wobbling around to look around
-        //TODO: Tie handling into yaw rate
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        //This rotation limit will be used to know if the ride has exceeded it and its needs correcting.
-        val rotMin = 15.0
-        val rotLimit = max(handling * sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)), rotMin)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
 
-        var yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())) //sin(Math.toRadians(controller.roll.toDouble())) * abs(cos(Math.toRadians(controller.pitch.toDouble())))
-        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble())))
-        //val pitchedYawDelt = yawDeltaDeg - trueYawDelt
+        val yawDeltaDeg =  deltaTime * handling * sin(Math.toRadians(controller.roll.toDouble())).pow(2) * sin(Math.toRadians(controller.roll.toDouble())).sign
+        val trueYawDelt = yawDeltaDeg * abs(cos(Math.toRadians(controller.pitch.toDouble()))) * sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed))
 
-        controller.applyGlobalYaw(trueYawDelt.toFloat())
+        // Dampen yaw when upside down
+        val yawDampen = (1 - abs(min(cos(controller.roll.toRadians()),0.0f)))
+        controller.applyGlobalYaw(trueYawDelt.toFloat() * yawDampen)
 
-        //Calculate correcting roll force.
-        val correctionRate = 5.0
-        if(abs(controller.roll) > rotLimit && state.rideVelocity.get().length() < 0.2) {
+        // Correct orientation when at low speeds
+        correctOrientation(settings, state, vehicle, controller, deltaTime)
+
+        //yaw, pitch, roll
+        return Vec3(0.0, state.currPitchCorrectionForce.get(), state.currRollCorrectionForce.get())
+    }
+
+    private fun correctOrientation(
+        settings: BirdSettings,
+        state: BirdState,
+        vehicle: PokemonEntity,
+        controller: OrientationController,
+        deltaTime: Double
+    ) {
+        // Calculate correcting roll force.
+        // Mult by cos(pitch) to ensure that it doesn't roll correct at when diving or climbing
+        val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect)
+        val maxRollCorrectionRate = if (state.rideVelocity.get().length() < 0.1) 15.0f else 8.0f * (cos(controller.pitch.toRadians())).pow(2) * ((state.noInputTime.get() - rollCorrectionTimer) * 2).coerceIn(0.0, 1.0).toFloat()
+        val maxRollForce = maxRollCorrectionRate / 40.0
+        val rollArrivalDeg = 90.0
+        if(state.rideVelocity.get().length() < 0.1 || state.noInputTime.get() > rollCorrectionTimer) {
+            val arrivalInfluence = (min(rollArrivalDeg,abs(controller.roll).toDouble()) / rollArrivalDeg)
+            val desiredRollForce = (0 - controller.roll).sign * maxRollCorrectionRate * arrivalInfluence
+            var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
+
+            // Ensure the 'steering' correction force doesn't exceed our maxForce
+            if (abs(steeredRollForce) > maxRollForce) {
+                steeredRollForce = steeredRollForce.sign * maxRollForce
+            }
+
+            // Apply the 'steered' force (its really not a steering force I need a better name)
             state.currRollCorrectionForce.set(
-                state.currRollCorrectionForce.get() + ((abs(controller.roll) - rotLimit) / 180 - rotLimit) * controller.roll.sign * correctionRate * deltaTime * 0.01
+                state.currRollCorrectionForce.get() + steeredRollForce
             )
         } else {
             state.currRollCorrectionForce.set(
                 //reduce rollCorrection gradually
-                lerp(state.currRollCorrectionForce.get(), 0.0, deltaTime * 0.98)
+                lerp(state.currRollCorrectionForce.get(), 0.0, deltaTime * 0.96)
             )
         }
 
-        //yaw, pitch, roll
-        return Vec3(0.0, 0.0, state.currRollCorrectionForce.get())
+        //Calculate correcting pitch force.
+        val maxPitchCorrectionRate = 15
+        val maxPitchForce = maxPitchCorrectionRate / 40.0
+        val pitchArrivalDeg = 90.0
+        if(state.rideVelocity.get().length() < 0.1) {
+            val arrivalInfluence = (min(pitchArrivalDeg,abs(controller.pitch).toDouble()) / pitchArrivalDeg)
+            val desiredPitchForce = (0 - controller.pitch).sign * maxPitchCorrectionRate * arrivalInfluence
+            var steeredPitchForce = desiredPitchForce - state.currPitchCorrectionForce.get()
+
+            // Ensure the 'steering' correction force doesn't exceed our maxForce
+            if (abs(steeredPitchForce) > maxPitchForce) {
+                steeredPitchForce = steeredPitchForce.sign * maxPitchForce
+            }
+
+            // Apply the 'steered' force (its really not a steering force I need a better name)
+            state.currPitchCorrectionForce.set(
+                state.currPitchCorrectionForce.get() + steeredPitchForce
+            )
+        } else {
+            state.currPitchCorrectionForce.set(
+                //reduce rollCorrection gradually
+                lerp(state.currPitchCorrectionForce.get(), 0.0, deltaTime * 0.98)
+            )
+        }
     }
 
     override fun rotationOnMouseXY(
@@ -280,6 +342,14 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
+        // Begin the roll correction time counter if not enough mouse input
+        // is detected
+        if (abs(mouseX) < 1 && abs(mouseY) < 1) {
+            state.noInputTime.set(state.noInputTime.get() + deltaTime)
+        } else {
+            state.noInputTime.set(0.0)
+        }
+
         return when {
             Cobblemon.config.disableRoll -> noRollRotation(
                 settings,
@@ -326,24 +396,23 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         // Set roll to zero if transitioning to noroll config
         controller.rotateRoll(controller.roll * -1.0f)
 
-        //TODO: hook up handling in parity with normal bird
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult)
 
         //Smooth out mouse input.
         val smoothingSpeed = 4.0
-        val mouseXc = (mouseX).coerceIn(-60.0, 60.0)
-        val mouseYc = (mouseY).coerceIn(-60.0, 60.0)
+        val mouseXc = ((mouseX).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
+        val mouseYc = ((mouseY).coerceIn(-60.0, 60.0) / 60.0) * mouseInputMult
         val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
         val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
 
         //Give the ability to yaw with x mouse input when at low speeds.
-        val yawForce =  xInput * ( 1.0 - min(sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)), 0.5))
+        val yawForce =  xInput  * handling //* ( 1.0 - min(sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)), 0.5))
 
         //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
-        controller.applyGlobalYaw(yawForce.toFloat())
+        controller.applyGlobalYaw(yawForce.toFloat() * abs(cos(controller.pitch.toRadians())).pow(2))
 
-        var pitchRot = yInput
+        var pitchRot = yInput * handling
 
         // Pitch up globally
         if (abs(controller.pitch + pitchRot) >= 89.5 ) {
@@ -372,62 +441,44 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
         val controller = (driver as OrientationControllable).orientationController
 
-        val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
+        val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult)
 
         //Smooth out mouse input.
         val smoothingSpeed = 4.0
-        val mouseXc = (mouseX).coerceIn(-60.0, 60.0)
-        val mouseYc = (mouseY).coerceIn(-60.0, 60.0)
+        val mouseXc = (mouseX).coerceIn(-45.0, 45.0) * mouseInputMult
+        // When upside down apply a pitching force to nudge the player towards a dive. This reduces the 'weirdness'
+        // of being upside down
+        val rolledOverPitchCorrection = -8*sqrt(abs(min(cos(controller.roll.toRadians()),0.0f))) * (cos(controller.pitch.toRadians())).pow(2)
+        val mouseYc = ((mouseY).coerceIn(-45.0, 45.0) * mouseInputMult) + rolledOverPitchCorrection
         val xInput = mouseXSmoother.getNewDeltaValue(mouseXc * 0.1, deltaTime * smoothingSpeed);
         val yInput = mouseYSmoother.getNewDeltaValue(mouseYc * 0.1, deltaTime * smoothingSpeed);
+        val currSpeed = state.rideVelocity.get().length()
+        val hoverSpeed = 0.1
 
-        //limit rolling based on handling and current speed.
-        //modulated by speed so that when flapping idle in air you are ont wobbling around to look around
-        val rotMin = 15.0
-        var rollForce = xInput
-        val rotLimit = max(90 * sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)), rotMin)
+        // Yaw locally when at or below hoverSpeed
+        val yawDampen = abs(cos(controller.pitch.toRadians())).pow(2) * abs(cos(controller.roll.toRadians())).pow(2)
+        val localYaw = if (currSpeed < hoverSpeed) xInput * (1 - sqrt(RidingBehaviour.scaleToRange(currSpeed, hoverSpeed, topSpeed))).coerceIn(0.0, 1.0)
+            else xInput * 0.4 * cos(controller.roll.toRadians()).coerceIn(0.0f, 1.0f) * yawDampen
 
-        //Limit roll by non linearly decreasing inputs towards
-        // a rotation limit based on the current distance from
-        // that rotation limit
-        if (abs(controller.roll + rollForce) < rotLimit) {
-            if (sign(rollForce) == sign(controller.roll).toDouble()) {
-                //Grab how far the current roll is away from the roll limit
-                val d = abs(abs(controller.roll) - rotLimit)
-                rollForce *= (d.pow(2)) / (rotLimit.pow(2))
-            }
-        } else { //if (sign(rollForce) == sign(controller.roll).toDouble()) {
-            rollForce *= max(abs(sin(controller.pitch.toRadians())),0.1f)
-        }
+        // Pitch locally up or down depending upon a number of factors:
+        // - Reduce pitch substantially when rolled and in a steep yaw. This prevents the player from ignoring a slow handling stat
+        // - Do not pitch at all when at or below hover speed
+        // - pitch faster at higher speeds
+        val p = 1.0 - vehicle.runtime.resolveDouble(settings.horizontalPitchExpr)
+        var localPitch = yInput * (1 - abs(sin(controller.roll.toRadians())).pow(2) * p * hypot(controller.forwardVector.x.toDouble(), controller.forwardVector.z.toDouble()).toFloat())
+        localPitch *= if (currSpeed > hoverSpeed) RidingBehaviour.scaleToRange(currSpeed, hoverSpeed, topSpeed)
+            else 0.0
 
-        //Give the ability to yaw with x mouse input when at low speeds.
-        val yawForce =  xInput * ( 1.0 - sqrt(RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), 0.0, topSpeed)))
-
-        //        //Yaw locally a bit when up or down so that its more intuitive to make it out of a dive or a straight vertical
-        //        //climb
-        //        val yawForcePitched = xInput * sin(Math.toRadians(abs(controller.pitch.toDouble()))) * 0.25
-
-
-        //Apply yaw globally as we don't want roll or pitch changes due to local yaw when looking up or down.
-        if (controller.upVector.dot(Vector3f(0f,1f,0f)) > 0) {
-            controller.applyGlobalYaw(yawForce.toFloat())
-        }
-
-
-        // Pitch up globally
-        controller.applyGlobalPitch(-1 * yInput.toFloat())
-        // roll to 0 if pitching and not upside down. This is to prevent odd back and forth wobbling when
-        // pitching globally and experiencing axis changes
-        if (controller.upVector.dot(Vector3f(0f,1f,0f)) > 0) {
-            // correct roll equal to the amount the ride is pitching (yInput)
-            // correct roll only when near to horizontal (cos(pitch))
-            // correct roll proportional to how rolled the ride currently is
-            rollForce += controller.roll * -0.01 * abs(yInput) * abs(cos(controller.pitch.toRadians())) * abs(sin(controller.roll.toRadians()))
-        }
+        // Roll less when slow and not at all when at hoverSpeed or lower.
+        // Apply a roll righting force when trying to pitch hard while rolled sideways. This nudges the player towards
+        // pitching globally
+        val pitchInfluencedRollCorrection = 0.0 // if ( currSpeed > hoverSpeed * 2) 0.4*(abs(yInput - localPitch) * controller.roll.sign * -1.0) else 0.0
+        val rollForce = if (currSpeed > hoverSpeed) xInput * sqrt(abs(RidingBehaviour.scaleToRange(currSpeed, hoverSpeed, topSpeed)).coerceIn(0.0,1.0)) + pitchInfluencedRollCorrection
+            else 0.0
 
         //yaw, pitch, roll
-        return Vec3(0.0, 0.0, rollForce)
+        return Vec3(localYaw, localPitch, rollForce)
     }
 
 
@@ -474,13 +525,14 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-        val glideTopSpeed = vehicle.runtime.resolveDouble(settings.glidespeedExpr)
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
+        val glideTopSpeed = topSpeed * vehicle.runtime.resolveDouble(settings.glidespeedExpr)
+        val currSpeed = state.rideVelocity.get().length()
 
-        //Must I ensure that topspeed is greater than minimum?
-        val normalizedGlideSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), topSpeed, glideTopSpeed)
+        // Must I ensure that topspeed is greater than minimum?
+        val normalizedGlideSpeed = RidingBehaviour.scaleToRange(currSpeed, topSpeed, glideTopSpeed)
 
-        //Only ever want the fov change to be a max of 0.2 and for it to have non linear scaling.
+        // Only ever want the fov change to be a max of 0.2 and for it to have non linear scaling.
         return 1.0f + normalizedGlideSpeed.pow(2).toFloat() * 0.2f
     }
 
@@ -557,14 +609,18 @@ class BirdSettings : RidingBehaviourSettings {
     var infiniteStamina: Expression = "false".asExpression()
         private set
 
-    //max y level for the ride
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 200.0, 128.0)".asExpression()
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 135.0, 45.0)".asExpression()
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.0, 0.35)".asExpression()
-    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 3.0)), (1.0 / (20.0 * 8.0)))".asExpression()
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 120.0, 20.0)".asExpression()
+    var timeToRollCorrect: Expression = "0.5".asExpression()
+        private set
 
-    var glidespeedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 2.0, 1.0)".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 90.0, 45.0)".asExpression()
+    var horizontalPitchExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 0.2, 0.1)".asExpression()
+    var mouseInputMult: Expression = "q.get_ride_stats('SKILL', 'AIR', 1.2, 0.8)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 14.0, 8.0)".asExpression()
+    // Seconds from stationary to top speed
+    var accelerationExpr: Expression = "q.get_ride_stats('ACCELERATION', 'AIR', 2.0, 5.0)".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 22.0, 12.0)".asExpression()
+
+    var glidespeedExpr: Expression =  "q.get_ride_stats('JUMP', 'AIR', 2.2, 1.5)".asExpression()
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
@@ -576,11 +632,13 @@ class BirdSettings : RidingBehaviourSettings {
         buffer.writeExpression(infiniteAltitude)
         buffer.writeExpression(infiniteStamina)
         buffer.writeExpression(glidespeedExpr)
-        buffer.writeExpression(jumpExpr)
         buffer.writeExpression(handlingExpr)
+        buffer.writeExpression(horizontalPitchExpr)
+        buffer.writeExpression(mouseInputMult)
         buffer.writeExpression(speedExpr)
         buffer.writeExpression(accelerationExpr)
         buffer.writeExpression(staminaExpr)
+        buffer.writeExpression(timeToRollCorrect)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -589,18 +647,22 @@ class BirdSettings : RidingBehaviourSettings {
         infiniteAltitude = buffer.readExpression()
         infiniteStamina = buffer.readExpression()
         glidespeedExpr = buffer.readExpression()
-        jumpExpr = buffer.readExpression()
         handlingExpr = buffer.readExpression()
+        horizontalPitchExpr = buffer.readExpression()
+        mouseInputMult = buffer.readExpression()
         speedExpr = buffer.readExpression()
         accelerationExpr = buffer.readExpression()
         staminaExpr = buffer.readExpression()
+        timeToRollCorrect = buffer.readExpression()
     }
 }
 
 class BirdState : RidingBehaviourState() {
-    var gliding = ridingState(false, Side.CLIENT)
+    var gliding = ridingState(false, Side.BOTH)
     var lastGlide = ridingState(-100L, Side.CLIENT)
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)
+    var currPitchCorrectionForce = ridingState(0.0, Side.CLIENT)
+    var noInputTime = ridingState(0.0, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
@@ -618,6 +680,8 @@ class BirdState : RidingBehaviourState() {
         gliding.set(false, forced = true)
         lastGlide.set(-100L, forced = true)
         currRollCorrectionForce.set(0.0, forced = true)
+        currPitchCorrectionForce.set(0.0, forced = true)
+        noInputTime.set(0.0, forced = true)
     }
 
     override fun toString(): String {
@@ -630,6 +694,8 @@ class BirdState : RidingBehaviourState() {
         it.gliding.set(this.gliding.get(), forced = true)
         it.lastGlide.set(this.lastGlide.get(), forced = true)
         it.currRollCorrectionForce.set(this.currRollCorrectionForce.get(), forced = true)
+        it.currPitchCorrectionForce.set(this.currPitchCorrectionForce.get(), forced = true)
+        it.noInputTime.set(this.noInputTime.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {

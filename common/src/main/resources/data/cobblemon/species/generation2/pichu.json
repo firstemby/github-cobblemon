@@ -232,6 +232,16 @@
     }
   ],
   "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4"
+    },
     "herd": {
       "maxSize": "4",
       "toleratedLeaders": [

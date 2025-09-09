@@ -67,10 +67,6 @@
       "maxSize": "9",
       "toleratedLeaders": [
         {
-          "pokemon": "combee",
-          "tier": 1
-        },
-        {
           "pokemon": "vespiquen",
           "tier": 2
         }

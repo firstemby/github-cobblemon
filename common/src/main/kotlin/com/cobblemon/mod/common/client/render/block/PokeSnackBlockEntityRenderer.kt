@@ -27,11 +27,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT
 
 open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<PokeSnackBlockEntity> {
     override fun render(blockEntity: PokeSnackBlockEntity, partialTick: Float, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
-        renderCandle(blockEntity, poseStack, bufferSource, packedLight, packedOverlay)
-        renderBerries(blockEntity, poseStack, bufferSource, packedLight, packedOverlay)
+        val hasCandle = renderCandle(blockEntity, poseStack, bufferSource, packedLight, packedOverlay)
+        renderBerries(blockEntity, poseStack, bufferSource, packedLight, packedOverlay, hasCandle)
     }
 
-    fun renderCandle(blockEntity: PokeSnackBlockEntity, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+    fun renderCandle(blockEntity: PokeSnackBlockEntity, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int): Boolean {
         val candleId = blockEntity.blockState.getValue(CANDLE)
 
         if (candleId > 0) {
@@ -47,10 +47,12 @@ open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context
                 packedOverlay
             )
             poseStack.popPose()
+            return true
         }
+        return false
     }
 
-    fun renderBerries(blockEntity: PokeSnackBlockEntity, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int) {
+    fun renderBerries(blockEntity: PokeSnackBlockEntity, poseStack: PoseStack, bufferSource: MultiBufferSource, packedLight: Int, packedOverlay: Int, hasCandle: Boolean) {
         // RenderType.entityCutoutNoCull for shading, as shading is absent in RenderType CobblemonRenderLayers.BERRY_LAYER
         val buffer = bufferSource.getBuffer(
             RenderType.entityCutoutNoCull(BERRY_SPRITE_ATLAS.textureAtlas.location())
@@ -65,16 +67,29 @@ open class PokeSnackBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context
             when (berryIngredients.size) {
                 1 -> {
                     val pos = berry.pokeSnackPositionings[0].position
+                    val rot = berry.pokeSnackPositionings[0].rotation
 
-                    model.setPosition(Axis.X_AXIS.ordinal, 8F)
-                    model.setPosition(Axis.Y_AXIS.ordinal, pos.y.toFloat())
-                    model.setPosition(Axis.Z_AXIS.ordinal, 8F)
+                    if (hasCandle) {
+                        model.setPosition(Axis.X_AXIS.ordinal, pos.x.toFloat())
+                        model.setPosition(Axis.Y_AXIS.ordinal, pos.y.toFloat())
+                        model.setPosition(Axis.Z_AXIS.ordinal, pos.z.toFloat())
 
-                    model.setRotation(
-                        Math.toRadians(180.0).toFloat(),
-                        Math.toRadians(0.0).toFloat(),
-                        Math.toRadians(0.0).toFloat()
-                    )
+                        model.setRotation(
+                            Math.toRadians(rot.x).toFloat(),
+                            Math.toRadians(rot.y).toFloat(),
+                            Math.toRadians(rot.z).toFloat()
+                        )
+                    } else {
+                        model.setPosition(Axis.X_AXIS.ordinal, 8F)
+                        model.setPosition(Axis.Y_AXIS.ordinal, pos.y.toFloat())
+                        model.setPosition(Axis.Z_AXIS.ordinal, 8F)
+
+                        model.setRotation(
+                            Math.toRadians(180.0).toFloat(),
+                            Math.toRadians(0.0).toFloat(),
+                            Math.toRadians(0.0).toFloat()
+                        )
+                    }
                 }
                 2 -> {
                     val pos = berry.pokeSnackPositionings[0].position

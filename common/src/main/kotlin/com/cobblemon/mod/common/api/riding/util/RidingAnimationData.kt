@@ -16,7 +16,10 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.sign
+import kotlin.math.sin
 
 /**
  * Class to handle the updating and containment of ride data used in animation.
@@ -35,6 +38,18 @@ class RidingAnimationData(val ride: PokemonEntity)
     var rotDeltaSpring: Vec3Spring = Vec3Spring()
     var localVelocitySpring: Vec3Spring = Vec3Spring()
     var driverInputSpring: Vec3Spring = Vec3Spring()
+    var diveSpring: Vec3Spring = Vec3Spring()
+
+    fun clear() {
+        prevOrientation = Matrix3f()
+        prevRot = Vec3.ZERO
+        velocitySpring = Vec3Spring()
+        rotSpring = Vec3Spring()
+        rotDeltaSpring = Vec3Spring()
+        localVelocitySpring = Vec3Spring()
+        driverInputSpring = Vec3Spring()
+        diveSpring = Vec3Spring()
+    }
 
     fun update() {
         val activeRide = ride.hasControllingPassenger()
@@ -149,6 +164,9 @@ class RidingAnimationData(val ride: PokemonEntity)
         rotDeltaSpring.update(angDelta, stiffness, damping)
         velocitySpring.update(currentVelocity, stiffness, damping)
         rotSpring.update(currRot, stiffness, damping)
+
+        val diving = abs(max(sin(currRot.x.toRadians()),0f))
+        diveSpring.update(Vec3(0.0,diving.toDouble(),0.0), stiffness, damping)
         prevRot = currRot
     }
 }

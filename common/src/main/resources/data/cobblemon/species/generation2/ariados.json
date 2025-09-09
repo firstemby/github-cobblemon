@@ -43,7 +43,7 @@
   "catchRate": 90,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 0.8,
+  "baseScale": 1,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -205,8 +205,38 @@
   "preEvolution": "spinarak",
   "evolutions": [],
   "behaviour": {
+    "walking":{
+      "walkSpeed": 0.18
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
     "herd": {
       "maxSize": "5"
     }
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "20-70",
+          "ACCELERATION": "90-100",
+          "SKILL": "40-60",
+          "JUMP": "10-30",
+          "STAMINA": "50-70"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
   }
 }

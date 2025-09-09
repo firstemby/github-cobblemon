@@ -16,7 +16,6 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.client.resources.sounds.TickableSoundInstance
 import net.minecraft.sounds.SoundSource
-import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.util.Mth
 
@@ -57,6 +56,9 @@ class BattleMusicInstance(sound: SoundEvent, volume: Float = 1.0F, pitch: Float 
         this.fade = true
         this.looping = false
     }
+
+    /** Returns whether this instance is currently fading out. */
+    fun isFading(): Boolean = fade
 
     override fun tick() {
         ++tickCount

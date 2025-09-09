@@ -4,56 +4,159 @@
 		"animation.grimer.ground_idle": {
 			"loop": true,
 			"bones": {
-				"arm_right": {
-					"rotation": [9.00717, -20.70481, -24.14867]
+				"body2": {
+					"rotation": [5, 0, 0]
 				},
-				"arm_right2": {
-					"rotation": [-22.5, -55, 22.5]
-				},
-				"finger_right_index": {
-					"rotation": [0, -22.5, -22.5]
-				},
-				"finger_right_ring": {
-					"rotation": [0, 22.5, -22.5]
+				"torso": {
+					"rotation": [5, 0, 0]
 				},
 				"arm_left": {
-					"rotation": [9.00717, 20.70481, 24.14867]
+					"rotation": [-10.82086, 45.85124, -21.72716]
 				},
 				"arm_left2": {
-					"rotation": [-22.5, 55, -22.5]
+					"rotation": [-1.59176, 32.46527, -2.96346]
 				},
-				"finger_left_index": {
-					"rotation": [0, 22.5, 22.5]
+				"finger_front_left": {
+					"rotation": [0, 17.5, 0]
 				},
-				"finger_left_ring": {
-					"rotation": [0, -22.5, 22.5]
+				"finger_front_left2": {
+					"rotation": [0, -10, 0]
+				},
+				"finger_middle_left": {
+					"rotation": [0, 0, -7.5]
+				},
+				"finger_middle_left2": {
+					"rotation": [0, 0, 7.5]
+				},
+				"finger_back_left": {
+					"rotation": [0, -17.5, 0]
+				},
+				"finger_back_left2": {
+					"rotation": [0, 10, 0]
+				},
+				"arm_right": {
+					"rotation": [-12.2127, -43.65747, 17.40744]
+				},
+				"arm_right2": {
+					"rotation": [0, -40, 0]
+				},
+				"hand_right": {
+					"rotation": [0, 0, -7.5]
+				},
+				"finger_front_right": {
+					"rotation": [0, -17.5, 0]
+				},
+				"finger_front_right2": {
+					"rotation": [0, 10, 0]
+				},
+				"finger_middle_right": {
+					"rotation": [0, 0, 7.5]
+				},
+				"finger_middle_right2": {
+					"rotation": [0, 0, -7.5]
+				},
+				"finger_back_right": {
+					"rotation": [0, 17.5, 0]
+				},
+				"finger_back_right2": {
+					"rotation": [0, -10, 0]
+				},
+				"head": {
+					"rotation": [-2.5, 0, 0]
+				},
+				"jaw": {
+					"rotation": [0, 0, 0]
+				},
+				"jaw_detail": {
+					"rotation": [47.5, 0, 0]
+				},
+				"front_tail": {
+					"position": [0, 0, 3.5]
+				},
+				"back_tail": {
+					"position": [0, 0, -1]
+				},
+				"slime_right": {
+					"rotation": [0, 0, -12.5]
+				},
+				"slime_left": {
+					"rotation": [0, 0, 5]
 				}
 			}
 		},
 		"animation.grimer.blink": {
 			"animation_length": 0.1667,
 			"bones": {
-				"eyelid_right": {
-					"position": {
-						"0.0": [-0.1, 0, -0.1],
-						"0.125": [-0.1, 0, -0.1],
-						"0.1667": [0, 0, 0]
-					}
-				},
 				"eyelid_left": {
 					"position": {
 						"0.0": [0.1, 0, -0.1],
 						"0.125": [0.1, 0, -0.1],
 						"0.1667": [0, 0, 0]
 					}
+				},
+				"eyelid_right": {
+					"position": {
+						"0.0": [-0.1, 0, -0.1],
+						"0.125": [-0.1, 0, -0.1],
+						"0.1667": [0, 0, 0]
+					}
 				}
 			}
 		},
-		"animation.grimer.cry": {
-			"animation_length": 0.25,
-			"sound_effects": {
-				"0.0417": {
-					"effect": "pokemon.grimer.cry"
+		"animation.grimer.shock": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"position": [0.25, -0.5, 0],
+					"scale": [0.7, 0.7, 1]
+				},
+				"pupil_right": {
+					"position": [-0.25, -0.5, 0],
+					"scale": [0.7, 0.7, 1]
+				}
+			}
+		},
+		"animation.grimer.angry": {
+			"loop": true,
+			"bones": {
+				"eye_angry_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_angry_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.grimer.sad": {
+			"loop": true,
+			"bones": {
+				"eye_sad_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_sad_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.grimer.happy": {
+			"loop": true,
+			"bones": {
+				"eyelid_happy_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eyelid_happy_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.grimer.hurt": {
+			"loop": true,
+			"bones": {
+				"eyelid_recoil_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eyelid_recoil_right": {
+					"position": [-0.1, 0, -0.1]
 				}
 			}
 		}

@@ -39,28 +39,35 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
     KeybindCategories.COBBLEMON_CATEGORY
 ) {
     var canApplyChange = true
-    var secondsSinceActioned = 0F
+    var heldDownSeconds = 0F
 
     fun actioned() {
         canApplyChange = false
-        secondsSinceActioned = 0F
+        wasDown = true
+        heldDownSeconds = 0F
     }
 
     fun canAction() = canApplyChange && Minecraft.getInstance().player?.isUsingPokedex() == false
 
     override fun onTick() {
-        if (secondsSinceActioned < 100) {
-            secondsSinceActioned += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+        if (wasDown) {
+            if (heldDownSeconds < 100) {
+                heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
+            }
+        } else {
+            heldDownSeconds = 0F
         }
 
         super.onTick()
     }
 
     override fun onRelease() {
+        val canAction = canAction()
         wasDown = false
         canApplyChange = true
-
-        if (!canAction()) return
+        if (!canAction) {
+            return
+        }
         val player = Minecraft.getInstance().player ?: return
         if (player.isSpectator) return
 

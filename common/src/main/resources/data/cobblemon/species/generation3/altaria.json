@@ -43,28 +43,130 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "standingEyeHeight": 0.87,
-  "swimmingEyeHeight": 0.87,
-  "flyingEyeHeight": 0.87,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.7,
     "height": 1.8,
-    "fixed": false
+    "fixed": false,
+    "width": 1.7
   },
-  "behaviour": {
-    "moving": {
-      "walking": {
-        "walkSpeed": 0.19
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "55-85",
+          "SKILL": "55-85",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
+        }
       },
-      "fly": {
-        "canFly": true
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
       }
     },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.004296821,
+              "y": -1.125,
+              "z": 0.18746306
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03763314,
+              "y": -0.98570454,
+              "z": 0.3061015
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.01724504,
+              "y": -1.2718778,
+              "z": 0.234375
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2170211,
+              "z": 0.21431871
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.004296821,
+              "y": -1.125,
+              "z": 0.18746306
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.004296821,
+              "y": -1.125,
+              "z": 0.18746306
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.004296821,
+              "y": -1.125,
+              "z": 0.18746306
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [
@@ -77,6 +179,18 @@
           "tier": 2
         }
       ]
+    },
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walking": {
+        "walkSpeed": 0.19
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
     }
   },
   "drops": {
@@ -278,9 +392,6 @@
         "speed": 80
       },
       "baseExperienceYield": 207,
-      "dynamaxBlocked": true,
-      "evolutions": [],
-      "battleOnly": true,
       "behaviour": {
         "herd": {
           "maxSize": "9",
@@ -291,7 +402,13 @@
             }
           ]
         }
-      }
+      },
+      "evolutions": [],
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
-  ]
+  ],
+  "flyingEyeHeight": 0.87,
+  "standingEyeHeight": 0.87,
+  "swimmingEyeHeight": 0.87
 }

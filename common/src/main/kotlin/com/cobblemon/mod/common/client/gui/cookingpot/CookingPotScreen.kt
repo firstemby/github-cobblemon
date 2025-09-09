@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
@@ -22,13 +23,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.components.StateSwitchingButton
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetSprites
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
@@ -39,7 +38,6 @@ import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.RecipeBookMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.crafting.CraftingInput
-import java.util.*
 import kotlin.math.ceil
 
 @Environment(EnvType.CLIENT)
@@ -216,7 +214,8 @@ class CookingPotScreen(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             CobblemonJeiPlugin.jeiRuntime?.recipesGui?.showTypes(
@@ -252,7 +251,8 @@ class CookingPotScreen(
     ) {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             guiGraphics.renderTooltip(

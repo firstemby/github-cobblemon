@@ -3,6 +3,9 @@
   "portraitTranslation": [ -0.46, -0.055, 0.0],
   "profileScale": 0.81,
   "profileTranslation": [ 0, 0.51, 0],
+  "animations": {
+    "cry": "q.bedrock_stateful('houndour', 'cry')"
+  },
   "rootBone": "houndour",
   "poses": {
     "standing": {

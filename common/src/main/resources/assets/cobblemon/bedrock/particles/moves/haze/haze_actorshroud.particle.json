@@ -25,7 +25,7 @@
         },
         "components": {
             "minecraft:emitter_rate_steady": {
-                "spawn_rate": 140,
+                "spawn_rate": 180,
                 "max_particles": 1000
             },
             "minecraft:emitter_lifetime_looping": {
@@ -34,7 +34,7 @@
             "minecraft:emitter_shape_disc": {
                 "offset": [
                     0,
-                    "math.random(0,6)",
+                    "math.random(-2,6)",
                     -2
                 ],
                 "radius": 8,
@@ -54,7 +54,7 @@
             "minecraft:particle_motion_dynamic": {
                 "linear_acceleration": [
                     0,
-                    1,
+                    0.5,
                     0
                 ],
                 "linear_drag_coefficient": 2
@@ -101,9 +101,6 @@
                         "1.0": "#00021026"
                     }
                 }
-            },
-            "cobblemon:emitter_space": {
-                "scaling": "entity"
             }
         }
     }

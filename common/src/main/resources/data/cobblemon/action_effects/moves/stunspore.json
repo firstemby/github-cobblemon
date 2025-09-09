@@ -6,8 +6,8 @@
     },
     {
       "type": "animation",
-      "animation": ["stunspore", "status", "cry"],
-      "delay": 1.15
+      "animation": ["stunspore", "powder", "status", "cry"],
+      "delay": 1.25
     },
     {
       "type": "entity_particles",

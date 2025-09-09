@@ -23,7 +23,7 @@
       ]
     },
     {
-      "aspects": ["shiny", "low-key"],
+      "aspects": ["shiny", "low_key-form"],
       "texture": "cobblemon:textures/pokemon/0849_toxtricity/toxtricity_lowkey_shiny.png",
       "layers": [
         {

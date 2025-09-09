@@ -48,13 +48,21 @@
   "hitbox": {
     "width": 0.8,
     "height": 1.2,
+    "standingEyeHeight": 0.7,
     "fixed": false
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.17
+      },
       "fly": {
         "canFly": true
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
     },
     "herd": {
       "maxSize": "9",
@@ -195,10 +203,6 @@
         {
           "variant": "level",
           "minLevel": 54
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/rufflet_hisuibiome"
         }
       ]
     },
@@ -218,10 +222,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/rufflet_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
         }
       ]
     }
@@ -262,10 +262,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/rufflet_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
             }
           ]
@@ -282,10 +278,6 @@
             {
               "variant": "level",
               "minLevel": 54
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
             }
           ]
         }

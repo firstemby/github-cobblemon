@@ -149,7 +149,6 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                         showVerticalMouse = false
                     }
                     JetBehaviour.KEY -> {
-                       showMovementKeys = false
                        showSneakKey = false
                        showJumpKey = false
                     }

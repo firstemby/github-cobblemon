@@ -210,10 +210,6 @@
         {
           "variant": "level",
           "minLevel": 36
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
         }
       ]
     },
@@ -233,10 +229,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/quilava_johtobiome"
         }
       ]
     }
@@ -275,10 +267,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/quilava_johtobiome"
             }
           ]
@@ -295,10 +283,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/quilava_johtobiome"
             }
           ]
         }

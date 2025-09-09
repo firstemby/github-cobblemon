@@ -43,9 +43,124 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.65,
     "height": 2.35,
-    "fixed": false
+    "fixed": false,
+    "width": 1.65
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "55-85",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.019899037,
+              "y": -1.4814445,
+              "z": 0.41130581
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.007633015,
+              "y": -1.4571182,
+              "z": 0.4200257
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gogoat",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "canWalk": true,
+      "walkSpeed": 0.9
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
   },
   "drops": {
     "amount": 4,
@@ -181,16 +296,5 @@
     "legacy:toxic"
   ],
   "preEvolution": "skiddo",
-  "evolutions": [],
-  "behaviour": {
-    "herd": {
-      "maxSize": "9",
-      "toleratedLeaders": [
-        {
-          "pokemon": "gogoat",
-          "tier": 1
-        }
-      ]
-    }
-  }
+  "evolutions": []
 }

@@ -13,9 +13,6 @@ import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.acos
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
@@ -32,6 +29,9 @@ import net.minecraft.world.level.pathfinder.PathFinder
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.acos
 
 /**
  * A navigator designed to work with the [OmniPathNodeMaker], allowing a path that can cross land, water, and air
@@ -219,6 +219,16 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     fun moveTo(x: Double, y: Double, z: Double, speed: Double = 1.0, navigationContext: NavigationContext) {
         this.navigationContext = navigationContext
         this.moveTo(x, y, z, speed)
+    }
+
+    override fun isStableDestination(pos: BlockPos): Boolean {
+        if (pather.canSwimInWater() && mob.isInWater) {
+            val blockGetter: BlockGetter = level
+            if (blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
+                return true
+            }
+        }
+        return super.isStableDestination(pos)
     }
 
     override fun getGroundY(vec: Vec3): Double {

@@ -722,6 +722,16 @@ class PCGUI(
         }
         if (storageWidget.isHovered && mouseX < (storageWidget.x + StorageWidget.SCREEN_WIDTH)) this.storageWidget.box -= verticalAmount.toInt()
         if (wallpaperWidget.isHovered) wallpaperWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
+
+        val infoBoxX = ((width - BASE_WIDTH) / 2) + 9
+        val infoBoxY = ((height - BASE_HEIGHT) / 2) + 128
+
+        if (mouseX in infoBoxX.toDouble()..(infoBoxX + INFO_BOX_WIDTH).toDouble()
+            && mouseY in infoBoxY.toDouble()..(infoBoxY + INFO_BOX_HEIGHT).toDouble()
+        ) {
+            currentStatIndex = (currentStatIndex + verticalAmount.toInt() + 3) % 3
+        }
+
         return super.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
     }
 

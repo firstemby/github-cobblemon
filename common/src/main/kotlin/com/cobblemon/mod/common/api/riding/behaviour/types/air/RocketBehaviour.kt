@@ -85,29 +85,56 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     ): Float {
         // Use this as a "tick" function and check to see if the driver is "boosting"
         if(vehicle.level().isClientSide) {
+            handleBoosting(settings, state, vehicle, driver)
+            tickStamina(settings, state, vehicle)
+        }
 
-            //If the forward key is not held then it cannot be boosting
-            if(Minecraft.getInstance().options.keyUp.isDown()) {
-                val boostKeyPressed = Minecraft.getInstance().options.keySprint.isDown()
+        return state.rideVelocity.get().length().toFloat()
+    }
 
+    fun handleBoosting(
+        settings: RocketSettings,
+        state: RocketState,
+        vehicle: PokemonEntity,
+        driver: Player
+    ) {
+        //If the forward key is not held then it cannot be boosting
+        if(Minecraft.getInstance().options.keyUp.isDown() && state.stamina.get() != 0.0f) {
+            val boostKeyPressed = Minecraft.getInstance().options.keySprint.isDown()
+            if (state.stamina.get() >= 0.25f) {
                 //If on the previous tick the boost key was held then don't change if the ride is boosting
                 if(state.boostIsToggleable.get() && boostKeyPressed) {
                     //flip the boosting state if boost key is pressed
                     state.boosting.set(!state.boosting.get())
                 }
-
                 //If the boost key is not held then next tick boosting is toggleable
                 state.boostIsToggleable.set(!boostKeyPressed)
-            } else {
-                //Turn off boost and reset boost params
-                state.boostIsToggleable.set(true)
-                state.boosting.set(false)
-                state.canSpeedBurst.set(true)
             }
-
+        } else {
+            //Turn off boost and reset boost params
+            state.boostIsToggleable.set(true)
+            state.boosting.set(false)
+            state.canSpeedBurst.set(true)
         }
+    }
 
-        return state.rideVelocity.get().length().toFloat()
+    fun tickStamina(
+        settings: RocketSettings,
+        state: RocketState,
+        vehicle: PokemonEntity
+    ) {
+        val stam = state.stamina.get()
+
+        // Grab the boost time in seconds and convert to ticks. Then calculate the drain rate as inversely
+        // proportional to the number of ticks of boost thus making a full boost take x ticks
+        // in short: "Stamina drains slower at higher values and also replenishes slower"
+        val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
+        val stamDrainRate = (1.0f / boostTime).toFloat()
+
+        val newStam = if (state.boosting.get()) max(0.0f,stam - stamDrainRate)
+            else min(1.0f,stam + stamDrainRate)
+
+        state.stamina.set(newStam)
     }
 
     override fun updatePassengerRotation(
@@ -153,22 +180,23 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     ): Vec2 {
 
         var newMomentum = state.turnMomentum.get().toDouble()
-
-        // Grab turningAcceleration and divide 20 twice to get
-        val turningAcceleration = (vehicle.runtime.resolveDouble(settings.handlingExpr) / 20.0f) / 20.0f * 2
+        // Degrees per tick
+        val maxTurnMomentum = vehicle.runtime.resolveDouble(settings.maxTurnRate) / 20.0f
+        // Turn rate increase per tick. Based off number of seconds to get to max turn rate
+        val turningAcceleration = maxTurnMomentum / (vehicle.runtime.resolveDouble(settings.handlingExpr) * 20.0f)
         val turnInput =  (driver.xxa *-1.0f) * turningAcceleration
 
-        val maxTurnMomentum = 80.0f / 20.0f
-
         // Base boost stats off of normal turning stats
-        val boostMaxTurnMomentum = maxTurnMomentum * 0.1f
-        val boostTurnInput = turnInput * 0.15f
+        val boostHandlingMod = vehicle.runtime.resolveDouble(settings.boostHandlingMod)
+        val boostMaxTurnMomentum = maxTurnMomentum * boostHandlingMod
+        val boostTurnInput = turnInput * boostHandlingMod
 
         if(state.boosting.get()) {
             if(driver.xxa != 0.0f && abs(newMomentum + turnInput) < (boostMaxTurnMomentum)) { //If max momentum will not be exceeded then modulate
                 newMomentum += boostTurnInput
             } else {
                 newMomentum = lerp(newMomentum, 0.0, 0.05)
+                newMomentum = newMomentum.coerceIn(-boostMaxTurnMomentum, boostMaxTurnMomentum)
             }
         } else {
             if(driver.xxa == 0.0f) { //If no turning input then lerp to 0
@@ -204,8 +232,9 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Vec3 {
-        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) * 2
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr) * 0.5 * 2
+        val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
+        val jump = vehicle.runtime.resolveDouble(settings.jumpExpr)
 
         var newVelocity = vehicle.deltaMovement
 
@@ -213,8 +242,10 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val yawAligned = Matrix3f().rotateY(vehicle.yRot.toRadians())
         newVelocity = (newVelocity.toVector3f().mul(yawAligned)).toVec3d()
 
-        //speed up and slow down based on input
-        if (driver.zza != 0.0f && state.stamina.get() > 0.0 && !state.boosting.get()) {
+        /******************************************************
+         * Speed up and slow down based on input
+         *****************************************************/
+        if (driver.zza != 0.0f && !state.boosting.get()) {
             //make sure it can't exceed top speed
             val forwardInput = when {
                 vehicle.deltaMovement.horizontalDistance() > topSpeed && (driver.zza.sign == newVelocity.z.sign.toFloat()) -> 0.0
@@ -226,14 +257,16 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 newVelocity.y,
                 (newVelocity.z + (accel * forwardInput.toDouble())))
 
-        } else if ((state.stamina.get() > 0.0 && state.boosting.get())) {
-            val boostSpeed = topSpeed * 5
-            val boostAccel = if(newVelocity.length() < boostSpeed) accel * 3 else 0.0
+        } else if ((state.boosting.get())) {
+            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod)
+            val boostSpeed = topSpeed * boostMod
+            val boostAccel = if(newVelocity.length() < boostSpeed) accel * (boostMod/1.5) else 0.0
             val forwardInput = 1.0f
             var burst = 0.0f
 
             if(state.canSpeedBurst.get()) {
-                burst = 0.25f
+                burst = 0.5f
+                state.stamina.set(max(0.0f,state.stamina.get() - 0.1f))
                 state.canSpeedBurst.set(false)
             }
 
@@ -244,12 +277,13 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         }
 
         //Vertical movement based on driver input.
-        val maxVertSpeed = 0.5f
+        val maxVertSpeed = jump
+        val boostMaxVertSpeed = 0.5f * 0.25f
         var vertInput = 0.0
 
         //If boosting then don't lose altitude
         //otherwise propel up or fall
-        if (state.boosting.get() && !driver.jumping && vehicle.deltaMovement.y > (-maxVertSpeed * 0.25)) {
+        if (state.boosting.get() && !driver.jumping && vehicle.deltaMovement.y > (-boostMaxVertSpeed)) {
             vertInput = -0.7
             newVelocity = Vec3(
                 newVelocity.x,
@@ -257,28 +291,33 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 newVelocity.z)
         } else if(state.boosting.get() && vehicle.deltaMovement.y < maxVertSpeed) {
             vertInput = when {
-                driver.jumping -> 2.0
+                driver.jumping -> 1.0
                 else -> 0.0
             }
             newVelocity = Vec3(
                 newVelocity.x,
-                (newVelocity.y + (accel * 0.5 * vertInput)),
+                (newVelocity.y + (accel * vertInput)),
                 newVelocity.z)
         } else {
             if (driver.jumping && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
-                vertInput = 1.0
-
+                // More force if traveling downwards to allow for quicker fall stops
+                vertInput = if (newVelocity.y < 0) jump * 3 else jump
                 // Reset falldistance if upward motion is detected
                 vehicle.resetFallDistance()
-            } else {
-                vertInput = -2.5
-            }
-
-            if (state.stamina.get() > 0.0) {
                 newVelocity = Vec3(
                     newVelocity.x,
                     (newVelocity.y + (accel * vertInput)),
                     newVelocity.z)
+            } else {
+                /******************************************************
+                 * Gravity logic
+                 *****************************************************/
+                val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
+                val terminalVel = 2.0
+
+                val fallingForce = gravity
+                newVelocity = Vec3(newVelocity.x, max(newVelocity.y - fallingForce, -terminalVel), newVelocity.z)
+
             }
         }
 
@@ -362,10 +401,8 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     ): Float {
         if (state.boosting.get()) {
             val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
-            //val exceededSpeed = max(vehicle.deltaMovement.length() - topSpeed, 0.0)
-
-            //TODO: Remove this magic number and get a better comparison for boost top speed
-            val normalizedBoostSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), topSpeed, topSpeed * 3)
+            val boostMod = vehicle.runtime.resolveDouble(settings.boostSpeedMod)
+            val normalizedBoostSpeed = RidingBehaviour.scaleToRange(state.rideVelocity.get().length(), topSpeed, topSpeed * boostMod)
             return 1.0f + normalizedBoostSpeed.pow(2).toFloat() * 0.2f
         } else {
             return 1.0f
@@ -452,7 +489,19 @@ class RocketSettings : RidingBehaviourSettings {
     override val key = RocketBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 0.65, 0.3) * 0.25".asExpression()
+    // Boost multiplier for speed
+    var boostSpeedMod: Expression = "5.0".asExpression()
+        private set
+
+    // Boost multiplier for handling
+    var boostHandlingMod: Expression = "0.3".asExpression()
+        private set
+
+    // Max turn rate in degrees per second
+    var maxTurnRate: Expression = "100.0".asExpression()
+        private set
+
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 1.2, 0.6)".asExpression()
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
@@ -460,18 +509,15 @@ class RocketSettings : RidingBehaviourSettings {
         "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 3.0))) * 0.5".asExpression()
         private set
 
-    // Between 30 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 30.0, 10.0)".asExpression()
+    // Boost time in seconds
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 7.5, 2.5)".asExpression()
         private set
 
-    //Between a one block jump and a ten block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 10.0, 1.0)".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 2.0, 1.0)".asExpression()
         private set
 
-    // Controls the acceleration of the turning speed since the max turning speed is locked at 60 degrees/second
-    // So this is a range of 60 degrees/second per second to 20. Meaning at max stats when holding a direction it
-    // takes a full second to be turning at max speed.
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 60.0, 20.0)".asExpression()
+    // How long it takes to get to max turn rate from rest (in seconds)
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 0.5, 3.0)".asExpression()
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()

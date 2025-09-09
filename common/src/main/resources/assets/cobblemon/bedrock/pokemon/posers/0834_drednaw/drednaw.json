@@ -5,10 +5,8 @@
   "profileTranslation": [-0.085, 0.7, 0.0],
   "rootBone": "drednaw",
   "animations": {
-    "faint": "q.bedrock_primary('drednaw', 'faint', q.curve('one'))",
     "cry": "q.bedrock_stateful('drednaw', 'cry_PLACEHOLDER')",
-    "recoil": "q.bedrock_stateful('drednaw', 'recoil')",
-    "status": "q.bedrock_stateful('drednaw', 'status', q.curve('symmetrical_wide'))"
+    "recoil": "q.bedrock_stateful('drednaw', 'recoil')"
   },
   "poses": {
     "battle-standing": {
@@ -28,7 +26,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('drednaw', 'ground_idle')",
-        "q.quadruped_walk(0.9, 1.2, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+        "q.quadruped_walk(1.5, 1.2, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
       ],
       "quirks": ["q.bedrock_quirk('drednaw', 'blink')"]
     },

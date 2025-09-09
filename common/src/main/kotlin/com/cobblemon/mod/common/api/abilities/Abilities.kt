@@ -78,6 +78,7 @@ object Abilities : DataRegistry {
     fun all() = this.abilityMap.values.toList()
     fun first() = this.abilityMap.values.first()
     fun get(name: String) = abilityMap[name.lowercase()]
+    fun getOrDummy(name: String) = get(name) ?: DUMMY
     fun getOrException(name: String) = get(name) ?: throw IllegalArgumentException("Unable to find ability of name: $name")
     fun count() = this.abilityMap.size
 

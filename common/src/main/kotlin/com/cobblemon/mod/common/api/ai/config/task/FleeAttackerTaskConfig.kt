@@ -9,44 +9,36 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.FLEE_DESIRED_DISTANCE
-import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables.FLEE_SPEED_MULTIPLIER
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.ai.FleeFromAttackerTask
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
 class FleeAttackerTaskConfig : SingleTaskConfig {
-    var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "flee_attacker", true).asExpressible()
-    var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.5).asExpressible()
-    var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
+    val avoidDurationTicks: ExpressionOrEntityVariable = Either.left("600".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
-        condition,
-        speedMultiplier,
-        desiredDistance
-    ).asVariables()
+    override fun getVariables(
+        entity: LivingEntity,
+        behaviourConfigurationContext: BehaviourConfigurationContext
+    ): List<MoLangConfigVariable> {
+        return listOf(avoidDurationTicks).asVariables()
+    }
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
-    ): BehaviorControl<in LivingEntity>? {
-        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime) || entity !is PathfinderMob) return null
-
-        behaviourConfigurationContext.addMemories(MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.WALK_TARGET)
-        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
-
-        val speedMultiplier = speedMultiplier.resolveFloat(behaviourConfigurationContext.runtime)
-        val desiredDistance = desiredDistance.resolveInt(behaviourConfigurationContext.runtime)
-        return WrapperLivingEntityTask(
-            SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, speedMultiplier, desiredDistance, false),
-            PathfinderMob::class.java
+    ): BehaviorControl<in LivingEntity> {
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.HURT_BY_ENTITY,
+            MemoryModuleType.AVOID_TARGET
         )
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
+        return FleeFromAttackerTask.create(avoidDurationTicks.asExpression())
     }
 }

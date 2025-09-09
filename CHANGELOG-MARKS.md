@@ -1,6 +1,7 @@
 ### Additions
 - Added functionality for marks.
-- Added data for all marks and all title ribbons from Pokémon.
+- Added data for all marks and ribbons from the mainline Pokémon games.
+- Implemented fishing, personality, weather, and time related marks, that can rarely be granted to a wild-spawned Pokémon.
 - Added marks screen within the summary UI.
 - Added `/givemark <player> <partySlot> <mark>` command to give a mark to a Pokémon.
 - Added `/takemark <player> <partySlot> <mark>` command to remove a mark from a Pokémon.
