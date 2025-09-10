@@ -131,8 +131,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
-        val newStam = if (state.boosting.get()) max(0.0f,stam - stamDrainRate)
-            else min(1.0f,stam + stamDrainRate)
+        val newStam = max(0.0f,stam - stamDrainRate)
 
         state.stamina.set(newStam)
     }
@@ -301,7 +300,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         } else {
             if (driver.jumping && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
                 // More force if traveling downwards to allow for quicker fall stops
-                vertInput = if (newVelocity.y < 0) jump * 3 else jump
+                vertInput = (if (state.stamina.get() > 0.0f) -0.3f else if(newVelocity.y < 0) jump * 3 else jump) as Double
                 // Reset falldistance if upward motion is detected
                 vehicle.resetFallDistance()
                 newVelocity = Vec3(
