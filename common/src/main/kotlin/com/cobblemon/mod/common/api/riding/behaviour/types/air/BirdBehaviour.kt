@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.client.Minecraft
@@ -77,6 +78,19 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         }
     }
 
+    private fun checkUpsideDown(
+        state: BirdState,
+        vehicle: PokemonEntity,
+        driver: Player,
+    ) {
+        val controller = (driver as OrientationControllable).orientationController
+        if (cos(controller.roll.toRadians()) < 0.0) {
+
+        } else { // Its right side up so reset it
+
+        }
+    }
+
     fun tickStamina(
         settings: BirdSettings,
         state: BirdState,
@@ -92,7 +106,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         val stamDrainRate = (1.0f / totalStam).toFloat()
 
         val newStam = if (driver.zza > 0.0) max(0.0f,stam - stamDrainRate)
-            else min(1.0f,stam + stamDrainRate)
+            else if (!state.gliding.get()) max(0.0f,stam - stamDrainRate * 0.5f) // if hovering half the stam drain
+            else min(1.0f,stam + stamDrainRate * 0.5f)
 
         state.stamina.set(newStam)
     }
@@ -663,6 +678,7 @@ class BirdState : RidingBehaviourState() {
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)
     var currPitchCorrectionForce = ridingState(0.0, Side.CLIENT)
     var noInputTime = ridingState(0.0, Side.CLIENT)
+    var currUpsideDownForce = ridingState(0.0, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
