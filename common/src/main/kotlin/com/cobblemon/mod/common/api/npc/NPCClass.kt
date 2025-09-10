@@ -57,6 +57,7 @@ class NPCClass {
     var isMovable: Boolean = true
     var isInvulnerable = false
     var isLeashable = true
+    var visibilityCondition = true
     var allowProjectileHits = true
     var hideNameTag = false
 
@@ -98,6 +99,7 @@ class NPCClass {
         buffer.writeBoolean(isMovable)
         buffer.writeBoolean(isInvulnerable)
         buffer.writeBoolean(isLeashable)
+        buffer.writeBoolean(visibilityCondition)
         buffer.writeBoolean(allowProjectileHits)
         buffer.writeBoolean(hideNameTag)
     }
@@ -150,6 +152,7 @@ class NPCClass {
         isMovable = buffer.readBoolean()
         isInvulnerable = buffer.readBoolean()
         isLeashable = buffer.readBoolean()
+        visibilityCondition = buffer.readBoolean()
         allowProjectileHits = buffer.readBoolean()
         hideNameTag = buffer.readBoolean()
     }

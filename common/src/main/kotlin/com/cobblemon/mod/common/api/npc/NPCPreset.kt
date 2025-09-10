@@ -37,6 +37,7 @@ class NPCPreset {
     var isMovable: Boolean? = null
     var isInvulnerable: Boolean? = null
     var isLeashable: Boolean? = null
+    var visibilityCondition: Boolean? = null
     var allowProjectileHits: Boolean? = null
     var hideNameTag: Boolean? = null
 
@@ -63,6 +64,7 @@ class NPCPreset {
         isMovable?.let { npcClass.isMovable = it }
         isInvulnerable?.let { npcClass.isInvulnerable = it }
         isLeashable?.let { npcClass.isLeashable = it }
+        visibilityCondition?.let { npcClass.visibilityCondition = it }
         allowProjectileHits?.let { npcClass.allowProjectileHits = it }
         hideNameTag?.let { npcClass.hideNameTag = it }
     }

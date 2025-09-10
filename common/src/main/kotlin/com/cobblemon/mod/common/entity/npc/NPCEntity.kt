@@ -421,6 +421,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
             val hide = value.map["hide"] as? DoubleValue
             return hide?.asDouble() == 1.0
         }
+        val conditionValue = npc.visibilityCondition
+        if (!conditionValue) {
+            return true
+        }
         return false
     }
 
