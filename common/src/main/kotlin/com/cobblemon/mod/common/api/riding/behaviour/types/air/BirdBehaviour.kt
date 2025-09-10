@@ -129,8 +129,6 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        var yVel = 0.0
-        var leftForce = 0.0
         var upForce = 0.0
         var forwardForce = 0.0
 
@@ -150,7 +148,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         }
 
         // The downward force used to encourage players to stop flying upside down.
-        val extraDownwardForce = state.currUpsideDownForce.get().pow(2) * -0.3 // 6 blocks a second downward
+        val extraDownwardForce = if(state.stamina.get() == 0.0f) -0.3
+            else state.currUpsideDownForce.get().pow(2) * -0.3 // 6 blocks a second downward
 
         val velocity = Vec3(state.rideVelocity.get().x , upForce + extraDownwardForce, forwardForce)
         return velocity
