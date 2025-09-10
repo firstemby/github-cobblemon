@@ -322,12 +322,26 @@
     {
       "name": "Mega",
       "primaryType": "rock",
+      "variant": "temporary",
+      "toggleable": true,
       "secondaryType": "flying",
       "maleRatio": 0.875,
       "height": 21,
       "weight": 790,
       "pokedex": [
         "cobblemon.species.aerodactyl-mega.desc"
+      ],
+      "requirements": [
+        {
+          "variant": "held_item",
+          "itemCondition": {
+            "items": ["minecraft:glowstone"]
+          }
+        },
+        {
+          "variant": "key_item",
+          "requiredKeyItem": "cobblemon:key_stone"
+        }
       ],
       "labels": [
         "gen6",

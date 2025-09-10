@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.battles.*
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGimmickButton.GimmickTile
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.toRGB
-import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvents
 
@@ -30,7 +30,7 @@ import net.minecraft.sounds.SoundEvents
  * @author Segfault Guy
  * @since July 8th, 2023
  */
-abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Float, val y: Float) {
+abstract class BattleGimmickButton(val gimmick: ShowdownMoveset.Gimmick, val x: Float, val y: Float) {
 
     companion object {
         const val WIDTH = 36
@@ -61,24 +61,32 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
     var toggled = false
     private val sfx = SimpleSoundInstance.forUI(SoundEvents.ANVIL_LAND, 1.0F)
     private val texture = gimmick.id
+    val selectable: Boolean
+        get()  {
+            val battle = CobblemonClient.battle ?: return false
+            return battle.pendingGimmick(gimmick)
+        }
 
-    fun render(matrices: PoseStack, mouseX: Int, mouseY: Int, delta: Float) {
+    fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         blitk(
-            matrixStack = matrices,
+            matrixStack = graphics.pose(),
             texture = cobblemonResource("textures/gui/battle/battle_gimmick_${texture}.png"),
             x = x * 2,
             y = y * 2,
             height = HEIGHT,
             width = WIDTH,
-            vOffset = if (toggled || isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+            vOffset = if ((toggled || isHovered(mouseX.toDouble(), mouseY.toDouble()) && selectable)) HEIGHT else 0,
             textureHeight = HEIGHT * 2,
-            scale = SCALE
+            scale = SCALE,
+            alpha = if (selectable) 1.0F else 0.5F
         )
     }
 
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX >= x && mouseX <= x + XOFF && mouseY >= y && mouseY <= y + YOFF
 
     fun toggle(): Boolean {
+        if (!selectable)
+            return toggled
         toggled = !toggled
         Minecraft.getInstance().soundManager.play(sfx)
         return toggled

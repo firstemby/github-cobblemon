@@ -39,6 +39,8 @@ import net.minecraft.resources.ResourceLocation
 open class TemporaryForm (
     /** Whether this form is triggered during a battle. */
     val battleOnly: Boolean = false,
+    /** Whether this form has to be reverted before a battle begins. If null, [battleOnly] is used **/
+    val revertBeforeBattle: Boolean? = null,
     /** Whether this form can be freely toggled after requirements are initially met. */
     val toggleable: Boolean = false,
     /** */
@@ -83,7 +85,7 @@ open class TemporaryForm (
      */
     override fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (this.test(pokemon, context)) {
-            return if (this.optional)
+            return if (this.optional || this.toggleable)
                 pokemon.formProxy.server().add(this)
             else {
                 this.forceStart(pokemon)

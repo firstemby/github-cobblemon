@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.battleLang
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
@@ -44,6 +45,9 @@ open class BattlePokemon(
             val effectedPokemon = pokemon.clone()
             BattleCloneProperty.isBattleClone().apply(effectedPokemon)
             UncatchableProperty.uncatchable().apply(effectedPokemon)
+            val shouldRevertForm = (effectedPokemon.form as? TemporaryForm)?.revertBeforeBattle ?: (effectedPokemon.form as? TemporaryForm)?.battleOnly ?: false
+            if (shouldRevertForm)
+                effectedPokemon.formProxy.server().revert()
             return BattlePokemon(
                 originalPokemon = pokemon,
                 effectedPokemon = effectedPokemon,
@@ -51,13 +55,18 @@ open class BattlePokemon(
             )
         }
 
-        fun playerOwned(pokemon: Pokemon): BattlePokemon = BattlePokemon(
-            originalPokemon = pokemon,
-            effectedPokemon = pokemon,
-            postBattleEntityOperation = { entity ->
-                entity.effects.wipe()
-            }
-        )
+        fun playerOwned(pokemon: Pokemon): BattlePokemon {
+            val shouldRevertForm = (pokemon.form as? TemporaryForm)?.revertBeforeBattle ?: (pokemon.form as? TemporaryForm)?.battleOnly ?: false
+            if (shouldRevertForm)
+                pokemon.formProxy.server().revert()
+            return BattlePokemon(
+                originalPokemon = pokemon,
+                effectedPokemon = pokemon,
+                postBattleEntityOperation = { entity ->
+                    entity.effects.wipe()
+                }
+            )
+        }
     }
 
     val struct = QueryStruct(

@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.pokemon.transformation.requirements
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.requirements.template.EntityQueryRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.EntityQueryRequirement
 import net.minecraft.world.entity.LivingEntity
 
 /**

@@ -6,9 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.pokemon.transformation.requirements.template
+package com.cobblemon.mod.common.api.pokemon.transformation.requirement
 
-import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
@@ -32,7 +31,7 @@ interface EntityQueryRequirement : TransformationRequirement {
      * Checks if the given [Pokemon] & [LivingEntity] satisfies the requirement.
      *
      * @param pokemon The [Pokemon] being queried.
-     * @param queriedEntity The [LivingEntity] that can be compared in context of a [Level].
+     * @param queriedEntity The [LivingEntity] that can be compared in context of a [net.minecraft.world.level.Level].
      * @return If the requirement was satisfied.
      */
     fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean

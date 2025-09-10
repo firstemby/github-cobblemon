@@ -74,7 +74,8 @@ class BattleMoveSelection(
         BattleGimmickButton.create(gimmick, this, backButton.x + xOff, backButton.y)
     }
 
-    val shiftButton = BattleShiftButton(x + 22.5F, Minecraft.getInstance().window.guiScaledHeight - 22F )
+    val shiftButton = if (request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c'))
+        BattleShiftButton(x + 22.5F, Minecraft.getInstance().window.guiScaledHeight - 22F ) else null
 
     open class MoveTile(
         val moveSelection: BattleMoveSelection,
@@ -190,31 +191,30 @@ class BattleMoveSelection(
         }
         backButton.render(context, mouseX, mouseY, delta)
         gimmickButtons.forEach {
-            it.render(context.pose(), mouseX, mouseY, delta)
+            it.render(context, mouseX, mouseY, delta)
         }
-        if(this.request.activePokemon.getFormat().battleType.slotsPerActor == 3 && (request.activePokemon.getPNX()[2] == 'a' || request.activePokemon.getPNX()[2] == 'c')) {
-            shiftButton.render(context, mouseX, mouseY, delta)
-        }
+        shiftButton?.render(context, mouseX, mouseY, delta)
     }
 
     override fun mousePrimaryClicked(mouseX: Double, mouseY: Double): Boolean {
         val move = moveTiles.find { it.isHovered(mouseX, mouseY) }
         val gimmick = gimmickButtons.find { it.isHovered(mouseX, mouseY) }
         if (move != null) {
-            if(this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
+            if (this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
                 move.onClick()
-            } else {
-                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move))
+                return true
+            } else if (move.selectable) {
+                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID, move.move.gimmickMove))
                 playDownSound(Minecraft.getInstance().soundManager)
+                return true
             }
-            return true
         } else if (backButton.isHovered(mouseX, mouseY)) {
             playDownSound(Minecraft.getInstance().soundManager)
             battleGUI.changeActionSelection(null)
-        } else if (gimmick != null) {
+        } else if (gimmick != null && gimmick.selectable) {
             gimmickButtons.filter { it != gimmick }.forEach { it.toggled = false }
             moveTiles = if (gimmick.toggle()) gimmick.tiles else baseTiles
-        } else if(shiftButton.isHovered(mouseX,mouseY)) {
+        } else if (shiftButton?.isHovered(mouseX,mouseY) == true) {
             playDownSound(Minecraft.getInstance().soundManager)
             battleGUI.selectAction(request, ShiftActionResponse())
         }
