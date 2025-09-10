@@ -75,6 +75,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     ) {
         if(vehicle.level().isClientSide) {
             tickStamina(settings, state, vehicle, driver)
+            checkUpsideDown(state, vehicle, driver)
         }
     }
 
@@ -108,7 +109,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         val newStam = if (driver.zza > 0.0) max(0.0f,stam - stamDrainRate)
             else if (!state.gliding.get()) max(0.0f,stam - stamDrainRate * 0.5f) // if hovering half the stam drain
-            else min(1.0f,stam + stamDrainRate * 0.5f)
+            else min(1.0f,stam + stamDrainRate * 0.2f)
 
         state.stamina.set(newStam)
     }
@@ -246,7 +247,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         //Check if the ride should be gliding
         if (driver.isLocalPlayer) {
-            if (activeInput && state.stamina.get() > 0.0) {
+            if ((activeInput && state.stamina.get() > 0.0) || state.rideVelocity.get().z < 0.2) {
                 state.gliding.set(false)
             } else {
                 state.gliding.set(true)
@@ -255,7 +256,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         //air resistance
         if( abs(newVelocity.z) > 0) {
-            newVelocity = newVelocity.subtract(0.0, 0.0, min(0.0015 * newVelocity.z.sign, newVelocity.z))
+            newVelocity = newVelocity.subtract(0.0, 0.0, min(0.002 * newVelocity.z.sign, newVelocity.z))
         }
         state.rideVelocity.set(newVelocity)
     }

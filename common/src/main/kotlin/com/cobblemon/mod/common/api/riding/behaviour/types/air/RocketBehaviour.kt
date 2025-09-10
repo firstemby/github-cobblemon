@@ -86,7 +86,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         // Use this as a "tick" function and check to see if the driver is "boosting"
         if(vehicle.level().isClientSide) {
             handleBoosting(settings, state, vehicle, driver)
-            tickStamina(settings, state, vehicle)
+            tickStamina(settings, state, vehicle, driver)
         }
 
         return state.rideVelocity.get().length().toFloat()
@@ -121,7 +121,8 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     fun tickStamina(
         settings: RocketSettings,
         state: RocketState,
-        vehicle: PokemonEntity
+        vehicle: PokemonEntity,
+        driver: Player
     ) {
         val stam = state.stamina.get()
 
@@ -131,7 +132,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
-        val newStam = max(0.0f,stam - stamDrainRate)
+        val newStam = if(state.boosting.get() || driver.jumping) max(0.0f,stam - stamDrainRate) else stam
 
         state.stamina.set(newStam)
     }
@@ -265,7 +266,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
 
             if(state.canSpeedBurst.get()) {
                 burst = 0.5f
-                state.stamina.set(max(0.0f,state.stamina.get() - 0.1f))
+                state.stamina.set(max(0.0f,state.stamina.get() - 0.05f))
                 state.canSpeedBurst.set(false)
             }
 
@@ -300,7 +301,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         } else {
             if (driver.jumping && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
                 // More force if traveling downwards to allow for quicker fall stops
-                vertInput = (if (state.stamina.get() > 0.0f) -0.3f else if(newVelocity.y < 0) jump * 3 else jump) as Double
+                vertInput = (if (state.stamina.get() == 0.0f) -1.0f else if(newVelocity.y < 0) jump.toFloat() * 3.0f else jump.toFloat()).toDouble()
                 // Reset falldistance if upward motion is detected
                 vehicle.resetFallDistance()
                 newVelocity = Vec3(
@@ -508,8 +509,8 @@ class RocketSettings : RidingBehaviourSettings {
         "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 3.0))) * 0.5".asExpression()
         private set
 
-    // Boost time in seconds
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 7.5, 2.5)".asExpression()
+    // air time in seconds
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 20.0, 10.0)".asExpression()
         private set
 
     var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 2.0, 1.0)".asExpression()

@@ -149,7 +149,8 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
 
         //Translate ride space velocity to world space velocity.
         if (controller != null) {
-            upForce = -1.0 * sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z
+            upForce =  if(state.stamina.get() != 0.0f) -1.0 * sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z
+                else min(0.0, -1.0 * sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z)
             forwardForce = cos(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().z
         }
 
@@ -181,13 +182,12 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
 
         //speed up and slow down based on input
         if (state.stamina.get() == 0.0f) {
-            //modify acceleration to be slower when at closer speeds to top speed
-            val accelMod = max(-(RidingBehaviour.scaleToRange(speed, minSpeed, topSpeed)) + 1, 0.0)
+            // Decelerate currently always a constant half of max acceleration.
             state.rideVelocity.set(
                 Vec3(
                     state.rideVelocity.get().x,
                     state.rideVelocity.get().y,
-                    min(state.rideVelocity.get().z + (accel * accelMod), topSpeed)
+                    max(state.rideVelocity.get().z - ((accel) / 2), minSpeed * 0.5)
                 )
             )
         }
