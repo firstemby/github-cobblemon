@@ -24,6 +24,8 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sign
+import kotlin.math.sin
+import kotlin.random.Random
 
 class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -35,6 +37,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     // TODO: might need to hold its own velocity so minecraft doesn't do its nonsense to it?
     // Can handle collisions ourselves as well
     var speed: Double? = null
+
+    // wander vars
+    var currHorzWander = 0.0
+    var currVertWander = 0.0
+    val wanderDisp = 30.0 // The degrees of change from tick to tick in wander angle
 
     override fun tick() {
 
@@ -59,34 +66,13 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         val cubeWidth = 15.0
         val cubeHeight = 6.0
         val cubeCenter = target.position().add(cubeWidth, cubeHeight / 2.0, 0.0)
-        forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
+        //forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
 
-        // TODO: maybe move this to a sensor that lives spins up on the boid activity creation
-        // Get a list of other boid entities in this entity's vicinity
-        val brain = pokemonEntity.brain
-        val boids = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
-            nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
-                pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS
-            }
-        }.orElse(emptyList())
+        // Apply boid forces
+//        boid()
 
-        // separation
-        val separationForce = separation(boids)?.scale(0.8)
-        separationForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-        }
-        // alignment
-        val alignmentForce = alignment(boids)?.scale(0.7)
-        alignmentForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-        }
-
-        // cohesion
-        val cohesionForce = cohesion(boids)?.scale(0.6)
-        cohesionForce?.let { force ->
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
-        }
-
+        // Wander
+        wander()
 
         // Apply steering force to current movement
 //        val steerForce = steerToTargetForce(targetPos, speedLimit, maxForce, arrivalRange)
@@ -97,11 +83,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 
         // Limit upwards speed to be half of max speed. The boids kept bumping into the top of the box more so than birds
         // would. Honestly birds probably mostly want to move in the x,z plane anyhow
-        pokemonEntity.deltaMovement = Vec3(
-            pokemonEntity.deltaMovement.x,
-            min(pokemonEntity.deltaMovement.y, MAX_SPEED),
-            pokemonEntity.deltaMovement.y
-        ).normalize().scale(speed!!)
+//        pokemonEntity.deltaMovement = Vec3(
+//            pokemonEntity.deltaMovement.x,
+//            min(pokemonEntity.deltaMovement.y, MAX_SPEED),
+//            pokemonEntity.deltaMovement.y
+//        ).normalize().scale(speed!!)
 
         orientEntityToTravel()
     }
@@ -128,6 +114,71 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         }
 
         return steer
+    }
+
+    private fun wander() {
+        // Wander behaviour
+        /*************************************************************************************************************
+         * The wander behaviour is based of Reynolds wander behaviour which can be seen in the below link under wander
+         * This version however is adapted to 3dimensions.
+         * https://slsdo.github.io/steering-behaviors/
+         *************************************************************************************************************/
+        // Get curr steering positions in left/right and up/down offsets
+        val yWanderOff = sin(this.currVertWander.toRadians())
+        // Must be thought of as left right be
+        val normVec = pokemonEntity.deltaMovement.normalize()
+        val currHeading = Mth.atan2(normVec.z, normVec.x).toDegrees() // Grab the current heading in degrees
+        val xWanderOff = cos((this.currHorzWander + currHeading).toRadians())
+        val zWanderOff = sin((this.currHorzWander + currHeading).toRadians())
+
+        // Get point of the bird 1 tick in the future and have it be our circles' centerpoint
+        val wanderCenter = pokemonEntity.position().add(pokemonEntity.deltaMovement)
+        // Get the wander circle's radius
+        // NOTE! doing it this way means the wander turn rate is smaller the slower you are moving.
+        // Actually that may not be true as then the circle would be closer and the angle then might
+        // be the same to the same degree on the circle.
+        val wanderRadius = pokemonEntity.deltaMovement.length()
+        val wanderOff = Vec3(xWanderOff.toDouble(), yWanderOff.toDouble(), zWanderOff.toDouble()).scale(wanderRadius)
+
+        val wanderPoint = wanderCenter.add(wanderOff)
+
+        // change wander points
+        val randVert = Random.nextDouble(-wanderDisp, wanderDisp)
+        val randHorz = Random.nextDouble(-wanderDisp, wanderDisp)
+        currVertWander = Mth.wrapDegrees(randVert + currVertWander)
+        currHorzWander = Mth.wrapDegrees(randHorz + currHorzWander)
+
+        val wanderForce = steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
+        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce)
+    }
+
+    private fun boid() {
+        // TODO: maybe move this to a sensor that lives spins up on the boid activity creation
+        // Get a list of other boid entities in this entity's vicinity
+        val brain = pokemonEntity.brain
+        val boids = brain.getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).map { nearbyEntities ->
+            nearbyEntities.filterIsInstance<PokemonEntity>().filter { pokemon ->
+                pokemon.brain.activeNonCoreActivity.orElse(null) == CobblemonActivities.POKEMON_BOIDS
+            }
+        }.orElse(emptyList())
+
+        // separation
+        val separationForce = separation(boids)?.scale(0.8)
+        separationForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
+        // alignment
+        val alignmentForce = alignment(boids)?.scale(0.7)
+        alignmentForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
+
+        // cohesion
+        val cohesionForce = cohesion(boids)?.scale(0.6)
+        cohesionForce?.let { force ->
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(force)
+        }
+
     }
 
     private fun separation(boids: List<PokemonEntity>): Vec3? {
