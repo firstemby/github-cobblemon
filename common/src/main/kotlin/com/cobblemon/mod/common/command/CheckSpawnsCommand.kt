@@ -84,6 +84,9 @@ object CheckSpawnsCommand {
         spawnProbabilities.entries.forEach {
             val nameText = it.key.getName()
             val nameString = nameText.string
+
+            if(nameString.isBlank()) return@forEach
+
             if (!spawnNames.containsKey(nameString)) {
                 spawnNames[nameString] = it.key.getName()
             }
