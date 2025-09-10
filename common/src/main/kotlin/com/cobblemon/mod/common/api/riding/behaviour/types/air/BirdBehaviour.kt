@@ -85,9 +85,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     ) {
         val controller = (driver as OrientationControllable).orientationController
         if (cos(controller.roll.toRadians()) < 0.0) {
-
+            val upsideDownRate = 1.0 / (2.0 * 20.0) // 2 seconds to max out upsideDown force
+            state.currUpsideDownForce.set( min(1.0, state.currUpsideDownForce.get() + upsideDownRate * abs(cos(controller.roll.toRadians()))))
         } else { // Its right side up so reset it
-
+            state.currUpsideDownForce.set(0.0)
         }
     }
 
@@ -148,7 +149,10 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             forwardForce += sin(Math.toRadians(controller.pitch.toDouble())) * state.rideVelocity.get().y
         }
 
-        val velocity = Vec3(state.rideVelocity.get().x , upForce, forwardForce)
+        // The downward force used to encourage players to stop flying upside down.
+        val extraDownwardForce = state.currUpsideDownForce.get().pow(2) * -0.3 // 6 blocks a second downward
+
+        val velocity = Vec3(state.rideVelocity.get().x , upForce + extraDownwardForce, forwardForce)
         return velocity
     }
 
