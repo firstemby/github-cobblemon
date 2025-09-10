@@ -97,8 +97,10 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         driver: Player,
         input: Vec3
     ) {
-        tickStamina(settings, state, vehicle)
-        checkTooHigh(settings, state, vehicle)
+        if(vehicle.level().isClientSide) {
+            tickStamina(settings, state, vehicle)
+            checkTooHigh(settings, state, vehicle)
+        }
     }
 
     fun checkTooHigh(
@@ -432,16 +434,16 @@ class HoverSettings : RidingBehaviourSettings {
         private set
 
     // Speed in block per second
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 13.0, 6.0)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 9.0, 3.5)".asExpression()
         private set
 
     // Acceleration in number of seconds to top speed
     var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', 2.0, 5.0)".asExpression()
+        "q.get_ride_stats('ACCELERATION', 'AIR', 1.0, 3.0)".asExpression()
         private set
 
     // Amount of seconds between boosts
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 1, 4)".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 30.0, 10.0)".asExpression()
         private set
 
     // Blocks before stamina drain

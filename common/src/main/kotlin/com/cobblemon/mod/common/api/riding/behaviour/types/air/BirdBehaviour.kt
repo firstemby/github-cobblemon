@@ -686,7 +686,6 @@ class BirdState : RidingBehaviourState() {
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
-        buffer.writeFloat(stamina.get())
         buffer.writeBoolean(gliding.get())
     }
 

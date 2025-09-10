@@ -101,7 +101,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         //If the forward key is not held then it cannot be boosting
         if(Minecraft.getInstance().options.keyUp.isDown() && state.stamina.get() != 0.0f) {
             val boostKeyPressed = Minecraft.getInstance().options.keySprint.isDown()
-            if (state.stamina.get() >= 0.25f) {
                 //If on the previous tick the boost key was held then don't change if the ride is boosting
                 if(state.boostIsToggleable.get() && boostKeyPressed) {
                     //flip the boosting state if boost key is pressed
@@ -109,7 +108,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 }
                 //If the boost key is not held then next tick boosting is toggleable
                 state.boostIsToggleable.set(!boostKeyPressed)
-            }
         } else {
             //Turn off boost and reset boost params
             state.boostIsToggleable.set(true)

@@ -520,7 +520,7 @@ class HorseSettings : RidingBehaviourSettings {
         private set
 
     //Between a one block jump and a six block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.2, 0.45)".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.0, 0.38)".asExpression()
         private set
 
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 180.0, 40.0)".asExpression()
