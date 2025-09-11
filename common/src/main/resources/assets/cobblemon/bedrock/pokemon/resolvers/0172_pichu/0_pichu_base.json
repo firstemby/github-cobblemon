@@ -7,11 +7,26 @@
       "poser": "cobblemon:pichu",
       "model": "cobblemon:pichu.geo",
       "texture": "cobblemon:textures/pokemon/0172_pichu/pichu.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
     },
     {
       "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
     }
   ]
 }

@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.battles.ForcePassActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.battle.BattleSelectActionsPacket
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import java.util.UUID
 
 class ClientBattle(
@@ -32,11 +33,10 @@ class ClientBattle(
         set(value) {
             field = value
             if (value != null) {
-                val wildMonProps = value.activePokemon[0].battlePokemon?.properties
-                wildMonProps?.let {props ->
-                    val wildSpecies = PokemonSpecies.getByName(props.species!!)!!
+                val wildMonSpecies = value.activePokemon[0].battlePokemon?.properties?.species?.asIdentifierDefaultingNamespace()
+                knowledge = wildMonSpecies?.let {
                     //FIXME: Better knowledge checking based on aspects/form and such
-                    knowledge = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(wildSpecies.resourceIdentifier)
+                    CobblemonClient.clientPokedexData.getKnowledgeForSpecies(it)
                 } ?: PokedexEntryProgress.NONE
             }
             else {

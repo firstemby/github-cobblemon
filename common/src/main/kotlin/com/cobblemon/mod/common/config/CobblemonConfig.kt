@@ -281,6 +281,15 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Riding, lang = "invert_yaw")
     var invertYaw = false
 
+    @CobblemonConfigField(Category.Riding, lang = "x_axis_sensitivity")
+    var xAxisSensitivity = 1.0
+
+    @CobblemonConfigField(Category.Riding, lang = "y_axis_sensitivity")
+    var yAxisSensitivity = 1.0
+
+    @CobblemonConfigField(Category.Riding, lang = "swap_x_and_y_axes")
+    var swapXAndYAxes = false
+
     @CobblemonConfigField(Category.Riding, lang = "automatic_righting_delay")
     var rightingDelay = -1.0
 

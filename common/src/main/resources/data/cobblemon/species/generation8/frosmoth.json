@@ -156,5 +156,10 @@
     "legacy:snore"
   ],
   "preEvolution": "snom",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

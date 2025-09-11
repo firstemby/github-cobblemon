@@ -48,6 +48,7 @@ object DataKeys {
     const val POKEMON_MINTED_NATURE = "MintedNature"
     const val HELD_ITEM = "HeldItem"
     const val HELD_ITEM_VISIBLE = "HeldItemVisible"
+    const val HELD_ITEM_AI_DROPPABLE = "HeldItemDroppableByAI"
     const val POKEMON_TERA_TYPE = "TeraType"
     const val POKEMON_DMAX_LEVEL = "DmaxLevel"
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
@@ -148,11 +149,10 @@ object DataKeys {
     const val HEALER_MACHINE_CHARGE = "MachineCharge"
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
 
-    // Cake Blocks
-    const val CAKE_BITES = "Bites"
-    const val CAKE_FLAVOUR = "Flavour"
-    const val CAKE_BAIT_EFFECTS = "BaitEffects"
-    const val CAKE_FOOD_COLOUR = "FoodColour"
+    // Cooking
+    const val FLAVOUR = "Flavour"
+    const val BAIT_EFFECTS = "BaitEffects"
+    const val INGREDIENTS = "Ingredients"
 
     // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"

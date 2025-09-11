@@ -64,6 +64,27 @@
     },
     "resting": {
       "canSleep": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "magikarp",
+          "tier": 1
+        },
+        {
+          "pokemon": "feebas",
+          "tier": 1
+        },
+        {
+          "pokemon": "milotic",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

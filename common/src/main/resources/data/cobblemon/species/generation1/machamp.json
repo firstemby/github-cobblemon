@@ -261,5 +261,10 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
   }
 }

@@ -63,6 +63,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "blastoise mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "blastoise mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

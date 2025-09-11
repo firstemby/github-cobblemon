@@ -9,12 +9,11 @@
 package com.cobblemon.mod.common.entity.npc.ai
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.getNearbyBlockEntities
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
@@ -28,9 +27,6 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.AABB
 
 object GoToHealingMachineTask {
-    @JvmStatic
-    val runtime = MoLangRuntime().setup()
-
     fun create(
         horizontalSearchRange: Expression,
         verticalSearchRange: Expression,
@@ -48,10 +44,10 @@ object GoToHealingMachineTask {
                         return@Trigger false
                     }
 
-                    val horizontalSearchRange = runtime.resolveDouble(horizontalSearchRange)
-                    val verticalSearchRange = runtime.resolveDouble(verticalSearchRange)
-                    val speedMultiplier = runtime.resolveFloat(speedMultiplier)
-                    val completionRange = runtime.resolveInt(completionRange)
+                    val horizontalSearchRange = mainThreadRuntime.resolveDouble(horizontalSearchRange)
+                    val verticalSearchRange = mainThreadRuntime.resolveDouble(verticalSearchRange)
+                    val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
+                    val completionRange = mainThreadRuntime.resolveInt(completionRange)
 
                     if ((entity.party?.getHealingRemainderPercent() ?: 0F) > 0F) {
                         val npcPos = entity.blockPosition()

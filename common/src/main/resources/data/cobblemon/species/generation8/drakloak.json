@@ -60,13 +60,26 @@
       "fly": {
         "canFly": true
       },
-      "walk":  {
+      "walk": {
         "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "drakloak",
+          "tier": 1
+        },
+        {
+          "pokemon": "dragapult",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

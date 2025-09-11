@@ -57,6 +57,43 @@
       "walk": {
         "walkSpeed": 0.23
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ponyta",
+          "tier": 1
+        },
+        {
+          "pokemon": "blitzle",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudbray",
+          "tier": 2
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 3
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 3
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 4
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 5
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

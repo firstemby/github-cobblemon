@@ -371,7 +371,23 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "3"
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hoopa unbound",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -52,6 +52,19 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nidorino",
+          "tier": 1
+        },
+        {
+          "pokemon": "nidoking",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

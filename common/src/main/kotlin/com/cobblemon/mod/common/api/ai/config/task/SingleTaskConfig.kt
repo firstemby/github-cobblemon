@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.behavior.DoNothing
 interface SingleTaskConfig : TaskConfig {
     companion object {
         fun nothing() = object : SingleTaskConfig {
-            override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+            override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
             override fun createTask(
                 entity: LivingEntity,
                 behaviourConfigurationContext: BehaviourConfigurationContext

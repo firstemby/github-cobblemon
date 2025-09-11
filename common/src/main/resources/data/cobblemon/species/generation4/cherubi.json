@@ -158,5 +158,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cherubi",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -52,6 +52,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -282,7 +285,12 @@
       "baseExperienceYield": 315,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     }
   ]
 }

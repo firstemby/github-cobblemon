@@ -321,7 +321,7 @@ def build_herd(behaviour_row):
             s = s.strip()
             # format: <some_pokemon_information>-<tier>
             tier = int(s.split('-')[-1].strip() if '-' in s else '1')
-            pokemon = sanitize_pokemon(s.split('-')[0].strip())
+            pokemon = s.split('-')[0].strip()
             leaders.append({'pokemon': pokemon, 'tier': tier})
         if leaders:
             herd['toleratedLeaders'] = leaders

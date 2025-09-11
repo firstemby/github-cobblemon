@@ -224,5 +224,6 @@
     "legacy:tailwind",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

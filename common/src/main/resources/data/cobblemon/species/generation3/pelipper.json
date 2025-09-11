@@ -66,6 +66,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kilowattrel",
+          "tier": 1
+        },
+        {
+          "pokemon": "pelipper",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

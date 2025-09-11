@@ -61,6 +61,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "furret",
+          "tier": 1
+        },
+        {
+          "pokemon": "linoone",
+          "tier": 2
+        },
+        {
+          "pokemon": "obstagoon",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -362,7 +379,22 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "linoone",
+              "tier": 1
+            },
+            {
+              "pokemon": "obstagoon",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

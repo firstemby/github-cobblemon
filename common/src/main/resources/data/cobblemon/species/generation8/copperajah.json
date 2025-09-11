@@ -57,6 +57,15 @@
       "walk": {
         "walkSpeed": 0.17
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "copperajah",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

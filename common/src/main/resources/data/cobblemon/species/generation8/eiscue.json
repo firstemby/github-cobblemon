@@ -65,6 +65,23 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "prinplup",
+          "tier": 1
+        },
+        {
+          "pokemon": "eiscue",
+          "tier": 2
+        },
+        {
+          "pokemon": "empoleon",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -221,6 +238,25 @@
             "percentage": 5.0
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "prinplup",
+              "tier": 1
+            },
+            {
+              "pokemon": "eiscue",
+              "tier": 2
+            },
+            {
+              "pokemon": "empoleon",
+              "tier": 3
+            }
+          ]
+        }
       }
     }
   ]

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:minimize_actor",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/orbshrink_white"
+                "texture": "textures/particles/generic/orb/orbshrink_white"
             }
         },
         "components": {

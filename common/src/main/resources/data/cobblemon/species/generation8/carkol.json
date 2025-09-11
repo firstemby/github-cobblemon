@@ -54,6 +54,19 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carkol",
+          "tier": 1
+        },
+        {
+          "pokemon": "coalossal",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

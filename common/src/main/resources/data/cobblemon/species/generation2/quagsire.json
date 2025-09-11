@@ -58,6 +58,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quagsire",
+          "tier": 1
+        },
+        {
+          "pokemon": "clodsire",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

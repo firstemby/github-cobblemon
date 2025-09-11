@@ -12,12 +12,10 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.closestPosition
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import java.util.function.Predicate
 import net.minecraft.core.BlockPos
@@ -46,7 +44,7 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
     val horizontalSearchRange: ExpressionOrEntityVariable = Either.left("8".asExpression())
     val verticalSearchRange: ExpressionOrEntityVariable = Either.left("8".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             condition,
             movesIntoWater,
@@ -61,23 +59,22 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.WALK_TARGET,
             CobblemonMemories.PATH_COOLDOWN
         )
-        val movesIntoWater = this@MoveIntoFluidTaskConfig.movesIntoWater.resolveBoolean()
-        val movesIntoLava = movesIntoLava.resolveBoolean()
-        val speedModifier = speedModifier.resolveFloat()
-        val horizontalSearchRange = horizontalSearchRange.resolveInt()
-        val verticalSearchRange = verticalSearchRange.resolveInt()
+        val movesIntoWater = this@MoveIntoFluidTaskConfig.movesIntoWater.resolveBoolean(behaviourConfigurationContext.runtime)
+        val movesIntoLava = movesIntoLava.resolveBoolean(behaviourConfigurationContext.runtime)
+        val speedModifier = speedModifier.resolveFloat(behaviourConfigurationContext.runtime)
+        val horizontalSearchRange = horizontalSearchRange.resolveInt(behaviourConfigurationContext.runtime)
+        val verticalSearchRange = verticalSearchRange.resolveInt(behaviourConfigurationContext.runtime)
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.absent(CobblemonMemories.PATH_COOLDOWN)
             ).apply(it) { walkTarget, pathCooldown ->
-                Trigger { world, entity, _ ->
+                Trigger { _, entity, _ ->
                     val isInWater = entity.isInWater
                     val isInLava = entity.isInLava
                     // If it's already in a place it wants to be, then we're fine.

@@ -22,7 +22,7 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(HONEY, "can_add_honey", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
     ).asVariables()
 
@@ -33,7 +33,7 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
         if (entity !is PokemonEntity) {
             return null
         }
-        if (!checkCondition(entity, condition)) {
+        if (!checkCondition(behaviourConfigurationContext.runtime, condition)) {
             return null
         }
         return PathToBeeHiveTask.create()

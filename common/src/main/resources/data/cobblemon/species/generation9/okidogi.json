@@ -145,5 +145,28 @@
     "tutor:thunderpunch",
     "tutor:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "munkidori",
+          "tier": 1
+        },
+        {
+          "pokemon": "fezandipiti",
+          "tier": 1
+        },
+        {
+          "pokemon": "okidogi",
+          "tier": 2
+        },
+        {
+          "pokemon": "pecharunt",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

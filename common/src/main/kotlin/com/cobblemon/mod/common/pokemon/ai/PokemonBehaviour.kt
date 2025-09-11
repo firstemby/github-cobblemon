@@ -21,9 +21,12 @@ open class PokemonBehaviour {
     var moving = MoveBehaviour()
     val idle = IdleBehaviour()
     val fireImmune = false
+    val dampensVibrations = false
     val entityInteract = EntityBehaviour()
+    val blockInteract = BlockBehavior()
     val combat = CombatBehaviour()
     val herd = HerdBehaviour()
+    val itemInteract = ItemBehavior()
 
     @Transient
     val struct = ObjectValue<PokemonBehaviour>(this).also {
@@ -31,7 +34,9 @@ open class PokemonBehaviour {
         it.addFunction("moving") { moving.struct }
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }
+        it.addFunction("block_interact") { blockInteract.struct }
         it.addFunction("combat") { combat.struct }
         it.addFunction("herd") { herd.struct }
+        it.addFunction("item_interact") { itemInteract.struct }
     }
 }

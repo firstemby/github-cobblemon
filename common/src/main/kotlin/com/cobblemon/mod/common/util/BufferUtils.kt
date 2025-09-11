@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.util
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.net.IntSize
@@ -98,6 +99,21 @@ fun ByteBuf.readString(): String {
 
 fun ByteBuf.writeExpression(expression: Expression): ByteBuf {
     return this.writeString(expression.getString())
+}
+
+fun ByteBuf.writeRidingStats(stats: Map<RidingStat, IntRange>) {
+    return this.writeMap(
+        stats,
+        { buf, stat -> buf.writeEnumConstant(stat) },
+        { buf, range -> buf.writeInt(range.first).writeInt(range.last) }
+    )
+}
+
+fun ByteBuf.readRidingStats(): Map<RidingStat, IntRange> {
+    return this.readMap(
+        { buf -> buf.readEnumConstant(RidingStat::class.java) },
+        { buf -> IntRange(buf.readInt(), buf.readInt()) }
+    )
 }
 
 fun ByteBuf.readExpression(): Expression {

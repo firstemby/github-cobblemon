@@ -63,6 +63,15 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "basculegion",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -96,7 +96,7 @@ open class MoveTemplate(
 
         @JvmStatic
         val BY_STRING_CODEC: Codec<MoveTemplate> = CodecUtils.createByStringCodec(
-            Moves::getByName,
+            Moves::getByNameOrDummy,
             MoveTemplate::name
         ) { id -> "No MoveTemplate for ID $id" }
     }

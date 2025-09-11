@@ -216,5 +216,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hariyama",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

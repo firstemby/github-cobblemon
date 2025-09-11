@@ -1007,6 +1007,14 @@
 					"position": [-0.5, 0, 0]
 				}
 			}
+		},
+		"animation.aegislash.cry": {
+			"loop": true,
+			"sound_effects": {
+				"0.0": {
+					"effect": "pokemon.aegislash.cry"
+				}
+			}
 		}
 	}
 }

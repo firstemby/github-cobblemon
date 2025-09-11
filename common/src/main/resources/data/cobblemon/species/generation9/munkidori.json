@@ -126,5 +126,28 @@
     "tutor:trick",
     "tutor:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "okidogi",
+          "tier": 1
+        },
+        {
+          "pokemon": "fezandipiti",
+          "tier": 1
+        },
+        {
+          "pokemon": "munkidori",
+          "tier": 2
+        },
+        {
+          "pokemon": "pecharunt",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

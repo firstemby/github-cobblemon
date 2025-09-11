@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
@@ -34,12 +35,12 @@ class HateEntityTaskConfig : SingleTaskConfig {
     val entityCondition: Expression = "true".asExpression()
     val range: ExpressionOrEntityVariable = Either.left("24".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        val range = range.resolveFloat()
+        val range = range.resolveFloat(behaviourConfigurationContext.runtime)
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
             MemoryModuleType.ANGRY_AT
@@ -52,8 +53,8 @@ class HateEntityTaskConfig : SingleTaskConfig {
             ).apply(instance) { entities, angryAt ->
                 Trigger { world, entity, _ ->
                     val target = instance.get(entities).findClosest {
-                        runtime.withQueryValue("entity", it.asMostSpecificMoLangValue())
-                        return@findClosest runtime.resolveBoolean(entityCondition)
+                        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                        return@findClosest mainThreadRuntime.resolveBoolean(entityCondition)
                     }.orElse(null)
 
                     if (target != null && target.distanceTo(entity) <= range) {

@@ -51,8 +51,17 @@
     "fixed": false
   },
   "riding": {
-    "behaviour": {
-      "key": "cobblemon:liquid/boat"
+    "behaviours": {
+      "LIQUID": {
+        "key": "cobblemon:liquid/boat",
+        "stats": {
+          "SPEED": "10-20",
+          "ACCELERATION": "90-100",
+          "SKILL": "15-30",
+          "JUMP": "10-20",
+          "STAMINA": "15-30"
+        }
+      }
     },
     "seats": [
       {
@@ -104,6 +113,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lapras",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -52,6 +52,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mankey",
+          "tier": 1
+        },
+        {
+          "pokemon": "primeape",
+          "tier": 2
+        },
+        {
+          "pokemon": "annihilape",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

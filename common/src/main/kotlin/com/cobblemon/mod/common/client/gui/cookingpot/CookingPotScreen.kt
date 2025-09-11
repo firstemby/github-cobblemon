@@ -8,11 +8,12 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
+import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
-import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.PREVIEW_ITEM_SLOT
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
@@ -22,13 +23,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.components.StateSwitchingButton
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetSprites
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
@@ -174,24 +173,36 @@ class CookingPotScreen(
             this.recipeBookComponent.renderGhostRecipe(context, this.leftPos, this.topPos, true, partialTicks)
         }
 
+        val resultSlot = menu.slots[menu.resultSlotIndex]
+        val optionalRecipe = menu.currentActiveRecipe
+        if (optionalRecipe != null && !optionalRecipe.value.result.isEmpty && !resultSlot.hasItem()) {
+            val resultItem = menu.previewItem
+
+            RenderSystem.enableBlend()
+            RenderSystem.setShaderColor(1F, 1F, 1F, 0.5F)
+
+            context.renderFakeItem(resultItem, leftPos + resultSlot.x, topPos + resultSlot.y);
+            context.renderItemDecorations(font, resultItem, leftPos + resultSlot.x, topPos + resultSlot.y)
+
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+            RenderSystem.disableBlend()
+
+            if (isHovering(resultSlot.x, resultSlot.y, 16, 16, mouseX.toDouble(), mouseY.toDouble()) && menu.carried.isEmpty) {
+                context.renderTooltip(font, getTooltipFromContainerItem(resultItem), resultItem.tooltipImage, mouseX, mouseY)
+            }
+        }
+
         this.renderTooltip(context, mouseX, mouseY)
         this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
     override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
-        if (slot.index != PREVIEW_ITEM_SLOT) {
-            super.renderSlot(guiGraphics, slot)
-            return
+        if (slot is SeasoningSlot && !menu.carried.isEmpty && !slot.mayPlace(menu.carried)) {
+            val x = slot.x
+            val y = slot.y
+            guiGraphics.fill(x,y,x+16,y+16,822018048)
         }
-
-        RenderSystem.enableBlend()
-        RenderSystem.setShaderColor(1F, 1F, 1F, 0.5F)
-
-        guiGraphics.renderFakeItem(slot.item, slot.x, slot.y);
-        guiGraphics.renderItemDecorations(minecraft!!.font, slot.item, slot.x, slot.y)
-
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
-        RenderSystem.disableBlend()
+        super.renderSlot(guiGraphics, slot)
     }
 
     override fun recipesUpdated() {
@@ -203,7 +214,8 @@ class CookingPotScreen(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             CobblemonJeiPlugin.jeiRuntime?.recipesGui?.showTypes(
@@ -239,7 +251,8 @@ class CookingPotScreen(
     ) {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             guiGraphics.renderTooltip(

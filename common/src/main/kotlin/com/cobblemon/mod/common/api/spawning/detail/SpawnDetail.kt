@@ -47,7 +47,7 @@ abstract class SpawnDetail : ModDependant {
 
     abstract val type: String
     var id = ""
-    var displayName: String? =  null
+    var displayName: String? = null
     @SerializedName("spawnablePositionType", alternate = ["context"])
     lateinit var spawnablePositionType: SpawnablePositionType<*>
     var bucket = SpawnBucket("", 0F)

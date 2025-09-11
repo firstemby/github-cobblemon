@@ -64,6 +64,19 @@
     },
     "combat": {
       "willFlee": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wimpod",
+          "tier": 1
+        },
+        {
+          "pokemon": "golisopod",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asUUID
 import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.getIntOrNull
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.getStringOrNull
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer
@@ -102,7 +103,6 @@ class NPCServerDelegate : NPCSideDelegate {
                 val cloneParties = (setLevel != -1) || (params.getBooleanOrNull(3) ?: false)
                 val healFirst = params.getBooleanOrNull(4) ?: false
 
-                println("Cobblemon: Starting battle with format: $modifiedBattleFormat, level: ${modifiedBattleFormat.adjustLevel}")
                 val battleStartResult = BattleBuilder.pvn(
                     player = opponent,
                     npcEntity = entity,
@@ -147,7 +147,7 @@ class NPCServerDelegate : NPCSideDelegate {
             }
             .addFunction("was_hurt_by") { params ->
                 val entity = params.get<ObjectValue<LivingEntity>>(0).obj
-                val hurtByEntity = this.entity.brain.getMemory(MemoryModuleType.HURT_BY_ENTITY).orElse(null)
+                val hurtByEntity = this.entity.brain.getMemorySafely(MemoryModuleType.HURT_BY_ENTITY).orElse(null)
                 return@addFunction DoubleValue(hurtByEntity == entity)
             }
     }

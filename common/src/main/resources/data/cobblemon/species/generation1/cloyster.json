@@ -60,6 +60,9 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {

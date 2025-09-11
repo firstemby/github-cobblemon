@@ -30,7 +30,7 @@ class GoToHealingMachineTaskConfig : SingleTaskConfig {
     val completionRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
 
     companion object {
         const val SELF_HEALING = "self_healing"
@@ -41,8 +41,7 @@ class GoToHealingMachineTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.LOOK_TARGET,

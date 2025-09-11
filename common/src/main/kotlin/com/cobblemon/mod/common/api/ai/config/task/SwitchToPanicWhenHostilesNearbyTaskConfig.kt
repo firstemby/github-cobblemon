@@ -23,14 +23,13 @@ import net.minecraft.world.entity.schedule.Activity
 
 class SwitchToPanicWhenHostilesNearbyTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.FEAR_CATEGORY, "panic_when_hostiles_nearby", true).asExpressible()
-    override fun getVariables(entity: LivingEntity) = listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(MemoryModuleType.NEAREST_HOSTILE)
         behaviourConfigurationContext.addSensors(SensorType.VILLAGER_HOSTILES)
         return BehaviorBuilder.create {

@@ -50,7 +50,7 @@ class RideLoopSound(val ride: PokemonEntity, val soundSettings: RideSoundSetting
         this.looping = true
         this.delay = 0
         this.volume = 0.1f
-        this.attenuation = SoundInstance.Attenuation.NONE // This class performs its own attenuation
+        this.attenuation = SoundInstance.Attenuation.LINEAR // This class performs its own attenuation
         if (this.isPassenger) this.relative = true
     }
 

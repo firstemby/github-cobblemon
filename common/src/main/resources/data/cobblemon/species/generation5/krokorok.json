@@ -58,6 +58,19 @@
       "walk": {
         "walkSpeed": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand') ? 0.3 : 0.22"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "krokorok",
+          "tier": 1
+        },
+        {
+          "pokemon": "krookodile",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -66,6 +66,35 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ducklett",
+          "tier": 1
+        },
+        {
+          "pokemon": "quaxly",
+          "tier": 1
+        },
+        {
+          "pokemon": "farfetchd galarian=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "swanna",
+          "tier": 3
+        },
+        {
+          "pokemon": "quaxwell",
+          "tier": 4
+        },
+        {
+          "pokemon": "quaquaval",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

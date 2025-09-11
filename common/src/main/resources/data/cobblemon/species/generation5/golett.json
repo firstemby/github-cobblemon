@@ -59,6 +59,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "golurk",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

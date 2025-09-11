@@ -319,5 +319,16 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ogerpon",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

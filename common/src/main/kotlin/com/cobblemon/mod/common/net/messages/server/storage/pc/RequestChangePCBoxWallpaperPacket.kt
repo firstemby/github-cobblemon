@@ -20,7 +20,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import java.util.UUID
 
-class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: ResourceLocation) : NetworkPacket<RequestChangePCBoxWallpaperPacket>, UnsplittablePacket {
+class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: ResourceLocation, val altWallpaper: ResourceLocation?) : NetworkPacket<RequestChangePCBoxWallpaperPacket>, UnsplittablePacket {
 
     override val id = ID
 
@@ -28,6 +28,7 @@ class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, 
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeString(wallpaper.toString())
+        buffer.writeNullable(altWallpaper) { _, value -> buffer.writeString(value.toString()) }
     }
 
     companion object {
@@ -36,7 +37,8 @@ class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, 
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val wallpaper = ResourceLocation.parse(buffer.readString())
-            return RequestChangePCBoxWallpaperPacket(storeID, boxNumber, wallpaper)
+            val altWallpaper = (buffer.readNullable { buffer.readString() })?.let { ResourceLocation.parse(it) }
+            return RequestChangePCBoxWallpaperPacket(storeID, boxNumber, wallpaper, altWallpaper)
         }
     }
 }

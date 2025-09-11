@@ -6,7 +6,7 @@
 				"identifier": "geometry.bastiodon",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -16,9 +16,41 @@
 					"pivot": [0, -0.5, 0]
 				},
 				{
+					"name": "locator_top",
+					"parent": "bastiodon",
+					"pivot": [0, 26.6, 0],
+					"locators": {
+						"top": [0, 26.6, 0]
+					}
+				},
+				{
+					"name": "locator_root",
+					"parent": "bastiodon",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
 					"name": "body",
 					"parent": "bastiodon",
-					"pivot": [0, -1, 0]
+					"pivot": [0, 13, 0]
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 12.5, -21.5],
+					"locators": {
+						"target": [0, 12.5, -21.5]
+					}
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 12.5, 0],
+					"locators": {
+						"middle": [0, 12.5, 0]
+					}
 				},
 				{
 					"name": "torso",
@@ -52,6 +84,70 @@
 					]
 				},
 				{
+					"name": "locator_head",
+					"parent": "head",
+					"pivot": [0, 26.6, -14.5],
+					"locators": {
+						"head": [0, 26.6, -17.5]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "head",
+					"pivot": [0, 26.6, -14.5],
+					"locators": {
+						"item_hat": [0, 26.6, -14.5]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "head",
+					"pivot": [0, 26.6, -14.5],
+					"locators": {
+						"item_face": [0, 11.35, -19.5]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "head",
+					"pivot": [0, 9, -20],
+					"locators": {
+						"face": [0, 9, -20]
+					}
+				},
+				{
+					"name": "locator_physical",
+					"parent": "head",
+					"pivot": [0, 19.75, -17.25],
+					"locators": {
+						"physical": [0, 19.75, -17.25]
+					}
+				},
+				{
+					"name": "locator_special",
+					"parent": "head",
+					"pivot": [0, 7.75, -13.25],
+					"locators": {
+						"special": [0, 7.75, -13.25]
+					}
+				},
+				{
+					"name": "locator_mouth",
+					"parent": "head",
+					"pivot": [0, 7.75, -13.25],
+					"locators": {
+						"mouth": [0, 7.75, -13.25]
+					}
+				},
+				{
+					"name": "locator_jaw_upper",
+					"parent": "head",
+					"pivot": [0, 7.7, -16.95],
+					"locators": {
+						"jaw_upper": [0, 7.7, -16.95]
+					}
+				},
+				{
 					"name": "jaw",
 					"parent": "head",
 					"pivot": [0, 7.5, -11],
@@ -68,6 +164,23 @@
 						{"origin": [-8.25, 7, -19.5], "size": [2, 4, 2], "pivot": [-6.5, 8.5, -18.75], "rotation": [-5, 0, 0], "uv": [50, 0]},
 						{"origin": [-9, 3.5, -11.75], "size": [18, 4, 5], "pivot": [0, 3.5, -11.75], "rotation": [45, 0, 0], "uv": [44, 47]}
 					]
+				},
+				{
+					"name": "locator_jaw_lower",
+					"parent": "jaw",
+					"pivot": [0, 8.525, -18.775],
+					"locators": {
+						"jaw_lower": [0, 8.525, -18.775]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "jaw",
+					"pivot": [5, 8.525, -17.775],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"item": [5, 8.775, -16.775]
+					}
 				},
 				{
 					"name": "nose",
@@ -168,6 +281,14 @@
 					]
 				},
 				{
+					"name": "locator_left_eye",
+					"parent": "left_eye",
+					"pivot": [4.75, 11.25, -17],
+					"locators": {
+						"left_eye": [4.75, 11.25, -17]
+					}
+				},
+				{
 					"name": "left_eyelid",
 					"parent": "eyes",
 					"pivot": [4, 10.5, -16.9],
@@ -193,6 +314,14 @@
 					]
 				},
 				{
+					"name": "locator_right_eye",
+					"parent": "right_eye",
+					"pivot": [-4.75, 11.25, -17],
+					"locators": {
+						"left_eye2": [-4.75, 11.25, -17]
+					}
+				},
+				{
 					"name": "tail",
 					"parent": "torso",
 					"pivot": [0, 12.5, 10],
@@ -207,6 +336,24 @@
 					"cubes": [
 						{"origin": [-3, 9.5, 16], "size": [6, 6, 8], "uv": [0, 74]}
 					]
+				},
+				{
+					"name": "locator_tail",
+					"parent": "tail2",
+					"pivot": [0, 12.5, 20],
+					"rotation": [180, 0, 0],
+					"locators": {
+						"tail": [0, 12.5, 20]
+					}
+				},
+				{
+					"name": "locator_tail_tip",
+					"parent": "tail2",
+					"pivot": [0, 12.5, 24],
+					"rotation": [180, 0, 0],
+					"locators": {
+						"tail_tip": [0, 12.5, 24]
+					}
 				},
 				{
 					"name": "back_spikes",
@@ -230,6 +377,22 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "saddle",
+					"pivot": [0, 20.275, -2.5],
+					"locators": {
+						"seat_1": [0, 20.275, -2.5]
+					}
+				},
+				{
+					"name": "locator_seat_2",
+					"parent": "saddle",
+					"pivot": [0, 20, 5.75],
+					"locators": {
+						"seat_2": [0, 20, 5.75]
+					}
+				},
+				{
 					"name": "left_front_upper_leg",
 					"parent": "body",
 					"pivot": [7.5, 14, -6],
@@ -246,6 +409,15 @@
 					"cubes": [
 						{"origin": [0.86603, -1.5, -9.5], "size": [7, 9, 7], "uv": [70, 18]}
 					]
+				},
+				{
+					"name": "locator_foot_secondary1",
+					"parent": "left_front_lower_leg",
+					"pivot": [4.35, 1, -7],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary1": [4.35, 1, -7]
+					}
 				},
 				{
 					"name": "left_front_toes",
@@ -286,6 +458,15 @@
 					]
 				},
 				{
+					"name": "locator_foot_primary",
+					"parent": "right_front_lower_leg",
+					"pivot": [-4.35, 1, -7],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_primary": [-4.35, 1, -7]
+					}
+				},
+				{
 					"name": "right_front_toes",
 					"parent": "right_front_lower_leg",
 					"pivot": [-4.36603, -1.5, -9.5],
@@ -324,6 +505,15 @@
 					]
 				},
 				{
+					"name": "locator_foot_secondary3",
+					"parent": "left_back_lower_leg",
+					"pivot": [4.35, 1, 5],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary3": [4.35, 1, 5]
+					}
+				},
+				{
 					"name": "left_back_toes",
 					"parent": "left_back_lower_leg",
 					"pivot": [4.36603, -1.5, 2.5],
@@ -360,6 +550,15 @@
 					"cubes": [
 						{"origin": [-7.86603, -1.5, 2.5], "size": [7, 9, 7], "uv": [0, 58]}
 					]
+				},
+				{
+					"name": "locator_foot_secondary2",
+					"parent": "right_back_lower_leg",
+					"pivot": [-4.35, 1, 5],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary2": [-4.35, 1, 5]
+					}
 				},
 				{
 					"name": "right_back_toes",

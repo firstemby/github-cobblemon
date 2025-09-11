@@ -153,5 +153,28 @@
     "legacy:toxic"
   ],
   "preEvolution": "morelull",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shiinotic",
+          "tier": 1
+        },
+        {
+          "pokemon": "amoonguss",
+          "tier": 2
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 3
+        },
+        {
+          "pokemon": "toedscruel",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

@@ -164,5 +164,6 @@
     "legacy:snore"
   ],
   "preEvolution": "yamask galarian",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

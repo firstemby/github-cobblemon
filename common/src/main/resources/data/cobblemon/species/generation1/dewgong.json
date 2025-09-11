@@ -58,7 +58,62 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sealeo",
+          "tier": 1
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 1
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 2
+        },
+        {
+          "pokemon": "dewgong",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
+  },
+  "riding": {
+    "behaviours": {
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "stats": {
+          "SPEED": "50-100",
+          "ACCELERATION": "50-100",
+          "SKILL": "50-100",
+          "JUMP": "50-100",
+          "STAMINA": "50-100"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        }
+      },
+      {
+        "offset": {
+          "x": 0,
+          "y": 0.4,
+          "z": 1
+        }
+      }
+    ]
   },
   "drops": {
     "amount": 4,
@@ -208,26 +263,5 @@
     "legacy:toxic"
   ],
   "preEvolution": "seel",
-  "evolutions": [],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "15-30"
-      },
-      "ACCELERATION": {
-        "ranges": "25-50"
-      },
-      "SKILL": {
-        "ranges": "15-30"
-      },
-      "JUMP": {
-        "ranges": "20-40"
-      },
-      "STAMINA": {
-        "ranges": "30-60"
-      }
-    },
-    "seats": [],
-    "behaviour": null
-  }
+  "evolutions": []
 }

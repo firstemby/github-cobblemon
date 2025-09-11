@@ -4,7 +4,7 @@
   "variations": [
     {
       "aspects": [],
-      "poser": "cobblemon:alakazam",
+      "poser": "cobblemon:alakazam_male",
       "model": "cobblemon:alakazam_male.geo",
       "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam.png",
       "layers": []
@@ -12,6 +12,11 @@
     {
       "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam_shiny.png"
+    },
+    {
+      "aspects": ["female"],
+      "poser": "cobblemon:alakazam_female",
+      "model": "cobblemon:alakazam_female.geo"
     }
   ]
 }

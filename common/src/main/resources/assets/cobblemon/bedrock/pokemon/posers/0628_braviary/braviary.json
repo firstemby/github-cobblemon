@@ -1,117 +1,103 @@
 {
-  "portraitScale": 2.28,
-  "portraitTranslation": [-0.88, 2.21, 0],
-  "profileScale": 0.63,
-  "profileTranslation": [-0.02, 0.88, 0],
+  "portraitScale": 1.95,
+  "portraitTranslation": [-0.77, 2.18, 0],
+  "profileScale": 0.52,
+  "profileTranslation": [0.05, 1.05, 0],
   "rootBone": "braviary",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.1, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 5],
+    "seat_1_reverse": [0, 1, 5]
+  },
   "animations": {
-    "cry": "q.bedrock_stateful('braviary', 'cry')"
+    "cry": "q.bedrock_stateful('braviary', 'cry')",
+    "recoil": "q.bedrock_stateful('braviary', 'recoil')"
   },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head')", "q.bedrock('braviary', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('braviary', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        }
-      ]
+      "animations": [
+        "q.look('neck1', 1, 1, 5, -5, 10, -10)",
+        "q.look('neck2', 1, 1, 35, -10, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -30, 25, -25)",
+        "q.bedrock('braviary', 'ground_idle')"
+      ],
+      "transformTicks": 10,
+      "quirks": ["q.bedrock_quirk('braviary', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.look('head')",
-        "q.bedrock('braviary', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
-      ],
-      "quirks": ["q.bedrock_quirk('braviary', 'blink')"],
-      "transformedParts": [
+        "q.look('neck1', 1, 1, 5, -5, 10, -10)",
+        "q.look('neck2', 1, 1, 35, -10, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -30, 25, -25)",
+        "q.bedrock('braviary', 'ground_walk')",
         {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('braviary', 'ride_ground_walk')"
         }
-      ]
+      ],
+      "transformTicks": 10,
+      "quirks": ["q.bedrock_quirk('braviary', 'blink')"]
     },
     "hover": {
       "poseTypes": ["HOVER"],
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
-        "q.look('head')",
+        "q.pitch_tilt('body', 1)",
+        "q.look('neck1', 1, 1, 5, -5, 10, -10)",
+        "q.look('neck2', 1, 1, 35, -10, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -30, 25, -25)",
         "q.bedrock('braviary', 'air_idle')"
       ],
-      "quirks": ["q.bedrock_quirk('braviary', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": false
-        }
-      ]
+      "transformTicks": 10,
+      "quirks": ["q.bedrock_quirk('braviary', 'blink')"]
     },
     "fly": {
       "poseTypes": ["FLY"],
+      "condition": "!q.is_gliding",
       "animations": [
-        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_open_left', 'wing_open_right')",
-        "q.look('head')",
-        "q.bedrock('braviary', 'air_fly')"
-      ],
-      "quirks": ["q.bedrock_quirk('braviary', 'blink')"],
-      "transformedParts": [
+        "q.pitch_tilt('body', 1)",
+        "q.look('neck1', 1, 1, 5, -5, 10, -10)",
+        "q.look('neck2', 1, 1, 35, -10, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -30, 25, -25)",
+        "q.bedrock('braviary', 'air_fly')",
         {
-          "part": "wing_open_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": false
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('braviary', 'ride_air_fly')"
         }
-      ]
+      ],
+      "transformTicks": 10,
+      "quirks": ["q.bedrock_quirk('braviary', 'blink')"]
+    },
+    "glide": {
+      "poseTypes": ["FLY"],
+      "condition": "q.is_gliding",
+      "animations": [
+        "q.pitch_tilt('body', 1)",
+        "q.look('neck1', 1, 1, 5, -5, 10, -10)",
+        "q.look('neck2', 1, 1, 35, -10, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -30, 25, -25)",
+        "q.bedrock('braviary', 'air_glide')",
+        "q.bedrock('braviary', 'ride_air_dive')",
+        {
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('braviary', 'ride_air_glide')"
+        }
+      ],
+      "transformTicks": 10,
+      "quirks": ["q.bedrock_quirk('braviary', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('braviary', 'sleep')"],
+      "transformTicks": 10
     }
   }
 }

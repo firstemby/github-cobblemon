@@ -194,5 +194,56 @@
       "requirements": [],
       "requiredContext": "cobblemon:leaf_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aipom",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansage",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "panpour",
+          "tier": 1
+        },
+        {
+          "pokemon": "grookey",
+          "tier": 1
+        },
+        {
+          "pokemon": "ambipom",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 2
+        },
+        {
+          "pokemon": "simipour",
+          "tier": 2
+        },
+        {
+          "pokemon": "thwackey",
+          "tier": 2
+        },
+        {
+          "pokemon": "rillaboom",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

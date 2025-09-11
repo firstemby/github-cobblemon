@@ -53,6 +53,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pidgeotto",
+          "tier": 1
+        },
+        {
+          "pokemon": "tranquill",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "unfezant",
+          "tier": 2
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 3
+        },
+        {
+          "pokemon": "staravia",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

@@ -58,6 +58,9 @@
         "depth": "normal",
         "light": "0-4"
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {

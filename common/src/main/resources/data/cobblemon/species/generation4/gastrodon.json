@@ -222,7 +222,8 @@
       ],
       "preEvolution": "shellos",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

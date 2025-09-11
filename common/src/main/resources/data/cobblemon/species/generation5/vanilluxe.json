@@ -53,6 +53,9 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {

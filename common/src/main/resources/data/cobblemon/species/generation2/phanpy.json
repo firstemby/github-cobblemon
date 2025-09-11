@@ -57,6 +57,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "phanpy",
+          "tier": 1
+        },
+        {
+          "pokemon": "donphan",
+          "tier": 2
+        },
+        {
+          "pokemon": "greattusk",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

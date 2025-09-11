@@ -54,6 +54,15 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "falinks",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

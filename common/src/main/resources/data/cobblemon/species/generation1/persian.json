@@ -443,7 +443,8 @@
       ],
       "preEvolution": "meowth alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

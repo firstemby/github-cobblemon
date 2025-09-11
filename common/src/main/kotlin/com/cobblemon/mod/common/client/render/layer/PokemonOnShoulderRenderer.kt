@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.client.render.layer
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
@@ -70,9 +72,16 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, false)
     }
 
-    fun configureState(state: FloatingState, model: PosableModel, leftShoulder: Boolean): FloatingState {
+    fun configureState(state: FloatingState, model: PosableModel, leftShoulder: Boolean, shoulderData: ShoulderData): FloatingState {
         state.currentModel = model
         state.setPoseToFirstSuitable(if (leftShoulder) PoseType.SHOULDER_LEFT else PoseType.SHOULDER_RIGHT)
+
+        state.runtime.environment.query.addFunction("is_holding_item") { return@addFunction DoubleValue(shoulderData.shownItem.let {
+            !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
+        }) }
+        state.runtime.environment.query.addFunction("is_wearing_hat") { return@addFunction DoubleValue(shoulderData.shownItem.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
+        state.runtime.environment.query.addFunction("is_wearing_face") { return@addFunction DoubleValue(shoulderData.shownItem.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
+
         return state
     }
 
@@ -129,11 +138,11 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             matrixStack.translate(0f, 1.5f, 0f)
 
             state = if (pLeftShoulder && shoulderData != lastRenderedLeft) {
-                leftState = configureState(state, model, true)
+                leftState = configureState(state, model, true, shoulderData)
                 lastRenderedLeft = shoulderData
                 leftState
             } else if (!pLeftShoulder && shoulderData != lastRenderedRight) {
-                rightState = configureState(state, model, false)
+                rightState = configureState(state, model, false, shoulderData)
                 lastRenderedRight = shoulderData
                 rightState
             } else {

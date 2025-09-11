@@ -4,6 +4,17 @@
   "profileScale": 0.54,
   "profileTranslation": [0.02, 1, 0.0],
   "rootBone": "garchomp",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.5, 2],
+    "seat_1_reverse": [0, 0.5, 2]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1.5, 5],
+    "seat_1_reverse": [0, 1.5, 5]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('garchomp', 'cry')",
     "recoil": "q.bedrock_stateful('garchomp', 'recoil')",
@@ -13,6 +24,15 @@
     "blunt": "q.bedrock_primary('garchomp', 'blunt', q.curve('symmetrical_wide'))"
   },
   "poses": {
+    "boat-jump": {
+      "poseTypes": ["STAND", "WALK"],
+      "isRideStyle": ["LIQUID"],
+      "condition": "q.in_air",
+      "animations": ["q.look('head')", "q.bedrock('garchomp', 'surfacewater_swim')"],
+      "quirks": [
+        "q.bedrock_quirk('garchomp', 'blink')"
+      ]
+    },
     "standing": {
       "poseName": "standing",
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
@@ -20,7 +40,7 @@
       "isTouchingWater": false,
       "condition": "!q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "animations": [
-        "q.look('head')", 
+        "q.look('head')",
         "q.bedrock('garchomp', 'ground_idle')",
         {
           "condition": "q.is_holding_item",
@@ -39,7 +59,7 @@
       "isTouchingWater": false,
       "condition": "!q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "animations": [
-        "q.look('head')", 
+        "q.look('head')",
         "q.bedrock('garchomp', 'battle_idle')",
         {
           "condition": "q.is_holding_item",
@@ -55,7 +75,7 @@
       "isTouchingWater": false,
       "condition": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "animations": [
-        "q.look('head')", 
+        "q.look('head')",
         "q.bedrock('garchomp', 'sand_idle')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"]
@@ -67,7 +87,7 @@
       "isTouchingWater": false,
       "condition": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand')",
       "animations": [
-        "q.look('head')", 
+        "q.look('head')",
         "q.bedrock('garchomp', 'sand_swim')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"]
@@ -114,6 +134,15 @@
           "part": "body",
           "position": [0, 26, 0]
         }
+      ]
+    },
+    "boat-jump": {
+      "poseTypes": ["STAND", "WALK"],
+      "isRideStyle": ["LIQUID"],
+      "condition": "q.in_air",
+      "animations": ["q.look('head')", "q.bedrock('garchomp', 'surfacewater_swim')"],
+      "quirks": [
+        "q.bedrock_quirk('garchomp', 'blink')"
       ]
     },
     "swimming": {

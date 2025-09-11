@@ -151,5 +151,10 @@
     "legacy:swagger"
   ],
   "preEvolution": "shelmet",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

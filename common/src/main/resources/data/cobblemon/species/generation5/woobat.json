@@ -58,6 +58,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zubat",
+          "tier": 1
+        },
+        {
+          "pokemon": "noibat",
+          "tier": 1
+        },
+        {
+          "pokemon": "golbat",
+          "tier": 2
+        },
+        {
+          "pokemon": "crobat",
+          "tier": 3
+        },
+        {
+          "pokemon": "woobat",
+          "tier": 4
+        },
+        {
+          "pokemon": "swoobat",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

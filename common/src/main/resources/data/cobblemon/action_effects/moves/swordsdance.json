@@ -6,7 +6,7 @@
     },
     {
       "type": "animation",
-      "animation": ["swordsdance", "status"],
+      "animation": ["swordsdance", "dancer", "status"],
       "delay": 0.1
     },
     {

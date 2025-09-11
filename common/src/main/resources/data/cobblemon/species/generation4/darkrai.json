@@ -196,5 +196,6 @@
     "special:roaroftime",
     "special:spacialrend"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

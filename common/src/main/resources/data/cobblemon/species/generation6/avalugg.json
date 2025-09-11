@@ -67,6 +67,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
@@ -349,7 +352,12 @@
       ],
       "preEvolution": "bergmite",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9"
+        }
+      }
     }
   ]
 }

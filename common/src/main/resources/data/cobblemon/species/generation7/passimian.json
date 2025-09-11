@@ -193,5 +193,16 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "passimian",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

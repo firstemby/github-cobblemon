@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.genericRuntime
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
@@ -30,13 +31,12 @@ class LookInDirectionTask(
     val yaw: Expression = "0".asExpression(),
     val pitch: Expression = "0".asExpression()
 ) : Behavior<LivingEntity>(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT), 0, 0) {
-    val runtime = MoLangRuntime().setup()
     override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long): Boolean {
-        return !entity.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
+        return !entity.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
     }
 
     override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity): Boolean {
-        return owner is PathfinderMob && !owner.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && runtime.withQueryValue("entity", owner.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
+        return owner is PathfinderMob && !owner.brain.getMemory(MemoryModuleType.LOOK_TARGET).isPresent && mainThreadRuntime.withQueryValue("entity", owner.asMostSpecificMoLangValue()).resolveBoolean(shouldLock)
     }
 
     override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
@@ -44,9 +44,9 @@ class LookInDirectionTask(
 
     override fun tick(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
         entity as PathfinderMob
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val yaw = (runtime.resolveFloat(this.yaw) + 90) * Math.PI / 180.0
-        val pitch = runtime.resolveFloat(this.pitch) * Math.PI / 180.0 * -1
+        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        val yaw = (mainThreadRuntime.resolveFloat(this.yaw) + 90) * Math.PI / 180.0
+        val pitch = mainThreadRuntime.resolveFloat(this.pitch) * Math.PI / 180.0 * -1
 
         val xDisp = Math.cos(yaw)
         val zDisp = Math.sin(yaw)

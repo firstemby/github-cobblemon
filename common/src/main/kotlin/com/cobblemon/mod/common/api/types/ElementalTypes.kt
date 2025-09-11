@@ -21,126 +21,126 @@ object ElementalTypes {
     val NORMAL = register(
         name = "Normal",
         displayName = Component.translatable("cobblemon.type.normal"),
-        hue = 0xDDDDCF,
+        hue = 0xE8E8DA,
         textureXMultiplier = 0
     )
 
     val FIRE = register(
         name = "Fire",
         displayName = Component.translatable("cobblemon.type.fire"),
-        hue = 0xE55C32,
+        hue = 0xFF6E21,
         textureXMultiplier = 1
     )
 
     val WATER = register(
         name = "Water",
         displayName = Component.translatable("cobblemon.type.water"),
-        hue = 0x4A9BE8,
+        hue = 0x3FA5FF,
         textureXMultiplier = 2
     )
 
     val GRASS = register(
         name = "Grass",
         displayName = Component.translatable("cobblemon.type.grass"),
-        hue = 0x4DBC3C,
+        hue = 0x62D14F,
         textureXMultiplier = 3
     )
 
     val ELECTRIC = register(
         name = "Electric",
         displayName = Component.translatable("cobblemon.type.electric"),
-        hue = 0xEFD128,
+        hue = 0xFFD314,
         textureXMultiplier = 4
     )
 
     val ICE = register(
         name = "Ice",
         displayName = Component.translatable("cobblemon.type.ice"),
-        hue = 0x6BC3EF,
+        hue = 0x54F2F2,
         textureXMultiplier = 5
     )
 
     val FIGHTING = register(
         name = "Fighting",
         displayName = Component.translatable("cobblemon.type.fighting"),
-        hue = 0xC44C5C,
+        hue = 0xEF565D,
         textureXMultiplier = 6
     )
 
     val POISON = register(
         name = "Poison",
         displayName = Component.translatable("cobblemon.type.poison"),
-        hue = 0xA24BD8,
+        hue = 0xD651FF,
         textureXMultiplier = 7
     )
 
     val GROUND = register(
         name = "Ground",
         displayName = Component.translatable("cobblemon.type.ground"),
-        hue = 0xD89950,
+        hue = 0xF4A453,
         textureXMultiplier = 8
     )
 
     val FLYING = register(
         name = "Flying",
         displayName = Component.translatable("cobblemon.type.flying"),
-        hue = 0xBCC1FF,
+        hue = 0xB8B2FF,
         textureXMultiplier = 9
     )
 
     val PSYCHIC = register(
         name = "Psychic",
         displayName = Component.translatable("cobblemon.type.psychic"),
-        hue = 0xD86AD6,
+        hue = 0xFF5E9E,
         textureXMultiplier = 10
     )
 
     val BUG = register(
         name = "Bug",
         displayName = Component.translatable("cobblemon.type.bug"),
-        hue = 0xA2C831,
+        hue = 0xD3D319,
         textureXMultiplier = 11
     )
 
     val ROCK = register(
         name = "Rock",
         displayName = Component.translatable("cobblemon.type.rock"),
-        hue = 0xAA9666,
+        hue = 0xB7A16E,
         textureXMultiplier = 12
     )
 
     val GHOST = register(
         name = "Ghost",
         displayName = Component.translatable("cobblemon.type.ghost"),
-        hue = 0x9572E5,
+        hue = 0x9C80F7,
         textureXMultiplier = 13
     )
 
     val DRAGON = register(
         name = "Dragon",
         displayName = Component.translatable("cobblemon.type.dragon"),
-        hue = 0x535DE8,
+        hue = 0x7580FF,
         textureXMultiplier = 14
     )
 
     val DARK = register(
         name = "Dark",
         displayName = Component.translatable("cobblemon.type.dark"),
-        hue = 0x5C6CB2,
+        hue = 0x587DA0,
         textureXMultiplier = 15
     )
 
     val STEEL = register(
         name = "Steel",
         displayName = Component.translatable("cobblemon.type.steel"),
-        hue = 0xC3CCE0,
+        hue = 0xABD1F4,
         textureXMultiplier = 16
     )
 
     val FAIRY = register(
         name = "Fairy",
         displayName = Component.translatable("cobblemon.type.fairy"),
-        hue = 0xEA727E,
+        hue = 0xFF7FE5,
         textureXMultiplier = 17
     )
 

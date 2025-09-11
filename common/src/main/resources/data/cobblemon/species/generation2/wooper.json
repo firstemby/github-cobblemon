@@ -68,6 +68,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wooper",
+          "tier": 1
+        },
+        {
+          "pokemon": "quagsire",
+          "tier": 2
+        },
+        {
+          "pokemon": "clodsire",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -374,7 +391,26 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "wooper",
+              "tier": 1
+            },
+            {
+              "pokemon": "quagsire",
+              "tier": 2
+            },
+            {
+              "pokemon": "clodsire",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

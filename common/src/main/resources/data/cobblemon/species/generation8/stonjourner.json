@@ -60,6 +60,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "stonjourner",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

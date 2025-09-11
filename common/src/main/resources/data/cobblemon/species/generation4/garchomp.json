@@ -46,106 +46,168 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.3,
     "height": 2.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.3
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can stay off the ground",
-        "ranges": {
-          "LAND": "50-100",
-          "AIR": "50-100"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:composite",
-      "transitionStrategy": "cobblemon:strategy/run",
-      "defaultBehaviour": {
-        "key": "cobblemon:land/horse",
-        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+    "behaviours": {
+      "AIR": {
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [0, "0.3*q.jump_strength/50", "-1 * 0.5*q.jump_strength/50"]
-      },
-      "alternateBehaviour": {
         "key": "cobblemon:air/jet",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          0
+        ],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "55-85",
+          "STAMINA": "10-40"
+        }
+      },
+      "LAND": {
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [0, "0.3*q.jump_strength/50", 0]
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
+        "jumpVector": [
+          0,
+          "0.3*q.jump_strength/50",
+          "-1 * 0.5*q.jump_strength/50"
+        ],
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "55-85",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "30-65"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/boat",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "0-10",
+          "STAMINA": "30-65"
+        }
       }
     },
     "seats": [
       {
         "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "poseOffsets": [
           {
+            "offset": {
+              "x": 0.0,
+              "y": -2.1011124,
+              "z": 0.16987759
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.015757028,
+              "y": -2.0372698,
+              "z": -0.51279336
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.05311563,
+              "y": -1.1318469,
+              "z": -0.39360297
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.05311563,
+              "y": -1.1318469,
+              "z": -0.39360297
+            },
             "poseTypes": [
               "FLY"
-            ],
+            ]
+          },
+          {
             "offset": {
-              "x": 0,
-              "y": 0.0,
-              "z": 0
-            }
+              "x": 0.0011951595,
+              "y": -2.2336457,
+              "z": -0.24524418
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.14308973,
+              "y": -1.6967092,
+              "z": -0.18873778
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.14308973,
+              "y": -1.6967092,
+              "z": -0.18873778
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
           }
         ]
       }
     ]
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "herd": {
+      "maxSize": "7"
     },
     "moving": {
-      "walk": {
-        "walkSpeed": 0.55
-      },
       "fly": {
         "canFly": true
       },
       "swim": {
         "canSwimInLava": true
+      },
+      "walk": {
+        "walkSpeed": 0.55
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
     }
   },
   "drops": {
@@ -334,9 +396,14 @@
         "speed": 92
       },
       "baseExperienceYield": 350,
-      "dynamaxBlocked": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "8"
+        }
+      },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

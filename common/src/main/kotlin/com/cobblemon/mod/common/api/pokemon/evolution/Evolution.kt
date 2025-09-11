@@ -199,6 +199,8 @@ interface Evolution : EvolutionLike {
         // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
         val previousSpeciesLearnableMoves = pokemon.relearnableMoves
 
+        val sourcePokemon = pokemon.clone()
+        
         this.result.apply(pokemon)
 
         val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
@@ -238,7 +240,7 @@ interface Evolution : EvolutionLike {
             )
         }
 
-        CobblemonEvents.EVOLUTION_COMPLETE.post(EvolutionCompleteEvent(pokemon, this))
+        CobblemonEvents.EVOLUTION_COMPLETE.post(EvolutionCompleteEvent(pokemon, sourcePokemon, this))
         CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))
     }
 

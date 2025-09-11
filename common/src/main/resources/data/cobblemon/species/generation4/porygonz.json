@@ -57,6 +57,7 @@
         "canWalk": false
       },
       "swim": {
+        "canBreatheUnderwater": true,
         "avoidsWater": true,
         "canSwimInWater": false
       }
@@ -64,6 +65,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4"
     }
   },
   "drops": {

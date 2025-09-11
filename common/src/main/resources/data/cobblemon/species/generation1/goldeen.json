@@ -60,6 +60,47 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "finneon",
+          "tier": 1
+        },
+        {
+          "pokemon": "lumineon",
+          "tier": 2
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "magikarp",
+          "tier": 3
+        },
+        {
+          "pokemon": "goldeen",
+          "tier": 4
+        },
+        {
+          "pokemon": "seaking",
+          "tier": 5
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 6
+        },
+        {
+          "pokemon": "chiyu",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

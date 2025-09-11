@@ -214,5 +214,6 @@
     "special:heartstamp",
     "special:moonblast"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

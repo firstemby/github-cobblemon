@@ -70,7 +70,7 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
 
     fun getCodeFeature(name: String) = codeFeatures[name]
     fun getResourceFeature(name: String) = resourceFeatures[name]
-    fun getFeature(name: String) = getCodeFeature(name) ?: getResourceFeature(name)
+    fun getFeature(name: String) = getCodeFeature(name) ?: getResourceFeature(name) ?: GlobalSpeciesFeatures.getFeature(name)
     fun loadOnClient(entries: Collection<Map.Entry<String, SpeciesFeatureProvider<*>>>) {
         codeFeatures.putAll(entries.map { it.toPair() })
     }

@@ -6,8 +6,8 @@
     },
     {
       "type": "animation",
-      "animation": ["spore", "status", "cry"],
-      "delay": 1.15
+      "animation": ["spore", "powder", "status", "cry"],
+      "delay": 1.25
     },
     {
       "type": "entity_particles",

@@ -177,5 +177,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "karrablast",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

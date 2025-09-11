@@ -23,7 +23,7 @@
         {
           "name": "emissive",
           "emissive": true,
-          "texture": "cobblemon:textures/pokemon/0631_heatmor/heatmor_emissive_shiny.png",
+          "texture": "cobblemon:textures/pokemon/0631_heatmor/heatmor_shiny_emissive.png",
           "translucent": true
         }
       ]

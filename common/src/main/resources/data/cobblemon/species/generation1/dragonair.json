@@ -63,6 +63,31 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "times": "night",
+      "light": "0-4",
+      "fluids": [
+        "#minecraft:water"
+      ]
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dragonair",
+          "tier": 1
+        },
+        {
+          "pokemon": "milotic",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -258,14 +258,15 @@ class StorageWidget(
         }
 
         val boxWallpaper = pc.boxes[box].wallpaper
-        val screenResource: Pair<ResourceLocation, ResourceLocation?> =
-            PCBoxWallpaperRepository.allWallpapers.find { it.first == boxWallpaper }
+        // Get wallpaper data by matching resource. If box wallpaper has no match, attempt matching alternate wallpaper resource
+        val wallpaperData = PCBoxWallpaperRepository.allWallpapers.find { it.first == boxWallpaper } ?: PCBoxWallpaperRepository.allWallpapers.find { it.second == boxWallpaper }
+        val screenResource = wallpaperData
             ?: PCBoxWallpaperRepository.allWallpapers.find { it.first == PCBoxWallpaperRepository.defaultWallpaper }
-            ?: Pair(PCBoxWallpaperRepository.defaultWallpaper, null)
+            ?: Triple(PCBoxWallpaperRepository.defaultWallpaper, null, null)
 
         blitk(
             matrixStack = matrices,
-            texture = screenResource.first,
+            texture = if (wallpaperData != null) boxWallpaper else screenResource.first,
             x = x,
             y = y,
             width = SCREEN_WIDTH,
@@ -273,10 +274,10 @@ class StorageWidget(
             alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
         )
 
-        if (screenResource.second !== null) {
+        if (screenResource.third !== null) {
             blitk(
                 matrixStack = matrices,
-                texture = screenResource.second,
+                texture = screenResource.third,
                 x = x - 17,
                 y = y - 17,
                 width = 208,

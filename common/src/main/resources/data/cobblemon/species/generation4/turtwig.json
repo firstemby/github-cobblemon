@@ -60,6 +60,23 @@
       "walk": {
         "walkSpeed": 0.35
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "turtwig",
+          "tier": 1
+        },
+        {
+          "pokemon": "grotle",
+          "tier": 2
+        },
+        {
+          "pokemon": "torterra",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

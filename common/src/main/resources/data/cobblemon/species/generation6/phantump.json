@@ -63,6 +63,19 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "phantump",
+          "tier": 1
+        },
+        {
+          "pokemon": "trevenant",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

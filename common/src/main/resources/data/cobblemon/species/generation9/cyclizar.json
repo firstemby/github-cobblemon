@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 967,
   "name": "Cyclizar",
   "primaryType": "dragon",
@@ -43,9 +44,124 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.3,
     "height": 1.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.3
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-85",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "55-85",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.030879233,
+              "y": -1.2217013,
+              "z": 0.41698992
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.030879233,
+              "y": -1.2217013,
+              "z": 0.41698992
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cyclizar",
+          "tier": 1
+        },
+        {
+          "pokemon": "koraidon",
+          "tier": 2
+        },
+        {
+          "pokemon": "miraidon",
+          "tier": 2
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,

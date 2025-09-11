@@ -92,11 +92,14 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     open var profileScale = 1F
 
-    /** Used for third person riding camera */
-    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
+    /** Used for third person riding camera with no view bobbing */
+    open var thirdPersonCameraOffsetNoViewBobbing = mutableMapOf<String, Vec3>()
 
-    /** Used for third person riding camera */
+    /** Used for third person riding camera with no view bobbing */
     open var thirdPersonPivotOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for third person riding camera with view bobbing */
+    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
 
     /** Used for first person riding camera */
     open var firstPersonCameraOffset = mutableMapOf<String, Vec3>()
@@ -201,8 +204,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     /**
      * Animation group : animation name [: primary]
-     * e.g. "particle_dummy:animation.particle_dummy.dragon_claw_target:primary"
-     * e.g. "particle_dummy:animation.particle.dummy.stat_up
      */
     fun extractAnimation(string: String): ActiveAnimation? {
         val group = string.substringBefore(":")
@@ -607,6 +608,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         setDefault()
         // Applies any of the state's queued actions.
         state.preRender()
+        state.renderMarkers.clear()
         // Performs a check that the current pose is correct and returns back which pose we should be applying. Even if
         // a change of pose is necessary, if it's going to gradually transition there then we're still going to keep
         // applying our current pose until that process is done.
@@ -773,8 +775,8 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         matrixStack.scale(scale, scale, scale)
         matrixStack.mulPose(Axis.YP.rotationDegrees(yRot))
 
-        //For some reason locators are positioned upside-down so this fixes that
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
+        // Entities' locators are positioned upside-down so this fixes that
+        if(entity != null) matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
     }

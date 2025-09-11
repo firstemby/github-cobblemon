@@ -57,6 +57,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "naganadel",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

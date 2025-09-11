@@ -60,6 +60,71 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "sharpedo mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "sharpedo mega",
+          "tier": 3
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 3
+        },
+        {
+          "pokemon": "wailmer",
+          "tier": 4
+        },
+        {
+          "pokemon": "lapras",
+          "tier": 5
+        },
+        {
+          "pokemon": "arctovish",
+          "tier": 5
+        },
+        {
+          "pokemon": "gyarados mega=false",
+          "tier": 6
+        },
+        {
+          "pokemon": "dondozo",
+          "tier": 6
+        },
+        {
+          "pokemon": "gyarados mega",
+          "tier": 7
+        },
+        {
+          "pokemon": "wailord",
+          "tier": 8
+        },
+        {
+          "pokemon": "kyogre",
+          "tier": 9
+        },
+        {
+          "pokemon": "mantyke",
+          "tier": 10
+        },
+        {
+          "pokemon": "mantine",
+          "tier": 11
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 12
+        }
+      ]
     }
   },
   "drops": {

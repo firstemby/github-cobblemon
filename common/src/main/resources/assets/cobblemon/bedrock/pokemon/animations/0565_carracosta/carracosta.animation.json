@@ -66,6 +66,10 @@
 				},
 				"foot_right": {
 					"rotation": ["0-math.sin(query.anim_time*90*3/2)*-1", 0, 2.5]
+				},
+				"locator_seat_1": {
+					"rotation": [51, 0, 0],
+					"position": [0, 4.6, 0]
 				}
 			}
 		},
@@ -228,6 +232,10 @@
 				"body": {
 					"rotation": [0, "0-math.cos(query.anim_time*90*2-30)*2", 0],
 					"position": [0, 0, "0-math.sin(query.anim_time*90*2*2+30)*0.3"]
+				},
+				"locator_seat_1": {
+					"rotation": [51, 0, 0],
+					"position": [0, 4.6, 0]
 				}
 			}
 		},
@@ -302,6 +310,10 @@
 				},
 				"body": {
 					"position": [0, "-0.75+math.sin(query.anim_time*90*3/2)*0.15", 0]
+				},
+				"locator_seat_1": {
+					"rotation": [51, 0, 0],
+					"position": [0, 4.6, 0]
 				}
 			}
 		},
@@ -378,6 +390,10 @@
 				},
 				"eyelid_right": {
 					"position": [-0.1, 0, 0]
+				},
+				"locator_seat_1": {
+					"rotation": [51, 0, 0],
+					"position": [0, 4.6, 0]
 				}
 			}
 		},
@@ -903,6 +919,22 @@
 			"sound_effects": {
 				"0.0833": {
 					"effect": "pokemon.carracosta.cry"
+				}
+			}
+		},
+		"animation.carracosta.walk_test": {
+			"loop": true,
+			"bones": {
+				"carracosta": {
+					"position": [0, 0, "15-query.anim_time*90*0.06"]
+				}
+			}
+		},
+		"animation.carracosta.water_test": {
+			"loop": true,
+			"bones": {
+				"carracosta": {
+					"position": [0, 0, "59-query.anim_time*90*0.13"]
 				}
 			}
 		}

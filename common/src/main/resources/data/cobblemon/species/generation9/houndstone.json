@@ -148,5 +148,10 @@
     "tutor:uproar"
   ],
   "preEvolution": "greavard",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

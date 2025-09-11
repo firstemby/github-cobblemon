@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -79,7 +80,15 @@ fun ServerLevel.isBoxLoaded(box: AABB): Boolean {
 }
 
 fun AABB.getRanges(): Triple<IntRange, IntRange, IntRange> {
-    return Triple(floor(minX)..ceil(maxX), minY.toInt()..ceil(maxY), minZ.toInt()..ceil(maxZ))
+    val minX = floor(this.minX)
+    val minY = floor(this.minY)
+    val minZ = floor(this.minZ)
+
+    val maxX = floor(this.maxX)
+    val maxY = floor(this.maxY)
+    val maxZ = floor(this.maxZ)
+
+    return Triple(minX..maxX, minY..maxY, minZ..maxZ)
 }
 
 fun BlockGetter.doForAllBlocksIn(box: AABB, action: (BlockState, BlockPos) -> Unit) {
@@ -230,6 +239,8 @@ val Level.blockRegistry: Registry<Block>
     get() = registryAccess().registryOrThrow(Registries.BLOCK)
 val Level.entityTypeRegistry: Registry<EntityType<*>>
     get() = registryAccess().registryOrThrow(Registries.ENTITY_TYPE)
+val Level.fluidRegistry: Registry<Fluid>
+    get() = registryAccess().registryOrThrow(Registries.FLUID)
 
 fun Vec3.traceDownwards(
     world: Level,

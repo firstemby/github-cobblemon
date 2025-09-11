@@ -55,6 +55,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "chatot",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

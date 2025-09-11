@@ -57,7 +57,8 @@ class BugwortBlock(settings: Properties) : CropBlock(settings), BonemealableBloc
         builder.add(IS_WILD)
     }
 
-    override fun getBaseSeedId(): ItemLike = CobblemonItems.BUGWORT
+    // TODO after 1.7
+//    override fun getBaseSeedId(): ItemLike = CobblemonItems.BUGWORT
 
     override fun getShape(state: BlockState, world: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape = AGE_TO_SHAPE[this.getAge(state)]
 
@@ -93,26 +94,27 @@ class BugwortBlock(settings: Properties) : CropBlock(settings), BonemealableBloc
         return floor.`is`(BlockTags.DIRT) || floor.`is`(Blocks.FARMLAND)
     }
 
-    override fun useWithoutItem(
-            state: BlockState,
-            world: Level,
-            pos: BlockPos,
-            player: Player,
-            hit: BlockHitResult
-    ): InteractionResult {
-        if (state != null && world != null && pos != null) {
-            // if bugwort is at max age then revert age to 0 and drop items
-            if (player.getItemInHand(InteractionHand.MAIN_HAND).`is`(Items.BONE_MEAL) && !this.isMaxAge(state)) {
-                return InteractionResult.PASS
-            } else if (this.isMaxAge(state)) {
-                world.playSound(null, pos, CobblemonSounds.BERRY_HARVEST, SoundSource.BLOCKS, 0.4F, 1F)
-                world.setBlock(pos, state.setValue(this.ageProperty, (0).coerceAtMost(this.maxAge)), UPDATE_CLIENTS)
-                Block.popResource(world, pos, ItemStack(CobblemonItems.BUGWORT, Random.nextInt(2, 4)))
-                return InteractionResult.sidedSuccess(world.isClientSide)
-            }
-        }
-        return super.useWithoutItem(state, world, pos, player, hit)
-    }
+    // TODO after 1.7
+//    override fun useWithoutItem(
+//            state: BlockState,
+//            world: Level,
+//            pos: BlockPos,
+//            player: Player,
+//            hit: BlockHitResult
+//    ): InteractionResult {
+//        if (state != null && world != null && pos != null) {
+//            // if bugwort is at max age then revert age to 0 and drop items
+//            if (player.getItemInHand(InteractionHand.MAIN_HAND).`is`(Items.BONE_MEAL) && !this.isMaxAge(state)) {
+//                return InteractionResult.PASS
+//            } else if (this.isMaxAge(state)) {
+//                world.playSound(null, pos, CobblemonSounds.BERRY_HARVEST, SoundSource.BLOCKS, 0.4F, 1F)
+//                world.setBlock(pos, state.setValue(this.ageProperty, (0).coerceAtMost(this.maxAge)), UPDATE_CLIENTS)
+//                Block.popResource(world, pos, ItemStack(CobblemonItems.BUGWORT, Random.nextInt(2, 4)))
+//                return InteractionResult.sidedSuccess(world.isClientSide)
+//            }
+//        }
+//        return super.useWithoutItem(state, world, pos, player, hit)
+//    }
 
     override fun getBonemealAgeIncrease(world: Level): Int = 1
 

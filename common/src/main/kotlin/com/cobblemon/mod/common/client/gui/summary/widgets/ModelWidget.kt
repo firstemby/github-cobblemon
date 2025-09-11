@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets
 
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.calculateHeadYawAndPitch
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -41,6 +43,11 @@ class ModelWidget(
             field = value
             currentYawAndPitch = Pair(0f, 0f)
             state = FloatingState()
+            state.runtime.environment.query.addFunction("is_holding_item") { return@addFunction DoubleValue(field.heldItem.let {
+               !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
+            }) }
+            state.runtime.environment.query.addFunction("is_wearing_hat") { return@addFunction DoubleValue(field.heldItem.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
+            state.runtime.environment.query.addFunction("is_wearing_face") { return@addFunction DoubleValue(field.heldItem.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
         }
 
     private val heldItemRenderer = HeldItemRenderer()

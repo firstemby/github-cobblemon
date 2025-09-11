@@ -64,6 +64,15 @@
     },
     "walk": {
       "walkSpeed": 0.27
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "archeops",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

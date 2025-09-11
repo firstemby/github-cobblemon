@@ -1,6 +1,6 @@
 {
   "ingredient": "cobblemon:mental_herb",
-  "colour": "green",
+  "colour": "light_blue",
   "mobEffects": [
     {
       "effect": "minecraft:darkness",

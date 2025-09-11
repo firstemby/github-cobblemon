@@ -263,5 +263,10 @@
     "special:refresh"
   ],
   "preEvolution": "nuzleaf",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6"
+    }
+  }
 }

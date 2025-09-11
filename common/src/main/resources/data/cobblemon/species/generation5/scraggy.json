@@ -224,5 +224,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "scraggy",
+          "tier": 1
+        },
+        {
+          "pokemon": "scrafty",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

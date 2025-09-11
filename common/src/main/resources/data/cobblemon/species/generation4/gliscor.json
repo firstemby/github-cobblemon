@@ -246,5 +246,6 @@
     "legacy:swagger"
   ],
   "preEvolution": "gligar",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

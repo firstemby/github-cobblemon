@@ -61,6 +61,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "delibird",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

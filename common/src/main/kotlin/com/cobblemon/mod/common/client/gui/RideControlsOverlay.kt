@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.air.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeState
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BoatBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.BurstBehaviour
@@ -99,13 +100,14 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
             // Don't render if duration config set to 0 or less
             if (maxDurationFrames <= 0F) return
 
-            val rideBehaviourSettings = riddenEntity.ridingBehaviourSettings
-            val rideBehaviourKey = rideBehaviourSettings?.key
+            val rideBehaviourSettings = riddenEntity.ridingController?.context?.settings ?: return
+            val ridingBehaviourState = riddenEntity.ridingController?.context?.state ?: return
+            val rideBehaviourKey = rideBehaviourSettings.key
 
             // Update current ride behaviour if changed
             // If composite, get active behaviour instead
             if (rideBehaviourKey == CompositeBehaviour.KEY) {
-                val activeBehaviour = (riddenEntity.ridingState as CompositeState).activeBehaviour.get()
+                val activeBehaviour = (ridingBehaviourState as CompositeState).activeBehaviour.get()
                 if (currentBehaviourKey != activeBehaviour) {
                     currentBehaviourKey = activeBehaviour
                     resetOverlayState()
@@ -133,25 +135,33 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                 // Configure what controls to show for each behaviour
                 when (currentBehaviourKey) {
                     BirdBehaviour.KEY -> {}
+                    BoatBehaviour.KEY -> {}
+                    BurstBehaviour.KEY -> {}
                     DolphinBehaviour.KEY -> {}
+                    GliderBehaviour.KEY -> {}
+                    HelicopterBehaviour.KEY -> {}
                     HorseBehaviour.KEY -> {
                         showVerticalMouse = false
                         disableHorizontalMovementKeys = true
                         showSneakKey = false
                     }
-                    BoatBehaviour.KEY -> {}
-                    GliderBehaviour.KEY -> {}
-                    HelicopterBehaviour.KEY -> {}
-                    JetBehaviour.KEY -> {
-                       showMovementKeys = false
-                       showSneakKey = false
-                       showJumpKey = false
-                    }
-                    BurstBehaviour.KEY -> {}
-                    VehicleBehaviour.KEY -> {}
                     HoverBehaviour.KEY -> {
                         showVerticalMouse = false
                     }
+                    JetBehaviour.KEY -> {
+                       showSneakKey = false
+                       showJumpKey = false
+                    }
+                    MinekartBehaviour.KEY -> {
+                        showVerticalMouse = false
+                        showHorizontalMouse = false
+                        showSneakKey = false
+                    }
+                    RocketBehaviour.KEY -> {
+                        showVerticalMouse = false
+                        showHorizontalMouse = false
+                    }
+                    VehicleBehaviour.KEY -> {}
                 }
 
                 val centerX = minecraft.window.guiScaledWidth / 2

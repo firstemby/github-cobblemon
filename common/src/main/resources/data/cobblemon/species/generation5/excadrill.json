@@ -50,6 +50,11 @@
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.179
+      }
+    },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,

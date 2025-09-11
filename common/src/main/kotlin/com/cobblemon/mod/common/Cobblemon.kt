@@ -75,7 +75,8 @@ import com.cobblemon.mod.common.config.constraint.IntConstraint
 import com.cobblemon.mod.common.config.starter.StarterConfig
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.events.AdvancementHandler
-import com.cobblemon.mod.common.events.FlowHandler
+import com.cobblemon.mod.common.events.EntityCallbackHandler
+import com.cobblemon.mod.common.events.CallbackHandler
 import com.cobblemon.mod.common.events.PokedexHandler
 import com.cobblemon.mod.common.events.ServerTickHandler
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
@@ -312,7 +313,8 @@ object Cobblemon {
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
-        FlowHandler.setup()
+        CallbackHandler.setup()
+        EntityCallbackHandler.setup()
 
         ifDedicatedServer {
             isDedicatedServer = true

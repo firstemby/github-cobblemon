@@ -12,10 +12,13 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.CompositeRidingStrategies
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.writeRidingStats
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -107,13 +110,13 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         }
     }
 
-    override fun shouldRotatePlayerHead(
+    override fun shouldRotateRiderHead(
         settings: CompositeSettings,
         state: CompositeState,
         vehicle: PokemonEntity
     ): Boolean {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
-            behaviour.shouldRotatePlayerHead(behaviourSettings, behaviourState, vehicle)
+            behaviour.shouldRotateRiderHead(behaviourSettings, behaviourState, vehicle)
         }
     }
 
@@ -380,8 +383,10 @@ open class CompositeSettings : RidingBehaviourSettings {
         private set
 
     override val key: ResourceLocation = CompositeBehaviour.KEY
+    override val stats = mutableMapOf<RidingStat, IntRange>()
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeRidingStats(stats)
         buffer.writeResourceLocation(key)
         buffer.writeResourceLocation(transitionStrategy)
         defaultBehaviour.encode(buffer)
@@ -389,6 +394,7 @@ open class CompositeSettings : RidingBehaviourSettings {
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
+        stats.putAll(buffer.readRidingStats())
         transitionStrategy = buffer.readResourceLocation()
         val defaultBehaviourKey = buffer.readResourceLocation()
         defaultBehaviour = RidingBehaviourSettingsAdapter.types[defaultBehaviourKey]?.getConstructor()?.newInstance()

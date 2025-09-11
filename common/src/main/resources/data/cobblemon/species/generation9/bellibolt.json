@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 939,
   "name": "Bellibolt",
   "primaryType": "electric",
@@ -41,6 +42,12 @@
   "catchRate": 50,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.9,
+  "hitbox": {
+    "width": 1.3,
+    "height": 1.5,
+    "fixed": false
+  },
   "behaviour": {
     "moving": {
       "swim": {
@@ -49,6 +56,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {

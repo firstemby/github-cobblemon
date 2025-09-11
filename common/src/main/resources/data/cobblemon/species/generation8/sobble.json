@@ -43,6 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.5,
   "hitbox": {
     "width": 0.9,
@@ -62,6 +63,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sobble",
+          "tier": 1
+        },
+        {
+          "pokemon": "drizzile",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

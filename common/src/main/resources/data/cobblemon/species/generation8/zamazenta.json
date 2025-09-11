@@ -54,6 +54,27 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zacian",
+          "tier": 1
+        },
+        {
+          "pokemon": "zamazenta",
+          "tier": 1
+        },
+        {
+          "pokemon": "zacian crowned",
+          "tier": 2
+        },
+        {
+          "pokemon": "zamazenta crowned",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [
@@ -185,7 +206,22 @@
       },
       "baseExperienceYield": 350,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zacian crowned",
+              "tier": 1
+            },
+            {
+              "pokemon": "zamazenta crowned",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "drops": {

@@ -42,17 +42,41 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "0-4"
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/minekart",
+        "stats": {
+          "ACCELERATION": "41-60",
+          "JUMP": "0-20",
+          "SKILL": "21-40",
+          "SPEED": "61-80",
+          "STAMINA": "21-40"
+        }
+      }
     },
+    "seats": []
+  },
+  "behaviour": {
     "moving": {
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "willSleepOnBed": true
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "revavroom",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

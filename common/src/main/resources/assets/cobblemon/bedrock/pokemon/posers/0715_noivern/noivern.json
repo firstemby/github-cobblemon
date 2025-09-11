@@ -4,6 +4,17 @@
   "profileScale": 0.43,
   "profileTranslation": [ -0.01, 0.97, 0],
   "rootBone": "noivern",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.65, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 5],
+    "seat_1_reverse": [0, 1, 5]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('noivern', 'cry')"
   },
@@ -16,24 +27,53 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
+      "condition": "q.has_entity ? !q.in_air : 1.0",
       "animations": [
-        "q.look('head')",
+        "q.look('head_ai')",
         "q.bedrock('noivern', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
       ]
     },
+    "in-air": {
+      "poseTypes": ["STAND", "WALK", "NONE"],
+      "condition": "q.has_entity ? q.in_air && q.is_ridden : 0.0",
+      "animations": ["q.bedrock('noivern', 'ride_jump')"],
+      "transformTicks": 2,
+      "transformToTicks": 2
+    },
     "walking": {
       "poseTypes": [
         "WALK",
         "SWIM"
       ],
+      "condition": "q.has_entity ? !q.in_air && !q.is_sprinting : 1.0",
       "animations": [
-        "q.look('head')",
-        "q.bedrock('noivern', 'ground_idle')",
-        "q.quadruped_walk(1, 1, 'arm_left', 'arm_right', 'leg_left', 'leg_right')"
+        "q.look('head_ai')",
+        "q.bedrock('noivern', 'ground_walk')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('noivern', 'ride_ground')"
+        }
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    },
+    "running": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "condition": "q.has_entity ? !q.in_air && q.is_sprinting : 0.0",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('noivern', 'ground_run')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('noivern', 'ride_ground')"
+        }
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
@@ -44,7 +84,7 @@
         "HOVER"
       ],
       "animations": [
-        "q.look('head')",
+        "q.look('head_ai')",
         "q.bedrock('noivern', 'air_idle')"
       ],
       "quirks": [
@@ -52,12 +92,31 @@
       ]
     },
     "fly": {
-      "poseTypes": [
-        "FLY"
-      ],
+      "poseTypes": ["FLY"],
+      "condition": "!q.is_gliding",
       "animations": [
-        "q.look('head')",
-        "q.bedrock('noivern', 'air_fly')"
+        "q.look('head_ai')",
+        "q.bedrock('noivern', 'air_fly')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('noivern', 'ride_air_fly')"
+        }
+      ],
+      "quirks": [
+        "q.bedrock_quirk('noivern', 'blink')"
+      ]
+    },
+    "glide": {
+      "poseTypes": ["FLY"],
+      "condition": "q.is_gliding",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('noivern', 'air_glide')",
+        "q.bedrock('noivern', 'ride_dive')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('noivern', 'ride_air_glide')"
+        }
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"

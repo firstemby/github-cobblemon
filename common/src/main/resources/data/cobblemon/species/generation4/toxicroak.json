@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 454,
   "name": "Toxicroak",
   "primaryType": "poison",
@@ -236,5 +237,10 @@
     "legacy:snore"
   ],
   "preEvolution": "croagunk",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

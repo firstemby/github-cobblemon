@@ -62,6 +62,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skrelp",
+          "tier": 1
+        },
+        {
+          "pokemon": "dragalge",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

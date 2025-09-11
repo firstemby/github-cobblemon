@@ -53,7 +53,8 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
                 it is PokemonEntity &&
                         it != currentLeader &&
                         it.pokemon.storeCoordinates.get()?.store !is PartyStore &&
-                        it.getHerdSize() < it.behaviour.herd.maxSize
+                        it.getHerdSize() < it.behaviour.herd.maxSize &&
+                        !it.brain.hasMemoryValue(CobblemonMemories.POKEMON_DROWSY)
             }.forEach { possibleLeader ->
                 possibleLeader as PokemonEntity
                 val matchingHerdLeader = entity.behaviour.herd.bestMatchLeader(entity, possibleLeader) ?: return@forEach
@@ -80,7 +81,7 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
     // How frequently to check for whether it should herd. Probably isn't that expensive but might use this for chance.
     val checkTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
@@ -98,8 +99,7 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
             MemoryModuleType.WALK_TARGET
         )
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val checkTicksValue = checkTicks.resolveInt()
+        val checkTicksValue = checkTicks.resolveInt(behaviourConfigurationContext.runtime)
         return BehaviorBuilder.create { instance ->
             instance.group(
                 instance.present(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES),

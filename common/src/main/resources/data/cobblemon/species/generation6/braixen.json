@@ -52,6 +52,15 @@
       "walk": {
         "walkSpeed": 0.4
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "delphox",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

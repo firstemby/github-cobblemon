@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 602,
   "name": "Tynamo",
   "primaryType": "electric",
@@ -40,10 +41,10 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.55,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.6,
+    "height": 0.75,
     "fixed": false
   },
   "behaviour": {
@@ -55,6 +56,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tynamo",
+          "tier": 1
+        },
+        {
+          "pokemon": "huntail",
+          "tier": 2
+        },
+        {
+          "pokemon": "gorebyss",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektrik",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektross",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

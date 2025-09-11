@@ -60,6 +60,9 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -276,7 +279,12 @@
       "baseExperienceYield": 320,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     }
   ]
 }

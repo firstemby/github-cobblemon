@@ -172,5 +172,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "bisharp",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9"
+    }
+  }
 }

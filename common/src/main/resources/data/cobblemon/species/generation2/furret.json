@@ -225,5 +225,20 @@
     "legacy:whirlpool"
   ],
   "preEvolution": "sentret",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "linoone",
+          "tier": 1
+        },
+        {
+          "pokemon": "furret",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

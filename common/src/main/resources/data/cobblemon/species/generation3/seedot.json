@@ -183,5 +183,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "seedot",
+          "tier": 1
+        },
+        {
+          "pokemon": "nuzleaf",
+          "tier": 2
+        },
+        {
+          "pokemon": "shiftry",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

@@ -64,6 +64,19 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "slugma",
+          "tier": 1
+        },
+        {
+          "pokemon": "magcargo",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

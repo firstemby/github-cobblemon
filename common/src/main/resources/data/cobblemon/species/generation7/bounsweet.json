@@ -153,5 +153,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bounsweet",
+          "tier": 1
+        },
+        {
+          "pokemon": "steenee",
+          "tier": 2
+        },
+        {
+          "pokemon": "tsareena",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

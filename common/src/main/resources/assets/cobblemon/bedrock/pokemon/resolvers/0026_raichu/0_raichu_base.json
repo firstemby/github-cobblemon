@@ -7,11 +7,52 @@
       "poser": "cobblemon:raichu",
       "model": "cobblemon:raichu_male.geo",
       "texture": "cobblemon:textures/pokemon/0026_raichu/raichu.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
     },
     {
       "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["female"],
+      "poser": "cobblemon:raichu",
+      "model": "cobblemon:raichu_female.geo",
+      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["female","shiny"],
+      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
     }
   ]
 }

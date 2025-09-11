@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 361,
   "name": "Snorunt",
   "primaryType": "ice",
@@ -43,7 +44,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "standingEyeHeight": 0.4,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -191,5 +192,28 @@
       ],
       "requiredContext": "cobblemon:dawn_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snorunt",
+          "tier": 1
+        },
+        {
+          "pokemon": "glalie mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "froslass",
+          "tier": 3
+        },
+        {
+          "pokemon": "glalie mega",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

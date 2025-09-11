@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 577,
   "name": "Solosis",
   "primaryType": "psychic",
@@ -63,6 +64,23 @@
         "canSwimInLava": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "solosis",
+          "tier": 1
+        },
+        {
+          "pokemon": "duosion",
+          "tier": 2
+        },
+        {
+          "pokemon": "reuniclus",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

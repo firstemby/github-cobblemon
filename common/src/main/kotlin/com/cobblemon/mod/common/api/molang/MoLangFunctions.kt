@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
+import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -23,7 +24,9 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.Environment
+import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
+import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
@@ -32,11 +35,12 @@ import com.cobblemon.mod.common.api.dialogue.ReferenceDialogueFaceProvider
 import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.BenchedMove
-import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.NPCProvider
+import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
+import com.cobblemon.mod.common.api.npc.NPCClass
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
 import com.cobblemon.mod.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
@@ -53,10 +57,13 @@ import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.riding.Rideable
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
+import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.storage.PokemonStore
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
@@ -68,13 +75,11 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleFormat
-import com.cobblemon.mod.common.battles.BattleFormat.Companion.GEN_9_DOUBLES
-import com.cobblemon.mod.common.battles.BattleFormat.Companion.GEN_9_SINGLES
-import com.cobblemon.mod.common.battles.BattleFormat.Companion.GEN_9_TRIPLES
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunctions
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCEntity
@@ -82,6 +87,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleMusicPacket
 import com.cobblemon.mod.common.net.messages.client.effect.RunPosableMoLangPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
@@ -90,6 +96,8 @@ import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
@@ -104,6 +112,7 @@ import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
 import net.minecraft.core.Vec3i
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
@@ -120,20 +129,28 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.TagKey
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageTypes
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.PlayerRideable
 import net.minecraft.world.entity.TamableAnimal
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.entity.animal.Animal
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.monster.Enemy
+import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.Level.ExplosionInteraction
 import net.minecraft.world.level.biome.Biome
@@ -143,6 +160,9 @@ import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import kotlin.text.get
+import kotlin.text.toInt
+import kotlin.toString
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
@@ -156,6 +176,17 @@ object MoLangFunctions {
             val message = params.get<MoValue>(0).asString()
             Cobblemon.LOGGER.info(message)
         },
+        "delete_variable" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            val variable = params.getString(1)
+            struct.map.remove(variable)
+            DoubleValue.ONE
+        },
+        "delete_variables" to java.util.function.Function { params ->
+            val struct = params.get<VariableStruct>(0)
+            struct.map.clear()
+            DoubleValue.ONE
+        },
         "set_query" to java.util.function.Function { params ->
             val variable = params.getString(0)
             val value = params.get<MoValue>(1)
@@ -167,6 +198,28 @@ object MoLangFunctions {
             val search = params.getString(1)
             val replace = params.getString(2)
             return@Function StringValue(text.replace(search, replace))
+        },
+        "is_included" to java.util.function.Function { params ->
+            val text = params.getString(0)
+            val search = params.getString(1)
+            return@Function DoubleValue(text.contains(search))
+        },
+        "to_lower" to java.util.function.Function { params ->
+            return@Function StringValue(params.getString(0).lowercase())
+        },
+        "to_upper" to java.util.function.Function { params ->
+            return@Function StringValue(params.getString(0).uppercase())
+        },
+        "string_length" to java.util.function.Function { params ->
+            return@Function DoubleValue(params.getString(0).length)
+        },
+        "split_string" to java.util.function.Function { params ->
+            val text = params.getString(0)
+            val delimiter = params.getString(1)
+            val parts = text.split(delimiter).map { StringValue(it) }
+            val struct = ArrayStruct(hashMapOf())
+            parts.forEachIndexed { index, moValue -> struct.setDirectly("$index", moValue) }
+            return@Function struct
         },
         "is_blank" to java.util.function.Function { params ->
             val arg = params.get<MoValue>(0)
@@ -206,7 +259,7 @@ object MoLangFunctions {
             return@Function array
         },
         "length" to java.util.function.Function { params ->
-            val array = params.get<ArrayStruct>(0)
+            val array = (params.getOrNull<MoValue>(0) as? VariableStruct) ?: return@Function DoubleValue.ZERO
             return@Function DoubleValue(array.map.size.toDouble())
         },
         "append" to java.util.function.Function { params ->
@@ -298,6 +351,12 @@ object MoLangFunctions {
         "create_simple_party_provider" to java.util.function.Function { params ->
             val partyProvider = SimplePartyProvider()
             return@Function partyProvider.struct
+        },
+        "create_pickup_item" to java.util.function.Function { params ->
+            val item = params.getOrNull<MoValue>(0)?.asString()?.let(ObtainableItemCondition::parseFromString)
+            val pickupPriority = params.getIntOrNull(1) ?: 0
+            val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
+            return@Function pickupItem.struct
         }
     )
     val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
@@ -305,6 +364,12 @@ object MoLangFunctions {
         { worldHolder ->
             val world = worldHolder.value()
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("is_time_of_day") { params ->
+                val timeOfDay = TimeRange.timeRanges[params.getString(0).lowercase()]
+                    ?: return@put DoubleValue.ZERO
+                val time = world.dayTime % 24000
+                return@put DoubleValue(timeOfDay.contains(time.toInt()))
+            }
             map.put("game_time") { _ -> DoubleValue(world.gameTime.toDouble()) }
             map.put("time_of_day") {
                 val time = world.dayTime % 24000
@@ -423,6 +488,22 @@ object MoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
+            map.put("spawn_npc") { params ->
+                val x = params.getDouble(0)
+                val y = params.getDouble(1)
+                val z = params.getDouble(2)
+                val npcClass = params.getStringOrNull(3)?.let { NPCClasses.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+                val level = params.getInt(4)
+                if(npcClass == null) return@put DoubleValue.ZERO
+                val npc = NPCEntity(world)
+                npc.moveTo(x, y, z, npc.yRot, npc.xRot)
+                npc.npc = npcClass
+                npc.initialize(level)
+                if (world.addFreshEntity(npc)) {
+                    return@put npc.asMoLangValue()
+                }
+                return@put DoubleValue.ZERO
+            }
             map.put("play_sound_on_server") { params ->
                 val sound = params.getString(0).asResource()
                 val soundSource = params.getString(1).uppercase()
@@ -507,10 +588,61 @@ object MoLangFunctions {
                 environment
             }
             map.put("is_player") { DoubleValue.ONE }
+            map.put("riding_pokemon") {
+                val vehicle = player.vehicle
+                if (vehicle is PokemonEntity) {
+                    return@put vehicle.struct
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+            }
             if (player is ServerPlayer) {
+                map.put("seen_credits") { _ ->
+                    DoubleValue( DoubleValue(player.seenCredits) )
+                }
+                map.put("is_in_dialogue") { _ ->
+                    DoubleValue( DoubleValue(player.isInDialogue) )
+                }
+                map.put("active_dialogue") { _ ->
+                    if (player.isInDialogue) {
+                        player.activeDialogue?.dialogueId.toString()
+                        return@put DoubleValue.ONE
+                    } else {
+                        DoubleValue.ZERO
+                    }
+                }
+                map.put("is_spectator") { DoubleValue(player.isSpectator) }
+                map.put("is_creative") { DoubleValue(player.isCreative) }
+                map.put("is_survival") { DoubleValue(player.gameMode.isSurvival) }
+                map.put("is_adventure") { DoubleValue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) }
                 map.put("run_command") { params ->
                     val command = params.getString(0)
                     player.server.commands.performPrefixedCommand(player.createCommandSourceStack(), command)
+                }
+                map.put("set_battle_theme") { params ->
+                    val soundId = params.getString(0).asResource()
+                    Cobblemon.playerDataManager.getGenericData(player).battleTheme = soundId
+                    return@put DoubleValue.ONE
+                }
+                map.put("battle_music") { params ->
+                    val soundId = params.getString(0).asResource()
+                    val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1.0f
+                    val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1.0f
+                    val restart = params.getBooleanOrNull(3) ?: true
+
+                    val music = soundId
+                    if (music != null) {
+                        val packet = BattleMusicPacket(music, volume, pitch, restart)
+                        packet.sendToPlayer(player)
+                        return@put DoubleValue.ONE
+                    } else {
+                        return@put DoubleValue.ZERO
+                    }
+                }
+                map.put("stop_battle_music") { _ ->
+                    val packet = BattleMusicPacket(null)
+                    packet.sendToPlayer(player)
+                    return@put DoubleValue.ONE
                 }
                 map.put("play_sound_on_server") { params ->
                     val sound = params.getString(0).asResource()
@@ -544,13 +676,13 @@ object MoLangFunctions {
                 map.put("party") { player.party().struct }
                 map.put("pc") { player.pc().struct }
                 map.put("has_permission") { params -> DoubleValue(Cobblemon.permissionValidator.hasPermission(player, params.getString(0), params.getIntOrNull(1) ?: 4)) }
-                map.put("data") { _ -> Cobblemon.molangData.load(player.uuid) }
-                map.put("save_data") { _ -> Cobblemon.molangData.save(player.uuid) }
+                map.put("data") { params -> Cobblemon.molangData.load(player.uuid, params.getStringOrNull(0)) }
+                map.put("save_data") { params -> Cobblemon.molangData.save(player.uuid, params.getStringOrNull(0)) }
                 map.put("in_battle") { DoubleValue(player.isInBattle()) }
                 map.put("battle") { player.getBattleState()?.first?.struct ?: DoubleValue.ZERO }
                 map.put("get_npc_data") { params ->
-                    val npcId = (params.get<MoValue>(0) as? ObjectValue<NPCEntity>)?.obj?.stringUUID ?: params.getString(0)
-                    val data = Cobblemon.molangData.load(player.uuid)
+                    val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID ?: params.getString(0)
+                    val data = Cobblemon.molangData.load(player.uuid, params.getStringOrNull(1))
                     if (data.map.containsKey(npcId)) {
                         return@put data.map[npcId]!!
                     } else {
@@ -560,9 +692,9 @@ object MoLangFunctions {
                     }
                 }
                 map.put("get_npc_variable") { params ->
-                    val npcId = (params.get<MoValue>(0) as? ObjectValue<NPCEntity>)?.obj?.stringUUID ?: params.getString(0)
+                    val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID ?: params.getString(0)
                     val variable = params.getString(1)
-                    val data = Cobblemon.molangData.load(player.uuid)
+                    val data = Cobblemon.molangData.load(player.uuid, params.getStringOrNull(2))
                     if (data.map.containsKey(npcId)) {
                         return@put (data.map[npcId] as VariableStruct).map[variable] ?: DoubleValue.ZERO
                     } else {
@@ -570,15 +702,16 @@ object MoLangFunctions {
                     }
                 }
                 map.put("set_npc_variable") { params ->
-                    val npcId = (params.get<MoValue>(0) as? ObjectValue<NPCEntity>)?.obj?.stringUUID ?: params.getString(0)
+                    val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID ?: params.getString(0)
                     val variable = params.getString(1)
                     val value = params.get<MoValue>(2)
                     val saveAfterwards = params.getBooleanOrNull(3) != false
-                    val data = Cobblemon.molangData.load(player.uuid)
+                    val path = params.getStringOrNull(4)
+                    val data = Cobblemon.molangData.load(player.uuid, path)
                     val npcData = data.map.getOrPut(npcId) { VariableStruct() } as VariableStruct
                     npcData.map[variable] = value
                     if (saveAfterwards) {
-                        Cobblemon.molangData.save(player.uuid)
+                        Cobblemon.molangData.save(player.uuid, path)
                     }
                     return@put DoubleValue.ONE
                 }
@@ -655,6 +788,7 @@ object MoLangFunctions {
             map.put("grow") { params -> stack.grow(params.getInt(0)) }
             map.put("is_of") { params -> DoubleValue(holder.`is`(params.getString(0).asIdentifierDefaultingNamespace())) }
             map.put("is_in") { params -> DoubleValue(holder.`is`(TagKey.create(Registries.ITEM, params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()))) }
+            map.put("is_food") { params -> DoubleValue(stack.has(DataComponents.FOOD)) }
             return@mutableListOf map
         }
     )
@@ -686,6 +820,56 @@ object MoLangFunctions {
                 }
                 val owner = entity.owner
                 return@put owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO
+            }
+            map.put("delta_movement") {
+                return@put listOf(entity.deltaMovement.x, entity.deltaMovement.y, entity.deltaMovement.z).asArrayValue(::DoubleValue)
+            }
+            map.put("tags") {
+                val tags = entity.tags
+                val array = ArrayStruct(hashMapOf())
+                tags.forEachIndexed { index, tag -> array.setDirectly("$index", StringValue(tag)) }
+                return@put array
+            }
+            map.put("add_tag") { params ->
+                val tag = params.getString(0)
+                entity.addTag(tag)
+                return@put DoubleValue.ONE
+            }
+            map.put("remove_tag") { params ->
+                val tag = params.getString(0)
+                entity.removeTag(tag)
+                return@put DoubleValue.ONE
+            }
+            map.put("has_tag") { params ->
+                val tag = params.getString(0)
+                return@put DoubleValue(entity.tags.contains(tag))
+            }
+            if (entity is MoLangScriptingEntity) {
+                map.put("add_callback") { params ->
+                    val type = params.getString(0).asIdentifierDefaultingNamespace()
+                    val callback = params.getString(1).asIdentifierDefaultingNamespace()
+                    val allowDuplicates = params.getBooleanOrNull(2) ?: false
+                    entity.callbacks.addCallback(type, callback, allowDuplicates)
+                }
+                map.put("remove_callback") { params ->
+                    val type = params.getString(0).asIdentifierDefaultingNamespace()
+                    val callback = params.getString(1).asIdentifierDefaultingNamespace()
+                    entity.callbacks.removeCallback(type, callback)
+                }
+                map.put("has_callback") { params ->
+                    val type = params.getString(0).asIdentifierDefaultingNamespace()
+                    val callback = params.getString(1).asIdentifierDefaultingNamespace()
+                    return@put DoubleValue(callback in (entity.callbacks[type] ?: emptySet()))
+                }
+                map.put("clear_callbacks") { params ->
+                    val type = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
+                    if (type != null) {
+                        entity.callbacks[type]?.clear()
+                    } else {
+                        entity.callbacks.clear()
+                    }
+                    return@put DoubleValue.ONE
+                }
             }
 
             if (entity is PathfinderMob) {
@@ -803,14 +987,15 @@ object MoLangFunctions {
             }
             map.put("is_standing_on_blocks") { params ->
                 val depth = params.getDouble(0).toInt()
-                val blocks: MutableSet<Block> = mutableSetOf()
+                val blockStrings: MutableSet<String> = mutableSetOf()
                 for (blockIndex in 1..<params.params.size) {
-                    val blockString = params.getString(blockIndex)
-                    val block = BuiltInRegistries.BLOCK.get(blockString.asIdentifierDefaultingNamespace("minecraft"))
-                    blocks.add(block)
+                    blockStrings.add(params.getString(blockIndex))
                 }
 
-                return@put if (entity.isStandingOn(blocks, depth)) DoubleValue.ONE else DoubleValue.ZERO
+                return@put if (entity.isStandingOn(blockStrings, depth)) DoubleValue.ONE else DoubleValue.ZERO
+            }
+            map.put("discard") {
+                entity.discard()
             }
             if (entity is PosableEntity) {
                 map.put("play_animation") { params ->
@@ -835,6 +1020,10 @@ object MoLangFunctions {
                         packet.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
                         return@put DoubleValue.ONE
                     }
+                }
+
+                map.put("face") { params -> ObjectValue(ReferenceDialogueFaceProvider(entity.id, params.getBooleanOrNull(0) != false))
+
                 }
             }
             if (entity is Schedulable) {
@@ -865,6 +1054,11 @@ object MoLangFunctions {
                     packet.sendToPlayer(player)
                 }
             }
+            map.put("make_intangible") { params ->
+                val intangible = params.getBooleanOrNull(0) ?: true
+                entity.noPhysics = intangible
+                return@put DoubleValue.ONE
+            }
             return@mutableListOf map
         }
     )
@@ -872,11 +1066,71 @@ object MoLangFunctions {
     val livingEntityFunctions: MutableList<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("is_player") { _ -> DoubleValue(entity is Player) }
+            map.put("is_npc") { _ -> DoubleValue(entity is NPCEntity) }
+            map.put("is_mob") { _ -> DoubleValue(entity is Mob) }
+            map.put("is_pokemon") { _ -> DoubleValue(entity is PokemonEntity) }
+            map.put("is_animal") { _ -> DoubleValue(entity is Animal) }
+            map.put("is_tamable") { _ -> DoubleValue(entity is TamableAnimal) }
+            map.put("is_tamed") { _ -> DoubleValue(entity is TamableAnimal && entity.isTame) }
+            map.put("is_hostile") { _ -> DoubleValue(entity is Monster) }
+            map.put("is_baby") { _ -> DoubleValue(entity.isBaby) }
+            map.put("is_adult") { _ -> DoubleValue(!entity.isBaby) }
+            map.put("remove_effect") { params ->
+                val effectId = params.getString(0).asIdentifierDefaultingNamespace()
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                if (effectHolder != null) {
+                    entity.removeEffect(effectHolder)
+                    return@put DoubleValue.ONE
+                }
+            }
+            map.put("add_effect") { params ->
+                val effectId = params.getString(0).asIdentifierDefaultingNamespace()
+                val duration = params.getInt(1)
+                val amplifier = params.getIntOrNull(2) ?: 0
+                val ambient = params.getBooleanOrNull(3) ?: false
+                val visible = params.getBooleanOrNull(4) ?: true
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                if (effectHolder != null) {
+                    entity.addEffect(MobEffectInstance(effectHolder, duration, amplifier, ambient, visible))
+                    return@put DoubleValue.ONE
+                }
+            }
+            map.put("has_effect") { params ->
+                val effectId = params.getString(0).asIdentifierDefaultingNamespace()
+                val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
+                return@put DoubleValue(if (effectHolder != null) entity.hasEffect(effectHolder) else false)
+            }
+            map.put("heal") { params ->
+                val amount = params.getDouble(0)
+                entity.heal(amount.toFloat())
+            }
+            map.put("is_looking_at") { params ->
+                val targetEntity = params.get<MoValue>(0)
+                val maxDistance = params.getDoubleOrNull(1)?.toFloat() ?: 2.0F
+
+                val entity = if (targetEntity is ObjectValue<*> && targetEntity.obj is Entity) {
+                    targetEntity.obj as Entity
+                } else {
+                    return@put DoubleValue.ZERO
+                }
+
+                return@put DoubleValue(entity.isLookingAt(entity, maxDistance))
+            }
             map.put("is_living_entity") { DoubleValue.ONE }
             map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) }
             map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
             map.put("health") { _ -> DoubleValue(entity.health) }
             map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
+            map.put("look_at_position") { params ->
+                val x = params.getDouble(0)
+                val y = params.getDouble(1)
+                val z = params.getDouble(2)
+                val duration = params.getIntOrNull(3) ?: 20
+                val flags = params.params.subList(4, params.params.size).map { it.asString() }
+                val brain = entity.brain
+                brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, CobblemonBlockPosTracker(Vec3(x, y, z), flags.toSet()), duration.toLong())
+            }
             map.put("get_wander_control_memory") {
                 val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                     ?: CobblemonWanderControl()
@@ -913,6 +1167,22 @@ object MoLangFunctions {
                 } else {
                     return@put DoubleValue.ZERO
                 }
+            }
+            map.put("set_uuid_memory") { params ->
+                val memory = params.getString(0).asIdentifierDefaultingNamespace().let(BuiltInRegistries.MEMORY_MODULE_TYPE::get) as MemoryModuleType<UUID>
+                val uuid = params.getString(1).asUUID ?: return@put DoubleValue.ZERO
+                val expiry = params.getIntOrNull(2) ?: -1
+                if (expiry != -1) {
+                    entity.brain.setMemoryWithExpiry(memory, uuid, expiry.toLong())
+                } else {
+                    entity.brain.setMemory(memory, uuid)
+                }
+                return@put DoubleValue.ONE
+            }
+            map.put("erase_memory") { params ->
+                val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() }.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
+                memories.forEach { entity.brain.eraseMemory(it) }
+                return@put DoubleValue.ONE
             }
             map.put("has_memory_value") { params ->
                 val memoryTypes = params.params.map {
@@ -969,7 +1239,6 @@ object MoLangFunctions {
                     DoubleValue(entity.brain.getMemory(MemoryModuleType.WALK_TARGET).isPresent || entity.isPathFinding)
                 }
             }
-
             map
         }
     )
@@ -980,7 +1249,6 @@ object MoLangFunctions {
             map.put("name") { StringValue(npc.name.string) }
             map.put("level") { DoubleValue(npc.level) }
             map.put("has_aspect") { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
-            map.put("face") { params -> ObjectValue(ReferenceDialogueFaceProvider(npc.id, params.getBooleanOrNull(0) != false)) }
             map.put("in_battle") { DoubleValue(npc.isInBattle()) }
             map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) }
             map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
@@ -1191,6 +1459,11 @@ object MoLangFunctions {
             map.put("has_party") { DoubleValue(npc.party != null) }
             map.put("is_npc") { DoubleValue.ONE }
             map.put("can_battle") { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) }
+            map.put("set_battle_theme") { params ->
+                val soundId = params.getString(0).asResource()
+                npc.npc.battleTheme = soundId
+                return@put DoubleValue.ONE
+            }
             map
         }
     )
@@ -1227,6 +1500,23 @@ object MoLangFunctions {
                 map.put("player") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             } else if (battleActor is PokemonBattleActor) {
                 map.put("pokemon") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+            }
+            return@mutableListOf map
+        }
+    )
+
+    val battleMessageFunctions = mutableListOf<(BattleMessage) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
+        { message ->
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("has_argument_at") { params ->
+                val index = params.getInt(0)
+                val value = params.getStringOrNull(1) ?: ""
+                return@put DoubleValue(value == message.argumentAt(index))
+            }
+            map.put("has_argument") { params ->
+                val argumentName = params.getString(0)
+                val value = params.getStringOrNull(1) ?: ""
+                return@put DoubleValue(value == message.optionalArgument(argumentName))
             }
             return@mutableListOf map
         }
@@ -1293,11 +1583,18 @@ object MoLangFunctions {
                 }
                 struct
             }
+            map.put("ride_boosts") {
+                val struct = QueryStruct(hashMapOf())
+                for (stat in RidingStat.entries) {
+                    struct.addFunction(stat.name.lowercase()) { DoubleValue(pokemon.getRideBoost(stat) ?: 0.0) }
+                }
+                struct
+            }
             map.put("natdex_number") {
                 DoubleValue(pokemon.species.nationalPokedexNumber.toDouble())
             }
             map.put("types") {
-               pokemon.form.types.map { it.toString() }.asArrayValue(::StringValue)
+                pokemon.form.types.map { it.toString() }.asArrayValue(::StringValue)
             }
             map.put("gender_ratio") {
                 DoubleValue(pokemon.form.maleRatio.toDouble())
@@ -1498,6 +1795,21 @@ object MoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
+            map.put("set_ride_boost") { params ->
+                val statName = params.getString(0).uppercase()
+                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) } ?: return@put DoubleValue.ZERO
+                val value = params.getDoubleOrNull(1)?.toFloat() ?: return@put DoubleValue.ZERO
+
+                pokemon.setRideBoost(stat, value)
+                return@put DoubleValue.ONE
+            }
+            map.put("add_ride_boost") { params ->
+                val statName = params.getString(0).uppercase()
+                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) } ?: return@put DoubleValue.ZERO
+                val value = params.getDoubleOrNull(1)?.toFloat() ?: return@put DoubleValue.ZERO
+
+                return@put DoubleValue(if (pokemon.addRideBoost(stat, value)) 1.0 else 0.0)
+            }
             map.put("initialize_moveset") { params ->
                 val preferLatest = params.getBooleanOrNull(0) ?: true
                 pokemon.initializeMoveset(preferLatest)
@@ -1542,7 +1854,11 @@ object MoLangFunctions {
                 val moveTemplate = Moves.getByName(moveName) ?: return@put DoubleValue.ZERO
                 val includeLegacy = params.getBooleanOrNull(1) ?: true
 
-                val canLearn = LearnsetQuery.ANY.canLearn(moveTemplate, pokemon.form.moves)
+                val canLearn = if (includeLegacy) {
+                    LearnsetQuery.ANY.canLearn(moveTemplate, pokemon.form.moves)
+                } else {
+                    LearnsetQuery.LEGAL.canLearn(moveTemplate, pokemon.form.moves)
+                }
                 return@put DoubleValue(if (canLearn) 1.0 else 0.0)
             }
             map.put("unlearn_move") { params ->
@@ -1555,6 +1871,15 @@ object MoLangFunctions {
                     return@put DoubleValue.ZERO
                 }
             }
+            map.put("can_evolve") { _ ->
+                DoubleValue(pokemon.evolutions.any())
+            }
+            map.put("force_evolve") { params ->
+                val idx = params.getInt(0)
+                val evolution = if (idx >= 0) pokemon.evolutions.elementAtOrNull(idx) else return@put DoubleValue.ZERO
+                evolution?.forceEvolve(pokemon)
+                StringValue(evolution.toString())
+            }
             map
         }
     )
@@ -1562,13 +1887,15 @@ object MoLangFunctions {
     val pokemonEntityFunctions = mutableListOf<(PokemonEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { pokemonEntity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
+            map.put("is_busy") { DoubleValue(pokemonEntity.isBusy) }
             map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) }
             map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
-            map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
             map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
             map.put("get_alt_pose") { StringValue(pokemonEntity.getAltPose()) }
             map.put("is_gliding") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("gliding"))) }
             map.put("is_sprinting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("sprinting"))) }
+            map.put("is_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("drifting"))) }
+            map.put("is_powered_drifting") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("powered_drifting"))) }
             map.put("in_air") { DoubleValue(pokemonEntity.isUsingAltPose(cobblemonResource("in_air"))) }
             map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
             map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
@@ -1585,6 +1912,34 @@ object MoLangFunctions {
             }
             map.put("pasture_conflict_enabled") {
                 DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.PASTURE_CONFLICT))
+            }
+            map.put("run_action_effect") { params ->
+                val runtime = MoLangRuntime().setup()
+                runtime.environment.cloneFrom(params.environment)
+                runtime.withQueryValue("entity", pokemonEntity.struct)
+                val actionEffect = ActionEffects.actionEffects[params.getString(0).asIdentifierDefaultingNamespace()]
+                if (actionEffect != null) {
+                    val context = ActionEffectContext(
+                        actionEffect = actionEffect,
+                        providers = mutableListOf(TargetsProvider(pokemonEntity)),
+                        runtime = runtime,
+                        level = pokemonEntity.level()
+                    )
+                    // This was taken from NPC run_action_effect but this variable isn't used, so I just commented it out.
+                    // pokemonEntity.actionEffect = context
+                    pokemonEntity.brain.setMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT, context)
+                    pokemonEntity.brain.setActiveActivityIfPossible(CobblemonActivities.ACTION_EFFECT)
+                    actionEffect.run(context).thenRun {
+                        val pokemonActionEffect = pokemonEntity.brain.getMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT).orElse(null)
+                        if (pokemonActionEffect == context && pokemonEntity.brain.isActive(CobblemonActivities.ACTION_EFFECT)) {
+                            pokemonEntity.brain.eraseMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT)
+                            //pokemonEntity.actionEffect = null
+                        }
+                    }
+
+                    return@put DoubleValue.ONE
+                }
+                return@put DoubleValue.ZERO
             }
             map
         }
@@ -1789,12 +2144,17 @@ object MoLangFunctions {
             }
 
             map.put("data") { params ->
-                val data = Cobblemon.molangData.load(UUID(0L, 0L))
-                return@put data
+                Cobblemon.molangData.load(
+                    UUID(0L, 0L),
+                    params.getStringOrNull(0)
+                )
             }
 
-            map.put("save_data") {
-                Cobblemon.molangData.save(UUID(0L, 0L))
+            map.put("save_data") { params ->
+                Cobblemon.molangData.save(
+                    UUID(0L, 0L),
+                    params.getStringOrNull(index = 0)
+                )
                 return@put DoubleValue.ONE
             }
 
@@ -2119,6 +2479,11 @@ object MoLangFunctions {
             is Player -> asMoLangValue()
             is PokemonEntity -> struct
             is NPCEntity -> struct
+            is ItemEntity -> ObjectValue(this).also {
+                it.addStandardFunctions()
+                it.addFunctions(entityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
+                it.addFunctions(itemStackFunctions.flatMap { it(this.item, this.registryAccess()).entries.map { it.key to it.value } }.toMap())
+            }
             else -> ObjectValue(this).also {
                 it.addStandardFunctions()
                 it.addFunctions(entityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -2185,6 +2550,14 @@ object MoLangFunctions {
     fun QueryStruct.addPokemonFunctions(pokemon: Pokemon): QueryStruct {
         val addedFunctions = pokemonFunctions
             .flatMap { it.invoke(pokemon).entries }
+            .associate { it.key to it.value }
+        functions.putAll(addedFunctions)
+        return this
+    }
+
+    fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
+        val addedFunctions = battleMessageFunctions
+            .flatMap { it.invoke(battleMessage).entries }
             .associate { it.key to it.value }
         functions.putAll(addedFunctions)
         return this
@@ -2285,3 +2658,4 @@ object MoLangFunctions {
 }
 
 fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })
+

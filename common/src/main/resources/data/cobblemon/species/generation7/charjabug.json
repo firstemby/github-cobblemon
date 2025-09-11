@@ -160,5 +160,6 @@
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"
     }
-  ]
+  ],
+  "behaviour": {}
 }

@@ -47,7 +47,7 @@ object HeldItemCommand {
         val pokemon = PartySlotArgumentType.getPokemonOf(ctx, SLOT, player)
         val stackArgument = ItemArgument.getItem(ctx, ITEM)
         val stack = stackArgument.createItemStack(1, false)
-        pokemon.swapHeldItem(stack)
+        pokemon.swapHeldItem(stack, true, false)
         ctx.source.sendSuccess({ commandLang(NAME, player.name, pokemon.species.translatedName, stack.displayName) }, true)
         return Command.SINGLE_SUCCESS
     }

@@ -53,6 +53,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "6"
     }
   },
   "drops": {
@@ -286,7 +289,12 @@
       "baseExperienceYield": 300,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     },
     {
       "name": "Gmax",

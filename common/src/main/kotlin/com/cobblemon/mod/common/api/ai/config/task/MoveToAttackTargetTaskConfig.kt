@@ -21,7 +21,7 @@ class MoveToAttackTargetTaskConfig : SingleTaskConfig {
     val speedMultiplier = numberVariable(SharedEntityVariables.ATTACKING_CATEGORY, "attacking_movement_speed", 0.5).asExpressible()
     val closeEnoughDistance: ExpressionOrEntityVariable = Either.left("0".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         speedMultiplier,
         closeEnoughDistance
     ).asVariables()

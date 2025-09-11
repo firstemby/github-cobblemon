@@ -149,5 +149,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pawmo",
+          "tier": 1
+        },
+        {
+          "pokemon": "pawmot",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

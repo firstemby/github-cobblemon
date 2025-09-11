@@ -57,6 +57,27 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mudkip",
+          "tier": 1
+        },
+        {
+          "pokemon": "marshtomp",
+          "tier": 2
+        },
+        {
+          "pokemon": "swampert mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "swampert mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

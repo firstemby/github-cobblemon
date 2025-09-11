@@ -56,6 +56,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "donphan",
+          "tier": 1
+        },
+        {
+          "pokemon": "greattusk",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

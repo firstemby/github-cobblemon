@@ -59,6 +59,7 @@ object CobblemonCommands {
         ApplyPlayerTextureCommand.register(dispatcher)
         RenameBoxCommand.register(dispatcher)
         ChangeBoxWallpaperCommand.register(dispatcher)
+        RunMolangCommand.register(dispatcher)
         RunMolangScriptCommand.register(dispatcher)
         SpectateBattleCommand.register(dispatcher)
         CobblemonConfigCommand.register(dispatcher)

@@ -132,6 +132,8 @@ object CobblemonPermissions {
     @JvmStatic
     val ABANDON_MULTITEAM = this.create("${COMMAND_PREFIX}abandonmultiteam", PermissionLevel.NONE)
     @JvmStatic
+    val RUN_MOLANG = this.create("${COMMAND_PREFIX}runmolang", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
     val RUN_MOLANG_SCRIPT = this.create("${COMMAND_PREFIX}runmolangscript", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val COBBLEMON_CONFIG_RELOAD = this.create("${COMMAND_PREFIX}cobblemonconfig.reload", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)

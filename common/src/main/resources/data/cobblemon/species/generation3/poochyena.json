@@ -51,6 +51,31 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poochyena",
+          "tier": 1
+        },
+        {
+          "pokemon": "houndour",
+          "tier": 2
+        },
+        {
+          "pokemon": "mightyena",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

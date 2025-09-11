@@ -61,6 +61,35 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "woobat",
+          "tier": 1
+        },
+        {
+          "pokemon": "noibat",
+          "tier": 1
+        },
+        {
+          "pokemon": "zubat",
+          "tier": 2
+        },
+        {
+          "pokemon": "swoobat",
+          "tier": 3
+        },
+        {
+          "pokemon": "golbat",
+          "tier": 4
+        },
+        {
+          "pokemon": "crobat",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

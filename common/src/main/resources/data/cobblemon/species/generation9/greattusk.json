@@ -139,5 +139,16 @@
     "tutor:thunderfang",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "greattusk",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -36,6 +36,6 @@ object BaitSeasoningProcessor : SeasoningProcessor {
 
     override fun consumesItem(seasoning: ItemStack): Boolean {
         val seasoningData = Seasonings.getFromItemStack(seasoning)
-        return seasoningData != null && !seasoningData.baitEffects.isNullOrEmpty()
+        return seasoningData != null && (!seasoningData.baitEffects.isNullOrEmpty() || SpawnBaitEffects.getBaitIdentifiersFromItem(seasoning.itemHolder).isNotEmpty())
     }
 }

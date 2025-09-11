@@ -52,6 +52,21 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.2
+      }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "weavile",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

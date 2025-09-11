@@ -57,6 +57,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cetoddle",
+          "tier": 1
+        },
+        {
+          "pokemon": "cetitan",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

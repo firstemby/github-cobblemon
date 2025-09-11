@@ -32,7 +32,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType
  */
 class FindAirTaskConfig : SingleTaskConfig {
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(walkSpeed).asVariables()
     }
 

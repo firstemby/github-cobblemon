@@ -415,6 +415,15 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "torso",
+					"pivot": [0, 30, 9],
+					"rotation": [-30, 0, 0],
+					"locators": {
+						"seat_1": [0, 30, 9]
+					}
+				},
+				{
 					"name": "left_upper_leg",
 					"parent": "body",
 					"pivot": [8, 16.75, 1],

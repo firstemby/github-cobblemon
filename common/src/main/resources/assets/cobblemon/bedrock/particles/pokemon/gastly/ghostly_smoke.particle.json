@@ -39,6 +39,11 @@
                     0,
                     0.15
                 ],
+                "attachment_options": {
+                  "rotation": true,
+                  "scale": true,
+                  "position": true
+                },
                 "radius": "0.2 * 1.7",
                 "surface_only": true,
                 "direction": "outwards"

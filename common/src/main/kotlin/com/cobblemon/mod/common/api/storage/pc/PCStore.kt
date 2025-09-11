@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacke
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toJsonArray
@@ -284,6 +285,10 @@ open class PCStore(
         }
     }
 
+    override fun onPokemonChanged(pokemon: Pokemon) {
+        pcChangeObservable.emit(Unit)
+    }
+
     fun clearPC() {
         boxes.forEach { box ->
             box.getNonEmptySlots().forEach{
@@ -318,7 +323,7 @@ open class PCStore(
                             if (event.shouldNotify) {
                                 val toast = Toast(
                                     title = lang("wallpaper_unlocked"),
-                                    description = unlockableWallpaper.displayName?.let { "\"".text().add(it).add("\"") } ?: lang("unknown_wallpaper") ,
+                                    description = unlockableWallpaper.displayName?.let { "\"".text().add(it.asTranslated()).add("\"") } ?: lang("unknown_wallpaper") ,
                                     icon = ItemStack(CobblemonItems.PC)
                                 )
                                 toast.addListeners(player)

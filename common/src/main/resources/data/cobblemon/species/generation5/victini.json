@@ -197,5 +197,6 @@
     "special:fusionflare",
     "special:glaciate"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

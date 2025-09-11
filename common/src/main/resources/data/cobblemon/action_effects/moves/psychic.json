@@ -12,12 +12,12 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:psychic_actor",
-      "locators": ["special_attack"]
+      "locators": ["root"]
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:psychic_actordots",
-      "locators": ["special_attack"]
+      "locators": ["root"]
     },
     {
       "type": "pause",

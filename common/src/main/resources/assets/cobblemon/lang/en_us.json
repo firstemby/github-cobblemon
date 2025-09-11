@@ -74,10 +74,11 @@
   "item.cobblemon.white_apricorn": "White Apricorn",
   "item.cobblemon.yellow_apricorn": "Yellow Apricorn",
   "item.cobblemon.saccharine_sapling": "Saccharine Sapling",
+  "block.cobblemon.potted_saccharine_sapling": "Potted Saccharine Sapling",
   "item.cobblemon.vivichoke_seeds": "Vivichoke Seeds",
   "item.cobblemon.vivichoke": "Vivichoke",
   "item.cobblemon.galarica_nuts": "Galarica Nuts",
-  "item.cobblemon.hearty_grains": "Hearty Rice",
+  "item.cobblemon.hearty_grains": "Hearty Grains",
   "item.cobblemon.bugwort": "Bugwort",
 
   "item.cobblemon.apricorn_boat": "Apricorn Boat",
@@ -945,7 +946,7 @@
   "block.cobblemon.campfire_pot_red": "Red Campfire Pot",
   "block.cobblemon.campfire_pot_white": "White Campfire Pot",
   "block.cobblemon.campfire_pot_yellow": "Yellow Campfire Pot",
-  "block.cobblemon.hearty_grain_bale": "Hearty Rice Bale",
+  "block.cobblemon.hearty_grain_bale": "Hearty Grain Bale",
   "block.cobblemon.tatami_block": "Tatami",
   "block.cobblemon.tatami_mat": "Tatami Mat",
 
@@ -1042,8 +1043,8 @@
   "block.cobblemon.terracotta_sun_stone_ore": "Terracotta Sun Stone Ore",
   "block.cobblemon.pasture": "Pasture Block",
 
-  "block.cobblemon.lure_cake": "Lure Cake",
   "block.cobblemon.poke_cake": "Poké Cake",
+  "block.cobblemon.poke_snack": "Poké Snack",
 
   "block.cobblemon.white_plaque": "White Plaque",
   "block.cobblemon.light_gray_plaque": "Light Gray Plaque",
@@ -2386,6 +2387,7 @@
   "cobblemon.command.takemark": "%1$s was taken from %2$s's %3$s.",
   "cobblemon.command.takemark.does_not_have": "%1$s's %2$s does not have a %3$s!",
   "cobblemon.command.mark.invalid": "Invalid mark name.",
+  "cobblemon.command.molang.out":  "MoLang output: %1$s",
   "cobblemon.command.pokeheal.in_battle": "You cannot heal your party while in a battle!",
   "cobblemon.command.spawnpokemonfrompool": "A %1$s has spawned in the area.",
   "cobblemon.command.spawnpokemonfrompool.unable_to_spawn": "Unable to spawn a Pokémon.",
@@ -2589,11 +2591,17 @@
   "cobblemon.config.ui.third_person_view_bobbing": "Third Person View Bobbing",
   "cobblemon.config.ui.third_person_view_bobbing.tooltip": "If true then use default Minecraft behavior to follow directly behind the player's head. If false then follow a fixed offset from the pokemon.",
   "cobblemon.config.ui.invert_pitch": "Invert Pitch",
-  "cobblemon.config.ui.invert_pitch.tooltip": "Invert the direction for pitch (left and right).",
+  "cobblemon.config.ui.invert_pitch.tooltip": "Invert the direction for pitch (up and down).",
   "cobblemon.config.ui.invert_yaw": "Invert Yaw",
-  "cobblemon.config.ui.invert_yaw.tooltip": "Invert the direction for yaw (up and down).",
+  "cobblemon.config.ui.invert_yaw.tooltip": "Invert the direction for yaw (left and right).",
   "cobblemon.config.ui.invert_roll": "Invert Roll",
   "cobblemon.config.ui.invert_roll.tooltip": "Invert the direction for Roll (rotating left and right).",
+  "cobblemon.config.ui.x_axis_sensitivity": "X-Axis Sensitivity",
+  "cobblemon.config.ui.x_axis_sensitivity.tooltip": "Multiply X-Axis input by this amount.",
+  "cobblemon.config.ui.y_axis_sensitivity": "Y-Axis Sensitivity",
+  "cobblemon.config.ui.y_axis_sensitivity.tooltip": "Multiply Y-Axis input by this amount.",
+  "cobblemon.config.ui.swap_x_and_y_axes": "Swap X and Y Axes",
+  "cobblemon.config.ui.swap_x_and_y_axes.tooltip": "Swap the X and Y input axes.",
   "cobblemon.config.ui.automatic_righting_delay": "Automatic Righting Delay",
   "cobblemon.config.ui.automatic_righting_delay.tooltip": "The delay before rolling is undone in seconds. A negative value means righting is disabled, while a value of 0 means whenever mouse movement stops it will start undoing roll immediately.",
   "cobblemon.config.ui.disable_roll": "Disable Roll",
@@ -2723,6 +2731,8 @@
   "advancements.cobblemon.craft_pokedex.description": "Craft a Pokédex out of Apricorns, Iron, Copper, and any glowing powder",
   "advancements.cobblemon.ride_pokemon": "Pokémon Jockey!",
   "advancements.cobblemon.ride_pokemon.description": "Ride a Pokémon for the first time",
+  "advancements.cobblemon.place_campfire_pot": "We Need To Cook",
+  "advancements.cobblemon.place_campfire_pot.description": "Place down a Campfire Pot on a lit Campfire",
 
   "cobblemon.battle.crash": "A battle error has occurred. If playing single-player, report this to the mod team. Otherwise, report this to the servers administrator.",
   "cobblemon.battle.damage_dealt": "%1$s took %2$s damage!",
@@ -3509,6 +3519,10 @@
   "tag.item.cobblemon.mochis": "Mochis",
   "tag.item.cobblemon.poke_food": "Poké Foods",
   "tag.item.cobblemon.full_heal_bottles": "Full Heal Bottles",
+  "tag.item.cobblemon.small_flowers": "Small Flowers",
+  "tag.item.cobblemon.held.blacklisted_items_to_hold": "Blacklisted Held Items",
+  "tag.item.cobblemon.held.whitelisted_items_to_hold": "Whitelisted Held Items",
+  "tag.item.cobblemon.poke_puff_berries": "Poké Puff Berries",
   "tag.item.cobblemon.held.weather_rocks": "Weather Duration-Extending Items",
   "tag.item.cobblemon.display_case_items": "3D Items in Display Case",
   "tag.item.cobblemon.item_blocks": "Decorative Items",
@@ -3747,6 +3761,15 @@
 
   "cobblemon.behaviour.npc_scale_configuration.name": "NPC Entity Scales",
   "cobblemon.behaviour.npc_scale_configuration.desc": "Allows configuring the render- and hitbox-scale of the NPC.",
+
+  "cobblemon.behaviour.pokemon_gets_mad_at_thrower.name": "Gets Mad At Poké Ball Thrower",
+  "cobblemon.behaviour.pokemon_gets_mad_at_thrower.desc": "Gets angry at the player that threw a Poké Ball at it. Aggressive Pokémon will attack the player, while non-aggressive Pokémon will flee.",
+
+  "cobblemon.behaviour.attack_hostile_mobs.name": "Attacks Hostile Mobs",
+  "cobblemon.behaviour.attack_hostile_mobs.desc": "Attacks hostile mobs that are nearby, even if unprovoked.",
+
+  "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
+  "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
 
   "npc.sacchi.name": "Professor Sacchi",
 

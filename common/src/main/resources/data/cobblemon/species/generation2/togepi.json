@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 175,
   "name": "Togepi",
   "primaryType": "fairy",
@@ -42,11 +43,37 @@
   "catchRate": 190,
   "eggCycles": 10,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.8,
+  "swimmingEyeHeight": 0.8,
+  "flyingEyeHeight": 0.8,
+  "baseScale": 0.55,
   "hitbox": {
     "width": 1,
     "height": 1,
     "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "togepi",
+          "tier": 1
+        },
+        {
+          "pokemon": "togetic",
+          "tier": 2
+        },
+        {
+          "pokemon": "togekiss",
+          "tier": 3
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 3,

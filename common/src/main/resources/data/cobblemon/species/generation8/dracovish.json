@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "arctovish",
+          "tier": 1
+        },
+        {
+          "pokemon": "dracovish",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [

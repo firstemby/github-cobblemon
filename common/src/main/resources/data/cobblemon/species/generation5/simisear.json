@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 514,
   "name": "Simisear",
   "primaryType": "fire",
@@ -191,5 +192,32 @@
     "legacy:toxic"
   ],
   "preEvolution": "pansear",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "monferno",
+          "tier": 1
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 1
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 1
+        },
+        {
+          "pokemon": "simipour",
+          "tier": 1
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

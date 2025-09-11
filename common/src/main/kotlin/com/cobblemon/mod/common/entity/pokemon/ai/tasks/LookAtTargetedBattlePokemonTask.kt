@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.behavior.OneShot
@@ -33,11 +34,16 @@ object LookAtTargetedBattlePokemonTask {
                 Trigger { world, entity, _ ->
                     val targeted = it.tryGet(targetedBattlePokemon).orElse(null)
                     val targetedEntity = targeted?.let { world.getEntity(it) as? PokemonEntity }
-                    val look = it.tryGet(lookTarget).orElse(null) as? EntityTracker
+                    var look = it.tryGet(lookTarget).orElse(null)
+                    if (look is CobblemonBlockPosTracker && look.isBattleLookBypass()) {
+                        return@Trigger false
+                    } else if (look !is EntityTracker) {
+                        look = null
+                    }
                     if (targeted != null && targetedEntity == null) {
                         entity.brain.eraseMemory(CobblemonMemories.TARGETED_BATTLE_POKEMON)
                         return@Trigger false
-                    } else if (targetedEntity != null && look?.entity != targetedEntity) {
+                    } else if (targetedEntity != null && (look as? EntityTracker)?.entity != targetedEntity) {
                         entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, EntityTracker(targetedEntity, true))
                         return@Trigger true
                     } else if (targetedEntity == null) {

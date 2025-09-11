@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 540,
   "name": "Sewaddle",
   "primaryType": "bug",
@@ -42,10 +43,10 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.75,
+    "height": 0.7,
     "fixed": false
   },
   "drops": {
@@ -179,5 +180,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sweaddle",
+          "tier": 1
+        },
+        {
+          "pokemon": "leavanny",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

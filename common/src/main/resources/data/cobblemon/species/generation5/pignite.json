@@ -60,6 +60,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grumpig",
+          "tier": 1
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 1
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 1
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

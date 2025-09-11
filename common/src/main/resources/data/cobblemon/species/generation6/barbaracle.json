@@ -57,6 +57,9 @@
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {

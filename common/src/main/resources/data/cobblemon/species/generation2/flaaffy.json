@@ -57,6 +57,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "flaaffy",
+          "tier": 1
+        },
+        {
+          "pokemon": "dubwool",
+          "tier": 2
+        },
+        {
+          "pokemon": "ampharos mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "ampharos mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

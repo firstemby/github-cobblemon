@@ -67,6 +67,19 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "croconaw",
+          "tier": 1
+        },
+        {
+          "pokemon": "feraligatr",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

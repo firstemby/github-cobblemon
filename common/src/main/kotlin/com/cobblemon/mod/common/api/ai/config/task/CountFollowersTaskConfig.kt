@@ -35,7 +35,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 class CountFollowersTaskConfig : SingleTaskConfig {
     val checkTicks: ExpressionOrEntityVariable = Either.left("10".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
@@ -43,8 +43,7 @@ class CountFollowersTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val checkTicksValue = checkTicks.resolveInt()
+        val checkTicksValue = checkTicks.resolveInt(behaviourConfigurationContext.runtime)
         behaviourConfigurationContext.addMemories(
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
             CobblemonMemories.HERD_SIZE,

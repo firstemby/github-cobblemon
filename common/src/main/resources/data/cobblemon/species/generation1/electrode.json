@@ -58,6 +58,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "electrode",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -312,7 +321,18 @@
       ],
       "preEvolution": "voltorb hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "electrode",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

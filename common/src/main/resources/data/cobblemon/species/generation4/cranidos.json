@@ -60,6 +60,19 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cranidos",
+          "tier": 1
+        },
+        {
+          "pokemon": "rampardos",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

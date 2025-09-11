@@ -56,6 +56,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grapploct",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -53,6 +53,19 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "natu",
+          "tier": 1
+        },
+        {
+          "pokemon": "xatu",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
