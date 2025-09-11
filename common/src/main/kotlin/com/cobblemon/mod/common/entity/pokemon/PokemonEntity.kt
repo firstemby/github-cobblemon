@@ -61,6 +61,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingController
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.sound.RideSoundManager
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.util.RideStatOverrideData
 import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
@@ -307,7 +308,7 @@ open class PokemonEntity(
     val ridingAnimationData: RidingAnimationData = RidingAnimationData(this)
     var rideSoundManager: RideSoundManager = RideSoundManager(this)
 
-    private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, Double>>()
+    private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, RideStatOverrideData>>()
     var ridingController: RidingController? = null
         private set
 
@@ -2064,25 +2065,25 @@ open class PokemonEntity(
     fun getRideStat(stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double): Double {
         //TODO: Change from static zero boost once aprijuice is implemented.
         if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
-            return (((baseMax - baseMin) / 100) * rideStatOverrides[style]!![stat]!!) + baseMin
+            return rideStatOverrides[style]!![stat]!!.getCurrStatValue()
         }
         val stat = this.rideProp.behaviours?.get(style)?.calculate(stat, 0) ?: return 0.0
         val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
         return statVal
     }
 
-    fun getRawRideStat(stat: RidingStat, style: RidingStyle): Double {
+    fun getRawRideStat(stat: RidingStat, style: RidingStyle): RideStatOverrideData? {
         if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
             return rideStatOverrides[style]!![stat]!!
         }
-        return this.rideProp.behaviours?.get(style)?.calculate(stat, 0)?.toDouble() ?: 0.0
+        return null
     }
 
-    internal fun overrideRideStat(style: RidingStyle, stat: RidingStat, value: Double) {
+    internal fun overrideRideStat(style: RidingStyle, stat: RidingStat, rideStatData: RideStatOverrideData) {
         if (rideStatOverrides[style] == null) {
             rideStatOverrides[style] = mutableMapOf()
         }
-        rideStatOverrides[style]!![stat] = value
+        rideStatOverrides[style]!![stat] = rideStatData
     }
 
     override fun canAddPassenger(passenger: Entity): Boolean {

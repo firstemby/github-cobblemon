@@ -28,7 +28,6 @@ import kotlin.math.sin
  * @since April 7th, 2025
  */
 
-
 class RidingAnimationData(val ride: PokemonEntity)
 {
     var prevOrientation: Matrix3f = Matrix3f()

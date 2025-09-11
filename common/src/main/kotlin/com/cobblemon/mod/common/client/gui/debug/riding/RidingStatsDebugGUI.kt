@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.client.gui.debug.riding
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.util.RideStatOverrideData
+import com.cobblemon.mod.common.api.riding.util.RidingTier
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -32,6 +34,8 @@ import java.awt.Color
 class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.riding_stats")), CobblemonRenderable {
 
     var ridingStyle: RidingStyle = RidingStyle.LAND
+
+    val selectedTiers = mutableMapOf<RidingStat, RidingTier>()
 
     val changeRidingStyle: Button
 
@@ -88,6 +92,12 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
         minStaminaInput = addRenderableWidget(RidingStatInputWidget(getScaledWidth() - 210, 180, "".text()))
         maxStaminaInput = addRenderableWidget(RidingStatInputWidget(getScaledWidth() - 100, 180, "".text()))
 
+        addTierSelectorRow(RidingStat.SPEED, 60)
+        addTierSelectorRow(RidingStat.ACCELERATION, 90)
+        addTierSelectorRow(RidingStat.SKILL, 120)
+        addTierSelectorRow(RidingStat.JUMP, 150)
+        addTierSelectorRow(RidingStat.STAMINA, 180)
+
         addRenderableWidget(
             Button.builder("Save".text()) { button ->
                 saveStatRanges()
@@ -113,11 +123,18 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
         val jump = jumpSlider.currentValue
         val stamina = staminaSlider.currentValue
 
-        vehicle.overrideRideStat(ridingStyle, RidingStat.SPEED, speed.toDouble())
-        vehicle.overrideRideStat(ridingStyle, RidingStat.ACCELERATION, acceleration.toDouble())
-        vehicle.overrideRideStat(ridingStyle, RidingStat.SKILL, skill.toDouble())
-        vehicle.overrideRideStat(ridingStyle, RidingStat.JUMP, jump.toDouble())
-        vehicle.overrideRideStat(ridingStyle, RidingStat.STAMINA, stamina.toDouble())
+        for (stat in RidingStat.entries) {
+            // For each stat, try to get the selected tier from the map
+            selectedTiers[stat]?.let { selectedTier ->
+                val overrideData = RideStatOverrideData(
+                    min = 0.0,
+                    max = 100.0,
+                    tier = selectedTier,
+                    boost = 0.0
+                )
+                vehicle.overrideRideStat(ridingStyle, stat, overrideData)
+            }
+        }
 
         CobblemonNetwork.sendToServer(
             ServerboundUpdateRidingStatsPacket(
@@ -202,6 +219,23 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
     }
 
     fun getScaledWidth() = Minecraft.getInstance().window.guiScaledWidth
+
+    private fun addTierSelectorRow(stat: RidingStat, y: Int) {
+        val buttonWidth = 38
+        val buttonGap = 2
+        var currentX = 85
+
+        // Iterate directly over all the enum constants. No more hardcoded maps!
+        for (tier in RidingTier.entries) {
+            addRenderableWidget(
+                Button.builder(tier.name.text()) {
+                    // When clicked, store the selected tier
+                    selectedTiers[stat] = tier
+                }.bounds(currentX, y, buttonWidth, 20).build()
+            )
+            currentX += buttonWidth + buttonGap
+        }
+    }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
@@ -301,3 +335,5 @@ class RidingStatInputWidget(x: Int, y: Int, val hint: Component) : EditBox(
         setHint(hint)
     }
 }
+
+
