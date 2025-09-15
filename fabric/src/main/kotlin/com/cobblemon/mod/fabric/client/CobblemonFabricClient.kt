@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
+import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
@@ -169,6 +170,21 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     camera = context.camera()
                 )
             )
+        }
+
+        WorldRenderEvents.LAST.register { context ->
+            val poseStack = context.matrixStack()
+            val multiBufferSource = context.consumers()
+            val camera = context.camera()
+
+            // Add a null check to ensure all required tools are present before rendering
+            if (poseStack != null && multiBufferSource != null && camera != null) {
+                ObjectAvoidanceRenderer.render(
+                    poseStack,
+                    multiBufferSource,
+                    camera
+                )
+            }
         }
 
         CobblemonModelPredicateRegistry.registerPredicates()

@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 
 
 import com.cobblemon.mod.common.CobblemonActivities
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToTrackingPlayers
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.toVec3d
@@ -82,14 +84,14 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         boid()
 
         // Obstacle Avoidance
-//        val whiskerRange = 1.0
-//        val avoidanceAngle = 20.0 // x degrees to the left, right, up, and down
-//        val obsAvoidForce = whisObsAvoid(whiskerRange, avoidanceAngle)
-//
-//        if (obsAvoidForce != null) {
-//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
-//        }
-//        wander()
+        val whiskerRange = 1.0
+        val avoidanceAngle = 20.0 // x degrees to the left, right, up, and down
+        val obsAvoidForce = whisObsAvoid(whiskerRange, avoidanceAngle)
+
+        if (obsAvoidForce != null) {
+            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
+        }
+        wander()
 
 
         // Apply steering force to current movement
@@ -177,6 +179,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
 //            forward.xRot((-90).toRadians()),
         )
 
+
         // iterate through each point and raycast to it starting from the entities pos (may need to be from somewhere else)
         // If a position is hit then add its avoidance force to the totalAvoidance forces.
         var totalAvoidance: Vec3? = null
@@ -240,28 +243,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     }
 
     private fun visualizeRay(level: Level, start: Vec3, end: Vec3, hit: Boolean) {
-        // We only want to run this on the server, and only if it's a ServerLevel.
         if (level !is ServerLevel) return
-
-        // Use a different particle for hits and misses for clarity.
-        // END_ROD is great because it's bright and doesn't have gravity.
-        // FLAME is a good indicator for a collision.
-        val particleType: ParticleOptions = if (hit) ParticleTypes.FLAME else ParticleTypes.END_ROD
-
-        val distance = start.distanceTo(end)
-        if (distance == 0.0) return
-
-        // How far apart each particle should be
-        val stepSize = 0.25
-        val direction = end.subtract(start).normalize().scale(stepSize)
-        val steps = (distance / stepSize).toInt()
-
-        var currentPos = start
-        for (i in 0 until steps) {
-            level.sendParticles(particleType, currentPos.x, currentPos.y, currentPos.z, 1, 0.0, 0.0, 0.0, 0.0)
-            currentPos = currentPos.add(direction)
-        }
+        val linesList = listOf(Pair(start, end))
+        sendPacketToTrackingPlayers(pokemonEntity, ClientboundUpdateObsAvoidPacket(pokemonEntity.id, linesList))
     }
+
 
     private fun wander() {
         // Wander behaviour

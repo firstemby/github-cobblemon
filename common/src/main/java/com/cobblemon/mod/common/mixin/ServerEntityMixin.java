@@ -101,7 +101,7 @@ public abstract class ServerEntityMixin {
         cobblemon$broadcast(new ClientboundUpdateDriverInputPacket(driverInput, entity.getId()));
     }
 
-    private void cobblemon$broadcast(NetworkPacket<?> packet) {
+    public void cobblemon$broadcast(NetworkPacket<?> packet) {
         if (!(entity.level() instanceof ServerLevel level)) return;
         ChunkMap chunkMap = level.getChunkSource().chunkMap;
         Int2ObjectMap<?> entityMap = ((ChunkMapAccessor) chunkMap).getEntityMap();

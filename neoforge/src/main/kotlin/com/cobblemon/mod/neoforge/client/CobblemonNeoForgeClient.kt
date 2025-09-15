@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
+import com.cobblemon.mod.common.client.render.debug.ObjectAvoidanceRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
 import com.cobblemon.mod.common.compat.LambDynamicLightsCompat
@@ -69,6 +70,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
 import net.neoforged.neoforge.client.event.RegisterShadersEvent
 import net.neoforged.neoforge.client.event.RenderGuiEvent
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers
 import net.neoforged.neoforge.common.NeoForge
@@ -104,6 +106,16 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
         modContainer.registerExtensionPoint(IConfigScreenFactory::class.java, object : IConfigScreenFactory {
             override fun createScreen(modContainer: ModContainer, arg: Screen): Screen = CobblemonConfigScreen(arg)
         })
+
+        NeoForge.EVENT_BUS.addListener<RenderLevelStageEvent> { event ->
+            if (event.stage == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+                ObjectAvoidanceRenderer.render(
+                    event.poseStack,
+                    Minecraft.getInstance().renderBuffers().bufferSource(),
+                    event.camera
+                )
+            }
+        }
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {
