@@ -37,6 +37,7 @@ import net.minecraft.world.level.pathfinder.PathType
 class WanderTaskConfig : SingleTaskConfig {
     companion object {
         const val WANDER = "wander" // Category
+        const val MAX_LOOK_DOWN_DISTANCE = 64
     }
 
     val condition = booleanVariable(WANDER, "wanders", true).asExpressible()
@@ -73,10 +74,18 @@ class WanderTaskConfig : SingleTaskConfig {
         val altitude = if (!block.isAir) {
             0
         } else {
-            (1..64).firstOrNull {
+            (1..MAX_LOOK_DOWN_DISTANCE).firstOrNull {
                 val newPos = pos.below(it)
-                return@firstOrNull !world.getBlockState(newPos).isAir
-            } ?: Int.MAX_VALUE
+                if (!world.getBlockState(newPos).isAir) {
+                    return@firstOrNull  true
+                } else if (newPos.y <= world.minBuildHeight) {
+                    // Don't adjust downward into the void (Mostly if we're in the end)
+                    // This doesn't stop fliers from wandering off end islands,
+                    // but it does stop them from diving directly into the void.
+                    return pos
+                }
+                return@firstOrNull false
+            } ?: MAX_LOOK_DOWN_DISTANCE
         }
 
         if (altitude > maximumHeight && maximumHeight >= 0) {
@@ -141,7 +150,7 @@ class WanderTaskConfig : SingleTaskConfig {
                             HoverRandomPos.getPos(
                                 entity,
                                 horizontalRange.resolveInt(mainThreadRuntime),
-                                maxOf(verticalRange.resolveInt(mainThreadRuntime), maximumHeight), // In case they fly up pretty high and need to find a way down
+                                verticalRange.resolveInt(mainThreadRuntime),
                                 entity.random.nextFloat() - 0.5,
                                 entity.random.nextFloat() - 0.5,
                                 Math.PI.toFloat(),

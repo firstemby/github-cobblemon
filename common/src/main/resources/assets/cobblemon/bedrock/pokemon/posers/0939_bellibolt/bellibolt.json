@@ -1,19 +1,52 @@
 {
-  "portraitScale": 1.09,
-  "portraitTranslation": [-0.12, 0.51, 0],
+  "portraitScale": 1.19,
+  "portraitTranslation": [-0.16, 0.5, 0],
   "profileScale": 0.75,
-  "profileTranslation": [0.0, 0.56, 0.0],
+  "profileTranslation": [0.0, 0.62, 0.0],
   "rootBone": "bellibolt",
   "poses": {
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "animations": ["q.look('head')", "q.bedrock('bellibolt', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('bellibolt', 'blink')"]
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+      "q.look('head_ai', 1, 1, 13, -25, 7, -7)",
+      "q.look('torso', 1, 1, 10, -5, 0, 0)", 
+      "q.bedrock('bellibolt', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('bellibolt', 'blink')"],
+  "transformedParts": [
+        {
+          "part": "bump_right_active",
+          "isVisible": false
+        },
+        {
+          "part": "bump_left_active",
+          "isVisible": false
+        }
+      ]
     },
     "walking": {
-      "poseTypes": ["WALK"],
-      "animations": ["q.look('head')", "q.bedrock('bellibolt', 'ground_walk')"],
-      "quirks": ["q.bedrock_quirk('bellibolt', 'blink')"]
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
+      "q.look('head_ai', 1, 1, 13, -25, 7, -7)",
+      "q.look('torso', 1, 1, 10, -5, 0, 0)", 
+      "q.bedrock('bellibolt', 'ground_idle')",
+      "q.biped_walk(0.66, 1.4, 'foot_left', 'foot_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('bellibolt', 'blink')"],
+  "transformedParts": [
+        {
+          "part": "bump_right_active",
+          "isVisible": false
+        },
+        {
+          "part": "bump_left_active",
+          "isVisible": false
+        }
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('bellibolt', 'sleep')"]
     }
   }
 }

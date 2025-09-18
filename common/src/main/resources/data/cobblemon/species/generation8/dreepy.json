@@ -45,7 +45,7 @@
   "eggCycles": 40,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.75,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 0.75,
     "height": 0.5,

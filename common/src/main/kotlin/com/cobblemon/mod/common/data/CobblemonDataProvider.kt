@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.data
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonFlows
+import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
@@ -97,7 +97,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(Dexes)
         this.register(DexAdditions)
         this.register(CobblemonCosmeticItems)
-        this.register(CobblemonFlows)
+        this.register(CobblemonCallbacks)
         this.register(CobblemonUnlockableWallpapers)
         this.register(Marks)
         this.register(StarterDataLoader)

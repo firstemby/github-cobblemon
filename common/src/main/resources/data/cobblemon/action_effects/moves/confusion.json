@@ -12,20 +12,20 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:confusion_actorglint",
-      "locators": ["special_attack"],
+      "locators": ["root"],
       "delay": 0.1
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:confusion_actor",
-      "locators": ["special_attack"],
+      "locators": ["root"],
       "delay": 0.85
     },
     {
       "type": "entity_particles",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:confusion_target",
-      "locators": ["special_attack"],
+      "locators": ["target"],
       "delay": 0.03
     },
     {

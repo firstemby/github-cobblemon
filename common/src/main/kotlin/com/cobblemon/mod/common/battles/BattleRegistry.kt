@@ -10,8 +10,7 @@ package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
+import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.moves.HiddenPowerUtil
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -19,9 +18,9 @@ import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.gson.GsonBuilder
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 import net.minecraft.server.level.ServerPlayer
+import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 object BattleRegistry {
 
@@ -48,7 +47,7 @@ object BattleRegistry {
      *
      * @return a string of the packed team
      */
-    fun List<BattlePokemon>.packTeam() : String {
+    fun List<BattlePokemon>.packTeam(): String {
         val team = mutableListOf<String>()
         for (pokemon in this) {
             val pk = pokemon.effectedPokemon
@@ -84,7 +83,8 @@ object BattleRegistry {
             // Additional move info
             packedTeamBuilder.append(
                 "${
-                    pk.moveSet.getMoves().joinToString(",") { move -> move.currentPp.toString() + "/" + move.maxPp.toString() }
+                    pk.moveSet.getMoves()
+                        .joinToString(",") { move -> move.currentPp.toString() + "/" + move.maxPp.toString() }
                 }|"
             )
             // Nature
@@ -207,10 +207,10 @@ object BattleRegistry {
 
         if (!canPreempt) start().also { return SuccessfulBattleStart(battle) }
 
-        val preBattleEvent = BattleStartedPreEvent(battle)
+        val preBattleEvent = BattleStartedEvent.Pre(battle)
         CobblemonEvents.BATTLE_STARTED_PRE.postThen(preBattleEvent) {
             start()
-            CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedPostEvent(battle))
+            CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedEvent.Post(battle))
             return SuccessfulBattleStart(battle)
         }
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
@@ -221,11 +221,11 @@ object BattleRegistry {
         battleMap.remove(battle.battleId)
     }
 
-    fun getBattle(id: UUID) : PokemonBattle? {
+    fun getBattle(id: UUID): PokemonBattle? {
         return battleMap[id]
     }
 
-    fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer) : PokemonBattle? {
+    fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer): PokemonBattle? {
         return battleMap.values.find { it.getActor(serverPlayer) != null }
     }
 

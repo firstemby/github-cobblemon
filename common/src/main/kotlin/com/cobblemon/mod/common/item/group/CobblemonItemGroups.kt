@@ -527,13 +527,13 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.POKE_CAKE)
         entries.accept(CobblemonItems.POKE_PUFF)
 
-        entries.accept(CobblemonItems.APRIJUICE_RED)
-        entries.accept(CobblemonItems.APRIJUICE_YELLOW)
-        entries.accept(CobblemonItems.APRIJUICE_GREEN)
-        entries.accept(CobblemonItems.APRIJUICE_BLUE)
-        entries.accept(CobblemonItems.APRIJUICE_PINK)
-        entries.accept(CobblemonItems.APRIJUICE_BLACK)
-        entries.accept(CobblemonItems.APRIJUICE_WHITE)
+        //entries.accept(CobblemonItems.APRIJUICE_RED) // TODO uncomment for 1.7.X
+        //entries.accept(CobblemonItems.APRIJUICE_YELLOW)
+        //entries.accept(CobblemonItems.APRIJUICE_GREEN)
+        //entries.accept(CobblemonItems.APRIJUICE_BLUE)
+        //entries.accept(CobblemonItems.APRIJUICE_PINK)
+        //entries.accept(CobblemonItems.APRIJUICE_BLACK)
+        //entries.accept(CobblemonItems.APRIJUICE_WHITE)
 
     }
 

@@ -194,6 +194,15 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "shell",
+					"pivot": [0, 18, 10.3],
+					"rotation": [-76.5, 0, 0],
+					"locators": {
+						"seat_1": [0, 18, 10.3]
+					}
+				},
+				{
 					"name": "leg_left",
 					"parent": "body",
 					"pivot": [-5.5, 7.5, -0.5],

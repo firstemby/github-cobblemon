@@ -4,6 +4,17 @@
  "profileScale": 0.62,
  "profileTranslation": [0.02, 0.84, 0],
  "rootBone": "zebstrika",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.35, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 5],
+    "seat_1_reverse": [0, 1, 5]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('zebstrika', 'cry')",
     "recoil": "q.bedrock_stateful('zebstrika', 'recoil')",

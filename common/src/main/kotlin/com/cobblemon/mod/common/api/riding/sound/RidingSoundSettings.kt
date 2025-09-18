@@ -6,16 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.api.riding.sound;
+package com.cobblemon.mod.common.api.riding.sound
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readExpression
 import com.cobblemon.mod.common.util.writeExpression
+import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceLocation
 
 /**
  * Class to store data for looping sounds played during riding.
@@ -25,12 +25,22 @@ import net.minecraft.resources.ResourceLocation;
  */
 data class RideSoundSettings(
     val soundLocation: ResourceLocation,
-    val volumeExpr: Expression = "1.0".asExpression(),
-    val pitchExpr: Expression = "1.0".asExpression(),
+    @SerializedName("volumeExpr") private val _volumeExpr: Expression? = "1.0".asExpression(),
+    @SerializedName("pitchExpr") private val _pitchExpr: Expression? = "1.0".asExpression(),
     val playForNonPassengers: Boolean = false,
     val muffleEnabled: Boolean = false,
-    val attenuationModel: RideAttenuationModel = RideAttenuationModel.NONE
+    @SerializedName("attenuationModel") private val _attenuationModel: RideAttenuationModel? = RideAttenuationModel.NONE
 ): Encodable {
+
+    //this is needed because GSON does NOT support default constructor parameters and will just happily throw nulls all over the place
+    val volumeExpr: Expression
+        get() = _volumeExpr ?: "1.0".asExpression()
+
+    val pitchExpr: Expression
+        get() = _pitchExpr ?: "1.0".asExpression()
+
+    val attenuationModel: RideAttenuationModel
+        get() = _attenuationModel ?: RideAttenuationModel.NONE
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(soundLocation)
@@ -38,18 +48,18 @@ data class RideSoundSettings(
         buffer.writeExpression(pitchExpr)
         buffer.writeBoolean(playForNonPassengers)
         buffer.writeBoolean(muffleEnabled)
+        buffer.writeEnum(attenuationModel)
     }
 
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RideSoundSettings {
 
-            // Try to read if available, fallback to default otherwise
             val soundLocation = buffer.readResourceLocation()
             val volumeExpr = buffer.readExpression()
             val pitchExpr = buffer.readExpression()
             val playForNonPassengers = buffer.readBoolean()
             val muffleEnabled = buffer.readBoolean()
-            val attenuationModel = RideAttenuationModel.EXPONENTIAL
+            val attenuationModel = buffer.readEnum(RideAttenuationModel::class.java)
 
             return RideSoundSettings(
                 soundLocation,

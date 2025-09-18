@@ -11,21 +11,13 @@ package com.cobblemon.mod.common.entity.ai
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
-import com.cobblemon.mod.common.util.getMemorySafely
-import com.cobblemon.mod.common.util.mainThreadRuntime
-import com.cobblemon.mod.common.util.math.geometry.toRadians
-import com.cobblemon.mod.common.util.resolveDouble
-import com.cobblemon.mod.common.util.toBlockPos
-import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableMap
-import net.minecraft.core.BlockPos
 import java.util.UUID
+import kotlin.math.pow
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
-import net.minecraft.world.entity.ai.util.HoverRandomPos
-import net.minecraft.world.entity.ai.util.LandRandomPos
 import net.minecraft.world.phys.Vec3
 
 class FollowHerdLeaderTask : Behavior<PokemonEntity>(
@@ -39,7 +31,8 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
     var leader: PokemonEntity? = null
     var tooFar = 8F
     var closeEnough = 4F
-    var herdReactionExpiry: Long? = null
+    /** Chance per tick of following the herd leader. */
+    val chance = 1 / 20F
 
     override fun checkExtraStartConditions(level: ServerLevel, owner: PokemonEntity): Boolean {
         leader = level.getEntity(owner.brain.getMemory(CobblemonMemories.HERD_LEADER).map(UUID::fromString).orElse(null) ?: return false) as? PokemonEntity
@@ -60,49 +53,15 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         }
         val moveControl = entity.moveControl as? PokemonMoveControl ?: return
         val leaderMoveControl = leader.moveControl as? PokemonMoveControl ?: return
-        val shouldMoveDelayed = herdReactionExpiry?.let {
-            gameTime >= it
-        } ?: false
         if (leader.distanceTo(entity) > tooFar) {
-//            val randomNearbyPos: BlockPos = LandRandomPos.getPosTowards(entity, 5, 3, leader.position())?.let {
-//                BlockPos.containing(it)
-//            } ?: leader.blockPosition()
-
-            val herdTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null)?.target?.currentBlockPosition()
-                ?: leader.blockPosition()
-            val randomHerdPos = LandRandomPos.getPos(leader, 1, 1)?.toBlockPos()
-                ?: herdTarget
             entity.brain.setMemory(
                 MemoryModuleType.WALK_TARGET,
                 CobblemonWalkTarget(
-                    pos = randomHerdPos,
+                    pos = leader.blockPosition(),
                     speedModifier = 0.4F,
                     completionRange = closeEnough.toInt()
                 )
             )
-        } else if (shouldMoveDelayed) {
-            // Go to the leader's walk target, roughly.
-            //val walkTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) ?: return
-//            val randomNearbyPos: BlockPos = LandRandomPos.getPosTowards(entity, 5, 3, walkTarget.target.currentPosition())?.let {
-//                BlockPos.containing(it)
-//            } ?: walkTarget.target.currentBlockPosition()
-//            val randomNearbyPos: BlockPos = LandRandomPos.getPosTowards(entity, 1, 0, leader.position())?.let {
-//                BlockPos.containing(it)
-//            } ?: leader.blockPosition()
-
-            val herdTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null)?.target?.currentBlockPosition()
-                ?: leader.blockPosition()
-            val randomHerdPos = LandRandomPos.getPos(leader, tooFar.toInt(), tooFar.toInt())?.toBlockPos()
-                ?: herdTarget
-            entity.brain.setMemory(
-                MemoryModuleType.WALK_TARGET,
-                CobblemonWalkTarget(
-                    pos = randomHerdPos,
-                    speedModifier = entity.runtime.resolveDouble(entity.behaviour.moving.walk.walkSpeed).toFloat(),
-                    completionRange = 1
-                )
-            )
-            herdReactionExpiry = null // We are moving so what movement would we be waiting for
         } else if (leader.isFlying() && !entity.isFlying()) {
             if (!entity.canFly()) {
                 entity.brain.eraseMemory(CobblemonMemories.HERD_LEADER) // We can't go where this guy's going
@@ -118,7 +77,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                     CobblemonWalkTarget(
                         pos = leader.blockPosition(),
                         speedModifier = 0.4F,
-                        completionRange = 0
+                        completionRange = 1
                     )
                 )
             } else {
@@ -131,11 +90,26 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 )
             }
         } else if (leader.brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
-
-            if (herdReactionExpiry == null) {
-                val delayTicks = (0..40).random().toLong()
-                herdReactionExpiry = gameTime + delayTicks
+            if (entity.random.nextFloat() > chance) {
+                return // Not this tick
             }
+
+            // Go to the leader's walk target, roughly.
+            val walkTarget = leader.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) ?: return
+
+            if (entity.distanceToSqr(walkTarget.target.currentPosition()) < leader.distanceToSqr(walkTarget.target.currentPosition())) {
+                return // We're already closer to the walk target than the leader is, so no need to move, if anything we should get out of the way
+            }
+
+            entity.brain.setMemory(
+                MemoryModuleType.WALK_TARGET,
+                CobblemonWalkTarget(
+                    pos = walkTarget.target.currentBlockPosition(),
+                    speedModifier = walkTarget.speedModifier,
+                    nodeTypeFilter = (walkTarget as? CobblemonWalkTarget)?.nodeTypeFilter ?: { true },
+                    completionRange = closeEnough.toInt()
+                )
+            )
         }
     }
 }

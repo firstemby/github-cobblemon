@@ -3,29 +3,34 @@
   "description": "cobblemon.behaviour.panics.desc",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:idle",
       "tasksByPriority": {
-        "0": ["switch_to_panic_when_hurt"]
+        "0": ["cobblemon:flee_attacker"],
+        "10": ["cobblemon:switch_to_panic_when_hurt"]
       }
     },
     {
-      "type": "add_tasks_to_activity",
-      "activity": "panic",
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "minecraft:panic",
       "tasksByPriority": {
         "0": [
-          "calm_down",
-          "follow_walk_target"
+          "cobblemon:flee_attacker",
+          {
+            "type": "cobblemon:activity_change",
+            "activity": "minecraft:idle",
+            "condition": "q.entity.lacks_memory_value('minecraft:avoid_target')"
+          }
         ],
         "1": [
-          "flee_nearest_hostile"
+          "cobblemon:flee_nearest_hostile"
         ],
         "2": [
-          "flee_attacker"
+          "cobblemon:walk_away_from_avoid_target"
         ],
         "3": [
           {
-            "type": "wander",
+            "type": "cobblemon:wander",
             "speedMultiplier": {
               "variableName": "flee_speed_multiplier",
               "category": "cobblemon.entity.variable.category.fear",

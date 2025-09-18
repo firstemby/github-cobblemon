@@ -213,7 +213,10 @@ class MoveSet : Iterable<Move> {
             .xmap(
                 { moveList ->
                     val moveSet = MoveSet()
-                    moveList.forEach(moveSet::add)
+                    moveList.filter { it.template !is MoveTemplate.Dummy }.forEach(moveSet::add)
+                    if (moveSet.moves.all { it == null }) {
+                        moveSet.add(Moves.getExceptional().create())
+                    }
                     return@xmap moveSet
                 },
                 { moveSet -> moveSet.toList() }

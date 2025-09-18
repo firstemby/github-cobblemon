@@ -40,6 +40,17 @@ class RidingAnimationData(val ride: PokemonEntity)
     var driverInputSpring: Vec3Spring = Vec3Spring()
     var diveSpring: Vec3Spring = Vec3Spring()
 
+    fun clear() {
+        prevOrientation = Matrix3f()
+        prevRot = Vec3.ZERO
+        velocitySpring = Vec3Spring()
+        rotSpring = Vec3Spring()
+        rotDeltaSpring = Vec3Spring()
+        localVelocitySpring = Vec3Spring()
+        driverInputSpring = Vec3Spring()
+        diveSpring = Vec3Spring()
+    }
+
     fun update() {
         val activeRide = ride.hasControllingPassenger()
 

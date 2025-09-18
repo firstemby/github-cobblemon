@@ -42,13 +42,18 @@
   "catchRate": 25,
   "eggCycles": 10,
   "baseFriendship": 140,
-  "baseScale": 1.2,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.7,
-    "height": 1,
+    "width": 1,
+    "height": 1.6,
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "swim": {
+        "canWalkOnWater": true
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"

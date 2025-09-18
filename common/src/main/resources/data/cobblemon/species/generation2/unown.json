@@ -51,6 +51,15 @@
     "fixed": false
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "unown",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "fly": {
         "canFly": true
@@ -551,16 +560,5 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ],
-  "behaviour": {
-    "herd": {
-      "maxSize": "9",
-      "toleratedLeaders": [
-        {
-          "pokemon": "unown",
-          "tier": 1
-        }
-      ]
-    }
-  }
+  ]
 }

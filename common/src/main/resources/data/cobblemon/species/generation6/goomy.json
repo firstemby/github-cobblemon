@@ -149,10 +149,6 @@
         {
           "variant": "level",
           "minLevel": 40
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
         }
       ]
     },
@@ -172,10 +168,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
         }
       ]
     }
@@ -215,10 +207,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/goomy_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
             }
           ]
@@ -235,10 +223,6 @@
             {
               "variant": "level",
               "minLevel": 40
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
             }
           ]
         }

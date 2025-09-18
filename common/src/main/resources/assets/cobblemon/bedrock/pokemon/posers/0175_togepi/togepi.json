@@ -5,6 +5,7 @@
   "profileTranslation": [0,0.66,0],
   "rootBone": "togepi",
   "animations": {
+  "cry": "q.bedrock_stateful('togepi', 'cry')"
   },
   "poses": {
     "standing": {

@@ -22,6 +22,7 @@
 ### Changes
 - Slots in pastures will now have darker backgrounds and italicised Pokémon names if the Pokémon is not owned by the player.
 - The pasture slot will show the name of the Pokémon owner when hovered if the Pokémon is not owned.
+- Increased the default PC box count from 30 to 40 to accommodate the fact that we have way more Pokémon now. If you've changed this config option then you'll need to edit it again after starting up with 1.7!
 
 ### Developer
 - Added `RenamePCBoxEvent.Pre` and `RenamePCBoxEvent.Post` events to prevent players from renaming a box or changing their input.

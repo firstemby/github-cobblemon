@@ -3255,7 +3255,12 @@
 						"1.0": [0, 0, 0]
 					}
 				}
-			}
+			},
+          "sound_effects": {
+            "0.5": {
+              "effect": "pokemon.axew.cry"
+            }
+          }
 		},
 		"animation.axew.blink": {
 			"animation_length": 0.125,

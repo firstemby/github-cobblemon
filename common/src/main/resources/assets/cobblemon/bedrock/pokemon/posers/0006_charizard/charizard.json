@@ -7,9 +7,12 @@
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.25, 0]
   },
-  "thirdPersonCameraOffset": {
+  "thirdPersonCameraOffsetNoViewBobbing": {
     "seat_1": [0, 3, 6],
     "seat_1_reverse": [0, 3, 6]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 1, 2]
   },
   "animations": {
     "cry": "q.bedrock_stateful('charizard', 'cry')",

@@ -128,18 +128,4 @@ public class BrewingStandBlockEntityMixin {
 			}
 		}
 	}
-
-	@Inject(method = "canTakeItemThroughFace", at = @At("HEAD"), cancellable = true)
-	private void cobblemon$canTakeItemThroughFace(int index, ItemStack stack, Direction dir, CallbackInfoReturnable<Boolean> cir) {
-		Level level = ((BrewingStandBlockEntity)(Object)this).getLevel();
-		if (level == null) return;
-
-		if (index >= 0 && index < 3) {
-			//only removes items that are never brewing ingredients
-			if (BrewingStandRecipe.Companion.isBottle(stack, level.getRecipeManager())) {
-				cir.setReturnValue(false);
-				return;
-			}
-		}
-	}
 }

@@ -9,7 +9,7 @@
 					"position": ["Math.Sin((q.anim_time * 180 * 0.5) * 1) * 1.5", "2+Math.Sin((q.anim_time * 90 * 0.5) * 1) * 1.5", 0]
 				},
 				"magnet_back_rotation": {
-					"rotation": [0, 0, "0 - 150 + q.anim_time * 180"],
+					"rotation": [0, 0, "0-150+math.mod(q.anim_time*0.5, 1)*-360 "],
 					"position": [-0.1105, -3.26306, -1.09075]
 				},
 				"magnet_left": {
@@ -22,18 +22,18 @@
 					"rotation": [0, 0, "Math.Cos(((q.anim_time + 0.4) * 180 * 0.5) * 1) * 5"]
 				},
 				"magnet_left_rotation": {
-					"rotation": [0, 0, "150 + q.anim_time * - 180"],
+					"rotation": [0, 0, "150+math.mod(q.anim_time*0.5, 1)*-360 "],
 					"position": [0.31051, -2.99661, -0.96119]
 				},
 				"nail_left_rotation": {
-					"rotation": [0, "150 + q.anim_time * - 180", 0]
+					"rotation": [0, "150+math.mod(q.anim_time*0.5, 1)*-360", 0]
 				},
 				"magnet_right_rotation": {
-					"rotation": [0, 0, "0 - 150 + q.anim_time * 180"],
+					"rotation": [0, 0, "0-150+math.mod(q.anim_time*0.5, 1)*360 "],
 					"position": [-0.53151, -2.99661, -0.96119]
 				},
 				"nail_right_rotation": {
-					"rotation": [0, "0 - 150 + q.anim_time * 180", 0]
+					"rotation": [0, "0-150+math.mod(q.anim_time*0.5, 1)*360 ", 0]
 				},
 				"magnet_back": {
 					"rotation": [-42.5, 0, 0],
@@ -49,7 +49,7 @@
 					"position": ["Math.Sin((q.anim_time * 180 * 0.5) * 1) * 1.5", "2+Math.Sin((q.anim_time * 90 * 0.5) * 1) * 1.5", 0]
 				},
 				"magnet_back_rotation": {
-					"rotation": [0, 0, "0 - 150 + q.anim_time * 270"],
+					"rotation": [0, 0, "0-150+math.mod(q.anim_time*1, 1)*-360"],
 					"position": [-0.1105, -3.26306, -1.09075]
 				},
 				"magnet_left": {
@@ -59,18 +59,18 @@
 					"rotation": [30, 0, 0]
 				},
 				"magnet_left_rotation": {
-					"rotation": [0, 0, "150 + q.anim_time * - 270"],
+					"rotation": [0, 0, "150+math.mod(q.anim_time*1, 1)*-360"],
 					"position": [0.31051, -2.99661, -0.96119]
 				},
 				"nail_left_rotation": {
-					"rotation": [0, "150 + q.anim_time * - 270", 0]
+					"rotation": [0, "150+math.mod(q.anim_time*1, 1)*-360", 0]
 				},
 				"magnet_right_rotation": {
-					"rotation": [0, 0, "0 - 150 + q.anim_time * 270"],
+					"rotation": [0, 0, "0-150+math.mod(q.anim_time*1, 1)*360"],
 					"position": [-0.53151, -2.99661, -0.96119]
 				},
 				"nail_right_rotation": {
-					"rotation": [0, "0 - 150 + q.anim_time * 270", 0]
+					"rotation": [0, "0-150+math.mod(q.anim_time*1, 1)*360", 0]
 				},
 				"magnet_back": {
 					"rotation": [-42.5, 0, 0],

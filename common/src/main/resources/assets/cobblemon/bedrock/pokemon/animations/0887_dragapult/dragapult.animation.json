@@ -60,6 +60,9 @@
 				},
 				"tail6": {
 					"rotation": [25, 0, 0]
+				},
+				"body": {
+					"position": [0, 17, 0]
 				}
 			}
 		},
@@ -103,11 +106,6 @@
 		},
 		"animation.dragapult.cry": {
 			"animation_length": 1.5,
-			"sound_effects": {
-				"0.04": {
-					"effect": "pokemon.dragapult.cry"
-				}
-			},
 			"bones": {
 				"neck": {
 					"rotation": {
@@ -132,6 +130,11 @@
 						"1.25": [12.5, 0, 0],
 						"1.5": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "pokemon.dragapult.cry"
 				}
 			}
 		},

@@ -16,11 +16,13 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ColorParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.stats.Stats
 import net.minecraft.tags.ItemTags
+import net.minecraft.util.FastColor
 import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -49,6 +51,7 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
+import kotlin.random.Random
 
 class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock(settings) {
     companion object {
@@ -226,6 +229,30 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
                 random
             )
         }
+
+        if (isLure && random.nextInt(5) == 0) {
+            val tint = getTint(level, pos)
+            val red = FastColor.ARGB32.red(tint) / 255F
+            val green = FastColor.ARGB32.green(tint) / 255F
+            val blue = FastColor.ARGB32.blue(tint) / 255F
+
+            for (i in 0..<random.nextInt(1) + 1) {
+                level.addParticle(
+                    ColorParticleOption.create(
+                        ParticleTypes.ENTITY_EFFECT,
+                        red,
+                        green,
+                        blue
+                    ),
+                    pos.getX().toDouble() + Random.nextDouble(0.25, 0.76),
+                    pos.getY().toDouble() + 0.4375,
+                    pos.getZ().toDouble() + Random.nextDouble(0.25, 0.76),
+                    0.0,
+                    0.0,
+                    0.0
+                )
+            }
+        }
     }
 
     override fun onProjectileHit(level: Level, state: BlockState, hit: BlockHitResult, projectile: Projectile) {
@@ -307,6 +334,11 @@ class PokeSnackBlock(settings: Properties, val isLure: Boolean): BaseEntityBlock
 
     private fun candleHit(hit: BlockHitResult): Boolean {
         return hit.getLocation().y - hit.getBlockPos().getY().toDouble() > CAKE_HEIGHT
+    }
+
+    fun getTint(level: Level, pos: BlockPos): Int {
+        val tint = (level.getBlockEntity(pos) as? PokeSnackBlockEntity)?.tint ?: 0xFFFFFF
+        return if (tint == 0xFFFFFF) 0xF5EDA8 else tint
     }
 
     fun spawnEatParticles(level: Level, pos: BlockPos) {

@@ -51,15 +51,28 @@
   },
   "riding": {
     "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "41-60",
-          "SKILL": "41-60",
-          "SPEED": "21-40",
-          "STAMINA": "0-20"
+          "ACCELERATION": "30-65",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
         }
       }
     },

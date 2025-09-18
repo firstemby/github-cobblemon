@@ -81,11 +81,19 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        // Use this as a "tick" function and calculate sprinting and inAir state here
-        handleSprinting(settings, state, vehicle, driver)
-        inAirCheck(state, vehicle)
-        tickStamina(settings, state, vehicle, driver)
         return state.rideVelocity.get().length().toFloat()
+    }
+
+    override fun tick(
+        settings: HorseSettings,
+        state: HorseState,
+        vehicle: PokemonEntity,
+        driver: Player,
+        input: Vec3
+    ) {
+        handleSprinting(state, driver)
+        inAirCheck(state, vehicle)
+        tickStamina(settings, state, vehicle)
     }
 
     fun inAirCheck(
@@ -100,16 +108,13 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         val canSupportEntity = blockStateBelow.isFaceSturdy(vehicle.level(), posBelow, Direction.UP)
         val standingOnSolid = canSupportEntity && !isAirOrLiquid
 
-
         // inAir if not on the ground
         val inAir = !(vehicle.deltaMovement.y == 0.0 || standingOnSolid)
         state.inAir.set(inAir)
     }
 
     fun handleSprinting(
-        settings: HorseSettings,
         state: HorseState,
-        vehicle: PokemonEntity,
         driver: Player
     ) {
         if (state.sprinting.get()) {
@@ -125,7 +130,6 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         settings: HorseSettings,
         state: HorseState,
         vehicle: PokemonEntity,
-        driver: Player
     ) {
         val stam = state.stamina.get()
         var newStam = stam
@@ -228,22 +232,22 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     ): Vec3 {
         val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint)
         val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
-        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr)
+        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr) * 0.75
         val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
         val walkSpeed = getWalkSpeed(vehicle)
         val topSpeed = if(canSprint && state.sprinting.get()) rideTopSpeed else walkSpeed
-        val accel = vehicle.runtime.resolveDouble(settings.accelerationExpr)
+        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)
         var activeInput = false
 
         /******************************************************
-         * Gather the previous velocity and set the horizontal
-         * fields of the velocity vector to the magnitude of the
-         * ones from deltaMovement. This is important as when a
-         * collision happens the Deltamovement will reflect it
-         * but rideVelocity won't.
+         * Gather the previous velocity and check for horizontal
+         * collisions
          *****************************************************/
-        var newVelocity = Vec3(state.rideVelocity.get().x, 0.0, state.rideVelocity.get().z).normalize().scale(vehicle.deltaMovement.horizontalDistance())
-        newVelocity = newVelocity.add(0.0, state.rideVelocity.get().y, 0.0)
+        var newVelocity = state.rideVelocity.get() //.normalize().scale(vehicle.deltaMovement.horizontalDistance())
+
+        if (vehicle.horizontalCollision) {
+            newVelocity = newVelocity.normalize().scale(vehicle.deltaMovement.length())
+        }
 
         /******************************************************
          * Speed up and slow down based on input
@@ -282,12 +286,14 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         /******************************************************
          * Gravity logic
          *****************************************************/
-        if (vehicle.onGround()) { newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z) }
-        val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
-        val terminalVel = 2.0
+        if (!vehicle.onGround() && state.jumpTicks.get() <= 0) {
+            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
+            val terminalVel = 2.0
+            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+        } else if(vehicle.onGround()) {
+            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
+        }
 
-        val fallingForce = gravity
-        newVelocity = Vec3(newVelocity.x, max(newVelocity.y - fallingForce, -terminalVel), newVelocity.z)
 
         /******************************************************
          * Ground Friction
@@ -299,8 +305,21 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         /******************************************************
          * Jump Logic
          *****************************************************/
-        if (driver.jumping && vehicle.onGround() && canJump && driver.deltaMovement.y <= 0.1) {
-            newVelocity = Vec3(newVelocity.x, jumpForce, newVelocity.z)
+        if (state.jumpTicks.get() > 0 || (state.jumpTicks.get() >= 0 && driver.jumping && vehicle.onGround() && canJump && driver.deltaMovement.y <= 0.1)) {
+            // Spread out jumpforce so that variable height jumps are possible
+            val jumpInputTicks = 6
+            if (driver.jumping && (state.jumpTicks.get() >= 0 && state.jumpTicks.get() < jumpInputTicks)) {
+                val appliedJumpForce = ((jumpForce*1.5) / jumpInputTicks) //* (1 - state.jumpTicks.get() / jumpInputTicks)
+                newVelocity = Vec3(newVelocity.x, newVelocity.y + appliedJumpForce, newVelocity.z)
+                state.jumpTicks.set(state.jumpTicks.get() + 1)
+            } else {
+                // Set delay before next jump is possible after hitting ground
+                val tickJumpDelay = 3
+                state.jumpTicks.set(-tickJumpDelay)
+            }
+        } else if (vehicle.onGround() && state.jumpTicks.get() < 0) {
+            // Tick off the delay once reaching the ground
+            state.jumpTicks.set(state.jumpTicks.get() + 1)
         }
 
         //Zero out lateral velocity possibly picked up from a controller transition
@@ -493,15 +512,15 @@ class HorseSettings : RidingBehaviourSettings {
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
     var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'LAND', (1.0 / (20.0 * 0.8)), (1.0 / (20.0 * 3.0)))".asExpression()
+        "q.get_ride_stats('ACCELERATION', 'LAND', 0.5, 2.0)".asExpression()
         private set
 
     // Between 30 seconds and 10 seconds at the lowest when at full speed.
     var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression()
         private set
 
-    //Between a one block jump and a ten block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.5, 0.8)".asExpression()
+    //Between a one block jump and a six block jump
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.0, 0.38)".asExpression()
         private set
 
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 180.0, 40.0)".asExpression()
@@ -518,6 +537,8 @@ class HorseSettings : RidingBehaviourSettings {
         buffer.writeExpression(staminaExpr)
         buffer.writeExpression(jumpExpr)
         buffer.writeExpression(handlingExpr)
+        buffer.writeExpression(canJump)
+        buffer.writeExpression(canSprint)
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -528,29 +549,35 @@ class HorseSettings : RidingBehaviourSettings {
         staminaExpr = buffer.readExpression()
         jumpExpr = buffer.readExpression()
         handlingExpr = buffer.readExpression()
+        canJump = buffer.readExpression()
+        canSprint = buffer.readExpression()
     }
 }
 
 class HorseState : RidingBehaviourState() {
     var sprinting = ridingState(false, Side.CLIENT)
     var inAir = ridingState(false, Side.CLIENT)
+    var jumpTicks = ridingState(0, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeBoolean(sprinting.get())
         buffer.writeBoolean(inAir.get())
+        buffer.writeInt(jumpTicks.get())
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
         sprinting.set(buffer.readBoolean(), forced = true)
         inAir.set(buffer.readBoolean(), forced = true)
+        jumpTicks.set(buffer.readInt(), forced = true)
     }
 
     override fun reset() {
         super.reset()
         sprinting.set(false, forced = true)
         inAir.set(false, forced = true)
+        jumpTicks.set(0, forced = true)
     }
 
     override fun copy() = HorseState().also {
@@ -558,6 +585,7 @@ class HorseState : RidingBehaviourState() {
         it.stamina.set(this.stamina.get(), forced = true)
         it.sprinting.set(this.sprinting.get(), forced = true)
         it.inAir.set(this.inAir.get(), forced = true)
+        it.jumpTicks.set(this.jumpTicks.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {

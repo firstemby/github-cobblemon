@@ -1,21 +1,17 @@
 {
   "rootBone": "tyrantrum",
   "portraitScale": 0.59,
-  "portraitTranslation": [
-    -0.86,
-    2,
-    5
-  ],
+  "portraitTranslation": [-0.86, 2, 5],
   "profileScale": 0.29,
-  "profileTranslation": [
-    0.02,
-    1.28,
-    -10
-  ],
+  "profileTranslation": [0.02, 1.28, -10],
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.25, 0]
   },
   "thirdPersonCameraOffset": {
+    "seat_1": [0, 1, 2],
+    "seat_1_reverse": [0, 1, 2]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
     "seat_1": [0, 1.5, 10],
     "seat_1_reverse": [0, 1.5, 10]
   },

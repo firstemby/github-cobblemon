@@ -22,7 +22,7 @@
         },
         {
           "variant": "drop_item",
-          "item": "minecraft:feather",
+          "item": "minecraft:string",
           "amount": "1-2"
         },
         {

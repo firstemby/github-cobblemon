@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.riding.behaviour.types.liquid
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
@@ -35,7 +34,6 @@ import kotlin.math.min
 class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
     companion object {
         val KEY = cobblemonResource("liquid/boat")
-        val TOP_SPEED = 2.0
     }
 
     override val key = KEY
@@ -44,8 +42,10 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return RidingStyle.LIQUID
     }
 
-    val poseProvider = PoseProvider<BoatSettings, BoatState>(PoseType.FLOAT)
-        .with(PoseOption(PoseType.SWIM) { _, _, entity -> entity.isSwimming && entity.entityData.get(PokemonEntity.MOVING) })
+    val poseProvider = PoseProvider<BoatSettings, BoatState>(PoseType.STAND)
+        .with(PoseOption(PoseType.WALK) { _, state, _ ->
+            abs(state.rideVelocity.get().horizontalDistance()) > 0.2
+        })
 
     override fun isActive(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity): Boolean {
         if (state.jumpBuffer.get() != -1) {
@@ -76,14 +76,22 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
             state.jumpBuffer.set(state.jumpBuffer.get() + 1)
         }
 
-        if (driver.zza == 0f && (vehicle.isInWater || vehicle.isUnderWater)) {
+        // Only start sprinting on vehicle if the state has changed and the pokemon has atleast 1/3 stamina
+        if (driver.isSprinting && !state.isVehicleSprinting.get()) {
+            state.isVehicleSprinting.set(state.stamina.get() > 0.33f)
+        }
+        else if (!driver.isSprinting) {
+            state.isVehicleSprinting.set(false)
+        }
+
+        if (!state.isVehicleSprinting.get()) {
             if (state.staminaBuffer.get() >= 20) {
-                val staminaIncrease = vehicle.getRideStat(RidingStat.STAMINA, RidingStyle.LIQUID, 1.0, 2.0)
+                val staminaIncrease = vehicle.runtime.resolveDouble(settings.staminaIncreaseExpr)
                 state.stamina.set(min(1.0f, state.stamina.get() + 0.01f * staminaIncrease.toFloat()))
             }
         }
-        else if (abs(state.rideVelocity.get().z) > 0.1) {
-            consumeStamina(vehicle, state, 0.01f)
+        else if (abs(state.rideVelocity.get().z) > 0.1 && state.isVehicleSprinting.get()) {
+            consumeStamina(vehicle, driver, settings, state, 0.01f)
         }
         state.staminaBuffer.set(state.staminaBuffer.get() + 1)
         super.tick(settings, state, vehicle, driver, input)
@@ -114,67 +122,68 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        applyStrafeRotation(vehicle, driver, state)
+        applyStrafeRotation(vehicle, driver, settings, state)
 
         var velocity = state.rideVelocity.get()
-        velocity = applyVelocityFromInput(velocity, vehicle, driver, state)
+        velocity = applyVelocityFromInput(velocity, vehicle, driver, settings, state)
         velocity = applyGravity(velocity, vehicle, settings, state)
-        velocity = applyJump(velocity, vehicle, driver, state)
+        velocity = applyJump(velocity, vehicle, driver, settings, state)
         state.rideVelocity.set(velocity)
         return state.rideVelocity.get()
     }
 
-    private fun applyVelocityFromInput(velocity: Vec3, vehicle: PokemonEntity, driver: Player, state: BoatState): Vec3 {
-        val speed = vehicle.getRideStat(RidingStat.SPEED, RidingStyle.LIQUID, 0.8, TOP_SPEED)
-        val acceleration = vehicle.getRideStat(RidingStat.ACCELERATION, RidingStyle.LIQUID, 0.05, 0.5)
+    private fun applyVelocityFromInput(velocity: Vec3, vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState): Vec3 {
+        val speed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val acceleration = vehicle.runtime.resolveDouble(settings.accelerationExpr)
 
         if (state.jumpBuffer.get() != -1 || !(vehicle.isInWater || vehicle.isUnderWater)) {
             return velocity
         }
 
+        val sprintModifier = vehicle.runtime.resolveDouble(settings.sprintSpeedModifier)
+        val activeSprintModifier = if (state.isVehicleSprinting.get() && hasStamina(state)) sprintModifier else 1.0
         val forwardInput = driver.zza.toDouble()
         val delta = when {
-            !hasStamina(state) || forwardInput == 0.0 -> -velocity.z * 0.04
+            forwardInput == 0.0 -> -velocity.z * 0.04
             forwardInput < 0.0 -> when {
                 velocity.z < 0.0 -> forwardInput * acceleration * 0.5
                 else -> min(forwardInput * acceleration * 0.5, -velocity.z * 0.04) // We never want it to be slower to reverse than no input
             }
-            else -> forwardInput * acceleration
+            else -> forwardInput * acceleration * activeSprintModifier
         }
 
         return Vec3(
             velocity.x,
             velocity.y,
-            Mth.clamp(velocity.z + delta, -speed * 0.25, speed)
+            Mth.clamp(velocity.z + delta, -speed * 0.25, speed * activeSprintModifier)
         )
     }
 
-    private fun applyJump(velocity: Vec3, vehicle: PokemonEntity, driver: Player, state: BoatState): Vec3 {
+    private fun applyJump(velocity: Vec3, vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState): Vec3 {
         if (!driver.jumping) return velocity // Not jumping
         if (state.jumpBuffer.get() != -1) return velocity // Already jumped very recently
-        if (!hasStamina(state)) return velocity // Has no stamina
 
-        val jumpStrength = vehicle.getRideStat(RidingStat.JUMP, RidingStyle.LIQUID, 1.0, 2.5)
+        val jumpStrength = vehicle.runtime.resolveDouble(settings.jumpStrengthExpr)
         state.jumpBuffer.set(0)
-        consumeStamina(vehicle, state, 0.05f)
         return Vec3(velocity.x, velocity.y + jumpStrength, velocity.z)
     }
 
     private fun applyGravity(velocity: Vec3, vehicle: PokemonEntity, settings: BoatSettings, state: BoatState): Vec3 {
-        if (state.jumpBuffer.get() == -1 && vehicle.isInWater || vehicle.isUnderWater) {
-            return Vec3(velocity.x, -0.05, velocity.z)
+        if (state.jumpBuffer.get() == -1 && (vehicle.isInWater || vehicle.isUnderWater)) {
+            val verticalVelocity = if (vehicle.isUnderWater) 0.5 else 0.0
+            return Vec3(velocity.x, verticalVelocity, velocity.z)
         }
         val terminalVelocity = vehicle.runtime.resolveDouble(settings.terminalVelocity)
         val gravity = (9.8 / ( 20.0)) * 0.2
         return Vec3(velocity.x, max(velocity.y - gravity, terminalVelocity), velocity.z)
     }
 
-    private fun applyStrafeRotation(vehicle: PokemonEntity, driver: Player, state: BoatState) {
-        val skill = vehicle.getRideStat(RidingStat.SKILL, RidingStyle.LIQUID, 0.5, 1.5)
+    private fun applyStrafeRotation(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState) {
+        val skillModifier = vehicle.runtime.resolveDouble(settings.rotationspeedModifierExpr)
         val strafe = driver.xxa
         if (abs(strafe) > 0) {
             val increase = if (strafe > 0) -1 else 1
-            state.deltaRotation.set(state.deltaRotation.get() + increase * skill)
+            state.deltaRotation.set(state.deltaRotation.get() + increase * skillModifier)
         }
     }
 
@@ -182,9 +191,13 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         return state.stamina.get() != 0f
     }
 
-    private fun consumeStamina(vehicle: PokemonEntity, state: BoatState, drain: Float) {
-        val stamina = vehicle.getRideStat(RidingStat.STAMINA, RidingStyle.LIQUID, 1.0, 5.0)
-        state.stamina.set(max(0f, state.stamina.get() - drain / stamina.toFloat()))
+    private fun consumeStamina(vehicle: PokemonEntity, driver: Player, settings: BoatSettings, state: BoatState, drain: Float) {
+        val staminaModifier = vehicle.runtime.resolveFloat(settings.staminaDecreaseExpr)
+        state.stamina.set(max(0f, state.stamina.get() - drain / staminaModifier))
+        if (state.stamina.get() == 0f) {
+            state.isVehicleSprinting.set(false)
+            driver.isSprinting = false
+        }
         state.staminaBuffer.set(0)
     }
 
@@ -285,10 +298,8 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Float {
-        if (state.rideVelocity.get().z > TOP_SPEED * 0.8) {
-            return Mth.lerp((state.rideVelocity.get().z - (TOP_SPEED * 0.8)) / (TOP_SPEED * 0.2), 1.0, 1.2).toFloat()
-        }
-        return 1.0f
+        val sprintFov = vehicle.runtime.resolveFloat(settings.sprintFovModifier)
+        return if (state.isVehicleSprinting.get()) sprintFov else 1.0f
     }
 
     override fun useAngVelSmoothing(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity): Boolean {
@@ -301,7 +312,14 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
         vehicle: PokemonEntity,
         driver: Player
     ): ResourceLocation {
-        return cobblemonResource("no_pose")
+        val isInWater = Shapes.create(vehicle.boundingBox).blockPositionsAsListRounded().any {
+            if (vehicle.isInWater || vehicle.isUnderWater) {
+                return@any true
+            }
+            val blockState = vehicle.level().getBlockState(it)
+            return@any !blockState.fluidState.isEmpty
+        }
+        return if (!isInWater) cobblemonResource("in_air") else cobblemonResource("no_pose")
     }
 
     override fun inertia(settings: BoatSettings, state: BoatState, vehicle: PokemonEntity): Double {
@@ -361,6 +379,29 @@ class BoatSettings : RidingBehaviourSettings {
     var rotatePokemonHead = "true".asExpression()
         private set
 
+    var staminaIncreaseExpr = "q.get_ride_stats('STAMINA', 'LIQUID', 2.0, 1.0)".asExpression()
+        private set
+
+    var staminaDecreaseExpr = "q.get_ride_stats('STAMINA', 'LIQUID', 5.0, 1.0)".asExpression()
+        private set
+
+    var rotationspeedModifierExpr = "q.get_ride_stats('SKILL', 'LIQUID', 1.5, 0.5)".asExpression()
+        private set
+
+    var jumpStrengthExpr = "q.get_ride_stats('JUMP', 'LIQUID', 2.5, 1.0)".asExpression()
+        private set
+
+    var speedExpr = "q.get_ride_stats('SPEED', 'LIQUID', 2.0, 0.5)".asExpression()
+        private set
+
+    var accelerationExpr = "q.get_ride_stats('ACCELERATION', 'LIQUID', 0.5, 0.05)".asExpression()
+        private set
+
+    var sprintSpeedModifier = "1.5".asExpression()
+        private set
+
+    var sprintFovModifier = "1.2".asExpression()
+
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(key)
         buffer.writeRidingStats(stats)
@@ -379,6 +420,7 @@ class BoatState : RidingBehaviourState() {
     val deltaRotation = ridingState(0.0, Side.CLIENT)
     val jumpBuffer = ridingState(-1, Side.CLIENT)
     val staminaBuffer = ridingState(0, Side.CLIENT)
+    val isVehicleSprinting = ridingState(false, Side.CLIENT)
 
     override fun copy() = BoatState().also {
         it.deltaRotation.set(deltaRotation.get(), true)
@@ -386,6 +428,7 @@ class BoatState : RidingBehaviourState() {
         it.stamina.set(stamina.get(), true)
         it.jumpBuffer.set(jumpBuffer.get(), true)
         it.staminaBuffer.set(staminaBuffer.get(), true)
+        it.isVehicleSprinting.set(isVehicleSprinting.get(), true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {

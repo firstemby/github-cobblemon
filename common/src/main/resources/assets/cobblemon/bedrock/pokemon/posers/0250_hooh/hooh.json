@@ -4,6 +4,15 @@
   "profileScale": 0.42,
   "profileTranslation": [-0.04, 1.11, 0],
   "rootBone": "ho_oh",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.5, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 1, 3],
+    "seat_1_reverse": [0, 1, 3],
+    "seat_2": [0, 1, 3],
+    "seat_2_reverse": [0, 1, 3]
+  },
   "animations": {},
   "poses": {
     "standing": {

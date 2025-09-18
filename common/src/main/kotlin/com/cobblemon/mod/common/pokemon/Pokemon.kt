@@ -644,7 +644,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     /**
-     * Whether this Pokémon's held item was given by its owner.
+     * Whether this Pokémon's held item can be dropped by its AI.
      */
     internal var canDropHeldItem: Boolean = false
         get() = field || heldItem.isEmpty
@@ -677,7 +677,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
-        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentPreEvent(this, level, position)) {
+        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentEvent.Pre(this, level, position)) {
             SeasonFeatureHandler.updateSeason(this, level, position.toBlockPos())
             val entity = PokemonEntity(level, this)
             illusion?.start(entity)
@@ -786,7 +786,7 @@ open class Pokemon : ShowdownIdentifiable {
                     it.phasingTargetId = -1
                     it.beamMode = 0
                     future.complete(it)
-                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, position, it))
                     if (doCry) {
                         it.cry()
                     }
@@ -843,7 +843,7 @@ open class Pokemon : ShowdownIdentifiable {
 
             afterOnServer(seconds = SEND_OUT_DURATION) {
                 future.complete(it)
-                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, currentPosition, it))
                 if (doCry) {
                     it.cry()
                 }
@@ -855,10 +855,12 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun recall() {
-        CobblemonEvents.POKEMON_RECALLED.post(PokemonRecalledEvent(this, this.entity))
-        val state = this.state as? ActivePokemonState
-        this.state = InactivePokemonState()
-        state?.recall()
+        CobblemonEvents.POKEMON_RECALL_PRE.postThen(PokemonRecallEvent.Pre(this, this.entity)) {
+            val state = this.state as? ActivePokemonState
+            this.state = InactivePokemonState()
+            state?.recall()
+            CobblemonEvents.POKEMON_RECALL_POST.post(PokemonRecallEvent.Post(this, this.entity))
+        }
     }
 
     fun tryRecallWithAnimation() {
@@ -1922,7 +1924,7 @@ open class Pokemon : ShowdownIdentifiable {
         val previousLevelUpMoves = form.moves.getLevelUpMovesUpTo(oldLevel)
         var appliedXP = xp
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_PRE.postThen(
-            event = ExperienceGainedPreEvent(this, source, appliedXP),
+            event = ExperienceGainedEvent.Pre(this, source, appliedXP),
             ifSucceeded = { appliedXP = it.experience},
             ifCanceled = {
                 return AddExperienceResult(level, level, emptySet(), 0)
@@ -1949,7 +1951,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_POST.post(
-            ExperienceGainedPostEvent(this, source, appliedXP, oldLevel, newLevel, differences),
+            ExperienceGainedEvent.Post(this, source, appliedXP, oldLevel, newLevel, differences),
             then = { return AddExperienceResult(oldLevel, newLevel, it.learnedMoves, appliedXP) }
         )
 

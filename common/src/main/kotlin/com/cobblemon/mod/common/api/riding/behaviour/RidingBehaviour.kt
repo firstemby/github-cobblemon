@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
+import kotlin.math.abs
 
 /**
  * Represents the behaviour of a Pokemon when being ridden.
@@ -113,7 +114,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
          *  and 1.0 represents x is at or above it.
          */
         internal fun scaleToRange(x: Double, min: Double, max: Double): Double {
-            return ((x - min) / (max - min)).coerceIn(0.0, 1.0)
+            return if ((max - min) < 0.01) 0.0 else ((x - min) / (max - min)).coerceIn(0.0, 1.0)
         }
     }
 }

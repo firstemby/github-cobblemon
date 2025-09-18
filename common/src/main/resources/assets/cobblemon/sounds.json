@@ -1226,92 +1226,104 @@
       { "name": "cobblemon:shiny/wild_shiny_ambient_chime_4", "volume": 0.8, "attenuation_distance": 128.0 }
     ]
   },
+  "animation.chitin.wing_flap.large": {
+    "sounds": [
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_7", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_large_8", "volume": 0.25 }
+    ]
+  },
   "animation.chitin.wing_flap.medium": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_1", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_2", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_3", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_4", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_5", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_6", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_7", "volume": 0.1 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_8", "volume": 0.1 }
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_1", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_2", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_3", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_4", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_5", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_6", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_7", "volume": 0.04 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_medium_8", "volume": 0.04 }
     ]
   },
   "animation.chitin.wing_flap.small": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_1", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_2", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_3", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_4", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_5", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_6", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_7", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_8", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_9", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_10", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_11", "volume": 0.08 },
-      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_12", "volume": 0.08 }
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_1", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_2", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_3", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_4", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_5", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_6", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_7", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_8", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_9", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_10", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_11", "volume": 0.02 },
+      { "name": "cobblemon:animation/wings/chitin_wing_flap_small_12", "volume": 0.02 }
     ]
   },
   "animation.leather.wing_flap.medium": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_1", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_2", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_3", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_4", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_5", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_6", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_8", "volume": 0.3 }
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_7", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_medium_8", "volume": 0.25 }
     ]
   },
   "animation.leather.wing_flap.small": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_1", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_2", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_3", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_4", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_5", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_6", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.15 },
-      { "name": "cobblemon:animation/wings/leather_wing_flap_small_8", "volume": 0.15 }
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_1", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_2", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_3", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_4", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_5", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_6", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_7", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/leather_wing_flap_small_8", "volume": 0.05 }
     ]
   },
   "animation.plumage.wing_flap.medium": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_1", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_2", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_3", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_4", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_5", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_6", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_8", "volume": 0.3 }
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_1", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_2", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_3", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_4", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_5", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_6", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_7", "volume": 0.25 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_medium_8", "volume": 0.25 }
     ]
   },
   "animation.plumage.wing_flap.small": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_1", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_2", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_3", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_4", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_5", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_6", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.25 },
-      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_8", "volume": 0.25 }
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_1", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_2", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_3", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_4", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_5", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_6", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_7", "volume": 0.05 },
+      { "name": "cobblemon:animation/wings/plumage_wing_flap_small_8", "volume": 0.05 }
     ]
   },
   "animation.steel.wing_flap.large": {
     "sounds": [
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_1", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_2", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_3", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_4", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_5", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_6", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_7", "volume": 0.3 },
-      { "name": "cobblemon:animation/wings/steel_wing_flap_large_8", "volume": 0.3 }
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_1", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_2", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_3", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_4", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_5", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_6", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_7", "volume": 0.2 },
+      { "name": "cobblemon:animation/wings/steel_wing_flap_large_8", "volume": 0.2 }
     ]
   },
   "animation.steel.wing_flap.medium": {
@@ -1326,12 +1338,23 @@
       { "name": "cobblemon:animation/wings/steel_wing_flap_medium_8", "volume": 0.25 }
     ]
   },
+  "ride.loop.wind": {
+    "sounds": [
+      {
+        "name": "cobblemon:ride/loop/wind_loop",
+        "stream": true,
+        "attenuation_distance": 48.0,
+        "volume": 0.1
+      }
+    ]
+  },
   "ride.loop.leather": {
     "sounds": [
       {
         "name": "cobblemon:ride/loop/leather_flight_loop",
         "stream": true,
-        "attenuation_distance": 48.0
+        "attenuation_distance": 48.0,
+        "volume": 0.2
       }
     ]
   },
@@ -1341,7 +1364,7 @@
         "name": "cobblemon:ride/loop/plumage_flight_loop",
         "stream": true,
         "attenuation_distance": 48.0,
-        "volume": 0.25
+        "volume": 0.2
       }
     ]
   },
@@ -1349,7 +1372,9 @@
     "sounds": [
       {
         "name": "cobblemon:ride/loop/saucer_flight_loop",
-        "attenuation_distance": 64.0
+        "stream": true,
+        "attenuation_distance": 48.0,
+        "volume": 0.2
       }
     ]
   },
@@ -1357,7 +1382,9 @@
     "sounds": [
       {
         "name": "cobblemon:ride/loop/rocket_flight_loop",
-        "attenuation_distance": 48.0
+        "stream": true,
+        "attenuation_distance": 48.0,
+        "volume": 0.4
       }
     ]
   },

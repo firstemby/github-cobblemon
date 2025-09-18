@@ -49,10 +49,9 @@ class AbilityTemplate(
 
         @JvmStatic
         val CODEC: Codec<AbilityTemplate> = CodecUtils.createByStringCodec(
-            Abilities::get,
+            Abilities::getOrDummy,
             AbilityTemplate::name
         ) { id -> "No ability for ID $id" }
-
     }
 
 }

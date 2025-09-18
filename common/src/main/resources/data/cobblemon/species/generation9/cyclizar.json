@@ -44,67 +44,124 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.3,
     "height": 1.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.3
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can jump",
-        "ranges": {
-          "LAND": "50-100"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint",
-        "ranges": {
-          "LAND": "50-100"
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-85",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "55-85",
+          "STAMINA": "30-65"
         }
       }
-    },
-    "behaviour": {
-      "key": "cobblemon:land/vehicle"
     },
     "seats": [
       {
         "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
-        }
-      },
-      {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 1
-        }
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.030879233,
+              "y": -1.2217013,
+              "z": 0.41698992
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.030879233,
+              "y": -1.2217013,
+              "z": 0.41698992
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2448049,
+              "z": 0.4476499
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
       }
     ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cyclizar",
+          "tier": 1
+        },
+        {
+          "pokemon": "koraidon",
+          "tier": 2
+        },
+        {
+          "pokemon": "miraidon",
+          "tier": 2
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,
@@ -204,24 +261,5 @@
     "tutor:uproar",
     "tutor:wildcharge"
   ],
-  "evolutions": [],
-  "behaviour": {
-    "herd": {
-      "maxSize": "2",
-      "toleratedLeaders": [
-        {
-          "pokemon": "cyclizar",
-          "tier": 1
-        },
-        {
-          "pokemon": "koraidon",
-          "tier": 2
-        },
-        {
-          "pokemon": "miraidon",
-          "tier": 2
-        }
-      ]
-    }
-  }
+  "evolutions": []
 }

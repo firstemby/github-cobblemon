@@ -13,13 +13,13 @@
     },
     "has_original_recipe": {
       "conditions": {
-        "recipe": "minecraft:rabbit_stew_in_red_mushroom"
+        "recipe": "minecraft:rabbit_stew_from_red_mushroom"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:campfire_pot/rabbit_stew_in_red_mushroom_in_campfire_pot"
+        "recipe": "cobblemon:campfire_pot/rabbit_stew_from_red_mushroom_in_campfire_pot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -33,7 +33,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:campfire_pot/rabbit_stew_in_red_mushroom_in_campfire_pot"
+      "cobblemon:campfire_pot/rabbit_stew_from_red_mushroom_in_campfire_pot"
     ]
   }
 }
