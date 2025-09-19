@@ -100,9 +100,11 @@
     "invoker.BooleanRuleInvoker",
     "invoker.DoorBlockInvoker",
     "invoker.FireBlockInvoker",
+    "invoker.IntegerRuleInvoker",
     "invoker.PressurePlateBlockInvoker",
     "invoker.StairsBlockInvoker",
     "invoker.TrapdoorBlockInvoker",
-    "pokeball.ThrownEntityMixin"
+    "pokeball.ProjectileMixin",
+    "pokeball.ThrowableProjectileMixin"
   ]
 }

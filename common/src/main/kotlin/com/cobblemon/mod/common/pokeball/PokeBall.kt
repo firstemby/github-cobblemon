@@ -36,17 +36,21 @@ open class PokeBall(
     val name: ResourceLocation,
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
-    val waterDragValue: Float,
+    val waterDragValue: Double,
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
-    val ancient: Boolean
+    val ancient: Boolean,
+    val maxBounces: Int,
+    val bouncyness: Double,
 ) {
     val struct = QueryStruct(hashMapOf())
         .addFunction("name") { StringValue(name.toString()) }
         .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
         .addFunction("throw_power") { DoubleValue(throwPower) }
         .addFunction("is_ancient") { DoubleValue(ancient) }
+        .addFunction("max_bounces") { DoubleValue(maxBounces) }
+        .addFunction("bouncyness") { DoubleValue(bouncyness) }
 //        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry

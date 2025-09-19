@@ -47,7 +47,8 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     @JvmField
     val EMPTY_POKEBALL: EntityType<EmptyPokeBallEntity> = this.create(
         EMPTY_POKEBALL_KEY.path,
-        EntityType.Builder.of({ _, world -> EmptyPokeBallEntity(PokeBalls.POKE_BALL, world) }, MobCategory.MISC)
+        EntityType.Builder.of(::EmptyPokeBallEntity, MobCategory.MISC)
+            .sized(EmptyPokeBallEntity.DIMENSIONS.width, EmptyPokeBallEntity.DIMENSIONS.height)
             .build(EMPTY_POKEBALL_KEY.toString())
     )
 

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.world.gamerules
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.mixin.invoker.BooleanRuleInvoker
+import com.cobblemon.mod.common.mixin.invoker.IntegerRuleInvoker
 import net.minecraft.world.level.GameRules
 
 object CobblemonGameRules {
@@ -27,4 +28,12 @@ object CobblemonGameRules {
     @JvmField
     val HEALERS_HEAL_PC: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("healersHealPC", GameRules.Category.MISC, BooleanRuleInvoker.`cobblemon$create`(false))
 
+    @JvmField
+    val BOUNCY_BOUNCYNESS: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyElasticity", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(60))
+    @JvmField
+    val BOUNCY_WATER_SKIP_FACTOR: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyWaterSkipAngle", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(40))
+    @JvmField
+    val BOUNCY_BOUNCE_COUNT: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyBounceCount", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(0))
+    @JvmField
+    val BOUNCY_BOUNCE_DRAG: GameRules.Key<GameRules.IntegerValue> = Cobblemon.implementation.registerGameRule("bouncyBounceDrag", GameRules.Category.MISC, IntegerRuleInvoker.`cobblemon$create`(40))
 }

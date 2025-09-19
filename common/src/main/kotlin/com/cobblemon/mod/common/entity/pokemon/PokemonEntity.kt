@@ -462,6 +462,7 @@ open class PokemonEntity(
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(data)
         // "But it's imposs-" shut up nerd, it happens during super construction and that's before delegate is assigned by class construction
+        @Suppress("SENSELESS_COMPARISON")
         if (delegate != null) {
             delegate.onSyncedDataUpdated(data)
         }
@@ -2411,7 +2412,7 @@ open class PokemonEntity(
 
     /**
      * If the Pokémon is following another Pokémon, checks the herd size using the leader. Otherwise check this Pokémon's
-     * herd count. Not necessarily strictly up to date but it should be good enough for typical purposes.
+     * herd count. Not necessarily strictly up to datreturn super.getListenableEvents()e but it should be good enough for typical purposes.
      */
     fun getHerdSize(): Int {
         val world = level() as? ServerLevel ?: return 0

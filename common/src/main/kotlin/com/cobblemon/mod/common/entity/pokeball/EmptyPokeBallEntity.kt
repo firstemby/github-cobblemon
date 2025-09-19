@@ -69,14 +69,18 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.ClipContext.Block
+import net.minecraft.world.level.ClipContext.Fluid
 import net.minecraft.world.level.Level
-import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.EntityHitResult
-import net.minecraft.world.phys.HitResult
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.*
+import org.joml.Quaterniond
+import org.joml.Vector3d
 import java.util.concurrent.CompletableFuture
+import java.util.function.Predicate
+import kotlin.math.*
 
-class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragModifier, Schedulable {
+class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, EmptyPokeballMarker, Schedulable {
     enum class CaptureState {
         NOT,
         HIT,
@@ -93,11 +97,84 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         val HIT_VELOCITY = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, Vec3DataSerializer)
         val SHAKE = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.BOOLEAN)
         val ASPECTS = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, StringSetDataSerializer)
+        val BOUNCES = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
+
+        // GAMERULE CONFIGURABLE
+        val MAX_BOUNCES = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
+        val BOUNCYNESS = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
+        val BOUNCE_DRAG = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
+        val WATER_SKIP_FACTOR = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.INT)
+        // END GAMERULE CONFIGURABLE
 
         const val SECONDS_BETWEEN_SHAKES = 1.25F
         const val SECONDS_BEFORE_SHAKE = 1F
 
         val DIMENSIONS = EntityDimensions.fixed(0.4F, 0.4F)
+
+        /**
+         * Calculate an aim vector with a given miss effect.
+         *
+         * @param missMagnitudeRad How far away from the aimed at point the output vector is, in radians. A value of 0 will result in a perfectly accurate throw, a value of 2π will result in a throw going exactly backwards.
+         * @param missAngleRad The point on the circle spanned by [missMagnitudeRad] which the resulting miss vector will point at, given in radian. Since the miss vector needs to be rotated which direction a given number points at from the perspective of the player depends on their orientation
+         */
+        fun getAimVector(playerAimX: Double, playerAimY: Double, playerAimZ: Double, missMagnitudeRad: Double, missAngleRad: Double): Vec3 {
+            // We want to sample a uniform vector out of the cone of potential misses. We can't just sample a rotation
+            // angle from [0, 360°] and a radius from [0, $inaccuracy] since at smaller radii the points would be much
+            // closer to each other and thus much more frequent. The mathematical trick we use comes from the fact that
+            // for a sphere all slices of equal height have an equal surface area. So we instead sample a value for a
+            // slice height and a rotation angle on the resulting circle, giving us uniformly distributed outputs.
+            // This means given a maximum miss angle θ, i.e. the maximum angle the adjusted vector will have from the
+            // player's aim we first calculate the possible range for our height: [cos(θ), 1]
+            // Given this range we then sample two values, z from [cos(θ), 1] and φ from [0, 2π] and calculate an offset
+            // vector given those values.
+            // Finally that offset vector is rotated to use the player aim as unit axis instead of [0, 0, 1], giving us
+            // our final miss vector to output.
+
+            val Z = cos(missMagnitudeRad)
+            val sqrtZ = sqrt(1.0 - Z.pow(2))
+
+            val miss = Vector3d(
+                sqrtZ * cos(missAngleRad),
+                sqrtZ * sin(missAngleRad),
+                Z
+            )
+
+            val rotAxis = Vector3d(0.0, 0.0, 1.0)
+            val rotAngle = acos(rotAxis.dot(playerAimX, playerAimY, playerAimZ))
+            rotAxis.cross(playerAimX, playerAimY, playerAimZ)
+
+            return Quaterniond()
+                .fromAxisAngleRad(rotAxis, rotAngle)
+                .transform(miss)
+                .let { Vec3(it.x, it.y, it.z) }
+        }
+
+        fun getEntityHitResult(
+            level: Level,
+            projectile: Entity,
+            startVec: Vec3,
+            endVec: Vec3,
+            boundingBox: AABB,
+            filter: Predicate<Entity>,
+            inflationAmount: Double
+        ): EntityHitResult? {
+            var entity: Pair<Entity, Vec3>? = null
+
+            level.getEntities(projectile, boundingBox, filter).forEach {
+                val aABB = it.boundingBox.inflate(inflationAmount)
+                val optional = aABB.clip(startVec, endVec)
+                if (optional.isPresent) {
+                    val vec = optional.orElseThrow()
+                    val distanceToEntity = startVec.distanceToSqr(vec)
+                    if (distanceToEntity < Double.MAX_VALUE) {
+                        entity = it to vec
+                        return@forEach
+                    }
+                }
+            }
+
+            return entity?.let { (entity, location) -> EntityHitResult(entity, location) }
+        }
     }
 
     val dataTrackerEmitter = SimpleObservable<EntityDataAccessor<*>>()
@@ -111,6 +188,24 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     var aspects: Set<String>
         get() = entityData.get(ASPECTS)
         set(value) { entityData.set(ASPECTS, value) }
+    var bounces: Int
+        get() = entityData.get(BOUNCES)
+        set(value) { entityData.set(BOUNCES, value) }
+
+    // GAMERULE CONFIGURABLE
+    var maxBounces: Int
+        get() = entityData.get(MAX_BOUNCES)
+        set(value) { entityData.set(MAX_BOUNCES, value) }
+    var bouncynessPercent: Int
+        get() = entityData.get(BOUNCYNESS)
+        set(value) { entityData.set(BOUNCYNESS, value) }
+    var bounceDragPercent: Int
+        get() = entityData.get(BOUNCE_DRAG)
+        set(value) { entityData.set(BOUNCE_DRAG, value) }
+    var waterSkipFactor: Int
+        get() = entityData.get(WATER_SKIP_FACTOR)
+        set(value) { entityData.set(WATER_SKIP_FACTOR, value) }
+    // END GAMERULE CONFIGURABLE
 
     override val delegate = if (level().isClientSide) {
         EmptyPokeBallClientDelegate()
@@ -132,11 +227,20 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         builder.define(HIT_TARGET_POSITION, Vec3.ZERO)
         builder.define(HIT_VELOCITY, Vec3.ZERO)
         builder.define(SHAKE, false)
+        builder.define(BOUNCES, 0)
+
+        // GAMERULE CONFIGURABLE
+        builder.define(MAX_BOUNCES, 0)
+        builder.define(BOUNCYNESS, 0)
+        builder.define(BOUNCE_DRAG, 0)
+        builder.define(WATER_SKIP_FACTOR, 0)
+        // END GAMERULE CONFIGURABLE
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(data)
         // See what I said about this in PokemonEntity
+        @Suppress("SENSELESS_COMPARISON")
         if (delegate != null) {
             delegate.onSyncedDataUpdated(data)
         }
@@ -158,7 +262,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         addPosableFunctions(struct)
     }
 
-    constructor(world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
+    constructor(entityType: EntityType<out EmptyPokeBallEntity> = EMPTY_POKEBALL, world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world, entityType = entityType)
     constructor(
         pokeBall: PokeBall,
         world: Level,
@@ -178,20 +282,174 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
 
+    //fun getMaxBounces(): Int = pokeBall.maxBounces
+
+    override fun isPushedByFluid(): Boolean = false
+
+    override fun getMovementToShoot(x: Double, y: Double, z: Double, velocity: Float, inaccuracy: Float): Vec3? {
+        // We multiply the inaccuracy value by 0.02 to have rough equivalence to vanilla, meaning an inaccuracy of
+        // `1.0f` passed to getMovementToShoot will give you about as much of an inaccurate throw as a 1.0f would for a
+        // bow or snowball.
+        val missMagnitudeRad: Double = inaccuracy * 0.02 * this.random.nextDouble()
+        val missAngleRad: Double = this.random.nextDouble() * 2 * Math.PI
+
+        // Also make velocity inaccurate by a linear factor. This will mean it becomes much more impactful on weak throws.
+        val adjustedVelocity = velocity + 0.02 * (this.random.nextDouble() - this.random.nextDouble())
+
+        return getAimVector(x, y, z, missMagnitudeRad, missAngleRad).scale(adjustedVelocity)
+    }
+
+    fun moveWithCollision() {
+        /* ==============================
+         * Gamerule configurables
+         * ============================== */
+        // The game rule bouncyWaterSkipAngle sets the default angle below which balls will skip.
+        // Setting it to 90 will make all balls (minus dive ball) skip all the time, setting it to 0 will make no balls skip ever
+        val waterSkipDegree = if (pokeBall.waterDragValue >= 0.99) {
+            // 1 means never skip
+            1.0
+        } else {
+            // 1 = cos(0), 0 = cos(90)
+            cos(waterSkipFactor * (kotlin.math.PI / 180.0))
+        }
+        // bounce elasticity. Default is 60 which means a ball will bounce back with 60% of the impact momentum
+        val bouncyness = bouncynessPercent / 100.0
+        // Water skip elasticity. Things that skip well retain more of their vertical movement when skipping
+        // The default ball has a water drag of 0.8, an extremely skippy ball has one of 0.6. This mans that a normal
+        // ball applies 80% of the elasticity reduction on water bounces while a skippy ball applies 60%
+        val water_bouncyness = 1.0 - (pokeBall.waterDragValue * bouncyness)
+        // Ground bounce drag. Set to 0 to lose no speed on bounce other than air friction, set to 100 to lose all speed immediately.
+        val bounce_drag = 1.0 - (bounceDragPercent / 100.0)
+        // Water skip drag. Skippy balls apply 30% of the configured bounce drag on skip, normal ones 40%
+        val water_bounce_drag = 1.0 - (pokeBall.waterDragValue * bounceDragPercent / 200.0)
+        /* ==============================
+         * END Gamerule configurables END
+         * ============================== */
+
+
+        // Account for floating point inaccuracies, always.
+        val FLOAT_MARGIN = 0.01
+        val MIN_MOVEMENT = 0.1
+
+        val entityFilter = this::canHitEntity
+        val entityHitMargin = 0.3
+
+        val deltaMovementSqr = this.deltaMovement.lengthSqr()
+        // The entire movement budget we have this tick (done as squared because it's cheaper)
+        var remainingMovementSqr = this.deltaMovement.lengthSqr()
+
+        var cumulativeBounceDrag = Vec3(1.0, 1.0, 1.0)
+
+        var isInWaterSubtick = false
+
+        while (remainingMovementSqr > FLOAT_MARGIN) {
+            /* This while loop checks ball movement in segments:
+             * On the first run through moveRatio will be 1.0 and all isBounce* will be false, so movement will be
+             * this.deltaMovement. That movement is then checked for collisions. If no, we're immediately done here as hitResult.location will be set to the end point we wanted to go anyway.
+             * If yes we perform the bounce:
+             *   - Set the isBounce* variables which are tracking which direction the ball should en up flying *after the whole tick*.
+             *   - Reduce the cummulative drag (value: [0.0; 1.0]) depending on the nature of the bounce.
+             * Lastly, set our new position to the position after a bounce and reduce our movement budget according to the current segment
+             * If we have movement budget left (yes in case of a bounce, no in case of a miss), do more segmented collision checks.
+             */
+            val moveRatio = remainingMovementSqr / deltaMovementSqr
+            val movement = this.deltaMovement
+                .multiply(cumulativeBounceDrag)
+                .scale(moveRatio)
+
+            val fluidFilter = if (this.isInWater || isInWaterSubtick) Fluid.NONE else Fluid.WATER
+            val hitResult = this.level().clip(ClipContext(this.position(), this.position().add(movement), Block.COLLIDER, fluidFilter, this))
+
+            val bounceSound = if (hitResult.type != HitResult.Type.MISS) {
+                val hitBlock = this.level().getBlockState(hitResult.blockPos)
+
+                // Normal vector of the surface we bounce off
+                val normal = hitResult.direction.normal
+
+                if (!hitBlock.fluidState.isEmpty) {
+                    // We calculate the bounce angle using normalised vectors, so this will be a value
+                    // between 0 (ball is moving parallel to the water) and 1 (ball is hitting the water straight on)
+                    val bounceAngle = abs(movement.normalize().dot(Vec3(normal.x.toDouble(), normal.y.toDouble(), normal.z.toDouble())))
+
+                    // The theory is that a ball that has no water drag (waterDragValue = 1.0) moves through water like
+                    // air so it physically can't skip. A ball that moves very slow in water skips much easier.
+                    // `pow(3)` serves as a good curve since it keeps the [0; 1] output range but most drag values will
+                    // be much closer to 1 so should be easier to skip (e.g. 0.8^3 = 0.512 so about 45° or sharper angles will skip)
+                    val targetAngle = 1.0 - waterSkipDegree
+
+                    // At a flat enough angle (we're comparing against the normal so > is correct) balls bounce off of water.
+                    // This does not happen if the ball has no remaining bounces so that a ball will never break on the
+                    // water surface but instead submerge
+                    if (bounceAngle < targetAngle && deltaMovementSqr > 0.4 && bounces < maxBounces) {
+                        bounces++
+                        cumulativeBounceDrag = cumulativeBounceDrag
+                            .multiply(
+                                if (normal.x != 0) { -water_bouncyness } else { water_bounce_drag },
+                                if (normal.y != 0) { -water_bouncyness } else { water_bounce_drag },
+                                if (normal.z != 0) { -water_bouncyness } else { water_bounce_drag },
+                            )
+                    } else {
+                        isInWaterSubtick = true
+                    }
+                } else {
+                    bounces++
+                    cumulativeBounceDrag = cumulativeBounceDrag
+                        // The effect vector a bounce with this normal has. Note that *negative* bouncyness is taken here; if we
+                        // bounce off e.g. the ground we were going down before (y is negative) but are going *up* after (y is positive),
+                        // although with less upward speed than we had downward speed (bouncyness is less than 1.0)
+                        .multiply(
+                            if (normal.x != 0) { -bouncyness } else { bounce_drag },
+                            if (normal.y != 0) { -bouncyness } else { bounce_drag },
+                            if (normal.z != 0) { -bouncyness } else { bounce_drag },
+                        )
+                }
+
+                if (captureState == CaptureState.NOT) {
+                    hitBlock.soundType.hitSound
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+
+            val entityHitResult = getEntityHitResult(this.level(), this, this.position(), hitResult.location, this.boundingBox.expandTowards(this.deltaMovement).inflate(1.0), entityFilter, entityHitMargin)
+
+            // The actual hit that happened
+            val effectiveHitResult = entityHitResult ?: hitResult
+
+            remainingMovementSqr = if (effectiveHitResult.type != HitResult.Type.MISS) {
+                remainingMovementSqr - this.position().distanceToSqr(effectiveHitResult.location)
+            } else {
+                0.0
+            }
+
+            val speedEstimateAfterBounce = deltaMovementSqr * cumulativeBounceDrag.lengthSqr()
+
+            if (bounces > maxBounces || effectiveHitResult.type == HitResult.Type.ENTITY || speedEstimateAfterBounce < MIN_MOVEMENT) {
+                val deflection = this.hitTargetOrDeflectSelf(effectiveHitResult)
+                val entity = (effectiveHitResult as? EntityHitResult)?.entity
+                deflection.deflect(this, entity, this.random)
+            } else {
+                bounceSound?.let { playSound(it, 0.5f, 1f) }
+            }
+
+            this.setPos(effectiveHitResult.location)
+        }
+
+        this.deltaMovement = this.deltaMovement.multiply(cumulativeBounceDrag)
+    }
+
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
             if (level().isServerSide()) {
                 super.onHitBlock(hitResult)
                 level().sendParticlesServer(ParticleTypes.CLOUD, hitResult.location, 2, hitResult.location.subtract(position()).normalize().scale(-0.1), 0.0)
-                level().playSoundServer(position(), SoundEvents.WOOD_PLACE, pitch = 2.5F)
-                discard()
-                val player = this.owner as? ServerPlayer
-                if (player?.isCreative == false) {
-                    spawnAtLocation(defaultItem)
-                }
+                playSound(SoundEvents.WOOD_BREAK, 0.5f, 2.5f)
+                return drop()
             }
         } else {
-            setNoGravity(false)
+            isNoGravity = false
             deltaMovement = Vec3.ZERO
         }
     }
@@ -282,9 +540,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     private fun drop() {
         val owner = owner
         discard()
-        val player = owner?.takeIf { it is ServerPlayer } as? ServerPlayer
-        if (player?.isCreative != true) spawnAtLocation(defaultItem)
-        return
+        if (owner is ServerPlayer && !owner.hasInfiniteMaterials()) {
+            spawnAtLocation(defaultItem)?.deltaMovement = deltaMovement
+        }
     }
 
     // Poké Balls don't save to the world.
@@ -292,13 +550,28 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     override fun tick() {
         super.tick()
+        moveWithCollision()
+
+        // Do the things that [ThrowableProjectile.tick] does that we want but skipped because of our mixin
+        checkInsideBlocks()
+        updateRotation()
+        // We want water behaviour to be special so we don't do the this.isInWater() check the same way
+
+        val drag = if (this.isInWater) {
+            pokeBall.waterDragValue
+        } else {
+            0.99
+        }
+        this.deltaMovement = this.deltaMovement.scale(drag)
+
+        this.applyGravity()
+
         delegate.tick(this)
 
         if (level().isServerSide()) {
-        
 
             if (this.tickCount > 600 && this.capturingPokemon == null) {
-                this.remove(RemovalReason.DISCARDED)
+                drop()
             }
 
             if (owner == null || !owner!!.isAlive || (captureState != CaptureState.NOT && capturingPokemon?.isAlive != true)) {
@@ -544,7 +817,5 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 super.getAddEntityPacket(entityTrackerEntry) as ClientboundAddEntityPacket
             )
         ) as Packet<ClientGamePacketListener>
-
-    override fun waterDrag(): Float = this.pokeBall.waterDragValue
 
 }
