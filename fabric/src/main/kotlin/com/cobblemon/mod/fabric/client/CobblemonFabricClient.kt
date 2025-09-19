@@ -176,12 +176,14 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
             val poseStack = context.matrixStack()
             val multiBufferSource = context.consumers()
             val camera = context.camera()
+            val partialTicks = context.tickCounter().getGameTimeDeltaPartialTick(true)
 
             // Add a null check to ensure all required tools are present before rendering
             if (poseStack != null && multiBufferSource != null && camera != null) {
                 ObjectAvoidanceRenderer.render(
                     poseStack,
                     multiBufferSource,
+                    partialTicks,
                     camera
                 )
             }

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToTrackingPlayers
+import com.cobblemon.mod.common.client.render.debug.EntityDebugLine
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.debug.ClientboundUpdateObsAvoidPacket
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
@@ -48,6 +49,7 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     // TODO: might need to hold its own velocity so minecraft doesn't do its nonsense to it?
     // Can handle collisions ourselves as well
     var speed: Double? = null
+    var drawLines: MutableList<EntityDebugLine> = mutableListOf()
 
     // wander vars
     var currHorzWander = 0.0
@@ -55,6 +57,8 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
     val wanderDisp = 15.0 // The degrees of change from tick to tick in wander angle
 
     override fun tick() {
+        // Clear since the info is sent and is now stale
+        drawLines.clear()
 
         // Steering constants
         val orbitRadius = 16.0
@@ -62,10 +66,10 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         val arrivalRange = 2.0 // in blocks
 
         // Handle collision
-        if (pokemonEntity.horizontalCollision) {
-            pokemonEntity.setYRot(pokemonEntity.getYRot() + 180.0f)
-            this.speed = 0.1
-        }
+//        if (pokemonEntity.horizontalCollision) {
+//            pokemonEntity.setYRot(pokemonEntity.getYRot() + 180.0f)
+//            this.speed = 0.1
+//        }
 
         // Set this to ensure the flying pose is active
         pokemonEntity.setFlying(true)
@@ -81,22 +85,24 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         //forceRectBoundary(cubeCenter, cubeWidth, cubeHeight)
 
         // Apply boid forces
-        boid()
+        //boid()
 
         // Obstacle Avoidance
         val whiskerRange = 1.0
         val avoidanceAngle = 20.0 // x degrees to the left, right, up, and down
-        val obsAvoidForce = whisObsAvoid(whiskerRange, avoidanceAngle)
+        //val obsAvoidForce = whisObsAvoid(whiskerRange, avoidanceAngle)
 
-        if (obsAvoidForce != null) {
-            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
-        }
+//        if (obsAvoidForce != null) {
+//            pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(obsAvoidForce.scale(0.5))
+//        }
         wander()
 
 
         // Apply steering force to current movement
-//        val steerForce = steerToTargetForce(pokemonEntity.position().add(pokemonEntity.lookAngle), MAX_SPEED, MAX_FORCE)
-//        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
+        val dm = pokemonEntity.deltaMovement
+        val w_pos = pokemonEntity.position().add(Vec3(dm.x, 0.0, dm.z))
+        val steerForce = steerToTargetForce(w_pos, MAX_SPEED, MAX_FORCE)
+        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
 
         // Take note of speed again to avoid minecraft's friction logic
         speed = pokemonEntity.deltaMovement.length()
@@ -110,6 +116,11 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         ).normalize().scale(speed!!)
 
         orientEntityToTravel()
+
+        drawLines.add(EntityDebugLine(pokemonEntity.position(), pokemonEntity.position().add(0.0, 2.0, 0.0)))
+        if (drawLines.isNotEmpty()) {
+            sendPacketToTrackingPlayers(pokemonEntity, ClientboundUpdateObsAvoidPacket(pokemonEntity.id, drawLines))
+        }
     }
 
 
@@ -197,7 +208,9 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
                 )
             )
 
-            visualizeRay(level, startPos, endPos, hit.type != HitResult.Type.MISS)
+            // Add the whisker to the debug lines to be drawn
+            drawLines.add(EntityDebugLine(startPos, endPos, 1.0f, 0.0f, 0.0f))
+            //visualizeRay(level, startPos, endPos, hit.type != HitResult.Type.MISS)
 
             if (hit.type != HitResult.Type.MISS) {
                 // Get the aviodance vector as the vector from the block detection point
@@ -242,13 +255,6 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
         }
     }
 
-    private fun visualizeRay(level: Level, start: Vec3, end: Vec3, hit: Boolean) {
-        if (level !is ServerLevel) return
-        val linesList = listOf(Pair(start, end))
-        sendPacketToTrackingPlayers(pokemonEntity, ClientboundUpdateObsAvoidPacket(pokemonEntity.id, linesList))
-    }
-
-
     private fun wander() {
         // Wander behaviour
         /*************************************************************************************************************
@@ -257,34 +263,43 @@ class BoidsMoveControl(val pokemonEntity: PokemonEntity, val target: LivingEntit
          * https://slsdo.github.io/steering-behaviors/
          *************************************************************************************************************/
         // Get curr steering positions in left/right and up/down offsets
-        val normVec = pokemonEntity.deltaMovement.normalize()
+        val normVec = if(pokemonEntity.deltaMovement.lengthSqr() > 0.0001) {
+            pokemonEntity.lookAngle.normalize()
+        } else {
+            Vec3(
+                Random.nextDouble(-1.0, 1.0),
+                Random.nextDouble(-1.0, 1.0),
+                Random.nextDouble(-1.0, 1.0)
+            ).normalize()
+        }
         val currPitch = normVec.y //Not really the entity pitch butttt
         val yWanderOff = sin((this.currVertWander + currPitch).toRadians())
-        // Must be thought of as left right be
+        if (yWanderOff >= 0.5f || yWanderOff <= 0.5f) { //TODO: make this y limit class wide
+            yWanderOff.coerceIn(-0.5f, 0.5f)
+            this.currVertWander = 0.0
+        }
 
-        val currHeading = Mth.atan2(normVec.z, normVec.x).toDegrees() // Grab the current heading in degrees
-        val xWanderOff = cos((this.currHorzWander + currHeading).toRadians())
-        val zWanderOff = sin((this.currHorzWander + currHeading).toRadians())
+        val currHeading = pokemonEntity.yRot//Mth.atan2(normVec.z, normVec.x).toDegrees() // Grab the current heading in degrees
+        val xWanderOff = cos((currHeading + 20).toRadians())
+        val zWanderOff = sin((currHeading + 20).toRadians())
 
-        // Get point of the bird 1 tick in the future and have it be our circles' centerpoint
-        val wanderCenter = pokemonEntity.position().add(pokemonEntity.deltaMovement)
+        // Base the center off the current look angle
+        val wanderCenter = pokemonEntity.position().add(normVec.yRot(45.0f.toRadians()))
         // Get the wander circle's radius
-        // NOTE! doing it this way means the wander turn rate is smaller the slower you are moving.
-        // Actually that may not be true as then the circle would be closer and the angle then might
-        // be the same to the same degree on the circle.
-        val wanderRadius = pokemonEntity.deltaMovement.length()
-        val wanderOff = Vec3(xWanderOff.toDouble(), -yWanderOff.toDouble(), zWanderOff.toDouble()).scale(wanderRadius)
+        val wanderRadius = normVec.length()
+        val wanderOff = Vec3(xWanderOff.toDouble(), 0.0, zWanderOff.toDouble()).scale(wanderRadius)
 
         val wanderPoint = wanderCenter.add(wanderOff)
 
         // change wander points
-        val randVert = Random.nextDouble(-wanderDisp, wanderDisp)
+        val randVert = Random.nextDouble(-wanderDisp * 4, wanderDisp * 4)
         val randHorz = Random.nextDouble(-wanderDisp, wanderDisp)
         currVertWander = Mth.wrapDegrees(randVert + currVertWander)
         currHorzWander = Mth.wrapDegrees(randHorz + currHorzWander)
 
+        drawLines.add(EntityDebugLine(pokemonEntity.position(), wanderPoint, 1.0f, 0.0f, 0.0f, 1.0f))
         val wanderForce = steerToTargetForce(wanderPoint, MAX_SPEED, MAX_FORCE)
-        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce)
+        pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(wanderForce.scale(10.0))
     }
 
     private fun boid() {

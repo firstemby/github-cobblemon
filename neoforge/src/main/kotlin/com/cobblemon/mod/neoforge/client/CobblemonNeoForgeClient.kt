@@ -112,6 +112,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 ObjectAvoidanceRenderer.render(
                     event.poseStack,
                     Minecraft.getInstance().renderBuffers().bufferSource(),
+                    event.partialTick.gameTimeDeltaTicks,
                     event.camera
                 )
             }

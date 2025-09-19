@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.net.messages.client.debug
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.client.render.debug.EntityDebugLine
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readString
@@ -25,13 +26,12 @@ import net.minecraft.world.phys.Vec3
  * @author Jackson
  * @since September 15th, 2025
  */
-class ClientboundUpdateObsAvoidPacket(val entityId: Int, val lines: List<Pair<Vec3, Vec3>>) : NetworkPacket<ClientboundUpdateObsAvoidPacket> {
+class ClientboundUpdateObsAvoidPacket(val entityId: Int, val lines: List<EntityDebugLine>) : NetworkPacket<ClientboundUpdateObsAvoidPacket> {
     override val id: ResourceLocation = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeInt(entityId)
         buffer.writeCollection(lines) { _, linePair ->
-            buffer.writeVec3(linePair.first)
-            buffer.writeVec3(linePair.second)
+            linePair.encode(buffer)
         }
     }
 
@@ -41,9 +41,7 @@ class ClientboundUpdateObsAvoidPacket(val entityId: Int, val lines: List<Pair<Ve
         fun decode(buffer: RegistryFriendlyByteBuf): ClientboundUpdateObsAvoidPacket {
             val entityId = buffer.readInt()
             val lines = buffer.readList { buf ->
-                val start = buf.readVec3()
-                val end = buf.readVec3()
-                Pair(start, end)
+                EntityDebugLine.decode(buf as RegistryFriendlyByteBuf)
             }
             return ClientboundUpdateObsAvoidPacket(entityId, lines)
         }
