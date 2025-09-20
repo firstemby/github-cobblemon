@@ -558,6 +558,8 @@ class HorseSettings : RidingBehaviourSettings {
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
         stats.putAll(buffer.readRidingStats())
+
+
         rideSounds = RideSoundSettingsList.decode(buffer)
         speedExpr = buffer.readExpression()
         accelerationExpr = buffer.readExpression()

@@ -19,10 +19,8 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.RunStrategy
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartSettings
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.ClimbBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.JsonDeserializationContext
@@ -50,6 +48,7 @@ object RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings
         MinekartBehaviour.KEY to MinekartSettings::class.java,
         HoverBehaviour.KEY to HoverSettings::class.java,
         RocketBehaviour.KEY to RocketSettings::class.java,
+        ClimbBehaviour.KEY to ClimbSettings::class.java,
         CompositeBehaviour.KEY to CompositeSettings::class.java,
 
         /*

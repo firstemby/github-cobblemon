@@ -219,7 +219,7 @@
   "riding": {
     "behaviours": {
       "LAND": {
-        "key": "cobblemon:land/horse",
+        "key": "cobblemon:land/climb",
         "stats": {
           "SPEED": "20-70",
           "ACCELERATION": "90-100",
