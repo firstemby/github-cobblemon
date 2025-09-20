@@ -1,0 +1,5 @@
+t.thrower = q.pokeball.thrower;
+t.thrower != 0 ? {
+  'Set the entity memory to try engaging the thrower in battle for the next 30 seconds';
+  q.entity.set_uuid_memory('cobblemon:recent_catch_attempt', t.thrower.uuid, 20 * 60);
+};

@@ -3757,6 +3757,9 @@
   "cobblemon.behaviour.pokemon_picks_up_items.name": "Picks Up Items",
   "cobblemon.behaviour.pokemon_picks_up_items.desc": "The Pokémon will pick up items that it cares about.",
 
+  "cobblemon.behaviour.pokemon_fites_thrower.name": "Fite Poké Ball Thrower",
+  "cobblemon.behaviour.pokemon_fites_thrower.desc": "Fite me, soy boy!",
+
   "npc.sacchi.name": "Professor Sacchi",
 
   "cobblemon.move.pound": "Pound",

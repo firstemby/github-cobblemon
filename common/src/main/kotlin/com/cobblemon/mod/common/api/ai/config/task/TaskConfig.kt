@@ -120,6 +120,7 @@ interface TaskConfig {
             cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
             cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
             cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
+            cobblemonResource("fite_me_soy_boy") to FiteThrowerTaskConfig::class.java,
         )
     }
 

@@ -201,7 +201,8 @@ object PokemonBrain {
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
         CobblemonMemories.ATTACK_TARGET_DATA,
-        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH,
+        CobblemonMemories.RECENT_CATCH_ATTEMPT
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
@@ -209,10 +210,12 @@ object PokemonBrain {
             add(0 toDF StayAfloatTask(0.8F))
         }
 
+        add(0 toDF FiteMeSoyBoyTask())
+
         if (pokemon.form.behaviour.combat.willDefendSelf) {
-            add(0 toDF GetAngryAtAttackerTask.create())
+            add(1 toDF GetAngryAtAttackerTask.create())
         } else {
-            add(0 toDF FleeFromAttackerTask.create("600".asExpression()))
+            add(1 toDF FleeFromAttackerTask.create("600".asExpression()))
         }
 
         add(0 toDF StopBeingAngryIfTargetDead.create())

@@ -13,6 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities.EMPTY_POKEBALL
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
@@ -72,8 +73,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
-import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import java.util.Optional
 import java.util.concurrent.CompletableFuture
 
 class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragModifier, Schedulable {
@@ -178,21 +179,30 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
 
+
     override fun onHitBlock(hitResult: BlockHitResult) {
-        if (captureState == CaptureState.NOT) {
-            if (level().isServerSide()) {
-                super.onHitBlock(hitResult)
-                level().sendParticlesServer(ParticleTypes.CLOUD, hitResult.location, 2, hitResult.location.subtract(position()).normalize().scale(-0.1), 0.0)
-                level().playSoundServer(position(), SoundEvents.WOOD_PLACE, pitch = 2.5F)
-                discard()
-                val player = this.owner as? ServerPlayer
-                if (player?.isCreative == false) {
-                    spawnAtLocation(defaultItem)
+        when (captureState) {
+            CaptureState.FALL -> {
+                if (level().isServerSide()) {
+                    beginCapture()
                 }
             }
-        } else {
-            setNoGravity(false)
-            deltaMovement = Vec3.ZERO
+            CaptureState.NOT -> {
+                if (level().isServerSide()) {
+                    super.onHitBlock(hitResult)
+                    level().sendParticlesServer(ParticleTypes.CLOUD, hitResult.location, 2, hitResult.location.subtract(position()).normalize().scale(-0.1), 0.0)
+                    level().playSoundServer(position(), SoundEvents.WOOD_PLACE, pitch = 2.5F)
+                    discard()
+                    val player = this.owner as? ServerPlayer
+                    if (player?.isCreative == false) {
+                        spawnAtLocation(defaultItem)
+                    }
+                }
+            }
+            else -> {
+                isNoGravity = false
+                deltaMovement = Vec3.ZERO
+            }
         }
     }
 
@@ -215,14 +225,13 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 }
 
                 if (battle != null && owner != null && owner is LivingEntity) {
-                    val throwerActor = battle.getActor(owner.uuid)
+                    val throwerActor = battle.getActor(owner.uuid) ?: run {
+                        owner.sendSystemMessage(lang("capture.in_battle", pokemonEntity.exposedSpecies.translatedName).red())
+                        return onHitEntity@drop()
+                    }
+
                     val hitActor = battle.actors.find { it.isForPokemon(pokemonEntity) }
                     val hitBattlePokemon = hitActor?.activePokemon?.find { it.battlePokemon?.effectedPokemon?.entity == pokemonEntity }
-
-                    if (throwerActor == null) {
-                        owner.sendSystemMessage(lang("capture.in_battle", pokemonEntity.exposedSpecies.translatedName).red())
-                        return drop()
-                    }
 
                     if (hitActor == null || hitBattlePokemon == null) {
                         return drop() // Weird, shouldn't be possible
@@ -253,6 +262,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                     throwerActor.forceChoose(ForcePassActionResponse())
                 } else if (pokemonEntity.isBusy) {
                     owner?.sendSystemMessage(lang("capture.busy", pokemonEntity.exposedSpecies.translatedName).red())
+                    return drop()
+                } else if (battle == null && pokemonEntity.brain.hasMemoryValue(CobblemonMemories.RECENT_CATCH_ATTEMPT)) {
+                    pokemonEntity.playAnimation("cry")
                     return drop()
                 } else if (owner is ServerPlayer && BattleRegistry.getBattleByParticipatingPlayer(owner) != null) {
                     owner.sendSystemMessage(lang("you_in_battle").red())
@@ -456,7 +468,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         after(seconds = 0.7F) {
             // Start beaming them up.
             deltaMovement = Vec3.ZERO
-            setNoGravity(true)
+            isNoGravity = true
             level().playSoundServer(position(), CobblemonSounds.POKE_BALL_RECALL, volume = 0.6F)
             pokemonEntity.beamMode = 3
         }
@@ -471,7 +483,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 // If it was still falling after a second and a half, just assume it's landed because we can't wait all day.
                 if (captureState == CaptureState.FALL) {
                     deltaMovement = Vec3.ZERO
-                    setNoGravity(true)
+                    isNoGravity = true
                     setOnGround(true)
                     beginCapture()
                 }
@@ -479,21 +491,14 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         }
     }
 
-    override fun onHit(hitResult: HitResult) {
-        super.onHit(hitResult)
-        if (captureState == CaptureState.FALL && hitResult.type == HitResult.Type.BLOCK) {
-            if (level().isServerSide()) {
-                beginCapture()
-            }
-        }
-    }
-
+    // We have hit the ground, time to stop falling and start shaking! Calculate capture.
     fun beginCapture() {
-        // We have hit the ground, time to stop falling and start shaking! Calculate capture.
-        capturingPokemon?.setPositionSafely(position())
+        val capturingPokemon = this.capturingPokemon ?: return
+        capturingPokemon.setPositionSafely(position())
+
         val thrower = owner as LivingEntity
-        val captureResult = Cobblemon.config.captureCalculator.processCapture(thrower, this, capturingPokemon!!).let {
-            val event = PokeBallCaptureCalculatedEvent(thrower = thrower, pokemonEntity = capturingPokemon!!, pokeBallEntity = this, captureResult = it)
+        val captureResult = Cobblemon.config.captureCalculator.processCapture(thrower, this, capturingPokemon).let {
+            val event = PokeBallCaptureCalculatedEvent(thrower = thrower, pokemonEntity = capturingPokemon, pokeBallEntity = this, captureResult = it)
             CobblemonEvents.POKE_BALL_CAPTURE_CALCULATED.post(event)
             event.captureResult
         }
@@ -530,11 +535,12 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
             }
             .build()
     }
+
     override fun getCurrentPoseType(): PoseType {
         return PoseType.NONE
     }
 
-    override fun canUsePortal(allowVehicles: Boolean) = false
+    override fun canUsePortal(allowVehicles: Boolean) = captureState == CaptureState.NOT
 
     override fun getAddEntityPacket(entityTrackerEntry: ServerEntity): Packet<ClientGamePacketListener> =
         ClientboundCustomPayloadPacket(
