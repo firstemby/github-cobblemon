@@ -161,13 +161,13 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         val vehicle = player.vehicle as PokemonEntity
         if (player != vehicle.controllingPassenger) {
             return true
-        }val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
-        val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
-        if (isAirRide && hasLandRide) {
-            return false
         }
-        else {
-            return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
+        val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
+        val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
+        return if (isAirRide && hasLandRide) {
+            false
+        } else {
+            vehicle.pokemon.uuid == selectedPartyPokemon.uuid
         }
     }
 
