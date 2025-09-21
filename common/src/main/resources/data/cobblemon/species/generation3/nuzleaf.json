@@ -44,10 +44,10 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 0.6,
-    "height": 1.2,
+    "width": 0.65,
+    "height": 1.3,
     "fixed": false
   },
   "drops": {
@@ -230,5 +230,20 @@
       "requirements": [],
       "requiredContext": "cobblemon:leaf_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nuzleaf",
+          "tier": 1
+        },
+        {
+          "pokemon": "shiftry",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

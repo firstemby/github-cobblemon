@@ -45,16 +45,19 @@
   "features": [
     "alolan"
   ],
-  "baseScale": 0.8,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1.1,
-    "height": 1.5,
+    "width": 1,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -228,6 +231,11 @@
       "maleRatio": 0.25,
       "height": 11,
       "weight": 199,
+      "baseScale": 0.65,
+      "hitbox": {
+        "width": 1,
+        "height": 2
+      },
       "pokedex": [
         "cobblemon.species.ninetales-alola.desc"
       ],
@@ -417,7 +425,12 @@
       ],
       "preEvolution": "vulpix alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "3"
+        }
+      }
     }
   ]
 }

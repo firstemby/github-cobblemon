@@ -257,5 +257,24 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "stantler",
+          "tier": 1
+        },
+        {
+          "pokemon": "wyrdeer",
+          "tier": 2
+        },
+        {
+          "pokemon": "sawsbuck",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

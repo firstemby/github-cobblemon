@@ -57,6 +57,43 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aipom",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansage",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "panpour",
+          "tier": 1
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 2
+        },
+        {
+          "pokemon": "simipour",
+          "tier": 2
+        },
+        {
+          "pokemon": "ambipom",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

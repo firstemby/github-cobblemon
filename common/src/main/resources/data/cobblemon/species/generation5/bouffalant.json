@@ -42,12 +42,126 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "standingEyeHeight": 0.45,
   "baseScale": 1,
   "hitbox": {
-    "width": 2.3,
     "height": 2.5,
-    "fixed": false
+    "fixed": false,
+    "width": 2.3
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.010004845,
+              "y": -2.5834131,
+              "z": -0.028971955
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.048964232,
+              "y": -2.5906749,
+              "z": -0.006100446
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06935923,
+              "y": -2.514327,
+              "z": -0.15220104
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06935923,
+              "y": -2.514327,
+              "z": -0.15220104
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.010004845,
+              "y": -2.5834131,
+              "z": -0.028971955
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.048964232,
+              "y": -2.5906749,
+              "z": -0.006100446
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.06935923,
+              "y": -2.514327,
+              "z": -0.15220104
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tauros",
+          "tier": 1
+        },
+        {
+          "pokemon": "bouffalant",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
   },
   "drops": {
     "amount": 8,
@@ -179,5 +293,6 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "standingEyeHeight": 0.45
 }

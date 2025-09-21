@@ -239,5 +239,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "medicham mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "medicham mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

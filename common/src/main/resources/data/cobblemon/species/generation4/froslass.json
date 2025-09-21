@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 478,
   "name": "Froslass",
   "primaryType": "ice",
@@ -58,6 +59,9 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {

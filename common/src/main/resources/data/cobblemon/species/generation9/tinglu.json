@@ -119,5 +119,6 @@
     "tutor:throatchop",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

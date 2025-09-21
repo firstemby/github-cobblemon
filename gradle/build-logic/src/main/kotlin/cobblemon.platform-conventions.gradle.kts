@@ -22,6 +22,17 @@ loom {
 //    clientConfig.programArg("--uuid=93e4e551-589a-41cb-ab2d-435266c8e035")
     val serverConfig = runConfigs.getByName("server")
     serverConfig.runDir = "runServer"
+
+    // Forge established the "main" name convention we're using here. Since NeoForged already defines it we must use
+    // `maybeCreate`
+    mods.maybeCreate("main")
+    // This configurations ensures that the code and resources in :common are available to the platform-specific builds
+    // in specifically the development mode. This code does nothing for the final packed jar since that one uses shadow
+    // bundling / jar-in-jar magic to make sure the platform-specific jar has all relevant files available.
+    mods.named("main") {
+        sourceSet(project.sourceSets.main.get())
+        sourceSet(project(":common").sourceSets.main.get())
+    }
 }
 
 tasks {

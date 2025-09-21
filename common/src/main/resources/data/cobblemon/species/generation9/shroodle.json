@@ -55,6 +55,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shroodle",
+          "tier": 1
+        },
+        {
+          "pokemon": "grafaiai",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

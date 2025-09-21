@@ -168,5 +168,16 @@
     "legacy:toxic"
   ],
   "preEvolution": "spritzee",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aromatisse",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

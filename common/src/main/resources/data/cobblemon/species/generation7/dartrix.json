@@ -57,6 +57,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "5"
     }
   },
   "drops": {
@@ -204,10 +207,6 @@
         {
           "variant": "level",
           "minLevel": 34
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dartrix_hisuibiome"
         }
       ]
     },
@@ -227,10 +226,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/dartrix_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dartrix_alolabiome"
         }
       ]
     }
@@ -272,10 +267,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dartrix_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dartrix_alolabiome"
             }
           ]
@@ -292,10 +283,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dartrix_alolabiome"
             }
           ]
         }

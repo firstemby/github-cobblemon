@@ -23,11 +23,22 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @since October 2nd, 2022
  */
 data class EvolutionCompleteEvent(
+    /**
+     * The [Pokemon] resulting from the evolution.
+     */
     override val pokemon: Pokemon,
+    /**
+     * The [Pokemon] that was the source of the evolution.
+     */
+    val sourcePokemon: Pokemon,
+    /**
+     * The [Evolution] that was used.
+     */
     override val evolution: Evolution
 ) : EvolutionEvent {
     val context = mutableMapOf<String, MoValue>(
         "pokemon" to pokemon.struct,
+        "source_pokemon" to sourcePokemon.struct,
         "evolution" to evolution.asMoLangValue()
     )
 }

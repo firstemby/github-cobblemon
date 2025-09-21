@@ -109,5 +109,10 @@
     "tutor:swift",
     "tutor:waterpulse"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  }
 }

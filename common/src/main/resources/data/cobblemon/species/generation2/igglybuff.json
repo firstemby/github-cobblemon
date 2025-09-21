@@ -212,5 +212,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "igglybuff",
+          "tier": 1
+        },
+        {
+          "pokemon": "jigglypuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "wigglytuff",
+          "tier": 3
+        },
+        {
+          "pokemon": "screamtail",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

@@ -70,6 +70,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wattrel",
+          "tier": 1
+        },
+        {
+          "pokemon": "kilowattrel",
+          "tier": 2
+        },
+        {
+          "pokemon": "wingull",
+          "tier": 3
+        },
+        {
+          "pokemon": "pelipper",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

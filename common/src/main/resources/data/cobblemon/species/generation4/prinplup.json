@@ -63,6 +63,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "eiscue",
+          "tier": 1
+        },
+        {
+          "pokemon": "prinplup",
+          "tier": 2
+        },
+        {
+          "pokemon": "empoleon",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

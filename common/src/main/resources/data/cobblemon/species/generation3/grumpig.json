@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 326,
   "name": "Grumpig",
   "primaryType": "psychic",
@@ -255,5 +256,28 @@
     "legacy:toxic"
   ],
   "preEvolution": "spoink",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grumpig",
+          "tier": 1
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 1
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 1
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

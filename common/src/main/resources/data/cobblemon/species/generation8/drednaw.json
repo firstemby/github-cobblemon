@@ -46,14 +46,14 @@
   "baseFriendship": 50,
   "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 2.0,
+    "height": 1.75,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.2
+        "walkSpeed": 0.125
       },
       "swim": {
         "canSwimInWater": true,
@@ -61,6 +61,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {

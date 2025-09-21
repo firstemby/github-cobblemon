@@ -189,5 +189,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "cosmoem",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

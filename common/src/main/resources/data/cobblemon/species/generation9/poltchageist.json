@@ -163,5 +163,20 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poltchageist",
+          "tier": 1
+        },
+        {
+          "pokemon": "sinistcha",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

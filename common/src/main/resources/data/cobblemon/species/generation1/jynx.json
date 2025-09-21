@@ -231,5 +231,10 @@
     "legacy:watergun"
   ],
   "preEvolution": "smoochum",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

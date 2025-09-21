@@ -189,5 +189,16 @@
     "legacy:takedown"
   ],
   "preEvolution": "gloom",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bellossom",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

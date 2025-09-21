@@ -168,5 +168,6 @@
     "legacy:toxic"
   ],
   "preEvolution": "helioptile",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

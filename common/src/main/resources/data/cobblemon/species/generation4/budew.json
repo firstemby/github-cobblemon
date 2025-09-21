@@ -60,6 +60,23 @@
       "walk": {
         "walkSpeed": 0.12
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "budew",
+          "tier": 1
+        },
+        {
+          "pokemon": "roselia",
+          "tier": 2
+        },
+        {
+          "pokemon": "roserade",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

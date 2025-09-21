@@ -54,6 +54,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikipek",
+          "tier": 1
+        },
+        {
+          "pokemon": "trumbeak",
+          "tier": 2
+        },
+        {
+          "pokemon": "toucannon",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

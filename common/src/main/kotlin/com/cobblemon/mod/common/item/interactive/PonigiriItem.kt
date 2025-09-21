@@ -25,8 +25,8 @@ class PonigiriItem : Item(
         Properties().stacksTo(64)
                 .food(FoodProperties.Builder()
                         .alwaysEdible()
-                        .nutrition(4)
-                        .saturationModifier(0.275f)
+                        .nutrition(2)
+                        .saturationModifier(0.55f)
                         .build())
 ) {
     override fun getName(stack: ItemStack): Component {

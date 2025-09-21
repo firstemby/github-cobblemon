@@ -53,6 +53,19 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fletchinder",
+          "tier": 1
+        },
+        {
+          "pokemon": "talonflame",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -62,6 +62,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "chingling",
+          "tier": 1
+        },
+        {
+          "pokemon": "chimecho",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

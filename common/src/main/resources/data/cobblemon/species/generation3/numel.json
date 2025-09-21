@@ -58,6 +58,23 @@
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "numel",
+          "tier": 1
+        },
+        {
+          "pokemon": "camerupt mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "camerupt mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

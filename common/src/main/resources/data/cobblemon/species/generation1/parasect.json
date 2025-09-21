@@ -46,17 +46,122 @@
   "baseFriendship": 50,
   "baseScale": 0.8,
   "hitbox": {
-    "width": 1.2,
     "height": 1.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-65",
+          "JUMP": "0-10",
+          "SKILL": "10-40",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2857038,
+              "z": 0.37916514
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -1.2747328,
+              "z": 0.37528855
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "parasect",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "canLook": false,
-      "wanderChance": 20,
       "walk": {
         "walkSpeed": 0.45
-      }
+      },
+      "wanderChance": 20
     },
     "resting": {
       "canSleep": true,

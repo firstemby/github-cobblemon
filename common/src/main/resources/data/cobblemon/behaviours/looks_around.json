@@ -7,8 +7,14 @@
       "activities": ["minecraft:idle", "minecraft:avoid", "minecraft:panic"],
       "tasksByPriority": {
         "0": [
-          "cobblemon:look_at_entities",
-          "cobblemon:look_at_speaker"
+          {
+            "type": "cobblemon:look_at_entities",
+            "condition": true
+          },
+          {
+            "type": "cobblemon:look_at_speaker",
+            "condition": "q.entity.is_npc"
+          }
         ]
       }
     }

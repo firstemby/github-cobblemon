@@ -55,6 +55,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carnivine",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

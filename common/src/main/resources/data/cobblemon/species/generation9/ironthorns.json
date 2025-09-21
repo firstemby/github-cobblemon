@@ -165,5 +165,10 @@
     "tutor:thunderpunch",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  }
 }

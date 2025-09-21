@@ -185,5 +185,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tangela",
+          "tier": 1
+        },
+        {
+          "pokemon": "tangrowth",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

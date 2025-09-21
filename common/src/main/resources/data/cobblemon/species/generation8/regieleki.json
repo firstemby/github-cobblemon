@@ -119,5 +119,16 @@
     "legacy:round",
     "legacy:snore"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "regigigas",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -43,7 +43,7 @@ interface ObtainableItemCondition {
                 val tagId = str.removePrefix("#").asIdentifierDefaultingNamespace(namespace = "minecraft")
                 return TagObtainableItemCondition(TagKey.create(Registries.ITEM, tagId))
             } else if (":" in str) {
-                val itemId = str.asIdentifierDefaultingNamespace(namespace = "minecraft")
+                val itemId = ResourceLocation.parse(str)
                 return IdentifierObtainableItemCondition(itemId)
             } else {
                 return ExpressionObtainableItemCondition(str.asExpressionLike())

@@ -59,6 +59,15 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bibarel",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

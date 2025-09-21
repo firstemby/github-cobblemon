@@ -51,6 +51,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "manectric mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "manectric mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -214,7 +227,18 @@
       "baseExperienceYield": 201,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "manectric mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

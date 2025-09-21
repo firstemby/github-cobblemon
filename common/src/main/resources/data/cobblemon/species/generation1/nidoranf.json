@@ -53,6 +53,35 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nidoranf",
+          "tier": 1
+        },
+        {
+          "pokemon": "nidoranm",
+          "tier": 2
+        },
+        {
+          "pokemon": "nidorino",
+          "tier": 3
+        },
+        {
+          "pokemon": "nidorina",
+          "tier": 4
+        },
+        {
+          "pokemon": "nidoking",
+          "tier": 5
+        },
+        {
+          "pokemon": "nidoqueen",
+          "tier": 6
+        }
+      ]
     }
   },
   "drops": {

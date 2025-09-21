@@ -51,6 +51,9 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {

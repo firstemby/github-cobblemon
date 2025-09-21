@@ -8,10 +8,9 @@
 
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.getMemorySafely
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.LivingEntity
@@ -38,7 +37,6 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
 
     var startTime : Int = 0
     companion object {
-        val runtime = MoLangRuntime().setup()
         const val WAIT_TIME = 40
     }
 
@@ -46,7 +44,8 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         if (startTime > WAIT_TIME) {
             return false
         }
-        val blockPos = entity.brain.getMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).get()
+        val blockPos = entity.brain.getMemorySafely(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).orElse(null)
+        if (blockPos == null) return false
         val blockState = world.getBlockState(blockPos)
         return (blockState.block == Blocks.SWEET_BERRY_BUSH && blockState.getValue(SweetBerryBushBlock.AGE) >= 2)
                 || CaveVines.hasGlowBerries(blockState)
@@ -97,6 +96,8 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
                 entity.level().setBlock(blockPos, blockState.setValue(SweetBerryBushBlock.AGE, 1) as BlockState, 2)
                 entity.level().gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity))
             }
+            entity.brain.eraseMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH)
+            entity.brain.eraseMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH)
         }
     }
 

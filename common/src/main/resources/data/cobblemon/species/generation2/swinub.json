@@ -54,6 +54,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swinub",
+          "tier": 1
+        },
+        {
+          "pokemon": "piloswine",
+          "tier": 2
+        },
+        {
+          "pokemon": "mamoswine",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

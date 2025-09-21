@@ -67,7 +67,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
             //This might not actually work, depending on what the yPos actually is. yPos of the middle of the entity? the feet?
             if (it.y.toDouble() == (vehicle.position().y)) {
                 val blockState = vehicle.level().getBlockState(it.below())
-                return@any !(!blockState.isAir && blockState.fluidState.isEmpty)
+                return@any (!blockState.isAir && blockState.fluidState.isEmpty)
             }
             true
         }
@@ -318,9 +318,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(

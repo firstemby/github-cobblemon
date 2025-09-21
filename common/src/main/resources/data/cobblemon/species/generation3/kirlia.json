@@ -59,6 +59,31 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kirlia",
+          "tier": 1
+        },
+        {
+          "pokemon": "gallade mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "gardevoir mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "gardevoir mega",
+          "tier": 4
+        },
+        {
+          "pokemon": "gallade mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

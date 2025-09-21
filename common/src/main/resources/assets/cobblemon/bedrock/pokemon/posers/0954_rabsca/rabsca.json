@@ -19,9 +19,6 @@
       "isBattle": true,
       "animations": [
         "q.bedrock('rabsca', 'ground_idle')"
-      ],
-      "quirks": [
-        "q.bedrock_quirk('rabsca', 'blink')"
       ]
     },
     "walking": {
@@ -31,9 +28,6 @@
       ],
       "animations": [
         "q.bedrock('rabsca', 'ground_idle')"
-      ],
-      "quirks": [
-        "q.bedrock_quirk('rabsca', 'blink')"
       ]
     }
   }

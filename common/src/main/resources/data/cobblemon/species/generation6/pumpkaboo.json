@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "11-15"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pumpkaboo",
+          "tier": 1
+        },
+        {
+          "pokemon": "gourgeist",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -57,6 +57,19 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swampert mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "swampert mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

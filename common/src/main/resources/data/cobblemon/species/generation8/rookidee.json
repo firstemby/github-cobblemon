@@ -59,6 +59,31 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "murkrow",
+          "tier": 1
+        },
+        {
+          "pokemon": "rookidee",
+          "tier": 2
+        },
+        {
+          "pokemon": "corvisquire",
+          "tier": 3
+        },
+        {
+          "pokemon": "honchkrow",
+          "tier": 4
+        },
+        {
+          "pokemon": "corviknight",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

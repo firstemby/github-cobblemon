@@ -40,13 +40,9 @@ dependencies {
     modLocalRuntime(libs.neoforge.debugutils)
     modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
 
+    implementation(libs.neo.kotlin.forge)
+
     implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    implementation(libs.neo.kotlin.forge) {
-        exclude(group = "net.neoforged.fancymodloader", module = "loader")
-    }
-    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
     bundle(project(path = ":common", configuration = "transformProductionNeoForge")) {

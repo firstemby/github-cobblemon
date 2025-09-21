@@ -57,6 +57,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "elekid",
+          "tier": 1
+        },
+        {
+          "pokemon": "electabuzz",
+          "tier": 2
+        },
+        {
+          "pokemon": "electivire",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

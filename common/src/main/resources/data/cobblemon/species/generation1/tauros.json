@@ -451,7 +451,18 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "tauros bull_breed=blaze",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Paldea-Aqua",
@@ -577,7 +588,18 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "tauros bull_breed=aqua",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {
@@ -616,6 +638,37 @@
     "seats": [],
     "behaviour": {
       "key": "cobblemon:land/horse"
+    }
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bouffalant",
+          "tier": 1
+        },
+        {
+          "pokemon": "miltank",
+          "tier": 2
+        },
+        {
+          "pokemon": "tauros",
+          "tier": 3
+        },
+        {
+          "pokemon": "tauros bull_breed=combat",
+          "tier": 3
+        },
+        {
+          "pokemon": "tauros bull_breed=aqua",
+          "tier": 4
+        },
+        {
+          "pokemon": "tauros bull_breed=blaze",
+          "tier": 4
+        }
+      ]
     }
   }
 }

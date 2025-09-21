@@ -107,6 +107,7 @@ class RidingController(
     private fun canTransitionToAir(driver: LivingEntity?): Boolean {
         if (driver != null) {
             if (driver !is DoubleJump) return false
+            if (behaviours[RidingStyle.AIR] == null) return false
             // check if style is water and player is submerged
             val isEyeInLiquid = entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA)
             if (context?.style == RidingStyle.LIQUID && isEyeInLiquid) return false

@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 928,
   "name": "Smoliv",
   "primaryType": "grass",
@@ -51,6 +52,23 @@
   "behaviour": {
     "resting": {
       "canSleep": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "smoliv",
+          "tier": 1
+        },
+        {
+          "pokemon": "dolliv",
+          "tier": 2
+        },
+        {
+          "pokemon": "arboliva",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

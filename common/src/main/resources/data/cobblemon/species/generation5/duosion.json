@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 578,
   "name": "Duosion",
   "primaryType": "psychic",
@@ -63,6 +64,19 @@
         "canSwimInLava": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "duosion",
+          "tier": 1
+        },
+        {
+          "pokemon": "reuniclus",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

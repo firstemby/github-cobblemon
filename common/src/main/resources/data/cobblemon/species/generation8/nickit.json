@@ -53,6 +53,15 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "thievul",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

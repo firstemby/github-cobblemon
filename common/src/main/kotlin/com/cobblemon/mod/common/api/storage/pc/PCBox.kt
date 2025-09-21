@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common.api.storage.pc
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.pokemon.PokemonSortMode
-import com.cobblemon.mod.common.api.reactive.Observable.Companion.stopAfter
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.storage.StoreCoordinates
@@ -148,6 +148,8 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
                     pokemon[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJson)
                 } catch (_: InvalidSpeciesException) {
                     pc.handleInvalidSpeciesJSON(pokemonJson)
+                } catch (e: Exception) {
+                    LOGGER.error("Failed to read a pokémon: $pokemonJson", e)
                 }
             }
         }
@@ -170,6 +172,8 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
                     pokemon[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
                 } catch (_: InvalidSpeciesException) {
                     pc.handleInvalidSpeciesNBT(pokemonNBT)
+                } catch (e: Exception) {
+                    LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
                 }
             }
         }

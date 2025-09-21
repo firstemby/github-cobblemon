@@ -154,5 +154,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hatterene",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

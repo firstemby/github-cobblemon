@@ -150,5 +150,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hattrem",
+          "tier": 1
+        },
+        {
+          "pokemon": "hatterene",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

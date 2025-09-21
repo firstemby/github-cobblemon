@@ -9,10 +9,9 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
@@ -31,8 +30,6 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 
 object MoveToOwnerTask {
-    val runtime = MoLangRuntime().setup()
-
     fun create(condition: Expression, completionRange: Expression, maxDistance: Expression, teleportDistance: Expression, speedMultiplier: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
             it.registered(MemoryModuleType.WALK_TARGET)
@@ -42,15 +39,15 @@ object MoveToOwnerTask {
                 if (owner.level() != entity.level()) {
                     return@Trigger false
                 }
-                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-                val condition = runtime.resolveBoolean(condition)
+                mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                val condition = mainThreadRuntime.resolveBoolean(condition)
                 if (!condition) {
                     return@Trigger false
                 }
-                val teleportDistance = runtime.resolveFloat(teleportDistance)
-                val maxDistance = runtime.resolveFloat(maxDistance)
-                val speedMultiplier = runtime.resolveFloat(speedMultiplier)
-                val completionRange = runtime.resolveInt(completionRange)
+                val teleportDistance = mainThreadRuntime.resolveFloat(teleportDistance)
+                val maxDistance = mainThreadRuntime.resolveFloat(maxDistance)
+                val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
+                val completionRange = mainThreadRuntime.resolveInt(completionRange)
 
                 if (entity.distanceTo(owner) > teleportDistance) {
                     if (tryTeleport(entity, owner)) {

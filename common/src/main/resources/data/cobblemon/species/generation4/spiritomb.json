@@ -189,5 +189,6 @@
     "legacy:uproar",
     "legacy:waterpulse"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

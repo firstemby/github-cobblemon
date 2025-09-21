@@ -159,5 +159,16 @@
     "legacy:snore"
   ],
   "preEvolution": "farfetchd galarian",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sirfetchd",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

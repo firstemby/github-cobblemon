@@ -92,11 +92,14 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     open var profileScale = 1F
 
-    /** Used for third person riding camera */
-    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
+    /** Used for third person riding camera with no view bobbing */
+    open var thirdPersonCameraOffsetNoViewBobbing = mutableMapOf<String, Vec3>()
 
-    /** Used for third person riding camera */
+    /** Used for third person riding camera with no view bobbing */
     open var thirdPersonPivotOffset = mutableMapOf<String, Vec3>()
+
+    /** Used for third person riding camera with view bobbing */
+    open var thirdPersonCameraOffset = mutableMapOf<String, Vec3>()
 
     /** Used for first person riding camera */
     open var firstPersonCameraOffset = mutableMapOf<String, Vec3>()
@@ -201,8 +204,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     /**
      * Animation group : animation name [: primary]
-     * e.g. "particle_dummy:animation.particle_dummy.dragon_claw_target:primary"
-     * e.g. "particle_dummy:animation.particle.dummy.stat_up
      */
     fun extractAnimation(string: String): ActiveAnimation? {
         val group = string.substringBefore(":")

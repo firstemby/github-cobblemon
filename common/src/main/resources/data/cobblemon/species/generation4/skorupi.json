@@ -58,6 +58,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "drapion",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

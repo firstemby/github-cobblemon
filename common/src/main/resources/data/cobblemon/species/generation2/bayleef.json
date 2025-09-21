@@ -57,6 +57,27 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bayleef",
+          "tier": 1
+        },
+        {
+          "pokemon": "meganium",
+          "tier": 2
+        },
+        {
+          "pokemon": "tropius",
+          "tier": 3
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

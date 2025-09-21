@@ -58,11 +58,9 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
     @Override
     public @NotNull HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
         Entity vehicle = this.getVehicle();
-        if (vehicle instanceof PokemonEntity pokemonEntity) {
+        if (vehicle instanceof PokemonEntity pokemonEntity && pokemonEntity.getDelegate() instanceof PokemonClientDelegate delegate) {
             int seatIndex = pokemonEntity.getPassengers().indexOf(this);
             Seat seat = pokemonEntity.getSeats().get(seatIndex);
-
-            PokemonClientDelegate delegate = (PokemonClientDelegate) pokemonEntity.getDelegate();
             MatrixWrapper locator = delegate.getLocatorStates().get(seat.getLocator());
 
             Vec3 locatorOffset = new Vec3(locator.getMatrix().getTranslation(new Vector3f()));

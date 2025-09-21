@@ -181,5 +181,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snover",
+          "tier": 1
+        },
+        {
+          "pokemon": "abomasnow mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "abomasnow mega",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

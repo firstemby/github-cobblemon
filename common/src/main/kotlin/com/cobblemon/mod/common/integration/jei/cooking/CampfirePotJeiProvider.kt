@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.integration.jei.cooking
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiProvider
+import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import net.minecraft.client.Minecraft
@@ -27,5 +29,11 @@ class CampfirePotJeiProvider : CobblemonJeiProvider {
 
         registration.addRecipes(CampfirePotRecipeCategory.RECIPE_TYPE, shapelessRecipes)
         registration.addRecipes(CampfirePotRecipeCategory.RECIPE_TYPE, cookingRecipes)
+    }
+
+    override fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration) {
+        CobblemonItems.campfire_pots.forEach {
+            registration.addRecipeCatalyst(it, CampfirePotRecipeCategory.RECIPE_TYPE)
+        }
     }
 }

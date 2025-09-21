@@ -161,5 +161,10 @@
     "tutor:waterpulse",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

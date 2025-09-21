@@ -1,4 +1,5 @@
 {
-  "texture": "cobblemon:textures/gui/pc/wallpaper/wallpaper_biome_forest.png",
+  "texture": "cobblemon:textures/gui/pc/wallpaper/biome/wallpaper_biome_forest.png",
+  "displayName": "biome.minecraft.forest",
   "enabled": true
 }

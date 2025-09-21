@@ -39,9 +39,7 @@ class ScriptBehaviourConfig : BehaviourConfig {
 
     private fun runScript(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
-        val runtime = MoLangRuntime().setup()
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        script.resolve(runtime)
+        script.resolve(behaviourConfigurationContext.runtime)
     }
 
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = variables

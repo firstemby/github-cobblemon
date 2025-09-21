@@ -43,6 +43,7 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.6,
   "hitbox": {
     "width": 1,
@@ -200,5 +201,23 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "walking":{
+        "walkSpeed": 0.13
+      },
+      "resting": {
+        "canSleep": true,
+        "light": "0-4"
+      },
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ariados",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

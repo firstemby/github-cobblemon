@@ -63,6 +63,15 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "darmanitan",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -381,7 +390,18 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Galar",
@@ -534,7 +554,18 @@
       ],
       "preEvolution": "darumaka galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Galar-Zen",
@@ -697,6 +728,17 @@
             "percentage": 5.0
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darmanitan",
+              "tier": 1
+            }
+          ]
+        }
       }
     }
   ]

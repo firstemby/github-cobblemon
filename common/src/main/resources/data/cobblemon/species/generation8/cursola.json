@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 864,
   "name": "Cursola",
   "primaryType": "ghost",
@@ -51,10 +52,13 @@
   },
   "behaviour": {
     "moving": {
-      "walking":
-      {"walkSpeed": 0.125},
+      "walk":
+      {
+        "walkSpeed": 0.125,
+        "avoidsLand": true
+      },
       "swim": {
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": 0.125
@@ -64,6 +68,15 @@
       "canSleep": true,
       "willSleepOnBed": false,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cursola",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

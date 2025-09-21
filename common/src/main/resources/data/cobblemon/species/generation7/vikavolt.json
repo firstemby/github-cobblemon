@@ -178,5 +178,6 @@
     "legacy:toxic"
   ],
   "preEvolution": "charjabug",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

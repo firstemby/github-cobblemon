@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import kotlin.math.max
 
@@ -28,8 +29,9 @@ object MoveToSweetBerryBushTask {
         context.group(
             context.present(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH),
             context.registered(MemoryModuleType.LOOK_TARGET),
-            context.absent(MemoryModuleType.WALK_TARGET)
-        ).apply(context) { nearestSweetBerryBush, lookTarget, walkTarget ->
+            context.absent(MemoryModuleType.WALK_TARGET),
+            context.registered(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH)
+        ).apply(context) { nearestSweetBerryBush, lookTarget, walkTarget, timeSpent ->
             Trigger { _, entity, _ ->
                 val blockPos = context.get(nearestSweetBerryBush) as BlockPos
                 if (
@@ -39,6 +41,10 @@ object MoveToSweetBerryBushTask {
                     val walkTargetX = WalkTarget(blockPos, speed, max(executionRange.minValue - 1, 0))
                     lookTarget.set(BlockPosTracker(blockPos))
                     walkTarget.set(walkTargetX)
+                    if (entity.brain.checkMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH, MemoryStatus.VALUE_ABSENT)) {
+                        entity.brain.setMemory(CobblemonMemories.TIME_TRYING_TO_REACH_BERRY_BUSH, 0)
+                    }
+
                     true
                 } else {
                     false

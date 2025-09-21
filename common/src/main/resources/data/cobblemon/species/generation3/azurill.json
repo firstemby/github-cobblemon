@@ -62,6 +62,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "azurill",
+          "tier": 1
+        },
+        {
+          "pokemon": "marill",
+          "tier": 2
+        },
+        {
+          "pokemon": "azumarill",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

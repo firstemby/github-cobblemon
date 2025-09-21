@@ -50,6 +50,7 @@
     "ChunkStorageMixin",
     "CrashReportMixin",
     "DecoratedPotPatternsMixin",
+    "EnderPearlItemMixin",
     "EntityCreeperMixin",
     "EntityFoxMixin",
     "EntitySkeletonMixin",

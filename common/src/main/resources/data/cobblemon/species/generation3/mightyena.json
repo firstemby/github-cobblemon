@@ -60,6 +60,23 @@
     },
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mightyena",
+          "tier": 1
+        },
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

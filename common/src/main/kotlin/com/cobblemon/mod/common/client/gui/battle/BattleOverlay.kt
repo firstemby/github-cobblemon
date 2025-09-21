@@ -56,7 +56,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth.ceil
 import org.joml.Vector3f
-import kotlin.math.floor
 
 class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
     companion object {

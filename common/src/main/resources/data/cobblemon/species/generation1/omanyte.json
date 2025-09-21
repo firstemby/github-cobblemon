@@ -65,8 +65,22 @@
         "swimSpeed": "0.2"
       },
       "walk": {
+        "avoidsLand": true,
         "walkSpeed": 0.19
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "omanyte",
+          "tier": 1
+        },
+        {
+          "pokemon": "omastar",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

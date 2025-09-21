@@ -9,14 +9,13 @@
 package com.cobblemon.mod.common.entity.npc.ai
 
 import com.bedrockk.molang.Expression
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.getNearbyBlockEntities
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.core.BlockPos
@@ -36,10 +35,6 @@ class HealUsingHealingMachineTask(
         CobblemonMemories.NPC_BATTLING to MemoryStatus.VALUE_ABSENT
     )
 ) {
-    companion object {
-        val runtime = MoLangRuntime().setup()
-    }
-
     var blockPos = BlockPos(0, 0, 0)
     var nearestHealer: HealingMachineBlockEntity? = null
 
@@ -59,9 +54,9 @@ class HealUsingHealingMachineTask(
         }
         val npcPos = entity.blockPosition()
 
-        runtime.withQueryValue("entity", entity.struct)
-        val horizRange = runtime.resolveDouble(horizontalUseRange)
-        val vertRange = runtime.resolveDouble(verticalUseRange)
+        mainThreadRuntime.withQueryValue("entity", entity.struct)
+        val horizRange = mainThreadRuntime.resolveDouble(horizontalUseRange)
+        val vertRange = mainThreadRuntime.resolveDouble(verticalUseRange)
 
         world
             .getNearbyBlockEntities(AABB.ofSize(entity.position(), horizRange, vertRange, horizRange), CobblemonBlockEntities.HEALING_MACHINE)

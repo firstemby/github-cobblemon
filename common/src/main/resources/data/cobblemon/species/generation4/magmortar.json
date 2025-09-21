@@ -216,5 +216,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "magmar",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

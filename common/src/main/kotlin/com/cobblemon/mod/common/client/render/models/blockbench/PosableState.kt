@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
@@ -37,6 +38,7 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.getIntOrNull
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -139,159 +141,124 @@ abstract class PosableState : Schedulable {
      */
     val renderMarkers = mutableSetOf<String>()
 
-    /** All of the MoLang functions that can be expose current riding data. */
+    /** The MoLang functions that expose current [RidingAnimationData] data.
+     *  They are all divided by a reference value and coerece into a float range useful in animation
+     */
     val ridingFunctions = QueryStruct(hashMapOf())
         .addFunction("pitch") { params ->
-            val lookBackTick = params.getInt(0)
-
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickPitch = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
+            val partialTickPitch = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).x
             val maxPitch = 90.0
             return@addFunction DoubleValue((partialTickPitch / maxPitch).coerceIn(-1.0,1.0))
         }
         .addFunction("yaw") { params ->
-            val lookBackTick = params.getInt(0)
-
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickYaw = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
+            val partialTickYaw = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
             val maxYaw = 180.0
             return@addFunction DoubleValue((partialTickYaw / maxYaw).coerceIn(-1.0,1.0))
         }
         .addFunction("roll") { params ->
-            val lookBackTick = params.getInt(0)
-
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickRoll = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
+            val partialTickRoll = pokemon.ridingAnimationData.rotSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).z
             val maxRoll = 180.0
             return@addFunction DoubleValue((partialTickRoll / maxRoll).coerceIn(-1.0,1.0))
         }
         .addFunction("pitch_change") { params ->
-            val lookBackTick = params.getInt(0)
-
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickPitchDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
-            //TODO: hook back up the retrieval of the current behaviors stat for this and the following functions
-            val maxRotRate = 140.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
-            //?: return@addFunction DoubleValue(0.0)
+            val partialTickPitchDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).x
+            val maxRotRate = 140.0
             return@addFunction DoubleValue((partialTickPitchDelta / maxRotRate).coerceIn(-1.0,1.0))
         }
         .addFunction("yaw_change") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickYawDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
-            //TODO: make this not hardcoded
-            val maxRotRate = -140.0 //pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
-            //?: return@addFunction DoubleValue(0.0)
+            val partialTickYawDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
+            val maxRotRate = -140.0
             return@addFunction DoubleValue((partialTickYawDelta / maxRotRate).coerceIn(-1.0,1.0))
         }
         .addFunction("roll_change") { params ->
-            val lookBackTick = params.getInt(0)
-
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-            val partialTickRollDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
-            val maxRotRate = -140.0 //pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SKILL)
-            //?: return@addFunction DoubleValue(0.0)
+            val partialTickRollDelta = pokemon.ridingAnimationData.rotDeltaSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).z
+            val maxRotRate = -140.0
             return@addFunction DoubleValue((partialTickRollDelta / maxRotRate).coerceIn(-1.0,1.0))
         }
         .addFunction("speed") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickSpeed = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).length()
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-
-            return@addFunction DoubleValue((partialTickSpeed / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickSpeed = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).length()
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickSpeed / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_x") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickXVel = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickXVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickXVel = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).x
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickXVel / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_y") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickYVel = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickYVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickYVel = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickYVel / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_z") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.velocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).z
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickVal / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_right") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).x
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickVal / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_up") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickVal / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("velocity_forward") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.localVelocitySpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).z
+            val referenceSpeed = 1.0
+            return@addFunction DoubleValue((partialTickVal / referenceSpeed).coerceIn(-1.0,1.0))
         }
         .addFunction("input_right") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).x
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).x
+            return@addFunction DoubleValue((partialTickVal).coerceIn(-1.0,1.0))
         }
         .addFunction("input_up") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).y
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
+            return@addFunction DoubleValue((partialTickVal).coerceIn(-1.0,1.0))
         }
         .addFunction("input_forward") { params ->
-            val lookBackTick = params.getInt(0)
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
             val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
-
-            val partialTickZVel = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), lookBackTick).z
-
-            val topSpeed = 1.0//pokemon.riding.getController(pokemon)?.getStat(pokemon, RidingStat.SPEED)
-            //?: return@addFunction DoubleValue(0.0)
-            return@addFunction DoubleValue((partialTickZVel / topSpeed).coerceIn(-1.0,1.0))
+            val partialTickVal = pokemon.ridingAnimationData.driverInputSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).z
+            return@addFunction DoubleValue((partialTickVal).coerceIn(-1.0,1.0))
+        }
+        .addFunction("dive") { params ->
+            val numOfTicksToAvg = params.getIntOrNull(0) ?: 0
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction DoubleValue(0.0)
+            val partialTickVal = pokemon.ridingAnimationData.diveSpring.getInterpolated(currentPartialTicks.toDouble(), numOfTicksToAvg).y
+            return@addFunction DoubleValue((partialTickVal).coerceIn(0.0,1.0))
         }
 
 

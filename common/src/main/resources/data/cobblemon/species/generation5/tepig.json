@@ -62,6 +62,39 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spoink",
+          "tier": 1
+        },
+        {
+          "pokemon": "tepig",
+          "tier": 1
+        },
+        {
+          "pokemon": "lechonk",
+          "tier": 1
+        },
+        {
+          "pokemon": "grumpig",
+          "tier": 2
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 2
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 2
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

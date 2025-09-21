@@ -53,6 +53,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kricketot",
+          "tier": 1
+        },
+        {
+          "pokemon": "kricketune",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -141,5 +141,6 @@
     "legacy:stompingtantrum"
   ],
   "preEvolution": "duraludon",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

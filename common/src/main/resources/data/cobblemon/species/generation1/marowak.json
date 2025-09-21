@@ -255,6 +255,9 @@
           "swim": {
             "canSwimInLava": true
           }
+        },
+        "herd": {
+          "maxSize": "3"
         }
       },
       "drops": {
@@ -447,5 +450,10 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

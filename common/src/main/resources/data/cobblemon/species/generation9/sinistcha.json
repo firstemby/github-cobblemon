@@ -144,5 +144,16 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sinistcha",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

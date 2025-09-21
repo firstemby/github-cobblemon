@@ -89,9 +89,6 @@ class BehaviourConfigurationContext {
         // Apply the brain config
         if (entity is MoLangScriptingEntity) {
             brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, sensors)
-
-            val runtime = MoLangRuntime().setup()
-            runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
             onAdd.forEach { runtime.resolve(it) }
         }
         activities.forEach { it.apply(entity) }

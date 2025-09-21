@@ -61,6 +61,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "volbeat",
+          "tier": 1
+        },
+        {
+          "pokemon": "illumise",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -60,6 +60,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "weezing",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -353,7 +362,18 @@
       ],
       "preEvolution": "koffing",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "5",
+          "toleratedLeaders": [
+            {
+              "pokemon": "weezing",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

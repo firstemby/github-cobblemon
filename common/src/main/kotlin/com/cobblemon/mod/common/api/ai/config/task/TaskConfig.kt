@@ -16,8 +16,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.asExpression
@@ -28,7 +26,6 @@ import com.cobblemon.mod.common.util.resolveDouble
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.resolveString
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -81,8 +78,9 @@ interface TaskConfig {
             cobblemonResource("switch_to_panic_when_hurt") to SwitchToPanicWhenHurtTaskConfig::class.java,
             cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
             cobblemonResource("calm_down") to CalmDownTaskConfig::class.java,
-            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
+            cobblemonResource("walk_away_from_avoid_target") to WalkAwayFromAvoidTargetTaskConfig::class.java,
             cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig::class.java,
+            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
             cobblemonResource("fly_in_circles") to FlyInCirclesTaskConfig::class.java,
             cobblemonResource("run_script") to RunScript::class.java,
             cobblemonResource("look_in_direction") to LookInDirectionTaskConfig::class.java,
@@ -105,11 +103,11 @@ interface TaskConfig {
             cobblemonResource("manage_flight_in_battle") to ManageFlightInBattleTaskConfig::class.java,
             cobblemonResource("attack_hostile_mobs") to AttackHostileMobsTaskConfig::class.java,
             cobblemonResource("move_to_sweet_berry_bush") to MoveToSweetBerryBushTaskConfig::class.java,
-            cobblemonResource("stop_moving_to_sweet_berry_bush") to StopIfTiredOfTryingToReachSweetBerryBushTaskConfig::class.java,
+            cobblemonResource("stop_moving_to_sweet_berry_bush") to StopTryingToReachSweetBerryBushTaskConfig::class.java,
             cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig::class.java,
             cobblemonResource("eat_held_item") to EatHeldItemTaskConfig::class.java,
             cobblemonResource("move_to_item") to MoveToItemTaskConfig::class.java,
-            cobblemonResource("stop_moving_to_item") to StopIfTiredOfTryingToReachWantedItemTaskConfig::class.java,
+            cobblemonResource("stop_moving_to_item") to StopTryingToReachWantedItemTaskConfig::class.java,
             cobblemonResource("pickup_item") to PickUpItemTaskConfig::class.java,
             cobblemonResource("move_into_fluid") to MoveIntoFluidTaskConfig::class.java,
             cobblemonResource("find_herd_leader") to FindHerdLeaderTaskConfig::class.java,

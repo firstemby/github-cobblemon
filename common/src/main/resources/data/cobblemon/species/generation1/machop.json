@@ -210,5 +210,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "machoke",
+          "tier": 1
+        },
+        {
+          "pokemon": "machamp",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

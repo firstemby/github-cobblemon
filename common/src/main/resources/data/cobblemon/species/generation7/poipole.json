@@ -135,5 +135,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poipole",
+          "tier": 1
+        },
+        {
+          "pokemon": "naganadel",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

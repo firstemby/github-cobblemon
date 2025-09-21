@@ -163,7 +163,9 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
         dialogueBox = DialogueBox(
             dialogueScreen = this,
+            background = dialogueDTO.currentPageDTO.background,
             messages = dialogueDTO.currentPageDTO.lines,
+            textColor = dialogueDTO.currentPageDTO.textColor,
             listX = (centerX - BOX_WIDTH / 2F).toInt(),
             listY = boxMinY.toInt(),
             frameWidth = BOX_WIDTH,

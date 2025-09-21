@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -16,6 +15,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -51,15 +51,14 @@ class RunScript : SingleTaskConfig {
     ): BehaviorControl<in LivingEntity>? = BehaviorBuilder.create {
         behaviourConfigurationContext.addMemories(memories + MemoryModuleType.LOOK_TARGET)
         behaviourConfigurationContext.addSensors(sensors)
-        val runtime = MoLangRuntime()
         it.group(
             it.registered(MemoryModuleType.LOOK_TARGET) // I think I need to have at least something here?
         ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+                mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 return@Trigger CobblemonScripts.run(
-                    identifier = script.resolveString(runtime).asIdentifierDefaultingNamespace(),
-                    runtime = runtime
+                    identifier = script.resolveString(mainThreadRuntime).asIdentifierDefaultingNamespace(),
+                    runtime = mainThreadRuntime
                 ) == DoubleValue.ONE
             }
         }

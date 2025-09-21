@@ -20,6 +20,13 @@
       "behaviours": [
         "cobblemon:looks_around"
       ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.resting.can_sleep",
+      "behaviours": [
+        "cobblemon:pokemon_sleeps"
+      ]
     }
   ]
 }

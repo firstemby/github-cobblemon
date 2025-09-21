@@ -12,9 +12,14 @@
         {
             "item": "cobblemon:masterpiece_teacup"
         },
-        {
+        [
+          {
             "item": "minecraft:water_bucket"
-        }
+          },
+          {
+            "tag": "c:drinks/milk"
+          }
+        ]
     ],
     "result": {
         "components": {

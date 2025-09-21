@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 930,
   "name": "Arboliva",
   "primaryType": "grass",
@@ -140,5 +141,10 @@
     "tutor:terrainpulse"
   ],
   "preEvolution": "dolliv",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

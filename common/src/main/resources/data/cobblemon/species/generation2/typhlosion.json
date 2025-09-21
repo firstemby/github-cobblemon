@@ -60,6 +60,9 @@
       "walk": {
         "walkSpeed": 0.15
       }
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {
@@ -410,7 +413,12 @@
       ],
       "preEvolution": "quilava",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     }
   ]
 }

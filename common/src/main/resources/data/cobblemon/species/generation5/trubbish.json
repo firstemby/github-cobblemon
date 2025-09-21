@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 568,
   "name": "Trubbish",
   "primaryType": "poison",
@@ -54,6 +55,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "garbodor",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

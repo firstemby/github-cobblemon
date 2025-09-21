@@ -160,5 +160,6 @@
     "legacy:toxic"
   ],
   "preEvolution": "silcoon",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

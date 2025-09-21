@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.storage
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
@@ -60,6 +61,8 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
                 pokemon.add(Pokemon.loadFromNBT(registryAccess, pokemonNBT))
             } catch(_: InvalidSpeciesException) {
                 handleInvalidSpeciesNBT(pokemonNBT)
+            } catch (e: Exception) {
+                LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
             }
         }
         return this
@@ -78,6 +81,8 @@ open class BottomlessStore(override val uuid: UUID) : PokemonStore<BottomlessPos
                 pokemon.add(Pokemon.loadFromJSON(registryAccess, pokemonJSON))
             } catch (_: InvalidSpeciesException) {
                 handleInvalidSpeciesJSON(pokemonJSON)
+            } catch (e: Exception) {
+                LOGGER.error("Failed to read a pokémon: $pokemonJSON", e)
             }
         }
         return this

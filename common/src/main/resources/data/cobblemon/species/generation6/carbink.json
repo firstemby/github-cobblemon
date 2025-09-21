@@ -186,5 +186,24 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carbink",
+          "tier": 1
+        },
+        {
+          "pokemon": "diancie mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "diancie mega",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

@@ -170,5 +170,6 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "rellor",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

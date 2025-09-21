@@ -55,6 +55,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gloom",
+          "tier": 1
+        },
+        {
+          "pokemon": "vileplume",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

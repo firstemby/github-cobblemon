@@ -27,7 +27,7 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val head = getPart("head_ai")
 
     override var portraitScale = 1.57F
-    override var portraitTranslation = Vec3(-0.05, 0.54, 0.0)
+    override var portraitTranslation = Vec3(-0.17, 0.54, 0.0)
 
     override var profileScale = 0.69F
     override var profileTranslation = Vec3(-0.04, 0.69, 0.0)

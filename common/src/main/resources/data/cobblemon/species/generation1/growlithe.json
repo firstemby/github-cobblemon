@@ -329,7 +329,8 @@
           "requiredContext": "cobblemon:fire_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

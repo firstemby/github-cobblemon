@@ -241,7 +241,33 @@
       "baseExperienceYield": 196,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "camerupt mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "camerupt mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "camerupt mega",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

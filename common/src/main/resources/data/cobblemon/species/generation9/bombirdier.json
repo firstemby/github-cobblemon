@@ -158,5 +158,16 @@
     "tutor:suckerpunch",
     "tutor:tailwind"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bombirdier",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

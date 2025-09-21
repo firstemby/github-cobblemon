@@ -46,10 +46,10 @@
   "features": [
     "alolan"
   ],
-  "baseScale": 1.4,
+  "baseScale": 1.35,
   "hitbox": {
-    "width": 1.4,
-    "height": 1,
+    "width": 1.75,
+    "height": 1.25,
     "fixed": false
   },
   "behaviour": {
@@ -256,6 +256,7 @@
         "gluttony",
         "h:powerofalchemy"
       ],
+      "baseScale": 1.25,
       "moves": [
         "1:venomdrench",
         "1:pound",
@@ -408,7 +409,8 @@
       ],
       "preEvolution": "grimer alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

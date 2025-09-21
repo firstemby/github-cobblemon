@@ -53,6 +53,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "servine",
+          "tier": 1
+        },
+        {
+          "pokemon": "serperior",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

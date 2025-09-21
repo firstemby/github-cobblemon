@@ -189,5 +189,23 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikachu",
+          "tier": 1
+        },
+        {
+          "pokemon": "morpeko",
+          "tier": 2
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

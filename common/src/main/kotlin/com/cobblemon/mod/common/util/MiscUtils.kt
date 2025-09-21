@@ -13,8 +13,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
-import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Screen
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -22,8 +20,11 @@ import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 import kotlin.random.Random
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.BlockPos
+import net.minecraft.core.RegistryAccess
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
@@ -206,10 +207,8 @@ fun Path.deleteNode(index: Int) {
     }
 }
 
-fun Collection<ObtainableItem>.findMatchingEntry(stack: ItemStack): ObtainableItem? {
-    val server = server() ?: return null
-    val registryAccess = server.registryAccess()
-    return if (stack == ItemStack.EMPTY) {
+fun Collection<ObtainableItem>.findMatchingEntry(registryAccess: RegistryAccess, stack: ItemStack): ObtainableItem? {
+    return if (stack.isEmpty) {
         null
     } else {
         this.find { it.item?.isItemObtainable(registryAccess, stack) != false }

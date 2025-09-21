@@ -51,6 +51,15 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mabosstiff",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

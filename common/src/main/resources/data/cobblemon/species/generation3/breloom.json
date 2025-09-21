@@ -59,6 +59,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "breloom",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

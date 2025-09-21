@@ -139,7 +139,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             operation = Operation.WAIT
         } else if (operation == Operation.MOVE_TO) {
             // Don't instantly move to WAIT for fluid movements as they overshoot their mark.
-            if (!pokemonEntity.isFlying() && !pokemonEntity.isSwimming) {
+            if (!pokemonEntity.isFlying() && !pokemonEntity.isInLiquid) {
                 operation = Operation.WAIT
             }
             var xDist = wantedX - mob.x
@@ -151,7 +151,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 mob.setZza(0F)
                 mob.yya = 0F
                 // If we're super close and we're fluid movers, forcefully stop moving so you don't overshoot
-                if ((pokemonEntity.isFlying() || pokemonEntity.isSwimming)) {
+                if ((pokemonEntity.isFlying() || pokemonEntity.isInLiquid)) {
                     operation = Operation.WAIT
                     mob.deltaMovement = Vec3.ZERO
                 }

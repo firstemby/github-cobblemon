@@ -51,6 +51,9 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {

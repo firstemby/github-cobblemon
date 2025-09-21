@@ -53,6 +53,31 @@
     "resting": {
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "chimchar",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 3
+        },
+        {
+          "pokemon": "monferno",
+          "tier": 4
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

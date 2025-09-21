@@ -7,7 +7,7 @@
     {
       "type": "animation",
       "animation": ["sandattack", "ground", "status"],
-      "delay": 1
+      "delay": 1.25
     },
     {
       "type": "entity_particles",

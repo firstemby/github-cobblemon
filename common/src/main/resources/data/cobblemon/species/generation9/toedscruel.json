@@ -53,6 +53,15 @@
       "canSleep": true,
       "willSleepOnBed": false,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "toedscruel",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

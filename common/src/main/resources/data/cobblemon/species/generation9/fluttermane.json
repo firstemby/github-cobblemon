@@ -136,5 +136,16 @@
     "tutor:swift",
     "tutor:thunderbolt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fluttermane",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

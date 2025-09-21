@@ -384,6 +384,14 @@
 						{"origin": [-8, 8, 7.22], "size": [0, 2, 3], "pivot": [-8, 9, 8.72], "rotation": [0, 0, -45], "uv": [24, 67], "mirror": true},
 						{"origin": [-9, 9, 7.22], "size": [2, 0, 3], "pivot": [-8, 9, 8.72], "rotation": [0, 0, -45], "uv": [27, 67], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "lower_gear_rotation",
+					"pivot": [0, 10.5, -4.5],
+					"locators": {
+						"seat_1": [0, 10.5, -4.5]
+					}
 				}
 			]
 		}

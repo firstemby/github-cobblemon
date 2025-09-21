@@ -58,6 +58,15 @@
       "walk": {
         "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nincada",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

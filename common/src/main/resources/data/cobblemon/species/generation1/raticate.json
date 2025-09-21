@@ -61,6 +61,9 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {
@@ -388,7 +391,12 @@
       ],
       "preEvolution": "rattata alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     }
   ]
 }

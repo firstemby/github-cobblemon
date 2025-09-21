@@ -44,7 +44,7 @@ class PokemonItemSensor(
             return
         }
 
-        val heldItemValue = pickupItems.findMatchingEntry(entity.pokemon.heldItem())?.pickupPriority ?: 0
+        val heldItemValue = pickupItems.findMatchingEntry(entity.registryAccess(), entity.pokemon.heldItem())?.pickupPriority ?: 0
         if (heldItemValue >= (pickupItems.maxOfOrNull { it.pickupPriority } ?: 0)) {
             // It's already holding the highest value item it can have, no need to look for better.
             return
@@ -54,9 +54,9 @@ class PokemonItemSensor(
             ItemEntity::class.java,
             entity.boundingBox.inflate(width, height, width)
         ) {
-            entity.wantsToPickUp(it.item)
-                    && entity.hasLineOfSight(it)
+            (pickupItems.findMatchingEntry(entity.registryAccess(), it.item)?.pickupPriority ?: 0) > heldItemValue
                     && it.closerThan(entity, maxTravelDistance)
+                    && entity.hasLineOfSight(it)
         }
 
         // Find the closest item to the entity

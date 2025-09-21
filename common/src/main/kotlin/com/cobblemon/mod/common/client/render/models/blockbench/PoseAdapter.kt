@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
 import com.cobblemon.mod.common.util.isDusk
@@ -49,6 +49,15 @@ class PoseAdapter(
             }
         }
 
+        if (json.has("isRideStyle")) {
+            val styles = json.get("isRideStyle").asJsonArray.map { it.asString }
+            conditionsList.add {
+                val pokemon = it.getEntity() as? PokemonEntity ?: return@add false
+                val rideStyle = pokemon.ridingController?.context?.style ?: return@add false
+                return@add styles.any { it == rideStyle.name }
+            }
+        }
+
         addCondition("isTouchingWater") { entity, expectedValue -> entity.isInWater == expectedValue }
         addCondition("isInWaterOrRain") { entity, expectedValue -> entity.isInWaterOrRain == expectedValue }
         addCondition("isUnderWater") { entity, expectedValue -> entity.isUnderWater == expectedValue }
@@ -67,14 +76,7 @@ class PoseAdapter(
 
         if (json.has("conditions")) {
             val conditionSet = json.get("conditions").asJsonArray.map { it.asString.asExpressionLike() }
-            conditionsList.add { state ->
-                val entity = state.getEntity()
-                if (entity is PosableEntity) {
-                    conditionSet.any { it.resolveBoolean(state.runtime) }
-                } else {
-                    false
-                }
-            }
+            conditionsList.add { state -> conditionSet.any { it.resolveBoolean(state.runtime) } }
         }
 
         val poseCondition: (PosableState) -> Boolean = if (conditionsList.isEmpty()) { { true } } else conditionsList.reduce { acc, function -> { acc(it) && function(it) } }

@@ -52,6 +52,15 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snom",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

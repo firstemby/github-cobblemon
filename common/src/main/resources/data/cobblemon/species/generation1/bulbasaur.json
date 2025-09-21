@@ -58,6 +58,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ivysaur",
+          "tier": 1
+        },
+        {
+          "pokemon": "venusaur mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "venusaur mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

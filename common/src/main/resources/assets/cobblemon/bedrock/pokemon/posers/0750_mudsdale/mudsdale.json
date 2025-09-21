@@ -4,32 +4,78 @@
     "profileScale": 0.5,
     "profileTranslation": [0.0, 1.0, 0.0],
     "rootBone": "mudsdale",
+    "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+    },
+    "thirdPersonCameraOffset": {
+      "seat_1": [0, 0, 1],
+      "seat_1_reverse": [0, 0, 1]
+    },
+    "thirdPersonCameraOffsetNoViewBobbing": {
+      "seat_1": [0, 1, 5],
+      "seat_1_reverse": [0, 1, 5]
+    },
     "animations": {
       "cry": "q.bedrock_stateful('mudsdale', 'cry')"
     },
     "poses": {
+      "standing": {
+        "poseName": "standing",
+        "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+        "condition": "q.has_entity ? !q.in_air : 1.0",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('mudsdale', 'ground_idle')",
+          "q.bedrock_stateful('mudsdale', 'blink')"
+        ],
+        "transformTicks": 10
+      },
       "sleep": {
         "poseName": "sleep",
         "poseTypes": ["SLEEP"],
         "animations": ["q.bedrock('mudsdale', 'sleep')"]
       },
-      "standing": {
-        "poseName": "standing",
-        "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "in-air": {
+        "poseTypes": ["STAND", "WALK"],
+        "condition": "q.in_air",
+        "isBattle": false,
         "animations": [
           "q.look('head')",
-          "q.bedrock('mudsdale', 'ground_idle')",
+          "q.bedrock('mudsdale', 'ride_jump')",
+          "q.bedrock('mudsdale', 'ride_ground_run')",
           "q.bedrock_stateful('mudsdale', 'blink')"
-        ]
+        ],
+        "transformTicks": 5,
+        "transformToTicks": 5
       },
       "walk": {
         "poseName": "walk",
         "poseTypes": ["WALK", "SWIM"],
+        "condition": "!q.is_sprinting",
         "animations": [
           "q.look('head')",
           "q.bedrock('mudsdale', 'ground_walk')",
-          "q.bedrock_stateful('mudsdale', 'blink')"
-        ]
+          "q.bedrock_stateful('mudsdale', 'blink')",
+          {
+            "condition": "q.is_ridden && q.has_entity && !q.in_air",
+            "animation": "q.bedrock('mudsdale', 'ride_ground_walk')"
+          }
+        ],
+        "transformTicks": 10
+      },
+      "run": {
+        "poseTypes": ["WALK", "SWIM"],
+        "condition": "q.is_sprinting",
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('mudsdale', 'ground_run')",
+          "q.bedrock_stateful('mudsdale', 'blink')",
+          {
+            "condition": "q.is_ridden && q.has_entity && !q.in_air",
+            "animation": "q.bedrock('mudsdale', 'ride_ground_run')"
+          }
+        ],
+        "transformTicks": 10
       }
     }
   }

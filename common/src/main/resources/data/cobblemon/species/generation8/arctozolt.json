@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dracozolt",
+          "tier": 1
+        },
+        {
+          "pokemon": "arctozolt",
+          "tier": 2
+        }
+      ]
     }
   },
   "moves": [

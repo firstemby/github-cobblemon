@@ -57,6 +57,39 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gible",
+          "tier": 1
+        },
+        {
+          "pokemon": "axew",
+          "tier": 1
+        },
+        {
+          "pokemon": "fraxure",
+          "tier": 2
+        },
+        {
+          "pokemon": "gabite",
+          "tier": 3
+        },
+        {
+          "pokemon": "haxorus",
+          "tier": 4
+        },
+        {
+          "pokemon": "garchomp mega=false",
+          "tier": 5
+        },
+        {
+          "pokemon": "garchomp mega",
+          "tier": 6
+        }
+      ]
     }
   },
   "drops": {

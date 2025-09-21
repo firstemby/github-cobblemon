@@ -63,6 +63,39 @@
       "walk": {
         "avoidsLand": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "goldeen",
+          "tier": 1
+        },
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "seaking",
+          "tier": 3
+        },
+        {
+          "pokemon": "finneon",
+          "tier": 4
+        },
+        {
+          "pokemon": "lumineon",
+          "tier": 5
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 6
+        }
+      ]
     }
   },
   "drops": {

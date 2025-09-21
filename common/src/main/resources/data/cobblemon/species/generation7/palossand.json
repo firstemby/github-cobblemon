@@ -185,5 +185,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "sandygast",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

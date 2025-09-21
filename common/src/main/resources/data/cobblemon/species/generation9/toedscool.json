@@ -162,5 +162,48 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "morelull",
+          "tier": 1
+        },
+        {
+          "pokemon": "foongus",
+          "tier": 2
+        },
+        {
+          "pokemon": "shroomish",
+          "tier": 3
+        },
+        {
+          "pokemon": "toedscool",
+          "tier": 4
+        },
+        {
+          "pokemon": "shiinotic",
+          "tier": 5
+        },
+        {
+          "pokemon": "breloom",
+          "tier": 6
+        },
+        {
+          "pokemon": "amoonguss",
+          "tier": 7
+        },
+        {
+          "pokemon": "brutebonnet",
+          "tier": 8
+        },
+        {
+          "pokemon": "toedscruel",
+          "tier": 9
+        }
+      ]
+    }
+  }
 }

@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides
-import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
+import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases.BERRY_SPRITE_ATLAS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.setPosition
 import com.cobblemon.mod.common.util.math.geometry.Axis
@@ -54,10 +54,15 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         if (entity.renderState == null) {
             entity.renderState = BerryBlockEntityRenderState()
         }
-        val bf = vertexConsumers.getBuffer(CobblemonRenderLayers.BERRY_LAYER)
+
+        // RenderType.entityCutoutNoCull for shading, as shading is absent in RenderType CobblemonRenderLayers.BERRY_LAYER
+        val buffer = vertexConsumers.getBuffer(
+            RenderType.entityCutoutNoCull(BERRY_SPRITE_ATLAS.textureAtlas.location())
+        )
+
         val renderState = entity.renderState as BerryBlockEntityRenderState
 //        if (renderState.needsRebuild || renderState.vboLightLevel != light) {
-            renderToBuffer(entity, matrices, light, overlay, renderState, bf)
+            renderToBuffer(entity, matrices, light, overlay, renderState, buffer)
 //            renderState.vboLightLevel = light
 //            (entity.renderState as BerryBlockEntityRenderState).needsRebuild = false
 //        }

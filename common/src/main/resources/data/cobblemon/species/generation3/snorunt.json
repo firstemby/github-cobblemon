@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 361,
   "name": "Snorunt",
   "primaryType": "ice",
@@ -191,5 +192,28 @@
       ],
       "requiredContext": "cobblemon:dawn_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snorunt",
+          "tier": 1
+        },
+        {
+          "pokemon": "glalie mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "froslass",
+          "tier": 3
+        },
+        {
+          "pokemon": "glalie mega",
+          "tier": 4
+        }
+      ]
+    }
+  }
 }

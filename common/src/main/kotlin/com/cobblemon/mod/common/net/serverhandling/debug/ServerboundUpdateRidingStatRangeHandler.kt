@@ -30,16 +30,16 @@ object ServerboundUpdateRidingStatRangeHandler : ServerNetworkPacketHandler<Serv
             behaviour.stats.set(RidingStat.SPEED, packet.minSpeed..packet.maxSpeed)
         }
         if (packet.minAcceleration < packet.maxAcceleration) {
-            behaviour.stats.set(RidingStat.ACCELERATION, packet.minSpeed..packet.maxSpeed)
+            behaviour.stats.set(RidingStat.ACCELERATION, packet.minAcceleration..packet.maxAcceleration)
         }
         if (packet.minSkill < packet.maxSkill) {
-            behaviour.stats.set(RidingStat.SKILL, packet.minSpeed..packet.maxSpeed)
+            behaviour.stats.set(RidingStat.SKILL, packet.minSkill..packet.maxSkill)
         }
         if (packet.minJump < packet.maxJump) {
-            behaviour.stats.set(RidingStat.JUMP, packet.minSpeed..packet.maxSpeed)
+            behaviour.stats.set(RidingStat.JUMP, packet.minJump..packet.maxJump)
         }
         if (packet.minStamina < packet.maxStamina) {
-            behaviour.stats.set(RidingStat.STAMINA, packet.minSpeed..packet.maxSpeed)
+            behaviour.stats.set(RidingStat.STAMINA, packet.minStamina..packet.maxStamina)
         }
     }
 

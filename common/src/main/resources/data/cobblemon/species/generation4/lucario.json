@@ -53,6 +53,9 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {
@@ -280,7 +283,12 @@
       "baseExperienceYield": 219,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4"
+        }
+      }
     }
   ]
 }

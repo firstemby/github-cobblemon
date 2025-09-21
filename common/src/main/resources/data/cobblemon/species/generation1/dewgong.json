@@ -58,6 +58,31 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sealeo",
+          "tier": 1
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 1
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 2
+        },
+        {
+          "pokemon": "dewgong",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
   },
   "riding": {

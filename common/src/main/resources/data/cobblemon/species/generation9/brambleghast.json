@@ -142,5 +142,6 @@
     "tutor:spite"
   ],
   "preEvolution": "bramblin",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

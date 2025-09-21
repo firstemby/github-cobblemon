@@ -130,9 +130,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseX * invertPitch, mouseY * invertRoll)
+        return Vec3(0.0, mouseX, mouseY)
     }
 
     override fun canJump(

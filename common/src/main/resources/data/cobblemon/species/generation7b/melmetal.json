@@ -143,5 +143,10 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9"
+    }
+  }
 }

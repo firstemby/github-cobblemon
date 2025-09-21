@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "cobblemon:cooking_pot/lava_cookie_from_cooking_pot"
+        "recipe": "cobblemon:campfire_pot/lava_cookie"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -40,7 +40,7 @@
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:cooking_pot/lava_cookie_from_cooking_pot"
+      "cobblemon:campfire_pot/lava_cookie"
     ]
   }
 }

@@ -64,6 +64,31 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "frillish",
+          "tier": 1
+        },
+        {
+          "pokemon": "jellicent",
+          "tier": 2
+        },
+        {
+          "pokemon": "tentacool",
+          "tier": 3
+        },
+        {
+          "pokemon": "tentacruel",
+          "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

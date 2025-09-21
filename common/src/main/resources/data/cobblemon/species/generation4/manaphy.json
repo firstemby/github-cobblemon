@@ -56,6 +56,15 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "manaphy",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

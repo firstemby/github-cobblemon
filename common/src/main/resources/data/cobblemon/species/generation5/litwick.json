@@ -55,6 +55,15 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "12-15"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "litwick",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -19,6 +19,7 @@ import com.bedrockk.molang.runtime.struct.ContextStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.ListExpression
@@ -131,6 +132,42 @@ fun MoLangRuntime.resolveFloat(expression: ExpressionLike, pokemon: Pokemon, con
 fun MoLangRuntime.resolveFloat(expression: ExpressionLike, pokemon: BattlePokemon, context: Map<String, MoValue> = contextOrEmpty): Float {
     environment.writePokemon(pokemon)
     return resolveFloat(expression, context)
+}
+
+fun <T> MoLangRuntime.queryObject(name: String, vararg args: MoValue): T? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is ObjectValue<*>) {
+        return null
+    }
+    return value.obj as? T
+}
+
+fun MoLangRuntime.queryDouble(name: String, vararg args: MoValue): Double? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is DoubleValue) {
+        return null
+    }
+    return value.asDouble()
+}
+
+fun MoLangRuntime.queryString(name: String, vararg args: MoValue): String? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is StringValue) {
+        return null
+    }
+    return value.asString()
+}
+
+fun MoLangRuntime.queryBoolean(name: String, vararg args: MoValue): Boolean? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is DoubleValue) {
+        return null
+    }
+    return value.asDouble() != 0.0
 }
 
 

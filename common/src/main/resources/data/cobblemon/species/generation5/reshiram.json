@@ -182,5 +182,6 @@
     "legacy:toxic",
     "special:mist"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

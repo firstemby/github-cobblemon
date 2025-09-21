@@ -153,5 +153,6 @@
     "legacy:uproar"
   ],
   "preEvolution": "skwovet",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }
