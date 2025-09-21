@@ -266,6 +266,7 @@ class PCGUI(
                     tooltipKey = "ui.sort.${typeName}",
                     label = "sort_${typeName}"
                 ) {
+                    storageWidget.resetSelected()
                     SortPCBoxPacket(pc.uuid, storageWidget.box, sortType, hasShiftDown()).sendToServer()
                 }.also {
                     it.visible = displayOptions
@@ -719,7 +720,7 @@ class PCGUI(
             if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
         }
         if (storageWidget.isHovered && mouseX < (storageWidget.x + StorageWidget.SCREEN_WIDTH)) this.storageWidget.box -= verticalAmount.toInt()
-        if (wallpaperWidget.isHovered) wallpaperWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
+        if (::wallpaperWidget.isInitialized && wallpaperWidget.isHovered) wallpaperWidget.mouseScrolled(mouseX, mouseY, amount, verticalAmount)
 
         val infoBoxX = ((width - BASE_WIDTH) / 2) + 9
         val infoBoxY = ((height - BASE_HEIGHT) / 2) + 128

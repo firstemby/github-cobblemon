@@ -44,6 +44,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.7,
   "hitbox": {
     "width": 0.9,
@@ -170,5 +171,15 @@
       ]
     }
   ],
-  "behaviour": {}
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.17
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    }
+  }
 }

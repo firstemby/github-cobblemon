@@ -53,11 +53,12 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.12,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       },
       "walk": {
+        "avoidsLand": true,
         "walkSpeed": 0.12
       }
     },

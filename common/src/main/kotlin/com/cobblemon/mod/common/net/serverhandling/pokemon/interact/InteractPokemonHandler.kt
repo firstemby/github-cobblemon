@@ -29,7 +29,7 @@ object InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket
                 }
                 InteractTypePokemon.RIDE -> {
                     player.isShiftKeyDown = false
-                    player.startRiding(pokemonEntity)
+                    pokemonEntity.tryRidingPokemon(player)
                 }
                 InteractTypePokemon.HELD_ITEM -> pokemonEntity.offerHeldItem(player, player.mainHandItem)
                 InteractTypePokemon.COSMETIC_ITEM -> pokemonEntity.offerCosmeticItem(player, player.mainHandItem)

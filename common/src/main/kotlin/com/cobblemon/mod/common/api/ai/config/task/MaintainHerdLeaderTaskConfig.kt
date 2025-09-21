@@ -8,15 +8,14 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import java.util.UUID
 import net.minecraft.world.entity.LivingEntity
@@ -82,6 +81,8 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
                         if (bestLeader != null && bestLeader != leader) {
                             bestLeader.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
                             entity.brain.setMemory(CobblemonMemories.HERD_LEADER, bestLeader.uuid.toString())
+                            bestLeader.adjustHerdSize(1)
+                            leader.adjustHerdSize(-1)
                         }
                     }
                     return@Trigger true

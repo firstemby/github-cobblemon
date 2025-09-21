@@ -204,17 +204,13 @@
         {
           "variant": "level",
           "minLevel": 35
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/koffing_galarbiome"
         }
       ]
     },
     {
       "id": "koffing_weezinggalar",
       "variant": "level_up",
-      "result": "weezing",
+      "result": "weezing galarian",
       "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
@@ -227,10 +223,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/koffing_galarbiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/koffing_kantobiome"
         }
       ]
     }
@@ -270,10 +262,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/koffing_galarbiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/koffing_kantobiome"
             }
           ]
@@ -281,7 +269,7 @@
         {
           "id": "koffing_weezinggalar",
           "variant": "level_up",
-          "result": "weezing",
+          "result": "weezing galarian",
           "consumeHeldItem": false,
           "learnableMoves": [
             "doublehit"
@@ -290,10 +278,6 @@
             {
               "variant": "level",
               "minLevel": 35
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/koffing_kantobiome"
             }
           ]
         }

@@ -644,7 +644,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     /**
-     * Whether this Pokémon's held item was given by its owner.
+     * Whether this Pokémon's held item can be dropped by its AI.
      */
     internal var canDropHeldItem: Boolean = false
         get() = field || heldItem.isEmpty
@@ -1845,14 +1845,14 @@ open class Pokemon : ShowdownIdentifiable {
         return rideBoosts.toMap()
     }
 
-    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
+    fun canAddRideBoost(stat: RidingStat): Boolean {
         val max = getMaxRideBoost(stat)
         val current = rideBoosts[stat] ?: 0F
-        return current + boost <= max
+        return current < max
     }
 
     fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
-        if (!canAddRideBoost(stat, boost)) {
+        if (!canAddRideBoost(stat)) {
             return false
         }
         val max = getMaxRideBoost(stat)

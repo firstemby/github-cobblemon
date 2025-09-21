@@ -47,11 +47,53 @@
   "features": [
     "galarian"
   ],
-  "baseScale": 1.6,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.8,
-    "height": 1.7,
+    "width": 1.5,
+    "height": 4,
     "fixed": false
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "soundLocation": "cobblemon:ride.loop.plumage",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "muffleEnabled": true
+          }
+        ],
+        "stats": {
+          "SPEED": "35-75",
+          "ACCELERATION": "25-50",
+          "SKILL": "50-80",
+          "JUMP": "25-60",
+          "STAMINA": "35-75"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "10-20",
+          "ACCELERATION": "70-90",
+          "SKILL": "30-60",
+          "JUMP": "25-50",
+          "STAMINA": "40-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
   },
   "behaviour": {
     "fireImmune": true,
@@ -363,43 +405,5 @@
         }
       }
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "10-20",
-          "AIR": "35-75"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "70-90",
-          "AIR": "25-50"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "30-60",
-          "AIR": "50-80"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "25-50",
-          "AIR": "25-60"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "40-80",
-          "AIR": "35-75"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/horse"
-    }
-  }
+  ]
 }

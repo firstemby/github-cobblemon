@@ -174,6 +174,16 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         return this.cobblemon$isDoubleJumping;
     }
 
+    @Inject(method = "isHandsBusy", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$isHandsBusy(CallbackInfoReturnable<Boolean> cir) {
+        Entity vehicle = this.getVehicle();
+        if (vehicle instanceof PokemonEntity pokemonEntity) {
+            int seatIndex = pokemonEntity.getPassengers().indexOf(this);
+            Seat seat = pokemonEntity.getSeats().get(seatIndex);
+            cir.setReturnValue(seat.getHandsBusy());
+        }
+    }
+
     @Override
     public HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
         Entity vehicle = this.getVehicle();

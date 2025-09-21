@@ -4,9 +4,7 @@
   "profileScale": 0.59,
   "profileTranslation": [ 0, 0.84, 0],
   "rootBone": "clobbopus",
-  "animations": {
-    "cry": "q.bedrock_stateful('clobbopus', 'cry')"
-  },
+  "animations": {},
   "poses": {
     "standing": {
       "poseTypes": [

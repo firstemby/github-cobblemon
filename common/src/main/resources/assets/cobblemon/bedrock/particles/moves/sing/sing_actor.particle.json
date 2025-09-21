@@ -47,7 +47,7 @@
                 "offset": [
                     0,
                     0,
-                    -0.15
+                    -0.25
                 ],
                 "direction": [
                     "math.sin(v.emitter_age*400)*2",

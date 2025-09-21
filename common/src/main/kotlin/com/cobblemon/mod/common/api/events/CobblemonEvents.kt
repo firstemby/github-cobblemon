@@ -150,6 +150,12 @@ object CobblemonEvents {
     val TRADE_EVENT_POST = EventObservable<TradeEvent.Post>()
 
     @JvmField
+    val RIDE_EVENT_PRE = CancelableObservable<RidePokemonEvent.Pre>()
+
+    @JvmField
+    val RIDE_EVENT_POST = EventObservable<RidePokemonEvent.Post>()
+
+    @JvmField
     val LEVEL_UP_EVENT = EventObservable<LevelUpEvent>()
 
     @JvmField

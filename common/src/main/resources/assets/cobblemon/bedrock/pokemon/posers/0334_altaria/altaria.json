@@ -4,6 +4,17 @@
   "profileScale": 0.66,
   "profileTranslation": [0,0.77,0],
   "rootBone": "altaria",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0.5, 1.5],
+    "seat_1_reverse": [0, 0.5, 1.5]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 0.5, 6],
+    "seat_1_reverse": [0, 0.5, 6]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('altaria', 'cry')"
   },

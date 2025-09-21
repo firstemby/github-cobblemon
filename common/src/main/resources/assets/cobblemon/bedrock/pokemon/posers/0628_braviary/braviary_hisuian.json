@@ -4,6 +4,17 @@
   "profileScale": 0.52,
   "profileTranslation": [0.05, 1.05, 0],
   "rootBone": "braviary",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.1, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1, 5],
+    "seat_1_reverse": [0, 1, 5]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('braviary_hisuian', 'cry')",
     "recoil": "q.bedrock_stateful('braviary_hisuian', 'recoil')"
@@ -12,15 +23,26 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "animations": ["q.look('head_ai')", "q.bedrock('braviary_hisuian', 'ground_idle')"],
+      "animations": [
+        "q.look('neck', 1, 1, 3, -20, 10, -10)",
+        "q.look('neck2', 1, 1, 1, -35, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, 0, 25, -25)",
+        "q.bedrock('braviary_hisuian', 'ground_idle')"
+      ],
       "transformTicks": 10,
       "quirks": ["q.bedrock_quirk('braviary_hisuian', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.look('head_ai')",
-        "q.bedrock('braviary_hisuian', 'ground_walk')"
+        "q.look('neck', 1, 1, 3, -20, 10, -10)",
+        "q.look('neck2', 1, 1, 1, -35, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
+        "q.bedrock('braviary_hisuian', 'ground_walk')",
+        {
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('braviary_hisuian', 'ride_ground_walk')"
+        }
       ],
       "transformTicks": 10,
       "quirks": ["q.bedrock_quirk('braviary_hisuian', 'blink')"]
@@ -29,7 +51,9 @@
       "poseTypes": ["HOVER"],
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 3, -20, 10, -10)",
+        "q.look('neck2', 1, 1, 1, -35, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
         "q.bedrock('braviary_hisuian', 'air_idle')"
       ],
       "transformTicks": 10,
@@ -40,10 +64,12 @@
       "condition": "!q.is_gliding",
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 3, -20, 10, -10)",
+        "q.look('neck2', 1, 1, 1, -35, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
         "q.bedrock('braviary_hisuian', 'air_fly')",
         {
-          "condition": "q.is_ridden",
+          "condition": "q.is_ridden && q.has_entity",
           "animation": "q.bedrock('braviary_hisuian', 'ride_air_fly')"
         }
       ],
@@ -55,14 +81,14 @@
       "condition": "q.is_gliding",
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 3, -20, 10, -10)",
+        "q.look('neck2', 1, 1, 1, -35, 15, -15)",
+        "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
         "q.bedrock('braviary_hisuian', 'air_glide')",
+        "q.bedrock('braviary_hisuian', 'ride_air_dive')",
         {
-          "condition": "q.is_ridden",
-          "animations": [
-            "q.bedrock('braviary', 'ride_air_fly')",
-            "q.bedrock('braviary', 'ride_air_dive')"
-          ]
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('braviary', 'ride_air_glide')"
         }
       ],
       "transformTicks": 10,

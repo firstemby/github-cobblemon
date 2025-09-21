@@ -49,6 +49,7 @@ class RidingController(
             if (newTransition != null && behaviourSettings != null) {
                 val newState = RidingBehaviours.get(behaviourSettings.key).createDefaultState(behaviourSettings)
                 context?.let { newState.stamina.set(it.state.stamina.get(), forced = true) }
+                context?.let { newState.rideVelocity.set(it.state.rideVelocity.get(), forced = true) }
                 context = ActiveRidingContext(behaviourSettings.key, behaviourSettings, newState, newTransition)
                 lastTransitionAge = entity.ticksLived
             } else {
@@ -107,6 +108,7 @@ class RidingController(
     private fun canTransitionToAir(driver: LivingEntity?): Boolean {
         if (driver != null) {
             if (driver !is DoubleJump) return false
+            if (behaviours[RidingStyle.AIR] == null) return false
             // check if style is water and player is submerged
             val isEyeInLiquid = entity.isEyeInFluid(FluidTags.WATER) || entity.isEyeInFluid(FluidTags.LAVA)
             if (context?.style == RidingStyle.LIQUID && isEyeInLiquid) return false

@@ -46,9 +46,9 @@
   "baseFriendship": 50,
   "baseScale": 1.8,
   "hitbox": {
-    "width": 1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1
   },
   "riding": {
     "behaviours": {
@@ -56,94 +56,132 @@
         "key": "cobblemon:air/bird",
         "rideSounds": [
           {
-            "soundLocation": "cobblemon:ride.loop.leather",
-            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)",
+            "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "muffleEnabled": true
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.leather",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "SPEED": "25-50",
-          "ACCELERATION": "20-40",
-          "SKILL": "50-100",
-          "JUMP": "25-50",
-          "STAMINA": "30-70"
+          "ACCELERATION": "10-40",
+          "JUMP": "0-10",
+          "SKILL": "0-10",
+          "SPEED": "55-85",
+          "STAMINA": "55-85"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
+        "rideSounds": [],
         "stats": {
-          "SPEED": "10-20",
-          "ACCELERATION": "90-100",
-          "SKILL": "15-30",
-          "JUMP": "10-20",
-          "STAMINA": "15-30"
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "10-40",
+          "SPEED": "0-10",
+          "STAMINA": "30-65"
         }
       }
     },
     "seats": [
       {
         "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -0.5
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
         },
         "poseOffsets": [
           {
-            "poseTypes": [
-              "HOVER"
-            ],
             "offset": {
-              "x": 0,
-              "y": 0.7,
-              "z": -1
-            }
+              "x": 0.0,
+              "y": -0.81824964,
+              "z": -0.016974024
+            },
+            "poseTypes": [
+              "STAND"
+            ]
           },
           {
-            "poseTypes": [
-              "FLY"
-            ],
             "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -1
-            }
-          }
-        ]
-      },
-      {
-        "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -1.5
-        },
-        "poseOffsets": [
-          {
+              "x": 0.0076697236,
+              "y": -0.8832693,
+              "z": 0.0025015995
+            },
             "poseTypes": [
-              "HOVER"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.4,
-              "z": -1
-            }
+              "WALK"
+            ]
           },
           {
+            "offset": {
+              "x": 0.0,
+              "y": -0.52675664,
+              "z": 0.11891519
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.56238306,
+              "z": -0.035822198
+            },
             "poseTypes": [
               "FLY"
-            ],
+            ]
+          },
+          {
             "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -0.2
-            }
+              "x": 0.0,
+              "y": -0.52675664,
+              "z": 0.11891519
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0,
+              "y": -0.56238306,
+              "z": -0.035822198
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.736375,
+              "y": -0.46837762,
+              "z": -0.09375
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
           }
         ]
       }
     ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aerodactyl",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "fly": {
         "canFly": true
@@ -155,15 +193,6 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
-    },
-    "herd": {
-      "maxSize": "4",
-      "toleratedLeaders": [
-        {
-          "pokemon": "aerodactyl",
-          "tier": 1
-        }
-      ]
     }
   },
   "drops": {
@@ -360,9 +389,9 @@
         "speed": 150
       },
       "baseExperienceYield": 215,
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

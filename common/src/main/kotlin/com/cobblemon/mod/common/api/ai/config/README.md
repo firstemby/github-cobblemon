@@ -117,7 +117,7 @@ Example behaviour (`uses_healing_machine.json`):
   "configurations": [
     {
       "type": "add_tasks_to_activity",
-      "activity": "idle",
+      "activity": "minecraft:idle",
       "tasksByPriority": {
         "1": [
           "heal_using_healing_machine",

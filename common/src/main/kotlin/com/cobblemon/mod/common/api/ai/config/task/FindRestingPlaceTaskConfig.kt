@@ -14,15 +14,19 @@ import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.FindRestingPlaceTask
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.resolveBoolean
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class FindRestingPlaceTaskConfig : SingleTaskConfig {
+    val condition: ExpressionLike = "true".asExpressionLike()
     val horizontalSearchDistance: ExpressionOrEntityVariable = Either.left("16".asExpression())
     val verticalSearchDistance: ExpressionOrEntityVariable = Either.left("5".asExpression())
 
@@ -31,6 +35,13 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
+        if (entity !is PokemonEntity) {
+            return null
+        }
+        if (!behaviourConfigurationContext.runtime.resolveBoolean(condition)) {
+            return null
+        }
+
         behaviourConfigurationContext.addMemories(
             CobblemonMemories.PATH_COOLDOWN,
             CobblemonMemories.POKEMON_DROWSY,

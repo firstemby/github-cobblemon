@@ -3,7 +3,7 @@
     "category": "complex_dishes",
     "key": {
         "M": {
-            "item": "minecraft:milk_bucket"
+            "tag": "c:drinks/milk"
         },
         "H": {
             "item": "minecraft:honey_bottle"

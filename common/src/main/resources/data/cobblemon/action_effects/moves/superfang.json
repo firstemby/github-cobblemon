@@ -6,7 +6,7 @@
     },
     {
       "type": "animation",
-      "animation": ["superfang", "bite", "physical"]
+      "animation": ["superfang", "bite", "fang", "physical"]
     },
     {
       "type": "entity_particles",

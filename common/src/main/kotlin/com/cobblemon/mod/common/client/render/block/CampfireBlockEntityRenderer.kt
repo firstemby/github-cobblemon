@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
-import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.item.CampfirePotItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
@@ -83,7 +82,7 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
         light: Int,
         overlay: Int
     ) {
-        val isLidOpen = blockEntity.dataAccess.get(IS_LID_OPEN_INDEX) == 1
+        val isLidOpen = !blockEntity.blockState.getValue(CampfireBlock.LID)
 
         val yRot = (blockEntity.blockState.getValue(CampfireBlock.ITEM_DIRECTION).opposite.toYRot() + blockEntity.blockState.getValue(FACING).toYRot()) % 360
 

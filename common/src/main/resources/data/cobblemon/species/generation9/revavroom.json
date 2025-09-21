@@ -42,10 +42,16 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.9,
+  "hitbox": {
+    "width": 0.7,
+    "height": 1.55,
+    "fixed": false
+  },
   "riding": {
     "behaviours": {
       "LAND": {
-        "key": "cobblemon:land/minekart",
+        "key": "cobblemon:land/horse",
         "stats": {
           "ACCELERATION": "41-60",
           "JUMP": "0-20",
@@ -55,7 +61,15 @@
         }
       }
     },
-    "seats": []
+    "seats": [
+        {
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
   },
   "behaviour": {
     "moving": {

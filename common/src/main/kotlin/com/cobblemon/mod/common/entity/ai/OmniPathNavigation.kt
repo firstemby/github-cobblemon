@@ -228,6 +228,13 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 return true
             }
         }
+        if (pather.canFly()) {
+            return this.level.getBlockState(pos).isAir || super.isStableDestination(pos)
+            // Note the below is what is used by default for minecraft fliers
+            // Mojang seems interested in anchoring flying mobs toward the ground
+            // but we are decidedly not doing that.
+            // this.level.getBlockState(pos).entityCanStandOn(this.level, pos, this.mob)
+        }
         return super.isStableDestination(pos)
     }
 

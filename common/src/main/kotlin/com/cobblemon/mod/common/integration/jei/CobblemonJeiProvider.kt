@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.integration.jei
 
+import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 
@@ -17,4 +18,5 @@ import mezz.jei.api.registration.IRecipeRegistration
 interface CobblemonJeiProvider {
     fun registerCategory(registration: IRecipeCategoryRegistration)
     fun registerRecipes(registration: IRecipeRegistration)
+    fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration)
 }

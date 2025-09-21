@@ -45,9 +45,9 @@
   "baseFriendship": 50,
   "baseScale": 1.0,
   "hitbox": {
-    "height": 3.5,
+    "height": 5.1,
     "fixed": false,
-    "width": 1.4
+    "width": 2.5
   },
   "riding": {
     "behaviours": {
@@ -56,21 +56,24 @@
         "rideSounds": [
           {
             "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind"
+          },
+          {
+            "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.driver_input() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
             "soundLocation": "cobblemon:ride.loop.rocket",
             "volumeExpr": "math.pow(math.min((q.driver_input() / 1.5) + (q.ride_velocity() / 1.5), 1.0),2)"
-          },
-          {
-            "soundLocation": "cobblemon:ride.loop.wind"
           }
         ],
         "stats": {
-          "ACCELERATION": "50-100",
-          "JUMP": "50-100",
-          "SKILL": "50-100",
-          "SPEED": "50-100",
-          "STAMINA": "50-100"
+          "ACCELERATION": "0-10",
+          "JUMP": "55-85",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
         }
       },
       "LAND": {
@@ -78,11 +81,11 @@
         "rideSounds": [],
         "canJump": true,
         "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "41-60",
-          "SKILL": "0-20",
-          "SPEED": "21-40",
-          "STAMINA": "41-60"
+          "ACCELERATION": "0-10",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
         }
       }
     },
@@ -96,9 +99,9 @@
         "poseOffsets": [
           {
             "offset": {
-              "x": 0.0,
-              "y": -4.85,
-              "z": 0.61875
+              "x": 0.0069884723,
+              "y": -4.8332925,
+              "z": 0.713007
             },
             "poseTypes": [
               "STAND"
@@ -106,9 +109,9 @@
           },
           {
             "offset": {
-              "x": 0.0,
-              "y": -4.85,
-              "z": 0.61875
+              "x": 0.009686413,
+              "y": -4.746398,
+              "z": 0.38281527
             },
             "poseTypes": [
               "WALK"
@@ -175,9 +178,9 @@
         "poseOffsets": [
           {
             "offset": {
-              "x": -0.875,
-              "y": -4.85,
-              "z": 0.80625
+              "x": -0.8680348,
+              "y": -4.8281674,
+              "z": 0.9003285
             },
             "poseTypes": [
               "STAND"
@@ -185,9 +188,9 @@
           },
           {
             "offset": {
-              "x": -0.875,
-              "y": -4.85,
-              "z": 0.80625
+              "x": -0.8579975,
+              "y": -4.7733426,
+              "z": 0.60002506
             },
             "poseTypes": [
               "WALK"
@@ -254,9 +257,9 @@
         "poseOffsets": [
           {
             "offset": {
-              "x": 0.875,
-              "y": -4.85,
-              "z": 0.80625
+              "x": 0.8819546,
+              "y": -4.822059,
+              "z": 0.9003285
             },
             "poseTypes": [
               "STAND"
@@ -264,9 +267,9 @@
           },
           {
             "offset": {
-              "x": 0.875,
-              "y": -4.85,
-              "z": 0.80625
+              "x": 0.89080614,
+              "y": -4.7519755,
+              "z": 0.5389509
             },
             "poseTypes": [
               "WALK"
@@ -333,6 +336,7 @@
     "moving": {
       "swim": {
         "avoidsWater": true,
+        "canBreatheUnderwater": true,
         "canSwimInWater": false
       },
       "walk": {
@@ -525,5 +529,6 @@
     "legacy:toxic"
   ],
   "preEvolution": "golett",
-  "evolutions": []
+  "evolutions": [],
+  "standingEyeHeight": 0.98
 }

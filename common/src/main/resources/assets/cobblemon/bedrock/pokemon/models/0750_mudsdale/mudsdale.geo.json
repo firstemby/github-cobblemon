@@ -34,7 +34,7 @@
 				{
 					"name": "body",
 					"parent": "mudsdale",
-					"pivot": [0, 8, 0]
+					"pivot": [0, 24, 0]
 				},
 				{
 					"name": "locator_middle",
@@ -65,7 +65,7 @@
 					"parent": "torso",
 					"pivot": [0, 33, 4],
 					"locators": {
-						"seat_1": [0, 33, 4]
+						"seat_1": [0, 29, 4]
 					}
 				},
 				{
@@ -616,22 +616,6 @@
 							"offset": [0, 29, 33.5],
 							"rotation": [180, 0, 0]
 						}
-					}
-				},
-				{
-					"name": "locator_seat_1",
-					"parent": "torso",
-					"pivot": [0, 31, -2],
-					"locators": {
-						"seat_1": [0, 31, -2]
-					}
-				},
-				{
-					"name": "locator_seat_2",
-					"parent": "torso",
-					"pivot": [0, 33, 9],
-					"locators": {
-						"seat_2": [0, 31, 9]
 					}
 				},
 				{

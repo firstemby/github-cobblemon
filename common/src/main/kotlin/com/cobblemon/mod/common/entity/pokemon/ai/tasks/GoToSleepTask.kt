@@ -20,18 +20,25 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 object GoToSleepTask {
-    fun create(): OneShot<PokemonEntity> {
+    fun create(
+        onlyFromStatus: Boolean
+    ): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(
                 it.absent(MemoryModuleType.WALK_TARGET),
                 it.registered(CobblemonMemories.POKEMON_DROWSY)
             ).apply(it) { _, pokemonDrowsy ->
-                Trigger { world, entity, _ ->
+                Trigger { _, entity, _ ->
                     val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
-                    if (entity.behaviour.resting.canSleep && ((it.tryGet(pokemonDrowsy).orElse(false) && entity.canSleepAt(entity.blockPosition().below())) || hasSleepStatus) && entity.pokemon.storeCoordinates.get()?.store !is PartyStore) {
+                    if (entity.behaviour.resting.canSleep && ((it.tryGet(pokemonDrowsy).orElse(false) && entity.canSleepAt(entity.blockPosition().below())) || hasSleepStatus)) {
                         if (!hasSleepStatus) {
+                            if (onlyFromStatus) {
+                                return@Trigger false
+                            }
                             entity.pokemon.status = PersistentStatusContainer(Statuses.SLEEP)
                         }
+                        entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+                        entity.navigation.stop()
                         entity.brain.setActiveActivityToFirstValid(listOf(CobblemonActivities.POKEMON_SLEEPING_ACTIVITY))
                         entity.brain.setMemory(CobblemonMemories.POKEMON_SLEEPING, true)
                         return@Trigger true

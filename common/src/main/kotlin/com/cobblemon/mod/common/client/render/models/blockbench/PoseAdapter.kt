@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
 import com.cobblemon.mod.common.util.isDusk
@@ -46,6 +46,15 @@ class PoseAdapter(
         fun addCondition(jsonKey: String, condition: (Entity, Boolean) -> Boolean) {
             json.get(jsonKey)?.asBoolean?.let { expectedValue ->
                 conditionsList.add { it.getEntity()?.let { entity -> condition(entity, expectedValue) } ?: true }
+            }
+        }
+
+        if (json.has("isRideStyle")) {
+            val styles = json.get("isRideStyle").asJsonArray.map { it.asString }
+            conditionsList.add {
+                val pokemon = it.getEntity() as? PokemonEntity ?: return@add false
+                val rideStyle = pokemon.ridingController?.context?.style ?: return@add false
+                return@add styles.any { it == rideStyle.name }
             }
         }
 

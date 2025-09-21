@@ -69,9 +69,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso",
-					"pivot": [0, 17, 3],
+					"pivot": [0, 14.5, 3],
 					"locators": {
-						"seat_1": [0, 17, 3]
+						"seat_1": [0, 14.5, 3]
 					}
 				},
 				{
@@ -829,7 +829,7 @@
 				{
 					"name": "leg_front_right3",
 					"parent": "leg_front_right2",
-					"pivot": [-2.75, 0.25, -4.25],
+					"pivot": [-2.75, 1.75, -4.25],
 					"cubes": [
 						{"origin": [-3.75, 0, -5.5], "size": [2, 2, 2], "inflate": 0.02, "uv": [16, 47]}
 					]
@@ -863,7 +863,7 @@
 				{
 					"name": "leg_front_left3",
 					"parent": "leg_front_left2",
-					"pivot": [2.75, 0.25, -4.25],
+					"pivot": [2.75, 1.75, -4.25],
 					"cubes": [
 						{"origin": [1.75, 0, -5.5], "size": [2, 2, 2], "inflate": 0.02, "uv": [24, 47]}
 					]
@@ -904,19 +904,19 @@
 				{
 					"name": "leg_back_right3",
 					"parent": "leg_back_right2",
-					"pivot": [-2.75, -0.25, 3.5],
+					"pivot": [-2.75, 0.4, 3.5],
 					"rotation": [5, 0, 0],
 					"cubes": [
-						{"origin": [-3.75, -1.25, 2.25], "size": [2, 2, 2], "inflate": 0.02, "uv": [0, 47]}
+						{"origin": [-3.75, -1.24753, 2.19335], "size": [2, 2, 2], "inflate": 0.02, "uv": [0, 47]}
 					]
 				},
 				{
 					"name": "locator_foot_secondary2",
 					"parent": "leg_back_right3",
-					"pivot": [-2.75, -0.65, 3.25],
+					"pivot": [-2.75, -0.64753, 3.19335],
 					"rotation": [90, 0, 0],
 					"locators": {
-						"foot_secondary4": [-2.75, -0.65, 3.25]
+						"foot_secondary4": [-2.75, -0.64753, 3.19335]
 					}
 				},
 				{
@@ -941,19 +941,19 @@
 				{
 					"name": "leg_back_left3",
 					"parent": "leg_back_left2",
-					"pivot": [2.75, -0.25, 3.5],
+					"pivot": [2.75, 0.4, 3.5],
 					"rotation": [5, 0, 0],
 					"cubes": [
-						{"origin": [1.75, -1.25, 2.25], "size": [2, 2, 2], "inflate": 0.02, "uv": [8, 47]}
+						{"origin": [1.75, -1.24753, 2.19335], "size": [2, 2, 2], "inflate": 0.02, "uv": [8, 47]}
 					]
 				},
 				{
 					"name": "locator_foot_secondary3",
 					"parent": "leg_back_left3",
-					"pivot": [2.75, -0.65, 3.25],
+					"pivot": [2.75, -0.64753, 3.19335],
 					"rotation": [90, 0, 0],
 					"locators": {
-						"foot_secondary3": [2.75, -0.65, 3.25]
+						"foot_secondary3": [2.75, -0.64753, 3.19335]
 					}
 				}
 			]

@@ -52,35 +52,43 @@
     "behaviours": {
       "AIR": {
         "key": "cobblemon:air/rocket",
-        "rideSounds": [],
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "ACCELERATION": "21-40",
-          "JUMP": "0-20",
-          "SKILL": "41-60",
-          "SPEED": "61-80",
-          "STAMINA": "21-40"
+          "ACCELERATION": "30-65",
+          "JUMP": "10-40",
+          "SKILL": "0-10",
+          "SPEED": "0-10",
+          "STAMINA": "0-10"
         }
       },
       "LAND": {
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "0-20",
-          "JUMP": "21-40",
-          "SKILL": "41-60",
-          "SPEED": "21-40",
-          "STAMINA": "0-20"
+          "ACCELERATION": "30-65",
+          "JUMP": "0-10",
+          "SKILL": "10-40",
+          "SPEED": "0-10",
+          "STAMINA": "55-85"
         }
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "41-60",
-          "JUMP": "21-40",
-          "SKILL": "61-80",
-          "SPEED": "61-80",
-          "STAMINA": "0-20"
+          "ACCELERATION": "55-85",
+          "JUMP": "0-10",
+          "SKILL": "10-40",
+          "SPEED": "30-65",
+          "STAMINA": "55-85"
         }
       }
     },

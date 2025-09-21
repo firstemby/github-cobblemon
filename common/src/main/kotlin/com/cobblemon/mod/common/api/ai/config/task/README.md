@@ -162,11 +162,11 @@ on the entity type and this piggy-backs off the Minecraft list of aggressive mob
 The 'calm_down' type creates a task that will make the entity calm down when it is no longer being hurt and is far from hostiles and its attacker.
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
 
-### flee_attacker
-The 'flee_attacker' type creates a task that will make the entity flee from its attacker when it is hurt.
+### walk_away_from_avoid_target
+The 'flee_attacker' type creates a task that will make the entity flee from its avoid target.
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
-- `speedMultiplier`: A MoLang expression that determines the speed multiplier for fleeing from the attacker. Defaults to 0.5 which is an elevated speed to usual.
-- `desiredDistance`: A MoLang expression that determines the distance from the attacker that the entity should try to maintain. Defaults to 9.
+- `speedMultiplier`: A MoLang expression that determines the speed multiplier for fleeing from the avoid target. Defaults to 0.5 which is an elevated speed to usual.
+- `desiredDistance`: A MoLang expression that determines the distance from the target that the entity should try to maintain. Defaults to 9.
 
 ### flee_nearest_hostile
 The 'flee_nearest_hostile' type creates a task that will make the entity flee from the nearest hostile entity when it is hurt.

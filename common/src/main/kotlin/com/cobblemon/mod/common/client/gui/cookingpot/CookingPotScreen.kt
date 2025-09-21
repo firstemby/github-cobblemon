@@ -8,10 +8,13 @@
 
 package com.cobblemon.mod.common.client.gui.cookingpot
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.block.campfirepot.SeasoningSlot
+import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.COOKING_POT_COLOR_INDEX
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.IS_LID_OPEN_INDEX
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin
 import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotRecipeCategory
@@ -22,13 +25,11 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.ImageButton
 import net.minecraft.client.gui.components.StateSwitchingButton
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.WidgetSprites
-import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener
@@ -39,7 +40,6 @@ import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.RecipeBookMenu
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.crafting.CraftingInput
-import java.util.*
 import kotlin.math.ceil
 
 @Environment(EnvType.CLIENT)
@@ -120,7 +120,8 @@ class CookingPotScreen(
         this.titleLabelY = 6
 
         if (::cookButton.isInitialized) removeWidget(cookButton)
-        cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0) {
+        val color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
+        cookButton = CookButton(this.leftPos + 97, topPos + 56, menu.containerData.get(IS_LID_OPEN_INDEX) == 0, color) {
             val isLidClosed = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
             sendToServer(ToggleCookingPotLidPacket(isLidClosed))
         }
@@ -163,6 +164,7 @@ class CookingPotScreen(
         mouseY: Int,
         partialTicks: Float
     ) {
+        cookButton.color = CampfirePotColor.entries[menu.containerData.get(COOKING_POT_COLOR_INDEX).coerceIn(0, CampfirePotColor.entries.lastIndex)]
         cookButton.selected = menu.containerData.get(IS_LID_OPEN_INDEX) == 0
         cookButton.setPosition(this.leftPos + 97, topPos + 56)
 
@@ -216,7 +218,8 @@ class CookingPotScreen(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             CobblemonJeiPlugin.jeiRuntime?.recipesGui?.showTypes(
@@ -252,7 +255,8 @@ class CookingPotScreen(
     ) {
         val progressX = leftPos + 96
         val progressY = topPos + 39
-        if (mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
+        if (Cobblemon.implementation.isModInstalled("jei") &&
+            mouseX >= progressX && mouseX < progressX + COOK_PROGRESS_WIDTH &&
             mouseY >= progressY && mouseY < progressY + COOK_PROGRESS_HEIGHT
         ) {
             guiGraphics.renderTooltip(

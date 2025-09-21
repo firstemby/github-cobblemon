@@ -81,7 +81,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
         val boosts = getBoosts(stack, pokemon)
-        return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key, it.value) } && super.canUseOnPokemon(stack, pokemon)
+        return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key) } && super.canUseOnPokemon(stack, pokemon)
     }
 
     fun getBoosts(stack: ItemStack, pokemon: Pokemon): Map<RidingStat, Float> {

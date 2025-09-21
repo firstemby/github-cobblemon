@@ -58,12 +58,24 @@
       "shoulder_left": {
       "poseTypes": ["SHOULDER_LEFT"],
       "animations": ["q.look('head')", "q.bedrock('spinarak', 'shoulder_left')"],
-      "quirks": ["q.bedrock_quirk('spinarak', 'blink')"]
+      "quirks": ["q.bedrock_quirk('spinarak', 'blink')"],
+        "transformedParts": [
+          {
+            "part": "body",
+            "position": [6, 0, 0]
+          }
+        ]
     },
     "shoulder_right": {
       "poseTypes": ["SHOULDER_RIGHT"],
       "animations": ["q.look('head')", "q.bedrock('spinarak', 'shoulder_right')"],
-      "quirks": ["q.bedrock_quirk('spinarak', 'blink')"]
+      "quirks": ["q.bedrock_quirk('spinarak', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-6, 0, 0]
+        }
+      ]
     }
   }
 }

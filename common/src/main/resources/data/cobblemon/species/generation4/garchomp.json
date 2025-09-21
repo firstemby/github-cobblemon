@@ -55,7 +55,15 @@
       "AIR": {
         "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
         "key": "cobblemon:air/jet",
-        "rideSounds": [],
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
         "jumpVector": [
           0,
@@ -63,11 +71,11 @@
           0
         ],
         "stats": {
-          "ACCELERATION": "61-80",
-          "JUMP": "41-60",
-          "SKILL": "41-60",
-          "SPEED": "41-60",
-          "STAMINA": "41-60"
+          "ACCELERATION": "30-65",
+          "JUMP": "30-65",
+          "SKILL": "30-65",
+          "SPEED": "55-85",
+          "STAMINA": "10-40"
         }
       },
       "LAND": {
@@ -81,22 +89,22 @@
           "-1 * 0.5*q.jump_strength/50"
         ],
         "stats": {
-          "ACCELERATION": "41-60",
-          "JUMP": "41-60",
-          "SKILL": "21-40",
-          "SPEED": "21-40",
-          "STAMINA": "61-80"
+          "ACCELERATION": "10-40",
+          "JUMP": "55-85",
+          "SKILL": "30-65",
+          "SPEED": "30-65",
+          "STAMINA": "30-65"
         }
       },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "0-20",
-          "JUMP": "41-60",
-          "SKILL": "21-40",
-          "SPEED": "41-60",
-          "STAMINA": "0-20"
+          "ACCELERATION": "10-40",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "0-10",
+          "STAMINA": "30-65"
         }
       }
     },
@@ -110,9 +118,9 @@
         "poseOffsets": [
           {
             "offset": {
-              "x": 0.0011951595,
-              "y": -0.60864544,
-              "z": -0.24524418
+              "x": 0.0,
+              "y": -2.1011124,
+              "z": 0.16987759
             },
             "poseTypes": [
               "STAND"
@@ -120,9 +128,9 @@
           },
           {
             "offset": {
-              "x": 0.14308973,
-              "y": -0.071709104,
-              "z": -0.18873778
+              "x": 0.015757028,
+              "y": -2.0372698,
+              "z": -0.51279336
             },
             "poseTypes": [
               "WALK"
@@ -170,9 +178,9 @@
           },
           {
             "offset": {
-              "x": 0.0,
-              "y": -2.1011124,
-              "z": 0.16987759
+              "x": 0.14308973,
+              "y": -1.6967092,
+              "z": -0.18873778
             },
             "poseTypes": [
               "GLIDE"

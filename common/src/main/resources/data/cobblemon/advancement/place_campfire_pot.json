@@ -85,17 +85,11 @@
                 "terms": [
                   {
                     "condition": "minecraft:block_state_property",
-                    "block": "cobblemon:campfire",
-                    "properties": {
-                      "lit": "true"
-                    }
+                    "block": "cobblemon:campfire"
                   },
                   {
                     "condition": "minecraft:block_state_property",
-                    "block": "cobblemon:soul_campfire",
-                    "properties": {
-                      "lit": "true"
-                    }
+                    "block": "cobblemon:soul_campfire"
                   }
                 ]
               }

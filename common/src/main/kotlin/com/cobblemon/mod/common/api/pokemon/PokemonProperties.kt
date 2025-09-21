@@ -464,7 +464,7 @@ open class PokemonProperties {
             val stack = ItemStack(result.item)
             stack.applyComponents(result.components)
             if (stack.isEmpty) return@let
-            pokemon.swapHeldItem(stack)
+            pokemon.swapHeldItem(stack, decrement = true, aiCanDrop = false)
         }
         pokemon.updateAspects()
     }

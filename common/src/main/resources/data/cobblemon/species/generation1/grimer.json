@@ -46,10 +46,10 @@
   "features": [
     "alolan"
   ],
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1.2,
+    "width": 1.25,
+    "height": 1.25,
     "fixed": false
   },
   "behaviour": {
@@ -244,6 +244,7 @@
         "gluttony",
         "h:powerofalchemy"
       ],
+      "baseScale": 0.7,
       "moves": [
         "1:pound",
         "1:poisongas",

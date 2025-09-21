@@ -82,9 +82,7 @@
 					"parent": "head",
 					"pivot": [0, 7.75, -7],
 					"locators": {
-						"face": [0, 7.75, -7],
-						"special": [0, 7.75, -7],
-						"physical": [0, 7.75, -7]
+						"face": [0, 7.75, -7]
 					}
 				},
 				{
@@ -226,6 +224,8 @@
 					"parent": "torso2",
 					"pivot": [0, 8.5, 7],
 					"locators": {
+						"special": [0, 8.5, 7],
+						"physical": [0, 8.5, 7],
 						"item": [0, 8.5, 7]
 					}
 				},

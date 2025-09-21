@@ -146,32 +146,30 @@ public abstract class MouseHandlerMixin {
             return true;
         }
 
-        //Send mouse input to be interpreted into rotation
-        //deltas by the ride controller
+        // Send mouse input to be interpreted into rotation
+        // deltas by the ride controller
         Vec3 angVecMouse = cobblemon$getRideMouseRotation(cursorDeltaX, cursorDeltaY, movementTime);
 
-        //Perform Rotation using mouse influenced rotation deltas.
+        // Perform Rotation using mouse influenced rotation deltas.
         controllable.getOrientationController().rotate(
             (float) angVecMouse.x,
             (float) angVecMouse.y,
             (float) angVecMouse.z
         );
 
-        //Gather and apply the current rotation deltas
+        // Gather and apply the current rotation deltas
         var angRot = cobblemon$getAngularVelocity(movementTime);
 
-        //Apply smoothing if requested by the controller.
-        //This Might be best if done by the controller itself?
-        if(cobblemon$shouldUseAngVelSmoothing())
-        {
+        // Apply smoothing if requested by the controller.
+        // This Might be best if done by the controller itself?
+        if(cobblemon$shouldUseAngVelSmoothing()) {
             var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
             var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
             var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
             controllable.getOrientationController().rotate((float) yaw, (float) pitch, (float) roll);
         }
-        //Otherwise simply apply the smoothing
-        else
-        {
+        // Otherwise simply apply the smoothing
+        else {
             controllable.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
         return false;

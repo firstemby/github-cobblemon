@@ -1,0 +1,32 @@
+{
+  "species": "cobblemon:raichu",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["alolan"],
+      "poser": "cobblemon:raichu_alolan",
+      "model": "cobblemon:raichu_alolan.geo",
+      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_alolan.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_alolan_emissive.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny", "alolan"],
+      "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_alolan_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_alolan_emissive_shiny.png",
+          "emissive": true,
+          "translucent": false
+        }
+      ]
+    }
+  ]
+}

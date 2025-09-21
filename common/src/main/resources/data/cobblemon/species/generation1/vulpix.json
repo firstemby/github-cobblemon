@@ -47,7 +47,7 @@
   ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.9,
+    "width": 0.7,
     "height": 1.1,
     "fixed": false
   },
@@ -248,6 +248,12 @@
       "maleRatio": 0.25,
       "height": 6,
       "weight": 99,
+      "baseScale": 0.6,
+      "hitbox": {
+        "width": 0.7,
+        "height": 1.1,
+        "fixed": false
+      },
       "pokedex": [
         "cobblemon.species.vulpix-alola.desc"
       ],

@@ -100,7 +100,7 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
     override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
         if (state.getValue(HALF) == DoubleBlockHalf.UPPER || !canGrow(world, pos, state)) return
 
-        if (hasSufficientLight(world, pos) && random.nextInt(7) == 0) {
+        if (hasSufficientLight(world, pos) && random.nextInt(16) == 0) {
             grow(world, pos, state, 1)
         }
     }

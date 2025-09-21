@@ -49,6 +49,11 @@
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.18
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"

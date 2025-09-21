@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 
 class CombatBehaviour {
     var willDefendSelf = false
-    var willFlee = false
+    var willFlee = true
     var willDefendOwner = false
     var fightsMelee = true
 

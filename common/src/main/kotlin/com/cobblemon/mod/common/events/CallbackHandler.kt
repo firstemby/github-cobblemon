@@ -79,6 +79,8 @@ object CallbackHandler {
         CobblemonEvents.BOBBER_SPAWN_POKEMON_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("bobber_spawn_pokemon_post"), it.context) }
         CobblemonEvents.TRADE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_pre"), it.context, it.functions) }
         CobblemonEvents.TRADE_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("trade_event_post"), it.context) }
+        CobblemonEvents.RIDE_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_pre"), it.context, it.functions) }
+        CobblemonEvents.RIDE_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("ride_event_post"), it.context) }
         CobblemonEvents.WALLPAPER_UNLOCKED_EVENT.subscribe { CobblemonCallbacks.run(cobblemonResource("wallpaper_unlocked"), it.context, it.functions) }
         CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_PRE.subscribe { CobblemonCallbacks.run(cobblemonResource("change_pc_box_wallpaper_pre"), it.context, it.functions) }
         CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_POST.subscribe { CobblemonCallbacks.run(cobblemonResource("change_pc_box_wallpaper"), it.context) }

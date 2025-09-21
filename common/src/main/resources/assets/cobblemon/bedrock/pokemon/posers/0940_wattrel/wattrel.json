@@ -13,50 +13,14 @@
       "isBattle": true,
       "isTouchingWater": false,
       "animations": ["q.look('head')", "q.bedrock('wattrel', 'battle_idle')"],
-      "quirks": ["q.bedrock_quirk('wattrel', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        }
-      ]
+      "quirks": ["q.bedrock_quirk('wattrel', 'blink')"]
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
       "isTouchingWater": false,
       "animations": ["q.look('head')", "q.bedrock('wattrel', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('wattrel', 'blink')"],
-      "transformedParts": [
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        }
-      ]
+      "quirks": ["q.bedrock_quirk('wattrel', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],

@@ -44,7 +44,7 @@
         },
         {
           "variant": "give_item",
-          "item": "minecraft:moomoo_milk"
+          "item": "cobblemon:moomoo_milk"
         },
         {
           "variant": "play_sound",
