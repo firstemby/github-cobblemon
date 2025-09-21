@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.CompositeBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.types.land.ClimbBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartBehaviour
@@ -34,6 +35,7 @@ object RidingBehaviours {
         register(MinekartBehaviour.KEY, MinekartBehaviour())
         register(HoverBehaviour.KEY, HoverBehaviour())
         register(RocketBehaviour.KEY, RocketBehaviour())
+        register(ClimbBehaviour.KEY, ClimbBehaviour())
         register(CompositeBehaviour.KEY, CompositeBehaviour())
     }
 

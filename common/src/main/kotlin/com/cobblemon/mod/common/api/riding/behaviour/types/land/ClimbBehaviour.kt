@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
@@ -18,7 +19,8 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.math.geometry.toRadians
+import it.unimi.dsi.fastutil.Arrays
+import it.unimi.dsi.fastutil.floats.FloatArrays
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -31,7 +33,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import org.joml.Matrix3f
 import kotlin.math.*
 
 class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
@@ -374,13 +375,19 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
+        if (driver !is OrientationControllable) return Vec3.ZERO
+        val controller = (driver as OrientationControllable).orientationController
+
+        // Set roll to zero if transitioning to noroll config
+        controller.rotateRoll(controller.roll * -1.0f)
+
         //Smooth out mouse input.
         val smoothingSpeed = 4
         val xInput = mouseXSmoother.getNewDeltaValue(mouseX * 0.1, deltaTime * smoothingSpeed);
         val yInput = mouseYSmoother.getNewDeltaValue(mouseY * 0.1, deltaTime * smoothingSpeed);
 
         //yaw, pitch, roll
-        return Vec3(0.0, yInput, xInput)
+        return Vec3(xInput, 0.0, 0.0)
     }
 
     override fun canJump(
@@ -608,5 +615,45 @@ class ClimbState : RidingBehaviourState() {
         if (previous.sprinting.get() != sprinting.get()) return true
         if (previous.inAir.get() != inAir.get()) return true
         return super.shouldSync(previous)
+    }
+}
+
+// TODO: ask nyfaria on using their code
+private class BoxConsumer private constructor(private val p: Vec3, private val boxScale: Float) :
+    Shapes.DoubleLineConsumer {
+    private var capacity = 16
+    private var size = 0
+
+    private var erx = FloatArray(this.capacity)
+    private var ery = FloatArray(this.capacity)
+    private var erz = FloatArray(this.capacity)
+
+    private var ecx = FloatArray(this.capacity)
+    private var ecy = FloatArray(this.capacity)
+    private var ecz = FloatArray(this.capacity)
+
+    override fun consume(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double) {
+        if (this.size == this.capacity) {
+            this.capacity = max(
+                min(this.capacity.toLong() + (this.capacity shr 1), Arrays.MAX_ARRAY_SIZE.toLong()),
+                this.capacity.toLong()
+            ).toInt()
+            this.erx = FloatArrays.forceCapacity(this.erx, this.capacity, this.size)
+            this.ery = FloatArrays.forceCapacity(this.ery, this.capacity, this.size)
+            this.erz = FloatArrays.forceCapacity(this.erz, this.capacity, this.size)
+            this.ecx = FloatArrays.forceCapacity(this.ecx, this.capacity, this.size)
+            this.ecy = FloatArrays.forceCapacity(this.ecy, this.capacity, this.size)
+            this.ecz = FloatArrays.forceCapacity(this.ecz, this.capacity, this.size)
+        }
+
+        this.erx[this.size] = 1.0f / ((maxX - minX).toFloat() / 2 * this.boxScale)
+        this.ery[this.size] = 1.0f / ((maxY - minY).toFloat() / 2 * this.boxScale)
+        this.erz[this.size] = 1.0f / ((maxZ - minZ).toFloat() / 2 * this.boxScale)
+
+        this.ecx[this.size] = ((minX + maxX) / 2 - this.p.x).toFloat()
+        this.ecy[this.size] = ((minY + maxY) / 2 - this.p.y).toFloat()
+        this.ecz[this.size] = ((minZ + maxZ) / 2 - this.p.z).toFloat()
+
+        this.size++
     }
 }
