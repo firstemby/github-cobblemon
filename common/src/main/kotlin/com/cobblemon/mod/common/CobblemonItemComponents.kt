@@ -13,11 +13,11 @@ import com.cobblemon.mod.common.item.components.FlavourComponent
 import com.cobblemon.mod.common.item.components.FoodColourComponent
 import com.cobblemon.mod.common.api.pokemon.breeding.Egg
 import com.cobblemon.mod.common.block.entity.EggBlockEntity
-import com.cobblemon.mod.common.item.components.HeldItemCapableComponent
 import com.cobblemon.mod.common.item.components.PokemonItemComponent
 import com.cobblemon.mod.common.item.components.RodBaitComponent
 import com.cobblemon.mod.common.item.components.EggComponent
 import com.cobblemon.mod.common.item.components.FoodComponent
+import com.cobblemon.mod.common.item.components.HeldItemEffectComponent
 import com.cobblemon.mod.common.item.components.IngredientComponent
 import com.cobblemon.mod.common.item.components.MobEffectsComponent
 import com.cobblemon.mod.common.item.components.PotComponent
