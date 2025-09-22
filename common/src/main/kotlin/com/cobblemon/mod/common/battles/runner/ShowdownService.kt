@@ -34,8 +34,9 @@ interface ShowdownService {
     fun resetRegistryData(type: String)
     fun resetAllRegistries()
     fun indicateSpeciesInitialized() {}
+    fun validateTeam(packedTeam: String, format: String = "cobblemon") {}
 
     companion object {
-        val service: ShowdownService by lazy { GraalShowdownService() }
+        val service: ShowdownService by lazy { SocketShowdownService() }
     }
 }

@@ -57,7 +57,7 @@ data class BattleFormat(
 
         val GEN_9_SINGLES = BattleFormat(
             battleType = BattleTypes.SINGLES,
-            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+            ruleSet = mutableSetOf("Standard NatDex")
         )
 
         val GEN_9_DOUBLES = BattleFormat(

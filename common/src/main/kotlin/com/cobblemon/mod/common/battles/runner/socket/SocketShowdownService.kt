@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.battles.runner.socket
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
@@ -139,6 +140,17 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
     override fun resetAllRegistries() {
         writer.write(">resetAll")
         acknowledge()
+    }
+
+    override fun validateTeam(packedTeam: String, format: String) {
+        writer.write(">validator $packedTeam $format")
+        writer.flush()
+        val response = readMessage()
+        val jsonarray = gson.fromJson(response, JsonArray::class.java)
+        for (i in 0 until jsonarray.size()) {
+            val msg = jsonarray[i].asString
+            Cobblemon.LOGGER.error(msg)
+        }
     }
 
     fun acknowledge(ifFails: () -> Unit = {}) {

@@ -71,6 +71,7 @@ object CobblemonCommands {
         MarkGiveAllCommand.register(dispatcher)
         PcSearchCommand.register(dispatcher)
         PcTakeCommand.register(dispatcher)
+        ValidateTeamCommand.register(dispatcher)
 
         // Possibly lock down registration if and only if under dev environment or running in an environment
         // with a certain system environment variable set

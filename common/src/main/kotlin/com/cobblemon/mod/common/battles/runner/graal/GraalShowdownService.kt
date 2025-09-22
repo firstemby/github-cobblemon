@@ -167,6 +167,11 @@ class GraalShowdownService : ShowdownService {
         func.execute()
     }
 
+    override fun validateTeam(packedTeam: String, format: String) {
+        val func = this.context.getBindings("js").getMember("validateTeam")
+        func.execute(packedTeam, format).asString()
+    }
+
     private fun sendToShowdown(battleId: UUID, messages: Array<String>) {
         sendBattleMessageFunction.execute(battleId.toString(), messages)
     }
