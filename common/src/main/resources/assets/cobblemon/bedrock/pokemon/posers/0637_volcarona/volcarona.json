@@ -36,7 +36,7 @@
       ]
     },
     "battle-standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT", "HOVER"],
       "isBattle": true,
       "namedAnimations": {
         "cry": "q.bedrock_primary('volcarona', 'battle_cry', q.curve('symmetrical_wide'))"
@@ -73,12 +73,13 @@
     },
     "hover": {
       "poseTypes": ["HOVER"],
+      "isBattle": false,
       "animations": [
         "q.look('head')",
         "q.bedrock('volcarona', 'air_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('kilowattrel', 'quirk')"
+        "q.bedrock_quirk('volcarona', 'quirk')"
       ]
     },
     "fly": {

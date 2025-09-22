@@ -1,6 +1,6 @@
 {
-  "portraitScale": 2.3,
-  "portraitTranslation": [ -1.16, 2.04, 0],
+  "portraitScale": 1.5,
+  "portraitTranslation": [ -0.9, 1.64, 0],
   "profileScale": 0.43,
   "profileTranslation": [ -0.01, 0.97, 0],
   "rootBone": "noivern",
@@ -69,7 +69,7 @@
       "condition": "q.has_entity ? !q.in_air && q.is_sprinting : 0.0",
       "animations": [
         "q.look('head_ai')",
-        "q.bedrock('noivern', 'ground_run')",
+        "q.bedrock('noivern', 'ground_run2')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('noivern', 'ride_ground')"

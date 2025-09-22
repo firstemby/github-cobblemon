@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
+import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBattle
@@ -84,7 +85,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         if (isRidingPokemon(player) && canAttemptDismount(player, selectedPartyPokemon)) {
             sendToServer(DismountPokemonPacket())
         }
-        else {
+        else if (!isRidingSelectedPokemon(player, selectedPartyPokemon)){
             checkForTargetInteractions(player, selectedPartyPokemon)
         }
     }
@@ -145,6 +146,11 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         if (player != vehicle.controllingPassenger) {
             return true
         }
+        val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
+        val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
+        if (isAirRide && hasLandRide) {
+            return false
+        }
         else {
             return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
         }
@@ -155,6 +161,14 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         if (player.vehicle !is PokemonEntity) return false
         if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
         return true
+    }
+
+    private fun isRidingSelectedPokemon(player: LocalPlayer, selectedPartyPokemon: Pokemon, ignoreControlling: Boolean = false): Boolean {
+        if (!player.isPassenger) return false
+        if (player.vehicle !is PokemonEntity) return false
+        val vehicle = player.vehicle as PokemonEntity
+        if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
+        return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
     }
 
     override fun onPress() {

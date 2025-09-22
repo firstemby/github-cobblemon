@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
+import org.joml.Matrix3f
 import kotlin.math.*
 
 class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
@@ -243,7 +245,20 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
          * Gather the previous velocity and check for horizontal
          * collisions
          *****************************************************/
+        val dmSpeed = vehicle.deltaMovement.length()
+        val rvSpeed = state.rideVelocity.get().length()
         var newVelocity = state.rideVelocity.get() //.normalize().scale(vehicle.deltaMovement.horizontalDistance())
+
+        /******************************************************
+         * Gather the previous velocity and check for horizontal
+         * collisions
+         *****************************************************/
+//        if (dmSpeed > rvSpeed) {
+//            // align the velocity vector to be in local vehicle space
+//            newVelocity = vehicle.deltaMovement
+//            val yawAligned = Matrix3f().rotateY(-vehicle.yRot.toRadians())
+//            newVelocity = (newVelocity.toVector3f().mul(yawAligned)).toVec3d()
+//        }
 
         if (vehicle.horizontalCollision) {
             newVelocity = newVelocity.normalize().scale(vehicle.deltaMovement.length())
@@ -520,7 +535,7 @@ class HorseSettings : RidingBehaviourSettings {
         private set
 
     //Between a one block jump and a six block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.2, 0.45)".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.0, 0.38)".asExpression()
         private set
 
     var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 180.0, 40.0)".asExpression()

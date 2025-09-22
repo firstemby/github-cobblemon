@@ -49,6 +49,7 @@ class RidingController(
             if (newTransition != null && behaviourSettings != null) {
                 val newState = RidingBehaviours.get(behaviourSettings.key).createDefaultState(behaviourSettings)
                 context?.let { newState.stamina.set(it.state.stamina.get(), forced = true) }
+                context?.let { newState.rideVelocity.set(it.state.rideVelocity.get(), forced = true) }
                 context = ActiveRidingContext(behaviourSettings.key, behaviourSettings, newState, newTransition)
                 lastTransitionAge = entity.ticksLived
             } else {

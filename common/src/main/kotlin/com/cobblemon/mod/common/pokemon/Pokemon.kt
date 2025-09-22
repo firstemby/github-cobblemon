@@ -1831,8 +1831,13 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    /**
+     * Gets the largest conceivable boost that can be granted to a stat. This is effectively the widest range
+     * from min to max of this stat for any of the styles. For example, if ACCELERATION is from 10 to 40 in one
+     * style and 20 to 60 in another, the max ride boost is 40.
+     */
     fun getMaxRideBoost(stat: RidingStat): Int {
-        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.endInclusive ?: 0 } ?: 0
+        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.let { it.last - it.first } ?: 0 } ?: 0
     }
 
     fun getRideBoost(stat: RidingStat): Float {
@@ -1843,14 +1848,14 @@ open class Pokemon : ShowdownIdentifiable {
         return rideBoosts.toMap()
     }
 
-    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
+    fun canAddRideBoost(stat: RidingStat): Boolean {
         val max = getMaxRideBoost(stat)
         val current = rideBoosts[stat] ?: 0F
-        return current + boost <= max
+        return current < max
     }
 
     fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
-        if (!canAddRideBoost(stat, boost)) {
+        if (!canAddRideBoost(stat)) {
             return false
         }
         val max = getMaxRideBoost(stat)

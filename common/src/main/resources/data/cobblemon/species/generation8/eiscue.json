@@ -62,7 +62,7 @@
       "swim": {
         "canSwimInWater": true,
         "canSwimInLava": false,
-        "canBreatheUnderwater": true,
+        "canBreatheUnderwater": false,
         "swimSpeed": "0.2"
       }
     },
@@ -240,6 +240,17 @@
         ]
       },
       "behaviour": {
+        "moving": {
+          "walk": {
+            "walkSpeed": 0.15
+          },
+          "swim": {
+            "canSwimInWater": true,
+            "canSwimInLava": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        },
         "herd": {
           "maxSize": "9",
           "toleratedLeaders": [

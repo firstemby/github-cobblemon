@@ -9,7 +9,7 @@
     "seat_2": [0, 0.25, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 2.5],
+    "seat_1": [0, 1, 2.5],
     "seat_1_reverse": [0, 0, 2.5],
     "seat_2": [0, 1, 2],
     "seat_2_reverse": [0, 1, 2]

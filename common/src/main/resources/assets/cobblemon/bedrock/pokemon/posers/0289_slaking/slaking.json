@@ -48,31 +48,57 @@
         "cry": "q.bedrock_primary('slaking', 'battle_cry', q.curve('symmetrical_wide'))"
       }
     },
+    "jump": {
+      "poseTypes": ["STAND", "WALK"],
+      "condition": "q.in_air",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('slaking', 'ride_jump')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('slaking', 'blink')"
+      ],
+      "transformTicks": 5,
+      "transformToTicks": 5
+    },
+    "running": {
+      "poseTypes": ["WALK", "FLOAT", "SWIM"],
+      "isBattle": false,
+      "condition": "!q.in_air && q.is_sprinting",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('slaking', 'ground_run')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('slaking', 'ride_ground')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('slaking', 'blink')"]
+    },
     "standing": {
       "poseTypes": ["STAND", "NONE"],
       "isBattle": false,
+      "condition": "!q.in_air",
       "animations": [
         "q.look('head')",
-        "q.bedrock('slaking', 'ground_idle')"
+        "q.bedrock('slaking', 'ground_idle')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('slaking', 'ride_ground')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('slaking', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK", "FLOAT", "SWIM"],
-      "condition": "!q.is_sprinting",
+      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.look('head')",
-        "q.bedrock('slaking', 'ground_walk')"
-      ],
-      "quirks": ["q.bedrock_quirk('slaking', 'blink')"]
-    },
-    "running": {
-      "poseTypes": ["WALK", "FLOAT", "SWIM"],
-      "isBattle": false,
-      "condition": "q.is_sprinting",
-      "animations": [
-        "q.look('head')",
-        "q.bedrock('slaking', 'ground_run')"
+        "q.bedrock('slaking', 'ground_walk')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('slaking', 'ride_ground')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('slaking', 'blink')"]
     },

@@ -57,8 +57,8 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector4f
+import com.cobblemon.mod.common.item.CampfirePotItem
 import java.util.*
-import kotlin.math.sign
 
 class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(
     CobblemonBlockEntities.CAMPFIRE,
@@ -84,6 +84,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
         const val COOKING_PROGRESS_INDEX = 0
         const val COOKING_PROGRESS_TOTAL_TIME_INDEX = 1
         const val IS_LID_OPEN_INDEX = 2
+        const val COOKING_POT_COLOR_INDEX = 3
 
         const val BASE_BROTH_COLOR = 0xFDFACF
         const val BASE_BROTH_BUBBLE_COLOR = 0xFFFEFDE4.toInt()
@@ -242,6 +243,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 COOKING_PROGRESS_INDEX -> this@CampfireBlockEntity.cookingProgress
                 COOKING_PROGRESS_TOTAL_TIME_INDEX -> this@CampfireBlockEntity.cookingTotalTime
                 IS_LID_OPEN_INDEX -> if (this@CampfireBlockEntity.blockState.getValue(CampfireBlock.LID)) 0 else 1
+                COOKING_POT_COLOR_INDEX -> (this@CampfireBlockEntity.getPotItem()?.item as? CampfirePotItem)?.color?.ordinal ?: 0
                 else -> 0
             }
         }
@@ -251,11 +253,12 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 COOKING_PROGRESS_INDEX -> this@CampfireBlockEntity.cookingProgress = value
                 COOKING_PROGRESS_TOTAL_TIME_INDEX -> this@CampfireBlockEntity.cookingTotalTime = value
                 IS_LID_OPEN_INDEX -> this@CampfireBlockEntity.toggleLid(value == 1)
+                COOKING_POT_COLOR_INDEX -> {}
             }
         }
 
         override fun getCount(): Int {
-            return 3
+            return 4
         }
     }
 

@@ -17,6 +17,15 @@
       "aspects": ["female"],
       "poser": "cobblemon:alakazam_female",
       "model": "cobblemon:alakazam_female.geo"
+    },
+    {
+      "aspects": ["color-black"],
+      "layers": [
+        {
+          "name": "pokemopolis",
+          "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam_pokemopolis.png"
+        }
+      ]
     }
   ]
 }

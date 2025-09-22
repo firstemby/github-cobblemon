@@ -14,7 +14,17 @@
     "delphox",
     "dragonite",
     "hawlucha",
-    "pikachu"
+    "pichu",
+    "pikachu",
+    "raichu",
+    "electrode",
+    "alakazam",
+    "sudowoodo",
+    "gengar",
+    "jigglypuff",
+    "tinkatink",
+    "tinkatuff",
+    "tinkaton"
   ],
   "features": ["cosmetic_item"]
 }

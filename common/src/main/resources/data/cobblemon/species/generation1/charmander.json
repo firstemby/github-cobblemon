@@ -6,6 +6,7 @@
   "maleRatio": 0.875,
   "height": 6,
   "weight": 85,
+  "lightingData": { "lightLevel": 8, "liquidGlowMode": "LAND" },
   "pokedex": [
     "cobblemon.species.charmander.desc"
   ],

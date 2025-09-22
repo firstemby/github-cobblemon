@@ -1,5 +1,5 @@
 {
-  "pokemon": ["pikachu"],
+  "pokemon": ["pikachu", "raichu", "pichu"],
   "cosmeticItems": [
     {
       "consumedItem": "cobblemon:lumiose_galette",

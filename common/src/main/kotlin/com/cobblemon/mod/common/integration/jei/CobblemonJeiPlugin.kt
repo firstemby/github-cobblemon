@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotJeiProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
+import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import mezz.jei.api.runtime.IJeiRuntime
@@ -40,6 +41,12 @@ class CobblemonJeiPlugin : IModPlugin {
     override fun registerRecipes(registration: IRecipeRegistration) {
         jeiProviders.forEach {
             it.registerRecipes(registration)
+        }
+    }
+
+    override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
+        jeiProviders.forEach {
+            it.registerRecipeCatalsysts(registration)
         }
     }
 

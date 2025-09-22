@@ -19,59 +19,48 @@
     "faint": "q.bedrock_primary('parasect', 'faint')"
   },
   "poses": {
-    "standing": {
+    "stand": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "condition": "!q.is_ridden",
+      "condition": "!q.in_air",
       "animations": [
         "q.bedrock('parasect', 'ground_idle')"
       ]
     },
-    "walking": {
-      "poseTypes": ["WALK"],
-      "condition": "!q.is_ridden",
-      "animations": [
-        "q.bedrock('parasect', 'ground_walk')"
-      ]
-    },
-    "mount_standing": {
-      "poseTypes": ["STAND"],
+    "in-air": {
+      "poseTypes": ["STAND", "WALK"],
       "isBattle": false,
-      "condition": "q.is_ridden && !q.in_air",
+      "condition": "q.in_air && q.is_ridden",
       "animations": [
-        "q.bedrock('parasect', 'ground_idle')"
-      ]
+        "q.bedrock('parasect', 'ride_jump')",
+        "q.bedrock('parasect', 'ride_ground_run')"
+      ],
+      "transformTicks": 2,
+      "transformToTicks": 2
     },
-    "mount_walking": {
+    "walk": {
       "poseTypes": ["WALK"],
-      "isBattle": false,
-      "condition": "q.is_ridden && !q.is_sprinting && !q.is_air && q.has_entity",
+      "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.bedrock('parasect', 'ground_walk')",
-        "q.bedrock('parasect', 'ride_ground_run')"
-      ],
-      "transformTicks": 5,
-      "transformToTicks": 5
-    },
-    "mount_running": {
-      "poseTypes": ["WALK"],
-      "isBattle": false,
-      "condition": "!q.in_air && q.is_sprinting && q.is_ridden && q.has_entity",
-      "animations": [
-        "q.bedrock('parasect', 'ground_run')",
-        "q.bedrock('parasect', 'ride_ground_run')"
+        {
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('parasect', 'ride_ground_run')"
+        }
       ]
     },
-    "ride_jump": {
-      "poseTypes": ["WALK","STAND", "FLOAT", "NONE"],
+    "run": {
+      "poseTypes": ["STAND","WALK"],
       "isBattle": false,
-      "condition": "q.in_air && q.is_ridden && q.has_entity",
+      "condition": "!q.in_air && q.is_sprinting",
       "animations": [
-        "q.bedrock('parasect','ride_jump')",
-        "q.bedrock('parasect', 'ride_ground_run')"
+        "q.bedrock('parasect', 'ground_run')",
+        {
+          "condition": "q.is_ridden && q.has_entity",
+          "animation": "q.bedrock('parasect', 'ride_ground_run')"
+        }
       ],
-      "transformTicks": 5,
-      "transformToTicks": 5
+      "transformTicks": 5
     },
     "sleep": {
       "poseTypes": ["SLEEP"],

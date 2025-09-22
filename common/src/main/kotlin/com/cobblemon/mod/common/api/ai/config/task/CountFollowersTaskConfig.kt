@@ -12,11 +12,9 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import kotlin.jvm.optionals.getOrNull
 import net.minecraft.world.entity.LivingEntity
@@ -27,7 +25,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
 /**
- * Checks nearby entities and counts how many have nominated this entity as their leader.
+ * Checks nearby entities and counts how many have nominated this entity as their leader. We normally update this
+ * as people join and leave the herd, but this is a fallback to make sure we don't get stuck with an incorrect value
+ * like if the entities die or whatever.
  *
  * @author Hiroku
  * @since June 17th, 2025

@@ -143,6 +143,8 @@
 - Dedenne
 - Noibat
 - Noivern
+- Furfrou
+  - You can change Furfrou's form by using shears on it while it holds a certain dye in its cosmetic slot.
 
 #### Gen 7
 - Yungoos
@@ -277,6 +279,19 @@
 - Parasect
 - Bastiodon
 - Amaura
+- Varoom
+- Revavroom
+- Bouffalant
+- Lickilicky
+- Blaziken
+- Rhyhorn
+- Rhydon
+- Rhyperior
+- Tauros
+- Tauros - Paldea Aqua
+- Tauros - Paldea Blaze
+- Tauros - Paldea Combat
+- Dewgong
 
 ### Model updates for the following Pokémon
 - Cleffa
@@ -383,6 +398,10 @@
 - Starly
 - Staravia
 - Staraptor
+- Varoom
+- Revavroom
+- Nickit
+- Thievul
 
 ### Changes
 - Changed pokemon caught and seen count to update based on the current pokedex being looked
@@ -446,6 +465,7 @@
 - Updated `EvolutionCompleteEvent` parameters to include the Source Pokemon that evolved.
 - Updated `HatchEggEvent.Post` to include the Pokemon that hatched.
 - Roseli Berry Trees now naturally generate in their preferred biomes.
+- Refactored dynamic lights compat to be more future proof. The dynamic light support is only tested with LambDynamicLights, on NeoForged use that mod in combination with Sinytra Connector
 
 ### Fixes
 - Fixed game crashing when removing national pokedex using datapacks
@@ -528,6 +548,7 @@
 - Fixed Pokémon with alternate forms being created with an incorrect 'forced' tag on their ability.
 - Fixed busted abilities and moves in Pokémon data due to removed datapacks etc. causing storage corruption. It now just rerolls their ability / uses Tackle.
 - Fixed singular Pokémon corruption causing entire storage corruption. Storages will now skip corrupted Pokémon and print an error to console.
+- Fixed species additions not being able to properly mark a species as implemented.
 
 ### Developer
 - A finished battle now has winners and losers set inside of `PokemonBattle` instead of them always being empty.

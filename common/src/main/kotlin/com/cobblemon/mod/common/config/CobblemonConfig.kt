@@ -55,7 +55,8 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Storage, lang = "default_box_count")
     @IntConstraint(min = 1, max = 1000)
-    var defaultBoxCount = 30
+    @LastChangedVersion("1.7.0")
+    var defaultBoxCount = 40
     @CobblemonConfigField(Category.Storage, lang = "pokemon_save_interval_seconds")
     @IntConstraint(min = 1, max = 120)
     var pokemonSaveIntervalSeconds = 30

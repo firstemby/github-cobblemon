@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.helditem
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItemComponents.HELD_ITEM_EFFECT
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
@@ -60,9 +61,12 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
 
     override fun showdownId(pokemon: BattlePokemon): String? {
         val itemStack = pokemon.effectedPokemon.heldItemNoCopy()
-        if (remaps.containsKey(itemStack.item)) {
+
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)!!.showdownId
+
+        if (remaps.containsKey(itemStack.item))
             return remaps[itemStack.item]
-        }
 
         for (remap in stackRemaps) {
             val id = remap.apply(itemStack)
@@ -80,9 +84,11 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
     }
 
     fun showdownId(itemStack: ItemStack): String? {
-        if (remaps.containsKey(itemStack.item)) {
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)?.showdownId
+
+        if (remaps.containsKey(itemStack.item))
             return remaps[itemStack.item]
-        }
 
         for (remap in stackRemaps) {
             val id = remap.apply(itemStack)
@@ -173,13 +179,18 @@ object CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
     }
 
     override fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, showdownId: String): Boolean {
+        val itemStack = pokemon.effectedPokemon.heldItem()
+
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)!!.consumed
+
         // In 3rd party and the future battles might have multiple types, give it a priority from pvp down to wild.
         val tag = when {
             battle.isPvP -> CobblemonItemTags.CONSUMED_IN_PVP_BATTLE
             battle.isPvN -> CobblemonItemTags.CONSUMED_IN_NPC_BATTLE
             else -> CobblemonItemTags.CONSUMED_IN_WILD_BATTLE
         }
-        return pokemon.effectedPokemon.heldItem().`is`(tag)
+        return itemStack.`is`(tag)
     }
 
     /**

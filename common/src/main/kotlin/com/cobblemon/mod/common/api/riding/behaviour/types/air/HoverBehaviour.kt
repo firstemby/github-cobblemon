@@ -11,8 +11,6 @@ package com.cobblemon.mod.common.api.riding.behaviour.types.air
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
@@ -27,7 +25,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
@@ -97,7 +94,31 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
         driver: Player,
         input: Vec3
     ) {
-        tickStamina(settings, state, vehicle)
+        if(vehicle.level().isClientSide) {
+            tickStamina(settings, state, vehicle)
+            checkTooHigh(settings, state, vehicle)
+        }
+    }
+
+    fun checkTooHigh(
+        settings: HoverSettings,
+        state: HoverState,
+        vehicle: PokemonEntity,
+    ) {
+        val heightLimit = vehicle.runtime.resolveDouble(settings.jumpExpr)
+        val pos = vehicle.position()
+        val level = Minecraft.getInstance().player?.level() ?: return
+        val hit = level.clip(
+            ClipContext(
+                pos,
+                pos.subtract(0.0, heightLimit, 0.0),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                vehicle
+            )
+        )
+
+        state.tooHigh.set(hit.type == HitResult.Type.MISS)
     }
 
     fun tickStamina(
@@ -107,8 +128,8 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     ) {
         val stam = state.stamina.get()
         val stamDrainRate = (1.0f / vehicle.runtime.resolveDouble(settings.staminaExpr)).toFloat() / 20.0f
-
-        val newStam = min(1.0f,stam + stamDrainRate)
+        val stamReplenishRate = (1.0f / vehicle.runtime.resolveDouble(settings.stamReplenishTimeSeconds) ).toFloat() / 20.0f // 2 seconds to replenish a full bar of stamina
+        val newStam = if (state.tooHigh.get()) max(0.0f, stam - stamDrainRate) else min(1.0f,stam + stamReplenishRate)
 
         state.stamina.set(newStam)
     }
@@ -206,6 +227,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
 
         // Vertical movement based on driver input.
         val vertInput = when {
+            state.stamina.get() == 0.0f -> -1.0
             driver.jumping -> 1.0
             driver.isShiftKeyDown -> -1.0
             else -> 0.0
@@ -218,28 +240,6 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
             vertInput,
             driver.zza.sign.toDouble()
         ).normalize()
-
-        /******************************************************
-         * Boosting Logic
-         *****************************************************/
-        if (driver.level().isClientSide) {
-            if(Minecraft.getInstance().options.keySprint.isDown() && state.stamina.get() == 1.0f && !state.isBoosting.get()) {
-                state.isBoosting.set(true)
-                val localBoostVel = if (inputVel.horizontalDistance() == 0.0) Vec3(0.0, 0.0, 1.0) else Vec3(inputVel.x, 0.0, inputVel.z)
-                state.boostVec.set(localBoostVel)
-                state.boostTicks.set(0)
-                state.stamina.set(0.0f)
-            }
-        }
-        val maxBoostTicks = 20
-        val boostPower = (topSpeed * 20) * 0.1 * vehicle.runtime.resolveDouble(settings.jumpExpr)
-        if (state.isBoosting.get() && state.boostTicks.get() < maxBoostTicks) {
-            newVelocity = newVelocity.add(state.boostVec.get().scale(boostPower / maxBoostTicks))
-            state.boostTicks.set(state.boostTicks.get() + 1)
-        } else if (state.isBoosting.get()) {
-            state.isBoosting.set(false)
-        }
-
 
         // Air Friction/Resistance
         // When the dot between friction and input is -1 we want to apply none of it.
@@ -430,25 +430,28 @@ class HoverSettings : RidingBehaviourSettings {
     var canJump = "true".asExpression()
         private set
 
+    var stamReplenishTimeSeconds = "2.0".asExpression()
+        private set
+
     // Speed in block per second
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 13.0, 6.0)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'AIR', 7.0, 1.0)".asExpression()
         private set
 
     // Acceleration in number of seconds to top speed
     var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'AIR', 2.0, 5.0)".asExpression()
+        "q.get_ride_stats('ACCELERATION', 'AIR', 2.0, 8.0)".asExpression()
         private set
 
     // Amount of seconds between boosts
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 1, 4)".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 30.0, 2.0)".asExpression()
         private set
 
-    // Power of boost as a fraction of top speed
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 1.2, 0.2)".asExpression()
+    // Blocks before stamina drain
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 16.0, 2.0)".asExpression()
         private set
 
     // Turn rate in degrees per second when stationary
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 360.0, 90)".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'AIR', 270.0, 45.0)".asExpression()
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
@@ -481,17 +484,20 @@ class HoverState : RidingBehaviourState() {
     var isBoosting = ridingState(false, Side.BOTH)
     var boostVec = ridingState(Vec3.ZERO, Side.CLIENT)
     var boostTicks = ridingState(0, Side.CLIENT)
+    var tooHigh = ridingState(false, Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
         buffer.writeDouble(speed.get())
         buffer.writeBoolean(isBoosting.get())
+        buffer.writeBoolean(tooHigh.get())
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
         super.decode(buffer)
         speed.set(buffer.readDouble(), forced = true)
         isBoosting.set(buffer.readBoolean(), forced = true)
+        tooHigh.set(buffer.readBoolean(), forced = true)
     }
 
     override fun reset() {
@@ -500,6 +506,7 @@ class HoverState : RidingBehaviourState() {
         isBoosting.set(false, forced = true)
         boostVec.set(Vec3.ZERO, forced = true)
         boostTicks.set(0, forced = true)
+        tooHigh.set(false, forced = true)
     }
 
     override fun copy() = HoverState().also {
@@ -508,6 +515,7 @@ class HoverState : RidingBehaviourState() {
         it.isBoosting.set(this.isBoosting.get(), forced = true)
         it.boostVec.set(this.boostVec.get(), forced = true)
         it.boostTicks.set(this.boostTicks.get(), forced = true)
+        it.tooHigh.set(this.tooHigh.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {

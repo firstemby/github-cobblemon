@@ -21,6 +21,7 @@
     "accessor.KeyBindingAccessor",
     "accessor.RecipeBookComponentAccessor",
     "client.AbstractClientPlayerMixin",
+    "client.AgeableListModelMixin",
     "client.CameraMixin",
     "client.ClientRecipeBookMixin",
     "client.EntryListWidgetMixin",

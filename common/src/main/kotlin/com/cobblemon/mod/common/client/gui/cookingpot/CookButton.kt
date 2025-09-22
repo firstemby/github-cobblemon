@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.cookingpot
 
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -21,6 +22,7 @@ import net.minecraft.sounds.SoundEvents
 class CookButton(
     pX: Int, pY: Int,
     var selected: Boolean = false,
+    var color: CampfirePotColor,
     onPress: OnPress
 ): Button(pX, pY, SIZE.toInt(), SIZE.toInt(), Component.literal("Cook"), onPress, DEFAULT_NARRATION) {
 
@@ -28,11 +30,11 @@ class CookButton(
         private const val SIZE = 20F
 
         private val buttonResource = cobblemonResource("textures/gui/campfirepot/button.png")
-        private val buttonIconResource = cobblemonResource("textures/item/campfire_pots/campfire_pot_red.png")
-        private val buttonIconOpenResource = cobblemonResource("textures/item/campfire_pots/campfire_pot_red_open.png")
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        val closedIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}.png")
+        val openIcon = cobblemonResource("textures/item/campfire_pots/campfire_pot_${color.suffix}_open.png")
         blitk(
             matrixStack = context.pose(),
             texture = buttonResource,
@@ -46,7 +48,7 @@ class CookButton(
 
         blitk(
             matrixStack = context.pose(),
-            texture = if (selected) buttonIconResource else buttonIconOpenResource,
+            texture = if (selected) closedIcon else openIcon,
             x = x + 2,
             y = y + 2,
             width = 16,

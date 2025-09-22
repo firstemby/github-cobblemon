@@ -26,11 +26,9 @@ architectury {
 
 val generatedResources = file("src/generated/resources")
 
-sourceSets {
-    main {
-        resources {
-            srcDir(generatedResources)
-        }
+sourceSets.main {
+    resources {
+        srcDir(generatedResources)
     }
 }
 
@@ -44,9 +42,6 @@ repositories {
 
 dependencies {
     implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    "developmentFabric"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
     bundle(project(path = ":common", configuration = "transformProductionFabric")) {

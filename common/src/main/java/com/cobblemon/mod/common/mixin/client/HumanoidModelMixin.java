@@ -19,19 +19,16 @@ import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-
 @Mixin(HumanoidModel.class)
 public class HumanoidModelMixin {
-    @Unique HashMap<String, ModelPart> relevantPartsByName = new HashMap<>();
-
     @Shadow @Final
     public ModelPart head;
+    @Shadow @Final
+    public ModelPart hat;
     @Shadow @Final
     public ModelPart rightArm;
     @Shadow @Final
@@ -40,6 +37,8 @@ public class HumanoidModelMixin {
     public ModelPart rightLeg;
     @Shadow @Final
     public ModelPart leftLeg;
+    @Shadow @Final
+    public ModelPart body;
 
     @Inject(method = "setupAnim*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;copyFrom(Lnet/minecraft/client/model/geom/ModelPart;)V", shift = At.Shift.BEFORE))
     public void cobblemon$animateRiders(
@@ -51,19 +50,23 @@ public class HumanoidModelMixin {
         float headPitch,
         CallbackInfo ci
     ) {
-        if (relevantPartsByName.isEmpty()) {
-            relevantPartsByName.put("arm_left", leftArm);
-            relevantPartsByName.put("arm_right", rightArm);
-            relevantPartsByName.put("leg_left", leftLeg);
-            relevantPartsByName.put("leg_right", rightLeg);
-            relevantPartsByName.put("head", head);
+        MountedPlayerRenderer.shouldApplyRootAnimation = false;
+
+        if (MountedPlayerRenderer.relevantPartsByName.size() <= 1) {
+            MountedPlayerRenderer.relevantPartsByName.put("arm_left", leftArm);
+            MountedPlayerRenderer.relevantPartsByName.put("arm_right", rightArm);
+            MountedPlayerRenderer.relevantPartsByName.put("leg_left", leftLeg);
+            MountedPlayerRenderer.relevantPartsByName.put("leg_right", rightLeg);
+            MountedPlayerRenderer.relevantPartsByName.put("head", head);
+            MountedPlayerRenderer.relevantPartsByName.put("hat", hat);
+            MountedPlayerRenderer.relevantPartsByName.put("torso", body);
         }
 
         Entity vehicle = entity.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity && entity instanceof OrientationControllable) {
-            var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) -> {
-                return behaviour.shouldRotateRiderHead(settings, state, pokemonEntity);
-            });
+            var shouldRotatePlayerHead = pokemonEntity.ifRidingAvailableSupply(false, (behaviour, settings, state) ->
+                    behaviour.shouldRotateRiderHead(settings, state, pokemonEntity)
+            );
 
             if (!shouldRotatePlayerHead) {
                 netHeadYaw = 0f;
@@ -76,7 +79,8 @@ public class HumanoidModelMixin {
 
             if (!(entity instanceof AbstractClientPlayer player)) return;
 
-            MountedPlayerRenderer.INSTANCE.animate(pokemonEntity, player, relevantPartsByName, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
+            MountedPlayerRenderer.shouldApplyRootAnimation = true;
+            MountedPlayerRenderer.INSTANCE.animate((HumanoidModel<AbstractClientPlayer>)(Object)this, pokemonEntity, player, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
         }
     }
 }

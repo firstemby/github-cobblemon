@@ -2694,6 +2694,8 @@
   "advancements.cobblemon.ride_pokemon.description": "Ride a Pokémon for the first time",
   "advancements.cobblemon.place_campfire_pot": "We Need To Cook",
   "advancements.cobblemon.place_campfire_pot.description": "Place down a Campfire Pot on a lit Campfire",
+  "advancements.cobblemon.use_iv_candy": "Souped Up Stats",
+  "advancements.cobblemon.use_iv_candy.description": "Use any candy that alters the potential of Individual Values on a Pokémon",
 
   "cobblemon.battle.crash": "A battle error has occurred. If playing single-player, report this to the mod team. Otherwise, report this to the servers administrator.",
   "cobblemon.battle.damage_dealt": "%1$s took %2$s damage!",
@@ -3416,7 +3418,6 @@
   "tag.item.cobblemon.berries": "Berries",
   "tag.item.cobblemon.evolution_items": "Evolution Items",
   "tag.item.cobblemon.evolution_stones": "Evolution Stones",
-  "tag.item.cobblemon.experience_candies": "Experience Candies",
   "tag.item.cobblemon.held.destiny_knot": "Destiny Knots",
   "tag.item.cobblemon.held.everstone": "Everstones",
   "tag.item.cobblemon.held.experience_share": "Experience Shares",
@@ -3516,6 +3517,11 @@
   "tag.item.cobblemon.held.blacklisted_items_to_hold": "Blacklisted Held Items",
   "tag.item.cobblemon.held.whitelisted_items_to_hold": "Whitelisted Held Items",
   "tag.item.cobblemon.poke_puff_berries": "Poké Puff Berries",
+  "tag.item.cobblemon.candies": "Candies",
+  "tag.item.cobblemon.experience_candies": "Experience Candies",
+  "tag.item.cobblemon.iv_candies": "Hyper Training Candies",
+  "tag.item.cobblemon.additive_iv_candies": "Additive Hyper Training Candies",
+  "tag.item.cobblemon.subtractive_iv_candies": "Subtractive Hyper Training Candies",
 
   "cobblemon.entity.variable.challenge_cooldown.name": "Challenge Cooldown",
   "cobblemon.entity.variable.challenge_cooldown.desc": "How long the NPC will be un-challenge-able from that player's last challenge.",
@@ -3759,6 +3765,9 @@
 
   "cobblemon.behaviour.pokemon_bee.name": "Pollinates Flowers",
   "cobblemon.behaviour.pokemon_bee.desc": "Pollinates flowers and adds honey to hives and Saccharine tree leaves.",
+
+  "cobblemon.behaviour.pokemon_picks_up_items.name": "Picks Up Items",
+  "cobblemon.behaviour.pokemon_picks_up_items.desc": "The Pokémon will pick up items that it cares about.",
 
   "npc.sacchi.name": "Professor Sacchi",
 
@@ -6303,6 +6312,10 @@
   "cobblemon.species.unown-y.desc": "This Pokémon is shaped like ancient writing. It is a mystery as to which came first, the ancient writings or the various Unown. Research into this topic is ongoing but nothing is known.",
   "cobblemon.ui.pokedex.info.form.unown-z": "One form",
   "cobblemon.species.unown-z.desc": "This Pokémon is shaped like ancient writing. It is a mystery as to which came first, the ancient writings or the various Unown. Research into this topic is ongoing but nothing is known.",
+  "cobblemon.ui.pokedex.info.form.unown-!": "One form",
+  "cobblemon.species.unown-!.desc": "This Pokémon is shaped like ancient writing. It is a mystery as to which came first, the ancient writings or the various Unown. Research into this topic is ongoing but nothing is known.",
+  "cobblemon.ui.pokedex.info.form.unown-?": "One form",
+  "cobblemon.species.unown-?.desc": "This Pokémon is shaped like ancient writing. It is a mystery as to which came first, the ancient writings or the various Unown. Research into this topic is ongoing but nothing is known.",
   "cobblemon.species.wobbuffet.name": "Wobbuffet",
   "cobblemon.species.wobbuffet.desc": "Wobbuffet does nothing but endure attacks—it won't attack on its own. However, it won't endure an attack on its tail. When that happens, the Pokémon will try to take the foe with it using Destiny Bond.",
   "cobblemon.species.girafarig.name": "Girafarig",

@@ -56,7 +56,7 @@ class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, Cont
             CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
         )
         this.resultContainer = ResultContainer()
-        this.containerData = SimpleContainerData(3)
+        this.containerData = SimpleContainerData(4)
         this.addDataSlots(containerData)
         this.player = playerInventory.player
         this.level = playerInventory.player.level()

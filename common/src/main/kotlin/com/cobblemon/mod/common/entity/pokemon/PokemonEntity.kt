@@ -26,8 +26,8 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
-import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
+import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.api.mark.Marks
@@ -57,7 +57,6 @@ import com.cobblemon.mod.common.api.riding.Seat
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
-import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviours
 import com.cobblemon.mod.common.api.riding.behaviour.RidingController
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.sound.RideSoundManager
@@ -100,6 +99,7 @@ import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
 import com.cobblemon.mod.common.net.messages.server.behaviour.DamageOnCollisionPacket
+import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
 import com.cobblemon.mod.common.net.serverhandling.storage.SendOutPokemonHandler.SEND_OUT_DURATION
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
@@ -127,6 +127,7 @@ import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.math.PI
 import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
@@ -150,7 +151,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerEntity
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.tags.FluidTags
@@ -182,6 +182,7 @@ import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.entity.EntityTypeTest
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.SuspiciousEffectHolder
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.material.EmptyFluid
 import net.minecraft.world.level.material.FluidState
@@ -507,9 +508,10 @@ open class PokemonEntity(
     }
 
     override fun canStandOnFluid(state: FluidState): Boolean {
-//        val node = navigation.currentPath?.currentNode
-//        val targetPos = node?.blockPos
-//        if (targetPos == null || world.getBlockState(targetPos.up()).isAir) {
+        // If the pokemon is currently ridden then return false to prevent mounts that can transition
+        // from the air to the water from getting stuck on the water surface.
+        if (this.passengers.filterIsInstance<LivingEntity>().isNotEmpty() && this.controllingPassenger != null) return false
+
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
             exposedForm.behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
         } else if (state.`is`(FluidTags.LAVA) && !isEyeInFluid(FluidTags.LAVA)) {
@@ -517,9 +519,6 @@ open class PokemonEntity(
         } else {
             super.canStandOnFluid(state)
         }
-//        }
-//
-//        return super.canWalkOnFluid(state)
     }
 
     override fun canSprint() = true
@@ -1729,15 +1728,13 @@ open class PokemonEntity(
             val velocity = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                 behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
             }
-            //Handle ridden pokemon differently to allow vector lerp instead of simple addition.
+            // Handle ridden pokemon differently to allow vector lerp instead of simple addition.
             val v = getInputVector(velocity, 1.0f, this.yRot)
-            //changing this will give the ride more or less inertia/handling/drift
+            // Changing this will give the ride more or less inertia/handling/drift
             val inertia = ifRidingAvailableSupply(fallback = 0.5) { behaviour, settings, state ->
                 behaviour.inertia(settings, state,this)
             }
 
-            // TODO: jackowes look over this so I don't accidentally break anything
-            // TODO: Talk to landon about why this was needed
             this.deltaMovement = this.deltaMovement.lerp(v, inertia)
             var pos = this.deltaMovement.scale(this.speed.toDouble())
             if (super.onGround() && this.deltaMovement.y == 0.0) {
@@ -1809,6 +1806,12 @@ open class PokemonEntity(
                         val delta = triedMovement.subtract(this.deltaMovement)
                         if (behaviour.damageOnCollision(settings, state, this, delta)) {
                             DamageOnCollisionPacket(delta).sendToServer()
+
+                            for (passenger in this.passengers) {
+                                passenger.deltaMovement = this.deltaMovement
+                            }
+                            DismountPokemonPacket().sendToServer()
+
                             // Reset ride velocity
                             state.rideVelocity.set(state.rideVelocity.get().multiply(0.0, 1.0, 0.0))
                         }
@@ -1873,6 +1876,13 @@ open class PokemonEntity(
 
     fun isFalling() =
         this.fallDistance > 0 && this.level().getBlockState(this.blockPosition().below()).isAir && !this.isFlying()
+
+    override fun checkFallDamage(y: Double, onGround: Boolean, state: BlockState, pos: BlockPos) {
+        super.checkFallDamage(y, onGround, state, pos)
+        if (isFlying() && this.passengers.isEmpty() && y < 0.0 && !onGround) {
+            fallDistance = 0F // Prevent fall damage after flying without a rider
+        }
+    }
 
     override fun getCurrentPoseType(): PoseType = this.entityData.get(POSE_TYPE)
 
@@ -2046,10 +2056,6 @@ open class PokemonEntity(
     }
 
     override fun canBeLeashed() = true
-//    override fun canBeLeashedBy(player: Player): Boolean {
-//        return this.ownerUuid == null || this.ownerUuid == player.uuid
-//    }
-
     override fun setLeashedTo(entity: Entity, bl: Boolean) {
         super.setLeashedTo(entity, bl)
         if (this.ownerUUID != null && this.ownerUUID != entity.uuid) {
@@ -2057,8 +2063,8 @@ open class PokemonEntity(
         }
     }
 
-    /** Retrieves the battle theme associated with this Pokemon's Species/Form, or the default PVW theme if not found. */
-    fun getBattleTheme() = this.form.battleTheme ?: CobblemonSounds.PVW_BATTLE.location
+    /** Retrieves the battle theme associated with this Pokemon's Species/Form which falls back to the default PVW theme if not found. */
+    fun getBattleTheme() = this.form.battleTheme
 
     /**
      * A utility method to instance a [Pokemon] aware if the [world] is client sided or not.
@@ -2073,21 +2079,22 @@ open class PokemonEntity(
 
     // Takes in a requested stat type with a base minimum and base maximum and returns the interpolated
     // stat based on the boost of that pokemons stat
-    fun getRideStat(stat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double): Double {
-        //TODO: Change from static zero boost once aprijuice is implemented.
-        if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
-            return (((baseMax - baseMin) / 100) * rideStatOverrides[style]!![stat]!!) + baseMin
+    fun getRideStat(rideStat: RidingStat, style: RidingStyle, baseMin: Double, baseMax: Double): Double {
+        if (rideStatOverrides[style] != null && rideStatOverrides[style]!![rideStat] != null) {
+            return (((baseMax - baseMin) / 100) * rideStatOverrides[style]!![rideStat]!!) + baseMin
         }
-        val stat = this.rideProp.behaviours?.get(style)?.calculate(stat, 0) ?: return 0.0
+        val stat = this.rideProp.behaviours?.get(style)?.calculate(rideStat, entityData.get(RIDE_BOOSTS)[rideStat] ?: 0F) ?: return 0.0
         val statVal = (((baseMax - baseMin) / 100) * stat) + baseMin
-        return statVal
+        // Cap the minimum value at a very small value to prevent control inversions and other unexpected behaviour in
+        // the ride controllers when using negative values
+        return max(statVal, 1e-6)
     }
 
     fun getRawRideStat(stat: RidingStat, style: RidingStyle): Double {
         if (rideStatOverrides[style] != null && rideStatOverrides[style]!![stat] != null) {
             return rideStatOverrides[style]!![stat]!!
         }
-        return this.rideProp.behaviours?.get(style)?.calculate(stat, 0)?.toDouble() ?: 0.0
+        return this.rideProp.behaviours?.get(style)?.calculate(stat, 0F)?.toDouble() ?: 0.0
     }
 
     internal fun overrideRideStat(style: RidingStyle, stat: RidingStat, value: Double) {
@@ -2433,6 +2440,17 @@ open class PokemonEntity(
         } else {
             herdLeader.brain.getMemorySafely(CobblemonMemories.HERD_SIZE).orElse(0)
         }
+    }
+
+    internal fun adjustHerdSize(difference: Int): Int {
+        val currentSize = brain.getMemorySafely(CobblemonMemories.HERD_SIZE).orElse(0)
+        val newSize = (currentSize + difference).coerceAtLeast(0)
+        if (newSize == 0) {
+            brain.eraseMemory(CobblemonMemories.HERD_SIZE)
+        } else {
+            brain.setMemory(CobblemonMemories.HERD_SIZE, newSize)
+        }
+        return newSize
     }
 
     /**

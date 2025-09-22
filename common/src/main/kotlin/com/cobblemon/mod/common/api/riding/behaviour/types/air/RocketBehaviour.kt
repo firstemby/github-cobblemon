@@ -86,7 +86,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         // Use this as a "tick" function and check to see if the driver is "boosting"
         if(vehicle.level().isClientSide) {
             handleBoosting(settings, state, vehicle, driver)
-            tickStamina(settings, state, vehicle)
+            tickStamina(settings, state, vehicle, driver)
         }
 
         return state.rideVelocity.get().length().toFloat()
@@ -101,7 +101,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         //If the forward key is not held then it cannot be boosting
         if(Minecraft.getInstance().options.keyUp.isDown() && state.stamina.get() != 0.0f) {
             val boostKeyPressed = Minecraft.getInstance().options.keySprint.isDown()
-            if (state.stamina.get() >= 0.25f) {
                 //If on the previous tick the boost key was held then don't change if the ride is boosting
                 if(state.boostIsToggleable.get() && boostKeyPressed) {
                     //flip the boosting state if boost key is pressed
@@ -109,7 +108,6 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
                 }
                 //If the boost key is not held then next tick boosting is toggleable
                 state.boostIsToggleable.set(!boostKeyPressed)
-            }
         } else {
             //Turn off boost and reset boost params
             state.boostIsToggleable.set(true)
@@ -121,7 +119,8 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     fun tickStamina(
         settings: RocketSettings,
         state: RocketState,
-        vehicle: PokemonEntity
+        vehicle: PokemonEntity,
+        driver: Player
     ) {
         val stam = state.stamina.get()
 
@@ -131,8 +130,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         val boostTime = vehicle.runtime.resolveDouble(settings.staminaExpr) * 20.0f
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
-        val newStam = if (state.boosting.get()) max(0.0f,stam - stamDrainRate)
-            else min(1.0f,stam + stamDrainRate)
+        val newStam = if(state.boosting.get() || driver.jumping) max(0.0f,stam - stamDrainRate) else stam
 
         state.stamina.set(newStam)
     }
@@ -266,7 +264,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
 
             if(state.canSpeedBurst.get()) {
                 burst = 0.5f
-                state.stamina.set(max(0.0f,state.stamina.get() - 0.1f))
+                state.stamina.set(max(0.0f,state.stamina.get() - 0.05f))
                 state.canSpeedBurst.set(false)
             }
 
@@ -301,7 +299,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         } else {
             if (driver.jumping && !(vehicle.deltaMovement.y > maxVertSpeed && (newVelocity.y.sign.toFloat() > 0.0))) {
                 // More force if traveling downwards to allow for quicker fall stops
-                vertInput = if (newVelocity.y < 0) jump * 3 else jump
+                vertInput = (if (state.stamina.get() == 0.0f) -1.0f else if(newVelocity.y < 0) jump.toFloat() * 3.0f else jump.toFloat()).toDouble()
                 // Reset falldistance if upward motion is detected
                 vehicle.resetFallDistance()
                 newVelocity = Vec3(
@@ -474,6 +472,18 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         return false
     }
 
+
+    override fun damageOnCollision(
+        settings: RocketSettings,
+        state: RocketState,
+        vehicle: PokemonEntity,
+        impactVec: Vec3
+    ): Boolean {
+        if (!state.boosting.get()) return false
+        val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
+        return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
+    }
+
     override fun getRideSounds(
         settings: RocketSettings,
         state: RocketState,
@@ -509,8 +519,8 @@ class RocketSettings : RidingBehaviourSettings {
         "q.get_ride_stats('ACCELERATION', 'AIR', (1.0 / (20.0 * 1.5)), (1.0 / (20.0 * 3.0))) * 0.5".asExpression()
         private set
 
-    // Boost time in seconds
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 7.5, 2.5)".asExpression()
+    // air time in seconds
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'AIR', 20.0, 10.0)".asExpression()
         private set
 
     var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'AIR', 2.0, 1.0)".asExpression()

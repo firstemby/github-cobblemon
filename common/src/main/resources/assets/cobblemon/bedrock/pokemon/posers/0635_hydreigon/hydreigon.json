@@ -4,6 +4,17 @@
   "profileScale": 0.35,
   "profileTranslation": [0, 1.37, 0],
   "rootBone": "hydreigon",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 1.25, 6],
+    "seat_1_reverse": [0, 1.25, 6]
+  },
   "animations": {
     "cry": "q.bedrock_stateful('hydreigon', 'cry')",
     "recoil": "q.bedrock_stateful('hydreigon', 'recoil')"
