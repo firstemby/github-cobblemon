@@ -163,7 +163,7 @@
         "electroshot"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:metal_coat"
+      "requiredContext": "cobblemon:metal_alloy"
     }
   ],
   "forms": [
@@ -188,5 +188,6 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {}
 }

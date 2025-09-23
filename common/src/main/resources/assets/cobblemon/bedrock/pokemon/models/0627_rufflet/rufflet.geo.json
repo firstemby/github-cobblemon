@@ -131,7 +131,7 @@
 				{
 					"name": "wing_open_left3",
 					"parent": "wing_open_left2",
-					"pivot": [13, 8, -2.3],
+					"pivot": [13, 7.5, -2.3],
 					"cubes": [
 						{"origin": [13, 7.5, -4.3], "size": [5, 0, 10], "uv": [47, 44]}
 					]
@@ -165,7 +165,7 @@
 				{
 					"name": "wing_open_right3",
 					"parent": "wing_open_right2",
-					"pivot": [-13, 8, -2.3],
+					"pivot": [-13, 7.5, -2.3],
 					"cubes": [
 						{"origin": [-18, 7.5, -4.3], "size": [5, 0, 10], "uv": [35, 44]}
 					]

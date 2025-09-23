@@ -51,6 +51,19 @@
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "manectric mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "manectric mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -52,6 +52,15 @@
     "entityInteract": {
       "avoidedByCreeper": true,
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "meowstic",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

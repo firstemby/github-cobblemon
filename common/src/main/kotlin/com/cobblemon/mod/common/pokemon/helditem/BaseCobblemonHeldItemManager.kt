@@ -10,9 +10,9 @@ package com.cobblemon.mod.common.pokemon.helditem
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemManager
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.google.common.collect.HashBiMap
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -32,17 +32,11 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
 
     internal open fun load() {
         this.itemIds.clear()
-        val itemsJson = ShowdownService.service.getRegistryData("heldItem")
-        val showdownIds = hashSetOf<String>()
-        for (i in 0 until itemsJson.size()) {
-            val jsItem = itemsJson[i].asJsonObject
-            showdownIds += jsItem.get("id").asString
-        }
         BuiltInRegistries.ITEM.forEach { item ->
             val identifier = BuiltInRegistries.ITEM.getKey(item)
             if (identifier.namespace == Cobblemon.MODID) {
                 val formattedPath = identifier.path.replace("_", "")
-                if (showdownIds.contains(formattedPath)) {
+                if (HeldItems.showdownItems.contains(formattedPath)) {
                     this.itemIds[formattedPath] = item
                 }
             }
@@ -51,9 +45,9 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
 
     override fun showdownId(pokemon: BattlePokemon): String? {
         val item = pokemon.effectedPokemon.heldItemNoCopy()
-        val identifier = item.get(CobblemonItemComponents.HELD_ITEM_REP)?.item ?: BuiltInRegistries.ITEM.getKey(item.item)
+        val identifier = item.get(CobblemonItemComponents.HELD_ITEM_EFFECT)?.showdownId ?: BuiltInRegistries.ITEM.getKey(item.item).path
 
-        val formattedPath = identifier.path.replace("_", "")
+        val formattedPath = identifier.replace("_", "")
         if (this.itemIds.containsKey(formattedPath)) {
             return formattedPath
         }
@@ -65,7 +59,7 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
     // This is safe to do as any item triggers will only happen if a Pokémon has a valid held item to begin with.
     override fun give(pokemon: BattlePokemon, showdownId: String) {
         val stack = this.itemIds[showdownId]?.let { ItemStack(it) } ?: ItemStack.EMPTY
-        pokemon.effectedPokemon.swapHeldItem(stack, false)
+        pokemon.effectedPokemon.swapHeldItem(stack, false, false)
     }
 
     // This is safe to do as any item triggers will only happen if a Pokémon has a valid held item to begin with.

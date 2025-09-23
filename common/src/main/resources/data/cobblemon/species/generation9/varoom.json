@@ -58,6 +58,19 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "varoom",
+          "tier": 1
+        },
+        {
+          "pokemon": "revavroom",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

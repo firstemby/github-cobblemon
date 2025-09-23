@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 522,
   "name": "Blitzle",
   "primaryType": "electric",
@@ -48,10 +49,51 @@
     "fixed": false
   },
   "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
     "moving": {
       "walk": {
-        "walkSpeed": 0.175
+        "walkSpeed": 0.2
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ponyta",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudbray",
+          "tier": 1
+        },
+        {
+          "pokemon": "blitzle",
+          "tier": 2
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 3
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 3
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 4
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 5
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

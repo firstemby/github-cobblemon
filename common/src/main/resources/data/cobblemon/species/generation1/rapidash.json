@@ -61,6 +61,31 @@
       "walk": {
         "walkSpeed": 0.35
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zebstrika",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 1
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 2
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -352,6 +377,33 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "zebstrika",
+              "tier": 1
+            },
+            {
+              "pokemon": "mudsdale",
+              "tier": 1
+            },
+            {
+              "pokemon": "rapidash",
+              "tier": 2
+            },
+            {
+              "pokemon": "glastrier",
+              "tier": 3
+            },
+            {
+              "pokemon": "spectrier",
+              "tier": 3
+            }
+          ]
         }
       }
     }

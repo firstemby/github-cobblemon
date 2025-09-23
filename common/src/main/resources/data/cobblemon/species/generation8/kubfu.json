@@ -133,7 +133,7 @@
         "wickedblow"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:dusk_stone"
+      "requiredContext": "cobblemon:scroll_of_darkness"
     },
     {
       "id": "kubfu_urshifurapidstrike",
@@ -144,7 +144,18 @@
         "surgingstrikes"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:water_stone"
+      "requiredContext": "cobblemon:scroll_of_waters"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "urshifu",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

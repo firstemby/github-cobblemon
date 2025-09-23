@@ -52,6 +52,15 @@
   "behaviour": {
     "resting": {
       "canSleep": true
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spinda",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

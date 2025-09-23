@@ -58,6 +58,19 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "voltorb",
+          "tier": 1
+        },
+        {
+          "pokemon": "electrode",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -318,7 +331,22 @@
           "requiredContext": "cobblemon:leaf_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "voltorb",
+              "tier": 1
+            },
+            {
+              "pokemon": "electrode",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

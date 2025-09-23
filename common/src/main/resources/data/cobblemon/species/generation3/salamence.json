@@ -260,7 +260,8 @@
       "baseExperienceYield": 350,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {}
     }
   ]
 }

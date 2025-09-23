@@ -51,12 +51,25 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.1
+      },
       "swim": {
         "swimSpeed": 0.1,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "binacle",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

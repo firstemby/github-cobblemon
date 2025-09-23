@@ -11,16 +11,21 @@ package com.cobblemon.mod.common.api.ai.config.task
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSensors
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.GoToSleepTask
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class GoToSleepTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity) = emptyList<MoLangConfigVariable>()
+    var onlyFromStatus: ExpressionOrEntityVariable = Either.left("false".asExpression())
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
@@ -34,6 +39,6 @@ class GoToSleepTaskConfig : SingleTaskConfig {
             CobblemonMemories.POKEMON_SLEEPING
         )
         behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)
-        return WrapperLivingEntityTask(GoToSleepTask.create(), PokemonEntity::class.java)
+        return WrapperLivingEntityTask(GoToSleepTask.create(onlyFromStatus.resolveBoolean(behaviourConfigurationContext.runtime)), PokemonEntity::class.java)
     }
 }

@@ -49,7 +49,16 @@
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "regigigas",
+          "tier": 1
+        }
+      ]
+    }
   },
   "moves": [
     "1:twister",

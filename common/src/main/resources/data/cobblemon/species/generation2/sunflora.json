@@ -58,6 +58,15 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sunflora",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

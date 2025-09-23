@@ -27,6 +27,15 @@
           "translucent": true
         }
       ]
+    },
+    {
+      "aspects": ["color-green"],
+      "layers": [
+        {
+          "name": "pokemopolis",
+          "texture": "cobblemon:textures/pokemon/0094_gengar/gengar_pokemopolis.png"
+        }
+      ]
     }
   ]
 }

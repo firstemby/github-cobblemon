@@ -8,15 +8,14 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import java.util.UUID
 import net.minecraft.world.entity.LivingEntity
@@ -37,7 +36,7 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
     // How frequently to check for a better herd leader
     val checkTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
@@ -53,8 +52,7 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
         )
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val checkTicks = checkTicks.resolveInt()
+        val checkTicks = checkTicks.resolveInt(behaviourConfigurationContext.runtime)
         return BehaviorBuilder.create { instance ->
             instance.group(
                 instance.present(CobblemonMemories.HERD_LEADER),
@@ -83,6 +81,8 @@ class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
                         if (bestLeader != null && bestLeader != leader) {
                             bestLeader.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
                             entity.brain.setMemory(CobblemonMemories.HERD_LEADER, bestLeader.uuid.toString())
+                            bestLeader.adjustHerdSize(1)
+                            leader.adjustHerdSize(-1)
                         }
                     }
                     return@Trigger true

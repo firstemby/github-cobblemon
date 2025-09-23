@@ -46,14 +46,122 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.2,
     "height": 1.4,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-10",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.0016335993,
+              "y": -1.1859827,
+              "z": -0.50283176
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0048732185,
+              "y": -1.1896727,
+              "z": -0.49589556
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.0017163849,
+              "y": -1.2334154,
+              "z": -0.40224022
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.0017163849,
+              "y": -1.2334154,
+              "z": -0.40224022
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0048732185,
+              "y": -1.1896727,
+              "z": -0.49589556
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": 0.0048732185,
+              "y": -1.1896727,
+              "z": -0.49589556
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.0017163849,
+              "y": -1.2334154,
+              "z": -0.40224022
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rhyhorn",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "swim": {
         "canSwimInLava": true
+      },
+      "walk": {
+        "walkSpeed": 0.2
       }
     }
   },
@@ -223,42 +331,19 @@
   ],
   "evolutions": [
     {
-      "id": "rhyhorn_rhydon",
-      "variant": "level_up",
-      "result": "rhydon",
       "consumeHeldItem": false,
+      "id": "rhyhorn_rhydon",
       "learnableMoves": [
         "hammerarm"
       ],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 42
+          "minLevel": 42,
+          "variant": "level"
         }
-      ]
+      ],
+      "result": "rhydon",
+      "variant": "level_up"
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "20-50"
-      },
-      "ACCELERATION": {
-        "ranges": "30-60"
-      },
-      "SKILL": {
-        "ranges": "20-40"
-      },
-      "JUMP": {
-        "ranges": "5-10"
-      },
-      "STAMINA": {
-        "ranges": "25-55"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/vehicle"
-    }
-  }
+  ]
 }

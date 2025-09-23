@@ -56,6 +56,9 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3"
     }
   },
   "drops": {

@@ -53,6 +53,7 @@
   "behaviour": {
     "moving": {
       "walk": {
+        "avoidsLand": true,
         "walkSpeed": 0.17
       },
       "swim": {
@@ -66,6 +67,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "anorith",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

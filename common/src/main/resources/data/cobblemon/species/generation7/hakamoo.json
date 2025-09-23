@@ -200,5 +200,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kommoo",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

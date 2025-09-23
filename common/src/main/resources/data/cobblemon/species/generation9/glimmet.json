@@ -66,6 +66,19 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "glimmet",
+          "tier": 1
+        },
+        {
+          "pokemon": "glimmora",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -8,17 +8,16 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.ToleratedHerdLeader
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
@@ -53,24 +52,25 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
                 it is PokemonEntity &&
                         it != currentLeader &&
                         it.pokemon.storeCoordinates.get()?.store !is PartyStore &&
-                        it.getHerdSize() < it.behaviour.herd.maxSize
+                        it.getHerdSize() < it.behaviour.herd.maxSize &&
+                        !it.brain.hasMemoryValue(CobblemonMemories.POKEMON_DROWSY)
             }.forEach { possibleLeader ->
                 possibleLeader as PokemonEntity
-                val matchingHerdLeader = entity.behaviour.herd.bestMatchLeader(entity, possibleLeader) ?: return@forEach
-                val alreadyIsALeader = possibleLeader.brain.hasMemoryValue(CobblemonMemories.HERD_SIZE)
-                val nestedHerdTier = currentLeaderEntity?.getHerdTier() ?: 0
-                if (nestedHerdTier >= matchingHerdLeader.tier) {
+                val bestMatchingHerdLeader = entity.behaviour.herd.bestMatchLeader(entity, possibleLeader) ?: return@forEach
+                val possibleLeaderIsAlreadyALeader = possibleLeader.brain.hasMemoryValue(CobblemonMemories.HERD_SIZE)
+                val currentLeaderHerdTier = currentLeaderEntity?.getHerdTier() ?: entity.getHerdTier()
+                if (currentLeaderHerdTier >= bestMatchingHerdLeader.tier) {
                     return@forEach // This leader is following a leader of a higher tier, we can't replace them
                 }
                 val distance = entity.distanceTo(possibleLeader)
-                if (matchingHerdLeader.tier < bestTier) {
+                if (bestMatchingHerdLeader.tier < bestTier) {
                     return@forEach // No need to check further if this leader is worse than the best found so far
-                } else if ((distance > bestDistance && !alreadyIsALeader) && matchingHerdLeader.tier == bestTier) {
+                } else if ((distance > bestDistance && !possibleLeaderIsAlreadyALeader) && bestMatchingHerdLeader.tier == bestTier) {
                     return@forEach // No need to check further if this leader is farther than the best found so far, unless they are already a leader - I'd prefer to join a pack
                 } else {
                     bestLeader = possibleLeader
                     bestDistance = distance
-                    bestTier = matchingHerdLeader.tier
+                    bestTier = bestMatchingHerdLeader.tier
                 }
             }
             return bestLeader ?: currentLeaderEntity
@@ -80,7 +80,7 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
     // How frequently to check for whether it should herd. Probably isn't that expensive but might use this for chance.
     val checkTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
@@ -98,8 +98,7 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
             MemoryModuleType.WALK_TARGET
         )
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        val checkTicksValue = checkTicks.resolveInt()
+        val checkTicksValue = checkTicks.resolveInt(behaviourConfigurationContext.runtime)
         return BehaviorBuilder.create { instance ->
             instance.group(
                 instance.present(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES),
@@ -119,6 +118,7 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
 
                     herdLeader.set(bestLeader.uuid.toString())
                     bestLeader.brain.eraseMemory(CobblemonMemories.HERD_LEADER)
+                    bestLeader.adjustHerdSize(1)
                     return@Trigger true
                 }
             }

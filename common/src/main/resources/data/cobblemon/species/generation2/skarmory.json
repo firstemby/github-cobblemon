@@ -58,6 +58,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skarmory",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

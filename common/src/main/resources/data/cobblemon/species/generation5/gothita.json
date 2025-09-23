@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 574,
   "name": "Gothita",
   "primaryType": "psychic",
@@ -206,5 +207,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gothita",
+          "tier": 1
+        },
+        {
+          "pokemon": "gothorita",
+          "tier": 2
+        },
+        {
+          "pokemon": "gothitelle",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

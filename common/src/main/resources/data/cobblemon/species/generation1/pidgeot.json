@@ -60,6 +60,23 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "unfezant",
+          "tier": 1
+        },
+        {
+          "pokemon": "pidgeot mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "pidgeot mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -249,6 +266,11 @@
         "seats": [],
         "behaviour": {
           "key": "cobblemon:land/horse"
+        }
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "9"
         }
       }
     }

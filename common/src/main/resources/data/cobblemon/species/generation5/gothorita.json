@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 575,
   "name": "Gothorita",
   "primaryType": "psychic",
@@ -209,5 +210,10 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

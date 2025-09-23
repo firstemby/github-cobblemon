@@ -33,18 +33,12 @@ class CobblemonBehaviour(
     // detect if it's a ResourceLocation and failing that, Expression. The on[..]Script fields are kinda fringe though.
     @SerializedName("onRemove", alternate = ["undo"])
     val onRemove: ExpressionLike? = null,
-    @SerializedName("onRemoveScript", alternate = ["undoScript"])
-    val onRemoveScript: ResourceLocation? = null,
     val onAdd: ExpressionLike? = null,
-    val onAddScript: ResourceLocation? = null,
 ) {
     fun canBeApplied(entity: LivingEntity) = entityType?.let { entityType == entity.type.builtInRegistryHolder().unwrapKey().get().location() } != false
     fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (onAdd != null) {
             behaviourConfigurationContext.addOnAddScript(onAdd)
-        }
-        if (onAddScript != null) {
-            behaviourConfigurationContext.addOnAddScript(onAddScript)
         }
         configurations.forEach { it.configure(entity, behaviourConfigurationContext) }
     }
@@ -53,9 +47,6 @@ class CobblemonBehaviour(
     fun onRemove(entity: LivingEntity) {
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (onRemoveScript != null) {
-            CobblemonScripts.run(onRemoveScript, runtime)
-        }
         if (onRemove != null) {
             runtime.resolve(onRemove)
         }

@@ -38,11 +38,10 @@ class OneOfTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val options = mutableListOf<OneOfTaskOption>()
 
-    override fun getVariables(entity: LivingEntity) = options.flatMap { it.task.getVariables(entity) }
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = options.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) }
 
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         return RunOne(options.map { it.task.createTasks(entity, behaviourConfigurationContext).first() toDF it.weight })
     }
 }

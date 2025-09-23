@@ -57,14 +57,14 @@
     {
       "type": "cobblemon:add_tasks_to_activity",
       "activity": "idle",
-        "tasksByPriority": {
-          "7": [
-            {
-              "type": "cobblemon:hate_entity",
-              "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:zangoose'"
-            }
-          ]
-        }
+      "tasksByPriority": {
+        "7": [
+          {
+            "type": "cobblemon:hate_entity",
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:zangoose'"
+          }
+        ]
+      }
     }
   ],
   "drops": {

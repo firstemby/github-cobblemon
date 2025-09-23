@@ -60,6 +60,19 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "slurpuff",
+          "tier": 1
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

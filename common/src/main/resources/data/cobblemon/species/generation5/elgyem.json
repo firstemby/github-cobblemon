@@ -62,6 +62,19 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "elgyem",
+          "tier": 1
+        },
+        {
+          "pokemon": "beheeyem",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

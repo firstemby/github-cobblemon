@@ -50,6 +50,10 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.18
+      },
       "fly": {
         "canFly": true
       }
@@ -57,6 +61,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "corvisquire",
+          "tier": 1
+        },
+        {
+          "pokemon": "honchkrow",
+          "tier": 2
+        },
+        {
+          "pokemon": "corviknight",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

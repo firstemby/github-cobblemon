@@ -66,6 +66,27 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wartortle",
+          "tier": 1
+        },
+        {
+          "pokemon": "drednaw",
+          "tier": 1
+        },
+        {
+          "pokemon": "blastoise mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "blastoise mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

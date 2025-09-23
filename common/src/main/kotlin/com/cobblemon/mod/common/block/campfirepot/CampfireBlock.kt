@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.CampfirePotItem
 import com.cobblemon.mod.common.util.playSoundServer
-import com.cobblemon.mod.common.util.toVec3d
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -65,12 +64,13 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
             ).apply(it, ::CampfireBlock)
         }
         val ITEM_DIRECTION = DirectionProperty.create("item_facing")
-        val LIT = BlockStateProperties.LIT
         val POWERED = BlockStateProperties.POWERED
+        val COOKING = BooleanProperty.create("cooking")
+        val LID = BooleanProperty.create("lid")
 
         private val campfireAABB = Shapes.box(0.0, 0.0, 0.0, 1.0, 0.4375, 1.0)
         private val AABB = Shapes.or(
-            Shapes.box(0.0, 0.0, 0.0, 1.0, 0.4375, 1.0),
+            campfireAABB,
             Shapes.box(0.1875, 0.5, 0.125, 0.875, 0.8125, 0.1875),
             Shapes.box(0.125, 0.4375, 0.125, 0.875, 0.5, 0.875),
             Shapes.box(0.8125, 0.5, 0.1875, 0.875, 0.8125, 0.875),
@@ -82,9 +82,10 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
-            .setValue(LIT, true)
             .setValue(ITEM_DIRECTION, Direction.NORTH)
-            .setValue(POWERED, false))
+            .setValue(POWERED, false)
+            .setValue(COOKING, false)
+            .setValue(LID, false))
     }
 
     override fun getStateForPlacement(ctx: BlockPlaceContext): BlockState? {
@@ -105,7 +106,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
         return null
     }
 
-    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = campfireAABB
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = AABB
 
     override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape = AABB
 
@@ -203,7 +204,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, ITEM_DIRECTION, LIT, POWERED)
+        builder.add(FACING, ITEM_DIRECTION, POWERED, COOKING, LID)
     }
 
     override fun updateShape(
@@ -290,7 +291,7 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
 
         if (isPowered != state.getValue(POWERED)) {
             level.setBlock(pos, state.setValue(POWERED, isPowered), UPDATE_ALL)
-            blockEntity.toggleLid(!isPowered, pos)
+            blockEntity.toggleLid(!isPowered)
         }
     }
 

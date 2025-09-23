@@ -215,5 +215,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bisharp",
+          "tier": 1
+        },
+        {
+          "pokemon": "kingambit",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

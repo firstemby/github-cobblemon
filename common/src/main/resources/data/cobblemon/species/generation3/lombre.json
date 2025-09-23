@@ -63,6 +63,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lombre",
+          "tier": 1
+        },
+        {
+          "pokemon": "ludicolo",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

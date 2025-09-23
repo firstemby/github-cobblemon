@@ -63,6 +63,9 @@
         "canSwimInWater": false
       },
       "canLook": false
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {

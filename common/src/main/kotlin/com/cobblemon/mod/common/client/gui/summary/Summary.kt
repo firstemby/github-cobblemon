@@ -148,7 +148,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         if (this.party.size > 6) {
             throw IllegalArgumentException("Summary UI cannot display more than six Pokemon")
         }
-        switchSelection(selection)
         this.listenToMoveSet()
 
         val x = (width - BASE_WIDTH) / 2
@@ -201,6 +200,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             clickAction = {
                 selectedPokemon.heldItemVisible = !selectedPokemon.heldItemVisible
                 heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
+                updatePokemonInfo()
                 // Send item visibility update to server
                 sendToServer(SetItemHiddenPacket(selectedPokemon.uuid, selectedPokemon.heldItemVisible))
             },
@@ -297,6 +297,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             shouldFollowCursor = true,
         )
         addRenderableOnly(this.modelWidget)
+
+        updatePokemonInfo()
     }
 
     fun swapPartySlot(sourceIndex: Int, targetIndex: Int) {
@@ -342,7 +344,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     fun updatePokemonInfo() {
         val pokemon = selectedPokemon.asRenderablePokemon()
-        if (::modelWidget.isInitialized && modelWidget.pokemon != pokemon) {
+        if (::modelWidget.isInitialized) {
             modelWidget.pokemon = pokemon
             heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
             if (::nicknameEntryWidget.isInitialized) nicknameEntryWidget.setSelectedPokemon(selectedPokemon)

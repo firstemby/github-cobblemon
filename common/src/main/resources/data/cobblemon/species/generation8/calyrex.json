@@ -348,7 +348,12 @@
         "legacy:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     },
     {
       "name": "Shadow",
@@ -535,7 +540,17 @@
         "legacy:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

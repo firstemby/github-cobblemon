@@ -16,8 +16,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class AttackHostileMobsTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> {
-        return emptyList<MoLangConfigVariable>()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+        return emptyList()
     }
 
     override fun createTask(

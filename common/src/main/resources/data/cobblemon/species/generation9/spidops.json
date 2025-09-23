@@ -155,5 +155,6 @@
     "tutor:xscissor"
   ],
   "preEvolution": "tarountula",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

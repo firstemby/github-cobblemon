@@ -223,5 +223,10 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "electabuzz",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5"
+    }
+  }
 }

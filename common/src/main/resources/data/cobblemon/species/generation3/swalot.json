@@ -199,5 +199,6 @@
     "special:sing"
   ],
   "preEvolution": "gulpin",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

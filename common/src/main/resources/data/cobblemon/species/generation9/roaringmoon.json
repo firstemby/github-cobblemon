@@ -156,5 +156,6 @@
     "tutor:xscissor",
     "tutor:zenheadbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

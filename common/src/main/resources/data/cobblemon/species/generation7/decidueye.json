@@ -57,6 +57,9 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "7"
     }
   },
   "drops": {
@@ -397,7 +400,12 @@
       ],
       "preEvolution": "dartrix",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     }
   ]
 }

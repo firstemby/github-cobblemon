@@ -9,7 +9,7 @@
   },
   "poses": {
     "battle-standing": {
-      "poseTypes": ["STAND"],
+      "poseTypes": ["STAND","HOVER"],
       "isBattle": true,
       "animations": ["q.look('head')", "q.bedrock('drakloak', 'battle_idle')"],
       "quirks": [
@@ -18,7 +18,7 @@
       ]
     },
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE","HOVER"],
       "isBattle": false,
       "animations": ["q.look('head')", "q.bedrock('drakloak', 'ground_idle')"],
       "quirks": [
@@ -27,7 +27,7 @@
       ]
     },
     "walking": {
-      "poseTypes": ["WALK"],
+      "poseTypes": ["WALK","FLY"],
       "animations": ["q.look('head')", "q.bedrock('drakloak', 'ground_walk')"],
       "quirks": [
         "q.bedrock_quirk('drakloak', 'blink')",

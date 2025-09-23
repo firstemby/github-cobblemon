@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 938,
   "name": "Tadbulb",
   "primaryType": "electric",
@@ -50,6 +51,19 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tadbulb",
+          "tier": 1
+        },
+        {
+          "pokemon": "bellibolt",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

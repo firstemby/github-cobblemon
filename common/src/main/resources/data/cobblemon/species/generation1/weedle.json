@@ -58,6 +58,9 @@
       "walk": {
         "walkSpeed": 0.26
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {

@@ -52,6 +52,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "stantler",
+          "tier": 1
+        },
+        {
+          "pokemon": "sawsbuck",
+          "tier": 1
+        },
+        {
+          "pokemon": "wyrdeer",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

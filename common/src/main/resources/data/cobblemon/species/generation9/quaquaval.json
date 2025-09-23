@@ -61,6 +61,15 @@
       "walk": {
         "walkSpeed": 0.25
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quaquaval",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

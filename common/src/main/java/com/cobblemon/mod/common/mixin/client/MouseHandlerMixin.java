@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
@@ -129,6 +130,11 @@ public abstract class MouseHandlerMixin {
             return false;
         }
 
+        // Clamp player rotation if riding and the vehicle demands it
+        if (player.isPassenger() && player.getVehicle() instanceof PokemonEntity vehicle) {
+            vehicle.clampPassengerRotation(player);
+        }
+
         if (!(player instanceof OrientationControllable controllable)) return true;
 
         if (!controllable.getOrientationController().isActive()) {
@@ -140,32 +146,30 @@ public abstract class MouseHandlerMixin {
             return true;
         }
 
-        //Send mouse input to be interpreted into rotation
-        //deltas by the ride controller
+        // Send mouse input to be interpreted into rotation
+        // deltas by the ride controller
         Vec3 angVecMouse = cobblemon$getRideMouseRotation(cursorDeltaX, cursorDeltaY, movementTime);
 
-        //Perform Rotation using mouse influenced rotation deltas.
+        // Perform Rotation using mouse influenced rotation deltas.
         controllable.getOrientationController().rotate(
             (float) angVecMouse.x,
             (float) angVecMouse.y,
             (float) angVecMouse.z
         );
 
-        //Gather and apply the current rotation deltas
+        // Gather and apply the current rotation deltas
         var angRot = cobblemon$getAngularVelocity(movementTime);
 
-        //Apply smoothing if requested by the controller.
-        //This Might be best if done by the controller itself?
-        if(cobblemon$shouldUseAngVelSmoothing())
-        {
+        // Apply smoothing if requested by the controller.
+        // This Might be best if done by the controller itself?
+        if(cobblemon$shouldUseAngVelSmoothing()) {
             var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
             var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
             var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
             controllable.getOrientationController().rotate((float) yaw, (float) pitch, (float) roll);
         }
-        //Otherwise simply apply the smoothing
-        else
-        {
+        // Otherwise simply apply the smoothing
+        else {
             controllable.getOrientationController().rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
         return false;
@@ -210,6 +214,18 @@ public abstract class MouseHandlerMixin {
         if (vehicle == null) return Vec3.ZERO;
         if (!(vehicle instanceof PokemonEntity pokemonEntity)) return Vec3.ZERO;
 
+        var invertYaw = Cobblemon.config.getInvertYaw();
+        var invertPitch = Cobblemon.config.getInvertPitch();
+
+        var xValue = mouseX * Cobblemon.config.getXAxisSensitivity();
+        var yValue = mouseY * Cobblemon.config.getYAxisSensitivity();
+
+        var swapXAndY = Cobblemon.config.getSwapXAndYAxes();
+
+        var yaw = (swapXAndY ? yValue : xValue) * (invertYaw? -1.0f : 1.0f);
+
+        var pitch = (swapXAndY ? xValue : yValue) * (invertPitch? -1.0f : 1.0f);
+
         var sensitivity = cobblemon$getRidingSensitivity();
         return pokemonEntity.ifRidingAvailableSupply(Vec3.ZERO, (behaviour, settings, state) -> {
             return behaviour.rotationOnMouseXY(
@@ -217,8 +233,8 @@ public abstract class MouseHandlerMixin {
                     state,
                     pokemonEntity,
                     player,
-                    mouseY,
-                    mouseX,
+                    pitch,
+                    yaw,
                     yMouseSmoother,
                     xMouseSmoother,
                     sensitivity,

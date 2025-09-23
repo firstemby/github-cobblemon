@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 
@@ -37,7 +38,9 @@ class DialogueBox(
     val listY: Int = 0,
     val frameWidth: Int,
     height: Int,
-    messages: MutableList<MutableComponent>
+    val background: ResourceLocation?,
+    messages: MutableList<MutableComponent>,
+    textColor: String?
 ): ScrollingWidget<DialogueBox.DialogueLine>(
     left = listX,
     top = listY,
@@ -59,13 +62,14 @@ class DialogueBox(
     init {
         correctSize()
 
+        val lineColor = textColor?.toInt(16) ?: 0x4C4C4C
         val textRenderer = Minecraft.getInstance().font
 
         messages.flatMap { Language.getInstance().getVisualOrder(textRenderer.splitter.splitLines(it, LINE_WIDTH, it.style)) }
-            .forEach { addEntry(DialogueLine(it)) }
+            .forEach { addEntry(DialogueLine(it, lineColor)) }
 
         // Add empty line for bottom padding if text area height is larger than box height
-        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY))
+        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
     }
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -81,7 +85,7 @@ class DialogueBox(
 
         // Scroll Track
         blitk(
-            texture = boxResource,
+            texture = background ?: boxResource,
             matrixStack = context.pose(),
             x = xLeft + 1,
             y = yStart,
@@ -94,7 +98,7 @@ class DialogueBox(
 
         // Scroll Bar
         blitk(
-            texture = boxResource,
+            texture = background ?: boxResource,
             matrixStack = context.pose(),
             x = xLeft,
             y = yTop,
@@ -133,7 +137,7 @@ class DialogueBox(
         correctSize()
         blitk(
             matrixStack = context.pose(),
-            texture = boxResource,
+            texture = background ?: boxResource,
             x = x,
             y = y,
             height = height,
@@ -178,7 +182,7 @@ class DialogueBox(
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
-    class DialogueLine(val line: FormattedCharSequence) : Entry<DialogueLine>() {
+    class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>() {
         override fun getNarration() = "".text()
 
         override fun renderBack(
@@ -211,7 +215,7 @@ class DialogueBox(
                 line,
                 rowLeft + 14,
                 rowTop + 7,
-                colour = 0x4C4C4C
+                colour = lineColor
             )
         }
     }

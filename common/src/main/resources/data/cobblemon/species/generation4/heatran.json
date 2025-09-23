@@ -171,5 +171,6 @@
     "legacy:uproar",
     "special:eruption"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

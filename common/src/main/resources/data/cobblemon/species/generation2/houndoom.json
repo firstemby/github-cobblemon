@@ -60,6 +60,19 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -265,7 +278,18 @@
       "baseExperienceYield": 210,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "8",
+          "toleratedLeaders": [
+            {
+              "pokemon": "houndoom mega",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ]
 }

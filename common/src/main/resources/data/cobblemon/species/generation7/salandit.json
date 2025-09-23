@@ -54,6 +54,19 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "salandit",
+          "tier": 1
+        },
+        {
+          "pokemon": "salazzle",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

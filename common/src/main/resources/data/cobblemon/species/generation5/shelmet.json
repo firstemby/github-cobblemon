@@ -174,5 +174,16 @@
         ]
       }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shelmet",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

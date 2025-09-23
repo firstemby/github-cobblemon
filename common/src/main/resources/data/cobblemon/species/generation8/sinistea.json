@@ -172,5 +172,20 @@
       ],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sinistea",
+          "tier": 1
+        },
+        {
+          "pokemon": "polteageist",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

@@ -61,6 +61,23 @@
         "canSwimInWater": true,
         "canSwimInLava": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "seaking",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        },
+        {
+          "pokemon": "chiyu",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

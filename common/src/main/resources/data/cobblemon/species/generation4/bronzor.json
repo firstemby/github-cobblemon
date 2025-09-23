@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 436,
   "name": "Bronzor",
   "primaryType": "steel",
@@ -62,6 +63,15 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bronzong",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

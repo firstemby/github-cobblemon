@@ -58,6 +58,19 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "inkay",
+          "tier": 1
+        },
+        {
+          "pokemon": "malamar",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -198,5 +198,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "joltik",
+          "tier": 1
+        },
+        {
+          "pokemon": "galvantula",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

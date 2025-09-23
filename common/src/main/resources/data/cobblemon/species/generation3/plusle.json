@@ -42,7 +42,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.6,
+  "baseScale": 0.45,
   "hitbox": {
     "width": 0.7,
     "height": 0.9,
@@ -194,5 +194,37 @@
     "legacy:toxic",
     "special:watersport"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikachu",
+          "tier": 1
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 2
+        },
+        {
+          "pokemon": "plusle",
+          "tier": 3
+        },
+        {
+          "pokemon": "minun",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

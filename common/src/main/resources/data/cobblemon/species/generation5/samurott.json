@@ -60,6 +60,15 @@
       "swim": {
         "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "samurott",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -397,7 +406,12 @@
       ],
       "preEvolution": "dewott",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        }
+      }
     }
   ]
 }

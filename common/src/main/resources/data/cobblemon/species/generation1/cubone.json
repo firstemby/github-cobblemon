@@ -376,5 +376,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "marowak",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

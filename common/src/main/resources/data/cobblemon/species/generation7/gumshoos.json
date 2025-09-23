@@ -183,5 +183,6 @@
     "legacy:uproar"
   ],
   "preEvolution": "yungoos",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

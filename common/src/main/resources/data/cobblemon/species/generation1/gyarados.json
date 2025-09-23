@@ -63,7 +63,13 @@
       }
     },
     "herd": {
-      "maxSize": 20
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "manaphy",
+          "tier": 1
+        }
+      ]
     }
   },
   "riding": {
@@ -120,7 +126,7 @@
         ]
       }
     ]
-},
+  },
   "drops": {
     "amount": 3,
     "entries": [

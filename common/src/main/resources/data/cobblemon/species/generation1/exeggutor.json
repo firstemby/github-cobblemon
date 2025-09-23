@@ -61,6 +61,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "exeggutor alolan=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "exeggutor alolan",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -443,7 +456,18 @@
       ],
       "preEvolution": "exeggcute",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "exeggutor alolan",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

@@ -287,9 +287,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(

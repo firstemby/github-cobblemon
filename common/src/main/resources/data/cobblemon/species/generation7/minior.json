@@ -55,6 +55,15 @@
         "avoidsWater": true,
         "canSwimInWater": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "minior",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -198,7 +207,18 @@
       },
       "baseExperienceYield": 154,
       "catchRate": 30,
-      "evolutions": []
+      "evolutions": [],
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "minior",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "drops": {

@@ -1,11 +1,10 @@
 {
-	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"texture_size": [32, 32],
 	"textures": {
-		"particle": "cobblemon:campfire_pot_red",
-		"pot": "cobblemon:campfire_pot_red"
+		"particle": "cobblemon:block/campfire_pot/campfire_pot_red",
+		"pot": "cobblemon:block/campfire_pot/campfire_pot_red"
 	},
 	"elements": [
 		{
@@ -108,6 +107,15 @@
 			}
 		},
 		{
+			"name": "lid",
+			"from": [4, 5, 7.5],
+			"to": [12, 6, 8.5],
+			"faces": {
+				"up": {"uv": [6.5, 14, 10.5, 14.5], "texture": "#pot"},
+				"down": {"uv": [6.5, 14.5, 10.5, 14], "texture": "#pot"}
+			}
+		},
+		{
 			"name": "handle",
 			"from": [7, 5, 7],
 			"to": [9, 7, 9],
@@ -169,7 +177,8 @@
 			"name": "lid",
 			"origin": [3, 7, 12],
 			"color": 0,
-			"children": [7, 8]
+			"children": [7, 8, 9]
 		}
-	]
+	],
+	"format_version": "1.21.6"
 }

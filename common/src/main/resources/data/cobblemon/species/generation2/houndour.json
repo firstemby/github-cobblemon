@@ -57,6 +57,27 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "houndour",
+          "tier": 1
+        },
+        {
+          "pokemon": "mightyena",
+          "tier": 2
+        },
+        {
+          "pokemon": "houndoom mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "houndoom mega",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

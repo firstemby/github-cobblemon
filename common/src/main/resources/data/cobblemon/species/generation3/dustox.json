@@ -163,5 +163,6 @@
     "legacy:swift"
   ],
   "preEvolution": "cascoon",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

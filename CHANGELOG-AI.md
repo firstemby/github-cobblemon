@@ -6,6 +6,7 @@
   - Cat Pokémon (Meowth, Persian, etc.) intimidate Creepers and Phantoms.
   - Sleep-related Pokémon (Munsharna, Komala, etc.) intimidate Phantoms.
   - Some Pokémon naturally hunt each other.
+  - Some Pokémon herd together.
 - Added a Behaviour Editor to the NPC editing screen.
 - Added /behaviouredit command for opening the Behaviour Editor on Pokémon and NPCs.
   - Editing variables for Pokémon is not yet supported.
@@ -13,6 +14,9 @@
 ### Developer
 - baseScale in NPCs has been removed from classes and presets, and in the entity it is replaced with hitboxScale and renderScale.
 - Added `EntityCallbacks` to `NPCEntity` and `PokemonEntity`. You can trigger custom callback types by using `[Entity].callbacks.process(...)`
+
+### Fixes
+- Fixed Pokémon with a moving walk target frequently spinning in place as they re-calculate their path.
 
 ### MoLang & Datapacks
 - Added a `behaviours` datapack folder which motivates the Behaviour Editor screen on NPCs and Pokémon.

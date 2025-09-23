@@ -54,6 +54,27 @@
       "swim": {
         "canSwimInWater": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swirlix",
+          "tier": 1
+        },
+        {
+          "pokemon": "milcery",
+          "tier": 1
+        },
+        {
+          "pokemon": "slurpuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

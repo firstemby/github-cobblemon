@@ -51,16 +51,45 @@
     "fixed": false
   },
   "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4"
+    },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.16
+      },
       "fly": {
         "canFly": true
       },
       "swim": {
+        "canWalkOnWater": true,
         "canSwimInWater": true,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wingull",
+          "tier": 1
+        },
+        {
+          "pokemon": "pelipper",
+          "tier": 2
+        },
+        {
+          "pokemon": "wattrel",
+          "tier": 3
+        },
+        {
+          "pokemon": "kilowattrel",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

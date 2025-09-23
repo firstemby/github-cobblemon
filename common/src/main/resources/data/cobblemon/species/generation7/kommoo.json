@@ -228,5 +228,10 @@
     "legacy:waterpulse"
   ],
   "preEvolution": "hakamoo",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

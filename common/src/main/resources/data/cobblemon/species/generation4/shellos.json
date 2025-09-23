@@ -53,8 +53,12 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": "0.2"
+      },
       "swim": {
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
@@ -223,7 +227,8 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {}
     }
   ]
 }

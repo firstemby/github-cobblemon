@@ -517,5 +517,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "toxel",
+          "tier": 1
+        },
+        {
+          "pokemon": "toxtricity",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

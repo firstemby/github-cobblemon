@@ -45,11 +45,125 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
     "height": 1.2,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-10",
+          "JUMP": "0-10",
+          "SKILL": "30-65",
+          "SPEED": "10-40",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "offset": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "poseOffsets": [
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "STAND"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.05803985,
+              "y": -1.4624523,
+              "z": 0.22226189
+            },
+            "poseTypes": [
+              "WALK"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "HOVER"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "FLY"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "FLOAT"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "SWIM"
+            ]
+          },
+          {
+            "offset": {
+              "x": -0.03125,
+              "y": -1.4440616,
+              "z": 0.21015523
+            },
+            "poseTypes": [
+              "GLIDE"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "piloswine",
+          "tier": 1
+        },
+        {
+          "pokemon": "mamoswine",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"
@@ -201,19 +315,19 @@
   "preEvolution": "swinub",
   "evolutions": [
     {
-      "id": "piloswine_mamoswine",
-      "variant": "level_up",
-      "result": "mamoswine",
       "consumeHeldItem": false,
+      "id": "piloswine_mamoswine",
       "learnableMoves": [
         "doublehit"
       ],
       "requirements": [
         {
-          "variant": "has_move",
-          "move": "ancientpower"
+          "move": "ancientpower",
+          "variant": "has_move"
         }
-      ]
+      ],
+      "result": "mamoswine",
+      "variant": "level_up"
     }
   ]
 }

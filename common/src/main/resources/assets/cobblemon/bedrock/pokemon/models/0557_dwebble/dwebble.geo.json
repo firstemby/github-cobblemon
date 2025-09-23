@@ -6,7 +6,7 @@
 				"identifier": "geometry.dwebble",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 8,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
@@ -19,6 +19,20 @@
 					"name": "body",
 					"parent": "dwebble",
 					"pivot": [0, 2.75, 0]
+				},
+				{
+					"name": "rock",
+					"parent": "body",
+					"pivot": [0, 11.5, 2.5]
+				},
+				{
+					"name": "rock_pivot",
+					"parent": "rock",
+					"pivot": [0, 9.5, 8.75],
+					"cubes": [
+						{"origin": [-4, 15, -1.75], "size": [8, 5, 8], "pivot": [0, 17.5, 2.25], "rotation": [2.81797, 27.47162, 1.30078], "uv": [32, 0]},
+						{"origin": [-6.5, 9.5, -4.25], "size": [13, 6, 13], "uv": [0, 20]}
+					]
 				},
 				{
 					"name": "torso",
@@ -203,15 +217,6 @@
 					"rotation": [60, 0, 0],
 					"cubes": [
 						{"origin": [0, 2.5, 8.5], "size": [0, 1, 2], "inflate": 0.01, "uv": [17, 0]}
-					]
-				},
-				{
-					"name": "rock",
-					"parent": "torso",
-					"pivot": [0, 11.5, 2.5],
-					"cubes": [
-						{"origin": [-6.5, 9.5, -4.25], "size": [13, 6, 13], "uv": [0, 20]},
-						{"origin": [-4, 15, -1.75], "size": [8, 5, 8], "pivot": [0, 17.5, 2.25], "rotation": [2.81797, 27.47162, 1.30078], "uv": [32, 0]}
 					]
 				},
 				{

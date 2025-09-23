@@ -6,6 +6,7 @@
   "maleRatio": 0.875,
   "height": 6,
   "weight": 85,
+  "lightingData": { "lightLevel": 8, "liquidGlowMode": "LAND" },
   "pokedex": [
     "cobblemon.species.charmander.desc"
   ],
@@ -64,6 +65,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "charmeleon",
+          "tier": 1
+        },
+        {
+          "pokemon": "charizard mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "charizard megax",
+          "tier": 3
+        },
+        {
+          "pokemon": "charizard megay",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

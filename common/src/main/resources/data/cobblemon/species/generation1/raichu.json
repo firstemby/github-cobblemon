@@ -53,9 +53,23 @@
     "fixed": false
   },
   "behaviour": {
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.21
+      }
+    },
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "raichu",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -284,7 +298,7 @@
       },
       "hitbox": {
         "width": 0.8,
-        "height": 1.6,
+        "height": 1.75,
         "fixed": false
       },
       "behaviour": {
@@ -294,14 +308,25 @@
         },
         "moving": {
           "swim": {
-            "canWalkOnWater": true
+            "canWalkOnWater": true,
+            "swimSpeed": 0.25
           },
           "walk": {
             "canWalk": false
           },
           "fly": {
-            "canFly": true
+            "canFly": true,
+            "flySpeedHorizontal": 0.25
           }
+        },
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "raichu",
+              "tier": 1
+            }
+          ]
         }
       },
       "moves": [

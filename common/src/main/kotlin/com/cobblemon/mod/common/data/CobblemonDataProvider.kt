@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.data
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonFlows
+import com.cobblemon.mod.common.CobblemonCallbacks
 import com.cobblemon.mod.common.CobblemonBehaviours
 import com.cobblemon.mod.common.CobblemonMechanics
 import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
@@ -29,6 +29,7 @@ import com.cobblemon.mod.common.api.fishing.PokeRods
 import com.cobblemon.mod.common.api.fossil.Fossils
 import com.cobblemon.mod.common.api.fossil.NaturalMaterials
 import com.cobblemon.mod.common.api.interaction.PokemonInteractions
+import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
@@ -87,6 +88,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonSpawnRules)
         this.register(CobblemonMechanics)
         this.register(BagItems)
+        this.register(HeldItems)
         this.register(Dialogues)
         this.register(NaturalMaterials)
         this.register(Fossils)
@@ -97,7 +99,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(Dexes)
         this.register(DexAdditions)
         this.register(CobblemonCosmeticItems)
-        this.register(CobblemonFlows)
+        this.register(CobblemonCallbacks)
         this.register(CobblemonUnlockableWallpapers)
         this.register(Marks)
         this.register(StarterDataLoader)

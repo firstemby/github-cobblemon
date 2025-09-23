@@ -49,7 +49,24 @@
     "fixed": false
   },
   "behaviour": {
-    "dampensVibrations": true
+    "dampensVibrations": true,
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "whismur",
+          "tier": 1
+        },
+        {
+          "pokemon": "loudred",
+          "tier": 2
+        },
+        {
+          "pokemon": "exploud",
+          "tier": 3
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,

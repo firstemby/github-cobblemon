@@ -165,5 +165,6 @@
     "legacy:snore",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

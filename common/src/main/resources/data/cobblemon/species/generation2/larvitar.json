@@ -58,6 +58,35 @@
       "swim": {
         "canSwimInLava": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvitar",
+          "tier": 1
+        },
+        {
+          "pokemon": "axew",
+          "tier": 1
+        },
+        {
+          "pokemon": "fraxure",
+          "tier": 2
+        },
+        {
+          "pokemon": "haxorus",
+          "tier": 3
+        },
+        {
+          "pokemon": "tyranitar mega=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "tyranitar mega",
+          "tier": 5
+        }
+      ]
     }
   },
   "drops": {

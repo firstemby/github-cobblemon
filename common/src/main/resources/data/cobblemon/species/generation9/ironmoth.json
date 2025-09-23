@@ -122,5 +122,10 @@
     "tutor:sleeptalk",
     "tutor:swift"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    }
+  }
 }

@@ -57,13 +57,34 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.42
+        "walkSpeed": 0.15
+      },
+      "swim": {
+        "canWalkOnWater": true,
+        "swimSpeed": 0.15
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pikachu",
+          "tier": 1
+        },
+        {
+          "pokemon": "morpeko",
+          "tier": 1
+        },
+        {
+          "pokemon": "raichu",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

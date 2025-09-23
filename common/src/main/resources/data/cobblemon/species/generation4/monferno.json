@@ -52,6 +52,23 @@
   "behaviour": {
     "resting": {
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "simisear",
+          "tier": 1
+        },
+        {
+          "pokemon": "monferno",
+          "tier": 2
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

@@ -24,15 +24,16 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -42,26 +43,24 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
-import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPacket
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
+import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
-import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.adapters.*
-import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.ifClient
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.advancements.critereon.ItemPredicate
 import com.mojang.datafixers.util.Either
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
@@ -132,7 +131,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
         .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
         .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
@@ -147,24 +146,17 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     val species: Collection<Species>
         get() = this.speciesByIdentifier.values
-    val implemented = mutableListOf<Species>()
+    val implemented: List<Species>
+        get() = this.species.filter { it.implemented }
 
     init {
         SpeciesAdditions.observable.subscribe {
-            implemented.clear()
             this.species.forEach(Species::initialize)
-            this.species.forEach {
-                if (it.implemented) {
-                    this.implemented.add(it)
-                }
-            }
             this.species.forEach(Species::resolveEvolutionMoves)
             Cobblemon.showdownThread.queue {
                 it.resetRegistryData("species")
                 it.sendRegistryData(allShowdownSpecies(), "species")
                 it.indicateSpeciesInitialized()
-                // Reload this with the mod
-                CobblemonHeldItemManager.load()
                 Cobblemon.LOGGER.info("Loaded {} Pokémon species", this.speciesByIdentifier.size)
                 this.observable.emit(this)
             }
@@ -229,7 +221,6 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override fun reload(data: Map<ResourceLocation, Species>) {
         this.speciesByIdentifier.clear()
-        this.implemented.clear()
         this.speciesByDex.clear()
         data.forEach { (identifier, species) ->
             species.resourceIdentifier = identifier
@@ -237,11 +228,6 @@ object PokemonSpecies : JsonDataRegistry<Species> {
                 this.speciesByDex.remove(old.resourceIdentifier.namespace, old.nationalPokedexNumber)
             }
             this.speciesByDex.put(species.resourceIdentifier.namespace, species.nationalPokedexNumber, species)
-            ifClient {
-                if (species.implemented) {
-                    this.implemented.add(species)
-                }
-            }
         }
     }
 

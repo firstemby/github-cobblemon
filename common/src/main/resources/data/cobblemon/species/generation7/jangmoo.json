@@ -179,5 +179,24 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "jangmoo",
+          "tier": 1
+        },
+        {
+          "pokemon": "hakamoo",
+          "tier": 2
+        },
+        {
+          "pokemon": "kommoo",
+          "tier": 3
+        }
+      ]
+    }
+  }
 }

@@ -164,5 +164,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swirlix",
+          "tier": 1
+        },
+        {
+          "pokemon": "milcery",
+          "tier": 1
+        },
+        {
+          "pokemon": "slurpuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "alcremie",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

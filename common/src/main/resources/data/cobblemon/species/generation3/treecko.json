@@ -54,6 +54,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grovyle",
+          "tier": 1
+        },
+        {
+          "pokemon": "sceptile mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "sceptile mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

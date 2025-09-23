@@ -184,7 +184,77 @@
         "resolute-form"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "cobalion",
+              "tier": 1
+            },
+            {
+              "pokemon": "terrakion",
+              "tier": 1
+            },
+            {
+              "pokemon": "virizion",
+              "tier": 1
+            },
+            {
+              "pokemon": "keldeo resolute",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rapidash",
+          "tier": 1
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 1
+        },
+        {
+          "pokemon": "keldeo ordinary",
+          "tier": 2
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "cobalion",
+          "tier": 4
+        },
+        {
+          "pokemon": "terrakion",
+          "tier": 4
+        },
+        {
+          "pokemon": "virizion",
+          "tier": 4
+        },
+        {
+          "pokemon": "keldeo resolute",
+          "tier": 5
+        }
+      ]
+    }
+  }
 }

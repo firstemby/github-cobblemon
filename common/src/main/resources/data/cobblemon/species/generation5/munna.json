@@ -56,6 +56,15 @@
       "walk": {
         "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "munna",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

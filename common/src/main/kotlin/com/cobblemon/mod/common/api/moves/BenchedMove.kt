@@ -117,7 +117,7 @@ class BenchedMoves : Iterable<BenchedMove> {
             .xmap(
                 { moveList ->
                     val benchedMoves = BenchedMoves()
-                    benchedMoves.addAll(moveList)
+                    benchedMoves.addAll(moveList.filter { it.moveTemplate !is MoveTemplate.Dummy })
                     return@xmap benchedMoves
                 },
                 BenchedMoves::toList

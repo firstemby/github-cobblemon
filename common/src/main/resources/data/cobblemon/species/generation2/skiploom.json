@@ -61,6 +61,27 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skiploom",
+          "tier": 1
+        },
+        {
+          "pokemon": "jumpluff",
+          "tier": 2
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 2
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

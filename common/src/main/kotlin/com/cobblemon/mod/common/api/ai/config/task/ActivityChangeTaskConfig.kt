@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -24,16 +25,16 @@ class ActivityChangeTaskConfig : SingleTaskConfig {
     val activity: Activity = Activity.IDLE
     val condition: ExpressionLike = "false".asExpressionLike()
 
-    override fun getVariables(entity: LivingEntity): List<MoLangConfigVariable> = emptyList()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> = emptyList()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
-    ): BehaviorControl<in LivingEntity>? {
+    ): BehaviorControl<in LivingEntity> {
         return object : OneShot<LivingEntity>() {
             override fun trigger(serverLevel: ServerLevel, livingEntity: LivingEntity, l: Long): Boolean {
-                runtime.withQueryValue("entity", livingEntity.asMostSpecificMoLangValue())
-                if (condition.resolveBoolean(runtime)) {
+                mainThreadRuntime.withQueryValue("entity", livingEntity.asMostSpecificMoLangValue())
+                if (condition.resolveBoolean(mainThreadRuntime)) {
                     livingEntity.brain.setActiveActivityIfPossible(activity)
                     return true
                 } else {

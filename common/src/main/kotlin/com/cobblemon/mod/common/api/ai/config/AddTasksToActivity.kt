@@ -24,9 +24,13 @@ class AddTasksToActivity : BehaviourConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasksByPriority = mutableMapOf<Int, List<TaskConfig>>()
 
-    override fun getVariables(entity: LivingEntity) = tasksByPriority.values.flatten().flatMap { it.getVariables(entity) } + listOf(condition).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasksByPriority.values
+        .flatten()
+        .flatMap {
+            it.getVariables(entity, behaviourConfigurationContext)
+        } + listOf(condition).asVariables()
     override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
-        if (!checkCondition(entity, condition)) return
+        if (!checkCondition(behaviourConfigurationContext, condition)) return
 
         val activities = if (activity != null) (activities + activity) else activities
 

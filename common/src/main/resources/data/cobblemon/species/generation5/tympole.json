@@ -55,6 +55,39 @@
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "poliwag",
+          "tier": 1
+        },
+        {
+          "pokemon": "tympole",
+          "tier": 2
+        },
+        {
+          "pokemon": "poliwhirl",
+          "tier": 3
+        },
+        {
+          "pokemon": "palpitoad",
+          "tier": 4
+        },
+        {
+          "pokemon": "poliwrath",
+          "tier": 5
+        },
+        {
+          "pokemon": "politoed",
+          "tier": 6
+        },
+        {
+          "pokemon": "seismitoad",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

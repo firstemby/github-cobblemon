@@ -66,6 +66,23 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "farfetchd galarian=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "farfetchd galarian",
+          "tier": 2
+        },
+        {
+          "pokemon": "sirfetchd",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {
@@ -379,7 +396,22 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "farfetchd galarian",
+              "tier": 1
+            },
+            {
+              "pokemon": "sirfetchd",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

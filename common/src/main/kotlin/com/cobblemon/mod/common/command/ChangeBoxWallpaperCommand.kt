@@ -74,10 +74,10 @@ object ChangeBoxWallpaperCommand {
 
         val pcBox = playerPc.boxes[box - 1]
         CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_PRE.postThen(
-            event = ChangePCBoxWallpaperEvent.Pre(player, pcBox, wallpaper),
+            event = ChangePCBoxWallpaperEvent.Pre(player, pcBox, wallpaper, null),
             ifSucceeded = {
                 pcBox.wallpaper = it.wallpaper
-                CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_POST.post(ChangePCBoxWallpaperEvent.Post(player, pcBox, it.wallpaper))
+                CobblemonEvents.CHANGE_PC_BOX_WALLPAPER_EVENT_POST.post(ChangePCBoxWallpaperEvent.Post(player, pcBox, it.wallpaper, null))
                 ChangePCBoxWallpaperPacket(playerPc.uuid, pcBox.boxNumber, it.wallpaper).sendToPlayer(player)
             },
             ifCanceled = {

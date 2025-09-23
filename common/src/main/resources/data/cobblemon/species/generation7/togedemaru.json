@@ -59,6 +59,15 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "togedemaru",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -10,12 +10,10 @@ package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
+import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.acos
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
@@ -32,6 +30,9 @@ import net.minecraft.world.level.pathfinder.PathFinder
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.acos
 
 /**
  * A navigator designed to work with the [OmniPathNodeMaker], allowing a path that can cross land, water, and air
@@ -221,6 +222,23 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         this.moveTo(x, y, z, speed)
     }
 
+    override fun isStableDestination(pos: BlockPos): Boolean {
+        if (pather.canSwimInWater() && mob.isInWater) {
+            val blockGetter: BlockGetter = level
+            if (blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
+                return true
+            }
+        }
+        if (pather.canFly()) {
+            return this.level.getBlockState(pos).isAir || super.isStableDestination(pos)
+            // Note the below is what is used by default for minecraft fliers
+            // Mojang seems interested in anchoring flying mobs toward the ground
+            // but we are decidedly not doing that.
+            // this.level.getBlockState(pos).entityCanStandOn(this.level, pos, this.mob)
+        }
+        return super.isStableDestination(pos)
+    }
+
     override fun getGroundY(vec: Vec3): Double {
         val blockGetter: BlockGetter = level
         val blockPos = BlockPos.containing(vec)
@@ -252,6 +270,28 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     override fun trimPath() {
         super.trimPath()
         val path = getPath() ?: return
+
+        // What's there to trim
+        if (path.nodeCount < 2) {
+            return
+        }
+
+        /*
+         * Sometimes entities spin in place at the start of their path
+         * because of rounding stuff (I think) so try to detect those
+         * cases and nix the first node so they just move forward.
+         */
+        val introNode = path.getNode(0)
+        val subsequentNode = path.getNode(1)
+        val mobMiddle = entity.position()
+        val toIntroNode = introNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
+        val toSubsequentNode = subsequentNode.asVec3().add(0.5, 0.0, 0.5).subtract(mobMiddle)
+        // if the first two nodes are pointing in opposite directions (>90 degrees) from the entity or the second node is closer, trim the first node
+        if (toIntroNode.dot(toSubsequentNode) < 0 || toIntroNode.lengthSqr() > toSubsequentNode.lengthSqr()) {
+            path.deleteNode(0)
+        }
+
+
         var i = 2
 
         // Tries to skip some nodes that are all lined up

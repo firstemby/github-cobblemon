@@ -27,13 +27,12 @@ class FollowWalkTargetTaskConfig : SingleTaskConfig {
     val minRunTicks: ExpressionOrEntityVariable = Either.left("150".asExpression())
     val maxRunTicks: ExpressionOrEntityVariable = Either.left("250".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(minRunTicks, maxRunTicks).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(minRunTicks, maxRunTicks).asVariables()
 
     override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, MemoryModuleType.PATH, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)
         return WrapperLivingEntityTask(
-            FollowWalkTargetTask(minRunTicks.resolveInt(), maxRunTicks.resolveInt()),
+            FollowWalkTargetTask(minRunTicks.resolveInt(behaviourConfigurationContext.runtime), maxRunTicks.resolveInt(behaviourConfigurationContext.runtime)),
             PathfinderMob::class.java
         )
     }

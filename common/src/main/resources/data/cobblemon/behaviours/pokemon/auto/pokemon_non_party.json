@@ -3,13 +3,6 @@
   "configurations": [
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party",
-      "behaviours": [
-        "cobblemon:pokemon_sleeps"
-      ]
-    },
-    {
-      "type": "apply_behaviours",
       "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land",
       "behaviours": [
         "cobblemon:wanders"
@@ -17,21 +10,21 @@
     },
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && !q.entity.behaviour.moving.walk.can_walk && q.entity.behaviour.moving.fly.can_fly",
+      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.fly.can_fly",
       "behaviours": [
         "cobblemon:wanders_hover"
       ]
     },
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.avoids_land && q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water",
+      "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water",
       "behaviours": [
         "cobblemon:wanders_water"
       ]
     },
     {
       "type": "apply_behaviours",
-      "condition": "!q.entity.is_in_party && q.entity.behaviour.combat.will_flee",
+      "condition": "!q.entity.is_in_party && (q.entity.behaviour.combat.will_flee && !q.entity.behaviour.combat.will_defend_self)",
       "behaviours": [
         "cobblemon:panics"
       ]
@@ -48,6 +41,13 @@
       "condition": "!q.entity.is_in_party && q.entity.behaviour.moving.walk.avoids_land && q.entity.behaviour.moving.swim.can_swim_in_water",
       "behaviours": [
         "cobblemon:moves_to_water"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "!q.entity.is_in_party && q.length(q.entity.config.pickup_items) > 0",
+      "behaviours": [
+        "cobblemon:pokemon_picks_up_items"
       ]
     }
   ]

@@ -52,6 +52,19 @@
       "walk": {
         "walkSpeed": 0.12
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hippopotas",
+          "tier": 1
+        },
+        {
+          "pokemon": "hippowdon",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

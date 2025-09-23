@@ -60,6 +60,27 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "horsea",
+          "tier": 1
+        },
+        {
+          "pokemon": "seadra",
+          "tier": 2
+        },
+        {
+          "pokemon": "kingdra",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

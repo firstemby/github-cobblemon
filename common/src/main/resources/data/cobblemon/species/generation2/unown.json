@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 201,
   "name": "Unown",
   "primaryType": "psychic",
@@ -42,11 +43,28 @@
   "catchRate": 225,
   "eggCycles": 40,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.6,
+    "height": 0.8,
     "fixed": false
+  },
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "unown",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "fly": {
+        "canFly": true
+      }
+    }
   },
   "drops": {
     "amount": 1,

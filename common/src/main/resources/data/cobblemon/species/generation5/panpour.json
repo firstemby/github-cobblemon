@@ -195,5 +195,44 @@
       "requirements": [],
       "requiredContext": "cobblemon:water_stone"
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aipom",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansage",
+          "tier": 1
+        },
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "panpour",
+          "tier": 1
+        },
+        {
+          "pokemon": "ambipom",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisage",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 2
+        },
+        {
+          "pokemon": "simipour",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

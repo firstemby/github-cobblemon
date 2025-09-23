@@ -75,7 +75,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         val xVector = if (vehicle.runtime.resolveBoolean(settings.canStrafe)) driver.xxa.toDouble() else 0.0
         val yVector = -vehicle.runtime.resolveDouble(settings.glideSpeed)
         val zVector = driver.zza.toDouble()
-        val speedStat = settings.calculate(RidingStat.SPEED, 0)
+        val speedStat = settings.calculate(RidingStat.SPEED, 0F)
         return Vec3(xVector, yVector, zVector)
     }
 
@@ -104,9 +104,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
         if (driver !is OrientationControllable) return Vec3.ZERO
 
         //Might need to add the smoothing here for default.
-        val invertRoll = if (Cobblemon.config.invertRoll) -1 else 1
-        val invertPitch = if (Cobblemon.config.invertPitch) -1 else 1
-        return Vec3(0.0, mouseY * invertPitch, mouseX * invertRoll)
+        return Vec3(0.0, mouseY, mouseX)
     }
 
     override fun canJump(settings: GliderSettings, state: RidingBehaviourState, vehicle: PokemonEntity, driver: Player): Boolean {

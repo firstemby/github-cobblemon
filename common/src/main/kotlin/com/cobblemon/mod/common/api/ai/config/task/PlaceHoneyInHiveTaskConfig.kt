@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -22,7 +23,7 @@ class PlaceHoneyInHiveTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(HONEY, "can_add_honey", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 
@@ -33,7 +34,7 @@ class PlaceHoneyInHiveTaskConfig : SingleTaskConfig {
         if (entity !is PokemonEntity) {
             return null
         }
-        if (!checkCondition(entity, condition)) {
+        if (!checkCondition(behaviourConfigurationContext.runtime, condition)) {
             return null
         }
         return PlaceHoneyInHiveTask.create()

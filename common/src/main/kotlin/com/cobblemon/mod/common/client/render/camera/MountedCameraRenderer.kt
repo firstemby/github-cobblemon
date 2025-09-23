@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.client.render.camera
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.OrientationControllable
-import com.cobblemon.mod.common.api.riding.Seat
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController.setup
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -18,6 +17,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository.getPoser
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.mixin.accessor.CameraAccessor
+import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
@@ -73,18 +73,31 @@ object MountedCameraRenderer
             val currEyeHeight: Double = Mth.lerp(instance.partialTickTime.toDouble(), eyeHeight, eyeHeightOld)
             var offset = Vector3f(0f, (currEyeHeight - (entity.bbHeight / 2)).toFloat(), 0f)
 
-            // Get additional offset from poser and add to the eyeHeight offset when first person
+            // Get additional offset from poser and add to the eyeHeight offset
             if (!instance.isDetached) {
-                offset.add(getFirstPersonOffset(model, locatorName))
+                offset.add(
+                    getFirstPersonOffset(model, locatorName)
+                )
+            } else {
+                offset.add(
+                    getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffset, locatorName)
+                )
             }
 
-            // Rotate Offset if needed
             if (controller.isActive()) {
                 offset = controller.getRenderOrientation(instance.partialTickTime).transform(offset)
+            } else {
+                offset = Axis.YP.rotationDegrees(180f - instance.yRot).transform(offset)
             }
 
-            val position = locatorOffset.add(entityPos).add(Vec3(offset))
-            return position
+            val pos = locatorOffset.add(entityPos).toVector3f()
+            val offsetDistance = offset.length()
+            val offsetDirection = offset.mul(1 / offsetDistance)
+
+            // Use getMaxZoom to calculate clipping
+            val maxZoom: Float = getMaxZoom(offsetDistance, offsetDirection, pos, instance)
+
+            return Vec3(offsetDirection.mul(maxZoom).add(pos))
         } else {
             val xRot = (-1 * Math.toRadians(instance.xRot.toDouble())).toFloat()
 
@@ -113,9 +126,8 @@ object MountedCameraRenderer
             val pos = entityPos.toVector3f().add(pivot)
 
             // Get offset from poser
-            val offset = getThirdPersonOffset(thirdPersonReverse, model, locatorName)
+            val offset = getThirdPersonOffset(thirdPersonReverse, model.thirdPersonCameraOffsetNoViewBobbing, locatorName)
 
-            if (thirdPersonReverse) offset.z *= -1f
             val rotatedOffset = orientation.transform(offset)
             val offsetDistance = rotatedOffset.length()
             val offsetDirection = rotatedOffset.mul(1 / offsetDistance)
@@ -130,18 +142,18 @@ object MountedCameraRenderer
 
     private fun getThirdPersonOffset(
         thirdPersonReverse: Boolean,
-        model: PosableModel,
+        cameraOffsets: Map<String, Vec3>,
         locatorName: String
     ): Vector3f {
-        val cameraOffsets = model.thirdPersonCameraOffset
-
-        return if (thirdPersonReverse && cameraOffsets.containsKey(locatorName + "_reverse")) {
+        val offset = if (thirdPersonReverse && cameraOffsets.containsKey(locatorName + "_reverse")) {
             cameraOffsets[locatorName + "_reverse"]!!.toVector3f()
         } else if (cameraOffsets.containsKey(locatorName)) {
             cameraOffsets[locatorName]!!.toVector3f()
         } else {
             Vector3f(0f, 2f, 4f)
         }
+        if (thirdPersonReverse) offset.z *= -1
+        return offset
     }
 
     private fun getFirstPersonOffset(model: PosableModel, locatorName: String): Vector3f {

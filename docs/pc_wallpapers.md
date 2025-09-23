@@ -7,7 +7,9 @@ This involves adding the texture PNG file to the `assets/cobblemon/textures/gui/
 this directory on asset load and form a base list. The client will send this list to the server to validate
 the list, with the server returning a list of valid wallpapers. The client will then display the wallpapers in the GUI.
 The emissive screen glow will be automatically generated using colour of the center pixel of the provided wallpaper.
-For a custom screen glow, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/glow` directory with the same file name as the wallpaper.
+For a custom screen glow, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/*/glow` directory with the same file name as the wallpaper.
+An optional, alternate wallpaper can also be provided. This should be similar to the main wallpaper as it will share the custom glow if one is provided. This alternate wallpaper will be shown, replacing the main wallpaper, when holding the Shift key while the wallpaper selection list is open in the PC interface. To add an alternate wallpaper, place the file in the `assets/cobblemon/textures/gui/pc/wallpaper/*/alt` directory with the same file name as the main wallpaper.
+
 
 #### Server Side
 A datapack folder exists called `unlockable_pc_box_wallpapers`. This contains JSONs of a simplistic format.
@@ -29,7 +31,7 @@ The `enabled` field is used when you want to actively prevent a specific texture
 is a wallpaper supplied by Cobblemon that you want to remove, setting this to false will prevent its use despite existing
 in the client's resources.
 
-The `displayName` field is used to provide a name in the toast when the wallpaper is unlocked. If it is null, the toast
+The `displayName` field is used to provide a name in the toast when the wallpaper is unlocked. It can be a lang key or text. If it is left out or null, the toast
 will instead insert '???' in place of the name.
 
 For enabled, datapacked wallpapers, the server will build a list of which of these have been unlocked by the player.

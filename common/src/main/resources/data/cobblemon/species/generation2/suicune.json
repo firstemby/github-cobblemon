@@ -174,5 +174,6 @@
     "legacy:toxic",
     "special:aquaring"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {}
 }

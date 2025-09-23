@@ -1,11 +1,10 @@
 {
-	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"texture_size": [32, 32],
 	"textures": {
-		"particle": "cobblemon:campfire_pot_red",
-		"pot": "cobblemon:campfire_pot_red"
+		"particle": "cobblemon:block/campfire_pot/campfire_pot_red",
+		"pot": "cobblemon:block/campfire_pot/campfire_pot_red"
 	},
 	"elements": [
 		{
@@ -139,5 +138,6 @@
 			"color": 0,
 			"children": [0, 1, 2, 3, 4, 5, 6]
 		}
-	]
+	],
+	"format_version": "1.21.6"
 }

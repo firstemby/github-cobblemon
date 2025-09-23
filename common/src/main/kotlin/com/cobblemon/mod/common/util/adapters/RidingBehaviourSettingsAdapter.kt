@@ -39,14 +39,12 @@ import java.lang.reflect.Type
 object RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings?> {
     val types: MutableMap<ResourceLocation, Class<out RidingBehaviourSettings>> = mutableMapOf(
         BirdBehaviour.KEY to BirdSettings::class.java,
-        BirdNoRollBehaviour.KEY to BirdNoRollSettings::class.java,
         DolphinBehaviour.KEY to DolphinSettings::class.java,
         HorseBehaviour.KEY to HorseSettings::class.java,
         BoatBehaviour.KEY to BoatSettings::class.java,
         GliderBehaviour.KEY to GliderSettings::class.java,
         HelicopterBehaviour.KEY to HelicopterSettings::class.java,
         JetBehaviour.KEY to JetSettings::class.java,
-        JetNoRollBehaviour.KEY to JetNoRollSettings::class.java,
         BurstBehaviour.KEY to BurstSettings::class.java,
         VehicleBehaviour.KEY to VehicleSettings::class.java,
         MinekartBehaviour.KEY to MinekartSettings::class.java,

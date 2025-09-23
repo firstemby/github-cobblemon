@@ -56,6 +56,23 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "togepi",
+          "tier": 1
+        },
+        {
+          "pokemon": "togetic",
+          "tier": 2
+        },
+        {
+          "pokemon": "togekiss",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

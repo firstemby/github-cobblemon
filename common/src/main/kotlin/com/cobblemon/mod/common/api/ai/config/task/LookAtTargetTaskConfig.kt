@@ -28,7 +28,7 @@ class LookAtTargetTaskConfig : SingleTaskConfig {
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("160".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         minDurationTicks,
         maxDurationTicks
@@ -38,10 +38,9 @@ class LookAtTargetTaskConfig : SingleTaskConfig {
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)
         behaviourConfigurationContext.addSensors(SensorType.NEAREST_LIVING_ENTITIES)
-        return WrapperLivingEntityTask(LookAtTargetSink(minDurationTicks.resolveInt(), maxDurationTicks.resolveInt()), Mob::class.java)
+        return WrapperLivingEntityTask(LookAtTargetSink(minDurationTicks.resolveInt(behaviourConfigurationContext.runtime), maxDurationTicks.resolveInt(behaviourConfigurationContext.runtime)), Mob::class.java)
     }
 }

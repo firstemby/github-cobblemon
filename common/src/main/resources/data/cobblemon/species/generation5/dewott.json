@@ -61,6 +61,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewott",
+          "tier": 1
+        },
+        {
+          "pokemon": "samurott",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {
@@ -206,10 +219,6 @@
         {
           "variant": "level",
           "minLevel": 36
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
         }
       ]
     },
@@ -229,10 +238,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/dewott_unovabiome"
         }
       ]
     }
@@ -273,10 +278,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dewott_unovabiome"
             }
           ]
@@ -293,10 +294,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/dewott_unovabiome"
             }
           ]
         }

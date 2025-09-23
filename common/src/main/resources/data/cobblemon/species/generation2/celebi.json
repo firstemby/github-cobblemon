@@ -213,5 +213,16 @@
     "legacy:toxic",
     "special:holdback"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "celebi",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

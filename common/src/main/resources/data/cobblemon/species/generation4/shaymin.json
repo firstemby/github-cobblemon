@@ -279,7 +279,37 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "shaymin sky=false",
+              "tier": 1
+            },
+            {
+              "pokemon": "shaymin sky",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shaymin sky",
+          "tier": 1
+        },
+        {
+          "pokemon": "shaymin sky=false",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

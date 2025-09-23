@@ -189,5 +189,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "palossand",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

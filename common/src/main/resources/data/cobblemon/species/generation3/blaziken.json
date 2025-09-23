@@ -42,10 +42,10 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1.1,
-    "height": 2.6,
+    "width": 1.4,
+    "height": 3.25,
     "fixed": false
   },
   "drops": {
@@ -277,7 +277,17 @@
       "baseExperienceYield": 315,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "8"
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "7"
+    }
+  }
 }

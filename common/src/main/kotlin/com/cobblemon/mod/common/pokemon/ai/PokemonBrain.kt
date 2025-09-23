@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
 import com.cobblemon.mod.common.entity.pokemon.ai.tasks.*
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.toDF
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
@@ -59,6 +60,11 @@ object PokemonBrain {
     private val ADULT_FOLLOW_RANGE = UniformInt.of(5, 16)
     private val AVOID_MEMORY_DURATION = TimeUtil.rangeOfSeconds(5, 20)
 
+    /**
+     * The things that absolutely should be on all pokemon can be put in here. Things that make no sense
+     * without specific activities/Behaviours should be given as part of those activities. Some of the things
+     * in this list currently violate this rule but it's whatever, I'll get to them later.
+     */
     val SENSORS: Collection<SensorType<out Sensor<in PokemonEntity>>> = listOf(
         SensorType.NEAREST_LIVING_ENTITIES,
         SensorType.HURT_BY,
@@ -70,7 +76,8 @@ object PokemonBrain {
         SensorType.IS_IN_WATER,
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
-        CobblemonSensors.NEARBY_FLOWER
+        CobblemonSensors.NEARBY_FLOWER,
+        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -193,7 +200,8 @@ object PokemonBrain {
         CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HERD_LEADER,
         CobblemonMemories.HERD_SIZE,
-        CobblemonMemories.ATTACK_TARGET_DATA
+        CobblemonMemories.ATTACK_TARGET_DATA,
+        CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
     )
 
     private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
@@ -204,7 +212,7 @@ object PokemonBrain {
         if (pokemon.form.behaviour.combat.willDefendSelf) {
             add(0 toDF GetAngryAtAttackerTask.create())
         } else {
-            add(0 toDF FleeFromAttackerTask.create())
+            add(0 toDF FleeFromAttackerTask.create("600".asExpression()))
         }
 
         add(0 toDF StopBeingAngryIfTargetDead.create())
@@ -234,7 +242,7 @@ object PokemonBrain {
         }
 
         add(0 toDF ChooseLandWanderTargetTask.create(pokemon.form.behaviour.moving.wanderChance, horizontalRange = 10, verticalRange = 5, walkSpeed = 0.33F, completionRange = 1))
-        add(0 toDF GoToSleepTask.create())
+        add(0 toDF GoToSleepTask.create(onlyFromStatus = false))
         add(0 toDF FindRestingPlaceTask.create(16, 8))
 //        add(0 toDF EatGrassTask())
         add(0 toDF AttackAngryAtTask.create())

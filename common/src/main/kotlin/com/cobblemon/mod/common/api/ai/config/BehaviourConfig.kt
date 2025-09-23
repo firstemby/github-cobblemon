@@ -37,7 +37,6 @@ interface BehaviourConfig {
     companion object {
         val types = mutableMapOf<ResourceLocation, Class<out BehaviourConfig>>(
             cobblemonResource("script") to ScriptBehaviourConfig::class.java,
-            cobblemonResource("custom_script") to CustomScriptBehaviourConfig::class.java,
             cobblemonResource("add_tasks_to_activity") to AddTasksToActivity::class.java,
             cobblemonResource("apply_behaviours") to ApplyBehaviours::class.java,
             cobblemonResource("set_default_activity") to SetDefaultActivity::class.java,
@@ -48,12 +47,16 @@ interface BehaviourConfig {
         )
     }
 
-    fun checkCondition(entity: LivingEntity, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
-        val runtime = MoLangRuntime().setup()
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        return runtime.resolveBoolean(expressionOrEntityVariable.map({ it }, { "q.entity.config.${it.variableName}".asExpression() }))
+    /** Literally just here for shorthand. */
+    fun checkCondition(behaviourConfigurationContext: BehaviourConfigurationContext, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+        return behaviourConfigurationContext.runtime.resolveBoolean(expressionOrEntityVariable.map({ it }, { "q.entity.config.${it.variableName}".asExpression() }))
     }
 
-    fun getVariables(entity: LivingEntity): List<MoLangConfigVariable>
+    fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
+
+    fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+        // Default implementation does nothing, can be overridden if needed
+    }
+
     fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext)
 }

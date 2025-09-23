@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBo
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -84,7 +85,8 @@ class WallpapersScrollingWidget(
     private fun createEntries() {
         clearEntries()
         for (wallpaper in PCBoxWallpaperRepository.availableWallpapers) {
-            addEntry(WallpaperEntry(wallpaper, pcGui.unseenWallpapers.contains(wallpaper)))
+            val altWallpaper = PCBoxWallpaperRepository.allWallpapers.find { it.first == wallpaper }?.second
+            addEntry(WallpaperEntry(wallpaper, altWallpaper, pcGui.unseenWallpapers.contains(wallpaper)))
         }
     }
 
@@ -100,7 +102,7 @@ class WallpapersScrollingWidget(
         return this.rowLeft + SLOT_WIDTH
     }
 
-    inner class WallpaperEntry(val wallpaper: ResourceLocation, var isNew: Boolean) : Slot<WallpaperEntry>() {
+    inner class WallpaperEntry(val wallpaper: ResourceLocation, var altWallpaper: ResourceLocation?, var isNew: Boolean) : Slot<WallpaperEntry>() {
         override fun render(
             guiGraphics: GuiGraphics,
             index: Int,
@@ -114,9 +116,10 @@ class WallpapersScrollingWidget(
             partialTick: Float
         ) {
             val matrices = guiGraphics.pose()
+            val resource = if (Screen.hasShiftDown() && altWallpaper !== null) altWallpaper else wallpaper
             blitk(
                 matrixStack = matrices,
-                texture = wallpaper,
+                texture = resource,
                 x = left + 1,
                 y = top + SLOT_PADDING + 1,
                 width = width - 2,
@@ -137,8 +140,9 @@ class WallpapersScrollingWidget(
 
         override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
             if (this@WallpapersScrollingWidget.visible && isMouseOver(mouseX, mouseY)) {
-                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper).sendToServer()
-                pcGui.pc.boxes[storageWidget.box].wallpaper = wallpaper
+                val appliedWallpaper = if (Screen.hasShiftDown()) altWallpaper ?: wallpaper else wallpaper
+                RequestChangePCBoxWallpaperPacket(pcGui.pc.uuid, storageWidget.box, wallpaper, if (Screen.hasShiftDown()) altWallpaper else null).sendToServer()
+                pcGui.pc.boxes[storageWidget.box].wallpaper = appliedWallpaper
                 pcGui.unseenWallpapers.remove(wallpaper)
                 isNew = false
                 minecraft.soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.PC_CLICK, 1.0F))

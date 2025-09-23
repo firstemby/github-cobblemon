@@ -52,6 +52,19 @@
     "resting": {
       "canSleep": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sceptile mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "sceptile mega",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

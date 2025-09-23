@@ -59,6 +59,19 @@
         "canFly": true,
         "flySpeedHorizontal": 0.6
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vibrava",
+          "tier": 1
+        },
+        {
+          "pokemon": "flygon",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

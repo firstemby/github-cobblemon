@@ -128,5 +128,16 @@
     "tutor:thunderbolt",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sandyshocks",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

@@ -168,5 +168,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spritzee",
+          "tier": 1
+        },
+        {
+          "pokemon": "aromatisse",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

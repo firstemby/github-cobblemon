@@ -14,10 +14,8 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
-import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.isInBattle
-import com.cobblemon.mod.common.util.lang
-import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -159,12 +157,15 @@ class HealingMachineBlock(settings: Properties) : BaseEntityBlock(settings) {
             return InteractionResult.SUCCESS
         }
         val party = serverPlayerEntity.party()
-        if (party.none()) {
+        val pc = serverPlayerEntity.pc()
+        val healPC = player.level().gameRules.getBoolean(CobblemonGameRules.HEALERS_HEAL_PC);
+
+        if (party.none() && (!healPC || pc.none())) {
             player.sendSystemMessage(lang("healingmachine.nopokemon").red(), true)
             return InteractionResult.SUCCESS
         }
 
-        if (party.none { pokemon -> pokemon.canBeHealed() }) {
+        if (party.none { pokemon -> pokemon.canBeHealed() } && (!healPC || pc.none { pokemon -> pokemon.canBeHealed() })) {
             player.sendSystemMessage(lang("healingmachine.alreadyhealed").red(), true)
             return InteractionResult.SUCCESS
         }

@@ -58,6 +58,47 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "seel",
+          "tier": 1
+        },
+        {
+          "pokemon": "popplio",
+          "tier": 1
+        },
+        {
+          "pokemon": "spheal",
+          "tier": 2
+        },
+        {
+          "pokemon": "dewgong",
+          "tier": 3
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 3
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 4
+        },
+        {
+          "pokemon": "sealeo",
+          "tier": 5
+        },
+        {
+          "pokemon": "walrein",
+          "tier": 6
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 7
+        }
+      ]
     }
   },
   "drops": {

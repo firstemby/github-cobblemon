@@ -56,6 +56,35 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tynamo",
+          "tier": 1
+        },
+        {
+          "pokemon": "huntail",
+          "tier": 2
+        },
+        {
+          "pokemon": "gorebyss",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektrik",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektross",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
     }
   },
   "drops": {

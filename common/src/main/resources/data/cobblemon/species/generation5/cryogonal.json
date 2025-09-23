@@ -63,6 +63,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "cryogonal",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

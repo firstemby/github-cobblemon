@@ -56,13 +56,16 @@
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "9"
     }
   },
   "drops": {
     "amount": 3,
     "entries": [
       {
-        "item": "cobblemon:verdant_froglight"
+        "item": "minecraft:verdant_froglight"
       },
       {
         "item": "cobblemon:kings_rock",

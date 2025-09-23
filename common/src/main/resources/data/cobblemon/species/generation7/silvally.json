@@ -2797,5 +2797,16 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "silvally",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

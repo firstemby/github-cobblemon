@@ -4,6 +4,17 @@
   "profileScale": 0.45,
   "profileTranslation": [-0.1, 1.0, 0],
   "rootBone": "blastoise",
+  "firstPersonCameraOffset": {
+    "seat_1": [0, 0.25, 0]
+  },
+  "thirdPersonCameraOffset": {
+    "seat_1": [0, 0, 1],
+    "seat_1_reverse": [0, 0, 1]
+  },
+  "thirdPersonCameraOffsetNoViewBobbing": {
+    "seat_1": [0, 3, 6],
+    "seat_1_reverse": [0, 3, 6]
+  },
   "animations": {
     "faint": "q.bedrock_primary('blastoise', 'faint', q.curve('one'))",
     "cry": "q.bedrock_stateful('blastoise', 'cry')",

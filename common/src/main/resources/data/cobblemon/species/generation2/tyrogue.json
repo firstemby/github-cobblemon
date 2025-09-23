@@ -55,6 +55,23 @@
       "canSleep": true,
       "willSleepOnBed": true,
       "light": "0-4"
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hitmonchan",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmonlee",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmontop",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

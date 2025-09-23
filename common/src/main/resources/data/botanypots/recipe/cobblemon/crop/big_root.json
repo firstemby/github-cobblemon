@@ -1,29 +1,38 @@
 {
   "type": "botanypots:crop",
-  "seed": {
+  "input": {
     "item": "cobblemon:big_root"
   },
-  "categories": [
-    "dirt",
-    "stone"
-  ],
-  "growthTicks": 1200,
+  "soil": {
+    "tag": "botanypots:soil/moss"
+  },
+  "grow_time": 1200,
   "display": {
     "type": "botanypots:simple",
-    "block": "cobblemon:big_root",
-    "rotation": "X_180"
+    "block_state": {
+      "block": "cobblemon:big_root"
+    },
+    "options": {
+      "rotation": "X_180"
+    }
   },
   "drops": [
     {
-      "chance": 1.00,
-      "output": {
-        "item": "cobblemon:big_root"
-      }
-    },{
-      "chance": 0.25,
-      "output": {
-        "item": "cobblemon:energy_root"
-      }
+      "type": "botanypots:items",
+      "items": [
+        {
+          "result": {
+            "id": "cobblemon:big_root"
+          },
+          "chance": 1.00
+        },
+        {
+          "result": {
+            "id": "cobblemon:energy_root"
+          },
+          "chance": 0.25
+        }
+      ]
     }
   ],
   "fabric:load_conditions": [{

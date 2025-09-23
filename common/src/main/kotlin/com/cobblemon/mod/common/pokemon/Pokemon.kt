@@ -643,6 +643,12 @@ open class Pokemon : ShowdownIdentifiable {
             onChange()
         }
 
+    /**
+     * Whether this Pokémon's held item can be dropped by its AI.
+     */
+    internal var canDropHeldItem: Boolean = false
+        get() = field || heldItem.isEmpty
+
     val riding: RidingProperties
         get() = this.form.riding
 
@@ -671,7 +677,7 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
-        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentPreEvent(this, level, position)) {
+        CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentEvent.Pre(this, level, position)) {
             SeasonFeatureHandler.updateSeason(this, level, position.toBlockPos())
             val entity = PokemonEntity(level, this)
             illusion?.start(entity)
@@ -780,7 +786,7 @@ open class Pokemon : ShowdownIdentifiable {
                     it.phasingTargetId = -1
                     it.beamMode = 0
                     future.complete(it)
-                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                    CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, position, it))
                     if (doCry) {
                         it.cry()
                     }
@@ -837,7 +843,7 @@ open class Pokemon : ShowdownIdentifiable {
 
             afterOnServer(seconds = SEND_OUT_DURATION) {
                 future.complete(it)
-                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentPostEvent(this, it))
+                CobblemonEvents.POKEMON_SENT_POST.post(PokemonSentEvent.Post(this, level, currentPosition, it))
                 if (doCry) {
                     it.cry()
                 }
@@ -849,10 +855,12 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun recall() {
-        CobblemonEvents.POKEMON_RECALLED.post(PokemonRecalledEvent(this, this.entity))
-        val state = this.state as? ActivePokemonState
-        this.state = InactivePokemonState()
-        state?.recall()
+        CobblemonEvents.POKEMON_RECALL_PRE.postThen(PokemonRecallEvent.Pre(this, this.entity)) {
+            val state = this.state as? ActivePokemonState
+            this.state = InactivePokemonState()
+            state?.recall()
+            CobblemonEvents.POKEMON_RECALL_POST.post(PokemonRecallEvent.Post(this, this.entity))
+        }
     }
 
     fun tryRecallWithAnimation() {
@@ -1153,7 +1161,7 @@ open class Pokemon : ShowdownIdentifiable {
      *
      * @see [HeldItemEvent]
      */
-    fun swapHeldItem(stack: ItemStack, decrement: Boolean = true): ItemStack {
+    fun swapHeldItem(stack: ItemStack, decrement: Boolean = true, aiCanDrop: Boolean = true): ItemStack {
         val existing = this.heldItem()
         val event = HeldItemEvent.Pre(this, stack, existing, decrement)
         if (!isClient) {
@@ -1165,6 +1173,7 @@ open class Pokemon : ShowdownIdentifiable {
                 event.receiving.shrink(1)
             }
             this.heldItem = giving
+            this.canDropHeldItem = giving.isEmpty || aiCanDrop
             onChange(HeldItemUpdatePacket({ this }, giving))
             CobblemonEvents.HELD_ITEM_POST.post(HeldItemEvent.Post(this, this.heldItem(), event.returning.copy(), event.decrement)) {
                 StashHandler.giveHeldItem(it)
@@ -1369,6 +1378,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.nature = other.nature
         this.mintedNature = other.mintedNature
         this.heldItem = other.heldItem
+        this.canDropHeldItem = other.canDropHeldItem
         this.persistentData = other.persistentData
         this.tetheringId = other.tetheringId
         this.teraType = other.teraType
@@ -1811,8 +1821,13 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    /**
+     * Gets the largest conceivable boost that can be granted to a stat. This is effectively the widest range
+     * from min to max of this stat for any of the styles. For example, if ACCELERATION is from 10 to 40 in one
+     * style and 20 to 60 in another, the max ride boost is 40.
+     */
     fun getMaxRideBoost(stat: RidingStat): Int {
-        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.endInclusive ?: 0 } ?: 0
+        return form.riding.behaviours?.maxOf { it.value.stats[stat]?.let { it.last - it.first } ?: 0 } ?: 0
     }
 
     fun getRideBoost(stat: RidingStat): Float {
@@ -1823,14 +1838,14 @@ open class Pokemon : ShowdownIdentifiable {
         return rideBoosts.toMap()
     }
 
-    fun canAddRideBoost(stat: RidingStat, boost: Float): Boolean {
+    fun canAddRideBoost(stat: RidingStat): Boolean {
         val max = getMaxRideBoost(stat)
         val current = rideBoosts[stat] ?: 0F
-        return current + boost <= max
+        return current < max
     }
 
     fun addRideBoost(stat: RidingStat, boost: Float): Boolean {
-        if (!canAddRideBoost(stat, boost)) {
+        if (!canAddRideBoost(stat)) {
             return false
         }
         val max = getMaxRideBoost(stat)
@@ -1914,7 +1929,7 @@ open class Pokemon : ShowdownIdentifiable {
         val previousLevelUpMoves = form.moves.getLevelUpMovesUpTo(oldLevel)
         var appliedXP = xp
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_PRE.postThen(
-            event = ExperienceGainedPreEvent(this, source, appliedXP),
+            event = ExperienceGainedEvent.Pre(this, source, appliedXP),
             ifSucceeded = { appliedXP = it.experience},
             ifCanceled = {
                 return AddExperienceResult(level, level, emptySet(), 0)
@@ -1941,7 +1956,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         CobblemonEvents.EXPERIENCE_GAINED_EVENT_POST.post(
-            ExperienceGainedPostEvent(this, source, appliedXP, oldLevel, newLevel, differences),
+            ExperienceGainedEvent.Post(this, source, appliedXP, oldLevel, newLevel, differences),
             then = { return AddExperienceResult(oldLevel, newLevel, it.learnedMoves, appliedXP) }
         )
 

@@ -29,14 +29,13 @@ class HealUsingHealingMachineTaskConfig : SingleTaskConfig {
     val horizontalUseRange: ExpressionOrEntityVariable = Either.left("2".asExpression())
     val verticalUseRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
 
-    override fun getVariables(entity: LivingEntity) = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
 
     override fun createTask(
         entity: LivingEntity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
-        if (!condition.resolveBoolean()) return null
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(MemoryModuleType.WALK_TARGET, CobblemonMemories.NPC_BATTLING,)
         behaviourConfigurationContext.addSensors(CobblemonSensors.NPC_BATTLING)
         return HealUsingHealingMachineTask(horizontalUseRange.asExpression(), verticalUseRange.asExpression())

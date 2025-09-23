@@ -175,5 +175,20 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "deino",
+          "tier": 1
+        },
+        {
+          "pokemon": "zweilous",
+          "tier": 2
+        }
+      ]
+    }
+  }
 }

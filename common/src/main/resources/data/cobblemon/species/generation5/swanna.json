@@ -65,6 +65,15 @@
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swanna",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

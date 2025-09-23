@@ -200,5 +200,10 @@
     "legacy:swagger"
   ],
   "preEvolution": "stunky",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    }
+  }
 }

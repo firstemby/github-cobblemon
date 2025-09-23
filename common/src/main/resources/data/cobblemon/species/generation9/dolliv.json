@@ -1,4 +1,5 @@
-{ "implemented": true,
+{
+  "implemented": true,
   "nationalPokedexNumber": 929,
   "name": "Dolliv",
   "primaryType": "grass",
@@ -132,5 +133,16 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "arboliva",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

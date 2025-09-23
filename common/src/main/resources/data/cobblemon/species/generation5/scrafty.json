@@ -222,5 +222,16 @@
     "legacy:toxic"
   ],
   "preEvolution": "scraggy",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "scrafty",
+          "tier": 1
+        }
+      ]
+    }
+  }
 }

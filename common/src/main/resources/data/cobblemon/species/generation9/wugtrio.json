@@ -52,10 +52,19 @@
     "moving": {
       "swim": {
         "canSwimInWater": false,
-        "canBreatheUnderwater": true,
+        "canBreatheUnderwater": false,
         "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wugtrio",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

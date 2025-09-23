@@ -10,10 +10,8 @@ package com.cobblemon.mod.common.api.riding.behaviour
 
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
-import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.phys.Vec3
 
 /**
  * Represents static settings of a riding behaviour.
@@ -27,10 +25,9 @@ interface RidingBehaviourSettings: Encodable, Decodable {
     val key: ResourceLocation
     val stats: MutableMap<RidingStat, IntRange>
 
-    fun calculate(stat: RidingStat, boosts: Int): Float {
+    fun calculate(stat: RidingStat, boostedAmount: Float): Float {
         val range = stats[stat] ?: return 0F
-        val boostQuotient = boosts / 255F
-        return range.first + (range.last - range.first) * boostQuotient
+        return (range.first + boostedAmount).coerceAtMost(range.last.toFloat())
     }
 
     fun hasStat(stat: RidingStat) = stats.containsKey(stat)
