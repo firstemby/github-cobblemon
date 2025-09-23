@@ -160,7 +160,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("great_ball", MultiplierModifier(1.5F))
         createDefault("ultra_ball", MultiplierModifier(2F))
         createDefault("master_ball", GuaranteedModifier())
-        createDefault("safari_ball", CatchRateModifiers.SAFARI)
+        createDefault("safari_ball", CatchRateModifiers.SAFARI, stealthFactor = 0.75f)
         createDefault("fast_ball", BaseStatModifier(Stats.SPEED, { it >= 100 }, 4F))
         createDefault("level_ball", CatchRateModifiers.LEVEL)
         createDefault("lure_ball", CatchRateModifiers.LURE)
@@ -237,11 +237,12 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         model2d: ResourceLocation = cobblemonResource(name),
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
-        ancient: Boolean = false
+        ancient: Boolean = false,
+        stealthFactor: Float = 0.0f,
     ): PokeBall {
         val identifier = cobblemonResource(name)
         //val finalModifiers = if (appendUltraBeastPenalty) modifiers + listOf(LabelModifier(0.1F, true, CobblemonPokemonLabels.ULTRA_BEAST)) else modifiers
-        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient)
+        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient, stealthFactor)
         this.defaults[identifier] = pokeball
         return pokeball
     }

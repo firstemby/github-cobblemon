@@ -34,7 +34,6 @@
           "switch_to_panic_when_hostiles_nearby",
           "calm_down",
           "flee_attacker",
-          "flee_nearest_hostile",
           "run_script",
           "look_in_direction",
           "path_to_hive",

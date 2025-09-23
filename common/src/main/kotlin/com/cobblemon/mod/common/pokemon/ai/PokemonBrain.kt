@@ -296,9 +296,7 @@ object PokemonBrain {
 
     fun onCaptureFailed(pokemonEntity: PokemonEntity, capturer: Entity) {
         if (pokemonEntity.pokemon.isWild() && pokemonEntity.battleId == null && capturer is LivingEntity) {
-            pokemonEntity.brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
             pokemonEntity.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET)
-            pokemonEntity.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, capturer, AVOID_MEMORY_DURATION.sample(pokemonEntity.random).toLong())
         }
     }
 }

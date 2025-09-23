@@ -23,12 +23,9 @@
           }
         ],
         "1": [
-          "cobblemon:flee_nearest_hostile"
-        ],
-        "2": [
           "cobblemon:walk_away_from_avoid_target"
         ],
-        "3": [
+        "2": [
           {
             "type": "cobblemon:wander",
             "speedMultiplier": {

@@ -20,7 +20,8 @@
       "type": "cobblemon:add_memories_and_sensors",
       "memories": [
         "minecraft:attack_target",
-        "cobblemon:attack_target_data"
+        "cobblemon:attack_target_data",
+        "cobblemon:recent_catch_attempt"
       ]
     },
     {

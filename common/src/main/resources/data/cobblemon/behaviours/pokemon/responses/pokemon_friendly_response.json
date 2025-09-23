@@ -22,7 +22,8 @@
       "type": "cobblemon:add_memories_and_sensors",
       "memories": [
         "minecraft:avoid_target",
-        "cobblemon:avoid_target_data"
+        "cobblemon:avoid_target_data",
+        "minecraft:flee_target"
       ]
     },
     {

@@ -249,7 +249,7 @@ class ForcePassActionResponse : ShowdownActionResponse(ShowdownActionResponseTyp
             return false
         }
 
-        return activeBattlePokemon.actor.expectingPassActions.size > 0
+        return activeBattlePokemon.actor.expectingPassActions.isNotEmpty()
     }
 
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "pass"

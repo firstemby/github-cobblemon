@@ -29,9 +29,11 @@ object BattleRegistry {
         .registerTypeAdapter(ShowdownMoveset::class.java, ShowdownMovesetAdapter)
         .create()
     private val battleMap = ConcurrentHashMap<UUID, PokemonBattle>()
+    private val battleLock = ConcurrentHashMap<UUID, Boolean>()
 
     fun onServerStarted() {
         battleMap.clear()
+        battleLock.clear()
     }
 
     fun onPlayerDisconnect(player: ServerPlayer) {
@@ -205,12 +207,18 @@ object BattleRegistry {
             startShowdown(battle)
         }
 
-        if (!canPreempt) start().also { return SuccessfulBattleStart(battle) }
+        if (!canPreempt) start().also {
+            side1.actors.forEach { actor -> battleLock.remove(actor.uuid) }
+            side2.actors.forEach { actor -> battleLock.remove(actor.uuid) }
+            return SuccessfulBattleStart(battle)
+        }
 
         val preBattleEvent = BattleStartedEvent.Pre(battle)
         CobblemonEvents.BATTLE_STARTED_PRE.postThen(preBattleEvent) {
             start()
             CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedEvent.Post(battle))
+            side1.actors.forEach { actor -> battleLock.remove(actor.uuid) }
+            side2.actors.forEach { actor -> battleLock.remove(actor.uuid) }
             return SuccessfulBattleStart(battle)
         }
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
@@ -227,6 +235,19 @@ object BattleRegistry {
 
     fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer): PokemonBattle? {
         return battleMap.values.find { it.getActor(serverPlayer) != null }
+    }
+
+    fun checkBattleLock(serverPlayer: ServerPlayer, ancientIsOkay: Boolean): Boolean =
+        if (ancientIsOkay)
+            battleLock.get(serverPlayer.uuid) == false
+        else
+            battleLock.containsKey(serverPlayer.uuid)
+
+    fun lockPlayer(serverPlayer: ServerPlayer, ancient: Boolean) {
+        battleLock.put(serverPlayer.uuid, ancient)
+    }
+    fun unlockPlayer(serverPlayer: ServerPlayer) {
+        battleLock.remove(serverPlayer.uuid)
     }
 
     fun getBattleByParticipatingPlayerId(playerId: UUID): PokemonBattle? {

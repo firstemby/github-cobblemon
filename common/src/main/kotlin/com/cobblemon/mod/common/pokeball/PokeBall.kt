@@ -40,13 +40,15 @@ open class PokeBall(
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
-    val ancient: Boolean
+    val ancient: Boolean,
+    val stealthFactor: Float,
 ) {
     val struct = QueryStruct(hashMapOf())
         .addFunction("name") { StringValue(name.toString()) }
         .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
         .addFunction("throw_power") { DoubleValue(throwPower) }
         .addFunction("is_ancient") { DoubleValue(ancient) }
+        .addFunction("stealth_factor") { DoubleValue(stealthFactor)  }
 //        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry

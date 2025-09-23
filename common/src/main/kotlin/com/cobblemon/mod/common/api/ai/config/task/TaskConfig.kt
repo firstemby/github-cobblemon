@@ -79,7 +79,6 @@ interface TaskConfig {
             cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
             cobblemonResource("calm_down") to CalmDownTaskConfig::class.java,
             cobblemonResource("walk_away_from_avoid_target") to WalkAwayFromAvoidTargetTaskConfig::class.java,
-            cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig::class.java,
             cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
             cobblemonResource("fly_in_circles") to FlyInCirclesTaskConfig::class.java,
             cobblemonResource("run_script") to RunScript::class.java,
