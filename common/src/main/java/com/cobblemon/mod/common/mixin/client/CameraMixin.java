@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.riding.Rideable;
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController;
+import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.camera.MountedCameraRenderer;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -73,7 +74,7 @@ public abstract class CameraMixin {
                 }
                 controller.getOrientation().rotateZ((float) Math.toRadians(-rollAngleStart*(1-returnTimer)));
                 cobblemon$applyRotation();
-                this.returnTimer += .05F;
+                this.returnTimer += .01F;
                 ci.cancel();
             } else {
                 this.returnTimer = 1;
@@ -119,7 +120,34 @@ public abstract class CameraMixin {
 
     @Unique
     private void cobblemon$applyRotation(){
-        if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
+        if (!(this.entity.getVehicle() instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
+
+//        Camera cameraInstance = (Camera)(Object)this;
+//        Entity entity = cameraInstance.getEntity();
+//        Entity vehicle = entity.getVehicle();
+//
+//        if(vehicle instanceof Rideable) {
+//            Quaternionf newRotation = MountedCameraRenderer.INSTANCE.getCameraRotation(
+//                    cameraInstance,
+//                    entity,
+//                    vehicle
+//            );
+//
+//            if (newRotation != null) {
+//                var controller = controllable.getOrientationController();
+//                if (this.minecraft.options.getCameraType().isMirrored()) {
+//                    newRotation.rotateY((float)Math.toRadians(180));
+//                }
+//                this.rotation.set(newRotation);
+//                this.xRot = controller.getPitch();
+//                this.yRot = controller.getYaw();
+//                OrientationController.Companion.getFORWARDS().rotate(this.rotation, this.forwards);
+//                OrientationController.Companion.getUP().rotate(this.rotation, this.up);
+//                OrientationController.Companion.getLEFT().rotate(this.rotation, this.left);
+//                return;
+//            }
+//        }
+
         var controller = controllable.getOrientationController();
         var newRotation = controller.getOrientation().normal(new Matrix3f()).getNormalizedRotation(new Quaternionf());
         if (this.minecraft.options.getCameraType().isMirrored()) {

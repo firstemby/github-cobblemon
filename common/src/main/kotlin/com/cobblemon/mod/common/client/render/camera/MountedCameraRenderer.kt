@@ -24,7 +24,9 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import org.joml.AxisAngle4f
 import org.joml.Matrix3f
+import org.joml.Quaternionf
 import org.joml.Vector3f
 
 object MountedCameraRenderer
@@ -85,7 +87,10 @@ object MountedCameraRenderer
             }
 
             if (controller.isActive()) {
+                val rotQuat = Quaternionf().setFromUnnormalized(locator.matrix)
+                //offset = offset.rotate(rotQuat)
                 offset = controller.getRenderOrientation(instance.partialTickTime).transform(offset)
+                //matrix.rotate(locator.matrix.getRotation(AxisAngle4f()))
             } else {
                 offset = Axis.YP.rotationDegrees(180f - instance.yRot).transform(offset)
             }
@@ -137,6 +142,23 @@ object MountedCameraRenderer
 
             return Vec3(offsetDirection.mul(maxZoom).add(pos))
         }
+    }
+
+    fun getCameraRotation(
+        instance: Camera,
+        entity: Entity,
+        vehicle: Entity
+    ): Quaternionf? {
+        if (vehicle !is PokemonEntity) {
+            return null
+        }
+        val delegate = vehicle.delegate as? PokemonClientDelegate ?: return null
+
+        var locatorName = delegate.getSeatLocator(entity)
+        var locator = delegate.locatorStates[locatorName]
+        if (locator == null) return null
+
+        return Quaternionf().setFromUnnormalized(locator.matrix)
     }
 
 
