@@ -183,10 +183,6 @@ object ShowdownInterpreter {
                     val id = message.id.replace("|", "")
                     val instruction: InterpreterInstruction = updateInstructionParser[id]?.invoke(battle, instructionSet, message, iterator) ?: UnknownInstruction(message)
                     instructionSet.instructions.add(instruction)
-
-                    if (instruction is MoveInstruction && instruction.isWildTeleport(battle)) {
-                        break
-                    }
                 }
             }
             else if (lines[0] == "sideupdate") {

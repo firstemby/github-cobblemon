@@ -114,16 +114,20 @@ class MoveInstruction(
             }
             battle.broadcastChatMessage(lang)
             if (isWildTeleport(battle)) {
+                var teleportSuccess = false
                 val teleportingEntity = userPokemon.originalPokemon.entity
                 if (teleportingEntity != null) {
-                    tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
+                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
                 }
 
-                battle.dispatchWaiting(1.0F) {
-                    battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }
-                        .forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
-                    battle.end()
+                if (teleportSuccess){
+                    battle.dispatchWaiting(1.0F) {
+                        battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }
+                            .forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
+                        battle.end()
+                    }
                 }
+
             }
             battle.majorBattleActions[userPokemon.uuid] = message
 
