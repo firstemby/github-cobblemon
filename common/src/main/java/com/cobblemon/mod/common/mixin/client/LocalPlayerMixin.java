@@ -93,9 +93,11 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     @Inject(method = "rideTick", at = @At("HEAD"))
     private void cobblemon$updateOrientationControllerRideTick(CallbackInfo ci) {
         if (Minecraft.getInstance().player != (Object)this) return;
-        if (!(this instanceof OrientationControllable controllable)) return;
+        if (!(this instanceof OrientationControllable controllableDriver)) return;
+        if (!(this.getVehicle() instanceof OrientationControllable controllableVehicle)) return;
         var shouldUseCustomOrientation = cobblemon$shouldUseCustomOrientation((LocalPlayer)(Object)this);
-        controllable.getOrientationController().setActive(shouldUseCustomOrientation);
+        controllableDriver.getOrientationController().setActive(shouldUseCustomOrientation);
+        controllableVehicle.getOrientationController().setActive(shouldUseCustomOrientation);
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))
@@ -129,8 +131,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public void stopRiding() {
         super.stopRiding();
         if (Minecraft.getInstance().player != (Object)this) return;
-        if (!(this instanceof OrientationControllable controllable)) return;
-        controllable.getOrientationController().setActive(false);
+        if (!(this instanceof OrientationControllable controllableDriver)) return;
+        if (!(this instanceof OrientationControllable controllableVehicle)) return;
+        controllableDriver.getOrientationController().setActive(false);
+        controllableVehicle.getOrientationController().setActive(false);
     }
 
     @Inject(method = "getJumpRidingScale", at = @At("HEAD"), cancellable = true)

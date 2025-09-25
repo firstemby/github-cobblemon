@@ -189,8 +189,7 @@ class PokemonRenderer(
         buffer: MultiBufferSource,
         packedLight: Int
     ) {
-        val driver = entity.firstPassenger ?: return
-        val rollable = driver as? OrientationControllable ?: return
+        val rollable = entity as? OrientationControllable ?: return
         val controller = rollable.orientationController
         poseMatrix.pushPose()
 

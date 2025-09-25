@@ -120,7 +120,7 @@ public abstract class CameraMixin {
 
     @Unique
     private void cobblemon$applyRotation(){
-        if (!(this.entity.getVehicle() instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
+        if (!(this.entity instanceof OrientationControllable controllable) || controllable.getOrientationController().getOrientation() == null) return;
 
 //        Camera cameraInstance = (Camera)(Object)this;
 //        Entity entity = cameraInstance.getEntity();

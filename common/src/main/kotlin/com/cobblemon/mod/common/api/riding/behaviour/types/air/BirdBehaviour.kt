@@ -83,7 +83,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         driver: Player,
     ) {
         // Also checks stamina
-        val controller = (driver as OrientationControllable).orientationController
+        val controller = (vehicle as OrientationControllable).orientationController
         if (cos(controller.roll.toRadians()) < 0.0) {
             val upsideDownRate = 1.0 / (2.0 * 20.0) // 2 seconds to max out upsideDown force
             state.currUpsideDownForce.set( min(1.0, state.currUpsideDownForce.get() + upsideDownRate * abs(cos(controller.roll.toRadians()))))
@@ -122,7 +122,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         vehicle: PokemonEntity,
         driver: LivingEntity
     ): Vec2 {
-        return Vec2(driver.xRot * 0.5f, driver.yRot)
+        return Vec2.ZERO//Vec2(driver.xRot * 0.5f, driver.yRot)
     }
 
     override fun velocity(
@@ -139,7 +139,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         calculateRideSpaceVel(settings, state, vehicle, driver)
 
         //Translate ride space velocity to world space velocity.
-        val controller = (driver as? OrientationControllable)?.orientationController
+        val controller = (vehicle as? OrientationControllable)?.orientationController
         if (controller != null) {
             //Need to deadzone this when straight up or down
 
@@ -193,7 +193,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
             activeInput = true
         }
 
-        val controller = (driver as? OrientationControllable)?.orientationController
+        val controller = (vehicle as? OrientationControllable)?.orientationController
         if (controller != null) {
             //Base glide speed change on current pitch of the ride.
             glideSpeedChange = sin(Math.toRadians(controller.pitch.toDouble()))
@@ -270,8 +270,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         deltaTime: Double
     ): Vec3 {
         if (Cobblemon.config.disableRoll) return Vec3.ZERO
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
 
         val handling = vehicle.runtime.resolveDouble(settings.handlingExpr)
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
@@ -285,6 +285,14 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         // Correct orientation when at low speeds
         correctOrientation(settings, state, vehicle, controller, deltaTime)
+
+//        controller.updateOrientation { currOrientation ->
+//            if (driver is OrientationControllable) {
+//                driver.orientationController.orientation
+//            } else {
+//                currOrientation
+//            }
+//        }
 
         //yaw, pitch, roll
         return Vec3(0.0, state.currPitchCorrectionForce.get(), state.currRollCorrectionForce.get())
@@ -417,8 +425,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
 
         // Set roll to zero if transitioning to noroll config
         controller.rotateRoll(controller.roll * -1.0f)
@@ -465,8 +473,8 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         sensitivity: Double,
         deltaTime: Double
     ): Vec3 {
-        if (driver !is OrientationControllable) return Vec3.ZERO
-        val controller = (driver as OrientationControllable).orientationController
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = (vehicle as OrientationControllable).orientationController
 
         val topSpeed = vehicle.runtime.resolveDouble(settings.speedExpr) / 20.0
         val mouseInputMult = vehicle.runtime.resolveDouble(settings.mouseInputMult)
