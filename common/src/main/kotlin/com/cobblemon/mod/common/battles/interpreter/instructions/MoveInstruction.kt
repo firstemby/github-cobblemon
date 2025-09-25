@@ -113,22 +113,6 @@ class MoveInstruction(
                     battleLang("used_move", pokemonName, move.displayName)
             }
             battle.broadcastChatMessage(lang)
-            if (isWildTeleport(battle)) {
-                var teleportSuccess = false
-                val teleportingEntity = userPokemon.originalPokemon.entity
-                if (teleportingEntity != null) {
-                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
-                }
-
-                if (teleportSuccess){
-                    battle.dispatchWaiting(1.0F) {
-                        battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }
-                            .forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
-                        battle.end()
-                    }
-                }
-
-            }
             battle.majorBattleActions[userPokemon.uuid] = message
 
             val runtime = MoLangRuntime().also {
@@ -161,6 +145,24 @@ class MoveInstruction(
                 providers = providers,
                 level = battle.players.firstOrNull()?.level()
             )
+
+            if (isWildTeleport(battle)) {
+                var teleportSuccess = false
+                val teleportingEntity = userPokemon.originalPokemon.entity
+                if (teleportingEntity != null) {
+                    teleportSuccess = tryTeleport(battle.players.firstOrNull()?.level() as ServerLevel, teleportingEntity, 10, 30, 32)
+                }
+
+                if (teleportSuccess){
+                    battle.ended = true
+                    battle.dispatchWaiting(1.0F) {
+                        battle.actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }
+                            .forEach { it.sendSystemMessage(battleLang("wild_flee", pokemonName).yellow()) }
+                        battle.end()
+                    }
+                }
+
+            }
 
             val subsequentInstructions = instructionSet.findInstructionsCausedBy(this)
             val missedTargets = subsequentInstructions.filterIsInstance<MissInstruction>().mapNotNull { it.target }
