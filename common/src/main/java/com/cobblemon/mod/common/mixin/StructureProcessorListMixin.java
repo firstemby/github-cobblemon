@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.bridges.StructureProcessorListBridge;
+import com.cobblemon.mod.common.duck.StructureProcessorListBridge;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;

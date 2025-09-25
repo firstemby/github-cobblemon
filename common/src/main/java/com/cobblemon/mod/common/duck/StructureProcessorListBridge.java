@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.bridges;
+package com.cobblemon.mod.common.duck;
 
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
