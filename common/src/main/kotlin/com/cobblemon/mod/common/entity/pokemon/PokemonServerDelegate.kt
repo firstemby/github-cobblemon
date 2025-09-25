@@ -76,12 +76,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val moving = pokemon.form.behaviour.moving
         entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 12F else -1F)
         entity.setPathfindingMalus(PathType.WATER, if (moving.swim.canSwimInWater) 12F else -1F)
-        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater) 6F else -1F)
+        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater || moving.walk.avoidsLand || moving.swim.canBreatheUnderwater) 6F else -1F)
         if (moving.swim.canBreatheUnderwater) {
-            entity.setPathfindingMalus(PathType.WATER, if (moving.walk.avoidsLand) 0F else 4F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.WATER, 0F)
         }
         if (moving.swim.canBreatheUnderlava) {
-            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 4F else -1F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 0F else -1F)
         }
         if (moving.walk.avoidsLand) {
             entity.setPathfindingMalus(PathType.WALKABLE, 12F)

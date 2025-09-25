@@ -522,23 +522,23 @@ class HorseSettings : RidingBehaviourSettings {
     var lookYawLimit = "90.0f".asExpression()
         private set
 
-    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.0, 0.4)".asExpression()
+    var speedExpr: Expression = "q.get_ride_stats('SPEED', 'LAND', 1.2, 0.1)".asExpression()
         private set
 
     // Max accel is a whole 1.0 in 1 second. The conversion in the function below is to convert seconds to ticks
     var accelerationExpr: Expression =
-        "q.get_ride_stats('ACCELERATION', 'LAND', 0.5, 2.0)".asExpression()
+        "q.get_ride_stats('ACCELERATION', 'LAND', 0.1, 12.0)".asExpression()
         private set
 
     // Between 30 seconds and 10 seconds at the lowest when at full speed.
-    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 30.0, 10.0)".asExpression()
+    var staminaExpr: Expression = "q.get_ride_stats('STAMINA', 'LAND', 60.0, 4.0)".asExpression()
         private set
 
     //Between a one block jump and a six block jump
-    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.0, 0.38)".asExpression()
+    var jumpExpr: Expression = "q.get_ride_stats('JUMP', 'LAND', 1.6, 0.2)".asExpression()
         private set
 
-    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 180.0, 40.0)".asExpression()
+    var handlingExpr: Expression = "q.get_ride_stats('SKILL', 'LAND', 90.0, 30.0)".asExpression()
         private set
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()

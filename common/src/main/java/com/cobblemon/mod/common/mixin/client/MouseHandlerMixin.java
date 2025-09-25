@@ -127,7 +127,6 @@ public abstract class MouseHandlerMixin {
             var sensitivity = Mth.lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
             var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
-            return false;
         }
 
         // Clamp player rotation if riding and the vehicle demands it
