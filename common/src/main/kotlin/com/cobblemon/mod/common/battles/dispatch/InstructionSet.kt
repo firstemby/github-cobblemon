@@ -50,9 +50,6 @@ class InstructionSet {
     fun getMostRecentCauser(comparedTo: InterpreterInstruction) = getMostRecentInstruction<CauserInstruction>(comparedTo)
 
     fun execute(battle: PokemonBattle) {
-        for (instruction in instructions) {
-            if (battle.ended) break
-            instruction(battle)
-        }
+        instructions.forEach { it(battle) }
     }
 }
